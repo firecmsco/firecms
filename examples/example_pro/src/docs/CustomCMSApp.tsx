@@ -14,15 +14,14 @@ import {
     NavigationRoutes,
     Scaffold,
     SideDialogs,
-    SnackbarProvider,
+    SnackbarProvider, useBuildDataSource,
     useBuildModeController
 } from "@firecms/core";
 import {
     FirebaseAuthController,
     FirebaseLoginView,
     useFirebaseAuthController,
-    useFirebaseStorageSource,
-    useFirestoreDataSource,
+    useFirebaseStorageSource, useFirestoreDelegate,
     useInitialiseFirebase,
     useValidateAuthenticator
 } from "@firecms/firebase_pro";
@@ -93,9 +92,18 @@ export function CustomCMSApp() {
         signInOptions
     });
 
-    const dataSource = useFirestoreDataSource({
-        firebaseApp
-        // You can add your `FirestoreTextSearchController` here
+    const firestoreDelegate = useFirestoreDelegate({
+        firebaseApp,
+        // textSearchController: textSearchController,
+        // firestoreIndexesBuilder: firestoreIndexesBuilder
+    })
+
+    /**
+     * Controller in charge of fetching and persisting data
+     */
+    const dataSource = useBuildDataSource({
+        delegate: firestoreDelegate,
+        // propertyConfigs: propertyConfigs
     });
 
     const storageSource = useFirebaseStorageSource({ firebaseApp });

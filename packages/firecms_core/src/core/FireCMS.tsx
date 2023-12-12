@@ -73,7 +73,9 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
     const sideDialogsController = useBuildSideDialogsController();
     const sideEntityController = useBuildSideEntityController(navigation, sideDialogsController);
 
-    const loading = authController.initialLoading || navigation.loading || (plugins?.some(p => p.loading) ?? false);
+    const pluginsLoading = plugins?.some(p => p.loading) ?? false;
+
+    const loading = authController.initialLoading || navigation.loading || pluginsLoading;
 
     const context: Partial<FireCMSContext> = useMemo(() => ({
         entityLinkBuilder,

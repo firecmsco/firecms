@@ -15,9 +15,7 @@ import {
     Typography,
     useModeController,
 } from "@firecms/core";
-import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider } from "../types/auth";
 import { appleIcon, facebookIcon, githubIcon, googleIcon, microsoftIcon, twitterIcon } from "./social_icons";
-import { RECAPTCHA_CONTAINER_ID, useRecaptcha } from "../hooks/useRecaptcha";
 import {
     getAuth,
     getMultiFactorResolver,
@@ -25,6 +23,13 @@ import {
     PhoneMultiFactorGenerator,
     RecaptchaVerifier
 } from "firebase/auth";
+import {
+    FirebaseAuthController,
+    FirebaseSignInOption,
+    FirebaseSignInProvider,
+    RECAPTCHA_CONTAINER_ID,
+    useRecaptcha
+} from "@firecms/firebase";
 
 /**
  * @category Firebase

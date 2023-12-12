@@ -50,7 +50,6 @@ export const FireCMSAppBar = function FireCMSAppBar({
                                                         style,
                                                         user: userProp
                                                     }: FireCMSAppBarProps) {
-    if (!endAdornment) console.trace("endAdornment", endAdornment);
     const navigation = useNavigationContext();
 
     const authController = useAuthController();

@@ -16,8 +16,9 @@
   },
   "dependencies": {
     "@firecms/core": "^3.0.0-alpha.35",
+    "@firecms/firebase": "^3.0.0-alpha.35",
     "@types/node": "^20.8.9",
-    "firebase": "^10.4.0",
+    "firebase": "^10.5.2",
     "typescript": "^5.2.2"
   },
   "scripts": {

@@ -1,7 +1,6 @@
 import React from "react";
 import { GoogleAuthProvider } from "firebase/auth";
 import { BrowserRouter } from "react-router-dom";
-import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 
 import {
     CenteredView,
@@ -14,18 +13,20 @@ import {
     SideDialogs,
     SnackbarProvider,
     useBrowserTitleAndIcon,
+    useBuildDataSource,
     useBuildLocalConfigurationPersistence,
     useBuildModeController
 } from "@firecms/core";
 
 import { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
-import { useFirebaseAuthController } from "./hooks/useFirebaseAuthController";
-import { useFirestoreDataSource } from "./hooks/useFirestoreDataSource";
-import { useFirebaseStorageSource } from "./hooks/useFirebaseStorageSource";
-import { useInitializeAppCheck } from "./hooks/useInitializeAppCheck";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
-import { FirebaseAuthController } from "./types/auth";
-import { useValidateAuthenticator } from "./hooks/useValidateAuthenticator";
+import {
+    FirebaseAuthController,
+    useFirebaseAuthController, useFirebaseStorageSource,
+    useFirestoreDelegate,
+    useInitialiseFirebase,
+    useInitializeAppCheck, useValidateAuthenticator
+} from "@firecms/firebase";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -72,13 +73,19 @@ export function FirebaseCMSApp({
                                    propertyConfigs: propertyConfigsProp,
                                    plugins,
                                    autoOpenDrawer,
-                                   firestoreIndexesBuilder
+                                   firestoreIndexesBuilder,
                                }: FirebaseCMSAppProps) {
 
     /**
      * Update the browser title and icon
      */
     useBrowserTitleAndIcon(name, logo);
+
+    const propertyConfigs: Record<string, PropertyConfig> = (propertyConfigsProp ?? [])
+        .map(pc => ({
+            [pc.key]: pc
+        }))
+        .reduce((a, b) => ({ ...a, ...b }), {});
 
     const {
         firebaseApp,
@@ -110,13 +117,18 @@ export function FirebaseCMSApp({
      */
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
+    const firestoreDelegate = useFirestoreDelegate({
+        firebaseApp,
+        textSearchController: textSearchController,
+        firestoreIndexesBuilder: firestoreIndexesBuilder
+    })
+
     /**
      * Controller in charge of fetching and persisting data
      */
-    const dataSource = useFirestoreDataSource({
-        firebaseApp,
-        textSearchController,
-        firestoreIndexesBuilder
+    const dataSource = useBuildDataSource({
+        delegate: firestoreDelegate,
+        propertyConfigs
     });
 
     /**
@@ -157,11 +169,6 @@ export function FirebaseCMSApp({
         </>;
     }
 
-    const propertyConfigs: Record<string, PropertyConfig> = (propertyConfigsProp ?? [])
-        .map(pc => ({
-            [pc.key]: pc
-        }))
-        .reduce((a, b) => ({ ...a, ...b }), {});
 
     return (
         <BrowserRouter basename={basePath}>
@@ -188,7 +195,6 @@ export function FirebaseCMSApp({
                               loading
                           }) => {
 
-                            // return <MultiSelect/>;
                             let component;
                             if (loading || authLoading) {
                                 component = <CircularProgressCenter size={"large"}/>;

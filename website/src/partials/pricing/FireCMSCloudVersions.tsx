@@ -84,6 +84,7 @@ export function FireCMSCloudVersions() {
                 </p>
                 <ul>
                     <li className={"ml-8 list-disc"}>Everything in PLUS</li>
+                    <li className={"ml-8 list-disc"}>Custom authentication and access control</li>
                     <li className={"ml-8 list-disc"}>SAML SSO</li>
                     <li className={"ml-8 list-disc"}>Custom domain</li>
                     <li className={"ml-8 list-disc"}>Priority support</li>

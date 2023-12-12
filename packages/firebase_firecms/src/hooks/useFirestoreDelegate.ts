@@ -24,6 +24,7 @@ import {
     doc,
     DocumentReference,
     DocumentSnapshot,
+    Firestore,
     GeoPoint as FirestoreGeoPoint,
     getCountFromServer,
     getDoc,
@@ -44,7 +45,6 @@ import {
 import { FirebaseApp } from "firebase/app";
 import { FirestoreTextSearchController } from "../types/text_search";
 import { useCallback } from "react";
-import { cmsToFirestoreModel } from "./useFirestoreDataSource";
 
 /**
  * @group Firebase
@@ -636,4 +636,23 @@ function setDateToMidnight(input?: Timestamp): Timestamp | undefined {
     const date = input.toDate();
     date.setHours(0, 0, 0, 0);
     return Timestamp.fromDate(date);
+}
+
+function cmsToFirestoreModel(data: any, firestore: Firestore): any {
+    if (data === undefined) {
+        return deleteField();
+    } else if (Array.isArray(data)) {
+        return data.map(v => cmsToFirestoreModel(v, firestore));
+    } else if (data instanceof EntityReference) {
+        return doc(firestore, data.path, data.id);
+    } else if (data instanceof GeoPoint) {
+        return new FirestoreGeoPoint(data.latitude, data.longitude);
+    } else if (data instanceof Date) {
+        return Timestamp.fromDate(data);
+    } else if (data && typeof data === "object") {
+        return Object.entries(data)
+            .map(([key, v]) => ({ [key]: cmsToFirestoreModel(v, firestore) }))
+            .reduce((a, b) => ({ ...a, ...b }), {});
+    }
+    return data;
 }

@@ -2,6 +2,8 @@
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "version": "3.0.0-alpha.35",
   "packages": [
+    "packages/firecms",
+    "packages/firecms_core",
     "packages/collection_editor",
     "packages/data_enhancement",
     "packages/data_import",
@@ -10,7 +12,6 @@
     "packages/firecms_cli",
     "packages/create_firecms_app",
     "packages/collection_editor",
-    "packages/firecms_core",
     "packages/saas",
     "packages/schema_inference",
     "examples/example_v3",

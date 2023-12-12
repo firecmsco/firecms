@@ -1,0 +1,65 @@
+{
+  "name": "firecms",
+  "version": "3.0.0-alpha.35",
+  "publishConfig": {
+    "access": "public"
+  },
+  "packageManager": "yarn@3.2.3",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "source": "src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "@firecms/collection_editor": "^3.0.0-alpha.35",
+    "@firecms/core": "^3.0.0-alpha.35",
+    "@firecms/data_enhancement": "^3.0.0-alpha.35",
+    "@firecms/data_import": "^3.0.0-alpha.35",
+    "@firecms/firebase": "^3.0.0-alpha.35",
+    "@firecms/schema_inference": "^3.0.0-alpha.35",
+    "firebase": "^10.5.2",
+    "react-router": "^6.17.0",
+    "react-router-dom": "^6.17.0"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.9",
+    "@types/react": "^18.2.33",
+    "@types/react-dom": "^18.2.14",
+    "@typescript-eslint/parser": "^5.59.0",
+    "eslint": "^8.52.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "typescript": "^5.3.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+    "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "gitHead": "f0f3ef616f13176166c193f98b8198f7fa53a1d2"
+}

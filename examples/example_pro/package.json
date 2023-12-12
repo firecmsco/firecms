@@ -11,7 +11,7 @@
     "@firecms/firebase_pro": "^3.0.0-alpha.35",
     "@firecms/schema_inference": "^3.0.0-alpha.35",
     "algoliasearch": "^4.17.1",
-    "firebase": "^10.4.0",
+    "firebase": "^10.5.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.12.0",

@@ -22,8 +22,6 @@ import { resolveCollection, updateDateAutoValues } from "../util";
 /**
  * Use this hook to build a {@link DataSource} based on Firestore
  * @param firebaseApp
- * @param textSearchController
- * @param collectionRegistry
  * @group Firebase
  */
 export function useBuildDataSource({
@@ -31,7 +29,7 @@ export function useBuildDataSource({
                                        propertyConfigs
                                    }: {
     delegate: DataSourceDelegate,
-    propertyConfigs: Record<string, PropertyConfig>;
+    propertyConfigs?: Record<string, PropertyConfig>;
 }): DataSource {
 
     return {

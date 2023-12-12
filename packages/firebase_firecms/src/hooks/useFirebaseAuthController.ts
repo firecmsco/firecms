@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
     createUserWithEmailAndPassword as createUserWithEmailAndPasswordFirebase,
@@ -8,16 +8,25 @@ import {
     signInWithEmailAndPassword,
     signInWithPopup,
     signOut,
-    User as FirebaseUser
+    User as FirebaseUser,
+    OAuthProvider,
+    Auth,
+    FacebookAuthProvider,
+    GithubAuthProvider,
+    TwitterAuthProvider,
+    signInAnonymously,
+    ApplicationVerifier,
+    signInWithPhoneNumber,
+    ConfirmationResult,
+    onAuthStateChanged
 } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
-import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider, FireCMSBackend } from "../types/auth";
-import { Role } from "../types";
+import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider, Role } from "../types";
 
 interface FirebaseAuthControllerProps {
     firebaseApp?: FirebaseApp;
     signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>; // TODO
-    fireCMSBackend?: FireCMSBackend;
+    onSignOut?: () => void;
 }
 
 /**
@@ -27,7 +36,7 @@ interface FirebaseAuthControllerProps {
 export const useFirebaseAuthController = ({
                                               firebaseApp,
                                               signInOptions,
-                                              fireCMSBackend
+                                              onSignOut: onSignOutProp
                                           }: FirebaseAuthControllerProps): FirebaseAuthController => {
 
     const [loggedUser, setLoggedUser] = useState<FirebaseUser | null | undefined>(undefined); // logged user, anonymous or logged out
@@ -35,8 +44,27 @@ export const useFirebaseAuthController = ({
     const [authProviderError, setAuthProviderError] = useState<any>();
     const [authLoading, setAuthLoading] = useState(true);
     const [loginSkipped, setLoginSkipped] = useState<boolean>(false);
+    const [confirmationResult, setConfirmationResult] = useState<undefined | ConfirmationResult>();
 
     const [userRoles, setUserRoles] = useState<Role[] | null>(null);
+
+    useEffect(() => {
+        if (!firebaseApp) return;
+        try {
+            const auth = getAuth(firebaseApp);
+            setAuthError(undefined);
+            setLoggedUser(auth.currentUser)
+            return onAuthStateChanged(
+                auth,
+                updateUser,
+                error => setAuthProviderError(error)
+            );
+        } catch (e) {
+            setAuthError(e);
+            return () => {
+            };
+        }
+    }, [firebaseApp]);
 
     const getProviderOptions = useCallback((providerId: FirebaseSignInProvider): FirebaseSignInOption | undefined => {
         return signInOptions?.find((option) => {
@@ -96,17 +124,99 @@ export const useFirebaseAuthController = ({
             .then(_ => {
                 setLoggedUser(null);
                 setAuthProviderError(null);
-                fireCMSBackend?.signOut();
+                onSignOutProp && onSignOutProp();
             });
         setLoginSkipped(false);
-    }, [firebaseApp, fireCMSBackend?.signOut]);
+    }, [firebaseApp, onSignOutProp]);
 
     const updateUser = useCallback((user: FirebaseUser | null) => {
         setLoggedUser(user);
         setAuthLoading(false);
     }, []);
 
-    return useMemo(() => ({
+    const doOauthLogin = useCallback((auth: Auth, provider: OAuthProvider | FacebookAuthProvider | GithubAuthProvider | TwitterAuthProvider) => {
+        setAuthLoading(true);
+        signInWithPopup(auth, provider)
+            .catch(setAuthProviderError).then(() => setAuthLoading(false));
+    }, []);
+
+    const anonymousLogin = useCallback(() => {
+        const auth = getAuth();
+        setAuthLoading(true);
+        signInAnonymously(auth)
+            .catch(setAuthProviderError)
+            .then(() => setAuthLoading(false));
+    }, []);
+
+    const phoneLogin = useCallback((phone: string, applicationVerifier: ApplicationVerifier) => {
+        const auth = getAuth();
+        setAuthLoading(true);
+        return signInWithPhoneNumber(auth, phone, applicationVerifier)
+            .catch(setAuthProviderError)
+            .then((res) => {
+                setAuthLoading(false);
+                setConfirmationResult(res ?? undefined);
+            });
+    }, []);
+
+    const appleLogin = useCallback(() => {
+        const provider = new OAuthProvider("apple.com");
+        const options = getProviderOptions("apple.com");
+        if (options?.scopes)
+            options.scopes.forEach((scope) => provider.addScope(scope));
+        if (options?.customParameters)
+            provider.setCustomParameters(options.customParameters);
+        const auth = getAuth();
+        doOauthLogin(auth, provider);
+    }, [doOauthLogin, getProviderOptions]);
+
+    const facebookLogin = useCallback(() => {
+        const provider = new FacebookAuthProvider();
+        const options = getProviderOptions("facebook.com");
+        if (options?.scopes)
+            options.scopes.forEach((scope) => provider.addScope(scope));
+        if (options?.customParameters)
+            provider.setCustomParameters(options.customParameters);
+        const auth = getAuth();
+        doOauthLogin(auth, provider);
+    }, [doOauthLogin, getProviderOptions]);
+
+    const githubLogin = useCallback(() => {
+        const provider = new GithubAuthProvider();
+        const options = getProviderOptions("github.com");
+        if (options?.scopes)
+            options.scopes.forEach((scope) => provider.addScope(scope));
+        if (options?.customParameters)
+            provider.setCustomParameters(options.customParameters);
+        const auth = getAuth();
+        doOauthLogin(auth, provider);
+    }, [doOauthLogin, getProviderOptions]);
+
+    const microsoftLogin = useCallback(() => {
+        const provider = new OAuthProvider("microsoft.com");
+        const options = getProviderOptions("microsoft.com");
+        if (options?.scopes)
+            options.scopes.forEach((scope) => provider.addScope(scope));
+        if (options?.customParameters)
+            provider.setCustomParameters(options.customParameters);
+        const auth = getAuth();
+        doOauthLogin(auth, provider);
+    }, [doOauthLogin, getProviderOptions]);
+
+    const twitterLogin = useCallback(() => {
+        const provider = new TwitterAuthProvider();
+        const options = getProviderOptions("twitter.com");
+        if (options?.customParameters)
+            provider.setCustomParameters(options.customParameters);
+        const auth = getAuth();
+        doOauthLogin(auth, provider);
+    }, [doOauthLogin, getProviderOptions]);
+
+    console.log({
+        authLoading,
+    })
+
+    return {
         user: loggedUser ?? null,
         setUser: updateUser,
         authProviderError,
@@ -120,6 +230,15 @@ export const useFirebaseAuthController = ({
         setUserRoles,
         emailPasswordLogin,
         createUserWithEmailAndPassword,
-        fetchSignInMethodsForEmail
-    }), [authLoading, authProviderError, createUserWithEmailAndPassword, emailPasswordLogin, fetchSignInMethodsForEmail, getAuthToken, googleLogin, loggedUser, onSignOut, updateUser, userRoles]);
+        fetchSignInMethodsForEmail,
+        anonymousLogin,
+        phoneLogin,
+        appleLogin,
+        facebookLogin,
+        githubLogin,
+        microsoftLogin,
+        twitterLogin,
+        confirmationResult
+    };
 };
+

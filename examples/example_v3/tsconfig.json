@@ -17,6 +17,7 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
+      "firecms": ["../../packages/firecms/src/index.ts"],
       "@firecms/core": ["../../packages/firecms_core/src/index.ts"],
       "@firecms/cli": ["../../packages/firecms_cli/src/index.ts"],
       "@firecms/firebase": ["../../packages/firebase_firecms/src/index.ts"],

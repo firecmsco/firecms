@@ -1,4 +1,4 @@
-import { buildCollection } from "@firecms/firebase";
+import { buildCollection } from "firecms";
 import { ArchiveIcon, EntityCallbacks } from "@firecms/core";
 
 import { Product } from "../types";

@@ -23,6 +23,7 @@ export default defineConfig({
         alias: {
             "@firecms/cli": path.resolve(__dirname, "../../packages/firecms_cli/src"),
             "@firecms/core": path.resolve(__dirname, "../../packages/firecms_core/src"),
+            "@firecms/firebase": path.resolve(__dirname, "../../packages/firebase_firecms/src"),
             "@firecms/firebase_pro": path.resolve(__dirname, "../../packages/firebase_firecms_pro/src"),
             "@firecms/data_enhancement": path.resolve(__dirname, "../../packages/data_enhancement/src"),
             "@firecms/data_import": path.resolve(__dirname, "../../packages/data_import/src"),

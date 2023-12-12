@@ -1,4 +1,4 @@
-import { PropertyConfig } from "@firecms/firebase";
+import { PropertyConfig } from "firecms";
 
 export const pricePropertyConfig: PropertyConfig = {
     name: "Price builder",

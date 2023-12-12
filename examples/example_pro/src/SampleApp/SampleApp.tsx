@@ -71,7 +71,7 @@ function SampleApp() {
 
     const onFirebaseInit = (config: object, app: FirebaseApp) => {
         // Just calling analytics enables screen tracking
-        getAnalytics(app);
+        // getAnalytics(app);
 
         // This is an example of connecting to a local emulator (move import to top)
         // import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";

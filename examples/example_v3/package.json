@@ -14,8 +14,8 @@
     "@firecms/core": "^3.0.0-alpha.35",
     "@firecms/data_enhancement": "^3.0.0-alpha.35",
     "@firecms/data_import": "^3.0.0-alpha.35",
-    "@firecms/firebase": "^3.0.0-alpha.35",
     "@firecms/schema_inference": "^3.0.0-alpha.35",
+    "firecms": "^3.0.0-alpha.35",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

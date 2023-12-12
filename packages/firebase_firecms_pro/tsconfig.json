@@ -32,6 +32,9 @@
     ],
     "baseUrl": ".",
     "paths": {
+      "@firecms/firebase": [
+        "../firebase_firecms/src/index.ts"
+      ],
       "@firecms/core": [
         "../firecms_core/src/index.ts"
       ]

@@ -5,6 +5,7 @@
   "author": "FireCMS",
   "homepage": "https://firecms.co",
   "workspaces": [
+    "packages/firecms",
     "packages/firecms_core",
     "packages/firecms_cli",
     "packages/create_firecms_app",

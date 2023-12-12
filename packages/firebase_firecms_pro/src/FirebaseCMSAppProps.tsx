@@ -13,11 +13,14 @@ import {
     Locale
 } from "@firecms/core";
 import { useNavigationContext } from "@firecms/core";
-import { FirestoreTextSearchController } from "./types/text_search";
-import { Authenticator, FirebaseSignInOption, FirebaseSignInProvider } from "./types/auth";
 import { FirebaseLoginViewProps } from "./components/FirebaseLoginView";
 import { FirebaseApp } from "firebase/app";
-import { FirestoreIndexesBuilder } from "./hooks/useFirestoreDataSource";
+import {
+    Authenticator,
+    FirebaseSignInOption,
+    FirebaseSignInProvider,
+    FirestoreIndexesBuilder, FirestoreTextSearchController
+} from "@firecms/firebase";
 
 /**
  * Main entry point that defines the CMS configuration
