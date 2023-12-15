@@ -30,7 +30,7 @@ export type FireCMS3AppProps = {
     /**
      * Callback used to get analytics events from the CMS
      */
-    onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
+    onAnalyticsEvent?: (event: string, data?: object) => void;
 
     /**
      * Backend API host. Only used internally for testing.

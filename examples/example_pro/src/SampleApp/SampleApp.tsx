@@ -113,6 +113,8 @@ function SampleApp() {
                 return true;
             if (path === "books")
                 return true;
+            if (path === "blog")
+                return true;
             return false;
         }
     });

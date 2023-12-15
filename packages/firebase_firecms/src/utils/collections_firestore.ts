@@ -91,6 +91,7 @@ export function prepareCollectionForPersistence<M extends { [Key: string]: CMSTy
     delete newCollection.additionalFields;
     delete newCollection.callbacks;
     delete newCollection.Actions;
+    delete newCollection.entityActions;
     delete newCollection.selectionController;
     delete newCollection.subcollections;
     // @ts-ignore

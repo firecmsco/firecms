@@ -164,7 +164,7 @@ export type FireCMS3ClientProps<ExtraAppbarProps = object> = {
 
     basePath?: string;
     baseCollectionPath?: string;
-    onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
+    onAnalyticsEvent?: (event: string, data?: object) => void;
 };
 
 function FullLoadingView(props: {
@@ -256,7 +256,8 @@ export function FireCMS3ClientWithController({
         projectsApi: fireCMSBackend.projectsApi,
         firebaseApp: clientFirebaseApp,
         projectId,
-        onUserChanged: (user) => authController.setUser(user ?? null)
+        onUserChanged: (user) => authController.setUser(user ?? null),
+        onAnalyticsEvent: props.onAnalyticsEvent
     });
 
     const permissions: PermissionsBuilder<PersistedCollection, FireCMSUser> = useCallback(({
@@ -401,7 +402,6 @@ function FireCMS3AppAuthenticated({
 
     const importExportPlugin = useImportExportPlugin({
         exportAllowed: ({ collectionEntitiesCount }) => {
-            console.log("collectionEntitiesCount", collectionEntitiesCount);
             return currentProjectController.canExport || collectionEntitiesCount <= DOCS_LIMIT;
         },
         notAllowedView: <SubscriptionPlanWidget showForPlans={["free"]}

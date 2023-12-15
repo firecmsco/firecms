@@ -13,6 +13,7 @@ export type DialogProps = {
     fullScreen?: boolean;
     scrollable?: boolean;
     maxWidth?: keyof typeof widthClasses;
+    modal?: boolean;
 };
 
 const widthClasses = {
@@ -39,7 +40,8 @@ export const Dialog = ({
                            fullHeight,
                            fullScreen,
                            scrollable = true,
-                           maxWidth = "lg"
+                           maxWidth = "lg",
+                           modal = true
                        }: DialogProps) => {
     const [displayed, setDisplayed] = useState(false);
 
@@ -58,10 +60,11 @@ export const Dialog = ({
 
     return (
         <DialogPrimitive.Root open={displayed || open}
+                              modal={modal}
                               onOpenChange={onOpenChange}>
             <DialogPrimitive.Portal>
 
-                <div className={"fixed inset-0 z-40"}>
+                <div className={"fixed inset-0 z-30"}>
 
                     <DialogPrimitive.Overlay
                         className={cn("fixed inset-0 transition-opacity z-20 ease-in-out duration-200 bg-black bg-opacity-50 dark:bg-opacity-60 backdrop-blur-sm ",
@@ -74,7 +77,7 @@ export const Dialog = ({
                     />
 
                     <DialogPrimitive.Content
-                        className={cn("h-full outline-none flex justify-center items-center z-50 opacity-100 transition-all duration-200 ease-in-out")}
+                        className={cn("h-full outline-none flex justify-center items-center z-40 opacity-100 transition-all duration-200 ease-in-out")}
                     >
                         <div
                             className={cn(paperMixin,

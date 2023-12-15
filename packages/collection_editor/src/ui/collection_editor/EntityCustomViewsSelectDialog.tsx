@@ -23,6 +23,11 @@ export function EntityCustomViewsSelectDialog({ open, onClose }: { open: boolean
                     {view.name} ({view.key})
                 </Button>;
             })}
+            {(entityViews ?? []).length === 0 &&
+                <Typography variant={"body2"}>
+                    No custom views defined
+                </Typography>
+            }
         </DialogContent>
         <DialogActions>
             <Button onClick={() => onClose()}>Cancel</Button>

@@ -37,9 +37,9 @@ out-of-the-box experience for any project.
 FireCMS is based on this great technologies:
 
 - Typescript
-- Firebase SDK 9
+- Firebase SDK 10
 - React + React Router 6
-- Material UI 5
+- Tailwind CSS
 - Formik + Yup
 
 ### Quickstart
@@ -133,24 +133,6 @@ reordering.
 
 You can replace the Firebase Storage implementation with your own.
 
-## Included example
-
-You can access the code for the demo project under
-[`example`](https://github.com/FireCMSco/firecms/tree/master/example). It includes
-every feature provided by this CMS.
-
-Keep in mind you need to update the dependencies in that project if you want to
-use it as it is, without linking it to the library source code. More details in
-its README
-
-## 🙌 Custom backend
-
-FireCMS has a good separation of concerns. All the logic related to
-Firebase/Firestore is abstracted away behind 3 interfaces: `DataSource`,
-`StorageSource` and `AuthController`. This means you can extend or even
-completely
-replace those 3 implementations with your own.
-
 ## Contact and support
 
 If you need general support, you can open a GitHub issue.
@@ -158,12 +140,6 @@ If you need general support, you can open a GitHub issue.
 Do you need consulting setting up your Firestore-based CMS in no time? We are
 happy to help!
 `hello@firecms.co`
-
-
-## Contributing
-
-Check the [Contributing Guidelines](CONTRIBUTING.md)
-TLDR: Simply run `yarn` and `yarn dev`
 
 ## License
 
