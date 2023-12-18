@@ -460,8 +460,8 @@ function PropertyEditView({
                         error={Boolean(selectedWidgetError)}
                         value={selectedFieldConfigId ?? ""}
                         placeholder={"Select a property widget"}
-                        // open={selectOpen}
-                        // onOpenChange={setSelectOpen}
+                        open={selectOpen}
+                        onOpenChange={setSelectOpen}
                         position={"item-aligned"}
                         disabled={disabled}
                         renderValue={(value) => {

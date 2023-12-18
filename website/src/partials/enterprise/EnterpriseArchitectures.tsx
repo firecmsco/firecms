@@ -1,10 +1,8 @@
 import React from "react";
 import { TwoColumns } from "../general/TwoColumns";
 import { Panel } from "../general/Panel";
-import SimpleArchitecture
-    from "@site/static/img/enterprise/simple_architecture.svg";
-import ComplexArchitecture
-    from "@site/static/img/enterprise/complex_architecture.svg";
+import SimpleArchitecture from "@site/static/img/enterprise/simple_architecture.svg";
+import ComplexArchitecture from "@site/static/img/enterprise/complex_architecture.svg";
 
 export function EnterpriseArchitectures() {
     return (

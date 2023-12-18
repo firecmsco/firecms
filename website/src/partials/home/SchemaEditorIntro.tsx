@@ -2,13 +2,7 @@ import React from "react"
 
 // @ts-ignore
 import collectionEditorVideo from "@site/static/img/collection_editor_preview.mp4";
-import {
-    ContainerMixin,
-    ContainerPaddingMixin,
-    CTACaret,
-    CTAOutlinedButtonMixin,
-    defaultBorderMixin
-} from "../styles";
+import { ContainerMixin, ContainerPaddingMixin, CTACaret, CTAOutlinedButtonMixin, defaultBorderMixin } from "../styles";
 import clsx from "clsx";
 
 export const SchemaEditorIntro = () => {

@@ -1,6 +1,5 @@
 import React from "react";
 import { ContainerMixin, defaultBorderMixin } from "../styles";
-import { LinedSpace } from "../layout/LinedSpace";
 import clsx from "clsx";
 
 export function TwoColumns({

@@ -1,10 +1,6 @@
 import { buildCollection, CollectionActionsProps } from "@firecms/core";
 import { CopyEntityButton } from "./copy_button";
-import {
-    Product,
-    productsCollection,
-    properties
-} from "./simple_product_collection";
+import { Product, productsCollection, properties } from "./simple_product_collection";
 
 export const productsCollectionCopy = buildCollection<Product>({
     name: "Products copy target",

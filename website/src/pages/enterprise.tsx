@@ -3,10 +3,8 @@ import React from "react";
 import Layout from "@theme/Layout";
 import { EnterpriseHero } from "../partials/enterprise/EnterpriseHero";
 import { EnterpriseFeatures } from "../partials/enterprise/EnterpriseFeatures";
-import {
-    EnterpriseArchitectures
-} from "../partials/enterprise/EnterpriseArchitectures";
-import { CTAButtonMixin, CTAOutlinedButtonWhiteMixin } from "../partials/styles";
+import { EnterpriseArchitectures } from "../partials/enterprise/EnterpriseArchitectures";
+import { CTAOutlinedButtonWhiteMixin } from "../partials/styles";
 import { Panel } from "../partials/general/Panel";
 
 function Enterprise() {

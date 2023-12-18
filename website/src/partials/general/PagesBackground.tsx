@@ -1,7 +1,5 @@
-import React, { Suspense, useEffect } from "react";
+import React, { Suspense } from "react";
 import BrowserOnly from "@docusaurus/BrowserOnly";
-import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
-import { useLocation } from "@docusaurus/router";
 
 const LazyHomeHeroNeatGradient = React.lazy(() => import("../../shape/HomeHeroNeatGradient"));
 const LazyHeroNeatGradient = React.lazy(() => import("../../shape/HeroNeatGradient"));

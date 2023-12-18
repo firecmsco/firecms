@@ -1,7 +1,6 @@
 import React from "react";
 import Layout from "@theme-original/Footer/Layout";
 import { Newsletter } from "../../../partials/general/Newsletter";
-import useBaseUrl from "@docusaurus/useBaseUrl";
 import { EnterpriseTeaser } from "../../../partials/general/EnterpriseTeaser";
 import { useLocation } from "@docusaurus/router";
 

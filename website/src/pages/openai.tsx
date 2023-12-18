@@ -5,12 +5,8 @@ import { AutofillFeature } from "../partials/data_enhancement/AutofillFeature";
 // import { CustomizationOptions } from "../partials/data_enhancement/CustomizationOptions";
 // import { Testimonials } from "../partials/data_enhancement/Testimonials";
 // import { Contact } from "../partials/data_enhancement/Contact";
-import {
-    DataEnhancementUseCases
-} from "../partials/data_enhancement/DataEnhancementUseCases";
-import {
-    DataEnhancementHero
-} from "../partials/data_enhancement/DataEnhancementHero";
+import { DataEnhancementUseCases } from "../partials/data_enhancement/DataEnhancementUseCases";
+import { DataEnhancementHero } from "../partials/data_enhancement/DataEnhancementHero";
 import { BatchProcessing } from "../partials/data_enhancement/BatchProcessing";
 import { Translations } from "../partials/data_enhancement/Translations";
 import { DataStructure } from "../partials/data_enhancement/DataStructure";

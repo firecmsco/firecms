@@ -6,11 +6,7 @@ import translationLight from "@site/static/img/data/translations_light.png";
 // @ts-ignore
 import translationDark from "@site/static/img/data/translations_dark.png";
 import { Panel } from "../general/Panel";
-import {
-    CTAButtonMixin,
-    CTACaret,
-    CTAOutlinedButtonWhiteMixin
-} from "../styles";
+import { CTACaret, CTAOutlinedButtonWhiteMixin } from "../styles";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
 export function DataStructure() {

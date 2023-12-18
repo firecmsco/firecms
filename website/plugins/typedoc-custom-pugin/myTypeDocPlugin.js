@@ -1,5 +1,5 @@
-import { Converter } from 'typedoc/dist/lib/converter';
-import { DispatcherEvent } from 'typedoc/dist/lib/output/events';
+import { Converter } from "typedoc/dist/lib/converter";
+import { DispatcherEvent } from "typedoc/dist/lib/output/events";
 
 export function load(PluginHost: Converter) {
     const app = PluginHost.owner;

@@ -1,5 +1,5 @@
 import React from "react";
-import { CTAButtonMixin, CTAOutlinedButtonWhiteMixin } from "../styles";
+import { CTAOutlinedButtonWhiteMixin } from "../styles";
 import { Hero } from "../general/Hero";
 
 export function EnterpriseHero() {

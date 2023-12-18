@@ -1,24 +1,24 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import {
+    ApplicationVerifier,
+    Auth,
+    ConfirmationResult,
     createUserWithEmailAndPassword as createUserWithEmailAndPasswordFirebase,
+    FacebookAuthProvider,
     fetchSignInMethodsForEmail as fetchSignInMethodsForEmailFirebase,
     getAuth,
+    GithubAuthProvider,
     GoogleAuthProvider,
+    OAuthProvider,
+    onAuthStateChanged,
+    signInAnonymously,
     signInWithEmailAndPassword,
+    signInWithPhoneNumber,
     signInWithPopup,
     signOut,
-    User as FirebaseUser,
-    OAuthProvider,
-    Auth,
-    FacebookAuthProvider,
-    GithubAuthProvider,
     TwitterAuthProvider,
-    signInAnonymously,
-    ApplicationVerifier,
-    signInWithPhoneNumber,
-    ConfirmationResult,
-    onAuthStateChanged
+    User as FirebaseUser
 } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
 import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider, Role } from "../types";

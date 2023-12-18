@@ -4,7 +4,8 @@ export default {
     content: [
         "./index.html",
         "./src/**/*.{js,ts,jsx,tsx}",
-        "../**/node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}",
+        "../../node_modules/firecms/src/**/*.{js,ts,jsx,tsx}",
+        "../../node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}",
     ],
     theme: {
         extend: {

@@ -8,9 +8,6 @@ import FireCMSLogo from "@site/static/img/firecms_logo.svg";
 import FirebaseLogo from "@site/static/img/firebase.svg";
 // @ts-ignore
 import pricePreview from "@site/static/img/price.png";
-
-import SettingsIcon from "@site/static/img/icons/settings.svg";
-import DashboardIcon from "@site/static/img/icons/dashboard.svg";
 import LightingIcon from "@site/static/img/icons/lighting.svg";
 
 // @ts-ignore
@@ -25,10 +22,8 @@ import inlineEditingVideo from "@site/static/img/inline_table_editing.mp4";
 import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
 
 import { useColorMode } from "@docusaurus/theme-common";
-import { TwoColumns } from "../general/TwoColumns";
-import { ContainerMixin, ContainerSmallMixin } from "../styles";
+import { ContainerSmallMixin } from "../styles";
 import { BrowserFrame } from "../BrowserFrame";
-import { Panel } from "../general/Panel";
 
 function RealTime() {
 

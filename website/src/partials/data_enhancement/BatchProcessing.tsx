@@ -1,10 +1,8 @@
 import React from "react";
-import { BrowserFrame } from "../BrowserFrame";
-import { TwoColumns } from "../general/TwoColumns";
 import { useColorMode } from "@docusaurus/theme-common";
 
 import { Panel } from "../general/Panel";
-import { CTAOutlinedButtonMixin, CTAOutlinedButtonWhiteMixin } from "../styles";
+import { CTAOutlinedButtonMixin } from "../styles";
 
 export function BatchProcessing() {
 

@@ -1,7 +1,7 @@
 import {
-    Button,
     buildCollection,
     buildProperties,
+    Button,
     CollectionActionsProps,
     Entity,
     EntityCollection,

@@ -1,5 +1,4 @@
 import React from "react";
-import { ThreeColumns } from "../general/ThreeColumns";
 import {
     ContainerMixin,
     ContainerPaddingMixin,
@@ -9,7 +8,6 @@ import {
     defaultBorderMixin
 } from "../styles";
 import clsx from "clsx";
-import { LinedSpace } from "../layout/LinedSpace";
 
 export function FireCMSCloudVersions() {
 
@@ -26,13 +24,13 @@ export function FireCMSCloudVersions() {
                     need more features.
                 </p>
                 <ul>
-                    <li className={"ml-8 list-disc"}>Unlimited projects</li>
-                    <li className={"ml-8 list-disc"}>Unlimited collections</li>
-                    <li className={"ml-8 list-disc"}>All available form fields</li>
-                    <li className={"ml-8 list-disc"}>Schema editor and inference from data</li>
-                    <li className={"ml-8 list-disc"}>Advanced data import and export</li>
-                    <li className={"ml-8 list-disc"}>Default roles</li>
-                    <li className={"ml-8 list-disc"}>3 users</li>
+                    <li className={" list-disc"}>Unlimited projects</li>
+                    <li className={" list-disc"}>Unlimited collections</li>
+                    <li className={" list-disc"}>All available form fields</li>
+                    <li className={" list-disc"}>Schema editor and inference from data</li>
+                    <li className={" list-disc"}>Advanced data import and export</li>
+                    <li className={" list-disc"}>Default roles</li>
+                    <li className={" list-disc"}>3 users</li>
                 </ul>
             </div>
             <div className={"text-center mt-4 text-gray-600 dark:text-gray-400 w-full"}>
@@ -54,13 +52,13 @@ export function FireCMSCloudVersions() {
                     Perfect for small teams and startups.
                 </p>
                 <ul>
-                    <li className={"ml-8 list-disc"}>Everything in the free tier</li>
-                    <li className={"ml-8 list-disc"}>Custom fields and custom views</li>
-                    <li className={"ml-8 list-disc"}>Unlimited users and roles</li>
-                    <li className={"ml-8 list-disc"}>Unlimited data export</li>
-                    <li className={"ml-8 list-disc"}>Theme and logo customization</li>
-                    <li className={"ml-8 list-disc"}>Custom user roles</li>
-                    <li className={"ml-8 list-disc"}>GPT-4 content generation</li>
+                    <li className={" list-disc"}>Everything in the free tier</li>
+                    <li className={" list-disc"}>Custom fields and custom views</li>
+                    <li className={" list-disc"}>Unlimited users and roles</li>
+                    <li className={" list-disc"}>Unlimited data export</li>
+                    <li className={" list-disc"}>Theme and logo customization</li>
+                    <li className={" list-disc"}>Custom user roles</li>
+                    <li className={" list-disc"}>GPT-4 content generation</li>
                 </ul>
             </div>
             <div className={"text-center mt-4 w-full"}>
@@ -83,13 +81,13 @@ export function FireCMSCloudVersions() {
                     Perfect for large teams and enterprises.
                 </p>
                 <ul>
-                    <li className={"ml-8 list-disc"}>Everything in PLUS</li>
-                    <li className={"ml-8 list-disc"}>Custom authentication and access control</li>
-                    <li className={"ml-8 list-disc"}>SAML SSO</li>
-                    <li className={"ml-8 list-disc"}>Custom domain</li>
-                    <li className={"ml-8 list-disc"}>Full CMS components customization</li>
-                    <li className={"ml-8 list-disc"}>Priority support</li>
-                    <li className={"ml-8 list-disc"}>Roadmap prioritization</li>
+                    <li className={" list-disc"}>Everything in PLUS</li>
+                    <li className={" list-disc"}>Custom authentication and access control</li>
+                    <li className={" list-disc"}>SAML SSO</li>
+                    <li className={" list-disc"}>Custom domain</li>
+                    <li className={" list-disc"}>Full CMS components customization</li>
+                    <li className={" list-disc"}>Priority support</li>
+                    <li className={" list-disc"}>Roadmap prioritization</li>
                 </ul>
             </div>
             <div className={"text-center mt-4 text-primary w-full"}>

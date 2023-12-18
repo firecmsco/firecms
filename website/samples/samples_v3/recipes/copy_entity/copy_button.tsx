@@ -1,11 +1,4 @@
-import {
-    Button,
-    Entity,
-    EntityCollection,
-    useDataSource,
-    useReferenceDialog,
-    useSnackbarController
-} from "firecms";
+import { Button, Entity, EntityCollection, useDataSource, useReferenceDialog, useSnackbarController } from "firecms";
 import { useCallback } from "react";
 
 export type CopyEntityButtonProps = {
