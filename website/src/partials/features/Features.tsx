@@ -1,14 +1,5 @@
 import React from "react";
 
-// @ts-ignore
-import ReactLogo from "@site/static/img/reactjs-icon.svg";
-// @ts-ignore
-import FireCMSLogo from "@site/static/img/firecms_logo.svg";
-// @ts-ignore
-import FirebaseLogo from "@site/static/img/firebase.svg";
-// @ts-ignore
-import pricePreview from "@site/static/img/price.png";
-
 import SettingsIcon from "@site/static/img/icons/settings.svg";
 import DashboardIcon from "@site/static/img/icons/dashboard.svg";
 import LightingIcon from "@site/static/img/icons/lighting.svg";

@@ -12,6 +12,9 @@ export function TechSplash() {
                 React
             </h2>
             <h2 className="h1 my-1 text-white uppercase font-mono">
+                Tailwind CSS
+            </h2>
+            <h2 className="h1 my-1 text-white uppercase font-mono">
                 Firebase
             </h2>
             <h2 className="h1 my-1 text-white uppercase font-mono">

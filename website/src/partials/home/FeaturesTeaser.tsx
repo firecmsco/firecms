@@ -1,13 +1,5 @@
 import React from "react";
 
-// @ts-ignore
-import ReactLogo from "@site/static/img/reactjs-icon.svg";
-// @ts-ignore
-import FireCMSLogo from "@site/static/img/firecms_logo.svg";
-// @ts-ignore
-import FirebaseLogo from "@site/static/img/firebase.svg";
-// @ts-ignore
-import pricePreview from "@site/static/img/price.png";
 
 import SettingsIcon from "@site/static/img/icons/settings.svg";
 
@@ -15,8 +7,6 @@ import SettingsIcon from "@site/static/img/icons/settings.svg";
 import editingDemoVideo from "@site/static/img/editing_demo.mp4";
 // @ts-ignore
 import editingDemoDarkVideo from "@site/static/img/editing_demo_dark.mp4";
-// @ts-ignore
-import customFieldVideo from "@site/static/img/custom_fields.mp4";
 // @ts-ignore
 import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
 

@@ -3,6 +3,8 @@ import React from "react";
 import ReactLogo from "@site/static/img/reactjs-icon.svg";
 // @ts-ignore
 import FirebaseLogo from "@site/static/img/firebase.svg";
+// @ts-ignore
+import TailwindLogo from "@site/static/img/tailwind_logo.svg";
 import { FireCMSLogo } from "../FireCMSLogo";
 import { defaultBorderMixin } from "../styles";
 import clsx from "clsx";
@@ -21,15 +23,22 @@ function FirebaseIntro() {
                  data-aos="fade-up">
                 <div
                     className="flex flex-row gap-8 md:gap-12 justify-center items-center p-4">
+
+                    <FirebaseLogo
+                        style={{
+                            width: 130,
+                            height: 150,
+                            maxWidth: "30%"
+                        }}/>
                     <ReactLogo
                         style={{
                             width: 150,
                             height: 150,
                             maxWidth: "35%"
                         }}/>
-                    <FirebaseLogo
+                    <TailwindLogo
                         style={{
-                            width: 130,
+                            width: 140,
                             height: 150,
                             maxWidth: "30%"
                         }}/>
