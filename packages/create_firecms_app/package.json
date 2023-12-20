@@ -1,6 +1,6 @@
 {
   "name": "create-firecms-app",
-  "version": "3.0.0-alpha.40",
+  "version": "3.0.0-alpha.41",
   "description": "A CLI to bootstrap FireCMS",
   "main": "src/index.ts",
   "packageManager": "yarn@3.2.3",
@@ -27,7 +27,7 @@
   "author": "firecms.co",
   "license": "MIT",
   "dependencies": {
-    "@firecms/cli": "^3.0.0-alpha.40"
+    "@firecms/cli": "^3.0.0-alpha.41"
   },
   "devDependencies": {
     "@types/node": "^20.8.9",
@@ -44,5 +44,5 @@
     "node_modules",
     "template/node_modules"
   ],
-  "gitHead": "5908ef529f511bdb4c600f159e45fe12085e8262"
+  "gitHead": "e0ef2e0e67a440014747b9af47b6bdf482c5869d"
 }
