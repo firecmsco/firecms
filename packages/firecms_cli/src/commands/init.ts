@@ -272,7 +272,7 @@ export async function createProject(options: InitOptions) {
     } else {
         console.log("If you want to run your project locally, run:");
         console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
-        console.log(chalk.cyan.bold("yarn install"));
+        console.log(chalk.bgYellow.black.bold("yarn install"));
         console.log(chalk.bgYellow.black.bold("yarn dev"));
         console.log("");
         console.log("If you want to deploy your project, run:");

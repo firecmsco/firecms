@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { FirebaseApp, initializeApp } from "firebase/app";
 
@@ -48,9 +48,9 @@ export function useInitialiseFirebase({
     authDomain?: string;
 }): InitialiseFirebaseResult {
 
-    const [firebaseApp, setFirebaseApp] = React.useState<FirebaseApp | undefined>();
-    const [firebaseConfigLoading, setFirebaseConfigLoading] = React.useState<boolean>(false);
-    const [configError, setConfigError] = React.useState<string>();
+    const [firebaseApp, setFirebaseApp] = useState<FirebaseApp | undefined>();
+    const [firebaseConfigLoading, setFirebaseConfigLoading] = useState<boolean>(false);
+    const [configError, setConfigError] = useState<string>();
 
     const initFirebase = useCallback((config: Record<string, unknown>) => {
         try {
