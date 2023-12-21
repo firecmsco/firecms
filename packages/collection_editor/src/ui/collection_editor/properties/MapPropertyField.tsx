@@ -3,10 +3,10 @@ import {
     AddIcon,
     BooleanSwitchWithLabel,
     Button,
-    PropertyConfig,
     MapProperty,
     Paper,
     Property,
+    PropertyConfig,
     Typography
 } from "@firecms/core";
 import { PropertyFormDialog } from "../PropertyEditView";

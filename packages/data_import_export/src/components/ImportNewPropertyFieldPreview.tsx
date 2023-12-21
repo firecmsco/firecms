@@ -1,17 +1,13 @@
 import React from "react";
 import {
-    cn,
     EditIcon,
     ErrorBoundary,
     FieldConfigBadge,
-    FunctionsIcon,
     getFieldConfig,
     IconButton,
-    Paper,
     Property,
-    RemoveCircleIcon,
     TextField,
-    Typography, useFireCMSContext
+    useFireCMSContext
 } from "@firecms/core";
 
 export function ImportNewPropertyFieldPreview({

@@ -1,4 +1,4 @@
-import { ProjectConfig, Role, FireCMSUserProject } from "../../src";
+import { FireCMSUserProject, ProjectConfig, Role } from "../../src";
 import { MOCK_PROJECT_ID } from "./constants";
 
 export function useBuildMockProjectConfig(): ProjectConfig {

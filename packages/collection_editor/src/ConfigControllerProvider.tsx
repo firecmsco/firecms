@@ -2,14 +2,7 @@ import React, { PropsWithChildren, useCallback, useEffect } from "react";
 import equal from "react-fast-compare"
 
 import { CollectionsConfigController } from "./types/config_controller";
-import {
-    EntityCollection,
-    Property,
-    useFireCMSContext,
-    useNavigationController,
-    User,
-    useSnackbarController
-} from "@firecms/core";
+import { Property, useFireCMSContext, useNavigationController, User, useSnackbarController } from "@firecms/core";
 import { CollectionEditorDialog } from "./ui/collection_editor/CollectionEditorDialog";
 import { useNavigate } from "react-router";
 import { CollectionEditorController } from "./types/collection_editor_controller";

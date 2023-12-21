@@ -1,7 +1,7 @@
 // import { cli } from "./cli";
 // import { main } from "./commands/auth";
-import { getTokens, login, logout, refreshCredentials } from "./commands/auth";
 import { createFireCMSApp } from "./commands/init";
+
 async function main(){
     // await logout();
     // await login("dev");

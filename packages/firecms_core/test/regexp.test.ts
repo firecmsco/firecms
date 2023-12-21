@@ -1,4 +1,4 @@
-import { it, expect } from "@jest/globals";
+import { expect, it } from "@jest/globals";
 import { isValidRegExp, serializeRegExp } from "../src/core/util/regexp";
 
 it("Serialize", () => {

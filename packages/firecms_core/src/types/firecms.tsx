@@ -1,7 +1,7 @@
 import React from "react";
 import { User } from "./user";
 import { AuthController } from "./auth";
-import { DataSource, DataSourceDelegate } from "./datasource";
+import { DataSourceDelegate } from "./datasource";
 import { EntityCollection, EntityCustomView } from "./collections";
 import { CMSView } from "./navigation";
 import { FireCMSContext } from "./firecms_context";

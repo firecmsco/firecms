@@ -1,5 +1,5 @@
 import { getColorSchemeForSeed } from "../src/core/util/chip_utils";
-import { describe, expect, test } from "@jest/globals";
+import { describe, test } from "@jest/globals";
 
 describe("chip colors", () => {
 

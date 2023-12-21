@@ -1,4 +1,4 @@
-import { it, expect } from "@jest/globals";
+import { expect, it } from "@jest/globals";
 import { getCollectionByPathOrAlias, resolveCollectionPathAliases } from "../src/core/util/navigation_utils";
 import { siteConfig } from "./test_site_config";
 import { getNavigationEntriesFromPathInternal } from "../src/core/util/navigation_from_path";

@@ -2,7 +2,7 @@ import React, { MouseEvent, useCallback } from "react";
 import equal from "react-fast-compare"
 
 import { CollectionSize, Entity, EntityAction, EntityCollection, SelectionController } from "../../../types";
-import { Checkbox, cn, IconButton, Menu, MenuItem, Tooltip, Typography, Skeleton } from "../../../ui";
+import { Checkbox, cn, IconButton, Menu, MenuItem, Skeleton, Tooltip, Typography } from "../../../ui";
 import { useFireCMSContext, useLargeLayout } from "../../../hooks";
 import { MoreVertIcon } from "../../../icons";
 

@@ -9,11 +9,11 @@ import {
     DialogContent,
     DoneIcon,
     LoadingButton,
+    MultiSelect,
     MultiSelectItem,
     TextField,
     Typography,
-    useSnackbarController,
-    MultiSelect
+    useSnackbarController
 } from "@firecms/core";
 import { Role } from "@firecms/firebase";
 

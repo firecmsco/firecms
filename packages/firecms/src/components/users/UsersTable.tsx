@@ -1,5 +1,6 @@
 import {
     Chip,
+    defaultDateFormat,
     DeleteConfirmationDialog,
     DeleteIcon,
     FireCMSContext,
@@ -10,7 +11,6 @@ import {
     TableHeader,
     TableRow,
     Tooltip,
-    defaultDateFormat,
     useFireCMSContext,
     useSnackbarController
 } from "@firecms/core";

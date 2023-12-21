@@ -12,7 +12,6 @@ import {
     ErrorView,
     FireCMS,
     FireCMSAppBarProps,
-    FireCMSPlugin,
     Locale,
     ModeController,
     ModeControllerProvider,

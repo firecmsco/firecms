@@ -1,7 +1,6 @@
 import { ValuesCountEntry } from "./types";
 import { DocumentReference } from "firebase/firestore";
 
-
 export function findCommonInitialStringInPath(valuesCount?: ValuesCountEntry) {
 
     if (!valuesCount) return undefined;

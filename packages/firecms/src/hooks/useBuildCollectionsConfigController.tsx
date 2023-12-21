@@ -8,15 +8,7 @@ import {
     PersistedCollection,
     SaveCollectionParams
 } from "@firecms/collection_editor";
-import {
-    PermissionsBuilder,
-    Property,
-    PropertyConfig,
-    removeFunctions,
-    removeUndefined,
-    useFireCMSContext,
-    User
-} from "@firecms/core";
+import { PermissionsBuilder, Property, PropertyConfig, removeFunctions, removeUndefined, User } from "@firecms/core";
 import {
     applyPermissionsFunction,
     buildCollectionPath,

@@ -5,7 +5,7 @@ import {
     AuthController,
     CMSView,
     CMSViewsBuilder,
-    DataSource, DataSourceDelegate,
+    DataSourceDelegate,
     EntityCollection,
     EntityCollectionsBuilder,
     EntityReference,
@@ -24,7 +24,6 @@ import {
     resolvePermissions
 } from "../util";
 import { getParentReferencesFromPath } from "../util/parent_references_from_path";
-import { useTraceUpdate } from "../util/useTraceUpdate";
 
 const DEFAULT_BASE_PATH = "/";
 const DEFAULT_COLLECTION_PATH = "/c";

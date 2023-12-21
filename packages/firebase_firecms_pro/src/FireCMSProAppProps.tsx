@@ -8,18 +8,18 @@ import {
     CMSViewsBuilder,
     EntityCollection,
     EntityCollectionsBuilder,
-    PropertyConfig,
     FireCMSPlugin,
-    Locale
+    Locale,
+    PropertyConfig
 } from "@firecms/core";
-import { useNavigationController } from "@firecms/core";
 import { FirebaseLoginViewProps } from "./components/FirebaseLoginView";
 import { FirebaseApp } from "firebase/app";
 import {
     Authenticator,
     FirebaseSignInOption,
     FirebaseSignInProvider,
-    FirestoreIndexesBuilder, FirestoreTextSearchController
+    FirestoreIndexesBuilder,
+    FirestoreTextSearchController
 } from "@firecms/firebase";
 
 /**

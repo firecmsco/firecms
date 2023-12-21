@@ -10,7 +10,7 @@ import {
     setDoc
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
-import { ProjectSubscriptionPlan, FireCMSUserProject } from "../types";
+import { FireCMSUserProject, ProjectSubscriptionPlan } from "../types";
 import { CMSType, UploadFileProps } from "@firecms/core";
 import { FirebaseStorage, getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "firebase/storage";
 import { ProjectsApi } from "../api/projects";

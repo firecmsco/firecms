@@ -1,10 +1,11 @@
 import {
-    DataSource, DataSourceDelegate,
+    DataSourceDelegate,
     DeleteEntityProps,
-    Entity, EntityReference,
+    Entity,
+    EntityReference,
     FetchCollectionProps,
-    FetchEntityProps, GeoPoint,
-    ResolvedProperty,
+    FetchEntityProps,
+    GeoPoint,
     SaveEntityProps
 } from "@firecms/core";
 

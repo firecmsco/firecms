@@ -2,11 +2,12 @@ import React from "react";
 import {
     CMSView,
     CMSViewsBuilder,
+    EntityCollection,
     EntityCollectionsBuilder,
     EntityCustomView,
-    PropertyConfig,
     FireCMSAppBarProps,
-    Locale, EntityCollection
+    Locale,
+    PropertyConfig
 } from "@firecms/core";
 import { FirebaseApp } from "firebase/app";
 import { FirestoreIndexesBuilder, FirestoreTextSearchController } from "@firecms/firebase";

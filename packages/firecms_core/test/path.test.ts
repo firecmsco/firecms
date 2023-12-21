@@ -1,4 +1,4 @@
-import { it, expect } from "@jest/globals";
+import { expect, it } from "@jest/globals";
 import { getValueInPath } from "../src/util/objects";
 
 const obj = {

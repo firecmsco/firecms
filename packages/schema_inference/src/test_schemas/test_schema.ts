@@ -2,8 +2,8 @@ import { buildEntityPropertiesFromData } from "../collection_builder";
 import { DataType } from "@firecms/core";
 
 import usage from "./usage.json" assert {
-        type: 'json',
-        integrity: 'sha384-ABC123'
+        type: "json",
+        integrity: "sha384-ABC123"
         };
 import * as util from "util";
 

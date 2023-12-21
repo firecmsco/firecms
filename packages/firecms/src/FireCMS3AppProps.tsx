@@ -1,4 +1,3 @@
-import { CMSAnalyticsEvent } from "@firecms/core";
 import { FireCMSAppConfig } from "./types";
 
 /**

@@ -1,12 +1,6 @@
 import React from "react";
 
-import {
-    EntityCollection,
-    PropertiesOrBuilders,
-    PropertyConfig,
-    PropertyOrBuilder,
-    ResolvedProperty
-} from "../types";
+import { EntityCollection, PropertiesOrBuilders, PropertyConfig, PropertyOrBuilder, ResolvedProperty } from "../types";
 import { isPropertyBuilder } from "./entities";
 import { resolveProperty } from "./resolutions";
 import { CircleIcon, FunctionsIcon } from "../icons";

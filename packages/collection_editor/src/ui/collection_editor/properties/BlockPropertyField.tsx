@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { AddIcon, ArrayProperty, Button, PropertyConfig, Paper, Property, Typography } from "@firecms/core";
+import { AddIcon, ArrayProperty, Button, Paper, Property, PropertyConfig, Typography } from "@firecms/core";
 import { getIn, useFormikContext } from "formik";
 import { PropertyFormDialog } from "../PropertyEditView";
 import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath } from "../util";

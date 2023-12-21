@@ -1,4 +1,4 @@
-import { it, expect, test } from "@jest/globals";
+import { expect, it } from "@jest/globals";
 
 import { EntityCollection, PropertyBuilder } from "../../src/types";
 import { mergeCollections } from "../../src/core/util/collections";

@@ -12,7 +12,6 @@ import {
 } from "@firecms/core";
 
 import { Link as ReactLink } from "react-router-dom";
-import { SubscriptionPlanWidget } from "./subscriptions";
 import { ADMIN_VIEWS } from "../utils";
 
 /**

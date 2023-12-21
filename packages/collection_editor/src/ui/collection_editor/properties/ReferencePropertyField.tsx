@@ -2,7 +2,6 @@ import React from "react";
 import { Field, getIn, useFormikContext } from "formik";
 import {
     CircularProgress,
-    EntityCollection,
     getIconForView,
     NumberProperty,
     Select,

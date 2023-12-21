@@ -1,5 +1,5 @@
 import { CollectionEditorPermissionsBuilder } from "./config_permissions";
-import { EntityCollection, Property } from "@firecms/core";
+import { Property } from "@firecms/core";
 import { PersistedCollection } from "./persisted_collection";
 
 /**

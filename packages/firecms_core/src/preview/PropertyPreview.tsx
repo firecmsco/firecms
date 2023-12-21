@@ -17,7 +17,6 @@ import { UrlComponentPreview } from "./components/UrlComponentPreview";
 import { StorageThumbnail } from "./components/StorageThumbnail";
 import { Markdown } from "../ui";
 import { StringPropertyPreview } from "./property_previews/StringPropertyPreview";
-import { ArrayOfMapsPreview } from "./property_previews/ArrayOfMapsPreview";
 import { ArrayPropertyPreview } from "./property_previews/ArrayPropertyPreview";
 import { ArrayOfReferencesPreview } from "./property_previews/ArrayOfReferencesPreview";
 import { ArrayOfStorageComponentsPreview } from "./property_previews/ArrayOfStorageComponentsPreview";
