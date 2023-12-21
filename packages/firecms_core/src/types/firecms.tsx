@@ -1,7 +1,7 @@
 import React from "react";
 import { User } from "./user";
 import { AuthController } from "./auth";
-import { DataSource } from "./datasource";
+import { DataSource, DataSourceDelegate } from "./datasource";
 import { EntityCollection, EntityCustomView } from "./collections";
 import { CMSView, NavigationController } from "./navigation";
 import { FireCMSContext } from "./firecms_context";
@@ -26,7 +26,7 @@ import { CMSAnalyticsEvent } from "./analytics";
 export type EntityCollectionsBuilder<EC extends EntityCollection = EntityCollection> = (params: {
     user: User | null,
     authController: AuthController,
-    dataSource: DataSource
+    dataSource: DataSourceDelegate
 }) => EC[] | Promise<EC[]>;
 
 /**
@@ -41,7 +41,7 @@ export type EntityCollectionsBuilder<EC extends EntityCollection = EntityCollect
 export type CMSViewsBuilder = (params: {
     user: User | null,
     authController: AuthController,
-    dataSource: DataSource
+    dataSource: DataSourceDelegate
 }) => CMSView[] | Promise<CMSView[]>;
 
 /**

@@ -5,27 +5,33 @@ import {
     Entity,
     FetchCollectionProps,
     FetchEntityProps,
+    NavigationController,
     SaveEntityProps,
     useBuildDataSource,
 } from "@firecms/core";
 import { FirebaseApp } from "firebase/app";
 import { useFirestoreDelegate } from "@firecms/firebase_pro";
 
-type CustomDataSourceProps = { firebaseApp?: FirebaseApp };
+type CustomDataSourceProps = {
+    firebaseApp?: FirebaseApp,
+    navigationController: NavigationController
+};
 
 /**
  * This is an example of a custom data source.
  * It is a React Hook that returns a {@link DataSource} object.
  * @param firebaseApp
+ * @param navigationController
  */
-export function useCustomDatasource({ firebaseApp }: CustomDataSourceProps): DataSource {
+export function useCustomDatasource({ firebaseApp, navigationController }: CustomDataSourceProps): DataSource {
 
     const firestoreDelegate = useFirestoreDelegate({
         firebaseApp,
     })
 
     const firestoreDataSource = useBuildDataSource({
-        delegate: firestoreDelegate
+        delegate: firestoreDelegate,
+        navigationController
     });
 
     return {

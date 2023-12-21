@@ -5,7 +5,7 @@ import {
     AuthController,
     CMSView,
     CMSViewsBuilder,
-    DataSource,
+    DataSource, DataSourceDelegate,
     EntityCollection,
     EntityCollectionsBuilder,
     EntityReference,
@@ -36,7 +36,7 @@ type BuildNavigationContextProps<EC extends EntityCollection, UserType extends U
     views?: CMSView[] | CMSViewsBuilder;
     userConfigPersistence?: UserConfigurationPersistence;
     plugins?: FireCMSPlugin[];
-    dataSource: DataSource;
+    dataSource: DataSourceDelegate;
 };
 
 export function useBuildNavigationController<EC extends EntityCollection, UserType extends User>({
@@ -291,7 +291,7 @@ function filterOutNotAllowedCollections(resolvedCollections: EntityCollection[],
         });
 }
 
-async function resolveCollections(collections: undefined | EntityCollection[] | EntityCollectionsBuilder<any>, authController: AuthController, dataSource: DataSource, plugins?: FireCMSPlugin[]) {
+async function resolveCollections(collections: undefined | EntityCollection[] | EntityCollectionsBuilder<any>, authController: AuthController, dataSource: DataSourceDelegate, plugins?: FireCMSPlugin[]) {
     let resolvedCollections: EntityCollection[] = [];
     if (typeof collections === "function") {
         resolvedCollections = await collections({
@@ -315,7 +315,7 @@ async function resolveCollections(collections: undefined | EntityCollection[] | 
     return resolvedCollections;
 }
 
-async function resolveCMSViews(baseViews: CMSView[] | CMSViewsBuilder | undefined, authController: AuthController, dataSource: DataSource) {
+async function resolveCMSViews(baseViews: CMSView[] | CMSViewsBuilder | undefined, authController: AuthController, dataSource: DataSourceDelegate) {
     let resolvedViews: CMSView[] = [];
     if (typeof baseViews === "function") {
         resolvedViews = await baseViews({

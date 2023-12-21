@@ -446,14 +446,6 @@ function FireCMS3AppAuthenticated({
         firestoreIndexesBuilder: appConfig?.firestoreIndexesBuilder
     })
 
-    /**
-     * Controller in charge of fetching and persisting data
-     */
-    const dataSource = useBuildDataSource({
-        delegate: firestoreDelegate,
-        propertyConfigs: propertyConfigsMap
-    });
-
     const plugins: FireCMSPlugin<any, any, any>[] = [importExportPlugin, collectionEditorPlugin, dataEnhancementPlugin];
 
     const navigationController = useBuildNavigationController({
@@ -463,8 +455,17 @@ function FireCMS3AppAuthenticated({
         collections: appConfig?.collections,
         views: appConfig?.views,
         userConfigPersistence,
-        dataSource,
+        dataSource: firestoreDelegate,
         plugins
+    });
+
+    /**
+     * Controller in charge of fetching and persisting data
+     */
+    const dataSource = useBuildDataSource({
+        delegate: firestoreDelegate,
+        propertyConfigs: propertyConfigsMap,
+        navigationController
     });
 
     /**

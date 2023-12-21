@@ -55,7 +55,6 @@ export default function App() {
     const collectionBuilder: EntityCollectionsBuilder = async ({ dataSource }) => {
         const units = await dataSource.fetchCollection<Unit>({
             path: "units",
-            collection: unitsCollection
         });
         const lessonCollections = units.map(unit => buildCollection({
             name: unit.values.name,

@@ -304,6 +304,7 @@ export const EntityCollectionView = React.memo(
 
             return saveEntityWithCallbacks({
                 ...saveProps,
+                collection,
                 callbacks: collection.callbacks,
                 dataSource,
                 context,

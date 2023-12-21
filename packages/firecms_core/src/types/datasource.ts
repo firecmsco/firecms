@@ -8,7 +8,7 @@ import { ResolvedEntityCollection } from "./resolved_entities";
 export interface FetchEntityProps<M extends Record<string, any> = any> {
     path: string;
     entityId: string;
-    collection: EntityCollection<M>
+    collection?: EntityCollection<M>
 }
 
 /**
@@ -26,7 +26,7 @@ export type ListenEntityProps<M extends Record<string, any> = any> =
  */
 export interface FetchCollectionProps<M extends Record<string, any> = any> {
     path: string;
-    collection: EntityCollection<M> | ResolvedEntityCollection<M>;
+    collection?: EntityCollection<M> | ResolvedEntityCollection<M>;
     filter?: FilterValues<Extract<keyof M, string>>,
     limit?: number;
     startAfter?: any[];
@@ -53,7 +53,7 @@ export interface SaveEntityProps<M extends Record<string, any> = any> {
     values: Partial<EntityValues<M>>;
     entityId?: string; // can be empty for new entities
     previousValues?: Partial<EntityValues<M>>;
-    collection: EntityCollection<M> | ResolvedEntityCollection<M>;
+    collection?: EntityCollection<M> | ResolvedEntityCollection<M>;
     status: EntityStatus;
 }
 

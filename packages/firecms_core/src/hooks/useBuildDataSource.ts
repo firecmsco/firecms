@@ -28,7 +28,7 @@ import { resolveCollection, updateDateAutoValues } from "../util";
 export function useBuildDataSource({
                                        delegate,
                                        propertyConfigs,
-    navigationController
+                                       navigationController
                                    }: {
     delegate: DataSourceDelegate,
     propertyConfigs?: Record<string, PropertyConfig>;
@@ -53,7 +53,7 @@ export function useBuildDataSource({
          */
         fetchCollection: useCallback(<M extends Record<string, any>>({
                                                                          path,
-                                                                         collection,
+                                                                         collection: collectionProp,
                                                                          filter,
                                                                          limit,
                                                                          startAfter,
@@ -63,6 +63,7 @@ export function useBuildDataSource({
                                                                      }: FetchCollectionProps<M>
         ): Promise<Entity<M>[]> => {
 
+            const collection = collectionProp ?? navigationController.getCollection(path);
             return delegate.fetchCollection<M>({
                 path,
                 filter,
@@ -95,7 +96,7 @@ export function useBuildDataSource({
             ? useCallback(<M extends Record<string, any>>(
                 {
                     path,
-                    collection,
+                    collection: collectionProp,
                     filter,
                     limit,
                     startAfter,
@@ -107,7 +108,8 @@ export function useBuildDataSource({
                 }: ListenCollectionProps<M>
             ): () => void => {
 
-                const isCollectionGroup = Boolean(collection.collectionGroup) ?? false;
+                const collection = collectionProp ?? navigationController.getCollection(path);
+                const isCollectionGroup = Boolean(collection?.collectionGroup) ?? false;
                 if (!delegate.listenCollection)
                     throw Error("useBuildDataSource delegate not initialised");
 
@@ -189,18 +191,22 @@ export function useBuildDataSource({
                 path,
                 entityId,
                 values,
-                collection,
+                collection: collectionProp,
                 status
             }: SaveEntityProps<M>): Promise<Entity<M>> => {
 
-            const resolvedCollection = resolveCollection<M>({
-                collection,
-                path,
-                entityId,
-                fields: propertyConfigs
-            });
+            const collection = collectionProp ?? navigationController.getCollection(path);
 
-            const properties: ResolvedProperties<M> = resolvedCollection.properties;
+            const resolvedCollection = collection
+                ? resolveCollection<M>({
+                    collection,
+                    path,
+                    entityId,
+                    fields: propertyConfigs
+                })
+                : undefined;
+
+            const properties: ResolvedProperties<M> | undefined = resolvedCollection?.properties;
 
             const firestoreValues = cmsToDelegateModel(
                 values,
@@ -209,14 +215,16 @@ export function useBuildDataSource({
                 delegate.buildDate,
                 delegate.buildDeleteFieldValue
             );
-            const updatedFirestoreValues: EntityValues<M> = updateDateAutoValues(
-                {
-                    inputValues: firestoreValues,
-                    properties,
-                    status,
-                    timestampNowValue: delegate.currentTime(),
-                    setDateToMidnight: delegate.setDateToMidnight
-                });
+            const updatedFirestoreValues: EntityValues<M> = properties
+                ? updateDateAutoValues(
+                    {
+                        inputValues: firestoreValues,
+                        properties,
+                        status,
+                        timestampNowValue: delegate.currentTime(),
+                        setDateToMidnight: delegate.setDateToMidnight
+                    })
+                : firestoreValues;
 
             console.debug("Saving entity", path, entityId, updatedFirestoreValues);
 
@@ -245,7 +253,7 @@ export function useBuildDataSource({
                 entity
             }: DeleteEntityProps<M>
         ): Promise<void> => {
-            return delegate.deleteEntity({entity});
+            return delegate.deleteEntity({ entity });
         }, [delegate.deleteEntity]),
 
         /**
@@ -268,7 +276,7 @@ export function useBuildDataSource({
         }, [delegate.checkUniqueField]),
 
         generateEntityId: useCallback((path: string): string => {
-            return delegate.generateEntityId(path, );
+            return delegate.generateEntityId(path,);
         }, [delegate.generateEntityId]),
 
         countEntities: useCallback(async ({

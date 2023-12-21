@@ -5,7 +5,7 @@ import {
     Entity,
     EntityCollection,
     FetchCollectionProps,
-    FetchEntityProps,
+    FetchEntityProps, NavigationController,
     SaveEntityProps,
     useBuildDataSource
 } from "@firecms/core";
@@ -13,15 +13,16 @@ import {
 import { FirebaseApp } from "firebase/app";
 import { useFirestoreDelegate } from "@firecms/firebase_pro";
 
-type CustomDataSourceProps = { firebaseApp?: FirebaseApp };
+type CustomDataSourceProps = { firebaseApp?: FirebaseApp, navigationController: NavigationController };
 
-export function useCustomDatasource({ firebaseApp }: CustomDataSourceProps): DataSource {
+export function useCustomDatasource({ firebaseApp, navigationController }: CustomDataSourceProps): DataSource {
     const firestoreDelegate = useFirestoreDelegate({
         firebaseApp
     })
 
     const firestoreDataSource = useBuildDataSource({
-        delegate: firestoreDelegate
+        delegate: firestoreDelegate,
+        navigationController
     });
 
     return {

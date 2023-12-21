@@ -1,4 +1,13 @@
-import { DataSource, Entity, EntityCallbacks, EntityValues, FireCMSContext, SaveEntityProps, User } from "../../types";
+import {
+    DataSource,
+    Entity,
+    EntityCallbacks,
+    EntityCollection,
+    EntityValues,
+    FireCMSContext,
+    SaveEntityProps,
+    User
+} from "../../types";
 import { useDataSource } from "./useDataSource";
 import { resolveCollection } from "../../util";
 
@@ -55,6 +64,7 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, Use
                                                                                                         onPreSaveHookError,
                                                                                                         onSaveSuccessHookError
                                                                                                     }: SaveEntityWithCallbacksProps<M> & {
+                                                                                                        collection: EntityCollection<M>,
                                                                                                         dataSource: DataSource,
                                                                                                         context: FireCMSContext<UserType>,
                                                                                                     }

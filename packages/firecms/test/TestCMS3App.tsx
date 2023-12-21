@@ -363,7 +363,7 @@ function Mock3AppAuthenticated({
         collections: appConfig?.collections,
         views: appConfig?.views,
         userConfigPersistence,
-        dataSource,
+        dataSource: dataSource as any,
         plugins
     });
 

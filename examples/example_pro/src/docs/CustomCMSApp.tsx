@@ -102,17 +102,27 @@ export function CustomCMSApp() {
         // firestoreIndexesBuilder: firestoreIndexesBuilder
     })
 
+    const storageSource = useFirebaseStorageSource({ firebaseApp });
+
+    const modeController = useBuildModeController();
+
+    const plugins: FireCMSPlugin[] = [];
+
+    const navigationController = useBuildNavigationController({
+        authController,
+        collections: [productsCollection],
+        dataSource: firestoreDelegate,
+        plugins
+    });
+
     /**
      * Controller in charge of fetching and persisting data
      */
     const dataSource = useBuildDataSource({
         delegate: firestoreDelegate,
+        navigationController
         // propertyConfigs: propertyConfigs
     });
-
-    const storageSource = useFirebaseStorageSource({ firebaseApp });
-
-    const modeController = useBuildModeController();
 
     const {
         authLoading,
@@ -126,15 +136,6 @@ export function CustomCMSApp() {
         },
         dataSource,
         storageSource
-    });
-
-    const plugins: FireCMSPlugin[] = [];
-
-    const navigationController = useBuildNavigationController({
-        authController,
-        collections: [productsCollection],
-        dataSource,
-        plugins
     });
 
     if (configError) {

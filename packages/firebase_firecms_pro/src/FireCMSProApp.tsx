@@ -125,18 +125,30 @@ export function FireCMSProApp({
     })
 
     /**
-     * Controller in charge of fetching and persisting data
-     */
-    const dataSource = useBuildDataSource({
-        delegate: firestoreDelegate,
-        propertyConfigs
-    });
-
-    /**
      * Controller used for saving and fetching files in storage
      */
     const storageSource = useFirebaseStorageSource({
         firebaseApp
+    });
+
+    const navigationController = useBuildNavigationController({
+        basePath,
+        baseCollectionPath,
+        authController,
+        collections,
+        views,
+        userConfigPersistence,
+        dataSource: firestoreDelegate,
+        plugins
+    });
+
+    /**
+     * Controller in charge of fetching and persisting data
+     */
+    const dataSource = useBuildDataSource({
+        delegate: firestoreDelegate,
+        propertyConfigs,
+        navigationController
     });
 
     /**
@@ -153,17 +165,6 @@ export function FireCMSProApp({
         appCheckForceRefresh: (appCheckOptions && appCheckOptions.forceRefresh) ? appCheckOptions.forceRefresh! : false,
         dataSource,
         storageSource
-    });
-
-    const navigationController = useBuildNavigationController({
-        basePath,
-        baseCollectionPath,
-        authController,
-        collections,
-        views,
-        userConfigPersistence,
-        dataSource,
-        plugins
     });
 
     /**
