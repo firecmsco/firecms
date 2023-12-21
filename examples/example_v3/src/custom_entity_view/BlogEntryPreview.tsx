@@ -11,7 +11,7 @@ import {
     Markdown,
     Typography,
     useDataSource,
-    useNavigationContext,
+    useNavigationController,
     useStorageSource
 } from "@firecms/core";
 import { BlogEntry, Product } from "../types";
@@ -128,7 +128,7 @@ function ProductGroupPreview({ references }: {
     references: EntityReference[]
 }) {
 
-    const navigation = useNavigationContext();
+    const navigation = useNavigationController();
     const productsCollection = navigation.getCollectionFromPaths(["products"]);
     const [products, setProducts] = useState<Entity<Product>[] | undefined>();
     const dataSource = useDataSource();

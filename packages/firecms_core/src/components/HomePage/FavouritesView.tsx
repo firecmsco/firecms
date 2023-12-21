@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useNavigationContext } from "../../hooks";
+import { useNavigationController } from "../../hooks";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
 import { TopNavigationEntry } from "../../types";
 import { Chip, Collapse } from "../../ui";
@@ -46,14 +46,14 @@ function NavigationChip({ entry }: { entry: TopNavigationEntry }) {
 
 export function FavouritesView({ hidden }: { hidden: boolean }) {
 
-    const navigationContext = useNavigationContext();
+    const navigationController = useNavigationController();
     const userConfigurationPersistence = useUserConfigurationPersistence();
 
     if (!userConfigurationPersistence)
         return null;
 
     const favouriteCollections = (userConfigurationPersistence?.favouritePaths ?? [])
-        .map((path) => navigationContext.topLevelNavigation?.navigationEntries.find((entry) => entry.path === path))
+        .map((path) => navigationController.topLevelNavigation?.navigationEntries.find((entry) => entry.path === path))
         .filter(Boolean) as TopNavigationEntry[];
 
     return <Collapse in={favouriteCollections.length > 0}>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Entity, EntityCollection, FireCMSContext, User } from "../../types";
 import { useDataSource } from "./useDataSource";
-import { useNavigationContext } from "../useNavigationContext";
+import { useNavigationController } from "../useNavigationController";
 import { useFireCMSContext } from "../useFireCMSContext";
 
 /**
@@ -44,9 +44,9 @@ export function useEntityFetch<M extends Record<string, any>, UserType extends U
     }: EntityFetchProps<M>): EntityFetchResult<M> {
 
     const dataSource = useDataSource();
-    const navigationContext = useNavigationContext();
+    const navigationController = useNavigationController();
 
-    const path = navigationContext.resolveAliasesFrom(inputPath);
+    const path = navigationController.resolveAliasesFrom(inputPath);
 
     const context: FireCMSContext<UserType> = useFireCMSContext();
 

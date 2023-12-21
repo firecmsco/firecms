@@ -10,18 +10,22 @@ import {
     buildCollection,
     CircularProgressCenter,
     FireCMS,
+    FireCMSPlugin,
     ModeControllerProvider,
     NavigationRoutes,
     Scaffold,
     SideDialogs,
-    SnackbarProvider, useBuildDataSource,
-    useBuildModeController
+    SnackbarProvider,
+    useBuildDataSource,
+    useBuildModeController,
+    useBuildNavigationController
 } from "@firecms/core";
 import {
     FirebaseAuthController,
     FirebaseLoginView,
     useFirebaseAuthController,
-    useFirebaseStorageSource, useFirestoreDelegate,
+    useFirebaseStorageSource,
+    useFirestoreDelegate,
     useInitialiseFirebase,
     useValidateAuthenticator
 } from "@firecms/firebase_pro";
@@ -124,6 +128,15 @@ export function CustomCMSApp() {
         storageSource
     });
 
+    const plugins: FireCMSPlugin[] = [];
+
+    const navigationController = useBuildNavigationController({
+        authController,
+        collections: [productsCollection],
+        dataSource,
+        plugins
+    });
+
     if (configError) {
         return <div> {configError} </div>;
     }
@@ -146,11 +159,12 @@ export function CustomCMSApp() {
             <SnackbarProvider>
                 <ModeControllerProvider
                     value={modeController}>
-                    <FireCMS authController={authController}
-                             collections={[productsCollection]}
-                             dataSource={dataSource}
-                             storageSource={storageSource}
-                             entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
+                    <FireCMS
+                        navigationController={navigationController}
+                        authController={authController}
+                        dataSource={dataSource}
+                        storageSource={storageSource}
+                        entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
                     >
                         {({ context, loading }) => {
 

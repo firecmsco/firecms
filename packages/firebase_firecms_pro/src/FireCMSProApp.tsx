@@ -15,7 +15,7 @@ import {
     useBrowserTitleAndIcon,
     useBuildDataSource,
     useBuildLocalConfigurationPersistence,
-    useBuildModeController
+    useBuildModeController, useBuildNavigationController
 } from "@firecms/core";
 
 import { FireCMSProAppProps } from "./FireCMSProAppProps";
@@ -155,6 +155,17 @@ export function FireCMSProApp({
         storageSource
     });
 
+    const navigationController = useBuildNavigationController({
+        basePath,
+        baseCollectionPath,
+        authController,
+        collections,
+        views,
+        userConfigPersistence,
+        dataSource,
+        plugins
+    });
+
     /**
      * Controller used to manage the dark or light color mode
      */
@@ -170,15 +181,13 @@ export function FireCMSProApp({
         </>;
     }
 
-
     return (
         <BrowserRouter basename={basePath}>
             <SnackbarProvider>
                 <ModeControllerProvider
                     value={modeController}>
                     <FireCMS
-                        collections={collections}
-                        views={views}
+                        navigationController={navigationController}
                         authController={authController}
                         userConfigPersistence={userConfigPersistence}
                         dateTimeFormat={dateTimeFormat}
@@ -186,8 +195,6 @@ export function FireCMSProApp({
                         storageSource={storageSource}
                         entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
                         locale={locale}
-                        basePath={basePath}
-                        baseCollectionPath={baseCollectionPath}
                         onAnalyticsEvent={onAnalyticsEvent}
                         plugins={plugins}
                         propertyConfigs={propertyConfigs}>

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 
 import { EntitySidePanelProps } from "../types";
-import { useNavigationContext } from "../hooks";
+import { useNavigationController } from "../hooks";
 
 import { ErrorBoundary } from "../components";
 import { EntityView } from "../internal/EntityView";
@@ -23,21 +23,21 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
         setBlockedNavigationMessage
     } = useSideDialogContext();
 
-    const navigationContext = useNavigationContext();
+    const navigationController = useNavigationController();
 
     const collection = useMemo(() => {
         if (!props) return undefined;
         let usedCollection = props.collection;
 
         if (!usedCollection) {
-            usedCollection = navigationContext.getCollection(props.path, props.entityId);
+            usedCollection = navigationController.getCollection(props.path, props.entityId);
             if (!usedCollection) {
                 console.error("ERROR: No collection found in path `", props.path, "`. Entity id: ", props.entityId);
                 throw Error("ERROR: No collection found in path `" + props.path + "`. Make sure you have defined a collection for this path in the root navigation.");
             }
         }
         return usedCollection;
-    }, [navigationContext, props]);
+    }, [navigationController, props]);
 
     useEffect(() => {
         function beforeunload(e: any) {

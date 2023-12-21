@@ -3,7 +3,7 @@ import equal from "react-fast-compare"
 import { Link } from "react-router-dom";
 
 import { Drawer as DefaultDrawer, DrawerProps } from "./Drawer";
-import { useLargeLayout, useNavigationContext } from "../hooks";
+import { useLargeLayout, useNavigationController } from "../hooks";
 import { CircularProgressCenter, ErrorBoundary, FireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "../components";
 import { cn, IconButton, Sheet, Tooltip } from "../ui";
 import { ChevronLeftIcon, MenuIcon } from "../icons";
@@ -85,7 +85,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
 
         const largeLayout = useLargeLayout();
 
-        const navigation = useNavigationContext();
+        const navigation = useNavigationController();
         const [drawerOpen, setDrawerOpen] = React.useState(false);
         const [onHover, setOnHover] = React.useState(false);
 
@@ -171,7 +171,7 @@ function StyledDrawer(props: {
     onMouseLeave: () => void
 }) {
 
-    const navigation = useNavigationContext();
+    const navigation = useNavigationController();
 
     const width = !props.displayed ? 0 : (props.open ? DRAWER_WIDTH : 72);
     const innerDrawer = <div

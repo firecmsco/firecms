@@ -3,7 +3,7 @@ import { VirtualTableWhereFilterOp } from "../../VirtualTable";
 import { Entity, EntityCollection, EntityReference } from "../../../types";
 import { ReferencePreview } from "../../../preview";
 import { getReferenceFrom } from "../../../util";
-import { useNavigationContext, useReferenceDialog } from "../../../hooks";
+import { useNavigationController, useReferenceDialog } from "../../../hooks";
 import { Button, Select, SelectItem } from "../../../ui";
 
 interface ReferenceFilterFieldProps {
@@ -94,9 +94,9 @@ export function ReferenceFilterField({
         }
     }
 
-    const navigationContext = useNavigationContext();
+    const navigationController = useNavigationController();
     const collection: EntityCollection | undefined = useMemo(() => {
-        return path ? navigationContext.getCollection(path) : undefined;
+        return path ? navigationController.getCollection(path) : undefined;
     }, [path]);
 
     const onSingleEntitySelected = (entity: Entity<any>) => {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Entity, EntityCollection, FilterValues, FireCMSContext, User } from "../../types";
 import { useDataSource } from "./useDataSource";
-import { useNavigationContext } from "../useNavigationContext";
+import { useNavigationController } from "../useNavigationController";
 import { useFireCMSContext } from "../useFireCMSContext";
 
 /**
@@ -71,9 +71,9 @@ export function useCollectionFetch<M extends Record<string, any>, UserType exten
     }: CollectionFetchProps<M>): CollectionFetchResult<M> {
 
     const dataSource = useDataSource();
-    const navigationContext = useNavigationContext();
+    const navigationController = useNavigationController();
 
-    const path = navigationContext.resolveAliasesFrom(inputPath);
+    const path = navigationController.resolveAliasesFrom(inputPath);
 
     const sortByProperty = sortBy ? sortBy[0] : undefined;
     const currentSort = sortBy ? sortBy[1] : undefined;

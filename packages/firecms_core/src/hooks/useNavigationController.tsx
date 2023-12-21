@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { NavigationContext } from "../types";
-import { NavigationContextInstance } from "../contexts/NavigationContext";
+import { NavigationController } from "../types";
+import { NavigationContext } from "../contexts/NavigationContext";
 
 /**
  * Use this hook to get the navigation of the app.
@@ -9,4 +9,4 @@ import { NavigationContextInstance } from "../contexts/NavigationContext";
  *
  * @group Hooks and utilities
  */
-export const useNavigationContext = (): NavigationContext => useContext(NavigationContextInstance);
+export const useNavigationController = (): NavigationController => useContext(NavigationContext);

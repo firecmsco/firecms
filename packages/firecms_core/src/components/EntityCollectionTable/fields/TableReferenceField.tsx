@@ -4,7 +4,7 @@ import { CollectionSize, Entity, EntityCollection, EntityReference, FilterValues
 
 import { getPreviewSizeFrom } from "../../../preview/util";
 import { getReferenceFrom } from "../../../util";
-import { useFireCMSContext, useNavigationContext, useReferenceDialog } from "../../../hooks";
+import { useFireCMSContext, useNavigationController, useReferenceDialog } from "../../../hooks";
 import { ErrorView } from "../../ErrorView";
 import { Button } from "../../../ui/Button";
 
@@ -24,9 +24,9 @@ type TableReferenceFieldProps = {
 export function TableReferenceField(props: TableReferenceFieldProps) {
 
     const context = useFireCMSContext();
-    const navigationContext = useNavigationContext();
+    const navigationController = useNavigationController();
     const { path } = props;
-    const collection = navigationContext.getCollection<EntityCollection>(path);
+    const collection = navigationController.getCollection<EntityCollection>(path);
     if (!collection) {
         if (context.components?.missingReference) {
             return <context.components.missingReference path={path}/>;

@@ -42,7 +42,7 @@ import {
     useDataSource,
     useFireCMSContext,
     useLargeLayout,
-    useNavigationContext,
+    useNavigationController,
     useSideEntityController
 } from "../../hooks";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
@@ -109,7 +109,7 @@ export const EntityCollectionView = React.memo(
     ) {
 
         const dataSource = useDataSource();
-        const navigation = useNavigationContext();
+        const navigation = useNavigationController();
         const sideEntityController = useSideEntityController();
         const authController = useAuthController();
         const userConfigPersistence = useUserConfigurationPersistence();
@@ -668,7 +668,7 @@ function EntitiesCount({
 }) {
 
     const dataSource = useDataSource();
-    const navigation = useNavigationContext();
+    const navigation = useNavigationController();
     const [count, setCount] = useState<number | undefined>(undefined);
     const [error, setError] = useState<Error | undefined>(undefined);
 

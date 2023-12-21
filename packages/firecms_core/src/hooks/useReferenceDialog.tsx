@@ -1,7 +1,7 @@
 import { useSideDialogsController } from "./useSideDialogsController";
 import { ReferenceSelectionInner, ReferenceSelectionInnerProps } from "../components";
 import { useCallback } from "react";
-import { useNavigationContext } from "./useNavigationContext";
+import { useNavigationController } from "./useNavigationController";
 
 /**
  * This hook is used to open a side dialog that allows the selection
@@ -18,7 +18,7 @@ export function useReferenceDialog<M extends Record<string, any>>(referenceDialo
     onClose?: () => void;
 }): { open: () => void; close: () => void } {
 
-    const navigation = useNavigationContext();
+    const navigation = useNavigationController();
     const sideDialogsController = useSideDialogsController();
 
     const open = useCallback(() => {

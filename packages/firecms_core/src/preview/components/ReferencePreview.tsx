@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { Entity, EntityCollection, EntityReference, ResolvedProperty } from "../../types";
 
 import { getReferencePreviewKeys, getValueInPath, resolveCollection } from "../../util";
-import { useEntityFetch, useFireCMSContext, useNavigationContext, useSideEntityController } from "../../hooks";
+import { useEntityFetch, useFireCMSContext, useNavigationController, useSideEntityController } from "../../hooks";
 import { PropertyPreview } from "../PropertyPreview";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { SkeletonPropertyComponent } from "../property_previews/SkeletonPropertyComponent";
@@ -61,9 +61,9 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                                                                  }: ReferencePreviewProps) {
 
     const context = useFireCMSContext();
-    const navigationContext = useNavigationContext();
+    const navigationController = useNavigationController();
 
-    const collection = navigationContext.getCollection<EntityCollection<M>>(reference.path);
+    const collection = navigationController.getCollection<EntityCollection<M>>(reference.path);
     if (!collection) {
         if (context.components?.missingReference) {
             return <context.components.missingReference path={reference.path}/>;

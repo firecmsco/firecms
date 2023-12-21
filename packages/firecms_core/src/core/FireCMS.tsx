@@ -2,25 +2,21 @@ import React, { useMemo } from "react";
 
 import { EntityCollection, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
 import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
-import { ModeControllerContext } from "../contexts/ModeController";
+import { AuthControllerContext, ModeControllerContext } from "../contexts";
 import { useBuildSideEntityController } from "../internal/useBuildSideEntityController";
-import { useBuildNavigationContext } from "../internal/useBuildNavigationContext";
-import { useBuildSideDialogsController } from "../internal/useBuildSideDialogsController";
 import { FireCMSContextInstance, useFireCMSContext, useModeController } from "../hooks";
+import { useBuildSideDialogsController } from "../internal/useBuildSideDialogsController";
 import { ErrorView } from "../components";
 import { StorageSourceContext } from "../contexts/StorageSourceContext";
 import { UserConfigurationPersistenceContext } from "../contexts/UserConfigurationPersistenceContext";
 import { DataSourceContext } from "../contexts/DataSourceContext";
 import { SideEntityControllerContext } from "../contexts/SideEntityControllerContext";
-import { NavigationContextInstance } from "../contexts/NavigationContext";
-import { AuthControllerContext } from "../contexts/AuthControllerContext";
+import { NavigationContext } from "../contexts/NavigationContext";
 import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerContext";
 import { useLocaleConfig } from "../internal/useLocaleConfig";
 import { CenteredView } from "../ui";
 import { DialogsProvider } from "../contexts/DialogsProvider";
 
-const DEFAULT_BASE_PATH = "/";
-const DEFAULT_COLLECTION_PATH = "/c";
 
 /**
  * If you are using independent components of the CMS
@@ -39,8 +35,6 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
     const modeController = useModeController();
     const {
         children,
-        collections,
-        views,
         entityLinkBuilder,
         userConfigPersistence,
         dateTimeFormat,
@@ -48,8 +42,7 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
         authController,
         storageSource,
         dataSource,
-        basePath = DEFAULT_BASE_PATH,
-        baseCollectionPath = DEFAULT_COLLECTION_PATH,
+        navigationController,
         plugins,
         onAnalyticsEvent,
         propertyConfigs,
@@ -59,23 +52,12 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
 
     useLocaleConfig(locale);
 
-    const navigation = useBuildNavigationContext({
-        basePath,
-        baseCollectionPath,
-        authController,
-        collections,
-        views,
-        userConfigPersistence,
-        dataSource,
-        plugins
-    });
-
     const sideDialogsController = useBuildSideDialogsController();
-    const sideEntityController = useBuildSideEntityController(navigation, sideDialogsController);
+    const sideEntityController = useBuildSideEntityController(navigationController, sideDialogsController);
 
     const pluginsLoading = plugins?.some(p => p.loading) ?? false;
 
-    const loading = authController.initialLoading || navigation.loading || pluginsLoading;
+    const loading = authController.initialLoading || navigationController.loading || pluginsLoading;
 
     const context: Partial<FireCMSContext> = useMemo(() => ({
         entityLinkBuilder,
@@ -88,12 +70,12 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
         components
     }), [dateTimeFormat, locale, plugins, entityViews, propertyConfigs, components]);
 
-    if (navigation.navigationLoadingError) {
+    if (navigationController.navigationLoadingError) {
         return (
             <CenteredView maxWidth={"md"} fullScreen={true}>
                 <ErrorView
                     title={"Error loading navigation"}
-                    error={navigation.navigationLoadingError}/>
+                    error={navigationController.navigationLoadingError}/>
             </CenteredView>
         );
     }
@@ -123,8 +105,8 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
                                     value={sideDialogsController}>
                                     <SideEntityControllerContext.Provider
                                         value={sideEntityController}>
-                                        <NavigationContextInstance.Provider
-                                            value={navigation}>
+                                        <NavigationContext.Provider
+                                            value={navigationController}>
                                             <BreadcrumbsProvider>
                                                 <DialogsProvider>
                                                     <FireCMSInternal
@@ -133,7 +115,7 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
                                                     </FireCMSInternal>
                                                 </DialogsProvider>
                                             </BreadcrumbsProvider>
-                                        </NavigationContextInstance.Provider>
+                                        </NavigationContext.Provider>
                                     </SideEntityControllerContext.Provider>
                                 </SideDialogsControllerContext.Provider>
                             </AuthControllerContext.Provider>

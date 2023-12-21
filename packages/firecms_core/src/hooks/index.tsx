@@ -5,7 +5,7 @@ export * from "./data/save";
 export * from "./data/delete";
 
 export * from "../form/useClearRestoreValue";
-export * from "./useNavigationContext";
+export * from "./useNavigationController";
 
 export * from "./useResolvedNavigationFrom";
 
@@ -23,3 +23,4 @@ export * from "./useLargeLayout";
 export * from "./useReferenceDialog";
 export * from "./useBrowserTitleAndIcon";
 export * from "./useBuildDataSource";
+export * from "./useBuildNavigationController";

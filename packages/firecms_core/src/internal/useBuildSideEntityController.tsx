@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from "react";
 import {
     EntityCollection,
     EntitySidePanelProps,
-    NavigationContext,
+    NavigationController,
     SideDialogPanelProps,
     SideDialogsController,
     SideEntityController
@@ -23,7 +23,7 @@ export function getEntityViewWidth(props: EntitySidePanelProps<any>, small: bool
     return !mainViewSelected ? `calc(${ADDITIONAL_TAB_WIDTH} + ${resolvedWidth ?? FORM_CONTAINER_WIDTH})` : resolvedWidth ?? FORM_CONTAINER_WIDTH
 }
 
-export const useBuildSideEntityController = (navigation: NavigationContext,
+export const useBuildSideEntityController = (navigation: NavigationController,
                                              sideDialogsController: SideDialogsController): SideEntityController => {
 
     const location = useLocation();
@@ -142,7 +142,7 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
     return sidePanels;
 }
 
-const propsToSidePanel = (props: EntitySidePanelProps<any>, navigation: NavigationContext, smallLayout: boolean): SideDialogPanelProps => {
+const propsToSidePanel = (props: EntitySidePanelProps<any>, navigation: NavigationController, smallLayout: boolean): SideDialogPanelProps => {
 
     const collectionPath = removeInitialAndTrailingSlashes(props.path);
     const newPath = props.entityId

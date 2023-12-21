@@ -1,11 +1,11 @@
-import { AddIcon, Chip, Collapse, Typography, unslugify, useAuthController, useNavigationContext } from "@firecms/core";
+import { AddIcon, Chip, Collapse, Typography, unslugify, useAuthController, useNavigationController } from "@firecms/core";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import React from "react";
 
 export function RootCollectionSuggestions() {
 
     const authController = useAuthController();
-    const navigationContext = useNavigationContext();
+    const navigationController = useNavigationController();
 
     const collectionEditorController = useCollectionEditorController();
     const canCreateCollections = collectionEditorController.configPermissions
@@ -16,7 +16,7 @@ export function RootCollectionSuggestions() {
 
     const rootPathSuggestions = collectionEditorController.rootPathSuggestions ?? [];
 
-    const showSuggestions = rootPathSuggestions.length > 3 || (navigationContext.collections.length === 0 && rootPathSuggestions.length > 0);
+    const showSuggestions = rootPathSuggestions.length > 3 || (navigationController.collections.length === 0 && rootPathSuggestions.length > 0);
     return <Collapse
         in={showSuggestions}>
 

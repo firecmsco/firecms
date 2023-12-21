@@ -6,7 +6,7 @@ import {
     EntityCollection,
     Property,
     useFireCMSContext,
-    useNavigationContext,
+    useNavigationController,
     User,
     useSnackbarController
 } from "@firecms/core";
@@ -70,7 +70,7 @@ export const ConfigControllerProvider = React.memo(
                                           getData
                                       }: PropsWithChildren<ConfigControllerProviderProps>) {
 
-        const navigation = useNavigationContext();
+        const navigation = useNavigationController();
         const navigate = useNavigate();
         const snackbarController = useSnackbarController();
         const { propertyConfigs } = useFireCMSContext();

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { useFireCMSContext, useNavigationContext } from "../../hooks";
+import { useFireCMSContext, useNavigationController } from "../../hooks";
 import { PluginGenericProps, PluginHomePageAdditionalCardsProps } from "../../types";
 
 import { toArray } from "../../util/arrays";
@@ -35,9 +35,9 @@ export function DefaultHomePage({
 }) {
 
     const context = useFireCMSContext();
-    const navigationContext = useNavigationContext();
+    const navigationController = useNavigationController();
 
-    if (!navigationContext.topLevelNavigation)
+    if (!navigationController.topLevelNavigation)
         throw Error("Navigation not ready in FireCMSHomePage");
 
     const {
@@ -49,7 +49,7 @@ export function DefaultHomePage({
     const {
         navigationEntries,
         groups
-    } = navigationContext.topLevelNavigation;
+    } = navigationController.topLevelNavigation;
 
     const [filteredUrls, setFilteredUrls] = useState<string[] | null>(null);
 

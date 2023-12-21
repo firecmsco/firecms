@@ -4,7 +4,7 @@ import { ReferencePreview } from "../../preview";
 import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../components";
 import { getIconForProperty, getReferenceFrom } from "../../util";
 
-import { useClearRestoreValue, useNavigationContext, useReferenceDialog } from "../../hooks";
+import { useClearRestoreValue, useNavigationController, useReferenceDialog } from "../../hooks";
 import { Button, ExpandablePanel } from "../../ui";
 import { ErrorView } from "../../components";
 
@@ -46,9 +46,9 @@ export function ArrayOfReferencesFieldBinding({
         setValue
     });
 
-    const navigationContext = useNavigationContext();
+    const navigationController = useNavigationController();
     const collection: EntityCollection | undefined = useMemo(() => {
-        return ofProperty.path ? navigationContext.getCollection(ofProperty.path) : undefined;
+        return ofProperty.path ? navigationController.getCollection(ofProperty.path) : undefined;
     }, [ofProperty.path]);
 
     if (!collection) {

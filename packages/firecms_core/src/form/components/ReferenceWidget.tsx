@@ -7,7 +7,7 @@ import { LabelWithIcon } from "../components";
 import {
     useEntityFetch,
     useFireCMSContext,
-    useNavigationContext,
+    useNavigationController,
     useReferenceDialog,
     useSideEntityController
 } from "../../hooks";
@@ -49,12 +49,12 @@ export function ReferenceWidget<M extends Record<string, any>>({
 }) {
 
     const fireCMSContext = useFireCMSContext();
-    const navigationContext = useNavigationContext();
+    const navigationController = useNavigationController();
     const sideEntityController = useSideEntityController();
 
     const collection: EntityCollection | undefined = useMemo(() => {
-        return navigationContext.getCollection(path);
-    }, [path, navigationContext]);
+        return navigationController.getCollection(path);
+    }, [path, navigationController]);
 
     if (!collection) {
         throw Error(`Couldn't find the corresponding collection for the path: ${path}`);

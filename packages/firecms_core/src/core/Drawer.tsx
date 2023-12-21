@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 
-import { useFireCMSContext, useLargeLayout, useNavigationContext } from "../hooks";
+import { useFireCMSContext, useLargeLayout, useNavigationController } from "../hooks";
 
 import { NavLink } from "react-router-dom";
 import { CMSAnalyticsEvent, TopNavigationEntry, TopNavigationResult } from "../types";
@@ -28,7 +28,7 @@ export function Drawer({
                        }: DrawerProps) {
 
     const context = useFireCMSContext();
-    const navigation = useNavigationContext();
+    const navigation = useNavigationController();
 
     const tooltipsOpen = hovered && !drawerOpen;
     const largeLayout = useLargeLayout();

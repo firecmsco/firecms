@@ -1,7 +1,7 @@
 import { Locale } from "./locales";
 import { DataSource } from "./datasource";
 import { StorageSource } from "./storage";
-import { NavigationContext } from "./navigation";
+import { NavigationController } from "./navigation";
 import { SideEntityController } from "./side_entity_controller";
 import { AuthController } from "./auth";
 import { EntityLinkBuilder } from "./entity_link_builder";
@@ -50,7 +50,7 @@ export type FireCMSContext<UserType extends User = User, AuthControllerType exte
      * attributes.
      * @see useNavigation
      */
-    navigation: NavigationContext;
+    navigation: NavigationController;
 
     /**
      * Controller to open the side dialog displaying entity forms

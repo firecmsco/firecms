@@ -8,7 +8,7 @@ import {
     useDataSource,
     useFireCMSContext,
     useLargeLayout,
-    useNavigationContext,
+    useNavigationController,
     useSideEntityController
 } from "../hooks";
 import { ErrorView } from "./ErrorView";
@@ -101,7 +101,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
 
     const sideDialogContext = useSideDialogContext();
     const sideEntityController = useSideEntityController();
-    const navigation = useNavigationContext();
+    const navigation = useNavigationController();
     const context = useFireCMSContext();
 
     const fullPath = navigation.resolveAliasesFrom(pathInput);

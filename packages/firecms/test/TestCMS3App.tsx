@@ -12,6 +12,7 @@ import {
     ErrorView,
     FireCMS,
     FireCMSAppBarProps,
+    FireCMSPlugin,
     Locale,
     ModeController,
     ModeControllerProvider,
@@ -23,6 +24,7 @@ import {
     useBrowserTitleAndIcon,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
+    useBuildNavigationController,
     User
 } from "@firecms/core";
 
@@ -36,11 +38,7 @@ import {
 import { FireCMSBackEndProvider, ProjectConfig, ProjectConfigProvider } from "../src/hooks";
 
 import { FireCMS3AppProps } from "../src/FireCMS3AppProps";
-import {
-    FireCMSAppConfig,
-    FireCMSBackend,
-    FireCMSUser
-} from "../src/types";
+import { FireCMSAppConfig, FireCMSBackend, FireCMSUser } from "../src/types";
 import {
     ADMIN_VIEWS,
     getUserRoles,
@@ -57,7 +55,12 @@ import { useMockDelegatedLogin } from "./mocks/useDelegatedLogin";
 import { useBuildMockCollectionsConfigController } from "./mocks/useBuildMockCollectionsConfigController";
 import { useBuildMockDataSource } from "./mocks/useBuildMockDataSource";
 import { useBuildMockStorageSource } from "./mocks/useBuildMockStorageSource";
-import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider, FirestoreTextSearchController } from "@firecms/firebase";
+import {
+    FirebaseAuthController,
+    FirebaseSignInOption,
+    FirebaseSignInProvider,
+    FirestoreTextSearchController
+} from "@firecms/firebase";
 import { useImportExportPlugin } from "@firecms/data_import_export";
 
 /**
@@ -69,8 +72,6 @@ import { useImportExportPlugin } from "@firecms/data_import_export";
  * This component is in charge of initialising Firebase, with the given
  * configuration object.
  *
- * If you are building a larger app and need finer control, you can use
- * {@link FireCMS}, {@link Scaffold}, {@link SideDialogs}
  * and {@link NavigationRoutes} instead.
  *
  * @param props
@@ -202,10 +203,10 @@ function Mock3ClientInner({
     });
 
     const permissions: PermissionsBuilder<PersistedCollection, FireCMSUser> = useCallback(({
-                                                                                            pathSegments,
-                                                                                            collection,
-                                                                                            user
-                                                                                        }) => resolveUserRolePermissions({
+                                                                                               pathSegments,
+                                                                                               collection,
+                                                                                               user
+                                                                                           }) => resolveUserRolePermissions({
         collection,
         roles: authController.userRoles ?? undefined,
         paths: pathSegments,
@@ -317,7 +318,7 @@ function Mock3AppAuthenticated({
 
     const importExportPlugin = useImportExportPlugin();
 
-    const collectionEditorPlugin = useCollectionEditorPlugin<PersistedCollection, User>({
+    const collectionEditorPlugin = useCollectionEditorPlugin({
         collectionConfigController,
         configPermissions,
         reservedGroups: RESERVED_GROUPS,
@@ -353,6 +354,19 @@ function Mock3AppAuthenticated({
      */
     const storageSource = useBuildMockStorageSource();
 
+    const plugins: FireCMSPlugin<any, any, any>[] = [importExportPlugin, collectionEditorPlugin];
+
+    const navigationController = useBuildNavigationController({
+        basePath,
+        baseCollectionPath,
+        authController,
+        collections: appConfig?.collections,
+        views: appConfig?.views,
+        userConfigPersistence,
+        dataSource,
+        plugins
+    });
+
     return (
         <FireCMSBackEndProvider {...fireCMSBackend}>
             <ProjectConfigProvider config={currentProjectController}>
@@ -360,8 +374,7 @@ function Mock3AppAuthenticated({
                     <ModeControllerProvider
                         value={modeController}>
                         <FireCMS
-                            collections={appConfig?.collections}
-                            views={appConfig?.views}
+                            navigationController={navigationController}
                             propertyConfigs={{}} // TODO
                             authController={authController}
                             userConfigPersistence={userConfigPersistence}
@@ -369,10 +382,8 @@ function Mock3AppAuthenticated({
                             dataSource={dataSource}
                             storageSource={storageSource}
                             locale={locale}
-                            basePath={basePath}
-                            baseCollectionPath={baseCollectionPath}
                             onAnalyticsEvent={onAnalyticsEvent}
-                            plugins={[importExportPlugin, collectionEditorPlugin]}
+                            plugins={plugins}
                         >
                             {({
                                   context,

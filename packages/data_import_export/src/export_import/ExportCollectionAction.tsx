@@ -22,7 +22,7 @@ import {
     Typography,
     useDataSource,
     useFireCMSContext,
-    useNavigationContext,
+    useNavigationController,
     User
 } from "@firecms/core";
 import { downloadExport } from "./export";
@@ -49,9 +49,9 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
 
     const context = useFireCMSContext<UserType>();
     const dataSource = useDataSource();
-    const navigationContext = useNavigationContext();
+    const navigationController = useNavigationController();
 
-    const path = navigationContext.resolveAliasesFrom(inputPath);
+    const path = navigationController.resolveAliasesFrom(inputPath);
 
     const canExport = !exportAllowed || exportAllowed({
         collectionEntitiesCount,

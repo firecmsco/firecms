@@ -1,4 +1,4 @@
 import React from "react";
-import { NavigationContext } from "../types";
+import { NavigationController } from "../types";
 
-export const NavigationContextInstance = React.createContext<NavigationContext>({} as NavigationContext);
+export const NavigationContext = React.createContext<NavigationController>({} as NavigationController);

@@ -14,7 +14,7 @@ import {
     TopNavigationResult,
     Typography,
     useAuthController,
-    useNavigationContext
+    useNavigationController
 } from "@firecms/core";
 import { useCollectionEditorController } from "@firecms/collection_editor";
 import { useNavigate } from "react-router-dom";
@@ -32,7 +32,7 @@ export function FireCMSDrawer({
 
     const navigate = useNavigate();
 
-    const navigation = useNavigationContext();
+    const navigation = useNavigationController();
     const collectionEditorController = useCollectionEditorController();
     const { user } = useAuthController();
 

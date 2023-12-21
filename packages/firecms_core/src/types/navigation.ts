@@ -2,11 +2,11 @@ import { EntityCollection } from "./collections";
 import { EntityReference } from "./entities";
 
 /**
- * Context that includes the resolved navigation and utility methods and
+ * Controller that includes the resolved navigation and utility methods and
  * attributes.
  * @group Models
  */
-export type NavigationContext = {
+export type NavigationController = {
 
     /**
      * List of the mapped collections in the CMS.

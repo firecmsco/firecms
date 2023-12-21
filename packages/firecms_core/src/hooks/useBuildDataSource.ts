@@ -13,6 +13,7 @@ import {
     GeoPoint,
     ListenCollectionProps,
     ListenEntityProps,
+    NavigationController,
     PropertyConfig,
     ResolvedProperties,
     SaveEntityProps
@@ -26,10 +27,12 @@ import { resolveCollection, updateDateAutoValues } from "../util";
  */
 export function useBuildDataSource({
                                        delegate,
-                                       propertyConfigs
+                                       propertyConfigs,
+    navigationController
                                    }: {
     delegate: DataSourceDelegate,
     propertyConfigs?: Record<string, PropertyConfig>;
+    navigationController: NavigationController;
 }): DataSource {
 
     return {

@@ -30,7 +30,7 @@ import {
     TopNavigationResult,
     useAuthController,
     useFireCMSContext,
-    useNavigationContext,
+    useNavigationController,
     User,
     useSnackbarController
 } from "@firecms/core";
@@ -158,7 +158,7 @@ export function CollectionEditorDialogInternal<M extends {
 ) {
 
     const { propertyConfigs } = useFireCMSContext();
-    const navigation = useNavigationContext();
+    const navigation = useNavigationController();
     const {
         topLevelNavigation,
         collections

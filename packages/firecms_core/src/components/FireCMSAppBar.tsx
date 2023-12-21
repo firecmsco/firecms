@@ -3,7 +3,7 @@ import React from "react";
 import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary } from "../components";
 import { Avatar, cn, IconButton, Menu, MenuItem, Typography } from "../ui";
-import { useAuthController, useLargeLayout, useModeController, useNavigationContext } from "../hooks";
+import { useAuthController, useLargeLayout, useModeController, useNavigationController } from "../hooks";
 import { DarkModeIcon, LightModeIcon, LogoutIcon } from "../icons";
 import { Skeleton } from "../ui/Skeleton";
 import { User } from "../types";
@@ -50,7 +50,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                                                         style,
                                                         user: userProp
                                                     }: FireCMSAppBarProps) {
-    const navigation = useNavigationContext();
+    const navigation = useNavigationController();
 
     const authController = useAuthController();
     const {

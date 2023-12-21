@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 
-import { useCollectionFetch, useDataSource, useNavigationContext } from "../../hooks";
+import { useCollectionFetch, useDataSource, useNavigationController } from "../../hooks";
 import { useDataOrder } from "../../hooks/data/useDataOrder";
 import { Entity, EntityCollection, FilterValues, SelectedCellProps, TableController, User } from "../../types";
 import { useDebouncedData } from "./useDebouncedData";
@@ -45,7 +45,7 @@ export function useEntityCollectionTableController<M extends Record<string, any>
 
     const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
 
-    const navigation = useNavigationContext();
+    const navigation = useNavigationController();
     const dataSource = useDataSource();
     const resolvedPath = useMemo(() => navigation.resolveAliasesFrom(fullPath), [fullPath, navigation.resolveAliasesFrom]);
 

@@ -12,7 +12,7 @@ import {
     FireCMSPlugin,
     Locale
 } from "@firecms/core";
-import { useNavigationContext } from "@firecms/core";
+import { useNavigationController } from "@firecms/core";
 import { FirebaseLoginViewProps } from "./components/FirebaseLoginView";
 import { FirebaseApp } from "firebase/app";
 import {

@@ -10,7 +10,7 @@ import {
     EntityCollectionsBuilder,
     EntityReference,
     FireCMSPlugin,
-    NavigationContext,
+    NavigationController,
     TopNavigationEntry,
     TopNavigationResult,
     User,
@@ -25,9 +25,12 @@ import {
 } from "../util";
 import { getParentReferencesFromPath } from "../util/parent_references_from_path";
 
+const DEFAULT_BASE_PATH = "/";
+const DEFAULT_COLLECTION_PATH = "/c";
+
 type BuildNavigationContextProps<EC extends EntityCollection, UserType extends User> = {
-    basePath: string,
-    baseCollectionPath: string,
+    basePath?: string,
+    baseCollectionPath?: string,
     authController: AuthController<UserType>;
     collections?: EC[] | EntityCollectionsBuilder<EC>;
     views?: CMSView[] | CMSViewsBuilder;
@@ -36,16 +39,16 @@ type BuildNavigationContextProps<EC extends EntityCollection, UserType extends U
     dataSource: DataSource;
 };
 
-export function useBuildNavigationContext<EC extends EntityCollection, UserType extends User>({
-                                                                                                                 basePath,
-                                                                                                                 baseCollectionPath,
-                                                                                                                 authController,
-                                                                                                                 collections: baseCollections,
-                                                                                                                 views: baseViews,
-                                                                                                                 userConfigPersistence,
-                                                                                                                 plugins,
-                                                                                                                 dataSource
-                                                                                                             }: BuildNavigationContextProps<EC, UserType>): NavigationContext {
+export function useBuildNavigationController<EC extends EntityCollection, UserType extends User>({
+                                                                                                     basePath = DEFAULT_BASE_PATH,
+                                                                                                     baseCollectionPath = DEFAULT_COLLECTION_PATH,
+                                                                                                     authController,
+                                                                                                     collections: baseCollections,
+                                                                                                     views: baseViews,
+                                                                                                     userConfigPersistence,
+                                                                                                     plugins,
+                                                                                                     dataSource
+                                                                                                 }: BuildNavigationContextProps<EC, UserType>): NavigationController {
 
     const location = useLocation();
 

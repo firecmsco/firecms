@@ -7,10 +7,10 @@ import {
     Button,
     CenteredView,
     CircularProgressCenter,
-    CMSAnalyticsEvent,
     ErrorView,
     FireCMS,
     FireCMSAppBarProps,
+    FireCMSPlugin,
     ModeController,
     ModeControllerProvider,
     NavigationRoutes,
@@ -23,6 +23,7 @@ import {
     useBuildDataSource,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
+    useBuildNavigationController,
     User
 } from "@firecms/core";
 
@@ -453,13 +454,25 @@ function FireCMS3AppAuthenticated({
         propertyConfigs: propertyConfigsMap
     });
 
+    const plugins: FireCMSPlugin<any, any, any>[] = [importExportPlugin, collectionEditorPlugin, dataEnhancementPlugin];
+
+    const navigationController = useBuildNavigationController({
+        basePath,
+        baseCollectionPath,
+        authController,
+        collections: appConfig?.collections,
+        views: appConfig?.views,
+        userConfigPersistence,
+        dataSource,
+        plugins
+    });
+
     /**
      * Controller used for saving and fetching files in storage
      */
     const storageSource = useFirebaseStorageSource({
         firebaseApp
     });
-
     return (
         <FireCMSBackEndProvider {...fireCMSBackend}>
             <ProjectConfigProvider config={currentProjectController}>
@@ -467,9 +480,8 @@ function FireCMS3AppAuthenticated({
                     <ModeControllerProvider
                         value={modeController}>
                         <FireCMS
-                            collections={appConfig?.collections}
+                            navigationController={navigationController}
                             dateTimeFormat={appConfig?.dateTimeFormat}
-                            views={appConfig?.views}
                             entityViews={appConfig?.entityViews}
                             locale={appConfig?.locale}
                             propertyConfigs={propertyConfigsMap}
@@ -478,10 +490,8 @@ function FireCMS3AppAuthenticated({
                             dataSource={dataSource}
                             storageSource={storageSource}
                             entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
-                            basePath={basePath}
-                            baseCollectionPath={baseCollectionPath}
                             onAnalyticsEvent={onAnalyticsEvent}
-                            plugins={[importExportPlugin, collectionEditorPlugin, dataEnhancementPlugin]}
+                            plugins={plugins}
                             components={{
                                 missingReference: MissingReferenceWidget
                             }}

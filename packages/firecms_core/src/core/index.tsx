@@ -1,4 +1,4 @@
-export { FireCMS } from "./FireCMS";
+export * from "./FireCMS";
 
 export type { ScaffoldProps } from "./Scaffold";
 export { Scaffold } from "./Scaffold";

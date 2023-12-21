@@ -10,7 +10,7 @@ import {
     SelectItem,
     StringProperty,
     Typography,
-    useNavigationContext
+    useNavigationController
 } from "@firecms/core";
 import { FieldHelperView } from "./FieldHelperView";
 
@@ -30,7 +30,7 @@ export function ReferencePropertyField({
         setFieldValue
     } = useFormikContext<StringProperty | NumberProperty>();
 
-    const navigation = useNavigationContext();
+    const navigation = useNavigationController();
 
     if (!navigation)
         return <div className={"col-span-12"}>
@@ -88,7 +88,7 @@ export function CollectionsSelect({
 
     console.log("error", error)
 
-    const navigation = useNavigationContext();
+    const navigation = useNavigationController();
 
     if (!navigation)
         return <div className={"col-span-12"}>

@@ -2,7 +2,7 @@ import { createContext, useContext } from "react";
 import { AuthController, FireCMSContext, User } from "../types";
 import { useAuthController } from "./useAuthController";
 import { useSideDialogsController } from "./useSideDialogsController";
-import { useNavigationContext } from "./useNavigationContext";
+import { useNavigationController } from "./useNavigationController";
 import { useSideEntityController } from "./useSideEntityController";
 import { useDataSource } from "./data/useDataSource";
 import { useStorageSource } from "./useStorageSource";
@@ -27,7 +27,7 @@ export const useFireCMSContext = <UserType extends User = User, AuthControllerTy
     const authController = useAuthController<UserType, AuthControllerType>();
     const sideDialogsController = useSideDialogsController();
     const sideEntityController = useSideEntityController();
-    const navigation = useNavigationContext();
+    const navigation = useNavigationController();
     const dataSource = useDataSource();
     const storageSource = useStorageSource();
     const snackbarController = useSnackbarController();

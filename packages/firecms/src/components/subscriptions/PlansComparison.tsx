@@ -7,7 +7,7 @@ import {
     Dialog,
     DialogContent,
     IconButton,
-    useNavigationContext
+    useNavigationController
 } from "@firecms/core";
 import { useNavigate } from "react-router-dom";
 import { useProjectConfig, useSubscriptionsForUserController } from "../../hooks";
@@ -22,11 +22,11 @@ export function PlansComparisonDialog({
     onClose: () => void
 }) {
 
-    const navigationContext = useNavigationContext();
+    const navigationController = useNavigationController();
     const navigate = useNavigate();
     const goToSettings = () => {
         onClose();
-        navigate(navigationContext.basePath + "/settings");
+        navigate(navigationController.basePath + "/settings");
     }
 
     return <Dialog

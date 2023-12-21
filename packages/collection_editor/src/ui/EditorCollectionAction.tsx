@@ -9,7 +9,7 @@ import {
     SettingsIcon,
     Tooltip,
     useAuthController,
-    useNavigationContext,
+    useNavigationController,
     useSnackbarController
 } from "@firecms/core";
 
@@ -25,7 +25,7 @@ export function EditorCollectionAction({
                                        }: CollectionActionsProps) {
 
     const authController = useAuthController();
-    const navigationController = useNavigationContext();
+    const navigationController = useNavigationController();
     const collectionEditorController = useCollectionEditorController();
     const configController = useCollectionsConfigController();
     const snackbarController = useSnackbarController();

@@ -3,7 +3,7 @@ import React, { PropsWithChildren } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView } from "../types";
 import { DefaultHomePage, EntityCollectionView, NotFoundPage } from "../components";
-import { useBreadcrumbsContext, useNavigationContext } from "../hooks";
+import { useBreadcrumbsContext, useNavigationController } from "../hooks";
 import { toArray } from "../util/arrays";
 import equal from "react-fast-compare"
 
@@ -23,7 +23,7 @@ export type NavigationRoutesProps = {
 /**
  * This component is in charge of rendering
  * all the related routes (entity collection root views, custom views
- * or the home route) related to a {@link NavigationContext}.
+ * or the home route) related to a {@link NavigationController}.
  * This component needs a parent {@link FireCMS}
  *
  * @constructor
@@ -37,7 +37,7 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
                               }: NavigationRoutesProps) {
 
         const location = useLocation();
-        const navigation = useNavigationContext();
+        const navigation = useNavigationController();
 
         if (!navigation)
             return <></>;

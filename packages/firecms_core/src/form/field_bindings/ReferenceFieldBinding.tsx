@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 
 import { Entity, EntityCollection, EntityReference, FieldProps } from "../../types";
-import { useClearRestoreValue, useNavigationContext, useReferenceDialog } from "../../hooks";
+import { useClearRestoreValue, useNavigationController, useReferenceDialog } from "../../hooks";
 import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { ReferencePreview } from "../../preview";
@@ -51,9 +51,9 @@ function ReferenceFieldBindingInternal<M extends Record<string, any>>({
 
     const validValue = value && value instanceof EntityReference;
 
-    const navigationContext = useNavigationContext();
+    const navigationController = useNavigationController();
     const collection: EntityCollection | undefined = useMemo(() => {
-        return property.path ? navigationContext.getCollection(property.path) : undefined;
+        return property.path ? navigationController.getCollection(property.path) : undefined;
     }, [property.path]);
 
     if (!collection) {
