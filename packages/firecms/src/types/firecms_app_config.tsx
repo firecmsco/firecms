@@ -6,7 +6,7 @@ import {
     EntityCollectionsBuilder,
     EntityCustomView,
     FireCMSAppBarProps,
-    Locale,
+    Locale, ModifyCollectionProps,
     PropertyConfig
 } from "@firecms/core";
 import { FirebaseApp } from "firebase/app";
@@ -25,7 +25,15 @@ export type FireCMSAppConfig = {
      * Each of the navigation entries in this field
      * generates an entry in the main menu.
      */
-    collections?: EntityCollection[] | EntityCollectionsBuilder<EntityCollection>;
+    collections?: EntityCollection[] | EntityCollectionsBuilder;
+
+    /**
+     * Use this callback to modify the collection before it is used in the CMS.
+     * This is useful to add custom views to the collection without overriding
+     * the original collection.
+     * @param props
+     */
+    modifyCollection?: (props: ModifyCollectionProps) => EntityCollection;
 
     /**
      * Custom additional views created by the developer, added to the main
@@ -78,11 +86,6 @@ export type FireCMSAppConfig = {
      * @param config
      */
     onFirebaseInit?: (config: object, app: FirebaseApp) => void;
-
-    // /**
-    //  * Use this to enable Firebase App Check
-    //  */
-    // appCheckOptions?: AppCheckOptions;
 
     /**
      * Format of the dates in the CMS.

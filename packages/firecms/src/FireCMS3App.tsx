@@ -411,6 +411,7 @@ function FireCMS3AppAuthenticated({
         collectionConfigController,
         configPermissions,
         reservedGroups: RESERVED_GROUPS,
+        modifyCollection: appConfig?.modifyCollection,
         pathSuggestions: (path?) => {
             if (!path)
                 return fireCMSBackend.projectsApi.getRootCollections(currentProjectController.projectId);

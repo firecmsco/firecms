@@ -17,7 +17,7 @@ export function GetCodeDialog({ collection, onOpenChange, open }: { onOpenChange
 
     const snackbarController = useSnackbarController();
 
-    const code = "const " + camelCase(collection.name) + "Collection = " + JSON5.stringify(collectionToCode(collection), null, "\t");
+    const code = "import { EntityCollection } from \"firecms\";\n\nconst " + camelCase(collection.name) + "Collection:EntityCollection = " + JSON5.stringify(collectionToCode(collection), null, "\t");
     return <Dialog open={open}
                    onOpenChange={onOpenChange}
                    maxWidth={"4xl"}>

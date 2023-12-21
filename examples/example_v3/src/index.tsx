@@ -13,6 +13,10 @@ const appConfig: FireCMSAppConfig = {
             productsCollection
         ]);
     },
+    modifyCollection: (props) => {
+        console.log("Modifying collection", props);
+      return props.collection;
+    },
     propertyConfigs: [
         colorPropertyConfig,
         pricePropertyConfig,

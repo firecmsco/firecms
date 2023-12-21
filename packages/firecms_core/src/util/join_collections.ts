@@ -1,4 +1,11 @@
-import { EntityCollection, MapProperty, PropertiesOrBuilders, Property, PropertyOrBuilder } from "../types";
+import {
+    EntityCollection,
+    MapProperty,
+    ModifyCollectionProps,
+    PropertiesOrBuilders,
+    Property,
+    PropertyOrBuilder
+} from "../types";
 import { mergeDeep } from "../util/objects";
 import { sortProperties } from "../util/collections";
 import { isPropertyBuilder } from "../util/entities";
@@ -8,7 +15,10 @@ import { isPropertyBuilder } from "../util/entities";
  * @param storedCollections
  * @param codedCollections
  */
-export function joinCollectionLists(storedCollections: EntityCollection[], codedCollections: EntityCollection[] | undefined): EntityCollection[] {
+export function joinCollectionLists(storedCollections: EntityCollection[],
+                                    codedCollections: EntityCollection[] | undefined,
+                                    parentPaths: string[] = [],
+                                    modifyCollection?: (props: ModifyCollectionProps) => EntityCollection): EntityCollection[] {
 
     // merge collections that are in both lists
     const updatedCollections = (codedCollections ?? [])
@@ -19,7 +29,7 @@ export function joinCollectionLists(storedCollections: EntityCollection[], coded
             if (!storedCollection) {
                 return codedCollection;
             } else {
-                return mergeCollection(storedCollection, codedCollection);
+                return mergeCollection(storedCollection, codedCollection, parentPaths, modifyCollection);
             }
         });
 
@@ -35,9 +45,18 @@ export function joinCollectionLists(storedCollections: EntityCollection[], coded
  * @param target
  * @param source
  */
-export function mergeCollection(target: EntityCollection, source: EntityCollection): EntityCollection {
+export function mergeCollection(target: EntityCollection,
+                                source: EntityCollection,
+                                parentPaths: string[] = [],
+                                modifyCollection?: (props: ModifyCollectionProps) => EntityCollection
+): EntityCollection {
 
-    const subcollectionsMerged = joinCollectionLists(target?.subcollections ?? [], source?.subcollections ?? []);
+    const subcollectionsMerged = joinCollectionLists(
+        target?.subcollections ?? [],
+        source?.subcollections ?? [],
+        [...parentPaths, target.path],
+        modifyCollection
+    );
 
     const propertiesMerged: PropertiesOrBuilders = { ...target.properties } as PropertiesOrBuilders;
     Object.keys(source.properties).forEach((key) => {
@@ -54,13 +73,17 @@ export function mergeCollection(target: EntityCollection, source: EntityCollecti
     const mergedPropertiesOrder = [...new Set([...targetPropertiesOrder, ...sourcePropertiesOrder])];
     const mergedEntityViews = [...new Set([...(target.entityViews ?? []), ...(source.entityViews ?? [])])];
 
-    return {
+    let resultCollection: EntityCollection = {
         ...mergedCollection,
         subcollections: subcollectionsMerged,
         properties: sortProperties(propertiesMerged, mergedPropertiesOrder),
         propertiesOrder: mergedPropertiesOrder,
         entityViews: mergedEntityViews
+    };
+    if (modifyCollection) {
+        resultCollection = modifyCollection({ collection: resultCollection, parentPaths });
     }
+    return resultCollection
 }
 
 function mergePropertyOrBuilder(target: Property, source: PropertyOrBuilder): PropertyOrBuilder {

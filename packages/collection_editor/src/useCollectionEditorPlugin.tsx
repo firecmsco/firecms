@@ -4,6 +4,7 @@ import {
     FireCMSPlugin,
     joinCollectionLists,
     makePropertiesEditable,
+    ModifyCollectionProps,
     Properties,
     User
 } from "@firecms/core";
@@ -25,6 +26,8 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
      * Firebase app where the configuration is saved.
      */
     collectionConfigController: CollectionsConfigController;
+
+    modifyCollection?: (props: ModifyCollectionProps) => EntityCollection;
 
     /**
      * Define what actions can be performed on the configuration.
@@ -55,6 +58,7 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
 
 }
 
+
 /**
  * Use this hook to initialise the Collection Editor plugin.
  * This is likely the only hook you will need to use.
@@ -69,6 +73,7 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
 export function useCollectionEditorPlugin<EC extends PersistedCollection = PersistedCollection, UserType extends User = User>
 ({
      collectionConfigController,
+    modifyCollection,
      configPermissions,
      reservedGroups,
      extraView,
@@ -86,9 +91,9 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
             };
             const editableCollections = collectionConfigController.collections ?? [];
             editableCollections.forEach(markAsEditable);
-            return joinCollectionLists(editableCollections, collections);
+            return joinCollectionLists(editableCollections, collections, [], modifyCollection);
         },
-        [collectionConfigController.collections]);
+        [collectionConfigController.collections, modifyCollection]);
 
     return {
         name: "Collection Editor",
