@@ -183,7 +183,7 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
 
     const answers = await inquirer.prompt(questions);
 
-    if (!answers.existing_firecms_project) {
+    if (!options.v2 && !answers.existing_firecms_project) {
         console.log("Please create a FireCMS project first. Head to https://app.firecms.co to get started and then run this command again!");
         process.exit(1);
     }
@@ -240,18 +240,7 @@ export async function createProject(options: InitOptions) {
             title: "Initialize git",
             task: () => initGit(options),
             enabled: () => options.git,
-        },
-        // {
-        //     title: "Install dependencies",
-        //     task: () =>
-        //         projectInstall({
-        //             cwd: options.targetDirectory,
-        //         }),
-        //     skip: () =>
-        //         options.skipInstall
-        //             ? "Pass --skipInstall to skip automatically installing dependencies"
-        //             : undefined,
-        // },
+        }
     ]);
 
     await tasks.run();

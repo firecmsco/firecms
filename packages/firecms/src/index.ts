@@ -10,4 +10,3 @@ export type { FireCMS3AppProps } from "./FireCMS3AppProps";
 
 // we export everything in these packages for simplicity
 export * from "@firecms/firebase";
-export * from "@firecms/core";
