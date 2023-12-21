@@ -1,7 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare";
 
-import { AppCheckTokenResult, AuthController, DataSource, StorageSource, User } from "@firecms/core";
+import {
+    AppCheckTokenResult,
+    AuthController,
+    DataSource,
+    DataSourceDelegate,
+    StorageSource,
+    User
+} from "@firecms/core";
 import { Authenticator } from "../types/auth";
 
 /**
@@ -21,14 +28,14 @@ export function useValidateAuthenticator<UserType extends User = User>({
                                                                            getAppCheckToken,
                                                                            appCheckForceRefresh = false,
                                                                            storageSource,
-                                                                           dataSource
+                                                                           dataSourceDelegate
                                                                        }:
                                                                            {
                                                                                authController: AuthController<UserType>,
                                                                                authentication?: boolean | Authenticator<UserType>,
                                                                                getAppCheckToken?: (forceRefresh: boolean) => Promise<AppCheckTokenResult> | undefined,
                                                                                appCheckForceRefresh?: boolean,
-                                                                               dataSource: DataSource;
+                                                                               dataSourceDelegate: DataSourceDelegate;
                                                                                storageSource: StorageSource;
                                                                            }): {
     canAccessMainView: boolean,
@@ -93,7 +100,7 @@ export function useValidateAuthenticator<UserType extends User = User>({
                 const allowed = await authentication({
                     user: delegateUser,
                     authController,
-                    dataSource,
+                    dataSourceDelegate ,
                     storageSource
                 });
                 if (!allowed) {
@@ -115,7 +122,7 @@ export function useValidateAuthenticator<UserType extends User = User>({
             setAuthVerified(true);
         }
 
-    }, [authController, authentication, getAppCheckToken, appCheckForceRefresh, dataSource, storageSource]);
+    }, [authController, authentication, getAppCheckToken, appCheckForceRefresh, dataSourceDelegate, storageSource]);
 
     useEffect(() => {
         checkAuthentication();

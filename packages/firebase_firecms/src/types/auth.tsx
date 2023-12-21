@@ -1,6 +1,6 @@
 import { ApplicationVerifier, ConfirmationResult, User as FirebaseUser } from "firebase/auth";
 
-import { AuthController, DataSource, StorageSource, User } from "@firecms/core";
+import { AuthController, DataSourceDelegate, StorageSource, User } from "@firecms/core";
 import { Role } from "./roles";
 
 /**
@@ -92,7 +92,7 @@ export type Authenticator<UserType extends User = User> = ({ user }: {
     /**
      * Connector to your database, e.g. your Firestore database
      */
-    dataSource: DataSource;
+    dataSourceDelegate: DataSourceDelegate;
 
     /**
      * Used storage implementation

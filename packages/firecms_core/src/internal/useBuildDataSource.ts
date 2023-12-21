@@ -62,8 +62,6 @@ export function useBuildDataSource({
                                                                          order
                                                                      }: FetchCollectionProps<M>
         ): Promise<Entity<M>[]> => {
-
-            const collection = collectionProp ?? navigationController.getCollection(path);
             return delegate.fetchCollection<M>({
                 path,
                 filter,
@@ -125,7 +123,7 @@ export function useBuildDataSource({
                     onError,
                     isCollectionGroup
                 });
-            }, [delegate])
+            }, [delegate, navigationController.getCollection])
             : undefined,
 
         /**
@@ -240,7 +238,7 @@ export function useBuildDataSource({
                     values: delegate.delegateToCMSModel(updatedFirestoreValues)
                 } as Entity<M>;
             });
-        }, [delegate.saveEntity]),
+        }, [delegate.saveEntity, navigationController.getCollection]),
 
         /**
          * Delete an entity

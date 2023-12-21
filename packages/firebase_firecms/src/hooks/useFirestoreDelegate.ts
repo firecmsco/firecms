@@ -638,7 +638,7 @@ function setDateToMidnight(input?: Timestamp): Timestamp | undefined {
     return Timestamp.fromDate(date);
 }
 
-function cmsToFirestoreModel(data: any, firestore: Firestore): any {
+export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
     if (data === undefined) {
         return deleteField();
     } else if (Array.isArray(data)) {

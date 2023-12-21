@@ -16,9 +16,7 @@ import {
     Scaffold,
     SideDialogs,
     SnackbarProvider,
-    useBuildDataSource,
     useBuildModeController,
-    useBuildNavigationController
 } from "@firecms/core";
 import {
     FirebaseAuthController,
@@ -102,27 +100,10 @@ export function CustomCMSApp() {
         // firestoreIndexesBuilder: firestoreIndexesBuilder
     })
 
+
     const storageSource = useFirebaseStorageSource({ firebaseApp });
 
     const modeController = useBuildModeController();
-
-    const plugins: FireCMSPlugin[] = [];
-
-    const navigationController = useBuildNavigationController({
-        authController,
-        collections: [productsCollection],
-        dataSource: firestoreDelegate,
-        plugins
-    });
-
-    /**
-     * Controller in charge of fetching and persisting data
-     */
-    const dataSource = useBuildDataSource({
-        delegate: firestoreDelegate,
-        navigationController
-        // propertyConfigs: propertyConfigs
-    });
 
     const {
         authLoading,
@@ -134,7 +115,7 @@ export function CustomCMSApp() {
             console.log("Allowing access to", user?.email);
             return true;
         },
-        dataSource,
+        dataSourceDelegate: firestoreDelegate,
         storageSource
     });
 
@@ -160,12 +141,11 @@ export function CustomCMSApp() {
             <SnackbarProvider>
                 <ModeControllerProvider
                     value={modeController}>
-                    <FireCMS
-                        navigationController={navigationController}
-                        authController={authController}
-                        dataSource={dataSource}
-                        storageSource={storageSource}
-                        entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
+                    <FireCMS authController={authController}
+                             collections={[productsCollection]}
+                             dataSourceDelegate={firestoreDelegate}
+                             storageSource={storageSource}
+                             entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
                     >
                         {({ context, loading }) => {
 

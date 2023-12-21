@@ -13,9 +13,8 @@ import {
     SideDialogs,
     SnackbarProvider,
     useBrowserTitleAndIcon,
-    useBuildDataSource,
     useBuildLocalConfigurationPersistence,
-    useBuildModeController, useBuildNavigationController
+    useBuildModeController
 } from "@firecms/core";
 
 import { FireCMSProAppProps } from "./FireCMSProAppProps";
@@ -131,26 +130,6 @@ export function FireCMSProApp({
         firebaseApp
     });
 
-    const navigationController = useBuildNavigationController({
-        basePath,
-        baseCollectionPath,
-        authController,
-        collections,
-        views,
-        userConfigPersistence,
-        dataSource: firestoreDelegate,
-        plugins
-    });
-
-    /**
-     * Controller in charge of fetching and persisting data
-     */
-    const dataSource = useBuildDataSource({
-        delegate: firestoreDelegate,
-        propertyConfigs,
-        navigationController
-    });
-
     /**
      * Validate authenticator
      */
@@ -163,7 +142,7 @@ export function FireCMSProApp({
         authentication,
         getAppCheckToken,
         appCheckForceRefresh: (appCheckOptions && appCheckOptions.forceRefresh) ? appCheckOptions.forceRefresh! : false,
-        dataSource,
+        dataSourceDelegate: firestoreDelegate,
         storageSource
     });
 
@@ -188,14 +167,17 @@ export function FireCMSProApp({
                 <ModeControllerProvider
                     value={modeController}>
                     <FireCMS
-                        navigationController={navigationController}
+                        collections={collections}
+                        views={views}
                         authController={authController}
                         userConfigPersistence={userConfigPersistence}
                         dateTimeFormat={dateTimeFormat}
-                        dataSource={dataSource}
+                        dataSourceDelegate={firestoreDelegate}
                         storageSource={storageSource}
                         entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
                         locale={locale}
+                        basePath={basePath}
+                        baseCollectionPath={baseCollectionPath}
                         onAnalyticsEvent={onAnalyticsEvent}
                         plugins={plugins}
                         propertyConfigs={propertyConfigs}>

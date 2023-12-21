@@ -327,14 +327,14 @@ export function CollectionPropertiesEditorForm({
                     </div>}
 
                     <div className="ml-1 mt-2 flex flex-row gap-2">
-                        {/*<Tooltip title={"Get the code for this collection"}>*/}
-                        {/*    <IconButton*/}
-                        {/*        variant={"filled"}*/}
-                        {/*        disabled={inferringProperties}*/}
-                        {/*        onClick={() => setCodeDialogOpen(true)}>*/}
-                        {/*        <CodeIcon/>*/}
-                        {/*    </IconButton>*/}
-                        {/*</Tooltip>*/}
+                        <Tooltip title={"Get the code for this collection"}>
+                            <IconButton
+                                variant={"filled"}
+                                disabled={inferringProperties}
+                                onClick={() => setCodeDialogOpen(true)}>
+                                <CodeIcon/>
+                            </IconButton>
+                        </Tooltip>
                         {inferPropertiesFromData && <Tooltip title={"Add new properties based on data"}>
                             <IconButton
                                 variant={"filled"}

@@ -1,16 +1,24 @@
 import {
-    DataSource,
+    DataSource, DataSourceDelegate,
     DeleteEntityProps,
-    Entity,
+    Entity, EntityReference,
     FetchCollectionProps,
-    FetchEntityProps,
+    FetchEntityProps, GeoPoint,
     ResolvedProperty,
     SaveEntityProps
 } from "@firecms/core";
 
-export function useBuildMockDataSource(): DataSource {
+export function useBuildMockDataSourceDelegate(): DataSourceDelegate {
     return {
-        checkUniqueField(path: string, name: string, value: any, property: ResolvedProperty, entityId?: string): Promise<boolean> {
+        buildDate(date: Date): any {
+        }, buildDeleteFieldValue(): any {
+        }, buildGeoPoint(geoPoint: GeoPoint): any {
+        }, buildReference(reference: EntityReference): any {
+        }, delegateToCMSModel(data: any): any {
+        }, setDateToMidnight(input: any): any {
+        }, currentTime(): any {
+        },
+        checkUniqueField(path: string, name: string, value: any, entityId?: string): Promise<boolean> {
             return Promise.resolve(false);
         },
 

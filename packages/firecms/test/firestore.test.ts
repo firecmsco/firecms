@@ -1,6 +1,7 @@
-import { it, expect } from "@jest/globals";
+import { expect, it } from "@jest/globals";
 import { Timestamp } from "firebase/firestore";
 import { cmsToFirestoreModel, firestoreToCMSModel } from "../src";
+
 it("cmsToFirestoreModel", () => {
     const inputValues = {
         content:

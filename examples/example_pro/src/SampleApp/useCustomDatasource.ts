@@ -1,63 +1,71 @@
 import {
     CMSType,
     DataSource,
+    DataSourceDelegate,
     DeleteEntityProps,
     Entity,
-    EntityCollection,
     FetchCollectionProps,
-    FetchEntityProps, NavigationController,
+    FetchEntityProps,
     SaveEntityProps,
-    useBuildDataSource
 } from "@firecms/core";
-
 import { FirebaseApp } from "firebase/app";
 import { useFirestoreDelegate } from "@firecms/firebase_pro";
 
-type CustomDataSourceProps = { firebaseApp?: FirebaseApp, navigationController: NavigationController };
+type CustomDataSourceProps = {
+    firebaseApp?: FirebaseApp,
+};
 
-export function useCustomDatasource({ firebaseApp, navigationController }: CustomDataSourceProps): DataSource {
+/**
+ * This is an example of a custom data source.
+ * It is a React Hook that returns a {@link DataSource} object.
+ * @param firebaseApp
+ * @param navigationController
+ */
+export function useCustomDatasource({ firebaseApp }: CustomDataSourceProps): DataSourceDelegate {
+
     const firestoreDelegate = useFirestoreDelegate({
-        firebaseApp
+        firebaseApp,
     })
 
-    const firestoreDataSource = useBuildDataSource({
-        delegate: firestoreDelegate,
-        navigationController
-    });
-
     return {
-        fetchCollection<M extends { [Key: string]: CMSType }>(props: FetchCollectionProps<M>): Promise<Entity<M>[]> {
+        ...firestoreDelegate,
+        fetchCollection<M extends {
+            [Key: string]: CMSType
+        }>(props: FetchCollectionProps<M>): Promise<Entity<M>[]> {
             if (props.path === "your_path_custom") {
                 // make your custom http call and return your Entities
             }
-            return firestoreDataSource.fetchCollection(props);
+            return firestoreDelegate.fetchCollection(props);
         },
-        fetchEntity<M extends { [Key: string]: CMSType }>(props: FetchEntityProps<M>): Promise<Entity<M> | undefined> {
+        fetchEntity<M extends {
+            [Key: string]: CMSType
+        }>(props: FetchEntityProps<M>): Promise<Entity<M> | undefined> {
             if (props.path === "your_path_custom") {
                 // make your custom http call and return your Entities
             }
-            return firestoreDataSource.fetchEntity(props);
+            return firestoreDelegate.fetchEntity(props);
         },
-        saveEntity<M extends { [Key: string]: CMSType }>(props: SaveEntityProps<M>): Promise<Entity<M>> {
+        saveEntity<M extends {
+            [Key: string]: CMSType
+        }>(props: SaveEntityProps<M>): Promise<Entity<M>> {
             if (props.path === "your_path_custom") {
                 // make your custom http call and return your Entities
             }
-            return firestoreDataSource.saveEntity(props);
+            return firestoreDelegate.saveEntity(props);
         },
-        deleteEntity<M extends { [Key: string]: CMSType }>(props: DeleteEntityProps<M>): Promise<void> {
-            return firestoreDataSource.deleteEntity(props);
+        deleteEntity<M extends {
+            [Key: string]: CMSType
+        }>(props: DeleteEntityProps<M>): Promise<void> {
+            return firestoreDelegate.deleteEntity(props);
         },
         checkUniqueField(path: string, name: string, value: any, entityId?: string): Promise<boolean> {
-            return firestoreDataSource.checkUniqueField(path, name, value, entityId);
+            return firestoreDelegate.checkUniqueField(path, name, value, entityId);
         },
         generateEntityId(path: string) {
-            return firestoreDataSource.generateEntityId(path);
+            return firestoreDelegate.generateEntityId(path);
         },
-        countEntities(props: {
-            path: string,
-            collection: EntityCollection,
-        }): Promise<number> {
-            return firestoreDataSource.countEntities(props);
+        countEntities(props: FetchCollectionProps): Promise<number> {
+            return firestoreDelegate.countEntities(props);
         }
     }
 }

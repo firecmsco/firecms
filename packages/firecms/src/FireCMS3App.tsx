@@ -20,10 +20,8 @@ import {
     SnackbarProvider,
     Typography,
     useBrowserTitleAndIcon,
-    useBuildDataSource,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
-    useBuildNavigationController,
     User
 } from "@firecms/core";
 
@@ -71,7 +69,7 @@ import {
     useFirestoreDelegate,
     useInitialiseFirebase
 } from "@firecms/firebase";
-import { useImportExportPlugin } from "@firecms/data_import_export";
+import { ExportAllowedParams, useImportExportPlugin } from "@firecms/data_import_export";
 
 const DOCS_LIMIT = 200;
 
@@ -402,9 +400,9 @@ function FireCMS3AppAuthenticated({
     }, [appConfig?.propertyConfigs]);
 
     const importExportPlugin = useImportExportPlugin({
-        exportAllowed: ({ collectionEntitiesCount }) => {
+        exportAllowed: useCallback(({ collectionEntitiesCount }: ExportAllowedParams) => {
             return currentProjectController.canExport || collectionEntitiesCount <= DOCS_LIMIT;
-        },
+        }, [currentProjectController.canExport]),
         notAllowedView: <SubscriptionPlanWidget showForPlans={["free"]}
                                                 message={`Upgrade to export more than ${DOCS_LIMIT} entities`}/>
     });
@@ -448,32 +446,13 @@ function FireCMS3AppAuthenticated({
 
     const plugins: FireCMSPlugin<any, any, any>[] = [importExportPlugin, collectionEditorPlugin, dataEnhancementPlugin];
 
-    const navigationController = useBuildNavigationController({
-        basePath,
-        baseCollectionPath,
-        authController,
-        collections: appConfig?.collections,
-        views: appConfig?.views,
-        userConfigPersistence,
-        dataSource: firestoreDelegate,
-        plugins
-    });
-
-    /**
-     * Controller in charge of fetching and persisting data
-     */
-    const dataSource = useBuildDataSource({
-        delegate: firestoreDelegate,
-        propertyConfigs: propertyConfigsMap,
-        navigationController
-    });
-
     /**
      * Controller used for saving and fetching files in storage
      */
     const storageSource = useFirebaseStorageSource({
         firebaseApp
     });
+
     return (
         <FireCMSBackEndProvider {...fireCMSBackend}>
             <ProjectConfigProvider config={currentProjectController}>
@@ -481,14 +460,17 @@ function FireCMS3AppAuthenticated({
                     <ModeControllerProvider
                         value={modeController}>
                         <FireCMS
-                            navigationController={navigationController}
+                            collections={appConfig?.collections}
+                            views={appConfig?.views}
+                            basePath={basePath}
+                            baseCollectionPath={baseCollectionPath}
                             dateTimeFormat={appConfig?.dateTimeFormat}
                             entityViews={appConfig?.entityViews}
                             locale={appConfig?.locale}
                             propertyConfigs={propertyConfigsMap}
                             authController={authController}
                             userConfigPersistence={userConfigPersistence}
-                            dataSource={dataSource}
+                            dataSourceDelegate={firestoreDelegate}
                             storageSource={storageSource}
                             entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
                             onAnalyticsEvent={onAnalyticsEvent}

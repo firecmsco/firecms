@@ -53,7 +53,7 @@ import { useBuildMockProjectConfig } from "./mocks/useBuildMockProjectConfig";
 import { useBuildMockAuthController } from "./mocks/useBuildMockAuthController";
 import { useMockDelegatedLogin } from "./mocks/useDelegatedLogin";
 import { useBuildMockCollectionsConfigController } from "./mocks/useBuildMockCollectionsConfigController";
-import { useBuildMockDataSource } from "./mocks/useBuildMockDataSource";
+import { useBuildMockDataSourceDelegate } from "./mocks/useBuildMockDataSource";
 import { useBuildMockStorageSource } from "./mocks/useBuildMockStorageSource";
 import {
     FirebaseAuthController,
@@ -203,10 +203,10 @@ function Mock3ClientInner({
     });
 
     const permissions: PermissionsBuilder<PersistedCollection, FireCMSUser> = useCallback(({
-                                                                                               pathSegments,
-                                                                                               collection,
-                                                                                               user
-                                                                                           }) => resolveUserRolePermissions({
+                                                                                            pathSegments,
+                                                                                            collection,
+                                                                                            user
+                                                                                        }) => resolveUserRolePermissions({
         collection,
         roles: authController.userRoles ?? undefined,
         paths: pathSegments,
@@ -347,25 +347,12 @@ function Mock3AppAuthenticated({
     /**
      * Controller in charge of fetching and persisting data
      */
-    const dataSource = useBuildMockDataSource();
+    const dataSourceDelegate = useBuildMockDataSourceDelegate();
 
     /**
      * Controller used for saving and fetching files in storage
      */
     const storageSource = useBuildMockStorageSource();
-
-    const plugins: FireCMSPlugin<any, any, any>[] = [importExportPlugin, collectionEditorPlugin];
-
-    const navigationController = useBuildNavigationController({
-        basePath,
-        baseCollectionPath,
-        authController,
-        collections: appConfig?.collections,
-        views: appConfig?.views,
-        userConfigPersistence,
-        dataSource: dataSource as any,
-        plugins
-    });
 
     return (
         <FireCMSBackEndProvider {...fireCMSBackend}>
@@ -374,16 +361,19 @@ function Mock3AppAuthenticated({
                     <ModeControllerProvider
                         value={modeController}>
                         <FireCMS
-                            navigationController={navigationController}
+                            collections={appConfig?.collections}
+                            views={appConfig?.views}
                             propertyConfigs={{}} // TODO
                             authController={authController}
                             userConfigPersistence={userConfigPersistence}
                             dateTimeFormat={dateTimeFormat}
-                            dataSource={dataSource}
+                            dataSourceDelegate={dataSourceDelegate}
                             storageSource={storageSource}
                             locale={locale}
+                            basePath={basePath}
+                            baseCollectionPath={baseCollectionPath}
                             onAnalyticsEvent={onAnalyticsEvent}
-                            plugins={plugins}
+                            plugins={[importExportPlugin, collectionEditorPlugin]}
                         >
                             {({
                                   context,

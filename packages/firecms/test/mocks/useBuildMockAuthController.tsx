@@ -2,13 +2,21 @@ import { useState } from "react";
 
 import { User as FirebaseUser } from "firebase/auth";
 import { createMockUser } from "./mock_user";
-import { FirebaseAuthController, Role } from "../../src/types";
+import { FirebaseAuthController, Role } from "@firecms/firebase";
 
 export function useBuildMockAuthController(): FirebaseAuthController {
 
     const [user, setUser] = useState<FirebaseUser | null>(null);
 
     return {
+        anonymousLogin(): void {
+        }, appleLogin(): void {
+        }, facebookLogin(): void {
+        }, githubLogin(): void {
+        }, microsoftLogin(): void {
+        }, phoneLogin(phone: string, applicationVerifier): void {
+        }, twitterLogin(): void {
+        },
         authLoading: false,
         createUserWithEmailAndPassword(email: string, password: string): void {
         },
