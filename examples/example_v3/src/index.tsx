@@ -14,8 +14,7 @@ const appConfig: FireCMSAppConfig = {
         ]);
     },
     modifyCollection: (props) => {
-        console.log("Modifying collection", props);
-      return props.collection;
+        return props.collection;
     },
     propertyConfigs: [
         colorPropertyConfig,

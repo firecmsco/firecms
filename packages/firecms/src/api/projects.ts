@@ -3,6 +3,8 @@ import { handleApiResponse } from "./common";
 
 export type ProjectsApi = ReturnType<typeof buildProjectsApi>;
 
+const rootCollectionsCache: { [key: string]: string[] } = {};
+
 export function buildProjectsApi(host: string, getBackendAuthToken: () => Promise<string>) {
 
     async function createNewFireCMSProject(projectId: string, googleAccessToken: string) {
@@ -112,8 +114,6 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                 return handleApiResponse<void>(res, projectId);
             });
     }
-
-    const rootCollectionsCache: { [key: string]: string[] } = {};
 
     async function getRootCollections(projectId: string,
                                       googleAccessToken?: string): Promise<string[]> {

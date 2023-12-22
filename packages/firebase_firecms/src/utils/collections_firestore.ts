@@ -16,10 +16,10 @@ import {
 } from "@firecms/core";
 import { PersistedCollection } from "@firecms/collection_editor";
 
-export function buildCollectionPath(path: string, parentPathSegments?: string[]): string {
-    if (!parentPathSegments)
-        return stripCollectionPath(path);
-    return [...parentPathSegments.map(stripCollectionPath), stripCollectionPath(path)].join(COLLECTION_PATH_SEPARATOR);
+export function buildCollectionId(idOrPath: string, parentCollectionIds?: string[]): string {
+    if (!parentCollectionIds)
+        return stripCollectionPath(idOrPath);
+    return [...parentCollectionIds.map(stripCollectionPath), stripCollectionPath(idOrPath)].join(COLLECTION_PATH_SEPARATOR);
 }
 
 export function setUndefinedToDelete(data: any): any {
@@ -67,22 +67,23 @@ export const docToCollection = (doc: DocumentSnapshot): PersistedCollection => {
     const properties = data.properties as Properties ?? {};
     makePropertiesEditable(properties);
     const sortedProperties = sortProperties(properties, propertiesOrder);
-    return { ...data, properties: sortedProperties } as PersistedCollection;
+    return {
+        ...data,
+        properties: sortedProperties,
+        id: data.id ?? data.alias ?? data.path
+    } as PersistedCollection;
 }
 
 export function prepareCollectionForPersistence<M extends { [Key: string]: CMSType }>(collection: PersistedCollection<M>, propertyConfigs: Record<string, PropertyConfig>) {
 
     const { properties: inputProperties, ...rest } = collection;
     const cleanedProperties = cleanPropertyConfigs(inputProperties, propertyConfigs);
-    console.log("cleanedProperties", cleanedProperties)
     const properties = setUndefinedToDelete(removeFunctions(cleanedProperties));
     const newCollection: PersistedCollection = {
         ...removeUndefined(rest),
         properties
     };
 
-    if (newCollection.alias === "")
-        delete newCollection.alias;
     delete newCollection.permissions;
     if (newCollection.entityViews) {
         newCollection.entityViews = newCollection.entityViews.filter(view => typeof view === "string");

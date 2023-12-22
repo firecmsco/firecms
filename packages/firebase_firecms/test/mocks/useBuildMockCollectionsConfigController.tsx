@@ -22,7 +22,7 @@ export function useBuildMockCollectionsConfigController(): CollectionsConfigCont
 export const productsCollection: PersistedCollection = {
     ownerId: "",
     path: "products",
-    alias: "ppp",
+    id: "ppp",
     name: "Products",
     singularName: "Product",
     group: "Main",

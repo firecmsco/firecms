@@ -6,6 +6,7 @@ const collectionBuilder: EntityCollectionsBuilder = async ({ dataSource }) => {
         path: "units",
     });
     const lessonCollections = units.map(unit => buildCollection({
+        id: "unit_lessons",
         name: unit.values.name,
         path: `units/${unit.id}/lessons`,
         description: unit.values.description,

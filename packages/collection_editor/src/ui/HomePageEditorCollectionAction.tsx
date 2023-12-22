@@ -7,7 +7,7 @@ import {
     MoreVertIcon,
     PluginHomePageActionsProps,
     SettingsIcon,
-    useAuthController
+    useAuthController, useSnackbarController
 } from "@firecms/core";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { useCallback, useState } from "react";
@@ -18,6 +18,7 @@ export function HomePageEditorCollectionAction({
                                                    collection
                                                }: PluginHomePageActionsProps) {
 
+    const snackbarController = useSnackbarController();
     const authController = useAuthController();
     const configController = useCollectionsConfigController();
     const collectionEditorController = useCollectionEditorController();
@@ -28,13 +29,19 @@ export function HomePageEditorCollectionAction({
     });
 
     const onEditCollectionClicked = useCallback(() => {
-        collectionEditorController?.editCollection({ path, parentPathSegments: [] });
+        collectionEditorController?.editCollection({ path, parentCollectionIds: [] });
     }, [collectionEditorController, path]);
 
     const [deleteRequested, setDeleteRequested] = useState(false);
 
     const deleteCollection = useCallback(() => {
-        configController?.deleteCollection({ path });
+        configController?.deleteCollection({ path }).then(() => {
+            setDeleteRequested(false);
+            snackbarController.open({
+                message: "Collection deleted",
+                type: "success"
+            });
+        });
     }, [path, configController]);
 
     return <>

@@ -116,7 +116,7 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
             property: ResolvedProperty,
             propertyKey: string,
             fullPath: string,
-            parentPathSegments: string[],
+            parentCollectionIds: string[],
             onHover: boolean,
             collection: EC;
         }>;
@@ -127,7 +127,7 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
          */
         AddColumnComponent?: React.ComponentType<{
             fullPath: string,
-            parentPathSegments: string[],
+            parentCollectionIds: string[],
             collection: EC;
         }>;
     }

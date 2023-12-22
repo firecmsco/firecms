@@ -46,10 +46,10 @@ export function getNavigationEntriesFromPathInternal(props: {
     for (let i = 0; i < subpathCombinations.length; i++) {
         const subpathCombination = subpathCombinations[i];
 
-        const collection: EntityCollection<any> | undefined = collections && collections.find((entry) => entry.alias === subpathCombination || entry.path === subpathCombination);
+        const collection: EntityCollection<any> | undefined = collections && collections.find((entry) => entry.id === subpathCombination || entry.path === subpathCombination);
 
         if (collection) {
-            const pathOrAlias = collection.alias ?? collection.path;
+            const pathOrAlias = collection.id ?? collection.path;
             const collectionPath = currentFullPath && currentFullPath.length > 0
                 ? (currentFullPath + "/" + pathOrAlias)
                 : pathOrAlias;

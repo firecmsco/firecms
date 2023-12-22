@@ -45,16 +45,11 @@ export interface EntityViewProps<M extends Record<string, any>> {
     entityId?: string;
     copy?: boolean;
     selectedSubPath?: string;
+    parentCollectionIds: string[];
     formWidth?: number | string;
     onValuesAreModified: (modified: boolean) => void;
     onUpdate?: (params: { entity: Entity<any> }) => void;
     onClose?: () => void;
-}
-
-type EntityViewView = {
-    label: string;
-    component: React.ReactNode;
-    size: "full" | "half";
 }
 
 /**
@@ -69,11 +64,13 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                                                                                      selectedSubPath,
                                                                                      copy,
                                                                                      collection,
+                                                                                     parentCollectionIds,
                                                                                      onValuesAreModified,
                                                                                      formWidth,
                                                                                      onUpdate,
                                                                                      onClose
                                                                                  }: EntityViewProps<M>) {
+
 
     if (collection.customId && collection.formAutoSave) {
         console.warn(`The collection ${collection.path} has customId and formAutoSave enabled. This is not supported and formAutoSave will be ignored`);
@@ -343,7 +340,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
 
     const subCollectionsViews = subcollections && subcollections.map(
         (subcollection, colIndex) => {
-            const subcollectionId = subcollection.alias ?? subcollection.path;
+            const subcollectionId = subcollection.id ?? subcollection.path;
             const fullPath = usedEntity ? `${path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollectionId)}` : undefined;
             if (selectedTabRef.current !== subcollectionId)
                 return null;
@@ -359,7 +356,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                         (usedEntity && fullPath
                             ? <EntityCollectionView
                                 fullPath={fullPath}
-                                parentPathSegments={fullPathToCollectionSegments(path)}
+                                parentCollectionIds={[...parentCollectionIds, collection.id]}
                                 isSubCollection={true}
                                 {...subcollection}/>
                             : <div
@@ -480,7 +477,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
         (subcollection) =>
             <Tab
                 className="text-sm min-w-[140px]"
-                value={subcollection.path}
+                value={subcollection.id}
                 key={`entity_detail_collection_tab_${subcollection.name}`}>
                 {subcollection.name}
             </Tab>
@@ -533,9 +530,6 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
 
                             <Tab
                                 disabled={!hasAdditionalViews}
-                                // onClick={() => {
-                                //     onSideTabClick(-1);
-                                // }}
                                 value={MAIN_TAB_VALUE}
                                 className={`${
                                     !hasAdditionalViews ? "hidden" : ""

@@ -27,7 +27,7 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
      */
     collectionConfigController: CollectionsConfigController;
 
-    modifyCollection?: (props: ModifyCollectionProps) => EntityCollection;
+    modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | undefined;
 
     /**
      * Define what actions can be performed on the configuration.
@@ -89,9 +89,10 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
                 makePropertiesEditable(c.properties as Properties);
                 c.subcollections?.forEach(markAsEditable);
             };
-            const editableCollections = collectionConfigController.collections ?? [];
-            editableCollections.forEach(markAsEditable);
-            return joinCollectionLists(editableCollections, collections, [], modifyCollection);
+            const storedCollections = collectionConfigController.collections ?? [];
+            storedCollections.forEach(markAsEditable);
+            const joinCollectionLists1 = joinCollectionLists(collections, storedCollections, [], modifyCollection);
+            return joinCollectionLists1;
         },
         [collectionConfigController.collections, modifyCollection]);
 

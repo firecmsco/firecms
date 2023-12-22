@@ -19,6 +19,14 @@ import { ExportConfig } from "./export_import";
 export interface EntityCollection<M extends Record<string, any> = any, UserType extends User = User> {
 
     /**
+     * You can set an alias that will be used internally instead of the `path`.
+     * The `alias` value will be used to determine the URL of the collection,
+     * while `path` will still be used in the datasource.
+     * Note that you can use this value in reference properties too.
+     */
+    id: string;
+
+    /**
      * Name of the collection, typically plural.
      * E.g. `Products`, `Blog`
      */
@@ -47,14 +55,6 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
      * property to `true` to indicate that this collection is a collection group.
      */
     collectionGroup?: boolean;
-
-    /**
-     * You can set an alias that will be used internally instead of the `path`.
-     * The `alias` value will be used to determine the URL of the collection,
-     * while `path` will still be used in the datasource.
-     * Note that you can use this value in reference properties too.
-     */
-    alias?: string;
 
     /**
      * Icon key to use in this collection.
@@ -300,7 +300,7 @@ export interface CollectionActionsProps<M extends Record<string, any> = any, Use
     /**
      * Array of the parent path segments like `['users']`
      */
-    parentPathSegments: string[];
+    parentCollectionIds: string[];
 
     /**
      * The collection configuration

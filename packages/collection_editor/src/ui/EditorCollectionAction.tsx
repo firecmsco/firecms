@@ -19,7 +19,7 @@ import { PersistedCollection } from "../types/persisted_collection";
 
 export function EditorCollectionAction({
                                            path: fullPath,
-                                           parentPathSegments,
+                                           parentCollectionIds,
                                            collection,
                                            tableController
                                        }: CollectionActionsProps) {
@@ -30,7 +30,7 @@ export function EditorCollectionAction({
     const configController = useCollectionsConfigController();
     const snackbarController = useSnackbarController();
 
-    const parentCollection = navigationController.getCollectionFromPaths(parentPathSegments);
+    const parentCollection = navigationController.getCollectionFromIds(parentCollectionIds);
 
     const canEditCollection = collectionEditorController.configPermissions
         ? collectionEditorController.configPermissions({
@@ -50,8 +50,8 @@ export function EditorCollectionAction({
                 variant={"outlined"}
                 onClick={() => configController
                     ?.saveCollection({
-                        path: collection.path,
-                        parentPathSegments,
+                        id: collection.path,
+                        parentCollectionIds,
                         collectionData: mergeDeep(collection as PersistedCollection,
                             {
                                 initialFilter: tableController.filterValues ?? null,
@@ -75,7 +75,7 @@ export function EditorCollectionAction({
             color={"primary"}
             disabled={!canEditCollection}
             onClick={canEditCollection
-                ? () => collectionEditorController?.editCollection({ path: collection.path, fullPath, parentPathSegments, parentCollection: parentCollection as PersistedCollection })
+                ? () => collectionEditorController?.editCollection({ path: collection.path, fullPath, parentCollectionIds, parentCollection: parentCollection as PersistedCollection })
                 : undefined}>
             <SettingsIcon/>
         </IconButton>

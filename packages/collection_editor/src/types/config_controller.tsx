@@ -21,10 +21,10 @@ export interface CollectionsConfigController {
 }
 
 export type SaveCollectionParams<M extends Record<string, any>> = {
-    path: string,
+    id: string,
     collectionData: PersistedCollection<M>,
     previousPath?: string,
-    parentPathSegments?: string[]
+    parentCollectionIds?: string[]
 }
 
 export type SavePropertyParams = {
@@ -33,7 +33,7 @@ export type SavePropertyParams = {
     namespace?: string,
     newPropertiesOrder?: string[],
     property: Property,
-    parentPathSegments?: string[]
+    parentCollectionIds?: string[]
 }
 
 export type DeletePropertyParams = {
@@ -41,10 +41,10 @@ export type DeletePropertyParams = {
     propertyKey: string,
     namespace?: string,
     newPropertiesOrder?: string[],
-    parentPathSegments?: string[]
+    parentCollectionIds?: string[]
 }
 
 export type DeleteCollectionParams = {
     path: string,
-    parentPathSegments?: string[]
+    parentCollectionIds?: string[]
 }

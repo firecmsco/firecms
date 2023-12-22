@@ -124,9 +124,9 @@ describe("convertDataEntryValue", () => {
 
         console.log("result", result)
 
-        expect(result[0].path).toEqual("products")
+        expect(result[0].id).toEqual("products")
         expect(result[0].id).toEqual("one");
-        expect(result[1].path).toEqual("products")
+        expect(result[1].id).toEqual("products")
         expect(result[1].id).toEqual("two");
     });
 

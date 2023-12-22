@@ -32,14 +32,14 @@ export function CollectionDetailsForm({
                                           isNewCollection,
                                           reservedGroups,
                                           existingPaths,
-                                          existingAliases,
+                                          existingIds,
                                           groups,
                                           parentCollection
                                       }: {
     isNewCollection: boolean,
     reservedGroups?: string[];
     existingPaths?: string[];
-    existingAliases?: string[];
+    existingIds?: string[];
     groups: string[] | null;
     parentCollection?: EntityCollection;
 }) {
@@ -80,22 +80,22 @@ export function CollectionDetailsForm({
         if (!value) {
             error = "You must specify a path in the database for this collection";
         }
-        if (isNewCollection && existingAliases?.includes(value.trim().toLowerCase()))
-            error = "There is already a collection which uses this path as an alias";
-        if (isNewCollection && existingPaths?.includes(value.trim().toLowerCase()) && !values.alias)
-            error = "There is already a collection with the specified path. If you want to have multiple collections referring to the same database path, you need to define an alias in at least one of the collections";
+        // if (isNewCollection && existingIds?.includes(value.trim().toLowerCase()))
+        //     error = "There is already a collection which uses this path as an alias";
+        // if (isNewCollection && existingPaths?.includes(value.trim().toLowerCase()) && !values.id)
+        //     error = "There is already a collection with the specified path. If you want to have multiple collections referring to the same database path, you need to define an alias in at least one of the collections";
         return error;
-    }, [isNewCollection, existingAliases, existingPaths, values.alias]);
+    }, [isNewCollection, existingIds, existingPaths, values.id]);
 
-    const validateAlias = useCallback((value: string) => {
-        if (!value) return undefined;
-        let error;
-        if (isNewCollection && existingPaths?.includes(value.trim().toLowerCase()))
-            error = "There is already a collection that uses this value as a path";
-        if (isNewCollection && existingAliases?.includes(value.trim().toLowerCase()))
-            error = "There is already a collection which uses this alias";
-        return error;
-    }, [isNewCollection, existingPaths, existingAliases]);
+    // const validateAlias = useCallback((value: string) => {
+    //     if (!value) return undefined;
+    //     let error;
+    //     if (isNewCollection && existingPaths?.includes(value.trim().toLowerCase()))
+    //         error = "There is already a collection that uses this value as a path";
+    //     if (isNewCollection && existingIds?.includes(value.trim().toLowerCase()))
+    //         error = "There is already a collection which uses this alias";
+    //     return error;
+    // }, [isNewCollection, existingPaths, existingIds]);
 
     const groupOptions = groups?.filter((group) => !reservedGroups?.includes(group));
 
@@ -168,10 +168,10 @@ export function CollectionDetailsForm({
                                validate={validatePath}
                                disabled={!isNewCollection}
                                required
-                               error={touched.path && Boolean(errors.path)}/>
+                               error={touched.id && Boolean(errors.id)}/>
 
-                        <FieldHelperView error={touched.path && Boolean(errors.path)}>
-                            {touched.path && Boolean(errors.path) ? errors.path : "Path that this collection is stored in"}
+                        <FieldHelperView error={touched.id && Boolean(errors.id)}>
+                            {touched.id && Boolean(errors.id) ? errors.id : "Path that this collection is stored in"}
                         </FieldHelperView>
 
                     </div>
@@ -251,17 +251,17 @@ export function CollectionDetailsForm({
                                     </FieldHelperView>
                                 </div>
 
-                                <div className={"col-span-12"}>
-                                    <Field name={"alias"}
-                                           as={DebouncedTextField}
-                                           disabled={!isNewCollection}
-                                           label={"Alias"}
-                                           validate={validateAlias}
-                                           error={touched.alias && Boolean(errors.alias)}/>
-                                    <FieldHelperView error={touched.alias && Boolean(errors.alias)}>
-                                        {touched.alias && Boolean(errors.alias) ? errors.alias : "Use an alias as an ID when you have multiple collections located in the same path"}
-                                    </FieldHelperView>
-                                </div>
+                                {/*<div className={"col-span-12"}>*/}
+                                {/*    <Field name={"alias"}*/}
+                                {/*           as={DebouncedTextField}*/}
+                                {/*           disabled={!isNewCollection}*/}
+                                {/*           label={"Alias"}*/}
+                                {/*           validate={validateAlias}*/}
+                                {/*           error={touched.id && Boolean(errors.id)}/>*/}
+                                {/*    <FieldHelperView error={touched.id && Boolean(errors.id)}>*/}
+                                {/*        {touched.id && Boolean(errors.id) ? errors.id : "Use an alias as an ID when you have multiple collections located in the same path"}*/}
+                                {/*    </FieldHelperView>*/}
+                                {/*</div>*/}
 
                                 <div className={"col-span-12"}>
                                     <Select

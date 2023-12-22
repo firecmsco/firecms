@@ -55,6 +55,11 @@ export type NavigationController = {
     /**
      * Get the collection configuration from its parent path segments.
      */
+    getCollectionFromIds: <EC extends EntityCollection = EntityCollection<any>>(ids: string[]) => EC | undefined;
+
+    /**
+     * Get the collection configuration from its parent path segments.
+     */
     getCollectionFromPaths: <EC extends EntityCollection = EntityCollection<any>>(pathSegments: string[]) => EC | undefined;
 
     /**
@@ -128,6 +133,12 @@ export type NavigationController = {
      * @param path
      */
     getParentReferencesFromPath: (path: string) => EntityReference[];
+
+    /**
+     * Retrieve all the related parent collection ids for a given path
+     * @param path
+     */
+    getParentCollectionIds: (path: string) => string[];
 }
 
 /**

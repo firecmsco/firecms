@@ -163,7 +163,6 @@ export function useBuildFireCMSBackend({ backendApiHost, backendFirebaseApp, onU
             });
     }, []);
 
-
     const projectsApi = buildProjectsApi(backendApiHost, getBackendAuthToken);
 
     return {

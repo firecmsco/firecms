@@ -24,6 +24,7 @@ import {
     Property,
     PropertyConfig,
     PropertyOrBuilder,
+    randomString,
     removeUndefined,
     Tab,
     Tabs,
@@ -60,7 +61,7 @@ export interface CollectionEditorDialogProps {
     }
     editedCollectionPath?: string; // last segment of the path, like `locales`
     fullPath?: string; // full path of this particular collection, like `products/123/locales`
-    parentPathSegments?: string[]; // path segments of the parent collection, like [`products`]
+    parentCollectionIds?: string[]; // path segments of the parent collection, like [`products`]
     handleClose: (collection?: EntityCollection) => void;
     configController: CollectionsConfigController;
     reservedGroups?: string[];
@@ -139,7 +140,7 @@ export function CollectionEditorDialogInternal<M extends {
        initialValues: initialValuesProp,
        configController,
        editedCollectionPath,
-       parentPathSegments,
+       parentCollectionIds,
        fullPath,
        collectionInference,
        handleClose,
@@ -164,10 +165,10 @@ export function CollectionEditorDialogInternal<M extends {
         collections
     } = navigation;
 
-    const includeTemplates = !initialValuesProp?.path && (parentPathSegments ?? []).length === 0;
+    const includeTemplates = !initialValuesProp?.path && (parentCollectionIds ?? []).length === 0;
     const collectionsInThisLevel = (parentCollection ? parentCollection.subcollections : collections) ?? [];
     const existingPaths = collectionsInThisLevel.map(col => col.path.trim().toLowerCase());
-    const existingAliases = collectionsInThisLevel.map(col => col.alias?.trim().toLowerCase()).filter(Boolean) as string[];
+    const existingIds = collectionsInThisLevel.map(col => col.id?.trim().toLowerCase()).filter(Boolean) as string[];
 
     const importConfig = useImportConfig();
 
@@ -198,7 +199,7 @@ export function CollectionEditorDialogInternal<M extends {
         try {
             if (navigation.initialised) {
                 if (editedCollectionPath) {
-                    setCollection(navigation.getCollectionFromPaths<PersistedCollection<M>>([...(parentPathSegments ?? []), editedCollectionPath]));
+                    setCollection(navigation.getCollectionFromPaths<PersistedCollection<M>>([...(parentCollectionIds ?? []), editedCollectionPath]));
                 } else {
                     setCollection(undefined);
                 }
@@ -211,12 +212,12 @@ export function CollectionEditorDialogInternal<M extends {
     }, [navigation.getCollectionFromPaths, editedCollectionPath, initialError, navigation.initialised]);
 
     const saveCollection = (updatedCollection: PersistedCollection<M>): Promise<boolean> => {
-        const fullPath = updatedCollection.alias || updatedCollection.path;
+        const fullPath = updatedCollection.id || updatedCollection.path;
         return configController.saveCollection({
-            path: fullPath,
+            id: fullPath,
             collectionData: updatedCollection,
             previousPath: editedCollectionPath,
-            parentPathSegments
+            parentCollectionIds
         })
             .then(() => {
                 setError(undefined);
@@ -233,15 +234,18 @@ export function CollectionEditorDialogInternal<M extends {
             });
     };
 
-    const initialValues: PersistedCollection<M> = collection ? applyPropertyConfigs(collection, propertyConfigs) : {
-        path: initialValuesProp?.path ?? "",
-        name: initialValuesProp?.name ?? "",
-        group: initialValuesProp?.group ?? "",
-        properties: {} as PropertiesOrBuilders<M>,
-        propertiesOrder: [],
-        icon: coolIconKeys[Math.floor(Math.random() * coolIconKeys.length)],
-        ownerId: authController.user?.uid ?? ""
-    };
+    const initialValues: PersistedCollection<M> = collection
+        ? applyPropertyConfigs(collection, propertyConfigs)
+        : {
+            id: randomString(10),
+            path: initialValuesProp?.path ?? "",
+            name: initialValuesProp?.name ?? "",
+            group: initialValuesProp?.group ?? "",
+            properties: {} as PropertiesOrBuilders<M>,
+            propertiesOrder: [],
+            icon: coolIconKeys[Math.floor(Math.random() * coolIconKeys.length)],
+            ownerId: authController.user?.uid ?? ""
+        };
 
     const setNextMode = useCallback(() => {
         if (currentView === "details") {
@@ -268,8 +272,8 @@ export function CollectionEditorDialogInternal<M extends {
 
     const doCollectionInference = useCallback((collection: PersistedCollection<any>) => {
         if (!collectionInference) return undefined;
-        return collectionInference?.(collection.path, collection.collectionGroup ?? false, parentPathSegments ?? []);
-    }, [collectionInference, parentPathSegments]);
+        return collectionInference?.(collection.path, collection.collectionGroup ?? false, parentCollectionIds ?? []);
+    }, [collectionInference, parentCollectionIds]);
 
     const inferCollectionFromData = useCallback(async (newCollection: PersistedCollection<M>) => {
 
@@ -315,7 +319,7 @@ export function CollectionEditorDialogInternal<M extends {
             });
             return newCollection;
         }
-    }, [parentPathSegments, doCollectionInference]);
+    }, [parentCollectionIds, doCollectionInference]);
 
     const onSubmit = (newCollectionState: PersistedCollection<M>, formikHelpers: FormikHelpers<PersistedCollection<M>>) => {
         try {
@@ -406,7 +410,7 @@ export function CollectionEditorDialogInternal<M extends {
                   submitCount
               }) => {
 
-                const path = values.path ?? editedCollectionPath;
+                const path = values.id ?? editedCollectionPath;
                 const updatedFullPath = fullPath?.includes("/") ? fullPath?.split("/").slice(0, -1).join("/") + "/" + path : path; // TODO: this path is wrong
                 const resolvedPath = navigation.resolveAliasesFrom(updatedFullPath);
                 const getDataWithPath = resolvedPath && getData ? () => getData(resolvedPath) : undefined;
@@ -432,7 +436,7 @@ export function CollectionEditorDialogInternal<M extends {
                         });
                 }
 
-                const validValues = Boolean(values.name) && Boolean(values.path);
+                const validValues = Boolean(values.name) && Boolean(values.id);
 
                 const onImportMappingComplete = () => {
                     const updatedProperties = { ...values.properties };
@@ -517,7 +521,7 @@ export function CollectionEditorDialogInternal<M extends {
                             {currentView === "details" &&
                                 <CollectionDetailsForm
                                     existingPaths={existingPaths}
-                                    existingAliases={existingAliases}
+                                    existingIds={existingIds}
                                     groups={groups}
                                     parentCollection={parentCollection}
                                     isNewCollection={isNewCollection}/>}
@@ -528,7 +532,7 @@ export function CollectionEditorDialogInternal<M extends {
                                     configController={configController}
                                     getUser={getUser}
                                     collectionInference={collectionInference}
-                                    parentPathSegments={parentPathSegments}
+                                    parentCollectionIds={parentCollectionIds}
                                     collection={collection}/>}
 
                             {currentView === "properties" &&

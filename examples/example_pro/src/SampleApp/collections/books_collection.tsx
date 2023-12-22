@@ -24,6 +24,7 @@ const categories = {
 export const booksCollection = buildCollection({
     name: "Books",
     singularName: "Book",
+    id: "books",
     path: "books",
     icon: "MenuBook",
     group: "Main",

@@ -125,7 +125,7 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
                 if (previousEntry.type === "entity") {
                     const lastSidePanel: EntitySidePanelProps<any> = sidePanels[sidePanels.length - 1];
                     if (lastSidePanel)
-                        lastSidePanel.selectedSubPath = navigationEntry.collection.alias ?? navigationEntry.collection.path;
+                        lastSidePanel.selectedSubPath = navigationEntry.collection.id ?? navigationEntry.collection.path;
                 }
             }
         }

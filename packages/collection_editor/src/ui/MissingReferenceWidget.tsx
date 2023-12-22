@@ -1,11 +1,12 @@
-import { Button, ErrorView, unslugify } from "@firecms/core";
+import { Button, ErrorView, unslugify, useNavigationController } from "@firecms/core";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 
 export function MissingReferenceWidget({ path: pathProp }: {
     path: string
 }) {
+    const navigation = useNavigationController();
     const path = getLastSegment(pathProp);
-    const parentPathSegments = getParentPathSegments(pathProp);
+    const parentCollectionIds = navigation.getParentCollectionIds(pathProp);
     const collectionEditor = useCollectionEditorController();
     return <div className={"p-1 flex flex-col items-center"}>
         <ErrorView error={"No collection for path: " + path}/>
@@ -13,7 +14,7 @@ export function MissingReferenceWidget({ path: pathProp }: {
                 onClick={() => {
                     collectionEditor.createCollection({
                         initialValues: { path, name: unslugify(path) },
-                        parentPathSegments,
+                        parentCollectionIds,
                         redirect: false
                     });
                 }}>

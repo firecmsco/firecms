@@ -23,7 +23,7 @@ export function NewCollectionCard({
               onClick={collectionEditorController && canCreateCollections
                   ? () => collectionEditorController.createCollection({
                       initialValues: group ? { group } : undefined,
-                      parentPathSegments: [],
+                      parentCollectionIds: [],
                         redirect: true
                   })
                   : undefined}>

@@ -14,7 +14,7 @@ export async function getDocuments(
         return Promise.all(childDocs.docs
             .map((doc) => getDocuments(
                 firestore,
-                doc.ref.path + "/" + collectionPath,
+                doc.ref.id + "/" + collectionPath,
                 isCollectionGroup,
                 restSubpaths,
                 Math.max(Math.ceil(limitCount / 5), 5)

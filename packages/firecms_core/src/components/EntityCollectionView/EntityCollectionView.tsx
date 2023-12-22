@@ -69,7 +69,7 @@ const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
  */
 export type EntityCollectionViewProps<M extends Record<string, any>> = {
     fullPath: string;
-    parentPathSegments?: string[];
+    parentCollectionIds?: string[];
     isSubCollection?: boolean;
     className?: string;
 } & EntityCollection<M>;
@@ -101,7 +101,7 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
 export const EntityCollectionView = React.memo(
     function EntityCollectionView<M extends Record<string, any>>({
                                                                      fullPath,
-                                                                     parentPathSegments,
+                                                                     parentCollectionIds,
                                                                      isSubCollection,
                                                                      className,
                                                                      ...collectionProp
@@ -238,7 +238,7 @@ export const EntityCollectionView = React.memo(
 
         let AddColumnComponent: React.ComponentType<{
             fullPath: string,
-            parentPathSegments: string[],
+            parentCollectionIds: string[],
             collection: EntityCollection;
         }> | undefined
 
@@ -367,7 +367,7 @@ export const EntityCollectionView = React.memo(
                                     sideEntityController.open({
                                         path: fullPath,
                                         entityId: entity.id,
-                                        selectedSubPath: subcollection.alias ?? subcollection.path,
+                                        selectedSubPath: subcollection.id ?? subcollection.path,
                                         collection,
                                         updateUrl: true
                                     });
@@ -529,7 +529,7 @@ export const EntityCollectionView = React.memo(
                             property={property}
                             fullPath={fullPath}
                             collection={collection}
-                            parentPathSegments={parentPathSegments ?? []}/>;
+                            parentCollectionIds={parentCollectionIds ?? []}/>;
                     })}
             </>;
         }
@@ -538,7 +538,7 @@ export const EntityCollectionView = React.memo(
             ? function () {
                 if (typeof AddColumnComponent === "function")
                     return <AddColumnComponent fullPath={fullPath}
-                                               parentPathSegments={parentPathSegments ?? []}
+                                               parentCollectionIds={parentCollectionIds ?? []}
                                                collection={collection}/>;
                 return null;
             }
@@ -565,7 +565,7 @@ export const EntityCollectionView = React.memo(
                     properties={resolvedCollection.properties}
                     getPropertyFor={getPropertyFor}
                     actions={<EntityCollectionViewActions
-                        parentPathSegments={parentPathSegments ?? []}
+                        parentCollectionIds={parentCollectionIds ?? []}
                         collection={collection}
                         tableController={tableController}
                         onMultipleDeleteClick={onMultipleDeleteClick}

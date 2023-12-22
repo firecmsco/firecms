@@ -25,6 +25,10 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
 
     const navigationController = useNavigationController();
 
+    const parentCollectionIds = useMemo(() => {
+        return navigationController.getParentCollectionIds(props.path);
+    }, [navigationController, props.path]);
+
     const collection = useMemo(() => {
         if (!props) return undefined;
         let usedCollection = props.collection;
@@ -76,6 +80,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                     {...props}
                     formWidth={props.width}
                     collection={collection}
+                    parentCollectionIds={parentCollectionIds}
                     onValuesAreModified={onValuesAreModified}
                 />
             </ErrorBoundary>

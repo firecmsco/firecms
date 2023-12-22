@@ -67,19 +67,19 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
 
         const collectionRoutes = sortedCollections
             .map((collection) => {
-                    const urlPath = navigation.buildUrlCollectionPath(collection.alias ?? collection.path);
+                    const urlPath = navigation.buildUrlCollectionPath(collection.id ?? collection.path);
                     return <Route path={urlPath + "/*"}
-                                  key={`navigation_${collection.alias ?? collection.path}`}
+                                  key={`navigation_${collection.id ?? collection.path}`}
                                   element={
                                       <RouteWrapper
                                           path={urlPath}
                                           title={collection.name}
                                           type={"collection"}>
                                           <EntityCollectionView
-                                              key={`collection_view_${collection.alias ?? collection.path}`}
+                                              key={`collection_view_${collection.id ?? collection.path}`}
                                               isSubCollection={false}
-                                              parentPathSegments={[]}
-                                              fullPath={collection.alias ?? collection.path}
+                                              parentCollectionIds={[]}
+                                              fullPath={collection.id ?? collection.path}
                                               {...collection}
                                               Actions={toArray(collection.Actions)}/>
                                       </RouteWrapper>

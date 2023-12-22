@@ -78,10 +78,10 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         const navigationEntries: TopNavigationEntry[] = [
             ...(collections ?? []).map(collection => (!collection.hideFromNavigation
                 ? {
-                    url: buildUrlCollectionPath(collection.alias ?? collection.path),
+                    url: buildUrlCollectionPath(collection.id ?? collection.path),
                     type: "collection",
                     name: collection.name.trim(),
-                    path: collection.alias ?? collection.path,
+                    path: collection.id ?? collection.path,
                     collection,
                     description: collection.description?.trim(),
                     group: collection.group?.trim()
@@ -141,7 +141,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
     }, [refreshNavigation]);
 
     const getCollection = useCallback(<EC extends EntityCollection>(
-        pathOrAlias: string,
+        idOrPath: string,
         entityId?: string,
         includeUserOverride = false
     ): EC | undefined => {
@@ -149,9 +149,9 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         if (!collections)
             return undefined;
 
-        const baseCollection = getCollectionByPathOrAlias(removeInitialAndTrailingSlashes(pathOrAlias), collections);
+        const baseCollection = getCollectionByPathOrAlias(removeInitialAndTrailingSlashes(idOrPath), collections);
 
-        const userOverride = includeUserOverride ? userConfigPersistence?.getCollectionConfig(pathOrAlias) : undefined;
+        const userOverride = includeUserOverride ? userConfigPersistence?.getCollectionConfig(idOrPath) : undefined;
 
         const overriddenCollection = baseCollection ? mergeDeep(baseCollection, userOverride) : undefined;
 
@@ -186,11 +186,30 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
 
         for (let i = 0; i < pathSegments.length; i++) {
             const pathSegment = pathSegments[i];
-            const collection: EntityCollection | undefined = currentCollections!.find(c => c.alias === pathSegment || c.path === pathSegment);
+            const collection: EntityCollection | undefined = currentCollections!.find(c => c.id === pathSegment || c.path === pathSegment);
             if (!collection)
                 return undefined;
             currentCollections = collection.subcollections;
             if (i === pathSegments.length - 1)
+                return collection as EC;
+        }
+
+        return undefined;
+
+    }, [collections]);
+
+    const getCollectionFromIds = useCallback(<EC extends EntityCollection>(ids: string[]): EC | undefined => {
+        let currentCollections = collections;
+        if (!currentCollections)
+            throw Error("Collections have not been initialised yet");
+
+        for (let i = 0; i < ids.length; i++) {
+            const id = ids[i];
+            const collection: EntityCollection | undefined = currentCollections!.find(c => c.id === id);
+            if (!collection)
+                return undefined;
+            currentCollections = collection.subcollections;
+            if (i === ids.length - 1)
                 return collection as EC;
         }
 
@@ -238,6 +257,10 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         });
     }, [collections]);
 
+    const getParentCollectionIds = useCallback((path: string): string[] => {
+        return getAllParentCollectionsForPath(path).map(r => r.id);
+    }, [getAllParentCollectionsForPath])
+
     return useMemo(() => ({
         collections: collections ?? [],
         views: views ?? [],
@@ -249,6 +272,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         initialised,
         getCollection,
         getCollectionFromPaths,
+        getCollectionFromIds,
         isUrlCollectionPath,
         urlPathToDataPath,
         buildUrlCollectionPath,
@@ -258,7 +282,8 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         topLevelNavigation,
         baseLocation,
         refreshNavigation,
-        getParentReferencesFromPath: getAllParentCollectionsForPath
+        getParentReferencesFromPath: getAllParentCollectionsForPath,
+        getParentCollectionIds
     }), [baseCollectionPath, baseLocation, basePath, buildCMSUrlPath, buildUrlCollectionPath, buildUrlEditCollectionPath, collections, getAllParentCollectionsForPath, getCollection, getCollectionFromPaths, homeUrl, initialised, isUrlCollectionPath, navigationLoading, navigationLoadingError, refreshNavigation, resolveAliasesFrom, topLevelNavigation, urlPathToDataPath, views]);
 }
 

@@ -6,25 +6,24 @@ import {
     Property,
     PropertyOrBuilder
 } from "../types";
-import { mergeDeep } from "../util/objects";
-import { sortProperties } from "../util/collections";
-import { isPropertyBuilder } from "../util/entities";
+import { mergeDeep } from "./objects";
+import { sortProperties } from "./collections";
+import { isPropertyBuilder } from "./entities";
 
 /**
  *
- * @param storedCollections
- * @param codedCollections
  */
-export function joinCollectionLists(storedCollections: EntityCollection[],
-                                    codedCollections: EntityCollection[] | undefined,
+export function joinCollectionLists(targetCollections: EntityCollection[],
+                                    sourceCollections: EntityCollection[] | undefined,
                                     parentPaths: string[] = [],
-                                    modifyCollection?: (props: ModifyCollectionProps) => EntityCollection): EntityCollection[] {
+                                    modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | undefined): EntityCollection[] {
 
     // merge collections that are in both lists
-    const updatedCollections = (codedCollections ?? [])
+    const updatedCollections = (sourceCollections ?? [])
         .map((codedCollection) => {
-            const storedCollection = storedCollections?.find((collection) => {
-                return collection.path === codedCollection.path || (collection.alias && codedCollection.alias && collection.alias === codedCollection.alias);
+            const storedCollection = targetCollections?.find((collection) => {
+                return collection.id === codedCollection.id;
+                // return collection.path === codedCollection.path || collection.id && codedCollection.id;
             });
             if (!storedCollection) {
                 return codedCollection;
@@ -34,21 +33,27 @@ export function joinCollectionLists(storedCollections: EntityCollection[],
         });
 
     // fetched collections that are not in the base collections
-    const resultStoredCollections = storedCollections
-        .filter((col) => !updatedCollections.map(c => c.path).includes(col.path) || !updatedCollections.map(c => c.alias).includes(col.alias));
+    const resultStoredCollections = targetCollections
+        .filter((col) => !updatedCollections.map(c => c.id).includes(col.id))
+        .map((col) => {
+            if (modifyCollection) {
+                const modified = modifyCollection({ collection: col, parentPaths });
+                return modified ?? col;
+            } else {
+                return col;
+            }
+        });
 
     return [...updatedCollections, ...resultStoredCollections];
 }
 
 /**
  *
- * @param target
- * @param source
  */
 export function mergeCollection(target: EntityCollection,
                                 source: EntityCollection,
                                 parentPaths: string[] = [],
-                                modifyCollection?: (props: ModifyCollectionProps) => EntityCollection
+                                modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | undefined
 ): EntityCollection {
 
     const subcollectionsMerged = joinCollectionLists(
@@ -70,7 +75,7 @@ export function mergeCollection(target: EntityCollection,
     const mergedCollection = mergeDeep(target, source);
     const targetPropertiesOrder = getCollectionKeys(target);
     const sourcePropertiesOrder = getCollectionKeys(source);
-    const mergedPropertiesOrder = [...new Set([...targetPropertiesOrder, ...sourcePropertiesOrder])];
+    const mergedPropertiesOrder = [...new Set([...sourcePropertiesOrder, ...targetPropertiesOrder])];
     const mergedEntityViews = [...new Set([...(target.entityViews ?? []), ...(source.entityViews ?? [])])];
 
     let resultCollection: EntityCollection = {
@@ -81,7 +86,9 @@ export function mergeCollection(target: EntityCollection,
         entityViews: mergedEntityViews
     };
     if (modifyCollection) {
-        resultCollection = modifyCollection({ collection: resultCollection, parentPaths });
+        const modifiedCollection = modifyCollection({ collection: resultCollection, parentPaths });
+        if (modifiedCollection)
+            resultCollection = modifiedCollection;
     }
     return resultCollection
 }

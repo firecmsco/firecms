@@ -13,6 +13,7 @@ export type BlogEntry = {
 }
 
 export const blogCollection = buildCollection<BlogEntry>({
+    id: "blog",
     path: "blog",
     name: "Blog",
     singularName: "Blog entry",

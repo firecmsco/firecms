@@ -12,7 +12,7 @@ export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
     path: string;
     relativePath: string;
-    parentPathSegments: string[];
+    parentCollectionIds: string[];
     selectionEnabled: boolean;
     onNewClick: () => void;
     onMultipleDeleteClick: () => void;
@@ -24,7 +24,7 @@ export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
 export function EntityCollectionViewActions<M extends Record<string, any>>({
                                                                                collection,
                                                                                relativePath,
-                                                                               parentPathSegments,
+                                                                               parentCollectionIds,
                                                                                onNewClick,
                                                                                onMultipleDeleteClick,
                                                                                selectionEnabled,
@@ -95,7 +95,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
     const actionProps: CollectionActionsProps = {
         path,
         relativePath,
-        parentPathSegments,
+        parentCollectionIds,
         collection,
         selectionController,
         context,

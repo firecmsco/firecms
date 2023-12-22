@@ -60,7 +60,7 @@ export function GetCodeDialog({ collection, onOpenChange, open }: { onOpenChange
                     e.preventDefault();
                     snackbarController.open({
                         type: "success",
-                        message: `Copied}`
+                        message: `Copied`
                     })
                     return navigator.clipboard.writeText(code);
                 }}>
@@ -95,13 +95,13 @@ function collectionToCode(collection: EntityCollection): object {
     }
 
     return {
+        id: collection.id,
         name: collection.name,
         singularName: collection.singularName,
-        description: collection.description,
         path: collection.path,
+        description: collection.description,
         editable: true,
         collectionGroup: collection.collectionGroup,
-        alias: collection.alias,
         icon: collection.icon,
         group: collection.group,
         customId: collection.customId,

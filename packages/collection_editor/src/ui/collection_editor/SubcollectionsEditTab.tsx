@@ -33,14 +33,14 @@ export function SubcollectionsEditTab({
                                           configController,
                                           collectionInference,
                                           getUser,
-                                          parentPathSegments
+                                          parentCollectionIds
                                       }: {
     collection: PersistedCollection,
     parentCollection?: EntityCollection,
     configController: CollectionsConfigController;
     collectionInference?: CollectionInference;
     getUser: (uid: string) => User | null;
-    parentPathSegments?: string[];
+    parentCollectionIds?: string[];
 }) {
 
     const { entityViews: contextEntityViews } = useFireCMSContext();
@@ -202,7 +202,7 @@ export function SubcollectionsEditTab({
                                           onAccept={() => {
                                               configController.deleteCollection({
                                                   path: subcollectionToDelete,
-                                                  parentPathSegments: [...(parentPathSegments ?? []), collection.path]
+                                                  parentCollectionIds: [...(parentCollectionIds ?? []), collection.path]
                                               });
                                               setSubcollectionToDelete(undefined);
                                           }}
@@ -228,7 +228,7 @@ export function SubcollectionsEditTab({
                 configController={configController}
                 parentCollection={collection}
                 collectionInference={collectionInference}
-                parentPathSegments={[...parentPathSegments ?? [], values.path]}
+                parentCollectionIds={[...parentCollectionIds ?? [], values.id]}
                 isNewCollection={false}
                 {...currentDialog}
                 getUser={getUser}

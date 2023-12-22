@@ -4,11 +4,11 @@ import { PersistedCollection } from "../types/persisted_collection";
 
 export function PropertyAddColumnComponent({
                                                fullPath,
-                                               parentPathSegments,
+                                               parentCollectionIds,
                                                collection
                                            }: {
     fullPath: string,
-    parentPathSegments: string[],
+    parentCollectionIds: string[],
     collection: PersistedCollection;
 }) {
 
@@ -29,7 +29,7 @@ export function PropertyAddColumnComponent({
                 onClick={() => {
                     collectionEditorController.editProperty({
                         editedCollectionPath: fullPath,
-                        parentPathSegments,
+                        parentCollectionIds,
                         currentPropertiesOrder: getDefaultPropertiesOrder(collection),
                         collection
                     });

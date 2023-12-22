@@ -8,14 +8,14 @@ export function CollectionViewHeaderAction({
                                                onHover,
                                                property,
                                                fullPath,
-                                               parentPathSegments,
+                                               parentCollectionIds,
                                                collection
                                            }: {
     property: ResolvedProperty,
     propertyKey: string,
     onHover: boolean,
     fullPath: string,
-    parentPathSegments: string[],
+    parentCollectionIds: string[],
     collection: PersistedCollection;
 }) {
 
@@ -30,7 +30,7 @@ export function CollectionViewHeaderAction({
                         propertyKey,
                         property,
                         editedCollectionPath: fullPath,
-                        parentPathSegments,
+                        parentCollectionIds,
                         collection
                     });
                 }}

@@ -113,7 +113,7 @@ export function CollectionsSelect({
                 onChange={handleChange}
                 label={"Target collection"}
                 renderValue={(selected) => {
-                    const selectedCollection = collections.find(collection => collection.alias === selected || collection.path === selected);
+                    const selectedCollection = collections.find(collection => collection.id === selected || collection.path === selected);
                     if (!selectedCollection) return null;
                     const collectionIcon = getIconForView(selectedCollection);
                     return (
@@ -136,8 +136,8 @@ export function CollectionsSelect({
                                 .map((collection) => {
                                     const collectionIcon = getIconForView(collection);
                                     return <SelectItem
-                                        key={`${collection.alias ?? collection.path}-${group}`}
-                                        value={collection.alias ?? collection.path}>
+                                        key={`${collection.id ?? collection.path}-${group}`}
+                                        value={collection.id ?? collection.path}>
                                         <div className="flex flex-row">
                                             {collectionIcon}
                                             <Typography
@@ -157,8 +157,8 @@ export function CollectionsSelect({
                     {ungroupedCollections
                         .map((collection) => {
                             const collectionIcon = getIconForView(collection);
-                            return <SelectItem key={collection.alias ?? collection.path}
-                                               value={collection.alias ?? collection.path}>
+                            return <SelectItem key={collection.id ?? collection.path}
+                                               value={collection.id ?? collection.path}>
                                 <div className="flex flex-row">
                                     {collectionIcon}
                                     <Typography

@@ -10,22 +10,22 @@ it("collection view matches ok", () => {
 
     const collectionViewFromPath = getCollectionByPathOrAlias("products", collections);
     expect(
-        collectionViewFromPath && collectionViewFromPath.path
+        collectionViewFromPath && collectionViewFromPath.id
     ).toEqual("products");
 
     const collectionViewFromPath1 = getCollectionByPathOrAlias("products/pid/locales", collections);
     expect(
-        collectionViewFromPath1 && collectionViewFromPath1.path
+        collectionViewFromPath1 && collectionViewFromPath1.id
     ).toEqual("locales");
 
     const collectionViewFromPath2 = getCollectionByPathOrAlias("sites/es/products", collections);
     expect(
-        collectionViewFromPath2 && collectionViewFromPath2.path
+        collectionViewFromPath2 && collectionViewFromPath2.id
     ).toEqual("sites/es/products");
 
     const collectionViewFromPath3 = getCollectionByPathOrAlias("sites/es/products/pid/locales", collections);
     expect(
-        collectionViewFromPath3 && collectionViewFromPath3.path
+        collectionViewFromPath3 && collectionViewFromPath3.id
     ).toEqual("locales");
 
     expect(
@@ -40,7 +40,7 @@ it("collection view matches ok", () => {
 
     const collectionViewFromPath10 = getCollectionByPathOrAlias("products/id/subcollection_inline", collections);
     expect(
-        collectionViewFromPath10 && collectionViewFromPath10.path
+        collectionViewFromPath10 && collectionViewFromPath10.id
     ).toEqual("products/id/subcollection_inline");
 
 });

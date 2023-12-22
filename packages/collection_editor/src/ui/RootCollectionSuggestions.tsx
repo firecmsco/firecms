@@ -46,7 +46,7 @@ export function RootCollectionSuggestions() {
                                 onClick={collectionEditorController && canCreateCollections
                                     ? () => collectionEditorController.createCollection({
                                         initialValues: { path, name: unslugify(path) },
-                                        parentPathSegments: [],
+                                        parentCollectionIds: [],
                                         redirect: true
                                     })
                                     : undefined}

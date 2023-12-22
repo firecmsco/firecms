@@ -11,7 +11,7 @@ export interface CollectionEditorController {
     editCollection: (props: {
         path?: string,
         fullPath?: string,
-        parentPathSegments: string[],
+        parentCollectionIds: string[],
         parentCollection?: PersistedCollection
     }) => void;
 
@@ -21,7 +21,7 @@ export interface CollectionEditorController {
             path?: string,
             name?: string
         },
-        parentPathSegments: string[],
+        parentCollectionIds: string[],
         parentCollection?: PersistedCollection,
         redirect: boolean
     }) => void;
@@ -31,7 +31,7 @@ export interface CollectionEditorController {
         property?: Property,
         currentPropertiesOrder?: string[],
         editedCollectionPath: string,
-        parentPathSegments: string[],
+        parentCollectionIds: string[],
         collection: PersistedCollection
     }) => void;
 

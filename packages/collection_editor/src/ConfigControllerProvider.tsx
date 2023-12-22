@@ -87,7 +87,7 @@ export const ConfigControllerProvider = React.memo(
             parentCollection?: PersistedCollection,
             editedCollectionPath?: string,
             fullPath?: string,
-            parentPathSegments: string[],
+            parentCollectionIds: string[],
             initialValues?: {
                 path?: string,
                 group?: string,
@@ -104,7 +104,7 @@ export const ConfigControllerProvider = React.memo(
             currentPropertiesOrder?: string[],
             editedCollectionPath: string,
             fullPath?: string,
-            parentPathSegments: string[],
+            parentCollectionIds: string[],
             collectionEditable: boolean;
         }>();
 
@@ -117,18 +117,18 @@ export const ConfigControllerProvider = React.memo(
         const editCollection = useCallback(({
                                                 path,
                                                 fullPath,
-                                                parentPathSegments,
+                                                parentCollectionIds,
                                                 parentCollection
                                             }: {
             path?: string,
             fullPath?: string,
-            parentPathSegments: string[],
+            parentCollectionIds: string[],
             parentCollection?: PersistedCollection
         }) => {
             setCurrentDialog({
                 editedCollectionPath: path,
                 fullPath,
-                parentPathSegments,
+                parentCollectionIds,
                 isNewCollection: false,
                 parentCollection,
                 redirect: false
@@ -140,14 +140,14 @@ export const ConfigControllerProvider = React.memo(
                                               property,
                                               editedCollectionPath,
                                               currentPropertiesOrder,
-                                              parentPathSegments,
+                                              parentCollectionIds,
                                               collection
                                           }: {
             propertyKey?: string,
             property?: Property,
             currentPropertiesOrder?: string[],
             editedCollectionPath: string,
-            parentPathSegments: string[],
+            parentCollectionIds: string[],
             collection: PersistedCollection,
         }) => {
             // namespace is all the path until the last dot
@@ -164,18 +164,18 @@ export const ConfigControllerProvider = React.memo(
                 namespace,
                 currentPropertiesOrder,
                 editedCollectionPath,
-                parentPathSegments,
+                parentCollectionIds,
                 collectionEditable: collection?.editable ?? false
             });
         }, []);
 
         const createCollection = React.useCallback(({
-                                                        parentPathSegments,
+                                                        parentCollectionIds,
                                                         parentCollection,
                                                         initialValues,
                                                         redirect
                                                     }: {
-            parentPathSegments: string[],
+            parentCollectionIds: string[],
             parentCollection?: PersistedCollection
             initialValues?: {
                 group?: string,
@@ -186,7 +186,7 @@ export const ConfigControllerProvider = React.memo(
         }) => {
             setCurrentDialog({
                 isNewCollection: true,
-                parentPathSegments,
+                parentCollectionIds,
                 parentCollection,
                 initialValues,
                 redirect
@@ -229,8 +229,8 @@ export const ConfigControllerProvider = React.memo(
                         getUser={getUser}
                         handleClose={(collection) => {
                             if (currentDialog?.redirect) {
-                                if (collection && currentDialog?.isNewCollection && !currentDialog.parentPathSegments.length) {
-                                    const url = navigation.buildUrlCollectionPath(collection.alias ?? collection.path);
+                                if (collection && currentDialog?.isNewCollection && !currentDialog.parentCollectionIds.length) {
+                                    const url = navigation.buildUrlCollectionPath(collection.id ?? collection.path);
                                     navigate(url);
                                 }
                             }
@@ -265,7 +265,7 @@ export const ConfigControllerProvider = React.memo(
                                 propertyKey: id,
                                 newPropertiesOrder: newProperty && currentPropertyDialog.currentPropertiesOrder ? [...currentPropertyDialog.currentPropertiesOrder, id] : undefined,
                                 namespace: currentPropertyDialog.namespace,
-                                parentPathSegments: currentPropertyDialog.parentPathSegments
+                                parentCollectionIds: currentPropertyDialog.parentCollectionIds
                             })
                                 .catch((e) => {
                                     console.error(e);
@@ -285,7 +285,7 @@ export const ConfigControllerProvider = React.memo(
                                 propertyKey: currentPropertyDialog?.propertyKey,
                                 namespace: currentPropertyDialog?.namespace,
                                 newPropertiesOrder,
-                                parentPathSegments: currentPropertyDialog?.parentPathSegments
+                                parentCollectionIds: currentPropertyDialog?.parentCollectionIds
                             })
                                 .then(() => {
                                     setCurrentPropertyDialog(undefined);

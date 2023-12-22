@@ -8,6 +8,7 @@ import { categories, currencies, locales } from "./enums";
 import CustomColorTextField from "../custom_field/CustomColorTextField";
 
 export const localeCollection = buildCollection<Locale>({
+    id: "product_locales",
     path: "locales",
     icon: "Translate",
     customId: locales,
@@ -64,7 +65,7 @@ const productAdditionalField: AdditionalFieldDelegate<Product> = {
               }) =>
         <AsyncPreviewComponent builder={
             context.dataSource.fetchEntity({
-                path: `${entity.path}/${entity.id}/locales`,
+                path: `${entity.id}/${entity.id}/locales`,
                 entityId: "es",
                 collection: localeCollection
             }).then((entity) => entity?.values.name)
@@ -100,7 +101,7 @@ export const productCallbacks: EntityCallbacks<Product> = {
 
 export const productsCollection = buildCollection<Product>({
     path: "products",
-    alias: "ppp",
+    id: "ppp",
     callbacks: productCallbacks,
     name: "Products",
     singularName: "Product",
@@ -300,6 +301,7 @@ export const productsCollection = buildCollection<Product>({
 
 });
 export const productsSimpleCollection = buildCollection<any>({
+    id: "products",
     path: "products",
     name: "Products",
     singularName: "Product",

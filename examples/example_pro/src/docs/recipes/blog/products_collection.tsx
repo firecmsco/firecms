@@ -3,7 +3,7 @@ import { Product } from "./types";
 
 export const productsCollection = buildCollection<Product>({
     path: "products",
-    alias: "ppp",
+    id: "ppp",
     name: "Products",
     singularName: "Product",
     group: "Main",

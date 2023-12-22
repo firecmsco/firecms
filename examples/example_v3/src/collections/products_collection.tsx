@@ -35,8 +35,8 @@ export const productCallbacks: EntityCallbacks<Product> = {
 };
 
 export const productsCollection = buildCollection<Product>({
+    id: "ppp",
     path: "products",
-    alias: "ppp",
     callbacks: productCallbacks,
     name: "Products",
     singularName: "Product",
@@ -44,7 +44,6 @@ export const productsCollection = buildCollection<Product>({
     icon: "shopping_cart",
     description: "List of the products currently sold in our shop",
     textSearchEnabled: true,
-    editable: true,
     permissions: ({ authController }) => ({
         edit: true,
         create: true,
@@ -86,7 +85,8 @@ export const productsCollection = buildCollection<Product>({
             clearable: true,
             validation: {
                 required: true
-            }
+            },
+            editable: false
         },
         main_image: {
             dataType: "string",
