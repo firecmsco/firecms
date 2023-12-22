@@ -24,6 +24,7 @@ const unitsCollection = buildCollection<Unit>({
     name: "Units",
     singularName: "Unit",
     group: "Main",
+    id: "units",
     path: "units",
     customId: true,
     icon: "LocalLibrary",
@@ -58,6 +59,7 @@ export default function App() {
         });
         const lessonCollections = units.map(unit => buildCollection({
             name: unit.values.name,
+            id: "unit_lessons",
             path: `units/${unit.id}/lessons`,
             description: unit.values.description,
             group: "Units",

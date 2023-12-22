@@ -70,7 +70,7 @@ export function FireCMSDrawer({
                             initialValues: {
                                 group,
                             },
-                            parentPathSegments: [],
+                            parentCollectionIds: [],
                             redirect: true
                         });
                     }}>

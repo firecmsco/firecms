@@ -4,6 +4,7 @@ import { Product, productsCollection, properties } from "./simple_product_collec
 
 export const productsCollectionCopy = buildCollection<Product>({
     name: "Products copy target",
+    id: "products_copied",
     path: "products_copied",
     properties,
     Actions: ({ path, collection }: CollectionActionsProps<Product>) =>

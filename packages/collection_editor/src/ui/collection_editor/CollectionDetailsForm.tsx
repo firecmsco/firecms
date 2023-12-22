@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Autocomplete,
     AutocompleteItem,
@@ -57,6 +57,7 @@ export function CollectionDetailsForm({
     } = useFormikContext<EntityCollection>();
 
     const [iconDialogOpen, setIconDialogOpen] = useState(false);
+    const [advancedPanelExpanded, setAdvancedPanelExpanded] = useState(false);
 
     const updateName = (name: string) => {
         setFieldValue("name", name);
@@ -66,6 +67,11 @@ export function CollectionDetailsForm({
             setFieldValue("path", toSnakeCase(name));
         }
 
+        const idTouched = getIn(touched, "id");
+        if (!idTouched && isNewCollection && name) {
+            setFieldValue("id", toSnakeCase(name));
+        }
+
         const singularNameTouched = getIn(touched, "singularName");
         if (!singularNameTouched && isNewCollection && name) {
             setFieldValue("singularName", singular(name))
@@ -73,29 +79,13 @@ export function CollectionDetailsForm({
 
     };
 
-    const collectionIcon = getIconForView(values);
-
-    const validatePath = useCallback((value: string) => {
-        let error;
-        if (!value) {
-            error = "You must specify a path in the database for this collection";
+    useEffect(() => {
+        if (errors.id) {
+            setAdvancedPanelExpanded(true);
         }
-        // if (isNewCollection && existingIds?.includes(value.trim().toLowerCase()))
-        //     error = "There is already a collection which uses this path as an alias";
-        // if (isNewCollection && existingPaths?.includes(value.trim().toLowerCase()) && !values.id)
-        //     error = "There is already a collection with the specified path. If you want to have multiple collections referring to the same database path, you need to define an alias in at least one of the collections";
-        return error;
-    }, [isNewCollection, existingIds, existingPaths, values.id]);
+    }, [errors.id]);
 
-    // const validateAlias = useCallback((value: string) => {
-    //     if (!value) return undefined;
-    //     let error;
-    //     if (isNewCollection && existingPaths?.includes(value.trim().toLowerCase()))
-    //         error = "There is already a collection that uses this value as a path";
-    //     if (isNewCollection && existingIds?.includes(value.trim().toLowerCase()))
-    //         error = "There is already a collection which uses this alias";
-    //     return error;
-    // }, [isNewCollection, existingPaths, existingIds]);
+    const collectionIcon = getIconForView(values);
 
     const groupOptions = groups?.filter((group) => !reservedGroups?.includes(group));
 
@@ -165,13 +155,12 @@ export function CollectionDetailsForm({
                         <Field name={"path"}
                                as={DebouncedTextField}
                                label={"Path"}
-                               validate={validatePath}
                                disabled={!isNewCollection}
                                required
-                               error={touched.id && Boolean(errors.id)}/>
+                               error={touched.path && Boolean(errors.path)}/>
 
-                        <FieldHelperView error={touched.id && Boolean(errors.id)}>
-                            {touched.id && Boolean(errors.id) ? errors.id : "Path that this collection is stored in"}
+                        <FieldHelperView error={touched.path && Boolean(errors.path)}>
+                            {touched.path && Boolean(errors.path) ? errors.path : "Path that this collection is stored in, in the database"}
                         </FieldHelperView>
 
                     </div>
@@ -210,6 +199,8 @@ export function CollectionDetailsForm({
 
                     <div className={"col-span-12"}>
                         <ExpandablePanel
+                            expanded={advancedPanelExpanded}
+                            onExpandedChange={setAdvancedPanelExpanded}
                             title={
                                 <div className="flex flex-row text-gray-500">
                                     <SettingsIcon/>
@@ -251,17 +242,16 @@ export function CollectionDetailsForm({
                                     </FieldHelperView>
                                 </div>
 
-                                {/*<div className={"col-span-12"}>*/}
-                                {/*    <Field name={"alias"}*/}
-                                {/*           as={DebouncedTextField}*/}
-                                {/*           disabled={!isNewCollection}*/}
-                                {/*           label={"Alias"}*/}
-                                {/*           validate={validateAlias}*/}
-                                {/*           error={touched.id && Boolean(errors.id)}/>*/}
-                                {/*    <FieldHelperView error={touched.id && Boolean(errors.id)}>*/}
-                                {/*        {touched.id && Boolean(errors.id) ? errors.id : "Use an alias as an ID when you have multiple collections located in the same path"}*/}
-                                {/*    </FieldHelperView>*/}
-                                {/*</div>*/}
+                                <div className={"col-span-12"}>
+                                    <Field name={"id"}
+                                           as={DebouncedTextField}
+                                           disabled={!isNewCollection}
+                                           label={"Collection id"}
+                                           error={touched.id && Boolean(errors.id)}/>
+                                    <FieldHelperView error={touched.id && Boolean(errors.id)}>
+                                        {touched.id && Boolean(errors.id) ? errors.id : "This id identifies this collection"}
+                                    </FieldHelperView>
+                                </div>
 
                                 <div className={"col-span-12"}>
                                     <Select
@@ -284,7 +274,7 @@ export function CollectionDetailsForm({
                                 <div className={"col-span-12"}>
                                     <Select
                                         name="customId"
-                                        label="ID generation"
+                                        label="Data IDs generation"
                                         position={"item-aligned"}
                                         disabled={customIdValue === "code_defined"}
                                         onValueChange={(v) => {
@@ -306,11 +296,11 @@ export function CollectionDetailsForm({
                                             else if (value === "optional")
                                                 return "Users can define an ID, but it is not required";
                                             else
-                                                return "ID is generated automatically";
+                                                return "Document ID is generated automatically";
                                         }}
                                     >
                                         <SelectItem value={"false"}>
-                                            ID is generated automatically
+                                            Document ID is generated automatically
                                         </SelectItem>
                                         <SelectItem value={"true"}>
                                             Users must define an ID
@@ -359,6 +349,5 @@ export function CollectionDetailsForm({
 
             </Container>
         </div>
-    )
-        ;
+    );
 }

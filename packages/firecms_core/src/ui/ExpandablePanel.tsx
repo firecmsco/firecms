@@ -10,8 +10,9 @@ export function ExpandablePanel({
                                     title,
                                     children,
                                     invisible = false,
-                                    initiallyExpanded: initiallyOpen = true,
+                                    expanded,
                                     onExpandedChange,
+                                    initiallyExpanded = true,
                                     titleClassName,
                                     asField,
                                     className
@@ -19,6 +20,7 @@ export function ExpandablePanel({
     title: React.ReactNode,
     invisible?: boolean,
     initiallyExpanded?: boolean;
+    expanded?: boolean;
     onExpandedChange?: (expanded: boolean) => void,
     titleClassName?: string,
     asField?: boolean,
@@ -54,7 +56,7 @@ export function ExpandablePanel({
   }
 }`);
 
-    const [open, setOpen] = useState(initiallyOpen);
+    const [open, setOpen] = useState(expanded !== undefined ? expanded : initiallyExpanded);
     const [allowOverflow, setAllowOverflow] = useState(open);
 
     useEffect(() => {
@@ -66,6 +68,11 @@ export function ExpandablePanel({
             setAllowOverflow(false);
         }
     }, [open]);
+
+    useEffect(() => {
+        if (expanded !== undefined)
+            setOpen(expanded);
+    }, [expanded]);
 
     return (<>
             <Collapsible.Root

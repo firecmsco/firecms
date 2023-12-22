@@ -43,7 +43,7 @@ type CollectionEditorFormProps = {
     extraIcon: React.ReactNode;
     getUser: (uid: string) => User | null;
     getData?: () => Promise<object[]>;
-    doCollectionInference: (collection: PersistedCollection) => Promise<EntityCollection | null> | undefined;
+    doCollectionInference: (collection: PersistedCollection) => Promise<Partial<EntityCollection> | null> | undefined;
     propertyConfigs: Record<string, PropertyConfig>;
     collectionEditable: boolean;
 };
@@ -121,7 +121,7 @@ export function CollectionPropertiesEditorForm({
                         return;
                     }
                     // find properties in the new collection, not present in the current one
-                    const newPropertyKeys = Object.keys(newCollection.properties)
+                    const newPropertyKeys = (newCollection.properties ? Object.keys(newCollection.properties) : [])
                         .filter((propertyKey) => !values.properties[propertyKey]);
                     if (newPropertyKeys.length === 0) {
                         snackbarController.open({
@@ -133,7 +133,7 @@ export function CollectionPropertiesEditorForm({
                     // add them to the current collection
                     const updatedProperties = {
                         ...newPropertyKeys.reduce((acc, propertyKey) => {
-                            acc[propertyKey] = newCollection.properties[propertyKey];
+                            acc[propertyKey] = (newCollection.properties ?? {})[propertyKey];
                             return acc;
                         }, {} as { [key: string]: PropertyOrBuilder }),
                         ...values.properties

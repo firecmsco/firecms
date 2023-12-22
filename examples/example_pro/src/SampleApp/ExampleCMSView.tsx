@@ -49,6 +49,7 @@ export function ExampleCMSView() {
     });
 
     const customProductCollection = buildCollection({
+        id: "custom_product",
         path: "custom_product",
         name: "Custom products",
         properties: {

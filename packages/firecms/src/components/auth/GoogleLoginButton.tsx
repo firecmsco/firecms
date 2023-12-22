@@ -21,13 +21,13 @@ export function GoogleLoginButton({
                     variant="filled"
                     disabled={disabled}
                     onClick={onClick}>
-                <div className="flex items-center justify-items-center">
+                <div
+                    className={cn("flex items-center justify-items-center text-gray-900 dark:text-gray-900", disabled ? "" : "hover:text-white hover:dark:text-white")}>
                     <div className="flex flex-col items-center justify-center w-4.5 h-4.5">
                         {googleIcon()}
                     </div>
                     <div
-                        className={cn("flex-grow pl-6 text-left text-gray-900 dark:text-gray-900",
-                            disabled ? "" : "hover:text-white hover:dark:text-white")}>
+                        className={cn("flex-grow pl-6 text-left")}>
                         {"Sign in with Google"}
                     </div>
                 </div>

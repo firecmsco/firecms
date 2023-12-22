@@ -1,6 +1,7 @@
 import { buildCollection } from "@firecms/core";
 
 export const usersCollection = buildCollection({
+    id: "users",
     path: "users",
     name: "Users",
     singularName: "User",

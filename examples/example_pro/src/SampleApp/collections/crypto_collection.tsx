@@ -2,6 +2,7 @@ import { buildCollection } from "@firecms/core";
 
 export const cryptoCollection = buildCollection({
     name: "Crypto",
+    id: "alpaca",
     path: "alpaca",
     icon: "AttachMoney",
     description: "Example of a read-only collection with near real-time updates",

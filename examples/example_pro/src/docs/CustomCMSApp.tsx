@@ -35,6 +35,7 @@ const DEFAULT_SIGN_IN_OPTIONS = [
 ];
 
 const productsCollection = buildCollection({
+    id: "products",
     path: "products",
     permissions: ({ user }) => ({
         edit: true,

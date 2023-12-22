@@ -49,6 +49,7 @@ const productCallbacks = buildEntityCallbacks({
 
 const productCollection = buildCollection<Product>({
     name: "Product",
+    id: "products",
     path: "products",
     properties: {
         name: {

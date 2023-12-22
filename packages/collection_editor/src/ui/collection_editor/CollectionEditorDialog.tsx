@@ -234,10 +234,17 @@ export function CollectionEditorDialogInternal<M extends {
             });
     };
 
-    const initialValues: PersistedCollection<M> = collection
-        ? applyPropertyConfigs(collection, propertyConfigs)
+    const initialCollection = collection
+        ? {
+            ...collection,
+            id: collection.id ?? collection.path ?? randomString(16)
+        }
+        : undefined;
+
+    const initialValues: PersistedCollection<M> = initialCollection
+        ? applyPropertyConfigs(initialCollection, propertyConfigs)
         : {
-            id: randomString(10),
+            id: initialValuesProp?.path ?? randomString(16),
             path: initialValuesProp?.path ?? "",
             name: initialValuesProp?.name ?? "",
             group: initialValuesProp?.group ?? "",
@@ -292,7 +299,7 @@ export function CollectionEditorDialogInternal<M extends {
                 return Promise.resolve(newCollection);
             }
             const values = {
-                ...(newCollection ?? {}),
+                ...(newCollection ?? {})
             };
 
             if (Object.keys(inferredCollection.properties ?? {}).length > 0) {
@@ -393,24 +400,36 @@ export function CollectionEditorDialogInternal<M extends {
         <Formik
             initialValues={initialValues}
             validationSchema={(currentView === "properties" || currentView === "subcollections" || currentView === "details") && YupSchema}
-            validate={() => {
+            validate={(v) => {
                 if (currentView === "properties") {
                     // return the errors for the properties form
                     return propertyErrorsRef.current;
                 }
-                return undefined;
+                const errors: Record<string, any> = {};
+                if (currentView === "details") {
+                    const pathError = validatePath(v.path, isNewCollection, existingPaths, v.id);
+                    if (pathError) {
+                        errors.path = pathError;
+                    }
+                    const idError = validateId(v.id, isNewCollection, existingPaths, existingIds);
+                    if (idError) {
+                        errors.id = idError;
+                    }
+                }
+                return errors;
             }}
             onSubmit={onSubmit}
         >
-            {({
-                  values,
-                  setFieldValue,
-                  isSubmitting,
-                  dirty,
-                  submitCount
-              }) => {
+            {(formikHelpers) => {
+                const {
+                    values,
+                    setFieldValue,
+                    isSubmitting,
+                    dirty,
+                    submitCount
+                } = formikHelpers;
 
-                const path = values.id ?? editedCollectionPath;
+                const path = values.path ?? editedCollectionPath;
                 const updatedFullPath = fullPath?.includes("/") ? fullPath?.split("/").slice(0, -1).join("/") + "/" + path : path; // TODO: this path is wrong
                 const resolvedPath = navigation.resolveAliasesFrom(updatedFullPath);
                 const getDataWithPath = resolvedPath && getData ? () => getData(resolvedPath) : undefined;
@@ -447,7 +466,7 @@ export function CollectionEditorDialogInternal<M extends {
                     setNextMode();
                     console.log("onImportMappingComplete", {
                         importConfig,
-                        properties: updatedProperties,
+                        properties: updatedProperties
                     })
                 };
 
@@ -698,3 +717,28 @@ function applyPropertiesConfig(property: PropertyOrBuilder, propertyConfigs: Rec
     return internalProperty;
 
 }
+
+const validatePath = (value: string, isNewCollection: boolean, existingPaths: string[], idValue?: string) => {
+    let error;
+    if (!value) {
+        error = "You must specify a path in the database for this collection";
+    }
+    // if (isNewCollection && existingIds?.includes(value.trim().toLowerCase()))
+    //     error = "There is already a collection which uses this path as an id";
+    if (isNewCollection && existingPaths?.includes(value.trim().toLowerCase()) && !idValue)
+        error = "There is already a collection with the specified path. If you want to have multiple collections referring to the same database path, make sure the have different ids";
+    return error;
+};
+
+const validateId = (value: string, isNewCollection: boolean, existingPaths: string[], existingIds: string[]) => {
+    if (!value) return undefined;
+    let error;
+    if (isNewCollection && existingPaths?.includes(value.trim().toLowerCase()))
+        error = "There is already a collection that uses this value as a path";
+    if (isNewCollection && existingIds?.includes(value.trim().toLowerCase()))
+        error = "There is already a collection which uses this id";
+    // if (error) {
+    //     setAdvancedPanelExpanded(true);
+    // }
+    return error;
+};

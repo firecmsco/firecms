@@ -1,6 +1,7 @@
 import { buildCollection, buildProperty } from "@firecms/core";
 
 export const showcaseCollection = buildCollection({
+    id: "showcase",
     path: "showcase",
     customId: false,
     icon: "bento",

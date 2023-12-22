@@ -9,6 +9,7 @@ export const unitsCollection = buildCollection<Unit>({
     name: "Units",
     singularName: "Unit",
     group: "Main",
+    id: "units",
     path: "units",
     customId: true,
     icon: "LocalLibrary",

@@ -25,6 +25,7 @@ export const properties = buildProperties<Product>({
 // Source collection
 export const productsCollection = buildCollection<Product>({
     name: "Products",
+    id: "products",
     path: "products",
     properties
 });
@@ -32,6 +33,7 @@ export const productsCollection = buildCollection<Product>({
 // Target collection
 export const productsCollectionCopy = buildCollection<Product>({
     name: "Products copy target",
+    id: "products_copied",
     path: "products_copied",
     properties
 });
