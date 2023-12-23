@@ -19,6 +19,7 @@ import { useEntityCollectionTableController } from "./EntityCollectionTable/useE
 import { AddIcon } from "../icons";
 import { useColumnIds } from "./EntityCollectionView/useColumnsIds";
 import { useSideDialogContext } from "../core";
+import { useTraceUpdate } from "../util/useTraceUpdate";
 
 /**
  * @group Components
@@ -99,6 +100,8 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
         maxSelection
     }: ReferenceSelectionInnerProps<M>) {
 
+    console.log("ReferenceSelectionInner");
+
     const sideDialogContext = useSideDialogContext();
     const sideEntityController = useSideEntityController();
     const navigation = useNavigationController();
@@ -142,7 +145,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
         };
     }, [dataSource, fullPath, selectedEntityIdsProp, collection, selectionController.setSelectedEntities]);
 
-    const onClear = useCallback(() => {
+    const onClear = () => {
         context.onAnalyticsEvent?.("reference_selection_clear", {
             path: fullPath
         });
@@ -152,9 +155,10 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
         } else if (onMultipleEntitiesSelected) {
             onMultipleEntitiesSelected([]);
         }
-    }, [multiselect, onMultipleEntitiesSelected, onSingleEntitySelected]);
+    };
 
-    const toggleEntitySelection = useCallback((entity: Entity<any>) => {
+    const toggleEntitySelection = (entity: Entity<any>) => {
+        console.debug("ReferenceSelectionInner toggleEntitySelection", entity);
         let newValue;
         const selectedEntities = selectionController.selectedEntities;
 
@@ -176,9 +180,10 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
             if (onMultipleEntitiesSelected)
                 onMultipleEntitiesSelected(newValue);
         }
-    }, [onMultipleEntitiesSelected, selectionController.selectedEntities]);
+    };
 
-    const onEntityClick = useCallback((entity: Entity<any>) => {
+    const onEntityClick = (entity: Entity<any>) => {
+        console.debug("ReferenceSelectionInner onEntityClick", entity);
 
         if (!multiselect && onSingleEntitySelected) {
             context.onAnalyticsEvent?.("reference_selected_single", {
@@ -190,32 +195,31 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
         } else {
             toggleEntitySelection(entity);
         }
-    }, [sideDialogContext, multiselect, onSingleEntitySelected, toggleEntitySelection]);
+    };
 
     // create a new entity from within the reference dialog
-    const onNewClick = useCallback(() => {
-            context.onAnalyticsEvent?.("reference_selection_new_entity", {
-                path: fullPath
-            });
-            sideEntityController.open({
-                path: fullPath,
-                collection,
-                updateUrl: true,
-                onUpdate: ({ entity }) => {
-                    setEntitiesDisplayedFirst([entity, ...entitiesDisplayedFirst]);
-                    onEntityClick(entity);
-                },
-                closeOnSave: true
-            });
-        },
-        [sideEntityController, fullPath, collection, entitiesDisplayedFirst, onEntityClick]);
+    const onNewClick = () => {
+        context.onAnalyticsEvent?.("reference_selection_new_entity", {
+            path: fullPath
+        });
+        sideEntityController.open({
+            path: fullPath,
+            collection,
+            updateUrl: true,
+            onUpdate: ({ entity }) => {
+                setEntitiesDisplayedFirst([entity, ...entitiesDisplayedFirst]);
+                onEntityClick(entity);
+            },
+            closeOnSave: true
+        });
+    };
 
-    const tableRowActionsBuilder = useCallback(({
-                                                    entity,
-                                                    size,
-                                                    width,
-                                                    frozen
-                                                }: {
+    const tableRowActionsBuilder = ({
+                                        entity,
+                                        size,
+                                        width,
+                                        frozen
+                                    }: {
         entity: Entity<any>,
         size: CollectionSize,
         width: number,
@@ -234,7 +238,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
             fullPath={fullPath}
             selectionController={selectionController}/>;
 
-    }, [multiselect, selectionController.selectedEntities, toggleEntitySelection, collection?.hideIdFromCollection]);
+    };
 
     const onDone = useCallback((event: React.SyntheticEvent) => {
         event.stopPropagation();

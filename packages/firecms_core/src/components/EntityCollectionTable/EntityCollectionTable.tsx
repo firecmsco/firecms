@@ -142,6 +142,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         const onRowClick = useCallback(({ rowData }: {
             rowData: Entity<M>
         }) => {
+            console.debug("EntityCollectionTable click");
             if (inlineEditing)
                 return;
             return onEntityClick && onEntityClick(rowData);

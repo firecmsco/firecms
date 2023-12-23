@@ -16,7 +16,7 @@ import { isPropertyBuilder } from "./entities";
 export function joinCollectionLists(targetCollections: EntityCollection[],
                                     sourceCollections: EntityCollection[] | undefined,
                                     parentPaths: string[] = [],
-                                    modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | undefined): EntityCollection[] {
+                                    modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | void): EntityCollection[] {
 
     // merge collections that are in both lists
     const updatedCollections = (sourceCollections ?? [])
@@ -53,7 +53,7 @@ export function joinCollectionLists(targetCollections: EntityCollection[],
 export function mergeCollection(target: EntityCollection,
                                 source: EntityCollection,
                                 parentPaths: string[] = [],
-                                modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | undefined
+                                modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | void
 ): EntityCollection {
 
     const subcollectionsMerged = joinCollectionLists(

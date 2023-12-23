@@ -197,6 +197,8 @@ export function SubcollectionsEditTab({
                 </div>
             </Container>
 
+            <div style={{ height: "52px" }}/>
+
             {subcollectionToDelete &&
                 <DeleteConfirmationDialog open={Boolean(subcollectionToDelete)}
                                           onAccept={() => {

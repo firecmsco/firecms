@@ -27,7 +27,7 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
      */
     collectionConfigController: CollectionsConfigController;
 
-    modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | undefined;
+    modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | void;
 
     /**
      * Define what actions can be performed on the configuration.

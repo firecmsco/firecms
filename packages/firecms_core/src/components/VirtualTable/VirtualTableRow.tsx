@@ -15,16 +15,18 @@ export const VirtualTableRow = React.memo<VirtualTableRowProps<any>>(
                                     size,
                                     style,
                                     hoverRow,
-                                    rowClassName,
+                                    rowClassName
                                 }: VirtualTableRowProps<T>) {
 
-        const onClick = useCallback((event: React.SyntheticEvent) => onRowClick
-            ? onRowClick({
-                rowData,
-                rowIndex,
-                event
-            })
-            : undefined, [onRowClick, rowData, rowIndex]);
+        const onClick = useCallback((event: React.SyntheticEvent) => {
+            console.debug("VirtualTableRow click");
+            if (onRowClick)
+                onRowClick({
+                    rowData,
+                    rowIndex,
+                    event
+                })
+        }, [onRowClick, rowData, rowIndex]);
 
         return (
             <div

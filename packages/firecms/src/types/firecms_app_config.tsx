@@ -33,7 +33,7 @@ export type FireCMSAppConfig = {
      * the original collection.
      * @param props
      */
-    modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | undefined;
+    modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | void;
 
     /**
      * Custom additional views created by the developer, added to the main
