@@ -91,8 +91,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
             };
             const storedCollections = collectionConfigController.collections ?? [];
             storedCollections.forEach(markAsEditable);
-            const joinCollectionLists1 = joinCollectionLists(collections, storedCollections, [], modifyCollection);
-            return joinCollectionLists1;
+            return joinCollectionLists(collections, storedCollections, [], modifyCollection);
         },
         [collectionConfigController.collections, modifyCollection]);
 

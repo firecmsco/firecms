@@ -81,7 +81,8 @@ export function prepareCollectionForPersistence<M extends { [Key: string]: CMSTy
     const properties = setUndefinedToDelete(removeFunctions(cleanedProperties));
     const newCollection: PersistedCollection = {
         ...removeUndefined(rest),
-        properties
+        properties,
+        propertiesOrder: removeDuplicates(rest.propertiesOrder ?? Object.keys(properties))
     };
 
     delete newCollection.permissions;
@@ -124,4 +125,8 @@ function cleanPropertyConfigs(properties: PropertiesOrBuilders<any>, propertyCon
         }
     });
     return res;
+}
+
+function removeDuplicates<T>(array: T[]): T[] {
+    return [...new Set(array)];
 }

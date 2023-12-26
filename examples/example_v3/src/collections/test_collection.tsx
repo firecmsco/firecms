@@ -85,6 +85,7 @@ const validatedCustom = buildProperty({
 
 export const testCollection = buildCollection({
     callbacks: testCallbacks,
+    id: "test_entity",
     path: "test_entity",
     customId: false,
     name: "Test entities",

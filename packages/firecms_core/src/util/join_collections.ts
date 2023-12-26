@@ -10,6 +10,26 @@ import { mergeDeep } from "./objects";
 import { sortProperties } from "./collections";
 import { isPropertyBuilder } from "./entities";
 
+function applyModifyFunction(modifyCollection: ((props: ModifyCollectionProps) => (EntityCollection | void)) | undefined,
+                             collection: EntityCollection,
+                             parentPaths: string[]) {
+    if (modifyCollection) {
+        const modified = modifyCollection({
+            collection,
+            parentPaths
+        });
+        const resCollection = modified ?? collection;
+        if (resCollection.subcollections) {
+            resCollection.subcollections = resCollection.subcollections.map((subcollection) => {
+                return applyModifyFunction(modifyCollection, subcollection, [...parentPaths, collection.path]);
+            });
+        }
+        return resCollection;
+    } else {
+        return collection;
+    }
+}
+
 /**
  *
  */
@@ -20,15 +40,15 @@ export function joinCollectionLists(targetCollections: EntityCollection[],
 
     // merge collections that are in both lists
     const updatedCollections = (sourceCollections ?? [])
-        .map((codedCollection) => {
-            const storedCollection = targetCollections?.find((collection) => {
-                return collection.id === codedCollection.id;
+        .map((sourceCol) => {
+            const targetCol = targetCollections?.find((collection) => {
+                return collection.id === sourceCol.id;
                 // return collection.path === codedCollection.path || collection.id && codedCollection.id;
             });
-            if (!storedCollection) {
-                return codedCollection;
+            if (!targetCol) {
+                return applyModifyFunction(modifyCollection, sourceCol, parentPaths);
             } else {
-                return mergeCollection(storedCollection, codedCollection, parentPaths, modifyCollection);
+                return mergeCollection(targetCol, sourceCol, parentPaths, modifyCollection);
             }
         });
 
@@ -37,8 +57,7 @@ export function joinCollectionLists(targetCollections: EntityCollection[],
         .filter((col) => !updatedCollections.map(c => c.id).includes(col.id))
         .map((col) => {
             if (modifyCollection) {
-                const modified = modifyCollection({ collection: col, parentPaths });
-                return modified ?? col;
+                return applyModifyFunction(modifyCollection, col, parentPaths);
             } else {
                 return col;
             }
@@ -86,7 +105,10 @@ export function mergeCollection(target: EntityCollection,
         entityViews: mergedEntityViews
     };
     if (modifyCollection) {
-        const modifiedCollection = modifyCollection({ collection: resultCollection, parentPaths });
+        const modifiedCollection = modifyCollection({
+            collection: resultCollection,
+            parentPaths
+        });
         if (modifiedCollection)
             resultCollection = modifiedCollection;
     }
@@ -112,9 +134,17 @@ function mergePropertyOrBuilder(target: Property, source: PropertyOrBuilder): Pr
                 if (property)
                     mergedProperties[key] = mergePropertyOrBuilder(property, sourceProperties[key] as PropertyOrBuilder);
             });
-            return { ...mergedProperty, editable: targetEditable && sourceEditable, properties: mergedProperties, propertiesOrder: mergedPropertiesOrder } as MapProperty;
+            return {
+                ...mergedProperty,
+                editable: targetEditable && sourceEditable,
+                properties: mergedProperties,
+                propertiesOrder: mergedPropertiesOrder
+            } as MapProperty;
         }
-        return { ...mergedProperty, editable: targetEditable && sourceEditable };
+        return {
+            ...mergedProperty,
+            editable: targetEditable && sourceEditable
+        };
     }
 }
 
