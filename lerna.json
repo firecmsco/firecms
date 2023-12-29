@@ -1,9 +1,10 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "version": "3.0.0-alpha.49",
+  "version": "3.0.0-alpha.50",
   "packages": [
     "packages/firecms",
     "packages/firecms_core",
+    "packages/ui",
     "packages/collection_editor",
     "packages/data_enhancement",
     "packages/data_import_export",
