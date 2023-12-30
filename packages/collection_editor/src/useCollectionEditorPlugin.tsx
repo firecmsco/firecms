@@ -56,8 +56,9 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
 
     getUser: (uid: string) => UserType | null;
 
-}
+    onAnalyticsEvent?: (event: string, params?: object) => void;
 
+}
 
 /**
  * Use this hook to initialise the Collection Editor plugin.
@@ -73,14 +74,15 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
 export function useCollectionEditorPlugin<EC extends PersistedCollection = PersistedCollection, UserType extends User = User>
 ({
      collectionConfigController,
-    modifyCollection,
+     modifyCollection,
      configPermissions,
      reservedGroups,
      extraView,
      pathSuggestions,
      getUser,
      collectionInference,
-     getData
+     getData,
+     onAnalyticsEvent
  }: CollectionConfigControllerProps<EC, UserType>): FireCMSPlugin<any, any, PersistedCollection> {
 
     const injectCollections = useCallback(
@@ -112,7 +114,8 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
                 extraView,
                 pathSuggestions,
                 getUser,
-                getData
+                getData,
+                onAnalyticsEvent
             }
         },
         homePage: {

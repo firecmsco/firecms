@@ -48,6 +48,8 @@ export interface ConfigControllerProviderProps {
 
     getData?: (path: string) => Promise<object[]>;
 
+    onAnalyticsEvent?: (event: string, params?: object) => void;
+
 }
 
 export const ConfigControllerProvider = React.memo(
@@ -60,7 +62,8 @@ export const ConfigControllerProvider = React.memo(
                                           extraView,
                                           pathSuggestions,
                                           getUser,
-                                          getData
+                                          getData,
+                                          onAnalyticsEvent
                                       }: PropsWithChildren<ConfigControllerProviderProps>) {
 
         const navigation = useNavigationController();
@@ -125,6 +128,8 @@ export const ConfigControllerProvider = React.memo(
             parentCollectionIds: string[],
             parentCollection?: PersistedCollection
         }) => {
+            console.debug("edit collection", path, fullPath, parentCollectionIds, parentCollection);
+            onAnalyticsEvent?.("edit_collection", { path, fullPath });
             setCurrentDialog({
                 editedCollectionPath: path,
                 fullPath,
@@ -150,6 +155,8 @@ export const ConfigControllerProvider = React.memo(
             parentCollectionIds: string[],
             collection: PersistedCollection,
         }) => {
+            console.debug("edit property", propertyKey, property, editedCollectionPath, currentPropertiesOrder, parentCollectionIds, collection);
+            onAnalyticsEvent?.("edit_property", { propertyKey, editedCollectionPath });
             // namespace is all the path until the last dot
             const namespace = propertyKey && propertyKey.includes(".")
                 ? propertyKey.substring(0, propertyKey.lastIndexOf("."))
@@ -184,6 +191,8 @@ export const ConfigControllerProvider = React.memo(
             },
             redirect: boolean
         }) => {
+            console.debug("create collection", parentCollectionIds, parentCollection, initialValues, redirect);
+            onAnalyticsEvent?.("create_collection", { parentCollectionIds, parentCollection, initialValues, redirect });
             setCurrentDialog({
                 isNewCollection: true,
                 parentCollectionIds,
