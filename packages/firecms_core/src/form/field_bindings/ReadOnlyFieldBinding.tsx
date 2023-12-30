@@ -5,8 +5,7 @@ import { Entity, FieldProps } from "../../types";
 import { PropertyPreview } from "../../preview";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { getIconForProperty } from "../../util";
-import { paperMixin } from "../../styles";
-import { cn } from "../../ui";
+import { cn, paperMixin } from "@firecms/ui";
 import { ErrorBoundary } from "../../components";
 
 /**

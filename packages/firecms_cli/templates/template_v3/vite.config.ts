@@ -18,7 +18,7 @@ export default defineConfig({
             exposes: {
                 "./config": "./src/index"
             },
-            shared: ["react", "react-dom", "firecms", "@firecms/core", "@firecms/firebase"]
+            shared: ["react", "react-dom", "firecms", "@firecms/core", "@firecms/firebase", "@firecms/ui"]
         })
     ],
     build: {

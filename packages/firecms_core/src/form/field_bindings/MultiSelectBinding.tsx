@@ -5,8 +5,7 @@ import { FieldHelperText, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { EnumValuesChip } from "../../preview";
 import { enumToObjectEntries, getIconForProperty, getLabelOrConfigFrom } from "../../util";
-import { CloseIcon } from "../../icons";
-import { MultiSelect, MultiSelectItem } from "../../ui/MultiSelect";
+import { CloseIcon, MultiSelect, MultiSelectItem } from "@firecms/ui";
 
 /**
  * This fields renders a dropdown with multiple selection.

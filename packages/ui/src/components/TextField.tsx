@@ -10,7 +10,7 @@ import {
     focusedMixin
 } from "../styles";
 import { InputLabel } from "./InputLabel";
-import { cn } from "../utils";
+import { cn } from "../util";
 
 export type InputType =
     "text"

@@ -14,7 +14,7 @@ import { SideEntityControllerContext } from "../contexts/SideEntityControllerCon
 import { NavigationContext } from "../contexts/NavigationContext";
 import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerContext";
 import { useLocaleConfig } from "../internal/useLocaleConfig";
-import { CenteredView } from "../ui";
+import { CenteredView } from "@firecms/ui";
 import { DialogsProvider } from "../contexts/DialogsProvider";
 import { useBuildNavigationController } from "../internal/useBuildNavigationController";
 import { useBuildDataSource } from "../internal/useBuildDataSource";

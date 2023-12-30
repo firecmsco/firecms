@@ -4,9 +4,18 @@ import { DragDropContext, Draggable, DraggableProvided, Droppable } from "@hello
 
 import { getHashValue } from "../util";
 import useMeasure from "react-use-measure";
-import { Button, IconButton, Menu, MenuItem, Tooltip } from "../ui";
-import { AddIcon, ContentCopyIcon, MoreVertIcon, RemoveIcon } from "../icons";
-import { fieldBackgroundHoverMixin } from "../styles";
+import {
+    AddIcon,
+    Button,
+    ContentCopyIcon,
+    fieldBackgroundHoverMixin,
+    IconButton,
+    Menu,
+    MenuItem,
+    MoreVertIcon,
+    RemoveIcon,
+    Tooltip
+} from "@firecms/ui";
 
 interface ArrayContainerProps<T> {
     droppableId: string;

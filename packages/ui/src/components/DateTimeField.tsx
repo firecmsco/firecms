@@ -12,7 +12,7 @@ import {
     paperMixin
 } from "../styles";
 import { InputLabel } from "./InputLabel";
-import { cn, useInjectStyles } from "../utils";
+import { cn, useInjectStyles } from "../util";
 import { Typography } from "./Typography";
 
 interface DateTimeFieldProps {

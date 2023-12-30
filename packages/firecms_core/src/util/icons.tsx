@@ -1,9 +1,8 @@
 import React from "react";
 import { CMSView, EntityCollection } from "../types";
 import { hashString } from "./hash";
-import { Icon } from "../icons";
+import { coolIconKeys, Icon, iconKeys } from "@firecms/ui";
 import { slugify } from "./strings";
-import { coolIconKeys, iconKeys } from "../icons/icon_keys";
 
 export function getIcon(iconKey?: string, className?:string): React.ReactElement | undefined {
     if (!iconKey) return undefined;

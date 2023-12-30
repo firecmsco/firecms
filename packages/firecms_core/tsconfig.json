@@ -29,7 +29,13 @@
       "vite/client",
       "node",
       "jest"
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@firecms/ui": [
+        "../ui/src/index.ts"
+      ]
+    }
   },
   "include": [
     "src",

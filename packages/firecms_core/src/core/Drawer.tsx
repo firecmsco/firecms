@@ -5,7 +5,7 @@ import { useFireCMSContext, useLargeLayout, useNavigationController } from "../h
 import { NavLink } from "react-router-dom";
 import { CMSAnalyticsEvent, TopNavigationEntry, TopNavigationResult } from "../types";
 import { getIconForView } from "../util";
-import { cn, Tooltip, Typography } from "../ui";
+import { cn, Tooltip, Typography } from "@firecms/ui";
 
 /**
  * Props used in case you need to override the default drawer

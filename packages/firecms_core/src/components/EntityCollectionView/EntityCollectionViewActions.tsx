@@ -3,8 +3,7 @@ import React from "react";
 import { canCreateEntity, canDeleteEntity, fullPathToCollectionSegments } from "../../util";
 import { useAuthController, useFireCMSContext, useLargeLayout } from "../../hooks";
 import { CollectionActionsProps, EntityCollection, SelectionController, TableController } from "../../types";
-import { Button, IconButton, Tooltip } from "../../ui";
-import { AddIcon, DeleteIcon } from "../../icons";
+import { AddIcon, Button, DeleteIcon, IconButton, Tooltip } from "@firecms/ui";
 import { toArray } from "../../util/arrays";
 import { ErrorBoundary } from "../ErrorBoundary";
 

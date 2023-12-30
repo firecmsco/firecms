@@ -3,10 +3,7 @@ import { PropertyPreview } from "../preview";
 import { Entity, EntityCollection, FireCMSContext, ResolvedEntityCollection, ResolvedProperties } from "../types";
 import { resolveCollection } from "../util";
 import { useFireCMSContext } from "../hooks";
-import { defaultBorderMixin } from "../styles";
-import { IconButton } from "../ui";
-import { OpenInNewIcon } from "../icons";
-import { cn } from "../ui/util/cn";
+import { cn, defaultBorderMixin, IconButton, OpenInNewIcon } from "@firecms/ui";
 
 /**
  * @group Components

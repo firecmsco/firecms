@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { cn } from "../utils";
+import { cn } from "../util";
 
 interface SheetProps {
     children: React.ReactNode;

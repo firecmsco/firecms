@@ -13,13 +13,18 @@ export default defineConfig(() => ({
     build: {
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
-            name: "FireCMS core",
+            name: "FireCMS Core",
             fileName: (format) => `index.${format}.js`
         },
         target: "esnext",
         sourcemap: true,
         rollupOptions: {
             external: isExternal
+        }
+    },
+    resolve: {
+        alias: {
+            "@firecms/ui": path.resolve(__dirname, "../ui/src")
         }
     },
     plugins: [

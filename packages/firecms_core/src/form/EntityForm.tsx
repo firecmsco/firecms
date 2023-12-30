@@ -28,9 +28,7 @@ import {
 import { useAuthController, useDataSource, useFireCMSContext, useSideEntityController } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
-import { DialogActions, IconButton, Typography } from "../ui";
-import { Button } from "../ui/Button";
-import { cn } from "../ui/util/cn";
+import { Button, cn, DialogActions, IconButton, Typography } from "@firecms/ui";
 import { ErrorBoundary } from "../components";
 import {
     copyEntityAction,

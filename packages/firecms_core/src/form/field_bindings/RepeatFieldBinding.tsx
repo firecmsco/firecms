@@ -4,7 +4,7 @@ import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../compone
 import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../util";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
-import { ExpandablePanel } from "../../ui";
+import { ExpandablePanel } from "@firecms/ui";
 
 /**
  * Generic array field that allows reordering and renders the child property

@@ -23,7 +23,7 @@ export default defineConfig(({ command }) => {
                 },
                 shared: ["react", "react-dom",
                     ...(build
-                        ? ["@firecms/core", "firecms",]
+                        ? ["@firecms/core", "@firecms/firebase", "@firecms/ui", "firecms",]
                         : [])
                 ]
             })
@@ -39,6 +39,7 @@ export default defineConfig(({ command }) => {
                 "firecms": path.resolve(__dirname, "../../packages/firecms/src"),
                 "@firecms/cli": path.resolve(__dirname, "../../packages/firecms_cli/src"),
                 "@firecms/core": path.resolve(__dirname, "../../packages/firecms_core/src"),
+                "@firecms/ui": path.resolve(__dirname, "../../packages/ui/src"),
                 "@firecms/firebase": path.resolve(__dirname, "../../packages/firebase_firecms/src"),
                 "@firecms/data_enhancement": path.resolve(__dirname, "../../packages/data_enhancement/src"),
                 "@firecms/data_import_export": path.resolve(__dirname, "../../packages/data_import_export/src"),

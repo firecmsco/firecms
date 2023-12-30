@@ -12,14 +12,12 @@ import {
     useSideEntityController
 } from "../hooks";
 import { ErrorView } from "./ErrorView";
-import { Button, DialogActions, Typography } from "../ui";
+import { AddIcon, Button, DialogActions, Typography } from "@firecms/ui";
 import { canCreateEntity, fullPathToCollectionSegments, resolveCollection } from "../util";
 import { useSelectionController } from "./EntityCollectionView/EntityCollectionView";
 import { useEntityCollectionTableController } from "./EntityCollectionTable/useEntityCollectionTableController";
-import { AddIcon } from "../icons";
 import { useColumnIds } from "./EntityCollectionView/useColumnsIds";
 import { useSideDialogContext } from "../core";
-import { useTraceUpdate } from "../util/useTraceUpdate";
 
 /**
  * @group Components

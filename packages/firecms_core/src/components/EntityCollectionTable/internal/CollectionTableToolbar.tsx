@@ -1,10 +1,17 @@
 import React from "react";
 
-import { Button, CircularProgress, cn, SearchBar, Select, SelectItem } from "../../../ui";
+import {
+    Button,
+    CircularProgress,
+    cn,
+    defaultBorderMixin,
+    FilterListOffIcon,
+    SearchBar,
+    Select,
+    SelectItem
+} from "@firecms/ui";
 import { CollectionSize } from "../../../types";
 import { useLargeLayout } from "../../../hooks";
-import { defaultBorderMixin } from "../../../styles";
-import { FilterListOffIcon } from "../../../icons";
 
 interface CollectionTableToolbarProps {
     size: CollectionSize;

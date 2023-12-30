@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { EnumValuesChip } from "../../../preview";
 import { VirtualTableWhereFilterOp } from "../../VirtualTable";
-import { IconButton, Select, SelectItem, TextField } from "../../../ui";
-import { ClearIcon } from "../../../icons";
+import { ClearIcon, IconButton, Select, SelectItem, TextField } from "@firecms/ui";
 import { EnumValueConfig } from "../../../types";
 
 interface StringNumberFilterFieldProps {

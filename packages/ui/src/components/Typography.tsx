@@ -1,6 +1,6 @@
 import React, { ReactEventHandler } from "react";
 import { focusedMixin } from "../styles";
-import { cn } from "../utils";
+import { cn } from "../util";
 
 export type TextProps<C extends React.ElementType> = {
     align?: "center" | "inherit" | "justify" | "left" | "right";

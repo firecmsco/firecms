@@ -4,8 +4,7 @@ import { useFireCMSContext } from "../../hooks";
 import { PluginHomePageActionsProps, TopNavigationEntry } from "../../types";
 import { getIconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
-import { Card, cn, IconButton, Markdown, Typography } from "../../ui";
-import { ArrowForwardIcon, StarBorderIcon, StarIcon } from "../../icons";
+import { ArrowForwardIcon, Card, cn, IconButton, Markdown, StarBorderIcon, StarIcon, Typography } from "@firecms/ui";
 
 /**
  * This is the component used in the home page to render a card for each

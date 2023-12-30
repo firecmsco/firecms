@@ -1,5 +1,5 @@
 import React from "react";
-import { Tooltip, TooltipProps } from "../ui/Tooltip";
+import { Tooltip, TooltipProps } from "@firecms/ui";
 
 export function ErrorTooltip(props: TooltipProps) {
     return (

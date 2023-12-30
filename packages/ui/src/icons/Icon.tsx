@@ -1,6 +1,6 @@
 import * as React from "react";
 import "@material-design-icons/font/filled.css";
-import { cn } from "../ui/util/cn";
+import { cn } from "../util";
 
 export type IconColor = "inherit" | "primary" | "secondary" | "disabled" | "error" | "success" | "warning";
 export type IconProps = {

@@ -21,10 +21,9 @@ import { useWindowSize } from "./useWindowSize";
 import { ElementResizeListener } from "./ElementResizeListener";
 import { ErrorView, OnCellValueChangeParams } from "../../../../components";
 import { getPropertyInPath, isReadOnly, resolveCollection } from "../../../../util";
-import { Button, DialogActions, IconButton, Typography } from "../../../../ui";
+import { Button, ClearIcon, DialogActions, IconButton, Typography } from "@firecms/ui";
 import { PropertyFieldBinding } from "../../../../form";
 import { useDataSource, useFireCMSContext } from "../../../../hooks";
-import { ClearIcon } from "../../../../icons";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     entity?: Entity<M>;

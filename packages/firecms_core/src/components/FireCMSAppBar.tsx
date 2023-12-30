@@ -2,10 +2,19 @@ import React from "react";
 
 import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary } from "../components";
-import { Avatar, cn, IconButton, Menu, MenuItem, Typography } from "../ui";
+import {
+    Avatar,
+    cn,
+    DarkModeIcon,
+    IconButton,
+    LightModeIcon,
+    LogoutIcon,
+    Menu,
+    MenuItem,
+    Skeleton,
+    Typography
+} from "@firecms/ui";
 import { useAuthController, useLargeLayout, useModeController, useNavigationController } from "../hooks";
-import { DarkModeIcon, LightModeIcon, LogoutIcon } from "../icons";
-import { Skeleton } from "../ui/Skeleton";
 import { User } from "../types";
 
 export type FireCMSAppBarProps<ADDITIONAL_PROPS = object> = {

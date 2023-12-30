@@ -1,7 +1,7 @@
 import React from "react";
 import * as Collapsible from "@radix-ui/react-collapsible";
 
-import { cn, useInjectStyles } from "../utils";
+import { cn, useInjectStyles } from "../util";
 
 interface CollapseProps {
     children?: React.ReactNode;

@@ -3,9 +3,9 @@ import React from "react";
 import { FieldProps } from "../../types";
 
 import { FieldHelperText, LabelWithIcon } from "../components";
-import { useClearRestoreValue } from "../../hooks";
+import { useClearRestoreValue, useFireCMSContext } from "../../hooks";
 import { getIconForProperty } from "../../util";
-import { DateTimeField } from "../../ui";
+import { DateTimeField } from "@firecms/ui";
 
 type DateTimeFieldProps = FieldProps<Date>;
 
@@ -29,6 +29,7 @@ export function DateTimeFieldBinding({
                                          includeDescription
                                      }: DateTimeFieldProps) {
 
+    const { locale } = useFireCMSContext();
     const internalValue = value || null;
 
     useClearRestoreValue({
@@ -45,6 +46,7 @@ export function DateTimeFieldBinding({
                 size={"medium"}
                 mode={property.mode}
                 clearable={property.clearable}
+                locale={locale}
                 label={<LabelWithIcon
                     icon={getIconForProperty(property, "small")}
                     required={property.validation?.required}

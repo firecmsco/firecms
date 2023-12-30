@@ -261,7 +261,7 @@ function PropertySelect({
                 });
                 console.log("newSelectedWidgetId", newSelectedWidgetId);
             }}>
-            {supportedFields.map(([key, widget]) => {
+            {Object.entries(supportedFields).map(([key, widget]) => {
                 return <PropertySelectItem
                     key={key}
                     value={key}

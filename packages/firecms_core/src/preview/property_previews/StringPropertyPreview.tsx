@@ -6,8 +6,8 @@ import { getColorSchemeForSeed } from "../../util/chip_utils";
 import { PreviewType } from "../../types";
 import { UrlComponentPreview } from "../components/UrlComponentPreview";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
-import { Chip } from "../../ui/Chip";
 import { ErrorBoundary } from "../../components";
+import { Chip } from "@firecms/ui";
 
 /**
  * @group Preview components

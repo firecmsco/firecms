@@ -11,9 +11,17 @@ import {
     useReferenceDialog,
     useSideEntityController
 } from "../../hooks";
-import { Button, IconButton, Tooltip, Typography } from "../../ui";
-import { ClearIcon, ErrorIcon, KeyboardTabIcon, LinkIcon } from "../../icons";
-import { cn } from "../../ui/util/cn";
+import {
+    Button,
+    ClearIcon,
+    cn,
+    ErrorIcon,
+    IconButton,
+    KeyboardTabIcon,
+    LinkIcon,
+    Tooltip,
+    Typography
+} from "@firecms/ui";
 import { ErrorBoundary, ErrorView } from "../../components";
 
 /**

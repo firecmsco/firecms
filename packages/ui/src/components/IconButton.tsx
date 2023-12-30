@@ -1,6 +1,6 @@
 import React from "react";
 import { focusedMixin } from "../styles";
-import { cn } from "../utils";
+import { cn } from "../util";
 
 export type IconButtonProps<C extends React.ElementType> =
     Omit<(C extends "button" ? React.ButtonHTMLAttributes<HTMLButtonElement> : React.ComponentProps<C>), "onClick">

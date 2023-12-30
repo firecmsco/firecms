@@ -6,7 +6,7 @@ import {
     focusedClasses
 } from "../styles";
 import { BooleanSwitch, BooleanSwitchProps } from "./BooleanSwitch";
-import { cn } from "../utils";
+import { cn } from "../util";
 
 export type BooleanSwitchWithLabelProps = BooleanSwitchProps & {
     position?: "start" | "end",

@@ -1,6 +1,6 @@
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
-import { cn, useInjectStyles } from "../utils";
+import { cn, useInjectStyles } from "../util";
 
 export type TooltipProps = {
     open?: boolean,

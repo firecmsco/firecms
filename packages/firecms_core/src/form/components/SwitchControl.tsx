@@ -1,7 +1,7 @@
 import React from "react";
 
 import { FieldProps } from "formik";
-import { BooleanSwitchWithLabel, Tooltip } from "../../ui";
+import { BooleanSwitchWithLabel, Tooltip } from "@firecms/ui";
 
 export function SwitchControl({
                                   field,

@@ -38,7 +38,7 @@ import {
     SubjectIcon,
     UploadFileIcon,
     ViewStreamIcon
-} from "../icons";
+} from "@firecms/ui";
 
 export function isDefaultFieldConfigId(id: string) {
     return Object.keys(DEFAULT_FIELD_CONFIGS).includes(id);
@@ -313,10 +313,18 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
     }
 };
 
+export function getDefaultFieldConfig(property: Property | ResolvedProperty): PropertyConfig | undefined {
+    const fieldId = getDefaultFieldId(property);
+    if (!fieldId) {
+        console.error("No field id found for property", property);
+        return undefined;
+    }
+    return DEFAULT_FIELD_CONFIGS[fieldId];
+}
+
 export function getFieldConfig(property: Property | ResolvedProperty, propertyConfigs: Record<string, PropertyConfig<any>>): PropertyConfig | undefined {
     const fieldId = getFieldId(property);
     const defaultFieldId = getDefaultFieldId(property);
-    // console.log("fieldId", { fieldId });
     if (!defaultFieldId) {
         console.error("No field id found for property", property);
         return undefined;

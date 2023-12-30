@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { VirtualTableWhereFilterOp } from "../../VirtualTable";
-import { DateTimeField, Select, SelectItem } from "../../../ui";
+import { DateTimeField, Select, SelectItem } from "@firecms/ui";
+import { useFireCMSContext } from "../../../hooks";
 
 interface DateTimeFilterFieldProps {
     name: string,
@@ -35,6 +36,7 @@ export function DateTimeFilterField({
                                         title
                                     }: DateTimeFilterFieldProps) {
 
+    const { locale } = useFireCMSContext();
     const possibleOperations: (keyof typeof operationLabels) [] = isArray
         ? ["array-contains"]
         : ["==", "!=", ">", "<", ">=", "<="];
@@ -91,6 +93,7 @@ export function DateTimeFilterField({
                 <DateTimeField
                     mode={mode}
                     size={"medium"}
+                    locale={locale}
                     value={internalValue}
                     onChange={(dateValue: Date | null) => {
                         updateFilter(operation, dateValue === null ? undefined : dateValue);

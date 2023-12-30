@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "../utils";
+import { cn } from "../util";
 
 const colorClasses = {
     info: "bg-sky-200 dark:bg-teal-900",

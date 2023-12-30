@@ -2,7 +2,7 @@ import React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 
 import { Icon } from "../icons";
-import { cn } from "../utils";
+import { cn } from "../util";
 
 interface CheckboxProps {
     checked: boolean;

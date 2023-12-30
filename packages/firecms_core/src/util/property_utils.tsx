@@ -3,8 +3,8 @@ import React from "react";
 import { EntityCollection, PropertiesOrBuilders, PropertyConfig, PropertyOrBuilder, ResolvedProperty } from "../types";
 import { isPropertyBuilder } from "./entities";
 import { resolveProperty } from "./resolutions";
-import { CircleIcon, FunctionsIcon } from "../icons";
-import { getFieldConfig } from "../form";
+import { CircleIcon, FunctionsIcon } from "@firecms/ui";
+import { getFieldConfig } from "../core";
 
 export function isReferenceProperty(propertyOrBuilder: PropertyOrBuilder,
                                     fields: Record<string, PropertyConfig>) {

@@ -1,6 +1,6 @@
 import React from "react";
 import { defaultBorderMixin } from "../styles";
-import { cn } from "../utils";
+import { cn } from "../util";
 
 export function DialogActions({
                                   children,

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Skeleton } from "../../ui/Skeleton";
+import { Skeleton } from "@firecms/ui";
 
 export interface AsyncPreviewComponentProps {
     builder: Promise<React.ReactNode>;

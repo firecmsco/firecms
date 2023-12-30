@@ -26,7 +26,7 @@ import { getDefaultValuesFor, isPropertyBuilder } from "./entities";
 import { DEFAULT_ONE_OF_TYPE } from "./common";
 import { getIn } from "formik";
 import { enumToObjectEntries } from "./enums";
-import { isDefaultFieldConfigId } from "../form/form_field_configs";
+import { isDefaultFieldConfigId } from "../core";
 
 export const resolveCollection = <M extends Record<string, any>, >
 ({

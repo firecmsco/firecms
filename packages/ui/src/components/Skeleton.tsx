@@ -1,4 +1,4 @@
-import { cn } from "../utils";
+import { cn } from "../util";
 
 export type SkeletonProps = {
     width?: number;

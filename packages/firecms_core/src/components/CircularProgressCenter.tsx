@@ -1,5 +1,5 @@
 import React from "react";
-import { CircularProgress, CircularProgressProps, Typography } from "../ui";
+import { CircularProgress, CircularProgressProps, Typography } from "@firecms/ui";
 
 /**
  *

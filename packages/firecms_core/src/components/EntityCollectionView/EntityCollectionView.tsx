@@ -48,11 +48,22 @@ import {
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { useEntityCollectionTableController } from "../EntityCollectionTable/useEntityCollectionTableController";
-import { Button, cn, IconButton, Markdown, Popover, TextField, Tooltip, Typography } from "../../ui";
-import { Skeleton } from "../../ui/Skeleton";
+import {
+    AddIcon,
+    Button,
+    cn,
+    IconButton,
+    KeyboardTabIcon,
+    Markdown,
+    Popover,
+    SearchIcon,
+    Skeleton,
+    TextField,
+    Tooltip,
+    Typography
+} from "@firecms/ui";
 import { setIn } from "formik";
 import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common";
-import { AddIcon, KeyboardTabIcon, SearchIcon } from "../../icons";
 import { useColumnIds } from "./useColumnsIds";
 import { PopupFormField } from "../EntityCollectionTable/internal/popup_field/PopupFormField";
 import { GetPropertyForProps } from "../EntityCollectionTable/EntityCollectionTableProps";

@@ -8,6 +8,7 @@
     "packages/firecms",
     "packages/firecms_core",
     "packages/firecms_cli",
+    "packages/ui",
     "packages/create_firecms_app",
     "packages/firebase_firecms_pro",
     "packages/firebase_firecms",

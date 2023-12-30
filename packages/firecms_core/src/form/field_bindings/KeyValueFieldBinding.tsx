@@ -4,20 +4,23 @@ import { DataType, EntityReference, FieldProps, GeoPoint } from "../../types";
 import { ArrayContainer } from "../../components";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import {
+    AddIcon,
+    ArrowDropDownIcon,
     BooleanSwitchWithLabel,
     Button,
     cn,
     DateTimeField,
+    defaultBorderMixin,
     ExpandablePanel,
     IconButton,
     Menu,
     MenuItem,
+    RemoveIcon,
     TextField,
     Typography
-} from "../../ui";
-import { AddIcon, ArrowDropDownIcon, RemoveIcon } from "../../icons";
-import { defaultBorderMixin } from "../../styles";
+} from "@firecms/ui";
 import { getDefaultValueForDataType, getIconForProperty } from "../../util";
+import { useFireCMSContext } from "../../hooks";
 
 type MapEditViewRowState = [number, {
     key: string,
@@ -252,6 +255,8 @@ function MapKeyValueRow<T extends Record<string, any>>({
     updateDataType: (rowId: number, dataType: DataType) => void
 }) {
 
+    const { locale } = useFireCMSContext();
+
     function buildInput(entryValue: any, fieldKey: string, dataType: DataType) {
         if (dataType === "string" || dataType === "number") {
             return <TextField
@@ -290,6 +295,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
         } else if (dataType === "date") {
             return <DateTimeField value={entryValue}
                                   size={"small"}
+                                  locale={locale}
                                   disabled={disabled || !fieldKey}
                                   onChange={(date) => {
                                       setValue({
@@ -431,6 +437,7 @@ function ArrayKeyValueRow<T>({
     disabled?: boolean,
 }) {
 
+    const { locale } = useFireCMSContext();
     const [selectedDataType, setSelectedDataType] = useState<DataType>(getDataType(value) ?? "string");
 
     function doUpdateDataType(dataType: DataType) {
@@ -459,6 +466,7 @@ function ArrayKeyValueRow<T>({
         } else if (dataType === "date") {
             return <DateTimeField value={entryValue}
                                   size={"small"}
+                                  locale={locale}
                                   onChange={(date) => {
                                       setValue(date as T);
                                   }}/>;

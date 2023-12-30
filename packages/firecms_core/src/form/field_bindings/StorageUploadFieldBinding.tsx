@@ -18,13 +18,14 @@ import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { StorageFieldItem, useStorageUploadController } from "../../util/useStorageUploadController";
 import { StorageUploadProgress } from "../components/StorageUploadProgress";
 import { StorageItemPreview } from "../components/StorageItemPreview";
-import { cn, Typography } from "../../ui";
 import {
+    cn,
     fieldBackgroundDisabledMixin,
     fieldBackgroundHoverMixin,
     fieldBackgroundMixin,
-    focusedMixin
-} from "../../styles";
+    focusedMixin,
+    Typography
+} from "@firecms/ui";
 
 const dropZoneClasses = "box-border relative pt-[2px] items-center border border-transparent min-h-[254px] outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
 const disabledClasses = "border-dotted-gray"

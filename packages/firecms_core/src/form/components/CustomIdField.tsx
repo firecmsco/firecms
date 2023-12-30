@@ -6,8 +6,7 @@ import { Entity, EntityStatus, EnumValueConfig, EnumValues, FireCMSContext } fro
 
 import { useClipboard, useFireCMSContext, useSnackbarController } from "../../hooks";
 import { enumToObjectEntries } from "../../util";
-import { IconButton, Select, SelectItem, TextField, Tooltip } from "../../ui";
-import { ContentCopyIcon, OpenInNewIcon } from "../../icons";
+import { ContentCopyIcon, IconButton, OpenInNewIcon, Select, SelectItem, TextField, Tooltip } from "@firecms/ui";
 import { EnumValuesChip } from "../../preview";
 
 export function CustomIdField<M extends Record<string, any>>({

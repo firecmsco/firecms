@@ -4,7 +4,7 @@ import { FieldProps, Properties, ResolvedProperties } from "../../types";
 import { getIconForProperty, isHidden, pick } from "../../util";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
-import { ExpandablePanel, InputLabel, Select, SelectItem } from "../../ui";
+import { ExpandablePanel, InputLabel, Select, SelectItem } from "@firecms/ui";
 
 /**
  * Field that renders the children property fields

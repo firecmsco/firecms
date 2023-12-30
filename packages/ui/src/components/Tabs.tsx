@@ -1,6 +1,6 @@
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import { focusedMixin } from "../styles";
-import { cn } from "../utils";
+import { cn } from "../util";
 
 export type TabsProps = {
     value: string,

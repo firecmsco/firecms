@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "./Container";
-import { cn } from "../utils";
+import { cn } from "../util";
 
 export function CenteredView({
                                  children,

@@ -9,8 +9,7 @@ import { EnumValuesChip } from "../../preview";
 import { FieldProps, FormContext, PropertyFieldBindingProps, PropertyOrBuilder } from "../../types";
 import { getDefaultValueFor, getIconForProperty, } from "../../util";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../util/common";
-import { paperMixin } from "../../styles";
-import { cn, ExpandablePanel, Select, SelectItem, Typography } from "../../ui";
+import { cn, ExpandablePanel, paperMixin, Select, SelectItem, Typography } from "@firecms/ui";
 
 /**
  * If the `oneOf` property is specified, this fields render each array entry as

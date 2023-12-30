@@ -5,8 +5,7 @@ import { ResolvedProperty } from "../../types";
 import { useFireCMSContext } from "../../hooks";
 import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
-import { defaultBorderMixin } from "../../styles";
-import { cn } from "../../ui/util/cn";
+import { cn, defaultBorderMixin } from "@firecms/ui";
 import { ErrorBoundary } from "../../components";
 
 /**

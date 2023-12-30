@@ -7,10 +7,14 @@ import MdEditor, { Plugins } from "react-markdown-editor-lite";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { FieldProps } from "../../types";
 import { getIconForProperty } from "../../util";
-import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "../../styles";
-import { useInjectStyles } from "../../ui/util/useInjectStyles";
-import { Typography } from "../../ui";
-import { cn } from "../../ui/util/cn";
+import {
+    cn,
+    fieldBackgroundDisabledMixin,
+    fieldBackgroundHoverMixin,
+    fieldBackgroundMixin,
+    Typography
+} from "@firecms/ui";
+import { useInjectStyles } from "@firecms/ui";
 
 const mdParser = new MarkdownIt();
 try {

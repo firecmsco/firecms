@@ -1,7 +1,6 @@
 import React from "react";
 import { ErrorTooltip } from "./ErrorTooltip";
-import { Typography } from "../ui/Typography";
-import { ErrorIcon } from "../icons";
+import { ErrorIcon, Typography } from "@firecms/ui";
 
 /**
  * @group Components

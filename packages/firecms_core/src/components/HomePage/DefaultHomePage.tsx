@@ -10,7 +10,7 @@ import { NavigationCollectionCard } from "./NavigationCollectionCard";
 // @ts-ignore
 import * as JsSearch from "js-search";
 
-import { Container, SearchBar } from "../../ui";
+import { Container, SearchBar } from "@firecms/ui";
 import { FavouritesView } from "./FavouritesView";
 import { useRestoreScroll } from "../../internal/useRestoreScroll";
 

@@ -2,7 +2,7 @@ import React from "react";
 
 import { paperMixin } from "../styles";
 import { Collapse } from "./Collapse";
-import { cn, useOutsideAlerter } from "../utils";
+import { cn, useOutsideAlerter } from "../util";
 
 export type AutocompleteProps = {
     children: React.ReactNode;

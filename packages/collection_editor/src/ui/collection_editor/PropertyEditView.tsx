@@ -42,6 +42,7 @@ import { KeyValuePropertyField } from "./properties/KeyValuePropertyField";
 import { updatePropertyFromWidget } from "./utils/update_property_for_widget";
 import { PropertySelectItem } from "./PropertySelectItem";
 import { UrlPropertyField } from "./properties/UrlPropertyField";
+import { supportedFields } from "./utils/supported_fields";
 
 export type PropertyWithId = Property & {
     id?: string
@@ -302,7 +303,7 @@ function PropertyEditView({
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedFieldConfigId, setSelectedFieldConfigId] = useState<string | undefined>(values?.dataType ? getFieldId(values) : undefined);
 
-    const allSupportedFields = Object.entries(DEFAULT_FIELD_CONFIGS).concat(Object.entries(propertyConfigs));
+    const allSupportedFields = Object.entries(supportedFields).concat(Object.entries(propertyConfigs));
 
     const displayedWidgets = inArray
         ? allSupportedFields.filter(([_, propertyConfig]) => !isPropertyBuilder(propertyConfig.property) && propertyConfig.property?.dataType !== "array")

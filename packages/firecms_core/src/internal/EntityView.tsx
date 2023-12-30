@@ -29,12 +29,9 @@ import {
     useSnackbarController
 } from "../hooks";
 import { EntityForm } from "../form";
-import { CircularProgress, IconButton, Tab, Tabs, Typography } from "../ui";
+import { CircularProgress, CloseIcon, cn, defaultBorderMixin, IconButton, Tab, Tabs, Typography } from "@firecms/ui";
 import { EntityFormSaveParams } from "../form/EntityForm";
 import { FORM_CONTAINER_WIDTH } from "./common";
-import { defaultBorderMixin } from "../styles";
-import { CloseIcon } from "../icons";
-import { cn } from "../ui/util/cn";
 import { useSideDialogContext } from "../core";
 
 const MAIN_TAB_VALUE = "main_##Q$SC^#S6";

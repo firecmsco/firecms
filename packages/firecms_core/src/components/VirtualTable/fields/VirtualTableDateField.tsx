@@ -1,5 +1,6 @@
 import React from "react";
-import { DateTimeField } from "../../../ui";
+import { DateTimeField } from "@firecms/ui";
+import { useFireCMSContext } from "../../../hooks";
 
 export function VirtualTableDateField(props: {
     name: string;
@@ -12,6 +13,7 @@ export function VirtualTableDateField(props: {
     onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 }) {
 
+    const { locale } = useFireCMSContext();
     const {
         disabled,
         error,
@@ -29,6 +31,7 @@ export function VirtualTableDateField(props: {
             className={"w-full h-full"}
             inputClassName={"w-full h-full"}
             mode={mode}
+            locale={locale}
         />
     );
 }

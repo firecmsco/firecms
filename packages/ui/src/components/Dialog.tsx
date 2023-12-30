@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { paperMixin } from "../styles";
-import { cn } from "../utils";
+import { cn } from "../util";
 
 export type DialogProps = {
     open?: boolean;

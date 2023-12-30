@@ -1,5 +1,5 @@
 import React from "react";
-import { Checkbox } from "../../ui/Checkbox";
+import { Checkbox } from "@firecms/ui";
 
 /**
  * @group Preview components

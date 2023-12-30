@@ -1,7 +1,7 @@
 import React from "react";
 import { useDropzone } from "react-dropzone";
 import { fieldBackgroundHoverMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
-import { cn } from "../utils";
+import { cn } from "../util";
 import { Typography } from "./Typography";
 
 export interface FileUploadError {

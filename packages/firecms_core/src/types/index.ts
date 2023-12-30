@@ -8,7 +8,6 @@ export * from "./permissions";
 export * from "./navigation";
 export * from "./locales";
 export * from "./user";
-export * from "./colors";
 export * from "./storage";
 export * from "./fields";
 export * from "./property_config";

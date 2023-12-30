@@ -1,7 +1,7 @@
 import { EnumValueConfig } from "../../../types";
 import { ArrayEnumPreview, EnumValuesChip } from "../../../preview";
 import React, { useCallback, useEffect } from "react";
-import { MultiSelect, MultiSelectItem, Select, SelectItem } from "../../../ui";
+import { MultiSelect, MultiSelectItem, Select, SelectItem } from "@firecms/ui";
 
 export function VirtualTableSelect(props: {
     name: string;

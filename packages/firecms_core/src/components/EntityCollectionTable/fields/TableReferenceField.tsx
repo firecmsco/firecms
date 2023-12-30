@@ -6,7 +6,7 @@ import { getPreviewSizeFrom } from "../../../preview/util";
 import { getReferenceFrom } from "../../../util";
 import { useFireCMSContext, useNavigationController, useReferenceDialog } from "../../../hooks";
 import { ErrorView } from "../../ErrorView";
-import { Button } from "../../../ui/Button";
+import { Button } from "@firecms/ui";
 
 type TableReferenceFieldProps = {
     name: string;

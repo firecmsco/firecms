@@ -18,8 +18,8 @@ import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
 
 import { isHidden, isPropertyBuilder, isReadOnly, resolveProperty } from "../util";
 import { useFireCMSContext } from "../hooks";
-import { Typography } from "../ui";
-import { getFieldConfig, getFieldId } from "../form/form_field_configs";
+import { Typography } from "@firecms/ui";
+import { getFieldConfig, getFieldId } from "../core";
 import { ErrorBoundary } from "../components";
 
 /**

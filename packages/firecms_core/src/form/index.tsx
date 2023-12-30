@@ -34,8 +34,6 @@ export {
 
 export * from "./components";
 
-export * from "./form_field_configs";
-
 export type { EntityFormProps } from "./EntityForm";
 export {
     EntityForm

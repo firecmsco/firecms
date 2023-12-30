@@ -1,6 +1,6 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { focusedMixin, paperMixin } from "../styles";
-import { cn } from "../utils";
+import { cn } from "../util";
 
 export type MenuProps = {
     children: React.ReactNode;

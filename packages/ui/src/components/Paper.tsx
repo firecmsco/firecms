@@ -1,5 +1,5 @@
 import { paperMixin } from "../styles";
-import { cn } from "../utils";
+import { cn } from "../util";
 
 export function Paper({
                           children,

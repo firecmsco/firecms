@@ -1,7 +1,6 @@
 import { PropsWithChildren } from "react";
-import { ExpandablePanel } from "../../ui/ExpandablePanel";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
-import { Typography } from "../../ui/Typography";
+import { ExpandablePanel, Typography } from "@firecms/ui";
 
 export function NavigationGroup({
                                     children,

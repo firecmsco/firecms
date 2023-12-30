@@ -1,6 +1,6 @@
 import { EntityAction } from "../../../types";
 import { DeleteEntityDialog } from "./DeleteEntityDialog";
-import { ArchiveIcon, DeleteIcon, FileCopyIcon, KeyboardTabIcon } from "../../../icons";
+import { ArchiveIcon, DeleteIcon, FileCopyIcon, KeyboardTabIcon } from "@firecms/ui";
 
 export const editEntityAction: EntityAction = {
     icon: <KeyboardTabIcon/>,

@@ -4,8 +4,7 @@ import { ImagePreview } from "./ImagePreview";
 import { getThumbnailMeasure } from "../util";
 import { PreviewType } from "../../types";
 import { PreviewSize } from "../PropertyPreviewProps";
-import { Tooltip, Typography } from "../../ui";
-import { DescriptionIcon, OpenInNewIcon } from "../../icons";
+import { DescriptionIcon, OpenInNewIcon, Tooltip, Typography } from "@firecms/ui";
 import { EmptyValue } from "./EmptyValue";
 
 /**

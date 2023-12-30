@@ -6,7 +6,7 @@ import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { ReferencePreview } from "../../preview";
 import { getIconForProperty, getReferenceFrom } from "../../util";
-import { Button } from "../../ui";
+import { Button } from "@firecms/ui";
 import { ErrorView } from "../../components";
 
 /**

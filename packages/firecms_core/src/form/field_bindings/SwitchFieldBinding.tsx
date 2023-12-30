@@ -4,8 +4,8 @@ import { FieldProps } from "../../types";
 import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../util";
-import { BooleanSwitchWithLabel } from "../../ui/BooleanSwitchWithLabel";
 import { FieldHelperText } from "../components/FieldHelperText";
+import { BooleanSwitchWithLabel } from "@firecms/ui";
 
 type SwitchFieldProps = FieldProps<boolean>;
 

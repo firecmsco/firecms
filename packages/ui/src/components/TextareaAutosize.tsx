@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useLayoutEffect } from "react";
 import * as ReactDOM from "react-dom";
-import { cn, debounce } from "../utils";
+import { cn, debounce } from "../util";
 
 type State = {
     outerHeightStyle: number;

@@ -8,9 +8,7 @@ import { useEntityFetch, useFireCMSContext, useNavigationController, useSideEnti
 import { PropertyPreview } from "../PropertyPreview";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { SkeletonPropertyComponent } from "../property_previews/SkeletonPropertyComponent";
-import { IconButton, Skeleton, Tooltip, Typography } from "../../ui";
-import { KeyboardTabIcon } from "../../icons";
-import { cn } from "../../ui/util/cn";
+import { cn, IconButton, KeyboardTabIcon, Skeleton, Tooltip, Typography } from "@firecms/ui";
 import { ErrorView } from "../../components";
 
 export type ReferencePreviewProps = {

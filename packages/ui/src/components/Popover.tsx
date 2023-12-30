@@ -2,7 +2,7 @@ import React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 
 import { paperMixin } from "../styles";
-import { cn, useInjectStyles } from "../utils";
+import { cn, useInjectStyles } from "../util";
 
 export type PopoverSide = "top" | "right" | "bottom" | "left";
 export type PopoverAlign = "start" | "center" | "end";

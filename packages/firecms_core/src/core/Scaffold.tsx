@@ -5,9 +5,7 @@ import { Link } from "react-router-dom";
 import { Drawer as DefaultDrawer, DrawerProps } from "./Drawer";
 import { useLargeLayout, useNavigationController } from "../hooks";
 import { CircularProgressCenter, ErrorBoundary, FireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "../components";
-import { cn, IconButton, Sheet, Tooltip } from "../ui";
-import { ChevronLeftIcon, MenuIcon } from "../icons";
-import { defaultBorderMixin } from "../styles";
+import { ChevronLeftIcon, cn, defaultBorderMixin, IconButton, MenuIcon, Sheet, Tooltip } from "@firecms/ui";
 
 export const DRAWER_WIDTH = 280;
 

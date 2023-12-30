@@ -3,9 +3,16 @@ import equal from "react-fast-compare";
 
 import { VirtualTableColumn, VirtualTableSort, VirtualTableWhereFilterOp } from "./VirtualTableProps";
 import { ErrorBoundary } from "../ErrorBoundary";
-import { Badge, Button, cn, IconButton, Popover } from "../../ui";
-import { defaultBorderMixin } from "../../styles";
-import { ArrowUpwardIcon, FilterListIcon } from "../../icons";
+import {
+    ArrowUpwardIcon,
+    Badge,
+    Button,
+    cn,
+    defaultBorderMixin,
+    FilterListIcon,
+    IconButton,
+    Popover
+} from "@firecms/ui";
 
 interface FilterFormProps<T> {
     column: VirtualTableColumn<T>;

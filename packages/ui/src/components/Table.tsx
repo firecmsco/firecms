@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { defaultBorderMixin } from "../styles";
-import { cn } from "../utils";
+import { cn } from "../util";
 
 export type TableProps = {
     children: React.ReactNode;

@@ -9,7 +9,7 @@ import {
     focusedMixin
 } from "../styles";
 import { CheckIcon, ExpandMoreIcon } from "../icons";
-import { cn } from "../utils";
+import { cn } from "../util";
 import { SelectInputLabel } from "./common/SelectInputLabel";
 
 export type SelectProps = {

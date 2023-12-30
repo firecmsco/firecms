@@ -1,5 +1,5 @@
 import React, { ForwardRefRenderFunction } from "react";
-import { cn } from "../utils";
+import { cn } from "../util";
 
 export type ContainerProps = {
     children: React.ReactNode;

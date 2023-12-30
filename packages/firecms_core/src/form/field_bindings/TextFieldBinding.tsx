@@ -4,9 +4,8 @@ import { FieldProps, PreviewType } from "../../types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../util";
-import { Collapse, IconButton, TextField } from "../../ui";
+import { ClearIcon, Collapse, IconButton, TextField } from "@firecms/ui";
 import { PropertyPreview } from "../../preview";
-import { ClearIcon } from "../../icons";
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean

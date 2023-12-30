@@ -1,4 +1,4 @@
-import { cn } from "../../utils";
+import { cn } from "../../util";
 
 export function SelectInputLabel({ children, error }: { children: React.ReactNode, error?: boolean }) {
     return <div className={cn("text-sm  font-medium ml-3.5 mb-1",

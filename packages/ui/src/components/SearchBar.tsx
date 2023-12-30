@@ -3,7 +3,7 @@ import React, { useCallback, useDeferredValue, useState } from "react";
 import { defaultBorderMixin, focusedMixin } from "../styles";
 import { IconButton } from "./index";
 import { ClearIcon, SearchIcon } from "../icons";
-import { cn } from "../utils";
+import { cn } from "../util";
 
 interface SearchBarProps {
     onTextSearch: (searchString?: string) => void;

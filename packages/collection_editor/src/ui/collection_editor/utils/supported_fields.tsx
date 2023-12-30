@@ -1,4 +1,4 @@
-import { DEFAULT_FIELD_CONFIGS, FieldConfigId } from "@firecms/core";
+import { DEFAULT_FIELD_CONFIGS, FieldConfigId, PropertyConfig } from "@firecms/core";
 
 export const supportedFieldsIds: FieldConfigId[] = [
     "text_field",
@@ -13,16 +13,17 @@ export const supportedFieldsIds: FieldConfigId[] = [
     "multi_number_select",
     "file_upload",
     "multi_file_upload",
-    "group",
-    "key_value",
     "reference",
     "multi_references",
     "switch",
     "date_time",
+    "group",
+    "key_value",
     "repeat",
     "block"
 ];
 
-export const supportedFields = Object.entries(DEFAULT_FIELD_CONFIGS).filter(([id]) =>
-    supportedFieldsIds.includes(id as FieldConfigId)
-);
+export const supportedFields: Record<string, PropertyConfig> = Object.entries(DEFAULT_FIELD_CONFIGS)
+    .filter(([id]) => supportedFieldsIds.includes(id as FieldConfigId))
+    .map(([id, config]) => ({ [id]: config }))
+    .reduce((a, b) => ({ ...a, ...b }), {});

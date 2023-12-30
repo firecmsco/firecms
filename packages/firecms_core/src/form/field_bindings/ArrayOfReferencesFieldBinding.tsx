@@ -5,7 +5,7 @@ import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../compone
 import { getIconForProperty, getReferenceFrom } from "../../util";
 
 import { useClearRestoreValue, useNavigationController, useReferenceDialog } from "../../hooks";
-import { Button, ExpandablePanel } from "../../ui";
+import { Button, ExpandablePanel } from "@firecms/ui";
 import { ErrorView } from "../../components";
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;

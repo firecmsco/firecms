@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { cardClickableMixin, cardMixin, focusedMixin } from "../styles";
-import { cn } from "../utils";
+import { cn } from "../util";
 
 export function Card({
                          children,
