@@ -8,6 +8,7 @@ import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common";
 import * as os from "os";
 import EventEmitter from "events";
 import chalk from "chalk";
+import { done_html } from "./done_html";
 
 const https = require("https");
 const url = require("url");
@@ -48,17 +49,11 @@ export async function login(env: "prod" | "dev") {
                 server.close();
                 throw new Error(q.error);
             } else {
-                fs.readFile(path.join(__dirname, "/../../html/done.html"), function (err, data) {
-                    if (err) {
-                        res.writeHead(404);
-                        res.end(JSON.stringify(err));
-                        return;
-                    }
-                    const code = q.code;
-                    res.writeHead(200);
-                    res.end(data, () => req.socket.end());
-                    emitter.emit("tokensReady", code);
-                });
+                // return the imported html
+                res.writeHead(200);
+                res.end(done_html, () => req.socket.end());
+                emitter.emit("tokensReady", q.code);
+
             }
         }
 

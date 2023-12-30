@@ -1,6 +1,4 @@
-<!-- THIS HTML NEEDS TO BE COPIED TO done_html.ts-->
-
-<html lang="en">
+export const done_html = `<html lang="en">
 <head>
     <style>
         html, body {
@@ -36,3 +34,4 @@
 </body>
 </html>
 
+`;

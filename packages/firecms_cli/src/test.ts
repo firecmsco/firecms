@@ -1,12 +1,13 @@
 // import { cli } from "./cli";
 // import { main } from "./commands/auth";
 import { createFireCMSApp } from "./commands/init";
+import { login, logout } from "./commands/auth";
 
 async function main(){
-    // await logout();
-    // await login("dev");
+    await logout("dev");
+    await login("dev");
 
-    createFireCMSApp(["", "", "--env=prod"]);
+    // createFireCMSApp(["", "", "--v2"]);
     // const tokens = await refreshCredentials(await getTokens());
     // getTokens().then((tokens) => {
     //     console.log("current", tokens);

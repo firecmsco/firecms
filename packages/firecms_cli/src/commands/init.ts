@@ -86,6 +86,7 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
             "--skipInstall": Boolean,
             "--projectId": String,
             "--v2": Boolean,
+            "-2": Boolean,
             "--env": String
         },
         {
@@ -100,10 +101,8 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
     }
 
     return {
-        // skipPrompts: args["--yes"] || false,
         git: args["--git"] || false,
         dir_name: args._[0],
-        // skipInstall: args["--skipInstall"] || false,
         v2: args["--v2"] || false,
         firebaseProjectId: args["--projectId"],
         env
@@ -135,7 +134,7 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
             .then((res) => {
                 if (!res) {
                     if (spinner.isSpinning)
-                    spinner.fail("Error loading projects");
+                        spinner.fail("Error loading projects");
                     process.exit(1);
                 }
                 spinner.succeed();
@@ -166,7 +165,6 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
             type: "input",
             name: "dir_name",
             message: "Please choose which folder to create the project in",
-            when: (answers) => Boolean(answers.firebaseProjectId),
             default: defaultName,
         });
     }
