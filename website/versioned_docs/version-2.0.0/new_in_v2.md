@@ -16,7 +16,7 @@ this version:
 
 ### General
 
-- **New CLI tool** to create new FireCMS projects `yarn create firecms-app`.
+- **New CLI tool** to create new FireCMS projects `yarn create firecms-app --v2`.
 - New OpenAI integration.
 - More consistent **naming** all through the app.
 - Better documentation.

@@ -1,5 +1,5 @@
-import { buildCollection, buildProperty } from "../src/core";
 import { EntityCallbacks, EnumValues } from "../src/types";
+import { buildCollection, buildProperty } from "../src";
 
 const locales: EnumValues = {
     "de-DE": "German",
@@ -9,6 +9,7 @@ const locales: EnumValues = {
 };
 
 export const productsCollection = buildCollection({
+    id: "products",
     path: "products",
     name: "Products",
     singularName: "Product",
@@ -165,6 +166,7 @@ export const productsCollection = buildCollection({
 
 
 const localeCollection = buildCollection({
+    id: "locales",
     path: "locales",
     customId: locales,
     name: "Locales",
@@ -220,6 +222,7 @@ const productCallbacks: EntityCallbacks<any> = {
 };
 
 export const usersCollection = buildCollection({
+    id: "users",
     path: "users",
     name: "Users",
     singularName: "User",
@@ -300,11 +303,11 @@ export const siteConfig = {
         buildCollection({
             ...usersCollection,
             path: "users",
-            alias: "u",
+            id: "u",
             singularName: "Users",
             subcollections: [buildCollection({
                 ...productsCollection,
-                alias: "p"
+                id: "p"
             })]
         })
     ],

@@ -8,7 +8,6 @@ import federation from "@originjs/vite-plugin-federation"
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
     const build = command === "build";
-    console.log("command build", { command, build }, path.resolve(__dirname, "../../packages/firecms_cli"))
     return ({
         esbuild: {
             logOverride: { "this-is-undefined-in-esm": "silent" }

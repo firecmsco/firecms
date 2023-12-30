@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { FireCMSBackend, ProjectsApi } from "../../src";
 
 import { OAuthCredential, User as FirebaseUser } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
 import { MOCK_PROJECT_ID } from "./constants";
 import { createMockUser } from "./mock_user";
+import { FireCMSBackend, FireCMSProject, ProjectsApi } from "firecms";
 
 export function useBuildMockFireCMSBackend(): FireCMSBackend {
 
@@ -43,6 +43,10 @@ export function useBuildMockFireCMSBackend(): FireCMSBackend {
     }
 
     return {
+        getProject(projectId: string): Promise<FireCMSProject | null> {
+            throw new Error("Method not implemented.");
+        },
+        projects: undefined,
         backendApiHost: "https://mock.url",
         user: loggedUser ?? null,
         signOut,

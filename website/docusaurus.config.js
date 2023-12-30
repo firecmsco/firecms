@@ -304,7 +304,7 @@ module.exports = {
                             banner: "unmaintained"
                         },
                         current: {
-                            label: "3.0.0",
+                            label: "3.0.0-beta",
                         }
                     },
                 },
