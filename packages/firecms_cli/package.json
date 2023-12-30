@@ -1,6 +1,6 @@
 {
   "name": "@firecms/cli",
-  "version": "3.0.0-alpha.50",
+  "version": "3.0.0-alpha.51",
   "description": "A CLI to perform FireCMS operations",
   "packageManager": "yarn@3.2.3",
   "main": "./build/index.js",
@@ -46,9 +46,7 @@
     "nocache": "^4.0.0",
     "open": "^7.4.2",
     "ora": "^5.4.1",
-    "querystring": "^0.2.1",
     "ws": "^8.15.1",
-    "zip-a-folder": "^3.1.5",
     "zip-folder": "^1.0.0"
   },
   "devDependencies": {

@@ -1473,7 +1473,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firecms/cli@^3.0.0-alpha.50, @firecms/cli@workspace:packages/firecms_cli":
+"@firecms/cli@^3.0.0-alpha.51, @firecms/cli@workspace:packages/firecms_cli":
   version: 0.0.0-use.local
   resolution: "@firecms/cli@workspace:packages/firecms_cli"
   dependencies:
@@ -1492,23 +1492,21 @@ __metadata:
     nocache: ^4.0.0
     open: ^7.4.2
     ora: ^5.4.1
-    querystring: ^0.2.1
     ts-node: ^10.9.2
     typescript: ^5.3.3
     ws: ^8.15.1
-    zip-a-folder: ^3.1.5
     zip-folder: ^1.0.0
   bin:
     firecms: bin/firecms
   languageName: unknown
   linkType: soft
 
-"@firecms/collection_editor@^3.0.0-alpha.50, @firecms/collection_editor@workspace:packages/collection_editor":
+"@firecms/collection_editor@^3.0.0-alpha.51, @firecms/collection_editor@workspace:packages/collection_editor":
   version: 0.0.0-use.local
   resolution: "@firecms/collection_editor@workspace:packages/collection_editor"
   dependencies:
-    "@firecms/data_import_export": ^3.0.0-alpha.50
-    "@firecms/schema_inference": ^3.0.0-alpha.50
+    "@firecms/data_import_export": ^3.0.0-alpha.51
+    "@firecms/schema_inference": ^3.0.0-alpha.51
     "@jest/globals": ^29.7.0
     "@types/react": ^18.2.45
     "@types/react-dom": ^18.2.17
@@ -1539,12 +1537,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/core@^3.0.0-alpha.50, @firecms/core@workspace:packages/firecms_core":
+"@firecms/core@^3.0.0-alpha.51, @firecms/core@workspace:packages/firecms_core":
   version: 0.0.0-use.local
   resolution: "@firecms/core@workspace:packages/firecms_core"
   dependencies:
     "@date-io/date-fns": ^2.17.0
-    "@firecms/ui": ^3.0.0-alpha.50
+    "@firecms/ui": ^3.0.0-alpha.51
     "@fontsource/ibm-plex-mono": ^5.0.8
     "@fontsource/roboto": ^5.0.8
     "@hello-pangea/dnd": ^16.5.0
@@ -1603,11 +1601,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_enhancement@^3.0.0-alpha.50, @firecms/data_enhancement@workspace:packages/data_enhancement":
+"@firecms/data_enhancement@^3.0.0-alpha.51, @firecms/data_enhancement@workspace:packages/data_enhancement":
   version: 0.0.0-use.local
   resolution: "@firecms/data_enhancement@workspace:packages/data_enhancement"
   dependencies:
-    "@firecms/core": ^3.0.0-alpha.50
+    "@firecms/core": ^3.0.0-alpha.51
     "@testing-library/jest-dom": ^5.17.0
     "@types/jest": ^29.5.6
     "@types/react": ^18.2.45
@@ -1638,12 +1636,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_import_export@^3.0.0-alpha.50, @firecms/data_import_export@workspace:packages/data_import_export":
+"@firecms/data_import_export@^3.0.0-alpha.51, @firecms/data_import_export@workspace:packages/data_import_export":
   version: 0.0.0-use.local
   resolution: "@firecms/data_import_export@workspace:packages/data_import_export"
   dependencies:
-    "@firecms/core": ^3.0.0-alpha.50
-    "@firecms/schema_inference": ^3.0.0-alpha.50
+    "@firecms/core": ^3.0.0-alpha.51
+    "@firecms/schema_inference": ^3.0.0-alpha.51
     "@jest/globals": ^29.7.0
     "@testing-library/jest-dom": ^5.17.0
     "@types/jest": ^29.5.6
@@ -1676,15 +1674,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/firebase@^3.0.0-alpha.50, @firecms/firebase@workspace:packages/firebase_firecms":
+"@firecms/firebase@^3.0.0-alpha.51, @firecms/firebase@workspace:packages/firebase_firecms":
   version: 0.0.0-use.local
   resolution: "@firecms/firebase@workspace:packages/firebase_firecms"
   dependencies:
-    "@firecms/collection_editor": ^3.0.0-alpha.50
-    "@firecms/core": ^3.0.0-alpha.50
-    "@firecms/data_enhancement": ^3.0.0-alpha.50
-    "@firecms/data_import_export": ^3.0.0-alpha.50
-    "@firecms/schema_inference": ^3.0.0-alpha.50
+    "@firecms/collection_editor": ^3.0.0-alpha.51
+    "@firecms/core": ^3.0.0-alpha.51
+    "@firecms/data_enhancement": ^3.0.0-alpha.51
+    "@firecms/data_import_export": ^3.0.0-alpha.51
+    "@firecms/schema_inference": ^3.0.0-alpha.51
     "@types/node": ^20.8.9
     "@types/react": ^18.2.45
     "@types/react-dom": ^18.2.17
@@ -1705,29 +1703,29 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/firebase_pro@^3.0.0-alpha.50, @firecms/firebase_pro@workspace:packages/firebase_firecms_pro":
+"@firecms/firebase_pro@^3.0.0-alpha.51, @firecms/firebase_pro@workspace:packages/firebase_firecms_pro":
   version: 0.0.0-use.local
   resolution: "@firecms/firebase_pro@workspace:packages/firebase_firecms_pro"
   dependencies:
-    "@firecms/core": ^3.0.0-alpha.50
-    "@firecms/firebase": ^3.0.0-alpha.50
+    "@firecms/core": ^3.0.0-alpha.51
+    "@firecms/firebase": ^3.0.0-alpha.51
     "@types/node": ^20.8.9
     firebase: ^10.7.1
     typescript: ^5.3.3
   languageName: unknown
   linkType: soft
 
-"@firecms/schema_inference@^3.0.0-alpha.50, @firecms/schema_inference@workspace:packages/schema_inference":
+"@firecms/schema_inference@^3.0.0-alpha.51, @firecms/schema_inference@workspace:packages/schema_inference":
   version: 0.0.0-use.local
   resolution: "@firecms/schema_inference@workspace:packages/schema_inference"
   dependencies:
-    "@firecms/core": ^3.0.0-alpha.50
+    "@firecms/core": ^3.0.0-alpha.51
     "@types/node": ^20.8.9
     typescript: ^5.3.3
   languageName: unknown
   linkType: soft
 
-"@firecms/ui@^3.0.0-alpha.50, @firecms/ui@workspace:packages/ui":
+"@firecms/ui@^3.0.0-alpha.51, @firecms/ui@workspace:packages/ui":
   version: 0.0.0-use.local
   resolution: "@firecms/ui@workspace:packages/ui"
   dependencies:
@@ -5254,20 +5252,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"archiver-utils@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "archiver-utils@npm:4.0.1"
-  dependencies:
-    glob: ^8.0.0
-    graceful-fs: ^4.2.0
-    lazystream: ^1.0.0
-    lodash: ^4.17.15
-    normalize-path: ^3.0.0
-    readable-stream: ^3.6.0
-  checksum: 2917cdf63a912c74002a4a1e6de3076a4691030b4e722efdd6d862447b61cd64c8b7688d331b1d35f8d4fc661d6e34f91bc1ffc79478fca2e48ad060acece18c
-  languageName: node
-  linkType: hard
-
 "archiver@npm:^0.11.0":
   version: 0.11.0
   resolution: "archiver@npm:0.11.0"
@@ -5281,21 +5265,6 @@ __metadata:
     tar-stream: ~0.4.0
     zip-stream: ~0.4.0
   checksum: 0ddb6b0b263c2b223a91b8f5352a933a7d4300cdfd78de80a31f8d19aab465c3606d6a6ac981871c0da128f7f0759224e96407f1c942db316b7a15b889296c93
-  languageName: node
-  linkType: hard
-
-"archiver@npm:^6.0.1":
-  version: 6.0.1
-  resolution: "archiver@npm:6.0.1"
-  dependencies:
-    archiver-utils: ^4.0.1
-    async: ^3.2.4
-    buffer-crc32: ^0.2.1
-    readable-stream: ^3.6.0
-    readdir-glob: ^1.1.2
-    tar-stream: ^3.0.0
-    zip-stream: ^5.0.1
-  checksum: 20549eef7366173440a86873387412226568744a410626f826998b0dda85fe84e739c542d9db9aca3923b772436eb795eafdff29c2983e683355fdd9faaa0fdb
   languageName: node
   linkType: hard
 
@@ -5489,7 +5458,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"async@npm:^3.2.3, async@npm:^3.2.4":
+"async@npm:^3.2.3":
   version: 3.2.5
   resolution: "async@npm:3.2.5"
   checksum: 5ec77f1312301dee02d62140a6b1f7ee0edd2a0f983b6fd2b0849b969f245225b990b47b8243e7b9ad16451a53e7f68e753700385b706198ced888beedba3af4
@@ -5568,13 +5537,6 @@ __metadata:
     form-data: ^4.0.0
     proxy-from-env: ^1.1.0
   checksum: c7c9f2ae9e0b9bad7d6f9a4dff030930b12ee667dedf54c3c776714f91681feb743c509ac0796ae5c01e12c4ab4a2bee74905068dd200fbc1ab86f9814578fb0
-  languageName: node
-  linkType: hard
-
-"b4a@npm:^1.6.4":
-  version: 1.6.4
-  resolution: "b4a@npm:1.6.4"
-  checksum: 81b086f9af1f8845fbef4476307236bda3d660c158c201db976f19cdce05f41f93110ab6b12fd7a2696602a490cc43d5410ee36a56d6eef93afb0d6ca69ac3b2
   languageName: node
   linkType: hard
 
@@ -5769,7 +5731,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"buffer-crc32@npm:^0.2.1, buffer-crc32@npm:~0.2.1":
+"buffer-crc32@npm:~0.2.1":
   version: 0.2.13
   resolution: "buffer-crc32@npm:0.2.13"
   checksum: 06252347ae6daca3453b94e4b2f1d3754a3b146a111d81c68924c22d91889a40623264e95e67955b1cb4a68cbedf317abeabb5140a9766ed248973096db5ce1c
@@ -6313,18 +6275,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"compress-commons@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "compress-commons@npm:5.0.1"
-  dependencies:
-    crc-32: ^1.2.0
-    crc32-stream: ^5.0.0
-    normalize-path: ^3.0.0
-    readable-stream: ^3.6.0
-  checksum: 65a68e56211a8d1dbe9dab0d35f1bd60a4df27aa01e6c3f0883080263e228c460758bab4f083637a380d4a96d2326722972a42ea1951360cc69728a3915f209f
-  languageName: node
-  linkType: hard
-
 "compress-commons@npm:~0.1.0":
   version: 0.1.6
   resolution: "compress-commons@npm:0.1.6"
@@ -6486,22 +6436,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"crc-32@npm:^1.2.0, crc-32@npm:~1.2.0, crc-32@npm:~1.2.1":
+"crc-32@npm:~1.2.0, crc-32@npm:~1.2.1":
   version: 1.2.2
   resolution: "crc-32@npm:1.2.2"
   bin:
     crc32: bin/crc32.njs
   checksum: ad2d0ad0cbd465b75dcaeeff0600f8195b686816ab5f3ba4c6e052a07f728c3e70df2e3ca9fd3d4484dc4ba70586e161ca5a2334ec8bf5a41bf022a6103ff243
-  languageName: node
-  linkType: hard
-
-"crc32-stream@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "crc32-stream@npm:5.0.0"
-  dependencies:
-    crc-32: ^1.2.0
-    readable-stream: ^3.4.0
-  checksum: 8e5dd04f22f3fbecc623492395107fbed2114f225bd606e39e8ed338f2fc1c454ac02a05741243620ab526473cb867fa86411a44a7ffcd88457cc1c2af82d0bc
   languageName: node
   linkType: hard
 
@@ -6519,7 +6459,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "create-firecms-app@workspace:packages/create_firecms_app"
   dependencies:
-    "@firecms/cli": ^3.0.0-alpha.50
+    "@firecms/cli": ^3.0.0-alpha.51
     "@types/node": ^20.8.9
     ts-node: ^10.9.2
     typescript: ^5.3.3
@@ -7787,13 +7727,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-fifo@npm:^1.1.0, fast-fifo@npm:^1.2.0":
-  version: 1.3.2
-  resolution: "fast-fifo@npm:1.3.2"
-  checksum: 6bfcba3e4df5af7be3332703b69a7898a8ed7020837ec4395bb341bd96cc3a6d86c3f6071dd98da289618cf2234c70d84b2a6f09a33dd6f988b1ff60d8e54275
-  languageName: node
-  linkType: hard
-
 "fast-glob@npm:^3.2.11, fast-glob@npm:^3.2.9, fast-glob@npm:^3.3.0":
   version: 3.3.2
   resolution: "fast-glob@npm:3.3.2"
@@ -7979,13 +7912,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms-example-v3@workspace:examples/example_v3"
   dependencies:
-    "@firecms/cli": ^3.0.0-alpha.50
+    "@firecms/cli": ^3.0.0-alpha.51
     "@originjs/vite-plugin-federation": ^1.3.3
     "@types/react": 18.2.45
     "@types/react-dom": 18.2.17
     "@vitejs/plugin-react": ^4.2.1
     autoprefixer: ^10.4.16
-    firecms: ^3.0.0-alpha.50
+    firecms: ^3.0.0-alpha.51
     postcss: ^8.4.32
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -7999,12 +7932,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms-example@workspace:examples/example_pro"
   dependencies:
-    "@firecms/collection_editor": ^3.0.0-alpha.50
-    "@firecms/core": ^3.0.0-alpha.50
-    "@firecms/data_enhancement": ^3.0.0-alpha.50
-    "@firecms/data_import_export": ^3.0.0-alpha.50
-    "@firecms/firebase_pro": ^3.0.0-alpha.50
-    "@firecms/schema_inference": ^3.0.0-alpha.50
+    "@firecms/collection_editor": ^3.0.0-alpha.51
+    "@firecms/core": ^3.0.0-alpha.51
+    "@firecms/data_enhancement": ^3.0.0-alpha.51
+    "@firecms/data_import_export": ^3.0.0-alpha.51
+    "@firecms/firebase_pro": ^3.0.0-alpha.51
+    "@firecms/schema_inference": ^3.0.0-alpha.51
     "@types/react": ^18.2.45
     "@types/react-dom": 18.2.17
     "@typescript-eslint/eslint-plugin": ^5.62.0
@@ -8042,16 +7975,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"firecms@^3.0.0-alpha.50, firecms@workspace:packages/firecms":
+"firecms@^3.0.0-alpha.51, firecms@workspace:packages/firecms":
   version: 0.0.0-use.local
   resolution: "firecms@workspace:packages/firecms"
   dependencies:
-    "@firecms/collection_editor": ^3.0.0-alpha.50
-    "@firecms/core": ^3.0.0-alpha.50
-    "@firecms/data_enhancement": ^3.0.0-alpha.50
-    "@firecms/data_import_export": ^3.0.0-alpha.50
-    "@firecms/firebase": ^3.0.0-alpha.50
-    "@firecms/schema_inference": ^3.0.0-alpha.50
+    "@firecms/collection_editor": ^3.0.0-alpha.51
+    "@firecms/core": ^3.0.0-alpha.51
+    "@firecms/data_enhancement": ^3.0.0-alpha.51
+    "@firecms/data_import_export": ^3.0.0-alpha.51
+    "@firecms/firebase": ^3.0.0-alpha.51
+    "@firecms/schema_inference": ^3.0.0-alpha.51
     "@types/node": ^20.8.9
     "@types/react": ^18.2.45
     "@types/react-dom": ^18.2.17
@@ -8542,7 +8475,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^8.0.0, glob@npm:^8.0.1":
+"glob@npm:^8.0.1":
   version: 8.1.0
   resolution: "glob@npm:8.1.0"
   dependencies:
@@ -10374,15 +10307,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lazystream@npm:^1.0.0":
-  version: 1.0.1
-  resolution: "lazystream@npm:1.0.1"
-  dependencies:
-    readable-stream: ^2.0.5
-  checksum: 822c54c6b87701a6491c70d4fabc4cafcf0f87d6b656af168ee7bb3c45de9128a801cb612e6eeeefc64d298a7524a698dd49b13b0121ae50c2ae305f0dcc5310
-  languageName: node
-  linkType: hard
-
 "lazystream@npm:~0.1.0":
   version: 0.1.0
   resolution: "lazystream@npm:0.1.0"
@@ -11105,7 +11029,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^5.0.1, minimatch@npm:^5.1.0":
+"minimatch@npm:^5.0.1":
   version: 5.1.6
   resolution: "minimatch@npm:5.1.6"
   dependencies:
@@ -12690,24 +12614,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"querystring@npm:^0.2.1":
-  version: 0.2.1
-  resolution: "querystring@npm:0.2.1"
-  checksum: 7b83b45d641e75fd39cd6625ddfd44e7618e741c61e95281b57bbae8fde0afcc12cf851924559e5cc1ef9baa3b1e06e22b164ea1397d65dd94b801f678d9c8ce
-  languageName: node
-  linkType: hard
-
 "queue-microtask@npm:^1.2.2":
   version: 1.2.3
   resolution: "queue-microtask@npm:1.2.3"
   checksum: b676f8c040cdc5b12723ad2f91414d267605b26419d5c821ff03befa817ddd10e238d22b25d604920340fd73efd8ba795465a0377c4adf45a4a41e4234e42dc4
-  languageName: node
-  linkType: hard
-
-"queue-tick@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "queue-tick@npm:1.0.1"
-  checksum: 57c3292814b297f87f792fbeb99ce982813e4e54d7a8bdff65cf53d5c084113913289d4a48ec8bbc964927a74b847554f9f4579df43c969a6c8e0f026457ad01
   languageName: node
   linkType: hard
 
@@ -13133,21 +13043,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:^2.0.5, readable-stream@npm:~2.3.6":
-  version: 2.3.8
-  resolution: "readable-stream@npm:2.3.8"
-  dependencies:
-    core-util-is: ~1.0.0
-    inherits: ~2.0.3
-    isarray: ~1.0.0
-    process-nextick-args: ~2.0.0
-    safe-buffer: ~5.1.1
-    string_decoder: ~1.1.1
-    util-deprecate: ~1.0.1
-  checksum: 65645467038704f0c8aaf026a72fbb588a9e2ef7a75cd57a01702ee9db1c4a1e4b03aaad36861a6a0926546a74d174149c8c207527963e0c2d3eee2f37678a42
-  languageName: node
-  linkType: hard
-
 "readable-stream@npm:^3.0.0, readable-stream@npm:^3.0.2, readable-stream@npm:^3.1.1, readable-stream@npm:^3.4.0, readable-stream@npm:^3.6.0":
   version: 3.6.2
   resolution: "readable-stream@npm:3.6.2"
@@ -13171,12 +13066,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readdir-glob@npm:^1.1.2":
-  version: 1.1.3
-  resolution: "readdir-glob@npm:1.1.3"
+"readable-stream@npm:~2.3.6":
+  version: 2.3.8
+  resolution: "readable-stream@npm:2.3.8"
   dependencies:
-    minimatch: ^5.1.0
-  checksum: 1dc0f7440ff5d9378b593abe9d42f34ebaf387516615e98ab410cf3a68f840abbf9ff1032d15e0a0dbffa78f9e2c46d4fafdbaac1ca435af2efe3264e3f21874
+    core-util-is: ~1.0.0
+    inherits: ~2.0.3
+    isarray: ~1.0.0
+    process-nextick-args: ~2.0.0
+    safe-buffer: ~5.1.1
+    string_decoder: ~1.1.1
+    util-deprecate: ~1.0.1
+  checksum: 65645467038704f0c8aaf026a72fbb588a9e2ef7a75cd57a01702ee9db1c4a1e4b03aaad36861a6a0926546a74d174149c8c207527963e0c2d3eee2f37678a42
   languageName: node
   linkType: hard
 
@@ -13444,12 +13345,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "saas@workspace:packages/saas"
   dependencies:
-    "@firecms/collection_editor": ^3.0.0-alpha.50
-    "@firecms/core": ^3.0.0-alpha.50
-    "@firecms/data_enhancement": ^3.0.0-alpha.50
-    "@firecms/data_import_export": ^3.0.0-alpha.50
-    "@firecms/firebase": ^3.0.0-alpha.50
-    "@firecms/schema_inference": ^3.0.0-alpha.50
+    "@firecms/collection_editor": ^3.0.0-alpha.51
+    "@firecms/core": ^3.0.0-alpha.51
+    "@firecms/data_enhancement": ^3.0.0-alpha.51
+    "@firecms/data_import_export": ^3.0.0-alpha.51
+    "@firecms/firebase": ^3.0.0-alpha.51
+    "@firecms/schema_inference": ^3.0.0-alpha.51
     "@fontsource/roboto": ^5.0.8
     "@originjs/vite-plugin-federation": ^1.3.3
     "@sentry/react": ^7.88.0
@@ -13469,7 +13370,7 @@ __metadata:
     eslint-plugin-react: ^7.33.2
     eslint-plugin-react-hooks: ^4.6.0
     firebase: ^10.7.1
-    firecms: ^3.0.0-alpha.50
+    firecms: ^3.0.0-alpha.51
     postcss: ^8.4.32
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -13907,16 +13808,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"streamx@npm:^2.15.0":
-  version: 2.15.2
-  resolution: "streamx@npm:2.15.2"
-  dependencies:
-    fast-fifo: ^1.1.0
-    queue-tick: ^1.0.1
-  checksum: 41a801e17dcdcb2f2e5055acaeeb50594825950d353a77b104509dedf02a88a69ce2534ff1a540bd2d1edb0ff0667d3d3344234b5a7342208d844858fb9ea001
-  languageName: node
-  linkType: hard
-
 "string-length@npm:^4.0.1":
   version: 4.0.2
   resolution: "string-length@npm:4.0.2"
@@ -14262,17 +14153,6 @@ __metadata:
     tailwind: lib/cli.js
     tailwindcss: lib/cli.js
   checksum: 44632ac471248ecebcee1a2f15a0c3e9b8383513e71692b586aa2fe56dca12828ff70de3d340c898f27b27480e8475e5eb345fb2ebb813028bb2393578a34337
-  languageName: node
-  linkType: hard
-
-"tar-stream@npm:^3.0.0":
-  version: 3.1.6
-  resolution: "tar-stream@npm:3.1.6"
-  dependencies:
-    b4a: ^1.6.4
-    fast-fifo: ^1.2.0
-    streamx: ^2.15.0
-  checksum: f3627f918581976e954ff03cb8d370551053796b82564f8c7ca8fac84c48e4d042026d0854fc222171a34ff9c682b72fae91be9c9b0a112d4c54f9e4f443e9c5
   languageName: node
   linkType: hard
 
@@ -15580,34 +15460,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zip-a-folder@npm:^3.1.5":
-  version: 3.1.5
-  resolution: "zip-a-folder@npm:3.1.5"
-  dependencies:
-    archiver: ^6.0.1
-    glob: ^10.3.10
-    is-glob: ^4.0.3
-  checksum: 32ac9c7fb59750cc59ca95e3adb304baf8680933b0190703375affbe7d0e6dc361fdb5f4059138b99f509844104265b75560800692d75f5affa12f5620f1afd1
-  languageName: node
-  linkType: hard
-
 "zip-folder@npm:^1.0.0":
   version: 1.0.0
   resolution: "zip-folder@npm:1.0.0"
   dependencies:
     archiver: ^0.11.0
   checksum: 32d6433c93125bb17ea265b04e58afc848e6d2ade61eec16638d8db82d19a2eefabcbbe62509d2cf1748411380afb2990288619443bd55c26f9925c8359a7a4b
-  languageName: node
-  linkType: hard
-
-"zip-stream@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "zip-stream@npm:5.0.1"
-  dependencies:
-    archiver-utils: ^4.0.1
-    compress-commons: ^5.0.1
-    readable-stream: ^3.6.0
-  checksum: 116cee5a2c1ecce7aa440b665470653f58ef56670c6aafa1b5491c9f9335992352145502af5fa865ac82f46336905e37fb7cbc649c2be72e2152c6b91802995c
   languageName: node
   linkType: hard
 
