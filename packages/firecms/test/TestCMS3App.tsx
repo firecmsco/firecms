@@ -23,7 +23,6 @@ import {
     useBrowserTitleAndIcon,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
-    useBuildNavigationController,
     User
 } from "@firecms/core";
 

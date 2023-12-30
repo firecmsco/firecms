@@ -7,7 +7,7 @@ const rootCollectionsCache: { [key: string]: string[] } = {};
 
 export function buildProjectsApi(host: string, getBackendAuthToken: () => Promise<string>) {
 
-    async function createNewFireCMSProject(projectId: string, googleAccessToken: string) {
+    async function createNewFireCMSProject(projectId: string, googleAccessToken: string, creationType: "new" | "existing") {
 
         const firebaseAccessToken = await getBackendAuthToken();
         return fetch(host + "/projects",
@@ -19,7 +19,8 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                     "x-admin-authorization": `Bearer ${googleAccessToken}`
                 },
                 body: JSON.stringify({
-                    projectId
+                    projectId,
+                    creationType
                 })
             })
             .then(async (res) => {

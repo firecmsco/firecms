@@ -421,7 +421,8 @@ function FireCMS3AppAuthenticated({
             return currentProjectController.users.find(u => u.uid === uid) ?? null;
         },
         collectionInference: buildCollectionInference(firebaseApp),
-        getData: (path) => getFirestoreDataInPath(firebaseApp, path, 100)
+        getData: (path) => getFirestoreDataInPath(firebaseApp, path, 100),
+        onAnalyticsEvent
     });
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({

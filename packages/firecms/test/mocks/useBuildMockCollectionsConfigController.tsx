@@ -4,10 +4,17 @@ import {
     PersistedCollection,
     SaveCollectionParams
 } from "@firecms/collection_editor";
+import { DeletePropertyParams, SavePropertyParams } from "@firecms/collection_editor/dist/types/config_controller";
 
 export function useBuildMockCollectionsConfigController(): CollectionsConfigController {
 
     return {
+        deleteProperty(params: DeletePropertyParams): Promise<void> {
+            throw new Error("Function not implemented.");
+        },
+        saveProperty(params: SavePropertyParams): Promise<void> {
+            throw new Error("Function not implemented.");
+        },
         collections: [productsCollection],
         deleteCollection(props: DeleteCollectionParams): Promise<void> {
             throw new Error("Function not implemented.");
