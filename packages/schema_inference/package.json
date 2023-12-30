@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-alpha.51",
+  "version": "3.0.0-alpha.52",
   "name": "@firecms/schema_inference",
   "access": "public",
   "packageManager": "yarn@3.2.3",
@@ -16,7 +16,7 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/core": "^3.0.0-alpha.51",
+    "@firecms/core": "^3.0.0-alpha.52",
     "@types/node": "^20.8.9",
     "typescript": "^5.3.3"
   },
