@@ -39,20 +39,16 @@ service cloud.firestore {
 }
 ```
 
-but ideally you will want to make it more restricitve. For the demo in the website, you could have rules
-like this:
+but ideally you will want to make it more restricitve. For the products demo to work, your rules should look like this:
 
 ```
-
-For the products demo to work, your rules should look like this:
-
 rules_version = '2';
 service cloud.firestore {
 
     // everything is private by default
     match /{document=**} {
-      allow read: false;
-      allow write: false;
+      allow read: if false;
+      allow write: if false;
     }
     
     // allow every read to products collection but write only to authenticated users
