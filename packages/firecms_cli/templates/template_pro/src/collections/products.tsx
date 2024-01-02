@@ -1,5 +1,5 @@
-import { buildCollection, buildProperty, EntityReference } from "firecms";
-import { localeCollection } from "./locales.tsx";
+import { buildCollection, buildProperty, EntityReference } from "@firecms/firebase_pro";
+import { localeCollection } from "./locales";
 
 export type Product = {
     name: string;
@@ -23,6 +23,7 @@ export type Product = {
 export const productsCollection = buildCollection<Product>({
     name: "Products",
     singularName: "Product",
+    id: "products",
     path: "products",
     icon: "LocalGroceryStore",
     group: "E-commerce",

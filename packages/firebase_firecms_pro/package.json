@@ -1,6 +1,7 @@
 {
-  "version": "3.0.0-alpha.55",
+  "version": "3.0.0-alpha.56",
   "name": "@firecms/firebase_pro",
+  "access": "public",
   "packageManager": "yarn@3.2.3",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
@@ -14,15 +15,25 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/core": "^3.0.0-alpha.55",
-    "@firecms/firebase": "^3.0.0-alpha.55",
+    "@firecms/core": "^3.0.0-alpha.56",
+    "@firecms/firebase": "^3.0.0-alpha.56",
     "@types/node": "^20.8.9",
     "firebase": "^10.7.1",
     "typescript": "^5.3.3"
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build && tsc --emitDeclarationOnly"
+    "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json"
   },
-  "gitHead": "17bba2feea1f6c818c0d9d4b3d6c8e4dfd4e5b4b"
+  "files": [
+    "dist",
+    "src"
+  ],
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "gitHead": "958d93702495bd28b2e22d6c4aec0bccf03c71dc"
 }

@@ -1,4 +1,4 @@
-import { buildCollection, buildEnumValues } from "firecms";
+import { buildCollection, buildEnumValues } from "@firecms/firebase_pro";
 
 const locales = buildEnumValues({
     "en-US": "English (United States)",
@@ -7,6 +7,7 @@ const locales = buildEnumValues({
 });
 
 export const localeCollection = buildCollection({
+    id: "locale",
     path: "locale",
     customId: locales,
     name: "Locales",
