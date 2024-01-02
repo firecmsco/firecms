@@ -431,6 +431,11 @@ export function CollectionEditorDialogInternal<M extends {
 
                 const path = values.path ?? editedCollectionPath;
                 const updatedFullPath = fullPath?.includes("/") ? fullPath?.split("/").slice(0, -1).join("/") + "/" + path : path; // TODO: this path is wrong
+                console.log("CollectionEditorDialog", {
+                    fullPath,
+                    path,
+                    updatedFullPath
+                });
                 const resolvedPath = navigation.resolveAliasesFrom(updatedFullPath);
                 const getDataWithPath = resolvedPath && getData ? () => getData(resolvedPath) : undefined;
 

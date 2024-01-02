@@ -5,13 +5,13 @@ const client = new Client({
     auth: {
         username: process.env.ES_USER as string,
         password: process.env.ES_PASSWORD as string
-    },
+    }
 })
 
 export function indexInElasticSearch(indexName: string, data: any, id: string) {
     return client.index({
         index: indexName,
-        id: id,
+        id,
         body: data
     })
 }
@@ -19,7 +19,7 @@ export function indexInElasticSearch(indexName: string, data: any, id: string) {
 export function deleteInElasticSearch(indexName: string, id: string) {
     return client.delete({
         index: indexName,
-        id: id
+        id
     })
 }
 
@@ -28,11 +28,10 @@ export function searchInElasticSearch(indexName: string, query: any) {
         index: indexName,
         body: {
             query: {
-                "query_string": {
-                    "query": query,
+                query_string: {
+                    query
                 }
             }
         }
     })
 }
-
