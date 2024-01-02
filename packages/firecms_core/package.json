@@ -1,6 +1,6 @@
 {
   "name": "@firecms/core",
-  "version": "3.0.0-alpha.52",
+  "version": "3.0.0-alpha.53",
   "description": "Awesome Firebase/Firestore-based headless open-source CMS",
   "funding": {
     "url": "https://github.com/sponsors/firecmsco"
@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@date-io/date-fns": "^2.17.0",
-    "@firecms/ui": "^3.0.0-alpha.52",
+    "@firecms/ui": "^3.0.0-alpha.53",
     "@fontsource/ibm-plex-mono": "^5.0.8",
     "@fontsource/roboto": "^5.0.8",
     "@hello-pangea/dnd": "^16.5.0",
