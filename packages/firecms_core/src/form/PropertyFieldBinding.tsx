@@ -202,7 +202,7 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
         (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);
 
     const WrappedComponent: ComponentType<FieldProps<T, any, M>> | null = useWrappedComponent(context.path, context.collection, propertyKey, property, Component, plugins);
-    const UsedComponent: ComponentType<FieldProps<T>> = WrappedComponent ?? Component;
+    const UsedComponent: ComponentType<FieldProps<T>> = Component;
 
     const isSubmitting = fieldProps.form.isSubmitting;
 

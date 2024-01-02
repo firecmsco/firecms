@@ -28,6 +28,8 @@ import { getIn } from "formik";
 import { enumToObjectEntries } from "./enums";
 import { isDefaultFieldConfigId } from "../core";
 
+// import util from "util";
+
 export const resolveCollection = <M extends Record<string, any>, >
 ({
      collection,
@@ -57,17 +59,19 @@ export const resolveCollection = <M extends Record<string, any>, >
     const resolvedProperties = Object.entries(collection.properties)
         .map(([key, propertyOrBuilder]) => {
             const propertyValue = usedValues ? getIn(usedValues, key) : undefined;
+            const childResolvedProperty = resolveProperty({
+                propertyKey: key,
+                propertyOrBuilder: propertyOrBuilder as PropertyOrBuilder | ResolvedProperty,
+                values: usedValues,
+                previousValues: usedPreviousValues,
+                path,
+                propertyValue,
+                entityId,
+                fields
+            });
+            if (!childResolvedProperty) return {};
             return ({
-                [key]: resolveProperty({
-                    propertyKey: key,
-                    propertyOrBuilder: propertyOrBuilder as PropertyOrBuilder | ResolvedProperty,
-                    values: usedValues,
-                    previousValues: usedPreviousValues,
-                    path,
-                    propertyValue,
-                    entityId,
-                    fields
-                })
+                [key]: childResolvedProperty
             });
         })
         .filter((a) => a !== null)
@@ -133,7 +137,6 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
         });
 
         if (!result) {
-            console.debug("Property builder not returning `Property` so it is not rendered", path, props.entityId, propertyOrBuilder);
             return null;
         }
 
@@ -338,13 +341,16 @@ export function resolveProperties<M extends Record<string, any>>({
 }): ResolvedProperties<M> {
     return Object.entries<PropertyOrBuilder>(properties as Record<string, PropertyOrBuilder>)
         .map(([key, property]) => {
+            const thisPropertyValue = propertyValue && typeof propertyValue === "object" ? getValueInPath(propertyValue, key) : undefined;
+            const childResolvedProperty = resolveProperty({
+                propertyKey: key,
+                propertyOrBuilder: property,
+                propertyValue: thisPropertyValue,
+                ...props
+            });
+            if (!childResolvedProperty) return {};
             return {
-                [key]: resolveProperty({
-                    propertyKey: key,
-                    propertyOrBuilder: property,
-                    propertyValue: propertyValue && typeof propertyValue === "object" ? getValueInPath(propertyValue, key) : undefined,
-                    ...props
-                })
+                [key]: childResolvedProperty
             };
         })
         .filter((a) => a !== null)

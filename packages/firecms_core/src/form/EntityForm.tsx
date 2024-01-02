@@ -147,6 +147,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                                                                autoSave,
                                                                onIdUpdateError
                                                            }: EntityFormProps<M>) {
+
     const context = useFireCMSContext();
     const dataSource = useDataSource();
     const plugins = context.plugins;
@@ -212,7 +213,7 @@ function EntityFormInternal<M extends Record<string, any>>({
             onIdChange(entityId);
     }, [entityId, onIdChange]);
 
-    const collection = resolveCollection<M>({
+    const resolvedCollection = resolveCollection<M>({
         collection: inputCollection,
         path,
         entityId,
@@ -221,12 +222,12 @@ function EntityFormInternal<M extends Record<string, any>>({
         fields: context.propertyConfigs
     });
 
-    const onIdUpdate = collection.callbacks?.onIdUpdate;
+    const onIdUpdate = inputCollection.callbacks?.onIdUpdate;
     useEffect(() => {
         if (onIdUpdate && internalValues && (status === "new" || status === "copy")) {
             try {
                 const updatedId = onIdUpdate({
-                    collection,
+                    collection: resolvedCollection,
                     path,
                     entityId,
                     values: internalValues,
@@ -242,7 +243,7 @@ function EntityFormInternal<M extends Record<string, any>>({
 
     const underlyingChanges: Partial<EntityValues<M>> = useMemo(() => {
         if (initialValues && status === "existing") {
-            return Object.entries(collection.properties)
+            return Object.entries(resolvedCollection.properties)
                 .map(([key, property]) => {
                     if (isHidden(property)) {
                         return {};
@@ -258,11 +259,11 @@ function EntityFormInternal<M extends Record<string, any>>({
         } else {
             return {};
         }
-    }, [baseDataSourceValues, collection.properties, initialValues, status]);
+    }, [baseDataSourceValues, resolvedCollection.properties, initialValues, status]);
 
     const save = (values: EntityValues<M>) => {
         return onEntitySaveRequested({
-            collection,
+            collection: resolvedCollection,
             path,
             entityId,
             values,
@@ -300,8 +301,8 @@ function EntityFormInternal<M extends Record<string, any>>({
         if (status === "existing") {
             if (!entity?.id) throw Error("Form misconfiguration when saving, no id for existing entity");
         } else if (status === "new" || status === "copy") {
-            if (collection.customId) {
-                if (collection.customId !== "optional" && !entityId) {
+            if (inputCollection.customId) {
+                if (inputCollection.customId !== "optional" && !entityId) {
                     throw Error("Form misconfiguration when saving, entityId should be set");
                 }
             }
@@ -333,16 +334,16 @@ function EntityFormInternal<M extends Record<string, any>>({
     const validationSchema = useMemo(() => entityId
             ? getYupEntitySchema(
                 entityId,
-                collection.properties,
+                resolvedCollection.properties,
                 uniqueFieldValidator)
             : undefined,
-        [entityId, collection.properties, uniqueFieldValidator]);
+        [entityId, resolvedCollection.properties, uniqueFieldValidator]);
 
     const authController = useAuthController();
 
     const getActionsForEntity = useCallback(({ entity, customEntityActions }: { entity?: Entity<M>, customEntityActions?: EntityAction[] }): EntityAction[] => {
-        const createEnabled = canCreateEntity(collection, authController, fullPathToCollectionSegments(path), null);
-        const deleteEnabled = entity ? canDeleteEntity(collection, authController, fullPathToCollectionSegments(path), entity) : true;
+        const createEnabled = canCreateEntity(inputCollection, authController, fullPathToCollectionSegments(path), null);
+        const deleteEnabled = entity ? canDeleteEntity(inputCollection, authController, fullPathToCollectionSegments(path), entity) : true;
         const actions: EntityAction[] = [];
         if (createEnabled)
             actions.push(copyEntityAction);
@@ -351,7 +352,7 @@ function EntityFormInternal<M extends Record<string, any>>({
         if (customEntityActions)
             actions.push(...customEntityActions);
         return actions;
-    }, [authController, collection, path]);
+    }, [authController, inputCollection, path]);
 
     return (
         <Formik
@@ -368,11 +369,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                 const formContext: FormContext<M> = {
                     setFieldValue: props.setFieldValue,
                     values: props.values,
-                    collection: resolveCollection({
-                        collection,
-                        path,
-                        fields: context.propertyConfigs
-                    }),
+                    collection: resolvedCollection,
                     entityId,
                     path,
                     save
@@ -385,7 +382,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                     }
                 }, [onFormContextChange, formContext]);
 
-                if (plugins && collection) {
+                if (plugins && inputCollection) {
                     const actionProps: PluginFormActionProps = {
                         entityId,
                         path,
@@ -419,13 +416,13 @@ function EntityFormInternal<M extends Record<string, any>>({
                             className={`w-full py-2 flex items-center mt-${4 + (pluginActions ? 8 : 0)} lg:mt-${8 + (pluginActions ? 8 : 0)} mb-8`}>
 
                             <Typography
-                                className={"mt-4 flex-grow " + collection.hideIdFromForm ? "mb-2" : "mb-0"}
-                                variant={"h4"}>{collection.singularName ?? collection.name}
+                                className={"mt-4 flex-grow " + inputCollection.hideIdFromForm ? "mb-2" : "mb-0"}
+                                variant={"h4"}>{inputCollection.singularName ?? inputCollection.name}
                             </Typography>
                         </div>
 
                         {!hideId &&
-                            <CustomIdField customId={collection.customId}
+                            <CustomIdField customId={inputCollection.customId}
                                            entityId={entityId}
                                            status={status}
                                            onChange={setEntityId}
@@ -439,13 +436,13 @@ function EntityFormInternal<M extends Record<string, any>>({
                             onValuesChanged={doOnValuesChanges}
                             underlyingChanges={underlyingChanges}
                             entity={entity}
-                            resolvedCollection={collection}
+                            resolvedCollection={resolvedCollection}
                             formContext={formContext}
                             status={status}
                             savingError={savingError}
                             closeAfterSaveRef={closeAfterSaveRef}
                             autoSave={autoSave}
-                            entityActions={getActionsForEntity({ entity, customEntityActions: collection.entityActions })}/>}
+                            entityActions={getActionsForEntity({ entity, customEntityActions: inputCollection.entityActions })}/>}
 
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import {
     EntityCollection,
     FireCMSPlugin,
@@ -85,17 +85,15 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
      onAnalyticsEvent
  }: CollectionConfigControllerProps<EC, UserType>): FireCMSPlugin<any, any, PersistedCollection> {
 
-    const injectCollections = useCallback(
-        (collections: EntityCollection[]) => {
-            const markAsEditable = (c: PersistedCollection) => {
-                makePropertiesEditable(c.properties as Properties);
-                c.subcollections?.forEach(markAsEditable);
-            };
-            const storedCollections = collectionConfigController.collections ?? [];
-            storedCollections.forEach(markAsEditable);
-            return joinCollectionLists(collections, storedCollections, [], modifyCollection);
-        },
-        [collectionConfigController.collections, modifyCollection]);
+    const injectCollections = (collections: EntityCollection[]) => {
+        const markAsEditable = (c: PersistedCollection) => {
+            makePropertiesEditable(c.properties as Properties);
+            c.subcollections?.forEach(markAsEditable);
+        };
+        const storedCollections = collectionConfigController.collections ?? [];
+        storedCollections.forEach(markAsEditable);
+        return joinCollectionLists(collections, storedCollections, [], modifyCollection);
+    };
 
     return {
         name: "Collection Editor",

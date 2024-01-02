@@ -89,12 +89,11 @@ export const testCollection = buildCollection({
     path: "test_entity",
     customId: false,
     name: "Test entities",
-    // formAutoSave: true,
     properties: {
-        color: {
-            dataType: "string",
-            propertyConfig: "color",
-        },
+        // color: {
+        //     dataType: "string",
+        //     propertyConfig: "color",
+        // },
         mainSaturation: {
             name: "Main saturation",
             description: "Saturation applied to all colors when there is no saturation on color applied",
@@ -110,14 +109,19 @@ export const testCollection = buildCollection({
                             fromTo: "Saturation available range",
                         }
                     },
-                    value: ({ propertyValue, index }) => {
-                        if (propertyValue?.type === "oneNum") {
+                    value: ({ propertyValue, values, index }) => {
+                        if (index === undefined) {
+                            return null;
+                        }
+                        const parentValue = values.mainSaturation?.[index]?.type;
+                        console.log("callback propertyValue", { propertyValue, index, parentValue });
+                        if (parentValue === "oneNum") {
                             return ({
                                 name: "Saturation",
                                 dataType: "number",
                                 validation: { min: 0, max: 100 }
                             })
-                        } else if (propertyValue?.type === "fromTo") {
+                        } else if (parentValue === "fromTo") {
                             return ({
                                     name: "Saturation available range",
                                     dataType: "map",
@@ -153,68 +157,68 @@ export const testCollection = buildCollection({
                 }
             },
         },
-        array_enum: {
-            name: "Array enum",
-            dataType: "array",
-            of: {
-                name: "My enum",
-                dataType: "string",
-                enumValues: {
-                    value1: "My Value 1",
-                    value2: "Your Value 2",
-                    value3: "Another Value 3",
-                    value4: "Another Value 4",
-                    value5: "Another Value 5",
-                    value6: "Another Value 6",
-                    value7: "Another Value 7",
-                    value8: "Another Value 8",
-                    value9: "Another Value 9",
-                    value10: "Another Value 10",
-                    value11: "Another Value 11",
-                    value12: "Another Value 12",
-                    value13: "Another Value 13",
-                    value14: "Another Value 14",
-
-                },
-                validation: { required: false },
-                clearable: true
-            }
-        },
-        enum: {
-            name: "My enum",
-            dataType: "string",
-            enumValues: {
-                value1: "My Value 1",
-                value2: "Your Value 2",
-                value3: "Another Value 3",
-                value4: "Another Value 4",
-                value5: "Another Value 5",
-                value6: "Another Value 6",
-                value7: "Another Value 7",
-                value8: "Another Value 8",
-                value9: "Another Value 9",
-                value10: "Another Value 10",
-                value11: "Another Value 11",
-                value12: "Another Value 12",
-                value13: "Another Value 13",
-                value14: "Another Value 14",
-            },
-            validation: { required: false },
-            clearable: true
-        },
-        test_date: {
-            name: "Test date",
-            dataType: "date",
-            mode: "date_time",
-            clearable: true
-        },
-        tags: {
-            name: "Tags",
-            dataType: "array",
-            of: {
-                dataType: "string"
-            }
-        },
+        // array_enum: {
+        //     name: "Array enum",
+        //     dataType: "array",
+        //     of: {
+        //         name: "My enum",
+        //         dataType: "string",
+        //         enumValues: {
+        //             value1: "My Value 1",
+        //             value2: "Your Value 2",
+        //             value3: "Another Value 3",
+        //             value4: "Another Value 4",
+        //             value5: "Another Value 5",
+        //             value6: "Another Value 6",
+        //             value7: "Another Value 7",
+        //             value8: "Another Value 8",
+        //             value9: "Another Value 9",
+        //             value10: "Another Value 10",
+        //             value11: "Another Value 11",
+        //             value12: "Another Value 12",
+        //             value13: "Another Value 13",
+        //             value14: "Another Value 14",
+        //
+        //         },
+        //         validation: { required: false },
+        //         clearable: true
+        //     }
+        // },
+        // enum: {
+        //     name: "My enum",
+        //     dataType: "string",
+        //     enumValues: {
+        //         value1: "My Value 1",
+        //         value2: "Your Value 2",
+        //         value3: "Another Value 3",
+        //         value4: "Another Value 4",
+        //         value5: "Another Value 5",
+        //         value6: "Another Value 6",
+        //         value7: "Another Value 7",
+        //         value8: "Another Value 8",
+        //         value9: "Another Value 9",
+        //         value10: "Another Value 10",
+        //         value11: "Another Value 11",
+        //         value12: "Another Value 12",
+        //         value13: "Another Value 13",
+        //         value14: "Another Value 14",
+        //     },
+        //     validation: { required: false },
+        //     clearable: true
+        // },
+        // test_date: {
+        //     name: "Test date",
+        //     dataType: "date",
+        //     mode: "date_time",
+        //     clearable: true
+        // },
+        // tags: {
+        //     name: "Tags",
+        //     dataType: "array",
+        //     of: {
+        //         dataType: "string"
+        //     }
+        // },
         // specSheet: ({
         //                 values,
         //                 entityId
@@ -234,10 +238,10 @@ export const testCollection = buildCollection({
         //     }
         // }),
 
-        name: {
-            dataType: "string",
-            name: "Name"
-        },
+        // name: {
+        //     dataType: "string",
+        //     name: "Name"
+        // },
         // key_value: {
         //     dataType: "map",
         //     name: "Key value",
@@ -396,27 +400,27 @@ export const testCollection = buildCollection({
         //         }
         //     })
         // },
-        eeee: {
-            name: "My enum",
-            dataType: "string",
-            enumValues: {
-                value1: "Value 1",
-                value2: "Value 2",
-            },
-            validation: { required: false },
-            clearable: true,
-        },
-        products: buildProperty(({ values }) => ({
-            name: "Products",
-            dataType: "array",
-            of: {
-                dataType: "reference",
-                path: "products",
-                // forceFilter: {
-                //     tags: ["array-contains", "test"]
-                // }
-            },
-        })),
+        // eeee: {
+        //     name: "My enum",
+        //     dataType: "string",
+        //     enumValues: {
+        //         value1: "Value 1",
+        //         value2: "Value 2",
+        //     },
+        //     validation: { required: false },
+        //     clearable: true,
+        // },
+        // products: buildProperty(({ values }) => ({
+        //     name: "Products",
+        //     dataType: "array",
+        //     of: {
+        //         dataType: "reference",
+        //         path: "products",
+        //         // forceFilter: {
+        //         //     tags: ["array-contains", "test"]
+        //         // }
+        //     },
+        // })),
         // product: {
         //     name: "Product",
         //     dataType: "reference",
@@ -817,28 +821,28 @@ export const testCollection = buildCollection({
         //     }
         // }),
     },
-
-    exportable: {
-        additionalFields: [
-            {
-                key: "test_export",
-                builder: ({
-                              entity,
-                              context
-                          }) => "test_export"
-            }
-        ]
-    },
-
-    additionalFields: [
-        {
-            key: "full_name",
-            name: "Full Name",
-            Builder: ({ entity }) => {
-                const values = entity.values;
-                return typeof values.name === "string" ? values.name.toUpperCase() : "Nope";
-            },
-            dependencies: ["name"]
-        }
-    ]
+    //
+    // exportable: {
+    //     additionalFields: [
+    //         {
+    //             key: "test_export",
+    //             builder: ({
+    //                           entity,
+    //                           context
+    //                       }) => "test_export"
+    //         }
+    //     ]
+    // },
+    //
+    // additionalFields: [
+    //     {
+    //         key: "full_name",
+    //         name: "Full Name",
+    //         Builder: ({ entity }) => {
+    //             const values = entity.values;
+    //             return typeof values.name === "string" ? values.name.toUpperCase() : "Nope";
+    //         },
+    //         dependencies: ["name"]
+    //     }
+    // ]
 });

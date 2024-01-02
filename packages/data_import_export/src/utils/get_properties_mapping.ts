@@ -39,7 +39,6 @@ export function getPropertiesMapping(originProperties: Properties, newProperties
                     }
 
                     if (from !== to || fromSubtype !== toSubtype) {
-                        console.log(`Mapping`, { currentKey, inferredProperty, property, from, to, fromSubtype, toSubtype });
                         dataMapping[key] = {
                             from,
                             to,

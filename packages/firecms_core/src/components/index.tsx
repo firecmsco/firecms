@@ -15,7 +15,6 @@ export * from "./EntityCollectionView/EntityCollectionView";
 export * from "./FieldConfigBadge";
 
 export * from "./EntityCollectionTable";
-export * from "./BreadcrumbUpdater";
 export * from "./NotFoundPage";
 
 export * from "./VirtualTable";

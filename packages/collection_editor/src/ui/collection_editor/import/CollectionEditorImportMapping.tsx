@@ -132,10 +132,6 @@ export function CollectionEditorImportMapping({
 
         if (propertyPath) {
             if (inferredNewProperty) {
-                console.log("updating inferredNewProperty", {
-                    property,
-                    inferredNewProperty
-                })
                 setFieldValue(propertyPath, inferredNewProperty, false);
             } else {
                 setFieldValue(propertyPath, property, false);
@@ -259,7 +255,6 @@ function PropertySelect({
                     previousId: propertyKey,
                     namespace: undefined
                 });
-                console.log("newSelectedWidgetId", newSelectedWidgetId);
             }}>
             {Object.entries(supportedFields).map(([key, widget]) => {
                 return <PropertySelectItem

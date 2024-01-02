@@ -147,10 +147,6 @@ export function ReferenceFilterField({
         );
     };
 
-    console.log("ReferenceFilterField", {
-        internalValue
-
-    })
     return (
 
         <div className="flex w-[440px] flex-row">

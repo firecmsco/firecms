@@ -196,10 +196,6 @@ export function CollectionPropertiesEditorForm({
         id?: string,
         property: Property
     }) => {
-        console.log("onPropertyCreated", {
-            id,
-            property
-        })
         if (!id) {
             throw Error("Need to include an ID when creating a new property")
         }
@@ -209,11 +205,6 @@ export function CollectionPropertiesEditorForm({
         }, false);
         const newPropertiesOrder = [...(values.propertiesOrder ?? Object.keys(values.properties)), id];
 
-        console.log("onPropertyCreated", {
-            id,
-            property,
-            newPropertiesOrder
-        })
         updatePropertiesOrder(newPropertiesOrder);
 
         setNewPropertyDialogOpen(false);

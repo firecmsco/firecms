@@ -1,6 +1,7 @@
 import { buildCollection } from "firecms";
 
 export const usersCollection = buildCollection({
+    id: "users",
     path: "users",
     name: "Users",
     singularName: "User",
@@ -55,7 +56,7 @@ export const usersCollection = buildCollection({
     },
     additionalFields: [
         {
-            id: "sample_additional",
+            key: "sample_additional",
             name: "Sample additional",
             Builder: ({ entity }) => <>{`Generated column: ${entity.values.first_name}`}</>,
             dependencies: ["first_name"]

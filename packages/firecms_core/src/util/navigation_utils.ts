@@ -51,7 +51,7 @@ export function resolveCollectionPathAliases(path: string, allCollections: Entit
     const cleanPath = removeInitialAndTrailingSlashes(path);
     const subpaths = cleanPath.split("/");
     if (subpaths.length % 2 === 0) {
-        throw Error(`Collection paths must have an odd number of segments: ${path}`);
+        throw Error(`resolveCollectionPathAliases: Collection paths must have an odd number of segments: ${path}`);
     }
 
     const aliasedCollection = allCollections.find((col) => col.id === subpaths[0]);
@@ -82,7 +82,7 @@ export function getCollectionByPathOrAlias(pathOrAlias: string, collections: Ent
 
     const subpaths = removeInitialAndTrailingSlashes(pathOrAlias).split("/");
     if (subpaths.length % 2 === 0) {
-        throw Error(`Collection paths must have an odd number of segments: ${pathOrAlias}`);
+        throw Error(`getCollectionByPathOrAlias: Collection paths must have an odd number of segments: ${pathOrAlias}`);
     }
 
     const subpathCombinations = getCollectionPathsCombinations(subpaths);

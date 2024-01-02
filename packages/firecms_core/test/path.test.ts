@@ -1,5 +1,5 @@
 import { expect, it } from "@jest/globals";
-import { getValueInPath } from "../src/util/objects";
+import { getValueInPath } from "../src";
 
 const obj = {
     id: "022QFOrveCab2YUT88iw",

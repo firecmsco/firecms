@@ -3,7 +3,6 @@ import { FirebaseApp } from "firebase/app";
 import { BrowserRouter, Route } from "react-router-dom";
 
 import {
-    BreadcrumbUpdater,
     Button,
     CenteredView,
     CircularProgressCenter,
@@ -297,12 +296,18 @@ export function FireCMS3ClientWithController({
         console.warn("No user was found with email " + notValidUser.email);
         loadingOrErrorComponent = <NoAccessError authController={authController}/>
     } else if (currentProjectController.configError) {
-        loadingOrErrorComponent = <ErrorView
-            error={currentProjectController.configError as Error}/>
+        loadingOrErrorComponent = <CenteredView fullScreen={true}>
+            <ErrorView
+                error={currentProjectController.configError as Error}/>
+            <Typography>This error may be caused when trying to access with a user that is not
+                registered in the project.</Typography>
+            <Button variant="text" onClick={authController.signOut}>Sign out</Button>
+        </CenteredView>
     } else if (delegatedLoginError) {
         loadingOrErrorComponent = <CenteredView fullScreen={true}>
             <Typography variant={"h4"}>Error delegating login</Typography>
             <ErrorView error={delegatedLoginError}/>
+            <Button variant="text" onClick={authController.signOut}>Sign out</Button>
         </CenteredView>;
     } else if (customizationLoading) {
         loadingOrErrorComponent = <CircularProgressCenter text={"Project customization loading"}/>;
@@ -421,7 +426,7 @@ function FireCMS3AppAuthenticated({
             return currentProjectController.users.find(u => u.uid === uid) ?? null;
         },
         collectionInference: buildCollectionInference(firebaseApp),
-        getData: (path) => getFirestoreDataInPath(firebaseApp, path, 100),
+        getData: (path) => getFirestoreDataInPath(firebaseApp, path, 400),
         onAnalyticsEvent
     });
 
@@ -459,8 +464,7 @@ function FireCMS3AppAuthenticated({
         <FireCMSBackEndProvider {...fireCMSBackend}>
             <ProjectConfigProvider config={currentProjectController}>
                 <SnackbarProvider>
-                    <ModeControllerProvider
-                        value={modeController}>
+                    <ModeControllerProvider value={modeController}>
                         <FireCMS
                             collections={appConfig?.collections}
                             views={appConfig?.views}
@@ -535,13 +539,7 @@ function buildAdminRoutes() {
                             }) => <Route
         key={"navigation_admin_" + path}
         path={path}
-        element={
-            <BreadcrumbUpdater
-                path={path}
-                key={`navigation_admin_${path}`}
-                title={name}>
-                {view}
-            </BreadcrumbUpdater>}
+        element={view}
     />)
 }
 

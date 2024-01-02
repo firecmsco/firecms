@@ -242,7 +242,6 @@ export function SubcollectionsEditTab({
                 open={addEntityViewDialogOpen}
                 onClose={(selectedViewKey) => {
                     if (selectedViewKey) {
-                        console.log("selectedViewKey", selectedViewKey);
                         setFieldValue("entityViews", [...(values.entityViews ?? []), selectedViewKey]);
                     }
                     setAddEntityViewDialogOpen(false);

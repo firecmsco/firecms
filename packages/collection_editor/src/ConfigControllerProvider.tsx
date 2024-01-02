@@ -164,7 +164,6 @@ export const ConfigControllerProvider = React.memo(
             const propertyKeyWithoutNamespace = propertyKey && propertyKey.includes(".")
                 ? propertyKey.substring(propertyKey.lastIndexOf(".") + 1)
                 : propertyKey;
-            console.log("edit property", propertyKeyWithoutNamespace, collection)
             setCurrentPropertyDialog({
                 propertyKey: propertyKeyWithoutNamespace,
                 property,

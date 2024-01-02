@@ -12,7 +12,6 @@ export function CollectionEditorImportDataPreview({ importConfig, properties, pr
         const propertiesMapping = getPropertiesMapping(importConfig.originProperties, properties);
         const mappedData = importConfig.importData.map(d => convertDataToEntity(d, importConfig.idColumn, importConfig.headersMapping, properties, propertiesMapping, "TEMP_PATH"));
         importConfig.setEntities(mappedData);
-        console.log("res", { propertiesMapping, mappedData })
     }, []);
 
     const selectionController = useSelectionController();

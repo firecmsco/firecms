@@ -40,8 +40,6 @@ export function ReferencePropertyField({
     const pathValue: string | undefined = getIn(values, pathPath);
     const pathError: string | undefined = showErrors && getIn(errors, pathPath);
 
-    console.log("pathError", errors, pathError)
-
     return (
         <>
             <div className={"col-span-12"}>

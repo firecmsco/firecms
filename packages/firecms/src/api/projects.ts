@@ -164,7 +164,6 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                 if (res.status === 409) // already exists
                     throw Error("The service account already exists for this project.")
                 const data = await res.json();
-                console.log("createServiceAccount res", res, data);
                 return data.user as FireCMSUserProject;
             });
     }

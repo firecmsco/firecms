@@ -184,7 +184,7 @@ export function ArrayContainer<T>({
 
                         {includeAddButton && <div className="py-4 justify-center text-left">
                             <Button
-                                variant={size === "small" ? "text" : "outlined"}
+                                variant={"text"}
                                 size={size === "small" ? "small" : "medium"}
                                 color="primary"
                                 disabled={disabled}

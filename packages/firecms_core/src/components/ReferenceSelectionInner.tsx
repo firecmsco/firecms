@@ -98,8 +98,6 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
         maxSelection
     }: ReferenceSelectionInnerProps<M>) {
 
-    console.log("ReferenceSelectionInner");
-
     const sideDialogContext = useSideDialogContext();
     const sideEntityController = useSideEntityController();
     const navigation = useNavigationController();

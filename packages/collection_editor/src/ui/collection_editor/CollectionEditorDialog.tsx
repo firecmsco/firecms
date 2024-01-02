@@ -464,10 +464,6 @@ export function CollectionEditorDialogInternal<M extends {
                     setFieldValue("properties", updatedProperties);
                     // setFieldValue("propertiesOrder", Object.values(importConfig.headersMapping));
                     setNextMode();
-                    console.log("onImportMappingComplete", {
-                        importConfig,
-                        properties: updatedProperties
-                    })
                 };
 
                 const collectionEditable = collection?.editable || isNewCollection;

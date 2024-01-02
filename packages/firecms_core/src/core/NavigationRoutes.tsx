@@ -1,11 +1,10 @@
-import React, { PropsWithChildren } from "react";
+import React from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView } from "../types";
 import { DefaultHomePage, EntityCollectionView, NotFoundPage } from "../components";
-import { useBreadcrumbsContext, useNavigationController } from "../hooks";
+import { useNavigationController } from "../hooks";
 import { toArray } from "../util/arrays";
-import equal from "react-fast-compare"
 
 /**
  * @group Components
@@ -71,33 +70,20 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
                     return <Route path={urlPath + "/*"}
                                   key={`navigation_${collection.id ?? collection.path}`}
                                   element={
-                                      <RouteWrapper
-                                          path={urlPath}
-                                          title={collection.name}
-                                          type={"collection"}>
-                                          <EntityCollectionView
-                                              key={`collection_view_${collection.id ?? collection.path}`}
-                                              isSubCollection={false}
-                                              parentCollectionIds={[]}
-                                              fullPath={collection.id ?? collection.path}
-                                              {...collection}
-                                              Actions={toArray(collection.Actions)}/>
-                                      </RouteWrapper>
+                                      <EntityCollectionView
+                                          key={`collection_view_${collection.id ?? collection.path}`}
+                                          isSubCollection={false}
+                                          parentCollectionIds={[]}
+                                          fullPath={collection.id ?? collection.path}
+                                          {...collection}
+                                          Actions={toArray(collection.Actions)}/>
                                   }/>;
                 }
             );
 
         const homeRoute = (
             <Route path={"/"}
-                   element={
-                       <RouteWrapper
-                           path={navigation.homeUrl}
-                           key={"navigation_home"}
-                           title={"Home"}
-                           type={"home"}>
-                           <HomePage/>
-                       </RouteWrapper>
-                   }/>
+                   element={<HomePage/>}/>
         );
 
         const notFoundRoute = <Route path={"*"}
@@ -126,52 +112,7 @@ const buildCMSViewRoute = (path: string, cmsView: CMSView) => {
     return <Route
         key={"navigation_view_" + path}
         path={path}
-        element={
-            <RouteWrapper
-                path={path}
-                key={`navigation_${path}`}
-                title={cmsView.name}
-                type={"view"}>
-                {cmsView.view}
-            </RouteWrapper>}
+        element={cmsView.view}
     />;
 };
 
-interface RouteWrapperProps {
-    title: string;
-    path: string;
-    type: "collection" | "view" | "home";
-}
-
-/**
- * This component updates the breadcrumb in the app bar when rendered
- * @param children
- * @param title
- * @param path
- * @param type
- * @constructor
- * @group Components
- */
-
-export const RouteWrapper = React.memo<PropsWithChildren<RouteWrapperProps>>(
-    function RouteWrapper({
-                              children,
-                              title,
-                              path,
-                              type
-                          }
-                              : PropsWithChildren<RouteWrapperProps>) {
-
-        const breadcrumbsContext = useBreadcrumbsContext();
-
-        React.useEffect(() => {
-            breadcrumbsContext.set({
-                breadcrumbs: [{
-                    title,
-                    url: path
-                }]
-            });
-        }, [path, title]);
-
-        return <>{children}</>;
-    }, equal);

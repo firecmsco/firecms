@@ -17,9 +17,8 @@ export const colorPropertyConfig: PropertyConfig = {
                         type="color"
                         value={value}
                         onChange={(evt: any) => setValue(evt.target.value)}/>
-                    <Typography>
-                        Pick a color
-                    </Typography>
+                    <Typography> Pick a color </Typography>
+                    <Typography> {value} </Typography>
                 </div>
             </>;
         },

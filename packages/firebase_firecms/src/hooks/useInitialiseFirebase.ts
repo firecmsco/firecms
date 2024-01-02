@@ -95,7 +95,6 @@ export function useInitialiseFirebase({
                 );
         }
 
-
         if (firebaseConfig) {
             initFirebase(firebaseConfig);
         } else {

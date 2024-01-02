@@ -1,6 +1,6 @@
 import React from "react";
 
-import format from "date-fns/format";
+import { format } from "date-fns";
 import * as locales from "date-fns/locale";
 import { FireCMSContext } from "../../types";
 import { useFireCMSContext } from "../../hooks";

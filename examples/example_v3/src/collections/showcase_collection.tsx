@@ -6,6 +6,7 @@ export const showcaseCollection = buildCollection({
     customId: false,
     icon: "bento",
     name: "Showcase",
+    editable: true,
     properties: {
         // name: buildProperty({
         //     dataType: "string",

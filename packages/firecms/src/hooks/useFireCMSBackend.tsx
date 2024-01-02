@@ -1,8 +1,6 @@
-// import { FirebaseApp } from "firebase/app";
 import React from "react";
 import { FireCMSBackend } from "../types";
-// import { ProjectsApi } from "../api/projects";
-//
+
 export const FireCMSBackendContext = React.createContext({} as FireCMSBackend);
 //
 export function FireCMSBackEndProvider({

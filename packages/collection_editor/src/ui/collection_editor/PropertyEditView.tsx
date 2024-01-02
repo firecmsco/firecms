@@ -136,7 +136,6 @@ export const PropertyForm = React.memo(
                 ? { id: propertyKey, ...property } as PropertyWithId
                 : initialValue}
             onSubmit={(newPropertyWithId: PropertyWithId, helpers) => {
-                console.log("Submitting property", newPropertyWithId)
                 const {
                     id,
                     ...property

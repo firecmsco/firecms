@@ -22,7 +22,9 @@ export default defineConfig(({ command }) => {
                 },
                 shared: ["react", "react-dom",
                     ...(build
-                        ? ["@firecms/core", "@firecms/firebase", "@firecms/ui", "firecms",]
+                        ? [
+                            // "@firecms/core", "@firecms/firebase", "@firecms/ui",
+                            "firecms",]
                         : [])
                 ]
             })
