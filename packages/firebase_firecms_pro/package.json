@@ -1,6 +1,5 @@
 {
-  "version": "3.0.0-alpha.54",
-  "private": true,
+  "version": "3.0.0-alpha.55",
   "name": "@firecms/firebase_pro",
   "packageManager": "yarn@3.2.3",
   "main": "./dist/index.umd.js",
@@ -15,8 +14,8 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/core": "^3.0.0-alpha.54",
-    "@firecms/firebase": "^3.0.0-alpha.54",
+    "@firecms/core": "^3.0.0-alpha.55",
+    "@firecms/firebase": "^3.0.0-alpha.55",
     "@types/node": "^20.8.9",
     "firebase": "^10.7.1",
     "typescript": "^5.3.3"
