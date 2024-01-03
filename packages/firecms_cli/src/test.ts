@@ -4,10 +4,10 @@ import { createFireCMSApp } from "./commands/init";
 import { login, logout } from "./commands/auth";
 
 async function main(){
-    await logout("dev");
-    await login("dev");
+    // await logout("dev");
+    // await login("dev");
 
-    // createFireCMSApp(["", "", "--v2"]);
+    createFireCMSApp(["", "", "--pro"]);
     // const tokens = await refreshCredentials(await getTokens());
     // getTokens().then((tokens) => {
     //     console.log("current", tokens);

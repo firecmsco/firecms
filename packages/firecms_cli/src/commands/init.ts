@@ -3,7 +3,7 @@ import inquirer from "inquirer";
 import chalk from "chalk";
 import path from "path";
 import fs from "fs";
-import ncp from "ncp";
+
 import { promisify } from "util";
 import execa from "execa";
 import Listr from "listr";
@@ -13,6 +13,8 @@ import axios from "axios";
 import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common";
 import { getCurrentUser, getTokens, login, refreshCredentials } from "./auth";
 import ora from "ora";
+
+import ncp from "ncp";
 
 const access = promisify(fs.access);
 const copy = promisify(ncp);
@@ -88,7 +90,7 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
             "--skipInstall": Boolean,
             "--projectId": String,
             "--v2": Boolean,
-            "-2": Boolean,
+            "--pro": Boolean,
             "--env": String
         },
         {
@@ -106,6 +108,7 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
         git: args["--git"] || false,
         dir_name: args._[0],
         v2: args["--v2"] || false,
+        pro: args["--pro"] || false,
         firebaseProjectId: args["--projectId"],
         env
     };
@@ -267,10 +270,7 @@ export async function createProject(options: InitOptions) {
         console.log(chalk.cyan.bold("yarn dev"));
         console.log("");
     } else if (options.pro) {
-        console.log("First update your firebase config in");
-        console.log(chalk.bgYellow.black.bold("src/firebase-config.ts"));
-        console.log("");
-        console.log("Then run:");
+        console.log("Run:");
         console.log(chalk.cyan.bold("cd " + options.dir_name));
         console.log(chalk.cyan.bold("yarn"));
         console.log(chalk.cyan.bold("yarn dev"));
@@ -292,26 +292,42 @@ export async function createProject(options: InitOptions) {
 async function copyTemplateFiles(options: InitOptions, webappConfig?: object) {
     return copy(options.templateDirectory, options.targetDirectory, {
         clobber: false,
-    }).then(_ => {
+        dot: true,
+    }).then(async _ => {
         if (options.v2 && webappConfig) {
             writeWebAppConfig(options, webappConfig);
         }
         if (!options.v2) {
-            if(options.pro){
+            if (options.pro) {
+
+                const firebaseConfig = await getProjectWebappConfig(options.env, options.firebaseProjectId);
+                await copyWebAppConfig(options, firebaseConfig);
+
                 return replaceProjectIdInTemplateFiles(options, [
                     "./src/App.tsx",
                     "./firebase.json",
                     "./package.json",
                     "./.firebaserc",
                 ]);
-            }
-            else{
+            } else {
 
                 return replaceProjectIdInTemplateFiles(options, [
                     "./src/App.tsx",
                     "./package.json",
                 ]);
             }
+        }
+    });
+}
+
+async function copyWebAppConfig(options: InitOptions, firebaseConfig: object) {
+
+    const fullFileName = path.resolve(options.targetDirectory, "src/firebase-config.ts");
+    fs.writeFile(fullFileName, "export const firebaseConfig = " + JSON.stringify(firebaseConfig, null, 4), err => {
+        if (err) {
+            console.error("Failed to write file:", err);
+        } else {
+            console.log("File written successfully");
         }
     });
 }
@@ -363,6 +379,34 @@ async function getProjects(env: "prod" | "dev", onErr?: (e: any) => void) {
         }
         const server = env === "prod" ? DEFAULT_SERVER : DEFAULT_SERVER_DEV;
         const response = await axios.get(server + "/gcp_projects", {
+            headers: {
+                ["x-admin-authorization"]: `Bearer ${tokens["access_token"]}`
+            },
+        });
+
+        if (response.status >= 400) {
+            console.log(response.data.data?.message);
+            return null;
+        }
+        return response.data.data;
+    } catch (e) {
+        if (onErr) {
+            onErr(e);
+        }
+        console.error("Error getting projects", e.response?.data);
+    }
+}
+
+async function getProjectWebappConfig(env: "prod" | "dev", projectId: string, onErr?: (e: any) => void) {
+
+    try {
+        const credentials = await getTokens(env);
+        const tokens = await refreshCredentials(env, credentials, onErr);
+        if (!tokens) {
+            return null;
+        }
+        const server = env === "prod" ? DEFAULT_SERVER : DEFAULT_SERVER_DEV;
+        const response = await axios.get(server + `/projects/${projectId}/webapp_config`, {
             headers: {
                 ["x-admin-authorization"]: `Bearer ${tokens["access_token"]}`
             },

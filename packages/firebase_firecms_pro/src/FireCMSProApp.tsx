@@ -51,30 +51,30 @@ const DEFAULT_SIGN_IN_OPTIONS = [
  * @category Firebase
  */
 export function FireCMSProApp({
-                                   name,
-                                   logo,
-                                   logoDark,
-                                   toolbarExtraWidget,
-                                   authentication,
-                                   collections,
-                                   views,
-                                   textSearchController,
-                                   allowSkipLogin,
-                                   signInOptions = DEFAULT_SIGN_IN_OPTIONS,
-                                   firebaseConfig,
-                                   onFirebaseInit,
-                                   appCheckOptions,
-                                   dateTimeFormat,
-                                   locale,
-                                   basePath,
-                                   baseCollectionPath,
-                                   onAnalyticsEvent,
-                                   propertyConfigs: propertyConfigsProp,
-                                   plugins,
-                                   autoOpenDrawer,
-                                   firestoreIndexesBuilder,
-                                   components
-                               }: FireCMSProAppProps) {
+                                  name,
+                                  logo,
+                                  logoDark,
+                                  toolbarExtraWidget,
+                                  authentication,
+                                  collections,
+                                  views,
+                                  textSearchController,
+                                  allowSkipLogin,
+                                  signInOptions = DEFAULT_SIGN_IN_OPTIONS,
+                                  firebaseConfig,
+                                  onFirebaseInit,
+                                  appCheckOptions,
+                                  dateTimeFormat,
+                                  locale,
+                                  basePath,
+                                  baseCollectionPath,
+                                  onAnalyticsEvent,
+                                  propertyConfigs: propertyConfigsProp,
+                                  plugins,
+                                  autoOpenDrawer,
+                                  firestoreIndexesBuilder,
+                                  components
+                              }: FireCMSProAppProps) {
 
     /**
      * Update the browser title and icon
@@ -164,8 +164,7 @@ export function FireCMSProApp({
     return (
         <BrowserRouter basename={basePath}>
             <SnackbarProvider>
-                <ModeControllerProvider
-                    value={modeController}>
+                <ModeControllerProvider value={modeController}>
                     <FireCMS
                         collections={collections}
                         views={views}
