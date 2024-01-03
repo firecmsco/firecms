@@ -113,38 +113,39 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
         );
     }
 
-    const providers: {
-        component?: React.ComponentType<any>;
-        context?: React.Context<any>;
-        value?: any;
-    }[] = [
-        { context: FireCMSContextInstance, value: context },
-        { context: UserConfigurationPersistenceContext, value: userConfigPersistence },
-        { context: StorageSourceContext, value: storageSource },
-        { context: DataSourceContext, value: dataSource },
-        { context: AuthControllerContext, value: authController },
-        { context: SideDialogsControllerContext, value: sideDialogsController },
-        { context: SideEntityControllerContext, value: sideEntityController },
-        { context: NavigationContext, value: navigationController },
-        { component: DialogsProvider }
-    ];
-
-    return providers.reduce((children, provider) => {
-        const { context: Context, value, component: Component } = provider;
-        if (Context && value) {
-            return (
-                <Context.Provider value={value}>{children}</Context.Provider>
-            );
-        } else if (Component) {
-            return (
-                <Component>{children}</Component>
-            );
-        } else {
-            throw Error("Invalid provider");
-        }
-    }, <FireCMSInternal loading={loading}>
-        {children}
-    </FireCMSInternal>);
+    return (
+        <ModeControllerContext.Provider value={modeController}>
+            <FireCMSContextInstance.Provider value={context}>
+                <UserConfigurationPersistenceContext.Provider
+                    value={userConfigPersistence}>
+                    <StorageSourceContext.Provider
+                        value={storageSource}>
+                        <DataSourceContext.Provider
+                            value={dataSource}>
+                            <AuthControllerContext.Provider
+                                value={authController}>
+                                <SideDialogsControllerContext.Provider
+                                    value={sideDialogsController}>
+                                    <SideEntityControllerContext.Provider
+                                        value={sideEntityController}>
+                                        <NavigationContext.Provider
+                                            value={navigationController}>
+                                                <DialogsProvider>
+                                                    <FireCMSInternal
+                                                        loading={loading}>
+                                                        {children}
+                                                    </FireCMSInternal>
+                                                </DialogsProvider>
+                                        </NavigationContext.Provider>
+                                    </SideEntityControllerContext.Provider>
+                                </SideDialogsControllerContext.Provider>
+                            </AuthControllerContext.Provider>
+                        </DataSourceContext.Provider>
+                    </StorageSourceContext.Provider>
+                </UserConfigurationPersistenceContext.Provider>
+            </FireCMSContextInstance.Provider>
+        </ModeControllerContext.Provider>
+    );
 
 }
 

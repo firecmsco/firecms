@@ -4,11 +4,11 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@firecms/collection_editor": "^3.0.0-alpha.54",
-    "@firecms/data_enhancement": "^3.0.0-alpha.54",
-    "@firecms/data_import_export": "^3.0.0-alpha.54",
-    "@firecms/firebase_pro": "^3.0.0-alpha.54",
-    "@firecms/schema_inference": "^3.0.0-alpha.54",
+    "@firecms/collection_editor": "^3.0.0-alpha.56",
+    "@firecms/data_enhancement": "^3.0.0-alpha.56",
+    "@firecms/data_import_export": "^3.0.0-alpha.56",
+    "@firecms/firebase_pro": "^3.0.0-alpha.56",
+    "@firecms/schema_inference": "^3.0.0-alpha.56",
     "algoliasearch": "^4.22.0",
     "firebase": "^10.7.1",
     "react": "^18.2.0",
@@ -20,7 +20,7 @@
     "dev": "vite --mode development",
     "build": "vite build && tsc",
     "preview": "vite build && vite preview",
-    "deploy": "vite build && firebase deploy --only hosting:firecms-demo-27150"
+    "deploy": "vite build && firebase deploy --only hosting:[REPLACE_WITH_PROJECT_ID]"
   },
   "eslintConfig": {
     "extends": [

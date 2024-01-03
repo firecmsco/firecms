@@ -1139,12 +1139,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firecms/collection_editor@npm:^3.0.0-alpha.54, @firecms/collection_editor@npm:^3.0.0-alpha.55":
-  version: 3.0.0-alpha.55
-  resolution: "@firecms/collection_editor@npm:3.0.0-alpha.55"
+"@firecms/collection_editor@npm:^3.0.0-alpha.56":
+  version: 3.0.0-alpha.56
+  resolution: "@firecms/collection_editor@npm:3.0.0-alpha.56"
   dependencies:
-    "@firecms/data_import_export": ^3.0.0-alpha.55
-    "@firecms/schema_inference": ^3.0.0-alpha.55
+    "@firecms/data_import_export": ^3.0.0-alpha.56
+    "@firecms/schema_inference": ^3.0.0-alpha.56
     json5: ^2.2.3
     prism-react-renderer: ^2.3.0
   peerDependencies:
@@ -1152,15 +1152,15 @@ __metadata:
     react-dom: ^18.2.0
     react-router: ^6.12.0
     react-router-dom: ^6.12.0
-  checksum: 42df4da7199962c61617cb1e6f12ed4331204ccebdde2e9744456f3fce5ac25b6aeb58a2aa855cf89efce668325b2b8000ce4663434ccf7a6a787b3d5213bab0
+  checksum: 442078fdb1d1e18ee8e40e234b52efce71d9e5273fa6c5e246dd710fc2e2c501f01a65902b49a03d18ffa75092ebc6d693fcc7535ef4c1ccf6dab191d9873665
   languageName: node
   linkType: hard
 
-"@firecms/core@npm:^3.0.0-alpha.55":
-  version: 3.0.0-alpha.55
-  resolution: "@firecms/core@npm:3.0.0-alpha.55"
+"@firecms/core@npm:^3.0.0-alpha.56":
+  version: 3.0.0-alpha.56
+  resolution: "@firecms/core@npm:3.0.0-alpha.56"
   dependencies:
-    "@firecms/ui": ^3.0.0-alpha.55
+    "@firecms/ui": ^3.0.0-alpha.56
     "@fontsource/ibm-plex-mono": ^5.0.8
     "@fontsource/roboto": ^5.0.8
     "@hello-pangea/dnd": ^16.5.0
@@ -1185,15 +1185,15 @@ __metadata:
     react-dom: ^18.2.0
     react-router: ^6.2.0
     react-router-dom: ^6.2.0
-  checksum: 3ae731d166bfa22defb4fc3188594cefd93b6c9ff9a0e65b23050dccd47f2bc7be83d8b66ac43c1916e6f60b489c85b6f381248161498c65e71c0a320944b0cd
+  checksum: 28466afb9d3bb9e45db25c010ff4fb9cec1daeac809046c4e3ec1c25e0af85513ccbc08127b3efbaf18e3996e0274e79e368d06f361898dceab955c643783d5f
   languageName: node
   linkType: hard
 
-"@firecms/data_enhancement@npm:^3.0.0-alpha.54, @firecms/data_enhancement@npm:^3.0.0-alpha.55":
-  version: 3.0.0-alpha.55
-  resolution: "@firecms/data_enhancement@npm:3.0.0-alpha.55"
+"@firecms/data_enhancement@npm:^3.0.0-alpha.56":
+  version: 3.0.0-alpha.56
+  resolution: "@firecms/data_enhancement@npm:3.0.0-alpha.56"
   dependencies:
-    "@firecms/core": ^3.0.0-alpha.55
+    "@firecms/core": ^3.0.0-alpha.56
   peerDependencies:
     algoliasearch: ^4.17.1
     firebase: ^10.5.2
@@ -1201,16 +1201,16 @@ __metadata:
     react-dom: ^18.2.0
     react-router: ^6.12.0
     react-router-dom: ^6.12.0
-  checksum: fd59c910927d71502b0d89c589e5a8ca03275c9ef3976ba993079e0ae7489f5b08a6dab243aca769bcfe51c7fe55141c7f4abef3685ab32e8d46bf020ddf912e
+  checksum: 1e2212b7341ef14011c2dde7badc41020f57dc1b516af3d36d9b41b7af0aca3b636d4cd5fa97b7f9a65654686b624c68f4354a3a8169771433055560c329191f
   languageName: node
   linkType: hard
 
-"@firecms/data_import_export@npm:^3.0.0-alpha.54, @firecms/data_import_export@npm:^3.0.0-alpha.55":
-  version: 3.0.0-alpha.55
-  resolution: "@firecms/data_import_export@npm:3.0.0-alpha.55"
+"@firecms/data_import_export@npm:^3.0.0-alpha.56":
+  version: 3.0.0-alpha.56
+  resolution: "@firecms/data_import_export@npm:3.0.0-alpha.56"
   dependencies:
-    "@firecms/core": ^3.0.0-alpha.55
-    "@firecms/schema_inference": ^3.0.0-alpha.55
+    "@firecms/core": ^3.0.0-alpha.56
+    "@firecms/schema_inference": ^3.0.0-alpha.56
     xlsx: ^0.18.5
   peerDependencies:
     algoliasearch: ^4.17.1
@@ -1219,56 +1219,56 @@ __metadata:
     react-dom: ^18.2.0
     react-router: ^6.12.0
     react-router-dom: ^6.12.0
-  checksum: 7fb66f37324d209e298cd9e1321950ca5d22f5f89014db2c4216ac4b3a042f74af28e41c537230969eb2d35f0ce0522a4084b7fb77d2775af5a5f3d4e7bd2712
+  checksum: ef61cdf267a012eff2ceb991a4a82229e6a6803b630d7ed2ea37c64c971f3f900ebc4294c2eb2e19db3a435eb6c32bba9643f00326178f66aa1dd050ae15fdc7
   languageName: node
   linkType: hard
 
-"@firecms/firebase@npm:^3.0.0-alpha.55":
-  version: 3.0.0-alpha.55
-  resolution: "@firecms/firebase@npm:3.0.0-alpha.55"
+"@firecms/firebase@npm:^3.0.0-alpha.56":
+  version: 3.0.0-alpha.56
+  resolution: "@firecms/firebase@npm:3.0.0-alpha.56"
   dependencies:
-    "@firecms/collection_editor": ^3.0.0-alpha.55
-    "@firecms/core": ^3.0.0-alpha.55
-    "@firecms/data_enhancement": ^3.0.0-alpha.55
-    "@firecms/data_import_export": ^3.0.0-alpha.55
-    "@firecms/schema_inference": ^3.0.0-alpha.55
+    "@firecms/collection_editor": ^3.0.0-alpha.56
+    "@firecms/core": ^3.0.0-alpha.56
+    "@firecms/data_enhancement": ^3.0.0-alpha.56
+    "@firecms/data_import_export": ^3.0.0-alpha.56
+    "@firecms/schema_inference": ^3.0.0-alpha.56
     firebase: ^10.7.1
     react-router: ^6.21.0
     react-router-dom: ^6.21.0
   peerDependencies:
     react: ^18.2.0
     react-dom: ^18.2.0
-  checksum: db31bd7df14b8f28b33bfd4a117e21ca72f3315b4ed0f2b092597a644c133ba5c5dd66e337a8d98f406cacea82f18b1b0e1cda19ab64381875253684a959712c
+  checksum: 89fdad16cc6c9c73f14f51fc90077ca0250d59d07d405e6cf7209823a55ca566a5eb52889da57fb134802164951fb499da5e08e0d2c63343bbef35f480ada89b
   languageName: node
   linkType: hard
 
-"@firecms/firebase_pro@npm:^3.0.0-alpha.54":
-  version: 3.0.0-alpha.55
-  resolution: "@firecms/firebase_pro@npm:3.0.0-alpha.55"
+"@firecms/firebase_pro@npm:^3.0.0-alpha.56":
+  version: 3.0.0-alpha.56
+  resolution: "@firecms/firebase_pro@npm:3.0.0-alpha.56"
   dependencies:
-    "@firecms/core": ^3.0.0-alpha.55
-    "@firecms/firebase": ^3.0.0-alpha.55
+    "@firecms/core": ^3.0.0-alpha.56
+    "@firecms/firebase": ^3.0.0-alpha.56
     "@types/node": ^20.8.9
     firebase: ^10.7.1
     typescript: ^5.3.3
-  checksum: 60e2a3a6a6db0d749c90cd298f22b27c23ffeacdb6e379e797471942eb475d5244e262d25dc602f07b820ae868fbe1ba4d5ce2076aff6da64b66b609b452ea65
+  checksum: 8d05a22850c89ac5c89b1213faee645bc36e52d1d0625379daa779d747472ad070d640f24cf6665b5f68fa33f5d5ad3ebf72e1f3c391334d32bce06585ab3931
   languageName: node
   linkType: hard
 
-"@firecms/schema_inference@npm:^3.0.0-alpha.54, @firecms/schema_inference@npm:^3.0.0-alpha.55":
-  version: 3.0.0-alpha.55
-  resolution: "@firecms/schema_inference@npm:3.0.0-alpha.55"
+"@firecms/schema_inference@npm:^3.0.0-alpha.56":
+  version: 3.0.0-alpha.56
+  resolution: "@firecms/schema_inference@npm:3.0.0-alpha.56"
   dependencies:
-    "@firecms/core": ^3.0.0-alpha.55
+    "@firecms/core": ^3.0.0-alpha.56
     "@types/node": ^20.8.9
     typescript: ^5.3.3
-  checksum: 8b9637488ece6960c075bcab066fbd90699f69470abf3d8d6bbf7b596c9a6d3a4dd95cc7f085a944d6496060f62e931bcbf13e89e7f446b260ff1857b6a6acbd
+  checksum: 2f251d4229c3911b84c4419d944e3584c055507c67357a3568b0bdff3ebae4518ca5e82bced7a43b0256390bd6d17c42046eb230cd8c4a2b0c7d34fcb703dca3
   languageName: node
   linkType: hard
 
-"@firecms/ui@npm:^3.0.0-alpha.55":
-  version: 3.0.0-alpha.55
-  resolution: "@firecms/ui@npm:3.0.0-alpha.55"
+"@firecms/ui@npm:^3.0.0-alpha.56":
+  version: 3.0.0-alpha.56
+  resolution: "@firecms/ui@npm:3.0.0-alpha.56"
   dependencies:
     "@material-design-icons/font": ^0.14.13
     "@radix-ui/react-checkbox": ^1.0.4
@@ -1294,7 +1294,7 @@ __metadata:
     react-dom: ^18.2.0
     react-router: ^6.2.0
     react-router-dom: ^6.2.0
-  checksum: 062ad16291e0ae269d316cd11c47001b7de9e269f40d97bc359f20c104d288812459ccb1dfc32177904380b7a2410285d82e6c62af2ab13d5e84da98481cab97
+  checksum: 683565b4ef338b44a8133fd546f97be71d891e54dc7bab8ed19a6a8857fbe290514bea109ea620e7811375961c9b5343bdcb58fed319299adeb5fe24e3090125
   languageName: node
   linkType: hard
 
@@ -4682,11 +4682,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms-example@workspace:."
   dependencies:
-    "@firecms/collection_editor": ^3.0.0-alpha.54
-    "@firecms/data_enhancement": ^3.0.0-alpha.54
-    "@firecms/data_import_export": ^3.0.0-alpha.54
-    "@firecms/firebase_pro": ^3.0.0-alpha.54
-    "@firecms/schema_inference": ^3.0.0-alpha.54
+    "@firecms/collection_editor": ^3.0.0-alpha.56
+    "@firecms/data_enhancement": ^3.0.0-alpha.56
+    "@firecms/data_import_export": ^3.0.0-alpha.56
+    "@firecms/firebase_pro": ^3.0.0-alpha.56
+    "@firecms/schema_inference": ^3.0.0-alpha.56
     "@types/react": ^18.2.45
     "@types/react-dom": 18.2.17
     "@typescript-eslint/eslint-plugin": ^5.62.0

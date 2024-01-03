@@ -1,7 +1,7 @@
 {
     "hosting": {
         "public": "build",
-        "site": "firecms-demo-27150",
+        "site": "[REPLACE_WITH_PROJECT_ID]",
         "ignore": [
             "firebase.json",
             "**/.*",

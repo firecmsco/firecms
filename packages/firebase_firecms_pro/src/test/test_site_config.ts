@@ -1,6 +1,5 @@
-import { FirebaseCMSAppProps } from "../firebase_app";
-import { buildCollection, buildProperty } from "../core";
-import { EntityCallbacks, EnumValues } from "../types";
+import { buildCollection, buildProperty, EntityCallbacks, EnumValues } from "@firecms/core";
+import { FireCMSProAppProps } from "../FireCMSProAppProps";
 
 const locales: EnumValues = {
     "de-DE": "German",
@@ -11,12 +10,13 @@ const locales: EnumValues = {
 
 
 export const productsCollection = buildCollection({
+    id: "products",
     path: "products",
     name: "Products",
     singularName: "Product",
-    views: [
+    entityViews: [
         {
-            path: "custom_view",
+            key: "custom_view",
             name: "Test custom view",
             Builder: ({}) => null
         }
@@ -167,6 +167,7 @@ export const productsCollection = buildCollection({
 
 
 const localeCollection = buildCollection({
+    id: "locales",
     path: "locales",
     customId: locales,
     name: "Locales",
@@ -222,6 +223,7 @@ const productCallbacks: EntityCallbacks<any> = {
 };
 
 export const usersCollection = buildCollection({
+    id: "users",
     path: "users",
     name: "Users",
     singularName: "User",
@@ -275,7 +277,7 @@ export const usersCollection = buildCollection({
     }
 });
 
-export const siteConfig: FirebaseCMSAppProps = {
+export const siteConfig: FireCMSProAppProps = {
     name: "Test site",
     collections: [
         buildCollection({
@@ -302,11 +304,11 @@ export const siteConfig: FirebaseCMSAppProps = {
         buildCollection({
             ...usersCollection,
             path: "users",
-            alias: "u",
+            id: "u",
             singularName: "Users",
             subcollections: [buildCollection({
                 ...productsCollection,
-                alias: "p"
+                id: "p"
             })]
         })
     ],

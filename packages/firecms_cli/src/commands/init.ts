@@ -31,6 +31,7 @@ export type InitOptions = Partial<{
     firebaseProjectId?: string;
 
     v2: boolean;
+    pro: boolean;
 
     env: "prod" | "dev";
 }>
@@ -48,7 +49,8 @@ ${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
     let options = parseArgumentsIntoOptions(args);
 
     let currentUser = await getCurrentUser(args.env);
-    if (!options.v2 && !currentUser) {
+    const shouldLogin = !options.v2 && !currentUser;
+    if (shouldLogin) {
         console.log("You need to be logged in to create a project");
         await inquirer.prompt([
             {
@@ -216,9 +218,17 @@ export async function createProject(options: InitOptions) {
         targetDirectory: targetDirectory,
     };
 
+    let templateFolder: string;
+    if (options.v2) {
+        templateFolder = "template_v2";
+    } else if (options.pro) {
+        templateFolder = "template_pro";
+    } else {
+        templateFolder = "template_v3";
+    }
     const templateDir = path.resolve(
         __dirname,
-        "../../templates/" + (options.v2 ? "template_v2" : "template_v3")
+        "../../templates/" + templateFolder
     );
     options.templateDirectory = templateDir;
 
@@ -256,6 +266,15 @@ export async function createProject(options: InitOptions) {
         console.log(chalk.cyan.bold("yarn"));
         console.log(chalk.cyan.bold("yarn dev"));
         console.log("");
+    } else if (options.pro) {
+        console.log("First update your firebase config in");
+        console.log(chalk.bgYellow.black.bold("src/firebase-config.ts"));
+        console.log("");
+        console.log("Then run:");
+        console.log(chalk.cyan.bold("cd " + options.dir_name));
+        console.log(chalk.cyan.bold("yarn"));
+        console.log(chalk.cyan.bold("yarn dev"));
+        console.log("");
     } else {
         console.log("If you want to run your project locally, run:");
         console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
@@ -278,10 +297,21 @@ async function copyTemplateFiles(options: InitOptions, webappConfig?: object) {
             writeWebAppConfig(options, webappConfig);
         }
         if (!options.v2) {
-            return replaceProjectIdInTemplateFiles(options, [
-                "./src/App.tsx",
-                "./package.json",
-            ]);
+            if(options.pro){
+                return replaceProjectIdInTemplateFiles(options, [
+                    "./src/App.tsx",
+                    "./firebase.json",
+                    "./package.json",
+                    "./.firebaserc",
+                ]);
+            }
+            else{
+
+                return replaceProjectIdInTemplateFiles(options, [
+                    "./src/App.tsx",
+                    "./package.json",
+                ]);
+            }
         }
     });
 }
