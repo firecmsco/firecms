@@ -23,7 +23,7 @@ module.exports = {
                 "collections/multiple_filters",
                 "collections/text_search",
                 "collections/dynamic_collections",
-                "collections/custom_entity_views",
+                "collections/entity_views",
                 "collections/collection_groups"
             ]
         },

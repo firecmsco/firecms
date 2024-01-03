@@ -25,17 +25,6 @@ import { DialogsController } from "./dialogs_controller";
 export type FireCMSContext<UserType extends User = User, AuthControllerType extends AuthController<UserType> = AuthController<UserType>> = {
 
     /**
-     * Format of the dates in the CMS.
-     * Defaults to 'MMMM dd, yyyy, HH:mm:ss'
-     */
-    dateTimeFormat?: string;
-
-    /**
-     * Locale of the CMS, currently only affecting dates
-     */
-    locale?: Locale;
-
-    /**
      * Connector to your database, e.g. your Firestore database
      */
     dataSource: DataSource;
@@ -117,6 +106,16 @@ export type FireCMSContext<UserType extends User = User, AuthControllerType exte
      */
     entityViews?: EntityCustomView[];
 
+    /**
+     * Format of the dates in the CMS.
+     * Defaults to 'MMMM dd, yyyy, HH:mm:ss'
+     */
+    dateTimeFormat?: string;
+
+    /**
+     * Locale of the CMS, currently only affecting dates
+     */
+    locale?: Locale;
 
     components?: {
 

@@ -1,3 +1,8 @@
+import { useState } from "react";
+
+import { format } from "date-fns";
+import * as locales from "date-fns/locale";
+
 import {
     Chip,
     defaultDateFormat,
@@ -14,13 +19,9 @@ import {
     useFireCMSContext,
     useSnackbarController
 } from "@firecms/core";
+import { useProjectConfig } from "../../hooks/useProjectConfig";
 import { FireCMSUserProject } from "../../types/firecms_user";
 import { getUserRoles } from "../../utils/permissions";
-
-import { format } from "date-fns";
-import * as locales from "date-fns/locale";
-import { useState } from "react";
-import { useProjectConfig } from "../../hooks/useProjectConfig";
 
 export function UsersTable({ onUserClicked }: {
     onUserClicked: (user: FireCMSUserProject) => void;

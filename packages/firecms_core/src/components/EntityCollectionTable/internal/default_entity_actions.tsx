@@ -1,6 +1,6 @@
 import { EntityAction } from "../../../types";
 import { DeleteEntityDialog } from "./DeleteEntityDialog";
-import { ArchiveIcon, DeleteIcon, FileCopyIcon, KeyboardTabIcon } from "@firecms/ui";
+import { ArchiveIcon, DeleteIcon, FileCopyIcon, KeyboardTabIcon, OpenInNewIcon } from "@firecms/ui";
 
 export const editEntityAction: EntityAction = {
     icon: <KeyboardTabIcon/>,
@@ -61,9 +61,24 @@ export const archiveEntityAction: EntityAction = {
     onClick({
                 entity,
                 collection,
-                context,
+                context: {
+                    dataSource,
+                }
             }): Promise<void> {
         // Add your code here
+        return Promise.resolve(undefined);
+    }
+}
+export const openWebsiteAction: EntityAction = {
+    icon: <OpenInNewIcon/>,
+    name: "See in website",
+    onClick({
+                entity,
+                collection,
+                context,
+            }): Promise<void> {
+        // open a new tab
+        window.open(`https://example.com/${entity.id}`, "_blank");
         return Promise.resolve(undefined);
     }
 }
