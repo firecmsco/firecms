@@ -19,9 +19,9 @@ import {
     useFireCMSContext,
     useSnackbarController
 } from "@firecms/core";
-import { useProjectConfig } from "../../hooks/useProjectConfig";
 import { FireCMSUserProject } from "../../types/firecms_user";
 import { getUserRoles } from "../../utils/permissions";
+import { useUserManagement } from "../../hooks/useUserManagement";
 
 export function UsersTable({ onUserClicked }: {
     onUserClicked: (user: FireCMSUserProject) => void;
@@ -31,7 +31,7 @@ export function UsersTable({ onUserClicked }: {
         users,
         roles,
         deleteUser
-    } = useProjectConfig();
+    } = useUserManagement();
 
     const snackbarController = useSnackbarController();
 

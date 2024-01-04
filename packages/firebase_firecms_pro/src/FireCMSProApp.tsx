@@ -5,22 +5,34 @@ import { BrowserRouter } from "react-router-dom";
 import {
     CenteredView,
     CircularProgressCenter,
+    CMSAnalyticsEvent,
+    CMSView,
+    CMSViewsBuilder,
+    DataSourceDelegate,
+    EntityCollection,
+    EntityCollectionsBuilder,
     FireCMS,
+    FireCMSPlugin,
+    Locale,
     ModeControllerProvider,
     NavigationRoutes,
     PropertyConfig,
     Scaffold,
     SideDialogs,
     SnackbarProvider,
+    StorageSource,
     useBrowserTitleAndIcon,
     useBuildLocalConfigurationPersistence,
-    useBuildModeController
+    useBuildModeController,
+    UserConfigurationPersistence
 } from "@firecms/core";
 
-import { FireCMSProAppProps } from "./FireCMSProAppProps";
+import { ComponentsRegistry, FireCMSProAppProps } from "./FireCMSProAppProps";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import {
     FirebaseAuthController,
+    FirebaseSignInOption,
+    FirebaseSignInProvider,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
@@ -28,6 +40,14 @@ import {
     useInitializeAppCheck,
     useValidateAuthenticator
 } from "@firecms/firebase";
+import {
+    FireCMSBackend,
+    FireCMSBackEndProvider,
+    ProjectConfigProvider,
+    useBuildFireCMSBackend,
+    useBuildProjectConfig
+} from "firecms";
+import { FirebaseApp } from "firebase/app";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -73,7 +93,8 @@ export function FireCMSProApp({
                                   plugins,
                                   autoOpenDrawer,
                                   firestoreIndexesBuilder,
-                                  components
+                                  components,
+                                  backendApiHost = "https://api-drplyi3b6q-ey.a.run.app", // TODO
                               }: FireCMSProAppProps) {
 
     /**
@@ -146,6 +167,100 @@ export function FireCMSProApp({
         storageSource
     });
 
+    const {
+        firebaseApp: backendFirebaseApp,
+        firebaseConfigLoading: backendConfigLoading,
+        configError: backendConfigError,
+        firebaseConfigError: backendFirebaseConfigError
+    } = useInitialiseFirebase({
+        fromUrl: backendApiHost + "/config"
+    });
+
+    const fireCMSBackend = useBuildFireCMSBackend({
+        backendApiHost,
+        backendFirebaseApp,
+    });
+
+    if (firebaseConfigLoading || !firebaseApp || appCheckLoading) {
+        return <>
+            <CircularProgressCenter/>
+        </>;
+    }
+
+    return <FireCMSProInternal
+        firebaseApp={firebaseApp}
+        fireCMSBackend={fireCMSBackend}
+        configError={configError}
+        firebaseConfigLoading={firebaseConfigLoading}
+        appCheckLoading={appCheckLoading}
+        basePath={basePath}
+        collections={collections}
+        views={views}
+        authController={authController}
+        userConfigPersistence={userConfigPersistence}
+        dateTimeFormat={dateTimeFormat}
+        firestoreDelegate={firestoreDelegate}
+        storageSource={storageSource}
+        locale={locale}
+        baseCollectionPath={baseCollectionPath}
+        onAnalyticsEvent={onAnalyticsEvent}
+        plugins={plugins}
+        propertyConfigs={propertyConfigs}
+        authLoading={authLoading}
+        logoDark={logoDark}
+        logo={logo}
+        canAccessMainView={canAccessMainView}
+        components={components}
+        allowSkipLogin={allowSkipLogin}
+        signInOptions={signInOptions}
+        notAllowedError={notAllowedError}
+        name={name}
+        toolbarExtraWidget={toolbarExtraWidget}
+        autoOpenDrawer={autoOpenDrawer}
+    />;
+
+}
+
+function FireCMSProInternal({ firebaseApp, fireCMSBackend, configError, firebaseConfigLoading, appCheckLoading, basePath, collections, views, authController, userConfigPersistence, dateTimeFormat, firestoreDelegate, storageSource, locale, baseCollectionPath, onAnalyticsEvent, plugins, propertyConfigs, authLoading, logoDark, logo, canAccessMainView, components, allowSkipLogin, signInOptions, notAllowedError, name, toolbarExtraWidget, autoOpenDrawer }: {
+    firebaseApp: FirebaseApp,
+    fireCMSBackend: FireCMSBackend,
+    configError: string | undefined,
+    firebaseConfigLoading: boolean,
+    appCheckLoading: boolean,
+    basePath: string | undefined,
+    collections: EntityCollection[] | EntityCollectionsBuilder | undefined,
+    views: CMSView[] | CMSViewsBuilder | undefined,
+    authController: FirebaseAuthController,
+    userConfigPersistence: UserConfigurationPersistence,
+    dateTimeFormat: string | undefined,
+    firestoreDelegate: DataSourceDelegate,
+    storageSource: StorageSource,
+    locale?: Locale,
+    baseCollectionPath: string | undefined,
+    onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void,
+    plugins: FireCMSPlugin[] | undefined,
+    propertyConfigs: Record<string, PropertyConfig<any>>,
+    authLoading: boolean,
+    logoDark: string | undefined,
+    logo: string | undefined,
+    canAccessMainView: boolean,
+    components?: ComponentsRegistry,
+    allowSkipLogin: boolean | undefined,
+    signInOptions: Array<FirebaseSignInProvider | FirebaseSignInOption> | undefined,
+    notAllowedError: any, name: string,
+    toolbarExtraWidget: React.ReactNode | undefined,
+    autoOpenDrawer: boolean | undefined
+}) {
+
+    if (!firebaseApp.options.projectId) {
+        throw new Error("No firebase project id")
+    }
+    const projectConfig = useBuildProjectConfig({
+        projectId: firebaseApp.options.projectId,
+        backendFirebaseApp: fireCMSBackend.backendFirebaseApp,
+        projectsApi: fireCMSBackend.projectsApi
+    });
+
     /**
      * Controller used to manage the dark or light color mode
      */
@@ -155,72 +270,71 @@ export function FireCMSProApp({
         return <CenteredView fullScreen={true}>{configError}</CenteredView>;
     }
 
-    if (firebaseConfigLoading || !firebaseApp || appCheckLoading) {
-        return <>
-            <CircularProgressCenter/>
-        </>;
-    }
-
     return (
         <BrowserRouter basename={basePath}>
             <SnackbarProvider>
                 <ModeControllerProvider value={modeController}>
-                    <FireCMS
-                        collections={collections}
-                        views={views}
-                        authController={authController}
-                        userConfigPersistence={userConfigPersistence}
-                        dateTimeFormat={dateTimeFormat}
-                        dataSourceDelegate={firestoreDelegate}
-                        storageSource={storageSource}
-                        entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
-                        locale={locale}
-                        basePath={basePath}
-                        baseCollectionPath={baseCollectionPath}
-                        onAnalyticsEvent={onAnalyticsEvent}
-                        plugins={plugins}
-                        propertyConfigs={propertyConfigs}>
-                        {({
-                              context,
-                              loading
-                          }) => {
 
-                            let component;
-                            if (loading || authLoading) {
-                                component = <CircularProgressCenter size={"large"}/>;
-                            } else {
-                                const usedLogo = modeController.mode === "dark" && logoDark ? logoDark : logo;
-                                if (!canAccessMainView) {
-                                    const LoginViewUsed = components?.LoginView ?? FirebaseLoginView;
-                                    component = (
-                                        <LoginViewUsed
-                                            logo={usedLogo}
-                                            allowSkipLogin={allowSkipLogin}
-                                            signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
-                                            firebaseApp={firebaseApp}
-                                            authController={authController}
-                                            notAllowedError={notAllowedError}/>
-                                    );
-                                } else {
-                                    component = (
-                                        <Scaffold
-                                            name={name}
-                                            logo={usedLogo}
-                                            fireCMSAppBarComponentProps={{
-                                                endAdornment: toolbarExtraWidget
-                                            }}
-                                            autoOpenDrawer={autoOpenDrawer}>
-                                            <NavigationRoutes
-                                                HomePage={components?.HomePage}/>
-                                            <SideDialogs/>
-                                        </Scaffold>
-                                    );
-                                }
-                            }
+                    <FireCMSBackEndProvider {...fireCMSBackend}>
+                        <ProjectConfigProvider config={projectConfig}>
+                            <FireCMS
+                                collections={collections}
+                                views={views}
+                                authController={authController}
+                                userConfigPersistence={userConfigPersistence}
+                                dateTimeFormat={dateTimeFormat}
+                                dataSourceDelegate={firestoreDelegate}
+                                storageSource={storageSource}
+                                entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
+                                locale={locale}
+                                basePath={basePath}
+                                baseCollectionPath={baseCollectionPath}
+                                onAnalyticsEvent={onAnalyticsEvent}
+                                plugins={plugins}
+                                propertyConfigs={propertyConfigs}>
+                                {({
+                                      context,
+                                      loading
+                                  }) => {
 
-                            return component;
-                        }}
-                    </FireCMS>
+                                    let component;
+                                    if (loading || authLoading) {
+                                        component = <CircularProgressCenter size={"large"}/>;
+                                    } else {
+                                        const usedLogo = modeController.mode === "dark" && logoDark ? logoDark : logo;
+                                        if (!canAccessMainView) {
+                                            const LoginViewUsed = components?.LoginView ?? FirebaseLoginView;
+                                            component = (
+                                                <LoginViewUsed
+                                                    logo={usedLogo}
+                                                    allowSkipLogin={allowSkipLogin}
+                                                    signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
+                                                    firebaseApp={firebaseApp}
+                                                    authController={authController}
+                                                    notAllowedError={notAllowedError}/>
+                                            );
+                                        } else {
+                                            component = (
+                                                <Scaffold
+                                                    name={name}
+                                                    logo={usedLogo}
+                                                    fireCMSAppBarComponentProps={{
+                                                        endAdornment: toolbarExtraWidget
+                                                    }}
+                                                    autoOpenDrawer={autoOpenDrawer}>
+                                                    <NavigationRoutes
+                                                        HomePage={components?.HomePage}/>
+                                                    <SideDialogs/>
+                                                </Scaffold>
+                                            );
+                                        }
+                                    }
+
+                                    return component;
+                                }}
+                            </FireCMS>
+                        </ProjectConfigProvider>
+                    </FireCMSBackEndProvider>
                 </ModeControllerProvider>
             </SnackbarProvider>
         </BrowserRouter>

@@ -10,7 +10,8 @@ import {
 } from "../../types";
 import { useDropzone } from "react-dropzone";
 import { PreviewSize } from "../../preview";
-import { FieldHelperText, LabelWithIcon } from "../components";
+import { FieldHelperText } from "../components";
+import { LabelWithIcon } from "../../components";
 
 import { getIconForProperty, isReadOnly } from "../../util";
 import { useClearRestoreValue, useSnackbarController, useStorageSource } from "../../hooks";

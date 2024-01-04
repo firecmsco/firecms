@@ -24,9 +24,9 @@ import {
     toSnakeCase,
     Typography
 } from "@firecms/core";
-import { useProjectConfig } from "../../hooks";
 import { FieldHelperView } from "../FieldHelperView";
 import { Role } from "@firecms/firebase";
+import { useUserManagement } from "../../hooks/useUserManagement";
 
 export const YupSchema = Yup.object().shape({
     id: Yup.string().required("Required"),
@@ -47,7 +47,7 @@ export function RolesDetailsForm({
     collections?: EntityCollection[]
 }) {
 
-    const { saveRole } = useProjectConfig();
+    const { saveRole } = useUserManagement();
     const isNewRole = !role;
 
     const [savingError, setSavingError] = useState<Error | undefined>();

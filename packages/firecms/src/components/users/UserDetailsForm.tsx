@@ -23,6 +23,7 @@ import { useProjectConfig } from "../../hooks/useProjectConfig";
 import { areRolesEqual } from "../../utils/permissions";
 import { FieldHelperView } from "../FieldHelperView";
 import { useFireCMSBackend } from "../../hooks";
+import { useUserManagement } from "../../hooks/useUserManagement";
 
 export const YupSchema = Yup.object().shape({
     displayName: Yup.string().required("Required"),
@@ -65,7 +66,7 @@ export function UserDetailsForm({
         saveUser,
         users,
         roles
-    } = useProjectConfig();
+    } = useUserManagement();
     const isNewUser = !userProp;
 
     const onUserUpdated = useCallback((savedUser: FireCMSUserProject): Promise<FireCMSUserProject> => {

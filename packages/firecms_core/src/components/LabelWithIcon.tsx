@@ -9,8 +9,7 @@ interface LabelWithIconProps {
 }
 
 /**
- * Render the label of a form field for a given property, with the corresponding
- * icon.
+ * Render the label of with an icon and the title of a property
  * @group Form custom fields
  */
 export function LabelWithIcon({

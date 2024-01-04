@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { DataType, EntityReference, FieldProps, GeoPoint } from "../../types";
 
 import { ArrayContainer } from "../../components";
-import { FieldHelperText, LabelWithIcon } from "../components";
+import { FieldHelperText } from "../components";
+
+import { LabelWithIcon } from "../../components";
 import {
     AddIcon,
     ArrowDropDownIcon,

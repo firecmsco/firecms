@@ -3,6 +3,7 @@ import { CollectionEditorPermissions, PersistedCollection } from "@firecms/colle
 import { FireCMSUserProject } from "../types";
 import { ProjectConfig } from "../hooks";
 import { Role } from "@firecms/firebase";
+import { UserManagement } from "../hooks/useBuildUserManagement";
 
 export const RESERVED_GROUPS = ["Admin"];
 
@@ -89,11 +90,11 @@ export function getUserRoles(roles: Role[], fireCMSUser: FireCMSUserProject): Ro
 
 export function resolveCollectionConfigPermissions({
                                                        user,
-                                                       currentProjectController,
+                                                       userManagement,
                                                        collection
                                                    }: {
     user: User | null,
-    currentProjectController: ProjectConfig,
+    userManagement: UserManagement,
     collection?: PersistedCollection
 }): CollectionEditorPermissions {
 
@@ -103,8 +104,8 @@ export function resolveCollectionConfigPermissions({
         deleteCollections: false
     };
 
-    const fireCMSUser = user && currentProjectController.users.find((u) => u.uid === user.uid);
-    const userRoles: Role[] | undefined = fireCMSUser ? getUserRoles(currentProjectController.roles, fireCMSUser) : undefined;
+    const fireCMSUser = user && userManagement.users.find((u) => u.uid === user.uid);
+    const userRoles: Role[] | undefined = fireCMSUser ? getUserRoles(userManagement.roles, fireCMSUser) : undefined;
     if (!fireCMSUser || !userRoles) {
         return baseConfigPermissions;
     }

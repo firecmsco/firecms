@@ -12,7 +12,7 @@ import {
     Tooltip
 } from "@firecms/core";
 import { Role } from "@firecms/firebase";
-import { useProjectConfig } from "../../hooks";
+import { useUserManagement } from "../../hooks/useUserManagement";
 
 export function RolesTable({
                                onRoleClicked,
@@ -25,7 +25,7 @@ export function RolesTable({
     const {
         roles,
         deleteRole
-    } = useProjectConfig();
+    } = useUserManagement();
 
     const [roleToBeDeleted, setRoleToBeDeleted] = useState<Role | undefined>(undefined);
     const [deleteInProgress, setDeleteInProgress] = useState<boolean>(false);

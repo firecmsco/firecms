@@ -1,32 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import {
-    collection,
-    deleteDoc,
-    doc,
-    DocumentSnapshot,
-    Firestore,
-    getFirestore,
-    onSnapshot,
-    setDoc
-} from "firebase/firestore";
+import { doc, DocumentSnapshot, Firestore, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
 import { FireCMSUserProject, ProjectSubscriptionPlan } from "../types";
-import { CMSType, UploadFileProps } from "@firecms/core";
+import { UploadFileProps } from "@firecms/core";
 import { FirebaseStorage, getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "firebase/storage";
 import { ProjectsApi } from "../api/projects";
 import { Role } from "@firecms/firebase";
 
 export type ProjectConfig = {
     projectId: string;
-    loading: boolean;
-
-    users: FireCMSUserProject[];
-    saveUser: (user: FireCMSUserProject) => Promise<FireCMSUserProject>;
-    deleteUser: (user: FireCMSUserProject) => Promise<void>;
-
-    roles: Role[];
-    saveRole: (role: Role) => Promise<void>;
-    deleteRole: (role: Role) => Promise<void>;
 
     logo?: string;
     uploadLogo: (file: File) => Promise<void>;
@@ -79,14 +61,7 @@ export function useBuildProjectConfig({
     const firestoreRef = useRef<Firestore>();
     const storageRef = useRef<FirebaseStorage>();
 
-    const [rolesLoading, setRolesLoading] = React.useState<boolean>(true);
     const [logo, setLogo] = React.useState<string | undefined>();
-    const [usersLoading, setUsersLoading] = React.useState<boolean>(true);
-    const [roles, setRoles] = React.useState<Role[]>([]);
-    const [users, setUsers] = React.useState<FireCMSUserProject[]>([]);
-
-    const [rolesError, setRolesError] = React.useState<Error | undefined>();
-    const [usersError, setUsersError] = React.useState<Error | undefined>();
 
     useEffect(() => {
         if (!backendFirebaseApp) return;
@@ -108,106 +83,6 @@ export function useBuildProjectConfig({
                 }
             }
         );
-    }, [configPath]);
-
-    useEffect(() => {
-        const firestore = firestoreRef.current;
-        if (!firestore || !configPath) return;
-
-        return onSnapshot(collection(firestore, configPath, "roles"),
-            {
-                next: (snapshot) => {
-                    setRolesError(undefined);
-                    try {
-                        const newRoles = docsToRoles(snapshot.docs);
-                        setRoles(newRoles);
-                    } catch (e) {
-                        // console.error(e);
-                        setRolesError(e as Error);
-                    }
-                    setRolesLoading(false);
-                },
-                error: (e) => {
-                    setRolesError(e);
-                    setRolesLoading(false);
-                }
-            }
-        );
-    }, [configPath]);
-
-    useEffect(() => {
-        const firestore = firestoreRef.current;
-        if (!firestore || !configPath) return;
-
-        return onSnapshot(collection(firestore, configPath, "users"),
-            {
-                next: (snapshot) => {
-                    setUsersError(undefined);
-                    try {
-                        const newUsers = docsToUsers(snapshot.docs);
-                        setUsers(newUsers);
-                    } catch (e) {
-                        // console.error(e);
-                        setUsersError(e as Error);
-                    }
-                    setUsersLoading(false);
-                },
-                error: (e) => {
-                    setUsersError(e);
-                    setUsersLoading(false);
-                }
-            }
-        );
-    }, [configPath]);
-
-    const saveUser = useCallback(async <M extends {
-        [Key: string]: CMSType
-    }>(user: FireCMSUserProject): Promise<FireCMSUserProject> => {
-
-        const firestore = firestoreRef.current;
-        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        console.debug("Persisting", user);
-        const {
-            uid,
-            ...userData
-        } = user;
-        if (uid) {
-            return projectsApi.updateUser(projectId, uid, user);
-        } else {
-            return projectsApi.createNewUser(projectId, user);
-        }
-    }, [configPath, projectId]);
-
-    const saveRole = useCallback(<M extends { [Key: string]: CMSType }>(role: Role): Promise<void> => {
-        const firestore = firestoreRef.current;
-        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        console.debug("Persisting", role);
-        const {
-            id,
-            ...roleData
-        } = role;
-        const ref = doc(firestore, configPath, "roles", id);
-        return setDoc(ref, roleData, { merge: true });
-    }, [configPath]);
-
-    const removeUser = useCallback(async <M extends {
-        [Key: string]: CMSType
-    }>(user: FireCMSUserProject): Promise<void> => {
-        const firestore = firestoreRef.current;
-        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        console.debug("Deleting", user);
-        const { uid } = user;
-        return projectsApi.deleteUser(projectId, uid);
-    }, [configPath]);
-
-    const deleteRole = useCallback(<M extends { [Key: string]: CMSType }>(role: Role): Promise<void> => {
-
-        const firestore = firestoreRef.current;
-        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        console.debug("Deleting", role);
-        const { id } = role;
-        const ref = doc(firestore, configPath, "roles", id);
-        return deleteDoc(ref);
     }, [configPath]);
 
     const uploadLogo = useCallback(async (file: File): Promise<void> => {
@@ -287,13 +162,6 @@ export function useBuildProjectConfig({
     return {
 
         projectId,
-        loading: rolesLoading || usersLoading,
-        roles,
-        users,
-        saveUser,
-        saveRole,
-        deleteUser: removeUser,
-        deleteRole,
         logo,
         uploadLogo,
         updateProjectName,
@@ -323,20 +191,4 @@ const uploadFile = (storage: FirebaseStorage, {
     console.debug("Uploading file", usedFilename, file, path, metadata);
     return uploadBytes(ref(storage, `${path}/${usedFilename}`), file, metadata)
         .then(snapshot => snapshot.ref);
-}
-
-const docsToUsers = (docs: DocumentSnapshot[]): FireCMSUserProject[] => {
-    return docs.map((doc) => ({
-        uid: doc.id,
-        ...doc.data(),
-        created_on: doc.data()?.created_on?.toDate(),
-        updated_on: doc.data()?.updated_on?.toDate()
-    } as FireCMSUserProject));
-}
-
-const docsToRoles = (docs: DocumentSnapshot[]): Role[] => {
-    return docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data()
-    } as Role));
 }

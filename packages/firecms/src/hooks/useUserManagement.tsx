@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import { ProjectConfig } from "./useBuildProjectConfig";
+import { UserManagement } from "./useBuildUserManagement";
 
-export const ProjectConfigContext = React.createContext({} as ProjectConfig);
+export const UserManagementContext = React.createContext({} as UserManagement);
 
-export const useProjectConfig = () => useContext<ProjectConfig>(ProjectConfigContext);
+export const useUserManagement = () => useContext<UserManagement>(UserManagementContext);
 
-export function ProjectConfigProvider({ children, config }: { children: React.ReactNode, config: ProjectConfig }) {
-    return <ProjectConfigContext.Provider value={config}>
+export function UserManagementProvider({ children, userManagement }: { children: React.ReactNode, userManagement: UserManagement }) {
+    return <UserManagementContext.Provider value={userManagement}>
         {children}
-    </ProjectConfigContext.Provider>;
+    </UserManagementContext.Provider>;
 }

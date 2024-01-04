@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import { FastField, FieldProps as FormikFieldProps, useFormikContext } from "formik";
 
-import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../components";
+import { FieldHelperText, FormikArrayContainer } from "../components";
+import { LabelWithIcon } from "../../components";
 import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";

@@ -164,16 +164,20 @@ export type FireCMSProAppProps = {
      */
     firestoreIndexesBuilder?: FirestoreIndexesBuilder;
 
-    components?: {
-        /**
-         * Component to be used to render the login view
-         */
-        LoginView?: React.ComponentType<FirebaseLoginViewProps>;
+    components?: ComponentsRegistry;
 
-        /**
-         * Component to be used to render the home page
-         */
-        HomePage?: React.ComponentType;
-    }
+    backendApiHost?: string;
 
+};
+
+export type ComponentsRegistry = {
+    /**
+     * Component to be used to render the login view
+     */
+    LoginView?: React.ComponentType<FirebaseLoginViewProps>;
+
+    /**
+     * Component to be used to render the home page
+     */
+    HomePage?: React.ComponentType;
 };

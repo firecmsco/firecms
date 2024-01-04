@@ -1,7 +1,8 @@
 import React, { useCallback } from "react";
 
 import { EnumType, FieldProps, ResolvedProperty } from "../../types";
-import { FieldHelperText, LabelWithIcon } from "../components";
+import { FieldHelperText } from "../components";
+import { LabelWithIcon } from "../../components";
 import { useClearRestoreValue } from "../../hooks";
 import { EnumValuesChip } from "../../preview";
 import { enumToObjectEntries, getIconForProperty, getLabelOrConfigFrom } from "../../util";

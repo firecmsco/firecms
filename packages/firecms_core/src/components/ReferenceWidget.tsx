@@ -1,52 +1,38 @@
 import React, { useCallback, useMemo } from "react";
 
-import { Entity, EntityCollection, EntityReference, FilterValues, ResolvedProperty } from "../../types";
-import { getReferenceFrom, getReferencePreviewKeys } from "../../util";
-import { PropertyPreview, SkeletonPropertyComponent } from "../../preview";
-import { LabelWithIcon } from "../components";
-import {
-    useEntityFetch,
-    useFireCMSContext,
-    useNavigationController,
-    useReferenceDialog,
-    useSideEntityController
-} from "../../hooks";
-import {
-    Button,
-    ClearIcon,
-    cn,
-    ErrorIcon,
-    IconButton,
-    KeyboardTabIcon,
-    LinkIcon,
-    Tooltip,
-    Typography
-} from "@firecms/ui";
-import { ErrorBoundary, ErrorView } from "../../components";
+import { Entity, EntityCollection, EntityReference, FilterValues } from "../types";
+import { getReferenceFrom } from "../util";
+import { PreviewSize, ReferencePreview } from "../preview";
+import { useNavigationController, useReferenceDialog } from "../hooks";
+import { Button, cn } from "@firecms/ui";
 
 /**
  * This field allows selecting reference/s.
- * @param name
- * @param path
- * @param disabled
- * @param value
- * @param setValue
- * @param previewProperties
- * @param forceFilter
- * @constructor
  */
 export function ReferenceWidget<M extends Record<string, any>>({
                                                                    name,
+                                                                   multiselect = false,
                                                                    path,
                                                                    disabled,
                                                                    value,
-                                                                   setValue,
+                                                                   onReferenceSelected,
+                                                                   onMultipleReferenceSelected,
                                                                    previewProperties,
-                                                                   forceFilter
+                                                                   forceFilter,
+                                                                   size,
+                                                                   className
                                                                }: {
     name?: string,
-    value?: EntityReference,
-    setValue: (value: EntityReference | null) => void,
+    multiselect?: boolean,
+    value: EntityReference | EntityReference[] | null,
+    onReferenceSelected?: (params: {
+        reference: EntityReference | null,
+        entity: Entity<M> | null
+    }) => void,
+    onMultipleReferenceSelected?: (params: {
+        references: EntityReference[] | null,
+        entities: Entity<M>[] | null
+    }) => void,
     path: string,
     disabled?: boolean,
     previewProperties?: string[];
@@ -54,11 +40,11 @@ export function ReferenceWidget<M extends Record<string, any>>({
      * Allow selection of entities that pass the given filter only.
      */
     forceFilter?: FilterValues<string>;
+    size: PreviewSize;
+    className?: string;
 }) {
 
-    const fireCMSContext = useFireCMSContext();
     const navigationController = useNavigationController();
-    const sideEntityController = useSideEntityController();
 
     const collection: EntityCollection | undefined = useMemo(() => {
         return navigationController.getCollection(path);
@@ -68,188 +54,90 @@ export function ReferenceWidget<M extends Record<string, any>>({
         throw Error(`Couldn't find the corresponding collection for the path: ${path}`);
     }
 
-    const validValue = value && value instanceof EntityReference;
-
-    const {
-        entity,
-        dataLoading,
-        dataLoadingError
-    } = useEntityFetch({
-        path,
-        entityId: validValue ? value.id : undefined,
-        collection,
-        useCache: true
-    });
-
-    const onSingleEntitySelected = useCallback((entity: Entity<M>) => {
+    const onSingleEntitySelected = useCallback((entity: Entity<M> | null) => {
         if (disabled)
             return;
-        setValue(entity ? getReferenceFrom(entity) : null);
-    }, [disabled, setValue]);
+        if (onReferenceSelected) {
+            const reference = entity ? getReferenceFrom(entity) : null;
+            onReferenceSelected?.({ reference, entity });
+        }
+    }, [disabled, onReferenceSelected]);
+
+    const onMultipleEntitiesSelected = useCallback((entities: Entity<M>[]) => {
+        if (disabled)
+            return;
+        if (onMultipleReferenceSelected) {
+            const references = entities ? entities.map(e => getReferenceFrom(e)) : null;
+            onMultipleReferenceSelected({ references, entities });
+        }
+    }, [disabled, onReferenceSelected]);
 
     const referenceDialogController = useReferenceDialog({
-            multiselect: false,
+            multiselect,
             path,
             collection,
             onSingleEntitySelected,
+            onMultipleEntitiesSelected,
             forceFilter
         }
     );
 
-    const handleClickOpen = useCallback(() => {
-        referenceDialogController.open();
-    }, [referenceDialogController]);
-
     const clearValue = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
-        setValue(null);
-    }, [setValue]);
-
-    const seeEntityDetails = useCallback((e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (entity) {
-            fireCMSContext.onAnalyticsEvent?.("entity_click_from_reference", {
-                path: entity.path,
-                entityId: entity.id
-            });
-            sideEntityController.open({
-                entityId: entity.id,
-                path,
-                updateUrl: true
-            });
-        }
-    }, [entity, path, sideEntityController]);
-
-    const buildEntityView = (collection?: EntityCollection<any>) => {
-
-        const missingEntity = entity && !entity.values;
-
-        let body: React.ReactNode;
-        if (!collection) {
-            body = (
-                <ErrorView
-                    error={"The specified collection does not exist. Check console"}/>
-            );
-        } else if (missingEntity) {
-            body = (
-                <Tooltip title={value && value.path}>
-                    <div className="flex items-center p-4 flex-grow">
-                        <ErrorIcon size={"small"} color={"error"}/>
-                        <div className="ml-4">Missing
-                            reference {entity && entity.id}</div>
-                    </div>
-                </Tooltip>
-            );
+        if (multiselect) {
+            onMultipleEntitiesSelected([]);
         } else {
-            if (validValue) {
-
-                const listProperties = getReferencePreviewKeys(collection, fireCMSContext.propertyConfigs, previewProperties, 3);
-
-                body = (
-                    <div className="flex flex-col flex-grow ml-4 mr-4">
-
-                        {listProperties && listProperties.map((key) => {
-                            const property = collection.properties[key as string];
-                            if (!property) return null;
-                            return (
-                                <div
-                                    key={`reference_previews_${key as string}`}
-                                    className="mt-1 mb-1">
-                                    <ErrorBoundary>{
-                                        entity
-                                            ? <PropertyPreview
-                                                propertyKey={key as string}
-                                                value={(entity.values)[key]}
-                                                property={property as ResolvedProperty}
-                                                entity={entity}
-                                                size={"tiny"}/>
-                                            : <SkeletonPropertyComponent
-                                                property={property as ResolvedProperty}
-                                                size={"tiny"}/>}
-                                    </ErrorBoundary>
-                                </div>
-                            );
-                        })}
-                    </div>
-                );
-            } else {
-                body = <div className="p-4 flex justify-center"
-                            onClick={disabled ? undefined : handleClickOpen}>
-                    <Typography variant={"label"}
-                                className="flex-grow text-center">No value
-                        set</Typography>
-                    {!disabled && <Button variant="outlined"
-                                          color="primary">
-                        Set
-                    </Button>}
-                </div>;
-            }
+            onSingleEntitySelected(null);
         }
+    }, [onReferenceSelected]);
 
-        return (
-            <div
-                onClick={disabled ? undefined : handleClickOpen}
-                className="flex">
+    let child: React.ReactNode;
 
-                <div className="flex flex-col flex-grow">
-
-                    <div className="flex flex-col flex-grow">
-                        <LabelWithIcon icon={<LinkIcon color={"inherit"}
-                        />}
-                                       className="text-text-secondary dark:text-text-secondary-dark ml-3.5"
-                                       title={name}
-                        />
-
-                        {entity &&
-                            <div className="self-center m-4">
-                                <Tooltip title={value && value.path}>
-                                    <Typography variant={"caption"}
-                                                className={"font-mono"}>
-                                        {entity.id}
-                                    </Typography>
-                                </Tooltip>
-                            </div>}
-
-                        {!missingEntity && entity && value &&
-                            <Tooltip title={`See details for ${entity.id}`}>
-                                <span>
-                                <IconButton
-                                    onClick={seeEntityDetails}
-                                    size="large">
-                                    <KeyboardTabIcon/>
-                                </IconButton>
-                                    </span>
-                            </Tooltip>}
-
-                        {value && <div>
-                            <Tooltip title=" Clear">
-                                <span>
-                                <IconButton
-                                    disabled={disabled}
-                                    onClick={disabled ? undefined : clearValue}
-                                    size="large">
-                                    <ClearIcon/>
-                                </IconButton>
-                                </span>
-                            </Tooltip>
-                        </div>}
-
-                    </div>
-
-                    {body}
-
-                </div>
-            </div>
-        );
+    const onEntryClick = () => {
+        if (disabled)
+            return;
+        referenceDialogController.open();
     };
 
-    return <Typography variant={"label"}
-                       className={cn("relative w-full transition-colors duration-200 ease-in border rounded font-medium",
-                           disabled ? "bg-opacity-50" : "hover:bg-opacity-75",
-                           "text-opacity-50 dark:text-white dark:text-opacity-50")}
+    if (Array.isArray(value)) {
+        child = <div className={"flex flex-col gap-4"}>
+            {value.map((ref, index) => {
+                return <ReferencePreview
+                    key={`reference_preview_${index}`}
+                    onClick={onEntryClick}
+                    reference={ref}
+                    disabled={disabled}
+                    previewProperties={previewProperties}
+                    size={size}/>
+            })}
+        </div>
+    } else if (value instanceof EntityReference) {
+        child = <ReferencePreview
+            reference={value}
+            onClick={onEntryClick}
+            disabled={disabled}
+            previewProperties={previewProperties}
+            size={size}/>
+
+    }
+    return <div className={cn("text-sm font-medium text-gray-500",
+        "min-w-80 flex flex-col gap-4",
+        "relative transition-colors duration-200 ease-in rounded font-medium",
+        disabled ? "bg-opacity-50" : "hover:bg-opacity-75",
+        "text-opacity-50 dark:text-white dark:text-opacity-50",
+        className
+    )}
     >
 
-        {collection && buildEntityView(collection)}
+        {child}
+        {!value && <div className="justify-center text-left">
+            <Button variant="outlined"
+                    color="primary"
+                    disabled={disabled}
+                    onClick={onEntryClick}>
+                Edit {name}
+            </Button>
+        </div>}
 
-    </Typography>;
+    </div>;
 }

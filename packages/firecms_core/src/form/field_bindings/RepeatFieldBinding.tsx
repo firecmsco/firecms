@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { CMSType, FieldProps, ResolvedProperty } from "../../types";
-import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../components";
+import { FieldHelperText, FormikArrayContainer } from "../components";
+import { LabelWithIcon } from "../../components";
 import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../util";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";

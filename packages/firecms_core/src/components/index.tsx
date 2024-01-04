@@ -26,3 +26,5 @@ export * from "./FireCMSLogo";
 export * from "./FireCMSAppBar";
 
 export * from "./ArrayContainer";
+export * from "./ReferenceWidget";
+export * from "./LabelWithIcon";

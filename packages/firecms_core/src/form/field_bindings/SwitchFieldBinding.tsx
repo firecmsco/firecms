@@ -1,11 +1,11 @@
 import React from "react";
 
 import { FieldProps } from "../../types";
-import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../util";
 import { FieldHelperText } from "../components/FieldHelperText";
 import { BooleanSwitchWithLabel } from "@firecms/ui";
+import { LabelWithIcon } from "../../components";
 
 type SwitchFieldProps = FieldProps<boolean>;
 

@@ -69,6 +69,8 @@ import {
     useInitialiseFirebase
 } from "@firecms/firebase";
 import { ExportAllowedParams, useImportExportPlugin } from "@firecms/data_import_export";
+import { useBuildUserManagement, UserManagement } from "./hooks/useBuildUserManagement";
+import { UserManagementProvider } from "./hooks/useUserManagement";
 
 const DOCS_LIMIT = 200;
 
@@ -167,14 +169,14 @@ export type FireCMS3ClientProps<ExtraAppbarProps = object> = {
 
 function FullLoadingView(props: {
     projectId: string,
-    currentProjectController?: ProjectConfig,
+    projectConfig?: ProjectConfig,
     FireCMSAppBarComponent?: React.ComponentType<FireCMSAppBarProps>,
     text?: string
 }) {
     return <Scaffold
         key={"project_scaffold_" + props.projectId}
-        name={props.currentProjectController?.projectName ?? ""}
-        logo={props.currentProjectController?.logo}
+        name={props.projectConfig?.projectName ?? ""}
+        logo={props.projectConfig?.logo}
         FireCMSAppBarComponent={props.FireCMSAppBarComponent}
         includeDrawer={false}>
         <CircularProgressCenter text={props.text}/>
@@ -187,37 +189,48 @@ export const FireCMS3Client = function FireCMS3Client({
                                                           ...props
                                                       }: FireCMS3ClientProps) {
 
-    const currentProjectController = useBuildProjectConfig({
+    const projectConfig = useBuildProjectConfig({
         projectId,
         backendFirebaseApp: fireCMSBackend.backendFirebaseApp,
         projectsApi: fireCMSBackend.projectsApi
     });
 
-    if (currentProjectController.loading || (!currentProjectController.clientFirebaseConfig && !currentProjectController.configError)) {
+    const userManagement = useBuildUserManagement({
+        backendFirebaseApp: fireCMSBackend.backendFirebaseApp,
+        projectId,
+        projectsApi: fireCMSBackend.projectsApi,
+        usersLimit: projectConfig.usersLimit,
+        canEditRoles: projectConfig.canEditRoles
+    });
+
+    if (userManagement.loading || (!projectConfig.clientFirebaseConfig && !projectConfig.configError)) {
         return <FullLoadingView projectId={projectId}
-                                currentProjectController={currentProjectController}
+                                projectConfig={projectConfig}
                                 FireCMSAppBarComponent={props.FireCMSAppBarComponent}
                                 text={"Client loading"}/>;
     }
 
     return <FireCMS3ClientWithController
         projectId={projectId}
-        currentProjectController={currentProjectController}
+        projectConfig={projectConfig}
         fireCMSBackend={fireCMSBackend}
         customizationLoading={false}
+        userManagement={userManagement}
         {...props}
     />;
 };
 
 export function FireCMS3ClientWithController({
-                                                 currentProjectController,
+                                                 projectConfig,
+                                                 userManagement,
                                                  projectId,
                                                  fireCMSBackend,
                                                  appConfig,
                                                  customizationLoading,
                                                  ...props
                                              }: FireCMS3ClientProps & {
-    currentProjectController: ProjectConfig;
+    userManagement: UserManagement;
+    projectConfig: ProjectConfig;
     projectId: string;
     customizationLoading: boolean;
 }) {
@@ -230,7 +243,7 @@ export function FireCMS3ClientWithController({
         configError: firebaseConfigError
     } = useInitialiseFirebase({
         onFirebaseInit: appConfig?.onFirebaseInit,
-        firebaseConfig: currentProjectController.clientFirebaseConfig,
+        firebaseConfig: projectConfig.clientFirebaseConfig,
         name: projectId
     });
 
@@ -240,12 +253,12 @@ export function FireCMS3ClientWithController({
     });
 
     const fireCMSUser = useMemo(() => {
-            if (currentProjectController.loading || authController.authLoading) return;
+            if (userManagement.loading || authController.authLoading) return;
             const user = authController.user;
             if (!user) return;
-            return currentProjectController.users.find((fireCMSUser) => fireCMSUser.email === user?.email);
+            return userManagement.users.find((fireCMSUser) => fireCMSUser.email === user?.email);
         },
-        [authController.authLoading, authController.user, currentProjectController.loading, currentProjectController.users]);
+        [authController.authLoading, authController.user, userManagement.loading, userManagement.users]);
 
     const {
         delegatedLoginLoading,
@@ -277,28 +290,28 @@ export function FireCMS3ClientWithController({
     });
 
     useEffect(() => {
-        if (currentProjectController.loading) return;
+        if (userManagement.loading) return;
         const user = authController.user;
         if (!user) return;
         if (!fireCMSUser) {
             setNotValidUser(user);
         } else {
             setNotValidUser(undefined);
-            const userRoles = getUserRoles(currentProjectController.roles, fireCMSUser);
+            const userRoles = getUserRoles(userManagement.roles, fireCMSUser);
             authController.setUserRoles(userRoles ?? null);
         }
-    }, [authController.user, currentProjectController.loading, currentProjectController.roles, currentProjectController.users, fireCMSUser]);
+    }, [authController.user, userManagement.loading, userManagement.roles, userManagement.users, fireCMSUser]);
 
     let loadingOrErrorComponent;
-    if (currentProjectController.loading) {
+    if (userManagement.loading) {
         loadingOrErrorComponent = <CircularProgressCenter text={"Project loading"}/>;
     } else if (notValidUser) {
         console.warn("No user was found with email " + notValidUser.email);
         loadingOrErrorComponent = <NoAccessError authController={authController}/>
-    } else if (currentProjectController.configError) {
+    } else if (projectConfig.configError) {
         loadingOrErrorComponent = <CenteredView fullScreen={true}>
             <ErrorView
-                error={currentProjectController.configError as Error}/>
+                error={projectConfig.configError as Error}/>
             <Typography>This error may be caused when trying to access with a user that is not
                 registered in the project.</Typography>
             <Button variant="text" onClick={authController.signOut}>Sign out</Button>
@@ -327,9 +340,9 @@ export function FireCMS3ClientWithController({
 
     if (loadingOrErrorComponent) {
         return <Scaffold
-            key={"project_scaffold_" + currentProjectController.projectId}
-            name={currentProjectController.projectName ?? ""}
-            logo={currentProjectController.logo}
+            key={"project_scaffold_" + projectConfig.projectId}
+            name={projectConfig.projectName ?? ""}
+            logo={projectConfig.logo}
             includeDrawer={false}
             FireCMSAppBarComponent={props.FireCMSAppBarComponent}
         >
@@ -342,9 +355,10 @@ export function FireCMS3ClientWithController({
         fireCMSBackend={fireCMSBackend}
         appConfig={appConfig}
         authController={authController}
-        currentProjectController={currentProjectController}
+        projectConfig={projectConfig}
         collectionConfigController={configController}
         firebaseApp={clientFirebaseApp!}
+        userManagement={userManagement}
         {...props}
     />;
 }
@@ -362,7 +376,8 @@ function NoAccessError({ authController }: {
 function FireCMS3AppAuthenticated({
                                       fireCMSUser,
                                       firebaseApp,
-                                      currentProjectController,
+                                      projectConfig,
+                                      userManagement,
                                       collectionConfigController,
                                       appConfig,
                                       authController,
@@ -375,7 +390,8 @@ function FireCMS3AppAuthenticated({
                                   }: Omit<FireCMS3ClientProps, "projectId"> & {
     fireCMSUser: FireCMSUser;
     firebaseApp: FirebaseApp;
-    currentProjectController: ProjectConfig;
+    projectConfig: ProjectConfig;
+    userManagement: UserManagement;
     fireCMSBackend: FireCMSBackend,
     collectionConfigController: CollectionsConfigController;
     authController: FirebaseAuthController;
@@ -392,9 +408,9 @@ function FireCMS3AppAuthenticated({
                                                                                                               collection
                                                                                                           }) => resolveCollectionConfigPermissions({
         user: fireCMSUser,
-        currentProjectController,
+        userManagement,
         collection
-    }), [currentProjectController, fireCMSUser]);
+    }), [userManagement, fireCMSUser]);
 
     const propertyConfigsMap = useMemo(() => {
         const map: Record<string, any> = {};
@@ -406,8 +422,8 @@ function FireCMS3AppAuthenticated({
 
     const importExportPlugin = useImportExportPlugin({
         exportAllowed: useCallback(({ collectionEntitiesCount }: ExportAllowedParams) => {
-            return currentProjectController.canExport || collectionEntitiesCount <= DOCS_LIMIT;
-        }, [currentProjectController.canExport]),
+            return projectConfig.canExport || collectionEntitiesCount <= DOCS_LIMIT;
+        }, [projectConfig.canExport]),
         notAllowedView: <SubscriptionPlanWidget showForPlans={["free"]}
                                                 message={`Upgrade to export more than ${DOCS_LIMIT} entities`}/>
     });
@@ -419,11 +435,11 @@ function FireCMS3AppAuthenticated({
         modifyCollection: appConfig?.modifyCollection,
         pathSuggestions: (path?) => {
             if (!path)
-                return fireCMSBackend.projectsApi.getRootCollections(currentProjectController.projectId);
+                return fireCMSBackend.projectsApi.getRootCollections(projectConfig.projectId);
             return Promise.resolve([]);
         },
         getUser: (uid) => {
-            return currentProjectController.users.find(u => u.uid === uid) ?? null;
+            return userManagement.users.find(u => u.uid === uid) ?? null;
         },
         collectionInference: buildCollectionInference(firebaseApp),
         getData: (path) => getFirestoreDataInPath(firebaseApp, path, 400),
@@ -438,7 +454,7 @@ function FireCMS3AppAuthenticated({
     /**
      * Update the browser title and icon
      */
-    useBrowserTitleAndIcon(currentProjectController.projectName ?? "", currentProjectController.logo);
+    useBrowserTitleAndIcon(projectConfig.projectName ?? "", projectConfig.logo);
 
     /**
      * Controller for saving some user preferences locally.
@@ -462,69 +478,71 @@ function FireCMS3AppAuthenticated({
 
     return (
         <FireCMSBackEndProvider {...fireCMSBackend}>
-            <ProjectConfigProvider config={currentProjectController}>
-                <SnackbarProvider>
-                    <ModeControllerProvider value={modeController}>
-                        <FireCMS
-                            collections={appConfig?.collections}
-                            views={appConfig?.views}
-                            basePath={basePath}
-                            baseCollectionPath={baseCollectionPath}
-                            dateTimeFormat={appConfig?.dateTimeFormat}
-                            entityViews={appConfig?.entityViews}
-                            locale={appConfig?.locale}
-                            propertyConfigs={propertyConfigsMap}
-                            authController={authController}
-                            userConfigPersistence={userConfigPersistence}
-                            dataSourceDelegate={firestoreDelegate}
-                            storageSource={storageSource}
-                            entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
-                            onAnalyticsEvent={onAnalyticsEvent}
-                            plugins={plugins}
-                            components={{
-                                missingReference: MissingReferenceWidget
-                            }}
-                        >
-                            {({
-                                  context,
-                                  loading
-                              }) => {
+            <ProjectConfigProvider config={projectConfig}>
+                <UserManagementProvider userManagement={userManagement}>
+                    <SnackbarProvider>
+                        <ModeControllerProvider value={modeController}>
+                            <FireCMS
+                                collections={appConfig?.collections}
+                                views={appConfig?.views}
+                                basePath={basePath}
+                                baseCollectionPath={baseCollectionPath}
+                                dateTimeFormat={appConfig?.dateTimeFormat}
+                                entityViews={appConfig?.entityViews}
+                                locale={appConfig?.locale}
+                                propertyConfigs={propertyConfigsMap}
+                                authController={authController}
+                                userConfigPersistence={userConfigPersistence}
+                                dataSourceDelegate={firestoreDelegate}
+                                storageSource={storageSource}
+                                entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
+                                onAnalyticsEvent={onAnalyticsEvent}
+                                plugins={plugins}
+                                components={{
+                                    missingReference: MissingReferenceWidget
+                                }}
+                            >
+                                {({
+                                      context,
+                                      loading
+                                  }) => {
 
-                                let component;
-                                if (loading) {
-                                    component =
-                                        <Scaffold
-                                            key={"project_scaffold_" + currentProjectController.projectId}
-                                            name={currentProjectController.projectName ?? ""}
-                                            logo={currentProjectController.logo}
-                                            includeDrawer={false}
-                                            FireCMSAppBarComponent={FireCMSAppBarComponent}
-                                            fireCMSAppBarComponentProps={appConfig?.fireCMSAppBarComponentProps}>
-                                            <CircularProgressCenter text={"Almost there"}/>
-                                        </Scaffold>;
-                                } else {
-                                    component = (
-                                        <Scaffold
-                                            key={"project_scaffold_" + currentProjectController.projectId}
-                                            name={currentProjectController.projectName ?? ""}
-                                            logo={currentProjectController.logo}
-                                            Drawer={FireCMSDrawer}
-                                            FireCMSAppBarComponent={FireCMSAppBarComponent}
-                                            fireCMSAppBarComponentProps={appConfig?.fireCMSAppBarComponentProps}
-                                            autoOpenDrawer={appConfig?.autoOpenDrawer}>
-                                            <NavigationRoutes
-                                                HomePage={appConfig?.HomePage ?? FireCMSProjectHomePage}
-                                                customRoutes={adminRoutes}/>
-                                            <SideDialogs/>
-                                        </Scaffold>
-                                    );
-                                }
+                                    let component;
+                                    if (loading) {
+                                        component =
+                                            <Scaffold
+                                                key={"project_scaffold_" + projectConfig.projectId}
+                                                name={projectConfig.projectName ?? ""}
+                                                logo={projectConfig.logo}
+                                                includeDrawer={false}
+                                                FireCMSAppBarComponent={FireCMSAppBarComponent}
+                                                fireCMSAppBarComponentProps={appConfig?.fireCMSAppBarComponentProps}>
+                                                <CircularProgressCenter text={"Almost there"}/>
+                                            </Scaffold>;
+                                    } else {
+                                        component = (
+                                            <Scaffold
+                                                key={"project_scaffold_" + projectConfig.projectId}
+                                                name={projectConfig.projectName ?? ""}
+                                                logo={projectConfig.logo}
+                                                Drawer={FireCMSDrawer}
+                                                FireCMSAppBarComponent={FireCMSAppBarComponent}
+                                                fireCMSAppBarComponentProps={appConfig?.fireCMSAppBarComponentProps}
+                                                autoOpenDrawer={appConfig?.autoOpenDrawer}>
+                                                <NavigationRoutes
+                                                    HomePage={appConfig?.HomePage ?? FireCMSProjectHomePage}
+                                                    customRoutes={adminRoutes}/>
+                                                <SideDialogs/>
+                                            </Scaffold>
+                                        );
+                                    }
 
-                                return component;
-                            }}
-                        </FireCMS>
-                    </ModeControllerProvider>
-                </SnackbarProvider>
+                                    return component;
+                                }}
+                            </FireCMS>
+                        </ModeControllerProvider>
+                    </SnackbarProvider>
+                </UserManagementProvider>
             </ProjectConfigProvider>
         </FireCMSBackEndProvider>
     );

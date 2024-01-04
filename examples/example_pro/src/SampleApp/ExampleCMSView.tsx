@@ -5,10 +5,13 @@ import {
     Button,
     Entity,
     EntityCollectionView,
+    EntityReference,
     GitHubIcon,
     IconButton,
     Paper,
+    ReferenceWidget,
     Tooltip,
+    Typography,
     useAuthController,
     useReferenceDialog,
     useSelectionController,
@@ -29,7 +32,7 @@ export function ExampleCMSView() {
 
     const selectionController = useSelectionController();
 
-    console.log("Selection from ExampleCMSView", selectionController.selectedEntities);
+    const [sampleSelectedProduct, setSampleSelectedProduct] = React.useState<EntityReference | null>();
 
     // hook to open the side dialog that shows the entity forms
     const sideEntityController = useSideEntityController();
@@ -99,7 +102,7 @@ export function ExampleCMSView() {
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <Paper className={"w-full flex flex-col p-4 items-start"}>
                             <p className="mb-4 flex-grow">
-                                Use this button to select an entity under the path `products` programmatically
+                                Use this button to select an entity under the path <code>products</code> programmatically
                             </p>
                             <Button
                                 variant={"outlined"}
@@ -140,6 +143,19 @@ export function ExampleCMSView() {
                                 Open custom entity
                             </Button>
                         </Paper>
+                    </div>
+
+                    <div className={"w-full"}>
+                        <Typography className={"mb-4"}>
+                            You can include reference widgets in your views:
+                        </Typography>
+                        <ReferenceWidget
+                            name={"Sample reference widget"}
+                            value={sampleSelectedProduct ?? null}
+                            onReferenceSelected={({ reference, entity }) => setSampleSelectedProduct(reference)}
+                            path={"products"}
+                            size={"small"}
+                            className={"w-full"}/>
                     </div>
 
                     <div className="w-full">

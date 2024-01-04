@@ -4,7 +4,6 @@ import { BrowserRouter, Route } from "react-router-dom";
 
 import {
     AppCheckOptions,
-    BreadcrumbUpdater,
     Button,
     CenteredView,
     CircularProgressCenter,
@@ -135,11 +134,11 @@ export type Mock3ClientProps = {
     FireCMSAppBarComponent?: React.ComponentType<FireCMSAppBarProps>
 };
 
-function FullLoadingView(props: { projectId: string, currentProjectController?: ProjectConfig }) {
+function FullLoadingView(props: { projectId: string, projectConfig?: ProjectConfig }) {
     return <Scaffold
         key={"project_scaffold_" + props.projectId}
-        name={props.currentProjectController?.projectName ?? ""}
-        logo={props.currentProjectController?.logo}
+        name={props.projectConfig?.projectName ?? ""}
+        logo={props.projectConfig?.logo}
         includeDrawer={false}>
         <CircularProgressCenter/>
     </Scaffold>;
@@ -151,29 +150,29 @@ export const Mock3Client = function Mock3Client({
                                                     ...props
                                                 }: Mock3ClientProps) {
 
-    const currentProjectController = useBuildMockProjectConfig();
+    const projectConfig = useBuildMockProjectConfig();
 
-    if (!currentProjectController.clientFirebaseConfig) {
-        return <FullLoadingView projectId={projectId} currentProjectController={currentProjectController}/>;
+    if (!projectConfig.clientFirebaseConfig) {
+        return <FullLoadingView projectId={projectId} projectConfig={projectConfig}/>;
     }
 
     return <Mock3ClientInner
         projectId={projectId}
-        currentProjectController={currentProjectController}
+        projectConfig={projectConfig}
         fireCMSBackend={fireCMSBackend}
         {...props}
     />;
 };
 
 function Mock3ClientInner({
-                              currentProjectController,
+                              projectConfig,
                               projectId,
                               onFirebaseInit,
                               fireCMSBackend,
                               signInOptions,
                               ...props
                           }: Mock3ClientProps & {
-    currentProjectController: ProjectConfig;
+    projectConfig: ProjectConfig;
     signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>;
     projectId: string;
 }) {
@@ -183,12 +182,12 @@ function Mock3ClientInner({
     const authController: FirebaseAuthController = useBuildMockAuthController();
 
     const saasUser = useMemo(() => {
-            if (currentProjectController.loading || authController.authLoading) return;
+            if (projectConfig.loading || authController.authLoading) return;
             const user = authController.user;
             if (!user) return;
-            return currentProjectController.users.find((saasUser) => saasUser.email === user?.email);
+            return projectConfig.users.find((saasUser) => saasUser.email === user?.email);
         },
-        [authController.authLoading, authController.user, currentProjectController.loading, currentProjectController.users]);
+        [authController.authLoading, authController.user, projectConfig.loading, projectConfig.users]);
 
     const {
         delegatedLoginLoading,
@@ -201,10 +200,10 @@ function Mock3ClientInner({
     });
 
     const permissions: PermissionsBuilder<PersistedCollection, FireCMSUser> = useCallback(({
-                                                                                            pathSegments,
-                                                                                            collection,
-                                                                                            user
-                                                                                        }) => resolveUserRolePermissions({
+                                                                                               pathSegments,
+                                                                                               collection,
+                                                                                               user
+                                                                                           }) => resolveUserRolePermissions({
         collection,
         roles: authController.userRoles ?? undefined,
         paths: pathSegments,
@@ -214,7 +213,7 @@ function Mock3ClientInner({
     const configController = useBuildMockCollectionsConfigController();
 
     useEffect(() => {
-        if (currentProjectController.loading) return;
+        if (projectConfig.loading) return;
         const user = authController.user;
         if (!user) return;
         if (!saasUser) {
@@ -222,23 +221,23 @@ function Mock3ClientInner({
             // throw Error("No user was found with email " + user.email);
         } else {
             setNotValidUser(undefined);
-            const userRoles = getUserRoles(currentProjectController.roles, saasUser);
+            const userRoles = getUserRoles(projectConfig.roles, saasUser);
             authController.setUserRoles(userRoles ?? null);
         }
-    }, [authController.user, currentProjectController.loading, currentProjectController.roles, currentProjectController.users, saasUser]);
+    }, [authController.user, projectConfig.loading, projectConfig.roles, projectConfig.users, saasUser]);
 
     if (notValidUser) {
         console.warn("No user was found with email " + notValidUser.email);
         return <NoAccessError authController={authController}/>
     }
 
-    if (currentProjectController.loading) {
-        return <FullLoadingView projectId={projectId} currentProjectController={currentProjectController}/>;
+    if (projectConfig.loading) {
+        return <FullLoadingView projectId={projectId} projectConfig={projectConfig}/>;
     }
 
-    if (currentProjectController.configError) {
+    if (projectConfig.configError) {
         return <ErrorView
-            error={currentProjectController.configError as Error}/>
+            error={projectConfig.configError as Error}/>
     }
 
     if (delegatedLoginError) {
@@ -249,7 +248,7 @@ function Mock3ClientInner({
     }
 
     if (!authController.user) {
-        return <FullLoadingView projectId={projectId} currentProjectController={currentProjectController}/>;
+        return <FullLoadingView projectId={projectId} projectConfig={projectConfig}/>;
     }
 
     if (!saasUser) {
@@ -261,7 +260,7 @@ function Mock3ClientInner({
         fireCMSBackend={fireCMSBackend}
         onFirebaseInit={onFirebaseInit}
         authController={authController}
-        currentProjectController={currentProjectController}
+        projectConfig={projectConfig}
         collectionConfigController={configController}
         {...props}
     />;
@@ -277,7 +276,7 @@ function NoAccessError({ authController }: { authController: FirebaseAuthControl
 
 function Mock3AppAuthenticated({
                                    fireCMSUser,
-                                   currentProjectController,
+                                   projectConfig,
                                    collectionConfigController,
                                    appCheckOptions,
                                    textSearchController,
@@ -293,7 +292,7 @@ function Mock3AppAuthenticated({
                                    FireCMSAppBarComponent
                                }: Omit<Mock3ClientProps, "projectId"> & {
     fireCMSUser: FireCMSUser;
-    currentProjectController: ProjectConfig;
+    projectConfig: ProjectConfig;
     fireCMSBackend: FireCMSBackend,
     collectionConfigController: CollectionsConfigController;
     authController: FirebaseAuthController;
@@ -310,9 +309,9 @@ function Mock3AppAuthenticated({
                                                                                                               collection
                                                                                                           }) => resolveCollectionConfigPermissions({
         user: fireCMSUser,
-        currentProjectController,
+        projectConfig,
         collection
-    }), [currentProjectController, fireCMSUser]);
+    }), [projectConfig, fireCMSUser]);
 
     const importExportPlugin = useImportExportPlugin();
 
@@ -321,12 +320,14 @@ function Mock3AppAuthenticated({
         configPermissions,
         reservedGroups: RESERVED_GROUPS,
         pathSuggestions: (path?) => {
+            if (!projectConfig.projectId)
+                throw Error("pathSuggestions: Project id not found");
             if (!path)
-                return fireCMSBackend.projectsApi.getRootCollections(currentProjectController.projectId);
+                return fireCMSBackend.projectsApi.getRootCollections(projectConfig.projectId);
             return Promise.resolve([]);
         },
         getUser: (uid) => {
-            const saasUser = currentProjectController.users.find(u => u.uid === uid);
+            const saasUser = projectConfig.users.find(u => u.uid === uid);
             console.log("Getting user", uid, saasUser);
             return saasUser ?? null;
         },
@@ -335,7 +336,7 @@ function Mock3AppAuthenticated({
     /**
      * Update the browser title and icon
      */
-    useBrowserTitleAndIcon(currentProjectController.projectName ?? "", currentProjectController.logo);
+    useBrowserTitleAndIcon(projectConfig.projectName ?? "", projectConfig.logo);
 
     /**
      * Controller for saving some user preferences locally.
@@ -354,7 +355,7 @@ function Mock3AppAuthenticated({
 
     return (
         <FireCMSBackEndProvider {...fireCMSBackend}>
-            <ProjectConfigProvider config={currentProjectController}>
+            <ProjectConfigProvider config={projectConfig}>
                 <SnackbarProvider>
                     <ModeControllerProvider
                         value={modeController}>
@@ -384,9 +385,9 @@ function Mock3AppAuthenticated({
                                 } else {
                                     component = (
                                         <Scaffold
-                                            key={"project_scaffold_" + currentProjectController.projectId}
-                                            name={currentProjectController.projectName ?? ""}
-                                            logo={currentProjectController.logo}
+                                            key={"project_scaffold_" + projectConfig.projectId}
+                                            name={projectConfig.projectName ?? ""}
+                                            logo={projectConfig.logo}
                                             Drawer={FireCMSDrawer}
                                             FireCMSAppBarComponent={FireCMSAppBarComponent}
                                             fireCMSAppBarComponentProps={appConfig?.fireCMSAppBarComponentProps}
@@ -418,13 +419,7 @@ function buildSaasRoutes() {
                             }) => <Route
         key={"navigation_admin_" + path}
         path={path}
-        element={
-            <BreadcrumbUpdater
-                path={path}
-                key={`navigation_admin_${path}`}
-                title={name}>
-                {view}
-            </BreadcrumbUpdater>}
+        element={view}
     />)
 }
 

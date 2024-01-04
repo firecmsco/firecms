@@ -4,9 +4,9 @@ import { useCollectionsConfigController } from "@firecms/collection_editor";
 import { AddIcon, Button, Container, Tooltip, Typography } from "@firecms/core";
 import { RolesTable } from "./RolesTable";
 import { RolesDetailsForm } from "./RolesDetailsForm";
-import { useProjectConfig } from "../../hooks";
 import { Role } from "@firecms/firebase";
 import { SubscriptionPlanWidget } from "../subscriptions";
+import { useUserManagement } from "../../hooks/useUserManagement";
 
 export const RolesView = React.memo(
     function RolesView() {
@@ -15,7 +15,7 @@ export const RolesView = React.memo(
         const [dialogOpen, setDialogOpen] = useState(false);
         const [selectedRole, setSelectedRole] = useState<Role | undefined>();
 
-        const { canEditRoles } = useProjectConfig();
+        const { canEditRoles } = useUserManagement();
 
         const onRoleClicked = useCallback((user: Role) => {
             setDialogOpen(true);

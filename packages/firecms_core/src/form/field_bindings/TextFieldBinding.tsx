@@ -1,11 +1,12 @@
 import React, { useCallback } from "react";
 
 import { FieldProps, PreviewType } from "../../types";
-import { FieldHelperText, LabelWithIcon } from "../components";
+import { FieldHelperText } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../util";
 import { ClearIcon, Collapse, IconButton, TextField } from "@firecms/ui";
 import { PropertyPreview } from "../../preview";
+import { LabelWithIcon } from "../../components";
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean
