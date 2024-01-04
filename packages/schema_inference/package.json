@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-alpha.59",
+  "version": "3.0.0-alpha.60",
   "name": "@firecms/schema_inference",
   "access": "public",
   "packageManager": "yarn@3.2.3",
@@ -16,7 +16,7 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/core": "^3.0.0-alpha.59",
+    "@firecms/core": "^3.0.0-alpha.60",
     "@types/node": "^20.8.9",
     "typescript": "^5.3.3"
   },
@@ -29,5 +29,5 @@
     "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
   },
-  "gitHead": "64c77fec3109f226216fe452ab828c9fcca6f7c8"
+  "gitHead": "9d82460b4b28c7b31d097ff3e0e28f77c05b1023"
 }

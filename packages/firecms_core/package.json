@@ -1,6 +1,6 @@
 {
   "name": "@firecms/core",
-  "version": "3.0.0-alpha.59",
+  "version": "3.0.0-alpha.60",
   "description": "Awesome Firebase/Firestore-based headless open-source CMS",
   "funding": {
     "url": "https://github.com/sponsors/firecmsco"
@@ -45,7 +45,7 @@
     "generateIcons": "ts-node --esm src/icons/generateIcons.ts"
   },
   "dependencies": {
-    "@firecms/ui": "^3.0.0-alpha.59",
+    "@firecms/ui": "^3.0.0-alpha.60",
     "@fontsource/ibm-plex-mono": "^5.0.8",
     "@fontsource/roboto": "^5.0.8",
     "@hello-pangea/dnd": "^16.5.0",
@@ -116,7 +116,7 @@
     "dist",
     "src"
   ],
-  "gitHead": "64c77fec3109f226216fe452ab828c9fcca6f7c8",
+  "gitHead": "9d82460b4b28c7b31d097ff3e0e28f77c05b1023",
   "publishConfig": {
     "access": "public"
   }
