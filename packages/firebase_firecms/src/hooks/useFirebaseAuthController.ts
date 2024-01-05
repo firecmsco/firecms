@@ -212,6 +212,12 @@ export const useFirebaseAuthController = ({
         doOauthLogin(auth, provider);
     }, [doOauthLogin, getProviderOptions]);
 
+
+    const skipLogin = useCallback(() => {
+        setLoginSkipped(true);
+        setLoggedUser(null);
+    }, []);
+
     return {
         user: loggedUser ?? null,
         setUser: updateUser,
@@ -221,7 +227,8 @@ export const useFirebaseAuthController = ({
         signOut: onSignOut,
         getAuthToken,
         googleLogin,
-        loginSkipped: false,
+        skipLogin,
+        loginSkipped,
         userRoles,
         setUserRoles,
         emailPasswordLogin,

@@ -62,7 +62,7 @@ export type FirebaseAuthController =
     /**
      * Skip login
      */
-    skipLogin?: () => void;
+    skipLogin: () => void;
 
     setUser: (user: FirebaseUser | null) => void;
 

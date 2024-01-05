@@ -37,7 +37,7 @@ export type EntityValues<M extends object> = M;
 /**
  * Class used to create a reference to an entity in a different path
  */
-export class EntityReference {
+export class EntityReference<M extends Record<string, any> = any> {
     /**
      * ID of the entity
      */

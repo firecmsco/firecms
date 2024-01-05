@@ -6,6 +6,29 @@ import { PreviewSize, ReferencePreview } from "../preview";
 import { useNavigationController, useReferenceDialog } from "../hooks";
 import { Button, cn } from "@firecms/ui";
 
+export type ReferenceWidgetProps<M extends Record<string, any>> = {
+    name?: string,
+    multiselect?: boolean,
+    value: EntityReference<M> | EntityReference<M>[] | null,
+    onReferenceSelected?: (params: {
+        reference: EntityReference<M> | null,
+        entity: Entity<M> | null
+    }) => void,
+    onMultipleReferenceSelected?: (params: {
+        references: EntityReference<M>[] | null,
+        entities: Entity<M>[] | null
+    }) => void,
+    path: string,
+    disabled?: boolean,
+    previewProperties?: string[];
+    /**
+     * Allow selection of entities that pass the given filter only.
+     */
+    forceFilter?: FilterValues<string>;
+    size: PreviewSize;
+    className?: string;
+};
+
 /**
  * This field allows selecting reference/s.
  */
@@ -21,28 +44,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
                                                                    forceFilter,
                                                                    size,
                                                                    className
-                                                               }: {
-    name?: string,
-    multiselect?: boolean,
-    value: EntityReference | EntityReference[] | null,
-    onReferenceSelected?: (params: {
-        reference: EntityReference | null,
-        entity: Entity<M> | null
-    }) => void,
-    onMultipleReferenceSelected?: (params: {
-        references: EntityReference[] | null,
-        entities: Entity<M>[] | null
-    }) => void,
-    path: string,
-    disabled?: boolean,
-    previewProperties?: string[];
-    /**
-     * Allow selection of entities that pass the given filter only.
-     */
-    forceFilter?: FilterValues<string>;
-    size: PreviewSize;
-    className?: string;
-}) {
+                                                               }: ReferenceWidgetProps<M>) {
 
     const navigationController = useNavigationController();
 

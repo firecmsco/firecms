@@ -203,7 +203,7 @@ export function FirebaseLoginView({
                              style={{
                                  height: "100%",
                                  width: "100%",
-                                 objectFit: "cover"
+                                 objectFit: "contain"
                              }}
                              alt={"Logo"}/>;
     } else {
