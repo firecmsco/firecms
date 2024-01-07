@@ -1,5 +1,5 @@
 ---
-id: custom_entity_views
+id: entity_views
 title: Entity views
 sidebar_label: Entity views
 ---

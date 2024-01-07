@@ -84,7 +84,7 @@ export function UsageExamples() {
                     "absolute z-10 md:w-[800px] bg-gray-900"
                 }>
 
-                <img loading="lazy"  src={overlay}
+                <img loading="lazy" src={overlay}
                      className={"rounded-xl"}
                      style={{
                          // aspectRatio: 1280 / 700,
@@ -99,9 +99,10 @@ export function UsageExamples() {
                      top: 140 + 40 * parallaxOffset,
                  }}>
                 <PhoneFrame>
-                    <img loading="lazy"  src={MMApp}
+                    <img loading="lazy"
+                         src={MMApp}
                          style={{
-                             aspectRatio: 272 / 570,
+                             aspectRatio: 654 / 1336,
                          }}
                          alt="MedicalMotion App"
                          className=""/>
@@ -119,7 +120,7 @@ export function UsageExamples() {
                     "absolute  z-30 w-96 md:w-[720px] bg-gray-100"
                 }>
 
-                <img loading="lazy"  src={editorWhite}
+                <img loading="lazy" src={editorWhite}
                      className={"rounded-xl"}
                      style={{
                          aspectRatio: 1280 / 700,

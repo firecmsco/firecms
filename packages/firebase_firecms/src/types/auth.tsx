@@ -7,7 +7,6 @@ import { Role } from "./roles";
  * @group Firebase
  */
 export type FirebaseSignInProvider =
-// | 'email'
     | "password"
     | "phone"
     | "anonymous"
@@ -80,7 +79,7 @@ export type FirebaseAuthController =
  */
 export type Authenticator<UserType extends User = User> = ({ user }: {
     /**
-     * Logged in user or null
+     * Logged-in user or null
      */
     user: UserType | null;
 

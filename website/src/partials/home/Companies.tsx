@@ -27,7 +27,7 @@ export function Companies() {
 
     return <Panel color={"light"}>
 
-        <h2 className={"text-2xl text-center text-gray-400"}>
+        <h2 className={"text-2xl text-center text-gray-600 dark:text-gray-400"}>
             Trusted by
         </h2>
         <div
