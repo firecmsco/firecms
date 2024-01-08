@@ -72,7 +72,7 @@ ${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
             console.log("The login process was not completed. Exiting...");
             return;
         }
-    } else {
+    } else if (currentUser) {
         console.log("You are logged in as", currentUser["email"]);
     }
 
