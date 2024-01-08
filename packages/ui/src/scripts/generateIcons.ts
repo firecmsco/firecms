@@ -1,8 +1,13 @@
-import { iconKeys } from "./icon_keys";
+// const fs = require("fs");
+// const path = require("path");
+// const { fileURLToPath } = require("url");
+// const { iconKeys } = require("..");
+
 import fs from "fs";
 import path from "path";
 
 import { fileURLToPath } from "url";
+import { iconKeys } from "../icons/icon_keys.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -23,7 +28,8 @@ iconKeys.forEach((key: string) => {
         }).join("") +
         "Icon";
 
-    const iconComponent = `import { Icon, IconProps } from "../Icon";
+    const iconComponent = `import React from "react";
+import { Icon, IconProps } from "../Icon";
 /**
  * @group Icons
  */

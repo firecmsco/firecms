@@ -1,6 +1,7 @@
 {
     "name": "@firecms/ui",
-    "version": "3.0.0-alpha.60",
+    "type": "module",
+    "version": "3.0.0-alpha.61",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "funding": {
         "url": "https://github.com/sponsors/firecmsco"
@@ -42,7 +43,7 @@
         "test:lint": "eslint \"src/**\" --quiet",
         "test": "jest",
         "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
-        "generateIcons": "ts-node --esm src/icons/generateIcons.ts"
+        "generateIcons": "ts-node --esm src/scripts/generateIcons.ts"
     },
     "dependencies": {
         "@material-design-icons/font": "^0.14.13",
