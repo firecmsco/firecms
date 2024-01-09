@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-alpha.61",
+  "version": "3.0.0-alpha.62",
   "name": "@firecms/firebase_pro",
   "access": "public",
   "packageManager": "yarn@3.2.3",
@@ -15,11 +15,11 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/core": "^3.0.0-alpha.61",
-    "@firecms/firebase": "^3.0.0-alpha.61",
+    "@firecms/core": "^3.0.0-alpha.62",
+    "@firecms/firebase": "^3.0.0-alpha.62",
     "@types/node": "^20.8.9",
     "firebase": "^10.7.1",
-    "firecms": "^3.0.0-alpha.61",
+    "firecms": "^3.0.0-alpha.62",
     "typescript": "^5.3.3"
   },
   "scripts": {
@@ -36,5 +36,5 @@
       "react-app/jest"
     ]
   },
-  "gitHead": "04c920a874385714dd35f320256e6def346c2a9e"
+  "gitHead": "f963018423ebe54df515903e890b2075c9dab7a8"
 }
