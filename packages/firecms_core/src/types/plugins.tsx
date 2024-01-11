@@ -78,8 +78,21 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
 
     homePage?: {
 
+        /**
+         * Additional actions to be rendered in the home page, close to the search bar.
+         */
+        additionalActions?: React.ReactNode;
+
+        /**
+         * Additional children to be rendered in the beginning of the home page.
+         */
         additionalChildrenStart?: React.ReactNode;
+
+        /**
+         * Additional children to be rendered at the end of the home page.
+         */
         additionalChildrenEnd?: React.ReactNode;
+
         /**
          * Use this component to add custom actions to the navigation card
          * in the home page.

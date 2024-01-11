@@ -46,7 +46,7 @@ export function SearchIcons({ selectedIcon = "", onIconSelected }: SearchIconsPr
         <>
             <SearchBar
                 autoFocus
-                className={"w-full sticky top-0 z-10"}
+                innerClassName={"w-full sticky top-0 z-10"}
                 onTextSearch={(value?: string) => setQuery(value ?? "")}
                 placeholder="Search for more icons…"
             />

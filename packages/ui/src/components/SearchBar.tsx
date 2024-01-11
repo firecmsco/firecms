@@ -10,6 +10,7 @@ interface SearchBarProps {
     placeholder?: string;
     expandable?: boolean;
     large?: boolean;
+    innerClassName?: string;
     className?: string;
     autoFocus?: boolean;
 }
@@ -19,6 +20,7 @@ export function SearchBar({
                               placeholder = "Search",
                               expandable = false,
                               large = false,
+                              innerClassName,
                               className,
                               autoFocus
                           }: SearchBarProps) {
@@ -49,7 +51,8 @@ export function SearchBar({
             large ? "h-14" : "h-[42px]",
             "bg-gray-50 dark:bg-gray-800 transition duration-150 ease-in-out border",
             defaultBorderMixin,
-            "rounded",)}>
+            "rounded",
+            className)}>
             <div
                 className="absolute p-0 px-4 h-full absolute pointer-events-none flex items-center justify-center top-0">
                 <SearchIcon className={"text-gray-500"}/>
@@ -68,7 +71,7 @@ export function SearchBar({
                     "pl-12 h-full text-current ",
                     expandable ? (active ? "w-[220px]" : "w-[180px]") : "",
                     focusedMixin,
-                    className
+                    innerClassName
                 )}
             />
             {searchText

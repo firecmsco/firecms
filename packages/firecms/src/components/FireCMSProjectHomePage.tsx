@@ -8,7 +8,8 @@ import {
     focusedMixin,
     getIconForView,
     NavigationGroup,
-    Typography
+    Typography,
+    useFireCMSContext
 } from "@firecms/core";
 
 import { Link as ReactLink } from "react-router-dom";
@@ -24,13 +25,22 @@ import { SubscriptionPlanWidget } from "./subscriptions";
  */
 export function FireCMSProjectHomePage() {
 
+    const plugins = useFireCMSContext().plugins;
+
+    const pluginActions: React.ReactNode[] = [];
+    if (plugins) {
+        pluginActions.push(...plugins.map((plugin, i) => (
+            plugin.homePage?.additionalActions ?? null
+        )).filter(Boolean));
+    }
     return <DefaultHomePage
+        additionalActions={<> {pluginActions} </>}
         additionalChildrenStart={<SubscriptionPlanWidget showForPlans={["free"]}/>}
         additionalChildrenEnd={
             <NavigationGroup group={"ADMIN"}>
                 <div className={"grid grid-cols-12 gap-2"}>
                     {ADMIN_VIEWS.map((view) => <div className={"col-span-12 sm:col-span-6 lg:col-span-4"}
-                                                   key={`nav_${view.path}`}>
+                                                    key={`nav_${view.path}`}>
                         <NavigationCircularCard
                             name={view.name}
                             description={view.description}

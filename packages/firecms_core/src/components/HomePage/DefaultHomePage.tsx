@@ -27,11 +27,22 @@ search.addIndex("path");
  * @group Components
  */
 export function DefaultHomePage({
+                                    additionalActions,
                                     additionalChildrenStart,
                                     additionalChildrenEnd
                                 }: {
-    additionalChildrenStart?: React.ReactNode,
-    additionalChildrenEnd?: React.ReactNode
+    /**
+     * Additional actions to be rendered in the home page, close to the search bar.
+     */
+    additionalActions?: React.ReactNode;
+    /**
+     * Additional children to be rendered in the beginning of the home page.
+     */
+    additionalChildrenStart?: React.ReactNode;
+    /**
+     * Additional children to be rendered at the end of the home page.
+     */
+    additionalChildrenEnd?: React.ReactNode;
 }) {
 
     const context = useFireCMSContext();
@@ -117,12 +128,13 @@ export function DefaultHomePage({
              className="py-2 overflow-auto h-full w-full">
             <Container maxWidth={"6xl"}>
                 <div
-                    className="sticky py-4 transition-all duration-400 ease-in-out top-0 z-10"
+                    className="w-full sticky py-4 transition-all duration-400 ease-in-out top-0 z-10 flex flex-row gap-4"
                     style={{ top: direction === "down" ? -84 : 0 }}>
                     <SearchBar onTextSearch={updateSearchResults}
                                placeholder={"Search collections"}
                                large={false}
-                               className={"w-full"}/>
+                               className={"w-full flex-grow"}/>
+                    {additionalActions}
                 </div>
 
                 <FavouritesView hidden={Boolean(filteredUrls)}/>

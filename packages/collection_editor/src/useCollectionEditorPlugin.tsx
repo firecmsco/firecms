@@ -19,6 +19,7 @@ import { CollectionsConfigController } from "./types/config_controller";
 import { RootCollectionSuggestions } from "./ui/RootCollectionSuggestions";
 import { CollectionViewHeaderAction } from "./ui/CollectionViewHeaderAction";
 import { PropertyAddColumnComponent } from "./ui/PropertyAddColumnComponent";
+import { NewCollectionButton } from "./ui/NewCollectionButton";
 
 export interface CollectionConfigControllerProps<EC extends PersistedCollection = PersistedCollection, UserType extends User = User> {
 
@@ -52,7 +53,7 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
 
     collectionInference?: CollectionInference;
 
-    getData?: (path: string, parentPaths:string[]) => Promise<object[]>;
+    getData?: (path: string, parentPaths: string[]) => Promise<object[]>;
 
     getUser: (uid: string) => UserType | null;
 
@@ -121,6 +122,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
             }
         },
         homePage: {
+            additionalActions: <NewCollectionButton/>,
             additionalChildrenEnd: <RootCollectionSuggestions/>,
             CollectionActions: HomePageEditorCollectionAction,
             AdditionalCards: NewCollectionCard,
