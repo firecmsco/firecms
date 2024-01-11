@@ -42,6 +42,7 @@ export function CollectionDetailsForm({
     existingIds?: string[];
     groups: string[] | null;
     parentCollection?: EntityCollection;
+    parentCollectionIds?: string[];
 }) {
 
     const groupRef = React.useRef<HTMLInputElement>(null);
@@ -160,7 +161,9 @@ export function CollectionDetailsForm({
                                error={touched.path && Boolean(errors.path)}/>
 
                         <FieldHelperView error={touched.path && Boolean(errors.path)}>
-                            {touched.path && Boolean(errors.path) ? errors.path : "Path that this collection is stored in, in the database"}
+                            {touched.path && Boolean(errors.path)
+                                ? errors.path
+                                : isSubcollection ? "Relative path to the parent (no need to include the parent path)" : "Path that this collection is stored in, in the database"}
                         </FieldHelperView>
 
                     </div>
@@ -318,7 +321,7 @@ export function CollectionDetailsForm({
                                         value={values.collectionGroup ?? false}
                                     />
                                     <FieldHelperView>
-                                        A collection group consists of all collections with the same ID. This allows you
+                                        A collection group consists of all collections with the same path. This allows you
                                         to query over multiple collections at once.
                                     </FieldHelperView>
                                 </div>

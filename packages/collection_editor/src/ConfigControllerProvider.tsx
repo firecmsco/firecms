@@ -46,7 +46,7 @@ export interface ConfigControllerProviderProps {
 
     getUser: (uid: string) => User | null
 
-    getData?: (path: string) => Promise<object[]>;
+    getData?: (path: string, parentPaths: string[]) => Promise<object[]>;
 
     onAnalyticsEvent?: (event: string, params?: object) => void;
 
@@ -258,7 +258,7 @@ export const ConfigControllerProvider = React.memo(
                             ? () => {
                                 console.debug("get data for property", currentPropertyDialog?.editedCollectionPath);
                                 const resolvedPath = navigation.resolveAliasesFrom(currentPropertyDialog.editedCollectionPath!)
-                                return getData(resolvedPath);
+                                return getData(resolvedPath, []);
                             }
                             : undefined}
                         onPropertyChanged={({

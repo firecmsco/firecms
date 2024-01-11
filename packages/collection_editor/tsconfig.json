@@ -40,6 +40,9 @@
       ],
       "@firecms/data_import_export": [
         "../data_import_export/src/index.ts"
+      ],
+      "@firecms/ui": [
+        "../ui/src/index.ts"
       ]
     }
   },

@@ -16,6 +16,7 @@
   "dependencies": {
     "@firecms/data_import_export": "^3.0.0-alpha.62",
     "@firecms/schema_inference": "^3.0.0-alpha.62",
+    "@firecms/ui": "^3.0.0-alpha.62",
     "json5": "^2.2.3",
     "prism-react-renderer": "^2.3.0"
   },
@@ -78,5 +79,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "f963018423ebe54df515903e890b2075c9dab7a8"
+  "gitHead": "ee6ce49b774c005d9af503f7a393487b3a9ef3d8"
 }

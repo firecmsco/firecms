@@ -52,7 +52,7 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
 
     collectionInference?: CollectionInference;
 
-    getData?: (path: string) => Promise<object[]>;
+    getData?: (path: string, parentPaths:string[]) => Promise<object[]>;
 
     getUser: (uid: string) => UserType | null;
 
@@ -85,14 +85,18 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
      onAnalyticsEvent
  }: CollectionConfigControllerProps<EC, UserType>): FireCMSPlugin<any, any, PersistedCollection> {
 
-    const injectCollections = (collections: EntityCollection[]) => {
+    const injectCollections = (baseCollections: EntityCollection[]) => {
+
         const markAsEditable = (c: PersistedCollection) => {
             makePropertiesEditable(c.properties as Properties);
             c.subcollections?.forEach(markAsEditable);
         };
         const storedCollections = collectionConfigController.collections ?? [];
         storedCollections.forEach(markAsEditable);
-        return joinCollectionLists(collections, storedCollections, [], modifyCollection);
+
+        console.debug("Collections specified in code:", baseCollections);
+        console.debug("Collections store in the backend", storedCollections);
+        return joinCollectionLists(baseCollections, storedCollections, [], modifyCollection);
     };
 
     return {

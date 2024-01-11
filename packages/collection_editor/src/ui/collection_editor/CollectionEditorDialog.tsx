@@ -25,6 +25,7 @@ import {
     PropertyConfig,
     PropertyOrBuilder,
     randomString,
+    removeInitialAndTrailingSlashes,
     removeUndefined,
     Tab,
     Tabs,
@@ -61,7 +62,7 @@ export interface CollectionEditorDialogProps {
     }
     editedCollectionPath?: string; // last segment of the path, like `locales`
     fullPath?: string; // full path of this particular collection, like `products/123/locales`
-    parentCollectionIds?: string[]; // path segments of the parent collection, like [`products`]
+    parentCollectionIds?: string[]; // path ids of the parent collection, like [`products`]
     handleClose: (collection?: EntityCollection) => void;
     configController: CollectionsConfigController;
     reservedGroups?: string[];
@@ -74,7 +75,7 @@ export interface CollectionEditorDialogProps {
     };
     pathSuggestions?: (path?: string) => Promise<string[]>;
     getUser: (uid: string) => User | null;
-    getData?: (path: string) => Promise<object[]>;
+    getData?: (path: string, parentPaths: string[]) => Promise<object[]>;
     parentCollection?: PersistedCollection;
 }
 
@@ -423,6 +424,7 @@ export function CollectionEditorDialogInternal<M extends {
             {(formikHelpers) => {
                 const {
                     values,
+                    errors,
                     setFieldValue,
                     isSubmitting,
                     dirty,
@@ -431,13 +433,11 @@ export function CollectionEditorDialogInternal<M extends {
 
                 const path = values.path ?? editedCollectionPath;
                 const updatedFullPath = fullPath?.includes("/") ? fullPath?.split("/").slice(0, -1).join("/") + "/" + path : path; // TODO: this path is wrong
-                console.log("CollectionEditorDialog", {
-                    fullPath,
-                    path,
-                    updatedFullPath
-                });
-                const resolvedPath = navigation.resolveAliasesFrom(updatedFullPath);
-                const getDataWithPath = resolvedPath && getData ? () => getData(resolvedPath) : undefined;
+                const pathError = validatePath(path, isNewCollection, existingPaths, values.id);
+
+                const parentPaths = !pathError && parentCollectionIds ? navigation.convertIdsToPaths(parentCollectionIds) : undefined;
+                const resolvedPath = !pathError ? navigation.resolveAliasesFrom(updatedFullPath) : undefined;
+                const getDataWithPath = resolvedPath && getData ? () => getData(resolvedPath, parentPaths ?? []) : undefined;
 
                 // eslint-disable-next-line react-hooks/rules-of-hooks
                 useEffect(() => {
@@ -543,6 +543,7 @@ export function CollectionEditorDialogInternal<M extends {
                                     existingPaths={existingPaths}
                                     existingIds={existingIds}
                                     groups={groups}
+                                    parentCollectionIds={parentCollectionIds}
                                     parentCollection={parentCollection}
                                     isNewCollection={isNewCollection}/>}
 
@@ -728,6 +729,11 @@ const validatePath = (value: string, isNewCollection: boolean, existingPaths: st
     //     error = "There is already a collection which uses this path as an id";
     if (isNewCollection && existingPaths?.includes(value.trim().toLowerCase()) && !idValue)
         error = "There is already a collection with the specified path. If you want to have multiple collections referring to the same database path, make sure the have different ids";
+
+    const subpaths = removeInitialAndTrailingSlashes(value).split("/");
+    if (subpaths.length % 2 === 0) {
+        error = `Collection paths must have an odd number of segments: ${value}`;
+    }
     return error;
 };
 

@@ -90,6 +90,7 @@ export function CollectionEditorWelcomeView({
                                   colorScheme={"cyanLighter"}
                                   onClick={() => {
                                       setFieldValue("name", unslugify(suggestion));
+                                      setFieldValue("id", suggestion);
                                       setFieldValue("path", suggestion);
                                       setFieldValue("properties", undefined);
                                       onContinue();
