@@ -1,3 +1,4 @@
+import React from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import { focusedMixin } from "../styles";
 import { cn } from "../util";

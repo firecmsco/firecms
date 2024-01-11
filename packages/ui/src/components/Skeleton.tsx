@@ -1,3 +1,4 @@
+import React from "react";
 import { cn } from "../util";
 
 export type SkeletonProps = {

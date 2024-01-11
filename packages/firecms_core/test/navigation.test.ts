@@ -1,46 +1,46 @@
 import { expect, it } from "@jest/globals";
-import { getCollectionByPathOrAlias, resolveCollectionPathAliases } from "../src/core/util/navigation_utils";
 import { siteConfig } from "./test_site_config";
-import { getNavigationEntriesFromPathInternal } from "../src/core/util/navigation_from_path";
 import { EntityCollection } from "../src/types";
+import { getCollectionByPathOrId, resolveCollectionPathIds } from "../src";
+import { getNavigationEntriesFromPathInternal } from "../src/util/navigation_from_path";
 
 const collections = siteConfig.collections as EntityCollection[];
 
 it("collection view matches ok", () => {
 
-    const collectionViewFromPath = getCollectionByPathOrAlias("products", collections);
+    const collectionViewFromPath = getCollectionByPathOrId("products", collections);
     expect(
-        collectionViewFromPath && collectionViewFromPath.id
+        collectionViewFromPath && collectionViewFromPath.path
     ).toEqual("products");
 
-    const collectionViewFromPath1 = getCollectionByPathOrAlias("products/pid/locales", collections);
+    const collectionViewFromPath1 = getCollectionByPathOrId("products/pid/locales", collections);
     expect(
-        collectionViewFromPath1 && collectionViewFromPath1.id
+        collectionViewFromPath1 && collectionViewFromPath1.path
     ).toEqual("locales");
 
-    const collectionViewFromPath2 = getCollectionByPathOrAlias("sites/es/products", collections);
+    const collectionViewFromPath2 = getCollectionByPathOrId("sites/es/products", collections);
     expect(
-        collectionViewFromPath2 && collectionViewFromPath2.id
+        collectionViewFromPath2 && collectionViewFromPath2.path
     ).toEqual("sites/es/products");
 
-    const collectionViewFromPath3 = getCollectionByPathOrAlias("sites/es/products/pid/locales", collections);
+    const collectionViewFromPath3 = getCollectionByPathOrId("sites/es/products/pid/locales", collections);
     expect(
-        collectionViewFromPath3 && collectionViewFromPath3.id
+        collectionViewFromPath3 && collectionViewFromPath3.path
     ).toEqual("locales");
 
     expect(
-        () => getCollectionByPathOrAlias("products/pid", collections)
+        () => getCollectionByPathOrId("products/pid", collections)
     ).toThrow(
         "Collection paths must have an odd number of segments: products/pid"
     );
 
     expect(
-        getCollectionByPathOrAlias("products", [])
+        getCollectionByPathOrId("products", [])
     ).toEqual(undefined);
 
-    const collectionViewFromPath10 = getCollectionByPathOrAlias("products/id/subcollection_inline", collections);
+    const collectionViewFromPath10 = getCollectionByPathOrId("products/id/subcollection_inline", collections);
     expect(
-        collectionViewFromPath10 && collectionViewFromPath10.id
+        collectionViewFromPath10 && collectionViewFromPath10.path
     ).toEqual("products/id/subcollection_inline");
 
 });
@@ -80,18 +80,18 @@ it("build entity collection array 2", () => {
 
 it("Test aliases", () => {
 
-    const resolvedPath = resolveCollectionPathAliases("u", collections);
+    const resolvedPath = resolveCollectionPathIds("u", collections);
     expect(resolvedPath).toEqual("users");
 
-    const resolvedPath2 = resolveCollectionPathAliases("u/123/products", collections);
+    const resolvedPath2 = resolveCollectionPathIds("u/123/products", collections);
     expect(resolvedPath2).toEqual("users/123/products");
 
-    const resolvedPath3 = resolveCollectionPathAliases("u/123/p", collections);
+    const resolvedPath3 = resolveCollectionPathIds("u/123/p", collections);
     expect(resolvedPath3).toEqual("users/123/products");
 
-    const resolvedPath4 = resolveCollectionPathAliases("users/123/p", collections);
+    const resolvedPath4 = resolveCollectionPathIds("users/123/p", collections);
     expect(resolvedPath4).toEqual("users/123/products");
 
-    const resolvedPath5 = resolveCollectionPathAliases("products/id/subcollection_inline", collections);
+    const resolvedPath5 = resolveCollectionPathIds("products/id/subcollection_inline", collections);
     expect(resolvedPath5).toEqual("products/id/subcollection_inline");
 });

@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { CMSView } from "@firecms/core";
 import { ProjectSettings } from "../components/settings/ProjectSettings";
 import { UsersView } from "../components/users/UsersView";

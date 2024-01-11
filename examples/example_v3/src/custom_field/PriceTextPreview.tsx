@@ -5,7 +5,6 @@ export function PriceTextPreview({
                                      property,
                                      size,
                                      customProps,
-                                     entity
                                  }: PropertyPreviewProps<number>) {
 
     return (

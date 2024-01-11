@@ -54,7 +54,7 @@ export function StorageItemPreview({
                     <PropertyPreview propertyKey={name}
                                      value={value}
                                      property={property}
-                                     entity={entity}
+                                     // entity={entity}
                                      size={size}/>
                 </ErrorBoundary>
             }

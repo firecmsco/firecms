@@ -129,7 +129,7 @@ export type NavigationController = {
     refreshNavigation: () => void;
 
     /**
-     * Retrieve all the related parent collections for a given path
+     * Retrieve all the related parent references for a given path
      * @param path
      */
     getParentReferencesFromPath: (path: string) => EntityReference[];
@@ -139,6 +139,12 @@ export type NavigationController = {
      * @param path
      */
     getParentCollectionIds: (path: string) => string[];
+
+    /**
+     * Resolve paths from a list of ids
+     * @param ids
+     */
+    convertIdsToPaths: (ids: string[]) => string[];
 }
 
 /**

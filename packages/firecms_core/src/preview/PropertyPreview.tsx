@@ -1,4 +1,6 @@
 import React, { createElement } from "react";
+import equal from "react-fast-compare"
+
 import {
     CMSType,
     EntityReference,
@@ -33,7 +35,7 @@ import { ErrorView } from "../components";
 /**
  * @group Preview components
  */
-export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T>) {
+export const PropertyPreview = React.memo(function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T>) {
 
     const fireCMSContext = useFireCMSContext();
     let content: React.ReactNode | any;
@@ -44,7 +46,7 @@ export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T
         size,
         height,
         width,
-        entity
+        // entity
     } = props;
 
     const property = resolveProperty({
@@ -65,7 +67,7 @@ export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T
                 size,
                 height,
                 width,
-                entity,
+                // entity,
                 customProps: property.customProps
             });
     } else if (value === null) {
@@ -111,14 +113,14 @@ export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T
                                                     value={value}
                                                     property={property as ResolvedArrayProperty}/>;
                 }
-                // else if (arrayProperty.of.dataType === "map") {
-                //     content =
-                //         <ArrayOfMapsPreview propertyKey={propertyKey}
-                //                             property={property as ResolvedArrayProperty}
-                //                             value={value as Record<string, any>[]} // This might be wrong
-                //                             entity={entity}
-                //                             size={size}
-                //         />;
+                    // else if (arrayProperty.of.dataType === "map") {
+                    //     content =
+                    //         <ArrayOfMapsPreview propertyKey={propertyKey}
+                    //                             property={property as ResolvedArrayProperty}
+                    //                             value={value as Record<string, any>[]} // This might be wrong
+                    //                             entity={entity}
+                    //                             size={size}
+                    //         />;
                 // }
                 else if (arrayProperty.of.dataType === "reference") {
                     content = <ArrayOfReferencesPreview {...props}
@@ -180,7 +182,7 @@ export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T
                     disabled={!property.path}
                     previewProperties={property.previewProperties}
                     size={props.size}
-                    onClick={props.onClick}
+                    // onClick={props.onClick}
                     reference={value as EntityReference}
                 />;
             } else {
@@ -209,7 +211,7 @@ export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T
     }
 
     return content === undefined || content === null ? <EmptyValue/> : content;
-}
+}, equal);
 
 function buildWrongValueType(name: string | undefined, dataType: string, value: any) {
     console.warn(`Unexpected value for property ${name}, of type ${dataType}`, value);

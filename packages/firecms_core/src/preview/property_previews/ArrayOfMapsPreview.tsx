@@ -13,7 +13,7 @@ export function ArrayOfMapsPreview({
                                        value,
                                        property: inputProperty,
                                        size,
-                                       entity
+                                       // entity
                                    }: PropertyPreviewProps<Record<string, any>[]>) {
     const fireCMSContext = useFireCMSContext();
 
@@ -67,7 +67,7 @@ export function ArrayOfMapsPreview({
                                                     propertyKey={key as string}
                                                     value={(v)[key]}
                                                     property={properties[key as string]}
-                                                    entity={entity}
+                                                    // entity={entity}
                                                     size={"small"}/>
                                             </ErrorBoundary>
                                         </div>

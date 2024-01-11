@@ -1,3 +1,4 @@
+import React from "react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
 import { cn, useInjectStyles } from "../util";

@@ -1,4 +1,5 @@
 const fontaine = require("fontaine");
+const path = require("path");
 require("dotenv").config();
 
 module.exports = {
@@ -16,8 +17,7 @@ module.exports = {
         docSearchApiKey: process.env.REACT_APP_DOC_SEARCH_KEY,
         docSearchAppId: process.env.REACT_APP_DOC_SEARCH_APP_ID,
     },
-    webpack: {
-    },
+    webpack: {},
 
     plugins: [
         "docusaurus-tailwindcss-loader",
@@ -28,6 +28,22 @@ module.exports = {
         //         watch: false,
         //     }
         // ],
+        function () {
+
+            return {
+                name: "local-links",
+                configureWebpack(_config, _isServer) {
+                    return {
+                        resolve: {
+                            alias: {
+                                "firecms": path.resolve(__dirname, "../packages/firecms/src"),
+                                "@firecms/ui": path.resolve(__dirname, "../packages/ui/src"),
+                            },
+                        },
+                    };
+                },
+            };
+        },
         function fontainePlugin(_context, _options) {
             return {
                 name: "fontaine-plugin",
@@ -80,16 +96,16 @@ module.exports = {
         headTags: [
             // Declare some json-ld structured data
             {
-                tagName: 'script',
+                tagName: "script",
                 attributes: {
-                    type: 'application/ld+json',
+                    type: "application/ld+json",
                 },
                 innerHTML: JSON.stringify({
-                    '@context': 'https://schema.org/',
-                    '@type': 'Organization',
-                    name: 'Meta Open Source',
-                    url: 'https://opensource.fb.com/',
-                    logo: 'https://opensource.fb.com/img/logos/Meta-Open-Source.svg',
+                    "@context": "https://schema.org/",
+                    "@type": "Organization",
+                    name: "Meta Open Source",
+                    url: "https://opensource.fb.com/",
+                    logo: "https://opensource.fb.com/img/logos/Meta-Open-Source.svg",
                 }),
             },
         ],

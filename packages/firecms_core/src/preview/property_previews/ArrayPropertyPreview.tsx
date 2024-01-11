@@ -15,7 +15,7 @@ export function ArrayPropertyPreview({
                                          propertyKey,
                                          value,
                                          property: inputProperty,
-                                         entity,
+                                         // entity,
                                          size
                                      }: PropertyPreviewProps<any[]>) {
 
@@ -53,7 +53,7 @@ export function ArrayPropertyPreview({
                                     <ErrorBoundary>
                                         <PropertyPreview
                                             propertyKey={propertyKey}
-                                            entity={entity}
+                                            // entity={entity}
                                             value={value}
                                             property={of}
                                             size={childSize}/>

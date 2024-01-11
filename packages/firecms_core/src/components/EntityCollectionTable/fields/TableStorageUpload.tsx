@@ -302,7 +302,7 @@ export function TableStorageItemPreview({
                         propertyKey={"ignore"} // TODO: Fix this
                         value={value}
                         property={property}
-                        entity={entity}
+                        // entity={entity}
                         size={size}/>
                 </ErrorBoundary>
             }

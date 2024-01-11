@@ -13,7 +13,7 @@ import { ErrorBoundary } from "../../components";
  */
 export function ArrayOfStorageComponentsPreview({
                                                     propertyKey,
-                                                    entity,
+                                                    // entity,
                                                     value,
                                                     property: inputProperty,
                                                     size
@@ -44,7 +44,7 @@ export function ArrayOfStorageComponentsPreview({
                         <PropertyPreview
                             propertyKey={propertyKey}
                             value={v}
-                            entity={entity}
+                            // entity={entity}
                             property={property.of as ResolvedProperty<string>}
                             size={childSize}/>
                     </ErrorBoundary>

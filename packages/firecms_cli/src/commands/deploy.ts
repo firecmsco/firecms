@@ -13,8 +13,8 @@ import chalk from "chalk";
 export async function deploy(projectId: string, env: "prod" | "dev") {
     const currentUser = await getCurrentUser(env);
     if (!currentUser) {
-        console.log("You are not logged in");
-        console.log(`Run ${chalk.bold("firecms login")} to log in`);
+        console.log("⚠️ You are not logged in");
+        console.log(`Run ${chalk.red.bold("firecms login")} to log in`);
         return;
     }
     console.log("Starting deploy");

@@ -16,7 +16,7 @@ export function ArrayOneOfPreview({
                                       value,
                                       property: inputProperty,
                                       size,
-                                      entity
+                                      // entity
                                   }: PropertyPreviewProps<any[]>) {
 
     const fireCMSContext = useFireCMSContext();
@@ -55,7 +55,7 @@ export function ArrayOneOfPreview({
                                 {value && <PropertyPreview
                                     propertyKey={propertyKey}
                                     value={value[valueField]}
-                                    entity={entity}
+                                    // entity={entity}
                                     property={(property.resolvedProperties[index] ?? properties[value[typeField]]) as ResolvedProperty<any>}
                                     size={childSize}/>}
                             </ErrorBoundary>

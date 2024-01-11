@@ -160,7 +160,7 @@ function ReferencePreviewExisting<M extends Record<string, any> = any>({ referen
                                             propertyKey={key as string}
                                             value={getValueInPath(usedEntity.values, key)}
                                             property={childProperty as ResolvedProperty}
-                                            entity={usedEntity}
+                                            // entity={usedEntity}
                                             size={"tiny"}/>
                                         : <SkeletonPropertyComponent
                                             property={childProperty as ResolvedProperty}

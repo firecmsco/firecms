@@ -27,7 +27,7 @@ export interface PropertyPreviewProps<T extends CMSType = any, CustomProps = any
     /**
      * Click handler
      */
-    onClick?: () => void;
+    // onClick?: () => void;
 
     /**
      * Desired size of the preview, depending on the context.
@@ -54,6 +54,6 @@ export interface PropertyPreviewProps<T extends CMSType = any, CustomProps = any
     /**
      * Entity this property refers to
      */
-    entity?: Entity<M>;
+    // entity?: Entity<M>;
 
 }

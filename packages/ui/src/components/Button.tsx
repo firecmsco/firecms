@@ -28,7 +28,7 @@ export function Button<P extends React.ElementType>({
                                                     }: ButtonProps<P>) {
 
     const baseClasses =
-        "rounded-md border uppercase inline-flex items-center justify-center p-2 px-4 text-sm font-medium focus:outline-none transition ease-in-out duration-150 gap-2";
+        "h-fit rounded-md border uppercase inline-flex items-center justify-center p-2 px-4 text-sm font-medium focus:outline-none transition ease-in-out duration-150 gap-2";
 
     const buttonClasses = cn(
         {
@@ -45,8 +45,8 @@ export function Button<P extends React.ElementType>({
     const sizeClasses = cn(
         {
             "py-1 px-2": size === "small",
-            "py-2 px-4": size === "medium",
-            "py-2 px-5": size === "large"
+            "py-2 px-3.5": size === "medium",
+            "py-3 px-4": size === "large"
         }
     );
 

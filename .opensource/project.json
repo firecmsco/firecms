@@ -10,7 +10,7 @@
         "website/docs/quickstart.mdx": "Quickstart",
         "website/docs/collections/collections.md": "Collections",
         "website/docs/properties/custom_fields.md": "Custom fields",
-        "website/docs/navigation/custom_top_level_views.mdx": "Custom views",
+        "website/docs/navigation/top_level_views.mdx": "Custom views",
         "website/docs/properties/custom_previews.md": "Custom previews",
         "website/docs/firebase_setup.md": "Firebase setup",
         "website/docs/deployment.md": "Deployment"

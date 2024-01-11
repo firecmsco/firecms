@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { paperMixin } from "../styles";

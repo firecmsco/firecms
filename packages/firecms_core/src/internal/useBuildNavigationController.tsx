@@ -17,10 +17,10 @@ import {
     UserConfigurationPersistence
 } from "../types";
 import {
-    getCollectionByPathOrAlias,
+    getCollectionByPathOrId,
     mergeDeep,
     removeInitialAndTrailingSlashes,
-    resolveCollectionPathAliases,
+    resolveCollectionPathIds,
     resolvePermissions
 } from "../util";
 import { getParentReferencesFromPath } from "../util/parent_references_from_path";
@@ -149,7 +149,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         if (!collections)
             return undefined;
 
-        const baseCollection = getCollectionByPathOrAlias(removeInitialAndTrailingSlashes(idOrPath), collections);
+        const baseCollection = getCollectionByPathOrId(removeInitialAndTrailingSlashes(idOrPath), collections);
 
         const userOverride = includeUserOverride ? userConfigPersistence?.getCollectionConfig(idOrPath) : undefined;
 
@@ -239,7 +239,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
     const resolveAliasesFrom = useCallback((path: string): string => {
         if (!collections)
             throw Error("Collections have not been initialised yet");
-        return resolveCollectionPathAliases(path, collections);
+        return resolveCollectionPathIds(path, collections);
     }, [collections]);
 
     const state = location.state as any;
@@ -260,6 +260,21 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
     const getParentCollectionIds = useCallback((path: string): string[] => {
         return getAllParentCollectionsForPath(path).map(r => r.id);
     }, [getAllParentCollectionsForPath])
+
+    const convertIdsToPaths = useCallback((ids: string[]): string[] => {
+            let currentCollections = collections;
+            const paths: string[] = [];
+            for (let i = 0; i < ids.length; i++) {
+                const id = ids[i];
+                const collection: EntityCollection | undefined = currentCollections!.find(c => c.id === id);
+                if (!collection)
+                    throw Error(`Collection with id ${id} not found`);
+                paths.push(collection.path);
+                currentCollections = collection.subcollections;
+            }
+            return paths;
+        }
+        , [getCollectionFromIds]);
 
     return useMemo(() => ({
         collections: collections ?? [],
@@ -283,7 +298,8 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         baseLocation,
         refreshNavigation,
         getParentReferencesFromPath: getAllParentCollectionsForPath,
-        getParentCollectionIds
+        getParentCollectionIds,
+        convertIdsToPaths
     }), [baseCollectionPath, baseLocation, basePath, buildCMSUrlPath, buildUrlCollectionPath, buildUrlEditCollectionPath, collections, getAllParentCollectionsForPath, getCollection, getCollectionFromPaths, homeUrl, initialised, isUrlCollectionPath, navigationLoading, navigationLoadingError, refreshNavigation, resolveAliasesFrom, topLevelNavigation, urlPathToDataPath, views]);
 }
 

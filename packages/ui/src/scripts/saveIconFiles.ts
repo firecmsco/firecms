@@ -7,15 +7,15 @@ import fs from "fs";
 import path from "path";
 
 import { fileURLToPath } from "url";
-import { iconKeys } from "../icons/icon_keys.ts";
+// import { iconKeys } from "../icons/icon_keys.ts";
 
-function createIconFiles() {
+export function saveIconFiles(iconKeys: string[]) {
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
     fs.mkdirSync(path.join(__dirname, "../icons/components"), { recursive: true });
 
 // create empty index file
-    fs.writeFileSync(path.join(__dirname, "../icons/index.ts"), "export * from \"./icon_keys\";\nexport * from \"./cool_icon_keys.ts\";\nexport * from \"./Icon\";\nexport * from \"./GitHubIcon\";\n");
+    fs.writeFileSync(path.join(__dirname, "../icons/index.ts"), "export * from \"./icon_keys\";\nexport * from \"./cool_icon_keys\";\nexport * from \"./Icon\";\nexport * from \"./GitHubIcon\";\n");
 
 // for each key, generate a file with an Icon ts component
     iconKeys.forEach((key: string) => {
@@ -47,5 +47,4 @@ export function ${componentName}(props: IconProps) {
     });
 }
 
-createIconFiles();
 

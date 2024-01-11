@@ -101,7 +101,7 @@ export function CustomCMSApp() {
     const storageSource = useFirebaseStorageSource({ firebaseApp });
 
     const modeController = useBuildModeController();
-    const theme = useMemo(() => createCMSDefaultTheme({ mode: modeController.mode }), []);
+    const theme = useMemo(() => createCMSDefaultTheme({ mode: modeController.mode }), [modeController.mode]);
 
     const {
         authLoading,

@@ -442,7 +442,7 @@ function FireCMS3AppAuthenticated({
             return userManagement.users.find(u => u.uid === uid) ?? null;
         },
         collectionInference: buildCollectionInference(firebaseApp),
-        getData: (path) => getFirestoreDataInPath(firebaseApp, path, 400),
+        getData: (path, parentPaths) => getFirestoreDataInPath(firebaseApp, path, parentPaths, 400),
         onAnalyticsEvent
     });
 

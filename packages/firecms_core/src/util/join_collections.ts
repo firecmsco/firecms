@@ -52,9 +52,12 @@ export function joinCollectionLists(targetCollections: EntityCollection[],
             }
         });
 
-    // fetched collections that are not in the base collections
+    const sourceCollectionIds = updatedCollections.map(c => c.id);
+    // fetched collections that are not in the source collections
     const resultStoredCollections = targetCollections
-        .filter((col) => !updatedCollections.map(c => c.id).includes(col.id))
+        .filter((col) => {
+            return !sourceCollectionIds.includes(col.id);
+        })
         .map((col) => {
             if (modifyCollection) {
                 return applyModifyFunction(modifyCollection, col, parentPaths);

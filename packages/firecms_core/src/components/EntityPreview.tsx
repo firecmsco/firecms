@@ -70,7 +70,7 @@ export function EntityPreview<M extends Record<string, any>>(
                                     <PropertyPreview
                                         propertyKey={key}
                                         value={value}
-                                        entity={entity}
+                                        // entity={entity}
                                         property={property}
                                         size={"medium"}/>
                                 </div>

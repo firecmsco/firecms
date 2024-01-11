@@ -1,3 +1,5 @@
+import React from "react";
+
 import { paperMixin } from "../styles";
 import { cn } from "../util";
 

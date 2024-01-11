@@ -13,7 +13,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                                                                                             propertyKey,
                                                                                             value,
                                                                                             property,
-                                                                                            entity,
+                                                                                            // entity,
                                                                                             size
                                                                                         }: PropertyPreviewProps<T>) {
 
@@ -43,7 +43,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                             <PropertyPreview propertyKey={key}
                                              value={(value)[key]}
                                              property={mapProperty.properties![key]}
-                                             entity={entity}
+                                             // entity={entity}
                                              size={size}/>
                         </ErrorBoundary>
                     </div>
@@ -79,7 +79,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                                                 propertyKey={key}
                                                 value={(value)[key]}
                                                 property={childProperty}
-                                                entity={entity}
+                                                // entity={entity}
                                                 size={size}/>}
                                     </ErrorBoundary>
                                 </div>
@@ -91,7 +91,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                                         propertyKey={key}
                                         value={(value)[key]}
                                         property={childProperty}
-                                        entity={entity}
+                                        // entity={entity}
                                         size={size}/>
                                 </div>
                             }

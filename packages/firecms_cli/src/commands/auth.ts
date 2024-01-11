@@ -109,8 +109,8 @@ export async function logout(env: "prod" | "dev") {
 
     const userCredential = await getTokens(env);
     if (!userCredential) {
-        console.log("You are not logged in");
-        console.log(`Run ${chalk.bold("firecms login")} to log in`);
+        console.log("⚠️ You are not logged in");
+        console.log(`Run ${chalk.red.bold("firecms login")} to log in`);
         return;
     }
 
@@ -226,7 +226,7 @@ export async function refreshCredentials(env: "dev" | "prod", credentials?: obje
         if (onErr) onErr(error);
         await logout(env);
         console.error("\nError refreshing credentials", error.response?.status, error.response?.data?.message);
-        console.log(`Run ${chalk.bold("firecms login")} to log in again`);
+        console.log(`⚠️ Run ${chalk.red.bold("firecms login")} to log in again`);
         return null;
     }
 }

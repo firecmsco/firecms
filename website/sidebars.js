@@ -12,10 +12,10 @@ module.exports = {
         "deployment",
         "firebase_setup",
         {
-            "type":"category",
-            "label":"Collections",
-            "collapsed":false,
-            "items":[
+            "type": "category",
+            "label": "Collections",
+            "collapsed": false,
+            "items": [
                 "collections/collections",
                 "collections/callbacks",
                 "collections/permissions",
@@ -28,15 +28,15 @@ module.exports = {
             ]
         },
         {
-            "type":"category",
-            "label":"Properties",
-            "collapsed":true,
-            "items":[
+            "type": "category",
+            "label": "Properties",
+            "collapsed": true,
+            "items": [
                 "properties/properties_intro",
                 {
-                    "type":"category",
-                    "label":"Fields",
-                    "items":[
+                    "type": "category",
+                    "label": "Fields",
+                    "items": [
                         "properties/fields/text_fields",
                         "properties/fields/selects",
                         "properties/fields/file_upload",
@@ -50,9 +50,9 @@ module.exports = {
                     ]
                 },
                 {
-                    "type":"category",
-                    "label":"Config",
-                    "items":[
+                    "type": "category",
+                    "label": "Config",
+                    "items": [
                         "properties/config/properties_common",
                         "properties/config/string",
                         "properties/config/number",
@@ -69,11 +69,11 @@ module.exports = {
                 "properties/custom_previews"
             ]
         },
-        "custom_top_level_views",
+        "top_level_views",
         {
-            "type":"category",
-            "label":"Provided hooks",
-            "items":[
+            "type": "category",
+            "label": "Provided hooks",
+            "items": [
                 "hooks/use_auth_controller",
                 "hooks/use_side_entity_controller",
                 "hooks/use_snackbar_controller",
@@ -85,13 +85,21 @@ module.exports = {
             ]
         },
         {
-            "type":"category",
-            "label":"Recipes",
-            "collapsed":false,
-            "items":[
+            "type": "category",
+            "label": "Recipes",
+            "collapsed": false,
+            "items": [
                 "recipes/building_a_blog",
                 "recipes/copy_entity",
                 "recipes/documents_as_subcollections"
+            ]
+        },
+        {
+            "type": "category",
+            "label": "Components",
+            "collapsed": false,
+            "items": [
+                "components/button",
             ]
         },
         "changelog",

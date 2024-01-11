@@ -46,7 +46,7 @@ export function getLastSegment(path: string) {
     return cleanPath;
 }
 
-export function resolveCollectionPathAliases(path: string, allCollections: EntityCollection[]): string {
+export function resolveCollectionPathIds(path: string, allCollections: EntityCollection[]): string {
 
     const cleanPath = removeInitialAndTrailingSlashes(path);
     const subpaths = cleanPath.split("/");
@@ -61,12 +61,12 @@ export function resolveCollectionPathAliases(path: string, allCollections: Entit
     }
 
     if (subpaths.length > 1) {
-        const segmentCollection = getCollectionByPathOrAlias(resolvedAliased ?? subpaths[0], allCollections);
+        const segmentCollection = getCollectionByPathOrId(resolvedAliased ?? subpaths[0], allCollections);
         if (!segmentCollection?.subcollections) {
             return cleanPath;
         }
         const restOfThePath = cleanPath.split("/").slice(2).join("/");
-        return (resolvedAliased ?? subpaths[0]) + "/" + subpaths[1] + "/" + resolveCollectionPathAliases(restOfThePath, segmentCollection.subcollections);
+        return (resolvedAliased ?? subpaths[0]) + "/" + subpaths[1] + "/" + resolveCollectionPathIds(restOfThePath, segmentCollection.subcollections);
     } else {
         return resolvedAliased ?? cleanPath;
     }
@@ -78,7 +78,7 @@ export function resolveCollectionPathAliases(path: string, allCollections: Entit
  * @param pathOrAlias
  * @param collections
  */
-export function getCollectionByPathOrAlias(pathOrAlias: string, collections: EntityCollection[]): EntityCollection | undefined {
+export function getCollectionByPathOrId(pathOrAlias: string, collections: EntityCollection[]): EntityCollection | undefined {
 
     const subpaths = removeInitialAndTrailingSlashes(pathOrAlias).split("/");
     if (subpaths.length % 2 === 0) {
@@ -100,7 +100,7 @@ export function getCollectionByPathOrAlias(pathOrAlias: string, collections: Ent
             } else if (navigationEntry.subcollections) {
                 const newPath = pathOrAlias.replace(subpathCombination, "").split("/").slice(2).join("/");
                 if (newPath.length > 0)
-                    result = getCollectionByPathOrAlias(newPath, navigationEntry.subcollections);
+                    result = getCollectionByPathOrId(newPath, navigationEntry.subcollections);
             }
         }
         if (result) break;

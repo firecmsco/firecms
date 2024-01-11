@@ -1486,6 +1486,7 @@ __metadata:
   dependencies:
     "@firecms/data_import_export": ^3.0.0-alpha.62
     "@firecms/schema_inference": ^3.0.0-alpha.62
+    "@firecms/ui": ^3.0.0-alpha.62
     "@jest/globals": ^29.7.0
     "@types/react": ^18.2.45
     "@types/react-dom": ^18.2.17
@@ -7906,10 +7907,10 @@ __metadata:
     "@vitejs/plugin-react": ^4.2.1
     autoprefixer: ^10.4.16
     firecms: ^3.0.0-alpha.62
-    postcss: ^8.4.32
+    postcss: ^8.4.33
     react: ^18.2.0
     react-dom: ^18.2.0
-    tailwindcss: ^3.3.6
+    tailwindcss: ^3.4.1
     typescript: ^5.3.3
     vite: ^4.5.1
   languageName: unknown
@@ -7941,12 +7942,12 @@ __metadata:
     eslint-plugin-react-hooks: ^4.6.0
     eslint-plugin-react-refresh: ^0.3.5
     firebase: ^10.7.1
-    postcss: ^8.4.32
+    postcss: ^8.4.33
     react: ^18.2.0
     react-dom: ^18.2.0
     react-router: ^6.21.0
     react-router-dom: ^6.21.0
-    tailwindcss: ^3.3.6
+    tailwindcss: ^3.4.1
     typescript: ^5.3.3
     vite: ^4.5.1
     vite-plugin-fonts: ^0.7.0
@@ -12407,14 +12408,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.4.32":
-  version: 8.4.32
-  resolution: "postcss@npm:8.4.32"
+"postcss@npm:^8.4.33":
+  version: 8.4.33
+  resolution: "postcss@npm:8.4.33"
   dependencies:
     nanoid: ^3.3.7
     picocolors: ^1.0.0
     source-map-js: ^1.0.2
-  checksum: 220d9d0bf5d65be7ed31006c523bfb11619461d296245c1231831f90150aeb4a31eab9983ac9c5c89759a3ca8b60b3e0d098574964e1691673c3ce5c494305ae
+  checksum: 6f98b2af4b76632a3de20c4f47bf0e984a1ce1a531cf11adcb0b1d63a6cbda0aae4165e578b66c32ca4879038e3eaad386a6be725a8fb4429c78e3c1ab858fe9
   languageName: node
   linkType: hard
 
@@ -13358,12 +13359,12 @@ __metadata:
     eslint-plugin-react-hooks: ^4.6.0
     firebase: ^10.7.1
     firecms: ^3.0.0-alpha.62
-    postcss: ^8.4.32
+    postcss: ^8.4.33
     react: ^18.2.0
     react-dom: ^18.2.0
     react-router: ^6.21.0
     react-router-dom: ^6.21.0
-    tailwindcss: ^3.3.6
+    tailwindcss: ^3.4.1
     typescript: ^5.3.3
     vite: ^4.5.1
     vite-plugin-fonts: ^0.7.0
@@ -14110,9 +14111,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:^3.3.6":
-  version: 3.3.6
-  resolution: "tailwindcss@npm:3.3.6"
+"tailwindcss@npm:^3.4.1":
+  version: 3.4.1
+  resolution: "tailwindcss@npm:3.4.1"
   dependencies:
     "@alloc/quick-lru": ^5.2.0
     arg: ^5.0.2
@@ -14139,7 +14140,7 @@ __metadata:
   bin:
     tailwind: lib/cli.js
     tailwindcss: lib/cli.js
-  checksum: 44632ac471248ecebcee1a2f15a0c3e9b8383513e71692b586aa2fe56dca12828ff70de3d340c898f27b27480e8475e5eb345fb2ebb813028bb2393578a34337
+  checksum: ef5a587dd32bb4e91e1549ead6162f85f0b78d3e6ffd8b4e8eeb15585b7b886cb3af6ae9df5092ed8ccb7e590608d1b3eec79ca08c862b07cd9ff7e72f73104b
   languageName: node
   linkType: hard
 

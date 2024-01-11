@@ -4,9 +4,10 @@ const fireCMSTailwindConfig = {
     content: [
         "./index.html",
         "./src/**/*.{js,ts,jsx,tsx}",
+        "../**/node_modules/firecms/src/**/*.{js,ts,jsx,tsx}",
         "../**/node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}",
     ],
-    corePlugins: { preflight: false },
+    corePlugins: { preflight: true },
     theme: {
         extend: {
             colors: {
