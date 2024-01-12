@@ -9,6 +9,19 @@ overriding fields if you need a custom implementation, but that might be not
 enough in certain cases, where you might want to have a full **custom view related
 to one entity**.
 
+Typical use cases for this are:
+- **Preview** of an entity in a specific format.
+- Checking how the data looks in a **web page**.
+- Defining a **dashboard**.
+- Modifying the state of the **form**.
+- ... or any other custom view you might need.
+
+When your entity view is defined you can add directly to the collection
+or include it in the entity view registry.
+
+
+### Defining an entity custom view
+
 In order to accomplish that you can pass an array of `EntityCustomView`
 to your schema. Like in this example:
 
@@ -19,72 +32,85 @@ import { EntityCustomView, buildCollection } from "@firecms/firebase";
 const sampleView: EntityCustomView = {
     path: "preview",
     name: "Blog entry preview",
-    Builder: ({ collection, entity, modifiedValues }) => (
+    Builder: ({ collection, entity, modifiedValues, formContext }) => (
         // This is a custom component that you can build as any React component
         <MyBlogPreviewComponent entity={entity}
                                 modifiedValues={modifiedValues}/>
     )
 };
+```
+
+### Add your entity view directly to the collection
+
+If you are editing a collection in code you can add your custom view
+directly to the collection:
+
+```tsx
+import { buildCollection } from "@firecms/firebase";
 
 const blogCollection = buildCollection({
-    name: "Blog entry",
+    id: "blog",
+    path: "blog",
+    name: "Blog",
     views: [
-        sampleView
+        {
+            path: "preview",
+            name: "Blog entry preview",
+            Builder: ({ collection, entity, modifiedValues }) => (
+                // This is a custom component that you can build as any React component
+                <MyBlogPreviewComponent entity={entity}
+                                        modifiedValues={modifiedValues}/>
+            )
+        }
     ],
     properties: {
-        name: {
-            name: "Name",
-            validation: { required: true },
-            dataType: "string"
-        },
-        header_image: {
-            name: "Header image",
-            dataType: "string",
-            storage: {
-                mediaType: "image",
-                storagePath: "images",
-                acceptedFiles: ["image/*"],
-                metadata: {
-                    cacheControl: "max-age=1000000"
-                }
-            }
-        },
-        content: {
-            name: "Content",
-            description: "Example of a complex array with multiple properties as children",
-            validation: { required: true },
-            dataType: "array",
-            columnWidth: 400,
-            oneOf: {
-                properties: {
-                    images: {
-                        name: "Images",
-                        dataType: "array",
-                        of: {
-                            dataType: "string",
-                            storage: {
-                                mediaType: "image",
-                                storagePath: "images",
-                                acceptedFiles: ["image/*"]
-                            }
-                        }
-                    },
-                    text: {
-                        dataType: "string",
-                        name: "Text",
-                        markdown: true
-                    },
-                    products: {
-                        name: "Products",
-                        dataType: "array",
-                        of: {
-                            dataType: "reference",
-                            path: "products"
-                        }
-                    }
-                }
-            }
-        }
+        // ... your blog properties here
     }
-})
+});
 ```
+
+### Add your entity view to the entity view registry
+
+You might have an entity view that you want to reuse in different collections.
+In that case you can add it to the entity view registry in your 
+main `FireCMSAppConfig` export:
+
+```tsx
+import { FireCMSAppConfig } from "firecms";
+
+const appConfig: FireCMSAppConfig = {
+    version: "1",
+    collections: async (props) => {
+        return ([
+            // ... your collections here
+        ]);
+    },
+    entityViews: [{
+        key: "test-view",
+        name: "Test",
+        Builder: ({ collection, entity, modifiedValues }) => <div>Your view</div>
+    }]
+}
+
+export default appConfig;
+```
+
+This will make the entity view available in the collection editor UI.
+It is also possible to use the `entityView` prop in the collection
+with the key of the entity view you want to use:
+
+```tsx
+import { buildCollection } from "@firecms/firebase";
+
+const blogCollection = buildCollection({
+    id: "blog",
+    path: "blog",
+    name: "Blog",
+    views: ["test-view"],
+    properties: {
+        // ... your blog properties here
+    }
+});
+
+```
+

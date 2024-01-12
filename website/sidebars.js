@@ -18,9 +18,10 @@ module.exports = {
             "items": [
                 "collections/collections",
                 "collections/callbacks",
+                "collections/entity_actions",
                 "collections/permissions",
                 "collections/exporting_data",
-                "collections/multiple_filters",
+                "collections/additional_columns",
                 "collections/text_search",
                 "collections/dynamic_collections",
                 "collections/entity_views",
@@ -99,6 +100,7 @@ module.exports = {
             "label": "Components",
             "collapsed": false,
             "items": [
+                "components/components_intro",
                 "components/button",
             ]
         },
