@@ -13,15 +13,12 @@
 
 [![NPM](https://img.shields.io/npm/v/firecms.svg)](https://www.npmjs.com/package/firecms) [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 
-
-Designed by developers for developers, FireCMS is a headless CMS and admin panel
+FireCMS is a headless CMS and admin panel
 that seamlessly integrates with **Firebase and Firestore** by default, but is
-also
-compatible with any backend.
+also compatible with any backend.
 
 Effortlessly generate **CRUD views** based on your configuration. FireCMS is
-simple
-to set up for standard cases and easy to extend and customize for more specific
+simple to set up for standard cases and easy to extend and customize for more specific
 needs.
 
 Built to produce collection and form views that naturally align with the
@@ -37,17 +34,10 @@ out-of-the-box experience for any project.
 FireCMS is based on this great technologies:
 
 - Typescript
+- Tailwind CSS
 - Firebase SDK 10
 - React + React Router 6
-- Tailwind CSS
 - Formik + Yup
-
-### Quickstart
-
-The easiest way to get going is to check our quickstart guide! You will just
-need to follow some quick steps:
-
-https://firecms.co/docs/quickstart
 
 ### Demo
 
@@ -57,9 +47,16 @@ https://demo.firecms.co
 
 > You can modify the data, but it gets periodically restored.
 
-### Changelog
+### Getting started
 
-https://firecms.co/docs/changelog
+The easies way to get started is through [FireCMS Cloud](https://app.firecms.co/).
+Bring your project or create a new one in seconds.
+
+It will allow you to get started without writing a single line of code. Create collections
+and entities, and start editing your data.
+
+Later on, if you need to customize the CMS, you can build and compile your own views, form fields
+and other components, and upload them to your project.
 
 ## Features
 
@@ -77,6 +74,16 @@ Featuring **real-time** support, FireCMS is perfect for apps that require
 constant updates. It also supports **text search** (through an external provider
 like Algolia, if using Firestore), **filtering and sorting**, and **exporting**
 data.
+
+### 📥📤 Data import and export
+
+FireCMS supports importing and exporting data in CSV format as well as JSON.
+Bring your data from other sources or export it to use it in other systems.
+
+We offer a robust and flexible system for defining the import and export
+configuration, allowing you to define the fields to be imported/exported, the
+format, and the mapping between the fields in the file and the fields in the
+collection.
 
 ### ✨ Robust Forms
 
@@ -135,11 +142,16 @@ You can replace the Firebase Storage implementation with your own.
 
 ## Contact and support
 
-If you need general support, you can open a GitHub issue.
+If you need general support, you can open a [GitHub issue](https://github.com/firecmsco/firecms/issues) or join
+our [Discord channel](https://discord.gg/fxy7xsQm3m).
 
 Do you need consulting setting up your Firestore-based CMS in no time? We are
 happy to help!
 `hello@firecms.co`
+
+## Changelog
+
+https://firecms.co/docs/changelog
 
 ## License
 

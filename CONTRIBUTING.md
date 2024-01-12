@@ -19,7 +19,7 @@ to start the demo project.
 
 ## Support and discussion
 
-Please join our [Discord channel](https://discord.gg/fxy7xsQm3m)  to discuss any details regarding adaptations. We are
+Please join our [Discord channel](https://discord.gg/fxy7xsQm3m) to discuss any details regarding adaptations. We are
 happy to help!
 
 You are encouraged to check with us before implementing any major changes to the library, that would like

@@ -4,7 +4,6 @@ import { productsCollection } from "./collections/products_collection";
 import { SampleEntityView } from "./custom_entity_view/SampleEntityView";
 import { colorPropertyConfig } from "./property_configs/color_property_config";
 import { pricePropertyConfig } from "./property_configs/property_config_builder";
-import { showcaseCollection } from "./collections/showcase_collection";
 
 const appConfig: FireCMSAppConfig = {
     version: "1",
@@ -15,8 +14,22 @@ const appConfig: FireCMSAppConfig = {
             // showcaseCollection
         ]);
     },
-    modifyCollection: (props) => {
-        return props.collection;
+    modifyCollection: ({ collection }) => {
+        if (collection.id === "products") {
+            return {
+                ...collection,
+                name: "Products modified",
+                entityActions: [
+                    {
+                        name: "Test",
+                        onClick: ({ entity }) => {
+                            console.log("Entity", entity);
+                        }
+                    }
+                ]
+            }
+        }
+        return collection;
     },
     propertyConfigs: [
         colorPropertyConfig,

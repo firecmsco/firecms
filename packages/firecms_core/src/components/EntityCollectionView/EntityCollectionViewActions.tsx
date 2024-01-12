@@ -48,7 +48,6 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                 id={`add_entity_${path}`}
                 onClick={onNewClick}
                 startIcon={<AddIcon/>}
-                size="large"
                 variant="filled"
                 color="primary">
                 Add {collection.singularName ?? collection.name}

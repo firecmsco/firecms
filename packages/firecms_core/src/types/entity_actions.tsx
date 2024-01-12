@@ -8,9 +8,12 @@ import { SideEntityController } from "./side_entity_controller";
 export type EntityAction<M extends object = any, UserType extends User = User> = {
     name: string;
     icon?: React.ReactElement;
-    onClick: (props: EntityActionClickProps<M, UserType>) => Promise<void>;
+    onClick: (props: EntityActionClickProps<M, UserType>) => Promise<void> | void;
+
     /**
-     * Show this action in the menu, defaults to true
+     * Show this action collapsed in the menu of the collection view.
+     * Defaults to true
+     * If false, the action will be shown in the menu
      */
     collapsed?: boolean;
 
