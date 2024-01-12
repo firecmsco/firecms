@@ -403,7 +403,7 @@ export function ImportDataPreview<M extends Record<string, any>>({
 
 function buildHeadersMappingFromData(objArr: object[]) {
     const headersMapping: Record<string, string> = {};
-    objArr.forEach((obj) => {
+    objArr.filter(Boolean).forEach((obj) => {
         Object.keys(obj).forEach((key) => {
             // @ts-ignore
             const child = obj[key];
