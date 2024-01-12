@@ -170,11 +170,11 @@ export function VersionsComparison() {
             return <a className="text-inherit"
                       href={useBaseUrl("enterprise/")}>Enterprise</a>
         if (value === "Yes")
-            return <CheckIcon width={24}/>
+            return <CheckIcon className="m-auto" width={24}/>
         if (value === "No")
-            return <RemoveIcon width={24}/>
+            return <RemoveIcon className="m-auto" width={24}/>
         if (value === "WIP")
-            return <ScheduleIcon width={24}/>
+            return <ScheduleIcon className="m-auto" width={24}/>
         return value;
     }
 

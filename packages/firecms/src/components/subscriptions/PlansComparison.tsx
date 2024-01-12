@@ -179,7 +179,7 @@ export function PlansComparison() {
         <Container className={"flex flex-col gap-4 p-8 m-auto"}>
 
             <h2 className={"text-3xl md:text-4xl font-bold my-4 text-center"}>
-                Full no-code solution
+                Full no-code/low-code solution
             </h2>
 
             <p>

@@ -36,6 +36,7 @@ export function Companies() {
             <a
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="MedicalMotion"
                 href={"https://medicalmotion.com"}>
                 <img loading="lazy"  src={isDarkTheme ? MMLogoDark : MMLogo}
                      alt="MedicalMotion Logo"
@@ -44,6 +45,7 @@ export function Companies() {
             <a
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Proton Health"
                 href={"https://www.proton-health.com"}>
                 <img loading="lazy"  src={ProtonLogo}
                      alt="MedicalMotion Logo"
@@ -52,6 +54,7 @@ export function Companies() {
             <a
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Somnio Software"
                 href={"https://www.somniosoftware.com/"}>
                 <img loading="lazy"
                      src={SomnioLogo}
@@ -61,6 +64,7 @@ export function Companies() {
             <a
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="The Planet App"
                 href={"https://theplanetapp.com"}>
                 {isDarkTheme ?
                     <TPALogoDark className="w-56 m-4"/> :
@@ -69,18 +73,21 @@ export function Companies() {
             </a>
             <a
                 target="_blank"
+                aria-label="Social Income"
                 rel="noopener noreferrer"
                 href={"https://socialincome.org"}>
                 <SocialIncomeLogo className="w-48 h-auto m-4"/>
             </a>
             <a
                 target="_blank"
+                aria-label="Oikosbrain"
                 rel="noopener noreferrer"
                 href={"https://oikosbrain.com"}>
                 <OikosLogo className="w-48 m-4"/>
             </a>
             <a
                 target="_blank"
+                aria-label="Mindswitch"
                 rel="noopener noreferrer"
                 href={"https://www.mindswitch.me/"}>
                 {isDarkTheme ?
@@ -92,6 +99,7 @@ export function Companies() {
             <a
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="GearFocus"
                 href={"https://www.gearfocus.com/"}>
                 <GearFocusLogo
                     className="w-52 m-4"/>

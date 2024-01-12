@@ -13,9 +13,9 @@ export function FireCMSCloudVersions() {
 
     const freeTier = (
         <div
-            className={clsx("h-full mx-4 p-6 border rounded-lg dark:border-gray-700 flex flex-col", defaultBorderMixin)}>
+            className={clsx("w-full max-w-xl lg:max-w-none h-full mx-4 p-6 border rounded-lg dark:border-gray-700 flex flex-col", defaultBorderMixin)}>
 
-            <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300"}>
+            <h3 className={"text-3xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300"}>
                 Free
             </h3>
             <div className={"grow"}>
@@ -24,13 +24,13 @@ export function FireCMSCloudVersions() {
                     need more features.
                 </p>
                 <ul>
-                    <li className={" list-disc"}>Unlimited projects</li>
-                    <li className={" list-disc"}>Unlimited collections</li>
-                    <li className={" list-disc"}>All available form fields</li>
-                    <li className={" list-disc"}>Schema editor and inference from data</li>
-                    <li className={" list-disc"}>Advanced data import and export</li>
-                    <li className={" list-disc"}>Default roles</li>
-                    <li className={" list-disc"}>3 users</li>
+                    <li className={"list-disc"}>Unlimited projects</li>
+                    <li className={"list-disc"}>Unlimited collections</li>
+                    <li className={"list-disc"}>All available form fields</li>
+                    <li className={"list-disc"}>Schema editor and inference from data</li>
+                    <li className={"list-disc"}>Advanced data import and export</li>
+                    <li className={"list-disc"}>Default roles</li>
+                    <li className={"list-disc"}>3 users</li>
                 </ul>
             </div>
             <div className={"text-center mt-4 text-gray-600 dark:text-gray-400 w-full"}>
@@ -42,9 +42,9 @@ export function FireCMSCloudVersions() {
 
     const plusTier = (
         <div
-            className={clsx("h-full mx-4 p-6 rounded-lg flex flex-col outline-none ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent")}>
+            className={clsx("w-full max-w-xl lg:max-w-none h-full mx-4 p-6 rounded-lg flex flex-col outline-none ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent")}>
 
-            <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300 text-primary"}>
+            <h3 className={"text-3xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300 text-primary"}>
                 Plus
             </h3>
             <div className={"grow"}>
@@ -71,9 +71,9 @@ export function FireCMSCloudVersions() {
 
     const proTier = (
         <div
-            className={clsx("h-full mx-4 p-6 border rounded-lg  dark:border-gray-700 flex flex-col", defaultBorderMixin)}>
+            className={clsx("w-full max-w-xl lg:max-w-none h-full mx-4 p-6 border rounded-lg  dark:border-gray-700 flex flex-col", defaultBorderMixin)}>
 
-            <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300"}>
+            <h3 className={"text-3xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300"}>
                 Pro
             </h3>
             <div className={"grow"}>
