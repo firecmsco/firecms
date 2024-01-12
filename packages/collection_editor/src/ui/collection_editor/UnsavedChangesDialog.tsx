@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Dialog, DialogActions, DialogContent, Typography } from "@firecms/core";
+import { Button, Dialog, DialogActions, DialogContent, Typography } from "@firecms/ui";
 
 export interface UnsavedChangesDialogProps {
     open: boolean;

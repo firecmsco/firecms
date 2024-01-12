@@ -4,11 +4,15 @@ import { format } from "date-fns";
 import * as locales from "date-fns/locale";
 
 import {
-    Chip,
     defaultDateFormat,
     DeleteConfirmationDialog,
-    DeleteIcon,
     FireCMSContext,
+    useFireCMSContext,
+    useSnackbarController
+} from "@firecms/core";
+import {
+    Chip,
+    DeleteIcon,
     IconButton,
     Table,
     TableBody,
@@ -16,9 +20,7 @@ import {
     TableHeader,
     TableRow,
     Tooltip,
-    useFireCMSContext,
-    useSnackbarController
-} from "@firecms/core";
+} from "@firecms/ui";
 import { FireCMSUserProject } from "../../types/firecms_user";
 import { getUserRoles } from "../../utils/permissions";
 import { useUserManagement } from "../../hooks/useUserManagement";

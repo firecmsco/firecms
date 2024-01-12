@@ -3,7 +3,7 @@ import {
     Property,
     PropertyPreview,
     PropertyPreviewProps
-} from "@firecms/core";
+} from "@firecms/firebase_pro";
 import { CustomShapedArrayProps } from "./CustomShapedArrayProps";
 
 export default function CustomShapedArrayPreview({

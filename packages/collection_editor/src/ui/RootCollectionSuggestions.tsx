@@ -1,12 +1,5 @@
-import {
-    AddIcon,
-    Chip,
-    Collapse,
-    Typography,
-    unslugify,
-    useAuthController,
-    useNavigationController
-} from "@firecms/core";
+import { unslugify, useAuthController, useNavigationController } from "@firecms/core";
+import { AddIcon, Chip, Collapse, Typography, } from "@firecms/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import React from "react";
 

@@ -1,7 +1,7 @@
 import { googleIcon } from "./social_icons";
 import React from "react"
 
-import { Button, cn } from "@firecms/core";
+import { Button, cn } from "@firecms/ui";
 
 export function GoogleLoginButton({
                                       onClick,

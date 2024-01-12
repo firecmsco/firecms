@@ -1,6 +1,7 @@
 import { convertDataToEntity, getPropertiesMapping, ImportConfig } from "@firecms/data_import_export";
-import { EntityCollectionTable, Properties, Typography, useSelectionController } from "@firecms/core";
+import { EntityCollectionTable, Properties, useSelectionController } from "@firecms/core";
 import { useEffect } from "react";
+import { Typography } from "@firecms/ui";
 
 export function CollectionEditorImportDataPreview({ importConfig, properties, propertiesOrder }: {
     importConfig: ImportConfig,

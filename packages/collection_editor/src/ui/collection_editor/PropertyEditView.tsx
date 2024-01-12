@@ -3,28 +3,30 @@ import equal from "react-fast-compare"
 
 import { Formik, FormikErrors, FormikProps, getIn } from "formik";
 import {
-    Button,
-    cn,
     DEFAULT_FIELD_CONFIGS,
     DeleteConfirmationDialog,
-    DeleteIcon,
-    Dialog,
-    DialogActions,
-    DialogContent,
     FieldConfigBadge,
     FieldConfigId,
     getFieldConfig,
     getFieldId,
-    IconButton,
-    InfoLabel,
     isPropertyBuilder,
     mergeDeep,
     Property,
     PropertyConfig,
-    Select,
     toSnakeCase,
-    Typography
 } from "@firecms/core";
+import {
+    Button,
+    cn,
+    DeleteIcon,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    IconButton,
+    InfoLabel,
+    Select,
+    Typography
+} from "@firecms/ui";
 import { EnumPropertyField } from "./properties/EnumPropertyField";
 import { StoragePropertyField } from "./properties/StoragePropertyField";
 import { MapPropertyField } from "./properties/MapPropertyField";

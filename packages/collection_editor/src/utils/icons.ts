@@ -1,5 +1,5 @@
 import synonyms from "./synonyms";
-import { iconKeys } from "@firecms/core";
+import { iconKeys } from "@firecms/ui";
 
 // @ts-ignore
 import * as JsSearch from "js-search";

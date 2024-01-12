@@ -1,16 +1,18 @@
 import React from "react";
 import { Field, getIn, useFormikContext } from "formik";
 import {
-    CircularProgress,
     getIconForView,
     NumberProperty,
+    StringProperty,
+    useNavigationController
+} from "@firecms/core";
+import {
+    CircularProgress,
     Select,
     SelectGroup,
     SelectItem,
-    StringProperty,
     Typography,
-    useNavigationController
-} from "@firecms/core";
+} from "@firecms/ui";
 import { FieldHelperView } from "./FieldHelperView";
 
 export function ReferencePropertyField({

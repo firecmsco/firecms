@@ -3,7 +3,6 @@ import { GoogleAuthProvider } from "firebase/auth";
 import { BrowserRouter } from "react-router-dom";
 
 import {
-    CenteredView,
     CircularProgressCenter,
     CMSAnalyticsEvent,
     CMSView,
@@ -48,6 +47,7 @@ import {
     useBuildProjectConfig
 } from "firecms";
 import { FirebaseApp } from "firebase/app";
+import { CenteredView } from "@firecms/ui";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID

@@ -1,25 +1,27 @@
 import React from "react";
 import {
+    DeleteConfirmationDialog,
+    EntityCollection,
+    EntityCustomView,
+    resolveEntityView,
+    useFireCMSContext,
+    User
+} from "@firecms/core";
+import {
     AddIcon,
     Button,
     Container,
-    DeleteConfirmationDialog,
     DeleteIcon,
-    EntityCollection,
-    EntityCustomView,
     IconButton,
     InfoLabel,
     Paper,
-    resolveEntityView,
     Table,
     TableBody,
     TableCell,
     TableRow,
     Tooltip,
     Typography,
-    useFireCMSContext,
-    User
-} from "@firecms/core";
+} from "@firecms/ui";
 import { useFormikContext } from "formik";
 import { CollectionEditorDialog } from "./CollectionEditorDialog";
 import { CollectionsConfigController } from "../../types/config_controller";

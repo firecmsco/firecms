@@ -83,7 +83,6 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
 
         const largeLayout = useLargeLayout();
 
-        const navigation = useNavigationController();
         const [drawerOpen, setDrawerOpen] = React.useState(false);
         const [onHover, setOnHover] = React.useState(false);
 
@@ -124,13 +123,11 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                     hovered={onHover}
                     setDrawerOpen={setDrawerOpen}>
                     {includeDrawer && (
-                        navigation.loading
-                            ? <CircularProgressCenter/>
-                            : <Drawer
-                                hovered={onHover}
-                                drawerOpen={computedDrawerOpen}
-                                closeDrawer={handleDrawerClose}
-                                {...drawerProps}/>)}
+                        <Drawer
+                            hovered={onHover}
+                            drawerOpen={computedDrawerOpen}
+                            closeDrawer={handleDrawerClose}
+                            {...drawerProps}/> )}
                 </StyledDrawer>
 
                 <main

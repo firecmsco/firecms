@@ -10,6 +10,7 @@
     "../collection_editor/src",
     "../data_enhancement/src",
     "../schema_inference/src",
-    "../data_import_export/src"
+    "../data_import_export/src",
+    "../ui/src"
   ]
 }

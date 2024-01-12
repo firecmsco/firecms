@@ -1,7 +1,8 @@
 import React from "react";
 
 import { FastField, getIn, useFormikContext } from "formik";
-import { DebouncedTextField, SwitchControl } from "@firecms/core";
+import { SwitchControl } from "@firecms/core";
+import { DebouncedTextField } from "@firecms/ui";
 
 export function GeneralPropertyValidation({ disabled }: {
     required?: boolean;

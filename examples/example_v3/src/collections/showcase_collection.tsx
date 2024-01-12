@@ -1,4 +1,4 @@
-import { buildCollection, buildProperty } from "@firecms/core";
+import { buildCollection, buildProperty } from "firecms";
 
 export const showcaseCollection = buildCollection({
     id: "showcase",

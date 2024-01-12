@@ -1,13 +1,15 @@
 import {
+    EntityCollection,
+    useSnackbarController
+} from "@firecms/core";
+import {
     Button,
     ContentCopyIcon,
     Dialog,
     DialogActions,
     DialogContent,
-    EntityCollection,
     Typography,
-    useSnackbarController
-} from "@firecms/core";
+} from "@firecms/ui";
 import React from "react";
 import JSON5 from "json5";
 import { Highlight, themes } from "prism-react-renderer"

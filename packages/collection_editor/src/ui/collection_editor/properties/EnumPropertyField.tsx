@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { getIn, useFormikContext } from "formik";
-import { EnumValueConfig, resolveEnumValues, Select, SelectItem, useSnackbarController } from "@firecms/core";
+import { EnumValueConfig, resolveEnumValues, useSnackbarController } from "@firecms/core";
+import { Select, SelectItem } from "@firecms/ui";
 import { EnumForm } from "../EnumForm";
 import { StringPropertyValidation } from "./validation/StringPropertyValidation";
 import { ArrayPropertyValidation } from "./validation/ArrayPropertyValidation";

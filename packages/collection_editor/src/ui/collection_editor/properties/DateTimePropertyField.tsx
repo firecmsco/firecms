@@ -1,6 +1,7 @@
 import React from "react";
 import { getIn, useFormikContext } from "formik";
-import { NumberProperty, Select, SelectItem, StringProperty } from "@firecms/core";
+import { NumberProperty, StringProperty } from "@firecms/core";
+import { Select, SelectItem } from "@firecms/ui";
 import { GeneralPropertyValidation } from "./validation/GeneralPropertyValidation";
 import { ValidationPanel } from "./validation/ValidationPanel";
 import { FieldHelperView } from "./FieldHelperView";

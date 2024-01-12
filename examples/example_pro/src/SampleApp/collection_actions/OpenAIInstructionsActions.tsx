@@ -7,7 +7,7 @@ import {
     IconButton,
     Typography,
     useSideDialogsController
-} from "@firecms/core";
+} from "@firecms/firebase_pro";
 
 /**
  * This whole component is a big hack used to point the user to the

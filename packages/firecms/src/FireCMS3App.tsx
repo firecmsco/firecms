@@ -3,8 +3,6 @@ import { FirebaseApp } from "firebase/app";
 import { BrowserRouter, Route } from "react-router-dom";
 
 import {
-    Button,
-    CenteredView,
     CircularProgressCenter,
     ErrorView,
     FireCMS,
@@ -17,7 +15,6 @@ import {
     Scaffold,
     SideDialogs,
     SnackbarProvider,
-    Typography,
     useBrowserTitleAndIcon,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
@@ -71,6 +68,7 @@ import {
 import { ExportAllowedParams, useImportExportPlugin } from "@firecms/data_import_export";
 import { useBuildUserManagement, UserManagement } from "./hooks/useBuildUserManagement";
 import { UserManagementProvider } from "./hooks/useUserManagement";
+import { Button, CenteredView, Typography } from "@firecms/ui";
 
 const DOCS_LIMIT = 200;
 

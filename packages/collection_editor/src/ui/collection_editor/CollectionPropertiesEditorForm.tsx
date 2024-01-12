@@ -2,6 +2,19 @@ import React, { useEffect, useMemo, useState } from "react";
 
 import { Field, FormikErrors, getIn, useFormikContext } from "formik";
 import {
+    EntityCollection,
+    ErrorBoundary,
+    isPropertyBuilder,
+    makePropertiesEditable,
+    Properties,
+    Property,
+    PropertyConfig,
+    PropertyOrBuilder,
+    useLargeLayout,
+    User,
+    useSnackbarController
+} from "@firecms/core";
+import {
     AddIcon,
     AutoAwesomeIcon,
     Button,
@@ -10,22 +23,11 @@ import {
     CodeIcon,
     DebouncedTextField,
     defaultBorderMixin,
-    EntityCollection,
-    ErrorBoundary,
     IconButton,
-    isPropertyBuilder,
-    makePropertiesEditable,
     Paper,
-    Properties,
-    Property,
-    PropertyConfig,
-    PropertyOrBuilder,
     Tooltip,
     Typography,
-    useLargeLayout,
-    User,
-    useSnackbarController
-} from "@firecms/core";
+} from "@firecms/ui";
 
 import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath } from "./util";
 import { OnPropertyChangedParams, PropertyForm, PropertyFormDialog } from "./PropertyEditView";

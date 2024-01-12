@@ -9,6 +9,7 @@
     "src/test",
     "../firecms_core/src",
     "../schema_inference/src",
-    "../data_import_export/src"
+    "../data_import_export/src",
+    "../ui/src"
   ]
 }

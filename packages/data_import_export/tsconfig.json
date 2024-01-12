@@ -37,6 +37,9 @@
       ],
       "@firecms/schema_inference": [
         "../schema_inference/src/index.ts"
+      ],
+      "@firecms/ui": [
+        "../ui/src/index.ts"
       ]
     }
   },

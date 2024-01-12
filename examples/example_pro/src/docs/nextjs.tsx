@@ -3,7 +3,7 @@
 import React, { useCallback } from "react";
 
 import { User as FirebaseUser } from "firebase/auth";
-import { buildCollection, buildProperty, EntityReference, } from "@firecms/core";
+import { buildCollection, buildProperty, EntityReference, } from "@firecms/firebase_pro";
 import { Authenticator, FireCMSProApp } from "@firecms/firebase_pro";
 
 import "typeface-rubik";

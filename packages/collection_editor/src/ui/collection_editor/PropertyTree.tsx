@@ -1,17 +1,12 @@
 import {
     AdditionalFieldDelegate,
-    AutoAwesomeIcon,
     CMSType,
-    defaultBorderMixin,
-    DragHandleIcon,
     ErrorBoundary,
-    IconButton,
     isPropertyBuilder,
     PropertiesOrBuilders,
     PropertyOrBuilder,
-    RemoveIcon,
-    Tooltip
 } from "@firecms/core";
+import { AutoAwesomeIcon, defaultBorderMixin, DragHandleIcon, IconButton, RemoveIcon, Tooltip } from "@firecms/ui";
 import { NonEditablePropertyPreview, PropertyFieldPreview } from "./PropertyFieldPreview";
 import { DragDropContext, Draggable, DraggableProvided, Droppable } from "@hello-pangea/dnd";
 import { getFullId, idToPropertiesPath } from "./util";

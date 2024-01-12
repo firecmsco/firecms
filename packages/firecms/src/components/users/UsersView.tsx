@@ -1,4 +1,4 @@
-import { AddIcon, Button, Container, Typography } from "@firecms/core";
+import { AddIcon, Button, Container, Typography } from "@firecms/ui";
 
 import { UsersTable } from "./UsersTable";
 import { UserDetailsForm } from "./UserDetailsForm";

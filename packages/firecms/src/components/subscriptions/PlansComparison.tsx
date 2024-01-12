@@ -1,14 +1,16 @@
 import React from "react";
 import {
-    Button,
     CircularProgressCenter,
+    useNavigationController
+} from "@firecms/core";
+import {
+    Button,
     CloseIcon,
     Container,
     Dialog,
     DialogContent,
     IconButton,
-    useNavigationController
-} from "@firecms/core";
+} from "@firecms/ui";
 import { useNavigate } from "react-router-dom";
 import { useProjectConfig, useSubscriptionsForUserController } from "../../hooks";
 import { ProductView } from "./ProductView";

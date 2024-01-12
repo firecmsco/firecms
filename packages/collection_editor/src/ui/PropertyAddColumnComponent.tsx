@@ -1,4 +1,5 @@
-import { AddIcon, getDefaultPropertiesOrder, Tooltip, useAuthController } from "@firecms/core";
+import { getDefaultPropertiesOrder, useAuthController } from "@firecms/core";
+import { AddIcon, Tooltip } from "@firecms/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { PersistedCollection } from "../types/persisted_collection";
 

@@ -1,4 +1,4 @@
-import { getIconForProperty, LabelWithIcon } from "@firecms/core";
+import { getIconForProperty, LabelWithIcon } from "firecms";
 import { FieldProps, PropertyConfig, PropertyPreviewProps, Typography } from "firecms";
 
 export const colorPropertyConfig: PropertyConfig = {

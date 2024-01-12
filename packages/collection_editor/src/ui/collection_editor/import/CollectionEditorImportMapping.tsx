@@ -7,17 +7,19 @@ import {
 import { getIn, useFormikContext } from "formik";
 
 import {
-    Container,
     FieldConfigBadge,
     getFieldConfig,
     getFieldId,
     Properties,
     Property,
     PropertyConfig,
+} from "@firecms/core";
+import {
+    Container,
     Select,
     Tooltip,
     Typography
-} from "@firecms/core";
+} from "@firecms/ui";
 import React, { useState } from "react";
 import { OnPropertyChangedParams, PropertyFormDialog, PropertyWithId } from "../PropertyEditView";
 import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath } from "../util";

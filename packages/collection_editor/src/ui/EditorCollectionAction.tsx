@@ -1,17 +1,19 @@
 import equal from "react-fast-compare"
 
 import {
-    Button,
     CollectionActionsProps,
-    IconButton,
     mergeDeep,
-    SaveIcon,
-    SettingsIcon,
-    Tooltip,
     useAuthController,
     useNavigationController,
     useSnackbarController
 } from "@firecms/core";
+import {
+    Button,
+    IconButton,
+    SaveIcon,
+    SettingsIcon,
+    Tooltip,
+} from "@firecms/ui";
 
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { useCollectionsConfigController } from "../useCollectionsConfigController";

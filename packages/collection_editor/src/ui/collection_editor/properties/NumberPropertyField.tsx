@@ -1,7 +1,7 @@
 import React from "react";
 import { NumberPropertyValidation } from "./validation/NumberPropertyValidation";
 import { ValidationPanel } from "./validation/ValidationPanel";
-import { TextField } from "@firecms/core";
+import { TextField } from "@firecms/ui";
 import { getIn, useFormikContext } from "formik";
 
 export function NumberPropertyField({ disabled }: {

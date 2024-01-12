@@ -2,6 +2,11 @@ import React, { useEffect } from "react";
 
 import { FastField, Formik, getIn, useFormikContext } from "formik";
 import {
+    EnumValueConfig,
+    EnumValues,
+    FormikArrayContainer,
+} from "@firecms/core";
+import {
     AutoAwesomeIcon,
     Button,
     CircularProgress,
@@ -9,15 +14,12 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    EnumValueConfig,
-    EnumValues,
-    FormikArrayContainer,
     IconButton,
     ListIcon,
     Paper,
     SettingsIcon,
     Typography
-} from "@firecms/core";
+} from "@firecms/ui";
 import { FieldHelperView } from "./properties/FieldHelperView";
 import { extractEnumFromValues } from "@firecms/schema_inference";
 

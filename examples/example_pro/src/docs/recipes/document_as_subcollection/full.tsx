@@ -1,5 +1,5 @@
 import React from "react";
-import { buildCollection, EntityCollectionsBuilder, } from "@firecms/core";
+import { buildCollection, EntityCollectionsBuilder, } from "@firecms/firebase_pro";
 
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";

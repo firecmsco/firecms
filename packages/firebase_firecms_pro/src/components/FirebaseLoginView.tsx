@@ -2,19 +2,21 @@ import React, { ReactNode, useCallback, useEffect, useRef, useState } from "reac
 
 import { FirebaseApp, FirebaseError } from "firebase/app";
 import {
+    ErrorView,
+    FireCMSLogo,
+    useModeController,
+} from "@firecms/core";
+import {
     ArrowBackIcon,
     Button,
     CircularProgress,
     EmailIcon,
-    ErrorView,
-    FireCMSLogo,
     IconButton,
     PersonOutlineIcon,
     PhoneIcon,
     TextField,
     Typography,
-    useModeController,
-} from "@firecms/core";
+} from "@firecms/ui";
 import { appleIcon, facebookIcon, githubIcon, googleIcon, microsoftIcon, twitterIcon } from "./social_icons";
 import {
     getAuth,

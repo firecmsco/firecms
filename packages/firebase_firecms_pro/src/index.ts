@@ -6,3 +6,4 @@ export { FirebaseLoginView, LoginButton } from "./components/FirebaseLoginView";
 
 export * from "@firecms/firebase";
 export * from "@firecms/core";
+export * from "@firecms/ui";

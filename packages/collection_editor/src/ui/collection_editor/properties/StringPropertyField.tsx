@@ -3,7 +3,7 @@ import { StringPropertyValidation } from "./validation/StringPropertyValidation"
 import { ValidationPanel } from "./validation/ValidationPanel";
 import { getIn, useFormikContext } from "formik";
 
-import { TextField } from "@firecms/core";
+import { TextField } from "@firecms/ui";
 
 export function StringPropertyField({
                                         widgetId,

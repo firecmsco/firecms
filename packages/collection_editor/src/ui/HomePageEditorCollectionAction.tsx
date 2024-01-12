@@ -1,14 +1,10 @@
 import {
     DeleteConfirmationDialog,
-    DeleteIcon,
-    IconButton,
-    Menu,
-    MenuItem,
-    MoreVertIcon,
     PluginHomePageActionsProps,
-    SettingsIcon,
-    useAuthController, useSnackbarController
+    useAuthController,
+    useSnackbarController
 } from "@firecms/core";
+import { DeleteIcon, IconButton, Menu, MenuItem, MoreVertIcon, SettingsIcon, } from "@firecms/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { useCallback, useState } from "react";
 import { useCollectionsConfigController } from "../useCollectionsConfigController";

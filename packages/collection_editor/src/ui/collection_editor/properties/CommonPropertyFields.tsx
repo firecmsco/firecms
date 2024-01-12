@@ -1,5 +1,5 @@
 import { Field, getIn, useFormikContext } from "formik";
-import { DebouncedTextField, TextField } from "@firecms/core";
+import { DebouncedTextField, TextField } from "@firecms/ui";
 import { PropertyWithId } from "../PropertyEditView";
 import React from "react";
 import { FieldHelperView } from "./FieldHelperView";

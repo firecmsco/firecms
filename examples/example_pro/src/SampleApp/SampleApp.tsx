@@ -7,7 +7,7 @@ import "@fontsource/roboto"
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
 
-import { CMSView, GitHubIcon, IconButton, Tooltip } from "@firecms/core";
+import { CMSView, GitHubIcon, IconButton, Tooltip } from "@firecms/firebase_pro";
 import { Authenticator, FireCMSProApp, FirestoreIndexesBuilder, } from "@firecms/firebase_pro";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { useImportExportPlugin } from "@firecms/data_import_export";

@@ -12,7 +12,7 @@ import {
     Typography,
     useDataSource,
     useStorageSource
-} from "@firecms/core";
+} from "@firecms/firebase_pro";
 import { productsCollection } from "./products_collection";
 import { BlogEntry, Product } from "./types";
 

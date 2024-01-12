@@ -13,13 +13,11 @@ import {
     MultiSelectItem,
     TextField,
     Typography,
-    useSnackbarController
-} from "@firecms/core";
+} from "@firecms/ui";
 import { Role } from "@firecms/firebase";
+import { useSnackbarController } from "@firecms/core";
 
 import { FireCMSUserProject } from "../../types/firecms_user";
-
-import { useProjectConfig } from "../../hooks/useProjectConfig";
 import { areRolesEqual } from "../../utils/permissions";
 import { FieldHelperView } from "../FieldHelperView";
 import { useFireCMSBackend } from "../../hooks";

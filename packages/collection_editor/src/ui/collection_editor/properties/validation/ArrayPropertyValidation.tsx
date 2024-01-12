@@ -1,7 +1,7 @@
 import React from "react";
 
 import { getIn, useFormikContext } from "formik";
-import { DebouncedTextField } from "@firecms/core";
+import { DebouncedTextField } from "@firecms/ui";
 import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
 
 export function ArrayPropertyValidation({

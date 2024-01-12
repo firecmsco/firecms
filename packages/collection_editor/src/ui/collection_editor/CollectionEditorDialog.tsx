@@ -1,22 +1,11 @@
 import * as React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
-    ArrowBackIcon,
-    Button,
     CircularProgressCenter,
     CMSType,
-    cn,
-    coolIconKeys,
-    defaultBorderMixin,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DoneIcon,
     EntityCollection,
     ErrorView,
-    IconButton,
     isPropertyBuilder,
-    LoadingButton,
     MapProperty,
     mergeDeep,
     Properties,
@@ -27,8 +16,6 @@ import {
     randomString,
     removeInitialAndTrailingSlashes,
     removeUndefined,
-    Tab,
-    Tabs,
     TopNavigationResult,
     useAuthController,
     useFireCMSContext,
@@ -36,6 +23,21 @@ import {
     User,
     useSnackbarController
 } from "@firecms/core";
+import {
+    ArrowBackIcon,
+    Button,
+    cn,
+    coolIconKeys,
+    defaultBorderMixin,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DoneIcon,
+    IconButton,
+    LoadingButton,
+    Tab,
+    Tabs,
+} from "@firecms/ui";
 import { Form, Formik, FormikHelpers } from "formik";
 import { YupSchema } from "./CollectionYupValidation";
 import { CollectionDetailsForm } from "./CollectionDetailsForm";

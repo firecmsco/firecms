@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import { Form, Formik, getIn } from "formik";
 import * as Yup from "yup";
 
+import { EntityCollection, toSnakeCase, } from "@firecms/core";
 import {
     Button,
     Checkbox,
@@ -9,7 +10,6 @@ import {
     DialogActions,
     DialogContent,
     DoneIcon,
-    EntityCollection,
     LoadingButton,
     Paper,
     Select,
@@ -21,9 +21,8 @@ import {
     TableRow,
     TextField,
     Tooltip,
-    toSnakeCase,
     Typography
-} from "@firecms/core";
+} from "@firecms/ui";
 import { FieldHelperView } from "../FieldHelperView";
 import { Role } from "@firecms/firebase";
 import { useUserManagement } from "../../hooks/useUserManagement";

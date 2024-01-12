@@ -1,7 +1,6 @@
+import { getPropertyInPath, Property, } from "@firecms/core";
 import {
     ChevronRightIcon,
-    getPropertyInPath,
-    Property,
     Select,
     SelectItem,
     Table,
@@ -10,7 +9,7 @@ import {
     TableHeader,
     TableRow,
     Typography
-} from "@firecms/core";
+} from "@firecms/ui";
 
 export interface DataPropertyMappingProps {
     idColumn?: string;

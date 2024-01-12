@@ -5,7 +5,7 @@ import {
     useDataSource,
     useReferenceDialog,
     useSnackbarController
-} from "@firecms/core";
+} from "@firecms/firebase_pro";
 import { useCallback } from "react";
 
 export type CopyEntityButtonProps = {

@@ -1,32 +1,34 @@
 import React, { useCallback, useEffect } from "react";
 import {
-    Button,
-    cn,
     CollectionActionsProps,
-    defaultBorderMixin,
-    Dialog,
-    DialogActions,
-    DialogContent,
     EntityCollectionTable,
     FieldConfigBadge,
-    FileUploadIcon,
     getFieldConfig,
     getPropertiesWithPropertiesOrder,
     getPropertyInPath,
-    IconButton,
     Properties,
     Property,
     resolveCollection,
     ResolvedProperties,
-    Select,
-    SelectItem,
-    Tooltip,
-    Typography,
     useFireCMSContext,
     User,
     useSelectionController,
     useSnackbarController
 } from "@firecms/core";
+import {
+    Button,
+    cn,
+    defaultBorderMixin,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    FileUploadIcon,
+    IconButton,
+    Select,
+    SelectItem,
+    Tooltip,
+    Typography,
+} from "@firecms/ui";
 import { buildEntityPropertiesFromData } from "@firecms/schema_inference";
 import { useImportConfig } from "../hooks";
 import { convertDataToEntity, getInferenceType, getPropertiesMapping } from "../utils";

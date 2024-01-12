@@ -1,14 +1,6 @@
 import React, { useCallback, useState } from "react";
-import {
-    AddIcon,
-    BooleanSwitchWithLabel,
-    Button,
-    MapProperty,
-    Paper,
-    Property,
-    PropertyConfig,
-    Typography
-} from "@firecms/core";
+import { MapProperty, Property, PropertyConfig, } from "@firecms/core";
+import { AddIcon, BooleanSwitchWithLabel, Button, Paper, Typography } from "@firecms/ui";
 import { PropertyFormDialog } from "../PropertyEditView";
 import { getIn, useFormikContext } from "formik";
 import { PropertyTree } from "../PropertyTree";

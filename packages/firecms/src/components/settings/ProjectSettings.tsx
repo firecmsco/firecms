@@ -1,15 +1,16 @@
 import React, { useDeferredValue, useEffect, useState } from "react";
 
 import {
-    CenteredView,
-    FileUpload,
     FireCMSLogo,
-    OnFileUploadRejected,
-    TextField,
-    Typography,
     useBrowserTitleAndIcon,
     useSnackbarController
 } from "@firecms/core";
+import {
+    CenteredView,
+    FileUpload, OnFileUploadRejected,
+    TextField,
+    Typography,
+} from "@firecms/ui";
 import { useFireCMSBackend, useProjectConfig } from "../../hooks";
 import { ProjectSubscriptionPlans, SubscriptionPlanWidget } from "../subscriptions";
 import { SecurityRulesInstructions } from "../SecurityRulesInstructions";

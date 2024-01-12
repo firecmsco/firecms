@@ -1,20 +1,23 @@
 import {
+    ErrorBoundary,
+    FieldConfigBadge,
+    getFieldConfig,
+    isPropertyBuilder,
+    Property,
+    PropertyOrBuilder,
+    useFireCMSContext,
+} from "@firecms/core";
+import {
     cardClickableMixin,
     cardMixin,
     cardSelectedMixin,
     cn,
-    ErrorBoundary,
-    FieldConfigBadge,
     FunctionsIcon,
-    getFieldConfig,
-    isPropertyBuilder,
     Paper,
-    Property,
-    PropertyOrBuilder,
     RemoveCircleIcon,
     Typography,
-    useFireCMSContext
-} from "@firecms/core";
+} from "@firecms/ui";
+
 
 import { editableProperty } from "../../utils/entities";
 
@@ -154,9 +157,9 @@ export function NonEditablePropertyPreview({
 
                     <div className="flex flex-row items-center">
                         {propertyConfig && <Typography className="flex-grow pr-2"
-                                                    variant={"body2"}
-                                                    component="span"
-                                                    color="secondary">
+                                                       variant={"body2"}
+                                                       component="span"
+                                                       color="secondary">
                             {propertyConfig?.name}
                         </Typography>}
 

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { FieldHelperText, FieldProps, Paper, Property, PropertyFieldBinding } from "@firecms/core";
+import { FieldHelperText, FieldProps, Property, PropertyFieldBinding } from "firecms";
+import { Paper } from "@firecms/ui";
 
 /**
  * Simple map field to test validation of custom fields

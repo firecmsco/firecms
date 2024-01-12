@@ -1,4 +1,5 @@
-import { IconButton, ResolvedProperty, SettingsIcon, Tooltip } from "@firecms/core";
+import { ResolvedProperty } from "@firecms/core";
+import { IconButton, SettingsIcon, Tooltip } from "@firecms/ui";
 import React from "react";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { PersistedCollection } from "../types/persisted_collection";

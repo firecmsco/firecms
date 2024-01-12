@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
     Checkbox,
-    DeleteConfirmationDialog,
     DeleteIcon,
     IconButton,
     Table,
@@ -10,7 +9,8 @@ import {
     TableHeader,
     TableRow,
     Tooltip
-} from "@firecms/core";
+} from "@firecms/ui";
+import { DeleteConfirmationDialog } from "@firecms/core";
 import { Role } from "@firecms/firebase";
 import { useUserManagement } from "../../hooks/useUserManagement";
 

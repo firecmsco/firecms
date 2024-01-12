@@ -6,7 +6,7 @@ import {
     FieldHelperText,
     Paper,
     Typography
-} from "@firecms/core";
+} from "@firecms/firebase_pro";
 import { CustomShapedArrayProps } from "./CustomShapedArrayProps";
 
 export default function CustomShapedArrayField({

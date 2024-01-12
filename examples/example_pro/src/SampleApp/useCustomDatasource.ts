@@ -7,7 +7,7 @@ import {
     FetchCollectionProps,
     FetchEntityProps,
     SaveEntityProps,
-} from "@firecms/core";
+} from "@firecms/firebase_pro";
 import { FirebaseApp } from "firebase/app";
 import { useFirestoreDelegate } from "@firecms/firebase_pro";
 

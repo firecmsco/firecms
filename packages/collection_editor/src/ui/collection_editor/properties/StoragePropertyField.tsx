@@ -1,4 +1,5 @@
 import React from "react";
+import { SwitchControl, } from "@firecms/core";
 import {
     Button,
     Checkbox,
@@ -7,9 +8,8 @@ import {
     FileUploadIcon,
     MultiSelect,
     MultiSelectItem,
-    SwitchControl,
     Typography
-} from "@firecms/core";
+} from "@firecms/ui";
 
 import { Field, getIn, useFormikContext } from "formik";
 import { GeneralPropertyValidation } from "./validation/GeneralPropertyValidation";

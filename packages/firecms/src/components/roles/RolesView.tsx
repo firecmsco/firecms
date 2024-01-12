@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { useCollectionsConfigController } from "@firecms/collection_editor";
 
-import { AddIcon, Button, Container, Tooltip, Typography } from "@firecms/core";
+import { AddIcon, Button, Container, Tooltip, Typography } from "@firecms/ui";
 import { RolesTable } from "./RolesTable";
 import { RolesDetailsForm } from "./RolesDetailsForm";
 import { Role } from "@firecms/firebase";

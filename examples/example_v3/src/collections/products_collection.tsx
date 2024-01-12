@@ -1,5 +1,5 @@
 import { buildCollection } from "firecms";
-import { ArchiveIcon, EntityCallbacks } from "@firecms/core";
+import { ArchiveIcon, EntityCallbacks } from "firecms";
 
 import { Product } from "../types";
 import { SampleEntityView } from "../custom_entity_view/SampleEntityView";

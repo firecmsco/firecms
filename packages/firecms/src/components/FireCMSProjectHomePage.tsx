@@ -1,16 +1,18 @@
 import React from "react";
 import {
+    DefaultHomePage,
+    getIconForView,
+    NavigationGroup,
+    useFireCMSContext
+} from "@firecms/core";
+import {
     ArrowForwardIcon,
     cardClickableMixin,
     cardMixin,
     cn,
-    DefaultHomePage,
     focusedMixin,
-    getIconForView,
-    NavigationGroup,
     Typography,
-    useFireCMSContext
-} from "@firecms/core";
+} from "@firecms/ui";
 
 import { Link as ReactLink } from "react-router-dom";
 import { ADMIN_VIEWS } from "../utils";

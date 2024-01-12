@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Alert, Chip, LoadingButton, RocketLaunchIcon, Select, SelectItem } from "@firecms/core";
+import { Alert, Chip, LoadingButton, RocketLaunchIcon, Select, SelectItem } from "@firecms/ui";
 import { ProductPrice, ProductWithPrices, SubscriptionType } from "../../types/subscriptions";
 import { getPriceString, getSubscriptionPlanName } from "../settings/common";
 

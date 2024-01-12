@@ -1,4 +1,4 @@
-import { buildCollection, buildProperties } from "@firecms/core";
+import { buildCollection, buildProperties } from "@firecms/firebase_pro";
 
 export type Product = {
     name: string;

@@ -1,4 +1,4 @@
-import { buildCollection } from "@firecms/core";
+import { buildCollection } from "@firecms/firebase_pro";
 
 export const cryptoCollection = buildCollection({
     name: "Crypto",

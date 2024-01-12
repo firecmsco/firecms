@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { EntityCollection, getIconForView, singular, toSnakeCase, } from "@firecms/core";
 import {
     Autocomplete,
     AutocompleteItem,
@@ -8,20 +9,16 @@ import {
     Container,
     DebouncedTextField,
     Dialog,
-    EntityCollection,
     ExpandablePanel,
-    getIconForView,
     IconButton,
     Select,
     SelectItem,
     SettingsIcon,
-    singular,
     TextField,
     Tooltip,
-    toSnakeCase,
     Typography,
     useAutoComplete
-} from "@firecms/core";
+} from "@firecms/ui";
 import { Field, getIn, useFormikContext } from "formik";
 
 //@ts-ignore

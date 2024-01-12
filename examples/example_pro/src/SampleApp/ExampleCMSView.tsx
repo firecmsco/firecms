@@ -2,22 +2,24 @@ import React from "react";
 
 import {
     buildCollection,
-    Button,
     Entity,
     EntityCollectionView,
     EntityReference,
-    GitHubIcon,
-    IconButton,
-    Paper,
     ReferenceWidget,
-    Tooltip,
-    Typography,
     useAuthController,
     useReferenceDialog,
     useSelectionController,
     useSideEntityController,
     useSnackbarController
-} from "@firecms/core";
+} from "@firecms/firebase_pro";
+import {
+    Button,
+    GitHubIcon,
+    IconButton,
+    Paper,
+    Tooltip,
+    Typography,
+} from "@firecms/ui";
 import { Product } from "./types";
 import { usersCollection } from "./collections/users_collection";
 

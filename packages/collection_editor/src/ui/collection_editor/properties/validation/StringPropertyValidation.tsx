@@ -1,7 +1,8 @@
 import React from "react";
 
 import { FastField, getIn, useFormikContext } from "formik";
-import { DebouncedTextField, isValidRegExp, serializeRegExp, SwitchControl } from "@firecms/core";
+import { isValidRegExp, serializeRegExp, SwitchControl } from "@firecms/core";
+import { DebouncedTextField, } from "@firecms/ui";
 import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
 import { FieldHelperView } from "../FieldHelperView";
 

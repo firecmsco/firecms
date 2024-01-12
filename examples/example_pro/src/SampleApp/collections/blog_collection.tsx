@@ -1,4 +1,4 @@
-import { buildCollection, buildProperty } from "@firecms/core";
+import { buildCollection, buildProperty } from "@firecms/firebase_pro";
 import { BlogEntryPreview } from "../custom_entity_view/BlogEntryPreview";
 
 export type BlogEntry = {

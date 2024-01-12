@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import {
+    EntityCollection, unslugify,
+} from "@firecms/core";
+import {
     Button,
     Card,
     Chip,
     CircularProgress,
     cn,
     Container,
-    EntityCollection,
     Icon,
     Tooltip,
     Typography,
-    unslugify
-} from "@firecms/core";
+} from "@firecms/ui";
 import { useFormikContext } from "formik";
 
 import { productsCollectionTemplate } from "./templates/products_template";

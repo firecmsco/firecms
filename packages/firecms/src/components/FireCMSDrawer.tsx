@@ -1,21 +1,23 @@
 import React, { useCallback } from "react";
 import {
-    AddIcon,
-    Button,
-    cn,
     DrawerNavigationItem,
     DrawerProps,
     getIconForView,
+    TopNavigationResult,
+    useAuthController,
+    useNavigationController
+} from "@firecms/core";
+import {
+    AddIcon,
+    Button,
+    cn,
     IconButton,
     Menu,
     MenuItem,
     MoreVertIcon,
     Tooltip,
-    TopNavigationResult,
     Typography,
-    useAuthController,
-    useNavigationController
-} from "@firecms/core";
+} from "@firecms/ui";
 import { useCollectionEditorController } from "@firecms/collection_editor";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_VIEWS, RESERVED_GROUPS } from "../utils";

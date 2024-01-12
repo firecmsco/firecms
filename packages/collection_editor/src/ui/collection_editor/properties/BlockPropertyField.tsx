@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from "react";
-import { AddIcon, ArrayProperty, Button, Paper, Property, PropertyConfig, Typography } from "@firecms/core";
+import { AddIcon, Button, Paper, Typography } from "@firecms/ui";
 import { getIn, useFormikContext } from "formik";
 import { PropertyFormDialog } from "../PropertyEditView";
 import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath } from "../util";
 import { PropertyTree } from "../PropertyTree";
+import { ArrayProperty, Property, PropertyConfig } from "@firecms/core";
 
 export function BlockPropertyField({ disabled, getData, allowDataInference, propertyConfigs, collectionEditable }: {
     disabled: boolean;

@@ -45,8 +45,8 @@ export function Button<P extends React.ElementType>({
     const sizeClasses = cn(
         {
             "py-1 px-2": size === "small",
-            "py-2 px-3.5": size === "medium",
-            "py-3 px-4": size === "large"
+            "py-2 px-4": size === "medium",
+            "py-2.5 px-5": size === "large"
         }
     );
 
