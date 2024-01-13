@@ -2,6 +2,7 @@
 id: custom_fields
 title: Custom fields
 sidebar_label: Custom fields
+description: FireCMS custom fields elevate your forms with bespoke elements tailored precisely to your needs. By incorporating a React component into a property's `propertyConfig`, you gain full control over the field's rendering and logic. Minimum requirements include displaying `value` and employing `setValue` to update the property. Conveniently, custom props can be defined and received within your field component, and for more complex scenarios, the `context` within FieldProps provides access to the entity's full values. The example illustrates a custom TextField influenced by a background color prop, showcasing the flexibility and creativity allowed by custom fields. These personalized inputs are integral for crafting a content management system that aligns perfectly with your unique project requirements.
 ---
 
 Custom fields allow you to customize the field that it is displayed in the 
@@ -32,7 +33,7 @@ This is an example of a custom TextField that takes the background color as a pr
 
 import React from "react";
 import { TextField } from "@mui/material";
-import { FieldProps } from "@firecms/firebase";
+import { FieldProps } from "firecms";
 
 interface CustomColorTextFieldProps {
     color: string

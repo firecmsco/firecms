@@ -2,6 +2,7 @@
 id: firebase_setup
 title: Firebase setup
 sidebar_label: Firebase setup
+description: FireCMS Cloud simplifies your initial setup by automatically configuring your Firebase project. However, for a custom setup, you'll need to meet some requirements. Enable Firestore and set up appropriate security rules for each collection, tailored to your specific needs. By default, FireCMS users possess a unique custom claim, `fireCMSUser`, to facilitate Firestore read/write operations, but for more granular control, customize your security rules. Create a web app within your Firebase project to retrieve the necessary config for FireCMS, and consider linking it to Firebase Hosting for effortless deployment. Don't forget to enable authentication, altering the authorized domains to match the development server URL used by Vite or the alternative `localhost`. Lastly, activate Firebase Storage to fully utilize CMS storage fields, and if needed, resolve any CORS issues with the provided instructions, ensuring smooth file access in your CMS.
 ---
 
 :::important

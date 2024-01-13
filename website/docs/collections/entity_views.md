@@ -2,6 +2,7 @@
 id: entity_views
 title: Entity views
 sidebar_label: Entity views
+description: FireCMS introduces Entity Views, a feature providing unparalleled flexibility for your custom content management needs. Whether you're creating previews, web page visualizations, dashboards, form alterations, or any distinctive view, FireCMS's Entity Custom Views cater to your unique requirements. Simply define your custom React component and integrate it within your entity collection schema as an 'EntityCustomView'. For broader applications, register the view in the entity view registry through `FireCMSAppConfig` to make it accessible across different collections. These custom entity views are fundamental elements, offering a granule layer of customization and enhancing your CMS's extensibility for diverse implementations.
 ---
 
 FireCMS offers default form and table fields for common use cases and also allows
@@ -27,7 +28,7 @@ to your schema. Like in this example:
 
 ```tsx
 import React from "react";
-import { EntityCustomView, buildCollection } from "@firecms/firebase";
+import { EntityCustomView, buildCollection } from "firecms";
 
 const sampleView: EntityCustomView = {
     path: "preview",
@@ -46,7 +47,7 @@ If you are editing a collection in code you can add your custom view
 directly to the collection:
 
 ```tsx
-import { buildCollection } from "@firecms/firebase";
+import { buildCollection } from "firecms";
 
 const blogCollection = buildCollection({
     id: "blog",
@@ -100,7 +101,7 @@ It is also possible to use the `entityView` prop in the collection
 with the key of the entity view you want to use:
 
 ```tsx
-import { buildCollection } from "@firecms/firebase";
+import { buildCollection } from "firecms";
 
 const blogCollection = buildCollection({
     id: "blog",

@@ -2,6 +2,7 @@
 id: migrating_from_v2
 title: Migrating from FireCMS 2.0
 sidebar_label: Migrating from FireCMS 2.0
+description: Migrate seamlessly to FireCMS 3.0, the latest innovation in headless CMS, by creating a new project on app.firecms.co. Benefit from centralized configuration management and hassle-free integration without having to reveal Firebase credentials. Initiate a fresh project setup with simple CLI commands and adapt your existing collections to the new format with ease. Tailored for developers, FireCMS 3.0 elevates content management to new flexibility and customization heights, while retaining the familiarity of previous versions.
 ---
 
 FireCMS 3.0 is a major release that introduces a lot of changes. This page
@@ -67,7 +68,7 @@ of your project needs to be in a specific format.
 The `index.ts` file should export a `FireCMSAppConfig` object, which is defined as follows:
 
 ```typescript
-import {CMSView,CMSViewsBuilder, EntityCollection,EntityCollectionsBuilder,EntityCustomView,PropertyConfig } from "@firecms/firebase";
+import {CMSView,CMSViewsBuilder, EntityCollection,EntityCollectionsBuilder,EntityCustomView,PropertyConfig } from "firecms";
 export type FireCMSAppConfig = {
 
     /**
@@ -120,7 +121,7 @@ For `AdditionalFieldDelegate` the prop `id` has been renamed to `key`.
 To migrate your collections, simply export them in your `index.ts` file:
 
 ```typescript
-import { FireCMSAppConfig } from "@firecms/firebase";
+import { FireCMSAppConfig } from "firecms";
 const appConfig: FireCMSAppConfig = {
     version: "1",
     collections: async (props) => {

@@ -2,6 +2,7 @@
 id: collections
 title: Collections
 sidebar_label: Collections
+description: Discover how FireCMS Collections can streamline your data organization and management. Including features like top-level grouping and subcollections, define collections using UI or code, and implement advanced customizations, filtering, and permissions for optimized control over your CMS. Explore how to define, modify, and extend collections through intuitive UI interactions or detailed code customizations. Leverage FireCMS's robust entity and subcollection framework, with powerful filtering and sorting capabilities, for a seamless administrative experience. Learn more about collection configurations, entity actions, and inline editing options tailored to your needs. Whether you're managing products, articles, or custom data types, FireCMS Collections are the backbone of your efficient, scalable content management system.
 ---
 
 In FireCMS, **collections** represent groups of entities.
@@ -10,7 +11,7 @@ You can find collections at the **top level** of the navigation tree (the
 entries displayed in the home page and the navigation drawer), or as **
 subcollections**
 
-Collections in FireCMs can be defined in two ways:
+Collections in FireCMS can be defined in two ways:
 
 - Using the **FireCMS UI**.
 - Using **code**.
@@ -39,7 +40,7 @@ override them in the UI. For example, you can define an enum string property
 and the values will be merged from both definitions.
 :::
 
-## Modifying a collection defined in the UI
+#### Modifying a collection defined in the UI
 
 If you just need to add some code to a collection defined in the UI, you can
 use the `modifyCollection` function in your `FireCMSAppConfig` object.
@@ -80,7 +81,7 @@ export default appConfig;
 You can use all the props available in the `Collection` interface.
 
 
-## Sample collection defined in code
+#### Sample collection defined in code
 
 :::note
 FireCMS provides around 20 different fields (such as text fields,
@@ -100,7 +101,7 @@ import {
     buildCollection,
     buildProperty,
     EntityReference
-} from "@firecms/firebase";
+} from "firecms";
 
 type Product = {
     name: string;
@@ -231,7 +232,7 @@ can specify the filters that you have enabled in your Firestore configuration.
 In order to do so, just pass the indexes configuration to your collection:
 
 ```tsx
-import { buildCollection } from "@firecms/firebase";
+import { buildCollection } from "firecms";
 
 const productsCollection = buildCollection<Product>({
     path: "products",

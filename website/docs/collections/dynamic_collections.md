@@ -2,6 +2,7 @@
 id: dynamic_collections
 title: Dynamic collections
 sidebar_label: Dynamic collections
+description: Unlock personalized content management with Dynamic Collections in FireCMS, where collections can adapt to the logged-in user's profile using asynchronous callbacks. Tailor your CMS with custom properties built on-the-fly, ensuring a highly responsive and secure environment that aligns with user roles and permissions. Through strategic utilization of `EntityCollectionsBuilder` and `AuthController`, dynamically generate data schemas suitable for each user, enhancing their CMS experience with intelligent, role-specific interfaces.
 ---
 
 You can change the collections based on the logged-in user, by using an
@@ -16,7 +17,7 @@ import { useCallback } from "react";
 import {
 // ...
     EntityCollectionsBuilder,
-} from "@firecms/firebase";
+} from "firecms";
 
 // ...
 

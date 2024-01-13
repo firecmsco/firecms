@@ -64,7 +64,7 @@ customize the path and name of the file. The available placeholders are:
 ![Field](/img/fields/File_upload.png)
 
 ```typescript jsx
-import { buildProperty } from "@firecms/firebase";
+import { buildProperty } from "firecms";
 
 buildProperty({
     dataType: "string",
@@ -93,7 +93,7 @@ is [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding).
 ![Field](/img/fields/Multi_file_upload.png)
 
 ```typescript jsx
-import { buildProperty } from "@firecms/firebase";
+import { buildProperty } from "firecms";
 
 buildProperty({
     dataType: "array",

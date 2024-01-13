@@ -28,7 +28,7 @@ Example:
 
 ```tsx
 import React from "react";
-import { useAuthController } from "@firecms/firebase";
+import { useAuthController } from "firecms";
 
 export function ExampleCMSView() {
 
