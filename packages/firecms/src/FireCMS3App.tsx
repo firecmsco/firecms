@@ -66,7 +66,7 @@ import {
     useInitialiseFirebase
 } from "@firecms/firebase";
 import { ExportAllowedParams, useImportExportPlugin } from "@firecms/data_import_export";
-import { useBuildUserManagement, UserManagement } from "./hooks/useBuildUserManagement";
+import { useBuildUserManagement, UserManagement } from "./hooks";
 import { UserManagementProvider } from "./hooks/useUserManagement";
 import { Button, CenteredView, Typography } from "@firecms/ui";
 
@@ -461,7 +461,7 @@ function FireCMS3AppAuthenticated({
 
     const firestoreDelegate = useFirestoreDelegate({
         firebaseApp,
-        textSearchController: appConfig?.textSearchController,
+        textSearchControllerBuilder: appConfig?.textSearchControllerBuilder,
         firestoreIndexesBuilder: appConfig?.firestoreIndexesBuilder
     })
 

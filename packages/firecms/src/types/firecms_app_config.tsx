@@ -6,11 +6,12 @@ import {
     EntityCollectionsBuilder,
     EntityCustomView,
     FireCMSAppBarProps,
-    Locale, ModifyCollectionProps,
+    Locale,
+    ModifyCollectionProps,
     PropertyConfig
 } from "@firecms/core";
 import { FirebaseApp } from "firebase/app";
-import { FirestoreIndexesBuilder, FirestoreTextSearchController } from "@firecms/firebase";
+import { FirestoreIndexesBuilder, FirestoreTextSearchControllerBuilder } from "@firecms/firebase";
 
 export type FireCMSAppConfig = {
 
@@ -102,6 +103,6 @@ export type FireCMSAppConfig = {
      * Use this controller to return text search results as document ids, that
      * get then fetched from Firestore.
      */
-    textSearchController?: FirestoreTextSearchController;
+    textSearchControllerBuilder?: FirestoreTextSearchControllerBuilder;
 
 }

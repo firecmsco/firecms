@@ -121,7 +121,8 @@ export function useBuildDataSource({
                     order,
                     onUpdate,
                     onError,
-                    isCollectionGroup
+                    isCollectionGroup,
+                    collection
                 });
             }, [delegate, navigationController.getCollection])
             : undefined,

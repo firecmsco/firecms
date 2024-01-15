@@ -1,8 +1,16 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
-import { useCollectionFetch, useDataSource, useNavigationController } from "../../hooks";
+import { useDataSource, useFireCMSContext, useNavigationController } from "../../hooks";
 import { useDataOrder } from "../../hooks/data/useDataOrder";
-import { Entity, EntityCollection, FilterValues, SelectedCellProps, TableController, User } from "../../types";
+import {
+    Entity,
+    EntityCollection,
+    FilterValues,
+    FireCMSContext,
+    SelectedCellProps,
+    TableController,
+    User
+} from "../../types";
 import { useDebouncedData } from "./useDebouncedData";
 
 const DEFAULT_PAGE_SIZE = 50;
@@ -44,7 +52,6 @@ export function useEntityCollectionTableController<M extends Record<string, any>
     } = collection;
 
     const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
-
     const navigation = useNavigationController();
     const dataSource = useDataSource();
     const resolvedPath = useMemo(() => navigation.resolveAliasesFrom(fullPath), [fullPath, navigation.resolveAliasesFrom]);
@@ -55,6 +62,28 @@ export function useEntityCollectionTableController<M extends Record<string, any>
 
     const [searchString, setSearchString] = React.useState<string | undefined>();
     const [itemCount, setItemCount] = React.useState<number | undefined>(paginationEnabled ? pageSize : undefined);
+
+    const initialSortInternal = useMemo(() => {
+        if (initialSort && forceFilter && !checkFilterCombination(forceFilter, initialSort)) {
+            console.warn("Initial sort is not compatible with the force filter. Ignoring initial sort");
+            return undefined;
+        }
+        return initialSort;
+    }, [initialSort, forceFilter]);
+
+    const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? initialFilter ?? undefined);
+    const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>(initialSortInternal);
+
+    const sortByProperty = sortBy ? sortBy[0] : undefined;
+    const currentSort = sortBy ? sortBy[1] : undefined;
+
+    const context: FireCMSContext<UserType> = useFireCMSContext();
+
+    const [rawData, setRawData] = useState<Entity<M>[]>([]);
+
+    const [dataLoading, setDataLoading] = useState<boolean>(false);
+    const [dataLoadingError, setDataLoadingError] = useState<Error | undefined>();
+    const [noMoreToLoad, setNoMoreToLoad] = useState<boolean>(false);
 
     const checkFilterCombination = useCallback((filterValues: FilterValues<any>,
                                                 sortBy?: [string, "asc" | "desc"]) => {
@@ -67,17 +96,6 @@ export function useEntityCollectionTableController<M extends Record<string, any>
             sortBy
         })
     }, []);
-
-    const initialSortInternal = useMemo(() => {
-        if (initialSort && forceFilter && !checkFilterCombination(forceFilter, initialSort)) {
-            console.warn("Initial sort is not compatible with the force filter. Ignoring initial sort");
-            return undefined;
-        }
-        return initialSort;
-    }, [initialSort, forceFilter]);
-
-    const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? initialFilter ?? undefined);
-    const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>(initialSortInternal);
 
     const clearFilter = useCallback(() => setFilterValues(forceFilter ?? undefined), [forceFilter]);
 
@@ -93,19 +111,71 @@ export function useEntityCollectionTableController<M extends Record<string, any>
         }
     }, [forceFilter]);
 
-    const {
-        data: rawData,
-        dataLoading,
-        noMoreToLoad,
-        dataLoadingError
-    } = useCollectionFetch<M, UserType>({
-        path: fullPath,
-        collection,
-        filterValues,
-        sortBy,
-        searchString,
-        itemCount
-    });
+    useEffect(() => {
+
+        setDataLoading(true);
+
+        const onEntitiesUpdate = async (entities: Entity<M>[]) => {
+            if (collection.callbacks?.onFetch) {
+                try {
+                    entities = await Promise.all(
+                        entities.map((entity) =>
+                            collection.callbacks!.onFetch!({
+                                collection,
+                                path: resolvedPath,
+                                entity,
+                                context
+                            })));
+                } catch (e: any) {
+                    console.error(e);
+                }
+            }
+            setDataLoading(false);
+            setDataLoadingError(undefined);
+            setRawData(entities.map(e => ({
+                ...e,
+                // values: sanitizeData(e.values, resolvedCollection.properties)
+            })));
+            setNoMoreToLoad(!itemCount || entities.length < itemCount);
+        };
+
+        const onError = (error: Error) => {
+            console.error("ERROR", error);
+            setDataLoading(false);
+            setRawData([]);
+            setDataLoadingError(error);
+        };
+
+        if (dataSource.listenCollection) {
+            return dataSource.listenCollection<M>({
+                path: resolvedPath,
+                collection,
+                onUpdate: onEntitiesUpdate,
+                onError,
+                searchString,
+                filter: filterValues,
+                limit: itemCount,
+                startAfter: undefined,
+                orderBy: sortByProperty,
+                order: currentSort
+            });
+        } else {
+            dataSource.fetchCollection<M>({
+                path: resolvedPath,
+                collection,
+                searchString,
+                filter: filterValues,
+                limit: itemCount,
+                startAfter: undefined,
+                orderBy: sortByProperty,
+                order: currentSort
+            })
+                .then(onEntitiesUpdate)
+                .catch(onError);
+            return () => {
+            };
+        }
+    }, [resolvedPath, itemCount, currentSort, sortByProperty, filterValues, searchString]);
 
     const orderedData = useDataOrder({
         data: rawData,

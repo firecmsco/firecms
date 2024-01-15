@@ -78,7 +78,7 @@ export function FireCMSProApp({
                                   authentication,
                                   collections,
                                   views,
-                                  textSearchController,
+                                  textSearchControllerBuilder,
                                   allowSkipLogin,
                                   signInOptions = DEFAULT_SIGN_IN_OPTIONS,
                                   firebaseConfig,
@@ -140,7 +140,7 @@ export function FireCMSProApp({
 
     const firestoreDelegate = useFirestoreDelegate({
         firebaseApp,
-        textSearchController: textSearchController,
+        textSearchControllerBuilder: textSearchControllerBuilder,
         firestoreIndexesBuilder: firestoreIndexesBuilder
     })
 

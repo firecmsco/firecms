@@ -19,7 +19,7 @@ import {
     FirebaseSignInOption,
     FirebaseSignInProvider,
     FirestoreIndexesBuilder,
-    FirestoreTextSearchController
+    FirestoreTextSearchController, FirestoreTextSearchControllerBuilder
 } from "@firecms/firebase";
 
 /**
@@ -129,7 +129,7 @@ export type FireCMSProAppProps = {
      * get then fetched from Firestore.
      *
      */
-    textSearchController?: FirestoreTextSearchController;
+    textSearchControllerBuilder?: FirestoreTextSearchControllerBuilder;
 
     /**
      * Default path under the navigation routes of the CMS will be created

@@ -43,15 +43,19 @@ import {
     where as whereClause
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
-import { FirestoreTextSearchController } from "../types/text_search";
-import { useCallback } from "react";
+import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "../types/text_search";
+import { useCallback, useRef } from "react";
 
 /**
  * @group Firebase
  */
 export interface FirestoreDataSourceProps {
     firebaseApp?: FirebaseApp,
-    textSearchController?: FirestoreTextSearchController,
+    /**
+     * You can use this controller to return a list of ids from a search index, given a
+     * `path` and a `searchString`.
+     */
+    textSearchControllerBuilder?: FirestoreTextSearchControllerBuilder,
 
     /**
      * Use this builder to indicate which indexes are available in your
@@ -69,27 +73,17 @@ export type FirestoreIndexesBuilder = (params: {
 /**
  * Use this hook to build a {@link DataSource} based on Firestore
  * @param firebaseApp
- * @param textSearchController
+ * @param textSearchControllerBuilder
  * @param collectionRegistry
  * @group Firebase
  */
 export function useFirestoreDelegate({
                                          firebaseApp,
-                                         textSearchController,
+                                         textSearchControllerBuilder,
                                          firestoreIndexesBuilder
                                      }: FirestoreDataSourceProps): DataSourceDelegate {
 
-    const createEntityFromCollection = useCallback(<M extends Record<string, any>>(
-        docSnap: DocumentSnapshot,
-    ): Entity<M> => {
-
-        const values = firestoreToCMSModel(docSnap.data());
-        return {
-            id: docSnap.id,
-            path: getCMSPathFromFirestorePath(docSnap.ref.path),
-            values
-        };
-    }, []);
+    const searchControllerRef = useRef<FirestoreTextSearchController>();
 
     const buildQuery = useCallback(<M>(path: string,
                                        filter: FilterValues<Extract<keyof M, string>> | undefined,
@@ -141,91 +135,100 @@ export function useFirestoreDelegate({
                 if (!docSnapshot.exists()) {
                     return undefined;
                 }
-                return createEntityFromCollection(docSnapshot);
+                return createEntityFromDocument(docSnapshot);
             });
     }, [firebaseApp]);
 
-    const performTextSearch = useCallback(async <M extends Record<string, any>>(path: string,
-                                                                                searchString: string): Promise<Entity<M>[]> => {
+    const listenEntity = useCallback(<M extends Record<string, any>>(
+        {
+            path,
+            entityId,
+            collection,
+            onUpdate,
+            onError
+        }: ListenEntityProps<M>): () => void => {
+        if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
+
+        const firestore = getFirestore(firebaseApp);
+
+        return onSnapshot(
+            doc(firestore, path, entityId),
+            {
+                next: (docSnapshot) => {
+                    onUpdate(createEntityFromDocument(docSnapshot));
+                },
+                error: onError
+            }
+        );
+    }, [firebaseApp]);
+
+    const performTextSearch = useCallback(<M extends Record<string, any>>({
+                                                                              path,
+                                                                              searchString,
+                                                                              onUpdate
+                                                                          }: {
+        path: string,
+        searchString: string;
+        onUpdate: (entities: Entity<M>[]) => void
+    }): () => void => {
+
+        if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
+
+        const textSearchController = searchControllerRef.current;
         if (!textSearchController)
             throw Error("Trying to make text search without specifying a FirestoreTextSearchController");
-        const ids = await textSearchController({
+
+        let subscriptions: (() => void)[] = [];
+        textSearchController.search({
             path,
             searchString
-        });
-        if (ids === undefined)
-            throw Error("The current path is not supported by the specified FirestoreTextSearchController");
-        const promises: Promise<Entity<M> | undefined>[] = ids
-            .map(async (entityId) => {
-                    try {
-                        return await getAndBuildEntity(path, entityId);
-                    } catch (e) {
-                        console.error(e);
-                        return undefined;
-                    }
-                }
-            );
-        return Promise.all(promises)
-            .then((res) => res.filter((e) => e !== undefined && e.values) as Entity<M>[]);
-    }, [getAndBuildEntity, textSearchController]);
+        }).then((ids) => {
+            if (ids === undefined)
+                throw Error("The current path is not supported by the specified FirestoreTextSearchController");
 
-    function delegateToCMSModel(data: any): any {
-        if (data === null || data === undefined) return null;
-        if (deleteField().isEqual(data)) {
-            return undefined;
+            const entities: Entity<M>[] = [];
+            const addedEntitiesSet = new Set<string>();
+            subscriptions = ids
+                .map((entityId) => {
+                        return listenEntity({
+                            path,
+                            entityId,
+                            onUpdate: (entity: Entity<any>) => {
+                                if (entity.values) {
+                                    if (!addedEntitiesSet.has(entity.id)) {
+                                        addedEntitiesSet.add(entity.id);
+                                        entities.push(entity);
+                                        onUpdate(entities);
+                                    }
+                                } else {
+                                    addedEntitiesSet.delete(entity.id);
+                                    onUpdate([...entities.filter(e => e.id !== entityId)])
+                                }
+                            }
+                        })
+                    }
+                );
+        });
+
+        return () => {
+            console.log("Clearing", subscriptions.length, "subscriptions")
+            subscriptions.forEach((p) => p());
         }
-        if (serverTimestamp().isEqual(data)) {
-            return null;
-        }
-        if (data instanceof Timestamp || (typeof data.toDate === "function" && data.toDate() instanceof Date)) {
-            return data.toDate();
-        }
-        if (data instanceof Date) {
-            return data;
-        }
-        if (data instanceof FirestoreGeoPoint) {
-            return new GeoPoint(data.latitude, data.longitude);
-        }
-        if (data instanceof DocumentReference) {
-            return new EntityReference(data.id, getCMSPathFromFirestorePath(data.path));
-        }
-        if (Array.isArray(data)) {
-            return data.map(delegateToCMSModel).filter(v => v !== undefined);
-        }
-        if (typeof data === "object") {
-            const result: Record<string, any> = {};
-            for (const key of Object.keys(data)) {
-                const childValue = delegateToCMSModel(data[key]);
-                if (childValue !== undefined)
-                    result[key] = childValue;
-            }
-            return result;
-        }
-        return data;
-    }
+
+    }, [firebaseApp, listenEntity]);
 
     return {
-        setDateToMidnight: (input?: any) => {
-            return setDateToMidnight(input);
-        },
+        setDateToMidnight,
         delegateToCMSModel,
-        buildDate(date: Date): any {
-            return Timestamp.fromDate(date);
-        },
-        buildDeleteFieldValue(): any {
-            return deleteField();
-        },
-        currentTime(): any {
-            return serverTimestamp();
-        },
-        buildGeoPoint(geoPoint: GeoPoint): any {
-            return new FirestoreGeoPoint(geoPoint.latitude, geoPoint.longitude)
-        },
-        buildReference(reference: EntityReference): any {
+        buildDate,
+        buildDeleteFieldValue,
+        currentTime,
+        buildGeoPoint,
+        buildReference: useCallback((reference: EntityReference): any => {
             if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
             const firestore = getFirestore(firebaseApp);
             return doc(firestore, reference.path, reference.id);
-        },
+        }, [firebaseApp]),
 
         /**
          * Fetch entities in a Firestore path
@@ -241,21 +244,21 @@ export function useFirestoreDelegate({
          * @see useCollectionFetch if you need this functionality implemented as a hook
          * @group Firestore
          */
-        fetchCollection: useCallback(<M extends Record<string, any>>({
-                                                                         path,
-                                                                         filter,
-                                                                         limit,
-                                                                         startAfter,
-                                                                         searchString,
-                                                                         orderBy,
-                                                                         order,
-                                                                         isCollectionGroup
-                                                                     }: FetchCollectionDelegateProps<M>
+        fetchCollection: useCallback(async <M extends Record<string, any>>({
+                                                                               path,
+                                                                               filter,
+                                                                               limit,
+                                                                               startAfter,
+                                                                               searchString,
+                                                                               orderBy,
+                                                                               order,
+                                                                               isCollectionGroup
+                                                                           }: FetchCollectionDelegateProps<M>
         ): Promise<Entity<M>[]> => {
 
-            if (searchString) {
-                return performTextSearch(path, searchString,);
-            }
+            // if (searchString) {
+            //     return performTextSearch(path, searchString,);
+            // }
 
             console.debug("Fetching collection", {
                 path,
@@ -268,12 +271,9 @@ export function useFirestoreDelegate({
             });
             const query = buildQuery(path, filter, orderBy, order, startAfter, limit, isCollectionGroup);
 
-            return getDocs(query)
-                .then((snapshot) =>
-                    snapshot.docs.map((doc) => {
-                        return createEntityFromCollection(doc);
-                    }));
-        }, [buildQuery, performTextSearch]),
+            const snapshot = await getDocs(query);
+            return snapshot.docs.map((doc) => createEntityFromDocument(doc));
+        }, [buildQuery]),
 
         /**
          * Listen to a entities in a given path
@@ -302,7 +302,8 @@ export function useFirestoreDelegate({
                 order,
                 onUpdate,
                 onError,
-                isCollectionGroup
+                isCollectionGroup,
+                collection
             }: ListenCollectionDelegateProps<M>
         ): () => void => {
 
@@ -316,28 +317,41 @@ export function useFirestoreDelegate({
                 order
             });
 
+            if (!firebaseApp) {
+                throw Error("useFirestoreDelegate Firebase not initialised");
+            }
+
             const query = buildQuery(path, filter, orderBy, order, startAfter, limit, isCollectionGroup);
 
+            if (textSearchControllerBuilder && !searchControllerRef.current) {
+                searchControllerRef.current = textSearchControllerBuilder!({ firebaseApp });
+            }
+            if (searchControllerRef.current) {
+                searchControllerRef.current.init({
+                    path,
+                    collection
+                });
+            }
+
             if (searchString) {
-                performTextSearch<M>(path, searchString)
-                    .then(onUpdate)
-                    .catch((e) => {
-                        if (onError) onError(e);
-                    });
-                // eslint-disable-next-line @typescript-eslint/no-empty-function
-                return () => {
-                };
+                return performTextSearch<M>({
+                    path,
+                    searchString,
+                    onUpdate
+                });
             }
 
             return onSnapshot(query,
                 {
                     next: (snapshot) => {
-                        onUpdate(snapshot.docs.map((doc) => createEntityFromCollection(doc)));
+                        if (!searchString)
+                            onUpdate(snapshot.docs.map((doc) => createEntityFromDocument(doc)));
                     },
                     error: onError
                 }
             );
-        }, [buildQuery, performTextSearch]),
+
+        }, []),
 
         /**
          * Retrieve an entity given a path and a collection
@@ -362,28 +376,7 @@ export function useFirestoreDelegate({
          * @return Function to cancel subscription
          * @group Firestore
          */
-        listenEntity: useCallback(<M extends Record<string, any>>(
-            {
-                path,
-                entityId,
-                collection,
-                onUpdate,
-                onError
-            }: ListenEntityProps<M>): () => void => {
-            if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
-
-            const firestore = getFirestore(firebaseApp);
-
-            return onSnapshot(
-                doc(firestore, path, entityId),
-                {
-                    next: (docSnapshot) => {
-                        onUpdate(createEntityFromCollection(docSnapshot));
-                    },
-                    error: onError
-                }
-            );
-        }, [firebaseApp]),
+        listenEntity,
 
         /**
          * Save entity to the specified path. Note that Firestore does not allow
@@ -454,7 +447,7 @@ export function useFirestoreDelegate({
          * @return `true` if there are no other fields besides the given entity
          * @group Firestore
          */
-        checkUniqueField: useCallback((
+        checkUniqueField: useCallback(async (
             path: string,
             name: string,
             value: any,
@@ -471,10 +464,8 @@ export function useFirestoreDelegate({
                 return Promise.resolve(true);
             }
             const q = query(collectionClause(firestore, path), whereClause(name, "==", cmsToFirestoreModel(value, firestore)));
-            return getDocs(q)
-                .then((snapshots) =>
-                    snapshots.docs.filter(doc => doc.id !== entityId).length === 0
-                );
+            const snapshot = await getDocs(q);
+            return snapshot.docs.filter(doc => doc.id !== entityId).length === 0;
 
         }, [firebaseApp]),
 
@@ -556,6 +547,18 @@ export function useFirestoreDelegate({
 
 }
 
+const createEntityFromDocument = <M extends Record<string, any>>(
+    docSnap: DocumentSnapshot,
+): Entity<M> => {
+
+    const values = firestoreToCMSModel(docSnap.data());
+    return {
+        id: docSnap.id,
+        path: getCMSPathFromFirestorePath(docSnap.ref.path),
+        values
+    };
+};
+
 /**
  * Recursive function that converts Firestore data types into CMS or plain
  * JS types.
@@ -601,25 +604,6 @@ export function firestoreToCMSModel(data: any): any {
     return data;
 }
 
-// export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
-//     if (data === undefined) {
-//         return deleteField();
-//     } else if (Array.isArray(data)) {
-//         return data.map(v => cmsToFirestoreModel(v, firestore));
-//     } else if (data instanceof EntityReference) {
-//         return doc(firestore, data.path, data.id);
-//     } else if (data instanceof GeoPoint) {
-//         return new FirestoreGeoPoint(data.latitude, data.longitude);
-//     } else if (data instanceof Date) {
-//         return Timestamp.fromDate(data);
-//     } else if (data && typeof data === "object") {
-//         return Object.entries(data)
-//             .map(([key, v]) => ({ [key]: cmsToFirestoreModel(v, firestore) }))
-//             .reduce((a, b) => ({ ...a, ...b }), {});
-//     }
-//     return data;
-// }
-
 /**
  * Remove id from Firestore path
  * @param fsPath
@@ -628,6 +612,45 @@ function getCMSPathFromFirestorePath(fsPath: string): string {
     let to = fsPath.lastIndexOf("/");
     to = to === -1 ? fsPath.length : to;
     return fsPath.substring(0, to);
+}
+
+function buildDate(date: Date): any {
+    return Timestamp.fromDate(date);
+}
+
+function delegateToCMSModel(data: any): any {
+    if (data === null || data === undefined) return null;
+    if (deleteField().isEqual(data)) {
+        return undefined;
+    }
+    if (serverTimestamp().isEqual(data)) {
+        return null;
+    }
+    if (data instanceof Timestamp || (typeof data.toDate === "function" && data.toDate() instanceof Date)) {
+        return data.toDate();
+    }
+    if (data instanceof Date) {
+        return data;
+    }
+    if (data instanceof FirestoreGeoPoint) {
+        return new GeoPoint(data.latitude, data.longitude);
+    }
+    if (data instanceof DocumentReference) {
+        return new EntityReference(data.id, getCMSPathFromFirestorePath(data.path));
+    }
+    if (Array.isArray(data)) {
+        return data.map(delegateToCMSModel).filter(v => v !== undefined);
+    }
+    if (typeof data === "object") {
+        const result: Record<string, any> = {};
+        for (const key of Object.keys(data)) {
+            const childValue = delegateToCMSModel(data[key]);
+            if (childValue !== undefined)
+                result[key] = childValue;
+        }
+        return result;
+    }
+    return data;
 }
 
 function setDateToMidnight(input?: Timestamp): Timestamp | undefined {
@@ -655,4 +678,16 @@ export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
             .reduce((a, b) => ({ ...a, ...b }), {});
     }
     return data;
+}
+
+function buildDeleteFieldValue(): any {
+    return deleteField();
+}
+
+function currentTime(): any {
+    return serverTimestamp();
+}
+
+function buildGeoPoint(geoPoint: GeoPoint): any {
+    return new FirestoreGeoPoint(geoPoint.latitude, geoPoint.longitude)
 }

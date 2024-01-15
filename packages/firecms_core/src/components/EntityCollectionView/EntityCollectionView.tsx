@@ -575,6 +575,7 @@ export const EntityCollectionView = React.memo(
                     defaultSize={collection.defaultSize}
                     properties={resolvedCollection.properties}
                     getPropertyFor={getPropertyFor}
+                    textSearchEnabled={resolvedCollection.textSearchEnabled}
                     actions={<EntityCollectionViewActions
                         parentCollectionIds={parentCollectionIds ?? []}
                         collection={collection}

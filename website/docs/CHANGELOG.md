@@ -49,7 +49,7 @@ title: Changelog
 
 - Replaced `flexsearch` with `js-search`. Their imports are too messed up.
 - Fix for form assigning wrong ids
--
+
 
 ## [2.0.1] - 2023-06-12
 

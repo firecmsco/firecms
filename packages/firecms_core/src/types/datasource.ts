@@ -234,9 +234,9 @@ export type FetchCollectionDelegateProps<M extends Record<string, any> = any> =
 };
 
 export type ListenCollectionDelegateProps<M extends Record<string, any> = any> =
-    Omit<ListenCollectionProps<M>, "collection">
+    ListenCollectionProps<M>
     & {
-    isCollectionGroup?: boolean
+    isCollectionGroup?: boolean;
 };
 
 export interface DataSourceDelegate {

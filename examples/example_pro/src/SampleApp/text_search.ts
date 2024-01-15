@@ -1,9 +1,6 @@
 import algoliasearch, { SearchClient } from "algoliasearch";
 
-import {
-    FirestoreTextSearchController,
-    performAlgoliaTextSearch
-} from "@firecms/firebase_pro";
+import { buildAlgoliaSearchController, performAlgoliaTextSearch } from "@firecms/firebase_pro";
 
 let client: SearchClient | undefined;
 // process is defined for react-scripts builds
@@ -27,18 +24,17 @@ const usersIndex = client && client.initIndex("users");
 const blogIndex = client && client.initIndex("blog");
 const booksIndex = client && client.initIndex("books");
 
-export const textSearchController: FirestoreTextSearchController =
-    ({
-         path,
-         searchString
-     }) => {
-        if (path === "products")
-            return productsIndex && performAlgoliaTextSearch(productsIndex, searchString);
-        if (path === "users")
-            return usersIndex && performAlgoliaTextSearch(usersIndex, searchString);
-        if (path === "blog")
-            return blogIndex && performAlgoliaTextSearch(blogIndex, searchString);
-        if (path === "books")
-            return booksIndex && performAlgoliaTextSearch(booksIndex, searchString);
-        return undefined;
-    };
+export const textSearchControllerBuilder = buildAlgoliaSearchController(({
+                                                                      path,
+                                                                      searchString
+                                                                  }) => {
+    if (path === "products")
+        return productsIndex && performAlgoliaTextSearch(productsIndex, searchString);
+    if (path === "users")
+        return usersIndex && performAlgoliaTextSearch(usersIndex, searchString);
+    if (path === "blog")
+        return blogIndex && performAlgoliaTextSearch(blogIndex, searchString);
+    if (path === "books")
+        return booksIndex && performAlgoliaTextSearch(booksIndex, searchString);
+    return undefined;
+});

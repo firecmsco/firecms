@@ -1,37 +1,24 @@
-import { SearchIndex } from "algoliasearch";
-
 /**
  * Use this controller to return a list of ids from a search index, given a
  * `path` and a `searchString`.
- * Firestore does not support text search directly so we need to rely on an external
+ * Firestore does not support text search directly, so we need to rely on an external
  * index, such as Algolia.
  * Note that you will get text search requests for collections that have the
  * `textSearchEnabled` flag set to `true`.
  * @see performAlgoliaTextSearch
  * @group Firebase
  */
-export type FirestoreTextSearchController = (props: {
-    path: string,
-    searchString: string
-}) => Promise<readonly string[]> | undefined;
+import { FirebaseApp } from "firebase/app";
+import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
 
-/**
- * Utility function to perform a text search in an algolia index,
- * returning the ids of the entities.
- * @param index
- * @param query
- * @group Firebase
- */
-export function performAlgoliaTextSearch(index: SearchIndex, query: string): Promise<readonly string[]> {
+export type FirestoreTextSearchControllerBuilder = (props: {
+    firebaseApp: FirebaseApp;
+}) => FirestoreTextSearchController;
 
-    console.debug("Performing Algolia query", index, query);
-    return index
-        .search(query)
-        .then(({ hits }: any) => {
-            return hits.map((hit: any) => hit.objectID as string);
-        })
-        .catch((err: any) => {
-            console.error(err);
-            return [];
-        });
-}
+export type FirestoreTextSearchController = {
+    init: (props: {
+        path: string,
+        collection?: EntityCollection | ResolvedEntityCollection
+    }) => void,
+    search: (props: { searchString: string, path: string }) => (Promise<readonly string[] | undefined>),
+};
