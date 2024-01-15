@@ -64,6 +64,7 @@ export interface FirestoreDataSourceProps {
      * for multiple fields in the CMS.
      */
     firestoreIndexesBuilder?: FirestoreIndexesBuilder;
+    databaseId?: string;
 }
 
 export type FirestoreIndexesBuilder = (params: {
@@ -81,7 +82,8 @@ export type FirestoreIndexesBuilder = (params: {
 export function useFirestoreDataSource({
                                            firebaseApp,
                                            textSearchController,
-                                           firestoreIndexesBuilder
+                                           firestoreIndexesBuilder,
+                                           databaseId
                                        }: FirestoreDataSourceProps): DataSource {
 
     const createEntityFromCollection = useCallback(<M extends Record<string, any>>(
@@ -106,7 +108,7 @@ export function useFirestoreDataSource({
 
         if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
-        const firestore = getFirestore(firebaseApp);
+        const firestore = getFirestore(firebaseApp, databaseId || "(default)");
         const collectionReference: Query = collectionGroup ? collectionGroupClause(firestore, path) : collectionClause(firestore, path);
 
         const queryParams: QueryConstraint[] = [];
@@ -139,7 +141,7 @@ export function useFirestoreDataSource({
     ): Promise<Entity<M> | undefined> => {
         if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
-        const firestore = getFirestore(firebaseApp);
+        const firestore = getFirestore(firebaseApp, databaseId || "(default)");
 
         return getDoc(doc(firestore, path, entityId))
             .then((docSnapshot) => {
@@ -335,7 +337,7 @@ export function useFirestoreDataSource({
             }: ListenEntityProps<M>): () => void => {
             if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
-            const firestore = getFirestore(firebaseApp);
+            const firestore = getFirestore(firebaseApp, databaseId || "(default)");
 
             return onSnapshot(
                 doc(firestore, path, entityId),
@@ -370,7 +372,7 @@ export function useFirestoreDataSource({
 
             if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
-            const firestore = getFirestore(firebaseApp);
+            const firestore = getFirestore(firebaseApp, databaseId || "(default)");
 
             const resolvedCollection = resolveCollection<M>({
                 collection,
@@ -420,7 +422,7 @@ export function useFirestoreDataSource({
         ): Promise<void> => {
             if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
-            const firestore = getFirestore(firebaseApp);
+            const firestore = getFirestore(firebaseApp, databaseId || "(default)");
 
             return deleteDoc(doc(firestore, entity.path, entity.id));
         }, [firebaseApp]),
@@ -445,7 +447,7 @@ export function useFirestoreDataSource({
 
             if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
-            const firestore = getFirestore(firebaseApp);
+            const firestore = getFirestore(firebaseApp, databaseId || "(default)");
 
             console.debug("Check unique field entity", path, name, value, entityId);
 
@@ -466,7 +468,7 @@ export function useFirestoreDataSource({
 
         generateEntityId: useCallback((path: string): string => {
             if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
-            const firestore = getFirestore(firebaseApp);
+            const firestore = getFirestore(firebaseApp, databaseId || "(default)");
             return doc(collectionClause(firestore, path)).id;
         }, [firebaseApp]),
 
