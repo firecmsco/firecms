@@ -8,7 +8,6 @@ export * from "./paths";
 export * from "./regexp";
 export * from "./navigation_utils";
 export * from "./useDebounce";
-export * from "./useDebounceValue";
 export * from "./property_utils";
 export * from "./resolutions";
 export * from "./permissions";

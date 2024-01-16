@@ -30,6 +30,7 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
         path: string,
         collection?: EntityCollection | ResolvedEntityCollection
     }) => {
+
         const firestore = getFirestore(firebaseApp);
 
         const col = collection(firestore, path);
@@ -39,21 +40,22 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
 
         currentPath = path;
 
-        if (!indexes[path] && collectionProp)
+        if (!indexes[path] && collectionProp) {
+            console.debug("Init local search controller", path);
             indexes[path] = buildIndex(collectionProp);
-
-        listeners[path] = onSnapshot(query(col),
-            {
-                next: (snapshot) => {
-                    const docs = snapshot.docs.map(doc => ({
-                        id: doc.id,
-                        ...doc.data()
-                    }));
-                    indexes[path].addDocuments(docs);
-                },
-                error: console.error
-            }
-        );
+            listeners[path] = onSnapshot(query(col),
+                {
+                    next: (snapshot) => {
+                        const docs = snapshot.docs.map(doc => ({
+                            id: doc.id,
+                            ...doc.data()
+                        }));
+                        indexes[path].addDocuments(docs);
+                    },
+                    error: console.error
+                }
+            );
+        }
         return true;
     }
 

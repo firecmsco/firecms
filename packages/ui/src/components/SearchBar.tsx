@@ -4,6 +4,7 @@ import { defaultBorderMixin, focusedMixin } from "../styles";
 import { IconButton } from "./index";
 import { ClearIcon, SearchIcon } from "../icons";
 import { cn } from "../util";
+import { useDebounceValue } from "../util/useDebounceValue.tsx";
 
 interface SearchBarProps {
     onClick?: () => void;
@@ -32,7 +33,7 @@ export function SearchBar({
     const [searchText, setSearchText] = useState<string>("");
     const [active, setActive] = useState<boolean>(false);
 
-    const deferredValues = useDeferredValue(searchText);
+    const deferredValues = useDebounceValue(searchText, 200);
 
     /**
      * Debounce on Search text update
