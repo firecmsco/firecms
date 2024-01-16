@@ -421,7 +421,7 @@ export function CollectionPropertiesEditorForm({
                 inArray={false}
                 open={selectedPropertyIndex !== undefined}
                 key={`edit_view_${selectedPropertyIndex}`}
-                autoUpdateId={isNewCollection}
+                autoUpdateId={!selectedProperty}
                 allowDataInference={!isNewCollection}
                 existingProperty={true}
                 autoOpenTypeSelect={false}
