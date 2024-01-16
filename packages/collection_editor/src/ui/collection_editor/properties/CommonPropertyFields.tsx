@@ -1,8 +1,9 @@
 import { Field, getIn, useFormikContext } from "formik";
-import { DebouncedTextField, TextField } from "@firecms/ui";
+import { DebouncedTextField } from "@firecms/ui";
 import { PropertyWithId } from "../PropertyEditView";
 import React from "react";
 import { FieldHelperView } from "./FieldHelperView";
+import { toSnakeCase, unslugify } from "@firecms/core";
 
 type CommonPropertyFieldsProps = {
     showErrors: boolean,
@@ -10,6 +11,7 @@ type CommonPropertyFieldsProps = {
     existingPropertyKeys?: string[];
     disabled: boolean;
     isNewProperty: boolean;
+    autoUpdateId: boolean;
 };
 
 export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPropertyFieldsProps>(
@@ -18,11 +20,16 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
                                       disabledId,
                                       existingPropertyKeys,
                                       disabled,
+                                      autoUpdateId,
                                       isNewProperty
                                   }, ref) {
 
         const {
-            errors
+            errors,
+            values,
+            setFieldValue,
+            setFieldTouched,
+            touched
         } = useFormikContext<PropertyWithId>();
 
         const name = "name";
@@ -34,14 +41,25 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
         const description = "description";
         const descriptionError = showErrors && getIn(errors, description);
 
+        console.log({ touched })
+
         return (
             <div className={"flex flex-col gap-2 col-span-12"}>
 
                 <div>
                     <Field
                         inputRef={ref}
-                        name={name}
                         as={DebouncedTextField}
+                        value={values[name]}
+                        onChange={(e: any) => {
+                            const newNameValue = e.target.value;
+                            setFieldValue(name, newNameValue);
+                            setFieldTouched(name, true, true);
+                            const idTouched = getIn(touched, id);
+                            if (!idTouched && autoUpdateId) {
+                                setFieldValue(id, newNameValue ? toSnakeCase(newNameValue) : "")
+                            }
+                        }}
                         style={{ fontSize: 20 }}
                         validate={validateName}
                         placeholder={"Field name"}
@@ -55,14 +73,24 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
                 </div>
 
                 <div>
-                    <Field name={id}
-                           as={TextField}
-                           label={"ID"}
-                           validate={(value?: string) => validateId(value, existingPropertyKeys)}
-                           disabled={disabledId || disabled}
-                           required
-                           size="small"
-                           error={Boolean(idError)}/>
+                    <Field
+                        as={DebouncedTextField}
+                        label={"ID"}
+                        value={values[id]}
+                        onChange={(e: any) => {
+                            const newIdValue = e.target.value;
+                            setFieldValue(id, newIdValue);
+                            setFieldTouched(id, true, true);
+                            const nameTouched = getIn(touched, name);
+                            if (!nameTouched && autoUpdateId) {
+                                setFieldValue(name, newIdValue ? unslugify(newIdValue) : "")
+                            }
+                        }}
+                        validate={(value?: string) => validateId(value, existingPropertyKeys)}
+                        disabled={disabledId || disabled}
+                        required
+                        size="small"
+                        error={Boolean(idError)}/>
                     <FieldHelperView error={Boolean(idError)}>
                         {idError}
                     </FieldHelperView>

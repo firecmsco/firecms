@@ -49,3 +49,14 @@ export function slugify(text?: string, separator = "_", lowercase = true) {
         ? text.toLowerCase() // Convert the string to lowercase letters
         : text;
 }
+
+export function unslugify(slug: string): string {
+    if (slug.includes("-") || slug.includes("_") || !slug.includes(" ")) {
+        const result = slug.replace(/[-_]/g, " ");
+        return result.replace(/\w\S*/g, function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1);
+        });
+    } else {
+        return slug;
+    }
+}

@@ -1,20 +1,5 @@
 import { EntityCollection } from "../types";
 
-export function unslugify(slug: string): string {
-    if (slug.includes("-") || slug.includes("_") || !slug.includes(" ")) {
-        const result = slug.replace(/[-_]/g, " ");
-        return result.replace(/\w\S*/g, function (txt) {
-            return txt.charAt(0).toUpperCase() + txt.substr(1);
-        });
-    } else {
-        return slug;
-        // const unCamelCased = slug.replace(/([a-z])([A-Z])/g, "$1 $2");
-        // return unCamelCased.replace(/\b\w/g, function (l) {
-        //     return l.toUpperCase()
-        // });
-    }
-}
-
 export function removeInitialAndTrailingSlashes(s: string): string {
     return removeInitialSlash(removeTrailingSlash(s));
 }

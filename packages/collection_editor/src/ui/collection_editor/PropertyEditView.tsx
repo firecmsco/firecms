@@ -315,16 +315,7 @@ function PropertyEditView({
 
     const lastSubmittedProperty = useRef<object>(values);
 
-    const id = "id";
-
     const selectedWidgetError = showErrors && getIn(errors, "selectedWidget");
-
-    useEffect(() => {
-        const idTouched = getIn(touched, id);
-        if (!idTouched && autoUpdateId && values?.name) {
-            setFieldValue(id, toSnakeCase(values.name))
-        }
-    }, [autoUpdateId, touched, values?.name]);
 
     useEffect(() => {
         if (onPropertyChanged) {
@@ -541,6 +532,7 @@ function PropertyEditView({
                                           isNewProperty={!existing}
                                           existingPropertyKeys={existingPropertyKeys}
                                           disabled={disabled}
+                                          autoUpdateId={autoUpdateId}
                                           ref={nameFieldRef}/>}
 
                 {childComponent}
