@@ -94,6 +94,7 @@ export function FireCMSProApp({
                                   autoOpenDrawer,
                                   firestoreIndexesBuilder,
                                   components,
+                                  localTextSearchEnabled = false,
                                   backendApiHost = "https://api-drplyi3b6q-ey.a.run.app", // TODO
                               }: FireCMSProAppProps) {
 
@@ -141,7 +142,8 @@ export function FireCMSProApp({
     const firestoreDelegate = useFirestoreDelegate({
         firebaseApp,
         textSearchControllerBuilder: textSearchControllerBuilder,
-        firestoreIndexesBuilder: firestoreIndexesBuilder
+        firestoreIndexesBuilder: firestoreIndexesBuilder,
+        localTextSearchEnabled
     })
 
     /**
@@ -258,7 +260,6 @@ function FireCMSProInternal({ firebaseApp, fireCMSBackend, configError, firebase
     const projectConfig = useBuildProjectConfig({
         projectId: firebaseApp.options.projectId,
         backendFirebaseApp: fireCMSBackend.backendFirebaseApp,
-        projectsApi: fireCMSBackend.projectsApi
     });
 
     /**

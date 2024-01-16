@@ -5,14 +5,12 @@ import * as JsSearch from "js-search";
 import { FirebaseApp } from "firebase/app";
 import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
 
-
 export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder = ({
                                                                                        firebaseApp,
                                                                                    }: {
 
     firebaseApp: FirebaseApp,
 }): FirestoreTextSearchController => {
-
 
     let currentPath: string | undefined;
     const indexes: Record<string, JsSearch.Search> = {};
@@ -35,7 +33,7 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
         const firestore = getFirestore(firebaseApp);
 
         const col = collection(firestore, path);
-        if (currentPath && path != currentPath) {
+        if (currentPath && path !== currentPath) {
             destroyListener(currentPath)
         }
 
@@ -56,6 +54,7 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
                 error: console.error
             }
         );
+        return true;
     }
 
     const search = async ({ searchString, path }: {

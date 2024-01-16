@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { doc, DocumentSnapshot, Firestore, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
+import { doc, Firestore, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
-import { FireCMSUserProject, ProjectSubscriptionPlan } from "../types";
+import { ProjectSubscriptionPlan } from "../types";
 import { UploadFileProps } from "@firecms/core";
 import { FirebaseStorage, getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "firebase/storage";
 import { ProjectsApi } from "../api/projects";
-import { Role } from "@firecms/firebase";
 
 export type ProjectConfig = {
     projectId: string;
@@ -30,18 +29,20 @@ export type ProjectConfig = {
     canEditRoles: boolean;
     canUploadLogo: boolean;
     canExport: boolean;
+    canUseLocalTextSearch: boolean;
+
+    localTextSearchEnabled: boolean;
+    updateLocalTextSearchEnabled: (allow: boolean) => Promise<void>;
 };
 
 interface ProjectConfigParams {
     backendFirebaseApp?: FirebaseApp;
     projectId: string;
-    projectsApi: ProjectsApi
 }
 
 export function useBuildProjectConfig({
                                           backendFirebaseApp,
                                           projectId,
-                                          projectsApi
                                       }: ProjectConfigParams): ProjectConfig {
 
     const configPath = projectId ? `projects/${projectId}` : undefined;
@@ -53,6 +54,7 @@ export function useBuildProjectConfig({
     const [clientFirebaseMissing, setClientFirebaseMissing] = useState<boolean | undefined>();
     const [serviceAccountMissing, setServiceAccountMissing] = useState<boolean | undefined>();
     const [clientConfigError, setClientConfigError] = useState<Error | undefined>();
+    const [localTextSearchEnabled, setLocalTextSearchEnabled] = useState<boolean>(false);
 
     const [customizationRevision, setCustomizationRevision] = useState<string | undefined>();
 
@@ -104,6 +106,12 @@ export function useBuildProjectConfig({
         return setDoc(doc(firestore, configPath), { name }, { merge: true });
     }, [configPath]);
 
+    const updateLocalTextSearchEnabled = useCallback(async (allowed: boolean): Promise<void> => {
+        const firestore = firestoreRef.current;
+        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        return setDoc(doc(firestore, configPath), { local_text_search_enabled: allowed }, { merge: true });
+    }, [configPath]);
+
     useEffect(() => {
         if (!projectId || !backendFirebaseApp) {
             setClientConfigLoading(false);
@@ -121,8 +129,11 @@ export function useBuildProjectConfig({
             {
                 next: (snapshot) => {
 
+                    console.log("Project config snapshot", snapshot.data());
                     setClientProjectName(snapshot.get("name"));
                     setSubscriptionPlan(snapshot.get("subscription_plan") ?? "free"); // TODO: remove default value
+                    setLocalTextSearchEnabled(snapshot.get("local_text_search_enabled") ?? false);
+
                     const currentCustomizationRevision = snapshot.get("current_app_config_revision");
                     setCustomizationRevision(currentCustomizationRevision);
 
@@ -158,6 +169,7 @@ export function useBuildProjectConfig({
     const canEditRoles = subscriptionPlan !== "free";
     const canUploadLogo = subscriptionPlan !== "free";
     const canExport = subscriptionPlan !== "free";
+    const canUseLocalTextSearch = subscriptionPlan !== "free";
 
     return {
 
@@ -177,7 +189,10 @@ export function useBuildProjectConfig({
         usersLimit,
         canEditRoles,
         canUploadLogo,
-        canExport
+        canExport,
+        canUseLocalTextSearch,
+        localTextSearchEnabled,
+        updateLocalTextSearchEnabled
     }
 }
 

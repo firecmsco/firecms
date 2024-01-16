@@ -1,13 +1,11 @@
 import React, { useDeferredValue, useEffect, useState } from "react";
 
+import { FireCMSLogo, useBrowserTitleAndIcon, useSnackbarController } from "@firecms/core";
 import {
-    FireCMSLogo,
-    useBrowserTitleAndIcon,
-    useSnackbarController
-} from "@firecms/core";
-import {
+    BooleanSwitchWithLabel,
     CenteredView,
-    FileUpload, OnFileUploadRejected,
+    FileUpload,
+    OnFileUploadRejected,
     TextField,
     Typography,
 } from "@firecms/ui";
@@ -19,6 +17,7 @@ export function ProjectSettings() {
 
     const { backendUid } = useFireCMSBackend();
 
+    const projectConfig = useProjectConfig();
     const [showUpgradeBanner, setShowUpgradeBanner] = useState<boolean>(false);
 
     useBrowserTitleAndIcon("Project settings")
@@ -46,6 +45,15 @@ export function ProjectSettings() {
                 <ProjectNameTextField/>
 
                 <LogoUploadField onNoSubscriptionPlan={() => setShowUpgradeBanner(true)}/>
+
+                <div className={"col-span-12"}>
+                    <BooleanSwitchWithLabel
+                        position={"start"}
+                        label="Enable local text search"
+                        onValueChange={(v) => projectConfig.updateLocalTextSearchEnabled(v)}
+                        value={projectConfig.localTextSearchEnabled}
+                    />
+                </div>
             </div>
 
             <div className={"flex flex-col gap-2"}>
@@ -98,7 +106,7 @@ function LogoUploadField({ onNoSubscriptionPlan }: {
         uploadLogo(acceptedFiles[0]);
     }
 
-    const onFilesRejected:OnFileUploadRejected = (fileRejections, event) => {
+    const onFilesRejected: OnFileUploadRejected = (fileRejections, event) => {
         if (!canUploadLogo) {
             onNoSubscriptionPlan();
         } else {

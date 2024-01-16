@@ -5,7 +5,6 @@ import {
     AdditionalFieldDelegate,
     CollectionSize,
     Entity,
-    EntityCollection,
     FilterValues,
     FireCMSContext,
     ResolvedProperty,
@@ -111,7 +110,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
          AdditionalHeaderWidget,
          additionalIDHeaderWidget,
          emptyComponent,
-         getIdColumnWidth
+         getIdColumnWidth,
+         onTextSearchClick
      }: EntityCollectionTableProps<M>) {
 
         const largeLayout = useLargeLayout();
@@ -394,6 +394,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         forceFilter={disabledFilterChange}
                         filterIsSet={filterIsSet}
                         onTextSearch={textSearchEnabled ? onTextSearch : undefined}
+                        onTextSearchClick={textSearchEnabled ? onTextSearchClick : undefined}
                         clearFilter={clearFilter}
                         size={size}
                         onSizeChanged={updateSize}
@@ -515,4 +516,3 @@ function filterableProperty(property: ResolvedProperty, partOfArray = false): bo
     }
     return ["string", "number", "boolean", "date", "reference", "array"].includes(property.dataType);
 }
-

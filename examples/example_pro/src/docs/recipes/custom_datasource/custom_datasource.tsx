@@ -7,9 +7,9 @@ import {
     FetchCollectionProps,
     FetchEntityProps,
     SaveEntityProps,
+    useFirestoreDelegate
 } from "@firecms/firebase_pro";
 import { FirebaseApp } from "firebase/app";
-import { useFirestoreDelegate } from "@firecms/firebase_pro";
 
 type CustomDataSourceProps = {
     firebaseApp?: FirebaseApp,
@@ -25,6 +25,7 @@ export function useCustomDatasource({ firebaseApp }: CustomDataSourceProps): Dat
 
     const firestoreDelegate = useFirestoreDelegate({
         firebaseApp,
+        localTextSearchEnabled: false
     })
 
     return {

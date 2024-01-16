@@ -38,6 +38,9 @@
       "@firecms/firebase": [
         "../firebase_firecms/src/index.ts"
       ],
+      "@firecms/ui": [
+        "../ui/src/index.ts"
+      ],
       "@firecms/collection_editor": [
         "../collection_editor/src/index.ts"
       ],

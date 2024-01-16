@@ -21,6 +21,7 @@ interface CollectionTableToolbarProps {
     actionsStart?: React.ReactNode;
     actions?: React.ReactNode;
     title?: React.ReactNode,
+    onTextSearchClick?: () => void;
     onTextSearch?: (searchString?: string) => void;
     onSizeChanged: (size: CollectionSize) => void;
     clearFilter?: () => void;
@@ -82,12 +83,13 @@ export function CollectionTableToolbar(props: CollectionTableToolbarProps) {
                         <CircularProgress size={"small"}/>}
                 </div>}
 
-                {props.onTextSearch &&
+                {(props.onTextSearch || props.onTextSearchClick) &&
                     <SearchBar
                         key={"search-bar"}
-                        onTextSearch={props.onTextSearch}
-                        expandable={true}/>
-                }
+                        disabled={Boolean(props.onTextSearchClick)}
+                        onClick={props.onTextSearchClick}
+                        onTextSearch={props.onTextSearchClick ? undefined : props.onTextSearch}
+                        expandable={true}/>}
 
                 {props.actions}
 

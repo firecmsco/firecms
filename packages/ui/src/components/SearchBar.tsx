@@ -6,23 +6,27 @@ import { ClearIcon, SearchIcon } from "../icons";
 import { cn } from "../util";
 
 interface SearchBarProps {
-    onTextSearch: (searchString?: string) => void;
+    onClick?: () => void;
+    onTextSearch?: (searchString?: string) => void;
     placeholder?: string;
     expandable?: boolean;
     large?: boolean;
     innerClassName?: string;
     className?: string;
     autoFocus?: boolean;
+    disabled?: boolean;
 }
 
 export function SearchBar({
+                              onClick,
                               onTextSearch,
                               placeholder = "Search",
                               expandable = false,
                               large = false,
                               innerClassName,
                               className,
-                              autoFocus
+                              autoFocus,
+                              disabled
                           }: SearchBarProps) {
 
     const [searchText, setSearchText] = useState<string>("");
@@ -34,6 +38,7 @@ export function SearchBar({
      * Debounce on Search text update
      */
     React.useEffect(() => {
+        if (!onTextSearch) return;
         if (deferredValues) {
             onTextSearch(deferredValues);
         } else {
@@ -42,31 +47,38 @@ export function SearchBar({
     }, [deferredValues]);
 
     const clearText = useCallback(() => {
+        if (!onTextSearch) return;
         setSearchText("");
         onTextSearch(undefined);
     }, []);
 
     return (
-        <div className={cn("relative",
-            large ? "h-14" : "h-[42px]",
-            "bg-gray-50 dark:bg-gray-800 transition duration-150 ease-in-out border",
-            defaultBorderMixin,
-            "rounded",
-            className)}>
+        <div
+            onClick={onClick}
+            className={cn("relative",
+                large ? "h-14" : "h-[42px]",
+                "bg-gray-50 dark:bg-gray-800 transition duration-150 ease-in-out border",
+                defaultBorderMixin,
+                "rounded",
+                className)}>
             <div
                 className="absolute p-0 px-4 h-full absolute pointer-events-none flex items-center justify-center top-0">
                 <SearchIcon className={"text-gray-500"}/>
             </div>
             <input
+                onClick={onClick}
                 placeholder={placeholder}
                 value={searchText}
-                onChange={(event) => {
-                    setSearchText(event.target.value);
-                }}
+                onChange={onTextSearch
+                    ? (event) => {
+                        setSearchText(event.target.value);
+                    }
+                    : undefined}
                 autoFocus={autoFocus}
                 onFocus={() => setActive(true)}
                 onBlur={() => setActive(false)}
                 className={cn(
+                    disabled && "pointer-events-none",
                     "relative flex items-center rounded transition-all bg-transparent outline-none appearance-none border-none",
                     "pl-12 h-full text-current ",
                     expandable ? (active ? "w-[220px]" : "w-[180px]") : "",

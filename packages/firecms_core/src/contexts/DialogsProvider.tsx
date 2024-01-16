@@ -44,7 +44,9 @@ export const DialogsProvider: React.FC<PropsWithChildren<{}>> = ({ children }) =
             {children}
             {dialogEntries.map((entry, i) => <entry.Component
                 key={`dialog_${i}`}
-                open={true}/>)}
+                open={true}
+                closeDialog={close}
+            />)}
         </DialogsControllerContext.Provider>
     );
 };

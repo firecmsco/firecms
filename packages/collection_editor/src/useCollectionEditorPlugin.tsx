@@ -88,12 +88,15 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
 
     const injectCollections = (baseCollections: EntityCollection[]) => {
 
-        const markAsEditable = (c: PersistedCollection) => {
+        const markAsEditableAndSearchable = (c: PersistedCollection) => {
+            if (c.textSearchEnabled === undefined) {
+                c.textSearchEnabled = true;
+            }
             makePropertiesEditable(c.properties as Properties);
-            c.subcollections?.forEach(markAsEditable);
+            c.subcollections?.forEach(markAsEditableAndSearchable);
         };
         const storedCollections = collectionConfigController.collections ?? [];
-        storedCollections.forEach(markAsEditable);
+        storedCollections.forEach(markAsEditableAndSearchable);
 
         console.debug("Collections specified in code:", baseCollections);
         console.debug("Collections stored in the backend", storedCollections);

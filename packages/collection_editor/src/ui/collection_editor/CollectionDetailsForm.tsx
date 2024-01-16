@@ -211,6 +211,18 @@ export function CollectionDetailsForm({
                                 </div>}
                             initiallyExpanded={false}>
                             <div className={"grid grid-cols-12 gap-4 p-4"}>
+
+                                <div className={"col-span-12"}>
+                                    <Field name={"id"}
+                                           as={DebouncedTextField}
+                                           disabled={!isNewCollection}
+                                           label={"Collection id"}
+                                           error={touched.id && Boolean(errors.id)}/>
+                                    <FieldHelperView error={touched.id && Boolean(errors.id)}>
+                                        {touched.id && Boolean(errors.id) ? errors.id : "This id identifies this collection"}
+                                    </FieldHelperView>
+                                </div>
+
                                 <div className={"col-span-12"}>
                                     <TextField
                                         error={touched.singularName && Boolean(errors.singularName)}
@@ -239,17 +251,6 @@ export function CollectionDetailsForm({
                                     />
                                     <FieldHelperView error={touched.description && Boolean(errors.description)}>
                                         {touched.description && Boolean(errors.description) ? errors.description : "Description of the collection, you can use markdown"}
-                                    </FieldHelperView>
-                                </div>
-
-                                <div className={"col-span-12"}>
-                                    <Field name={"id"}
-                                           as={DebouncedTextField}
-                                           disabled={!isNewCollection}
-                                           label={"Collection id"}
-                                           error={touched.id && Boolean(errors.id)}/>
-                                    <FieldHelperView error={touched.id && Boolean(errors.id)}>
-                                        {touched.id && Boolean(errors.id) ? errors.id : "This id identifies this collection"}
                                     </FieldHelperView>
                                 </div>
 
@@ -318,7 +319,8 @@ export function CollectionDetailsForm({
                                         value={values.collectionGroup ?? false}
                                     />
                                     <FieldHelperView>
-                                        A collection group consists of all collections with the same path. This allows you
+                                        A collection group consists of all collections with the same path. This allows
+                                        you
                                         to query over multiple collections at once.
                                     </FieldHelperView>
                                 </div>

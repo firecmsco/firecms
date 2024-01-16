@@ -33,7 +33,6 @@ const appConfig: FireCMSAppConfig = {
         }
         return collection;
     },
-    textSearchControllerBuilder: localSearchControllerBuilder,
     propertyConfigs: [
         colorPropertyConfig,
         pricePropertyConfig,

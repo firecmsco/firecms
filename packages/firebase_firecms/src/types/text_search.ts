@@ -16,9 +16,18 @@ export type FirestoreTextSearchControllerBuilder = (props: {
 }) => FirestoreTextSearchController;
 
 export type FirestoreTextSearchController = {
+    /**
+     * This method is called when a search delegate is ready to be used.
+     * Return true if this path can be handled by this controller.
+     * @param props
+     */
     init: (props: {
         path: string,
         collection?: EntityCollection | ResolvedEntityCollection
-    }) => void,
-    search: (props: { searchString: string, path: string }) => (Promise<readonly string[] | undefined>),
+    }) => boolean,
+    /**
+     * Do the search and return a list of ids.
+     * @param props
+     */
+    search: (props: { searchString: string, path: string }) => (Promise<readonly string[]> | undefined),
 };

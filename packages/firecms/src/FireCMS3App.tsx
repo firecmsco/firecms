@@ -37,7 +37,9 @@ import {
     useBuildCollectionsConfigController,
     useBuildFireCMSBackend,
     useBuildProjectConfig,
+    useBuildUserManagement,
     useDelegatedLogin,
+    UserManagement,
 } from "./hooks";
 
 import { FireCMS3AppProps } from "./FireCMS3AppProps";
@@ -66,9 +68,9 @@ import {
     useInitialiseFirebase
 } from "@firecms/firebase";
 import { ExportAllowedParams, useImportExportPlugin } from "@firecms/data_import_export";
-import { useBuildUserManagement, UserManagement } from "./hooks";
 import { UserManagementProvider } from "./hooks/useUserManagement";
 import { Button, CenteredView, Typography } from "@firecms/ui";
+import { useSaasPlugin } from "./hooks/useSaasPlugin";
 
 const DOCS_LIMIT = 200;
 
@@ -156,7 +158,6 @@ export type FireCMS3ClientProps<ExtraAppbarProps = object> = {
     modeController: ModeController;
     /**
      * A component that gets rendered on the upper side of the main toolbar.
-     * `toolbarExtraWidget` has no effect if this is set.
      */
     FireCMSAppBarComponent?: React.ComponentType<FireCMSAppBarProps<ExtraAppbarProps>>;
 
@@ -190,7 +191,6 @@ export const FireCMS3Client = function FireCMS3Client({
     const projectConfig = useBuildProjectConfig({
         projectId,
         backendFirebaseApp: fireCMSBackend.backendFirebaseApp,
-        projectsApi: fireCMSBackend.projectsApi
     });
 
     const userManagement = useBuildUserManagement({
@@ -462,10 +462,15 @@ function FireCMS3AppAuthenticated({
     const firestoreDelegate = useFirestoreDelegate({
         firebaseApp,
         textSearchControllerBuilder: appConfig?.textSearchControllerBuilder,
-        firestoreIndexesBuilder: appConfig?.firestoreIndexesBuilder
-    })
+        firestoreIndexesBuilder: appConfig?.firestoreIndexesBuilder,
+        localTextSearchEnabled: projectConfig.localTextSearchEnabled
+    });
 
-    const plugins: FireCMSPlugin<any, any, any>[] = [importExportPlugin, collectionEditorPlugin, dataEnhancementPlugin];
+    const saasPlugin = useSaasPlugin({
+        projectConfig
+    });
+
+    const plugins: FireCMSPlugin<any, any, any>[] = [importExportPlugin, collectionEditorPlugin, dataEnhancementPlugin, saasPlugin];
 
     /**
      * Controller used for saving and fetching files in storage

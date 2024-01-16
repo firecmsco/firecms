@@ -121,6 +121,13 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
     }
 
     collectionView?: {
+
+        blockTextSearch?: boolean;
+
+        onTextSearchClick?: (props: {
+            context: FireCMSContext
+        }) => void;
+
         /**
          * Use this method to inject widgets to the entity collections header
          * @param props

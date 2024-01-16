@@ -9,18 +9,15 @@ import "@fontsource/ibm-plex-mono";
 import {
     buildCollection,
     CircularProgressCenter,
+    FirebaseAuthController,
+    FirebaseLoginView,
     FireCMS,
-    FireCMSPlugin,
     ModeControllerProvider,
     NavigationRoutes,
     Scaffold,
     SideDialogs,
     SnackbarProvider,
     useBuildModeController,
-} from "@firecms/firebase_pro";
-import {
-    FirebaseAuthController,
-    FirebaseLoginView,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
@@ -99,8 +96,8 @@ export function CustomCMSApp() {
         firebaseApp,
         // textSearchController: textSearchController,
         // firestoreIndexesBuilder: firestoreIndexesBuilder
-    })
-
+        localTextSearchEnabled: true
+    });
 
     const storageSource = useFirebaseStorageSource({ firebaseApp });
 

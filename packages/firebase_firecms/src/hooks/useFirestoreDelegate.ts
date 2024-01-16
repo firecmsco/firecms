@@ -12,6 +12,7 @@ import {
     GeoPoint,
     ListenCollectionDelegateProps,
     ListenEntityProps,
+    ResolvedEntityCollection,
     SaveEntityProps,
     WhereFilterOp
 } from "@firecms/core";
@@ -44,7 +45,8 @@ import {
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
 import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "../types/text_search";
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
+import { localSearchControllerBuilder } from "../utils";
 
 /**
  * @group Firebase
@@ -56,6 +58,12 @@ export interface FirestoreDataSourceProps {
      * `path` and a `searchString`.
      */
     textSearchControllerBuilder?: FirestoreTextSearchControllerBuilder,
+
+    /**
+     * Fallback to local text search if no text search controller is specified,
+     * or if the controller does not support the given path.
+     */
+    localTextSearchEnabled?: boolean,
 
     /**
      * Use this builder to indicate which indexes are available in your
@@ -80,10 +88,23 @@ export type FirestoreIndexesBuilder = (params: {
 export function useFirestoreDelegate({
                                          firebaseApp,
                                          textSearchControllerBuilder,
-                                         firestoreIndexesBuilder
+                                         firestoreIndexesBuilder,
+                                         localTextSearchEnabled
                                      }: FirestoreDataSourceProps): DataSourceDelegate {
 
     const searchControllerRef = useRef<FirestoreTextSearchController>();
+
+    useEffect(() => {
+        if (!searchControllerRef.current && firebaseApp) {
+            if ((textSearchControllerBuilder || localTextSearchEnabled) && !searchControllerRef.current) {
+                searchControllerRef.current = buildTextSearchControllerWithLocalSearch({
+                    firebaseApp,
+                    textSearchControllerBuilder,
+                    localTextSearchEnabled: localTextSearchEnabled ?? false
+                });
+            }
+        }
+    }, [firebaseApp, localTextSearchEnabled, textSearchControllerBuilder]);
 
     const buildQuery = useCallback(<M>(path: string,
                                        filter: FilterValues<Extract<keyof M, string>> | undefined,
@@ -179,12 +200,20 @@ export function useFirestoreDelegate({
             throw Error("Trying to make text search without specifying a FirestoreTextSearchController");
 
         let subscriptions: (() => void)[] = [];
-        textSearchController.search({
+        const search = textSearchController.search({
             path,
             searchString
-        }).then((ids) => {
-            if (ids === undefined)
-                throw Error("The current path is not supported by the specified FirestoreTextSearchController");
+        });
+
+        if (!search) {
+            throw Error("The current path is not supported by the specified FirestoreTextSearchController");
+        }
+
+        search.then((ids) => {
+            if (ids.length === 0) {
+                subscriptions = [];
+                onUpdate([]);
+            }
 
             const entities: Entity<M>[] = [];
             const addedEntitiesSet = new Set<string>();
@@ -211,7 +240,6 @@ export function useFirestoreDelegate({
         });
 
         return () => {
-            console.log("Clearing", subscriptions.length, "subscriptions")
             subscriptions.forEach((p) => p());
         }
 
@@ -323,10 +351,8 @@ export function useFirestoreDelegate({
 
             const query = buildQuery(path, filter, orderBy, order, startAfter, limit, isCollectionGroup);
 
-            if (textSearchControllerBuilder && !searchControllerRef.current) {
-                searchControllerRef.current = textSearchControllerBuilder!({ firebaseApp });
-            }
-            if (searchControllerRef.current) {
+            const textSearchEnabled = collection?.textSearchEnabled === undefined || collection?.textSearchEnabled;
+            if (searchControllerRef.current && textSearchEnabled) {
                 searchControllerRef.current.init({
                     path,
                     collection
@@ -351,7 +377,7 @@ export function useFirestoreDelegate({
                 }
             );
 
-        }, []),
+        }, [buildQuery, firebaseApp, performTextSearch]),
 
         /**
          * Retrieve an entity given a path and a collection
@@ -690,4 +716,43 @@ function currentTime(): any {
 
 function buildGeoPoint(geoPoint: GeoPoint): any {
     return new FirestoreGeoPoint(geoPoint.latitude, geoPoint.longitude)
+}
+
+function buildTextSearchControllerWithLocalSearch({
+                                                      textSearchControllerBuilder,
+                                                      firebaseApp,
+                                                      localTextSearchEnabled
+                                                  }: {
+    textSearchControllerBuilder?: FirestoreTextSearchControllerBuilder,
+    firebaseApp: FirebaseApp,
+    localTextSearchEnabled: boolean
+}): FirestoreTextSearchController | undefined {
+    if (!textSearchControllerBuilder && localTextSearchEnabled)
+        return localSearchControllerBuilder({ firebaseApp });
+
+    if (!localTextSearchEnabled && textSearchControllerBuilder)
+        return textSearchControllerBuilder({ firebaseApp });
+
+    if (!textSearchControllerBuilder && !localTextSearchEnabled) {
+        return undefined;
+    }
+
+    const localSearchController = localSearchControllerBuilder({ firebaseApp })
+    const textSearchController = textSearchControllerBuilder!({ firebaseApp });
+    return {
+        init: (props: {
+            path: string,
+            collection?: EntityCollection | ResolvedEntityCollection
+        }) => {
+            const b = textSearchController.init(props);
+            if (b) return true;
+            return localSearchController.init(props);
+        },
+        search: (props: {
+            searchString: string,
+            path: string
+        }) => {
+            return textSearchController.search(props) ?? localSearchController.search(props);
+        }
+    }
 }

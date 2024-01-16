@@ -44,7 +44,7 @@ export function FireCMSCloudVersions() {
         <div
             className={clsx("w-full max-w-xl lg:max-w-none h-full mx-4 p-6 rounded-lg flex flex-col outline-none ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent")}>
 
-            <h3 className={"text-3xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300 text-primary"}>
+            <h3 className={"text-3xl md:text-4xl font-bold mb-4 text-center dark:text-primary text-primary"}>
                 Plus
             </h3>
             <div className={"grow"}>
@@ -52,13 +52,14 @@ export function FireCMSCloudVersions() {
                     Perfect for small teams and startups.
                 </p>
                 <ul>
-                    <li className={" list-disc"}>Everything in the free tier</li>
-                    <li className={" list-disc"}>Custom fields and custom views</li>
-                    <li className={" list-disc"}>Unlimited users and roles</li>
-                    <li className={" list-disc"}>Unlimited data export</li>
-                    <li className={" list-disc"}>Theme and logo customization</li>
-                    <li className={" list-disc"}>Custom user roles</li>
-                    <li className={" list-disc"}>GPT-4 content generation</li>
+                    <li className={"list-disc"}>Everything in the free tier</li>
+                    <li className={"list-disc"}>Local text search</li>
+                    <li className={"list-disc"}>Custom fields and custom views</li>
+                    <li className={"list-disc"}>Unlimited users and roles</li>
+                    <li className={"list-disc"}>Unlimited data export</li>
+                    <li className={"list-disc"}>Theme and logo customization</li>
+                    <li className={"list-disc"}>Custom user roles</li>
+                    <li className={"list-disc"}>GPT-4 content generation</li>
                 </ul>
             </div>
             <div className={"text-center mt-4 w-full"}>
@@ -81,13 +82,13 @@ export function FireCMSCloudVersions() {
                     Perfect for large teams and enterprises.
                 </p>
                 <ul>
-                    <li className={" list-disc"}>Everything in PLUS</li>
-                    <li className={" list-disc"}>Custom authentication and access control</li>
-                    <li className={" list-disc"}>SAML SSO</li>
-                    <li className={" list-disc"}>Custom domain</li>
-                    <li className={" list-disc"}>Full CMS components customization</li>
-                    <li className={" list-disc"}>Priority support</li>
-                    <li className={" list-disc"}>Roadmap prioritization</li>
+                    <li className={"list-disc"}>Everything in PLUS</li>
+                    <li className={"list-disc"}>Custom authentication and access control</li>
+                    <li className={"list-disc"}>SAML SSO</li>
+                    <li className={"list-disc"}>Custom domain</li>
+                    <li className={"list-disc"}>Full CMS components customization</li>
+                    <li className={"list-disc"}>Priority support</li>
+                    <li className={"list-disc"}>Roadmap prioritization</li>
                 </ul>
             </div>
             <div className={"text-center mt-4 text-primary w-full"}>

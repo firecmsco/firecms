@@ -426,7 +426,10 @@ export const EntityCollectionView = React.memo(
 
         const largeLayout = useLargeLayout();
 
-        const getActionsForEntity = useCallback(({ entity, customEntityActions }: { entity?: Entity<M>, customEntityActions?: EntityAction[] }): EntityAction[] => {
+        const getActionsForEntity = useCallback(({ entity, customEntityActions }: {
+            entity?: Entity<M>,
+            customEntityActions?: EntityAction[]
+        }): EntityAction[] => {
             const deleteEnabled = entity ? canDeleteEntity(collection, authController, fullPathToCollectionSegments(fullPath), entity) : true;
             const actions: EntityAction[] = [editEntityAction];
             if (createEnabled)
@@ -555,6 +558,19 @@ export const EntityCollectionView = React.memo(
             }
             : undefined;
 
+        let onTextSearchClick: (() => void) | undefined;
+        if (context?.plugins) {
+            const addTextSeachClickListener = context.plugins?.find(p => p.collectionView?.blockTextSearch);
+            onTextSearchClick = addTextSeachClickListener
+                ? () => {
+                    context.plugins?.forEach(p => {
+                        if (p.collectionView?.onTextSearchClick)
+                            p.collectionView?.onTextSearchClick({ context });
+                    })
+                }
+                : undefined;
+        }
+
         return (
             <div className={cn("overflow-hidden h-full w-full", className)}
                  ref={containerRef}>
@@ -576,6 +592,7 @@ export const EntityCollectionView = React.memo(
                     properties={resolvedCollection.properties}
                     getPropertyFor={getPropertyFor}
                     textSearchEnabled={resolvedCollection.textSearchEnabled}
+                    onTextSearchClick={onTextSearchClick}
                     actions={<EntityCollectionViewActions
                         parentCollectionIds={parentCollectionIds ?? []}
                         collection={collection}

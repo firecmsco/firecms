@@ -24,17 +24,22 @@ const usersIndex = client && client.initIndex("users");
 const blogIndex = client && client.initIndex("blog");
 const booksIndex = client && client.initIndex("books");
 
-export const textSearchControllerBuilder = buildAlgoliaSearchController(({
-                                                                      path,
-                                                                      searchString
-                                                                  }) => {
-    if (path === "products")
-        return productsIndex && performAlgoliaTextSearch(productsIndex, searchString);
-    if (path === "users")
-        return usersIndex && performAlgoliaTextSearch(usersIndex, searchString);
-    if (path === "blog")
-        return blogIndex && performAlgoliaTextSearch(blogIndex, searchString);
-    if (path === "books")
-        return booksIndex && performAlgoliaTextSearch(booksIndex, searchString);
-    return undefined;
+export const textSearchControllerBuilder = buildAlgoliaSearchController({
+    isPathSupported: (path) => {
+        return ["products", "users", "blog", "books"].includes(path);
+    },
+    search: ({
+                 path,
+                 searchString
+             }) => {
+        if (path === "products")
+            return productsIndex && performAlgoliaTextSearch(productsIndex, searchString);
+        if (path === "users")
+            return usersIndex && performAlgoliaTextSearch(usersIndex, searchString);
+        if (path === "blog")
+            return blogIndex && performAlgoliaTextSearch(blogIndex, searchString);
+        if (path === "books")
+            return booksIndex && performAlgoliaTextSearch(booksIndex, searchString);
+        return undefined;
+    }
 });

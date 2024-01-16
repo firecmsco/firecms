@@ -6,10 +6,11 @@ import { useProjectConfig } from "../../hooks";
 
 export type SubscriptionPlanWidgetProps = {
     message?: React.ReactNode,
-    showForPlans?: string[]
+    showForPlans?: string[],
+    includeCTA?: boolean
 }
 
-export function SubscriptionPlanWidget({ message, showForPlans }: SubscriptionPlanWidgetProps) {
+export function SubscriptionPlanWidget({ message, showForPlans, includeCTA = true }: SubscriptionPlanWidgetProps) {
 
     const { subscriptionPlan } = useProjectConfig();
 
@@ -23,13 +24,14 @@ export function SubscriptionPlanWidget({ message, showForPlans }: SubscriptionPl
         <Alert
             color={"info"}
             className={"my-4"}
-            action={<Button
-                className={"dark:!text-white dark:border-white dark:hover:bg-white dark:hover:!text-primary"}
+            action={includeCTA && <Button
+                className={"dark:!text-white dark:border-white dark:hover:bg-white dark:hover:!text-primary min-w-content"}
                 variant={"outlined"}
                 onClick={() => setDialogOpen(true)}>
                 More info
             </Button>}
-        >This project is currently in the <PlanChip subscriptionPlan={subscriptionPlan}/> {message}
+        ><p>This project is currently in the <PlanChip subscriptionPlan={subscriptionPlan}/></p>
+            <p>{message}</p>
         </Alert>
 
         <PlansComparisonDialog open={dialogOpen} onClose={() => setDialogOpen(false)}/>

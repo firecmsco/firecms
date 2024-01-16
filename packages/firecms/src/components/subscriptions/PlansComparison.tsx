@@ -1,20 +1,10 @@
 import React from "react";
-import {
-    CircularProgressCenter,
-    useNavigationController
-} from "@firecms/core";
-import {
-    Button,
-    CloseIcon,
-    Container,
-    Dialog,
-    DialogContent,
-    IconButton,
-} from "@firecms/ui";
+import { CircularProgressCenter, useNavigationController } from "@firecms/core";
+import { Button, CloseIcon, Container, Dialog, DialogContent, IconButton, } from "@firecms/ui";
 import { useNavigate } from "react-router-dom";
 import { useProjectConfig, useSubscriptionsForUserController } from "../../hooks";
-import { ProductView } from "./ProductView";
 import { useFireCMSBackend } from "../../hooks/useFireCMSBackend";
+import { UpgradeToPlusButton } from "./UpgradeToPlusButton";
 
 export function PlansComparisonDialog({
                                           open,
@@ -48,33 +38,6 @@ export function PlansComparisonDialog({
 
 export function PlansComparison() {
 
-    const { backendFirebaseApp, backendUid } = useFireCMSBackend();
-
-    const {
-        subscriptionPlan,
-        projectId
-    } = useProjectConfig();
-    if (!subscriptionPlan)
-        throw new Error("No subscription plan");
-
-    const {
-        products,
-        subscribe,
-        getSubscriptionsForProject
-    } = useSubscriptionsForUserController({
-        firebaseApp: backendFirebaseApp,
-    });
-
-    const projectSubscriptions = getSubscriptionsForProject(projectId);
-
-    if (projectSubscriptions === undefined || products === undefined) {
-        return <CircularProgressCenter/>
-    }
-
-    const cloudProducts = products.filter(p => p.metadata?.type === "cloud_plus" || p.metadata?.type === "cloud_pro");
-
-    const plusProduct = cloudProducts.find(p => p.metadata?.type === "cloud_plus");
-    const plusSubscription = projectSubscriptions.find(s => s.product.metadata?.type === "cloud_plus");
 
     const freeTier = (
         <div
@@ -109,7 +72,7 @@ export function PlansComparison() {
         <div
             className="h-full max-w-sm p-6 rounded-lg flex flex-col outline-none ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent">
 
-            <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center dark:text-gray-300 text-primary"}>
+            <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center dark:text-primary text-primary"}>
                 Plus
             </h3>
             <div className={"grow"}>
@@ -118,6 +81,7 @@ export function PlansComparison() {
                 </p>
                 <ul>
                     <li className={"ml-8 list-disc"}>Everything in the free tier</li>
+                    <li className={"ml-8 list-disc"}>Local text search</li>
                     <li className={"ml-8 list-disc"}>Custom fields and custom views</li>
                     <li className={"ml-8 list-disc"}>Unlimited users and roles</li>
                     <li className={"ml-8 list-disc"}>Unlimited data export</li>
@@ -129,13 +93,9 @@ export function PlansComparison() {
 
             <span className={"text-2xl font-bold text-primary text-center my-8"}>€9.99 user/month</span>
 
-            {plusProduct && <div className={"flex items-center justify-center"}>
-                <ProductView
-                    includePriceSelect={false}
-                    product={plusProduct}
-                    projectId={projectId}
-                    subscribe={subscribe}/>
-            </div>}
+            <div className={"flex items-center justify-center"}>
+                <UpgradeToPlusButton/>
+            </div>
 
         </div>
     );

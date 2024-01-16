@@ -164,6 +164,8 @@ export type FireCMSProAppProps = {
      */
     firestoreIndexesBuilder?: FirestoreIndexesBuilder;
 
+    localTextSearchEnabled?: boolean;
+
     components?: ComponentsRegistry;
 
     backendApiHost?: string;

@@ -1,3 +1,5 @@
+import React from "react";
+
 /**
  * Controller to open the side dialog
  * @group Hooks and utilities
@@ -26,6 +28,6 @@ export interface DialogControllerEntryProps {
     /**
      * The component type that will be rendered
      */
-    Component: React.ComponentType<{ open: boolean }>;
+    Component: React.ComponentType<{ open: boolean, closeDialog: () => void }>;
 
 }

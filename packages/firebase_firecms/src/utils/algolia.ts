@@ -23,11 +23,16 @@ export function performAlgoliaTextSearch(index: SearchIndex, query: string): Pro
         });
 }
 
-export function buildAlgoliaSearchController(
+export function buildAlgoliaSearchController({
+                                                 isPathSupported,
+                                                 search
+                                             }: {
+    isPathSupported: (path: string) => boolean,
     search: (props: {
         searchString: string,
         path: string
-    }) => Promise<readonly string[]> | undefined,): FirestoreTextSearchControllerBuilder {
+    }) => Promise<readonly string[]> | undefined,
+}): FirestoreTextSearchControllerBuilder {
     return (props): FirestoreTextSearchController => {
 
         const init = (props: {
@@ -35,11 +40,12 @@ export function buildAlgoliaSearchController(
             collection?: EntityCollection | ResolvedEntityCollection
         }) => {
             // do nothing
+            return isPathSupported(props.path);
         }
 
         return {
             init,
-            search,
+            search
         }
     }
 
