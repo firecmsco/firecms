@@ -5,6 +5,8 @@ import * as JsSearch from "js-search";
 import { FirebaseApp } from "firebase/app";
 import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
 
+const MAX_SEARCH_RESULTS = 100;
+
 export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder = ({
                                                                                        firebaseApp,
                                                                                    }: {
@@ -65,7 +67,7 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
     }) => {
         const index = indexes[path];
         const searchResult = await index.search(searchString);
-        return searchResult.map((e: any) => e.id);
+        return searchResult.splice(0, MAX_SEARCH_RESULTS).map((e: any) => e.id);
     };
 
     return {

@@ -1,10 +1,10 @@
-import React, { useCallback, useDeferredValue, useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import { defaultBorderMixin, focusedMixin } from "../styles";
 import { IconButton } from "./index";
 import { ClearIcon, SearchIcon } from "../icons";
 import { cn } from "../util";
-import { useDebounceValue } from "../util/useDebounceValue.tsx";
+import { useDebounceValue } from "../util/useDebounceValue";
 
 interface SearchBarProps {
     onClick?: () => void;

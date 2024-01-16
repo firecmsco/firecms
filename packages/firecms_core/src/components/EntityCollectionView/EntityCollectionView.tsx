@@ -299,7 +299,7 @@ export const EntityCollectionView = React.memo(
                                                                 propertyKey,
                                                                 onValueUpdated,
                                                                 setError,
-                                                                entity
+                                                                entity,
                                                             }) => {
 
             const updatedValues = setIn({ ...entity.values }, propertyKey, value);
