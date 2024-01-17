@@ -118,9 +118,11 @@ export function mergeCollection(target: EntityCollection,
     return resultCollection
 }
 
-function mergePropertyOrBuilder(target: Property, source: PropertyOrBuilder): PropertyOrBuilder {
+function mergePropertyOrBuilder(target: PropertyOrBuilder, source: PropertyOrBuilder): PropertyOrBuilder {
     if (isPropertyBuilder(source)) {
         return source;
+    } else if (isPropertyBuilder(target)) {
+        return target;
     } else {
         const mergedProperty = mergeDeep(target, source);
         const targetEditable = Boolean(target.editable);

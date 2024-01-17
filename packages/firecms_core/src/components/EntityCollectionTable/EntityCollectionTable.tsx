@@ -111,7 +111,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
          additionalIDHeaderWidget,
          emptyComponent,
          getIdColumnWidth,
-         onTextSearchClick
+         onTextSearchClick,
+         textSearchLoading
      }: EntityCollectionTableProps<M>) {
 
         const largeLayout = useLargeLayout();
@@ -394,6 +395,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         forceFilter={disabledFilterChange}
                         filterIsSet={filterIsSet}
                         onTextSearch={textSearchEnabled ? onTextSearch : undefined}
+                        textSearchLoading={textSearchLoading}
                         onTextSearchClick={textSearchEnabled ? onTextSearchClick : undefined}
                         clearFilter={clearFilter}
                         size={size}

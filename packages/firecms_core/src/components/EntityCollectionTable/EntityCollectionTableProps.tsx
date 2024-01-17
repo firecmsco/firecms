@@ -134,6 +134,8 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
     getIdColumnWidth?: () => number;
 
     onTextSearchClick?: () => void;
+
+    textSearchLoading?: boolean;
 }
 
 export type GetPropertyForProps<M extends Record<string, any>> = {

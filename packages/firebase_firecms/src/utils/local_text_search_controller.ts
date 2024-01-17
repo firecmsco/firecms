@@ -31,34 +31,43 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
                   }: {
         path: string,
         collection?: EntityCollection | ResolvedEntityCollection
-    }) => {
+    }): Promise<boolean> => {
 
-        const firestore = getFirestore(firebaseApp);
+        console.log("Init local search controller", path, collectionProp)
 
-        const col = collection(firestore, path);
         if (currentPath && path !== currentPath) {
             destroyListener(currentPath)
         }
 
         currentPath = path;
 
-        if (!indexes[path] && collectionProp) {
-            console.debug("Init local search controller", path);
-            indexes[path] = buildIndex(collectionProp);
-            listeners[path] = onSnapshot(query(col),
-                {
-                    next: (snapshot) => {
-                        const docs = snapshot.docs.map(doc => ({
-                            id: doc.id,
-                            ...doc.data()
-                        }));
-                        indexes[path].addDocuments(docs);
-                    },
-                    error: console.error
-                }
-            );
-        }
-        return true;
+        return new Promise((resolve, reject) => {
+            if (!indexes[path] && collectionProp) {
+                console.debug("Init local search controller", path);
+                indexes[path] = buildIndex(collectionProp);
+                const firestore = getFirestore(firebaseApp);
+                const col = collection(firestore, path);
+                console.log("Listening to collection", path, col);
+                listeners[path] = onSnapshot(query(col),
+                    {
+                        next: (snapshot) => {
+                            const docs = snapshot.docs.map(doc => ({
+                                id: doc.id,
+                                ...doc.data()
+                            }));
+                            console.log("Added docs to index", path, docs.length);
+                            indexes[path].addDocuments(docs);
+                            resolve(true);
+                        },
+                        error: (e) => {
+                            console.error("Error initializing local search controller", path);
+                            console.error(e);
+                            reject(e);
+                        }
+                    }
+                );
+            }
+        });
     }
 
     const search = async ({ searchString, path }: {
@@ -66,6 +75,9 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
         path: string
     }) => {
         const index = indexes[path];
+        if (!index) {
+            throw new Error(`Index not found for path ${path}`);
+        }
         const searchResult = await index.search(searchString);
         return searchResult.splice(0, MAX_SEARCH_RESULTS).map((e: any) => e.id);
     };

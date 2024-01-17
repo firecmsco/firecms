@@ -13,7 +13,6 @@ import {
     mergeDeep,
     Property,
     PropertyConfig,
-    toSnakeCase,
 } from "@firecms/core";
 import {
     Button,
@@ -138,6 +137,7 @@ export const PropertyForm = React.memo(
                 ? { id: propertyKey, ...property } as PropertyWithId
                 : initialValue}
             onSubmit={(newPropertyWithId: PropertyWithId, helpers) => {
+                console.log("onSubmit", newPropertyWithId);
                 const {
                     id,
                     ...property
@@ -335,6 +335,7 @@ function PropertyEditView({
             }
         }
     }, [deferredValues, includeIdAndTitle, onPropertyChanged, propertyNamespace]);
+    console.log({ errors })
 
     useEffect(() => {
         if (values?.id && onError && Object.keys(errors).length > 0) {

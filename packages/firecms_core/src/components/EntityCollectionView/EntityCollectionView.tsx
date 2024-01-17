@@ -137,6 +137,7 @@ export const EntityCollectionView = React.memo(
         const [selectedNavigationEntity, setSelectedNavigationEntity] = useState<Entity<M> | undefined>(undefined);
         const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
 
+        const [textSearchLoading, setTextSearchLoading] = useState<boolean>(false);
         const [lastDeleteTimestamp, setLastDeleteTimestamp] = React.useState<number>(0);
 
         // number of entities in the collection
@@ -558,17 +559,33 @@ export const EntityCollectionView = React.memo(
             }
             : undefined;
 
+        const [textSearchInitialised, setTextSearchInitialised] = useState<boolean>(false);
         let onTextSearchClick: (() => void) | undefined;
+        let textSearchEnabled = Boolean(collection.textSearchEnabled);
         if (context?.plugins) {
-            const addTextSeachClickListener = context.plugins?.find(p => p.collectionView?.blockTextSearch);
-            onTextSearchClick = addTextSeachClickListener
+            const addTextSearchClickListener = context.plugins?.find(p => Boolean(p.collectionView?.onTextSearchClick));
+
+            onTextSearchClick = addTextSearchClickListener
                 ? () => {
-                    context.plugins?.forEach(p => {
+                    setTextSearchLoading(true);
+                    Promise.all(context.plugins?.map(p => {
                         if (p.collectionView?.onTextSearchClick)
-                            p.collectionView?.onTextSearchClick({ context });
-                    })
+                            return p.collectionView.onTextSearchClick({ context, path: resolvedFullPath, collection });
+                        return Promise.resolve(true);
+                    }) as Promise<boolean>[])
+                        .then((res) => {
+                            if (res.every(Boolean)) setTextSearchInitialised(true);
+                        })
+                        .finally(() => setTextSearchLoading(false));
                 }
                 : undefined;
+
+            context.plugins?.forEach(p => {
+                if (!textSearchEnabled)
+                    if (p.collectionView?.showTextSearchBar) {
+                        textSearchEnabled = p.collectionView.showTextSearchBar({ context, path: resolvedFullPath, collection });
+                    }
+            })
         }
 
         return (
@@ -591,8 +608,9 @@ export const EntityCollectionView = React.memo(
                     defaultSize={collection.defaultSize}
                     properties={resolvedCollection.properties}
                     getPropertyFor={getPropertyFor}
-                    textSearchEnabled={resolvedCollection.textSearchEnabled}
-                    onTextSearchClick={onTextSearchClick}
+                    onTextSearchClick={textSearchInitialised ? undefined : onTextSearchClick}
+                    textSearchLoading={textSearchLoading}
+                    textSearchEnabled={textSearchEnabled}
                     actions={<EntityCollectionViewActions
                         parentCollectionIds={parentCollectionIds ?? []}
                         collection={collection}

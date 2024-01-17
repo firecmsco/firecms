@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import {
     Button,
@@ -25,11 +25,22 @@ interface CollectionTableToolbarProps {
     onTextSearch?: (searchString?: string) => void;
     onSizeChanged: (size: CollectionSize) => void;
     clearFilter?: () => void;
+    textSearchLoading?: boolean;
 }
 
 export function CollectionTableToolbar(props: CollectionTableToolbarProps) {
 
+    const searchInputRef = React.useRef<HTMLInputElement>(null);
     const largeLayout = useLargeLayout();
+
+    const searchLoading = React.useRef<boolean>(false);
+
+    useEffect(() => {
+        if (searchInputRef.current && searchLoading.current && !props.textSearchLoading) {
+            searchInputRef.current.focus();
+        }
+        searchLoading.current = props.textSearchLoading ?? false;
+    }, [props.textSearchLoading]);
 
     const clearFilterButton = !props.forceFilter && props.filterIsSet && props.clearFilter &&
         <Button
@@ -86,6 +97,8 @@ export function CollectionTableToolbar(props: CollectionTableToolbarProps) {
                 {(props.onTextSearch || props.onTextSearchClick) &&
                     <SearchBar
                         key={"search-bar"}
+                        inputRef={searchInputRef}
+                        loading={props.textSearchLoading}
                         disabled={Boolean(props.onTextSearchClick)}
                         onClick={props.onTextSearchClick}
                         onTextSearch={props.onTextSearchClick ? undefined : props.onTextSearch}

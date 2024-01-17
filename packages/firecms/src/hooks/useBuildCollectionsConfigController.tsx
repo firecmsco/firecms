@@ -6,7 +6,8 @@ import {
     DeleteCollectionParams,
     namespaceToPropertiesPath,
     PersistedCollection,
-    SaveCollectionParams
+    SaveCollectionParams,
+    UpdateCollectionParams
 } from "@firecms/collection_editor";
 import { PermissionsBuilder, Property, PropertyConfig, removeFunctions, removeUndefined, User } from "@firecms/core";
 import {
@@ -136,7 +137,43 @@ export function useBuildCollectionsConfigController<EC extends PersistedCollecti
         });
     }, [configPath, firestore, propertyConfigsMap]);
 
+    const updateCollection = useCallback(<M extends Record<string, any>>({
+                                                                             id,
+                                                                             collectionData,
+                                                                             previousPath,
+                                                                             parentCollectionIds
+                                                                         }: UpdateCollectionParams<M>): Promise<void> => {
+        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        const cleanedCollection = prepareCollectionForPersistence(collectionData, propertyConfigsMap);
+        const strippedPath = buildCollectionId(id, parentCollectionIds);
+        const previousStrippedPath = previousPath ? buildCollectionId(previousPath, parentCollectionIds) : undefined;
+        const ref = doc(firestore, configPath, "collections", strippedPath);
+
+        console.debug("Saving collection", {
+            id,
+            collectionData,
+            previousPath,
+            parentCollectionIds,
+            cleanedCollection
+        });
+
+        return runTransaction(firestore, async (transaction) => {
+            transaction.set(ref, cleanedCollection, { merge: true });
+            if (previousStrippedPath && previousStrippedPath !== strippedPath) {
+                const previousRef = doc(firestore, configPath, "collections", previousStrippedPath);
+                transaction.delete(previousRef);
+            }
+        });
+    }, [configPath, firestore, propertyConfigsMap]);
+
     const collections = persistedCollections !== undefined ? applyPermissionsFunction(persistedCollections, permissions as PermissionsBuilder) : undefined;
+
+    const getCollection = useCallback((id: string) => {
+        if (!collections) throw Error("Collections not initialised");
+        const collection = collections.find(c => c.id === id);
+        if (!collection) throw Error(`Collection with id ${id} not found`);
+        return collection;
+    }, [collections]);
 
     const saveProperty = useCallback(({
                                           path,
@@ -215,9 +252,11 @@ export function useBuildCollectionsConfigController<EC extends PersistedCollecti
     return useMemo(() => ({
         loading: collectionsLoading,
         collections,
+        getCollection,
         saveCollection,
+        updateCollection,
         deleteCollection,
         saveProperty,
         deleteProperty,
-    }), [collections, collectionsLoading, deleteCollection, saveCollection, saveProperty])
+    }), [collectionsLoading, collections, getCollection, saveCollection, updateCollection, deleteCollection, saveProperty, deleteProperty])
 }

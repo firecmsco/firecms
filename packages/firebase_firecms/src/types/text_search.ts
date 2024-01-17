@@ -24,7 +24,7 @@ export type FirestoreTextSearchController = {
     init: (props: {
         path: string,
         collection?: EntityCollection | ResolvedEntityCollection
-    }) => boolean,
+    }) => Promise<boolean>,
     /**
      * Do the search and return a list of ids.
      * @param props

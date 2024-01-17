@@ -122,11 +122,17 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
 
     collectionView?: {
 
-        blockTextSearch?: boolean;
+        showTextSearchBar?: (props: {
+            context: FireCMSContext,
+            path: string,
+            collection: EC
+        }) => boolean;
 
         onTextSearchClick?: (props: {
-            context: FireCMSContext
-        }) => void;
+            context: FireCMSContext,
+            path: string,
+            collection: EC
+        }) => Promise<boolean>;
 
         /**
          * Use this method to inject widgets to the entity collections header

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 
 import { defaultBorderMixin, focusedMixin } from "../styles";
-import { IconButton } from "./index";
+import { CircularProgress, IconButton } from "./index";
 import { ClearIcon, SearchIcon } from "../icons";
 import { cn } from "../util";
 import { useDebounceValue } from "../util/useDebounceValue";
@@ -16,6 +16,8 @@ interface SearchBarProps {
     className?: string;
     autoFocus?: boolean;
     disabled?: boolean;
+    loading?: boolean;
+    inputRef?: React.Ref<HTMLInputElement>;
 }
 
 export function SearchBar({
@@ -27,7 +29,9 @@ export function SearchBar({
                               innerClassName,
                               className,
                               autoFocus,
-                              disabled
+                              disabled,
+                              loading,
+                              inputRef
                           }: SearchBarProps) {
 
     const [searchText, setSearchText] = useState<string>("");
@@ -64,12 +68,13 @@ export function SearchBar({
                 className)}>
             <div
                 className="absolute p-0 px-4 h-full absolute pointer-events-none flex items-center justify-center top-0">
-                <SearchIcon className={"text-gray-500"}/>
+                {loading ? <CircularProgress size={"small"}/> : <SearchIcon className={"text-gray-500"}/>}
             </div>
             <input
+                value={searchText}
+                ref={inputRef}
                 onClick={onClick}
                 placeholder={placeholder}
-                value={searchText}
                 onChange={onTextSearch
                     ? (event) => {
                         setSearchText(event.target.value);
@@ -79,7 +84,7 @@ export function SearchBar({
                 onFocus={() => setActive(true)}
                 onBlur={() => setActive(false)}
                 className={cn(
-                    disabled && "pointer-events-none",
+                    (disabled || loading) && "pointer-events-none",
                     "relative flex items-center rounded transition-all bg-transparent outline-none appearance-none border-none",
                     "pl-12 h-full text-current ",
                     expandable ? (active ? "w-[220px]" : "w-[180px]") : "",
@@ -90,7 +95,6 @@ export function SearchBar({
             {searchText
                 ? <IconButton
                     className={`${large ? "mr-2 top-1" : "mr-1 top-0"} absolute right-0 z-10`}
-                    // size={"small"}
                     onClick={clearText}>
                     <ClearIcon size={"small"}/>
                 </IconButton>

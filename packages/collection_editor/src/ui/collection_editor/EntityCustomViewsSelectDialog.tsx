@@ -10,7 +10,7 @@ export function EntityCustomViewsSelectDialog({ open, onClose }: { open: boolean
     return <Dialog
         maxWidth={"md"}
         open={open}>
-        <DialogContent>
+        <DialogContent className={"flex flex-col gap-4"}>
             <Typography variant={"h6"}>
                 Select view
             </Typography>
@@ -31,7 +31,7 @@ export function EntityCustomViewsSelectDialog({ open, onClose }: { open: boolean
             }
         </DialogContent>
         <DialogActions>
-            <Button onClick={() => onClose()}>Cancel</Button>
+            <Button variant={"outlined"} onClick={() => onClose()}>Cancel</Button>
         </DialogActions>
     </Dialog>
 }

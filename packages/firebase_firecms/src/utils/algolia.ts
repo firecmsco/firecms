@@ -40,7 +40,7 @@ export function buildAlgoliaSearchController({
             collection?: EntityCollection | ResolvedEntityCollection
         }) => {
             // do nothing
-            return isPathSupported(props.path);
+            return Promise.resolve(isPathSupported(props.path));
         }
 
         return {

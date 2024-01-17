@@ -14,7 +14,7 @@ export {
 } from "./utils/entities";
 
 export type {
-    CollectionsConfigController, DeleteCollectionParams, SaveCollectionParams
+    CollectionsConfigController, DeleteCollectionParams, SaveCollectionParams, UpdateCollectionParams
 } from "./types/config_controller";
 export type {
     CollectionEditorController

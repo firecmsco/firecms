@@ -78,6 +78,14 @@ export type FirestoreIndexesBuilder = (params: {
     collection: EntityCollection<any>,
 }) => FilterCombination<string>[] | undefined
 
+export type FirestoreDelegate = DataSourceDelegate & {
+
+    initTextSearchController: (props: {
+        path: string,
+        collection?: EntityCollection | ResolvedEntityCollection
+    }) => Promise<boolean>,
+}
+
 /**
  * Use this hook to build a {@link DataSource} based on Firestore
  * @param firebaseApp
@@ -90,7 +98,7 @@ export function useFirestoreDelegate({
                                          textSearchControllerBuilder,
                                          firestoreIndexesBuilder,
                                          localTextSearchEnabled
-                                     }: FirestoreDataSourceProps): DataSourceDelegate {
+                                     }: FirestoreDataSourceProps): FirestoreDelegate {
 
     const searchControllerRef = useRef<FirestoreTextSearchController>();
 
@@ -252,11 +260,20 @@ export function useFirestoreDelegate({
         buildDeleteFieldValue,
         currentTime,
         buildGeoPoint,
+
         buildReference: useCallback((reference: EntityReference): any => {
             if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
             const firestore = getFirestore(firebaseApp);
             return doc(firestore, reference.path, reference.id);
         }, [firebaseApp]),
+
+        initTextSearchController: useCallback(async (props: {
+            path: string,
+            collection?: EntityCollection | ResolvedEntityCollection
+        }) => {
+            if (!searchControllerRef.current) return false;
+            return searchControllerRef.current.init(props);
+        }, []),
 
         /**
          * Fetch entities in a Firestore path
@@ -337,6 +354,7 @@ export function useFirestoreDelegate({
 
             console.debug("Listening collection", {
                 path,
+                searchString,
                 isCollectionGroup,
                 limit,
                 filter,
@@ -351,13 +369,13 @@ export function useFirestoreDelegate({
 
             const query = buildQuery(path, filter, orderBy, order, startAfter, limit, isCollectionGroup);
 
-            const textSearchEnabled = collection?.textSearchEnabled === undefined || collection?.textSearchEnabled;
-            if (searchControllerRef.current && textSearchEnabled) {
-                searchControllerRef.current.init({
-                    path,
-                    collection
-                });
-            }
+            // const textSearchEnabled = collection?.textSearchEnabled === undefined || collection?.textSearchEnabled;
+            // if (searchControllerRef.current && textSearchEnabled) {
+            //     searchControllerRef.current.init({
+            //         path,
+            //         collection
+            //     });
+            // }
 
             if (searchString) {
                 return performTextSearch<M>({
@@ -740,11 +758,11 @@ function buildTextSearchControllerWithLocalSearch({
     const localSearchController = localSearchControllerBuilder({ firebaseApp })
     const textSearchController = textSearchControllerBuilder!({ firebaseApp });
     return {
-        init: (props: {
+        init: async (props: {
             path: string,
             collection?: EntityCollection | ResolvedEntityCollection
         }) => {
-            const b = textSearchController.init(props);
+            const b = await textSearchController.init(props);
             if (b) return true;
             return localSearchController.init(props);
         },

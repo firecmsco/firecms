@@ -41,8 +41,6 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
         const description = "description";
         const descriptionError = showErrors && getIn(errors, description);
 
-        console.log({ touched })
-
         return (
             <div className={"flex flex-col gap-2 col-span-12"}>
 
@@ -86,7 +84,7 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
                                 setFieldValue(name, newIdValue ? unslugify(newIdValue) : "")
                             }
                         }}
-                        validate={(value?: string) => validateId(value, existingPropertyKeys)}
+                        validate={() => validateId(values[id], existingPropertyKeys)}
                         disabled={disabledId || disabled}
                         required
                         size="small"

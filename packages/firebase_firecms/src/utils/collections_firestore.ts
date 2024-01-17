@@ -10,7 +10,6 @@ import {
     PropertyConfig,
     removeFunctions,
     removePropsIfExisting,
-    removeUndefined,
     sortProperties,
     stripCollectionPath
 } from "@firecms/core";
@@ -74,16 +73,23 @@ export const docToCollection = (doc: DocumentSnapshot): PersistedCollection => {
     } as PersistedCollection;
 }
 
-export function prepareCollectionForPersistence<M extends { [Key: string]: CMSType }>(collection: PersistedCollection<M>, propertyConfigs: Record<string, PropertyConfig>) {
+export function prepareCollectionForPersistence<M extends { [Key: string]: CMSType }>(collection: Partial<PersistedCollection<M>>, propertyConfigs: Record<string, PropertyConfig>) {
 
     const { properties: inputProperties, ...rest } = collection;
-    const cleanedProperties = cleanPropertyConfigs(inputProperties, propertyConfigs);
-    const properties = setUndefinedToDelete(removeFunctions(cleanedProperties));
-    const newCollection: PersistedCollection = {
-        ...removeUndefined(rest),
-        properties,
-        propertiesOrder: removeDuplicates(rest.propertiesOrder ?? Object.keys(properties))
-    };
+    const cleanedProperties = inputProperties ? cleanPropertyConfigs(inputProperties, propertyConfigs) : undefined;
+    const properties = cleanedProperties ? setUndefinedToDelete(removeFunctions(cleanedProperties)) : undefined;
+    let newCollection: Partial<PersistedCollection> = {};
+    if (rest) {
+        newCollection = {
+            ...rest
+        };
+    }
+    if (properties) {
+        newCollection.properties = properties;
+    }
+    if (rest.propertiesOrder || properties) {
+        newCollection.propertiesOrder = removeDuplicates(rest.propertiesOrder ?? Object.keys(properties));
+    }
 
     delete newCollection.permissions;
     if (newCollection.entityViews) {

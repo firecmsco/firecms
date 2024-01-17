@@ -11,13 +11,23 @@ export interface CollectionsConfigController {
 
     collections?: PersistedCollection[];
 
+    getCollection: (id: string) => PersistedCollection;
+
     saveCollection: <M extends { [Key: string]: CMSType }>(params: SaveCollectionParams<M>) => Promise<void>;
+    updateCollection: <M extends { [Key: string]: CMSType }>(params: UpdateCollectionParams<M>) => Promise<void>;
 
     saveProperty: (params: SavePropertyParams) => Promise<void>;
     deleteProperty: (params: DeletePropertyParams) => Promise<void>;
 
     deleteCollection: (props: DeleteCollectionParams) => Promise<void>;
 
+}
+
+export type UpdateCollectionParams<M extends Record<string, any>> = {
+    id: string,
+    collectionData: Partial<PersistedCollection<M>>,
+    previousPath?: string,
+    parentCollectionIds?: string[]
 }
 
 export type SaveCollectionParams<M extends Record<string, any>> = {

@@ -324,6 +324,19 @@ export function CollectionDetailsForm({
                                         to query over multiple collections at once.
                                     </FieldHelperView>
                                 </div>
+                                <div className={"col-span-12"}>
+                                    <BooleanSwitchWithLabel
+                                        position={"start"}
+                                        label="Enable text search for this collection"
+                                        onValueChange={(v) => setFieldValue("textSearchEnabled", v)}
+                                        value={values.textSearchEnabled ?? false}
+                                    />
+                                    <FieldHelperView>
+                                        Allow text search for this collection. If you have not specified a text search
+                                        delegate, this will use the built-in local text search. This is not recommended
+                                        for large collections, as it may incur in performance and cost issues.
+                                    </FieldHelperView>
+                                </div>
                             </div>
                         </ExpandablePanel>
 
