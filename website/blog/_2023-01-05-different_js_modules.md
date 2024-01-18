@@ -2,7 +2,7 @@
 slug: js_formats
 title: All the different JS formats
 author: Francesco Gatti
-image: /img/francesco_avatar.jpg
+image: /img/avatars/francesco_avatar.jpg
 author_url: https://www.linkedin.com/in/fgatti675
 author_image_url: https://avatars.githubusercontent.com/u/5120271?v=4
 ---

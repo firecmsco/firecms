@@ -327,6 +327,10 @@ h6 {
     font-size: var(--ifm-h6-font-size);
 }
 
+p{
+    margin: 16px 0
+}
+
 .theme-doc-markdown p {
     margin: 0 0 var(--ifm-paragraph-margin-bottom);
 }
