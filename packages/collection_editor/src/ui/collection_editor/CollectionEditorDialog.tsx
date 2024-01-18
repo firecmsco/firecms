@@ -473,7 +473,8 @@ export function CollectionEditorDialogInternal<M extends {
                     setNextMode();
                 };
 
-                const collectionEditable = collection?.editable || isNewCollection;
+                const editable = collection?.editable === undefined || collection?.editable === true;
+                const collectionEditable = editable || isNewCollection;
                 return (
                     <>
                         {!isNewCollection && <Tabs value={currentView}

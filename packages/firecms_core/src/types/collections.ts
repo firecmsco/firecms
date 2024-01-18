@@ -78,7 +78,7 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
 
     /**
      * Can this collection be edited by the end user.
-     * Defaults to `false`.
+     * Defaults to `true`.
      * Keep in mind that you can also set this prop to individual properties.
      */
     editable?: boolean;
