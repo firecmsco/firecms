@@ -1,23 +1,15 @@
 {
   "name": "@firecms/data_import_export",
   "type": "module",
-  "version": "3.0.0-alpha.67",
+  "version": "3.0.0-alpha.68",
   "access": "public",
   "main": "./dist/index.umd.js",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
   "source": "src/index.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.umd.js",
-      "types": "./dist/src/index.d.ts"
-    },
-    "./package.json": "./package.json"
-  },
   "dependencies": {
-    "@firecms/core": "^3.0.0-alpha.67",
-    "@firecms/schema_inference": "^3.0.0-alpha.67",
+    "@firecms/core": "^3.0.0-alpha.68",
+    "@firecms/schema_inference": "^3.0.0-alpha.68",
     "xlsx": "^0.18.5"
   },
   "peerDependencies": {
