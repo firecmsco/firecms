@@ -8,7 +8,7 @@
         "noImplicitReturns": true,
         "noUnusedLocals": false,
         "outDir": "lib",
-        "sourceMap": true,
+
         "strict": true,
         "target": "es2018",
         "skipLibCheck": true,

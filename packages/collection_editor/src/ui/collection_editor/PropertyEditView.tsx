@@ -335,7 +335,6 @@ function PropertyEditView({
             }
         }
     }, [deferredValues, includeIdAndTitle, onPropertyChanged, propertyNamespace]);
-    console.log({ errors })
 
     useEffect(() => {
         if (values?.id && onError && Object.keys(errors).length > 0) {

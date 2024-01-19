@@ -11,7 +11,7 @@
     "moduleResolution": "node",
     "jsx": "react-jsx",
     "noFallthroughCasesInSwitch": true,
-    "sourceMap": true,
+
     "declaration": true,
     "esModuleInterop": true,
     "noImplicitReturns": true,
@@ -33,19 +33,19 @@
     "baseUrl": ".",
     "paths": {
       "firecms": [
-        "../firecms/src/index.ts"
+        "../firecms"
       ],
       "@firecms/firebase": [
-        "../firebase_firecms/src/index.ts"
+        "../firebase_firecms"
       ],
       "@firecms/core": [
-        "../firecms_core/src/index.ts"
+        "../firecms_core"
       ],
       "@firecms/data_import_export": [
-        "../data_import_export/src/index.ts"
+        "../data_import_export"
       ],
       "@firecms/ui": [
-        "../ui/src/index.ts"
+        "../ui"
       ]
     }
   },
