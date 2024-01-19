@@ -4,7 +4,10 @@ import path from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react"
 
-const isExternal = (id: string) => !id.startsWith(".") && !path.isAbsolute(id);
+const isExternal = (id: string) => {
+    console.log("isExternal", id);
+    return !id.startsWith(".") && !path.isAbsolute(id);
+};
 
 export default defineConfig(() => ({
     esbuild: {
