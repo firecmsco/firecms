@@ -1,23 +1,23 @@
 {
   "name": "@firecms/collection_editor",
   "type": "module",
-  "version": "3.0.0-alpha.66",
+  "version": "3.0.0-alpha.67",
   "main": "./dist/index.umd.js",
-  "module": "./dist/index.es.js",
+  "module": "./dist/index.mjs",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.es.js",
+      "import": "./dist/index.mjs",
       "require": "./dist/index.umd.js",
       "types": "./dist/index.d.ts"
     },
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/data_import_export": "^3.0.0-alpha.66",
-    "@firecms/schema_inference": "^3.0.0-alpha.66",
-    "@firecms/ui": "^3.0.0-alpha.66",
+    "@firecms/data_import_export": "^3.0.0-alpha.67",
+    "@firecms/schema_inference": "^3.0.0-alpha.67",
+    "@firecms/ui": "^3.0.0-alpha.67",
     "json5": "^2.2.3",
     "prism-react-renderer": "^2.3.0"
   },

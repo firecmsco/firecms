@@ -1,30 +1,30 @@
 {
   "name": "firecms",
   "type": "module",
-  "version": "3.0.0-alpha.66",
+  "version": "3.0.0-alpha.67",
   "publishConfig": {
     "access": "public"
   },
   "packageManager": "yarn@3.2.3",
   "main": "./dist/index.umd.js",
-  "module": "./dist/index.es.js",
+  "module": "./dist/index.mjs",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.es.js",
+      "import": "./dist/index.mjs",
       "require": "./dist/index.umd.js",
       "types": "./dist/index.d.ts"
     },
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/collection_editor": "^3.0.0-alpha.66",
-    "@firecms/core": "^3.0.0-alpha.66",
-    "@firecms/data_enhancement": "^3.0.0-alpha.66",
-    "@firecms/data_import_export": "^3.0.0-alpha.66",
-    "@firecms/firebase": "^3.0.0-alpha.66",
-    "@firecms/schema_inference": "^3.0.0-alpha.66",
+    "@firecms/collection_editor": "^3.0.0-alpha.67",
+    "@firecms/core": "^3.0.0-alpha.67",
+    "@firecms/data_enhancement": "^3.0.0-alpha.67",
+    "@firecms/data_import_export": "^3.0.0-alpha.67",
+    "@firecms/firebase": "^3.0.0-alpha.67",
+    "@firecms/schema_inference": "^3.0.0-alpha.67",
     "firebase": "^10.7.1",
     "react-router": "^6.21.0",
     "react-router-dom": "^6.21.0"
@@ -34,7 +34,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@firecms/cli": "^3.0.0-alpha.66",
+    "@firecms/cli": "^3.0.0-alpha.67",
     "@types/node": "^20.8.9",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.17",
