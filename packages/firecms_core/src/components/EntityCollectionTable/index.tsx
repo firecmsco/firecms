@@ -13,4 +13,4 @@ export type {
     OnCellValueChangeParams
 } from "./types";
 
-export * from "./useEntityCollectionTableController";
+export * from "./useDataSourceEntityCollectionTableController";

@@ -39,8 +39,7 @@ export const useEntityCollectionTableController = () => useContext<EntityCollect
 
 /**
  * This component is in charge of rendering a collection table with a high
- * degree of customization. It is in charge of fetching data from
- * the {@link DataSource} and holding the state of filtering and sorting.
+ * degree of customization.
  *
  * This component is used internally by {@link EntityCollectionView} and
  * {@link useReferenceDialog}
@@ -51,10 +50,11 @@ export const useEntityCollectionTableController = () => useContext<EntityCollect
  *
  * If you want to bind a {@link EntityCollection} to a table with the default
  * options you see in collections in the top level navigation, you can
- * check {@link EntityCollectionView}
+ * check {@link EntityCollectionView}.
  *
- * If you need a table that is not bound to the datasource or entities and
- * properties at all, you can check {@link VirtualTable}
+ * The data displayed in the table is managed by a {@link TableController}.
+ * You can build the default, bound to a path in the datasource, by using the hook
+ * {@link useDataSourceEntityCollectionTableController}
  *
  * @see EntityCollectionTableProps
  * @see EntityCollectionView
@@ -385,7 +385,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     onValueChange,
                     size,
                     selectedCell,
-                    selectedEntityIds
                 }}
             >
 

@@ -47,7 +47,7 @@ import {
 } from "../../hooks";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
-import { useEntityCollectionTableController } from "../EntityCollectionTable/useEntityCollectionTableController";
+import { useDataSourceEntityCollectionTableController } from "../EntityCollectionTable/useDataSourceEntityCollectionTableController";
 import {
     AddIcon,
     Button,
@@ -176,7 +176,7 @@ export const EntityCollectionView = React.memo(
             setDeleteEntityClicked(undefined);
         }, [selectedEntities]);
 
-        const tableController = useEntityCollectionTableController<M>({
+        const tableController = useDataSourceEntityCollectionTableController<M>({
             fullPath,
             collection,
             entitiesDisplayedFirst: [],

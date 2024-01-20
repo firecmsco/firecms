@@ -15,7 +15,7 @@ import { ErrorView } from "./ErrorView";
 import { AddIcon, Button, DialogActions, Typography } from "@firecms/ui";
 import { canCreateEntity, fullPathToCollectionSegments, resolveCollection } from "../util";
 import { useSelectionController } from "./EntityCollectionView/EntityCollectionView";
-import { useEntityCollectionTableController } from "./EntityCollectionTable/useEntityCollectionTableController";
+import { useDataSourceEntityCollectionTableController } from "./EntityCollectionTable/useDataSourceEntityCollectionTableController";
 import { useColumnIds } from "./EntityCollectionView/useColumnsIds";
 import { useSideDialogContext } from "../core";
 
@@ -258,7 +258,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
     const displayedColumnIds = useColumnIds(resolvedCollection, false);
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const tableController = useEntityCollectionTableController<M>({
+    const tableController = useDataSourceEntityCollectionTableController<M>({
         fullPath,
         collection,
         entitiesDisplayedFirst,

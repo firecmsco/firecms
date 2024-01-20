@@ -15,34 +15,46 @@ import { useDebouncedData } from "./useDebouncedData";
 
 const DEFAULT_PAGE_SIZE = 50;
 
-export type EntityCollectionTableControllerProps<M extends Record<string, any> = any> = {
+export type DataSourceEntityCollectionTableControllerProps<M extends Record<string, any> = any> = {
+    /**
+     * Full path where the data of this table is located
+     */
     fullPath: string;
+    /**
+     * The collection that is represented by this config.
+     */
     collection: EntityCollection<M>;
     /**
      * List of entities that will be displayed on top, no matter the ordering.
      * This is used for reference fields selection
      */
     entitiesDisplayedFirst?: Entity<M>[];
+
     lastDeleteTimestamp?: number;
     forceFilter?: FilterValues<string>;
 }
 
 /**
- * Use this hook to build a controller for the {@link EntityCollectionTable}
+ * Use this hook to build a controller for the {@link EntityCollectionTable}.
+ * This controller is bound to data in a path in your specified datasource.
+ *
+ * Note that you can build your own hook returning a {@link TableController}
+ * if you would like to display different data.
+ *
  * @param fullPath
  * @param collection
  * @param entitiesDisplayedFirst
  * @param lastDeleteTimestamp
  * @param forceFilterFromProps
  */
-export function useEntityCollectionTableController<M extends Record<string, any> = any, UserType extends User = User>(
+export function useDataSourceEntityCollectionTableController<M extends Record<string, any> = any, UserType extends User = User>(
     {
         fullPath,
         collection,
         entitiesDisplayedFirst,
         lastDeleteTimestamp,
         forceFilter: forceFilterFromProps,
-    }: EntityCollectionTableControllerProps<M>)
+    }: DataSourceEntityCollectionTableControllerProps<M>)
     : TableController<M> {
 
     const {

@@ -2,11 +2,25 @@ import { CollectionSize, Entity, FireCMSContext, ResolvedProperty, SelectedCellP
 
 export type EntityCollectionTableController<M extends Record<string, any>> = {
 
+    /**
+     * This cell is displayed as selected
+     */
     selectedCell?: SelectedCellProps<any>;
+    /**
+     * Select a table cell
+     * @param cell
+     */
     select: (cell?: SelectedCellProps<M>) => void;
+    /**
+     * The cell that is displayed as a popup view.
+     * @param cell
+     */
     setPopupCell?: (cell?: SelectedCellProps<M>) => void;
+    /**
+     * Callback used when the value of a cell has changed.
+     * @param params
+     */
     onValueChange?: (params: OnCellValueChangeParams<any, M>) => void;
-    selectedEntityIds?: string[];
     /**
      * Size of the elements in the collection
      */

@@ -92,7 +92,7 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
 
     /**
      * Controller holding the logic for the table
-     * {@link useEntityCollectionTableController}
+     * {@link useDataSourceEntityCollectionTableController}
      * {@link TableController}
      */
     tableController: TableController<M>;
