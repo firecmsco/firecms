@@ -41,7 +41,7 @@ const IconButtonInner = <C extends React.ElementType = "button">({
                                                                      ...props
                                                                  }: IconButtonProps<C>, ref: React.ForwardedRef<HTMLButtonElement>) => {
 
-    const bgClasses = variant === "ghost" ? "bg-transparent" : "bg-gray-50 dark:bg-gray-950";
+    const bgClasses = variant === "ghost" ? "bg-transparent" : "bg-gray-50 dark:bg-gray-900";
     const Component: React.ElementType<any> = component || "button";
     return (
         <Component

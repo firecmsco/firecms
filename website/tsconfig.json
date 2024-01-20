@@ -29,10 +29,10 @@
         "baseUrl": ".",
         "paths": {
             "@firecms/core": [
-                "../packages/firecms_core/src/index.ts"
+                "../packages/firecms_core"
             ],
             "@firecms/firebase": [
-                "../packages/firebase_firecms/src/index.ts"
+                "../packages/firebase_firecms"
             ]
         }
     },

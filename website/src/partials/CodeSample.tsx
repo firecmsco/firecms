@@ -11,7 +11,9 @@ export default function CodeSample({
                                        className
                                    }: CodeSampleProps) {
     return (
-        <Paper className={cn("p-8 bg-gray-50", className)}>
+        <Paper className={cn("p-8 bg-gray-50",
+            "flex flex-row gap-4 items-center justify-center",
+            className)}>
             {children}
         </Paper>
     );

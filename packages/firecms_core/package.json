@@ -58,7 +58,6 @@
     "yup": "^0.32.11"
   },
   "peerDependencies": {
-    "algoliasearch": "^4.13.0",
     "firebase": "^10.5.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -85,7 +84,6 @@
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "@vitejs/plugin-react": "^4.2.1",
-    "algoliasearch": "^4.22.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.55.0",
     "eslint-config-standard": "^17.1.0",

@@ -4,5 +4,5 @@ export function camelCase(str: string): string {
         .split(/[-_ ]/)
         .reduce((cur, acc) => {
             return cur + acc[0].toUpperCase() + acc.substring(1);
-        });
+        }, "");
 }

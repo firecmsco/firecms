@@ -4,13 +4,13 @@ require("dotenv").config();
 
 module.exports = {
     title: "FireCMS",
-    tagline: "Awesome headless CMS based Firestore/Firebase and React, and completely open-source",
+    tagline: "Discover the power of FireCMS, an open-source headless CMS expertly crafted for Firestore/Firebase and React. Enjoy real-time data handling, efficient content management, and customizable features that enhance your workflow. With FireCMS, you gain access to a developer-centric platform that propels your projects forward. Dive into a world of streamlined development and bring your digital visions to life with FireCMS.",
     url: "https://firecms.co",
     baseUrl: "/",
     onBrokenLinks: "warn",
     onBrokenMarkdownLinks: "warn",
     favicon: "img/favicon.ico",
-    organizationName: "FireCMS",
+    organizationName: "FireCMS S.L.",
     projectName: "FireCMS",
     customFields: {
         env: process.env.NODE_ENV,
@@ -76,9 +76,8 @@ module.exports = {
     themeConfig: {
         image: "img/logo_small.png",
         announcementBar: {
-            id: "cloud-beta",
-            content:
-                "FireCMS Cloud beta is out! 🎉 Try our the collection editor and the new importing features!",
+            id: "local-search",
+            content: "Local text search is now available for <b>PLUS</b> users! 🎉",
             backgroundColor: "#FF5B79",
             textColor: "black",
             isCloseable: true,
@@ -262,7 +261,7 @@ module.exports = {
                             href: "https://github.com/FireCMSco/firecms"
                         },
                         {
-                            html: `<iframe src="https://github.com/sponsors/firecmsco/button" title="Sponsor firecmsco" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
+                            html: `<iframe src="https://github.com/sponsors/firecmsco/button" title="Sponsor FireCMS" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
                                 `,
                         },
                         // {
@@ -307,7 +306,7 @@ module.exports = {
                 docs: {
                     sidebarPath: require.resolve("./sidebars.js"),
                     lastVersion: "current",
-                    editUrl: "https://github.com/FireCMSco/firecms/tree/website/website",
+                    editUrl: "https://github.com/FireCMSco/firecms/tree/main/website",
                     versions: {
                         "2.0.0": {
                             label: "2.0.0",
@@ -327,11 +326,6 @@ module.exports = {
                 blog: {
                     showReadingTime: true
                 },
-                // theme: {
-                //     customCss: [
-                //         require.resolve("./src/css/custom.css"),
-                //     ]
-                // },
                 gtag: {
                     trackingID: process.env.REACT_APP_GTAG_ID ?? "G-D4DQQCW88S"
                 },

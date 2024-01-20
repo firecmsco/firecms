@@ -5,7 +5,18 @@ description: Elevate your FireCMS experience by adding custom top-level views th
 ---
 
 If you need to develop a custom view that does not map directly to a Firestore
-collection you can implement it as a React component.
+collection you can implement it as a React component. This is useful for
+implementing custom dashboards, data visualizations, or any other custom
+functionality you need.
+
+You can use all the components and hooks provided by FireCMS.
+Check the [components gallery](./components/intro) for more information.
+
+You can also use all the hooks, including authentication, navigation, datasource (Firestore),
+storage, etc.
+
+You can also include collection views inside your custom views, or use the side panel
+to see entity details, or use with completely custom components.
 
 You need to define the name, route and the component, and add it to the main
 navigation, as the example below.

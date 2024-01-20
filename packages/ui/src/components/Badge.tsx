@@ -2,7 +2,7 @@ import React from "react";
 
 export type BadgeColor = "primary" | "secondary" | "error";
 
-interface BadgeProps {
+export interface BadgeProps {
     color?: BadgeColor;
     children: React.ReactNode;
     invisible?: boolean;
@@ -30,7 +30,7 @@ export const Badge: React.FC<BadgeProps> = ({
         <div className="relative inline-block">
             {children}
             <span
-                className={`absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full
+                className={`absolute top-0.5 right-0.5 transform translate-x-1/2 -translate-y-1/2 rounded-full
         ${getColor(color)}
         transition-all duration-200 ease-out
         ${invisible ? "w-0 h-0" : "w-2 h-2"}`}

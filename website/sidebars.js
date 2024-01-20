@@ -101,6 +101,10 @@ module.exports = {
             "collapsed": false,
             "items": [
                 "components/components_intro",
+                "components/alert",
+                "components/avatar",
+                "components/badge",
+                "components/boolean_switch",
                 "components/button",
             ]
         },

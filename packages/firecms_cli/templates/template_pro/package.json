@@ -9,7 +9,6 @@
     "@firecms/data_import_export": "^3.0.0-alpha.56",
     "@firecms/firebase_pro": "^3.0.0-alpha.56",
     "@firecms/schema_inference": "^3.0.0-alpha.56",
-    "algoliasearch": "^4.22.0",
     "firebase": "^10.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
