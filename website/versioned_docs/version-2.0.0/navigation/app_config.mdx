@@ -63,7 +63,6 @@ apply
 view if `authentication` is enabled. You can pass Firebase providers strings,
 such as `firebase.auth.GoogleAuthProvider.PROVIDER_ID` or include additional
 config such as scopes or custom parameters
-{@link FirebaseSignInOption}
 Defaults to Google sign in only.
 
 * `allowSkipLogin` If authentication is enabled, allow the user to access the content
@@ -103,7 +102,7 @@ get then fetched from Firestore.
   Defaults to `/c`.
 
 * `HomePage` In case you need to override the home page.
-You may want to use {@link useNavigationContext} in order to get the resolved
+You may want to use `useNavigationContext` in order to get the resolved
 navigation.
 
 * `LoginView` Additional props passed to the login view. You can use this props

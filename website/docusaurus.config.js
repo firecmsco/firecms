@@ -295,9 +295,9 @@ module.exports = {
             ],
             copyright: `MIT © ${new Date().getFullYear()} - FireCMS S.L.`
         },
-        prism: {
-            theme: require("prism-react-renderer/themes/vsDark")
-        }
+        // prism: {
+        //     theme: require("prism-react-renderer/themes/vsDark")
+        // }
     },
     presets: [
         [

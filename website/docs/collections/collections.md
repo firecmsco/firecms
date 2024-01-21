@@ -327,7 +327,7 @@ setting the `inlineEditing` property to `false` in the collection configuration.
 
 * `description` Optional description of this view. You can use Markdown.
 
-* `entityActions`: EntityAction<M, UserType>[];
+* `entityActions`: EntityAction[];
 
   You can define additional actions that can be performed on the entities
   in this collection. These actions can be displayed in the collection

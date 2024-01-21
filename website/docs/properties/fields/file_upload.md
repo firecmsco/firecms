@@ -50,13 +50,13 @@ The complete list of params you can use when uploading files:
 You can use some placeholders in the `storagePath` and `fileName` to
 customize the path and name of the file. The available placeholders are:
 
-- {file} - Full file name
-- {file.name} - Name of the file without extension
-- {file.ext} - Extension of the file
-- {rand} - Random value used to avoid name collisions
-- {entityId} - ID of the entity
-- {propertyKey} - ID of this property
-- {path} - Path of this entity
+- \{file\} - Full file name
+- \{file.name\} - Name of the file without extension
+- \{file.ext\} - Extension of the file
+- \{rand\} - Random value used to avoid name collisions
+- \{entityId\} - ID of the entity
+- \{propertyKey\} - ID of this property
+- \{path\} - Path of this entity
 :::
 
 ### Single file upload

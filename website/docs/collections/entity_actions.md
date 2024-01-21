@@ -52,7 +52,7 @@ export const productsCollection = buildCollection<Product>({
 
 * `name`: Name of the action
 * `icon`?: React.ReactElement Icon of the action
-* `onClick`: (props: EntityActionClickProps<M, UserType>) => Promise 
+* `onClick`: (props: EntityActionClickProps) => Promise 
 Function to be called when the action is clicked
 * `collapsed`?: boolean Show this action collapsed in the menu of the collection view. Defaults to true. If false, the action will be shown in the menu
 * `includeInForm`?: boolean Show this action in the form, defaults to true

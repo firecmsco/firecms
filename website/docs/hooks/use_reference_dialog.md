@@ -1,6 +1,6 @@
 ---
-id: use_reference_dialog 
-title: useReferenceDialog 
+id: use_reference_dialog
+title: useReferenceDialog
 sidebar_label: useReferenceDialog
 ---
 
@@ -19,7 +19,6 @@ hook used internally when a reference property is defined.
 
 The props provided by this hook are:
 
-
 *     multiselect?: boolean;
   Allow multiple selection of values
 
@@ -27,7 +26,7 @@ The props provided by this hook are:
   Entity collection config
 
 *     path: string;
-  Absolute path of the collection. 
+  Absolute path of the collection.
   May be not set if this hook is being used in a component and the path is
   dynamic. If not set, the dialog won't open.
 
@@ -35,18 +34,18 @@ The props provided by this hook are:
   If you are opening the dialog for the first time, you can select some
   entity ids to be displayed first.
 
-*     onSingleEntitySelected?(entity: Entity<any> | null): void;
+*     onSingleEntitySelected?(entity: Entity | null): void;
   If `multiselect` is set to `false`, you will get the selected entity
   in this callback.
-    
-*     onMultipleEntitiesSelected?(entities: Entity<any>[]): void;
+
+*     onMultipleEntitiesSelected?(entities: Entity[]): void;
   If `multiselect` is set to `false`, you will get the selected entities
   in this callback.
 
 *     onClose?(): void;
   If the dialog currently open, close it
 
-*     forceFilter?: FilterValues<string>;
+*     forceFilter?: FilterValues;
   Allow selection of entities that pass the given filter only.
 
 Example:
