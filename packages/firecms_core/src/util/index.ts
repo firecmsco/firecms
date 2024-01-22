@@ -11,6 +11,8 @@ export * from "./useDebounce";
 export * from "./property_utils";
 export * from "./resolutions";
 export * from "./permissions";
+export * from "./icon_list";
+export * from "./icon_synonyms";
 export * from "./icons";
 export * from "./plurals";
 export * from "./references";

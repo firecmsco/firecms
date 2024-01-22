@@ -55,7 +55,7 @@ export function SearchBar({
         if (!onTextSearch) return;
         setSearchText("");
         onTextSearch(undefined);
-    }, []);
+    }, [onTextSearch]);
 
     return (
         <div

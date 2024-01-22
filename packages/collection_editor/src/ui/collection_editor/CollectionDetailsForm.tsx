@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { EntityCollection, getIconForView, singular, toSnakeCase, } from "@firecms/core";
+import { EntityCollection, getIconForView, SearchIcons, singular, toSnakeCase, } from "@firecms/core";
 import {
     Autocomplete,
     AutocompleteItem,
@@ -21,8 +21,6 @@ import {
 } from "@firecms/ui";
 import { Field, getIn, useFormikContext } from "formik";
 
-//@ts-ignore
-import { SearchIcons } from "./SelectIcons";
 import { FieldHelperView } from "./properties/FieldHelperView";
 
 export function CollectionDetailsForm({

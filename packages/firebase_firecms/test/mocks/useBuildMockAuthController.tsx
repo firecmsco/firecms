@@ -9,6 +9,22 @@ export function useBuildMockAuthController(): FirebaseAuthController {
     const [user, setUser] = useState<FirebaseUser | null>(null);
 
     return {
+        anonymousLogin(): void {
+        },
+        appleLogin(): void {
+        },
+        facebookLogin(): void {
+        },
+        githubLogin(): void {
+        },
+        microsoftLogin(): void {
+        },
+        phoneLogin(phone: string, applicationVerifier): void {
+        },
+        skipLogin(): void {
+        },
+        twitterLogin(): void {
+        },
         authLoading: false,
         createUserWithEmailAndPassword(email: string, password: string): void {
         },

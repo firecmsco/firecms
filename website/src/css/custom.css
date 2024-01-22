@@ -81,6 +81,10 @@
     --docsearch-logo-color: #0070f4;
 }
 
+[role="banner"] {
+    font-family: "IBM Plex Mono";
+}
+
 html[data-theme='dark'] {
     --ifm-custom-navbar-background-color: rgba(48, 49, 55, 0.33);
     /*--ifm-background-color: #ececec;*/

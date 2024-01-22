@@ -16,27 +16,33 @@ export function useDelegatedLogin({
                                       projectsApi,
                                       firebaseApp,
                                       projectId,
-                                      onUserChanged
+                                      onUserChanged,
                                   }: DelegatedLoginProps) {
 
     const [loginSuccessful, setLoginSuccessful] = useState(false);
     const [delegatedLoginLoading, setDelegatedLoginLoading] = useState(false);
     const [delegatedLoginError, setDelegatedLoginError] = useState<Error | undefined>(undefined);
 
-    const checkLogin = useCallback(async () => {
+    const checkLogin = useCallback(async (skipCache = false) => {
+        console.debug("Checking delegated login", {skipCache, projectId})
         if (firebaseApp && projectId) {
             setDelegatedLoginError(undefined);
             setDelegatedLoginLoading(true);
             setLoginSuccessful(false);
             try {
-                let delegatedToken = getDelegatedLoginTokenFromCache(projectId);
+                let usedCachedToken = false;
+                let delegatedToken = !skipCache && getDelegatedLoginTokenFromCache(projectId);
                 if (!delegatedToken) {
                     try {
+                        console.debug("Delegating login", projectId);
                         delegatedToken = await projectsApi.doDelegatedLogin(projectId);
                     } catch (e) {
                         console.error("Error delegating login", e);
                         setDelegatedLoginError(e as any);
                     }
+                } else {
+                    console.debug("Using cached token", projectId);
+                    usedCachedToken = true;
                 }
 
                 if (!delegatedToken) {
@@ -55,10 +61,15 @@ export function useDelegatedLogin({
                             console.error("Error caching token", e);
                         }
                     })
-                    .catch((error) => {
-                        console.error("Error signing in with delegated token", error);
-                        setLoginSuccessful(false);
-                        setDelegatedLoginError(error);
+                    .catch(async (error) => {
+                        if (usedCachedToken) {
+                            await checkLogin(true);
+                        } else {
+                            console.error("Error signing in with delegated token", error);
+                            setLoginSuccessful(false);
+                            setDelegatedLoginError(error);
+
+                        }
                     }).finally(() => setDelegatedLoginLoading(false));
             } catch (e) {
                 setLoginSuccessful(false);

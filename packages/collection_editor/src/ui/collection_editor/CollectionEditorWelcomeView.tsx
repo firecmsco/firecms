@@ -101,7 +101,7 @@ export function CollectionEditorWelcomeView({
                             </Chip>
                         ))}
 
-                        {!loadingPathSuggestions && filteredPathSuggestions?.length === 0 &&
+                        {!loadingPathSuggestions && (filteredPathSuggestions ?? [])?.length === 0 &&
                             <Typography variant={"caption"}>
                                 No suggestions
                             </Typography>

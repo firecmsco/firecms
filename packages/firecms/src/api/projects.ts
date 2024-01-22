@@ -117,7 +117,8 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
     }
 
     async function getRootCollections(projectId: string,
-                                      googleAccessToken?: string): Promise<string[]> {
+                                      googleAccessToken?: string,
+                                      retries = 20): Promise<string[]> {
         if (rootCollectionsCache[projectId]) {
             return rootCollectionsCache[projectId];
         }
@@ -145,6 +146,16 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                 const result = await handleApiResponse<string[]>(res, projectId);
                 rootCollectionsCache[projectId] = result;
                 return result;
+            })
+            .catch(async (error) => {
+                if (retries > 0) {
+                    console.log("Retrying getRootCollections", retries, error);
+                    // wait 2 seconds
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    return getRootCollections(projectId, googleAccessToken, retries - 1);
+                } else {
+                    throw error;
+                }
             });
     }
 

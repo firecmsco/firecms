@@ -24,7 +24,6 @@ export function getDelegatedLoginTokenFromCache(projectId: string) {
         const data = JSON.parse(entry);
         data.expiry = new Date(data.expiry);
         if (data.expiry > new Date()) {
-            console.log("Using cached token", projectId);
             return data.token;
         }
     }

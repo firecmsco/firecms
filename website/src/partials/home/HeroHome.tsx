@@ -33,11 +33,10 @@ function HeroHome({}) {
 
     const titleDiv = <>
 
-        <h1 className={clsx("m-0  text-center block text-5xl md:text-6xl font-extrabold tracking-tight leading-none uppercase text-white",
+        <h1 className={clsx("m-0 text-center block text-5xl md:text-6xl font-extrabold tracking-tight leading-none uppercase text-white",
             "px-16 md:px-24 py-8 md:py-16",
             "border-0 border-b",
-            defaultBorderMixin)}
-            data-aos="fade-up">
+            defaultBorderMixin)}>
             <div className={"block"}>
                 <span>Your </span>
                 <span
@@ -66,7 +65,8 @@ function HeroHome({}) {
     </>;
 
     return (
-        <div className={clsx("w-full relative border-0 border-b -mt-20 bg-gray-800 dark:bg-gray-900", defaultBorderMixin)}>
+        <div
+            className={clsx("w-full relative border-0 border-b -mt-20 bg-gray-800 dark:bg-gray-900", defaultBorderMixin)}>
             <PagesBackground/>
             <Panel includeMargin={false}
                    includePadding={false}

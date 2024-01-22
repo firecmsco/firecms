@@ -1,19 +1,18 @@
 import * as React from "react";
-import synonyms from "../../utils/synonyms";
-import { iconsSearch } from "../../utils/icons";
 import { coolIconKeys, debounce, Icon, IconButton, iconKeys, SearchBar, Tooltip } from "@firecms/ui";
+import { iconsSearch, icon_synonyms } from "../util";
 
 const UPDATE_SEARCH_INDEX_WAIT_MS = 220;
 
 if (process.env.NODE_ENV !== "production") {
-    Object.keys(synonyms).forEach((icon: string) => {
+    Object.keys(icon_synonyms).forEach((icon: string) => {
         if (!iconKeys.includes(icon)) {
-            console.warn(`The icon ${icon} no longer exists. Remove it from \`synonyms\``);
+            console.warn(`The icon ${icon} no longer exists. Remove it from \`icon_synonyms\``);
         }
     });
 }
 
-interface SearchIconsProps {
+export interface SearchIconsProps {
     selectedIcon?: string;
     onIconSelected: (icon: string) => void;
 }

@@ -1,4 +1,4 @@
-const synonyms = {
+export const icon_synonyms = {
     abc: "alphabet character font letter symbol text type",
     access_alarm: "clock time",
     access_alarms: "clock time",
@@ -1948,5 +1948,3 @@ const synonyms = {
     zoom_out: "find glass look magnifier magnifying minus negative scale search see size smaller",
     zoom_out_map: "arrows destination location maps move place stop"
 };
-
-export default synonyms;

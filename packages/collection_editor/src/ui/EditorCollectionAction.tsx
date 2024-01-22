@@ -7,13 +7,7 @@ import {
     useNavigationController,
     useSnackbarController
 } from "@firecms/core";
-import {
-    Button,
-    IconButton,
-    SaveIcon,
-    SettingsIcon,
-    Tooltip,
-} from "@firecms/ui";
+import { Button, IconButton, SaveIcon, SettingsIcon, Tooltip, } from "@firecms/ui";
 
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { useCollectionsConfigController } from "../useCollectionsConfigController";
@@ -44,31 +38,49 @@ export function EditorCollectionAction({
     let saveDefaultFilterButton = null;
     if (!equal(getObjectOrNull(tableController.filterValues), getObjectOrNull(collection.initialFilter)) ||
         !equal(getObjectOrNull(tableController.sortBy), getObjectOrNull(collection.initialSort))) {
-        saveDefaultFilterButton = <Tooltip
-            title={tableController.sortBy || tableController.filterValues ? "Save default filter and sort" : "Clear default filter and sort"}>
-            <Button
-                color={"primary"}
-                size={"small"}
-                variant={"outlined"}
-                onClick={() => configController
-                    ?.saveCollection({
-                        id: collection.path,
-                        parentCollectionIds,
-                        collectionData: mergeDeep(collection as PersistedCollection,
-                            {
-                                initialFilter: tableController.filterValues ?? null,
-                                initialSort: tableController.sortBy ?? null
-                            })
-                    }).then(() => {
-                        snackbarController.open({
-                            type: "success",
-                            message: "Default config saved"
-                        });
-                    })}>
-                <SaveIcon/>
-                {/*{tableController.sortBy || tableController.filterValues ? "Save default filter and sort" : "Clear default filter and sort"}*/}
-            </Button>
-        </Tooltip>;
+        saveDefaultFilterButton = <>
+            {collection.initialFilter || collection.initialSort && <Tooltip
+                title={"Reset to default filter and sort"}>
+                <Button
+                    color={"primary"}
+                    size={"small"}
+                    variant={"text"}
+                    onClick={() => {
+                        tableController.clearFilter?.();
+                        if (collection?.initialFilter)
+                            tableController.setFilterValues?.(collection?.initialFilter);
+                        if (collection?.initialSort)
+                            tableController.setSortBy?.(collection?.initialSort);
+                    }}>
+                    <SaveIcon/>
+                </Button>
+            </Tooltip>}
+
+            <Tooltip
+                title={tableController.sortBy || tableController.filterValues ? "Save default filter and sort" : "Clear default filter and sort"}>
+                <Button
+                    color={"primary"}
+                    size={"small"}
+                    variant={"outlined"}
+                    onClick={() => configController
+                        ?.saveCollection({
+                            id: collection.path,
+                            parentCollectionIds,
+                            collectionData: mergeDeep(collection as PersistedCollection,
+                                {
+                                    initialFilter: tableController.filterValues ?? null,
+                                    initialSort: tableController.sortBy ?? null
+                                })
+                        }).then(() => {
+                            snackbarController.open({
+                                type: "success",
+                                message: "Default config saved"
+                            });
+                        })}>
+                    <SaveIcon/>
+                </Button>
+            </Tooltip>
+        </>;
     }
 
     const editorButton = <Tooltip
