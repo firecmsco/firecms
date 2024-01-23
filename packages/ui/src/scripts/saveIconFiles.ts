@@ -7,7 +7,9 @@ import fs from "fs";
 import path from "path";
 
 import { fileURLToPath } from "url";
+import { keyToIconComponent } from "../util/key_to_icon_component.ts";
 // import { iconKeys } from "../icons/icon_keys.ts";
+
 
 export function saveIconFiles(iconKeys: string[]) {
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -19,15 +21,7 @@ export function saveIconFiles(iconKeys: string[]) {
 
 // for each key, generate a file with an Icon ts component
     iconKeys.forEach((key: string) => {
-
-        const startsWithNumber = key.match(/^\d/);
-
-        // convert key to came case
-        const componentName = (startsWithNumber ? "_" : "") +
-            key.split("_").map((word: string) => {
-                return word.charAt(0).toUpperCase() + word.slice(1);
-            }).join("") +
-            "Icon";
+        const componentName = keyToIconComponent(key);
 
         const iconComponent = `import React from "react";
 import { Icon, IconProps } from "../Icon";

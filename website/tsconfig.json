@@ -28,6 +28,9 @@
         "strictNullChecks": true,
         "baseUrl": ".",
         "paths": {
+            "@firecms/ui": [
+                "../packages/ui",
+            ],
             "@firecms/core": [
                 "../packages/firecms_core"
             ],
