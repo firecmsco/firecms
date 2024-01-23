@@ -225,8 +225,6 @@ export function useBuildDataSource({
                     })
                 : firestoreValues;
 
-            console.debug("Saving entity", path, entityId, updatedFirestoreValues);
-
             return delegate.saveEntity({
                 path,
                 entityId,

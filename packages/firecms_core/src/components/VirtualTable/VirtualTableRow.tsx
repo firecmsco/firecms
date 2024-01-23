@@ -19,7 +19,6 @@ export const VirtualTableRow = React.memo<VirtualTableRowProps<any>>(
                                 }: VirtualTableRowProps<T>) {
 
         const onClick = useCallback((event: React.SyntheticEvent) => {
-            console.debug("VirtualTableRow click");
             if (onRowClick)
                 onRowClick({
                     rowData,
