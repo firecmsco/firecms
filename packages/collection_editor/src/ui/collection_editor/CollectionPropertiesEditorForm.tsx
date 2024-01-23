@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { Field, FormikErrors, getIn, useFormikContext } from "formik";
 import {
@@ -248,6 +248,14 @@ export function CollectionPropertiesEditorForm({
             setFieldTouched(previousPropertyPath, false, false);
         }
 
+        console.debug("onPropertyChanged", {
+            id,
+            property,
+            previousId,
+            namespace,
+            propertyPath
+        })
+
         if (propertyPath) {
             setFieldValue(propertyPath, property, false);
             setFieldTouched(propertyPath, true, false);
@@ -255,7 +263,7 @@ export function CollectionPropertiesEditorForm({
 
     };
 
-    const onPropertyErrorInternal = (id: string, namespace?: string, error?: FormikErrors<any>) => {
+    const onPropertyErrorInternal = useCallback((id: string, namespace?: string, error?: FormikErrors<any>) => {
         const propertyPath = id ? getFullId(id, namespace) : undefined;
         console.warn("onPropertyErrorInternal", {
             id,
@@ -268,7 +276,7 @@ export function CollectionPropertiesEditorForm({
             onPropertyError(id, namespace, hasError ? error : undefined);
             setFieldError(idToPropertiesPath(propertyPath), hasError ? "Property error" : undefined);
         }
-    };
+    }, [])
 
     const closePropertyDialog = () => {
         setSelectedPropertyIndex(undefined);
