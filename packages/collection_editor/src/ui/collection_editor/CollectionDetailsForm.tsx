@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { EntityCollection, getIconForView, SearchIcons, singular, toSnakeCase, } from "@firecms/core";
+import { EntityCollection, getIconForView, SearchIconsView, singular, toSnakeCase, } from "@firecms/core";
 import {
     Autocomplete,
     AutocompleteItem,
@@ -351,8 +351,8 @@ export function CollectionDetailsForm({
                     fullWidth
                 >
                     <div className={"p-4 overflow-auto min-h-[200px]"}>
-                        <SearchIcons selectedIcon={values.icon}
-                                     onIconSelected={(icon: string) => {
+                        <SearchIconsView selectedIcon={values.icon}
+                                         onIconSelected={(icon: string) => {
                                          setIconDialogOpen(false);
                                          setFieldValue("icon", icon);
                                      }}/>

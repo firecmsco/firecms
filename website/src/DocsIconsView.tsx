@@ -2,6 +2,6 @@ import React from "react";
 
 import { SearchIconsView } from "@firecms/core";
 
-export default function DocsIconsView() {
+export function DocsIconsView() {
     return <SearchIconsView/>;
 }

@@ -37,6 +37,7 @@ module.exports = {
                         resolve: {
                             alias: {
                                 "firecms": path.resolve(__dirname, "../packages/firecms/src"),
+                                "@firecms/core": path.resolve(__dirname, "../packages/firecms_core/src"),
                                 "@firecms/ui": path.resolve(__dirname, "../packages/ui/src"),
                             },
                         },

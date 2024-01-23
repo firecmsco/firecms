@@ -95,6 +95,7 @@ module.exports = {
                 "recipes/documents_as_subcollections"
             ]
         },
+        "icons/icons",
         {
             "type": "category",
             "label": "Components",

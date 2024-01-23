@@ -1,6 +1,7 @@
-import * as React from "react";
+import React from "react";
+
 import { coolIconKeys, debounce, Icon, IconButton, iconKeys, SearchBar, Tooltip } from "@firecms/ui";
-import { iconsSearch, icon_synonyms } from "../util";
+import { icon_synonyms, iconsSearch } from "../util";
 
 const UPDATE_SEARCH_INDEX_WAIT_MS = 220;
 
@@ -14,10 +15,13 @@ if (process.env.NODE_ENV !== "production") {
 
 export interface SearchIconsProps {
     selectedIcon?: string;
-    onIconSelected: (icon: string) => void;
+    onIconSelected?: (icon: string) => void;
 }
 
-export function SearchIcons({ selectedIcon = "", onIconSelected }: SearchIconsProps) {
+export function SearchIconsView({
+                                selectedIcon = "",
+                                onIconSelected
+                            }: SearchIconsProps) {
     const [keys, setKeys] = React.useState<string[] | null>(null);
     const [query, setQuery] = React.useState<string>("");
 
@@ -27,7 +31,7 @@ export function SearchIcons({ selectedIcon = "", onIconSelected }: SearchIconsPr
                 setKeys(null);
             } else {
                 const searchResult = iconsSearch.search(value);
-                setKeys(searchResult.map((e:any) => e.key));
+                setKeys(searchResult.map((e: any) => e.key));
             }
         }, UPDATE_SEARCH_INDEX_WAIT_MS), []
     );
@@ -57,10 +61,10 @@ export function SearchIcons({ selectedIcon = "", onIconSelected }: SearchIconsPr
                             <IconButton
                                 shape={"square"}
                                 toggled={selectedIcon === icon}
-                                onClick={() => onIconSelected(icon)}
+                                onClick={onIconSelected ? () => onIconSelected(icon) : undefined}
                                 className="box-content m-1"
                             >
-                                <Icon iconKey={icon} size={24} />
+                                <Icon iconKey={icon} size={24}/>
                             </IconButton>
                         </Tooltip>
                     );
