@@ -5,6 +5,7 @@ import { PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
 import { cn, defaultBorderMixin, Typography } from "@firecms/ui";
 import { ErrorBoundary } from "../../components";
+import { EmptyValue } from "../components/EmptyValue";
 
 /**
  * @group Preview components
@@ -43,7 +44,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                             <PropertyPreview propertyKey={key}
                                              value={(value)[key]}
                                              property={mapProperty.properties![key]}
-                                             // entity={entity}
+                                // entity={entity}
                                              size={size}/>
                         </ErrorBoundary>
                     </div>
@@ -105,6 +106,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
 
 export function KeyValuePreview({ value }: { value: any }) {
     if (typeof value !== "object") return null;
+    if (!value) return <EmptyValue/>;
     return <div
         className="flex flex-col gap-1 w-full">
         {

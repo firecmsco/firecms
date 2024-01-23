@@ -109,7 +109,11 @@ export function getYupMapObjectSchema<M extends Record<string, any>>({
             });
         });
 
-    return yup.object().shape(objectSchema);
+    const shape = yup.object().shape(objectSchema);
+    if (validation?.required) {
+        return shape.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true);
+    }
+    return shape.nullable(true);
     // const object: ObjectSchema<any> = yup.object().shape(objectSchema);
     // return validation?.required
     //     ? object.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
