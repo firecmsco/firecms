@@ -7,7 +7,7 @@ import {
     useNavigationController,
     useSnackbarController
 } from "@firecms/core";
-import { Button, IconButton, SaveIcon, SettingsIcon, Tooltip, } from "@firecms/ui";
+import { Button, IconButton, SaveIcon, SettingsIcon, Tooltip, UndoIcon, } from "@firecms/ui";
 
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { useCollectionsConfigController } from "../useCollectionsConfigController";
@@ -52,7 +52,7 @@ export function EditorCollectionAction({
                         if (collection?.initialSort)
                             tableController.setSortBy?.(collection?.initialSort);
                     }}>
-                    <SaveIcon/>
+                    <UndoIcon/>
                 </Button>
             </Tooltip>}
 

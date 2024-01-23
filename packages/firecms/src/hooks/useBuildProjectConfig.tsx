@@ -4,7 +4,6 @@ import { FirebaseApp } from "firebase/app";
 import { ProjectSubscriptionPlan } from "../types";
 import { UploadFileProps } from "@firecms/core";
 import { FirebaseStorage, getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "firebase/storage";
-import { ProjectsApi } from "../api/projects";
 
 export type ProjectConfig = {
     projectId: string;
@@ -174,7 +173,7 @@ export function useBuildProjectConfig({
     return {
 
         projectId,
-        logo,
+        logo: canUploadLogo ? logo : undefined,
         uploadLogo,
         updateProjectName,
 
