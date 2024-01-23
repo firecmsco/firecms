@@ -157,6 +157,11 @@ module.exports = {
                     position: "left"
                 },
                 {
+                    label: "Blog",
+                    to: "blog",
+                    position: "left"
+                },
+                {
                     type: "html",
                     position: "right",
                     value: "<div id=\"docsearch\"></div>"
