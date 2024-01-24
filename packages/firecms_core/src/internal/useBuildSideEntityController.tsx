@@ -61,6 +61,7 @@ export const useBuildSideEntityController = (navigation: NavigationController,
         if (props.copy && !props.entityId) {
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
+
         const defaultSelectedView = resolveDefaultSelectedView(
             props.collection ? props.collection.defaultSelectedView : undefined,
             {
@@ -69,7 +70,10 @@ export const useBuildSideEntityController = (navigation: NavigationController,
             }
         );
 
-        sideDialogsController.open(propsToSidePanel({ selectedSubPath: defaultSelectedView, ...props }, navigation, smallLayout));
+        sideDialogsController.open(propsToSidePanel({
+            selectedSubPath: defaultSelectedView,
+            ...props,
+        }, navigation, smallLayout));
 
     }, [sideDialogsController, navigation, smallLayout]);
 
@@ -144,17 +148,24 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
 
 const propsToSidePanel = (props: EntitySidePanelProps<any>, navigation: NavigationController, smallLayout: boolean): SideDialogPanelProps => {
 
-    const collectionPath = removeInitialAndTrailingSlashes(props.path);
-    const newPath = props.entityId
-        ? navigation.buildUrlCollectionPath(`${collectionPath}/${props.entityId}/${props.selectedSubPath || ""}`)
-        : navigation.buildUrlCollectionPath(`${collectionPath}#${NEW_URL_HASH}`);
+        const collectionPath = removeInitialAndTrailingSlashes(props.path);
+        const newPath = props.entityId
+            ? navigation.buildUrlCollectionPath(`${collectionPath}/${props.entityId}/${props.selectedSubPath || ""}`)
+            : navigation.buildUrlCollectionPath(`${collectionPath}#${NEW_URL_HASH}`);
+        const resolvedPath = navigation.resolveAliasesFrom(props.path);
 
-    return ({
-        key: `${props.path}/${props.entityId}`,
-        component: <EntitySidePanel {...props}/>,
-        urlPath: newPath,
-        parentUrlPath: navigation.buildUrlCollectionPath(collectionPath),
-        width: getEntityViewWidth(props, smallLayout),
-        onClose: props.onClose
-    });
-};
+        const resolvedPanelProps: EntitySidePanelProps<any> = {
+            ...props,
+            path: resolvedPath
+        };
+
+        return ({
+            key: `${props.path}/${props.entityId}`,
+            component: <EntitySidePanel {...resolvedPanelProps}/>,
+            urlPath: newPath,
+            parentUrlPath: navigation.buildUrlCollectionPath(collectionPath),
+            width: getEntityViewWidth(props, smallLayout),
+            onClose: props.onClose
+        });
+    }
+;

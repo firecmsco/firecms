@@ -4,13 +4,25 @@ import { cn } from "../util";
 export interface AlertProps {
     children: React.ReactNode;
     onDismiss?: () => void;
-    color?: "error" | "warning" | "info" | "success";
+    color?: "error" | "warning" | "info" | "success" | "base";
+    size?: "small" | "medium" | "large";
     action?: React.ReactNode;
     className?: string;
     style?: React.CSSProperties;
 }
 
-const getClasses = (severity: string) => {
+const getSizeClasses = (size: "small" | "medium" | "large") => {
+    switch (size) {
+        case "small":
+            return "px-2 py-2";
+        case "large":
+            return "px-6 py-4";
+        case "medium":
+        default:
+            return "px-4 py-2";
+    }
+}
+const getColorClasses = (severity: string) => {
     switch (severity) {
         case "error":
             return "bg-red-50 dark:bg-red-800 dark:text-red-100 text-red-900";
@@ -20,8 +32,9 @@ const getClasses = (severity: string) => {
             return "bg-blue-50 dark:bg-blue-800 dark:text-blue-100 text-blue-900";
         case "success":
             return "bg-emerald-50 dark:bg-emerald-800 dark:text-emerald-100 text-emerald-900";
+        case "base":
         default:
-            return "bg-blue-50 dark:bg-blue-800 dark:text-blue-100 text-blue-900";
+            return "bg-slate-50 dark:bg-slate-800 dark:text-slate-100 text-slate-900";
     }
 };
 
@@ -29,16 +42,17 @@ export const Alert: React.FC<AlertProps> = ({
                                                 children,
                                                 onDismiss,
                                                 color = "info",
+                                                size = "medium",
                                                 action,
                                                 className,
                                                 style
                                             }) => {
-    const classes = getClasses(color);
+    const classes = getColorClasses(color);
 
     return (
         <div
             style={style}
-            className={cn("px-4 py-2 rounded-md flex items-center gap-2", classes, className)}
+            className={cn(getSizeClasses(size), "rounded-md flex items-center gap-2", classes, className)}
         >
             <span className={"flex-grow"}>{children}</span>
             {onDismiss && (

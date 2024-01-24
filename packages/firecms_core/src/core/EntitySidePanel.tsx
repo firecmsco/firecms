@@ -74,7 +74,6 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
 
     return (
         <>
-
             <ErrorBoundary>
                 <EntityView
                     {...props}

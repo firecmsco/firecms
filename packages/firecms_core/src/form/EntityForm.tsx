@@ -28,7 +28,7 @@ import {
 import { useAuthController, useDataSource, useFireCMSContext, useSideEntityController } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
-import { Button, cn, DialogActions, IconButton, Typography } from "@firecms/ui";
+import { Alert, Button, cn, DialogActions, IconButton, Typography } from "@firecms/ui";
 import { ErrorBoundary } from "../components";
 import {
     copyEntityAction,
@@ -400,9 +400,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                     )).filter(Boolean));
                 }
 
-                return <div
-                    className="h-full overflow-auto"
-                >
+                return <div className="h-full overflow-auto">
 
                     {pluginActions.length > 0 && <div
                         className={cn("w-full flex justify-end items-center sticky top-0 right-0 left-0 z-10 bg-opacity-60 bg-slate-200 dark:bg-opacity-60 dark:bg-slate-800 backdrop-blur-md")}>
@@ -413,12 +411,15 @@ function EntityFormInternal<M extends Record<string, any>>({
                         className="pl-4 pr-4 pt-12 pb-16 md:pl-8"
                     >
                         <div
-                            className={`w-full py-2 flex items-center mt-${4 + (pluginActions ? 8 : 0)} lg:mt-${8 + (pluginActions ? 8 : 0)} mb-8`}>
+                            className={`w-full py-2 flex flex-col items-start mt-${4 + (pluginActions ? 8 : 0)} lg:mt-${8 + (pluginActions ? 8 : 0)} mb-8`}>
 
                             <Typography
                                 className={"mt-4 flex-grow " + inputCollection.hideIdFromForm ? "mb-2" : "mb-0"}
                                 variant={"h4"}>{inputCollection.singularName ?? inputCollection.name}
                             </Typography>
+                            <Alert color={"base"} className={"w-full"} size={"small"}>
+                                <code className={"text-sm select-all"}>{path}/{entityId}</code>
+                            </Alert>
                         </div>
 
                         {!hideId &&

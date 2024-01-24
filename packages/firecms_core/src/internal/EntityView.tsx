@@ -68,7 +68,6 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                                                                                      onClose
                                                                                  }: EntityViewProps<M>) {
 
-
     if (collection.customId && collection.formAutoSave) {
         console.warn(`The collection ${collection.path} has customId and formAutoSave enabled. This is not supported and formAutoSave will be ignored`);
     }
@@ -502,11 +501,12 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
 
                         <div
                             className="pb-1 self-center">
-                            <IconButton onClick={() => {
-                                onClose?.();
-                                return sideDialogContext.close(false);
-                            }}
-                                        size="large">
+                            <IconButton
+                                onClick={() => {
+                                    onClose?.();
+                                    return sideDialogContext.close(false);
+                                }}
+                                size="large">
                                 <CloseIcon/>
                             </IconButton>
                         </div>
