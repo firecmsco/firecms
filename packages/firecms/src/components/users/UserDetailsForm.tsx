@@ -3,7 +3,6 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import {
     Button,
-    Chip,
     Dialog,
     DialogActions,
     DialogContent,
@@ -22,6 +21,7 @@ import { areRolesEqual } from "../../utils/permissions";
 import { FieldHelperView } from "../FieldHelperView";
 import { useFireCMSBackend } from "../../hooks";
 import { useUserManagement } from "../../hooks/useUserManagement";
+import { RoleChip } from "../roles/RoleChip";
 
 export const YupSchema = Yup.object().shape({
     displayName: Yup.string().required("Required"),
@@ -173,23 +173,14 @@ export function UserDetailsForm({
                                             renderValue={(value: string) => {
                                                 const userRole = roles
                                                     .find((role) => role.id === value);
+                                                if (!userRole) return null;
                                                 return <div className="flex flex-wrap space-x-2 space-y-2">
-                                                    <Chip
-                                                        colorScheme={"cyanLight"}
-                                                        key={userRole?.id}>
-                                                        {userRole!.name}
-                                                    </Chip>
+                                                    <RoleChip key={userRole?.id} role={userRole}/>
                                                 </div>;
                                             }}>
                                             {roles.map(userRole => <MultiSelectItem key={userRole.id}
-                                                                                    value={userRole.id}
-                                                                                    // className="flex flex-wrap space-x-2 space-y-2"
-                                            >
-                                                <Chip
-                                                    colorScheme={"cyanLight"}
-                                                    key={userRole?.id}>
-                                                    {userRole!.name}
-                                                </Chip>
+                                                                                    value={userRole.id}>
+                                                <RoleChip key={userRole?.id} role={userRole}/>
                                             </MultiSelectItem>)}
                                         </MultiSelect>
                                     </div>

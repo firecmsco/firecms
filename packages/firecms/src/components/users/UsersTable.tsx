@@ -24,6 +24,7 @@ import {
 import { FireCMSUserProject } from "../../types/firecms_user";
 import { getUserRoles } from "../../utils/permissions";
 import { useUserManagement } from "../../hooks/useUserManagement";
+import { RoleChip } from "../roles/RoleChip";
 
 export function UsersTable({ onUserClicked }: {
     onUserClicked: (user: FireCMSUserProject) => void;
@@ -92,11 +93,8 @@ export function UsersTable({ onUserClicked }: {
                                     {userRoles
                                         ? <div className="flex flex-wrap gap-2">
                                             {userRoles.map(userRole =>
-                                                <Chip
-                                                    colorScheme={"cyanLight"}
-                                                    key={userRole.id}>
-                                                    {userRole.name}
-                                                </Chip>)}
+                                                <RoleChip key={userRole?.id} role={userRole}/>
+                                            )}
                                         </div>
                                         : null}
                                 </TableCell>

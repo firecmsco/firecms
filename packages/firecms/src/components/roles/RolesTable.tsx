@@ -13,6 +13,7 @@ import {
 import { DeleteConfirmationDialog } from "@firecms/core";
 import { Role } from "@firecms/firebase";
 import { useUserManagement } from "../../hooks/useUserManagement";
+import { RoleChip } from "./RoleChip";
 
 export function RolesTable({
                                onRoleClicked,
@@ -68,7 +69,7 @@ export function RolesTable({
                                     </Tooltip>}
                             </TableCell>
                             <TableCell>
-                                {role.name}
+                                <RoleChip role={role}/>
                             </TableCell>
                             <TableCell className={"items-center"}>
                                 <Checkbox checked={role.isAdmin ?? false}/>

@@ -288,7 +288,7 @@ export function FireCMS3ClientWithController({
     });
 
     useEffect(() => {
-        if (userManagement.loading) return;
+        if (userManagement.loading || authController.authLoading) return;
         const user = authController.user;
         if (!user) return;
         if (!fireCMSUser) {
