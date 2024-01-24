@@ -14,7 +14,7 @@ export interface AlertProps {
 const getSizeClasses = (size: "small" | "medium" | "large") => {
     switch (size) {
         case "small":
-            return "px-2 py-2";
+            return "px-2 py-1";
         case "large":
             return "px-6 py-4";
         case "medium":
