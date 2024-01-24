@@ -73,7 +73,9 @@ export const docToCollection = (doc: DocumentSnapshot): PersistedCollection => {
     } as PersistedCollection;
 }
 
-export function prepareCollectionForPersistence<M extends { [Key: string]: CMSType }>(collection: Partial<PersistedCollection<M>>, propertyConfigs: Record<string, PropertyConfig>) {
+export function prepareCollectionForPersistence<M extends {
+    [Key: string]: CMSType
+}>(collection: Partial<PersistedCollection<M>>, propertyConfigs: Record<string, PropertyConfig>) {
 
     const { properties: inputProperties, ...rest } = collection;
     const cleanedProperties = inputProperties ? cleanPropertyConfigs(inputProperties, propertyConfigs) : undefined;
@@ -102,16 +104,28 @@ export function prepareCollectionForPersistence<M extends { [Key: string]: CMSTy
     delete newCollection.entityActions;
     delete newCollection.selectionController;
     delete newCollection.subcollections;
-    // @ts-ignore
     delete newCollection.exportable;
     return newCollection;
 }
 
-export const applyPermissionsFunction = (collections: PersistedCollection[], permissionsBuilder?: PermissionsBuilder): PersistedCollection[] => {
-    return collections.map(collection => ({
-        ...collection,
-        permissions: permissionsBuilder
-    }));
+/**
+ * If a collection is not applying permissions, we apply the given permissionsBuilder.
+ * This is used to apply the role permissions to the collections, unless they are already
+ * applying permissions.
+ * @param collections
+ * @param permissionsBuilder
+ */
+export const applyPermissionsFunctionIfEmpty = (collections: PersistedCollection[], permissionsBuilder?: PermissionsBuilder): PersistedCollection[] => {
+
+    return collections.map(collection => {
+        if (collection.permissions) {
+            return collection;
+        }
+        return ({
+            ...collection,
+            permissions: permissionsBuilder
+        });
+    });
 }
 
 function cleanPropertyConfigs(properties: PropertiesOrBuilders<any>, propertyConfigs: Record<string, PropertyConfig>) {

@@ -2,12 +2,11 @@ import React from "react";
 
 import { resolvePropertyEnum } from "../../util";
 import { EnumValuesChip } from "../components/EnumValuesChip";
-import { getColorSchemeForSeed } from "../../util/chip_utils";
 import { PreviewType } from "../../types";
 import { UrlComponentPreview } from "../components/UrlComponentPreview";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
 import { ErrorBoundary } from "../../components";
-import { Chip } from "@firecms/ui";
+import { Chip, getColorSchemeForSeed } from "@firecms/ui";
 
 /**
  * @group Preview components

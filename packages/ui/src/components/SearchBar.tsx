@@ -71,10 +71,11 @@ export function SearchBar({
                 {loading ? <CircularProgress size={"small"}/> : <SearchIcon className={"text-gray-500"}/>}
             </div>
             <input
-                value={searchText}
+                value={searchText ?? ""}
                 ref={inputRef}
                 onClick={onClick}
                 placeholder={placeholder}
+                readOnly={!onTextSearch}
                 onChange={onTextSearch
                     ? (event) => {
                         setSearchText(event.target.value);

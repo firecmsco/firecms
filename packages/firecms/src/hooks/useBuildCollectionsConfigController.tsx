@@ -11,7 +11,7 @@ import {
 } from "@firecms/collection_editor";
 import { PermissionsBuilder, Property, PropertyConfig, removeFunctions, removeUndefined, User } from "@firecms/core";
 import {
-    applyPermissionsFunction,
+    applyPermissionsFunctionIfEmpty,
     buildCollectionId,
     docsToCollectionTree,
     prepareCollectionForPersistence,
@@ -166,7 +166,7 @@ export function useBuildCollectionsConfigController<EC extends PersistedCollecti
         });
     }, [configPath, firestore, propertyConfigsMap]);
 
-    const collections = persistedCollections !== undefined ? applyPermissionsFunction(persistedCollections, permissions as PermissionsBuilder) : undefined;
+    const collections = persistedCollections !== undefined ? applyPermissionsFunctionIfEmpty(persistedCollections, permissions as PermissionsBuilder) : undefined;
 
     const getCollection = useCallback((id: string) => {
         if (!collections) throw Error("Collections not initialised");

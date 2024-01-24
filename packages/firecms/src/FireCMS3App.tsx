@@ -272,13 +272,15 @@ export function FireCMS3ClientWithController({
     const permissions: PermissionsBuilder<PersistedCollection, FireCMSUser> = useCallback(({
                                                                                                pathSegments,
                                                                                                collection,
-                                                                                               user
-                                                                                           }) => resolveUserRolePermissions({
-        collection,
-        roles: authController.userRoles ?? undefined,
-        paths: pathSegments,
-        user
-    }), [authController.userRoles]);
+                                                                                               user,
+                                                                                               entity
+                                                                                           }) =>
+        resolveUserRolePermissions({
+            collection,
+            roles: authController.userRoles ?? undefined,
+            paths: pathSegments,
+            user
+        }), [authController.userRoles]);
 
     const configController = useBuildCollectionsConfigController({
         firebaseApp: fireCMSBackend.backendFirebaseApp,
@@ -298,7 +300,7 @@ export function FireCMS3ClientWithController({
             const userRoles = getUserRoles(userManagement.roles, fireCMSUser);
             authController.setUserRoles(userRoles ?? null);
         }
-    }, [authController.user, userManagement.loading, userManagement.roles, userManagement.users, fireCMSUser]);
+    }, [authController.user, userManagement.loading, userManagement.roles, userManagement.users, fireCMSUser, authController.authLoading]);
 
     let loadingOrErrorComponent;
     if (userManagement.loading) {
