@@ -1,7 +1,6 @@
-import { CMSType, Permissions, segmentsToStrippedPath, User } from "@firecms/core";
+import { CMSType, Permissions, User } from "@firecms/core";
 import { CollectionEditorPermissions, PersistedCollection } from "@firecms/collection_editor";
 import { FireCMSUserProject } from "../types";
-import { ProjectConfig } from "../hooks";
 import { Role } from "@firecms/firebase";
 import { UserManagement } from "../hooks/useBuildUserManagement";
 
@@ -34,25 +33,20 @@ export function resolveUserRolePermissions<M extends {
             delete: true
         };
     } else {
-        const strippedCollectionPath = segmentsToStrippedPath(paths);
-        return resolveCollectionPermissions(roles, strippedCollectionPath);
+        const basePermissions = {
+            read: false,
+            create: false,
+            edit: false,
+            delete: false
+        };
+
+        return roles
+            .map(role => resolveCollectionRole(role, collection.id))
+            .reduce(mergePermissions, basePermissions);
     }
 }
 
-export function resolveCollectionPermissions(roles: Role[], path: string): Permissions {
-    const basePermissions = {
-        read: false,
-        create: false,
-        edit: false,
-        delete: false
-    };
-
-    return roles
-        .map(role => resolveCollectionRole(role, path))
-        .reduce(mergePermissions, basePermissions);
-}
-
-function resolveCollectionRole(role: Role, path: string): Permissions {
+function resolveCollectionRole(role: Role, id: string): Permissions {
 
     const basePermissions = {
         read: role.isAdmin || role.defaultPermissions?.read,
@@ -60,8 +54,8 @@ function resolveCollectionRole(role: Role, path: string): Permissions {
         edit: role.isAdmin || role.defaultPermissions?.edit,
         delete: role.isAdmin || role.defaultPermissions?.delete
     };
-    if (role.collectionPermissions && role.collectionPermissions[path]) {
-        return mergePermissions(role.collectionPermissions[path], basePermissions);
+    if (role.collectionPermissions && role.collectionPermissions[id]) {
+        return mergePermissions(role.collectionPermissions[id], basePermissions);
     } else if (role.defaultPermissions) {
         return mergePermissions(role.defaultPermissions, basePermissions);
     } else {

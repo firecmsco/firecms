@@ -25,9 +25,7 @@ export type Role = {
     defaultPermissions?: Permissions;
 
     /**
-     * Record of stripped collection paths
-     * `products/B44RG6APH/locales` => `products::locales`
-     * to their permissions.
+     * Record of stripped collection ids to their permissions.
      * @see stripCollectionPath
      */
     collectionPermissions?: Record<string, Permissions>;
