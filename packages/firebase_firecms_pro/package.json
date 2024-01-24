@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-alpha.72",
+  "version": "3.0.0-alpha.73",
   "type": "module",
   "name": "@firecms/firebase_pro",
   "access": "public",
@@ -9,12 +9,12 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "^3.0.0-alpha.72",
-    "@firecms/firebase": "^3.0.0-alpha.72",
-    "@firecms/ui": "^3.0.0-alpha.72",
+    "@firecms/core": "^3.0.0-alpha.73",
+    "@firecms/firebase": "^3.0.0-alpha.73",
+    "@firecms/ui": "^3.0.0-alpha.73",
     "@types/node": "^20.8.9",
     "firebase": "^10.7.1",
-    "firecms": "^3.0.0-alpha.72",
+    "firecms": "^3.0.0-alpha.73",
     "typescript": "^5.3.3"
   },
   "peerDependencies": {
