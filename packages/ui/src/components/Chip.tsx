@@ -54,9 +54,9 @@ export function Chip({
                 backgroundColor: error || !usedColorScheme ? undefined : usedColorScheme.color,
                 color: error || !usedColorScheme ? undefined : usedColorScheme.text,
                 overflow: "hidden",
-                display: "-webkit-box",
-                WebkitLineClamp: 1,
-                WebkitBoxOrient: "vertical",
+                // display: "-webkit-box",
+                // WebkitLineClamp: 1,
+                // WebkitBoxOrient: "vertical",
             }}
         >
             {children}

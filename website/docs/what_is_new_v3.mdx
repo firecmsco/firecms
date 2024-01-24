@@ -2,13 +2,13 @@
 id: what_is_new_v3
 title: ✨ What's new in FireCMS 3.0
 sidebar_label: ✨ What's new in FireCMS 3.0
-description: FireCMS 3.0 unveils pioneering features and enhancements for a dynamic and customizable content management experience. Now integrated with a backend, it extends the flexibility of collection schema modification directly from the UI, streamlining the workflow for end users. Innovations include an intuitive UI schema editor, intelligent data inference for quick setup, and advanced data import/export capabilities. Notably, the switch to Tailwind CSS marks a leap in performance, delivering a swift, more efficient CMS interface. FireCMS 3.0 transforms content management with its blend of user-friendly features and performance optimizations, setting a new standard in headless CMS solutions.
+description: FireCMS 3.0 includes pioneering features and enhancements for a dynamic and customizable content management experience. Now integrated with a backend, it extends the flexibility of collection schema modification directly from the UI, streamlining the workflow for end users. Innovations include an intuitive UI schema editor, intelligent data inference for quick setup, and advanced data import/export capabilities. Notably, the switch to Tailwind CSS marks a leap in performance, delivering a swift, more efficient CMS interface. FireCMS 3.0 transforms content management with its blend of user-friendly features and performance optimizations, setting a new standard in headless CMS solutions.
 ---
 
 The new version of FireCMS is a major release that brings a lot of new features
 and improvements. This page will guide you through the most important changes 🔥
 
-FireCMS 3.0 now makes use of a backend to provide a more flexible and
+FireCMS 3.0 now makes use of a **backend** to provide a more flexible and
 customizable experience.
 
 Until now, FireCMS was a frontend-only library that would connect directly to
@@ -24,6 +24,9 @@ FireCMS' configuration.
 Having a backend also allows us to provide a better experience by offering additional features
 such as data enhancement through OpenAPI GPT-4.
 
+Docs have been revamped and are now better in every way. Many documents have been adapted to
+the new version of FireCMS, and we have added new ones.
+
 
 ## New UI collection schema editor
 
@@ -38,6 +41,9 @@ collection schema. Let's say you have a collection of `Posts` and you want to
 add a new possible value for the enum `status`. You can now open the collection
 editor and add the new value. Even better, FireCMS can find new values and add
 them to your schema with one click!
+
+You can still limit the properties that can be modified from the UI, and you
+can also define the default values for new documents.
 
 ### New data inference
 
@@ -73,5 +79,45 @@ In FireCMS 3.0 we have migrated to Tailwind CSS. This is a utility-first CSS
 framework that allows us to generate a small CSS file with all the styles
 resolved at build time. This means that the browser does not have to do any
 work to resolve the styles, which results in a **much faster experience**. 🚀
+
+## New authentication system
+
+We now provide a new authentication system that allows managing CMS users
+and roles from the UI.
+
+If you prefer defining permissions for each collection in code, you can still do it.
+
+
+## New component library and Icons
+
+We have also created a new component library that you can use to build your own components
+(or use it in any project you like really!). You can get it from npm:
+
+```bash
+yarn add @firecms/ui
+```
+(you only need to install it if you want to use it in a different project)
+
+The components are fully typed and documented. You can find the documentation [here](/docs/components/intro).
+They are based in Tailwind CSS and Radix UI. They are easily customizable, and you can
+use them to build your own components. They are also accessible and responsive.
+
+## Icons collection
+
+You can customise the icons in different parts of the CMS, such when selecting one for
+a collection. FireCMS UI now exports all the Material Icons, conveniently exported as React components.
+
+We have also added an [icon search function](/docs/icons/icons) in the website to find the icon you need.
+
+It makes it easy to find the right icon key when defining configuration for your collections, or to
+find the right icon component when you want to use it in your own components.
+
+## New CLI
+
+Use the CLI to deploy your custom code with a single command:
+
+```bash
+firecms deploy
+```
 
 

@@ -50,7 +50,7 @@ Zamioculca.
 
 ![botanica_search.png](..%2Fstatic%2Fimg%2Fblog%2Fbotanica_search.png)
 
-Go and try it and give us a thought.
+Go try it and tell us what you think.
 
 ### Conclusion
 

@@ -1,5 +1,6 @@
 const fontaine = require("fontaine");
 const path = require("path");
+import {themes as prismThemes} from 'prism-react-renderer';
 require("dotenv").config();
 
 module.exports = {
@@ -301,9 +302,9 @@ module.exports = {
             ],
             copyright: `MIT © ${new Date().getFullYear()} - FireCMS S.L.`
         },
-        // prism: {
-        //     theme: require("prism-react-renderer/themes/vsDark")
-        // }
+        prism: {
+            theme: prismThemes.vsDark,
+        }
     },
     presets: [
         [
