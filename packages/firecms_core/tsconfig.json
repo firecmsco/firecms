@@ -33,7 +33,7 @@
     "baseUrl": ".",
     "paths": {
       "@firecms/ui": [
-        "../ui"
+        "../ui/src"
       ]
     }
   },

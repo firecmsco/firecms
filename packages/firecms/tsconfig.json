@@ -33,25 +33,25 @@
     "baseUrl": ".",
     "paths": {
       "@firecms/core": [
-        "../firecms_core"
+        "../firecms_core/src"
       ],
       "@firecms/firebase": [
-        "../firebase_firecms"
+        "../firebase_firecms/src"
       ],
       "@firecms/ui": [
-        "../ui"
+        "../ui/src"
       ],
       "@firecms/collection_editor": [
-        "../collection_editor"
+        "../collection_editor/src"
       ],
       "@firecms/data_enhancement": [
-        "../data_enhancement"
+        "../data_enhancement/src"
       ],
       "@firecms/schema_inference": [
-        "../schema_inference"
+        "../schema_inference/src"
       ],
       "@firecms/data_import_export": [
-        "../data_import_export"
+        "../data_import_export/src"
       ]
     }
   },

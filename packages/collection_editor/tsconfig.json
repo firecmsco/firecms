@@ -32,16 +32,16 @@
     "baseUrl": ".",
     "paths": {
       "@firecms/core": [
-        "../firecms_core"
+        "../firecms_core/src"
       ],
       "@firecms/schema_inference": [
-        "../schema_inference"
+        "../schema_inference/src"
       ],
       "@firecms/data_import_export": [
-        "../data_import_export"
+        "../data_import_export/src"
       ],
       "@firecms/ui": [
-        "../ui"
+        "../ui/src"
       ]
     }
   },
