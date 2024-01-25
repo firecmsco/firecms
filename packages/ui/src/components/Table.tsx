@@ -13,7 +13,7 @@ export const Table = ({
                           className,
                           style
                       }: TableProps) => (
-    <table className={cn("w-full text-left text-gray-800 dark:text-gray-200 rounded-md overflow-x-auto",
+    <table className={cn("w-full text-left text-slate-800 dark:text-slate-200 rounded-md overflow-x-auto",
         className)}
            style={style}>
         {children}
@@ -29,7 +29,7 @@ export const TableBody = ({
                               className
                           }: TableBodyProps) => (
     <tbody
-        className={cn("bg-white text-sm dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700", className)}>
+        className={cn("bg-white text-sm dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700", className)}>
     {children}
     </tbody>
 );
@@ -46,8 +46,8 @@ export const TableHeader = ({
     <thead>
     <tr className={cn(
         defaultBorderMixin,
-        "text-sm font-medium text-gray-700 dark:text-gray-300",
-        "bg-gray-50 border-b dark:bg-gray-900", className)}>
+        "text-sm font-medium text-slate-700 dark:text-slate-300",
+        "bg-slate-50 border-b dark:bg-slate-900", className)}>
         {children}
     </tr>
     </thead>
@@ -70,9 +70,9 @@ export const TableRow = ({
         onClick={onClick}
         style={style}
         className={cn(
-            "divide-gray-100 dark:divide-gray-800",
-            "bg-white dark:bg-gray-950",
-            onClick ? "hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer" : "",
+            "divide-slate-100 dark:divide-slate-800",
+            "bg-white dark:bg-slate-950",
+            onClick ? "hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer" : "",
             className)}
     >
         {children}

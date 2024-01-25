@@ -44,9 +44,9 @@ export function Chip({
         <div
             className={cn("rounded-lg w-fit h-fit font-regular inline-flex gap-1",
                 "text-ellipsis",
-                onClick ? "cursor-pointer hover:bg-gray-300 hover:dark:bg-gray-700" : "",
+                onClick ? "cursor-pointer hover:bg-slate-300 hover:dark:bg-slate-700" : "",
                 sizeClassNames[size],
-                error || !usedColorScheme ? "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200" : "",
+                error || !usedColorScheme ? "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200" : "",
                 error ? "text-red-500 dark:text-red-400" : "",
                 className)}
             onClick={onClick}

@@ -62,7 +62,7 @@ export const Sheet: React.FC<SheetProps> = ({
                     className={cn(
                         // "transform-gpu",
                         "will-change-transform",
-                        "text-gray-900 dark:text-white",
+                        "text-slate-900 dark:text-white",
                         "fixed transform z-20 transition-all duration-[240ms] ease-in-out",
                         "outline-none focus:outline-none",
                         !transparent ? "shadow-md" : "",

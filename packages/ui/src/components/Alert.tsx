@@ -56,7 +56,7 @@ export const Alert: React.FC<AlertProps> = ({
         >
             <span className={"flex-grow"}>{children}</span>
             {onDismiss && (
-                <button className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-400"
+                <button className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-400"
                         onClick={onDismiss}>
                     &times;
                 </button>

@@ -44,12 +44,12 @@ export const Tooltip = ({
                     <TooltipPrimitive.Content
                         className={cn("TooltipContent",
                             "max-w-lg leading-relaxed",
-                            "z-50 rounded px-3 py-2 text-xs leading-none bg-gray-700 dark:bg-gray-800 bg-opacity-90 font-medium text-gray-50 shadow-2xl select-none duration-400 ease-in transform opacity-100",
+                            "z-50 rounded px-3 py-2 text-xs leading-none bg-slate-700 dark:bg-slate-800 bg-opacity-90 font-medium text-slate-50 shadow-2xl select-none duration-400 ease-in transform opacity-100",
                             tooltipClassName)}
                         sideOffset={sideOffset === undefined ? 4 : sideOffset}
                         side={side}>
                         {title}
-                        {/*<TooltipPrimitive.Arrow className="fill-gray-600"/>*/}
+                        {/*<TooltipPrimitive.Arrow className="fill-slate-600"/>*/}
                     </TooltipPrimitive.Content>
                 </TooltipPrimitive.Portal>
             </TooltipPrimitive.Root>

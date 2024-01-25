@@ -172,7 +172,7 @@ export function MultiSelect({
                                 }}>
 
                                 <CommandPrimitive.Group
-                                    className="mt-2 text-gray-900 dark:text-white animate-in z-50 border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 p-2 rounded-lg shadow-lg flex flex-col outline-none w-full"
+                                    className="mt-2 text-slate-900 dark:text-white animate-in z-50 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 p-2 rounded-lg shadow-lg flex flex-col outline-none w-full"
                                 >
 
                                     {children}
@@ -210,13 +210,13 @@ export function MultiSelectItem({ children, value, className }: MultiSelectItemP
             onValueChangeInternal(value);
         }}
         className={cn(
-            (fieldValue ?? []).includes(value) ? "bg-gray-200 dark:bg-gray-950" : "",
+            (fieldValue ?? []).includes(value) ? "bg-slate-200 dark:bg-slate-950" : "",
             "cursor-pointer",
             "m-1",
             "ring-offset-transparent",
             "p-2 rounded aria-[selected=true]:outline-none aria-[selected=true]:ring-2 aria-[selected=true]:ring-primary aria-[selected=true]:ring-opacity-75 aria-[selected=true]:ring-offset-2",
-            "aria-[selected=true]:bg-gray-100 aria-[selected=true]:dark:bg-gray-900",
-            "cursor-pointer p-2 rounded aria-[selected=true]:bg-gray-100 aria-[selected=true]:dark:bg-gray-900",
+            "aria-[selected=true]:bg-slate-100 aria-[selected=true]:dark:bg-slate-900",
+            "cursor-pointer p-2 rounded aria-[selected=true]:bg-slate-100 aria-[selected=true]:dark:bg-slate-900",
             className
         )}
     >

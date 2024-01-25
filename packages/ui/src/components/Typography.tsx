@@ -54,7 +54,7 @@ const variantToClasses = {
     subtitle2: "text-base font-headers font-medium",
     body1: "text-base",
     body2: "text-sm",
-    label: "text-sm font-medium text-gray-500",
+    label: "text-sm font-medium text-slate-500",
     inherit: "text-inherit",
     caption: "text-xs",
     button: "text-sm font-medium"

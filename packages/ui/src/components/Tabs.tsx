@@ -19,7 +19,7 @@ export function Tabs({
 
     return <TabsPrimitive.Root value={value} onValueChange={onValueChange}>
         <TabsPrimitive.List className={cn(
-            "flex text-sm font-medium text-center text-gray-800 dark:text-gray-200",
+            "flex text-sm font-medium text-center text-slate-800 dark:text-slate-200",
             className)
         }>
             {children}
@@ -46,15 +46,15 @@ export function Tab({
                                       "border-b-2 border-transparent",
                                       "data-[state=active]:border-secondary",
                                       disabled
-                                          ? "text-gray-400 dark:text-gray-500"
-                                          : cn("text-gray-700 dark:text-gray-300",
-                                              "data-[state=active]:text-gray-900 data-[state=active]:dark:text-gray-100",
-                                              "hover:text-gray-800 dark:hover:text-gray-200"),
-                                      // disabled ? "text-gray-400 dark:text-gray-500" : "data-[state=active]:text-primary",
-                                      // "data-[state=active]:bg-gray-50 data-[state=active]:dark:bg-gray-800",
+                                          ? "text-slate-400 dark:text-slate-500"
+                                          : cn("text-slate-700 dark:text-slate-300",
+                                              "data-[state=active]:text-slate-900 data-[state=active]:dark:text-slate-100",
+                                              "hover:text-slate-800 dark:hover:text-slate-200"),
+                                      // disabled ? "text-slate-400 dark:text-slate-500" : "data-[state=active]:text-primary",
+                                      // "data-[state=active]:bg-slate-50 data-[state=active]:dark:bg-slate-800",
                                       className)}>
         <div className={cn("uppercase inline-block p-2 px-4 m-2 rounded",
-            "hover:bg-gray-100 dark:hover:bg-gray-800")}>
+            "hover:bg-slate-100 dark:hover:bg-slate-800")}>
             {children}
         </div>
     </TabsPrimitive.Trigger>;

@@ -38,7 +38,7 @@ export function Button<P extends React.ElementType>({
             "border-primary !text-primary hover:bg-primary hover:bg-opacity-10 hover:border-blue-600 !hover:text-blue-600 focus:ring-blue-400 hover:ring-1 hover:ring-primary": variant === "outlined" && !disabled,
             "border-transparent !text-primary !hover:text-blue-600 hover:bg-primary hover:bg-opacity-10": variant === "text" && !disabled,
             "border-blue-600 border-opacity-50 dark:border-blue-500 dark:border-opacity-50 opacity-50 !text-blue-600 !dark:text-blue-500 text-opacity-50 dark:text-opacity-50": variant === "outlined" && disabled,
-            "border-transparent outline-none opacity-50 !text-gray-600 !dark:text-gray-500": (variant === "filled" || variant === "text") && disabled
+            "border-transparent outline-none opacity-50 !text-slate-600 !dark:text-slate-500": (variant === "filled" || variant === "text") && disabled
         }
     );
 

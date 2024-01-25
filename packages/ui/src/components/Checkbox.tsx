@@ -38,7 +38,7 @@ export const Checkbox = ({
         <div className={cn(
             outerSizeClasses[size],
             "inline-flex items-center justify-center p-2 text-sm font-medium focus:outline-none transition-colors ease-in-out duration-150",
-            onCheckedChange ? "rounded-full hover:bg-gray-200 hover:bg-opacity-75 dark:hover:bg-gray-700 dark:hover:bg-opacity-75" : "",
+            onCheckedChange ? "rounded-full hover:bg-slate-200 hover:bg-opacity-75 dark:hover:bg-slate-700 dark:hover:bg-opacity-75" : "",
             onCheckedChange ? "cursor-pointer" : "cursor-default"
         )}>
             <CheckboxPrimitive.Root
@@ -51,12 +51,12 @@ export const Checkbox = ({
                         "border-2 relative transition-colors ease-in-out duration-150",
                         sizeClasses[size],
                         disabled
-                            ? (isChecked ? "bg-gray-400 dark:bg-gray-600" : "bg-gray-400 dark:bg-gray-600")
-                            : (isChecked ? "bg-primary" : "bg-white dark:bg-gray-900"),
-                        isChecked ? "text-gray-100 dark:text-gray-900" : "",
+                            ? (isChecked ? "bg-slate-400 dark:bg-slate-600" : "bg-slate-400 dark:bg-slate-600")
+                            : (isChecked ? "bg-primary" : "bg-white dark:bg-slate-900"),
+                        isChecked ? "text-slate-100 dark:text-slate-900" : "",
                         disabled
                             ? "border-transparent"
-                            : (isChecked ? "border-transparent" : "border-gray-800 dark:border-gray-200")
+                            : (isChecked ? "border-transparent" : "border-slate-800 dark:border-slate-200")
                     )}>
                     <CheckboxPrimitive.Indicator asChild>
                         {indeterminate

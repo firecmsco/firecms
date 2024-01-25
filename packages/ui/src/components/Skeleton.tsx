@@ -15,7 +15,7 @@ export function Skeleton({
     return <span className={
         cn(
             "block",
-            "bg-gray-200 dark:bg-gray-800 rounded",
+            "bg-slate-200 dark:bg-slate-800 rounded",
             "animate-pulse",
             width ? `w-[${width}px]` : "w-full",
             height ? `h-[${height}px]` : "h-3",

@@ -113,7 +113,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                         size === "small" ? "min-h-[48px]" : "min-h-[64px]",
                         label ? "pt-[28px] pb-2" : "py-2",
                         inputClassName,
-                        disabled && "border border-transparent outline-none opacity-50 dark:opacity-50 text-gray-600 dark:text-gray-500"
+                        disabled && "border border-transparent outline-none opacity-50 dark:opacity-50 text-slate-600 dark:text-slate-500"
                     )}
                 />
 
@@ -123,14 +123,14 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                         // @ts-ignore
                         return ref.current?.setOpen(true);
                     }}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 !text-gray-500 ">
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 !text-slate-500 ">
                     <CalendarMonthIcon color={"disabled"}/>
                 </IconButton>
 
                 {clearable && value && (
                     <IconButton
                         onClick={handleClear}
-                        className="absolute right-14 top-1/2 transform -translate-y-1/2 text-gray-400 ">
+                        className="absolute right-14 top-1/2 transform -translate-y-1/2 text-slate-400 ">
                         <ClearIcon/>
                     </IconButton>
                 )}
