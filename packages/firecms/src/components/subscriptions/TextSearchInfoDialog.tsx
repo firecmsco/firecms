@@ -19,13 +19,15 @@ export function TextSearchInfoDialog({
                                          open,
                                          closeDialog,
                                          collection,
-                                         collectionConfigController
+                                         collectionConfigController,
+                                         parentCollectionIds
                                      }: {
     open: boolean,
     closeDialog: () => void,
     path: string,
     collection: EntityCollection,
-    collectionConfigController: CollectionsConfigController
+    collectionConfigController: CollectionsConfigController,
+    parentCollectionIds?: string[]
 }) {
 
     const snackbarController = useSnackbarController();
@@ -36,6 +38,7 @@ export function TextSearchInfoDialog({
     function enableTextSearchForCollection() {
         return collectionConfigController.updateCollection({
             id: collection.id,
+            parentCollectionIds,
             collectionData: {
                 textSearchEnabled: true
             }

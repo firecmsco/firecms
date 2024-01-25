@@ -7,5 +7,5 @@ import { Checkbox } from "@firecms/ui";
 export function BooleanPreview({ value }: {
     value: boolean
 }): React.ReactElement {
-    return <Checkbox checked={value}/>;
+    return <Checkbox checked={value} color={"secondary"}/>;
 }

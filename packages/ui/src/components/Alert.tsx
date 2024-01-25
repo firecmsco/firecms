@@ -14,9 +14,9 @@ export interface AlertProps {
 const getSizeClasses = (size: "small" | "medium" | "large") => {
     switch (size) {
         case "small":
-            return "px-2 py-1";
+            return "px-4 py-1";
         case "large":
-            return "px-6 py-4";
+            return "px-4 py-4";
         case "medium":
         default:
             return "px-4 py-2";
@@ -52,8 +52,12 @@ export const Alert: React.FC<AlertProps> = ({
     return (
         <div
             style={style}
-            className={cn(getSizeClasses(size), "rounded-md flex items-center gap-2", classes, className)}
-        >
+            className={cn(
+                getSizeClasses(size),
+                "w-full",
+                "rounded-md flex items-center gap-2",
+                classes,
+                className)}>
             <span className={"flex-grow"}>{children}</span>
             {onDismiss && (
                 <button className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-400"

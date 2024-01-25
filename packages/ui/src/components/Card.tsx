@@ -12,7 +12,6 @@ export function Card({
     style?: React.CSSProperties;
     onClick?: () => void;
     className?: string;
-
 }) {
 
     const onKeyPress = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {

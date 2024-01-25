@@ -107,6 +107,9 @@ module.exports = {
                 "components/badge",
                 "components/boolean_switch",
                 "components/button",
+                "components/card",
+                "components/centered_view",
+                "components/checkbox",
             ]
         },
         "changelog",

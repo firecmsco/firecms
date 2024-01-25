@@ -5,13 +5,11 @@ import { cn } from "../util";
 export function CenteredView({
                                  children,
                                  maxWidth,
-                                 fullScreen = false,
-                                 className,
+                                 className
                              }: {
     children: React.ReactNode;
     maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl";
     className?: string;
-    fullScreen?: boolean,
 }) {
 
     return <div className={"flex flex-col flex-grow h-full"}>

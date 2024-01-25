@@ -163,9 +163,9 @@ export function DeveloperFeatures() {
             readOnly: true
         }
     }
-    });
+});
     
-    const productCallbacks = buildEntityCallbacks({
+const productCallbacks = buildEntityCallbacks({
     onPreSave: ({ values }) => {
         values.uppercase = values.name.toUpperCase();
         return values;

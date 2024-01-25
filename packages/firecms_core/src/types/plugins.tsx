@@ -125,13 +125,15 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
         showTextSearchBar?: (props: {
             context: FireCMSContext,
             path: string,
-            collection: EC
+            collection: EC,
+            parentCollectionIds?: string[]
         }) => boolean;
 
         onTextSearchClick?: (props: {
             context: FireCMSContext,
             path: string,
-            collection: EC
+            collection: EC,
+            parentCollectionIds?: string[]
         }) => Promise<boolean>;
 
         /**

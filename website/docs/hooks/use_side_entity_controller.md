@@ -48,7 +48,7 @@ export function ExampleCMSView() {
     const sideEntityController = useSideEntityController();
 
     // You don't need to provide a schema if the collection path is mapped in
-    // the main navigation or you have set a `schemaResolver`
+    // the main navigation
     const customproductCollection = buildCollection({
         name: "Product",
         properties: {

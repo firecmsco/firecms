@@ -1,7 +1,7 @@
 import React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 
-import { Icon } from "../icons";
+import { EvShadowMinusIcon, Icon } from "../icons";
 import { cn } from "../util";
 
 interface CheckboxProps {
@@ -10,6 +10,7 @@ interface CheckboxProps {
     indeterminate?: boolean;
     onCheckedChange?: (checked: boolean) => void;
     size?: "small" | "medium" | "large";
+    color?: "primary" | "secondary";
 }
 
 const sizeClasses = {
@@ -24,12 +25,18 @@ const outerSizeClasses = {
     large: "w-12 h-12"
 }
 
+const colorClasses = {
+    primary: "bg-primary",
+    secondary: "bg-secondary"
+}
+
 export const Checkbox = ({
                              checked,
                              indeterminate = false,
                              disabled,
                              size = "medium",
-                             onCheckedChange
+                             onCheckedChange,
+                             color = "primary"
                          }: CheckboxProps) => {
 
     const isChecked = indeterminate ? false : checked;
@@ -43,7 +50,7 @@ export const Checkbox = ({
         )}>
             <CheckboxPrimitive.Root
                 asChild
-                checked={isChecked}
+                checked={indeterminate || isChecked}
                 disabled={disabled}
                 onCheckedChange={disabled ? undefined : onCheckedChange}>
                 <div
@@ -51,17 +58,17 @@ export const Checkbox = ({
                         "border-2 relative transition-colors ease-in-out duration-150",
                         sizeClasses[size],
                         disabled
-                            ? (isChecked ? "bg-slate-400 dark:bg-slate-600" : "bg-slate-400 dark:bg-slate-600")
-                            : (isChecked ? "bg-primary" : "bg-white dark:bg-slate-900"),
+                            ? (indeterminate || isChecked ? "bg-slate-400 dark:bg-slate-600" : "bg-slate-400 dark:bg-slate-600")
+                            : (indeterminate || isChecked ? colorClasses[color] : "bg-white dark:bg-slate-900"),
                         isChecked ? "text-slate-100 dark:text-slate-900" : "",
                         disabled
                             ? "border-transparent"
-                            : (isChecked ? "border-transparent" : "border-slate-800 dark:border-slate-200")
+                            : (indeterminate || isChecked ? "border-transparent" : "border-slate-800 dark:border-slate-200")
                     )}>
                     <CheckboxPrimitive.Indicator asChild>
                         {indeterminate
                             ? (
-                                <div className="w-full h-[1px] bg-currentColor"/>
+                                <Icon iconKey={"remove"} size={20} className={"absolute"}/>
                             )
                             : (
                                 <Icon iconKey={"check"} size={20} className={"absolute"}/>
@@ -69,6 +76,11 @@ export const Checkbox = ({
                     </CheckboxPrimitive.Indicator>
                 </div>
             </CheckboxPrimitive.Root>
+            {/*{indeterminate && (*/}
+            {/*    <div >*/}
+            {/*         YO*/}
+            {/*    </div>*/}
+            {/*)}*/}
         </div>
     );
 };

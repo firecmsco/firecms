@@ -18,7 +18,7 @@ export function useSaasPlugin({ projectConfig, firestoreDelegate, collectionConf
                 }
                 return true;
             },
-            onTextSearchClick: ({ context, path, collection }) => {
+            onTextSearchClick: ({ context, path, collection, parentCollectionIds }) => {
                 if (projectConfig.canUseLocalTextSearch && projectConfig.localTextSearchEnabled && collection.textSearchEnabled) {
                     return firestoreDelegate.initTextSearchController({ path, collection });
                 } else {
@@ -26,6 +26,7 @@ export function useSaasPlugin({ projectConfig, firestoreDelegate, collectionConf
                         key: "text_search_info",
                         Component: (props) => <TextSearchInfoDialog {...props}
                                                                     collectionConfigController={collectionConfigController}
+                                                                    parentCollectionIds={parentCollectionIds}
                                                                     path={path}
                                                                     collection={collection}/>
                     });

@@ -149,6 +149,7 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
 const propsToSidePanel = (props: EntitySidePanelProps<any>, navigation: NavigationController, smallLayout: boolean): SideDialogPanelProps => {
 
         const collectionPath = removeInitialAndTrailingSlashes(props.path);
+
         const newPath = props.entityId
             ? navigation.buildUrlCollectionPath(`${collectionPath}/${props.entityId}/${props.selectedSubPath || ""}`)
             : navigation.buildUrlCollectionPath(`${collectionPath}#${NEW_URL_HASH}`);

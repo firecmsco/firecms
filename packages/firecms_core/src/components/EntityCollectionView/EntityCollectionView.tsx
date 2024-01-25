@@ -570,7 +570,7 @@ export const EntityCollectionView = React.memo(
                     setTextSearchLoading(true);
                     Promise.all(context.plugins?.map(p => {
                         if (p.collectionView?.onTextSearchClick)
-                            return p.collectionView.onTextSearchClick({ context, path: resolvedFullPath, collection });
+                            return p.collectionView.onTextSearchClick({ context, path: resolvedFullPath, collection, parentCollectionIds });
                         return Promise.resolve(true);
                     }) as Promise<boolean>[])
                         .then((res) => {
@@ -583,7 +583,7 @@ export const EntityCollectionView = React.memo(
             context.plugins?.forEach(p => {
                 if (!textSearchEnabled)
                     if (p.collectionView?.showTextSearchBar) {
-                        textSearchEnabled = p.collectionView.showTextSearchBar({ context, path: resolvedFullPath, collection });
+                        textSearchEnabled = p.collectionView.showTextSearchBar({ context, path: resolvedFullPath, collection, parentCollectionIds });
                     }
             })
         }

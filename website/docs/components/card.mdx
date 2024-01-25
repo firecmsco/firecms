@@ -1,0 +1,53 @@
+---
+id: card
+title: Card
+sidebar_label: Card
+---
+
+Cards are surfaces that display content and actions on a single topic. They should be easy to scan for relevant and actionable information. Cards can be used for a wide variety of purposes including to display information, as clickable actions, or as interactive elements of the UI.
+
+## Usage
+
+Import the `Card` from "firecms" and wrap the content you wish to display on the card. You can also make the card clickable by providing an `onClick` handler.
+
+import CodeSample from "../../src/CodeSample";
+import CodeBlock from "@theme/CodeBlock";
+
+## Basic Card
+
+Represents the basic usage of a card for displaying content.
+
+import CardBasicDemo from '../../samples/components/card/card_basic';
+import CardBasicSource from '!!raw-loader!../../samples/components/card/card_basic';
+
+<CodeSample>
+    <CardBasicDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{CardBasicSource}</CodeBlock>
+
+## Clickable Card
+
+Shows a card that has an onClick event, making it behave similar to a button.
+
+import CardClickableDemo from '../../samples/components/card/card_clickable';
+import CardClickableSource from '!!raw-loader!../../samples/components/card/card_clickable';
+
+<CodeSample>
+    <CardClickableDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{CardClickableSource}</CodeBlock>
+
+## Custom Styling
+
+Demonstrates how additional classes or styles can be applied to the card for custom appearance.
+
+import CardCustomStyleDemo from '../../samples/components/card/card_custom_style';
+import CardCustomStyleSource from '!!raw-loader!../../samples/components/card/card_custom_style';
+
+<CodeSample>
+    <CardCustomStyleDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{CardCustomStyleSource}</CodeBlock>

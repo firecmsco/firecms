@@ -3,7 +3,10 @@ import { Alert } from "firecms";
 
 export default function AlertColorDemo() {
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 w-full">
+            <Alert color={"base"}>
+                This is a simple alert.
+            </Alert>
             <Alert color="error">
                 This is an error alert.
             </Alert>
