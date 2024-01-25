@@ -407,9 +407,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                         {pluginActions}
                     </div>}
 
-                    <div
-                        className="pl-4 pr-4 pt-12 pb-16 md:pl-8"
-                    >
+                    <div className="pl-4 pr-4 pt-12 pb-16 md:pl-8">
                         <div
                             className={`w-full py-2 flex flex-col items-start mt-${4 + (pluginActions ? 8 : 0)} lg:mt-${8 + (pluginActions ? 8 : 0)} mb-8`}>
 
@@ -418,7 +416,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                                 variant={"h4"}>{inputCollection.singularName ?? inputCollection.name}
                             </Typography>
                             <Alert color={"base"} className={"w-full"} size={"small"}>
-                                <code className={"text-sm select-all"}>{path}/{entityId}</code>
+                                <code className={"text-xs select-all"}>{path}/{entityId}</code>
                             </Alert>
                         </div>
 
