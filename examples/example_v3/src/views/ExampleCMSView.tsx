@@ -1,7 +1,7 @@
 import React from "react";
 
 import {
-    buildCollection, Chip,
+    buildCollection,
     Entity,
     EntityCollectionView,
     EntityReference,
@@ -11,17 +11,10 @@ import {
     useSelectionController,
     useSideEntityController,
     useSnackbarController
-} from "@firecms/firebase_pro";
-import {
-    Button,
-    GitHubIcon,
-    IconButton,
-    Paper,
-    Tooltip,
-    Typography,
-} from "@firecms/ui";
-import { Product } from "./types";
-import { usersCollection } from "./collections/users_collection";
+} from "firecms";
+import { Button, Chip, GitHubIcon, IconButton, Paper, Tooltip, Typography, } from "@firecms/ui";
+import { Product } from "../types";
+import { usersCollection } from "../collections/users_collection";
 
 /**
  * Sample CMS view not bound to a collection, customizable by the developer
@@ -104,7 +97,8 @@ export function ExampleCMSView() {
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <Paper className={"w-full flex flex-col p-4 items-start"}>
                             <p className="mb-4 flex-grow">
-                                Use this button to select an entity under the path <code>products</code> programmatically
+                                Use this button to select an entity under the
+                                path <code>products</code> programmatically
                             </p>
                             <Button
                                 variant={"outlined"}
