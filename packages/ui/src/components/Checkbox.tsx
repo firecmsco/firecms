@@ -1,7 +1,7 @@
 import React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 
-import { EvShadowMinusIcon, Icon } from "../icons";
+import { Icon } from "../icons";
 import { cn } from "../util";
 
 interface CheckboxProps {
@@ -41,6 +41,11 @@ export const Checkbox = ({
 
     const isChecked = indeterminate ? false : checked;
 
+    const iconSize = size === "medium"
+        ? 20
+        : size === "small"
+            ? 16
+            : 24;
     return (
         <div className={cn(
             outerSizeClasses[size],
@@ -60,7 +65,7 @@ export const Checkbox = ({
                         disabled
                             ? (indeterminate || isChecked ? "bg-slate-400 dark:bg-slate-600" : "bg-slate-400 dark:bg-slate-600")
                             : (indeterminate || isChecked ? colorClasses[color] : "bg-white dark:bg-slate-900"),
-                        isChecked ? "text-slate-100 dark:text-slate-900" : "",
+                        (indeterminate || isChecked) ? "text-slate-100 dark:text-slate-900" : "",
                         disabled
                             ? "border-transparent"
                             : (indeterminate || isChecked ? "border-transparent" : "border-slate-800 dark:border-slate-200")
@@ -68,10 +73,10 @@ export const Checkbox = ({
                     <CheckboxPrimitive.Indicator asChild>
                         {indeterminate
                             ? (
-                                <Icon iconKey={"remove"} size={20} className={"absolute"}/>
+                                <Icon iconKey={"remove"} size={iconSize} className={"absolute"}/>
                             )
                             : (
-                                <Icon iconKey={"check"} size={20} className={"absolute"}/>
+                                <Icon iconKey={"check"} size={iconSize} className={"absolute"}/>
                             )}
                     </CheckboxPrimitive.Indicator>
                 </div>

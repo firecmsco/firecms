@@ -23,7 +23,6 @@ import {
 } from "../EntityCollectionTable";
 
 import { EntityCollectionRowActions } from "../EntityCollectionTable/internal/EntityCollectionRowActions";
-import { DeleteEntityDialog } from "../EntityCollectionTable/internal/DeleteEntityDialog";
 
 import {
     canCreateEntity,
@@ -72,6 +71,7 @@ import {
     deleteEntityAction,
     editEntityAction
 } from "../EntityCollectionTable/internal/default_entity_actions";
+import { DeleteEntityDialog } from "../DeleteEntityDialog";
 
 const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
 

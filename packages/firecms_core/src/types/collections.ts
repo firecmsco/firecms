@@ -317,7 +317,7 @@ export interface CollectionActionsProps<M extends Record<string, any> = any, Use
      * Use this controller to get the table controller and to update the
      * table controller state.
      */
-    tableController: TableController<M>;
+    tableController: EntityTableController<M>;
 
     /**
      * Context of the app status
@@ -497,7 +497,7 @@ export type DefaultSelectedViewParams = {
 /**
  * You can use this controller to control the table view of a collection.
  */
-export type TableController<M extends Record<string, any> = any> = {
+export type EntityTableController<M extends Record<string, any> = any> = {
     data: Entity<M>[];
     dataLoading: boolean;
     noMoreToLoad: boolean;

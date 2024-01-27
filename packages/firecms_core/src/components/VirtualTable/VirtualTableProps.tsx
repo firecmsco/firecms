@@ -1,5 +1,5 @@
 import React from "react";
-import { WhereFilterOp } from "../../types";
+import { ResolvedProperty, WhereFilterOp } from "../../types";
 import { FilterFormFieldProps } from "./VirtualTableHeader";
 
 export type OnRowClickParams<T extends Record<string, any>> = {
@@ -145,7 +145,6 @@ export interface VirtualTableProps<T extends Record<string, any>> {
 }
 
 export type CellRendererParams<T extends any> = {
-    cellData?: any;
     column: VirtualTableColumn;
     columns: VirtualTableColumn[];
     columnIndex: number;

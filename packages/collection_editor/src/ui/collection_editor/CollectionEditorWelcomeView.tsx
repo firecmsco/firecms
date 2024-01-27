@@ -19,6 +19,7 @@ import { productsCollectionTemplate } from "./templates/products_template";
 import { blogCollectionTemplate } from "./templates/blog_template";
 import { usersCollectionTemplate } from "./templates/users_template";
 import { ImportFileUpload } from "@firecms/data_import_export";
+import { pagesCollectionTemplate } from "./templates/pages_template";
 
 export function CollectionEditorWelcomeView({
                                                 path,
@@ -125,6 +126,13 @@ export function CollectionEditorWelcomeView({
                                             setValues(productsCollectionTemplate);
                                             onContinue();
                                         }}/>
+                        <TemplateButton title={"Users"}
+                                        subtitle={"A collection of users with emails, names and roles"}
+                                        icon={<Icon size={"small"} iconKey={usersCollectionTemplate.icon!}/>}
+                                        onClick={() => {
+                                            setValues(usersCollectionTemplate);
+                                            onContinue();
+                                        }}/>
                         <TemplateButton title={"Blog posts"}
                                         subtitle={"A collection of blog posts with images, authors and complex content"}
                                         icon={<Icon size={"small"} iconKey={blogCollectionTemplate.icon!}/>}
@@ -132,11 +140,11 @@ export function CollectionEditorWelcomeView({
                                             setValues(blogCollectionTemplate);
                                             onContinue();
                                         }}/>
-                        <TemplateButton title={"Users"}
-                                        subtitle={"A collection of users with emails, names and roles"}
-                                        icon={<Icon size={"small"} iconKey={usersCollectionTemplate.icon!}/>}
+                        <TemplateButton title={"Pages"}
+                                        subtitle={"A collection of pages with images, authors and complex content"}
+                                        icon={<Icon size={"small"} iconKey={pagesCollectionTemplate.icon!}/>}
                                         onClick={() => {
-                                            setValues(usersCollectionTemplate);
+                                            setValues(pagesCollectionTemplate);
                                             onContinue();
                                         }}/>
                     </div>

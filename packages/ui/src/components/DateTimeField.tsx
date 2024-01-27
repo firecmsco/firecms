@@ -81,7 +81,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                 {label && (
                     <InputLabel
                         className={cn("absolute top-1 pointer-events-none",
-                            !error ? (focused ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-red-500 dark:text-red-600",
+                            !error ? (focused ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-red-500 dark:text-red-500",
                             disabled ? "opacity-50" : "")}
                         shrink={hasValue || focused}
                     >

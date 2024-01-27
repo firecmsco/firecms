@@ -63,7 +63,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                                                                           container
                                                                       }: PopupFormFieldProps<M>) {
 
-    const dataSource = useDataSource();
+    // const dataSource = useDataSource();
     const fireCMSContext = useFireCMSContext();
 
     const [savingError, setSavingError] = React.useState<any>();
@@ -74,22 +74,22 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
     const entityId = entityProp?.id;
     const [entity, setEntity] = useState<Entity<M> | undefined>(entityProp);
-    useEffect(() => {
-        if (entityId && inputCollection) {
-            return dataSource.listenEntity?.({
-                path,
-                entityId,
-                collection: inputCollection,
-                onUpdate: (e) => {
-                    setEntity(e);
-                    setInternalValue(e?.values);
-                }
-            });
-        } else {
-            return () => {
-            };
-        }
-    }, [dataSource, entityId, inputCollection, path, open]);
+    // useEffect(() => {
+    //     if (entityId && inputCollection) {
+    //         return dataSource.listenEntity?.({
+    //             path,
+    //             entityId,
+    //             collection: inputCollection,
+    //             onUpdate: (e) => {
+    //                 setEntity(e);
+    //                 setInternalValue(e?.values);
+    //             }
+    //         });
+    //     } else {
+    //         return () => {
+    //         };
+    //     }
+    // }, [dataSource, entityId, inputCollection, path, open]);
 
     const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(entity?.values);
 

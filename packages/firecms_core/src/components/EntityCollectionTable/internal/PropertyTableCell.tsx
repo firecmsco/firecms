@@ -46,7 +46,7 @@ export interface PropertyTableCellProps<T extends CMSType, M extends Record<stri
     disabled: boolean;
 }
 
-function isStorageProperty<T>(property: ResolvedProperty) {
+function isStorageProperty(property: ResolvedProperty) {
     if (property.dataType === "string" && (property as ResolvedStringProperty).storage)
         return true;
     if (property.dataType === "array") {

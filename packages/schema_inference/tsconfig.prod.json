@@ -8,6 +8,7 @@
     "node_modules",
     "dist",
     "src/test",
+    "../ui/src",
     "../firecms_core/src"
   ]
 }

@@ -25,6 +25,14 @@ export const usersCollectionTemplate: EntityCollection = {
             name: "Phone",
             dataType: "string"
         },
+        favourite_products: {
+            name: "Favourite products",
+            dataType: "array",
+            of: {
+                dataType: "reference",
+                path: "products"
+            }
+        },
         photoURL: {
             name: "Photo URL",
             dataType: "string",

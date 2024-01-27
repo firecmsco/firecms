@@ -1,6 +1,5 @@
 import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import equal from "react-fast-compare";
-import { getTableCellAlignment, getTablePropertyColumnWidth } from "./internal/common";
 import {
     AdditionalFieldDelegate,
     CollectionSize,
@@ -15,7 +14,7 @@ import { PropertyTableCell } from "./internal/PropertyTableCell";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { useFireCMSContext, useLargeLayout } from "../../hooks";
 import { CellRendererParams, VirtualTable, VirtualTableColumn } from "../VirtualTable";
-import { enumToObjectEntries, getIconForProperty, getResolvedPropertyInPath, getValueInPath } from "../../util";
+import { enumToObjectEntries, getValueInPath } from "../../util";
 import { getRowHeight } from "../VirtualTable/common";
 import { EntityCollectionRowActions } from "./internal/EntityCollectionRowActions";
 import { EntityCollectionTableController } from "./types";
@@ -27,9 +26,9 @@ import { ReferenceFilterField } from "./filters/ReferenceFilterField";
 import { StringNumberFilterField } from "./filters/StringNumberFilterField";
 import { BooleanFilterField } from "./filters/BooleanFilterField";
 import { DateTimeFilterField } from "./filters/DateTimeFilterField";
-import { getColumnKeysForProperty } from "../EntityCollectionView/useColumnsIds";
 import { CustomFieldValidator } from "../../form/validation";
 import { renderSkeletonText } from "../../preview";
+import { propertiesToColumns } from "./column_utils";
 
 const DEFAULT_STATE = {} as any;
 
@@ -52,7 +51,7 @@ export const useEntityCollectionTableController = () => useContext<EntityCollect
  * options you see in collections in the top level navigation, you can
  * check {@link EntityCollectionView}.
  *
- * The data displayed in the table is managed by a {@link TableController}.
+ * The data displayed in the table is managed by a {@link EntityTableController}.
  * You can build the default, bound to a path in the datasource, by using the hook
  * {@link useDataSourceEntityCollectionTableController}
  *
@@ -283,34 +282,13 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         }, [additionalFieldsMap, size, selectedEntityIds]);
 
         const collectionColumns: VirtualTableColumn[] = useMemo(() => {
-                const columnsResult: VirtualTableColumn[] = Object.entries<ResolvedProperty>(properties)
-                    .flatMap(([key, property]) => getColumnKeysForProperty(property, key))
-                    .map(({
-                              key,
-                              disabled
-                          }) => {
-                        const property = getResolvedPropertyInPath(properties, key);
-                        if (!property)
-                            throw Error("Internal error: no property found in path " + key);
-                        const filterable = filterableProperty(property);
-                        return {
-                            key: key as string,
-                            align: getTableCellAlignment(property),
-                            icon: (hoverOrOpen) => getIconForProperty(property, "small"),
-                            title: property.name ?? key as string,
-                            sortable: sortable && (forceFilter ? Object.keys(forceFilter).includes(key) : true),
-                            filter: !disabledFilterChange && filterable,
-                            width: getTablePropertyColumnWidth(property),
-                            resizable: true,
-                            custom: {
-                                resolvedProperty: property,
-                                disabled
-                            },
-                            AdditionalHeaderWidget: ({ onHover }) => AdditionalHeaderWidget
-                                ? <AdditionalHeaderWidget property={property} propertyKey={key} onHover={onHover}/>
-                                : undefined
-                        };
-                    });
+                const columnsResult: VirtualTableColumn[] = propertiesToColumns({
+                    properties,
+                    sortable,
+                    forceFilter,
+                    disabledFilter: disabledFilterChange,
+                    AdditionalHeaderWidget
+                });
 
                 const additionalTableColumns: VirtualTableColumn[] = additionalFields
                     ? additionalFields.map((additionalField) =>
@@ -384,7 +362,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     select,
                     onValueChange,
                     size,
-                    selectedCell,
+                    selectedCell
                 }}
             >
 
@@ -503,17 +481,4 @@ function createFilterField({
     return (
         <div>{`Currently the filter field ${resolvedProperty.dataType} is not supported`}</div>
     );
-}
-
-function filterableProperty(property: ResolvedProperty, partOfArray = false): boolean {
-    if (partOfArray) {
-        return ["string", "number", "date", "reference"].includes(property.dataType);
-    }
-    if (property.dataType === "array") {
-        if (property.of)
-            return filterableProperty(property.of, true);
-        else
-            return false;
-    }
-    return ["string", "number", "boolean", "date", "reference", "array"].includes(property.dataType);
 }

@@ -95,7 +95,7 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
 
     if (navigationController.navigationLoadingError) {
         return (
-            <CenteredView maxWidth={"md"} fullScreen={true}>
+            <CenteredView maxWidth={"md"}>
                 <ErrorView
                     title={"Error loading navigation"}
                     error={navigationController.navigationLoadingError}/>
@@ -105,7 +105,7 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
 
     if (authController.authError) {
         return (
-            <CenteredView maxWidth={"md"} fullScreen={true}>
+            <CenteredView maxWidth={"md"}>
                 <ErrorView
                     title={"Error loading auth"}
                     error={authController.authError}/>

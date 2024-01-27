@@ -2,7 +2,7 @@ import React from "react";
 
 import { canCreateEntity, canDeleteEntity, fullPathToCollectionSegments } from "../../util";
 import { useAuthController, useFireCMSContext, useLargeLayout } from "../../hooks";
-import { CollectionActionsProps, EntityCollection, SelectionController, TableController } from "../../types";
+import { CollectionActionsProps, EntityCollection, SelectionController, EntityTableController } from "../../types";
 import { AddIcon, Button, DeleteIcon, IconButton, Tooltip } from "@firecms/ui";
 import { toArray } from "../../util/arrays";
 import { ErrorBoundary } from "../ErrorBoundary";
@@ -16,7 +16,7 @@ export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     onNewClick: () => void;
     onMultipleDeleteClick: () => void;
     selectionController: SelectionController<M>;
-    tableController: TableController<M>;
+    tableController: EntityTableController<M>;
     collectionEntitiesCount: number;
 }
 

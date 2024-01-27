@@ -125,7 +125,7 @@ export function FireCMS3App({
     } else if (fireCMSBackend.authLoading) {
         component = <FullLoadingView projectId={projectId} text={"Auth loading"}/>;
     } else if (!fireCMSBackend.user) {
-        component = <CenteredView maxWidth={"lg"} fullScreen={true}>
+        component = <CenteredView maxWidth={"lg"}>
             <FireCMSLoginView
                 authController={fireCMSBackend}
                 includeLogo={true}
@@ -309,7 +309,7 @@ export function FireCMS3ClientWithController({
         console.warn("No user was found with email " + notValidUser.email);
         loadingOrErrorComponent = <NoAccessError authController={authController}/>
     } else if (projectConfig.configError) {
-        loadingOrErrorComponent = <CenteredView fullScreen={true}>
+        loadingOrErrorComponent = <CenteredView>
             <ErrorView
                 error={projectConfig.configError as Error}/>
             <Typography>This error may be caused when trying to access with a user that is not
@@ -317,7 +317,7 @@ export function FireCMS3ClientWithController({
             <Button variant="text" onClick={authController.signOut}>Sign out</Button>
         </CenteredView>
     } else if (delegatedLoginError) {
-        loadingOrErrorComponent = <CenteredView fullScreen={true}>
+        loadingOrErrorComponent = <CenteredView>
             <Typography variant={"h4"}>Error delegating login</Typography>
             <ErrorView error={delegatedLoginError}/>
             <Button variant="text" onClick={authController.signOut}>Sign out</Button>
@@ -327,7 +327,7 @@ export function FireCMS3ClientWithController({
     } else if (firebaseConfigLoading) {
         loadingOrErrorComponent = <CircularProgressCenter text={"Client config loading"}/>;
     } else if (firebaseConfigError) {
-        loadingOrErrorComponent = <CenteredView fullScreen={true}>
+        loadingOrErrorComponent = <CenteredView>
             <ErrorView error={firebaseConfigError ?? "Error fetching client Firebase config"}/>
         </CenteredView>;
     } else if (delegatedLoginLoading) {
@@ -366,7 +366,7 @@ export function FireCMS3ClientWithController({
 function NoAccessError({ authController }: {
     authController: FirebaseAuthController
 }) {
-    return <CenteredView maxWidth={"md"} fullScreen={true} className={"gap-4"}>
+    return <CenteredView maxWidth={"md"} className={"gap-4"}>
         <ErrorView title={"You don't have access to this project"}
                    error={"You can request permission to the owner"}/>
         <Button variant="text" onClick={authController.signOut}>Sign out</Button>

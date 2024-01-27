@@ -1,9 +1,9 @@
-import { Entity, EntityCallbacks, EntityCollection } from "../../../types";
+import { Entity, EntityCallbacks, EntityCollection } from "../types";
 import React, { useCallback, useMemo, useState } from "react";
-import { deleteEntityWithCallbacks, useDataSource, useFireCMSContext, useSnackbarController } from "../../../hooks";
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, Typography } from "@firecms/ui";
-import { resolveCollection } from "../../../util";
-import { EntityPreview } from "../../EntityPreview";
+import { deleteEntityWithCallbacks, useDataSource, useFireCMSContext, useSnackbarController } from "../hooks";
+import { resolveCollection } from "../util";
+import { EntityPreview } from "./EntityPreview";
 
 export interface DeleteEntityDialogProps<M extends Record<string, any>> {
     entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],

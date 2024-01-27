@@ -1,18 +1,6 @@
 import React from "react";
-import {
-    DefaultHomePage,
-    getIconForView,
-    NavigationGroup,
-    useFireCMSContext
-} from "@firecms/core";
-import {
-    ArrowForwardIcon,
-    cardClickableMixin,
-    cardMixin,
-    cn,
-    focusedMixin,
-    Typography,
-} from "@firecms/ui";
+import { DefaultHomePage, getIconForView, NavigationGroup, useFireCMSContext } from "@firecms/core";
+import { ArrowForwardIcon, cardClickableMixin, cardMixin, cn, focusedMixin, Typography, } from "@firecms/ui";
 
 import { Link as ReactLink } from "react-router-dom";
 import { ADMIN_VIEWS } from "../utils";
@@ -32,7 +20,7 @@ export function FireCMSProjectHomePage() {
     const pluginActions: React.ReactNode[] = [];
     if (plugins) {
         pluginActions.push(...plugins.map((plugin, i) => (
-            plugin.homePage?.additionalActions ?? null
+            <React.Fragment key={plugin.name}>{plugin.homePage?.additionalActions ?? null}</React.Fragment>
         )).filter(Boolean));
     }
     return <DefaultHomePage

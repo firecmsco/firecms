@@ -5,6 +5,7 @@ import { SampleEntityView } from "./custom_entity_view/SampleEntityView";
 import { colorPropertyConfig } from "./property_configs/color_property_config";
 import { pricePropertyConfig } from "./property_configs/property_config_builder";
 import { usersCollection } from "./collections/users_collection";
+import { pagesCollection } from "./collections/pages";
 
 const appConfig: FireCMSAppConfig = {
     version: "1",
@@ -12,7 +13,8 @@ const appConfig: FireCMSAppConfig = {
         return ([
             testCollection,
             productsCollection,
-            usersCollection
+            usersCollection,
+            pagesCollection
             // showcaseCollection
         ]);
     },

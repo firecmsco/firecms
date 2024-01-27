@@ -12,7 +12,7 @@ export function FieldHelperText({
                                     includeDescription = true,
                                     disabled
                                 }: {
-                                    error: string,
+                                    error?: string,
                                     showError: boolean,
                                     property: ResolvedProperty,
                                     includeDescription?: boolean,
@@ -27,7 +27,7 @@ export function FieldHelperText({
 
     if (showError && error) {
         return <Typography variant={"caption"}
-                           className={"ml-3.5 text-red-500"}>
+                           className={"ml-3.5 text-red-500 dark:text-red-500"}>
             {error}
         </Typography>
     }

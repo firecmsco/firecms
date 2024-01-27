@@ -197,6 +197,8 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
     const error = getIn(fieldProps.form.errors, propertyKey);
     const touched = getIn(fieldProps.form.touched, propertyKey);
 
+    console.log("error", propertyKey, error);
+
     const showError: boolean = error &&
         (fieldProps.form.submitCount > 0 || property.validation?.unique) &&
         (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);

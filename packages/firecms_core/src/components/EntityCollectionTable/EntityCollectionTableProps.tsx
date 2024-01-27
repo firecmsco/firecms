@@ -7,7 +7,7 @@ import {
     ResolvedProperties,
     ResolvedProperty,
     SelectionController,
-    TableController,
+    EntityTableController,
     User
 } from "../../types";
 import { OnCellValueChange, UniqueFieldValidator } from "./types";
@@ -93,9 +93,9 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
     /**
      * Controller holding the logic for the table
      * {@link useDataSourceEntityCollectionTableController}
-     * {@link TableController}
+     * {@link EntityTableController}
      */
-    tableController: TableController<M>;
+    tableController: EntityTableController<M>;
 
     displayedColumnIds: PropertyColumnConfig[];
 

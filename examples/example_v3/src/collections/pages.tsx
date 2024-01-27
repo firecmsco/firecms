@@ -1,6 +1,6 @@
 import { EntityCollection } from "@firecms/core";
 
-export const pagesCollectionTemplate: EntityCollection = {
+export const pagesCollection: EntityCollection = {
     id: "pages",
     path: "pages",
     name: "Pages",

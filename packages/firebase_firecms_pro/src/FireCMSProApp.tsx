@@ -268,7 +268,7 @@ function FireCMSProInternal({ firebaseApp, fireCMSBackend, configError, firebase
     const modeController = useBuildModeController();
 
     if (configError) {
-        return <CenteredView fullScreen={true}>{configError}</CenteredView>;
+        return <CenteredView>{configError}</CenteredView>;
     }
 
     return (

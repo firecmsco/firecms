@@ -17,7 +17,7 @@ interface CollectionTableToolbarProps {
     size: CollectionSize;
     filterIsSet: boolean;
     loading: boolean;
-    forceFilter: boolean;
+    forceFilter?: boolean;
     actionsStart?: React.ReactNode;
     actions?: React.ReactNode;
     title?: React.ReactNode,

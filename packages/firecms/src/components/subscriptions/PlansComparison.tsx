@@ -22,7 +22,7 @@ export function PlansComparisonDialog({
     }
 
     return <Dialog
-        fullScreen={true}
+
         open={open}
         onOpenChange={(open) => !open ? onClose() : undefined}
     >

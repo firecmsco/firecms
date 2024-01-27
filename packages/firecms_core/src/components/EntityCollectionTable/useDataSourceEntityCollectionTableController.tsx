@@ -8,7 +8,7 @@ import {
     FilterValues,
     FireCMSContext,
     SelectedCellProps,
-    TableController,
+    EntityTableController,
     User
 } from "../../types";
 import { useDebouncedData } from "./useDebouncedData";
@@ -38,7 +38,7 @@ export type DataSourceEntityCollectionTableControllerProps<M extends Record<stri
  * Use this hook to build a controller for the {@link EntityCollectionTable}.
  * This controller is bound to data in a path in your specified datasource.
  *
- * Note that you can build your own hook returning a {@link TableController}
+ * Note that you can build your own hook returning a {@link EntityTableController}
  * if you would like to display different data.
  *
  * @param fullPath
@@ -55,7 +55,7 @@ export function useDataSourceEntityCollectionTableController<M extends Record<st
         lastDeleteTimestamp,
         forceFilter: forceFilterFromProps,
     }: DataSourceEntityCollectionTableControllerProps<M>)
-    : TableController<M> {
+    : EntityTableController<M> {
 
     const {
         initialFilter,

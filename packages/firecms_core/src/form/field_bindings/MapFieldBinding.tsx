@@ -51,12 +51,6 @@ export function MapFieldBinding<T extends Record<string, any>>({
         mapProperties = property.properties;
     }
 
-    // useClearRestoreValue({
-    //     property,
-    //     value,
-    //     setValue
-    // });
-
     const mapFormView = <>
         <div className="py-1 flex flex-col space-y-2">
             {Object.entries(mapProperties)
@@ -99,14 +93,14 @@ export function MapFieldBinding<T extends Record<string, any>>({
         <>
 
             {!tableMode && !partOfBlock && <ExpandablePanel initiallyExpanded={expanded}
-                                            className={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2"}
-                                            title={title}>{mapFormView}</ExpandablePanel>}
+                                                            className={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2"}
+                                                            title={title}>{mapFormView}</ExpandablePanel>}
 
             {(tableMode || partOfBlock) && mapFormView}
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}
-                             error={error}
+                             error={error ? (typeof error === "string" ? error : "A property of this map has an error") : undefined}
                              disabled={disabled}
                              property={property}/>
 
