@@ -67,7 +67,7 @@ export function ExampleCMSView() {
         <Tooltip
             title="Get the source code of this example view">
             <IconButton
-                href={"https://github.com/FireCMSco/firecms/blob/master/example/src/SampleApp/ExampleCMSView.tsx"}
+                href={"https://github.com/firecmsco/firecms/blob/main/examples/example_v3/src/views/ExampleCMSView.tsx"}
                 rel="noopener noreferrer"
                 target="_blank"
                 component={"a"}
