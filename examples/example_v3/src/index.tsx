@@ -7,6 +7,7 @@ import { pricePropertyConfig } from "./property_configs/property_config_builder"
 import { usersCollection } from "./collections/users_collection";
 import { pagesCollection } from "./collections/pages";
 import { ExampleCMSView } from "./views/ExampleCMSView";
+import { SampleCustomEntityCollection } from "./views/SampleCustomEntityCollection";
 
 const appConfig: FireCMSAppConfig = {
     version: "1",
@@ -19,12 +20,19 @@ const appConfig: FireCMSAppConfig = {
             // showcaseCollection
         ]);
     },
-    views: [{
-        path: "sample",
-        name: "Sample additional view",
-        icon: "extension",
-        view: <ExampleCMSView/>
-    }
+    views: [
+        {
+            path: "sample",
+            name: "Sample additional view",
+            icon: "extension",
+            view: <ExampleCMSView/>
+        },
+        {
+            path: "custom_entity_table",
+            name: "Sample entity table",
+            icon: "extension",
+            view: <SampleCustomEntityCollection/>
+        }
     ],
     modifyCollection: ({ collection }) => {
         if (collection.id === "products") {

@@ -8,28 +8,29 @@ import {
     ResolvedNumberProperty,
     ResolvedProperty,
     ResolvedStringProperty
-} from "../../../types";
+} from "../../types";
 
-import { VirtualTableInput } from "../../VirtualTable/fields/VirtualTableInput";
-import { VirtualTableSelect } from "../../VirtualTable/fields/VirtualTableSelect";
-import { VirtualTableNumberInput } from "../../VirtualTable/fields/VirtualTableNumberInput";
-import { VirtualTableSwitch } from "../../VirtualTable/fields/VirtualTableSwitch";
-import { VirtualTableDateField } from "../../VirtualTable/fields/VirtualTableDateField";
+import { VirtualTableInput } from "../VirtualTable/fields/VirtualTableInput";
+import { VirtualTableSelect } from "../VirtualTable/fields/VirtualTableSelect";
+import { VirtualTableNumberInput } from "../VirtualTable/fields/VirtualTableNumberInput";
+import { VirtualTableSwitch } from "../VirtualTable/fields/VirtualTableSwitch";
+import { VirtualTableDateField } from "../VirtualTable/fields/VirtualTableDateField";
 
-import { TableStorageUpload } from "../fields/TableStorageUpload";
-import { TableReferenceField } from "../fields/TableReferenceField";
+import { TableStorageUpload } from "./fields/TableStorageUpload";
+import { TableReferenceField } from "./fields/TableReferenceField";
 
-import { PropertyPreview } from "../../../preview";
-import { getPreviewSizeFrom } from "../../../preview/util";
-import { isReadOnly } from "../../../util";
+import { PropertyPreview } from "../../preview";
+import { getPreviewSizeFrom } from "../../preview/util";
+import { isReadOnly } from "../../util";
 
-import { CustomFieldValidator, mapPropertyToYup } from "../../../form/validation";
-import { useEntityCollectionTableController } from "../EntityCollectionTable";
-import { useClearRestoreValue, useFireCMSContext } from "../../../hooks";
+import { CustomFieldValidator, mapPropertyToYup } from "../../form/validation";
+import { useEntityCollectionTableController } from "./EntityCollectionTable";
+import { useClearRestoreValue, useFireCMSContext } from "../../hooks";
 
-import { EntityTableCell } from "./EntityTableCell";
-import { getRowHeight } from "../../VirtualTable/common";
-import { EntityTableCellActions } from "./EntityTableCellActions";
+import { EntityTableCell } from "./internal/EntityTableCell";
+import { EntityTableCellActions } from "./internal/EntityTableCellActions";
+
+import { getRowHeight } from "../VirtualTable/common";
 
 export interface PropertyTableCellProps<T extends CMSType, M extends Record<string, any>> {
     propertyKey: string;

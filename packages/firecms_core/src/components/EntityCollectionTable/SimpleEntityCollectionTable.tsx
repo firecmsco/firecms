@@ -41,7 +41,7 @@ export type SimpleEntityCollectionTableProps<M extends Record<string, any>> = {
 
     columns: VirtualTableColumn[];
 
-    cellRenderer: (params: CellRendererParams<Entity<M>>) => React.ReactNode;
+    cellRenderer: React.ComponentType<CellRendererParams<Entity<M>>>;
 
     /**
      * Builder for creating the buttons in each row

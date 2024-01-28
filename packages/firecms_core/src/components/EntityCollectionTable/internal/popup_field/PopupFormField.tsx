@@ -40,7 +40,7 @@ interface PopupFormFieldProps<M extends Record<string, any>> {
      * Callback when the value of a cell has been edited
      * @param params
      */
-    onCellValueChange?: (params: OnCellValueChangeParams<any, M>) => Promise<void>;
+    onCellValueChange?: (params: OnCellValueChangeParams<any, M>) => Promise<void> | void;
 }
 
 export function PopupFormField<M extends Record<string, any>>(props: PopupFormFieldProps<M>) {

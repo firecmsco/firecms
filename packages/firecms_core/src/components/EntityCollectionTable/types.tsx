@@ -31,7 +31,7 @@ export type EntityCollectionTableController<M extends Record<string, any>> = {
  * Props passed in a callback when the content of a cell in a table has been edited
  * @group Collection components
  */
-export interface OnCellValueChangeParams<T, M extends Record<string, any>> {
+export interface OnCellValueChangeParams<T = any, M extends Record<string, any> = any> {
     value: T,
     propertyKey: string,
     entity: Entity<M>,
@@ -55,4 +55,4 @@ export type UniqueFieldValidator = (props: {
  * Callback when a cell has changed in a table
  * @group Collection components
  */
-export type OnCellValueChange<T, M extends Record<string, any>> = (params: OnCellValueChangeParams<T, M>) => Promise<void>;
+export type OnCellValueChange<T, M extends Record<string, any>> = (params: OnCellValueChangeParams<T, M>) => Promise<void> | void;

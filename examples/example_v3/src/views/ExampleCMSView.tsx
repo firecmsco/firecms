@@ -84,9 +84,9 @@ export function ExampleCMSView() {
                 <div className="flex flex-col gap-12 items-start">
 
                     <div className="mt-24">
-                        <h4 className="font-bold text-xl mb-4">
+                        <Typography variant="h4">
                             This is an example of an additional view
-                        </h4>
+                        </Typography>
                         <p>
                             {authController.user
                                 ? <>Logged in as <Chip>{authController.user.displayName}</Chip></>

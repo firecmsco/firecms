@@ -26,7 +26,7 @@ export type VirtualTableContextProps<T extends any> = {
     data?: T[];
     size?: VirtualTableSize,
     columns: VirtualTableColumn[];
-    cellRenderer: (params: CellRendererParams<T>) => React.ReactNode;
+    cellRenderer: React.ComponentType<CellRendererParams<T>>;
     currentSort: "asc" | "desc" | undefined;
     filter?: VirtualTableFilterValues<any>;
     onRowClick?: (props: OnRowClickParams<any>) => void;

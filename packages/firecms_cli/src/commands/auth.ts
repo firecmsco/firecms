@@ -13,17 +13,18 @@ import { done_html } from "./done_html";
 const https = require("https");
 const url = require("url");
 
-export async function getCurrentUser(env: "prod" | "dev"): Promise<object | null> {
+export async function getCurrentUser(env: "prod" | "dev", debug: boolean): Promise<object | null> {
     const userCredential = await getTokens(env);
     if (!userCredential) {
         return null;
     }
+    if (debug) console.log("userCredential", userCredential);
     return parseJwt(userCredential["id_token"]);
 }
 
-export async function login(env: "prod" | "dev") {
+export async function login(env: "prod" | "dev", debug: boolean) {
     const emitter = new EventEmitter();
-    const currentUser = await getCurrentUser(env);
+    const currentUser = await getCurrentUser(env, debug);
     if (currentUser) {
         console.log("You are already logged in as", currentUser["email"]);
         console.log(`Run ${chalk.bold("firecms logout")} to sign out`);

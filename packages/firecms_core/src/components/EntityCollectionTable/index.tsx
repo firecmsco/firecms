@@ -13,4 +13,8 @@ export type {
     OnCellValueChangeParams
 } from "./types";
 
+export * from "./PropertyTableCell";
+export * from "./SimpleEntityCollectionTable";
+export * from "./EntityCollectionRowActions";
 export * from "./useDataSourceEntityCollectionTableController";
+export * from "./column_utils";

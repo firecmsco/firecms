@@ -17,13 +17,13 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "firecms": ["../../packages/firecms"],
-      "@firecms/ui": ["../../packages/ui"],
-      "@firecms/core": ["../../packages/firecms_core"],
-      "@firecms/cli": ["../../packages/firecms_cli"],
-      "@firecms/firebase": ["../../packages/firebase_firecms"],
-      "@firecms/data_enhancement": ["../../packages/data_enhancement"],
-      "@firecms/data_import_export": ["../../packages/data_import_export"]
+      "firecms": ["../../packages/firecms/src"],
+      "@firecms/ui": ["../../packages/ui/src"],
+      "@firecms/core": ["../../packages/firecms_core/src"],
+      "@firecms/cli": ["../../packages/firecms_cli/src"],
+      "@firecms/firebase": ["../../packages/firebase_firecms/src"],
+      "@firecms/data_enhancement": ["../../packages/data_enhancement/src"],
+      "@firecms/data_import_export": ["../../packages/data_import_export/src"]
     }
   },
   "include": ["./src"],

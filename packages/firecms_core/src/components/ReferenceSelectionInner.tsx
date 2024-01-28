@@ -2,7 +2,7 @@ import React, { MouseEventHandler, useCallback, useEffect, useMemo, useState } f
 import { CollectionSize, Entity, EntityCollection, FilterValues } from "../types";
 
 import { EntityCollectionTable } from "./EntityCollectionTable";
-import { EntityCollectionRowActions } from "./EntityCollectionTable/internal/EntityCollectionRowActions";
+import { EntityCollectionRowActions } from "./EntityCollectionTable/EntityCollectionRowActions";
 import {
     useAuthController,
     useDataSource,

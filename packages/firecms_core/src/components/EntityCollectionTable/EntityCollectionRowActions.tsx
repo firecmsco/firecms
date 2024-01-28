@@ -1,9 +1,9 @@
 import React, { MouseEvent, useCallback } from "react";
 import equal from "react-fast-compare"
 
-import { CollectionSize, Entity, EntityAction, EntityCollection, SelectionController } from "../../../types";
+import { CollectionSize, Entity, EntityAction, EntityCollection, SelectionController } from "../../types";
 import { Checkbox, cn, IconButton, Menu, MenuItem, MoreVertIcon, Skeleton, Tooltip, Typography } from "@firecms/ui";
-import { useFireCMSContext, useLargeLayout } from "../../../hooks";
+import { useFireCMSContext, useLargeLayout } from "../../hooks";
 
 /**
  *
@@ -45,7 +45,7 @@ export const EntityCollectionRowActions = React.memo(function EntityCollectionRo
                                                                                                  width: number,
                                                                                                  frozen?: boolean,
                                                                                                  size: CollectionSize,
-                                                                                                 isSelected: boolean,
+                                                                                                 isSelected?: boolean,
                                                                                                  selectionEnabled?: boolean,
                                                                                                  actions?: EntityAction[],
                                                                                                  hideId?: boolean,
@@ -145,7 +145,7 @@ export const EntityCollectionRowActions = React.memo(function EntityCollectionRo
                         <Tooltip title={`Select ${entity.id}`}>
                             <Checkbox
                                 size={largeLayout ? "medium" : "small"}
-                                checked={isSelected}
+                                checked={Boolean(isSelected)}
                                 onCheckedChange={onCheckedChange}
                             />
                         </Tooltip>}

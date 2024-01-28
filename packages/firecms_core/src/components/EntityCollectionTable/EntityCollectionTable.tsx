@@ -10,13 +10,13 @@ import {
     SelectedCellProps,
     User
 } from "../../types";
-import { PropertyTableCell } from "./internal/PropertyTableCell";
+import { PropertyTableCell } from "./PropertyTableCell";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { useFireCMSContext, useLargeLayout } from "../../hooks";
 import { CellRendererParams, VirtualTable, VirtualTableColumn } from "../VirtualTable";
 import { enumToObjectEntries, getValueInPath } from "../../util";
 import { getRowHeight } from "../VirtualTable/common";
-import { EntityCollectionRowActions } from "./internal/EntityCollectionRowActions";
+import { EntityCollectionRowActions } from "./EntityCollectionRowActions";
 import { EntityCollectionTableController } from "./types";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
 import { EntityCollectionTableProps } from "./EntityCollectionTableProps";

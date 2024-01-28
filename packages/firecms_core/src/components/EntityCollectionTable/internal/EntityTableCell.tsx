@@ -4,8 +4,7 @@ import useMeasure from "react-use-measure";
 
 import { VirtualTableSize } from "../../VirtualTable";
 import { getRowHeight } from "../../VirtualTable/common";
-import { cn, RemoveCircleIcon, Tooltip } from "@firecms/ui";
-import { useOutsideAlerter } from "@firecms/ui";
+import { useOutsideAlerter, cn, RemoveCircleIcon, Tooltip } from "@firecms/ui";
 import { ErrorBoundary } from "../../../components";
 
 interface EntityTableCellProps {

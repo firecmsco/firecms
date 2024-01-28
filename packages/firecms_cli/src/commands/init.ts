@@ -36,6 +36,7 @@ export type InitOptions = Partial<{
     pro: boolean;
 
     env: "prod" | "dev";
+    debug: boolean;
 }>
 
 export async function createFireCMSApp(args) {
@@ -50,7 +51,7 @@ ${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
 `);
     let options = parseArgumentsIntoOptions(args);
 
-    let currentUser = await getCurrentUser(args.env);
+    let currentUser = await getCurrentUser(args.env, args.debug);
     const shouldLogin = !options.v2 && !currentUser;
     if (shouldLogin) {
         console.log("You need to be logged in to create a project");
@@ -63,11 +64,11 @@ ${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
             }
         ]).then(async answers => {
             if (answers.login) {
-                return login(options.env);
+                return login(options.env, options.debug);
             }
         });
 
-        let currentUser = await getCurrentUser(args.env);
+        let currentUser = await getCurrentUser(args.env, options.debug);
         if (!currentUser) {
             console.log("The login process was not completed. Exiting...");
             return;
@@ -91,6 +92,7 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
             "--projectId": String,
             "--v2": Boolean,
             "--pro": Boolean,
+            "--debug": Boolean,
             "--env": String
         },
         {
@@ -109,6 +111,7 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
         dir_name: args._[0],
         v2: args["--v2"] || false,
         pro: args["--pro"] || false,
+        debug: args["--debug"] || false,
         firebaseProjectId: args["--projectId"],
         env
     };

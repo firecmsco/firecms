@@ -10,8 +10,8 @@ import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common";
 import ora from "ora";
 import chalk from "chalk";
 
-export async function deploy(projectId: string, env: "prod" | "dev") {
-    const currentUser = await getCurrentUser(env);
+export async function deploy(projectId: string, env: "prod" | "dev", debug: boolean) {
+    const currentUser = await getCurrentUser(env, debug);
     if (!currentUser) {
         console.log("⚠️ You are not logged in");
         console.log(`Run ${chalk.red.bold("firecms login")} to log in`);

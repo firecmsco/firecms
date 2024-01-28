@@ -22,7 +22,8 @@ export async function entry(args) {
     } else if (command === "deploy") {
         await deployArgs(args);
     } else {
-        console.log("Unknown command", command)
+        if (command)
+            console.log("Unknown command", command)
         printHelp();
         return;
     }
@@ -31,25 +32,28 @@ export async function entry(args) {
 async function loginArgs(rawArgs) {
     const args = arg(
         {
-            "--env": String
+            "--env": String,
+            "--debug": Boolean
         },
         {
             argv: rawArgs.slice(2),
         }
     );
     const env = args["--env"] || "prod";
+    const debug = args["--debug"] || false;
     if (env !== "prod" && env !== "dev") {
         console.log("Please specify a valid environment: dev or prod");
         console.log("firecms login --env=prod");
         return;
     }
-    await login(env);
+    await login(env, debug);
 }
 
 async function logoutArgs(rawArgs) {
     const args = arg(
         {
-            "--env": String
+            "--env": String,
+            "--debug": Boolean
         },
         {
             argv: rawArgs.slice(2),
@@ -68,7 +72,8 @@ async function deployArgs(rawArgs) {
     const args = arg(
         {
             "--project": String,
-            "--env": String
+            "--env": String,
+            "--debug": Boolean
         },
         {
             argv: rawArgs.slice(2),
@@ -82,15 +87,16 @@ async function deployArgs(rawArgs) {
         return;
     }
     const env = args["--env"] || "prod";
+    const debug = args["--debug"] || false;
     if (env !== "prod" && env !== "dev") {
         console.log("Please specify a valid environment:");
         console.log("firecms deploy --project=your-project-id --env=dev");
         return;
     }
-    await deploy(project, env);
+    await deploy(project, env, debug);
 }
 
-async function printHelp(env: "prod" | "dev" = "prod") {
+async function printHelp(env: "prod" | "dev" = "prod", debug: boolean = false) {
 
     console.log(`
 ${chalk.red.bold("Welcome to the FireCMS CLI 🔥🔥🔥")}
@@ -104,7 +110,7 @@ ${chalk.blue.bold("logout")} - Sign out
 ${chalk.blue.bold("init")} - Create a new CMS project
 ${chalk.blue.bold("deploy")} - Deploy an existing CMS project
 `);
-    const currentCredentials = await getCurrentUser(env);
+    const currentCredentials = await getCurrentUser(env, debug);
     if (currentCredentials) {
         console.log(`${chalk.green.bold("Current user")}
 ${currentCredentials["email"]}

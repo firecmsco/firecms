@@ -12,23 +12,19 @@ type VirtualTableCellProps<T extends any> = {
     cellData: any;
     rowIndex: any;
     columnIndex: number;
-    cellRenderer: (params: CellRendererParams<T>) => React.ReactNode;
+    cellRenderer: React.ComponentType<CellRendererParams<T>>;
 };
 
 export const VirtualTableCell = React.memo<VirtualTableCellProps<any>>(
     function VirtualTableCell<T extends any>(props: VirtualTableCellProps<T>) {
-        return props.rowData && props.cellRenderer(
-            {
-                cellData: props.cellData,
-                rowData: props.rowData,
-                rowIndex: props.rowIndex,
-                isScrolling: false,
-                column: props.column,
-                columns: props.columns,
-                columnIndex: props.columnIndex,
-                width: props.column.width
-            } as CellRendererParams<T>
-        );
+        return props.rowData && <props.cellRenderer
+            rowData={props.rowData}
+            rowIndex={props.rowIndex}
+            isScrolling={false}
+            column={props.column}
+            columns={props.columns}
+            columnIndex={props.columnIndex}
+            width={props.column.width}/>
     },
     (a, b) => {
         return equal(a, b);

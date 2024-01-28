@@ -22,7 +22,7 @@ import {
     UniqueFieldValidator
 } from "../EntityCollectionTable";
 
-import { EntityCollectionRowActions } from "../EntityCollectionTable/internal/EntityCollectionRowActions";
+import { EntityCollectionRowActions } from "../EntityCollectionTable/EntityCollectionRowActions";
 
 import {
     canCreateEntity,

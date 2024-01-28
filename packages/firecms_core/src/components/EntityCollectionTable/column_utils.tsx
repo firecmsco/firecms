@@ -5,13 +5,13 @@ import { VirtualTableColumn } from "../VirtualTable";
 import { getIconForProperty, getResolvedPropertyInPath } from "../../util";
 import { getColumnKeysForProperty } from "../EntityCollectionView/useColumnsIds";
 
-export function buildIdColumn(largeLayout: boolean) {
+export function buildIdColumn(largeLayout?: boolean): VirtualTableColumn {
     return {
         key: "id_ewcfedcswdf3",
-        width:  (largeLayout ? 160 : 130),
+        width: (largeLayout ? 160 : 130),
         title: "ID",
         resizable: false,
-        frozen: largeLayout,
+        frozen: largeLayout ?? false,
         headerAlign: "center",
         align: "center",
     };
@@ -21,7 +21,7 @@ export interface PropertiesToColumnsParams<M extends Record<string, any>> {
     properties: ResolvedProperties<M>;
     sortable?: boolean;
     forceFilter?: FilterValues<keyof M extends string ? keyof M : never>;
-    disabledFilter: boolean;
+    disabledFilter?: boolean;
     AdditionalHeaderWidget?: (props: {
         property: ResolvedProperty,
         propertyKey: string,

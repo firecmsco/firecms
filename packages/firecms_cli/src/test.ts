@@ -5,10 +5,10 @@ import { login, logout } from "./commands/auth";
 import { entry } from "./cli";
 
 async function main(){
-    // await logout("dev");
+    // await logout("prod");
     // await login("dev");
 
-    entry(["", ""]);
+    entry(["", "", "init","--debug"]);
     // createFireCMSApp(["", ""]);
     // const tokens = await refreshCredentials(await getTokens());
     // getTokens().then((tokens) => {

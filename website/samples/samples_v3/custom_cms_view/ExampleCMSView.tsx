@@ -9,6 +9,7 @@ import {
     IconButton,
     Paper,
     Tooltip,
+    Typography,
     useAuthController,
     useReferenceDialog,
     useSelectionController,
@@ -18,6 +19,7 @@ import {
 
 const usersCollection = buildCollection({
     path: "users",
+    id: "users",
     name: "Users",
     singularName: "User",
     group: "Main",
@@ -110,6 +112,7 @@ export function ExampleCMSView() {
     });
 
     const customProductCollection = buildCollection({
+        id: "custom_product",
         path: "custom_product",
         name: "Custom products",
         properties: {
@@ -146,9 +149,9 @@ export function ExampleCMSView() {
                 <div className="flex flex-col gap-12 items-start">
 
                     <div className="mt-24">
-                        <h4 className="font-bold text-xl mb-4">
+                        <Typography variant="h4">
                             This is an example of an additional view
-                        </h4>
+                        </Typography>
                         <p>
                             {authController.user
                                 ? <>Logged in as {authController.user.displayName}</>
