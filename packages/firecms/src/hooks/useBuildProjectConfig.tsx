@@ -4,7 +4,7 @@ import { FirebaseApp } from "firebase/app";
 import { ProjectSubscriptionPlan } from "../types";
 import { UploadFileProps } from "@firecms/core";
 import { FirebaseStorage, getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "firebase/storage";
-import { darkenColor, hexToRgbaWithOpacity } from "saas/src/utils/colors";
+import { darkenColor, hexToRgbaWithOpacity } from "../utils";
 
 const DEFAULT_PRIMARY_COLOR = "#0070F4";
 const DEFAULT_SECONDARY_COLOR = "#FF5B79";

@@ -23,6 +23,7 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
+    "@firecms/cli": "^3.0.0-alpha.81",
     "@firecms/collection_editor": "^3.0.0-alpha.81",
     "@firecms/core": "^3.0.0-alpha.81",
     "@firecms/data_enhancement": "^3.0.0-alpha.81",
@@ -38,7 +39,6 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@firecms/cli": "^3.0.0-alpha.81",
     "@types/node": "^20.8.9",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.17",
@@ -67,5 +67,5 @@
       "react-app/jest"
     ]
   },
-  "gitHead": "60fbe594a5ad36fa5a47ba279ef3f55014fe823f"
+  "gitHead": "ac77309580f9668647209724e1df2080d3932bef"
 }
