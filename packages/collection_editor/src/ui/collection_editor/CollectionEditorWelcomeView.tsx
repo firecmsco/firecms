@@ -1,18 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-    EntityCollection, unslugify,
-} from "@firecms/core";
-import {
-    Button,
-    Card,
-    Chip,
-    CircularProgress,
-    cn,
-    Container,
-    Icon,
-    Tooltip,
-    Typography,
-} from "@firecms/ui";
+import { EntityCollection, unslugify, } from "@firecms/core";
+import { Button, Card, Chip, CircularProgress, cn, Container, Icon, Tooltip, Typography, } from "@firecms/ui";
 import { useFormikContext } from "formik";
 
 import { productsCollectionTemplate } from "./templates/products_template";
@@ -196,16 +184,14 @@ export function TemplateButton({
                 className={cn(
                     "my-2 rounded-md border mx-0 p-6 px-4 focus:outline-none transition ease-in-out duration-150 flex flex-row gap-4 items-center",
                     "text-gray-700 dark:text-gray-300",
-                    "hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400 focus:ring-blue-400 hover:ring-1 hover:ring-primary",
+                    "hover:border-primary-dark hover:text-primary-dark dark:hover:text-primary-light focus:ring-primary-light hover:ring-1 hover:ring-primary",
                     // "border-transparent hover:bg-primary hover:bg-opacity-10",
                     // "my-2 cursor-pointer max-w-sm p-6 border border-solid rounded-lg flex flex-row gap-4 items-center bg-gray-50 dark:bg-gray-800 ",
                     "border-gray-400 dark:border-gray-600 "
                 )}
             >
                 {icon}
-                <div
-                    className={"flex flex-col items-start"}
-                >
+                <div className={"flex flex-col items-start"}>
 
                     <Typography variant={"subtitle1"}>
                         {title}

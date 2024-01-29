@@ -34,10 +34,10 @@ export function Button<P extends React.ElementType>({
         {
             "w-full": fullWidth,
             "w-fit": !fullWidth,
-            "border-transparent bg-primary hover:bg-blue-600 focus:ring-blue-400 !text-white shadow hover:ring-1 hover:ring-primary": variant === "filled" && !disabled,
-            "border-primary !text-primary hover:bg-primary hover:bg-opacity-10 hover:border-blue-600 !hover:text-blue-600 focus:ring-blue-400 hover:ring-1 hover:ring-primary": variant === "outlined" && !disabled,
-            "border-transparent !text-primary !hover:text-blue-600 hover:bg-primary hover:bg-opacity-10": variant === "text" && !disabled,
-            "border-blue-600 border-opacity-50 dark:border-blue-500 dark:border-opacity-50 opacity-50 !text-blue-600 !dark:text-blue-500 text-opacity-50 dark:text-opacity-50": variant === "outlined" && disabled,
+            "border-transparent bg-primary hover:bg-primary-dark focus:ring-primary-light !text-white shadow hover:ring-1 hover:ring-primary": variant === "filled" && !disabled,
+            "border-primary !text-primary hover:bg-primary hover:bg-opacity-10 hover:border-primary-dark !hover:text-primary-dark focus:ring-primary-light hover:ring-1 hover:ring-primary": variant === "outlined" && !disabled,
+            "border-transparent !text-primary !hover:text-primary-dark hover:bg-primary hover:bg-opacity-10": variant === "text" && !disabled,
+            "border-primary-dark border-opacity-50 dark:border-blue-500 dark:border-opacity-50 opacity-50 !text-primary-dark !dark:text-blue-500 text-opacity-50 dark:text-opacity-50": variant === "outlined" && disabled,
             "border-transparent outline-none opacity-50 !text-slate-600 !dark:text-slate-500": (variant === "filled" || variant === "text") && disabled
         }
     );

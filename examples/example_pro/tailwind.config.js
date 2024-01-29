@@ -32,9 +32,10 @@ export default {
                 ]
             },
             colors: {
+                "primary-light": "#0689ff",
                 primary: "#0070F4",
+                "primary-dark": "#0061e6",
                 secondary: "#FF5B79",
-                error: "#F44336",
                 field: {
                     disabled: "rgb(224 224 226)",
                     "disabled-dark": "rgb(35 35 37)"

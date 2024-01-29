@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useMemo } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useRef } from "react";
 import equal from "react-fast-compare";
 import {
     AdditionalFieldDelegate,
@@ -29,6 +29,7 @@ import { DateTimeFilterField } from "./filters/DateTimeFilterField";
 import { CustomFieldValidator } from "../../form/validation";
 import { renderSkeletonText } from "../../preview";
 import { propertiesToColumns } from "./column_utils";
+import { useOutsideAlerter } from "@firecms/ui";
 
 const DEFAULT_STATE = {} as any;
 
@@ -114,6 +115,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
          textSearchLoading
      }: EntityCollectionTableProps<M>) {
 
+        const ref = useRef<HTMLDivElement>(null);
+
         const largeLayout = useLargeLayout();
         const disabledFilterChange = Boolean(forceFilter);
         const selectedEntities = selectionController?.selectedEntities?.length > 0 ? selectionController?.selectedEntities : highlightedEntities;
@@ -134,6 +137,14 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             if (itemCount !== undefined)
                 setItemCount?.(itemCount + pageSize);
         };
+
+        useOutsideAlerter(ref,
+            () => {
+                if (selectedCell) {
+                    unselect();
+                }
+            },
+            Boolean(selectedCell));
 
         const resetPagination = useCallback(() => {
             setItemCount?.(pageSize);
@@ -366,7 +377,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 }}
             >
 
-                <div className="h-full w-full flex flex-col bg-white dark:bg-gray-950">
+                <div ref={ref}
+                     className="h-full w-full flex flex-col bg-white dark:bg-gray-950">
 
                     <CollectionTableToolbar
                         forceFilter={disabledFilterChange}

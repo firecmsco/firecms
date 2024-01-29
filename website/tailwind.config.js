@@ -11,9 +11,10 @@ const fireCMSTailwindConfig = {
     theme: {
         extend: {
             colors: {
+                "primary-light": "#0689ff",
                 primary: "#0070F4",
+                "primary-dark": "#0061e6",
                 secondary: "#FF5B79",
-                error: "#F44336",
                 light: "#e6e6e9",
                 lighter: "#f8f8fa",
                 field: {

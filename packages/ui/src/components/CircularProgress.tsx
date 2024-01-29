@@ -35,7 +35,7 @@ export function CircularProgress({
                 sizeClasses,
                 borderClasses,
                 "inline-block animate-spin rounded-full border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]",
-                "text-blue-600 dark:text-blue-400",
+                "text-primary-dark dark:text-primary-light",
                 className)}
             role="status">
               <span

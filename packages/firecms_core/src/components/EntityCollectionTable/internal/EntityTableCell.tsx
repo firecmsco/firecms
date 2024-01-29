@@ -4,7 +4,7 @@ import useMeasure from "react-use-measure";
 
 import { VirtualTableSize } from "../../VirtualTable";
 import { getRowHeight } from "../../VirtualTable/common";
-import { useOutsideAlerter, cn, RemoveCircleIcon, Tooltip } from "@firecms/ui";
+import { cn, RemoveCircleIcon, Tooltip } from "@firecms/ui";
 import { ErrorBoundary } from "../../../components";
 
 interface EntityTableCellProps {
@@ -90,13 +90,7 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
 
         const [measureRef, bounds] = useMeasure();
         const ref = useRef<HTMLDivElement>(null);
-        useOutsideAlerter(ref, () => {
-            if (selected && onSelect) {
-                onSelect(undefined);
-            }
-        }, Boolean(selected && onSelect));
 
-        const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
         const maxHeight = useMemo(() => getRowHeight(size), [size]);
 
         const [onHover, setOnHover] = useState(false);
@@ -167,13 +161,12 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
             event.stopPropagation();
         }, [onSelectCallback]);
 
-        useEffect(() => {
+        const isOverflowing = useMemo(() => {
             if (bounds) {
-                const newOverflowingValue = bounds.height > maxHeight;
-                if (isOverflowing !== newOverflowingValue)
-                    setIsOverflowing(newOverflowingValue);
+                return bounds.height > maxHeight;
             }
-        }, [bounds, isOverflowing, maxHeight]);
+            return false;
+        }, [bounds, maxHeight]);
 
         const isSelected = !showError && selected;
 
@@ -247,17 +240,18 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
 
             </div>
         );
-    }, (a, b) =>
-        a.error === b.error &&
-        a.value === b.value &&
-        a.disabled === b.disabled &&
-        a.saved === b.saved &&
-        a.allowScroll === b.allowScroll &&
-        a.align === b.align &&
-        a.size === b.size &&
-        a.disabledTooltip === b.disabledTooltip &&
-        a.width === b.width &&
-        a.showExpandIcon === b.showExpandIcon &&
-        a.removePadding === b.removePadding &&
-        a.fullHeight === b.fullHeight &&
-        a.selected === b.selected) as React.FunctionComponent<EntityTableCellProps>;
+    }, (a, b) => {
+        return a.error === b.error &&
+            a.value === b.value &&
+            a.disabled === b.disabled &&
+            a.saved === b.saved &&
+            a.allowScroll === b.allowScroll &&
+            a.align === b.align &&
+            a.size === b.size &&
+            a.disabledTooltip === b.disabledTooltip &&
+            a.width === b.width &&
+            a.showExpandIcon === b.showExpandIcon &&
+            a.removePadding === b.removePadding &&
+            a.fullHeight === b.fullHeight &&
+            a.selected === b.selected;
+    }) as React.FunctionComponent<EntityTableCellProps>;
