@@ -76,7 +76,7 @@ export function CollectionPropertiesEditorForm({
 
     const snackbarController = useSnackbarController();
 
-    const largeLayout = useLargeLayout("lg");
+    const largeLayout = useLargeLayout();
     const asDialog = !largeLayout
 
     // index of the selected property within the namespace
