@@ -184,9 +184,7 @@ export function TemplateButton({
                 className={cn(
                     "my-2 rounded-md border mx-0 p-6 px-4 focus:outline-none transition ease-in-out duration-150 flex flex-row gap-4 items-center",
                     "text-gray-700 dark:text-gray-300",
-                    "hover:border-primary-dark hover:text-primary-dark dark:hover:text-primary-light focus:ring-primary-light hover:ring-1 hover:ring-primary",
-                    // "border-transparent hover:bg-primary hover:bg-opacity-10",
-                    // "my-2 cursor-pointer max-w-sm p-6 border border-solid rounded-lg flex flex-row gap-4 items-center bg-gray-50 dark:bg-gray-800 ",
+                    "hover:border-primary-dark hover:text-primary-dark dark:hover:text-primary focus:ring-primary hover:ring-1 hover:ring-primary",
                     "border-gray-400 dark:border-gray-600 "
                 )}
             >

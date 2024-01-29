@@ -85,7 +85,7 @@ export function ProductView({
 
     return <>
 
-        {includePriceSelect && <div className={"my-4"}>
+        {includePriceSelect && <div className={"my-2"}>
             You can upgrade your project for {priceSelect}
         </div>}
 

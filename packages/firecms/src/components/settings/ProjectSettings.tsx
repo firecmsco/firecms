@@ -2,10 +2,14 @@ import React, { useDeferredValue, useEffect, useState } from "react";
 
 import { FireCMSLogo, useBrowserTitleAndIcon, useSnackbarController } from "@firecms/core";
 import {
+    BooleanSwitch,
     BooleanSwitchWithLabel,
+    Button,
     CenteredView,
+    Checkbox,
     FileUpload,
     OnFileUploadRejected,
+    Paper,
     TextField,
     Typography,
 } from "@firecms/ui";
@@ -18,7 +22,6 @@ export function ProjectSettings() {
     const { backendUid } = useFireCMSBackend();
 
     const projectConfig = useProjectConfig();
-    const [showUpgradeBanner, setShowUpgradeBanner] = useState<boolean>(false);
 
     useBrowserTitleAndIcon("Project settings")
 
@@ -28,23 +31,15 @@ export function ProjectSettings() {
 
     return (
         <CenteredView maxWidth={"6xl"}
-                      className={"w-full flex flex-col gap-16 px-4 py-32"}
-        >
+                      className={"w-full flex flex-col gap-16 px-4 py-32"}>
 
             <ProjectSubscriptionPlans uid={backendUid}/>
 
             <div className={"flex flex-col gap-2"}>
 
-                {showUpgradeBanner &&
-                    <SubscriptionPlanWidget
-                        showForPlans={["free"]}
-                        message={<>Upgrade to PLUS to customise the logo</>}/>}
-
                 <Typography variant={"h4"} className="mt-4 mb-2">Settings</Typography>
 
                 <ProjectNameTextField/>
-
-                <LogoUploadField onNoSubscriptionPlan={() => setShowUpgradeBanner(true)}/>
 
                 <div className={"col-span-12"}>
                     <BooleanSwitchWithLabel
@@ -54,6 +49,9 @@ export function ProjectSettings() {
                         value={projectConfig.localTextSearchEnabled}
                     />
                 </div>
+
+                <ThemeColors/>
+
             </div>
 
             <div className={"flex flex-col gap-2"}>
@@ -89,14 +87,14 @@ function LogoUploadField({ onNoSubscriptionPlan }: {
 
     const {
         logo,
-        canUploadLogo,
+        canModifyTheme,
         uploadLogo
     } = useProjectConfig();
 
     const snackbarContext = useSnackbarController();
 
     const onFilesAdded = async (acceptedFiles: File[]) => {
-        if (!canUploadLogo) {
+        if (!canModifyTheme) {
             onNoSubscriptionPlan();
             return;
         }
@@ -107,7 +105,7 @@ function LogoUploadField({ onNoSubscriptionPlan }: {
     }
 
     const onFilesRejected: OnFileUploadRejected = (fileRejections, event) => {
-        if (!canUploadLogo) {
+        if (!canModifyTheme) {
             onNoSubscriptionPlan();
         } else {
             for (const fileRejection of fileRejections) {
@@ -135,5 +133,71 @@ function LogoUploadField({ onNoSubscriptionPlan }: {
         {!logo && <FireCMSLogo
             className={"w-40 h-40 p-4"}/>}
     </FileUpload>;
+
+}
+
+function SampleComponents() {
+    const [checked, setChecked] = useState<boolean>(true);
+    return <Paper className={"p-4 mt-4 flex flex-col items-center gap-2"}>
+        <Typography variant={"label"}>Sample theme components</Typography>
+        <div className={"flex flex-row gap-4 items-center justify-center"}>
+            <Button> Button </Button>
+            <Button variant={"outlined"}> Button </Button>
+            <BooleanSwitch value={checked} onValueChange={setChecked}/>
+            <Checkbox checked={checked} onCheckedChange={setChecked}/>
+            <Checkbox color={"secondary"} checked={checked} onCheckedChange={setChecked}/>
+        </div>
+    </Paper>;
+}
+
+function ThemeColors() {
+    const [showUpgradeBanner, setShowUpgradeBanner] = useState<boolean>(false);
+
+    const projectConfig = useProjectConfig();
+    return <div className={"flex flex-col gap-2 mt-4 mb-2"}>
+
+        <Typography variant={"h4"} className="mt-4 mb-2">Theme</Typography>
+        <div className={"grid grid-cols-12 gap-4"}>
+
+            <div className={"col-span-12 md:col-span-6"}>
+                <LogoUploadField onNoSubscriptionPlan={() => setShowUpgradeBanner(true)}/>
+            </div>
+
+            <div className={"col-span-12 md:col-span-6"}>
+                <div className={"flex flex-col gap-2"}>
+
+                    <div className={"flex flex-col gap-4"}>
+                        <div className={"flex flex-row gap-2"}>
+                            <input
+                                type="color"
+                                value={projectConfig.primaryColor}
+                                onChange={e => {
+                                    setShowUpgradeBanner(true);
+                                    return projectConfig.updatePrimaryColor(e.target.value);
+                                }}
+                            />
+                            <Typography variant={"subtitle2"}>Primary color</Typography>
+                        </div>
+                        <div className={"flex flex-row gap-2"}>
+                            <input
+                                type="color"
+                                value={projectConfig.secondaryColor}
+                                onChange={e => {
+                                    setShowUpgradeBanner(true);
+                                    return projectConfig.updateSecondaryColor(e.target.value);
+                                }}
+                            />
+                            <Typography variant={"subtitle2"}>Secondary color</Typography>
+                        </div>
+                    </div>
+                    <SampleComponents/>
+                </div>
+            </div>
+        </div>
+        {showUpgradeBanner &&
+            <SubscriptionPlanWidget
+                showForPlans={["free"]}
+                message={<>Upgrade to <b>PLUS</b> to customise the logo and colors</>}/>}
+    </div>
 
 }

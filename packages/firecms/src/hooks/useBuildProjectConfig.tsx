@@ -4,8 +4,13 @@ import { FirebaseApp } from "firebase/app";
 import { ProjectSubscriptionPlan } from "../types";
 import { UploadFileProps } from "@firecms/core";
 import { FirebaseStorage, getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "firebase/storage";
+import { darkenColor, hexToRgbaWithOpacity } from "saas/src/utils/colors";
+
+const DEFAULT_PRIMARY_COLOR = "#0070F4";
+const DEFAULT_SECONDARY_COLOR = "#FF5B79";
 
 export type ProjectConfig = {
+
     projectId: string;
 
     logo?: string;
@@ -26,12 +31,17 @@ export type ProjectConfig = {
     usersLimit: number | null;
 
     canEditRoles: boolean;
-    canUploadLogo: boolean;
+    canModifyTheme: boolean;
     canExport: boolean;
     canUseLocalTextSearch: boolean;
 
     localTextSearchEnabled: boolean;
     updateLocalTextSearchEnabled: (allow: boolean) => Promise<void>;
+
+    primaryColor?: string;
+    secondaryColor?: string;
+    updatePrimaryColor: (color?: string) => void;
+    updateSecondaryColor: (color?: string) => void;
 };
 
 interface ProjectConfigParams {
@@ -43,6 +53,9 @@ export function useBuildProjectConfig({
                                           backendFirebaseApp,
                                           projectId,
                                       }: ProjectConfigParams): ProjectConfig {
+
+    const [primaryColor, setPrimaryColor] = useState<string | undefined>(DEFAULT_PRIMARY_COLOR);
+    const [secondaryColor, setSecondaryColor] = useState<string | undefined>(DEFAULT_SECONDARY_COLOR);
 
     const configPath = projectId ? `projects/${projectId}` : undefined;
 
@@ -85,6 +98,25 @@ export function useBuildProjectConfig({
             }
         );
     }, [configPath]);
+
+    // update css variables when colors change in :root
+    useEffect(() => {
+        if (primaryColor) {
+            document.documentElement.style.setProperty("--fcms-primary", primaryColor);
+            document.documentElement.style.setProperty("--fcms-primary-dark", darkenColor(primaryColor, 10));
+            document.documentElement.style.setProperty("--fcms-primary-bg", hexToRgbaWithOpacity(primaryColor, 20));
+        } else {
+            document.documentElement.style.setProperty("--fcms-primary", darkenColor(DEFAULT_PRIMARY_COLOR, 10));
+            document.documentElement.style.setProperty("--fcms-primary-dark", darkenColor(DEFAULT_PRIMARY_COLOR, 10));
+            document.documentElement.style.setProperty("--fcms-primary-bg", hexToRgbaWithOpacity(DEFAULT_PRIMARY_COLOR, 20));
+        }
+        if (secondaryColor) {
+            document.documentElement.style.setProperty("--fcms-secondary", secondaryColor);
+        } else {
+            document.documentElement.style.setProperty("--fcms-secondary", DEFAULT_SECONDARY_COLOR);
+        }
+
+    }, [primaryColor, secondaryColor]);
 
     const uploadLogo = useCallback(async (file: File): Promise<void> => {
         const firestore = firestoreRef.current;
@@ -130,8 +162,16 @@ export function useBuildProjectConfig({
 
                     console.log("Project config snapshot", snapshot.data());
                     setClientProjectName(snapshot.get("name"));
-                    setSubscriptionPlan(snapshot.get("subscription_plan") ?? "free"); // TODO: remove default value
+                    const plan = snapshot.get("subscription_plan") ?? "free";
+                    setSubscriptionPlan(plan); // TODO: remove default value
                     setLocalTextSearchEnabled(snapshot.get("local_text_search_enabled") ?? false);
+                    if (plan === "free") {
+                        setPrimaryColor(DEFAULT_PRIMARY_COLOR);
+                        setSecondaryColor(DEFAULT_SECONDARY_COLOR);
+                    } else {
+                        setPrimaryColor(snapshot.get("primary_color") ?? DEFAULT_PRIMARY_COLOR);
+                        setSecondaryColor(snapshot.get("secondary_color") ?? DEFAULT_SECONDARY_COLOR);
+                    }
 
                     const currentCustomizationRevision = snapshot.get("current_app_config_revision");
                     setCustomizationRevision(currentCustomizationRevision);
@@ -166,14 +206,30 @@ export function useBuildProjectConfig({
 
     const usersLimit = subscriptionPlan === "free" ? 3 : null;
     const canEditRoles = subscriptionPlan !== "free";
-    const canUploadLogo = subscriptionPlan !== "free";
+    const canModifyTheme = subscriptionPlan !== "free";
     const canExport = subscriptionPlan !== "free";
     const canUseLocalTextSearch = subscriptionPlan !== "free";
+
+    const updatePrimaryColor = useCallback(async (color?: string): Promise<void> => {
+        const firestore = firestoreRef.current;
+        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        setPrimaryColor(color);
+        if (canModifyTheme)
+            setDoc(doc(firestore, configPath), { primary_color: color }, { merge: true });
+    }, [configPath, canModifyTheme]);
+
+    const updateSecondaryColor = useCallback(async (color?: string): Promise<void> => {
+        const firestore = firestoreRef.current;
+        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        setSecondaryColor(color);
+        if (canModifyTheme)
+            setDoc(doc(firestore, configPath), { secondary_color: color }, { merge: true });
+    }, [configPath, canModifyTheme]);
 
     return {
 
         projectId,
-        logo: canUploadLogo ? logo : undefined,
+        logo: canModifyTheme ? logo : undefined,
         uploadLogo,
         updateProjectName,
 
@@ -187,11 +243,15 @@ export function useBuildProjectConfig({
         serviceAccountMissing: loadedProjectIdRef.current !== projectId ? undefined : serviceAccountMissing,
         usersLimit,
         canEditRoles,
-        canUploadLogo,
+        canModifyTheme,
         canExport,
         canUseLocalTextSearch,
         localTextSearchEnabled,
-        updateLocalTextSearchEnabled
+        updateLocalTextSearchEnabled,
+        primaryColor,
+        secondaryColor,
+        updatePrimaryColor,
+        updateSecondaryColor
     }
 }
 

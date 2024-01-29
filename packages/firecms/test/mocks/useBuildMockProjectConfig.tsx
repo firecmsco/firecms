@@ -6,7 +6,7 @@ export function useBuildMockProjectConfig(): ProjectConfig {
     return {
         canEditRoles: false,
         canExport: false,
-        canUploadLogo: false,
+        canModifyTheme: false,
         configLoading: false,
         projectId: MOCK_PROJECT_ID,
         updateProjectName(name: string): Promise<void> {
