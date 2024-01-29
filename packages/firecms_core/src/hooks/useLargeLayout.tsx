@@ -13,7 +13,7 @@ const breakpoints = {
 }
 
 // Global state and listeners array
-let isLargeLayoutGlobal = false; // Default value
+let isLargeLayoutGlobal = checkLargeLayout("lg"); // Default value
 const listeners: LayoutListener[] = [];
 
 // Utility to notify all listeners
