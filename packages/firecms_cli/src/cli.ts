@@ -60,12 +60,13 @@ async function logoutArgs(rawArgs) {
         }
     );
     const env = args["--env"] || "prod";
+    const debug = args["--debug"] || false;
     if (env !== "prod" && env !== "dev") {
         console.log("Please specify a valid environment: dev or prod");
         console.log("firecms logout --env=prod");
         return;
     }
-    await logout(env);
+    await logout(env, debug);
 }
 
 async function deployArgs(rawArgs) {

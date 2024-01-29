@@ -14,7 +14,8 @@ const https = require("https");
 const url = require("url");
 
 export async function getCurrentUser(env: "prod" | "dev", debug: boolean): Promise<object | null> {
-    const userCredential = await getTokens(env);
+    if (debug) console.log("Getting current user");
+    const userCredential = await getTokens(env, debug);
     if (!userCredential) {
         return null;
     }
@@ -106,9 +107,9 @@ function saveTokens(tokens: object, env: "prod" | "dev") {
 
 }
 
-export async function logout(env: "prod" | "dev") {
+export async function logout(env: "prod" | "dev", debug: boolean) {
 
-    const userCredential = await getTokens(env);
+    const userCredential = await getTokens(env, debug);
     if (!userCredential) {
         console.log("⚠️ You are not logged in");
         console.log(`Run ${chalk.red.bold("firecms login")} to log in`);
@@ -123,7 +124,7 @@ export async function logout(env: "prod" | "dev") {
     console.log("You have successfully logged out.")
 }
 
-export async function getTokens(env: "prod" | "dev"): Promise<object | null> {
+export async function getTokens(env: "prod" | "dev", debug: boolean): Promise<object | null> {
     const dirPath = path.join(os.homedir(), ".firecms");
     const filePath = path.join(dirPath, (env === "dev" ? "staging." : "") + "tokens.json");
 
@@ -133,6 +134,7 @@ export async function getTokens(env: "prod" | "dev"): Promise<object | null> {
 
     return new Promise((resolve, reject) => {
         fs.readFile(filePath, "utf8", (err, data) => {
+            if (debug) console.log("getTokens", { data });
             if (err) {
                 reject(err);
                 return;
@@ -186,11 +188,18 @@ export function parseJwt(token: string): object {
     const base64Url = token.split(".")[1];
     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     const buffer = Buffer.from(base64, "base64");
-    const jsonPayload = decodeURIComponent(buffer.toString().split("").map(function (c) {
-        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(""));
+    // console.log({
+    //     base64Url,
+    //     base64,
+    //     buffer: buffer.toString()
+    // });
+    // const uri = buffer.toString().split("").map(function (c) {
+    //     return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+    // }).join("");
+    // console.log({ uri });
+    // const jsonPayload = decodeURIComponent(uri);
 
-    return JSON.parse(jsonPayload);
+    return JSON.parse(buffer.toString());
 }
 
 async function getAuthURL(env: "prod" | "dev") {
@@ -225,7 +234,7 @@ export async function refreshCredentials(env: "dev" | "prod", credentials?: obje
         return newCredentials;
     } catch (error) {
         if (onErr) onErr(error);
-        await logout(env);
+        await logout(env, false);
         console.error("\nError refreshing credentials", error.response?.status, error.response?.data?.message);
         console.log(`⚠️ Run ${chalk.red.bold("firecms login")} to log in again`);
         return null;

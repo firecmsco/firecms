@@ -39,7 +39,7 @@ export type InitOptions = Partial<{
     debug: boolean;
 }>
 
-export async function createFireCMSApp(args) {
+export async function createFireCMSApp(rawArgs) {
 
     console.log(`
 ${chalk.green.bold(" ___ _          ___ __  __ ___")}
@@ -49,9 +49,10 @@ ${chalk.green.bold("|_| |_|_| \\___|\\___|_|  |_|___/")}
 
 ${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
 `);
-    let options = parseArgumentsIntoOptions(args);
 
-    let currentUser = await getCurrentUser(args.env, args.debug);
+    let options = parseArgumentsIntoOptions(rawArgs);
+
+    let currentUser = await getCurrentUser(options.env, options.debug);
     const shouldLogin = !options.v2 && !currentUser;
     if (shouldLogin) {
         console.log("You need to be logged in to create a project");
@@ -68,7 +69,7 @@ ${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
             }
         });
 
-        let currentUser = await getCurrentUser(args.env, options.debug);
+        let currentUser = await getCurrentUser(options.env, options.debug);
         if (!currentUser) {
             console.log("The login process was not completed. Exiting...");
             return;
@@ -136,7 +137,7 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
         });
 
         const spinner = ora("Loading your projects").start();
-        const projects = await getProjects(options.env, onErr => {
+        const projects = await getProjects(options.env, options.debug, onErr => {
             spinner.fail("Error loading projects");
         })
             .then((res) => {
@@ -303,7 +304,7 @@ async function copyTemplateFiles(options: InitOptions, webappConfig?: object) {
         if (!options.v2) {
             if (options.pro) {
 
-                const firebaseConfig = await getProjectWebappConfig(options.env, options.firebaseProjectId);
+                const firebaseConfig = await getProjectWebappConfig(options.env, options.firebaseProjectId, options.debug);
                 await copyWebAppConfig(options, firebaseConfig);
 
                 return replaceProjectIdInTemplateFiles(options, [
@@ -372,10 +373,10 @@ function writeWebAppConfig(options: InitOptions, webappConfig: object) {
         });
 }
 
-async function getProjects(env: "prod" | "dev", onErr?: (e: any) => void) {
+async function getProjects(env: "prod" | "dev", debug: boolean, onErr?: (e: any) => void) {
 
     try {
-        const credentials = await getTokens(env);
+        const credentials = await getTokens(env, debug);
         const tokens = await refreshCredentials(env, credentials, onErr);
         if (!tokens) {
             return null;
@@ -400,10 +401,10 @@ async function getProjects(env: "prod" | "dev", onErr?: (e: any) => void) {
     }
 }
 
-async function getProjectWebappConfig(env: "prod" | "dev", projectId: string, onErr?: (e: any) => void) {
+async function getProjectWebappConfig(env: "prod" | "dev", projectId: string, debug: boolean, onErr?: (e: any) => void) {
 
     try {
-        const credentials = await getTokens(env);
+        const credentials = await getTokens(env, debug);
         const tokens = await refreshCredentials(env, credentials, onErr);
         if (!tokens) {
             return null;

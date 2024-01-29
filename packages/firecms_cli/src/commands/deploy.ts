@@ -20,7 +20,7 @@ export async function deploy(projectId: string, env: "prod" | "dev", debug: bool
     console.log("Starting deploy");
     // await build();
     const zipFilePath = await createZipFromBuild();
-    await uploadZip(projectId, zipFilePath, env);
+    await uploadZip(projectId, zipFilePath, env, debug);
 }
 
 export function build() {
@@ -51,14 +51,14 @@ export async function createZipFromBuild(): Promise<string> {
     })
 }
 
-export async function uploadZip(projectId: string, zipFilePath: string, env: "prod" | "dev") {
+export async function uploadZip(projectId: string, zipFilePath: string, env: "prod" | "dev", debug: boolean) {
 
     if(env === "dev") {
         console.log("!!! Uploading to dev server");
     }
     const spinner = ora("Uploading build of project " + projectId).start();
 
-    const tokens = await refreshCredentials(env, await getTokens(env));
+    const tokens = await refreshCredentials(env, await getTokens(env, debug));
 
     const form = new FormData();
 
