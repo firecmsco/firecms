@@ -138,7 +138,7 @@ function LogoUploadField({ onNoSubscriptionPlan }: {
 
 function SampleComponents() {
     const [checked, setChecked] = useState<boolean>(true);
-    return <Paper className={"p-4 mt-4 flex flex-col items-center gap-2"}>
+    return <div className={"p-4 mt-4 flex flex-col items-center gap-2"}>
         <Typography variant={"label"}>Sample theme components</Typography>
         <div className={"flex flex-row gap-4 items-center justify-center"}>
             <Button> Button </Button>
@@ -147,7 +147,7 @@ function SampleComponents() {
             <Checkbox checked={checked} onCheckedChange={setChecked}/>
             <Checkbox color={"secondary"} checked={checked} onCheckedChange={setChecked}/>
         </div>
-    </Paper>;
+    </div>;
 }
 
 function ThemeColors() {
@@ -164,9 +164,9 @@ function ThemeColors() {
             </div>
 
             <div className={"col-span-12 md:col-span-6"}>
-                <div className={"flex flex-col gap-2"}>
+                <Paper className={"flex flex-col gap-2 p-4"}>
 
-                    <div className={"flex flex-col gap-4"}>
+                    <div className={"flex flex-row gap-4 justify-center mt-4"}>
                         <div className={"flex flex-row gap-2"}>
                             <input
                                 type="color"
@@ -191,7 +191,7 @@ function ThemeColors() {
                         </div>
                     </div>
                     <SampleComponents/>
-                </div>
+                </Paper>
             </div>
         </div>
         {showUpgradeBanner &&

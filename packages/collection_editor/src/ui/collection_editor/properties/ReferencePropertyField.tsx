@@ -85,8 +85,6 @@ export function CollectionsSelect({
     error?: string
 }) {
 
-    console.log("error", error)
-
     const navigation = useNavigationController();
 
     if (!navigation)

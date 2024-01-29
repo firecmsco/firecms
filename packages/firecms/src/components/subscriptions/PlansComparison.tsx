@@ -1,9 +1,7 @@
 import React from "react";
-import { CircularProgressCenter, useNavigationController } from "@firecms/core";
+import { useNavigationController } from "@firecms/core";
 import { Button, CloseIcon, Container, Dialog, DialogContent, IconButton, } from "@firecms/ui";
 import { useNavigate } from "react-router-dom";
-import { useProjectConfig, useSubscriptionsForUserController } from "../../hooks";
-import { useFireCMSBackend } from "../../hooks/useFireCMSBackend";
 import { UpgradeToPlusButton } from "./UpgradeToPlusButton";
 
 export function PlansComparisonDialog({
@@ -22,7 +20,7 @@ export function PlansComparisonDialog({
     }
 
     return <Dialog
-
+        fullScreen={true}
         open={open}
         onOpenChange={(open) => !open ? onClose() : undefined}
     >
@@ -37,7 +35,6 @@ export function PlansComparisonDialog({
 }
 
 export function PlansComparison() {
-
 
     const freeTier = (
         <div

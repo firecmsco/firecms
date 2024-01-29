@@ -4,6 +4,7 @@ import { SideDialogPanelProps, SideDialogsController } from "../types";
 import equal from "react-fast-compare"
 
 export function useBuildSideDialogsController(): SideDialogsController {
+    console.log("useBuildSideDialogsController");
 
     const location = useLocation();
     const navigate = useNavigate();
