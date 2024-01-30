@@ -25,7 +25,7 @@ export function EntityPreview<M extends Record<string, any>>(
         className
     }: EntityPreviewProps<M>) {
 
-    const context = useFireCMSContext();
+    const customizationController: CustomizationController = useCustomizationController();
     const resolvedCollection: ResolvedEntityCollection<M> = useMemo(() => resolveCollection<M>({
         collection,
         path,
@@ -33,8 +33,6 @@ export function EntityPreview<M extends Record<string, any>>(
         values: entity.values,
         fields: customizationController.propertyConfigs
     }), [collection, path, entity]);
-
-    const customizationController: CustomizationController = useCustomizationController();
 
     const properties: ResolvedProperties = resolvedCollection.properties;
 

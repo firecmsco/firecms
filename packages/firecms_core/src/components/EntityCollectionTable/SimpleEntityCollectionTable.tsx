@@ -196,7 +196,6 @@ export const SimpleEntityCollectionTable = React.memo<SimpleEntityCollectionTabl
         const onRowClick = useCallback(({ rowData }: {
             rowData: Entity<M>
         }) => {
-            console.debug("EntityCollectionTable click");
             if (inlineEditing)
                 return;
             return onEntityClick && onEntityClick(rowData);
@@ -230,7 +229,6 @@ export const SimpleEntityCollectionTable = React.memo<SimpleEntityCollectionTabl
         const unselect = useCallback(() => {
             setSelectedCell(undefined);
         }, []);
-
 
         const onFilterUpdate = useCallback((updatedFilterValues?: FilterValues<any>) => {
             setFilterValues?.({ ...updatedFilterValues, ...forceFilter } as FilterValues<any>);

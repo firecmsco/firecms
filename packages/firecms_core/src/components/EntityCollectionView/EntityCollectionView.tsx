@@ -39,7 +39,8 @@ import {
     saveEntityWithCallbacks,
     useAuthController,
     useCustomizationController,
-    useDataSource, useFireCMSContext,
+    useDataSource,
+    useFireCMSContext,
     useLargeLayout,
     useNavigationController,
     useSideEntityController
@@ -701,15 +702,19 @@ export const EntityCollectionView = React.memo(
             equal(a.forceFilter, b.forceFilter);
     }) as React.FunctionComponent<EntityCollectionViewProps<any>>
 
-export function useSelectionController<M extends Record<string, any> = any>(): SelectionController<M> {
+export function useSelectionController<M extends Record<string, any> = any>(
+    onSelectionChange?: (entity: Entity<M>, selected: boolean) => void
+): SelectionController<M> {
 
     const [selectedEntities, setSelectedEntities] = useState<Entity<M>[]>([]);
 
     const toggleEntitySelection = useCallback((entity: Entity<M>) => {
         let newValue;
         if (selectedEntities.map(e => e.id).includes(entity.id)) {
+            onSelectionChange?.(entity, false);
             newValue = selectedEntities.filter((item: Entity<M>) => item.id !== entity.id);
         } else {
+            onSelectionChange?.(entity, true);
             newValue = [...selectedEntities, entity];
         }
         setSelectedEntities(newValue);

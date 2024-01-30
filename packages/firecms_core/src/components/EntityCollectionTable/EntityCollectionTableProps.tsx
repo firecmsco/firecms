@@ -23,6 +23,7 @@ export type OnColumnResizeParams = { width: number, key: string };
 export type EntityCollectionTableProps<M extends Record<string, any>,
     UserType extends User = User> = {
 
+    debugKey?: string;
     /**
      * Display these entities as selected
      */

@@ -36,7 +36,7 @@ export const EntityCollectionRowActions = React.memo(function EntityCollectionRo
                                                                                              unhighlightEntity,
                                                                                              actions = [],
                                                                                              hideId,
-                                                                                             selectionController
+                                                                                             selectionController,
                                                                                          }:
                                                                                              {
                                                                                                  entity: Entity<any>,

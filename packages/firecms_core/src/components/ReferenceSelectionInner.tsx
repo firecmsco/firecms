@@ -113,7 +113,31 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
 
     const [entitiesDisplayedFirst, setEntitiesDisplayedFirst] = useState<Entity<any>[]>([]);
 
-    const selectionController = useSelectionController();
+    const toggleEntitySelection = (entity: Entity<any>) => {
+        let newValue;
+        const selectedEntities = selectionController.selectedEntities;
+
+        analyticsController.onAnalyticsEvent?.("reference_selection_toggle", {
+            path: fullPath,
+            entityId: entity.id
+        });
+        if (selectedEntities) {
+
+            if (selectedEntities.map((e) => e.id).indexOf(entity.id) > -1) {
+                newValue = selectedEntities.filter((item: Entity<any>) => item.id !== entity.id);
+            } else {
+                if (maxSelection && selectedEntities.length >= maxSelection)
+                    return;
+                newValue = [...selectedEntities, entity];
+            }
+            selectionController.setSelectedEntities(newValue);
+
+            if (onMultipleEntitiesSelected)
+                onMultipleEntitiesSelected(newValue);
+        }
+    };
+
+    const selectionController = useSelectionController(toggleEntitySelection);
 
     /**
      * Fetch initially selected ids
@@ -157,34 +181,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
         }
     };
 
-    const toggleEntitySelection = (entity: Entity<any>) => {
-        console.debug("ReferenceSelectionInner toggleEntitySelection", entity);
-        let newValue;
-        const selectedEntities = selectionController.selectedEntities;
-
-        analyticsController.onAnalyticsEvent?.("reference_selection_toggle", {
-            path: fullPath,
-            entityId: entity.id
-        });
-        if (selectedEntities) {
-
-            if (selectedEntities.map((e) => e.id).indexOf(entity.id) > -1) {
-                newValue = selectedEntities.filter((item: Entity<any>) => item.id !== entity.id);
-            } else {
-                if (maxSelection && selectedEntities.length >= maxSelection)
-                    return;
-                newValue = [...selectedEntities, entity];
-            }
-            selectionController.setSelectedEntities(newValue);
-
-            if (onMultipleEntitiesSelected)
-                onMultipleEntitiesSelected(newValue);
-        }
-    };
-
     const onEntityClick = (entity: Entity<any>) => {
-        console.debug("ReferenceSelectionInner onEntityClick", entity);
-
         if (!multiselect && onSingleEntitySelected) {
             analyticsController.onAnalyticsEvent?.("reference_selected_single", {
                 path: fullPath,
@@ -276,6 +273,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
             <div className="flex-grow">
                 {entitiesDisplayedFirst &&
                     <EntityCollectionTable
+                        debugKey={"reference_selection_table"}
                         displayedColumnIds={displayedColumnIds}
                         onEntityClick={onEntityClick}
                         tableController={tableController}

@@ -64,6 +64,7 @@ export const useEntityCollectionTableController = () => useContext<EntityCollect
 export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>(
     function EntityCollectionTable<M extends Record<string, any>, UserType extends User>
     ({
+         debugKey,
          forceFilter,
          actionsStart,
          actions,
@@ -150,10 +151,9 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             setItemCount?.(pageSize);
         }, [pageSize]);
 
-        const onRowClick = useCallback(({ rowData }: {
+        const onRowClickCallback = useCallback(({ rowData }: {
             rowData: Entity<M>
         }) => {
-            console.debug("EntityCollectionTable click");
             if (inlineEditing)
                 return;
             return onEntityClick && onEntityClick(rowData);
@@ -388,6 +388,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         //     createFilterField,
         // });
 
+        const onRowClick = inlineEditing ? undefined : (onEntityClick ? onRowClickCallback : undefined);
+
         return (
 
             <EntityCollectionTableContext.Provider
@@ -421,7 +423,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         data={data}
                         columns={columns}
                         cellRenderer={cellRenderer}
-                        onRowClick={inlineEditing ? undefined : (onEntityClick ? onRowClick : undefined)}
+                        onRowClick={onRowClick}
                         onEndReached={loadNextPage}
                         onResetPagination={resetPagination}
                         error={dataLoadingError}
