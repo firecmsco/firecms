@@ -30,7 +30,7 @@ export type EntityCallbacks<M extends Record<string, any> = any, UserType extend
      * Callback used when saving fails
      * @param entitySaveProps
      */
-    onSaveFailure?(entitySaveProps: EntityOnSaveProps<M, UserType>)
+    onSaveFailure?(entitySaveProps: EntityOnSaveFailureProps<M, UserType>)
         : Promise<void> | void;
 
     /**
@@ -39,7 +39,7 @@ export type EntityCallbacks<M extends Record<string, any> = any, UserType extend
      * error snackbar gets displayed.
      * @param entitySaveProps
      */
-    onPreSave?(entitySaveProps: EntityOnSaveProps<M, UserType>)
+    onPreSave?(entitySaveProps: EntityOnPreSaveProps<M, UserType>)
         : Promise<Partial<EntityValues<M>>> | Partial<EntityValues<M>>;
 
     /**
@@ -97,6 +97,25 @@ export interface EntityOnFetchProps<M extends Record<string, any> = any, UserTyp
 }
 
 /**
+ * Parameters passed to hooks before an entity is saved
+ * @group Models
+ */
+export type EntityOnPreSaveProps<M extends Record<string, any> = any, UserType extends User = User> =
+    Omit<EntityOnSaveProps<M, UserType>, "entityId">
+    & {
+    entityId?: string;
+}
+/**
+ * Parameters passed to hooks before an entity is saved
+ * @group Models
+ */
+export type EntityOnSaveFailureProps<M extends Record<string, any> = any, UserType extends User = User> =
+    Omit<EntityOnSaveProps<M, UserType>, "entityId">
+    & {
+    entityId?: string;
+}
+
+/**
  * Parameters passed to hooks when an entity is saved
  * @group Models
  */
@@ -121,7 +140,7 @@ export interface EntityOnSaveProps<M extends Record<string, any> = any, UserType
     /**
      * ID of the entity
      */
-    entityId?: string;
+    entityId: string;
 
     /**
      * Values being saved

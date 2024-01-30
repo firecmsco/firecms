@@ -363,6 +363,9 @@ export type WhereFilterOp =
 
 /**
  * Used to define filters applied in collections
+ *
+ * e.g. `{ age: [">=", 18] }`
+ *
  * @group Models
  */
 export type FilterValues<Key extends string> =

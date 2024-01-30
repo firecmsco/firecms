@@ -70,6 +70,9 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, Use
                                                                                                     }
 ): Promise<void> {
 
+    if (status !== "new" && !entityId) {
+        throw new Error("Entity id must be specified when updating an existing entity");
+    }
     let updatedValues: Partial<EntityValues<M>>;
 
     const customizationController = context.customizationController;
