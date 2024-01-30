@@ -65,7 +65,6 @@ export const testCallbacks: EntityCallbacks = {
             path: `${path}/${entityId}`,
             context
         }).then((navigationEntries) => {
-            console.log("navigationEntries", navigationEntries);
             return values;
         });
     }

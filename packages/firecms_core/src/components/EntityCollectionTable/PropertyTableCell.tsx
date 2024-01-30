@@ -387,7 +387,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                     multiselect={true}
                                     path={arrayProperty.of.path}
                                     previewProperties={arrayProperty.of.previewProperties}
-                                    title={arrayProperty.of.name}
+                                    title={arrayProperty.name}
                                     forceFilter={arrayProperty.of.forceFilter}
                                 />;
                         }
