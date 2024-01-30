@@ -1,5 +1,5 @@
 import React from "react";
-import { DefaultHomePage, getIconForView, NavigationGroup, useFireCMSContext } from "@firecms/core";
+import { DefaultHomePage, IconForView, NavigationGroup, useCustomizationController } from "@firecms/core";
 import { ArrowForwardIcon, cardClickableMixin, cardMixin, cn, focusedMixin, Typography, } from "@firecms/ui";
 
 import { Link as ReactLink } from "react-router-dom";
@@ -15,7 +15,7 @@ import { SubscriptionPlanWidget } from "./subscriptions";
  */
 export function FireCMSProjectHomePage() {
 
-    const plugins = useFireCMSContext().plugins;
+    const { plugins } = useCustomizationController();
 
     const pluginActions: React.ReactNode[] = [];
     if (plugins) {
@@ -35,7 +35,8 @@ export function FireCMSProjectHomePage() {
                             name={view.name}
                             description={view.description}
                             url={view.path}
-                            icon={getIconForView(view, "text-gray-400 dark:text-gray-600")}/>
+                            icon={<IconForView collectionOrView={view}
+                                               className={"text-gray-400 dark:text-gray-600"}/>}/>
                     </div>)}
                 </div>
             </NavigationGroup>

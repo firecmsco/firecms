@@ -3,11 +3,11 @@ import {
     AdditionalFieldDelegate,
     CollectionSize,
     Entity,
+    EntityTableController,
     FilterValues,
     ResolvedProperties,
     ResolvedProperty,
     SelectionController,
-    EntityTableController,
     User
 } from "../../types";
 import { OnCellValueChange, UniqueFieldValidator } from "./types";
@@ -21,7 +21,6 @@ export type OnColumnResizeParams = { width: number, key: string };
  * @group Collection components
  */
 export type EntityCollectionTableProps<M extends Record<string, any>,
-
     UserType extends User = User> = {
 
     /**
@@ -105,7 +104,7 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
 
     inlineEditing?: boolean | ((entity: Entity<M>) => boolean);
 
-    additionalFields?: AdditionalFieldDelegate<M,  UserType>[];
+    additionalFields?: AdditionalFieldDelegate<M, UserType>[];
 
     defaultSize?: CollectionSize;
 
@@ -119,11 +118,11 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
 
     endAdornment?: React.ReactNode;
 
-    AdditionalHeaderWidget?: (props: {
+    AdditionalHeaderWidget?: React.ComponentType<{
         property: ResolvedProperty,
         propertyKey: string,
         onHover: boolean,
-    }) => React.ReactNode;
+    }>;
 
     AddColumnComponent?: React.ComponentType;
 

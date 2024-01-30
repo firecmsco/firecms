@@ -4,7 +4,7 @@ import { FieldProps } from "../../types";
 
 import { FieldHelperText } from "../components";
 import { LabelWithIcon } from "../../components";
-import { useClearRestoreValue, useFireCMSContext } from "../../hooks";
+import { useClearRestoreValue, useCustomizationController } from "../../hooks";
 import { getIconForProperty } from "../../util";
 import { DateTimeField } from "@firecms/ui";
 
@@ -30,7 +30,7 @@ export function DateTimeFieldBinding({
                                          includeDescription
                                      }: DateTimeFieldProps) {
 
-    const { locale } = useFireCMSContext();
+    const { locale } = useCustomizationController();
     const internalValue = value || null;
 
     useClearRestoreValue({

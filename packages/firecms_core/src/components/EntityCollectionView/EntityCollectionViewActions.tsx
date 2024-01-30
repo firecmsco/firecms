@@ -1,8 +1,8 @@
 import React from "react";
 
 import { canCreateEntity, canDeleteEntity, fullPathToCollectionSegments } from "../../util";
-import { useAuthController, useFireCMSContext, useLargeLayout } from "../../hooks";
-import { CollectionActionsProps, EntityCollection, SelectionController, EntityTableController } from "../../types";
+import { useAuthController, useCustomizationController, useFireCMSContext, useLargeLayout } from "../../hooks";
+import { CollectionActionsProps, EntityCollection, EntityTableController, SelectionController } from "../../types";
 import { AddIcon, Button, DeleteIcon, IconButton, Tooltip } from "@firecms/ui";
 import { toArray } from "../../util/arrays";
 import { ErrorBoundary } from "../ErrorBoundary";
@@ -34,7 +34,9 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                                                                            }: EntityCollectionViewActionsProps<M>) {
 
     const context = useFireCMSContext();
-    const plugins = context.plugins ?? [];
+
+    const customizationController = useCustomizationController();
+    const plugins = customizationController.plugins ?? [];
 
     const authController = useAuthController();
 

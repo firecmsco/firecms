@@ -1,19 +1,15 @@
-import { Locale } from "./locales";
 import { DataSource } from "./datasource";
 import { StorageSource } from "./storage";
 import { NavigationController } from "./navigation";
 import { SideEntityController } from "./side_entity_controller";
 import { AuthController } from "./auth";
-import { EntityLinkBuilder } from "./entity_link_builder";
 import { User } from "./user";
 import { SnackbarController } from "../hooks";
 import { UserConfigurationPersistence } from "./local_config_persistence";
 import { SideDialogsController } from "./side_dialogs_controller";
-import { FireCMSPlugin } from "./plugins";
-import { CMSAnalyticsEvent } from "./analytics";
-import { PropertyConfig } from "./property_config";
-import { EntityCustomView } from "./collections";
 import { DialogsController } from "./dialogs_controller";
+import { CustomizationController } from "./customization_controller";
+import { AnalyticsController } from "./analytics_controller";
 
 /**
  * Context that includes the internal controllers and contexts used by the app.
@@ -65,9 +61,9 @@ export type FireCMSContext<UserType extends User = User, AuthControllerType exte
     authController: AuthControllerType;
 
     /**
-     * Builder for generating utility links for entities
+     * This controller holds the customization options for the CMS.
      */
-    entityLinkBuilder?: EntityLinkBuilder;
+    customizationController: CustomizationController;
 
     /**
      * Use this controller to display snackbars
@@ -80,49 +76,8 @@ export type FireCMSContext<UserType extends User = User, AuthControllerType exte
     userConfigPersistence?: UserConfigurationPersistence;
 
     /**
-     * Use plugins to modify the behaviour of the CMS.
-     * Currently, in ALPHA, and likely subject to change.
+     * Callback to send analytics events
      */
-    plugins?: FireCMSPlugin[];
+    analyticsController?: AnalyticsController;
 
-    /**
-     * Callback used to get analytics events from the CMS
-     */
-    onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
-
-    /**
-     * Record of custom form fields to be used in the CMS.
-     * You can use the key to reference the custom field in
-     * the `propertyConfig` prop of a property in a collection.
-     */
-    propertyConfigs: Record<string, PropertyConfig>;
-
-    /**
-     * List of additional custom views for entities.
-     * You can use the key to reference the custom view in
-     * the `entityViews` prop of a collection.
-     *
-     * You can also define an entity view from the UI.
-     */
-    entityViews?: EntityCustomView[];
-
-    /**
-     * Format of the dates in the CMS.
-     * Defaults to 'MMMM dd, yyyy, HH:mm:ss'
-     */
-    dateTimeFormat?: string;
-
-    /**
-     * Locale of the CMS, currently only affecting dates
-     */
-    locale?: Locale;
-
-    components?: {
-
-        /**
-         * Component to render when a reference is missing
-         */
-        missingReference?: React.ComponentType<{ path: string }>;
-
-    }
 };

@@ -4,7 +4,7 @@ import {
     EntityCollection,
     EntityCustomView,
     resolveEntityView,
-    useFireCMSContext,
+    useCustomizationController,
     User
 } from "@firecms/core";
 import {
@@ -45,7 +45,7 @@ export function SubcollectionsEditTab({
     parentCollectionIds?: string[];
 }) {
 
-    const { entityViews: contextEntityViews } = useFireCMSContext();
+    const { entityViews: contextEntityViews } = useCustomizationController();
 
     const [subcollectionToDelete, setSubcollectionToDelete] = React.useState<string | undefined>();
     const [addEntityViewDialogOpen, setAddEntityViewDialogOpen] = React.useState<boolean>(false);

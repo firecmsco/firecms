@@ -17,7 +17,7 @@ import {
 import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
 
 import { isHidden, isPropertyBuilder, isReadOnly, resolveProperty } from "../util";
-import { useFireCMSContext } from "../hooks";
+import { useCustomizationController } from "../hooks";
 import { Typography } from "@firecms/ui";
 import { getFieldConfig, getFieldId } from "../core";
 import { ErrorBoundary } from "../components";
@@ -81,9 +81,9 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
      autoFocus,
  }: PropertyFieldBindingProps<T, M>): ReactElement<PropertyFieldBindingProps<T, M>> {
 
-    const fireCMSContext = useFireCMSContext();
+    const customizationController = useCustomizationController();
 
-    const shouldAlwaysRerender = shouldPropertyReRender(property, fireCMSContext.plugins);
+    const shouldAlwaysRerender = shouldPropertyReRender(property, customizationController.plugins);
     // we use the standard Field for user defined fields, since it rebuilds
     // when there are changes in other values, in contrast to FastField
     const FieldComponent = shouldAlwaysRerender ? Field : FastField;
@@ -102,7 +102,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
                     values: fieldProps.form.values,
                     path: context.path,
                     entityId: context.entityId,
-                    fields: fireCMSContext.propertyConfigs
+                    fields: customizationController.propertyConfigs
                 });
 
                 if (resolvedProperty === null || isHidden(resolvedProperty)) {
@@ -114,9 +114,9 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
                         Component = resolvedProperty.Field as ComponentType<FieldProps<any>>;
                     }
                 } else {
-                    const propertyConfig = getFieldConfig(resolvedProperty, fireCMSContext.propertyConfigs);
+                    const propertyConfig = getFieldConfig(resolvedProperty, customizationController.propertyConfigs);
                     if (!propertyConfig) {
-                        console.log("INTERNAL: Could not find field config for property", { propertyKey, resolvedProperty, fields: fireCMSContext.propertyConfigs, propertyConfig });
+                        console.log("INTERNAL: Could not find field config for property", { propertyKey, resolvedProperty, fields: customizationController.propertyConfigs, propertyConfig });
                         throw new Error(`INTERNAL: Could not find field config for property ${propertyKey}`);
                     }
                     const configProperty = resolveProperty({
@@ -125,7 +125,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
                         values: fieldProps.form.values,
                         path: context.path,
                         entityId: context.entityId,
-                        fields: fireCMSContext.propertyConfigs
+                        fields: customizationController.propertyConfigs
                     });
                     Component = configProperty.Field as ComponentType<FieldProps<T>>;
                 }
@@ -189,7 +189,7 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
          fieldProps: FormikFieldProps<T>
      }) {
 
-    const { plugins } = useFireCMSContext();
+    const { plugins } = useCustomizationController();
 
     const customFieldProps: any = property.customProps;
     const value = fieldProps.field.value;

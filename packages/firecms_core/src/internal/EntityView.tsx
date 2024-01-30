@@ -22,6 +22,7 @@ import {
 import {
     saveEntityWithCallbacks,
     useAuthController,
+    useCustomizationController,
     useDataSource,
     useEntityFetch,
     useFireCMSContext,
@@ -98,6 +99,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
     const sideDialogContext = useSideDialogContext();
     const sideEntityController = useSideEntityController();
     const snackbarController = useSnackbarController();
+    const customizationController = useCustomizationController();
     const context = useFireCMSContext();
     const authController = useAuthController<UserType>();
 
@@ -297,7 +299,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
     };
 
     const resolvedEntityViews = customViews ? customViews
-            .map(e => resolveEntityView(e, context.entityViews))
+            .map(e => resolveEntityView(e, customizationController.entityViews))
             .filter(Boolean) as EntityCustomView[]
         : [];
     const customViewsView: React.ReactNode[] | undefined = customViews && resolvedEntityViews
@@ -411,7 +413,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
     }
 
     function buildForm() {
-        const plugins = context.plugins;
+        const plugins = customizationController.plugins;
         let form = <EntityForm
             status={status}
             path={path}

@@ -38,15 +38,17 @@ import { ReferencePreview } from "../../preview";
 import {
     saveEntityWithCallbacks,
     useAuthController,
-    useDataSource,
-    useFireCMSContext,
+    useCustomizationController,
+    useDataSource, useFireCMSContext,
     useLargeLayout,
     useNavigationController,
     useSideEntityController
 } from "../../hooks";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
-import { useDataSourceEntityCollectionTableController } from "../EntityCollectionTable/useDataSourceEntityCollectionTableController";
+import {
+    useDataSourceEntityCollectionTableController
+} from "../EntityCollectionTable/useDataSourceEntityCollectionTableController";
 import {
     AddIcon,
     Button,
@@ -72,6 +74,7 @@ import {
     editEntityAction
 } from "../EntityCollectionTable/internal/default_entity_actions";
 import { DeleteEntityDialog } from "../DeleteEntityDialog";
+import { useAnalyticsController } from "../../hooks/useAnalyticsController";
 
 const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
 
@@ -124,6 +127,8 @@ export const EntityCollectionView = React.memo(
         const sideEntityController = useSideEntityController();
         const authController = useAuthController();
         const userConfigPersistence = useUserConfigurationPersistence();
+        const analyticsController = useAnalyticsController();
+        const customizationController = useCustomizationController();
         const context = useFireCMSContext();
 
         const containerRef = React.useRef<HTMLDivElement>(null);
@@ -132,6 +137,11 @@ export const EntityCollectionView = React.memo(
             const userOverride = userConfigPersistence?.getCollectionConfig<M>(fullPath);
             return (userOverride ? mergeDeep(collectionProp, userOverride) : collectionProp) as EntityCollection<M>;
         }, [collectionProp, fullPath, userConfigPersistence?.getCollectionConfig]);
+
+        const collectionRef = React.useRef(collection);
+        useEffect(() => {
+            collectionRef.current = collection;
+        }, [collection]);
 
         const canCreateEntities = canCreateEntity(collection, authController, fullPathToCollectionSegments(fullPath), null);
         const [selectedNavigationEntity, setSelectedNavigationEntity] = useState<Entity<M> | undefined>(undefined);
@@ -152,11 +162,12 @@ export const EntityCollectionView = React.memo(
         }, [selectedNavigationEntity]);
 
         const checkInlineEditing = useCallback((entity?: Entity<any>): boolean => {
+            const collection = collectionRef.current;
             if (!canEditEntity(collection, authController, fullPathToCollectionSegments(fullPath), entity ?? null)) {
                 return false;
             }
             return collection.inlineEditing === undefined || collection.inlineEditing;
-        }, [collection, authController, fullPath]);
+        }, [authController, fullPath]);
 
         const selectionEnabled = collection.selectionEnabled === undefined || collection.selectionEnabled;
         const hoverRow = !checkInlineEditing();
@@ -178,7 +189,7 @@ export const EntityCollectionView = React.memo(
 
         const tableController = useDataSourceEntityCollectionTableController<M>({
             fullPath,
-            collection,
+            collection: collectionRef.current,
             entitiesDisplayedFirst: [],
             lastDeleteTimestamp
         });
@@ -191,8 +202,9 @@ export const EntityCollectionView = React.memo(
         }, [tableController.setPopupCell]);
 
         const onEntityClick = useCallback((clickedEntity: Entity<M>) => {
+            const collection = collectionRef.current;
             setSelectedNavigationEntity(clickedEntity);
-            context.onAnalyticsEvent?.("edit_entity_clicked", {
+            analyticsController.onAnalyticsEvent?.("edit_entity_clicked", {
                 path: clickedEntity.path,
                 entityId: clickedEntity.id
             });
@@ -203,10 +215,12 @@ export const EntityCollectionView = React.memo(
                 updateUrl: true,
                 onClose: unselectNavigatedEntity
             });
-        }, [fullPath, collection, sideEntityController]);
+        }, [unselectNavigatedEntity]);
 
         const onNewClick = useCallback(() => {
-            context.onAnalyticsEvent?.("new_entity_click", {
+
+            const collection = collectionRef.current;
+            analyticsController.onAnalyticsEvent?.("new_entity_click", {
                 path: fullPath
             });
             sideEntityController.open({
@@ -215,38 +229,31 @@ export const EntityCollectionView = React.memo(
                 updateUrl: true,
                 onClose: unselectNavigatedEntity
             });
-        }, [fullPath, collection, sideEntityController]);
+        }, [fullPath]);
 
-        const onSingleDeleteClick = useCallback((selectedEntity: Entity<any>) => {
-            context.onAnalyticsEvent?.("single_delete_dialog_open", {
-                path: fullPath
-            });
-            setDeleteEntityClicked(selectedEntity);
-        }, [context, fullPath]);
-
-        const onMultipleDeleteClick = useCallback(() => {
-            context.onAnalyticsEvent?.("multiple_delete_dialog_open", {
+        const onMultipleDeleteClick = () => {
+            analyticsController.onAnalyticsEvent?.("multiple_delete_dialog_open", {
                 path: fullPath
             });
             setDeleteEntityClicked(selectedEntities);
-        }, [context, fullPath, selectedEntities]);
+        };
 
-        const internalOnEntityDelete = useCallback((_path: string, entity: Entity<M>) => {
-            context.onAnalyticsEvent?.("single_entity_deleted", {
+        const internalOnEntityDelete = (_path: string, entity: Entity<M>) => {
+            analyticsController.onAnalyticsEvent?.("single_entity_deleted", {
                 path: fullPath
             });
             setSelectedEntities((selectedEntities) => selectedEntities.filter((e) => e.id !== entity.id));
             setLastDeleteTimestamp(Date.now());
-        }, [context, fullPath, setSelectedEntities]);
+        };
 
-        const internalOnMultipleEntitiesDelete = useCallback((_path: string, entities: Entity<M>[]) => {
-            context.onAnalyticsEvent?.("multiple_entities_deleted", {
+        const internalOnMultipleEntitiesDelete = (_path: string, entities: Entity<M>[]) => {
+            analyticsController.onAnalyticsEvent?.("multiple_entities_deleted", {
                 path: fullPath
             });
             setSelectedEntities([]);
             setDeleteEntityClicked(undefined);
             setLastDeleteTimestamp(Date.now());
-        }, [setSelectedEntities]);
+        };
 
         let AddColumnComponent: React.ComponentType<{
             fullPath: string,
@@ -255,8 +262,8 @@ export const EntityCollectionView = React.memo(
         }> | undefined
 
         // we are only using the first plugin that implements this
-        if (context?.plugins) {
-            AddColumnComponent = context.plugins.find(plugin => plugin.collectionView?.AddColumnComponent)?.collectionView?.AddColumnComponent;
+        if (customizationController?.plugins) {
+            AddColumnComponent = customizationController.plugins.find(plugin => plugin.collectionView?.AddColumnComponent)?.collectionView?.AddColumnComponent;
         }
 
         const onCollectionModifiedForUser = useCallback((path: string, partialCollection: PartialEntityCollection<M>) => {
@@ -271,11 +278,13 @@ export const EntityCollectionView = React.memo(
                                                 width,
                                                 key
                                             }: OnColumnResizeParams) => {
+
+            const collection = collectionRef.current;
             // Only for property columns
             if (!getPropertyInPath(collection.properties, key)) return;
             const localCollection = buildPropertyWidthOverwrite(key, width);
             onCollectionModifiedForUser(fullPath, localCollection);
-        }, [collection, onCollectionModifiedForUser, fullPath]);
+        }, [onCollectionModifiedForUser, fullPath]);
 
         const onSizeChanged = useCallback((size: CollectionSize) => {
             if (userConfigPersistence)
@@ -334,7 +343,7 @@ export const EntityCollectionView = React.memo(
         const resolvedCollection = useMemo(() => resolveCollection<M>({
             collection,
             path: fullPath,
-            fields: context.propertyConfigs
+            fields: customizationController.propertyConfigs
         }), [collection, fullPath]);
 
         const getPropertyFor = useCallback(({
@@ -357,9 +366,9 @@ export const EntityCollectionView = React.memo(
                 propertyValue,
                 values: entity.values,
                 entityId: entity.id,
-                fields: context.propertyConfigs
+                fields: customizationController.propertyConfigs
             });
-        }, [collection.properties, context.propertyConfigs, fullPath, resolvedCollection.properties]);
+        }, [collection.properties, customizationController.propertyConfigs, fullPath, resolvedCollection.properties]);
 
         const displayedColumnIds = useColumnIds(resolvedCollection, true);
 
@@ -448,7 +457,7 @@ export const EntityCollectionView = React.memo(
             const uncollapsedActions = entityActions.filter(a => a.collapsed === false);
             const actionsWidth = uncollapsedActions.length * (largeLayout ? 40 : 30);
             return (largeLayout ? (80 + actionsWidth) : (70 + actionsWidth)) + (collapsedActions.length > 0 ? (largeLayout ? 40 : 30) : 0);
-        }, [largeLayout, getActionsForEntity]);
+        }, [largeLayout]);
 
         const tableRowActionsBuilder = useCallback(({
                                                         entity,
@@ -500,8 +509,7 @@ export const EntityCollectionView = React.memo(
                             setPopOverOpen(true);
                             e.stopPropagation();
                         }
-                        : undefined}
-                >
+                        : undefined}>
                     {`${collection.name}`}
                 </Typography>
 
@@ -522,19 +530,20 @@ export const EntityCollectionView = React.memo(
 
         </Popover>;
 
-        function buildAdditionalHeaderWidget({
-                                                 property,
-                                                 propertyKey,
-                                                 onHover
-                                             }: {
+        const buildAdditionalHeaderWidget = useCallback(({
+                                                             property,
+                                                             propertyKey,
+                                                             onHover
+                                                         }: {
             property: ResolvedProperty,
             propertyKey: string,
             onHover: boolean
-        }) {
-            if (!context.plugins)
+        }) => {
+            const collection = collectionRef.current;
+            if (!customizationController.plugins)
                 return null;
             return <>
-                {context.plugins.filter(plugin => plugin.collectionView?.HeaderAction)
+                {customizationController.plugins.filter(plugin => plugin.collectionView?.HeaderAction)
                     .map((plugin, i) => {
                         const HeaderAction = plugin.collectionView!.HeaderAction!;
                         return <HeaderAction
@@ -547,7 +556,7 @@ export const EntityCollectionView = React.memo(
                             parentCollectionIds={parentCollectionIds ?? []}/>;
                     })}
             </>;
-        }
+        }, [customizationController.plugins, fullPath, parentCollectionIds]);
 
         const addColumnComponentInternal = AddColumnComponent
             ? function () {
@@ -562,13 +571,13 @@ export const EntityCollectionView = React.memo(
         const [textSearchInitialised, setTextSearchInitialised] = useState<boolean>(false);
         let onTextSearchClick: (() => void) | undefined;
         let textSearchEnabled = Boolean(collection.textSearchEnabled);
-        if (context?.plugins) {
-            const addTextSearchClickListener = context.plugins?.find(p => Boolean(p.collectionView?.onTextSearchClick));
+        if (customizationController?.plugins) {
+            const addTextSearchClickListener = customizationController.plugins?.find(p => Boolean(p.collectionView?.onTextSearchClick));
 
             onTextSearchClick = addTextSearchClickListener
                 ? () => {
                     setTextSearchLoading(true);
-                    Promise.all(context.plugins?.map(p => {
+                    Promise.all(customizationController.plugins?.map(p => {
                         if (p.collectionView?.onTextSearchClick)
                             return p.collectionView.onTextSearchClick({ context, path: resolvedFullPath, collection, parentCollectionIds });
                         return Promise.resolve(true);
@@ -580,7 +589,7 @@ export const EntityCollectionView = React.memo(
                 }
                 : undefined;
 
-            context.plugins?.forEach(p => {
+            customizationController.plugins?.forEach(p => {
                 if (!textSearchEnabled)
                     if (p.collectionView?.showTextSearchBar) {
                         textSearchEnabled = p.collectionView.showTextSearchBar({ context, path: resolvedFullPath, collection, parentCollectionIds });
@@ -675,9 +684,24 @@ export const EntityCollectionView = React.memo(
 
             </div>
         );
-    }, equal) as React.FunctionComponent<EntityCollectionViewProps<any>>
+    }, (a, b) => {
+        return equal(a.fullPath, b.fullPath) &&
+            equal(a.parentCollectionIds, b.parentCollectionIds) &&
+            equal(a.isSubCollection, b.isSubCollection) &&
+            equal(a.className, b.className) &&
+            equal(a.properties, b.properties) &&
+            equal(a.hideIdFromCollection, b.hideIdFromCollection) &&
+            equal(a.inlineEditing, b.inlineEditing) &&
+            equal(a.selectionEnabled, b.selectionEnabled) &&
+            equal(a.selectionController, b.selectionController) &&
+            equal(a.Actions, b.Actions) &&
+            equal(a.defaultSize, b.defaultSize) &&
+            equal(a.textSearchEnabled, b.textSearchEnabled) &&
+            equal(a.additionalFields, b.additionalFields) &&
+            equal(a.forceFilter, b.forceFilter);
+    }) as React.FunctionComponent<EntityCollectionViewProps<any>>
 
-export function useSelectionController<M extends Record<string, any>>(): SelectionController<M> {
+export function useSelectionController<M extends Record<string, any> = any>(): SelectionController<M> {
 
     const [selectedEntities, setSelectedEntities] = useState<Entity<M>[]>([]);
 

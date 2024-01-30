@@ -2,7 +2,7 @@ import React from "react";
 import { FieldProps } from "../../types";
 import { FieldHelperText } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
-import { useClearRestoreValue, useFireCMSContext } from "../../hooks";
+import { useClearRestoreValue } from "../../hooks";
 import { ExpandablePanel } from "@firecms/ui";
 import { getIconForProperty } from "../../util";
 import { LabelWithIcon } from "../../components";
@@ -29,7 +29,6 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
                                                                         disabled
                                                                     }: FieldProps<T, any, any>) {
 
-    const { propertyConfigs } = useFireCMSContext();
     if (!Array.isArray(property.resolvedProperties))
         throw Error("ArrayCustomShapedFieldBinding misconfiguration. Property `of` not set");
 

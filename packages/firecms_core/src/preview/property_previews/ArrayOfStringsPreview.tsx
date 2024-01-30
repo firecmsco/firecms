@@ -3,7 +3,7 @@ import { ResolvedStringProperty } from "../../types";
 
 import { resolveArrayProperty } from "../../util";
 import { PropertyPreviewProps, StringPropertyPreview } from "../../preview";
-import { useFireCMSContext } from "../../hooks";
+import { useCustomizationController } from "../../hooks";
 import { ErrorBoundary } from "../../components";
 
 /**
@@ -17,12 +17,12 @@ export function ArrayOfStringsPreview({
                                           size
                                       }: PropertyPreviewProps<string[]>) {
 
-    const fireCMSContext = useFireCMSContext();
+    const customizationController = useCustomizationController();
     const property = resolveArrayProperty({
         propertyKey,
         property: inputProperty,
         propertyValue: value,
-        fields: fireCMSContext.propertyConfigs
+        fields: customizationController.propertyConfigs
     });
 
     if (Array.isArray(property.of)) {
@@ -45,7 +45,7 @@ export function ArrayOfStringsPreview({
                             <StringPropertyPreview propertyKey={propertyKey}
                                                    property={stringProperty}
                                                    value={v}
-                                                   // entity={entity}
+                                // entity={entity}
                                                    size={size}/>
                         </ErrorBoundary>
                     </div>

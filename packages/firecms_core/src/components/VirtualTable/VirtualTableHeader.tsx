@@ -106,7 +106,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                         <div
                             className={`flex items-center justify-${column.headerAlign} flex-row`}>
 
-                            {column.icon && column.icon(onHover || openFilter)}
+                            {column.icon}
 
                             <div
                                 className="truncate -webkit-box w-full mx-1 overflow-hidden"

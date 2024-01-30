@@ -72,6 +72,8 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, Use
 
     let updatedValues: Partial<EntityValues<M>>;
 
+    const customizationController = context.customizationController;
+
     const resolvedPath = context.navigation.resolveAliasesFrom(path);
 
     const callbacks = collection.callbacks;
@@ -82,7 +84,7 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, Use
                 path,
                 values: previousValues as EntityValues<M>,
                 entityId,
-                fields: context.propertyConfigs
+                fields: customizationController.propertyConfigs
             });
             updatedValues = await callbacks.onPreSave({
                 collection: resolvedCollection,
@@ -119,7 +121,7 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, Use
                     path,
                     values: updatedValues as EntityValues<M>,
                     entityId,
-                    fields: context.propertyConfigs
+                    fields: customizationController.propertyConfigs
                 });
                 callbacks.onSaveSuccess({
                     collection: resolvedCollection,
@@ -147,7 +149,7 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, Use
                     path,
                     values: updatedValues as EntityValues<M>,
                     entityId,
-                    fields: context.propertyConfigs
+                    fields: customizationController.propertyConfigs
                 });
                 callbacks.onSaveFailure({
                     collection: resolvedCollection,

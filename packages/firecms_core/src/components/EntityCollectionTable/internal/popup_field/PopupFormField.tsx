@@ -23,7 +23,7 @@ import { ErrorView, OnCellValueChangeParams } from "../../../../components";
 import { getPropertyInPath, isReadOnly, resolveCollection } from "../../../../util";
 import { Button, ClearIcon, DialogActions, IconButton, Typography } from "@firecms/ui";
 import { PropertyFieldBinding } from "../../../../form";
-import { useDataSource, useFireCMSContext } from "../../../../hooks";
+import { useCustomizationController, useFireCMSContext } from "../../../../hooks";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     entity?: Entity<M>;
@@ -65,6 +65,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
     // const dataSource = useDataSource();
     const fireCMSContext = useFireCMSContext();
+    const customizationController = useCustomizationController();
 
     const [savingError, setSavingError] = React.useState<any>();
     const [popupLocation, setPopupLocation] = useState<{
@@ -99,7 +100,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             path,
             values: internalValue,
             entityId,
-            fields: fireCMSContext.propertyConfigs
+            fields: customizationController.propertyConfigs
         })
         : undefined;
 
@@ -315,7 +316,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                         </div>
                     </>;
 
-                    const plugins = fireCMSContext.plugins;
+                    const plugins = customizationController.plugins;
                     if (plugins) {
                         // const formController: FormContext<M> = {
                         //     values,

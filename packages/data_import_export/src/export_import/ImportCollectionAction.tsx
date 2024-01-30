@@ -6,11 +6,10 @@ import {
     getFieldConfig,
     getPropertiesWithPropertiesOrder,
     getPropertyInPath,
-    Properties,
     Property,
     resolveCollection,
     ResolvedProperties,
-    useFireCMSContext,
+    useCustomizationController,
     User,
     useSelectionController,
     useSnackbarController
@@ -43,7 +42,7 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
                                                                                                  collectionEntitiesCount,
                                                                                              }: CollectionActionsProps<M, UserType>
 ) {
-    const context = useFireCMSContext();
+    const customizationController = useCustomizationController();
 
     const snackbarController = useSnackbarController();
 
@@ -94,7 +93,7 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
     const resolvedCollection = resolveCollection({
         collection,
         path,
-        fields: context.propertyConfigs
+        fields: customizationController.propertyConfigs
     });
 
     const properties = getPropertiesWithPropertiesOrder<M>(resolvedCollection.properties, resolvedCollection.propertiesOrder as Extract<keyof M, string>[]) as ResolvedProperties<M>;
@@ -172,7 +171,7 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
                 </>}
 
                 {step === "preview" && <ImportDataPreview importConfig={importConfig}
-                                                          properties={properties as Properties<M>}
+                                                          properties={properties}
                                                           propertiesOrder={propertiesOrder}/>}
 
                 {step === "import_data_saving" && importConfig &&
@@ -326,7 +325,7 @@ export function PropertySelectEntry({
     level?: number;
 }) {
 
-    const { propertyConfigs } = useFireCMSContext();
+    const { propertyConfigs } = useCustomizationController();
     const widget = getFieldConfig(property, propertyConfigs);
 
     return <div
@@ -369,7 +368,7 @@ export function ImportDataPreview<M extends Record<string, any>>({
                                                                      propertiesOrder
                                                                  }: {
     importConfig: ImportConfig,
-    properties: Properties<M>,
+    properties: ResolvedProperties<M>,
     propertiesOrder: Extract<keyof M, string>[]
 }) {
 

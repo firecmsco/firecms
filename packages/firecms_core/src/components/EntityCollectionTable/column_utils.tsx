@@ -22,11 +22,11 @@ export interface PropertiesToColumnsParams<M extends Record<string, any>> {
     sortable?: boolean;
     forceFilter?: FilterValues<keyof M extends string ? keyof M : never>;
     disabledFilter?: boolean;
-    AdditionalHeaderWidget?: (props: {
+    AdditionalHeaderWidget?: React.ComponentType<{
         property: ResolvedProperty,
         propertyKey: string,
         onHover: boolean,
-    }) => React.ReactNode;
+    }>;
 }
 
 export function propertiesToColumns<M extends Record<string, any>>({ properties, sortable, forceFilter, disabledFilter, AdditionalHeaderWidget }: PropertiesToColumnsParams<M>): VirtualTableColumn[] {
@@ -43,7 +43,7 @@ export function propertiesToColumns<M extends Record<string, any>>({ properties,
             return {
                 key: key as string,
                 align: getTableCellAlignment(property),
-                icon: (hoverOrOpen) => getIconForProperty(property, "small"),
+                icon: getIconForProperty(property, "small"),
                 title: property.name ?? key as string,
                 sortable: sortable && (forceFilter ? Object.keys(forceFilter).includes(key) : true),
                 filter: !disabledFilter && filterable,

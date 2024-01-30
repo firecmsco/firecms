@@ -5,8 +5,8 @@ import { EntityCollectionTable } from "./EntityCollectionTable";
 import { EntityCollectionRowActions } from "./EntityCollectionTable/EntityCollectionRowActions";
 import {
     useAuthController,
+    useCustomizationController,
     useDataSource,
-    useFireCMSContext,
     useLargeLayout,
     useNavigationController,
     useSideEntityController
@@ -15,9 +15,12 @@ import { ErrorView } from "./ErrorView";
 import { AddIcon, Button, DialogActions, Typography } from "@firecms/ui";
 import { canCreateEntity, fullPathToCollectionSegments, resolveCollection } from "../util";
 import { useSelectionController } from "./EntityCollectionView/EntityCollectionView";
-import { useDataSourceEntityCollectionTableController } from "./EntityCollectionTable/useDataSourceEntityCollectionTableController";
+import {
+    useDataSourceEntityCollectionTableController
+} from "./EntityCollectionTable/useDataSourceEntityCollectionTableController";
 import { useColumnIds } from "./EntityCollectionView/useColumnsIds";
 import { useSideDialogContext } from "../core";
+import { useAnalyticsController } from "../hooks/useAnalyticsController";
 
 /**
  * @group Components
@@ -101,7 +104,8 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
     const sideDialogContext = useSideDialogContext();
     const sideEntityController = useSideEntityController();
     const navigation = useNavigationController();
-    const context = useFireCMSContext();
+    const analyticsController = useAnalyticsController();
+    const customizationController = useCustomizationController();
 
     const fullPath = navigation.resolveAliasesFrom(pathInput);
 
@@ -142,7 +146,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
     }, [dataSource, fullPath, selectedEntityIdsProp, collection, selectionController.setSelectedEntities]);
 
     const onClear = () => {
-        context.onAnalyticsEvent?.("reference_selection_clear", {
+        analyticsController.onAnalyticsEvent?.("reference_selection_clear", {
             path: fullPath
         });
         selectionController.setSelectedEntities([]);
@@ -158,7 +162,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
         let newValue;
         const selectedEntities = selectionController.selectedEntities;
 
-        context.onAnalyticsEvent?.("reference_selection_toggle", {
+        analyticsController.onAnalyticsEvent?.("reference_selection_toggle", {
             path: fullPath,
             entityId: entity.id
         });
@@ -182,7 +186,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
         console.debug("ReferenceSelectionInner onEntityClick", entity);
 
         if (!multiselect && onSingleEntitySelected) {
-            context.onAnalyticsEvent?.("reference_selected_single", {
+            analyticsController.onAnalyticsEvent?.("reference_selected_single", {
                 path: fullPath,
                 entityId: entity.id
             });
@@ -195,7 +199,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
 
     // create a new entity from within the reference dialog
     const onNewClick = () => {
-        context.onAnalyticsEvent?.("reference_selection_new_entity", {
+        analyticsController.onAnalyticsEvent?.("reference_selection_new_entity", {
             path: fullPath
         });
         sideEntityController.open({
@@ -251,8 +255,8 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
         collection: collection,
         path: fullPath,
         values: {},
-        fields: context.propertyConfigs
-    }), [collection, context.propertyConfigs, fullPath]);
+        fields: customizationController.propertyConfigs
+    }), [collection, customizationController.propertyConfigs, fullPath]);
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const displayedColumnIds = useColumnIds(resolvedCollection, false);

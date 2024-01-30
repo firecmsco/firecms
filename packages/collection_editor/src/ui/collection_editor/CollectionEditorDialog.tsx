@@ -18,7 +18,7 @@ import {
     removeUndefined,
     TopNavigationResult,
     useAuthController,
-    useFireCMSContext,
+    useCustomizationController,
     useNavigationController,
     User,
     useSnackbarController
@@ -161,7 +161,7 @@ export function CollectionEditorDialogInternal<M extends {
    }
 ) {
 
-    const { propertyConfigs } = useFireCMSContext();
+    const { propertyConfigs } = useCustomizationController();
     const navigation = useNavigationController();
     const {
         topLevelNavigation,

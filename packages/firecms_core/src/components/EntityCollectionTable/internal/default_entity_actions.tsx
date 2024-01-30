@@ -14,7 +14,7 @@ export const editEntityAction: EntityAction = {
                 unhighlightEntity
             }): Promise<void> {
         highlightEntity?.(entity);
-        context.onAnalyticsEvent?.("entity_click", {
+        context.analyticsController?.onAnalyticsEvent?.("entity_click", {
             path: entity.path,
             entityId: entity.id
         });
@@ -40,7 +40,7 @@ export const copyEntityAction: EntityAction = {
                 unhighlightEntity
             }): Promise<void> {
         highlightEntity?.(entity);
-        context.onAnalyticsEvent?.("copy_entity_click", {
+        context.analyticsController?.onAnalyticsEvent?.("copy_entity_click", {
             path: entity.path,
             entityId: entity.id
         });
@@ -107,7 +107,7 @@ export const deleteEntityAction: EntityAction = {
                     callbacks={collection.callbacks}
                     open={open}
                     onEntityDelete={() => {
-                        context.onAnalyticsEvent?.("single_entity_deleted", {
+                        context.analyticsController?.onAnalyticsEvent?.("single_entity_deleted", {
                             path: fullPath
                         });
                         selectionController?.setSelectedEntities(selectionController.selectedEntities.filter(e => e.id !== entity.id));

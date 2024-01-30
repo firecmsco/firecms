@@ -1,16 +1,6 @@
 import React from "react";
-import {
-    ErrorBoundary,
-    FieldConfigBadge,
-    getFieldConfig,
-    Property,
-    useFireCMSContext
-} from "@firecms/core";
-import {
-    EditIcon,
-    IconButton,
-    TextField,
-} from "@firecms/ui";
+import { ErrorBoundary, FieldConfigBadge, getFieldConfig, Property, useCustomizationController } from "@firecms/core";
+import { EditIcon, IconButton, TextField, } from "@firecms/ui";
 
 export function ImportNewPropertyFieldPreview({
                                                   propertyKey,
@@ -28,7 +18,7 @@ export function ImportNewPropertyFieldPreview({
     propertyTypeView?: React.ReactNode
 }) {
 
-    const { propertyConfigs } = useFireCMSContext();
+    const { propertyConfigs } = useCustomizationController();
     const widget = property ? getFieldConfig(property, propertyConfigs) : null;
 
     return <ErrorBoundary>

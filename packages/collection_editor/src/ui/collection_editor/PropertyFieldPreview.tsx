@@ -5,7 +5,7 @@ import {
     isPropertyBuilder,
     Property,
     PropertyOrBuilder,
-    useFireCMSContext,
+    useCustomizationController,
 } from "@firecms/core";
 import {
     cardClickableMixin,
@@ -17,7 +17,6 @@ import {
     RemoveCircleIcon,
     Typography,
 } from "@firecms/ui";
-
 
 import { editableProperty } from "../../utils/entities";
 
@@ -37,7 +36,7 @@ export function PropertyFieldPreview({
     onClick?: () => void
 }) {
 
-    const { propertyConfigs } = useFireCMSContext();
+    const { propertyConfigs } = useCustomizationController();
 
     const propertyConfig = getFieldConfig(property, propertyConfigs);
     const disabled = !editableProperty(property);
@@ -119,7 +118,7 @@ export function NonEditablePropertyPreview({
     property?: PropertyOrBuilder
 }) {
 
-    const { propertyConfigs } = useFireCMSContext();
+    const { propertyConfigs } = useCustomizationController();
 
     const propertyConfig = !isPropertyBuilder(property) && property ? getFieldConfig(property, propertyConfigs) : undefined;
 

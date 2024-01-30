@@ -3,8 +3,9 @@ import { CMSView, EntityCollection } from "../types";
 import { hashString } from "./hash";
 import { coolIconKeys, Icon, iconKeys } from "@firecms/ui";
 import { slugify } from "./strings";
+import equal from "react-fast-compare"
 
-export function getIcon(iconKey?: string, className?:string): React.ReactElement | undefined {
+export function getIcon(iconKey?: string, className?: string): React.ReactElement | undefined {
     if (!iconKey) return undefined;
     iconKey = slugify(iconKey);
     if (!(iconKey in iconKeysMap)) {
@@ -13,31 +14,33 @@ export function getIcon(iconKey?: string, className?:string): React.ReactElement
     return iconKey in iconKeysMap ? <Icon iconKey={iconKey} size={"medium"} className={className}/> : undefined;
 }
 
-export function getIconForView(collectionOrView: EntityCollection | CMSView, className?:string): React.ReactElement {
+export const IconForView = React.memo(
+    function IconForView({ collectionOrView, className }: { collectionOrView: EntityCollection | CMSView, className?: string }): React.ReactElement {
+        const icon = getIcon(collectionOrView.icon, className);
+        if (collectionOrView?.icon && icon)
+            return icon;
 
-    const icon = getIcon(collectionOrView.icon, className);
-    if (collectionOrView?.icon && icon)
-        return icon;
+        let slugName = slugify(("singularName" in collectionOrView ? collectionOrView.singularName : undefined) ?? collectionOrView.name);
 
-    let slugName = slugify(("singularName" in collectionOrView ? collectionOrView.singularName : undefined) ?? collectionOrView.name);
-
-    let key: string | undefined;
-    if (slugName in iconKeysMap)
-        key = slugName;
-
-    if (!key) {
-        slugName = slugify(collectionOrView.path);
+        let key: string | undefined;
         if (slugName in iconKeysMap)
             key = slugName;
-    }
 
-    const iconsCount = coolIconKeys.length;
+        if (!key) {
+            slugName = slugify(collectionOrView.path);
+            if (slugName in iconKeysMap)
+                key = slugName;
+        }
 
-    if (!key)
-        key = coolIconKeys[hashString(collectionOrView.path) % iconsCount];
+        const iconsCount = coolIconKeys.length;
 
-    return <Icon iconKey={key} size={"medium"} className={className}/>;
-}
+        if (!key)
+            key = coolIconKeys[hashString(collectionOrView.path) % iconsCount];
+
+        return <Icon iconKey={key} size={"medium"} className={className}/>;
+    }, (prevProps, nextProps) => {
+        return equal(prevProps.collectionOrView.icon, nextProps.collectionOrView.icon);
+    });
 
 const iconKeysMap: Record<string, string> = iconKeys.reduce((acc: Record<string, string>, key) => {
     acc[key] = key;

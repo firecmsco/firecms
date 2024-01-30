@@ -25,7 +25,13 @@ import {
     isReadOnly,
     resolveCollection
 } from "../util";
-import { useAuthController, useDataSource, useFireCMSContext, useSideEntityController } from "../hooks";
+import {
+    useAuthController,
+    useCustomizationController,
+    useDataSource,
+    useFireCMSContext,
+    useSideEntityController
+} from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
 import { Alert, Button, cn, DialogActions, IconButton, Typography } from "@firecms/ui";
@@ -34,6 +40,7 @@ import {
     copyEntityAction,
     deleteEntityAction
 } from "../components/EntityCollectionTable/internal/default_entity_actions";
+import { useAnalyticsController } from "../hooks/useAnalyticsController";
 
 /**
  * @group Components
@@ -148,15 +155,19 @@ function EntityFormInternal<M extends Record<string, any>>({
                                                                onIdUpdateError
                                                            }: EntityFormProps<M>) {
 
+    const analyticsController = useAnalyticsController();
+
+    const customizationController = useCustomizationController();
+
     const context = useFireCMSContext();
     const dataSource = useDataSource();
-    const plugins = context.plugins;
+    const plugins = customizationController.plugins;
 
     const initialResolvedCollection = useMemo(() => resolveCollection({
         collection: inputCollection,
         path,
         values: entity?.values,
-        fields: context.propertyConfigs
+        fields: customizationController.propertyConfigs
     }), [entity?.values, path]);
 
     const mustSetCustomId: boolean = (status === "new" || status === "copy") &&
@@ -219,7 +230,7 @@ function EntityFormInternal<M extends Record<string, any>>({
         entityId,
         values: internalValues,
         previousValues: initialValues,
-        fields: context.propertyConfigs
+        fields: customizationController.propertyConfigs
     });
 
     const onIdUpdate = inputCollection.callbacks?.onIdUpdate;
@@ -274,7 +285,7 @@ function EntityFormInternal<M extends Record<string, any>>({
             const eventName: CMSAnalyticsEvent = status === "new"
                 ? "new_entity_saved"
                 : (status === "copy" ? "entity_copied" : (status === "existing" ? "entity_edited" : "unmapped_event"));
-            context.onAnalyticsEvent?.(eventName, { path });
+            analyticsController.onAnalyticsEvent?.(eventName, { path });
             initialValuesRef.current = values;
         })
             .catch(e => {

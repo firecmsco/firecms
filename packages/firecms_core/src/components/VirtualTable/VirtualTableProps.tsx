@@ -1,5 +1,5 @@
 import React from "react";
-import { ResolvedProperty, WhereFilterOp } from "../../types";
+import { WhereFilterOp } from "../../types";
 import { FilterFormFieldProps } from "./VirtualTableHeader";
 
 export type OnRowClickParams<T extends Record<string, any>> = {
@@ -188,7 +188,7 @@ export interface VirtualTableColumn<CustomProps extends any = any> {
     /**
      * Icon displayed in the header
      */
-    icon?: (hoverOrOpen: boolean) => React.ReactNode;
+    icon?: React.ReactNode;
 
     /**
      *

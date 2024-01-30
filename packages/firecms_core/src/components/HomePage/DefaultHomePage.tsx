@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { useFireCMSContext, useNavigationController } from "../../hooks";
+import { useCustomizationController, useFireCMSContext, useNavigationController } from "../../hooks";
 import { PluginGenericProps, PluginHomePageAdditionalCardsProps } from "../../types";
 
 import { toArray } from "../../util/arrays";
@@ -46,6 +46,7 @@ export function DefaultHomePage({
 }) {
 
     const context = useFireCMSContext();
+    const customizationController = useCustomizationController();
     const navigationController = useNavigationController();
 
     if (!navigationController.topLevelNavigation)
@@ -90,12 +91,12 @@ export function DefaultHomePage({
     let additionalPluginChildrenStart: React.ReactNode | undefined;
     let additionalPluginChildrenEnd: React.ReactNode | undefined;
     let additionalPluginSections: React.ReactNode | undefined;
-    if (context.plugins) {
+    if (customizationController.plugins) {
         const sectionProps: PluginGenericProps = {
             context
         };
         additionalPluginSections = <>
-            {context.plugins.filter(plugin => plugin.homePage?.includeSection)
+            {customizationController.plugins.filter(plugin => plugin.homePage?.includeSection)
                 .map((plugin, i) => {
                     const section = plugin.homePage!.includeSection!(sectionProps)
                     return (
@@ -108,14 +109,14 @@ export function DefaultHomePage({
                 })}
         </>;
         additionalPluginChildrenStart = <div className={"flex flex-col gap-2"}>
-            {context.plugins.filter(plugin => plugin.homePage?.additionalChildrenStart)
+            {customizationController.plugins.filter(plugin => plugin.homePage?.additionalChildrenStart)
                 .map((plugin, i) => {
                     return <div key={`plugin_children_start_${i}`}>{plugin.homePage!.additionalChildrenStart}</div>;
                 })}
         </div>;
 
         additionalPluginChildrenEnd = <div className={"flex flex-col gap-2"}>
-            {context.plugins.filter(plugin => plugin.homePage?.additionalChildrenEnd)
+            {customizationController.plugins.filter(plugin => plugin.homePage?.additionalChildrenEnd)
                 .map((plugin, i) => {
                     return <div key={`plugin_children_start_${i}`}>{plugin.homePage!.additionalChildrenEnd}</div>;
                 })}
@@ -152,8 +153,8 @@ export function DefaultHomePage({
                         context
                     };
 
-                    if (context.plugins) {
-                        context.plugins.forEach(plugin => {
+                    if (customizationController.plugins) {
+                        customizationController.plugins.forEach(plugin => {
                             if (plugin.homePage?.AdditionalCards) {
                                 AdditionalCards.push(...toArray(plugin.homePage?.AdditionalCards));
                             }
@@ -181,7 +182,7 @@ export function DefaultHomePage({
                                                         : entry.type === "view"
                                                             ? "home_navigate_to_view"
                                                             : "unmapped_event";
-                                                context.onAnalyticsEvent?.(event, { path: entry.path });
+                                                context.analyticsController?.onAnalyticsEvent?.(event, { path: entry.path });
                                             }}
                                         />
                                     </div>

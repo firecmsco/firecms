@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import { EntityCollection, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
 import { AuthControllerContext, ModeControllerContext } from "../contexts";
 import { useBuildSideEntityController } from "../internal/useBuildSideEntityController";
-import { FireCMSContextInstance, useFireCMSContext, useModeController } from "../hooks";
+import { useCustomizationController, useFireCMSContext, useModeController } from "../hooks";
 import { useBuildSideDialogsController } from "../internal/useBuildSideDialogsController";
 import { ErrorView } from "../components";
 import { StorageSourceContext } from "../contexts/StorageSourceContext";
@@ -17,6 +17,9 @@ import { CenteredView } from "@firecms/ui";
 import { DialogsProvider } from "../contexts/DialogsProvider";
 import { useBuildNavigationController } from "../internal/useBuildNavigationController";
 import { useBuildDataSource } from "../internal/useBuildDataSource";
+import { useBuildCustomizationController } from "../internal/useBuildCustomizationController";
+import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext";
+import { AnalyticsContext } from "../contexts/AnalyticsContext";
 
 /**
  * If you are using independent components of the CMS
@@ -82,16 +85,19 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
 
     const loading = authController.initialLoading || navigationController.loading || pluginsLoading;
 
-    const context: Partial<FireCMSContext> = useMemo(() => ({
-        entityLinkBuilder,
+    const customizationController = useBuildCustomizationController({
         dateTimeFormat,
         locale,
+        entityLinkBuilder,
         plugins,
-        onAnalyticsEvent,
         entityViews: entityViews ?? [],
         propertyConfigs: propertyConfigs ?? {},
         components
-    }), [dateTimeFormat, locale, plugins, entityViews, propertyConfigs, components]);
+    })
+
+    const analyticsController = useMemo(() => ({
+        onAnalyticsEvent
+    }), []);
 
     if (navigationController.navigationLoadingError) {
         return (
@@ -115,35 +121,37 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
 
     return (
         <ModeControllerContext.Provider value={modeController}>
-            <FireCMSContextInstance.Provider value={context}>
-                <UserConfigurationPersistenceContext.Provider
-                    value={userConfigPersistence}>
-                    <StorageSourceContext.Provider
-                        value={storageSource}>
-                        <DataSourceContext.Provider
-                            value={dataSource}>
-                            <AuthControllerContext.Provider
-                                value={authController}>
-                                <SideDialogsControllerContext.Provider
-                                    value={sideDialogsController}>
-                                    <SideEntityControllerContext.Provider
-                                        value={sideEntityController}>
-                                        <NavigationContext.Provider
-                                            value={navigationController}>
+            <AnalyticsContext.Provider value={analyticsController}>
+                <CustomizationControllerContext.Provider value={customizationController}>
+                    <UserConfigurationPersistenceContext.Provider
+                        value={userConfigPersistence}>
+                        <StorageSourceContext.Provider
+                            value={storageSource}>
+                            <DataSourceContext.Provider
+                                value={dataSource}>
+                                <AuthControllerContext.Provider
+                                    value={authController}>
+                                    <SideDialogsControllerContext.Provider
+                                        value={sideDialogsController}>
+                                        <SideEntityControllerContext.Provider
+                                            value={sideEntityController}>
+                                            <NavigationContext.Provider
+                                                value={navigationController}>
                                                 <DialogsProvider>
                                                     <FireCMSInternal
                                                         loading={loading}>
                                                         {children}
                                                     </FireCMSInternal>
                                                 </DialogsProvider>
-                                        </NavigationContext.Provider>
-                                    </SideEntityControllerContext.Provider>
-                                </SideDialogsControllerContext.Provider>
-                            </AuthControllerContext.Provider>
-                        </DataSourceContext.Provider>
-                    </StorageSourceContext.Provider>
-                </UserConfigurationPersistenceContext.Provider>
-            </FireCMSContextInstance.Provider>
+                                            </NavigationContext.Provider>
+                                        </SideEntityControllerContext.Provider>
+                                    </SideDialogsControllerContext.Provider>
+                                </AuthControllerContext.Provider>
+                            </DataSourceContext.Provider>
+                        </StorageSourceContext.Provider>
+                    </UserConfigurationPersistenceContext.Provider>
+                </CustomizationControllerContext.Provider>
+            </AnalyticsContext.Provider>
         </ModeControllerContext.Provider>
     );
 
@@ -161,12 +169,14 @@ function FireCMSInternal({
 }) {
 
     const context = useFireCMSContext();
+    const customizationController = useCustomizationController();
+
     let childrenResult = children({
         context,
         loading
     });
 
-    const plugins = context.plugins;
+    const plugins = customizationController.plugins;
     if (!loading && plugins) {
         plugins.forEach((plugin: FireCMSPlugin) => {
             if (plugin.provider) {

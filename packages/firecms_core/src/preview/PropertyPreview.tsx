@@ -13,7 +13,7 @@ import {
 import { resolveProperty } from "../util";
 
 import { PropertyPreviewProps } from "./PropertyPreviewProps";
-import { useFireCMSContext } from "../hooks";
+import { useCustomizationController } from "../hooks";
 import { EmptyValue } from "./components/EmptyValue";
 import { UrlComponentPreview } from "./components/UrlComponentPreview";
 import { StorageThumbnail } from "./components/StorageThumbnail";
@@ -37,7 +37,8 @@ import { ErrorView } from "../components";
  */
 export const PropertyPreview = React.memo(function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T>) {
 
-    const fireCMSContext = useFireCMSContext();
+    const customizationController = useCustomizationController();
+
     let content: React.ReactNode | any;
     const {
         property: inputProperty,
@@ -53,7 +54,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
         propertyKey,
         propertyOrBuilder: inputProperty,
         propertyValue: value,
-        fields: fireCMSContext.propertyConfigs
+        fields: customizationController.propertyConfigs
     });
 
     if (value === undefined || property === null) {

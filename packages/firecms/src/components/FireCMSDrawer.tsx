@@ -2,22 +2,12 @@ import React, { useCallback } from "react";
 import {
     DrawerNavigationItem,
     DrawerProps,
-    getIconForView,
+    IconForView,
     TopNavigationResult,
     useAuthController,
     useNavigationController
 } from "@firecms/core";
-import {
-    AddIcon,
-    Button,
-    cn,
-    IconButton,
-    Menu,
-    MenuItem,
-    MoreVertIcon,
-    Tooltip,
-    Typography,
-} from "@firecms/ui";
+import { AddIcon, Button, cn, IconButton, Menu, MenuItem, MoreVertIcon, Tooltip, Typography, } from "@firecms/ui";
 import { useCollectionEditorController } from "@firecms/collection_editor";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_VIEWS, RESERVED_GROUPS } from "../utils";
@@ -27,10 +17,10 @@ import { ADMIN_VIEWS, RESERVED_GROUPS } from "../utils";
  * @group Core
  */
 export function FireCMSDrawer({
-                               hovered,
-                               drawerOpen,
-                               closeDrawer
-                           }: DrawerProps) {
+                                  hovered,
+                                  drawerOpen,
+                                  closeDrawer
+                              }: DrawerProps) {
 
     const navigate = useNavigate();
 
@@ -95,7 +85,7 @@ export function FireCMSDrawer({
                             .filter(e => e.group === group)
                             .map((view, index) => <DrawerNavigationItem
                                 key={`navigation_${index}`}
-                                icon={getIconForView(view.collection ?? view.view)}
+                                icon={<IconForView collectionOrView={view.collection ?? view.view}/>}
                                 tooltipsOpen={tooltipsOpen}
                                 drawerOpen={drawerOpen}
                                 url={view.url}
@@ -109,7 +99,7 @@ export function FireCMSDrawer({
 
                 {ungroupedNavigationViews.map((view, index) => <DrawerNavigationItem
                     key={`navigation_${index}`}
-                    icon={getIconForView(view.collection ?? view.view)}
+                    icon={<IconForView collectionOrView={view.collection ?? view.view}/>}
                     tooltipsOpen={tooltipsOpen}
                     drawerOpen={drawerOpen}
                     url={view.url}
@@ -148,7 +138,7 @@ export function FireCMSDrawer({
                             navigate(view.path);
                         }}
                         key={`navigation_${index}`}>
-                        {getIconForView(view)}
+                        {<IconForView collectionOrView={view}/>}
                         {view.name}
                     </MenuItem>)}
 

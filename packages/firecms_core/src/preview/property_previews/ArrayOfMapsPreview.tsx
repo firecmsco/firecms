@@ -1,6 +1,6 @@
 import React from "react";
 import { ErrorBoundary } from "../../components";
-import { useFireCMSContext } from "../../hooks";
+import { useCustomizationController } from "../../hooks";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
 import { resolveArrayProperty } from "../../util";
@@ -15,13 +15,13 @@ export function ArrayOfMapsPreview({
                                        size,
                                        // entity
                                    }: PropertyPreviewProps<Record<string, any>[]>) {
-    const fireCMSContext = useFireCMSContext();
 
+    const customizationController = useCustomizationController();
     const property = resolveArrayProperty({
         propertyKey,
         property: inputProperty,
         propertyValue: value,
-        fields: fireCMSContext.propertyConfigs
+        fields: customizationController.propertyConfigs
     });
 
     if (Array.isArray(property?.of)) {

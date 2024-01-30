@@ -119,7 +119,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         const largeLayout = useLargeLayout();
         const disabledFilterChange = Boolean(forceFilter);
-        const selectedEntities = selectionController?.selectedEntities?.length > 0 ? selectionController?.selectedEntities : highlightedEntities;
+        const selectedEntities = (selectionController?.selectedEntities?.length > 0 ? selectionController?.selectedEntities : highlightedEntities)?.filter(Boolean);
 
         const context: FireCMSContext<UserType> = useFireCMSContext();
 
@@ -131,12 +131,12 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         const filterIsSet = !!filterValues && Object.keys(filterValues).length > 0;
 
-        const loadNextPage = () => {
+        const loadNextPage = useCallback(() => {
             if (!paginationEnabled || dataLoading || noMoreToLoad)
                 return;
             if (itemCount !== undefined)
                 setItemCount?.(itemCount + pageSize);
-        };
+        }, [dataLoading, itemCount, noMoreToLoad, pageSize, paginationEnabled, setItemCount]);
 
         useOutsideAlerter(ref,
             () => {
@@ -245,7 +245,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     }
                 </ErrorBoundary>);
 
-        }, [customFieldValidator, inlineEditing, size, selectedEntityIds]);
+        }, [inlineEditing, size, selectedEntityIds]);
 
         const additionalCellRenderer = useCallback(({
                                                         column,
@@ -290,7 +290,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 </EntityTableCell>
             );
 
-        }, [additionalFieldsMap, size, selectedEntityIds]);
+        }, [size, selectedEntityIds]);
 
         const collectionColumns: VirtualTableColumn[] = useMemo(() => {
                 const columnsResult: VirtualTableColumn[] = propertiesToColumns({
@@ -364,6 +364,29 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         const onFilterUpdate = useCallback((updatedFilterValues?: FilterValues<any>) => {
             setFilterValues?.({ ...updatedFilterValues, ...forceFilter } as FilterValues<any>);
         }, [forceFilter]);
+
+        // useTraceUpdate({
+        //     data,
+        //     columns,
+        //     inlineEditing,
+        //     size, selectedEntityIds, additionalCellRenderer, propertyCellRenderer,
+        //     cellRenderer,
+        //     onRowClick,
+        //     onEndReached: loadNextPage,
+        //     onResetPagination: resetPagination,
+        //     error: dataLoadingError,
+        //     paginationEnabled,
+        //     onColumnResize,
+        //     loading: dataLoading,
+        //     filter: filterValues,
+        //     onFilterUpdate,
+        //     sortBy,
+        //     onSortByUpdate: setSortBy,
+        //     hoverRow,
+        //     emptyComponent,
+        //     checkFilterCombination,
+        //     createFilterField,
+        // });
 
         return (
 

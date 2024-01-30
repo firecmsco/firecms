@@ -4,12 +4,18 @@ import { useMemo } from "react";
 import { Entity, EntityCollection, EntityReference, ResolvedProperty } from "../../types";
 
 import { getReferencePreviewKeys, getValueInPath, resolveCollection } from "../../util";
-import { useEntityFetch, useFireCMSContext, useNavigationController, useSideEntityController } from "../../hooks";
+import {
+    useCustomizationController,
+    useEntityFetch,
+    useNavigationController,
+    useSideEntityController
+} from "../../hooks";
 import { PropertyPreview } from "../PropertyPreview";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { SkeletonPropertyComponent } from "../property_previews/SkeletonPropertyComponent";
 import { cn, IconButton, KeyboardTabIcon, Skeleton, Tooltip, Typography } from "@firecms/ui";
 import { ErrorView } from "../../components";
+import { useAnalyticsController } from "../../hooks/useAnalyticsController";
 
 export type ReferencePreviewProps = {
     disabled?: boolean;
@@ -58,13 +64,14 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                                                                      allowEntityNavigation = true
                                                                  }: ReferencePreviewProps) {
 
-    const context = useFireCMSContext();
+    const customizationController = useCustomizationController();
+
     const navigationController = useNavigationController();
 
     const collection = navigationController.getCollection<EntityCollection<M>>(reference.path);
     if (!collection) {
-        if (context.components?.missingReference) {
-            return <context.components.missingReference path={reference.path}/>;
+        if (customizationController.components?.missingReference) {
+            return <customizationController.components.missingReference path={reference.path}/>;
         } else {
             throw Error(`Couldn't find the corresponding collection view for the path: ${reference.path}`);
         }
@@ -85,7 +92,9 @@ function ReferencePreviewExisting<M extends Record<string, any> = any>({ referen
     collection: EntityCollection<M>
 }) {
 
-    const context = useFireCMSContext();
+    const customizationController = useCustomizationController();
+
+    const analyticsController = useAnalyticsController();
     const sideEntityController = useSideEntityController();
 
     const {
@@ -109,10 +118,10 @@ function ReferencePreviewExisting<M extends Record<string, any> = any>({ referen
         collection,
         path: reference.path,
         values: usedEntity?.values,
-        fields: context.propertyConfigs
+        fields: customizationController.propertyConfigs
     }), [collection]);
 
-    const listProperties = useMemo(() => getReferencePreviewKeys(resolvedCollection, context.propertyConfigs, previewProperties, size === "small" || size === "medium" ? 3 : 1),
+    const listProperties = useMemo(() => getReferencePreviewKeys(resolvedCollection, customizationController.propertyConfigs, previewProperties, size === "small" || size === "medium" ? 3 : 1),
         [previewProperties, resolvedCollection, size]);
 
     let body: React.ReactNode;
@@ -179,7 +188,7 @@ function ReferencePreviewExisting<M extends Record<string, any> = any>({ referen
                                 size={"small"}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    context.onAnalyticsEvent?.("entity_click_from_reference", {
+                                    analyticsController.onAnalyticsEvent?.("entity_click_from_reference", {
                                         path: usedEntity.path,
                                         entityId: usedEntity.id
                                     });

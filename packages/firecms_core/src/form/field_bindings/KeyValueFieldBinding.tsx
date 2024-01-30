@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { DataType, EntityReference, FieldProps, GeoPoint } from "../../types";
 
-import { ArrayContainer } from "../../components";
+import { ArrayContainer, LabelWithIcon } from "../../components";
 import { FieldHelperText } from "../components";
-
-import { LabelWithIcon } from "../../components";
 import {
     AddIcon,
     ArrowDropDownIcon,
@@ -22,7 +20,7 @@ import {
     Typography
 } from "@firecms/ui";
 import { getDefaultValueForDataType, getIconForProperty } from "../../util";
-import { useFireCMSContext } from "../../hooks";
+import { useCustomizationController } from "../../hooks";
 
 type MapEditViewRowState = [number, {
     key: string,
@@ -257,7 +255,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
     updateDataType: (rowId: number, dataType: DataType) => void
 }) {
 
-    const { locale } = useFireCMSContext();
+    const { locale } = useCustomizationController();
 
     function buildInput(entryValue: any, fieldKey: string, dataType: DataType) {
         if (dataType === "string" || dataType === "number") {
@@ -439,7 +437,7 @@ function ArrayKeyValueRow<T>({
     disabled?: boolean,
 }) {
 
-    const { locale } = useFireCMSContext();
+    const { locale } = useCustomizationController();
     const [selectedDataType, setSelectedDataType] = useState<DataType>(getDataType(value) ?? "string");
 
     function doUpdateDataType(dataType: DataType) {

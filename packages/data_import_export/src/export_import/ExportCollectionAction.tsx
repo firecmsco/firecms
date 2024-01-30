@@ -7,6 +7,7 @@ import {
     ExportConfig,
     resolveCollection,
     ResolvedEntityCollection,
+    useCustomizationController,
     useDataSource,
     useFireCMSContext,
     useNavigationController,
@@ -42,6 +43,8 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
     notAllowedView?: React.ReactNode;
 }) {
 
+    const customizationController = useCustomizationController();
+
     const exportConfig = typeof inputCollection.exportable === "object" ? inputCollection.exportable : undefined;
 
     const dateRef = React.useRef<Date>(new Date());
@@ -64,7 +67,7 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
     const collection: ResolvedEntityCollection<M> = React.useMemo(() => resolveCollection({
         collection: inputCollection,
         path,
-        fields: context.propertyConfigs
+        fields: customizationController.propertyConfigs
     }), [inputCollection, path]);
 
     const [dataLoading, setDataLoading] = React.useState<boolean>(false);

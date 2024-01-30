@@ -1,4 +1,3 @@
-import { createContext, useContext } from "react";
 import { AuthController, FireCMSContext, User } from "../types";
 import { useAuthController } from "./useAuthController";
 import { useSideDialogsController } from "./useSideDialogsController";
@@ -9,8 +8,8 @@ import { useStorageSource } from "./useStorageSource";
 import { useSnackbarController } from "./useSnackbarController";
 import { useUserConfigurationPersistence } from "./useUserConfigurationPersistence";
 import { useDialogsController } from "./useDialogsController";
-
-export const FireCMSContextInstance = createContext<Partial<FireCMSContext>>({});
+import { useCustomizationController } from "./useCustomizationController";
+import { useAnalyticsController } from "./useAnalyticsController";
 
 /**
  * Hook to retrieve the {@link FireCMSContext}.
@@ -23,7 +22,6 @@ export const FireCMSContextInstance = createContext<Partial<FireCMSContext>>({})
  */
 export const useFireCMSContext = <UserType extends User = User, AuthControllerType extends AuthController<UserType> = AuthController<UserType>>(): FireCMSContext<UserType, AuthControllerType> => {
 
-    const partialContext = useContext(FireCMSContextInstance) as FireCMSContext<UserType, AuthControllerType>;
     const authController = useAuthController<UserType, AuthControllerType>();
     const sideDialogsController = useSideDialogsController();
     const sideEntityController = useSideEntityController();
@@ -33,9 +31,10 @@ export const useFireCMSContext = <UserType extends User = User, AuthControllerTy
     const snackbarController = useSnackbarController();
     const userConfigPersistence = useUserConfigurationPersistence();
     const dialogsController = useDialogsController();
+    const customizationController = useCustomizationController();
+    const analyticsController = useAnalyticsController();
 
     return {
-        ...partialContext,
         authController,
         sideDialogsController,
         sideEntityController,
@@ -44,7 +43,9 @@ export const useFireCMSContext = <UserType extends User = User, AuthControllerTy
         storageSource,
         snackbarController,
         userConfigPersistence,
-        dialogsController
-    }
+        dialogsController,
+        customizationController,
+        analyticsController
+    };
 
 };

@@ -257,31 +257,34 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         const empty = !loading && (data?.length ?? 0) === 0;
         const customView = error ? buildErrorView() : (empty ? buildEmptyView() : undefined);
 
+        const virtualListController = {
+            data,
+            size,
+            cellRenderer,
+            columns,
+            currentSort,
+            onRowClick,
+            customView,
+            onColumnResize: onColumnResizeInternal,
+            onColumnResizeEnd: onColumnResizeEndInternal,
+            filter: filterRef.current,
+            onColumnSort,
+            onFilterUpdate: onFilterUpdateInternal,
+            sortByProperty,
+            hoverRow: hoverRow ?? false,
+            createFilterField,
+            rowClassName,
+            endAdornment,
+            AddColumnComponent
+        };
+
+        // useTraceUpdate(virtualListController);
         return (
             <div
                 ref={measureRef}
                 className={cn("h-full w-full", className)}>
                 <VirtualListContext.Provider
-                    value={{
-                        data,
-                        size,
-                        cellRenderer,
-                        columns,
-                        currentSort,
-                        onRowClick,
-                        customView,
-                        onColumnResize: onColumnResizeInternal,
-                        onColumnResizeEnd: onColumnResizeEndInternal,
-                        filter: filterRef.current,
-                        onColumnSort,
-                        onFilterUpdate: onFilterUpdateInternal,
-                        sortByProperty,
-                        hoverRow: hoverRow ?? false,
-                        createFilterField,
-                        rowClassName,
-                        endAdornment,
-                        AddColumnComponent
-                    }}>
+                    value={virtualListController}>
 
                     <MemoizedList
                         outerRef={tableRef}

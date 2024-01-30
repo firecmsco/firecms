@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 
-import { useFireCMSContext } from "../../hooks";
+import { useCustomizationController, useFireCMSContext } from "../../hooks";
 import { PluginHomePageActionsProps, TopNavigationEntry } from "../../types";
-import { getIconForView } from "../../util";
+import { IconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
 import { ArrowForwardIcon, Card, cn, IconButton, Markdown, StarBorderIcon, StarIcon, Typography } from "@firecms/ui";
 
@@ -32,22 +32,23 @@ export function NavigationCollectionCard({
 }) {
 
     const userConfigurationPersistence = useUserConfigurationPersistence();
-    const collectionIcon = getIconForView(collection ?? view);
+    const collectionIcon = <IconForView collectionOrView={collection ?? view}/>;
 
     const navigate = useNavigate();
     const context = useFireCMSContext();
+    const customizationController = useCustomizationController();
 
     const favourite = (userConfigurationPersistence?.favouritePaths ?? []).includes(path);
 
     let actions: React.ReactNode | undefined;
-    if (context.plugins && collection) {
+    if (customizationController.plugins && collection) {
         const actionProps: PluginHomePageActionsProps = {
             path,
             collection,
             context
         };
         actions = <>
-            {context.plugins.map((plugin, i) => (
+            {customizationController.plugins.map((plugin, i) => (
                 plugin.homePage?.CollectionActions
                     ? <plugin.homePage.CollectionActions
                         key={`actions_${i}`}

@@ -1,11 +1,12 @@
 import React, { useCallback } from "react";
 
-import { useFireCMSContext, useLargeLayout, useNavigationController } from "../hooks";
+import { useLargeLayout, useNavigationController } from "../hooks";
 
 import { NavLink } from "react-router-dom";
 import { CMSAnalyticsEvent, TopNavigationEntry, TopNavigationResult } from "../types";
-import { getIconForView } from "../util";
+import { IconForView } from "../util";
 import { cn, Tooltip, Typography } from "@firecms/ui";
+import { useAnalyticsController } from "../hooks/useAnalyticsController";
 
 /**
  * Props used in case you need to override the default drawer
@@ -27,7 +28,7 @@ export function Drawer({
                            closeDrawer
                        }: DrawerProps) {
 
-    const context = useFireCMSContext();
+    const analyticsController = useAnalyticsController();
     const navigation = useNavigationController();
 
     const tooltipsOpen = hovered && !drawerOpen;
@@ -60,7 +61,7 @@ export function Drawer({
         const eventName: CMSAnalyticsEvent = view.type === "collection"
             ? "drawer_navigate_to_collection"
             : (view.type === "view" ? "drawer_navigate_to_view" : "unmapped_event");
-        context.onAnalyticsEvent?.(eventName, { url: view.url });
+        analyticsController.onAnalyticsEvent?.(eventName, { url: view.url });
         if (!largeLayout)
             closeDrawer();
     };
@@ -77,7 +78,7 @@ export function Drawer({
                         .map((view, index) =>
                             <DrawerNavigationItem
                                 key={`navigation_${index}`}
-                                icon={getIconForView(view.collection ?? view.view)}
+                                icon={<IconForView collectionOrView={view.collection ?? view.view}/>}
                                 tooltipsOpen={tooltipsOpen}
                                 drawerOpen={drawerOpen}
                                 onClick={() => onClick(view)}
@@ -92,7 +93,7 @@ export function Drawer({
 
                 return <DrawerNavigationItem
                     key={`navigation_${index}`}
-                    icon={getIconForView(view.collection ?? view.view)}
+                    icon={<IconForView collectionOrView={view.collection ?? view.view}/>}
                     tooltipsOpen={tooltipsOpen}
                     onClick={() => onClick(view)}
                     drawerOpen={drawerOpen}

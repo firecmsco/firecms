@@ -2,7 +2,13 @@ import React, { PropsWithChildren, useCallback, useEffect } from "react";
 import equal from "react-fast-compare"
 
 import { CollectionsConfigController } from "./types/config_controller";
-import { Property, useFireCMSContext, useNavigationController, User, useSnackbarController } from "@firecms/core";
+import {
+    Property,
+    useCustomizationController,
+    useNavigationController,
+    User,
+    useSnackbarController
+} from "@firecms/core";
 import { CollectionEditorDialog } from "./ui/collection_editor/CollectionEditorDialog";
 import { useNavigate } from "react-router";
 import { CollectionEditorController } from "./types/collection_editor_controller";
@@ -69,7 +75,7 @@ export const ConfigControllerProvider = React.memo(
         const navigation = useNavigationController();
         const navigate = useNavigate();
         const snackbarController = useSnackbarController();
-        const { propertyConfigs } = useFireCMSContext();
+        const { propertyConfigs } = useCustomizationController();
 
         const {
             collections

@@ -1,7 +1,13 @@
 import { Entity, EntityCallbacks, EntityCollection } from "../types";
 import React, { useCallback, useMemo, useState } from "react";
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, Typography } from "@firecms/ui";
-import { deleteEntityWithCallbacks, useDataSource, useFireCMSContext, useSnackbarController } from "../hooks";
+import {
+    deleteEntityWithCallbacks,
+    useCustomizationController,
+    useDataSource,
+    useFireCMSContext,
+    useSnackbarController
+} from "../hooks";
 import { resolveCollection } from "../util";
 import { EntityPreview } from "./EntityPreview";
 
@@ -30,7 +36,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
                                                                   }: DeleteEntityDialogProps<M>) {
 
     const dataSource = useDataSource();
-    console.log("dataSource", dataSource)
+    const customizationController = useCustomizationController();
     const snackbarController = useSnackbarController();
     const [loading, setLoading] = useState(false);
 
@@ -52,7 +58,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
     const resolvedCollection = useMemo(() => resolveCollection<M>({
         collection,
         path,
-        fields: context.propertyConfigs
+        fields: customizationController.propertyConfigs
     }), [collection, path]);
 
     const handleCancel = useCallback(() => {

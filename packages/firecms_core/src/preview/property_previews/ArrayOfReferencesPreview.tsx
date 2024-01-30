@@ -1,6 +1,6 @@
 import { ResolvedReferenceProperty } from "../../types";
 import { resolveArrayProperty } from "../../util";
-import { useFireCMSContext } from "../../hooks";
+import { useCustomizationController } from "../../hooks";
 import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";
 import { ReferencePreview } from "../components/ReferencePreview";
 
@@ -14,12 +14,12 @@ export function ArrayOfReferencesPreview({
                                              size
                                          }: PropertyPreviewProps<any[]>) {
 
-    const fireCMSContext = useFireCMSContext();
+    const customizationController = useCustomizationController();
     const property = resolveArrayProperty({
         propertyKey,
         property: inputProperty,
         propertyValue: value,
-        fields: fireCMSContext.propertyConfigs
+        fields: customizationController.propertyConfigs
     });
 
     if (Array.isArray(property?.of)) {

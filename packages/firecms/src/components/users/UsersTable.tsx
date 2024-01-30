@@ -6,23 +6,12 @@ import * as locales from "date-fns/locale";
 import {
     defaultDateFormat,
     DeleteConfirmationDialog,
-    FireCMSContext,
-    useFireCMSContext,
+    useCustomizationController,
     useSnackbarController
 } from "@firecms/core";
-import {
-    Chip,
-    DeleteIcon,
-    IconButton,
-    Table,
-    TableBody,
-    TableCell,
-    TableHeader,
-    TableRow,
-    Tooltip,
-} from "@firecms/ui";
-import { FireCMSUserProject } from "../../types/firecms_user";
-import { getUserRoles } from "../../utils/permissions";
+import { DeleteIcon, IconButton, Table, TableBody, TableCell, TableHeader, TableRow, Tooltip, } from "@firecms/ui";
+import { FireCMSUserProject } from "../../types";
+import { getUserRoles } from "../../utils";
 import { useUserManagement } from "../../hooks/useUserManagement";
 import { RoleChip } from "../roles/RoleChip";
 
@@ -38,9 +27,9 @@ export function UsersTable({ onUserClicked }: {
 
     const snackbarController = useSnackbarController();
 
-    const appConfig: FireCMSContext<any> | undefined = useFireCMSContext();
-    const dateUtilsLocale = appConfig?.locale ? locales[appConfig?.locale as keyof typeof locales] : undefined;
-    const dateFormat: string = appConfig?.dateTimeFormat ?? defaultDateFormat;
+    const customizationController = useCustomizationController();
+    const dateUtilsLocale = customizationController?.locale ? locales[customizationController?.locale as keyof typeof locales] : undefined;
+    const dateFormat: string = customizationController?.dateTimeFormat ?? defaultDateFormat;
 
     const [userToBeDeleted, setUserToBeDeleted] = useState<FireCMSUserProject | undefined>(undefined);
     const [deleteInProgress, setDeleteInProgress] = useState<boolean>(false);
@@ -48,7 +37,7 @@ export function UsersTable({ onUserClicked }: {
     return (
         <div className="overflow-auto">
 
-            <Table >
+            <Table>
 
                 <TableHeader>
                     <TableCell className="truncate w-16"></TableCell>

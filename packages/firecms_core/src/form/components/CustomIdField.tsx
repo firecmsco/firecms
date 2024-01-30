@@ -2,12 +2,14 @@ import React, { useMemo } from "react";
 
 import { ErrorMessage } from "formik";
 
-import { Entity, EntityStatus, EnumValueConfig, EnumValues, FireCMSContext } from "../../types";
+import { Entity, EntityStatus, EnumValueConfig, EnumValues } from "../../types";
 
-import { useClipboard, useFireCMSContext, useSnackbarController } from "../../hooks";
+import { useClipboard, useSnackbarController } from "../../hooks";
 import { enumToObjectEntries } from "../../util";
 import { ContentCopyIcon, IconButton, OpenInNewIcon, Select, SelectItem, TextField, Tooltip } from "@firecms/ui";
 import { EnumValuesChip } from "../../preview";
+import { useCustomizationController } from "../../hooks/useCustomizationController";
+import { CustomizationController } from "../../types/customization_controller";
 
 export function CustomIdField<M extends Record<string, any>>({
                                                                  customId,
@@ -42,7 +44,7 @@ export function CustomIdField<M extends Record<string, any>>({
         })
     });
 
-    const appConfig: FireCMSContext | undefined = useFireCMSContext();
+    const customizationController: CustomizationController = useCustomizationController();
 
     const fieldProps = {
         label: idSetAutomatically ? "ID is set automatically" : "ID",
@@ -60,10 +62,10 @@ export function CustomIdField<M extends Record<string, any>>({
                         </IconButton>
                     </Tooltip>
 
-                    {appConfig?.entityLinkBuilder &&
+                    {customizationController?.entityLinkBuilder &&
                         <Tooltip title={"Open in the console"}>
                             <IconButton component={"a"}
-                                        href={appConfig.entityLinkBuilder({ entity })}
+                                        href={customizationController.entityLinkBuilder({ entity })}
                                         rel="noopener noreferrer"
                                         target="_blank"
                                         onClick={(e) => e.stopPropagation()}

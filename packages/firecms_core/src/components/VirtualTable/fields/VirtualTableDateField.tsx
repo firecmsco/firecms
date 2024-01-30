@@ -1,6 +1,6 @@
 import React from "react";
 import { DateTimeField } from "@firecms/ui";
-import { useFireCMSContext } from "../../../hooks";
+import { useCustomizationController } from "../../../hooks";
 
 export function VirtualTableDateField(props: {
     name: string;
@@ -13,7 +13,7 @@ export function VirtualTableDateField(props: {
     onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 }) {
 
-    const { locale } = useFireCMSContext();
+    const { locale } = useCustomizationController();
     const {
         disabled,
         error,

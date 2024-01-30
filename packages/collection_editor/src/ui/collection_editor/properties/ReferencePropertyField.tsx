@@ -1,18 +1,7 @@
 import React from "react";
 import { Field, getIn, useFormikContext } from "formik";
-import {
-    getIconForView,
-    NumberProperty,
-    StringProperty,
-    useNavigationController
-} from "@firecms/core";
-import {
-    CircularProgress,
-    Select,
-    SelectGroup,
-    SelectItem,
-    Typography,
-} from "@firecms/ui";
+import { IconForView, NumberProperty, StringProperty, useNavigationController } from "@firecms/core";
+import { CircularProgress, Select, SelectGroup, SelectItem, Typography, } from "@firecms/ui";
 import { FieldHelperView } from "./FieldHelperView";
 
 export function ReferencePropertyField({
@@ -26,9 +15,6 @@ export function ReferencePropertyField({
         values,
         handleChange,
         errors,
-        touched,
-        setFieldError,
-        setFieldValue
     } = useFormikContext<StringProperty | NumberProperty>();
 
     const navigation = useNavigationController();
@@ -113,10 +99,9 @@ export function CollectionsSelect({
                 renderValue={(selected) => {
                     const selectedCollection = collections.find(collection => collection.id === selected || collection.path === selected);
                     if (!selectedCollection) return null;
-                    const collectionIcon = getIconForView(selectedCollection);
                     return (
                         <div className="flex flex-row">
-                            {collectionIcon}
+                            <IconForView collectionOrView={selectedCollection}/>
                             <Typography
                                 variant={"subtitle2"}
                                 className="font-medium ml-4">
@@ -132,12 +117,11 @@ export function CollectionsSelect({
                         {
                             collections.filter(collection => collection.group === group)
                                 .map((collection) => {
-                                    const collectionIcon = getIconForView(collection);
                                     return <SelectItem
                                         key={`${collection.id ?? collection.path}-${group}`}
                                         value={collection.id ?? collection.path}>
                                         <div className="flex flex-row">
-                                            {collectionIcon}
+                                            <IconForView collectionOrView={collection}/>
                                             <Typography
                                                 variant={"subtitle2"}
                                                 className="font-medium ml-4">
@@ -154,11 +138,10 @@ export function CollectionsSelect({
                 {ungroupedCollections && <SelectGroup label={"Views"}>
                     {ungroupedCollections
                         .map((collection) => {
-                            const collectionIcon = getIconForView(collection);
                             return <SelectItem key={collection.id ?? collection.path}
                                                value={collection.id ?? collection.path}>
                                 <div className="flex flex-row">
-                                    {collectionIcon}
+                                    <IconForView collectionOrView={collection}/>
                                     <Typography
                                         variant={"subtitle2"}
                                         className="font-medium ml-4">
