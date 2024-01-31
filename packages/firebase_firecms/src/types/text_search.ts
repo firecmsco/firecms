@@ -1,3 +1,12 @@
+
+import { User as FirebaseUser } from "firebase/auth";
+import { FirebaseApp } from "firebase/app";
+import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
+
+export type FirestoreTextSearchControllerBuilder = (props: {
+    firebaseApp: FirebaseApp;
+}) => FirestoreTextSearchController;
+
 /**
  * Use this controller to return a list of ids from a search index, given a
  * `path` and a `searchString`.
@@ -8,13 +17,6 @@
  * @see performAlgoliaTextSearch
  * @group Firebase
  */
-import { FirebaseApp } from "firebase/app";
-import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
-
-export type FirestoreTextSearchControllerBuilder = (props: {
-    firebaseApp: FirebaseApp;
-}) => FirestoreTextSearchController;
-
 export type FirestoreTextSearchController = {
     /**
      * This method is called when a search delegate is ready to be used.
@@ -29,5 +31,5 @@ export type FirestoreTextSearchController = {
      * Do the search and return a list of ids.
      * @param props
      */
-    search: (props: { searchString: string, path: string }) => (Promise<readonly string[]> | undefined),
+    search: (props: { searchString: string, path: string, currentUser: FirebaseUser }) => (Promise<readonly string[]> | undefined),
 };

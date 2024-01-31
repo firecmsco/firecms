@@ -36,7 +36,7 @@ import {
     FirestoreTextSearchController,
     buildCollection,
     buildCollection,
-    FireCMS3App,
+    FireCMSApp,
     EntityCollectionsBuilder
 } from "firecms";
 
@@ -66,7 +66,7 @@ export default function App() {
         }
     });
 
-    return <FireCMS3App
+    return <FireCMSApp
         name={"My Online Shop"}
         collections={[productCollection]}
         textSearchController={textSearchController}

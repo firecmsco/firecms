@@ -1,9 +1,9 @@
 import React from "react"
-import { FireCMS3App } from "firecms";
+import { FireCMSApp } from "firecms";
 import appConfig from "./index";
 
 function App() {
-    return <FireCMS3App
+    return <FireCMSApp
         projectId={"[REPLACE_WITH_PROJECT_ID]"}
         appConfig={appConfig}
     />;

@@ -1,6 +1,11 @@
 import algoliasearch, { SearchClient } from "algoliasearch";
 
-import { buildAlgoliaSearchController, performAlgoliaTextSearch } from "@firecms/firebase_pro";
+import {
+    buildAlgoliaSearchController,
+    buildPineconeSearchController,
+    performAlgoliaTextSearch,
+    performPineconeTextSearch
+} from "@firecms/firebase_pro";
 
 let client: SearchClient | undefined;
 // process is defined for react-scripts builds
@@ -24,7 +29,7 @@ const usersIndex = client && client.initIndex("users");
 const blogIndex = client && client.initIndex("blog");
 const booksIndex = client && client.initIndex("books");
 
-export const textSearchControllerBuilder = buildAlgoliaSearchController({
+export const algoliaSearchControllerBuilder = buildAlgoliaSearchController({
     isPathSupported: (path) => {
         return ["products", "users", "blog", "books"].includes(path);
     },
@@ -41,5 +46,25 @@ export const textSearchControllerBuilder = buildAlgoliaSearchController({
         if (path === "books")
             return booksIndex && performAlgoliaTextSearch(booksIndex, searchString);
         return undefined;
+    }
+});
+
+export const pineconeSearchControllerBuilder = buildPineconeSearchController({
+    isPathSupported: (path) => {
+        return ["products"].includes(path);
+    },
+    search: async ({
+                       path,
+                       searchString,
+                       currentUser
+                   }) => {
+        if (path === "products")
+            return performPineconeTextSearch({
+                firebaseToken: await currentUser.getIdToken(),
+                projectId: "firecms-backend",
+                collectionPath: "products",
+                query: searchString
+            });
+        throw new Error("Path not supported");
     }
 });

@@ -6,7 +6,7 @@ import { Authenticator } from "../types/auth";
 
 /**
  * This hook is used internally for validating an authenticator.
- * You may want to use it if you are not using {@link FireCMS3App}, but
+ * You may want to use it if you are not using {@link FireCMSApp}, but
  * building your own custom {@link FireCMS} instance.
  * @param authController
  * @param authentication

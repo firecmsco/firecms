@@ -39,6 +39,12 @@
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+:root {
+    --fcms-primary: #0070F4;
+    --fcms-primary-dark: #0061e6;
+    --fcms-primary-bg: #0061e620;
+    --fcms-secondary: #FF5B79;
+}
 
 /* You can override the default Infima variables here. */
 :root {
@@ -261,8 +267,21 @@ article img, video {
     border-radius: 8px;
 }
 
+.table-of-contents__left-border {
+    border-left: none !important;
+}
 
-.table-of-contents.table-of-contents__left-border {
+.table-of-contents.table-of-contents__left-border > *  {
+    padding: 16px;
+    z-index: 10;
+    border-radius: 8px;
+    background-color: var(--ifm-background-color);
+    border: 1px solid var(--ifm-border-color);
+}
+
+aside > * {
+    padding: 16px;
+    z-index: 10;
     border-radius: 8px;
     background-color: var(--ifm-background-color);
     border: 1px solid var(--ifm-border-color);
@@ -341,7 +360,12 @@ p{
 
 .theme-doc-markdown li {
     display: list-item;
-    list-style: disc;
+    list-style: initial;
+}
+
+.markdown li {
+    word-wrap: break-word;
+    list-style: initial;
 }
 
 ul {

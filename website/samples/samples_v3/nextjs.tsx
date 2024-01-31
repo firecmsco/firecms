@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { buildCollection, buildProperty, EntityReference, FireCMS3App, } from "firecms";
+import { buildCollection, buildProperty, EntityReference, FireCMSApp, } from "firecms";
 
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
@@ -176,7 +176,7 @@ const productsCollection = buildCollection<Product>({
 
 export default function CMS() {
 
-    return <FireCMS3App
+    return <FireCMSApp
         projectId={projectId}
         basePath={"/cms"}
         appConfig={{

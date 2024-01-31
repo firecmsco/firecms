@@ -42,7 +42,7 @@ import {
     UserManagement,
 } from "./hooks";
 
-import { FireCMS3AppProps } from "./FireCMS3AppProps";
+import { FireCMSAppProps } from "./FireCMSAppProps";
 import { FireCMSAppConfig, FireCMSBackend, FireCMSUser } from "./types";
 import {
     ADMIN_VIEWS,
@@ -87,14 +87,14 @@ const DOCS_LIMIT = 200;
  * @constructor
  * @group Firebase
  */
-export function FireCMS3App({
+export function FireCMSApp({
                                 projectId,
                                 appConfig,
                                 backendApiHost = "https://api-drplyi3b6q-ey.a.run.app", // TODO
                                 onAnalyticsEvent,
                                 basePath,
                                 baseCollectionPath,
-                            }: FireCMS3AppProps) {
+                            }: FireCMSAppProps) {
 
     const modeController = useBuildModeController();
 
@@ -104,6 +104,7 @@ export function FireCMS3App({
         configError,
         firebaseConfigError: backendFirebaseConfigError
     } = useInitialiseFirebase({
+        name: "firecms-backend",
         fromUrl: backendApiHost + "/config"
     });
 
@@ -134,7 +135,7 @@ export function FireCMS3App({
                 includeGoogleDisclosure={false}/>
         </CenteredView>
     } else {
-        component = <FireCMS3Client
+        component = <FireCMSClient
             fireCMSBackend={fireCMSBackend}
             projectId={projectId}
             modeController={modeController}
@@ -151,7 +152,7 @@ export function FireCMS3App({
 
 }
 
-export type FireCMS3ClientProps<ExtraAppbarProps = object> = {
+export type FireCMSClientProps<ExtraAppbarProps = object> = {
     fireCMSBackend: FireCMSBackend,
     projectId: string;
     appConfig?: FireCMSAppConfig;
@@ -182,11 +183,11 @@ function FullLoadingView(props: {
     </Scaffold>;
 }
 
-export const FireCMS3Client = function FireCMS3Client({
+export const FireCMSClient = function FireCMSClient({
                                                           projectId,
                                                           fireCMSBackend,
                                                           ...props
-                                                      }: FireCMS3ClientProps) {
+                                                      }: FireCMSClientProps) {
 
     const projectConfig = useBuildProjectConfig({
         projectId,
@@ -208,7 +209,7 @@ export const FireCMS3Client = function FireCMS3Client({
                                 text={"Client loading"}/>;
     }
 
-    return <FireCMS3ClientWithController
+    return <FireCMSClientWithController
         projectId={projectId}
         projectConfig={projectConfig}
         fireCMSBackend={fireCMSBackend}
@@ -218,7 +219,7 @@ export const FireCMS3Client = function FireCMS3Client({
     />;
 };
 
-export function FireCMS3ClientWithController({
+export function FireCMSClientWithController({
                                                  projectConfig,
                                                  userManagement,
                                                  projectId,
@@ -226,7 +227,7 @@ export function FireCMS3ClientWithController({
                                                  appConfig,
                                                  customizationLoading,
                                                  ...props
-                                             }: FireCMS3ClientProps & {
+                                             }: FireCMSClientProps & {
     userManagement: UserManagement;
     projectConfig: ProjectConfig;
     projectId: string;
@@ -242,7 +243,7 @@ export function FireCMS3ClientWithController({
     } = useInitialiseFirebase({
         onFirebaseInit: appConfig?.onFirebaseInit,
         firebaseConfig: projectConfig.clientFirebaseConfig,
-        name: projectId
+        // name: projectId
     });
 
     const authController: FirebaseAuthController = useFirebaseAuthController({
@@ -350,7 +351,7 @@ export function FireCMS3ClientWithController({
         </Scaffold>;
     }
 
-    return <FireCMS3AppAuthenticated
+    return <FireCMSAppAuthenticated
         fireCMSUser={fireCMSUser!}
         fireCMSBackend={fireCMSBackend}
         appConfig={appConfig}
@@ -373,7 +374,7 @@ function NoAccessError({ authController }: {
     </CenteredView>;
 }
 
-function FireCMS3AppAuthenticated({
+function FireCMSAppAuthenticated({
                                       fireCMSUser,
                                       firebaseApp,
                                       projectConfig,
@@ -387,7 +388,7 @@ function FireCMS3AppAuthenticated({
                                       onAnalyticsEvent,
                                       basePath,
                                       baseCollectionPath
-                                  }: Omit<FireCMS3ClientProps, "projectId"> & {
+                                  }: Omit<FireCMSClientProps, "projectId"> & {
     fireCMSUser: FireCMSUser;
     firebaseApp: FirebaseApp;
     projectConfig: ProjectConfig;
@@ -398,7 +399,7 @@ function FireCMS3AppAuthenticated({
 }) {
 
     if (!authController.user) {
-        throw Error("You can only use FireCMS3AppAuthenticated with an authenticated user");
+        throw Error("You can only use FireCMSAppAuthenticated with an authenticated user");
     }
 
     const adminRoutes = useMemo(buildAdminRoutes, []);

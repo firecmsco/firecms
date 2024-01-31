@@ -4,7 +4,7 @@ import { FireCMSAppConfig } from "./types";
  * Main entry point that defines the CMS configuration
  * @group Firebase
  */
-export type FireCMS3AppProps = {
+export type FireCMSAppProps = {
 
     /**
      * Firebase project id this CMS is connected to.

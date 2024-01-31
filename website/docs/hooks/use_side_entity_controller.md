@@ -118,4 +118,4 @@ const customSchemaOverrideHandler: SchemaOverrideHandler = ({
 };
 ```
 
-Then you can pass your `SchemaOverrideHandler` to your `FireCMS3App` or `FireCMS`
+Then you can pass your `SchemaOverrideHandler` to your `FireCMSApp` or `FireCMS`

@@ -1,6 +1,8 @@
-import { SearchIndex } from "algoliasearch";
+import { User as FirebaseUser } from "firebase/auth";
 import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "../types";
 import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
+
+const DEFAULT_SERVER = "https://api-drplyi3b6q-ey.a.run.app";
 
 /**
  * Utility function to perform a text search in an algolia index,
@@ -9,28 +11,49 @@ import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
  * @param query
  * @group Firebase
  */
-export function performAlgoliaTextSearch(index: SearchIndex, query: string): Promise<readonly string[]> {
+export async function performPineconeTextSearch({
+                                                   host = DEFAULT_SERVER,
+                                                   firebaseToken,
+                                                   projectId,
+                                                   collectionPath,
+                                                   query
+                                               }: {
+    host?: string,
+    firebaseToken: string,
+    collectionPath: string,
+    projectId: string,
+    query: string
+}): Promise<readonly string[]> {
 
-    console.debug("Performing Algolia query", index, query);
-    return index
-        .search(query)
-        .then(({ hits }: any) => {
-            return hits.map((hit: any) => hit.objectID as string);
-        })
-        .catch((err: any) => {
-            console.error(err);
-            return [];
+    console.debug("Performing Pinecone query", collectionPath, query);
+    const response = await fetch((host ?? DEFAULT_SERVER) + `/projects/${projectId}/search/${collectionPath}`,
+        {
+            // mode: "no-cors",
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Basic ${firebaseToken}`,
+                // "x-de-version": version
+            },
+            body: JSON.stringify({
+                query
+            })
         });
+
+    const promise = await response.json();
+    return promise.data.ids;
+
 }
 
-export function buildAlgoliaSearchController({
+export function buildPineconeSearchController({
                                                  isPathSupported,
                                                  search
                                              }: {
     isPathSupported: (path: string) => boolean,
     search: (props: {
         searchString: string,
-        path: string
+        path: string,
+        currentUser: FirebaseUser
     }) => Promise<readonly string[]> | undefined,
 }): FirestoreTextSearchControllerBuilder {
     return (props): FirestoreTextSearchController => {

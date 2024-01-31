@@ -211,7 +211,9 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
         content = JSON.stringify(value);
     }
 
-    return content === undefined || content === null ? <EmptyValue/> : content;
+    return content === undefined || content === null || (Array.isArray(content) && content.length === 0)
+        ? <EmptyValue/>
+        : content;
 }, equal);
 
 function buildWrongValueType(name: string | undefined, dataType: string, value: any) {

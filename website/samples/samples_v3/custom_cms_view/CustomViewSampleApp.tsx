@@ -1,4 +1,4 @@
-import { buildCollection, CMSView, FireCMS3App, FireCMSAppConfig } from "firecms";
+import { buildCollection, CMSView, FireCMSApp, FireCMSAppConfig } from "firecms";
 import { ExampleCMSView } from "./ExampleCMSView";
 
 const projectId = "YOUR_PROJECT_ID";
@@ -33,7 +33,7 @@ const appConfig: FireCMSAppConfig = {
 
 export default function App() {
 
-    return <FireCMS3App
+    return <FireCMSApp
         projectId={projectId}
         appConfig={appConfig}
     />;

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
     ApplicationVerifier,
@@ -47,11 +47,13 @@ export const useFirebaseAuthController = ({
     const [confirmationResult, setConfirmationResult] = useState<undefined | ConfirmationResult>();
 
     const [userRoles, setUserRoles] = useState<Role[] | null>(null);
+    const authRef = useRef(firebaseApp ? getAuth(firebaseApp) : null);
 
     useEffect(() => {
         if (!firebaseApp) return;
         try {
             const auth = getAuth(firebaseApp);
+            authRef.current = auth;
             setAuthError(undefined);
             setLoggedUser(auth.currentUser)
             return onAuthStateChanged(
@@ -82,7 +84,8 @@ export const useFirebaseAuthController = ({
             options.scopes.forEach((scope) => provider.addScope(scope));
         if (options?.customParameters)
             provider.setCustomParameters(options.customParameters);
-        const auth = getAuth(firebaseApp);
+        const auth = authRef.current;
+        if(!auth) throw Error("No auth");
         signInWithPopup(auth, provider).catch(setAuthProviderError);
     }, [getProviderOptions]);
 
@@ -93,7 +96,8 @@ export const useFirebaseAuthController = ({
     }, [loggedUser]);
 
     const emailPasswordLogin = useCallback((email: string, password: string) => {
-        const auth = getAuth(firebaseApp);
+        const auth = authRef.current;
+        if(!auth) throw Error("No auth");
         setAuthLoading(true);
         signInWithEmailAndPassword(auth, email, password)
             .catch(setAuthProviderError)
@@ -101,7 +105,8 @@ export const useFirebaseAuthController = ({
     }, []);
 
     const createUserWithEmailAndPassword = useCallback((email: string, password: string) => {
-        const auth = getAuth(firebaseApp);
+        const auth = authRef.current;
+        if(!auth) throw Error("No auth");
         setAuthLoading(true);
         createUserWithEmailAndPasswordFirebase(auth, email, password)
             .catch(setAuthProviderError)
@@ -109,7 +114,8 @@ export const useFirebaseAuthController = ({
     }, []);
 
     const fetchSignInMethodsForEmail = useCallback((email: string): Promise<string[]> => {
-        const auth = getAuth(firebaseApp);
+        const auth = authRef.current;
+        if(!auth) throw Error("No auth");
         setAuthLoading(true);
         return fetchSignInMethodsForEmailFirebase(auth, email)
             .then((res) => {
@@ -119,7 +125,8 @@ export const useFirebaseAuthController = ({
     }, []);
 
     const onSignOut = useCallback(() => {
-        const auth = getAuth(firebaseApp);
+        const auth = authRef.current;
+        if(!auth) throw Error("No auth");
         signOut(auth)
             .then(_ => {
                 setLoggedUser(null);
@@ -141,7 +148,8 @@ export const useFirebaseAuthController = ({
     }, []);
 
     const anonymousLogin = useCallback(() => {
-        const auth = getAuth();
+        const auth = authRef.current;
+        if(!auth) throw Error("No auth");
         setAuthLoading(true);
         signInAnonymously(auth)
             .catch(setAuthProviderError)
@@ -149,7 +157,8 @@ export const useFirebaseAuthController = ({
     }, []);
 
     const phoneLogin = useCallback((phone: string, applicationVerifier: ApplicationVerifier) => {
-        const auth = getAuth();
+        const auth = authRef.current;
+        if(!auth) throw Error("No auth");
         setAuthLoading(true);
         return signInWithPhoneNumber(auth, phone, applicationVerifier)
             .catch(setAuthProviderError)
@@ -166,7 +175,8 @@ export const useFirebaseAuthController = ({
             options.scopes.forEach((scope) => provider.addScope(scope));
         if (options?.customParameters)
             provider.setCustomParameters(options.customParameters);
-        const auth = getAuth();
+        const auth = authRef.current;
+        if(!auth) throw Error("No auth");
         doOauthLogin(auth, provider);
     }, [doOauthLogin, getProviderOptions]);
 
@@ -177,7 +187,8 @@ export const useFirebaseAuthController = ({
             options.scopes.forEach((scope) => provider.addScope(scope));
         if (options?.customParameters)
             provider.setCustomParameters(options.customParameters);
-        const auth = getAuth();
+        const auth = authRef.current;
+        if(!auth) throw Error("No auth");
         doOauthLogin(auth, provider);
     }, [doOauthLogin, getProviderOptions]);
 
@@ -188,7 +199,8 @@ export const useFirebaseAuthController = ({
             options.scopes.forEach((scope) => provider.addScope(scope));
         if (options?.customParameters)
             provider.setCustomParameters(options.customParameters);
-        const auth = getAuth();
+        const auth = authRef.current;
+        if(!auth) throw Error("No auth");
         doOauthLogin(auth, provider);
     }, [doOauthLogin, getProviderOptions]);
 
@@ -199,7 +211,8 @@ export const useFirebaseAuthController = ({
             options.scopes.forEach((scope) => provider.addScope(scope));
         if (options?.customParameters)
             provider.setCustomParameters(options.customParameters);
-        const auth = getAuth();
+        const auth = authRef.current;
+        if(!auth) throw Error("No auth");
         doOauthLogin(auth, provider);
     }, [doOauthLogin, getProviderOptions]);
 
@@ -208,10 +221,10 @@ export const useFirebaseAuthController = ({
         const options = getProviderOptions("twitter.com");
         if (options?.customParameters)
             provider.setCustomParameters(options.customParameters);
-        const auth = getAuth();
+        const auth = authRef.current;
+        if(!auth) throw Error("No auth");
         doOauthLogin(auth, provider);
     }, [doOauthLogin, getProviderOptions]);
-
 
     const skipLogin = useCallback(() => {
         setLoginSkipped(true);

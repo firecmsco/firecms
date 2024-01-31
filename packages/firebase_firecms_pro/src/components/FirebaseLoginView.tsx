@@ -123,7 +123,7 @@ export function FirebaseLoginView({
     })
 
     const sendMFASms = useCallback(() => {
-        const auth = getAuth();
+        const auth = getAuth(firebaseApp);
         const recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha", { size: "invisible" });
 
         const resolver = getMultiFactorResolver(auth, authController.authProviderError);

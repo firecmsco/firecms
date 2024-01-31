@@ -24,7 +24,7 @@ const hostingError = "It seems like the provided Firebase config is not correct.
  * configuration.
  *
  * You most likely only need to use this if you are developing a custom app
- * that is not using {@link FireCMS3App}. You can also not use this component
+ * that is not using {@link FireCMSApp}. You can also not use this component
  * and initialise Firebase yourself.
  *
  * @param onFirebaseInit

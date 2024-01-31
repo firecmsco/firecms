@@ -22,7 +22,7 @@ import { localeCollectionGroup, productsCollection } from "./collections/product
 import { blogCollection } from "./collections/blog_collection";
 import { showcaseCollection } from "./collections/showcase_collection";
 
-import { textSearchControllerBuilder } from "./text_search";
+import { algoliaSearchControllerBuilder, pineconeSearchControllerBuilder } from "./text_search";
 
 import { CustomLoginView } from "./CustomLoginView";
 import { cryptoCollection } from "./collections/crypto_collection";
@@ -162,7 +162,7 @@ function SampleApp() {
             // 'microsoft.com',
             // 'apple.com'
         ]}
-        textSearchControllerBuilder={textSearchControllerBuilder}
+        textSearchControllerBuilder={pineconeSearchControllerBuilder}
         firestoreIndexesBuilder={firestoreIndexesBuilder}
         logo={logo}
         collections={(params) => collections}

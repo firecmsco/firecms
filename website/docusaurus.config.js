@@ -1,6 +1,7 @@
 const fontaine = require("fontaine");
 const path = require("path");
-import {themes as prismThemes} from 'prism-react-renderer';
+import { themes as prismThemes } from "prism-react-renderer";
+
 require("dotenv").config();
 
 module.exports = {
@@ -77,9 +78,10 @@ module.exports = {
     ],
     themeConfig: {
         image: "img/logo_small.png",
+        description: "Awesome headless CMS based Firestore/Firebase and React, and completely open-source",
         announcementBar: {
-            id: "local-search",
-            content: "Local text search is now available for <b>PLUS</b> users! 🎉",
+            id: "beta-3",
+            content: "FireCMS 3.0 is now in <b>BETA</b> Jump in! 🎉",
             backgroundColor: "#FF5B79",
             textColor: "black",
             isCloseable: true,
@@ -112,7 +114,7 @@ module.exports = {
         ],
 
         colorMode: {
-            defaultMode: "dark",
+            defaultMode: "light",
             disableSwitch: false,
             // respectPrefersColorScheme: false,
         },
@@ -300,7 +302,7 @@ module.exports = {
                     ]
                 }
             ],
-            copyright: `MIT © ${new Date().getFullYear()} - FireCMS S.L.`
+            copyright: `© ${new Date().getFullYear()} - FireCMS S.L.`
         },
         prism: {
             theme: prismThemes.vsDark,

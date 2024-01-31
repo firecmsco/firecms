@@ -47,6 +47,7 @@ import { FirebaseApp } from "firebase/app";
 import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "../types/text_search";
 import { useCallback, useEffect, useRef } from "react";
 import { localSearchControllerBuilder } from "../utils";
+import { getAuth } from "firebase/auth";
 
 /**
  * @group Firebase
@@ -192,10 +193,10 @@ export function useFirestoreDelegate({
     }, [firebaseApp]);
 
     const performTextSearch = useCallback(<M extends Record<string, any>>({
-                                                                              path,
-                                                                              searchString,
-                                                                              onUpdate
-                                                                          }: {
+                                                                                    path,
+                                                                                    searchString,
+                                                                                    onUpdate
+                                                                                }: {
         path: string,
         searchString: string;
         onUpdate: (entities: Entity<M>[]) => void
@@ -208,9 +209,15 @@ export function useFirestoreDelegate({
             throw Error("Trying to make text search without specifying a FirestoreTextSearchController");
 
         let subscriptions: (() => void)[] = [];
+
+        const auth = getAuth(firebaseApp);
+        const currentUser = auth.currentUser;
+        if (!currentUser) throw Error("No current user");
+
         const search = textSearchController.search({
             path,
-            searchString
+            searchString,
+            currentUser
         });
 
         if (!search) {
@@ -768,7 +775,8 @@ function buildTextSearchControllerWithLocalSearch({
         },
         search: (props: {
             searchString: string,
-            path: string
+            path: string,
+            currentUser: any
         }) => {
             return textSearchController.search(props) ?? localSearchController.search(props);
         }

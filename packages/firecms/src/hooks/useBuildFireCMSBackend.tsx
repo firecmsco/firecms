@@ -107,13 +107,14 @@ export function useBuildFireCMSBackend({ backendApiHost, backendFirebaseApp, onU
     }, [loggedUser]);
 
     const googleLogin = useCallback((includeGoogleAdminScopes?: boolean) => {
+        if (!backendFirebaseApp) return;
         const provider = new GoogleAuthProvider();
         provider.setCustomParameters({
             access_type: "offline"
         });
         if (includeGoogleAdminScopes)
             AUTH_SCOPES.forEach((scope) => provider.addScope(scope));
-        const auth = getAuth();
+        const auth = getAuth(backendFirebaseApp);
         signInWithPopup(auth, provider)
             .then(credential => {
                 if (includeGoogleAdminScopes) {
