@@ -132,7 +132,7 @@ export function useBuildFireCMSBackend({ backendApiHost, backendFirebaseApp, onU
                 }
             })
             .catch(setAuthProviderError);
-    }, []);
+    }, [backendFirebaseApp]);
 
     const onSignOut = useCallback(() => {
         const auth = getAuth(backendFirebaseApp);

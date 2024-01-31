@@ -16,7 +16,7 @@ const appConfig: FireCMSAppConfig = {
             testCollection,
             productsCollection,
             usersCollection,
-            pagesCollection
+            // pagesCollection
             // showcaseCollection
         ]);
     },
