@@ -16,6 +16,7 @@ export default defineConfig(() => ({
             name: "FireCMS Firebase",
             fileName: (format) => `index.${format}.js`
         },
+        minify: true,
         target: "esnext",
         sourcemap: true,
         rollupOptions: {

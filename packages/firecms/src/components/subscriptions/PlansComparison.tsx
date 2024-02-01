@@ -74,7 +74,7 @@ export function PlansComparison() {
             </h3>
             <div className={"grow"}>
                 <p className={"text-lg mb-4"}>
-                    Perfect for small teams and startups.
+                    Perfect for startups and larger companies
                 </p>
                 <ul>
                     <li className={"ml-8 list-disc"}>Everything in the free tier</li>
@@ -106,7 +106,7 @@ export function PlansComparison() {
             </h3>
             <div className={"grow"}>
                 <p className={"text-lg mb-4"}>
-                    Perfect for large teams and enterprises.
+                    Perfect for agencies.
                 </p>
                 <ul>
                     <li className={"ml-8 list-disc"}>Everything in PLUS</li>

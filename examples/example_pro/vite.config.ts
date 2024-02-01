@@ -10,6 +10,7 @@ export default defineConfig({
         logOverride: { "this-is-undefined-in-esm": "silent" }
     },
     build: {
+        minify: true,
         outDir: "./build",
         target: "esnext",
         sourcemap: true

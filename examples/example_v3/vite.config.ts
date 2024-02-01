@@ -32,7 +32,7 @@ export default defineConfig(({ command }) => {
         build: {
             modulePreload: false,
             target: "esnext",
-            minify: false,
+            minify: true,
             cssCodeSplit: false,
         },
         resolve: {
