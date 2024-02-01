@@ -22,13 +22,14 @@ const notifyListeners = () => {
 };
 
 // Listen to resize events once, at a global level
-window.addEventListener("resize", () => {
-    const newIsLargeLayout = checkLargeLayout("lg");
-    if (newIsLargeLayout !== isLargeLayoutGlobal) {
-        isLargeLayoutGlobal = newIsLargeLayout;
-        notifyListeners();
-    }
-});
+if (typeof window !== "undefined")
+    window.addEventListener("resize", () => {
+        const newIsLargeLayout = checkLargeLayout("lg");
+        if (newIsLargeLayout !== isLargeLayoutGlobal) {
+            isLargeLayoutGlobal = newIsLargeLayout;
+            notifyListeners();
+        }
+    });
 
 export const useLargeLayout = () => {
     const [isLargeLayout, setIsLargeLayout] = useState(isLargeLayoutGlobal);
@@ -58,6 +59,8 @@ export const useLargeLayout = () => {
 };
 
 function checkLargeLayout(breakpoint: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" = "lg"): boolean {
+    if (typeof window === "undefined")
+        return false;
     return window.matchMedia(`(min-width: ${breakpoints[breakpoint] + 1}px)`).matches;
 }
 

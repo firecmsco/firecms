@@ -75,7 +75,8 @@ export function ProductView({
                     setError(error);
                 }
                 if (url) {
-                    window.open(url, "_blank"); // Open a new tab
+                    if (typeof window !== "undefined")
+                        window.open(url, "_blank"); // Open a new tab
                     // window.location.assign(url);
                 }
                 setLinkLoading(false);
