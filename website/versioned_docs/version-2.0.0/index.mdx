@@ -6,12 +6,19 @@ slug: /
 ---
 
 <video class="intro_video" loop autoPlay muted>
-  <source src="/img/dark_mode.mp4" type="video/mp4"/>
+    <source src="/img/dark_mode.mp4" type="video/mp4"/>
 </video>
 
 
 > FireCMS is an **open source headless CMS and admin panel** built by developers
 > for developers.
+
+:::warning
+FireCMS 2.0 has been replaced by FireCMS 3.0. We encourage you to migrate to the
+new version at this point.
+The collections generated in FireCMS Cloud are synced automatically to the new
+version, but not to versions 2.2 or below.
+:::
 
 FireCMS is a content management system (CMS) that is built on top of the
 Firebase platform. It is a cloud-based system that allows users to manage and
@@ -35,16 +42,16 @@ easy to create your custom form fields, or your complete views.
 There are two ways to build top level views in FireCMS:
 
 - By creating mapping configurations for **collections** (to datasource
-  collections, such as Firestore collections, with your schema).
-  The best way to get a grasp of how
-  this works is checking the [Quickstart](quickstart.mdx) and
-  [Collections](collections/collections.md)
-  documentation.
+collections, such as Firestore collections, with your schema).
+The best way to get a grasp of how
+this works is checking the [Quickstart](quickstart.mdx) and
+[Collections](collections/collections.md)
+documentation.
 - Create **custom views** that sit in the main level of your navigation tree. In
-  this case you can build your custom React component and make use of the
-  internal components of the CMS as well as the provided hooks.
-  Check [Custom top level views](navigation/custom_top_level_views.mdx) for more
-  details
+this case you can build your custom React component and make use of the
+internal components of the CMS as well as the provided hooks.
+Check [Custom top level views](navigation/custom_top_level_views.mdx) for more
+details
 
 :::note Custom backend
 FireCMS was built with Firebase/Firestore as the default backend, but nothing
@@ -113,10 +120,10 @@ If Firebase is your chosen backend:
 
 * You need to enable the **Firestore** database in your Firebase project.
 * If you want to have  **authentication** enabled in your CMS config, you need
-  to enable
-  the corresponding auth method in your project.
+to enable
+the corresponding auth method in your project.
 * Also, if you are using **storage** fields in your string properties, you need
-  to enable Firebase Storage.
+to enable Firebase Storage.
 
 More details in [Firebase setup section](firebase_setup.md).
 

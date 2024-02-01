@@ -7,11 +7,11 @@ import { useLocation } from "@docusaurus/router";
 export default function LayoutWrapper(props) {
 
     const { pathname } = useLocation();
-    const includeEnterpriseTeaser = !pathname.startsWith("/enterprise");
+    // const includeEnterpriseTeaser = !pathname.startsWith("/enterprise");
 
     return (
         <>
-            {includeEnterpriseTeaser && <EnterpriseTeaser/>}
+            {/*{includeEnterpriseTeaser && <EnterpriseTeaser/>}*/}
             <Newsletter/>
             <Layout {...props} />
         </>

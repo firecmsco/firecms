@@ -15,8 +15,7 @@ export function EnterpriseArchitectures() {
             </Panel>
 
             <TwoColumns
-                left={<div className={"text-2xl "}>
-
+                left={<div className={"text-2xl p-8"}>
 
                     <h2 className={"h2"}>Adaptable to Your Architecture</h2>
                     <p>
@@ -47,14 +46,14 @@ export function EnterpriseArchitectures() {
                     </p>
 
                 </div>}
-                right={<>
+                right={<div className={"p-8 flex flex-col"}>
                     <SimpleArchitecture className={"w-full mt-8"}/>
                     <label className={"text-sm text-center m-4"}>Simple
                         architecture</label>
                     <ComplexArchitecture className={"w-full mt-16"}/>
                     <label className={"text-sm text-center m-4"}>Architecture
                         using microservices</label>
-                </>
+                </div>
                 }/>
 
         </>

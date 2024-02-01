@@ -1,7 +1,7 @@
 import React from "react";
 import {
     ContainerMixin,
-    ContainerPaddingMixin,
+    ContainerPaddingMixin, CTAButtonMixin,
     CTACaret,
     CTAOutlinedButtonMixin,
     CTAOutlinedButtonWhiteMixin,
@@ -18,11 +18,11 @@ export function FireCMSCloudVersions() {
             <h3 className={"text-3xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300"}>
                 Free
             </h3>
+            <p className={"text-lg mb-4 font-bold text-center"}>
+                Try FireCMS and upgrade to a paid plan when you
+                need more features.
+            </p>
             <div className={"grow"}>
-                <p className={"text-lg mb-4"}>
-                    Try FireCMS and upgrade to a paid plan when you
-                    need more features.
-                </p>
                 <ul>
                     <li className={"list-disc"}>Unlimited projects</li>
                     <li className={"list-disc"}>Unlimited collections</li>
@@ -47,10 +47,10 @@ export function FireCMSCloudVersions() {
             <h3 className={"text-3xl md:text-4xl font-bold mb-4 text-center dark:text-primary text-primary"}>
                 Plus
             </h3>
+            <p className={"text-lg mb-4 font-bold text-center"}>
+                Perfect for startups and larger companies
+            </p>
             <div className={"grow"}>
-                <p className={"text-lg mb-4"}>
-                    Perfect for small teams and startups.
-                </p>
                 <ul>
                     <li className={"list-disc"}>Everything in the free tier</li>
                     <li className={"list-disc"}>Local text search</li>
@@ -77,10 +77,10 @@ export function FireCMSCloudVersions() {
             <h3 className={"text-3xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300"}>
                 Pro
             </h3>
+            <p className={"text-lg mb-4 font-bold text-center"}>
+                Perfect for agencies.
+            </p>
             <div className={"grow"}>
-                <p className={"text-lg mb-4"}>
-                    Perfect for large teams and enterprises.
-                </p>
                 <ul>
                     <li className={"list-disc"}>Everything in PLUS</li>
                     <li className={"list-disc"}>Custom authentication and access control</li>
@@ -138,7 +138,7 @@ export function FireCMSCloudVersions() {
             {/*/>*/}
 
             <a
-                className={CTAOutlinedButtonWhiteMixin}
+                className={CTAButtonMixin}
                 href="http://app.firecms.co"
                 rel="noopener noreferrer"
                 target="_blank"

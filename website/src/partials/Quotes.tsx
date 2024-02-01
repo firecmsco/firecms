@@ -45,7 +45,7 @@ const quotes = [
 
 export const QuotesSection: React.FC = () => {
     return (
-        <Panel color={"light"} includePadding={false}>
+        <Panel color={"lighter"} includePadding={false}>
             <div
                 className="py-16 px-8 flex flex-row gap-4 overflow-auto no-scrollbar">
                 {

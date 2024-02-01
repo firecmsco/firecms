@@ -24,9 +24,10 @@ function Home() {
             description="Awesome headless CMS based Firestore/Firebase and React, and completely open-source">
             <Head>
                 <title>FireCMS - Firestore/Firebase headless CMS</title>
-                <meta property="og:title" content="FireCMS - Firestore/Firebase headless CMS" />
-                <meta property="og:description" content="Awesome headless CMS based Firestore/Firebase and React, and completely open-source" />
-                <meta property="og:image" content="/img/firecms_logo.svg" />
+                <meta property="og:title" content="FireCMS - Firestore/Firebase headless CMS"/>
+                <meta property="og:description"
+                      content="Awesome headless CMS based Firestore/Firebase and React, and completely open-source"/>
+                <meta property="og:image" content="/img/firecms_logo.svg"/>
             </Head>
 
             <HeroHome/>
@@ -37,9 +38,9 @@ function Home() {
 
                 <FirebaseIntro/>
 
-                <QuotesSection/>
-
                 <ManageYour/>
+
+                <QuotesSection/>
 
                 <Companies/>
 

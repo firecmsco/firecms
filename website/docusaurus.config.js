@@ -138,6 +138,10 @@ module.exports = {
                             to: "/openai",
                         },
                         {
+                            label: "Your admin panel",
+                            to: "/admin_panel",
+                        },
+                        {
                             label: "The most powerful backend",
                             to: "/f/backend_extension",
                         },
@@ -155,14 +159,14 @@ module.exports = {
                     position: "left"
                 },
                 {
-                    type: "docSidebar",
-                    sidebarId: "docsSidebar",
-                    label: "Docs",
+                    label: "Blog",
+                    to: "blog",
                     position: "left"
                 },
                 {
-                    label: "Blog",
-                    to: "blog",
+                    type: "docSidebar",
+                    sidebarId: "docsSidebar",
+                    label: "Docs",
                     position: "left"
                 },
                 {
@@ -199,7 +203,7 @@ module.exports = {
                     to: "https://demo.firecms.co",
                     label: "Demo",
                     // className: "btn shadow-none mr-2 px-6 py-2  uppercase",
-                    className: "border-1 border-slate-600 dark:border-slate-700  uppercase rounded border-solid dark:text-white text-slate-800 hover:text-slate-700 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-900 h dark:hover:border-slate-800 text-center btn mr-3 px-6 py-2",
+                    className: "border-1 border-slate-600 dark:border-slate-700  uppercase rounded border-solid dark:text-white text-white hover:text-slate-100 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-900 dark:hover:border-slate-800 text-center btn mr-3 px-6 py-2",
                     "aria-label": "Open the demo project",
                     position: "right"
                 },

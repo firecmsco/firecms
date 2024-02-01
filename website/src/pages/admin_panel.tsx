@@ -7,9 +7,9 @@ import { EnterpriseArchitectures } from "../partials/enterprise/EnterpriseArchit
 import { CTAOutlinedButtonWhiteMixin } from "../partials/styles";
 import { Panel } from "../partials/general/Panel";
 
-function Enterprise() {
+function AdminPanel() {
     return (
-        <Layout title="Enterprise" description="Enterprise">
+        <Layout title="Your admin panel" description="Customize FireCMS to exactly met the needs of your business">
             <div className="flex flex-col min-h-screen">
 
                 <main className="flex-grow">
@@ -35,4 +35,4 @@ function Enterprise() {
     );
 }
 
-export default Enterprise;
+export default AdminPanel;
