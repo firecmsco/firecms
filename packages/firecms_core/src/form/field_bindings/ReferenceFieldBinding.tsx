@@ -4,11 +4,10 @@ import { Entity, EntityCollection, EntityReference, FieldProps } from "../../typ
 import { useClearRestoreValue, useNavigationController, useReferenceDialog } from "../../hooks";
 import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
 import { FieldHelperText } from "../components";
-import { LabelWithIcon } from "../../components";
+import { ErrorView, LabelWithIcon } from "../../components";
 import { ReferencePreview } from "../../preview";
 import { getIconForProperty, getReferenceFrom } from "../../util";
 import { Button } from "@firecms/ui";
-import { ErrorView } from "../../components";
 
 /**
  * Field that opens a reference selection dialog.

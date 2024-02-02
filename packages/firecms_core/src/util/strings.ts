@@ -50,7 +50,8 @@ export function slugify(text?: string, separator = "_", lowercase = true) {
         : text;
 }
 
-export function unslugify(slug: string): string {
+export function unslugify(slug?: string): string {
+    if (!slug) return "";
     if (slug.includes("-") || slug.includes("_") || !slug.includes(" ")) {
         const result = slug.replace(/[-_]/g, " ");
         return result.replace(/\w\S*/g, function (txt) {

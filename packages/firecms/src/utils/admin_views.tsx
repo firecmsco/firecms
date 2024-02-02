@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 import { CMSView } from "@firecms/core";
 import { ProjectSettings } from "../components/settings/ProjectSettings";

@@ -19,3 +19,4 @@ export const pineconeSearchControllerBuilder = buildPineconeSearchController({
         throw new Error("Path not supported");
     }
 });
+

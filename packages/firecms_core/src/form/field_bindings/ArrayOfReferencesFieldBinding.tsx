@@ -2,12 +2,11 @@ import React, { useCallback, useMemo } from "react";
 import { Entity, EntityCollection, EntityReference, FieldProps, ResolvedProperty } from "../../types";
 import { ReferencePreview } from "../../preview";
 import { FieldHelperText, FormikArrayContainer } from "../components";
-import { LabelWithIcon } from "../../components";
+import { ErrorView, LabelWithIcon } from "../../components";
 import { getIconForProperty, getReferenceFrom } from "../../util";
 
 import { useClearRestoreValue, useNavigationController, useReferenceDialog } from "../../hooks";
 import { Button, ExpandablePanel } from "@firecms/ui";
-import { ErrorView } from "../../components";
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
 

@@ -4,7 +4,6 @@ import {
     Entity,
     FetchCollectionProps,
     FetchEntityProps,
-    ResolvedProperty,
     SaveEntityProps
 } from "@firecms/core";
 

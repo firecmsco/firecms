@@ -5,7 +5,6 @@ import { SampleEntityView } from "./custom_entity_view/SampleEntityView";
 import { colorPropertyConfig } from "./property_configs/color_property_config";
 import { pricePropertyConfig } from "./property_configs/property_config_builder";
 import { usersCollection } from "./collections/users_collection";
-import { pagesCollection } from "./collections/pages";
 import { ExampleCMSView } from "./views/ExampleCMSView";
 import { SampleCustomEntityCollection } from "./views/SampleCustomEntityCollection";
 

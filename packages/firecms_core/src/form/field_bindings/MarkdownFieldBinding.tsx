@@ -13,9 +13,9 @@ import {
     fieldBackgroundDisabledMixin,
     fieldBackgroundHoverMixin,
     fieldBackgroundMixin,
-    Typography
+    Typography,
+    useInjectStyles
 } from "@firecms/ui";
-import { useInjectStyles } from "@firecms/ui";
 
 const mdParser = new MarkdownIt();
 try {

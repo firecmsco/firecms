@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
 
 import { FastField, Formik, getIn, useFormikContext } from "formik";
-import {
-    EnumValueConfig,
-    EnumValues,
-    FormikArrayContainer,
-} from "@firecms/core";
+import { EnumValueConfig, EnumValues, FormikArrayContainer, } from "@firecms/core";
 import {
     AutoAwesomeIcon,
     Button,

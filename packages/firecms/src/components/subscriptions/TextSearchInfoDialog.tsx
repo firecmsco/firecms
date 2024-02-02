@@ -20,14 +20,16 @@ export function TextSearchInfoDialog({
                                          closeDialog,
                                          collection,
                                          collectionConfigController,
-                                         parentCollectionIds
+                                         parentCollectionIds,
+                                         hasOwnTextSearchImplementation
                                      }: {
     open: boolean,
     closeDialog: () => void,
     path: string,
     collection: EntityCollection,
     collectionConfigController: CollectionsConfigController,
-    parentCollectionIds?: string[]
+    parentCollectionIds?: string[],
+    hasOwnTextSearchImplementation: boolean
 }) {
 
     const snackbarController = useSnackbarController();
@@ -54,40 +56,51 @@ export function TextSearchInfoDialog({
 
             <Typography variant={"h5"} className={"flex flex-row gap-4 items-center"}>
                 <SearchIcon/>
-                Enable local text search
+                Enable text search
             </Typography>
 
             <SubscriptionPlanWidget
                 includeCTA={false}
                 showForPlans={["free"]}
-                message={<>Upgrade to PLUS to use local search</>}/>
+                message={<>Upgrade to PLUS to use text search</>}/>
 
-            <Typography>
-                Local text search is the simplest way to enable text search in your
-                collection. It loads all documents in the collection in the browser
-                and performs the search locally. This is the recommended option for
-                small collections.
-            </Typography>
+            {!hasOwnTextSearchImplementation && <>
 
-            <div className={"flex flex-col gap-2 my-2"}>
-                <Alert color={"warning"}>
-                    Local text search is not recommended for large collections.
-                </Alert>
+                <div className={"flex flex-col gap-2 my-2"}>
+                    <Alert color={"warning"}>
+                        Local text search is not recommended for large collections.
+                    </Alert>
 
-                <Typography variant={"caption"}>
-                    Note that enabling local text search will need to fetch all documents
-                    from your collection and store them in the browser. This can be inefficient
-                    for large collections. It can also incur in additional costs.
+                    <Typography variant={"caption"}>
+                        Note that enabling local text search will need to fetch all documents
+                        from your collection and store them in the browser. This can be inefficient
+                        for large collections. It can also incur in additional costs.
+                    </Typography>
+
+                    <Typography variant={"caption"}>
+                        If you are using a paid plan, you are encouraged to use an external
+                        search engine such as Algolia or Elastic Search.
+                    </Typography>
+                </div>
+
+                <Typography>
+                    Local text search is the simplest way to enable text search in your
+                    collection. It loads all documents in the collection in the browser
+                    and performs the search locally. This is the recommended option for
+                    small collections.
                 </Typography>
 
-                <Typography variant={"caption"}>
-                    If you are using a paid plan, you are encouraged to use an external
-                    search engine such as Algolia or Elastic Search.
+            </>}
+
+            {hasOwnTextSearchImplementation && <>
+                <Typography>
+                    You have implemented your own text search controller. You enable text search
+                    for your collection.
                 </Typography>
-            </div>
+            </>}
 
             <div className={"flex items-end justify-end gap-4"}>
-                {projectConfig.localTextSearchEnabled && !collection.textSearchEnabled &&
+                {(hasOwnTextSearchImplementation || projectConfig.localTextSearchEnabled) && !collection.textSearchEnabled &&
                     <LoadingButton variant={"outlined"}
                                    loading={enablingForCollection}
                                    size={"large"}
@@ -107,7 +120,7 @@ export function TextSearchInfoDialog({
                         Enable for this collection
                     </LoadingButton>}
 
-                {!projectConfig.localTextSearchEnabled &&
+                {!hasOwnTextSearchImplementation && !projectConfig.localTextSearchEnabled &&
                     <LoadingButton variant={"outlined"}
                                    loading={enablingLocalSearch}
                                    size={"large"}

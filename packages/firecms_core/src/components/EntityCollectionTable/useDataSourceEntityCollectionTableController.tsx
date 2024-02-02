@@ -5,10 +5,10 @@ import { useDataOrder } from "../../hooks/data/useDataOrder";
 import {
     Entity,
     EntityCollection,
+    EntityTableController,
     FilterValues,
     FireCMSContext,
     SelectedCellProps,
-    EntityTableController,
     User
 } from "../../types";
 import { useDebouncedData } from "./useDebouncedData";

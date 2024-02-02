@@ -19,7 +19,7 @@ import {
     FirebaseSignInOption,
     FirebaseSignInProvider,
     FirestoreIndexesBuilder,
-    FirestoreTextSearchController, FirestoreTextSearchControllerBuilder
+    FirestoreTextSearchControllerBuilder
 } from "@firecms/firebase";
 
 /**

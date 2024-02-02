@@ -101,7 +101,7 @@ module.exports = {
             "label": "Components",
             "collapsed": false,
             "items": [
-                "components/components_intro",
+                "components",
                 "components/alert",
                 "components/avatar",
                 "components/badge",

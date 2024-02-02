@@ -19,7 +19,8 @@ module.exports = {
         docSearchApiKey: process.env.REACT_APP_DOC_SEARCH_KEY,
         docSearchAppId: process.env.REACT_APP_DOC_SEARCH_APP_ID,
     },
-    webpack: {},
+    webpack: {
+    },
 
     plugins: [
         "docusaurus-tailwindcss-loader",
@@ -43,6 +44,9 @@ module.exports = {
                                 "@firecms/ui": path.resolve(__dirname, "../packages/ui/src"),
                             },
                         },
+                        optimization: {
+                            usedExports: true, // <- remove unused function
+                        }
                     };
                 },
             };
@@ -233,10 +237,6 @@ module.exports = {
                     title: "Links",
                     items: [
                         {
-                            to: "enterprise",
-                            label: "Enterprise",
-                        },
-                        {
                             to: "https://app.firecms.co/subscriptions",
                             label: "Manage subscriptions",
                         },
@@ -288,23 +288,23 @@ module.exports = {
                         // }
                     ]
                 },
-                {
-                    // title: "Community",
-                    items: [
-                        {
-                            //Renders the html pass-through instead of a simple link
-                            html: `
-                          <iframe
-                src="https://discordapp.com/widget?id=1013768502458470442&theme=dark"
-                width="300"
-                height="300"
-                allowTransparency="true"
-                frameBorder="0"
-                sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
-                        `,
-                        },
-                    ]
-                }
+                // {
+                //     // title: "Community",
+                //     items: [
+                //         {
+                //             //Renders the html pass-through instead of a simple link
+                //             html: `
+                //           <iframe
+                // src="https://discordapp.com/widget?id=1013768502458470442&theme=dark"
+                // width="300"
+                // height="300"
+                // allowTransparency="true"
+                // frameBorder="0"
+                // sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+                //         `,
+                //         },
+                //     ]
+                // }
             ],
             copyright: `© ${new Date().getFullYear()} - FireCMS S.L.`
         },

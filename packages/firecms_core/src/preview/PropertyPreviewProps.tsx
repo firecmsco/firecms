@@ -1,4 +1,4 @@
-import { CMSType, Entity, Property, ResolvedProperty } from "../types";
+import { CMSType, Property, ResolvedProperty } from "../types";
 
 /**
  * @group Preview components

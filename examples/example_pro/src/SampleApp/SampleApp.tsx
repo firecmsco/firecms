@@ -7,8 +7,7 @@ import "@fontsource/roboto"
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
 
-import { CMSView, GitHubIcon, IconButton, Tooltip } from "@firecms/firebase_pro";
-import { Authenticator, FireCMSProApp, FirestoreIndexesBuilder, } from "@firecms/firebase_pro";
+import { CMSView, GitHubIcon, IconButton, Tooltip , Authenticator, FireCMSProApp, FirestoreIndexesBuilder } from "@firecms/firebase_pro";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { useImportExportPlugin } from "@firecms/data_import_export";
 
@@ -22,7 +21,7 @@ import { localeCollectionGroup, productsCollection } from "./collections/product
 import { blogCollection } from "./collections/blog_collection";
 import { showcaseCollection } from "./collections/showcase_collection";
 
-import { algoliaSearchControllerBuilder, pineconeSearchControllerBuilder } from "./text_search";
+import { algoliaSearchControllerBuilder } from "./text_search";
 
 import { CustomLoginView } from "./CustomLoginView";
 import { cryptoCollection } from "./collections/crypto_collection";
@@ -162,7 +161,7 @@ function SampleApp() {
             // 'microsoft.com',
             // 'apple.com'
         ]}
-        textSearchControllerBuilder={pineconeSearchControllerBuilder}
+        textSearchControllerBuilder={algoliaSearchControllerBuilder}
         firestoreIndexesBuilder={firestoreIndexesBuilder}
         logo={logo}
         collections={(params) => collections}

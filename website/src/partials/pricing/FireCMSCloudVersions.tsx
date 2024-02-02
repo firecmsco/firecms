@@ -4,7 +4,6 @@ import {
     ContainerPaddingMixin, CTAButtonMixin,
     CTACaret,
     CTAOutlinedButtonMixin,
-    CTAOutlinedButtonWhiteMixin,
     defaultBorderMixin
 } from "../styles";
 import clsx from "clsx";
@@ -27,6 +26,8 @@ export function FireCMSCloudVersions() {
                     <li className={"list-disc"}>Unlimited projects</li>
                     <li className={"list-disc"}>Unlimited collections</li>
                     <li className={"list-disc"}>All available form fields</li>
+                    <li className={"list-disc"}>Custom fields and custom views</li>
+                    <li className={"list-disc"}>Access to a 40+ first class components library</li>
                     <li className={"list-disc"}>Schema editor and inference from data</li>
                     <li className={"list-disc"}>Advanced data import and export</li>
                     <li className={"list-disc"}>Default roles</li>
@@ -54,7 +55,6 @@ export function FireCMSCloudVersions() {
                 <ul>
                     <li className={"list-disc"}>Everything in the free tier</li>
                     <li className={"list-disc"}>Local text search</li>
-                    <li className={"list-disc"}>Custom fields and custom views</li>
                     <li className={"list-disc"}>Unlimited users and roles</li>
                     <li className={"list-disc"}>Unlimited data export</li>
                     <li className={"list-disc"}>Theme and logo customization</li>

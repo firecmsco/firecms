@@ -69,6 +69,30 @@ const data = [{
         cloudPlus: "Yes",
         cloudPro: "Yes"
     }, {
+        feature: "Custom form fields",
+        selfHosted: "Yes",
+        cloud: "Yes",
+        cloudPlus: "Yes",
+        cloudPro: "Yes"
+    }, {
+        feature: "Custom entity views",
+        selfHosted: "Yes",
+        cloud: "Yes",
+        cloudPlus: "Yes",
+        cloudPro: "Yes"
+    }, {
+        feature: "Dynamic properties",
+        selfHosted: "Yes",
+        cloud: "Yes",
+        cloudPlus: "Yes",
+        cloudPro: "Yes"
+    }, {
+        feature: "Custom routes",
+        selfHosted: "Yes",
+        cloud: "Yes",
+        cloudPlus: "Yes",
+        cloudPro: "Yes"
+    }, {
         feature: "OpenAI data augmentation",
         selfHosted: "With subscription",
         cloud: "No",
@@ -88,24 +112,6 @@ const data = [{
         cloudPro: "Yes"
     }, {
         feature: "Unlimited users",
-        selfHosted: "Yes",
-        cloud: "No",
-        cloudPlus: "Yes",
-        cloudPro: "Yes"
-    }, {
-        feature: "Custom fields",
-        selfHosted: "Yes",
-        cloud: "No",
-        cloudPlus: "Yes",
-        cloudPro: "Yes"
-    }, {
-        feature: "Dynamic properties",
-        selfHosted: "Yes",
-        cloud: "No",
-        cloudPlus: "Yes",
-        cloudPro: "Yes"
-    }, {
-        feature: "Custom routes",
         selfHosted: "Yes",
         cloud: "No",
         cloudPlus: "Yes",

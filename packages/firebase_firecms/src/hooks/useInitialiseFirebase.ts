@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { FirebaseApp, initializeApp } from "firebase/app";
+import { deleteApp, FirebaseApp, getApps, initializeApp } from "firebase/app";
 
 /**
  * @group Firebase
@@ -56,7 +56,13 @@ export function useInitialiseFirebase({
 
     const initFirebase = useCallback((config: Record<string, unknown>) => {
         try {
-            const initialisedFirebaseApp = initializeApp(config, name ?? "[DEFAULT]");
+            const targetName = name ?? "[DEFAULT]";
+            const currentApps = getApps();
+            const existingApp = currentApps.find(app => app.name === targetName);
+            if (existingApp) {
+                deleteApp(existingApp);
+            }
+            const initialisedFirebaseApp = initializeApp(config, targetName);
             setConfigError(undefined);
             setFirebaseConfigLoading(false);
             setFirebaseApp(initialisedFirebaseApp);

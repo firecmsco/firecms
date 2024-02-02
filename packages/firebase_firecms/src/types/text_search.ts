@@ -1,4 +1,3 @@
-
 import { User as FirebaseUser } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
 import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
@@ -32,4 +31,5 @@ export type FirestoreTextSearchController = {
      * @param props
      */
     search: (props: { searchString: string, path: string, currentUser: FirebaseUser }) => (Promise<readonly string[]> | undefined),
+
 };

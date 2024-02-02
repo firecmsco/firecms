@@ -25,14 +25,16 @@ export type InferenceTypeBuilder = (value: any) => DataType;
 export async function buildEntityPropertiesFromData(data: object[], getType: InferenceTypeBuilder): Promise<Properties> {
     const typesCount: TypesCountRecord = {};
     const valuesCount: ValuesCountRecord = {};
-    data.forEach((entry) => {
-        if (entry) {
-            Object.entries(entry).forEach(([key, value]) => {
-                increaseMapTypeCount(typesCount, key, value, getType);
-                increaseValuesCount(valuesCount, key, value, getType);
-            })
-        }
-    });
+    if (data) {
+        data.forEach((entry) => {
+            if (entry) {
+                Object.entries(entry).forEach(([key, value]) => {
+                    increaseMapTypeCount(typesCount, key, value, getType);
+                    increaseValuesCount(valuesCount, key, value, getType);
+                })
+            }
+        });
+    }
     // console.log(util.inspect({ typesCount }, { showHidden: false, depth: null, colors: true }));
     return buildPropertiesFromCount(data.length, typesCount, valuesCount);
 }
@@ -40,10 +42,12 @@ export async function buildEntityPropertiesFromData(data: object[], getType: Inf
 export function buildPropertyFromData(data: any[], property: Property, getType: InferenceTypeBuilder): Property {
     const typesCount = {};
     const valuesCount: ValuesCountRecord = {};
-    data.forEach((entry) => {
-        increaseTypeCount(property.dataType, typesCount, entry, getType);
-        increaseValuesCount(valuesCount, "inferred_prop", entry, getType);
-    });
+    if (data) {
+        data.forEach((entry) => {
+            increaseTypeCount(property.dataType, typesCount, entry, getType);
+            increaseValuesCount(valuesCount, "inferred_prop", entry, getType);
+        });
+    }
     const enumValues = "enumValues" in property ? resolveEnumValues(property["enumValues"] as EnumValues) : undefined;
     if (enumValues) {
         const newEnumValues = extractEnumFromValues(Array.from(valuesCount["inferred_prop"].valuesCount.keys()));

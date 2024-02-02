@@ -472,7 +472,8 @@ function FireCMSAppAuthenticated({
     const saasPlugin = useSaasPlugin({
         projectConfig,
         firestoreDelegate,
-        collectionConfigController
+        collectionConfigController,
+        appConfig
     });
 
     const plugins: FireCMSPlugin<any, any, any>[] = [importExportPlugin, collectionEditorPlugin, dataEnhancementPlugin, saasPlugin];

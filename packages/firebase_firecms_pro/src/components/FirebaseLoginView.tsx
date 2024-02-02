@@ -1,11 +1,7 @@
 import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
 import { FirebaseApp, FirebaseError } from "firebase/app";
-import {
-    ErrorView,
-    FireCMSLogo,
-    useModeController,
-} from "@firecms/core";
+import { ErrorView, FireCMSLogo, useModeController, } from "@firecms/core";
 import {
     ArrowBackIcon,
     Button,

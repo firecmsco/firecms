@@ -3,12 +3,16 @@ import { ProjectConfig } from "./useBuildProjectConfig";
 import { TextSearchInfoDialog } from "../components/subscriptions/TextSearchInfoDialog";
 import { FirestoreDelegate } from "@firecms/firebase";
 import { CollectionsConfigController } from "@firecms/collection_editor";
+import { FireCMSAppConfig } from "../types";
 
-export function useSaasPlugin({ projectConfig, firestoreDelegate, collectionConfigController }: {
+export function useSaasPlugin({ projectConfig, firestoreDelegate, collectionConfigController, appConfig }: {
     projectConfig: ProjectConfig;
+    appConfig?: FireCMSAppConfig;
     firestoreDelegate: FirestoreDelegate
     collectionConfigController: CollectionsConfigController;
 }): FireCMSPlugin {
+
+    const hasOwnTextSearchImplementation = Boolean(appConfig?.textSearchControllerBuilder);
     return {
         name: "Saas plugin",
         collectionView: {
@@ -25,6 +29,7 @@ export function useSaasPlugin({ projectConfig, firestoreDelegate, collectionConf
                     context.dialogsController.open({
                         key: "text_search_info",
                         Component: (props) => <TextSearchInfoDialog {...props}
+                                                                    hasOwnTextSearchImplementation={hasOwnTextSearchImplementation}
                                                                     collectionConfigController={collectionConfigController}
                                                                     parentCollectionIds={parentCollectionIds}
                                                                     path={path}
