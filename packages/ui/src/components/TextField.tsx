@@ -159,7 +159,7 @@ export function TextField<T extends string | number>({
 
             {input}
 
-            {endAdornment && <div className="flex absolute right-0 top-3 mr-3 ">{endAdornment}</div>}
+            {endAdornment && <div className="flex flex-row justify-center items-center absolute h-full right-0 top-0 mr-4 ">{endAdornment}</div>}
 
         </div>
     );

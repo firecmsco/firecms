@@ -206,6 +206,8 @@ function EntityFormInternal<M extends Record<string, any>>({
     const [entityIdError, setEntityIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<Error | undefined>();
 
+    const [customIdLoading, setCustomIdLoading] = React.useState<boolean>(false);
+
     const initialValuesRef = useRef<EntityValues<M>>(entity?.values ?? baseDataSourceValues as EntityValues<M>);
     const initialValues = initialValuesRef.current;
     const [internalValues, setInternalValues] = useState<EntityValues<M> | undefined>(initialValues);
@@ -234,10 +236,12 @@ function EntityFormInternal<M extends Record<string, any>>({
     });
 
     const onIdUpdate = inputCollection.callbacks?.onIdUpdate;
-    useEffect(() => {
+
+    const doOnIdUpdate = useCallback(async () => {
         if (onIdUpdate && internalValues && (status === "new" || status === "copy")) {
+            setCustomIdLoading(true);
             try {
-                const updatedId = onIdUpdate({
+                const updatedId = await onIdUpdate({
                     collection: resolvedCollection,
                     path,
                     entityId,
@@ -249,8 +253,13 @@ function EntityFormInternal<M extends Record<string, any>>({
                 onIdUpdateError && onIdUpdateError(e);
                 console.error(e);
             }
+            setCustomIdLoading(false);
         }
     }, [entityId, internalValues, status]);
+
+    useEffect(() => {
+        doOnIdUpdate();
+    }, [doOnIdUpdate]);
 
     const underlyingChanges: Partial<EntityValues<M>> = useMemo(() => {
         if (initialValues && status === "existing") {
@@ -437,6 +446,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                                            status={status}
                                            onChange={setEntityId}
                                            error={entityIdError}
+                                           loading={customIdLoading}
                                            entity={entity}/>}
 
                         {entityId && <InnerForm

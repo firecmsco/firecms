@@ -65,7 +65,8 @@ export type EntityCallbacks<M extends Record<string, any> = any, UserType extend
      *
      * @param idUpdateProps
      */
-    onIdUpdate?(idUpdateProps: EntityIdUpdateProps<M>): string;
+    onIdUpdate?(idUpdateProps: EntityIdUpdateProps<M>): string | Promise<string>;
+
 }
 
 /**
