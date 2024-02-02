@@ -9,7 +9,8 @@ import { defaultBorderMixin } from "../styles";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
 import { LinedSpace } from "../layout/LinedSpace";
-import { PagesBackground } from "../general/PagesBackground";
+import { PagesHeroBackground } from "../general/PagesHeroBackground";
+import { MainHeroBackground } from "../general/MainHeroBackground";
 
 function HeroHome({}) {
 
@@ -66,8 +67,8 @@ function HeroHome({}) {
 
     return (
         <div
-            className={clsx("w-full relative border-0 border-b -mt-20 bg-gray-800 dark:bg-gray-900", defaultBorderMixin)}>
-            <PagesBackground/>
+            className={clsx("w-full relative border-0 border-b -mt-20 bg-black bg-opacity-80 dark:bg-gray-900 dark:bg-opacity-90", defaultBorderMixin)}>
+            <MainHeroBackground/>
             <Panel includeMargin={false}
                    includePadding={false}
                    color={"transparent"}

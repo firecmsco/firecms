@@ -3,7 +3,7 @@ import { NeatGradient } from "@firecms/neat";
 import { easeInOut } from "../partials/styles";
 
 function getBrightnessFrom(scroll: number) {
-    const min = .5;
+    const min = .4;
     const max = .8;
     return Math.min(max, Math.max(min, min + scroll / 1000));
 }
@@ -21,7 +21,7 @@ function getSaturateFrom(scroll: number) {
 }
 
 function getAmplitude(scroll: number) {
-    const min = 2;
+    const min = 4;
     const max = 40;
     return Math.min(max, Math.max(min, min + scroll / 50));
 }

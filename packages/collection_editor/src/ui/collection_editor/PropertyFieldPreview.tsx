@@ -43,7 +43,7 @@ export function PropertyFieldPreview({
 
     const borderColorClass = hasError
         ? "border-red-500"
-        : (selected ? "border-blue-500" : "border-transparent");
+        : (selected ? "border-primary" : "border-transparent");
 
     return <ErrorBoundary>
         <div
@@ -141,7 +141,7 @@ export function NonEditablePropertyPreview({
                     onClick ? cardClickableMixin : "",
                     selected ? cardSelectedMixin : "",
                     "flex-grow p-4 border transition-colors duration-200",
-                    selected ? "border-blue-500" : "border-transparent")}
+                    selected ? "border-primary" : "border-transparent")}
             >
 
                 <div className="w-full flex flex-col">

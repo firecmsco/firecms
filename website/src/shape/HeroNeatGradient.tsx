@@ -3,7 +3,7 @@ import { NeatGradient } from "@firecms/neat";
 
 function getAmplitude(scroll: number) {
     const min = 10;
-    const max = 30;
+    const max = 40;
     return Math.min(max, Math.max(min, min + scroll / 50));
 }
 

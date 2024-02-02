@@ -1,6 +1,6 @@
 import React from "react";
 import { Panel } from "./Panel";
-import { PagesBackground } from "./PagesBackground";
+import { PagesHeroBackground } from "./PagesHeroBackground";
 
 export function Hero({
                          title,
@@ -16,7 +16,7 @@ export function Hero({
     return (
         <>
             <div className={"w-full relative bg-blue-800 -mt-20"}>
-                <PagesBackground color={color}/>
+                <PagesHeroBackground color={color}/>
                 <Panel includeMargin={false}
                        includePadding={false}
                        color={"transparent"}

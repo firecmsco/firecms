@@ -104,11 +104,11 @@ export function useBuildProjectConfig({
         if (primaryColor) {
             document.documentElement.style.setProperty("--fcms-primary", primaryColor);
             document.documentElement.style.setProperty("--fcms-primary-dark", darkenColor(primaryColor, 10));
-            document.documentElement.style.setProperty("--fcms-primary-bg", hexToRgbaWithOpacity(primaryColor, 20));
+            document.documentElement.style.setProperty("--fcms-primary-bg", hexToRgbaWithOpacity(primaryColor, 10));
         } else {
             document.documentElement.style.setProperty("--fcms-primary", darkenColor(DEFAULT_PRIMARY_COLOR, 10));
             document.documentElement.style.setProperty("--fcms-primary-dark", darkenColor(DEFAULT_PRIMARY_COLOR, 10));
-            document.documentElement.style.setProperty("--fcms-primary-bg", hexToRgbaWithOpacity(DEFAULT_PRIMARY_COLOR, 20));
+            document.documentElement.style.setProperty("--fcms-primary-bg", hexToRgbaWithOpacity(DEFAULT_PRIMARY_COLOR, 10));
         }
         if (secondaryColor) {
             document.documentElement.style.setProperty("--fcms-secondary", secondaryColor);
