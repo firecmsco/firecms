@@ -1,3 +1,28 @@
+h1 {
+    @apply text-6xl font-headers font-light
+}
+
+h2 {
+    @apply text-5xl font-headers font-light
+}
+
+h3 {
+    @apply text-4xl font-headers font-normal
+}
+
+h4 {
+    @apply text-3xl font-headers font-normal
+}
+
+h5 {
+    @apply text-2xl font-headers font-normal
+}
+
+h6 {
+    @apply text-xl font-headers font-medium
+}
+
+
 /* latin */
 @font-face {
     font-family: 'IBM Plex Mono';
@@ -350,7 +375,7 @@ h6 {
     font-size: var(--ifm-h6-font-size);
 }
 
-p{
+p {
     margin: 16px 0
 }
 

@@ -37,7 +37,7 @@ export function Button<P extends React.ElementType>({
             "border-transparent bg-primary hover:bg-primary-dark focus:ring-primary !text-white shadow hover:ring-1 hover:ring-primary": variant === "filled" && !disabled,
             "border-transparent !text-primary !hover:text-primary-dark hover:bg-primary hover:bg-primary-bg": variant === "text" && !disabled,
             "border-primary !text-primary hover:bg-primary-bg hover:border-primary-dark !hover:text-primary-dark focus:ring-primary hover:ring-1 hover:ring-primary": variant === "outlined" && !disabled,
-            "border-primary-dark border-opacity-50 dark:border-blue-500 dark:border-opacity-50 opacity-50 !text-primary-dark !dark:text-blue-500 text-opacity-50 dark:text-opacity-50": variant === "outlined" && disabled,
+            "border-primary-dark border-opacity-50 dark:border-primary dark:border-opacity-50 opacity-50 !text-primary-dark !dark:text-primary text-opacity-50 dark:text-opacity-50": variant === "outlined" && disabled,
             "border-transparent outline-none opacity-50 !text-slate-600 !dark:text-slate-500": (variant === "filled" || variant === "text") && disabled
         }
     );
