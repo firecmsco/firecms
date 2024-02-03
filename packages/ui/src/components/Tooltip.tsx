@@ -9,15 +9,17 @@ export type TooltipProps = {
     side?: "top" | "bottom" | "left" | "right",
     sideOffset?: number,
     title?: string,
+    delayDuration?: number;
     className?: string,
     tooltipClassName?: string,
     children: React.ReactNode,
-    style?: React.CSSProperties
+    style?: React.CSSProperties;
 };
 
 export const Tooltip = ({
                             open,
                             side = "bottom",
+                            delayDuration = 250,
                             sideOffset,
                             onOpenChange,
                             title,
@@ -33,7 +35,7 @@ export const Tooltip = ({
         return <>{children}</>;
 
     return (
-        <TooltipPrimitive.Provider delayDuration={250}>
+        <TooltipPrimitive.Provider delayDuration={delayDuration}>
             <TooltipPrimitive.Root open={open} onOpenChange={onOpenChange}>
                 <TooltipPrimitive.Trigger asChild>
                     <div className={className} style={style}>

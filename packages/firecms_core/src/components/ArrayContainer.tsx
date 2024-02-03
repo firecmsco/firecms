@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { DragDropContext, Draggable, DraggableProvided, Droppable } from "@hello-pangea/dnd";
 
 import { getHashValue } from "../util";
-import useMeasure from "react-use-measure";
 import {
     AddIcon,
     Button,
@@ -12,9 +11,9 @@ import {
     IconButton,
     Menu,
     MenuItem,
-    MoreVertIcon,
     RemoveIcon,
-    Tooltip
+    Tooltip,
+    useOutsideAlerter
 } from "@firecms/ui";
 
 interface ArrayContainerProps<T> {
@@ -224,11 +223,6 @@ export function ArrayContainerItem({
                                        isDragging
                                    }: ArrayContainerItemProps) {
 
-    const [measureRef, bounds] = useMeasure();
-
-    const measuring = size !== "small" && bounds.height === 0;
-    const menuOverflow = size !== "small" && bounds.height < 100;
-
     const [onHover, setOnHover] = React.useState(false);
     const setOnHoverTrue = useCallback(() => setOnHover(true), []);
     const setOnHoverFalse = useCallback(() => setOnHover(false), []);
@@ -246,9 +240,7 @@ export function ArrayContainerItem({
     >
         <div
             className="flex items-start">
-            <div ref={measureRef}
-                 className="flex-grow w-[calc(100%-48px)] text-text-primary dark:text-text-primary-dark"
-            >
+            <div className="flex-grow w-[calc(100%-48px)] text-text-primary dark:text-text-primary-dark">
                 {buildEntry(index, internalId)}
             </div>
             <ArrayItemOptions direction={size === "small" ? "row" : "column"}
@@ -256,8 +248,6 @@ export function ArrayContainerItem({
                               remove={remove}
                               index={index}
                               provided={provided}
-                              measuring={measuring}
-                              contentOverflow={menuOverflow}
                               copy={copy}/>
         </div>
     </div>;
@@ -270,12 +260,8 @@ export function ArrayItemOptions({
                                      index,
                                      provided,
                                      copy,
-                                     contentOverflow,
-                                     measuring
                                  }: {
     direction?: "row" | "column",
-    contentOverflow: boolean,
-    measuring: boolean,
     disabled: boolean,
     remove: (index: number) => void,
     index: number,
@@ -283,65 +269,43 @@ export function ArrayItemOptions({
     copy: (index: number) => void
 }) {
 
-    return <div className={`p-1 flex ${direction === "row" ? "flex-row-reverse" : "flex-col"} items-center`}
-                {...provided.dragHandleProps}
-    >
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    const iconRef = React.useRef<HTMLDivElement>(null);
+    useOutsideAlerter(iconRef, () => setMenuOpen(false));
+
+    return <div className={`ml-2 flex ${direction === "row" ? "flex-row-reverse" : "flex-col"} items-center`}
+                ref={iconRef}
+                {...provided.dragHandleProps}>
         <Tooltip
+            delayDuration={400}
+            open={menuOpen ? false : undefined}
+
             side={direction === "column" ? "left" : undefined}
-            title="Move">
+            title="Drag to move. Click for more options">
+
             <IconButton
                 size="small"
                 disabled={disabled}
+                onClick={() => setMenuOpen(true)}
+                onDragStart={(e: any) => {
+                    console.log("icon drag start", e);
+                    setMenuOpen(false);
+                }}
                 className={`cursor-${disabled ? "inherit" : "grab"}`}>
-                {/* TODO: for some reason, the icon as a span does not work with Drag and Drop
-                */}
-                <svg focusable="false"
-                     fill={"currentColor"}
-                     aria-hidden="true" viewBox="0 0 24 24">
-                    <path d="M20 9H4v2h16V9zM4 15h16v-2H4v2z"></path>
+                <svg width="24" height="24" viewBox="0 0 100 100" fill="none">
+                    <circle cx="28" cy="50" r="9" fill={"currentColor"}/>
+                    <circle cx="28" cy="21" r="9" fill={"currentColor"}/>
+                    <circle cx="71" cy="21" r="9" fill={"currentColor"}/>
+                    <circle cx="71" cy="50" r="9" fill={"currentColor"}/>
+                    <circle cx="71" cy="78" r="9" fill={"currentColor"}/>
+                    <circle cx="28" cy="78" r="9" fill={"currentColor"}/>
                 </svg>
-                {/*<DragHandleIcon*/}
-                {/*    size={"small"}*/}
-                {/*    color={disabled ? "disabled" : "inherit"}/>*/}
             </IconButton>
-        </Tooltip>
-
-        {!measuring && !contentOverflow && <>
-            <Tooltip
-                title="Remove"
-                side={direction === "column" ? "left" : undefined}>
-                <IconButton
-                    size="small"
-                    aria-label="remove"
-                    disabled={disabled}
-                    onClick={() => remove(index)}>
-                    <RemoveIcon
-                        size={"small"}/>
-                </IconButton>
-            </Tooltip>
-
-            <Tooltip
-                side={direction === "column" ? "left" : undefined}
-                title="Copy in this position">
-                <IconButton
-                    size="small"
-                    aria-label="copy"
-                    disabled={disabled}
-                    onClick={() => copy(index)}>
-                    <ContentCopyIcon
-                        size={"small"}/>
-                </IconButton>
-            </Tooltip>
-        </>}
-
-        {!measuring && contentOverflow && <>
 
             <Menu
-                trigger={<IconButton size={"small"}>
-                    <MoreVertIcon
-                        size={"small"}/>
-                </IconButton>}
-            >
+                open={menuOpen}
+                trigger={<div/>}>
 
                 <MenuItem dense onClick={() => remove(index)}>
                     <RemoveIcon size={"small"}/>
@@ -353,7 +317,9 @@ export function ArrayItemOptions({
                 </MenuItem>
 
             </Menu>
-        </>}
+
+        </Tooltip>
+
     </div>;
 }
 

@@ -92,6 +92,14 @@ export const testCollection = buildCollection({
         //     dataType: "string",
         //     propertyConfig: "color",
         // },
+
+        tags: {
+            name: "Tags",
+            dataType: "array",
+            of: {
+                dataType: "string"
+            }
+        },
         mainSaturation: {
             name: "Main saturation",
             description: "Saturation applied to all colors when there is no saturation on color applied",
@@ -209,13 +217,6 @@ export const testCollection = buildCollection({
         //     dataType: "date",
         //     mode: "date_time",
         //     clearable: true
-        // },
-        // tags: {
-        //     name: "Tags",
-        //     dataType: "array",
-        //     of: {
-        //         dataType: "string"
-        //     }
         // },
         // specSheet: ({
         //                 values,
