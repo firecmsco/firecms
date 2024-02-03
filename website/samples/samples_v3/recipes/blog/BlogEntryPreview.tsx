@@ -35,7 +35,7 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
     return (
         <div>
 
-            {headerUrl && <img loading="lazy" 
+            {headerUrl && <img
                 alt={"Header"}
                 style={{
                     width: "100%",
@@ -45,10 +45,13 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
                 src={headerUrl}
             />}
 
-            <Container>
-                {modifiedValues?.name && <Typography variant={"h3"} className="mt-16 mb-12">
-                    {modifiedValues.name}
-                </Typography>}
+            <Container className={"mb-16"}>
+
+                <Container maxWidth={"3xl"}>
+                    {modifiedValues?.name && <Typography variant={"h3"} className="mt-16 mb-12 mx-12">
+                        {modifiedValues.name}
+                    </Typography>}
+                </Container>
 
                 {modifiedValues?.content && modifiedValues.content
                     .filter((e: any) => !!e)
@@ -57,6 +60,9 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
                             if (entry.type === "text")
                                 return <Text key={`preview_text_${index}`}
                                              markdownText={entry.value}/>;
+                            if (entry.type === "quote")
+                                return <Quote key={`preview_text_${index}`}
+                                              quoteText={entry.value}/>;
                             if (entry.type === "images")
                                 return <Images key={`preview_images_${index}`}
                                                storagePaths={entry.value}/>;
@@ -76,20 +82,24 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
 
 }
 
-export function Images({ storagePaths }: { storagePaths: string[] }) {
+export function Images({ storagePaths }: {
+    storagePaths: string[]
+}) {
     if (!Array.isArray(storagePaths))
         return <></>;
-    return <div className="flex">
+    return <div className="flex justify-center">
         {storagePaths.map((path, index) =>
             <div key={`images_${index}`}
-                 className="m-4 p-8 w-[250px] h-[250px]">
+                 className="m-4 p-8 w-[350px] h-[350px]">
                 <StorageImage storagePath={path}/>
             </div>
         )}
     </div>;
 }
 
-export function StorageImage({ storagePath }: { storagePath: string }) {
+export function StorageImage({ storagePath }: {
+    storagePath: string
+}) {
 
     const storage = useStorageSource();
     const [url, setUrl] = useState<string | undefined>();
@@ -103,7 +113,7 @@ export function StorageImage({ storagePath }: { storagePath: string }) {
     if (!storagePath)
         return <></>;
 
-    return (<img loading="lazy" 
+    return (<img
         alt={"Generic"}
         style={{
             objectFit: "contain",
@@ -112,13 +122,15 @@ export function StorageImage({ storagePath }: { storagePath: string }) {
         }} src={url}/>);
 }
 
-function Text({ markdownText }: { markdownText: string }) {
+function Text({ markdownText }: {
+    markdownText: string
+}) {
 
     if (!markdownText)
         return <></>;
 
-    return <Container>
-        <div className="mt-24 mb-24">
+    return <Container maxWidth={"3xl"}>
+        <div className="mt-12 mb-12 px-12">
             <Markdown source={markdownText}/>
         </div>
     </Container>;
@@ -152,7 +164,7 @@ function ProductGroupPreview({ references }: {
 
     if (!products) return <CircularProgress/>;
 
-    return <div>
+    return <div className={"flex gap-2 flex-wrap items-center justify-center"}>
         {products.map((p, index) => <ProductPreview
             key={`products_${index}`}
             productValues={p.values as EntityValues<Product>}/>)}
@@ -167,7 +179,7 @@ export function ProductPreview({ productValues }: {
         return <></>;
 
     return (
-        <Card className={"m-4 width-[400px] height-[400px]"}>
+        <Card className={"m-4 max-w-[340px] p-8 border"}>
             <div className={"flex-grow flex-shrink-1 flex-basis-[296px] p-8 max-h-[296px]"}>
                 <StorageImage storagePath={productValues.main_image}/>
             </div>
@@ -188,4 +200,18 @@ export function ProductPreview({ productValues }: {
         </Card>
     );
 
+}
+
+function Quote({ quoteText }: {
+    quoteText: string
+}) {
+
+    if (!quoteText)
+        return <></>;
+
+    return <Container maxWidth={"5xl"} className={"border-l-2 border-l-red-950 dark:border-l-red-100 my-8 italic"}>
+        <Typography variant="h5" sx={{ fontStyle: "italic" }}>
+            {quoteText}
+        </Typography>
+    </Container>;
 }

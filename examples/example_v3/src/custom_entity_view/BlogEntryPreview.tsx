@@ -11,7 +11,6 @@ import {
     Markdown,
     Typography,
     useDataSource,
-    useNavigationController,
     useStorageSource
 } from "firecms";
 import { BlogEntry, Product } from "../types";
@@ -24,11 +23,11 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
 
     const storage = useStorageSource();
 
-    const [headerUrl, setHeaderUrl] = useState<string | null>();
+    const [headerUrl, setHeaderUrl] = useState<string | undefined>();
     useEffect(() => {
         if (modifiedValues?.header_image) {
             storage.getDownloadURL(modifiedValues.header_image)
-                .then((res) => setHeaderUrl(res.url));
+                .then((res) => setHeaderUrl(res.url ?? undefined));
         }
     }, [storage, modifiedValues?.header_image]);
 
@@ -46,9 +45,12 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
             />}
 
             <Container className={"mb-16"}>
-                {modifiedValues?.name && <Typography variant={"h3"} className="mt-16 mb-12 ml-16">
-                    {modifiedValues.name}
-                </Typography>}
+
+                <Container maxWidth={"3xl"}>
+                    {modifiedValues?.name && <Typography variant={"h3"} className="mt-16 mb-12 mx-12">
+                        {modifiedValues.name}
+                    </Typography>}
+                </Container>
 
                 {modifiedValues?.content && modifiedValues.content
                     .filter((e: any) => !!e)
@@ -57,6 +59,9 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
                             if (entry.type === "text")
                                 return <Text key={`preview_text_${index}`}
                                              markdownText={entry.value}/>;
+                            if (entry.type === "quote")
+                                return <Quote key={`preview_text_${index}`}
+                                              quoteText={entry.value}/>;
                             if (entry.type === "images")
                                 return <Images key={`preview_images_${index}`}
                                                storagePaths={entry.value}/>;
@@ -76,7 +81,9 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
 
 }
 
-export function Images({ storagePaths }: { storagePaths: string[] }) {
+export function Images({ storagePaths }: {
+    storagePaths: string[]
+}) {
     if (!Array.isArray(storagePaths))
         return <></>;
     return <div className="flex justify-center">
@@ -89,21 +96,23 @@ export function Images({ storagePaths }: { storagePaths: string[] }) {
     </div>;
 }
 
-export function StorageImage({ storagePath }: { storagePath: string }) {
+export function StorageImage({ storagePath }: {
+    storagePath: string
+}) {
 
     const storage = useStorageSource();
-    const [url, setUrl] = useState<string | null>();
+    const [url, setUrl] = useState<string | undefined>();
     useEffect(() => {
         if (storagePath) {
             storage.getDownloadURL(storagePath)
-                .then((res) => setUrl(res.url));
+                .then((res) => setUrl(res.url ?? undefined));
         }
     }, [storage, storagePath]);
 
     if (!storagePath)
         return <></>;
 
-    return (!url ? null : <img
+    return (<img
         alt={"Generic"}
         style={{
             objectFit: "contain",
@@ -112,12 +121,14 @@ export function StorageImage({ storagePath }: { storagePath: string }) {
         }} src={url}/>);
 }
 
-function Text({ markdownText }: { markdownText: string }) {
+function Text({ markdownText }: {
+    markdownText: string
+}) {
 
     if (!markdownText)
         return <></>;
 
-    return <Container>
+    return <Container maxWidth={"3xl"}>
         <div className="mt-12 mb-12 px-12">
             <Markdown source={markdownText}/>
         </div>
@@ -128,8 +139,6 @@ function ProductGroupPreview({ references }: {
     references: EntityReference[]
 }) {
 
-    const navigation = useNavigationController();
-    const productsCollection = navigation.getCollectionFromPaths(["products"]);
     const [products, setProducts] = useState<Entity<Product>[] | undefined>();
     const dataSource = useDataSource();
 
@@ -138,11 +147,10 @@ function ProductGroupPreview({ references }: {
      * and the products collection
      */
     useEffect(() => {
-        if (references && productsCollection) {
+        if (references) {
             Promise.all(references.map((ref) => dataSource.fetchEntity({
                 path: ref.path,
                 entityId: ref.id,
-                collection: productsCollection
             })))
                 .then((results) => results.filter(r => !!r) as Entity<Product>[])
                 .then((results) => setProducts(results));
@@ -190,4 +198,18 @@ export function ProductPreview({ productValues }: {
         </Card>
     );
 
+}
+
+function Quote({ quoteText }: {
+    quoteText: string
+}) {
+
+    if (!quoteText)
+        return <></>;
+
+    return <Container maxWidth={"5xl"} className={"border-l-2 border-l-red-950 dark:border-l-red-100 my-8 italic"}>
+        <Typography variant="h5" sx={{ fontStyle: "italic" }}>
+            {quoteText}
+        </Typography>
+    </Container>;
 }

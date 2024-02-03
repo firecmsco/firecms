@@ -5,7 +5,7 @@ export const usersCollection = buildCollection({
     path: "users",
     name: "Users",
     singularName: "User",
-    group: "Main",
+    group: "E-commerce",
     description: "Registered users",
     textSearchEnabled: true,
     icon: "Person",

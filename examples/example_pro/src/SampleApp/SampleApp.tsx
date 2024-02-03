@@ -7,7 +7,15 @@ import "@fontsource/roboto"
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
 
-import { CMSView, GitHubIcon, IconButton, Tooltip , Authenticator, FireCMSProApp, FirestoreIndexesBuilder } from "@firecms/firebase_pro";
+import {
+    Authenticator,
+    CMSView,
+    FireCMSProApp,
+    FirestoreIndexesBuilder,
+    GitHubIcon,
+    IconButton,
+    Tooltip
+} from "@firecms/firebase_pro";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { useImportExportPlugin } from "@firecms/data_import_export";
 
@@ -28,6 +36,7 @@ import { cryptoCollection } from "./collections/crypto_collection";
 import CustomColorTextField from "./custom_field/CustomColorTextField";
 import { booksCollection } from "./collections/books_collection";
 import { FirebaseApp } from "firebase/app";
+import { TestEditorView } from "./TestEditorView";
 
 function SampleApp() {
     // const appCheckOptions: AppCheckOptions = {
@@ -52,13 +61,21 @@ function SampleApp() {
         </Tooltip>
     );
 
-    const customViews: CMSView[] = [{
-        path: "additional",
-        name: "Additional",
-        group: "Content",
-        description: "This is an example of an additional view that is defined by the user",
-        view: <ExampleCMSView/>
-    }];
+    const customViews: CMSView[] = [
+        {
+            path: "additional",
+            name: "Additional",
+            group: "Content",
+            description: "This is an example of an additional view that is defined by the user",
+            view: <ExampleCMSView/>
+        },
+        // {
+        //     path: "editor_test",
+        //     name: "Editor test",
+        //     group: "Content",
+        //     view: <TestEditorView/>
+        // },
+    ];
 
     const onFirebaseInit = (config: object, app: FirebaseApp) => {
         // Just calling analytics enables screen tracking
@@ -88,9 +105,9 @@ function SampleApp() {
     }, []);
 
     const collections = [
+        booksCollection,
         productsCollection,
         localeCollectionGroup,
-        booksCollection,
         usersCollection,
         blogCollection,
         showcaseCollection,

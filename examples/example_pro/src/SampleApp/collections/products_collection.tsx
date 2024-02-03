@@ -52,7 +52,7 @@ export const localeCollectionGroup = buildCollection({
     ...localeCollection,
     name: "Product locales group",
     description: "This is a collection group related to the locales subcollection of products",
-    group: "Main",
+    group: "E-commerce",
     collectionGroup: true
 })
 
@@ -105,7 +105,7 @@ export const productsCollection = buildCollection<Product>({
     callbacks: productCallbacks,
     name: "Products",
     singularName: "Product",
-    group: "Main",
+    group: "E-commerce",
     icon: "shopping_cart",
     description: "List of the products currently sold in our shop",
     textSearchEnabled: true,
@@ -305,7 +305,7 @@ export const productsSimpleCollection = buildCollection<any>({
     path: "products",
     name: "Products",
     singularName: "Product",
-    group: "Main",
+    group: "E-commerce",
     icon: "ShoppingCart",
     properties: {
         name: {
