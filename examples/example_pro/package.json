@@ -16,6 +16,7 @@
     "@tiptap/react": "^2.2.1",
     "@tiptap/starter-kit": "^2.2.1",
     "firebase": "^10.7.1",
+    "novel": "^0.1.22",
     "prosemirror-model": "^1.19.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

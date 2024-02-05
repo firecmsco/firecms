@@ -1,15 +1,12 @@
-import plugin from "tailwindcss/plugin";
-import { Config } from "tailwindcss";
-
-export const fireCMSTailwindConfig: Config = {
-    mode: "jit",
+export default {
     darkMode: ["class", "[data-theme=\"dark\"]"],
+    mode: "jit",
     content: [
         "./index.html",
         "./src/**/*.{js,ts,jsx,tsx}",
-        "./**/node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}"
+        "./node_modules/firecms/src/**/*.{js,ts,jsx,tsx}",
+        "./node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}",
     ],
-    // plugins: [fireCMSPlugin],
     theme: {
         extend: {
             fontFamily: {
@@ -64,17 +61,8 @@ export const fireCMSTailwindConfig: Config = {
                     800: "#35353A",
                     900: "#18181C",
                     950: "#101013"
-                }
+                },
             }
-        }
-
-    },
-    variants: {
-        extend: {}
+        },
     }
 };
-export const fireCMSTailwindPlugin = plugin(function ({
-                                                          matchUtilities,
-                                                          theme
-                                                      }) {
-}, fireCMSTailwindConfig);

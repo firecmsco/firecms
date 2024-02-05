@@ -280,7 +280,6 @@ export function ArrayItemOptions({
         <Tooltip
             delayDuration={400}
             open={menuOpen ? false : undefined}
-
             side={direction === "column" ? "left" : undefined}
             title="Drag to move. Click for more options">
 
@@ -289,7 +288,6 @@ export function ArrayItemOptions({
                 disabled={disabled}
                 onClick={() => setMenuOpen(true)}
                 onDragStart={(e: any) => {
-                    console.log("icon drag start", e);
                     setMenuOpen(false);
                 }}
                 className={`cursor-${disabled ? "inherit" : "grab"}`}>

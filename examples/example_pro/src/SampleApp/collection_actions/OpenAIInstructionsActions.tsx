@@ -62,8 +62,8 @@ export function OpenAIInstructionsActions() {
                     {/*</Stepper>*/}
                     <Typography gutterBottom>
                         Try it out by clicking on <b>ADD BOOK</b> and
-                        then typing the title of your favourite book on the <b>ENHANCE
-                        input</b>
+                        then typing the title of your favourite book on the <b>AUTOFILL
+                        input</b> field.
                     </Typography>
                     <Typography gutterBottom>
                         You can also try finding an empty or incomplete field

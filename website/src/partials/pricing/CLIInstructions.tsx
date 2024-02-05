@@ -15,13 +15,16 @@ export function CLIInstructions() {
         </h2>
 
         <p className={"text-lg"}>
-            Use our <b>CLI</b> to create a new project and start
-            hacking right away.
+            Use our <b>CLI</b> to start hacking right away.
         </p>
 
         <p className={"text-lg"}>
-            If you are on paying plan you can use the CLI to initialize
-            your project with <b>custom fields</b> and <b>custom views</b>.
+            By using the CLI to initialize
+            your project, you can customize your CMS in multiple ways, including <b>custom form fields</b>,
+            <b>actions</b>, <b>views</b>, <b>custom business logic</b> and <b>authentication</b>.
+        </p>
+
+        <p className={"text-lg"}>
             This way you can create a CMS tailored to your needs.
         </p>
 

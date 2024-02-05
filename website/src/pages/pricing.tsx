@@ -21,9 +21,12 @@ function FeaturesPage() {
                     </>}
                 subtitle={
                     <>
-                        <p>Experience the power of our CMS platform with a
-                            free, <b>self-hosted</b> option or try <b>FireCMS
-                                Cloud</b> for a fully-managed, full-service solution.
+                        <p>
+                            Experience the power of FireCMS today completely for <b>free</b>.
+                        </p>
+                        <p>
+                            Try <b>FireCMS
+                            Cloud</b> for a fully-managed, full-service solution.
                         </p>
                     </>}
                 // cta={<a
@@ -39,9 +42,10 @@ function FeaturesPage() {
 
             <FireCMSCloudVersions/>
 
+            <CLIInstructions/>
+
             <VersionsComparison/>
 
-            <CLIInstructions/>
 
         </Layout>
     );

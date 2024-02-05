@@ -69,12 +69,12 @@ function SampleApp() {
             description: "This is an example of an additional view that is defined by the user",
             view: <ExampleCMSView/>
         },
-        // {
-        //     path: "editor_test",
-        //     name: "Editor test",
-        //     group: "Content",
-        //     view: <TestEditorView/>
-        // },
+        {
+            path: "editor_test",
+            name: "Editor test",
+            group: "Content",
+            view: <TestEditorView/>
+        },
     ];
 
     const onFirebaseInit = (config: object, app: FirebaseApp) => {

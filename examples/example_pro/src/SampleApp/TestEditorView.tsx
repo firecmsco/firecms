@@ -1,13 +1,9 @@
-import { Container } from "@firecms/ui";
-
-import { useEditor, EditorContent } from '@tiptap/react'
+import { Editor } from "novel";
 
 export function TestEditorView() {
-
-    const editor = useEditor()
-
-    return <Container>
-        <EditorContent editor={editor} />
-    </Container>;
+    return (
+        <Editor className={"bg-initial"}
+                onDebouncedUpdate={(value) => console.log(value)}
+        />
+    )
 }
-
