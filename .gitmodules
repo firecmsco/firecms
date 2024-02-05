@@ -2,6 +2,3 @@
 	path = saas
 	url = git@github.com:FireCMSco/firecms_saas.git
 
-[submodule "packages/data_enhancement"]
-	path = data_enhancement
-	url = git@github.com:FireCMSco/firecms_data_enhancement.git

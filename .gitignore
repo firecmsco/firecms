@@ -31,9 +31,6 @@ firebase-debug.log*
 report.**.json
 
 ./sass
-./collection_editor
-./data_enhancement
-./github_utils
 
 .pnp.*
 .yarn/*
