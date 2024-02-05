@@ -1,0 +1,95 @@
+{
+  "name": "@firecms/data_enhancement",
+  "type": "module",
+  "version": "3.0.0-beta.1",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
+  "source": "src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js",
+      "types": "./dist/src/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "@firecms/core": "^3.0.0-beta.1"
+  },
+  "peerDependencies": {
+    "firebase": "^10.5.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router": "^6.12.0",
+    "react-router-dom": "^6.12.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+    "prepublishOnly": "run-s build",
+    "test": "jest"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@types/jest": "^29.5.6",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.17",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "babel-jest": "^29.7.0",
+    "eslint": "^8.55.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.3.3",
+    "vite": "^4.5.1",
+    "vite-plugin-fonts": "^0.7.0"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "71db60591860441e5c0d2b6cbc11198870257c7e"
+}
