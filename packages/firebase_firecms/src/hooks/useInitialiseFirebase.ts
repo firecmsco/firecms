@@ -48,8 +48,6 @@ export function useInitialiseFirebase({
     authDomain?: string;
 }): InitialiseFirebaseResult {
 
-    console.debug("useInitialiseFirebase", { firebaseConfig, fromUrl, onFirebaseInit, name, authDomain });
-
     const [firebaseApp, setFirebaseApp] = useState<FirebaseApp | undefined>();
     const [firebaseConfigLoading, setFirebaseConfigLoading] = useState<boolean>(false);
     const [configError, setConfigError] = useState<string>();

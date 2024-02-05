@@ -1,4 +1,0 @@
-[submodule "packages/saas"]
-	path = saas
-	url = git@github.com:FireCMSco/firecms_saas.git
-

@@ -46,11 +46,11 @@
     "nocache": "^4.0.0",
     "open": "^7.4.2",
     "ora": "^5.4.1",
-    "ws": "^8.15.1",
+    "ws": "^8.16.0",
     "zip-folder": "^1.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.8.9",
+    "@types/node": "^20.11.16",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },

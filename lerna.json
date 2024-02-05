@@ -13,7 +13,6 @@
     "packages/firecms_cli",
     "packages/create_firecms_app",
     "packages/collection_editor",
-    "packages/saas",
     "packages/schema_inference",
     "examples/example_v3",
     "examples/example_pro"
