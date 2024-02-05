@@ -36,7 +36,7 @@
     "clean": "lerna run clean",
     "release": "git push origin main:release"
   },
-  "packageManager": "yarn@3.2.3",
+  "packageManager": "yarn@4.1.0",
   "devDependencies": {
     "lerna": "^7.4.2"
   }

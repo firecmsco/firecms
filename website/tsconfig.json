@@ -36,6 +36,15 @@
             ],
             "@firecms/firebase": [
                 "../packages/firebase_firecms"
+            ],
+            "@firecms/collection_editor": [
+                "../packages/collection_editor"
+            ],
+            "@firecms/data_import_export": [
+                "../packages/data_import_export"
+            ],
+            "@firecms/schema_inference": [
+                "../packages/schema_inference"
             ]
         }
     },

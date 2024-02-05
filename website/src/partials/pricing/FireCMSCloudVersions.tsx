@@ -28,7 +28,7 @@ export function FireCMSCloudVersions() {
                     <li className={"list-disc"}>All available form fields</li>
                     <li className={"list-disc"}>Custom fields and custom views</li>
                     <li className={"list-disc"}>Access to a 40+ first class components library</li>
-                    <li className={"list-disc"}>Schema editor and inference from data</li>
+                    <li className={"list-disc"}>Schema editor and data inference</li>
                     <li className={"list-disc"}>Advanced data import and export</li>
                     <li className={"list-disc"}>Default roles</li>
                     <li className={"list-disc"}>3 users</li>

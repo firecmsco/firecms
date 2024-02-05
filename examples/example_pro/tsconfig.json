@@ -22,6 +22,7 @@
       "@firecms/cli": ["../../packages/firecms_cli/src"],
       "@firecms/firebase": ["../../packages/firebase_firecms/src"],
       "@firecms/firebase_pro": ["../../packages/firebase_firecms_pro/src"],
+      "@firecms/ui": ["../../packages/ui/src"],
       "@firecms/data_enhancement": ["../../packages/data_enhancement/src"],
       "@firecms/data_import_export": ["../../packages/data_import_export/src"]
     }

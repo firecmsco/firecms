@@ -30,6 +30,7 @@ import { CustomFieldValidator } from "../../form/validation";
 import { renderSkeletonText } from "../../preview";
 import { propertiesToColumns } from "./column_utils";
 import { useOutsideAlerter } from "@firecms/ui";
+import { ErrorView } from "../ErrorView";
 
 const DEFAULT_STATE = {} as any;
 
@@ -338,55 +339,47 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             const column = props.column;
             const columns = props.columns;
             const columnKey = column.key;
-            if (props.columnIndex === 0) {
-                if (tableRowActionsBuilder)
-                    return tableRowActionsBuilder({
-                        entity: props.rowData,
-                        size,
-                        width: column.width,
-                        frozen: column.frozen
-                    });
-                else
-                    return <EntityCollectionRowActions entity={props.rowData}
-                                                       width={column.width}
-                                                       frozen={column.frozen}
-                                                       isSelected={false}
-                                                       size={size}/>;
-            } else if (additionalFieldsMap[columnKey]) {
-                return additionalCellRenderer(props);
-            } else if (props.columnIndex < columns.length + 1) {
-                return propertyCellRenderer(props);
-            } else {
-                throw Error("Internal: columns not mapped properly");
+
+            try {
+                if (props.columnIndex === 0) {
+                    if (tableRowActionsBuilder)
+                        return tableRowActionsBuilder({
+                            entity: props.rowData,
+                            size,
+                            width: column.width,
+                            frozen: column.frozen
+                        });
+                    else
+                        return <EntityCollectionRowActions entity={props.rowData}
+                                                           width={column.width}
+                                                           frozen={column.frozen}
+                                                           isSelected={false}
+                                                           size={size}/>;
+                } else if (additionalFieldsMap[columnKey]) {
+                    return additionalCellRenderer(props);
+                } else if (props.columnIndex < columns.length + 1) {
+                    return propertyCellRenderer(props);
+                } else {
+                    throw Error("Internal: columns not mapped properly");
+                }
+            } catch (e: any) {
+                console.error("Error rendering cell", e);
+                return <EntityTableCell
+                    size={size}
+                    width={column.width}
+                    saved={false}
+                    value={null}
+                    align={ "left"}
+                    fullHeight={false}
+                    disabled={true}>
+                    <ErrorView error={e}/>
+                </EntityTableCell>;
             }
         }, [additionalFieldsMap, tableRowActionsBuilder, size, additionalCellRenderer, propertyCellRenderer])
 
         const onFilterUpdate = useCallback((updatedFilterValues?: FilterValues<any>) => {
             setFilterValues?.({ ...updatedFilterValues, ...forceFilter } as FilterValues<any>);
         }, [forceFilter]);
-
-        // useTraceUpdate({
-        //     data,
-        //     columns,
-        //     inlineEditing,
-        //     size, selectedEntityIds, additionalCellRenderer, propertyCellRenderer,
-        //     cellRenderer,
-        //     onRowClick,
-        //     onEndReached: loadNextPage,
-        //     onResetPagination: resetPagination,
-        //     error: dataLoadingError,
-        //     paginationEnabled,
-        //     onColumnResize,
-        //     loading: dataLoading,
-        //     filter: filterValues,
-        //     onFilterUpdate,
-        //     sortBy,
-        //     onSortByUpdate: setSortBy,
-        //     hoverRow,
-        //     emptyComponent,
-        //     checkFilterCombination,
-        //     createFilterField,
-        // });
 
         const onRowClick = inlineEditing ? undefined : (onEntityClick ? onRowClickCallback : undefined);
 

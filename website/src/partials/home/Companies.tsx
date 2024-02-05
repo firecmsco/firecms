@@ -7,7 +7,8 @@ import MMLogo from "@site/static/img/logos/mm_logo.webp";
 import ProtonLogo from "@site/static/img/logos/proton_logo.webp";
 
 // @ts-ignore
-import SomnioLogo from "@site/static/img/logos/logo_somnio_blanco.png";
+import SomnioLogoDark from "@site/static/img/logos/logo_somnio_blanco.png";
+import SomnioLogoLight from "@site/static/img/logos/logo_somnio.svg";
 // @ts-ignore
 import MMLogoDark from "@site/static/img/logos/mm_logo_white.webp";
 import TPALogo from "@site/static/img/logos/the_planet_app_logo.svg";
@@ -38,7 +39,7 @@ export function Companies() {
                 rel="noopener noreferrer"
                 aria-label="MedicalMotion"
                 href={"https://medicalmotion.com"}>
-                <img loading="lazy"  src={isDarkTheme ? MMLogoDark : MMLogo}
+                <img loading="lazy" src={isDarkTheme ? MMLogoDark : MMLogo}
                      alt="MedicalMotion Logo"
                      className="w-48 m-4"/>
             </a>
@@ -47,7 +48,7 @@ export function Companies() {
                 rel="noopener noreferrer"
                 aria-label="Proton Health"
                 href={"https://www.proton-health.com"}>
-                <img loading="lazy"  src={ProtonLogo}
+                <img loading="lazy" src={ProtonLogo}
                      alt="MedicalMotion Logo"
                      className="w-48 m-4"/>
             </a>
@@ -56,10 +57,12 @@ export function Companies() {
                 rel="noopener noreferrer"
                 aria-label="Somnio Software"
                 href={"https://www.somniosoftware.com/"}>
-                <img loading="lazy"
-                     src={SomnioLogo}
-                     alt="Somnio Logo"
-                     className="w-48 m-4"/>
+                {isDarkTheme ? <img loading="lazy"
+                                    src={SomnioLogoDark}
+                                    alt="Somnio Logo"
+                                    className="w-48 m-4"/> :
+                    <SomnioLogoLight
+                        className="w-48 m-4"/>}
             </a>
             <a
                 target="_blank"

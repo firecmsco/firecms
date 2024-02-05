@@ -122,7 +122,7 @@ export function DeveloperFeatures() {
                                 </div>
 
                                 <h3 className="h3 m-0">
-                                    0Built for every project
+                                    Built for every project
                                 </h3>
 
                             </div>

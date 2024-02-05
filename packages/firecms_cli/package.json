@@ -2,7 +2,7 @@
   "name": "@firecms/cli",
   "version": "3.0.0-beta.1",
   "description": "A CLI to perform FireCMS operations",
-  "packageManager": "yarn@3.2.3",
+  "packageManager": "yarn@4.1.0",
   "main": "./build/index.js",
   "module": "./build/index.js",
   "types": "./build/index.d.ts",

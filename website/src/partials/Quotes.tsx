@@ -45,13 +45,14 @@ const quotes = [
 
 export const QuotesSection: React.FC = () => {
     return (
-        <Panel color={"lighter"} includePadding={false}>
+        <Panel color={"lighter"} includePadding={false} >
             <div
                 className="py-16 px-8 flex flex-row gap-4 overflow-auto no-scrollbar">
                 {
                     quotes.map(({ quote, avatar, author, role }, i) => (
-                        <>
                             <blockquote key={`quote-${i}`}
+                                        data-aos="fade-left"
+                                        data-aos-delay={i * 50}
                                         className={clsx(
                                             "flex flex-col",
                                             "not-italic w-96 min-w-[380px] bg-gray-50 dark:bg-gray-700 relative flex flex-col items-center justify-center px-8 py-6 rounded-2xl border", defaultBorderMixin)}>
@@ -77,8 +78,6 @@ export const QuotesSection: React.FC = () => {
                                 <cite
                                     className="not-italic	block mt-2 text-xs font-bold uppercase text-center">{role}</cite>
                             </blockquote>
-
-                        </>
 
                     ))
                 }
