@@ -26,7 +26,7 @@ export function LabelWithIcon({
             {icon}
 
             <span
-                className={`font-medium text-${small ? "base" : "sm"} origin-top-left transform ${small ? "translate-x-2 scale-75" : ""}`}>{(title ?? "") + (required ? " *" : "")}</span>
+                className={`text-start font-medium text-${small ? "base" : "sm"} origin-top-left transform ${small ? "translate-x-2 scale-75" : ""}`}>{(title ?? "") + (required ? " *" : "")}</span>
 
         </span>
     );
