@@ -136,7 +136,10 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
                 ];
                 downloadExport(data, additionalData, collection, flattenArrays, additionalHeaders, exportType, dateExportType);
             })
-            .catch(setDataLoadingError)
+            .catch((e) => {
+                console.error("Error loading export data", e);
+                setDataLoadingError(e);
+            })
             .finally(() => setDataLoading(false));
 
     }, [dataSource, path, fetchAdditionalFields, flattenArrays, exportType, dateExportType]);
