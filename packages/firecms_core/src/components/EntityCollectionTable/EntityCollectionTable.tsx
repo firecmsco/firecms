@@ -1,36 +1,22 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef } from "react";
+import React, { useCallback, useContext, useMemo, useRef } from "react";
 import equal from "react-fast-compare";
-import {
-    AdditionalFieldDelegate,
-    CollectionSize,
-    Entity,
-    FilterValues,
-    FireCMSContext,
-    ResolvedProperty,
-    SelectedCellProps,
-    User
-} from "../../types";
+import { AdditionalFieldDelegate, CollectionSize, Entity, FireCMSContext, User } from "../../types";
 import { PropertyTableCell } from "./PropertyTableCell";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { useFireCMSContext, useLargeLayout } from "../../hooks";
-import { CellRendererParams, VirtualTable, VirtualTableColumn } from "../VirtualTable";
-import { enumToObjectEntries, getValueInPath } from "../../util";
+import { CellRendererParams, VirtualTableColumn } from "../VirtualTable";
+import { getValueInPath } from "../../util";
 import { getRowHeight } from "../VirtualTable/common";
 import { EntityCollectionRowActions } from "./EntityCollectionRowActions";
 import { EntityCollectionTableController } from "./types";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
 import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
 import { EntityTableCell } from "./internal/EntityTableCell";
-import { FilterFormFieldProps } from "../VirtualTable/VirtualTableHeader";
-import { ReferenceFilterField } from "./filters/ReferenceFilterField";
-import { StringNumberFilterField } from "./filters/StringNumberFilterField";
-import { BooleanFilterField } from "./filters/BooleanFilterField";
-import { DateTimeFilterField } from "./filters/DateTimeFilterField";
 import { CustomFieldValidator } from "../../form/validation";
 import { renderSkeletonText } from "../../preview";
 import { propertiesToColumns } from "./column_utils";
-import { useOutsideAlerter } from "@firecms/ui";
 import { ErrorView } from "../ErrorView";
+import { SimpleTable } from "./SimpleTable";
 
 const DEFAULT_STATE = {} as any;
 
@@ -65,7 +51,6 @@ export const useEntityCollectionTableController = () => useContext<EntityCollect
 export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>(
     function EntityCollectionTable<M extends Record<string, any>, UserType extends User>
     ({
-         debugKey,
          forceFilter,
          actionsStart,
          actions,
@@ -86,25 +71,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
          displayedColumnIds,
          defaultSize,
          properties,
-         tableController:
-             {
-                 data,
-                 dataLoading,
-                 noMoreToLoad,
-                 dataLoadingError,
-                 filterValues,
-                 setFilterValues,
-                 sortBy,
-                 setSortBy,
-                 setSearchString,
-                 clearFilter,
-                 itemCount,
-                 setItemCount,
-                 pageSize = 50,
-                 paginationEnabled,
-                 checkFilterCombination,
-                 setPopupCell
-             },
+         tableController,
          filterable = true,
          sortable = true,
          endAdornment,
@@ -127,38 +94,9 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         const [size, setSize] = React.useState<CollectionSize>(defaultSize ?? "m");
 
-        const [selectedCell, setSelectedCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
-
         const selectedEntityIds = selectedEntities?.map(e => e.id);
 
-        const filterIsSet = !!filterValues && Object.keys(filterValues).length > 0;
-
-        const loadNextPage = useCallback(() => {
-            if (!paginationEnabled || dataLoading || noMoreToLoad)
-                return;
-            if (itemCount !== undefined)
-                setItemCount?.(itemCount + pageSize);
-        }, [dataLoading, itemCount, noMoreToLoad, pageSize, paginationEnabled, setItemCount]);
-
-        useOutsideAlerter(ref,
-            () => {
-                if (selectedCell) {
-                    unselect();
-                }
-            },
-            Boolean(selectedCell));
-
-        const resetPagination = useCallback(() => {
-            setItemCount?.(pageSize);
-        }, [pageSize]);
-
-        const onRowClickCallback = useCallback(({ rowData }: {
-            rowData: Entity<M>
-        }) => {
-            if (inlineEditing)
-                return;
-            return onEntityClick && onEntityClick(rowData);
-        }, [onEntityClick, inlineEditing]);
+        const filterIsSet = !!tableController.filterValues && Object.keys(tableController.filterValues).length > 0;
 
         const updateSize = useCallback((size: CollectionSize) => {
             if (onSizeChanged)
@@ -166,7 +104,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             setSize(size);
         }, []);
 
-        const onTextSearch = useCallback((newSearchString?: string) => setSearchString?.(newSearchString), []);
+        const onTextSearch = useCallback((newSearchString?: string) => tableController.setSearchString?.(newSearchString), []);
 
         const additionalFieldsMap: Record<string, AdditionalFieldDelegate<M, UserType>> = useMemo(() => {
             return (additionalFields
@@ -175,27 +113,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     .reduce((a, b) => ({ ...a, ...b }), {})
                 : {}) as Record<string, AdditionalFieldDelegate<M, UserType>>;
         }, [additionalFields]);
-
-        // on ESC key press
-        useEffect(() => {
-            const escFunction = (event: any) => {
-                if (event.keyCode === 27) {
-                    unselect();
-                }
-            };
-            document.addEventListener("keydown", escFunction, false);
-            return () => {
-                document.removeEventListener("keydown", escFunction, false);
-            };
-        });
-
-        const select = useCallback((cell?: SelectedCellProps<M>) => {
-            setSelectedCell(cell);
-        }, []);
-
-        const unselect = useCallback(() => {
-            setSelectedCell(undefined);
-        }, []);
 
         const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator;
 
@@ -369,7 +286,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     width={column.width}
                     saved={false}
                     value={null}
-                    align={ "left"}
+                    align={"left"}
                     fullHeight={false}
                     disabled={true}>
                     <ErrorView error={e}/>
@@ -377,138 +294,44 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             }
         }, [additionalFieldsMap, tableRowActionsBuilder, size, additionalCellRenderer, propertyCellRenderer])
 
-        const onFilterUpdate = useCallback((updatedFilterValues?: FilterValues<any>) => {
-            setFilterValues?.({ ...updatedFilterValues, ...forceFilter } as FilterValues<any>);
-        }, [forceFilter]);
-
-        const onRowClick = inlineEditing ? undefined : (onEntityClick ? onRowClickCallback : undefined);
-
         return (
 
-            <EntityCollectionTableContext.Provider
-                value={{
-                    setPopupCell: setPopupCell as ((cell?: SelectedCellProps<M>) => void),
-                    select,
-                    onValueChange,
-                    size,
-                    selectedCell
-                }}
-            >
+            <div ref={ref}
+                 className="h-full w-full flex flex-col bg-white dark:bg-gray-950">
 
-                <div ref={ref}
-                     className="h-full w-full flex flex-col bg-white dark:bg-gray-950">
+                <CollectionTableToolbar
+                    forceFilter={disabledFilterChange}
+                    filterIsSet={filterIsSet}
+                    onTextSearch={textSearchEnabled ? onTextSearch : undefined}
+                    textSearchLoading={textSearchLoading}
+                    onTextSearchClick={textSearchEnabled ? onTextSearchClick : undefined}
+                    clearFilter={tableController.clearFilter}
+                    size={size}
+                    onSizeChanged={updateSize}
+                    title={title}
+                    actionsStart={actionsStart}
+                    actions={actions}
+                    loading={tableController.dataLoading}/>
 
-                    <CollectionTableToolbar
-                        forceFilter={disabledFilterChange}
-                        filterIsSet={filterIsSet}
-                        onTextSearch={textSearchEnabled ? onTextSearch : undefined}
-                        textSearchLoading={textSearchLoading}
-                        onTextSearchClick={textSearchEnabled ? onTextSearchClick : undefined}
-                        clearFilter={clearFilter}
-                        size={size}
-                        onSizeChanged={updateSize}
-                        title={title}
-                        actionsStart={actionsStart}
-                        actions={actions}
-                        loading={dataLoading}/>
+                <SimpleTable columns={columns}
+                             size={size}
+                             inlineEditing={inlineEditing}
+                             cellRenderer={cellRenderer}
+                             onEntityClick={onEntityClick}
+                             highlightedRow={useCallback((entity: Entity<M>) => selectedEntityIds?.includes(entity.id) ?? false, [selectedEntityIds])}
+                             tableController={tableController}
+                             onValueChange={onValueChange}
+                             onColumnResize={onColumnResize}
+                             hoverRow={hoverRow}
+                             filterable={filterable}
+                             emptyComponent={emptyComponent}
+                             endAdornment={endAdornment}
+                             AddColumnComponent={AddColumnComponent}/>
 
-                    <VirtualTable
-                        data={data}
-                        columns={columns}
-                        cellRenderer={cellRenderer}
-                        onRowClick={onRowClick}
-                        onEndReached={loadNextPage}
-                        onResetPagination={resetPagination}
-                        error={dataLoadingError}
-                        paginationEnabled={paginationEnabled}
-                        onColumnResize={onColumnResize}
-                        size={size}
-                        loading={dataLoading}
-                        filter={filterValues}
-                        onFilterUpdate={setFilterValues ? onFilterUpdate : undefined}
-                        sortBy={sortBy}
-                        onSortByUpdate={setSortBy as ((sortBy?: [string, "asc" | "desc"]) => void)}
-                        hoverRow={hoverRow}
-                        emptyComponent={emptyComponent}
-                        checkFilterCombination={checkFilterCombination}
-                        createFilterField={filterable ? createFilterField : undefined}
-                        rowClassName={useCallback((entity: Entity<M>) => {
-                            return selectedEntityIds?.includes(entity.id) ? "bg-gray-100 bg-opacity-75 dark:bg-gray-800 dark:bg-opacity-75" : "";
-                        }, [selectedEntityIds])}
-                        className="flex-grow"
-                        endAdornment={endAdornment}
-                        AddColumnComponent={AddColumnComponent}
-                    />
 
-                </div>
-            </EntityCollectionTableContext.Provider>
+            </div>
         );
 
     },
     equal
 );
-
-function createFilterField({
-                               id,
-                               filterValue,
-                               setFilterValue,
-                               column,
-                               hidden,
-                               setHidden
-                           }: FilterFormFieldProps<{
-    resolvedProperty: ResolvedProperty,
-    disabled: boolean,
-}>): React.ReactNode {
-
-    if (!column.custom) {
-        return null;
-    }
-
-    const { resolvedProperty } = column.custom;
-
-    const isArray = resolvedProperty?.dataType === "array";
-    const baseProperty: ResolvedProperty = isArray ? resolvedProperty.of : resolvedProperty;
-    if (!baseProperty) {
-        return null;
-    }
-    if (baseProperty.dataType === "reference") {
-        return <ReferenceFilterField value={filterValue}
-                                     setValue={setFilterValue}
-                                     name={id as string}
-                                     isArray={isArray}
-                                     path={baseProperty.path}
-                                     title={resolvedProperty?.name}
-                                     previewProperties={baseProperty?.previewProperties}
-                                     hidden={hidden}
-                                     setHidden={setHidden}/>;
-    } else if (baseProperty.dataType === "number" || baseProperty.dataType === "string") {
-        const name = baseProperty.name;
-        const enumValues = baseProperty.enumValues ? enumToObjectEntries(baseProperty.enumValues) : undefined;
-        return <StringNumberFilterField value={filterValue}
-                                        setValue={setFilterValue}
-                                        name={id as string}
-                                        dataType={baseProperty.dataType}
-                                        isArray={isArray}
-                                        enumValues={enumValues}
-                                        title={name}/>;
-    } else if (baseProperty.dataType === "boolean") {
-        const name = baseProperty.name;
-        return <BooleanFilterField value={filterValue}
-                                   setValue={setFilterValue}
-                                   name={id as string}
-                                   title={name}/>;
-
-    } else if (baseProperty.dataType === "date") {
-        const title = baseProperty.name;
-        return <DateTimeFilterField value={filterValue}
-                                    setValue={setFilterValue}
-                                    name={id as string}
-                                    mode={baseProperty.mode}
-                                    isArray={isArray}
-                                    title={title}/>;
-    }
-
-    return (
-        <div>{`Currently the filter field ${resolvedProperty.dataType} is not supported`}</div>
-    );
-}

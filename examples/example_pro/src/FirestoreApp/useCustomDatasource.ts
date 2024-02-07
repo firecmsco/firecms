@@ -7,9 +7,9 @@ import {
     FetchCollectionProps,
     FetchEntityProps,
     SaveEntityProps,
+    useFirestoreDelegate,
 } from "@firecms/firebase_pro";
 import { FirebaseApp } from "firebase/app";
-import { useFirestoreDelegate } from "@firecms/firebase_pro";
 
 type CustomDataSourceProps = {
     firebaseApp?: FirebaseApp,
@@ -64,8 +64,8 @@ export function useCustomDatasource({ firebaseApp }: CustomDataSourceProps): Dat
         generateEntityId(path: string) {
             return firestoreDelegate.generateEntityId(path);
         },
-        countEntities(props: FetchCollectionProps): Promise<number> {
-            return firestoreDelegate.countEntities(props);
+        async countEntities(props: FetchCollectionProps): Promise<number> {
+            return firestoreDelegate.countEntities?.(props) ?? 0;
         }
     }
 }

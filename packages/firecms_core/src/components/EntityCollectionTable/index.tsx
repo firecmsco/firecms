@@ -14,7 +14,7 @@ export type {
 } from "./types";
 
 export * from "./PropertyTableCell";
-export * from "./SimpleEntityCollectionTable";
+export * from "./SimpleTable";
 export * from "./EntityCollectionRowActions";
 export * from "./useDataSourceEntityCollectionTableController";
 export * from "./column_utils";

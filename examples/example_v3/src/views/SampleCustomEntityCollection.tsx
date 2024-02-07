@@ -9,11 +9,12 @@ import {
     getPropertyInPath,
     getValueInPath,
     OnCellValueChangeParams,
+    Paper,
     propertiesToColumns,
     PropertyOrBuilder,
     PropertyTableCell,
     resolveProperty,
-    SimpleEntityCollectionTable,
+    SimpleTable,
     useDataSourceEntityCollectionTableController
 } from "firecms";
 import { usersCollection } from "../collections/users_collection";
@@ -124,15 +125,12 @@ export function SampleCustomEntityCollection() {
 
     return (
         <div className="flex h-full w-full items-center justify-center">
-            <div className={"h-[300px] w-full md:w-3/4"}>
-                {/*<Paper className={"h-[600px] w-full"}>*/}
-                <SimpleEntityCollectionTable columns={columns}
-                                             cellRenderer={cellRenderer}
-                                             tableController={tableController}
-                                             onValueChange={onValueChange}
-                />
-                {/*</Paper>*/}
-            </div>
+            <Paper className={"h-[300px] w-full md:w-3/4"}>
+                <SimpleTable columns={columns}
+                             cellRenderer={cellRenderer}
+                             tableController={tableController}
+                             onValueChange={onValueChange}/>
+            </Paper>
         </div>
     );
 }

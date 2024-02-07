@@ -2,7 +2,7 @@ import React, { Profiler } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css"
 
-import SampleApp from "./SampleApp/SampleApp";
+import App from "./FirestoreApp/App";
 
 const dod = () => {
     // @ts-ignore
@@ -57,7 +57,7 @@ const root = createRoot(container as any);
 root.render(
     <React.StrictMode>
         <Profiler id="App" onRender={onRenderCallback}>
-            <SampleApp/>
+            <App/>
         </Profiler>
     </React.StrictMode>
 );

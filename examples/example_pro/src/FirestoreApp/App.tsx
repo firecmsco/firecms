@@ -38,7 +38,7 @@ import { booksCollection } from "./collections/books_collection";
 import { FirebaseApp } from "firebase/app";
 import { TestEditorView } from "./TestEditorView";
 
-function SampleApp() {
+function App() {
     // const appCheckOptions: AppCheckOptions = {
     //     providerKey: publicRecaptchaKey,
     //     useEnterpriseRecaptcha: false,
@@ -206,4 +206,4 @@ function SampleApp() {
 
 }
 
-export default SampleApp;
+export default App;

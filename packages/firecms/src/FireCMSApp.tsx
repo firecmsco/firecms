@@ -177,7 +177,7 @@ function FullLoadingView(props: {
         key={"project_scaffold_" + props.projectId}
         name={props.projectConfig?.projectName ?? ""}
         logo={props.projectConfig?.logo}
-        FireCMSAppBarComponent={props.FireCMSAppBarComponent}
+        FireCMSAppBar={props.FireCMSAppBarComponent}
         includeDrawer={false}>
         <CircularProgressCenter text={props.text}/>
     </Scaffold>;
@@ -345,7 +345,7 @@ export function FireCMSClientWithController({
             name={projectConfig.projectName ?? ""}
             logo={projectConfig.logo}
             includeDrawer={false}
-            FireCMSAppBarComponent={props.FireCMSAppBarComponent}
+            FireCMSAppBar={props.FireCMSAppBarComponent}
         >
             {loadingOrErrorComponent}
         </Scaffold>;
@@ -524,8 +524,8 @@ function FireCMSAppAuthenticated({
                                                 name={projectConfig.projectName ?? ""}
                                                 logo={projectConfig.logo}
                                                 includeDrawer={false}
-                                                FireCMSAppBarComponent={FireCMSAppBarComponent}
-                                                fireCMSAppBarComponentProps={appConfig?.fireCMSAppBarComponentProps}>
+                                                FireCMSAppBar={FireCMSAppBarComponent}
+                                                fireCMSAppBarProps={appConfig?.fireCMSAppBarComponentProps}>
                                                 <CircularProgressCenter text={"Almost there"}/>
                                             </Scaffold>;
                                     } else {
@@ -535,8 +535,8 @@ function FireCMSAppAuthenticated({
                                                 name={projectConfig.projectName ?? ""}
                                                 logo={projectConfig.logo}
                                                 Drawer={FireCMSDrawer}
-                                                FireCMSAppBarComponent={FireCMSAppBarComponent}
-                                                fireCMSAppBarComponentProps={appConfig?.fireCMSAppBarComponentProps}
+                                                FireCMSAppBar={FireCMSAppBarComponent}
+                                                fireCMSAppBarProps={appConfig?.fireCMSAppBarComponentProps}
                                                 autoOpenDrawer={appConfig?.autoOpenDrawer}>
                                                 <NavigationRoutes
                                                     HomePage={appConfig?.HomePage ?? FireCMSProjectHomePage}

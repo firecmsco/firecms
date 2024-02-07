@@ -88,7 +88,6 @@ export function FireCMSProApp({
                                   firestoreIndexesBuilder,
                                   components,
                                   localTextSearchEnabled = false,
-                                  backendApiHost = "https://api-drplyi3b6q-ey.a.run.app", // TODO
                               }: FireCMSProAppProps) {
 
     /**
@@ -110,6 +109,11 @@ export function FireCMSProApp({
         onFirebaseInit,
         firebaseConfig
     });
+
+    /**
+     * Controller used to manage the dark or light color mode
+     */
+    const modeController = useBuildModeController();
 
     const {
         appCheckLoading,
@@ -168,84 +172,6 @@ export function FireCMSProApp({
         </>;
     }
 
-    return <FireCMSProInternal
-        firebaseApp={firebaseApp}
-        configError={configError}
-        firebaseConfigLoading={firebaseConfigLoading}
-        appCheckLoading={appCheckLoading}
-        basePath={basePath}
-        collections={collections}
-        views={views}
-        authController={authController}
-        userConfigPersistence={userConfigPersistence}
-        dateTimeFormat={dateTimeFormat}
-        firestoreDelegate={firestoreDelegate}
-        storageSource={storageSource}
-        locale={locale}
-        baseCollectionPath={baseCollectionPath}
-        onAnalyticsEvent={onAnalyticsEvent}
-        plugins={plugins}
-        propertyConfigs={propertyConfigs}
-        authLoading={authLoading}
-        logoDark={logoDark}
-        logo={logo}
-        canAccessMainView={canAccessMainView}
-        components={components}
-        allowSkipLogin={allowSkipLogin}
-        signInOptions={signInOptions}
-        notAllowedError={notAllowedError}
-        name={name}
-        toolbarExtraWidget={toolbarExtraWidget}
-        autoOpenDrawer={autoOpenDrawer}
-    />;
-
-}
-
-function FireCMSProInternal({ firebaseApp, configError, firebaseConfigLoading, appCheckLoading, basePath, collections, views, authController, userConfigPersistence, dateTimeFormat, firestoreDelegate, storageSource, locale, baseCollectionPath, onAnalyticsEvent, plugins, propertyConfigs, authLoading, logoDark, logo, canAccessMainView, components, allowSkipLogin, signInOptions, notAllowedError, name, toolbarExtraWidget, autoOpenDrawer }: {
-    firebaseApp: FirebaseApp,
-    // fireCMSBackend: FireCMSBackend,
-    configError: string | undefined,
-    firebaseConfigLoading: boolean,
-    appCheckLoading: boolean,
-    basePath: string | undefined,
-    collections: EntityCollection[] | EntityCollectionsBuilder | undefined,
-    views: CMSView[] | CMSViewsBuilder | undefined,
-    authController: FirebaseAuthController,
-    userConfigPersistence: UserConfigurationPersistence,
-    dateTimeFormat: string | undefined,
-    firestoreDelegate: DataSourceDelegate,
-    storageSource: StorageSource,
-    locale?: Locale,
-    baseCollectionPath: string | undefined,
-    onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void,
-    plugins: FireCMSPlugin[] | undefined,
-    propertyConfigs: Record<string, PropertyConfig<any>>,
-    authLoading: boolean,
-    logoDark: string | undefined,
-    logo: string | undefined,
-    canAccessMainView: boolean,
-    components?: ComponentsRegistry,
-    allowSkipLogin: boolean | undefined,
-    signInOptions: Array<FirebaseSignInProvider | FirebaseSignInOption> | undefined,
-    notAllowedError: any,
-    name: string,
-    toolbarExtraWidget: React.ReactNode | undefined,
-    autoOpenDrawer: boolean | undefined
-}) {
-
-    if (!firebaseApp.options.projectId) {
-        throw new Error("No firebase project id")
-    }
-    // const projectConfig = useBuildProjectConfig({
-    //     projectId: firebaseApp.options.projectId,
-    //     backendFirebaseApp: fireCMSBackend.backendFirebaseApp,
-    // });
-
-    /**
-     * Controller used to manage the dark or light color mode
-     */
-    const modeController = useBuildModeController();
-
     if (configError) {
         return <CenteredView>{configError}</CenteredView>;
     }
@@ -296,7 +222,7 @@ function FireCMSProInternal({ firebaseApp, configError, firebaseConfigLoading, a
                                         <Scaffold
                                             name={name}
                                             logo={usedLogo}
-                                            fireCMSAppBarComponentProps={{
+                                            fireCMSAppBarProps={{
                                                 endAdornment: toolbarExtraWidget
                                             }}
                                             autoOpenDrawer={autoOpenDrawer}>

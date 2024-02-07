@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import equal from "react-fast-compare";
 import {
     CollectionSize,
@@ -6,33 +6,21 @@ import {
     EntityTableController,
     FilterValues,
     ResolvedProperty,
-    SelectedCellProps,
-    User
+    SelectedCellProps
 } from "../../types";
-import { useLargeLayout } from "../../hooks";
 import { CellRendererParams, VirtualTable, VirtualTableColumn } from "../VirtualTable";
 import { enumToObjectEntries } from "../../util";
 import { OnCellValueChange } from "./types";
-import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
-import { EntityCollectionTableProps, OnColumnResizeParams } from "./EntityCollectionTableProps";
+import { OnColumnResizeParams } from "./EntityCollectionTableProps";
 import { FilterFormFieldProps } from "../VirtualTable/VirtualTableHeader";
 import { ReferenceFilterField } from "./filters/ReferenceFilterField";
 import { StringNumberFilterField } from "./filters/StringNumberFilterField";
 import { BooleanFilterField } from "./filters/BooleanFilterField";
 import { DateTimeFilterField } from "./filters/DateTimeFilterField";
 import { EntityCollectionTableContext } from "./EntityCollectionTable";
+import { useOutsideAlerter } from "@firecms/ui";
 
-export type SimpleEntityCollectionTableProps<M extends Record<string, any>> = {
-
-    /**
-     * List of entities that will be displayed as selected;
-     */
-    highlightedEntities?: Entity<M>[];
-
-    /**
-     * Override the title in the toolbar
-     */
-    title?: React.ReactNode;
+export type SimpleTableProps<M extends Record<string, any>> = {
 
     /**
      * Callback when a cell value changes.
@@ -66,26 +54,9 @@ export type SimpleEntityCollectionTableProps<M extends Record<string, any>> = {
     onColumnResize?(params: OnColumnResizeParams): void;
 
     /**
-     * Callback when the selected size of the table is changed
-     */
-    onSizeChanged?(size: CollectionSize): void;
-
-    /**
      * Should apply a different style to a row when hovering
      */
     hoverRow?: boolean;
-
-    /**
-     * Additional component that renders actions such as buttons in the
-     * collection toolbar, displayed on the left side
-     */
-    actionsStart?: React.ReactNode;
-
-    /**
-     * Additional component that renders actions such as buttons in the
-     * collection toolbar, displayed on the right side
-     */
-    actions?: React.ReactNode;
 
     /**
      * Controller holding the logic for the table
@@ -100,14 +71,18 @@ export type SimpleEntityCollectionTableProps<M extends Record<string, any>> = {
 
     inlineEditing?: boolean;
 
-    textSearchEnabled?: boolean;
+    forceFilter?: FilterValues<keyof M extends string ? keyof M : never>;
+
+    highlightedRow?: (data: Entity<M>) => boolean;
+
+    size?: CollectionSize;
 
     emptyComponent?: React.ReactNode;
 
-    forceFilter?: FilterValues<keyof M extends string ? keyof M : never>;
+    endAdornment?: React.ReactNode;
+
+    AddColumnComponent?: React.ComponentType;
 }
-
-
 
 /**
  * This component is in charge of rendering a collection table with a high
@@ -133,18 +108,13 @@ export type SimpleEntityCollectionTableProps<M extends Record<string, any>> = {
  * @see VirtualTable
  * @group Components
  */
-export const SimpleEntityCollectionTable = React.memo<SimpleEntityCollectionTableProps<any>>(
-    function SimpleEntityCollectionTable<M extends Record<string, any>, UserType extends User>
+export const SimpleTable = React.memo<SimpleTableProps<any>>(
+    function SimpleTable<M extends Record<string, any>>
     ({
-         actionsStart,
-         actions,
-         title,
          onValueChange,
          cellRenderer,
-         highlightedEntities,
          onEntityClick,
          onColumnResize,
-         onSizeChanged,
          hoverRow = true,
          inlineEditing = false,
          tableController:
@@ -167,15 +137,15 @@ export const SimpleEntityCollectionTable = React.memo<SimpleEntityCollectionTabl
                  setPopupCell
              },
          filterable = true,
-         sortable = true,
          emptyComponent,
-         textSearchEnabled,
          columns,
-         forceFilter
-     }: SimpleEntityCollectionTableProps<M>) {
+         forceFilter,
+         highlightedRow,
+         endAdornment,
+         AddColumnComponent
+     }: SimpleTableProps<M>) {
 
-        const largeLayout = useLargeLayout();
-
+        const ref = useRef<HTMLDivElement>(null);
         const [size, setSize] = React.useState<CollectionSize>("m");
 
         const [selectedCell, setSelectedCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
@@ -201,13 +171,13 @@ export const SimpleEntityCollectionTable = React.memo<SimpleEntityCollectionTabl
             return onEntityClick && onEntityClick(rowData);
         }, [onEntityClick, inlineEditing]);
 
-        const updateSize = useCallback((size: CollectionSize) => {
-            if (onSizeChanged)
-                onSizeChanged(size);
-            setSize(size);
-        }, []);
-
-        const onTextSearch = useCallback((newSearchString?: string) => setSearchString?.(newSearchString), []);
+        useOutsideAlerter(ref,
+            () => {
+                if (selectedCell) {
+                    unselect();
+                }
+            },
+            Boolean(selectedCell));
 
         // on ESC key press
         useEffect(() => {
@@ -244,18 +214,8 @@ export const SimpleEntityCollectionTable = React.memo<SimpleEntityCollectionTabl
                     selectedCell,
                 }}
             >
-                <div className="h-full w-full flex flex-col bg-white dark:bg-gray-950">
-
-                    <CollectionTableToolbar
-                        filterIsSet={filterIsSet}
-                        onTextSearch={textSearchEnabled ? onTextSearch : undefined}
-                        clearFilter={clearFilter}
-                        size={size}
-                        onSizeChanged={updateSize}
-                        title={title}
-                        actionsStart={actionsStart}
-                        actions={actions}
-                        loading={dataLoading}/>
+                <div className="h-full w-full flex flex-col bg-white dark:bg-gray-950"
+                     ref={ref}>
 
                     <VirtualTable
                         data={data}
@@ -274,10 +234,15 @@ export const SimpleEntityCollectionTable = React.memo<SimpleEntityCollectionTabl
                         sortBy={sortBy}
                         onSortByUpdate={setSortBy as ((sortBy?: [string, "asc" | "desc"]) => void)}
                         hoverRow={hoverRow}
-                        emptyComponent={emptyComponent}
                         checkFilterCombination={checkFilterCombination}
                         createFilterField={filterable ? createFilterField : undefined}
+                        rowClassName={useCallback((entity: Entity<M>) => {
+                            return highlightedRow?.(entity) ? "bg-gray-100 bg-opacity-75 dark:bg-gray-800 dark:bg-opacity-75" : "";
+                        }, [highlightedRow])}
                         className="flex-grow"
+                        emptyComponent={emptyComponent}
+                        endAdornment={endAdornment}
+                        AddColumnComponent={AddColumnComponent}
                     />
 
                 </div>

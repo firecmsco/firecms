@@ -168,8 +168,6 @@ export type FireCMSProAppProps = {
 
     components?: ComponentsRegistry;
 
-    backendApiHost?: string;
-
 };
 
 export type ComponentsRegistry = {

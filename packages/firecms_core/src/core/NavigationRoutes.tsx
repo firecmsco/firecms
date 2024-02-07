@@ -115,4 +115,3 @@ const buildCMSViewRoute = (path: string, cmsView: CMSView) => {
         element={cmsView.view}
     />;
 };
-

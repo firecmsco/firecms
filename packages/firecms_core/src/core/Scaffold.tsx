@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import { Drawer as DefaultDrawer, DrawerProps } from "./Drawer";
 import { useLargeLayout, useNavigationController } from "../hooks";
-import { ErrorBoundary, FireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "../components";
+import { ErrorBoundary, FireCMSAppBar as DefaultFireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "../components";
 import { ChevronLeftIcon, cn, defaultBorderMixin, IconButton, MenuIcon, Sheet, Tooltip } from "@firecms/ui";
 
 export const DRAWER_WIDTH = 280;
@@ -24,6 +24,9 @@ export interface ScaffoldProps<ExtraDrawerProps = object, ExtraAppbarProps = obj
      */
     logo?: string;
 
+    /**
+     * Whether to include the drawer in the scaffold
+     */
     includeDrawer?: boolean;
 
     /**
@@ -46,12 +49,12 @@ export interface ScaffoldProps<ExtraDrawerProps = object, ExtraAppbarProps = obj
      * A component that gets rendered on the upper side of the main toolbar.
      * `toolbarExtraWidget` has no effect if this is set.
      */
-    FireCMSAppBarComponent?: React.ComponentType<FireCMSAppBarProps<ExtraAppbarProps>>;
+    FireCMSAppBar?: React.ComponentType<FireCMSAppBarProps<ExtraAppbarProps>>;
 
     /**
      * Additional props passed to the custom AppBar
      */
-    fireCMSAppBarComponentProps?: Partial<FireCMSAppBarProps> & ExtraAppbarProps;
+    fireCMSAppBarProps?: Partial<FireCMSAppBarProps> & ExtraAppbarProps;
 
 }
 
@@ -77,8 +80,8 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
             autoOpenDrawer,
             Drawer = DefaultDrawer,
             drawerProps,
-            FireCMSAppBarComponent = FireCMSAppBar,
-            fireCMSAppBarComponentProps,
+            FireCMSAppBar = DefaultFireCMSAppBar,
+            fireCMSAppBarProps,
         } = props;
 
         const largeLayout = useLargeLayout();
@@ -108,10 +111,10 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                     // }
                 }}>
 
-                <FireCMSAppBarComponent title={name}
+                <FireCMSAppBar title={name}
                                         includeDrawer={includeDrawer}
                                         drawerOpen={computedDrawerOpen}
-                                        {...fireCMSAppBarComponentProps}/>
+                                        {...fireCMSAppBarProps}/>
 
                 <StyledDrawer
                     displayed={includeDrawer}
@@ -127,7 +130,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                             hovered={onHover}
                             drawerOpen={computedDrawerOpen}
                             closeDrawer={handleDrawerClose}
-                            {...drawerProps}/> )}
+                            {...drawerProps}/>)}
                 </StyledDrawer>
 
                 <main

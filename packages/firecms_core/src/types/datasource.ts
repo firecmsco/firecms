@@ -29,7 +29,7 @@ export interface FetchCollectionProps<M extends Record<string, any> = any> {
     collection?: EntityCollection<M> | ResolvedEntityCollection<M>;
     filter?: FilterValues<Extract<keyof M, string>>,
     limit?: number;
-    startAfter?: any[];
+    startAfter?: any;
     orderBy?: string;
     searchString?: string;
     order?: "desc" | "asc";
@@ -209,7 +209,7 @@ export interface DataSource {
     /**
      * Count the number of entities in a collection
      */
-    countEntities<M extends Record<string, any> = any>(props: FetchCollectionProps<M>): Promise<number>;
+    countEntities?<M extends Record<string, any> = any>(props: FetchCollectionProps<M>): Promise<number>;
 
     /**
      * Check if the given filter combination is valid
@@ -354,7 +354,7 @@ export interface DataSourceDelegate {
     /**
      * Count the number of entities in a collection
      */
-    countEntities<M extends Record<string, any> = any>(props: FetchCollectionDelegateProps<M>): Promise<number>;
+    countEntities?<M extends Record<string, any> = any>(props: FetchCollectionDelegateProps<M>): Promise<number>;
 
     /**
      * Check if the given filter combination is valid

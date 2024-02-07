@@ -273,7 +273,6 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
             <div className="flex-grow">
                 {entitiesDisplayedFirst &&
                     <EntityCollectionTable
-                        debugKey={"reference_selection_table"}
                         displayedColumnIds={displayedColumnIds}
                         onEntityClick={onEntityClick}
                         tableController={tableController}

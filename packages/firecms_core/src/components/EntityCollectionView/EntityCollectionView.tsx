@@ -754,14 +754,15 @@ function EntitiesCount({
     const resolvedPath = useMemo(() => navigation.resolveAliasesFrom(fullPath), [fullPath, navigation.resolveAliasesFrom]);
 
     useEffect(() => {
-        dataSource.countEntities({
-            path: resolvedPath,
-            collection,
-            filter,
-            orderBy: sortByProperty,
-            order: currentSort
-        }).then(setCount).catch(setError);
-    }, [fullPath, dataSource, resolvedPath, collection, filter, sortByProperty, currentSort]);
+        if (dataSource.countEntities)
+            dataSource.countEntities({
+                path: resolvedPath,
+                collection,
+                filter,
+                orderBy: sortByProperty,
+                order: currentSort
+            }).then(setCount).catch(setError);
+    }, [fullPath, dataSource.countEntities, resolvedPath, collection, filter, sortByProperty, currentSort]);
 
     useEffect(() => {
         if (onCountChange) {

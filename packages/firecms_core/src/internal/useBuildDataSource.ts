@@ -276,27 +276,27 @@ export function useBuildDataSource({
             return delegate.generateEntityId(path,);
         }, [delegate.generateEntityId]),
 
-        countEntities: useCallback(async ({
-                                              path,
-                                              collection,
-                                              filter,
-                                              order,
-                                              orderBy
-                                          }: {
+        countEntities: delegate.countEntities ? async ({
+                                                           path,
+                                                           collection,
+                                                           filter,
+                                                           order,
+                                                           orderBy
+                                                       }: {
             path: string,
             collection: EntityCollection<any>,
             filter?: FilterValues<Extract<keyof any, string>>,
             orderBy?: string,
             order?: "desc" | "asc",
         }): Promise<number> => {
-            return delegate.countEntities({
+            return delegate.countEntities!({
                 path,
                 filter,
                 orderBy,
                 order,
                 isCollectionGroup: Boolean(collection.collectionGroup) ?? false
             });
-        }, [delegate.countEntities]),
+        } : undefined,
 
         isFilterCombinationValid: useCallback(({
                                                    path,

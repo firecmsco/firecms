@@ -23,7 +23,6 @@ export type OnColumnResizeParams = { width: number, key: string };
 export type EntityCollectionTableProps<M extends Record<string, any>,
     UserType extends User = User> = {
 
-    debugKey?: string;
     /**
      * Display these entities as selected
      */
@@ -103,7 +102,7 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
 
     textSearchEnabled?: boolean;
 
-    inlineEditing?: boolean | ((entity: Entity<M>) => boolean);
+    inlineEditing?: boolean;
 
     additionalFields?: AdditionalFieldDelegate<M, UserType>[];
 
