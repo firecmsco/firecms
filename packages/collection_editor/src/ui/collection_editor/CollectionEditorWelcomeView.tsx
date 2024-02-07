@@ -8,44 +8,52 @@ import { blogCollectionTemplate } from "./templates/blog_template";
 import { usersCollectionTemplate } from "./templates/users_template";
 import { ImportFileUpload } from "@firecms/data_import_export";
 import { pagesCollectionTemplate } from "./templates/pages_template";
+import { useFormex } from "../../form/Formex";
 
 export function CollectionEditorWelcomeView({
                                                 path,
                                                 pathSuggestions,
                                                 parentCollection,
                                                 onContinue,
-                                                collections
+                                                existingCollectionPaths
                                             }: {
     path: string;
     pathSuggestions?: (path: string) => Promise<string[]>;
     parentCollection?: EntityCollection;
     onContinue: (importData?: object[]) => void;
-    collections?: EntityCollection[];
+    existingCollectionPaths?: string[];
 }) {
 
     const [loadingPathSuggestions, setLoadingPathSuggestions] = useState(false);
     const [filteredPathSuggestions, setFilteredPathSuggestions] = useState<string[] | undefined>();
     useEffect(() => {
-        if (pathSuggestions && collections) {
+        if (pathSuggestions && existingCollectionPaths) {
             setLoadingPathSuggestions(true);
             pathSuggestions(path)
                 .then(suggestions => {
-                    const filteredSuggestions = suggestions.filter(s => !collections.find(c => c.path.trim().toLowerCase() === s.trim().toLowerCase()));
+                    const filteredSuggestions = suggestions.filter(s => !(existingCollectionPaths ?? []).find(c => c.trim().toLowerCase() === s.trim().toLowerCase()));
                     setFilteredPathSuggestions(filteredSuggestions);
                 })
                 .finally(() => setLoadingPathSuggestions(false));
         }
-    }, [collections, path, pathSuggestions]);
+    }, [existingCollectionPaths, path, pathSuggestions]);
+
+    // const {
+    //     values,
+    //     setFieldValue,
+    //     setValues,
+    //     handleChange,
+    //     touched,
+    //     errors,
+    //     setFieldTouched,
+    //     isSubmitting,
+    //     submitCount
+    // } = useFormikContext<EntityCollection>();
 
     const {
         values,
         setFieldValue,
         setValues,
-        handleChange,
-        touched,
-        errors,
-        setFieldTouched,
-        isSubmitting,
         submitCount
     } = useFormikContext<EntityCollection>();
 

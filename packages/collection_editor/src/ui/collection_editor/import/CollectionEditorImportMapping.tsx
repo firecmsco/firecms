@@ -16,6 +16,7 @@ import { updatePropertyFromWidget } from "../utils/update_property_for_widget";
 import { PropertySelectItem } from "../PropertySelectItem";
 import { supportedFields } from "../utils/supported_fields";
 import { buildPropertyFromData } from "@firecms/schema_inference";
+import { useFormex } from "../../../form/Formex";
 
 export function CollectionEditorImportMapping({
                                                   importConfig,
@@ -27,6 +28,14 @@ export function CollectionEditorImportMapping({
                                                       propertyConfigs: Record<string, PropertyConfig>,
                                                       collectionEditable: boolean
                                                   }) {
+
+    // const {
+    //     values,
+    //     setFieldValue,
+    //     setFieldTouched,
+    //     setValues,
+    //     submitCount
+    // } = useFormex();
 
     const {
         setFieldValue,

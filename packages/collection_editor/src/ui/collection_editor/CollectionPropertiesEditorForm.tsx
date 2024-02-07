@@ -34,6 +34,7 @@ import { OnPropertyChangedParams, PropertyForm, PropertyFormDialog } from "./Pro
 import { PropertyTree } from "./PropertyTree";
 import { PersistedCollection } from "../../types/persisted_collection";
 import { GetCodeDialog } from "./GetCodeDialog";
+import { useFormex } from "../../form/Formex";
 
 type CollectionEditorFormProps = {
     showErrors: boolean;
@@ -64,6 +65,15 @@ export function CollectionPropertiesEditorForm({
                                                    propertyConfigs,
                                                    collectionEditable
                                                }: CollectionEditorFormProps) {
+
+    // const {
+    //     values,
+    //     setFieldValue,
+    //     setFieldTouched,
+    //     setFieldError,
+    //     errors,
+    //     dirty
+    // } = useFormex();
 
     const {
         values,
