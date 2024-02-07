@@ -1,6 +1,6 @@
 import {
     ErrorBoundary,
-    FieldConfigBadge,
+    PropertyConfigBadge,
     getFieldConfig,
     isPropertyBuilder,
     Property,
@@ -50,7 +50,7 @@ export function PropertyFieldPreview({
             onClick={onClick}
             className="flex flex-row w-full cursor-pointer">
             <div className={"m-4"}>
-                <FieldConfigBadge propertyConfig={propertyConfig}/>
+                <PropertyConfigBadge propertyConfig={propertyConfig}/>
             </div>
             <Paper
                 className={cn(
@@ -127,7 +127,7 @@ export function NonEditablePropertyPreview({
             onClick={onClick}
             className="flex flex-row w-full cursor-pointer">
             <div className={"relative m-4"}>
-                {propertyConfig && <FieldConfigBadge propertyConfig={propertyConfig}/>}
+                {propertyConfig && <PropertyConfigBadge propertyConfig={propertyConfig}/>}
                 {!propertyConfig && <div
                     className={"h-8 w-8 p-1 rounded-full shadow text-white bg-gray-500"}>
                     <FunctionsIcon color={"inherit"} size={"medium"}/>

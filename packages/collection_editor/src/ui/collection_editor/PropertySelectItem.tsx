@@ -1,4 +1,4 @@
-import { FieldConfigBadge, PropertyConfig } from "@firecms/core";
+import { PropertyConfigBadge, PropertyConfig } from "@firecms/core";
 import { cn, SelectItem, Typography } from "@firecms/ui";
 
 export interface PropertySelectItemProps {
@@ -17,7 +17,7 @@ export function PropertySelectItem({ value, optionDisabled, propertyConfig, exis
                 "flex flex-row items-center text-base min-h-[52px]",
                 optionDisabled ? "w-full" : "")}>
             <div className={"mr-8"}>
-                <FieldConfigBadge propertyConfig={propertyConfig}/>
+                <PropertyConfigBadge propertyConfig={propertyConfig}/>
             </div>
             <div>
                 <div>{propertyConfig.name}</div>

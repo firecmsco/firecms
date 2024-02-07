@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from "react";
 import {
     CollectionActionsProps,
     EntityCollectionTable,
-    FieldConfigBadge,
+    PropertyConfigBadge,
     getFieldConfig,
     getPropertiesWithPropertiesOrder,
     getPropertyInPath,
@@ -336,7 +336,7 @@ export function PropertySelectEntry({
 
         <div className={"m-4"}>
             <Tooltip title={widget?.name}>
-                <FieldConfigBadge propertyConfig={widget}/>
+                <PropertyConfigBadge propertyConfig={widget}/>
             </Tooltip>
         </div>
 

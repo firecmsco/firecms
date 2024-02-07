@@ -22,6 +22,8 @@ export function downloadExport<M extends Record<string, any>>(data: Entity<M>[],
                                                               exportType: "csv" | "json",
                                                               dateExportType: "timestamp" | "string"
 ) {
+
+    console.debug("Downloading export", { dataLength: data.length, collection, exportType, dateExportType });
     const properties = collection.properties;
 
     if (exportType === "csv") {

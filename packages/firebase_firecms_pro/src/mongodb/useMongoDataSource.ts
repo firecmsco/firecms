@@ -10,7 +10,7 @@ import {
     EntityValues,
     FetchCollectionProps,
     FetchEntityProps,
-    FieldConfig,
+    PropertyConfig,
     FilterValues,
     ListenCollectionProps,
     ListenEntityProps,
@@ -24,7 +24,7 @@ import {
     removeValueAtIndex,
     replaceValueAtIndex,
     updateValueAtIndex
-} from "./utils.ts";
+} from "./utils";
 
 type ChangeEvent = any;
 
@@ -36,7 +36,7 @@ export interface UseMongoDataSourceProps {
     app: App,
     cluster: string,
     dbName: string,
-    fields?: Record<string, FieldConfig>;
+    fields?: Record<string, PropertyConfig>;
 }
 
 const firecmsToMongoDB: Record<WhereFilterOp, string> = {
@@ -365,7 +365,6 @@ export function useMongoDataSource({
         path: string,
         name: string,
         value: any,
-        property: ResolvedProperty,
         entityId?: string
     ): Promise<boolean> => {
         throw Error("checkUniqueField not implemented");

@@ -1,5 +1,5 @@
 import React from "react";
-import { ErrorBoundary, FieldConfigBadge, getFieldConfig, Property, useCustomizationController } from "@firecms/core";
+import { ErrorBoundary, PropertyConfigBadge, getFieldConfig, Property, useCustomizationController } from "@firecms/core";
 import { EditIcon, IconButton, TextField, } from "@firecms/ui";
 
 export function ImportNewPropertyFieldPreview({
@@ -26,7 +26,7 @@ export function ImportNewPropertyFieldPreview({
             className="flex flex-row w-full items-center">
 
             <div className={"mx-4"}>
-                {propertyTypeView ?? <FieldConfigBadge propertyConfig={widget ?? undefined}/>}
+                {propertyTypeView ?? <PropertyConfigBadge propertyConfig={widget ?? undefined}/>}
             </div>
 
             <div className="w-full flex flex-col grow">

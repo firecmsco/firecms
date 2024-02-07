@@ -150,8 +150,6 @@ export const SimpleTable = React.memo<SimpleTableProps<any>>(
 
         const [selectedCell, setSelectedCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
 
-        const filterIsSet = !!filterValues && Object.keys(filterValues).length > 0;
-
         const loadNextPage = () => {
             if (!paginationEnabled || dataLoading || noMoreToLoad)
                 return;

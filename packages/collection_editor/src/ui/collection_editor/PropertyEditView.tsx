@@ -5,7 +5,7 @@ import { Formik, FormikErrors, FormikProps, getIn } from "formik";
 import {
     DEFAULT_FIELD_CONFIGS,
     DeleteConfirmationDialog,
-    FieldConfigBadge,
+    PropertyConfigBadge,
     FieldConfigId,
     getFieldConfig,
     getFieldId,
@@ -479,7 +479,7 @@ function PropertyEditView({
                                     "flex items-center",
                                     optionDisabled ? "w-full pointer-events-none opacity-50" : "")}>
                                 <div className={"mr-8"}>
-                                    <FieldConfigBadge propertyConfig={computedFieldConfig}/>
+                                    <PropertyConfigBadge propertyConfig={computedFieldConfig}/>
                                 </div>
                                 <div className={"flex flex-col items-start text-base text-left"}>
                                     <div>{computedFieldConfig.name}</div>

@@ -8,7 +8,7 @@ import {
     IconButton,
     TextField,
     useModeController
-} from "@firecms/firebase_pro";
+} from "firecms";
 
 import { MongoAuthController } from "../useMongoAuthController";
 import { Button, CircularProgress, Typography } from "@firecms/ui";

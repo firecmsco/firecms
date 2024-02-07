@@ -6,7 +6,7 @@ import {
 } from "@firecms/data_import_export";
 import { getIn, useFormikContext } from "formik";
 
-import { FieldConfigBadge, getFieldConfig, getFieldId, Properties, Property, PropertyConfig, } from "@firecms/core";
+import { PropertyConfigBadge, getFieldConfig, getFieldId, Properties, Property, PropertyConfig, } from "@firecms/core";
 import { Container, Select, Tooltip, Typography } from "@firecms/ui";
 import React, { useState } from "react";
 import { OnPropertyChangedParams, PropertyFormDialog, PropertyWithId } from "../PropertyEditView";
@@ -234,7 +234,7 @@ function PropertySelect({
             position={"item-aligned"}
             renderValue={(value) => {
                 if (!widget) return null;
-                return <FieldConfigBadge propertyConfig={widget}/>
+                return <PropertyConfigBadge propertyConfig={widget}/>
             }}
             onValueChange={(newSelectedWidgetId) => {
                 const newProperty = updatePropertyFromWidget(property, newSelectedWidgetId, propertyConfigs)

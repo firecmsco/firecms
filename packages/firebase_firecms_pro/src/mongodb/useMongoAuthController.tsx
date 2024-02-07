@@ -69,6 +69,7 @@ export const useMongoAuthController = ({
     }, [app.currentUser, app.emailPasswordAuth]);
 
     return {
+        loginSkipped: false,
         user: currentUser ? {
             uid: currentUser.id,
             displayName: currentUser.profile?.name ?? null,
@@ -83,6 +84,6 @@ export const useMongoAuthController = ({
         getAuthToken,
         signOut: logOut,
         register,
-        emailPasswordLogin,
+        emailPasswordLogin
     };
 };
