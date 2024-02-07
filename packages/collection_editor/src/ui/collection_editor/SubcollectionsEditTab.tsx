@@ -9,11 +9,11 @@ import {
 } from "@firecms/core";
 import {
     AddIcon,
+    Alert,
     Button,
     Container,
     DeleteIcon,
     IconButton,
-    InfoLabel,
     Paper,
     Table,
     TableBody,
@@ -180,9 +180,14 @@ export function SubcollectionsEditTab({
                         </>}
 
                         {totalEntityViews === 0 &&
-                            <InfoLabel>
-                                <b>COMING SOON</b> Define your own custom views by uploading it with the CLI
-                            </InfoLabel>
+                            <Alert action={<Button variant="text"
+                                                   size={"small"}
+                                                   href={"https://firecms.co/docs/customization_quickstart"}
+                                                   component={"a"}
+                                                   rel="noopener noreferrer"
+                                                   target="_blank">More info</Button>}>
+                                Define your own custom views by uploading it with the CLI.
+                            </Alert>
                         }
 
                         <Button

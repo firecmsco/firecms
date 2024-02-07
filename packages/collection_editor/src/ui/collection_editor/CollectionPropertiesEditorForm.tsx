@@ -156,20 +156,20 @@ export function CollectionPropertiesEditorForm({
         }
         : undefined;
 
-    const getCurrentPropertiesOrder = (namespace?: string) => {
+    const getCurrentPropertiesOrder = useCallback((namespace?: string) => {
         if (!namespace) return currentPropertiesOrderRef.current[""];
         return currentPropertiesOrderRef.current[namespace] ?? getIn(values, namespaceToPropertiesOrderPath(namespace));
-    }
+    }, [values]);
 
-    const updatePropertiesOrder = (newPropertiesOrder: string[], namespace?: string) => {
+    const updatePropertiesOrder = useCallback((newPropertiesOrder: string[], namespace?: string) => {
         const propertiesOrderPath = namespaceToPropertiesOrderPath(namespace);
 
         setFieldValue(propertiesOrderPath, newPropertiesOrder, false);
         currentPropertiesOrderRef.current[namespace ?? ""] = newPropertiesOrder;
 
-    };
+    }, [setFieldValue]);
 
-    const deleteProperty = (propertyKey?: string, namespace?: string) => {
+    const deleteProperty = useCallback((propertyKey?: string, namespace?: string) => {
         const fullId = propertyKey ? getFullId(propertyKey, namespace) : undefined;
         if (!fullId)
             throw Error("collection editor miss config");
@@ -185,7 +185,7 @@ export function CollectionPropertiesEditorForm({
         setSelectedPropertyIndex(undefined);
         setSelectedPropertyKey(undefined);
         setSelectedPropertyNamespace(undefined);
-    };
+    }, [getCurrentPropertiesOrder, setFieldValue, updatePropertiesOrder]);
 
     const onPropertyMove = (propertiesOrder: string[], namespace?: string) => {
         setFieldValue(namespaceToPropertiesOrderPath(namespace), propertiesOrder, false);
@@ -292,6 +292,17 @@ export function CollectionPropertiesEditorForm({
         : Object.keys(values.properties)) as string[];
 
     const owner = useMemo(() => getUser(values.ownerId), [getUser, values.ownerId]);
+
+    const onPropertyClick = useCallback((propertyKey: string, namespace?: string) => {
+        console.debug("CollectionEditor: onPropertyClick", {
+            propertyKey,
+            namespace
+        });
+        setSelectedPropertyIndex(usedPropertiesOrder.indexOf(propertyKey));
+        setSelectedPropertyKey(propertyKey);
+        setSelectedPropertyNamespace(namespace);
+    }, [usedPropertiesOrder]);
+
     const body = (
         <div className={"grid grid-cols-12 gap-2 h-full bg-gray-50 dark:bg-gray-900"}>
             <div className={cn(
@@ -357,16 +368,12 @@ export function CollectionPropertiesEditorForm({
                 <ErrorBoundary>
                     <PropertyTree
                         className={"pl-8"}
-                        onPropertyClick={(propertyKey, namespace) => {
-                            setSelectedPropertyIndex(usedPropertiesOrder.indexOf(propertyKey));
-                            setSelectedPropertyKey(propertyKey);
-                            setSelectedPropertyNamespace(namespace);
-                        }}
                         inferredPropertyKeys={inferredPropertyKeys}
                         selectedPropertyKey={selectedPropertyKey ? getFullId(selectedPropertyKey, selectedPropertyNamespace) : undefined}
                         properties={values.properties}
                         additionalFields={values.additionalFields}
                         propertiesOrder={usedPropertiesOrder}
+                        onPropertyClick={onPropertyClick}
                         onPropertyMove={onPropertyMove}
                         onPropertyRemove={isNewCollection ? deleteProperty : undefined}
                         collectionEditable={collectionEditable}
@@ -384,7 +391,7 @@ export function CollectionPropertiesEditorForm({
             </div>
 
             {!asDialog &&
-                <div className={"col-span-12 lg:col-span-7 ml-2 p-4 md:p-8 h-full overflow-auto pb-20 md:pb-20"}>
+                <div className={"col-span-12 lg:col-span-7 p-4 md:p-8 h-full overflow-auto pb-20 md:pb-20"}>
                     <Paper
                         className="sticky top-8 p-4 min-h-full border border-transparent w-full flex flex-col justify-center ">
 

@@ -195,6 +195,8 @@ export const PropertyForm = React.memo(
         </Formik>
     }, (a, b) =>
         a.getData === b.getData &&
+        a.propertyKey === b.propertyKey &&
+        a.propertyNamespace === b.propertyNamespace &&
         a.includeIdAndName === b.includeIdAndName &&
         a.autoOpenTypeSelect === b.autoOpenTypeSelect &&
         a.autoUpdateId === b.autoUpdateId &&

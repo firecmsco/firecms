@@ -10,9 +10,9 @@ export function DefaultSubscriptionMessage({ projectId }: SubscriptionMessagePro
             <Typography>You need an active subscription in order to continue using
                 the plugin</Typography>
             <Button
-                component={"a"}
                 href={`https://app.firecms.co/subscriptions?projectId=${projectId}`}
                 color={"warning"}
+                component={"a"}
                 rel="noopener noreferrer"
                 target="_blank">
                 Create a subscription
