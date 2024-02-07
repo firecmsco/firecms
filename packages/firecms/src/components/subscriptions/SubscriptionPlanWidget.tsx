@@ -29,9 +29,9 @@ export function SubscriptionPlanWidget({ message, showForPlans, includeCTA = tru
                 variant={"outlined"}
                 onClick={() => setDialogOpen(true)}>
                 More info
-            </Button>}
-        ><p>This project is currently in the <PlanChip subscriptionPlan={subscriptionPlan}/></p>
-            <p>{message}</p>
+            </Button>}>
+            <div>This project is currently in the <PlanChip subscriptionPlan={subscriptionPlan}/></div>
+            <div>{message}</div>
         </Alert>
 
         <PlansComparisonDialog open={dialogOpen} onClose={() => setDialogOpen(false)}/>
