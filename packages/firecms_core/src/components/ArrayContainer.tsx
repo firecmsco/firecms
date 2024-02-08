@@ -302,14 +302,21 @@ export function ArrayItemOptions({
             </IconButton>
 
             <Menu
+                portalContainer={iconRef.current}
                 open={menuOpen}
                 trigger={<div/>}>
 
-                <MenuItem dense onClick={() => remove(index)}>
+                <MenuItem dense onClick={(e) => {
+                    setMenuOpen(false);
+                    remove(index);
+                }}>
                     <RemoveIcon size={"small"}/>
                     Remove
                 </MenuItem>
-                <MenuItem dense onClick={() => copy(index)}>
+                <MenuItem dense onClick={() => {
+                    setMenuOpen(false);
+                    copy(index);
+                }}>
                     <ContentCopyIcon size={"small"}/>
                     Copy
                 </MenuItem>

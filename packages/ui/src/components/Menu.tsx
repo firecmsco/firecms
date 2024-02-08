@@ -10,6 +10,8 @@ export type MenuProps = {
     open?: boolean;
     defaultOpen?: boolean;
     onOpenChange?(open: boolean): void;
+
+    portalContainer?: HTMLElement | null;
 }
 
 export function Menu({
@@ -17,7 +19,8 @@ export function Menu({
                          trigger,
                          open,
                          defaultOpen,
-                         onOpenChange
+                         onOpenChange,
+                         portalContainer
                      }: MenuProps) {
     return (
         <DropdownMenu.Root
@@ -27,7 +30,7 @@ export function Menu({
             <DropdownMenu.Trigger asChild>
                 {trigger}
             </DropdownMenu.Trigger>
-            <DropdownMenu.Portal>
+            <DropdownMenu.Portal container={portalContainer}>
                 <DropdownMenu.Content className={cn(paperMixin, "shadow py-2 z-30")}>
                     {children}
                 </DropdownMenu.Content>
