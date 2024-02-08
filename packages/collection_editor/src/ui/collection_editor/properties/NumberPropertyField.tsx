@@ -2,13 +2,13 @@ import React from "react";
 import { NumberPropertyValidation } from "./validation/NumberPropertyValidation";
 import { ValidationPanel } from "./validation/ValidationPanel";
 import { TextField } from "@firecms/ui";
-import { getIn, useFormikContext } from "formik";
+import { getIn, useFormex } from "../../../form";
 
 export function NumberPropertyField({ disabled }: {
     disabled: boolean;
 }) {
 
-    const { values, setFieldValue } = useFormikContext();
+    const { values, setFieldValue } = useFormex();
 
     return (
         <>

@@ -1,14 +1,14 @@
 import React from "react";
-import { FastField, getIn, useFormikContext } from "formik";
+import { Field, FormexFieldProps, getIn, useFormex } from "../../../form";
 
 import { GeneralPropertyValidation } from "./validation/GeneralPropertyValidation";
 import { ValidationPanel } from "./validation/ValidationPanel";
-import { SwitchControl } from "@firecms/core";
+import { SwitchControl } from "../SwitchControl";
 
 export function BooleanPropertyField({ disabled }: {
     disabled: boolean;
 }) {
-    const { values } = useFormikContext();
+    const { values } = useFormex();
     const defaultValue = getIn(values, "defaultValue");
 
     return (
@@ -23,12 +23,16 @@ export function BooleanPropertyField({ disabled }: {
 
             <div className={"col-span-12"}>
 
-                <FastField type="checkbox"
-                           name={"defaultValue"}
-                           label={defaultValue === null || defaultValue === undefined ? "Default value not set" : ("Default value is " + defaultValue.toString())}
-                           disabled={disabled}
-                           allowIndeterminate={true}
-                           component={SwitchControl}/>
+                <Field
+                    name={"defaultValue"}>
+                    {({ field, form }: FormexFieldProps) => {
+                        return <SwitchControl
+                            label={defaultValue === null || defaultValue === undefined ? "Default value not set" : ("Default value is " + defaultValue.toString())}
+                            disabled={disabled}
+                            allowIndeterminate={true} field={field}
+                            form={form}/>
+                    }}
+                </Field>
 
             </div>
         </>

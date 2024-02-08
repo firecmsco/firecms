@@ -1,5 +1,5 @@
 import React from "react";
-import { Field, getIn, useFormikContext } from "formik";
+import { Field, getIn, useFormex } from "../../../form";
 import { IconForView, NumberProperty, StringProperty, useNavigationController } from "@firecms/core";
 import { CircularProgress, Select, SelectGroup, SelectItem, Typography, } from "@firecms/ui";
 import { FieldHelperView } from "./FieldHelperView";
@@ -9,13 +9,18 @@ export function ReferencePropertyField({
                                            multiple,
                                            disabled,
                                            showErrors
-                                       }: { existing: boolean, multiple: boolean, disabled: boolean, showErrors: boolean }) {
+                                       }: {
+    existing: boolean,
+    multiple: boolean,
+    disabled: boolean,
+    showErrors: boolean
+}) {
 
     const {
         values,
         handleChange,
         errors,
-    } = useFormikContext<StringProperty | NumberProperty>();
+    } = useFormex<StringProperty | NumberProperty>();
 
     const navigation = useNavigationController();
 
@@ -31,16 +36,15 @@ export function ReferencePropertyField({
     return (
         <>
             <div className={"col-span-12"}>
-                <Field required
-                       name={pathPath}
+
+                <Field name={pathPath}
                        pathPath={pathPath}
                        type="select"
-                       validate={validatePath}
                        disabled={existing || disabled}
                        value={pathValue}
                        error={pathError}
                        handleChange={handleChange}
-                       component={CollectionsSelect}/>
+                       as={CollectionsSelect}/>
 
             </div>
 
@@ -48,13 +52,6 @@ export function ReferencePropertyField({
     );
 }
 
-function validatePath(value?: string) {
-    let error;
-    if (!value) {
-        error = "You must specify a target collection for the field";
-    }
-    return error;
-}
 
 export function CollectionsSelect({
                                       disabled,

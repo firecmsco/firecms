@@ -1,10 +1,11 @@
 import React from "react";
 
-import { FastField, getIn, useFormikContext } from "formik";
-import { isValidRegExp, serializeRegExp, SwitchControl } from "@firecms/core";
+import { Field, FormexFieldProps, getIn, useFormex } from "../../../../form";
+import { isValidRegExp, serializeRegExp } from "@firecms/core";
 import { DebouncedTextField, } from "@firecms/ui";
 import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
 import { FieldHelperView } from "../FieldHelperView";
+import { SwitchControl } from "../../SwitchControl";
 
 export function StringPropertyValidation({
                                              length,
@@ -32,7 +33,7 @@ export function StringPropertyValidation({
         values,
         handleChange,
         errors
-    } = useFormikContext();
+    } = useFormex();
 
     const validationLength = "validation.length";
     const validationMin = "validation.min";
@@ -47,86 +48,105 @@ export function StringPropertyValidation({
     const matchesValue = getIn(values, validationMatches);
     const matchesStringValue = typeof matchesValue === "string" ? matchesValue : serializeRegExp(matchesValue);
     return (
-            <div className={"grid grid-cols-12 gap-2"}>
+        <div className={"grid grid-cols-12 gap-2"}>
 
-                <GeneralPropertyValidation disabled={disabled}/>
+            <GeneralPropertyValidation disabled={disabled}/>
 
-                <div className={"grid grid-cols-12 gap-2 col-span-12"}>
-                    {lowercase && <div className={"col-span-4"}>
-                        <FastField type="checkbox"
-                                   name={validationLowercase}
-                                   label={"Lowercase"}
-                                   disabled={disabled}
-                                   component={SwitchControl}/>
-                    </div>}
-                    {uppercase && <div className={"col-span-4"}>
-                        <FastField type="checkbox"
-                                   name={validationUppercase}
-                                   label={"Uppercase"}
-                                   disabled={disabled}
-                                   component={SwitchControl}/>
-                    </div>}
-                    {trim && <div className={"col-span-4"}>
-                        <FastField type="checkbox"
-                                   name={validationTrim}
-                                   label={"Trim"}
-                                   disabled={disabled}
-                                   component={SwitchControl}/>
-                    </div>}
-                </div>
+            <div className={"grid grid-cols-12 gap-2 col-span-12"}>
 
-                <div className={"grid grid-cols-12 gap-2 col-span-12"}>
-                    {length && <div className={"col-span-4"}>
-                        <DebouncedTextField
-                            value={getIn(values, validationLength)}
-                            label={"Exact length"}
-                            name={validationLength}
-                            type="number"
-                            size="small"
+                {lowercase && <div className={"col-span-4"}>
+                    <Field name={validationLowercase}
+                           type="checkbox">
+                        {({ field, form }: FormexFieldProps) => {
+                            return <SwitchControl
+                                label={"Lowercase"}
+                                disabled={disabled}
+                                form={form}
+                                field={field}/>
+                        }}
+                    </Field>
+                </div>}
 
-                            disabled={disabled}
-                            onChange={handleChange}/>
-                    </div>}
+                {uppercase && <div className={"col-span-4"}>
+                    <Field name={validationUppercase}
+                           type="checkbox">
+                        {({ field, form }: FormexFieldProps) => {
+                            return <SwitchControl
+                                label={"Uppercase"}
+                                disabled={disabled}
+                                form={form}
+                                field={field}/>
+                        }}
+                    </Field>
+                </div>}
 
-                    {min && <div className={"col-span-4"}>
-                        <DebouncedTextField value={getIn(values, validationMin)}
-                                            label={"Min length"}
-                                            name={validationMin}
-                                            type="number"
-                                            size="small"
-
-                                            disabled={disabled}
-                                            onChange={handleChange}/>
-                    </div>}
-
-                    {max && <div className={"col-span-4"}>
-                        <DebouncedTextField value={getIn(values, validationMax)}
-                                            label={"Max length"}
-                                            name={validationMax}
-                                            type="number"
-                                            size="small"
-
-                                            disabled={disabled}
-                                            onChange={handleChange}/>
-                    </div>}
-
-                </div>
-
-                {matches && <div className={"col-span-12"}>
-                    <FastField name={validationMatches}
-                               as={DebouncedTextField}
-                               validate={(value: string) => value && !isValidRegExp(value)}
-                               label={"Matches regex"}
-                               size="small"
-                               disabled={disabled}
-                               value={matchesStringValue}
-                               error={Boolean(matchesError)}/>
-                    <FieldHelperView error={Boolean(matchesError)}>
-                        {matchesError ? "Not a valid regexp" : "e.g. /^\\d+$/ for digits only"}
-                    </FieldHelperView>
+                {trim && <div className={"col-span-4"}>
+                    <Field name={validationTrim}
+                           type="checkbox">
+                        {({ field, form }: FormexFieldProps) => {
+                            return <SwitchControl
+                                label={"Trim"}
+                                disabled={disabled}
+                                form={form}
+                                field={field}/>
+                        }}
+                    </Field>
                 </div>}
 
             </div>
+
+            <div className={"grid grid-cols-12 gap-2 col-span-12"}>
+                {length && <div className={"col-span-4"}>
+                    <DebouncedTextField
+                        value={getIn(values, validationLength)}
+                        label={"Exact length"}
+                        name={validationLength}
+                        type="number"
+                        size="small"
+
+                        disabled={disabled}
+                        onChange={handleChange}/>
+                </div>}
+
+                {min && <div className={"col-span-4"}>
+                    <DebouncedTextField value={getIn(values, validationMin)}
+                                        label={"Min length"}
+                                        name={validationMin}
+                                        type="number"
+                                        size="small"
+
+                                        disabled={disabled}
+                                        onChange={handleChange}/>
+                </div>}
+
+                {max && <div className={"col-span-4"}>
+                    <DebouncedTextField value={getIn(values, validationMax)}
+                                        label={"Max length"}
+                                        name={validationMax}
+                                        type="number"
+                                        size="small"
+
+                                        disabled={disabled}
+                                        onChange={handleChange}/>
+                </div>}
+
+            </div>
+
+            {matches && <div className={"col-span-12"}>
+                <Field name={validationMatches}
+                       as={DebouncedTextField}
+                       validate={(value: string) => value && !isValidRegExp(value)}
+                       label={"Matches regex"}
+                       size="small"
+                       disabled={disabled}
+                       value={matchesStringValue}
+                       error={Boolean(matchesError)}/>
+                <FieldHelperView error={Boolean(matchesError)}>
+                    {matchesError ? "Not a valid regexp" : "e.g. /^\\d+$/ for digits only"}
+                </FieldHelperView>
+            </div>}
+
+        </div>
     );
 
 }

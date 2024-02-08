@@ -13,7 +13,7 @@ import { AutoAwesomeIcon, defaultBorderMixin, DragHandleIcon, IconButton, Remove
 import { NonEditablePropertyPreview, PropertyFieldPreview } from "./PropertyFieldPreview";
 import { DragDropContext, Draggable, DraggableProvided, Droppable } from "@hello-pangea/dnd";
 import { getFullId, idToPropertiesPath } from "./util";
-import { getIn } from "formik";
+import { getIn } from "../../form";
 import { editableProperty } from "../../utils/entities";
 
 export const PropertyTree = React.memo(

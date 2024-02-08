@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useFormex } from "./Formex";
-import { getIn, isObject } from "./utils";
+import { getIn, isFunction, isObject } from "./utils";
 import { FormexController } from "./types";
 
 export interface FieldInputProps<Value> {
@@ -18,34 +18,29 @@ export interface FieldInputProps<Value> {
     onBlur: (event: React.FocusEvent) => void,
 }
 
-export interface FieldProps<V = any, FormValues extends object = any> {
-    field: FieldInputProps<V>;
+export interface FormexFieldProps<Value = any, FormValues extends object = any> {
+    field: FieldInputProps<Value>;
     form: FormexController<FormValues>;
 }
 
-export interface FieldConfig<V = any> {
-    /**
-     * Field component to render. Can either be a string like 'select' or a component.
-     */
-    component?:
-        | string
-        | React.ComponentType<FieldProps<V>>
-        | React.ComponentType
-        | React.ForwardRefExoticComponent<any>;
+export type FieldValidator = (
+    value: any
+) => string | void | Promise<string | void>;
+
+export interface FieldConfig<V = any, C extends React.ElementType | undefined = undefined> {
 
     /**
      * Component to render. Can either be a string e.g. 'select', 'input', or 'textarea', or a component.
      */
     as?:
-        | React.ComponentType<FieldProps<V>["field"]>
+        | C
         | string
-        | React.ComponentType
         | React.ForwardRefExoticComponent<any>;
 
     /**
      * Children render function <Field name>{props => ...}</Field>)
      */
-    children?: ((props: FieldProps<V>) => React.ReactNode) | React.ReactNode;
+    children?: ((props: FormexFieldProps<V>) => React.ReactNode) | React.ReactNode;
 
     /**
      * Validate a single field value independently
@@ -70,94 +65,91 @@ export interface FieldConfig<V = any> {
 
     /** Inner ref */
     innerRef?: (instance: any) => void;
+
 }
 
-export type FieldAttributes<T> = {
-    className?: string;
-} & FieldConfig<T>
-    & T
-    & {
-    name: string,
-};
+export type FieldProps<T, C extends React.ElementType | undefined> = {
+    as?: C;
+} & (C extends React.ElementType ? (React.ComponentProps<C> & FieldConfig<T, C>) : FieldConfig<T, C>);
 
-export function Field({
-                          validate,
-                          name,
-                          children,
-                          as: is, // `as` is reserved in typescript lol
-                          component,
-                          className,
-                          ...props
-                      }: FieldAttributes<any>) {
+export function Field<T, C extends React.ElementType | undefined = undefined>({
+                                                                                  validate,
+                                                                                  name,
+                                                                                  children,
+                                                                                  as: is, // `as` is reserved in typescript lol
+                                                                                  // component,
+                                                                                  className,
+                                                                                  ...props
+                                                                              }: FieldProps<T, C>) {
+    const formController = useFormex();
     const {
         values,
         handleChange,
         handleBlur,
-        // validate: _validate,
-        // validationSchema: _validationSchema,
-        ...formik
-    } = useFormex();
+    } = formController;
 
-    const getFieldProps = React.useCallback(
-        (nameOrOptions: string | FieldConfig<any>): FieldInputProps<any> => {
-            const isAnObject = isObject(nameOrOptions);
-            const name = isAnObject
-                ? (nameOrOptions as FieldConfig<any>).name
-                : nameOrOptions;
-            const valueState = getIn(values, name);
+    const getFieldProps = (nameOrOptions: string | FieldConfig<any>): FieldInputProps<any> => {
+        const isAnObject = isObject(nameOrOptions);
+        const name = isAnObject
+            ? (nameOrOptions as FieldConfig<any>).name
+            : nameOrOptions;
+        const valueState = getIn(values, name);
 
-            const field: FieldInputProps<any> = {
-                name,
-                value: valueState,
-                onChange: handleChange,
-                onBlur: handleBlur,
-            };
-            if (isAnObject) {
-                const {
-                    type,
-                    value: valueProp, // value is special for checkboxes
-                    as: is,
-                    multiple,
-                } = nameOrOptions as FieldConfig<any>;
+        const field: FieldInputProps<any> = {
+            name,
+            value: valueState,
+            onChange: handleChange,
+            onBlur: handleBlur,
+        };
+        if (isAnObject) {
+            const {
+                type,
+                value: valueProp, // value is special for checkboxes
+                as: is,
+                multiple,
+            } = nameOrOptions as FieldConfig<any>;
 
-                if (type === "checkbox") {
-                    if (valueProp === undefined) {
-                        field.checked = !!valueState;
-                    } else {
-                        field.checked = !!(
-                            Array.isArray(valueState) && ~valueState.indexOf(valueProp)
-                        );
-                        field.value = valueProp;
-                    }
-                } else if (type === "radio") {
-                    field.checked = valueState === valueProp;
+            if (type === "checkbox") {
+                if (valueProp === undefined) {
+                    field.checked = !!valueState;
+                } else {
+                    field.checked = !!(
+                        Array.isArray(valueState) && ~valueState.indexOf(valueProp)
+                    );
                     field.value = valueProp;
-                } else if (is === "select" && multiple) {
-                    field.value = field.value || [];
-                    field.multiple = true;
                 }
+            } else if (type === "radio") {
+                field.checked = valueState === valueProp;
+                field.value = valueProp;
+            } else if (is === "select" && multiple) {
+                field.value = field.value || [];
+                field.multiple = true;
             }
-            return field;
-        },
-        [handleBlur, handleChange, values]
-    );
+        }
+        return field;
+    };
 
     const field = getFieldProps({ name, ...props });
-    if (component) {
-        if (typeof component === "string") {
-            const { innerRef, ...rest } = props;
-            return React.createElement(
-                component,
-                { ref: innerRef, ...field, ...rest, className },
-                children
-            );
-        }
-        return React.createElement(
-            component,
-            { field, form: formik, ...props, className },
-            children
-        );
+
+    if (isFunction(children)) {
+        return children({ field, form: formController });
     }
+
+    // if (component) {
+    //     if (typeof component === "string") {
+    //         const { innerRef, ...rest } = props;
+    //         return React.createElement(
+    //             component,
+    //             { ref: innerRef, ...field, ...rest, className },
+    //             children
+    //         );
+    //     }
+    //     return React.createElement(
+    //         component,
+    //         { field, form: formController, ...props, className },
+    //         children
+    //     );
+    // }
 
     // default to input here so we can check for both `as` and `children` above
     const asElement = is || "input";

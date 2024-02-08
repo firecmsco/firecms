@@ -1,7 +1,7 @@
 import React from "react";
 
-import { FieldProps } from "formik";
 import { BooleanSwitchWithLabel, Tooltip } from "@firecms/ui";
+import { FormexFieldProps } from "../../form";
 
 export function SwitchControl({
                                   field,
@@ -11,11 +11,11 @@ export function SwitchControl({
                                   disabled,
                                   size = "small",
                                   allowIndeterminate
-                              }: FieldProps & {
+                              }: FormexFieldProps & {
     label: string,
     tooltip?: string,
     disabled?: boolean,
-    size: "small" | "medium",
+    size?: "small" | "medium",
     allowIndeterminate?: boolean
 }) {
 

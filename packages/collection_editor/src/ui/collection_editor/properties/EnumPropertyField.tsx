@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { getIn, useFormikContext } from "formik";
+import { getIn, useFormex } from "../../../form";
 import { EnumValueConfig, resolveEnumValues, useSnackbarController } from "@firecms/core";
 import { Select, SelectItem } from "@firecms/ui";
 import { EnumForm } from "../EnumForm";
@@ -31,7 +31,7 @@ export function EnumPropertyField({
         touched,
         setFieldError,
         setFieldValue
-    } = useFormikContext<PropertyWithId>();
+    } = useFormex<PropertyWithId>();
 
     const snackbarContext = useSnackbarController();
 

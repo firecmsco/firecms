@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { AddIcon, Button, Paper, Typography } from "@firecms/ui";
-import { getIn, useFormikContext } from "formik";
+import { getIn, useFormex } from "../../../form";
 import { PropertyFormDialog } from "../PropertyEditView";
 import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath } from "../util";
 import { PropertyTree } from "../PropertyTree";
@@ -17,7 +17,7 @@ export function BlockPropertyField({ disabled, getData, allowDataInference, prop
     const {
         values,
         setFieldValue
-    } = useFormikContext<ArrayProperty>();
+    } = useFormex<ArrayProperty>();
 
     const [propertyDialogOpen, setPropertyDialogOpen] = useState<boolean>(false);
     const [selectedPropertyKey, setSelectedPropertyKey] = useState<string | undefined>();
