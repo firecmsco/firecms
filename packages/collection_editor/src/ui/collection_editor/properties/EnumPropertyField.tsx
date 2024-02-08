@@ -26,9 +26,6 @@ export function EnumPropertyField({
 
     const {
         values,
-        handleChange,
-        errors,
-        touched,
         setFieldError,
         setFieldValue
     } = useFormex<PropertyWithId>();
@@ -70,7 +67,7 @@ export function EnumPropertyField({
                           disabled={disabled}
                           allowDataInference={allowDataInference}
                           onError={(hasError) => {
-                              setFieldError(enumValuesPath, hasError ? "" : undefined);
+                              setFieldError(enumValuesPath, hasError ? "This enum property is missing some values" : undefined);
                           }}
                           getData={getData
                               ? () => getData()

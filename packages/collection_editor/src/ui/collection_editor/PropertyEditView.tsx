@@ -153,8 +153,6 @@ export const PropertyForm = React.memo(
                     controller.resetForm({ values: initialValue });
             },
             validation: (values) => {
-
-                console.log("validate property", { values, existingPropertyKeys })
                 const errors: Record<string, any> = {};
                 if (includeIdAndName) {
                     if (!values.name) {
@@ -363,6 +361,7 @@ function PropertyEditView({
         }
     }, [deferredValues, includeIdAndTitle, onPropertyChanged, propertyNamespace]);
 
+    console.log("PropertyEditView", { values, errors });
     useEffect(() => {
         if (values?.id && onError) {
             onError(values?.id, propertyNamespace, errors);

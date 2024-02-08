@@ -51,9 +51,7 @@ import { CollectionEditorImportMapping } from "./import/CollectionEditorImportMa
 import { CollectionEditorImportDataPreview } from "./import/CollectionEditorImportDataPreview";
 import { cleanPropertiesFromImport } from "./import/clean_import_data";
 import { PersistedCollection } from "../../types/persisted_collection";
-import { useCreateFormex } from "../../form/useCreateFormex";
-import { Formex } from "../../form/Formex";
-import { FormexController } from "src/form/types";
+import { Formex, FormexController, useCreateFormex } from "../../form";
 
 export interface CollectionEditorDialogProps {
     open: boolean;

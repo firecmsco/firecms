@@ -392,7 +392,7 @@ export function CollectionPropertiesEditorForm({
             </div>
 
             {!asDialog &&
-                <div className={"col-span-12 lg:col-span-7 p-4 md:p-8 h-full overflow-auto pb-20 md:pb-20"}>
+                <div className={"col-span-12 lg:col-span-7 p-4 md:py-8 md:px-4 h-full overflow-auto pb-20 md:pb-20"}>
                     <Paper
                         className="sticky top-8 p-4 min-h-full border border-transparent w-full flex flex-col justify-center ">
 

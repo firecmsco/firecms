@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
+import equal from "react-fast-compare"
 
-import { FastField, Formik, getIn, useFormikContext } from "formik";
 import { EnumValueConfig, EnumValues, FormikArrayContainer, } from "@firecms/core";
 import {
     AutoAwesomeIcon,
+    Badge,
     Button,
     CircularProgress,
     DebouncedTextField,
@@ -18,6 +19,7 @@ import {
 } from "@firecms/ui";
 import { FieldHelperView } from "./properties/FieldHelperView";
 import { extractEnumFromValues } from "@firecms/schema_inference";
+import { Field, Formex, getIn, useCreateFormex, useFormex } from "../../form";
 
 type EnumFormProps = {
     enumValues: EnumValueConfig[];
@@ -28,64 +30,68 @@ type EnumFormProps = {
     allowDataInference?: boolean;
     getData?: () => Promise<string[]>;
 };
-export const EnumForm = React.memo(
-    function EnumForm({
-                          enumValues,
-                          onValuesChanged,
-                          onError,
-                          updateIds,
-                          disabled,
-                          allowDataInference,
-                          getData
-                      }: EnumFormProps) {
 
-        return (
-            <Formik initialValues={{ enumValues }}
-                // enableReinitialize={true}
-                    validateOnMount={true}
-                    onSubmit={(data: { enumValues: EnumValueConfig[] }, formikHelpers) => {
-                    }}
-            >
-                {
-                    ({
-                         values,
-                         errors
-                     }) => {
-                        // eslint-disable-next-line react-hooks/rules-of-hooks
-                        useEffect(() => {
-                            if (onValuesChanged) {
-                                onValuesChanged(values.enumValues);
-                            }
-                        }, [values.enumValues]);
-                        // eslint-disable-next-line react-hooks/rules-of-hooks
-                        useEffect(() => {
-                            if (onError)
-                                onError(Boolean(errors?.enumValues ?? false));
-                        }, [errors]);
+export function EnumForm({
+                             enumValues,
+                             onValuesChanged,
+                             onError,
+                             updateIds,
+                             disabled,
+                             allowDataInference,
+                             getData
+                         }: EnumFormProps) {
 
-                        return <EnumFormFields enumValuesPath={"enumValues"}
-                                               values={values}
-                                               errors={errors}
-                                               shouldUpdateId={updateIds}
-                                               disabled={disabled}
-                                               allowDataInference={allowDataInference}
-                                               getData={getData}/>
+    const formex = useCreateFormex<{
+        enumValues: EnumValueConfig[]
+    }>({
+        initialValues: { enumValues },
+        validateOnChange: true,
+        validation: (values) => {
+            const errors: any = {};
+            if (values.enumValues) {
+                values.enumValues.forEach((enumValue, index) => {
+                    if (!enumValue?.label) {
+                        errors.enumValues = errors.enumValues ?? [];
+                        errors.enumValues[index] = errors.enumValues[index] ?? {};
+                        errors.enumValues[index].label = "You must specify a label for this enum value entry";
                     }
-                }
-            </Formik>
+                    if (!enumValue?.id) {
+                        errors.enumValues = errors.enumValues ?? [];
+                        errors.enumValues[index] = errors.enumValues[index] ?? {};
+                        errors.enumValues[index].id = "You must specify an ID for this enum value entry";
+                    }
+                });
+            }
+            const hasError = Boolean(errors?.enumValues && Object.keys(errors?.enumValues).length > 0);
+            onError?.(hasError);
+            return errors;
+        }
+    });
 
-        );
-    },
-    function areEqual(prevProps: EnumFormProps, nextProps: EnumFormProps) {
-        return prevProps.enumValues.length === nextProps.enumValues.length &&
-            prevProps.onValuesChanged === nextProps.onValuesChanged &&
-            prevProps.getData === nextProps.getData
-            ;
-    }
-);
+    const { values, errors } = formex;
+
+    useEffect(() => {
+        if (onValuesChanged) {
+            onValuesChanged(values.enumValues);
+        }
+    }, [values.enumValues]);
+
+    return <Formex value={formex}>
+        <EnumFormFields enumValuesPath={"enumValues"}
+                        values={values}
+                        errors={errors}
+                        shouldUpdateId={updateIds}
+                        disabled={disabled}
+                        allowDataInference={allowDataInference}
+                        getData={getData}/>
+    </Formex>
+
+}
 
 type EnumFormFieldsProps = {
-    values: { enumValues: EnumValueConfig[] };
+    values: {
+        enumValues: EnumValueConfig[]
+    };
     errors: any;
     enumValuesPath: string;
     shouldUpdateId: boolean;
@@ -107,7 +113,7 @@ function EnumFormFields({
 
     const {
         setFieldValue
-    } = useFormikContext();
+    } = useFormex();
 
     const [lastInternalIdAdded, setLastInternalIdAdded] = React.useState<number | undefined>();
     const [editDialogIndex, setEditDialogIndex] = React.useState<number | undefined>();
@@ -118,10 +124,12 @@ function EnumFormFields({
 
     const buildEntry = (index: number, internalId: number) => {
         const justAdded = lastInternalIdAdded === internalId;
+        const entryError = errors?.enumValues && errors?.enumValues[index];
         return <EnumEntry index={index}
                           disabled={disabled}
                           enumValuesPath={enumValuesPath}
                           autoFocus={justAdded}
+                          entryError={entryError}
                           shouldUpdateId={shouldUpdateId || justAdded}
                           onDialogOpen={() => setEditDialogIndex(index)}
                           inferredEntry={inferredValues.has(values.enumValues[index]?.id as string)}
@@ -151,7 +159,7 @@ function EnumFormFields({
             newEnumValues.forEach((enumValue) => {
                 inferredValues.add(enumValue.id);
             });
-            setFieldValue(enumValuesPath, [...newEnumValues, ...currentEnumValues]);
+            setFieldValue(enumValuesPath, [...newEnumValues, ...currentEnumValues], true);
         }).catch(e => {
             console.error(e);
         })
@@ -207,6 +215,7 @@ type EnumEntryProps = {
     onDialogOpen: () => void;
     disabled: boolean;
     inferredEntry?: boolean;
+    entryError?: { label?: string, id?: string }
 };
 
 const EnumEntry = React.memo(
@@ -217,7 +226,8 @@ const EnumEntry = React.memo(
                                    autoFocus,
                                    onDialogOpen,
                                    disabled,
-                                   inferredEntry
+                                   inferredEntry,
+                                   entryError
                                }: EnumEntryProps) {
 
         const {
@@ -226,15 +236,13 @@ const EnumEntry = React.memo(
             errors,
             setFieldValue,
             touched
-        } = useFormikContext<EnumValues>();
+        } = useFormex<EnumValues>();
 
         const shouldUpdateIdRef = React.useRef(!getIn(values, `${enumValuesPath}[${index}].id`));
         const shouldUpdateId = updateId || shouldUpdateIdRef.current;
 
         const idValue = getIn(values, `${enumValuesPath}[${index}].id`);
         const labelValue = getIn(values, `${enumValuesPath}[${index}].label`);
-
-        const labelError = getIn(errors, `${enumValuesPath}[${index}].label`);
 
         const currentLabelRef = React.useRef(labelValue);
 
@@ -246,35 +254,50 @@ const EnumEntry = React.memo(
         }, [labelValue]);
 
         return (
-            <div className={"flex w-full align-center justify-center"}>
-                <FastField name={`${enumValuesPath}[${index}].label`}
+            <>
+                <div className={"flex w-full align-center justify-center"}>
+                    <Field name={`${enumValuesPath}[${index}].label`}
                            as={DebouncedTextField}
                            className={"flex-grow"}
                            required
                            disabled={disabled}
                            size="small"
-                           validate={validateLabel}
                            autoFocus={autoFocus}
                            autoComplete="off"
                            endAdornment={inferredEntry && <AutoAwesomeIcon size={"small"}/>}
-                           error={Boolean(labelError)}/>
+                           error={Boolean(entryError?.label)}/>
 
-                {!disabled &&
-                    <IconButton
-                        size="small"
-                        aria-label="edit"
-                        className={"m-1"}
-                        onClick={() => onDialogOpen()}>
-                        <SettingsIcon size={"small"}/>
-                    </IconButton>}
+                    {!disabled &&
+                        <Badge color={"error"} invisible={!entryError?.id}>
+                            <IconButton
+                                size="small"
+                                aria-label="edit"
+                                className={"m-1"}
+                                onClick={() => onDialogOpen()}>
+                                <SettingsIcon size={"small"}/>
+                            </IconButton>
+                        </Badge>}
 
-            </div>);
+                </div>
+
+                {entryError?.label && <Typography variant={"caption"}
+                             className={"ml-3.5 text-red-500 dark:text-red-500"}>
+                    {entryError?.label}
+                </Typography>}
+
+                {entryError?.id && <Typography variant={"caption"}
+                             className={"ml-3.5 text-red-500 dark:text-red-500"}>
+                    {entryError?.id}
+                </Typography>}
+
+            </>);
     },
     function areEqual(prevProps: EnumEntryProps, nextProps: EnumEntryProps) {
         return prevProps.index === nextProps.index &&
             prevProps.enumValuesPath === nextProps.enumValuesPath &&
             prevProps.shouldUpdateId === nextProps.shouldUpdateId &&
             prevProps.inferredEntry === nextProps.inferredEntry &&
+            equal(prevProps.entryError, nextProps.entryError) &&
             prevProps.autoFocus === nextProps.autoFocus;
     }
 );
@@ -292,12 +315,8 @@ function EnumEntryDialog({
 }) {
 
     const {
-        values,
-        handleChange,
         errors,
-        setFieldValue,
-        touched
-    } = useFormikContext<EnumValues>();
+    } = useFormex<EnumValues>();
 
     const idError = index !== undefined ? getIn(errors, `${enumValuesPath}[${index}].id`) : undefined;
     return <Dialog
@@ -309,14 +328,14 @@ function EnumEntryDialog({
 
         <DialogContent>
             {index !== undefined &&
-                <div><FastField name={`${enumValuesPath}[${index}]id`}
-                                as={DebouncedTextField}
-                                required
-                                validate={validateId}
-                                label={"ID"}
-                                size="small"
-                                autoComplete="off"
-                                error={Boolean(idError)}/>
+                <div>
+                    <Field name={`${enumValuesPath}[${index}].id`}
+                           as={DebouncedTextField}
+                           required
+                           label={"ID"}
+                           size="small"
+                           autoComplete="off"
+                           error={Boolean(idError)}/>
 
                     <FieldHelperView error={Boolean(idError)}>
                         {idError ?? "Value saved in the data source"}
@@ -337,18 +356,3 @@ function EnumEntryDialog({
     </Dialog>
 }
 
-function validateLabel(value: string) {
-    let error;
-    if (!value) {
-        error = "You must specify a label";
-    }
-    return error;
-}
-
-function validateId(value: string) {
-    let error;
-    if (!value) {
-        error = "You must specify an ID";
-    }
-    return error;
-}
