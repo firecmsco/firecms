@@ -16,9 +16,10 @@ export function DebouncedTextField<T extends string | number>(props: TextFieldPr
         const emptyInitialValue = !props.value;
         if (emptyInitialValue && !deferredValue)
             return;
-        if (deferredValue !== props.value && previousEventRef.current && props.onChange)
+        if (deferredValue !== props.value && previousEventRef.current && props.onChange) {
             props.onChange(previousEventRef.current);
-    }, [deferredValue, props.value, props.onChange]);
+        }
+    }, [deferredValue, props.value]);
 
     const internalOnChange = useCallback((event: ChangeEvent<any>) => {
         previousEventRef.current = event;

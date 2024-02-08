@@ -29,7 +29,7 @@ export type InputType =
 
 export type TextFieldProps<T extends string | number> = {
     type?: InputType,
-    value: T,
+    value?: T,
     onChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
     label?: React.ReactNode,
     multiline?: boolean,
