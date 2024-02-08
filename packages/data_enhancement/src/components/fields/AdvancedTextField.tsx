@@ -101,9 +101,12 @@ export function AdvancedTextField<T extends string | number>({
 
     const additional: any = {
         onKeyPress: (e: any) => {
-            if (e.key === "Enter") {
+            // if (e.key === "Enter") {
+            //     e.preventDefault();
+            //     e.stopPropagation();
+            // }
+            if (!multiline && e.key === "Enter") {
                 e.preventDefault();
-                e.stopPropagation();
             }
         }
     }
@@ -158,11 +161,6 @@ export function AdvancedTextField<T extends string | number>({
                 onBlur={() => setFocused(false)}
                 value={internalValue}
                 sizeRef={ref}
-                onKeyPress={ev => {
-                    if (!multiline && ev.key === "Enter") {
-                        ev.preventDefault();
-                    }
-                }}
                 onChange={onChange}
                 onScroll={onScroll}
                 {...additional}/>
