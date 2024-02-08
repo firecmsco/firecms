@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FormEvent } from "react";
 
 export type FormexController<T extends object> = {
     values: T;
@@ -13,8 +13,9 @@ export type FormexController<T extends object> = {
     setFieldError: (key: string, error?: string) => void;
     handleChange: (event: React.SyntheticEvent) => void,
     handleBlur: (event: React.FocusEvent) => void,
-    submitForm: () => void;
-    resetForm: (props: FormexResetProps<T>) => void;
+    submitForm: (event?: FormEvent<HTMLFormElement>) => void;
+    validate: () => void;
+    resetForm: (props?: FormexResetProps<T>) => void;
     submitCount: number;
     isSubmitting: boolean;
 }

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { ArrayProperty, getFieldConfig, Property, PropertyConfig } from "@firecms/core";
 import { Button, Paper, Typography } from "@firecms/ui";
-import { Field, getIn, useFormikContext } from "formik";
+import { Field, getIn, useFormex } from "../../../form";
 import { PropertyFormDialog } from "../PropertyEditView";
 import { PropertyFieldPreview } from "../PropertyFieldPreview";
 import { ArrayPropertyValidation } from "./validation/ArrayPropertyValidation";
@@ -31,7 +31,7 @@ export function RepeatPropertyField({
         errors,
         setFieldValue,
         touched
-    } = useFormikContext<ArrayProperty>();
+    } = useFormex<ArrayProperty>();
 
     const [propertyDialogOpen, setPropertyDialogOpen] = useState(false);
     const ofProperty = getIn(values, "of");

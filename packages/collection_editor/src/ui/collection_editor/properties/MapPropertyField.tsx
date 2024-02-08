@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { MapProperty, Property, PropertyConfig, } from "@firecms/core";
 import { AddIcon, BooleanSwitchWithLabel, Button, Paper, Typography } from "@firecms/ui";
 import { PropertyFormDialog } from "../PropertyEditView";
-import { getIn, useFormikContext } from "formik";
+import { getIn, useFormex } from "../../../form";
 import { PropertyTree } from "../PropertyTree";
 import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath, namespaceToPropertiesPath } from "../util";
 import { FieldHelperView } from "./FieldHelperView";
@@ -18,7 +18,7 @@ export function MapPropertyField({ disabled, getData, allowDataInference, proper
     const {
         values,
         setFieldValue
-    } = useFormikContext<MapProperty>();
+    } = useFormex<MapProperty>();
 
     const [propertyDialogOpen, setPropertyDialogOpen] = useState<boolean>(false);
     const [selectedPropertyKey, setSelectedPropertyKey] = useState<string | undefined>();

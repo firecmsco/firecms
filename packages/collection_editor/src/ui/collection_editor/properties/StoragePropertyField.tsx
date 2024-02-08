@@ -1,5 +1,4 @@
 import React from "react";
-import { SwitchControl, } from "@firecms/core";
 import {
     Button,
     Checkbox,
@@ -11,10 +10,11 @@ import {
     Typography
 } from "@firecms/ui";
 
-import { Field, getIn, useFormikContext } from "formik";
+import { Field, FormexFieldProps, getIn, useFormex } from "../../../form";
 import { GeneralPropertyValidation } from "./validation/GeneralPropertyValidation";
 import { ArrayPropertyValidation } from "./validation/ArrayPropertyValidation";
 import { ValidationPanel } from "./validation/ValidationPanel";
+import { SwitchControl } from "../SwitchControl";
 
 const fileTypes: Record<string, string> = {
     "image/*": "Images",
@@ -37,7 +37,7 @@ export function StoragePropertyField({
     const {
         values,
         setFieldValue
-    } = useFormikContext();
+    } = useFormex();
 
     const baseStoragePath = multiple ? "of.storage" : "storage";
     const acceptedFiles = `${baseStoragePath}.acceptedFiles`;
@@ -158,12 +158,18 @@ export function StoragePropertyField({
                                     <li>{"{rand} - Random value used to avoid name collisions"}</li>
                                 </ul>
                             </Typography>
-                            <Field type="checkbox"
-                                   name={storeUrl}
-                                   label={"Save URL instead of storage path"}
-                                   disabled={existing || disabled}
-                                   component={SwitchControl}/>
-                            <br/>
+
+                            <Field name={storeUrl}
+                                   type="checkbox">
+                                {({ field, form }: FormexFieldProps) => {
+                                    return <SwitchControl
+                                        label={"Save URL instead of storage path"}
+                                        disabled={existing || disabled}
+                                        form={form}
+                                        field={field}/>
+                                }}
+                            </Field>
+
                             <Typography variant={"caption"} className={"ml-3.5 mt-1 mb-2"}>
                                 Turn this setting on, if you prefer to save
                                 the download

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
-import { Field, FormikErrors, getIn, useFormikContext } from "formik";
+import { Field, getIn } from "../../form";
 import {
     EntityCollection,
     ErrorBoundary,
@@ -40,7 +40,7 @@ type CollectionEditorFormProps = {
     showErrors: boolean;
     isNewCollection: boolean;
     propertyErrorsRef?: React.MutableRefObject<any>;
-    onPropertyError: (propertyKey: string, namespace: string | undefined, error?: FormikErrors<any>) => void;
+    onPropertyError: (propertyKey: string, namespace: string | undefined, error?: Record<string, any>) => void;
     setDirty?: (dirty: boolean) => void;
     reservedGroups?: string[];
     extraIcon: React.ReactNode;
@@ -66,15 +66,6 @@ export function CollectionPropertiesEditorForm({
                                                    collectionEditable
                                                }: CollectionEditorFormProps) {
 
-    // const {
-    //     values,
-    //     setFieldValue,
-    //     setFieldTouched,
-    //     setFieldError,
-    //     errors,
-    //     dirty
-    // } = useFormex();
-
     const {
         values,
         setFieldValue,
@@ -82,7 +73,7 @@ export function CollectionPropertiesEditorForm({
         setFieldTouched,
         errors,
         dirty
-    } = useFormikContext<PersistedCollection>();
+    } = useFormex<PersistedCollection>();
 
     const snackbarController = useSnackbarController();
 
@@ -273,7 +264,7 @@ export function CollectionPropertiesEditorForm({
 
     };
 
-    const onPropertyErrorInternal = useCallback((id: string, namespace?: string, error?: FormikErrors<any>) => {
+    const onPropertyErrorInternal = useCallback((id: string, namespace?: string, error?: Record<string, any>) => {
         const propertyPath = id ? getFullId(id, namespace) : undefined;
         console.warn("onPropertyErrorInternal", {
             id,

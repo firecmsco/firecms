@@ -37,7 +37,6 @@ import {
     Tab,
     Tabs,
 } from "@firecms/ui";
-import { Form, Formik, FormikHelpers } from "formik";
 import { YupSchema } from "./CollectionYupValidation";
 import { CollectionDetailsForm } from "./CollectionDetailsForm";
 import { CollectionPropertiesEditorForm } from "./CollectionPropertiesEditorForm";
@@ -52,8 +51,9 @@ import { CollectionEditorImportMapping } from "./import/CollectionEditorImportMa
 import { CollectionEditorImportDataPreview } from "./import/CollectionEditorImportDataPreview";
 import { cleanPropertiesFromImport } from "./import/clean_import_data";
 import { PersistedCollection } from "../../types/persisted_collection";
-import { useFormController } from "../../form/useFormController";
+import { useCreateFormex } from "../../form/useCreateFormex";
 import { Formex } from "../../form/Formex";
+import { FormexController } from "src/form/types";
 
 export interface CollectionEditorDialogProps {
     open: boolean;
@@ -199,8 +199,6 @@ export function CollectionEditor<M extends Record<string, any>>(props: Collectio
             icon: coolIconKeys[Math.floor(Math.random() * coolIconKeys.length)],
             ownerId: authController.user?.uid ?? ""
         };
-    console.log("initialValues", initialValues);
-    console.log("initialCollection", initialCollection);
 
     if (!initialLoadingCompleted) {
         return <CircularProgressCenter/>;
@@ -355,7 +353,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             }
 
             setCollection(values);
-            console.log("Inferred collection", {
+            console.debug("Inferred collection", {
                 newCollection: newCollection ?? {},
                 values
             });
@@ -370,13 +368,13 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         }
     }, [parentCollectionIds, doCollectionInference]);
 
-    const onSubmit = (newCollectionState: PersistedCollection<M>, formikHelpers: FormikHelpers<PersistedCollection<M>>) => {
+    const onSubmit = (newCollectionState: PersistedCollection<M>, formexController: FormexController<PersistedCollection<M>>) => {
+        console.log("Submitting collection", newCollectionState);
         try {
 
-            console.log("Submitting collection", newCollectionState)
             if (!isNewCollection) {
                 saveCollection(newCollectionState).then(() => {
-                    formikHelpers.resetForm({ values: initialValues });
+                    formexController.resetForm({ values: initialValues });
                     // setNextMode();
                     handleClose(newCollectionState);
                 });
@@ -385,15 +383,15 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
             if (currentView === "welcome") {
                 setNextMode();
-                formikHelpers.resetForm({ values: newCollectionState });
+                formexController.resetForm({ values: newCollectionState });
             } else if (currentView === "details") {
                 if (extraView || importConfig.inUse) {
-                    formikHelpers.resetForm({ values: newCollectionState });
+                    formexController.resetForm({ values: newCollectionState });
                     setNextMode();
                 } else if (isNewCollection) {
                     inferCollectionFromData(newCollectionState)
                         .then((values) => {
-                            formikHelpers.resetForm({
+                            formexController.resetForm({
                                 values: values ?? newCollectionState,
                                 touched: {
                                     path: true,
@@ -404,25 +402,25 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                         setNextMode();
                     });
                 } else {
-                    formikHelpers.resetForm({ values: newCollectionState });
+                    formexController.resetForm({ values: newCollectionState });
                     setNextMode();
                 }
             } else if (currentView === "extra_view") {
                 setNextMode();
-                formikHelpers.resetForm({ values: newCollectionState });
+                formexController.resetForm({ values: newCollectionState });
             } else if (currentView === "import_data_mapping") {
                 setNextMode();
             } else if (currentView === "import_data_preview") {
                 setNextMode();
             } else if (currentView === "properties") {
                 saveCollection(newCollectionState).then(() => {
-                    formikHelpers.resetForm({ values: initialValues });
+                    formexController.resetForm({ values: initialValues });
                     setNextMode();
                     handleClose(newCollectionState);
                 });
             } else {
                 setNextMode();
-                formikHelpers.resetForm({ values: newCollectionState });
+                formexController.resetForm({ values: newCollectionState });
             }
         } catch (e: any) {
             snackbarController.open({
@@ -430,11 +428,25 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                 message: "Error persisting collection: " + (e.message ?? "Details in the console")
             });
             console.error(e);
-            formikHelpers.resetForm({ values: newCollectionState });
+            formexController.resetForm({ values: newCollectionState });
         }
     };
 
-    const validate = (col: PersistedCollection) => {
+    const validation = (col: PersistedCollection) => {
+
+        // TODO: apply validation schema
+        const schema = (currentView === "properties" || currentView === "subcollections" || currentView === "details") && YupSchema;
+        if (schema) {
+            try {
+                schema.validateSync(col, { abortEarly: false });
+            } catch (e: any) {
+                const errors: Record<string, any> = {};
+                e.inner.forEach((err: any) => {
+                    errors[err.path] = err.message;
+                });
+                return errors;
+            }
+        }
         if (currentView === "properties") {
             // return the errors for the properties form
             return propertyErrorsRef.current;
@@ -453,275 +465,271 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         return errors;
     };
 
-    const formController = useFormController<PersistedCollection<M>>({ initialValues });
+    const formController = useCreateFormex<PersistedCollection<M>>({
+        initialValues,
+        onSubmit,
+        validation
+    });
+
+    const {
+        values,
+        setFieldValue,
+        isSubmitting,
+        dirty,
+        submitCount
+    } = formController;
+
+    const path = values.path ?? editedCollectionPath;
+    const updatedFullPath = fullPath?.includes("/") ? fullPath?.split("/").slice(0, -1).join("/") + "/" + path : path; // TODO: this path is wrong
+    const pathError = validatePath(path, isNewCollection, existingPaths, values.id);
+
+    const parentPaths = !pathError && parentCollectionIds ? navigation.convertIdsToPaths(parentCollectionIds) : undefined;
+    const resolvedPath = !pathError ? navigation.resolveAliasesFrom(updatedFullPath) : undefined;
+    const getDataWithPath = resolvedPath && getData ? () => getData(resolvedPath, parentPaths ?? []) : undefined;
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+        setFormDirty(dirty);
+    }, [dirty]);
+
+    function onImportDataSet(data: object[]) {
+        importConfig.setInUse(true);
+        buildEntityPropertiesFromData(data, getInferenceType)
+            .then((properties) => {
+                const res = cleanPropertiesFromImport(properties);
+
+                setFieldValue("properties", res.properties);
+                setFieldValue("propertiesOrder", Object.keys(res.properties));
+
+                importConfig.setIdColumn(res.idColumn);
+                importConfig.setImportData(data);
+                importConfig.setHeadersMapping(res.headersMapping);
+                importConfig.setOriginProperties(res.properties);
+            });
+    }
+
+    const validValues = Boolean(values.name) && Boolean(values.id);
+
+    const onImportMappingComplete = () => {
+        const updatedProperties = { ...values.properties };
+        if (importConfig.idColumn)
+            delete updatedProperties[importConfig.idColumn];
+        setFieldValue("properties", updatedProperties);
+        // setFieldValue("propertiesOrder", Object.values(importConfig.headersMapping));
+        setNextMode();
+    };
+
+    const editable = collection?.editable === undefined || collection?.editable === true;
+    const collectionEditable = editable || isNewCollection;
 
     return <DialogContent fullHeight={true}>
         <Formex value={formController}>
-            <Formik
-                initialValues={initialValues}
-                validationSchema={(currentView === "properties" || currentView === "subcollections" || currentView === "details") && YupSchema}
-                validate={validate}
-                onSubmit={onSubmit}
-            >
-                {(formikHelpers) => {
-                    const {
-                        values,
-                        setFieldValue,
-                        isSubmitting,
-                        dirty,
-                        submitCount
-                    } = formikHelpers;
 
-                    const path = values.path ?? editedCollectionPath;
-                    const updatedFullPath = fullPath?.includes("/") ? fullPath?.split("/").slice(0, -1).join("/") + "/" + path : path; // TODO: this path is wrong
-                    const pathError = validatePath(path, isNewCollection, existingPaths, values.id);
+            <>
+                {!isNewCollection && <Tabs value={currentView}
+                                           className={cn(defaultBorderMixin, "justify-end bg-gray-50 dark:bg-gray-950 border-b")}
+                                           onValueChange={(v) => setCurrentView(v as EditorView)}>
+                    <Tab value={"details"}>
+                        Details
+                    </Tab>
+                    <Tab value={"properties"}>
+                        Properties
+                    </Tab>
+                    <Tab value={"subcollections"}>
+                        Additional views
+                    </Tab>
+                </Tabs>}
 
-                    const parentPaths = !pathError && parentCollectionIds ? navigation.convertIdsToPaths(parentCollectionIds) : undefined;
-                    const resolvedPath = !pathError ? navigation.resolveAliasesFrom(updatedFullPath) : undefined;
-                    const getDataWithPath = resolvedPath && getData ? () => getData(resolvedPath, parentPaths ?? []) : undefined;
+                <form noValidate
+                      onSubmit={formController.submitForm}
+                      className={cn(
+                          isNewCollection ? "h-full" : "h-[calc(100%-48px)]",
+                          "flex-grow flex flex-col relative")}>
 
-                    // eslint-disable-next-line react-hooks/rules-of-hooks
-                    useEffect(() => {
-                        setFormDirty(dirty);
-                    }, [dirty]);
+                    {currentView === "loading" &&
+                        <CircularProgressCenter/>}
 
-                    function onImportDataSet(data: object[]) {
-                        importConfig.setInUse(true);
-                        buildEntityPropertiesFromData(data, getInferenceType)
-                            .then((properties) => {
-                                const res = cleanPropertiesFromImport(properties);
+                    {currentView === "extra_view" &&
+                        path &&
+                        extraView?.View &&
+                        <extraView.View path={path}/>}
 
-                                setFieldValue("properties", res.properties);
-                                setFieldValue("propertiesOrder", Object.keys(res.properties));
+                    {currentView === "welcome" &&
+                        <CollectionEditorWelcomeView
+                            path={path}
+                            onContinue={(data) => {
+                                if (data) {
+                                    onImportDataSet(data);
+                                    setCurrentView("import_data_mapping");
+                                } else {
+                                    setCurrentView("details");
+                                }
+                            }}
+                            existingCollectionPaths={existingPaths}
+                            parentCollection={parentCollection}
+                            pathSuggestions={pathSuggestions}/>}
 
-                                importConfig.setIdColumn(res.idColumn);
-                                importConfig.setImportData(data);
-                                importConfig.setHeadersMapping(res.headersMapping);
-                                importConfig.setOriginProperties(res.properties);
-                            });
+                    {currentView === "import_data_mapping" && importConfig &&
+                        <CollectionEditorImportMapping importConfig={importConfig}
+                                                       collectionEditable={collectionEditable}
+                                                       propertyConfigs={propertyConfigs}/>}
+
+                    {currentView === "import_data_preview" && importConfig &&
+                        <CollectionEditorImportDataPreview importConfig={importConfig}
+                                                           properties={values.properties as Properties}
+                                                           propertiesOrder={values.propertiesOrder as string[]}/>}
+
+                    {currentView === "import_data_saving" && importConfig &&
+                        <ImportSaveInProgress importConfig={importConfig}
+                                              collection={values}
+                                              onImportSuccess={(importedCollection) => {
+                                                  handleClose(importedCollection);
+                                                  snackbarController.open({
+                                                      type: "info",
+                                                      message: "Data imported successfully"
+                                                  });
+                                              }}
+                        />}
+
+                    {currentView === "details" &&
+                        <CollectionDetailsForm
+                            existingPaths={existingPaths}
+                            existingIds={existingIds}
+                            groups={groups}
+                            parentCollectionIds={parentCollectionIds}
+                            parentCollection={parentCollection}
+                            isNewCollection={isNewCollection}/>}
+
+                    {currentView === "subcollections" && collection &&
+                        <SubcollectionsEditTab
+                            parentCollection={parentCollection}
+                            configController={configController}
+                            getUser={getUser}
+                            collectionInference={collectionInference}
+                            parentCollectionIds={parentCollectionIds}
+                            collection={collection}/>}
+
+                    {currentView === "properties" &&
+                        <CollectionPropertiesEditorForm
+                            showErrors={submitCount > 0}
+                            isNewCollection={isNewCollection}
+                            reservedGroups={reservedGroups}
+                            onPropertyError={(propertyKey, namespace, error) => {
+                                console.log("onPropertyError", propertyKey, namespace, error);
+                                propertyErrorsRef.current = removeUndefined({
+                                    ...propertyErrorsRef.current,
+                                    [`properties.${propertyKey}`]: removeUndefined(error, true)
+                                }, true);
+                            }}
+                            getUser={getUser}
+                            getData={getDataWithPath}
+                            doCollectionInference={doCollectionInference}
+                            propertyConfigs={propertyConfigs}
+                            collectionEditable={collectionEditable}
+                            extraIcon={extraView?.icon &&
+                                <IconButton
+                                    color={"primary"}
+                                    onClick={() => setCurrentView("extra_view")}>
+                                    {extraView.icon}
+                                </IconButton>}/>
                     }
 
-                    const validValues = Boolean(values.name) && Boolean(values.id);
+                    {currentView !== "welcome" && <DialogActions
+                        position={"absolute"}>
+                        {error && <ErrorView error={error}/>}
 
-                    const onImportMappingComplete = () => {
-                        const updatedProperties = { ...values.properties };
-                        if (importConfig.idColumn)
-                            delete updatedProperties[importConfig.idColumn];
-                        setFieldValue("properties", updatedProperties);
-                        // setFieldValue("propertiesOrder", Object.values(importConfig.headersMapping));
-                        setNextMode();
-                    };
+                        {isNewCollection && includeTemplates && currentView === "import_data_mapping" &&
+                            <Button variant={"text"}
+                                    type="button"
+                                    onClick={() => {
+                                        importConfig.setInUse(false);
+                                        return setCurrentView("welcome");
+                                    }}>
+                                <ArrowBackIcon/>
+                                Back
+                            </Button>}
 
-                    const editable = collection?.editable === undefined || collection?.editable === true;
-                    const collectionEditable = editable || isNewCollection;
-                    return (
-                        <>
-                            {!isNewCollection && <Tabs value={currentView}
-                                                       className={cn(defaultBorderMixin, "justify-end bg-gray-50 dark:bg-gray-950 border-b")}
-                                                       onValueChange={(v) => setCurrentView(v as EditorView)}>
-                                <Tab value={"details"}>
-                                    Details
-                                </Tab>
-                                <Tab value={"properties"}>
-                                    Properties
-                                </Tab>
-                                <Tab value={"subcollections"}>
-                                    Additional views
-                                </Tab>
-                            </Tabs>}
+                        {isNewCollection && includeTemplates && currentView === "import_data_preview" &&
+                            <Button variant={"text"}
+                                    type="button"
+                                    onClick={() => {
+                                        saveCollection(values);
+                                        setCurrentView("import_data_mapping");
+                                    }}>
+                                <ArrowBackIcon/>
+                                Back
+                            </Button>}
 
-                            <Form noValidate
-                                  className={cn(
-                                      isNewCollection ? "h-full" : "h-[calc(100%-48px)]",
-                                      "flex-grow flex flex-col relative")}>
+                        {isNewCollection && includeTemplates && currentView === "details" &&
+                            <Button variant={"text"}
+                                    type="button"
+                                    onClick={() => setCurrentView("welcome")}>
+                                <ArrowBackIcon/>
+                                Back
+                            </Button>}
 
-                                {currentView === "loading" &&
-                                    <CircularProgressCenter/>}
+                        {isNewCollection && currentView === "properties" && <Button variant={"text"}
+                                                                                    type="button"
+                                                                                    onClick={() => setCurrentView("details")}>
+                            <ArrowBackIcon/>
+                            Back
+                        </Button>}
 
-                                {currentView === "extra_view" &&
-                                    path &&
-                                    extraView?.View &&
-                                    <extraView.View path={path}/>}
+                        <Button variant={"text"}
+                                onClick={() => {
+                                    handleCancel();
+                                }}>
+                            Cancel
+                        </Button>
 
-                                {currentView === "welcome" &&
-                                    <CollectionEditorWelcomeView
-                                        path={path}
-                                        onContinue={(data) => {
-                                            if (data) {
-                                                onImportDataSet(data);
-                                                setCurrentView("import_data_mapping");
-                                            } else {
-                                                setCurrentView("details");
-                                            }
-                                        }}
-                                        existingCollectionPaths={existingPaths}
-                                        parentCollection={parentCollection}
-                                        pathSuggestions={pathSuggestions}/>}
+                        {isNewCollection && currentView === "import_data_mapping" &&
+                            <Button
+                                variant={"filled"}
+                                color="primary"
+                                onClick={onImportMappingComplete}
+                            >
+                                Next
+                            </Button>}
 
-                                {currentView === "import_data_mapping" && importConfig &&
-                                    <CollectionEditorImportMapping importConfig={importConfig}
-                                                                   collectionEditable={collectionEditable}
-                                                                   propertyConfigs={propertyConfigs}/>}
+                        {isNewCollection && currentView === "import_data_preview" &&
+                            <Button
+                                variant={"filled"}
+                                color="primary"
+                                onClick={() => {
+                                    setNextMode();
+                                }}
+                            >
+                                Next
+                            </Button>}
 
-                                {currentView === "import_data_preview" && importConfig &&
-                                    <CollectionEditorImportDataPreview importConfig={importConfig}
-                                                                       properties={values.properties as Properties}
-                                                                       propertiesOrder={values.propertiesOrder as string[]}/>}
+                        {isNewCollection && (currentView === "details" || currentView === "properties") &&
+                            <LoadingButton
+                                variant={"filled"}
+                                color="primary"
+                                type="submit"
+                                loading={isSubmitting}
+                                disabled={isSubmitting || (currentView === "details" && !validValues)}
+                                startIcon={currentView === "properties"
+                                    ? <DoneIcon/>
+                                    : undefined}
+                            >
+                                {currentView === "details" && "Next"}
+                                {currentView === "properties" && "Create collection"}
+                            </LoadingButton>}
 
-                                {currentView === "import_data_saving" && importConfig &&
-                                    <ImportSaveInProgress importConfig={importConfig}
-                                                          collection={values}
-                                                          onImportSuccess={(importedCollection) => {
-                                                              handleClose(importedCollection);
-                                                              snackbarController.open({
-                                                                  type: "info",
-                                                                  message: "Data imported successfully"
-                                                              });
-                                                          }}
-                                    />}
+                        {!isNewCollection && <LoadingButton
+                            variant="filled"
+                            color="primary"
+                            type="submit"
+                            loading={isSubmitting}
+                            // disabled={isSubmitting || !dirty}
+                        >
+                            Update collection
+                        </LoadingButton>}
 
-                                {currentView === "details" &&
-                                    <CollectionDetailsForm
-                                        existingPaths={existingPaths}
-                                        existingIds={existingIds}
-                                        groups={groups}
-                                        parentCollectionIds={parentCollectionIds}
-                                        parentCollection={parentCollection}
-                                        isNewCollection={isNewCollection}/>}
-
-                                {currentView === "subcollections" && collection &&
-                                    <SubcollectionsEditTab
-                                        parentCollection={parentCollection}
-                                        configController={configController}
-                                        getUser={getUser}
-                                        collectionInference={collectionInference}
-                                        parentCollectionIds={parentCollectionIds}
-                                        collection={collection}/>}
-
-                                {currentView === "properties" &&
-                                    <CollectionPropertiesEditorForm
-                                        showErrors={submitCount > 0}
-                                        isNewCollection={isNewCollection}
-                                        reservedGroups={reservedGroups}
-                                        onPropertyError={(propertyKey, namespace, error) => {
-                                            propertyErrorsRef.current = removeUndefined({
-                                                ...propertyErrorsRef.current,
-                                                [propertyKey]: error
-                                            }, true);
-                                        }}
-                                        getUser={getUser}
-                                        getData={getDataWithPath}
-                                        doCollectionInference={doCollectionInference}
-                                        propertyConfigs={propertyConfigs}
-                                        collectionEditable={collectionEditable}
-                                        extraIcon={extraView?.icon &&
-                                            <IconButton
-                                                color={"primary"}
-                                                onClick={() => setCurrentView("extra_view")}>
-                                                {extraView.icon}
-                                            </IconButton>}/>
-                                }
-
-                                {currentView !== "welcome" && <DialogActions
-                                    position={"absolute"}>
-                                    {error && <ErrorView error={error}/>}
-
-                                    {isNewCollection && includeTemplates && currentView === "import_data_mapping" &&
-                                        <Button variant={"text"}
-                                                type="button"
-                                                onClick={() => {
-                                                    importConfig.setInUse(false);
-                                                    return setCurrentView("welcome");
-                                                }}>
-                                            <ArrowBackIcon/>
-                                            Back
-                                        </Button>}
-
-                                    {isNewCollection && includeTemplates && currentView === "import_data_preview" &&
-                                        <Button variant={"text"}
-                                                type="button"
-                                                onClick={() => {
-                                                    saveCollection(values);
-                                                    setCurrentView("import_data_mapping");
-                                                }}>
-                                            <ArrowBackIcon/>
-                                            Back
-                                        </Button>}
-
-                                    {isNewCollection && includeTemplates && currentView === "details" &&
-                                        <Button variant={"text"}
-                                                type="button"
-                                                onClick={() => setCurrentView("welcome")}>
-                                            <ArrowBackIcon/>
-                                            Back
-                                        </Button>}
-
-                                    {isNewCollection && currentView === "properties" && <Button variant={"text"}
-                                                                                                type="button"
-                                                                                                onClick={() => setCurrentView("details")}>
-                                        <ArrowBackIcon/>
-                                        Back
-                                    </Button>}
-
-                                    <Button variant={"text"}
-                                            onClick={() => {
-                                                handleCancel();
-                                            }}>
-                                        Cancel
-                                    </Button>
-
-                                    {isNewCollection && currentView === "import_data_mapping" &&
-                                        <Button
-                                            variant={"filled"}
-                                            color="primary"
-                                            onClick={onImportMappingComplete}
-                                        >
-                                            Next
-                                        </Button>}
-
-                                    {isNewCollection && currentView === "import_data_preview" &&
-                                        <Button
-                                            variant={"filled"}
-                                            color="primary"
-                                            onClick={() => {
-                                                setNextMode();
-                                            }}
-                                        >
-                                            Next
-                                        </Button>}
-
-                                    {isNewCollection && (currentView === "details" || currentView === "properties") &&
-                                        <LoadingButton
-                                            variant={"filled"}
-                                            color="primary"
-                                            type="submit"
-                                            loading={isSubmitting}
-                                            disabled={isSubmitting || (currentView === "details" && !validValues)}
-                                            startIcon={currentView === "properties"
-                                                ? <DoneIcon/>
-                                                : undefined}
-                                        >
-                                            {currentView === "details" && "Next"}
-                                            {currentView === "properties" && "Create collection"}
-                                        </LoadingButton>}
-
-                                    {!isNewCollection && <LoadingButton
-                                        variant="filled"
-                                        color="primary"
-                                        type="submit"
-                                        loading={isSubmitting}
-                                        // disabled={isSubmitting || !dirty}
-                                    >
-                                        Update collection
-                                    </LoadingButton>}
-
-                                </DialogActions>}
-                            </Form>
-                        </>
-                    );
-                }}
-
-            </Formik>
+                    </DialogActions>}
+                </form>
+            </>
 
         </Formex>
 

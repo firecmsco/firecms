@@ -22,12 +22,12 @@ import {
     Tooltip,
     Typography,
 } from "@firecms/ui";
-import { useFormikContext } from "formik";
 import { CollectionEditorDialog } from "./CollectionEditorDialog";
 import { CollectionsConfigController } from "../../types/config_controller";
 import { PersistedCollection } from "../../types/persisted_collection";
 import { CollectionInference } from "../../types/collection_inference";
 import { EntityCustomViewsSelectDialog } from "./EntityCustomViewsSelectDialog";
+import { useFormex } from "../../form/Formex";
 
 export function SubcollectionsEditTab({
                                           collection,
@@ -59,7 +59,7 @@ export function SubcollectionsEditTab({
     const {
         values,
         setFieldValue,
-    } = useFormikContext<EntityCollection>();
+    } = useFormex<EntityCollection>();
 
     const subcollections = collection.subcollections ?? [];
     const resolvedEntityViews = values.entityViews?.filter(e => typeof e === "string")

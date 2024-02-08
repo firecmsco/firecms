@@ -19,9 +19,9 @@ import {
     Typography,
     useAutoComplete
 } from "@firecms/ui";
-import { Field, getIn, useFormikContext } from "formik";
 
 import { FieldHelperView } from "./properties/FieldHelperView";
+import { useFormex, Field, getIn } from "../../form";
 
 export function CollectionDetailsForm({
                                           isNewCollection,
@@ -50,7 +50,7 @@ export function CollectionDetailsForm({
         setFieldTouched,
         isSubmitting,
         submitCount
-    } = useFormikContext<EntityCollection>();
+    } = useFormex<EntityCollection>();
 
     const [iconDialogOpen, setIconDialogOpen] = useState(false);
     const [advancedPanelExpanded, setAdvancedPanelExpanded] = useState(false);

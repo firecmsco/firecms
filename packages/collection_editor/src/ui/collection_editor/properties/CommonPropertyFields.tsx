@@ -1,4 +1,4 @@
-import { Field, getIn, useFormikContext } from "formik";
+import { Field, getIn, useFormex } from "../../../form";
 import { DebouncedTextField } from "@firecms/ui";
 import { PropertyWithId } from "../PropertyEditView";
 import React from "react";
@@ -8,7 +8,6 @@ import { toSnakeCase, unslugify } from "@firecms/core";
 type CommonPropertyFieldsProps = {
     showErrors: boolean,
     disabledId: boolean,
-    existingPropertyKeys?: string[];
     disabled: boolean;
     isNewProperty: boolean;
     autoUpdateId: boolean;
@@ -18,7 +17,6 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
     function CommonPropertyFields({
                                       showErrors,
                                       disabledId,
-                                      existingPropertyKeys,
                                       disabled,
                                       autoUpdateId,
                                       isNewProperty
@@ -29,8 +27,9 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
             values,
             setFieldValue,
             setFieldTouched,
-            touched
-        } = useFormikContext<PropertyWithId>();
+            touched,
+            validate
+        } = useFormex<PropertyWithId>();
 
         const name = "name";
         const nameError = showErrors && getIn(errors, name);
@@ -46,20 +45,20 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
 
                 <div>
                     <Field
+                        name={name}
                         inputRef={ref}
                         as={DebouncedTextField}
                         value={values[name]}
                         onChange={(e: any) => {
                             const newNameValue = e.target.value;
-                            setFieldValue(name, newNameValue);
-                            setFieldTouched(name, true, true);
                             const idTouched = getIn(touched, id);
                             if (!idTouched && autoUpdateId) {
-                                setFieldValue(id, newNameValue ? toSnakeCase(newNameValue) : "")
+                                setFieldValue(id, newNameValue ? toSnakeCase(newNameValue) : "", false)
                             }
+                            setFieldValue(name, newNameValue, true);
+                            setFieldTouched(name, true);
                         }}
                         style={{ fontSize: 20 }}
-                        validate={validateName}
                         placeholder={"Field name"}
                         required
                         disabled={disabled}
@@ -72,19 +71,19 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
 
                 <div>
                     <Field
+                        name={id}
                         as={DebouncedTextField}
                         label={"ID"}
                         value={values[id]}
                         onChange={(e: any) => {
                             const newIdValue = e.target.value;
-                            setFieldValue(id, newIdValue);
-                            setFieldTouched(id, true, true);
                             const nameTouched = getIn(touched, name);
                             if (!nameTouched && autoUpdateId) {
                                 setFieldValue(name, newIdValue ? unslugify(newIdValue) : "")
                             }
+                            setFieldValue(id, newIdValue, true);
+                            setFieldTouched(id, true);
                         }}
-                        validate={() => validateId(values[id], existingPropertyKeys)}
                         disabled={disabledId || disabled}
                         required
                         size="small"
@@ -110,28 +109,3 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
 
     }
 );
-
-const idRegEx = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
-
-function validateId(value?: string, existingPropertyKeys?: string[]) {
-
-    let error;
-    if (!value) {
-        error = "You must specify an id for the field";
-    }
-    if (value && !value.match(idRegEx)) {
-        error = "The id can only contain letters, numbers and underscores (_), and not start with a number";
-    }
-    if (value && existingPropertyKeys && existingPropertyKeys.includes(value)) {
-        error = "There is another field with this ID already";
-    }
-    return error;
-}
-
-function validateName(value: string) {
-    let error;
-    if (!value) {
-        error = "You must specify a title for the field";
-    }
-    return error;
-}
