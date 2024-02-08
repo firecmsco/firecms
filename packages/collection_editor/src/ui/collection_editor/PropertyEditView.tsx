@@ -9,6 +9,7 @@ import {
     getFieldConfig,
     getFieldId,
     isPropertyBuilder,
+    isValidRegExp,
     mergeDeep,
     Property,
     PropertyConfig,
@@ -152,23 +153,33 @@ export const PropertyForm = React.memo(
                     controller.resetForm({ values: initialValue });
             },
             validation: (values) => {
+
                 console.log("validate property", { values, existingPropertyKeys })
                 const errors: Record<string, any> = {};
-                if (!values.name) {
-                    errors.name = "Required";
-                } else {
-                    const nameError = validateName(values.name);
-                    if (nameError)
-                        errors.name = nameError;
-                }
-                if (!values.id) {
-                    errors.id = "Required";
-                } else {
-                    const idError = validateId(values.id, existingPropertyKeys);
-                    if (idError)
-                        errors.id = idError;
+                if (includeIdAndName) {
+                    if (!values.name) {
+                        errors.name = "Required";
+                    } else {
+                        const nameError = validateName(values.name);
+                        if (nameError)
+                            errors.name = nameError;
+                    }
+                    if (!values.id) {
+                        errors.id = "Required";
+                    } else {
+                        const idError = validateId(values.id, existingPropertyKeys);
+                        if (idError)
+                            errors.id = idError;
+                    }
                 }
 
+                if (values.dataType === "string") {
+                    if (values.validation?.matches && !isValidRegExp(values.validation?.matches.toString())) {
+                        errors.validation = {
+                            matches: "Invalid regular expression"
+                        }
+                    }
+                }
                 if (values.dataType === "reference" && !values.path) {
                     errors.path = "You must specify a target collection for the field";
                 }

@@ -135,7 +135,6 @@ export function StringPropertyValidation({
             {matches && <div className={"col-span-12"}>
                 <Field name={validationMatches}
                        as={DebouncedTextField}
-                       validate={(value: string) => value && !isValidRegExp(value)}
                        label={"Matches regex"}
                        size="small"
                        disabled={disabled}
