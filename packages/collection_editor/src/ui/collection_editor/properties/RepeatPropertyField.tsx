@@ -37,10 +37,11 @@ export function RepeatPropertyField({
     const ofProperty = getIn(values, "of");
     const ofPropertyError = getIn(touched, "of") && getIn(errors, "of");
 
-    const onPropertyChanged = useCallback(({ id, property, namespace }:
-                                               { id?: string, property: Property, namespace?: string }) => {
+    const onPropertyChanged = ({ id, property, namespace }:
+                                   { id?: string, property: Property, namespace?: string }) => {
+        console.log("onPropertyChanged", id, property, namespace);
         setFieldValue("of", property);
-    }, []);
+    };
 
     const widget = ofProperty && getFieldConfig(ofProperty, propertyConfigs);
     return (
@@ -52,11 +53,11 @@ export function RepeatPropertyField({
                 <Field
                     name={"of"}
                     value={ofProperty}
-                    validate={(property: Property) => {
-                        return property?.dataType ? undefined : "You need to specify a repeat field";
-                    }}
+                    // validate={(property: Property) => {
+                    //     return property?.dataType ? undefined : "You need to specify a repeat field";
+                    // }}
                 >
-                    {() => (
+                    {({}) => (
                         <Paper className="p-2 mt-4">
 
                             {ofProperty && <PropertyFieldPreview

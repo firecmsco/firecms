@@ -25,7 +25,6 @@ export function useCreateFormex<T extends object>({ initialValues, initialErrors
     }
 
     const validate = () => {
-        console.log("validate", valuesRef.current)
         const values = valuesRef.current;
         const validationErrors = validation?.(values);
         setErrors(validationErrors ?? {});
