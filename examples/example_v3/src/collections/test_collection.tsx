@@ -93,6 +93,12 @@ export const testCollection = buildCollection({
         //     propertyConfig: "color",
         // },
 
+        multiline: {
+            dataType: "string",
+            name: "Multiline",
+            multiline: true
+        },
+
         tags: {
             name: "Tags",
             dataType: "array",
