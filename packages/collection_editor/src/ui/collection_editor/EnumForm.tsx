@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import equal from "react-fast-compare"
 
-import { EnumValueConfig, EnumValues, FormikArrayContainer, } from "@firecms/core";
+import { ArrayContainer, EnumValueConfig, EnumValues, } from "@firecms/core";
 import {
     AutoAwesomeIcon,
     Badge,
@@ -187,16 +187,16 @@ function EnumFormFields({
 
             <Paper className="p-4 m-1">
 
-                <FormikArrayContainer
-                    value={values.enumValues}
-                    addLabel={"Add enum value"}
-                    name={enumValuesPath}
-                    buildEntry={buildEntry}
-                    disabled={disabled}
-                    onInternalIdAdded={setLastInternalIdAdded}
-                    small={true}
-                    setFieldValue={setFieldValue}
-                    includeAddButton={true}/>
+                <ArrayContainer droppableId={enumValuesPath}
+                                addLabel={"Add enum value"}
+                                value={values.enumValues}
+                                disabled={disabled}
+                                size={"small"}
+                                buildEntry={buildEntry}
+                                onInternalIdAdded={setLastInternalIdAdded}
+                                includeAddButton={true}
+                                onValueChange={(value) => setFieldValue(enumValuesPath, value)}
+                                newDefaultEntry={{ id: "", label: "" }}/>
 
                 <EnumEntryDialog index={editDialogIndex}
                                  open={editDialogIndex !== undefined}
@@ -281,12 +281,12 @@ const EnumEntry = React.memo(
                 </div>
 
                 {entryError?.label && <Typography variant={"caption"}
-                             className={"ml-3.5 text-red-500 dark:text-red-500"}>
+                                                  className={"ml-3.5 text-red-500 dark:text-red-500"}>
                     {entryError?.label}
                 </Typography>}
 
                 {entryError?.id && <Typography variant={"caption"}
-                             className={"ml-3.5 text-red-500 dark:text-red-500"}>
+                                               className={"ml-3.5 text-red-500 dark:text-red-500"}>
                     {entryError?.id}
                 </Typography>}
 
