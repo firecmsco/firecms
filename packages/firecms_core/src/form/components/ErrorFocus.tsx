@@ -21,7 +21,7 @@ export const ErrorFocus = ({ containerRef }:
                 if (scrollableParent) {
                     const top = errorElement.getBoundingClientRect().top;
                     scrollableParent.scrollTo({
-                        top: scrollableParent.scrollTop + top,
+                        top: scrollableParent.scrollTop + top - 196,
                         behavior: "smooth"
                     });
                 }

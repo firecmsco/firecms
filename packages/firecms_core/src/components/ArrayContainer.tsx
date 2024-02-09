@@ -48,7 +48,7 @@ export function ArrayContainer<T>({
                                       value,
                                       disabled = false,
                                       buildEntry,
-                                      size,
+                                      size = "medium",
                                       onInternalIdAdded,
                                       includeAddButton,
                                       newDefaultEntry,
