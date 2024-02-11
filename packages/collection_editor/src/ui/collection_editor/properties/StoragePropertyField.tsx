@@ -10,7 +10,7 @@ import {
     Typography
 } from "@firecms/ui";
 
-import { Field, FormexFieldProps, getIn, useFormex } from "../../../form";
+import { Field, FormexFieldProps, getIn, useFormex } from "@firecms/formex";
 import { GeneralPropertyValidation } from "./validation/GeneralPropertyValidation";
 import { ArrayPropertyValidation } from "./validation/ArrayPropertyValidation";
 import { ValidationPanel } from "./validation/ValidationPanel";

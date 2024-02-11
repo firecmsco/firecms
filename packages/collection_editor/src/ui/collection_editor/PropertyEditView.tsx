@@ -1,7 +1,7 @@
 import React, { useDeferredValue, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare"
 
-import { Formex, FormexController, getIn, useCreateFormex } from "../../form";
+import { Formex, FormexController, getIn, useCreateFormex } from "@firecms/formex";
 import {
     DEFAULT_FIELD_CONFIGS,
     DeleteConfirmationDialog,

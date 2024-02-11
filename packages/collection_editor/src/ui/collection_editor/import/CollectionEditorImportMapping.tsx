@@ -4,7 +4,7 @@ import {
     ImportConfig,
     ImportNewPropertyFieldPreview
 } from "@firecms/data_import_export";
-import { getIn, useFormex } from "../../../form";
+import { getIn, useFormex } from "@firecms/formex";
 
 import { PropertyConfigBadge, getFieldConfig, getFieldId, Properties, Property, PropertyConfig, } from "@firecms/core";
 import { Container, Select, Tooltip, Typography } from "@firecms/ui";

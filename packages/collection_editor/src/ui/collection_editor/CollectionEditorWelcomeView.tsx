@@ -7,7 +7,7 @@ import { blogCollectionTemplate } from "./templates/blog_template";
 import { usersCollectionTemplate } from "./templates/users_template";
 import { ImportFileUpload } from "@firecms/data_import_export";
 import { pagesCollectionTemplate } from "./templates/pages_template";
-import { useFormex } from "../../form";
+import { useFormex } from "@firecms/formex";
 
 export function CollectionEditorWelcomeView({
                                                 path,

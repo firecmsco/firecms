@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { MapProperty, Property, PropertyConfig, } from "@firecms/core";
 import { AddIcon, BooleanSwitchWithLabel, Button, Paper, Typography } from "@firecms/ui";
 import { PropertyFormDialog } from "../PropertyEditView";
-import { getIn, useFormex } from "../../../form";
+import { getIn, useFormex } from "@firecms/formex";
 import { PropertyTree } from "../PropertyTree";
 import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath, namespaceToPropertiesPath } from "../util";
 import { FieldHelperView } from "./FieldHelperView";

@@ -1,7 +1,7 @@
 import React from "react";
 
-import { Field, FormexFieldProps, getIn, useFormex } from "../../../../form";
-import { isValidRegExp, serializeRegExp } from "@firecms/core";
+import { Field, FormexFieldProps, getIn, useFormex } from "@firecms/formex";
+import { serializeRegExp } from "@firecms/core";
 import { DebouncedTextField, } from "@firecms/ui";
 import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
 import { FieldHelperView } from "../FieldHelperView";

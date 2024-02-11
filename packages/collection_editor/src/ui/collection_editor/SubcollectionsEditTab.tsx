@@ -27,7 +27,7 @@ import { CollectionsConfigController } from "../../types/config_controller";
 import { PersistedCollection } from "../../types/persisted_collection";
 import { CollectionInference } from "../../types/collection_inference";
 import { EntityCustomViewsSelectDialog } from "./EntityCustomViewsSelectDialog";
-import { useFormex } from "../../form/Formex";
+import { useFormex } from "@firecms/formex";
 
 export function SubcollectionsEditTab({
                                           collection,

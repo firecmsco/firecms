@@ -19,7 +19,7 @@ import {
 } from "@firecms/ui";
 import { FieldHelperView } from "./properties/FieldHelperView";
 import { extractEnumFromValues } from "@firecms/schema_inference";
-import { Field, Formex, getIn, useCreateFormex, useFormex } from "../../form";
+import { Field, Formex, getIn, useCreateFormex, useFormex } from "@firecms/formex";
 
 type EnumFormProps = {
     enumValues: EnumValueConfig[];

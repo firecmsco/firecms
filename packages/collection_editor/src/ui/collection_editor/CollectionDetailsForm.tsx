@@ -21,7 +21,7 @@ import {
 } from "@firecms/ui";
 
 import { FieldHelperView } from "./properties/FieldHelperView";
-import { useFormex, Field, getIn } from "../../form";
+import { useFormex, Field, getIn } from "@firecms/formex";
 
 export function CollectionDetailsForm({
                                           isNewCollection,

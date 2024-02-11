@@ -1,0 +1,69 @@
+{
+  "name": "@firecms/formex",
+  "type": "module",
+  "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "firebase",
+    "cms",
+    "admin",
+    "admin panel",
+    "firebase panel",
+    "firestore",
+    "headless",
+    "headless cms",
+    "content manager"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "packageManager": "yarn@4.1.0",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "source": "src/index.ts",
+  "peerDependencies": {
+    "firebase": "^10.7.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.16",
+    "@types/react": "^18.2.54",
+    "@types/react-dom": "^18.2.18",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^8.56.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "typescript": "^5.3.3"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+    "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
+  },
+  "files": [
+    "dist",
+    "src",
+    "tailwind.config.js",
+    "bin"
+  ],
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "gitHead": "71db60591860441e5c0d2b6cbc11198870257c7e"
+}

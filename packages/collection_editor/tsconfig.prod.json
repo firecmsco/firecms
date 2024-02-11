@@ -8,6 +8,7 @@
     "dist",
     "src/test",
     "../firecms_core/src",
+    "../formex/src",
     "../schema_inference/src",
     "../data_import_export/src",
     "../ui/src"

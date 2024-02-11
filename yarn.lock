@@ -2616,6 +2616,7 @@ __metadata:
   resolution: "@firecms/collection_editor@workspace:packages/collection_editor"
   dependencies:
     "@firecms/data_import_export": "npm:^3.0.0-beta.2-pre.3"
+    "@firecms/formex": "npm:^0.1.0"
     "@firecms/schema_inference": "npm:^3.0.0-beta.2-pre.3"
     "@firecms/ui": "npm:^3.0.0-beta.2-pre.3"
     "@jest/globals": "npm:^29.7.0"
@@ -2828,6 +2829,29 @@ __metadata:
     react: ^18.2.0
     react-dom: ^18.2.0
     realm-web: ^2.0.0
+  languageName: unknown
+  linkType: soft
+
+"@firecms/formex@npm:^0.1.0, @firecms/formex@workspace:packages/formex":
+  version: 0.0.0-use.local
+  resolution: "@firecms/formex@workspace:packages/formex"
+  dependencies:
+    "@types/node": "npm:^20.11.16"
+    "@types/react": "npm:^18.2.54"
+    "@types/react-dom": "npm:^18.2.18"
+    "@typescript-eslint/parser": "npm:^5.62.0"
+    eslint: "npm:^8.56.0"
+    eslint-config-standard: "npm:^17.1.0"
+    eslint-plugin-import: "npm:^2.29.1"
+    eslint-plugin-n: "npm:^15.7.0"
+    eslint-plugin-promise: "npm:^6.1.1"
+    eslint-plugin-react: "npm:^7.33.2"
+    eslint-plugin-react-hooks: "npm:^4.6.0"
+    typescript: "npm:^5.3.3"
+  peerDependencies:
+    firebase: ^10.7.1
+    react: ^18.2.0
+    react-dom: ^18.2.0
   languageName: unknown
   linkType: soft
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { getIn, useFormex } from "../../../../form";
+import { getIn, useFormex } from "@firecms/formex";
 import { DebouncedTextField } from "@firecms/ui";
 import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
 

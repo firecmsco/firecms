@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { AddIcon, Button, Paper, Typography } from "@firecms/ui";
-import { getIn, useFormex } from "../../../form";
+import { getIn, useFormex } from "@firecms/formex";
 import { PropertyFormDialog } from "../PropertyEditView";
 import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath } from "../util";
 import { PropertyTree } from "../PropertyTree";

@@ -1,7 +1,7 @@
 import React from "react";
 
 import { BooleanSwitchWithLabel, Tooltip } from "@firecms/ui";
-import { FormexFieldProps } from "../../form";
+import { FormexFieldProps } from "@firecms/formex";
 
 export function SwitchControl({
                                   field,

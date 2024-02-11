@@ -51,7 +51,7 @@ import { CollectionEditorImportMapping } from "./import/CollectionEditorImportMa
 import { CollectionEditorImportDataPreview } from "./import/CollectionEditorImportDataPreview";
 import { cleanPropertiesFromImport } from "./import/clean_import_data";
 import { PersistedCollection } from "../../types/persisted_collection";
-import { Formex, FormexController, useCreateFormex } from "../../form";
+import { Formex, FormexController, useCreateFormex } from "@firecms/formex";
 import { getFullIdPath } from "./util";
 
 export interface CollectionEditorDialogProps {

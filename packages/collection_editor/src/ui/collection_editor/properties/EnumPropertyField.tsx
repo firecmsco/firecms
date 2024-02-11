@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { getIn, useFormex } from "../../../form";
+import { getIn, useFormex } from "@firecms/formex";
 import { EnumValueConfig, resolveEnumValues, useSnackbarController } from "@firecms/core";
 import { Select, SelectItem } from "@firecms/ui";
 import { EnumForm } from "../EnumForm";

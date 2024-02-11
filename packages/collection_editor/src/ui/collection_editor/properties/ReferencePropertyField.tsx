@@ -1,5 +1,5 @@
 import React from "react";
-import { Field, getIn, useFormex } from "../../../form";
+import { Field, getIn, useFormex } from "@firecms/formex";
 import { IconForView, NumberProperty, StringProperty, useNavigationController } from "@firecms/core";
 import { CircularProgress, Select, SelectGroup, SelectItem, Typography, } from "@firecms/ui";
 import { FieldHelperView } from "./FieldHelperView";

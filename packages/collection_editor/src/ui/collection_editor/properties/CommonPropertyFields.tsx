@@ -1,4 +1,4 @@
-import { Field, getIn, useFormex } from "../../../form";
+import { Field, getIn, useFormex } from "@firecms/formex";
 import { DebouncedTextField } from "@firecms/ui";
 import { PropertyWithId } from "../PropertyEditView";
 import React from "react";

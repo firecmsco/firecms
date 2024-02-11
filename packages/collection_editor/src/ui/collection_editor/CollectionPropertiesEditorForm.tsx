@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
-import { Field, getIn } from "../../form";
+import { Field, getIn } from "@firecms/formex";
 import {
     EntityCollection,
     ErrorBoundary,
@@ -34,7 +34,7 @@ import { OnPropertyChangedParams, PropertyForm, PropertyFormDialog } from "./Pro
 import { PropertyTree } from "./PropertyTree";
 import { PersistedCollection } from "../../types/persisted_collection";
 import { GetCodeDialog } from "./GetCodeDialog";
-import { useFormex } from "../../form/Formex";
+import { useFormex } from "@firecms/formex";
 
 type CollectionEditorFormProps = {
     showErrors: boolean;
