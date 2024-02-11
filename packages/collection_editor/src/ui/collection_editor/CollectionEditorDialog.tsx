@@ -35,7 +35,7 @@ import {
     IconButton,
     LoadingButton,
     Tab,
-    Tabs,
+    Tabs
 } from "@firecms/ui";
 import { YupSchema } from "./CollectionYupValidation";
 import { CollectionDetailsForm } from "./CollectionDetailsForm";
@@ -52,6 +52,7 @@ import { CollectionEditorImportDataPreview } from "./import/CollectionEditorImpo
 import { cleanPropertiesFromImport } from "./import/clean_import_data";
 import { PersistedCollection } from "../../types/persisted_collection";
 import { Formex, FormexController, useCreateFormex } from "../../form";
+import { getFullIdPath } from "./util";
 
 export interface CollectionEditorDialogProps {
     open: boolean;
@@ -61,7 +62,7 @@ export interface CollectionEditorDialogProps {
         path?: string,
         name?: string,
     }
-    editedCollectionPath?: string; // last segment of the path, like `locales`
+    editedCollectionId?: string;
     fullPath?: string; // full path of this particular collection, like `products/123/locales`
     parentCollectionIds?: string[]; // path ids of the parent collection, like [`products`]
     handleClose: (collection?: EntityCollection) => void;
@@ -159,8 +160,8 @@ export function CollectionEditor<M extends Record<string, any>>(props: Collectio
     useEffect(() => {
         try {
             if (navigation.initialised) {
-                if (props.editedCollectionPath) {
-                    setCollection(navigation.getCollectionFromPaths<PersistedCollection<M>>([...(props.parentCollectionIds ?? []), props.editedCollectionPath]));
+                if (props.editedCollectionId) {
+                    setCollection(navigation.getCollectionFromPaths<PersistedCollection<M>>([...(props.parentCollectionIds ?? []), props.editedCollectionId]));
                 } else {
                     setCollection(undefined);
                 }
@@ -169,7 +170,7 @@ export function CollectionEditor<M extends Record<string, any>>(props: Collectio
         } catch (e) {
             console.error(e);
         }
-    }, [navigation.getCollectionFromPaths, props.editedCollectionPath, props.parentCollectionIds, navigation.initialised]);
+    }, [navigation.getCollectionFromPaths, props.editedCollectionId, props.parentCollectionIds, navigation.initialised]);
     if (!topLevelNavigation) {
         throw Error("Internal: Navigation not ready in collection editor");
     }
@@ -222,7 +223,7 @@ export function CollectionEditor<M extends Record<string, any>>(props: Collectio
 function CollectionEditorInternal<M extends Record<string, any>>({
                                                                      isNewCollection,
                                                                      configController,
-                                                                     editedCollectionPath,
+                                                                     editedCollectionId,
                                                                      parentCollectionIds,
                                                                      fullPath,
                                                                      collectionInference,
@@ -270,11 +271,11 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     const [error, setError] = React.useState<Error | undefined>();
 
     const saveCollection = (updatedCollection: PersistedCollection<M>): Promise<boolean> => {
-        const fullPath = updatedCollection.id || updatedCollection.path;
+        const id = updatedCollection.id || updatedCollection.path;
         return configController.saveCollection({
-            id: fullPath,
+            id,
             collectionData: updatedCollection,
-            previousPath: editedCollectionPath,
+            previousId: editedCollectionId,
             parentCollectionIds
         })
             .then(() => {
@@ -432,24 +433,20 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
     const validation = (col: PersistedCollection) => {
 
-        // TODO: apply validation schema
+        let errors: Record<string, any> = {};
         const schema = (currentView === "properties" || currentView === "subcollections" || currentView === "details") && YupSchema;
         if (schema) {
             try {
                 schema.validateSync(col, { abortEarly: false });
             } catch (e: any) {
-                const errors: Record<string, any> = {};
                 e.inner.forEach((err: any) => {
                     errors[err.path] = err.message;
                 });
-                return errors;
             }
         }
         if (currentView === "properties") {
-            // return the errors for the properties form
-            return propertyErrorsRef.current;
+            errors = { ...errors, ...propertyErrorsRef.current };
         }
-        const errors: Record<string, any> = {};
         if (currentView === "details") {
             const pathError = validatePath(col.path, isNewCollection, existingPaths, col.id);
             if (pathError) {
@@ -477,7 +474,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         submitCount
     } = formController;
 
-    const path = values.path ?? editedCollectionPath;
+    const path = values.path ?? editedCollectionId;
     const updatedFullPath = fullPath?.includes("/") ? fullPath?.split("/").slice(0, -1).join("/") + "/" + path : path; // TODO: this path is wrong
     const pathError = validatePath(path, isNewCollection, existingPaths, values.id);
 
@@ -613,11 +610,14 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             isNewCollection={isNewCollection}
                             reservedGroups={reservedGroups}
                             onPropertyError={(propertyKey, namespace, error) => {
-                                console.log("onPropertyError", propertyKey, namespace, error);
-                                propertyErrorsRef.current = removeUndefined({
+                                console.debug("!!!onPropertyError", { propertyKey, namespace, error })
+                                const current = removeUndefined({
                                     ...propertyErrorsRef.current,
-                                    [`properties.${propertyKey}`]: removeUndefined(error, true)
+                                    [getFullIdPath(propertyKey, namespace)]: removeUndefined(error, true)
                                 }, true);
+                                console.debug("aa!!!onPropertyError", { current })
+                                propertyErrorsRef.current = current;
+                                formController.validate();
                             }}
                             getUser={getUser}
                             getData={getDataWithPath}

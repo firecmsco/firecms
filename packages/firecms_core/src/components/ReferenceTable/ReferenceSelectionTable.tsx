@@ -1,8 +1,11 @@
 import React, { MouseEventHandler, useCallback, useEffect, useMemo, useState } from "react";
-import { CollectionSize, Entity, EntityCollection, FilterValues } from "../types";
+import { CollectionSize, Entity, EntityCollection, FilterValues } from "../../types";
 
-import { EntityCollectionTable } from "./EntityCollectionTable";
-import { EntityCollectionRowActions } from "./EntityCollectionTable/EntityCollectionRowActions";
+import {
+    EntityCollectionRowActions,
+    EntityCollectionTable,
+    useDataSourceEntityCollectionTableController
+} from "../EntityCollectionTable";
 import {
     useAuthController,
     useCustomizationController,
@@ -10,17 +13,14 @@ import {
     useLargeLayout,
     useNavigationController,
     useSideEntityController
-} from "../hooks";
-import { ErrorView } from "./ErrorView";
+} from "../../hooks";
+import { ErrorView } from "../ErrorView";
 import { AddIcon, Button, DialogActions, Typography } from "@firecms/ui";
-import { canCreateEntity, fullPathToCollectionSegments, resolveCollection } from "../util";
-import { useSelectionController } from "./EntityCollectionView/EntityCollectionView";
-import {
-    useDataSourceEntityCollectionTableController
-} from "./EntityCollectionTable/useDataSourceEntityCollectionTableController";
-import { useColumnIds } from "./EntityCollectionView/useColumnsIds";
-import { useSideDialogContext } from "../core";
-import { useAnalyticsController } from "../hooks/useAnalyticsController";
+import { canCreateEntity, fullPathToCollectionSegments, resolveCollection } from "../../util";
+import { useSelectionController } from "../EntityCollectionView/EntityCollectionView";
+import { useColumnIds, useTableSearchHelper } from "../common";
+import { useSideDialogContext } from "../../core";
+import { useAnalyticsController } from "../../hooks/useAnalyticsController";
 
 /**
  * @group Components
@@ -88,7 +88,7 @@ export interface ReferenceSelectionInnerProps<M extends Record<string, any>> {
  * You probably want to open this dialog as a side view using {@link useReferenceDialog}
  * @group Components
  */
-export function ReferenceSelectionInner<M extends Record<string, any>>(
+export function ReferenceSelectionTable<M extends Record<string, any>>(
     {
         onSingleEntitySelected,
         onMultipleEntitiesSelected,
@@ -98,7 +98,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
         selectedEntityIds: selectedEntityIdsProp,
         description,
         forceFilter,
-        maxSelection
+        maxSelection,
     }: ReferenceSelectionInnerProps<M>) {
 
     const sideDialogContext = useSideDialogContext();
@@ -266,6 +266,19 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
         forceFilter
     });
 
+
+    const {
+        textSearchLoading,
+        textSearchInitialised,
+        onTextSearchClick,
+        textSearchEnabled
+    } =
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useTableSearchHelper({
+            collection,
+            fullPath,
+        });
+
     return (
 
         <div className="flex flex-col h-full">
@@ -273,6 +286,9 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
             <div className="flex-grow">
                 {entitiesDisplayedFirst &&
                     <EntityCollectionTable
+                        textSearchLoading={textSearchLoading}
+                        onTextSearchClick={textSearchInitialised ? undefined : onTextSearchClick}
+                        textSearchEnabled={textSearchEnabled}
                         displayedColumnIds={displayedColumnIds}
                         onEntityClick={onEntityClick}
                         tableController={tableController}

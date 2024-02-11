@@ -56,3 +56,8 @@ export type UniqueFieldValidator = (props: {
  * @group Collection components
  */
 export type OnCellValueChange<T, M extends Record<string, any>> = (params: OnCellValueChangeParams<T, M>) => Promise<void> | void;
+
+/**
+ * @group Collection components
+ */
+export type OnColumnResizeParams = { width: number, key: string };

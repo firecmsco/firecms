@@ -7,9 +7,9 @@ export function NewCollectionButton() {
                    variant={"outlined"}
                    onClick={() => collectionEditorController.createCollection({
                        parentCollectionIds: [],
-                       redirect: true
-                   })
-                   }>
+                       redirect: true,
+                       sourceClick: "new_collection_button"
+                   })}>
         <AddIcon/>
         New collection
     </Button>

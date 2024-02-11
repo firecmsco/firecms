@@ -266,7 +266,7 @@ export function CollectionPropertiesEditorForm({
 
     const onPropertyErrorInternal = useCallback((id: string, namespace?: string, error?: Record<string, any>) => {
         const propertyPath = id ? getFullId(id, namespace) : undefined;
-        console.warn("onPropertyErrorInternal", {
+        console.debug("onPropertyErrorInternal", {
             id,
             namespace,
             error,
@@ -378,7 +378,7 @@ export function CollectionPropertiesEditorForm({
                         onPropertyMove={onPropertyMove}
                         onPropertyRemove={isNewCollection ? deleteProperty : undefined}
                         collectionEditable={collectionEditable}
-                        errors={showErrors ? errors : {}}/>
+                        errors={errors}/>
                 </ErrorBoundary>
 
                 <Button className={"mt-8 w-full"}

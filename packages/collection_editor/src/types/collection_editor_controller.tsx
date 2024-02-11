@@ -9,7 +9,7 @@ import { PersistedCollection } from "./persisted_collection";
 export interface CollectionEditorController {
 
     editCollection: (props: {
-        path?: string,
+        id?: string,
         fullPath?: string,
         parentCollectionIds: string[],
         parentCollection?: PersistedCollection
@@ -23,14 +23,15 @@ export interface CollectionEditorController {
         },
         parentCollectionIds: string[],
         parentCollection?: PersistedCollection,
-        redirect: boolean
+        redirect: boolean,
+        sourceClick?: string
     }) => void;
 
     editProperty: (props: {
         propertyKey?: string,
         property?: Property,
         currentPropertiesOrder?: string[],
-        editedCollectionPath: string,
+        editedCollectionId: string,
         parentCollectionIds: string[],
         collection: PersistedCollection
     }) => void;

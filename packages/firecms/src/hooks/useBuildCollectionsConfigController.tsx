@@ -101,11 +101,12 @@ export function useBuildCollectionsConfigController<EC extends PersistedCollecti
     }, [configPath, firestore]);
 
     const deleteCollection = useCallback(({
-                                              path,
+                                              id,
                                               parentCollectionIds
                                           }: DeleteCollectionParams): Promise<void> => {
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        const collectionPath = buildCollectionId(path, parentCollectionIds);
+        const collectionPath = buildCollectionId(id, parentCollectionIds);
+        console.debug("!!Deleting collection", collectionPath);
         const ref = doc(firestore, configPath, "collections", collectionPath);
         return deleteDoc(ref);
     }, [configPath, firestore]);
@@ -113,25 +114,25 @@ export function useBuildCollectionsConfigController<EC extends PersistedCollecti
     const saveCollection = useCallback(<M extends Record<string, any>>({
                                                                            id,
                                                                            collectionData,
-                                                                           previousPath,
+                                                                           previousId,
                                                                            parentCollectionIds
                                                                        }: SaveCollectionParams<M>): Promise<void> => {
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         const cleanedCollection = prepareCollectionForPersistence(collectionData, propertyConfigsMap);
         const strippedPath = buildCollectionId(id, parentCollectionIds);
-        const previousStrippedPath = previousPath ? buildCollectionId(previousPath, parentCollectionIds) : undefined;
+        const previousStrippedId = previousId ? buildCollectionId(previousId, parentCollectionIds) : undefined;
         const ref = doc(firestore, configPath, "collections", strippedPath);
         console.debug("Saving collection", {
             id,
             collectionData,
-            previousPath,
+            previousId,
             parentCollectionIds,
             cleanedCollection
         });
         return runTransaction(firestore, async (transaction) => {
             transaction.set(ref, cleanedCollection, { merge: true });
-            if (previousStrippedPath && previousStrippedPath !== strippedPath) {
-                const previousRef = doc(firestore, configPath, "collections", previousStrippedPath);
+            if (previousStrippedId && previousStrippedId !== strippedPath) {
+                const previousRef = doc(firestore, configPath, "collections", previousStrippedId);
                 transaction.delete(previousRef);
             }
         });
@@ -140,19 +141,19 @@ export function useBuildCollectionsConfigController<EC extends PersistedCollecti
     const updateCollection = useCallback(<M extends Record<string, any>>({
                                                                              id,
                                                                              collectionData,
-                                                                             previousPath,
+                                                                             previousId,
                                                                              parentCollectionIds
                                                                          }: UpdateCollectionParams<M>): Promise<void> => {
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         const cleanedCollection = prepareCollectionForPersistence(collectionData, propertyConfigsMap);
         const strippedPath = buildCollectionId(id, parentCollectionIds);
-        const previousStrippedPath = previousPath ? buildCollectionId(previousPath, parentCollectionIds) : undefined;
+        const previousStrippedPath = previousId ? buildCollectionId(previousId, parentCollectionIds) : undefined;
         const ref = doc(firestore, configPath, "collections", strippedPath);
 
         console.debug("Saving collection", {
             id,
             collectionData,
-            previousPath,
+            previousId,
             parentCollectionIds,
             cleanedCollection
         });

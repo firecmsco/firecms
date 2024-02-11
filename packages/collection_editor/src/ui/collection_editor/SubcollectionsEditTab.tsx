@@ -101,7 +101,7 @@ export function SubcollectionsEditTab({
                                                                     onClick={(e) => {
                                                                         e.preventDefault();
                                                                         e.stopPropagation();
-                                                                        setSubcollectionToDelete(subcollection.path);
+                                                                        setSubcollectionToDelete(subcollection.id);
                                                                     }}
                                                                     color="inherit">
                                                             <DeleteIcon size={"small"}/>
@@ -209,10 +209,12 @@ export function SubcollectionsEditTab({
             {subcollectionToDelete &&
                 <DeleteConfirmationDialog open={Boolean(subcollectionToDelete)}
                                           onAccept={() => {
-                                              configController.deleteCollection({
-                                                  path: subcollectionToDelete,
-                                                  parentCollectionIds: [...(parentCollectionIds ?? []), collection.path]
-                                              });
+                                              const props = {
+                                                  id: subcollectionToDelete,
+                                                  parentCollectionIds: [...(parentCollectionIds ?? []), collection.id]
+                                              };
+                                              console.debug("Deleting subcollection", props)
+                                              configController.deleteCollection(props);
                                               setSubcollectionToDelete(undefined);
                                           }}
                                           onCancel={() => setSubcollectionToDelete(undefined)}

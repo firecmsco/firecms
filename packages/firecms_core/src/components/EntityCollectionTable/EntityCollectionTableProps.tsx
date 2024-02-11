@@ -10,12 +10,8 @@ import {
     SelectionController,
     User
 } from "../../types";
-import { OnCellValueChange, UniqueFieldValidator } from "./types";
+import { OnCellValueChange, OnColumnResizeParams, UniqueFieldValidator } from "../common/types";
 
-/**
- * @group Collection components
- */
-export type OnColumnResizeParams = { width: number, key: string };
 
 /**
  * @group Collection components

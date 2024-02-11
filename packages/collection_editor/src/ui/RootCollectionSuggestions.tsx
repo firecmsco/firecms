@@ -40,7 +40,8 @@ export function RootCollectionSuggestions() {
                                     ? () => collectionEditorController.createCollection({
                                         initialValues: { path, name: unslugify(path) },
                                         parentCollectionIds: [],
-                                        redirect: true
+                                        redirect: true,
+                                        sourceClick: "root_collection_suggestion"
                                     })
                                     : undefined}
                                 size="small">

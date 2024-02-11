@@ -39,7 +39,7 @@ export function EditorCollectionAction({
     if (!equal(getObjectOrNull(tableController.filterValues), getObjectOrNull(collection.initialFilter)) ||
         !equal(getObjectOrNull(tableController.sortBy), getObjectOrNull(collection.initialSort))) {
         saveDefaultFilterButton = <>
-            {collection.initialFilter || collection.initialSort && <Tooltip
+            {(collection.initialFilter || collection.initialSort) && <Tooltip
                 title={"Reset to default filter and sort"}>
                 <Button
                     color={"primary"}
@@ -64,7 +64,7 @@ export function EditorCollectionAction({
                     variant={"outlined"}
                     onClick={() => configController
                         ?.saveCollection({
-                            id: collection.path,
+                            id: collection.id,
                             parentCollectionIds,
                             collectionData: mergeDeep(collection as PersistedCollection,
                                 {
@@ -89,7 +89,7 @@ export function EditorCollectionAction({
             color={"primary"}
             disabled={!canEditCollection}
             onClick={canEditCollection
-                ? () => collectionEditorController?.editCollection({ path: collection.path, fullPath, parentCollectionIds, parentCollection: parentCollection as PersistedCollection })
+                ? () => collectionEditorController?.editCollection({ id: collection.id, fullPath, parentCollectionIds, parentCollection: parentCollection as PersistedCollection })
                 : undefined}>
             <SettingsIcon/>
         </IconButton>

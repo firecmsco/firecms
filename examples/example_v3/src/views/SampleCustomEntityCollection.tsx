@@ -14,7 +14,7 @@ import {
     PropertyOrBuilder,
     PropertyTableCell,
     resolveProperty,
-    SimpleTable,
+    SelectableTable,
     useDataSourceEntityCollectionTableController
 } from "firecms";
 import { usersCollection } from "../collections/users_collection";
@@ -126,10 +126,10 @@ export function SampleCustomEntityCollection() {
     return (
         <div className="flex h-full w-full items-center justify-center">
             <Paper className={"h-[300px] w-full md:w-3/4"}>
-                <SimpleTable columns={columns}
-                             cellRenderer={cellRenderer}
-                             tableController={tableController}
-                             onValueChange={onValueChange}/>
+                <SelectableTable columns={columns}
+                                 cellRenderer={cellRenderer}
+                                 tableController={tableController}
+                                 onValueChange={onValueChange}/>
             </Paper>
         </div>
     );

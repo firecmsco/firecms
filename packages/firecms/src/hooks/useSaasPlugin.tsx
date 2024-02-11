@@ -26,15 +26,19 @@ export function useSaasPlugin({ projectConfig, firestoreDelegate, collectionConf
                 if (projectConfig.canUseLocalTextSearch && projectConfig.localTextSearchEnabled && collection.textSearchEnabled) {
                     return firestoreDelegate.initTextSearchController({ path, collection });
                 } else {
-                    context.dialogsController.open({
-                        key: "text_search_info",
-                        Component: (props) => <TextSearchInfoDialog {...props}
-                                                                    hasOwnTextSearchImplementation={hasOwnTextSearchImplementation}
-                                                                    collectionConfigController={collectionConfigController}
-                                                                    parentCollectionIds={parentCollectionIds}
-                                                                    path={path}
-                                                                    collection={collection}/>
-                    });
+                    if (parentCollectionIds === undefined) {
+                        console.warn("Enabling text search: Parent collection ids are undefined")
+                    } else {
+                        context.dialogsController.open({
+                            key: "text_search_info",
+                            Component: (props) => <TextSearchInfoDialog {...props}
+                                                                        hasOwnTextSearchImplementation={hasOwnTextSearchImplementation}
+                                                                        collectionConfigController={collectionConfigController}
+                                                                        parentCollectionIds={parentCollectionIds}
+                                                                        path={path}
+                                                                        collection={collection}/>
+                        });
+                    }
                 }
                 return Promise.resolve(false);
             }

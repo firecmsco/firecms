@@ -12,8 +12,7 @@ import {
 import { AutoAwesomeIcon, defaultBorderMixin, DragHandleIcon, IconButton, RemoveIcon, Tooltip } from "@firecms/ui";
 import { NonEditablePropertyPreview, PropertyFieldPreview } from "./PropertyFieldPreview";
 import { DragDropContext, Draggable, DraggableProvided, Droppable } from "@hello-pangea/dnd";
-import { getFullId, idToPropertiesPath } from "./util";
-import { getIn } from "../../form";
+import { getFullId, getFullIdPath } from "./util";
 import { editableProperty } from "../../utils/entities";
 
 export const PropertyTree = React.memo(
@@ -169,8 +168,9 @@ export function PropertyTreeEntry({
 }) {
 
     const isPropertyInferred = inferredPropertyKeys?.includes(namespace ? `${namespace}.${propertyKey}` : propertyKey);
-
     const fullId = getFullId(propertyKey, namespace);
+    const fullIdPath = getFullIdPath(propertyKey, namespace);
+    const hasError = fullIdPath in errors;
 
     let subtree;
     if (typeof propertyOrBuilder === "object") {
@@ -190,7 +190,7 @@ export function PropertyTreeEntry({
         }
     }
 
-    const hasError = fullId ? getIn(errors, idToPropertiesPath(fullId)) : false;
+    // const hasError = fullId ? getIn(errors, idToPropertiesPath(fullId)) : false;
     const selected = selectedPropertyKey === fullId;
     const editable = propertyOrBuilder && ((collectionEditable && !isPropertyBuilder(propertyOrBuilder)) || editableProperty(propertyOrBuilder));
 

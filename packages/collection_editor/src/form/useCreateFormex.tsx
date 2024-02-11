@@ -1,11 +1,12 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { setIn } from "./utils";
 import { FormexController, FormexResetProps } from "./types";
 
-export function useCreateFormex<T extends object>({ initialValues, initialErrors, validation, validateOnChange = false, onSubmit }: {
+export function useCreateFormex<T extends object>({ initialValues, initialErrors, validation, validateOnChange = false, onSubmit, validateOnInitialRender = false }: {
     initialValues: T,
     initialErrors?: Record<string, string>,
     validateOnChange?: boolean,
+    validateOnInitialRender?: boolean,
     validation?: (values: T) => Record<string, string>,
     onSubmit?: (values: T, controller: FormexController<T>) => void | Promise<void>
 }): FormexController<T> {
@@ -18,6 +19,12 @@ export function useCreateFormex<T extends object>({ initialValues, initialErrors
     const [dirty, setDirty] = useState(false);
     const [submitCount, setSubmitCount] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        if (validateOnInitialRender) {
+            validate();
+        }
+    }, []);
 
     const setValues = (newValues: T) => {
         valuesRef.current = newValues;
@@ -41,6 +48,7 @@ export function useCreateFormex<T extends object>({ initialValues, initialErrors
     }
 
     const setFieldError = (key: string, error: string | undefined) => {
+        console.log("setFieldError", {key, error, errors })
         const newErrors = { ...errors };
         if (error) {
             newErrors[key] = error;
@@ -76,6 +84,7 @@ export function useCreateFormex<T extends object>({ initialValues, initialErrors
 
     const submit = async (e?: FormEvent<HTMLFormElement>) => {
         e?.preventDefault();
+        e?.stopPropagation();
         setIsSubmitting(true);
         setSubmitCount(submitCount + 1);
         const validationErrors = validation?.(valuesRef.current);

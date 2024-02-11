@@ -19,11 +19,12 @@ import { useDraggable } from "./useDraggable";
 import { CustomFieldValidator, getYupEntitySchema } from "../../../../form/validation";
 import { useWindowSize } from "./useWindowSize";
 import { ElementResizeListener } from "./ElementResizeListener";
-import { ErrorView, OnCellValueChangeParams } from "../../../../components";
+import { ErrorView } from "../../../ErrorView";
 import { getPropertyInPath, isReadOnly, resolveCollection } from "../../../../util";
 import { Button, ClearIcon, DialogActions, IconButton, Typography } from "@firecms/ui";
 import { PropertyFieldBinding } from "../../../../form";
 import { useCustomizationController, useFireCMSContext } from "../../../../hooks";
+import { OnCellValueChangeParams } from "../../../common";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     entity?: Entity<M>;

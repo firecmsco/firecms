@@ -94,7 +94,7 @@ export const ConfigControllerProvider = React.memo(
         const [currentDialog, setCurrentDialog] = React.useState<{
             isNewCollection: boolean,
             parentCollection?: PersistedCollection,
-            editedCollectionPath?: string,
+            editedCollectionId?: string,
             fullPath?: string,
             parentCollectionIds: string[],
             initialValues?: {
@@ -111,7 +111,7 @@ export const ConfigControllerProvider = React.memo(
             namespace?: string,
             parentCollection?: PersistedCollection,
             currentPropertiesOrder?: string[],
-            editedCollectionPath: string,
+            editedCollectionId: string,
             fullPath?: string,
             parentCollectionIds: string[],
             collectionEditable: boolean;
@@ -124,20 +124,20 @@ export const ConfigControllerProvider = React.memo(
         }), []);
 
         const editCollection = useCallback(({
-                                                path,
+                                                id,
                                                 fullPath,
                                                 parentCollectionIds,
                                                 parentCollection
                                             }: {
-            path?: string,
+            id?: string,
             fullPath?: string,
             parentCollectionIds: string[],
             parentCollection?: PersistedCollection
         }) => {
-            console.debug("edit collection", path, fullPath, parentCollectionIds, parentCollection);
-            onAnalyticsEvent?.("edit_collection", { path, fullPath });
+            console.debug("Edit collection", id, fullPath, parentCollectionIds, parentCollection);
+            onAnalyticsEvent?.("edit_collection", { id, fullPath });
             setCurrentDialog({
-                editedCollectionPath: path,
+                editedCollectionId: id,
                 fullPath,
                 parentCollectionIds,
                 isNewCollection: false,
@@ -149,7 +149,7 @@ export const ConfigControllerProvider = React.memo(
         const editProperty = useCallback(({
                                               propertyKey,
                                               property,
-                                              editedCollectionPath,
+                                              editedCollectionId,
                                               currentPropertiesOrder,
                                               parentCollectionIds,
                                               collection
@@ -157,12 +157,12 @@ export const ConfigControllerProvider = React.memo(
             propertyKey?: string,
             property?: Property,
             currentPropertiesOrder?: string[],
-            editedCollectionPath: string,
+            editedCollectionId: string,
             parentCollectionIds: string[],
             collection: PersistedCollection,
         }) => {
-            console.debug("edit property", propertyKey, property, editedCollectionPath, currentPropertiesOrder, parentCollectionIds, collection);
-            onAnalyticsEvent?.("edit_property", { propertyKey, editedCollectionPath });
+            console.debug("edit property", propertyKey, property, editedCollectionId, currentPropertiesOrder, parentCollectionIds, collection);
+            onAnalyticsEvent?.("edit_property", { propertyKey, editedCollectionId });
             // namespace is all the path until the last dot
             const namespace = propertyKey && propertyKey.includes(".")
                 ? propertyKey.substring(0, propertyKey.lastIndexOf("."))
@@ -175,7 +175,7 @@ export const ConfigControllerProvider = React.memo(
                 property,
                 namespace,
                 currentPropertiesOrder,
-                editedCollectionPath,
+                editedCollectionId: editedCollectionId,
                 parentCollectionIds,
                 collectionEditable: collection?.editable ?? false
             });
@@ -185,7 +185,8 @@ export const ConfigControllerProvider = React.memo(
                                                         parentCollectionIds,
                                                         parentCollection,
                                                         initialValues,
-                                                        redirect
+                                                        redirect,
+                                                        sourceClick
                                                     }: {
             parentCollectionIds: string[],
             parentCollection?: PersistedCollection
@@ -194,10 +195,11 @@ export const ConfigControllerProvider = React.memo(
                 path?: string,
                 name?: string
             },
-            redirect: boolean
+            redirect: boolean,
+            sourceClick?: string
         }) => {
-            console.debug("create collection", parentCollectionIds, parentCollection, initialValues, redirect);
-            onAnalyticsEvent?.("create_collection", { parentCollectionIds, parentCollection, initialValues, redirect });
+            console.debug("Create collection", { parentCollectionIds, parentCollection, initialValues, redirect, sourceClick });
+            onAnalyticsEvent?.("create_collection", { parentCollectionIds, parentCollection, initialValues, redirect, sourceClick });
             setCurrentDialog({
                 isNewCollection: true,
                 parentCollectionIds,
@@ -260,10 +262,10 @@ export const ConfigControllerProvider = React.memo(
                         autoOpenTypeSelect={!currentPropertyDialog ? false : !currentPropertyDialog?.propertyKey}
                         inArray={false}
                         collectionEditable={currentPropertyDialog?.collectionEditable ?? false}
-                        getData={getData && currentPropertyDialog?.editedCollectionPath
+                        getData={getData && currentPropertyDialog?.editedCollectionId
                             ? () => {
-                                console.debug("get data for property", currentPropertyDialog?.editedCollectionPath);
-                                const resolvedPath = navigation.resolveAliasesFrom(currentPropertyDialog.editedCollectionPath!)
+                                console.debug("get data for property", currentPropertyDialog?.editedCollectionId);
+                                const resolvedPath = navigation.resolveAliasesFrom(currentPropertyDialog.editedCollectionId!)
                                 return getData(resolvedPath, []);
                             }
                             : undefined}
@@ -275,7 +277,7 @@ export const ConfigControllerProvider = React.memo(
                             if (!id) return;
                             const newProperty = !(currentPropertyDialog.propertyKey);
                             return collectionConfigController.saveProperty({
-                                path: currentPropertyDialog?.editedCollectionPath,
+                                path: currentPropertyDialog?.editedCollectionId,
                                 property,
                                 propertyKey: id,
                                 newPropertiesOrder: newProperty && currentPropertyDialog.currentPropertiesOrder ? [...currentPropertyDialog.currentPropertiesOrder, id] : undefined,
@@ -296,7 +298,7 @@ export const ConfigControllerProvider = React.memo(
                             if (!currentPropertyDialog?.propertyKey) return;
                             const newPropertiesOrder = currentPropertyDialog?.currentPropertiesOrder?.filter(p => p !== currentPropertyDialog?.propertyKey);
                             return collectionConfigController.deleteProperty({
-                                path: currentPropertyDialog?.editedCollectionPath,
+                                path: currentPropertyDialog?.editedCollectionId,
                                 propertyKey: currentPropertyDialog?.propertyKey,
                                 namespace: currentPropertyDialog?.namespace,
                                 newPropertiesOrder,

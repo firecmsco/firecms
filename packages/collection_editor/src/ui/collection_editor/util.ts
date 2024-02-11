@@ -19,3 +19,10 @@ export function getFullId(propertyKey: string, propertyNamespace?: string): stri
         ? `${propertyNamespace}.${propertyKey}`
         : propertyKey;
 }
+
+export function getFullIdPath(propertyKey: string, propertyNamespace?: string): string {
+    const keyWithNamespace = propertyNamespace
+        ? `${propertyNamespace}.${propertyKey}`
+        : propertyKey;
+    return idToPropertiesPath(keyWithNamespace);
+}

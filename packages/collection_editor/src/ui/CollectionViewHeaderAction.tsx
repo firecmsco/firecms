@@ -30,7 +30,7 @@ export function CollectionViewHeaderAction({
                     collectionEditorController.editProperty({
                         propertyKey,
                         property,
-                        editedCollectionPath: fullPath,
+                        editedCollectionId: collection.id,
                         parentCollectionIds,
                         collection
                     });

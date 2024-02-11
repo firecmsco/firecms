@@ -3,7 +3,7 @@ import { getTableCellAlignment, getTablePropertyColumnWidth } from "./internal/c
 import { FilterValues, ResolvedProperties, ResolvedProperty } from "../../types";
 import { VirtualTableColumn } from "../VirtualTable";
 import { getIconForProperty, getResolvedPropertyInPath } from "../../util";
-import { getColumnKeysForProperty } from "../EntityCollectionView/useColumnsIds";
+import { getColumnKeysForProperty } from "../common/useColumnsIds";
 
 export function buildIdColumn(largeLayout?: boolean): VirtualTableColumn {
     return {

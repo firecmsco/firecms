@@ -139,6 +139,7 @@ export const PropertyForm = React.memo(
                 : initialValue,
             initialErrors,
             validateOnChange: true,
+            validateOnInitialRender: true,
             onSubmit: (newPropertyWithId, controller) => {
                 console.debug("onSubmit", newPropertyWithId);
                 const {
@@ -200,7 +201,7 @@ export const PropertyForm = React.memo(
         }, [formexController, getController]);
 
         return <Formex value={formexController}>
-            <PropertyEditView
+            <PropertyEditFormFields
                 onPropertyChanged={onPropertyChangedImmediate
                     ? doOnPropertyChanged
                     : undefined}
@@ -243,9 +244,9 @@ export function PropertyFormDialog({
     onOkClicked?: () => void;
     onCancel?: () => void;
 }) {
-    const helpersRef = useRef<FormexController<PropertyWithId>>();
+    const formexRef = useRef<FormexController<PropertyWithId>>();
     const getController = (helpers: FormexController<PropertyWithId>) => {
-        helpersRef.current = helpers;
+        formexRef.current = helpers;
     };
 
     return <Dialog
@@ -253,61 +254,67 @@ export function PropertyFormDialog({
         maxWidth={"xl"}
         fullWidth={true}
     >
+        <form noValidate={true}
+              onSubmit={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  formexRef.current?.submitForm(e)
+              }}>
+            <DialogContent>
+                <PropertyForm {...formProps}
+                              onPropertyChanged={(params) => {
+                                  onPropertyChanged?.(params);
+                                  onOkClicked?.();
+                              }}
+                              collectionEditable={collectionEditable}
+                              onPropertyChangedImmediate={false}
+                              getController={getController}
+                              getData={getData}
+                />
+            </DialogContent>
 
-        <DialogContent>
-            <PropertyForm {...formProps}
-                          onPropertyChanged={(params) => {
-                              onPropertyChanged?.(params);
-                              onOkClicked?.();
-                          }}
-                          collectionEditable={collectionEditable}
-                          onPropertyChangedImmediate={false}
-                          getController={getController}
-                          getData={getData}
-            />
-        </DialogContent>
+            <DialogActions>
 
-        <DialogActions>
+                {onCancel && <Button
+                    variant={"text"}
+                    onClick={() => {
+                        onCancel();
+                        formexRef.current?.resetForm();
+                    }}>
+                    Cancel
+                </Button>}
 
-            {onCancel && <Button
-                variant={"text"}
-                onClick={() => {
-                    onCancel();
-                    helpersRef.current?.resetForm();
-                }}>
-                Cancel
-            </Button>}
-
-            <Button variant="outlined"
-                    color="primary"
-                    onClick={() => helpersRef.current?.submitForm()}>
-                Ok
-            </Button>
-        </DialogActions>
+                <Button variant="outlined"
+                        type={"submit"}
+                        color="primary">
+                    Ok
+                </Button>
+            </DialogActions>
+        </form>
     </Dialog>;
 
 }
 
-function PropertyEditView({
-                              values,
-                              errors,
-                              setValues,
-                              existing,
-                              autoUpdateId = false,
-                              autoOpenTypeSelect,
-                              includeIdAndTitle,
-                              onPropertyChanged,
-                              onDelete,
-                              propertyNamespace,
-                              onError,
-                              showErrors,
-                              disabled,
-                              inArray,
-                              getData,
-                              allowDataInference,
-                              propertyConfigs,
-                              collectionEditable
-                          }: {
+function PropertyEditFormFields({
+                                    values,
+                                    errors,
+                                    setValues,
+                                    existing,
+                                    autoUpdateId = false,
+                                    autoOpenTypeSelect,
+                                    includeIdAndTitle,
+                                    onPropertyChanged,
+                                    onDelete,
+                                    propertyNamespace,
+                                    onError,
+                                    showErrors,
+                                    disabled,
+                                    inArray,
+                                    getData,
+                                    allowDataInference,
+                                    propertyConfigs,
+                                    collectionEditable
+                                }: {
     includeIdAndTitle?: boolean;
     existing: boolean;
     autoUpdateId?: boolean;
@@ -361,7 +368,6 @@ function PropertyEditView({
         }
     }, [deferredValues, includeIdAndTitle, onPropertyChanged, propertyNamespace]);
 
-    console.log("PropertyEditView", { values, errors });
     useEffect(() => {
         if (values?.id && onError) {
             onError(values?.id, propertyNamespace, errors);

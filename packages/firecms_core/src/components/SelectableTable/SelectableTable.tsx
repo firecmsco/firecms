@@ -10,17 +10,16 @@ import {
 } from "../../types";
 import { CellRendererParams, VirtualTable, VirtualTableColumn } from "../VirtualTable";
 import { enumToObjectEntries } from "../../util";
-import { OnCellValueChange } from "./types";
-import { OnColumnResizeParams } from "./EntityCollectionTableProps";
+import { OnCellValueChange, OnColumnResizeParams } from "../common/types";
 import { FilterFormFieldProps } from "../VirtualTable/VirtualTableHeader";
 import { ReferenceFilterField } from "./filters/ReferenceFilterField";
 import { StringNumberFilterField } from "./filters/StringNumberFilterField";
 import { BooleanFilterField } from "./filters/BooleanFilterField";
 import { DateTimeFilterField } from "./filters/DateTimeFilterField";
-import { EntityCollectionTableContext } from "./EntityCollectionTable";
 import { useOutsideAlerter } from "@firecms/ui";
+import { SelectableTableContext } from "./SelectableTableContext";
 
-export type SimpleTableProps<M extends Record<string, any>> = {
+export type SelectableTableProps<M extends Record<string, any>> = {
 
     /**
      * Callback when a cell value changes.
@@ -108,8 +107,8 @@ export type SimpleTableProps<M extends Record<string, any>> = {
  * @see VirtualTable
  * @group Components
  */
-export const SimpleTable = React.memo<SimpleTableProps<any>>(
-    function SimpleTable<M extends Record<string, any>>
+export const SelectableTable = React.memo<SelectableTableProps<any>>(
+    function SelectableTable<M extends Record<string, any>>
     ({
          onValueChange,
          cellRenderer,
@@ -143,7 +142,7 @@ export const SimpleTable = React.memo<SimpleTableProps<any>>(
          highlightedRow,
          endAdornment,
          AddColumnComponent
-     }: SimpleTableProps<M>) {
+     }: SelectableTableProps<M>) {
 
         const ref = useRef<HTMLDivElement>(null);
         const [size, setSize] = React.useState<CollectionSize>("m");
@@ -203,7 +202,7 @@ export const SimpleTable = React.memo<SimpleTableProps<any>>(
         }, [forceFilter]);
 
         return (
-            <EntityCollectionTableContext.Provider
+            <SelectableTableContext.Provider
                 value={{
                     setPopupCell: setPopupCell as ((cell?: SelectedCellProps<M>) => void),
                     select,
@@ -244,7 +243,7 @@ export const SimpleTable = React.memo<SimpleTableProps<any>>(
                     />
 
                 </div>
-            </EntityCollectionTableContext.Provider>
+            </SelectableTableContext.Provider>
         );
 
     },

@@ -26,14 +26,14 @@ export interface CollectionsConfigController {
 export type UpdateCollectionParams<M extends Record<string, any>> = {
     id: string,
     collectionData: Partial<PersistedCollection<M>>,
-    previousPath?: string,
+    previousId?: string,
     parentCollectionIds?: string[]
 }
 
 export type SaveCollectionParams<M extends Record<string, any>> = {
     id: string,
     collectionData: PersistedCollection<M>,
-    previousPath?: string,
+    previousId?: string,
     parentCollectionIds?: string[]
 }
 
@@ -55,6 +55,6 @@ export type DeletePropertyParams = {
 }
 
 export type DeleteCollectionParams = {
-    path: string,
+    id: string,
     parentCollectionIds?: string[]
 }
