@@ -81,58 +81,12 @@ export function Field<T, C extends React.ElementType | undefined = undefined>({
                                                                                   className,
                                                                                   ...props
                                                                               }: FieldProps<T, C>) {
-    const formController = useFormex();
-    const {
-        values,
-        handleChange,
-        handleBlur,
-    } = formController;
+    const formex = useFormex();
 
-    const getFieldProps = (nameOrOptions: string | FieldConfig<any>): FieldInputProps<any> => {
-        const isAnObject = isObject(nameOrOptions);
-        const name = isAnObject
-            ? (nameOrOptions as FieldConfig<any>).name
-            : nameOrOptions;
-        const valueState = getIn(values, name);
-
-        const field: FieldInputProps<any> = {
-            name,
-            value: valueState,
-            onChange: handleChange,
-            onBlur: handleBlur,
-        };
-        if (isAnObject) {
-            const {
-                type,
-                value: valueProp, // value is special for checkboxes
-                as: is,
-                multiple,
-            } = nameOrOptions as FieldConfig<any>;
-
-            if (type === "checkbox") {
-                if (valueProp === undefined) {
-                    field.checked = !!valueState;
-                } else {
-                    field.checked = !!(
-                        Array.isArray(valueState) && ~valueState.indexOf(valueProp)
-                    );
-                    field.value = valueProp;
-                }
-            } else if (type === "radio") {
-                field.checked = valueState === valueProp;
-                field.value = valueProp;
-            } else if (is === "select" && multiple) {
-                field.value = field.value || [];
-                field.multiple = true;
-            }
-        }
-        return field;
-    };
-
-    const field = getFieldProps({ name, ...props });
+    const field = getFieldProps({ name, ...props }, formex);
 
     if (isFunction(children)) {
-        return children({ field, form: formController });
+        return children({ field, form: formex });
     }
 
     // if (component) {
@@ -146,7 +100,7 @@ export function Field<T, C extends React.ElementType | undefined = undefined>({
     //     }
     //     return React.createElement(
     //         component,
-    //         { field, form: formController, ...props, className },
+    //         { field, form: formex, ...props, className },
     //         children
     //     );
     // }
@@ -165,3 +119,44 @@ export function Field<T, C extends React.ElementType | undefined = undefined>({
 
     return React.createElement(asElement, { ...field, ...props, className }, children);
 }
+
+const getFieldProps = (nameOrOptions: string | FieldConfig<any>, formex:FormexController<any>): FieldInputProps<any> => {
+    const isAnObject = isObject(nameOrOptions);
+    const name = isAnObject
+        ? (nameOrOptions as FieldConfig<any>).name
+        : nameOrOptions;
+    const valueState = getIn(formex.values, name);
+
+    const field: FieldInputProps<any> = {
+        name,
+        value: valueState,
+        onChange: formex.handleChange,
+        onBlur: formex.handleBlur,
+    };
+    if (isAnObject) {
+        const {
+            type,
+            value: valueProp, // value is special for checkboxes
+            as: is,
+            multiple,
+        } = nameOrOptions as FieldConfig<any>;
+
+        if (type === "checkbox") {
+            if (valueProp === undefined) {
+                field.checked = !!valueState;
+            } else {
+                field.checked = !!(
+                    Array.isArray(valueState) && ~valueState.indexOf(valueProp)
+                );
+                field.value = valueProp;
+            }
+        } else if (type === "radio") {
+            field.checked = valueState === valueProp;
+            field.value = valueProp;
+        } else if (is === "select" && multiple) {
+            field.value = field.value || [];
+            field.multiple = true;
+        }
+    }
+    return field;
+};

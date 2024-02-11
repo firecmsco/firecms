@@ -125,7 +125,7 @@ export function SampleCustomEntityCollection() {
 
     return (
         <div className="flex h-full w-full items-center justify-center">
-            <Paper className={"h-[300px] w-full md:w-3/4"}>
+            <Paper className={"h-[500px] max-w-full w-full md:w-3/4"}>
                 <SelectableTable columns={columns}
                                  cellRenderer={cellRenderer}
                                  tableController={tableController}
