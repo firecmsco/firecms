@@ -37,7 +37,6 @@ import {
     useAuthController,
     useCustomizationController,
     useDataSource,
-    useFireCMSContext,
     useLargeLayout,
     useNavigationController,
     useSideEntityController
@@ -60,7 +59,13 @@ import {
 } from "@firecms/ui";
 import { setIn } from "formik";
 import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common";
-import { useColumnIds } from "../common/useColumnsIds";
+import {
+    OnCellValueChange,
+    OnColumnResizeParams,
+    UniqueFieldValidator,
+    useColumnIds,
+    useTableSearchHelper
+} from "../common";
 import { PopupFormField } from "../EntityCollectionTable/internal/popup_field/PopupFormField";
 import { GetPropertyForProps } from "../EntityCollectionTable/EntityCollectionTableProps";
 import {
@@ -70,7 +75,6 @@ import {
 } from "../EntityCollectionTable/internal/default_entity_actions";
 import { DeleteEntityDialog } from "../DeleteEntityDialog";
 import { useAnalyticsController } from "../../hooks/useAnalyticsController";
-import { OnCellValueChange, OnColumnResizeParams, UniqueFieldValidator, useTableSearchHelper } from "../common";
 
 const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
 

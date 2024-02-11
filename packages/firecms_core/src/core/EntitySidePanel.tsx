@@ -33,13 +33,15 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
         if (!props) return undefined;
         let usedCollection = props.collection;
 
-        if (!usedCollection) {
-            usedCollection = navigationController.getCollection(props.path, props.entityId);
-            if (!usedCollection) {
-                console.error("ERROR: No collection found in path `", props.path, "`. Entity id: ", props.entityId);
-                throw Error("ERROR: No collection found in path `" + props.path + "`. Make sure you have defined a collection for this path in the root navigation.");
-            }
+        const registryCollection = navigationController.getCollection(props.path, props.entityId);
+        if (registryCollection) {
+            usedCollection = registryCollection;
         }
+        if (!usedCollection) {
+            console.error("ERROR: No collection found in path `", props.path, "`. Entity id: ", props.entityId);
+            throw Error("ERROR: No collection found in path `" + props.path + "`. Make sure you have defined a collection for this path in the root navigation.");
+        }
+
         return usedCollection;
     }, [navigationController, props]);
 
