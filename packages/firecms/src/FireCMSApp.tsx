@@ -75,7 +75,7 @@ import {
 } from "@firecms/firebase";
 import { ExportAllowedParams, useImportExportPlugin } from "@firecms/data_import_export";
 import { UserManagementProvider } from "./hooks/useUserManagement";
-import { Button, CenteredView, Typography } from "@firecms/ui";
+import { Button, CenteredView, ErrorIcon, Typography } from "@firecms/ui";
 import { useSaasPlugin } from "./hooks/useSaasPlugin";
 
 const DOCS_LIMIT = 200;
@@ -225,6 +225,42 @@ export const FireCMSClient = function FireCMSClient({
     />;
 };
 
+function ErrorDelegatingLoginView(props: { configError: Error, onLogout: () => void }) {
+    return <CenteredView maxWidth={"2xl"} className={"flex flex-col gap-4"}>
+        <div className={"flex gap-4 items-center"}>
+            <ErrorIcon color={"error"}/>
+            <Typography variant={"h4"}>Error logging in</Typography>
+        </div>
+        <Typography>{props.configError.message}</Typography>
+        <Typography>
+            This error may be caused when a user has been deleted from the client project.
+            Make sure a user exists in the client project with the same email as the one trying to log in.
+            If the problem persists, reach us at <a href="mailto:hello@firecms.co?subject=FireCMS%20login%20error"
+                                                    rel="noopener noreferrer"
+                                                    target="_blank"> hello@firecms.co </a>, or in our <a
+            rel="noopener noreferrer"
+            target="_blank"
+            href={"https://discord.gg/fxy7xsQm3m"}>Discord channel</a>.
+        </Typography>
+        <Button variant="outlined" onClick={props.onLogout}>Sign out</Button>
+    </CenteredView>;
+}
+
+function NoAccessErrorView(props: { configError: Error, onLogout: () => void }) {
+    return <CenteredView maxWidth={"2xl"} className={"flex flex-col gap-4"}>
+        <div className={"flex gap-4 items-center"}>
+            <ErrorIcon color={"error"}/>
+            <Typography variant={"h4"}>Error accessing project</Typography>
+        </div>
+        <Typography>{props.configError.message}</Typography>
+        <Typography>
+            This error may be caused when trying to access with a user that is not
+            registered in the project. You can ask the project owner to add you to the project.
+        </Typography>
+        <Button variant="outlined" onClick={props.onLogout}>Sign out</Button>
+    </CenteredView>;
+}
+
 export function FireCMSClientWithController({
                                                 projectConfig,
                                                 userManagement,
@@ -316,19 +352,11 @@ export function FireCMSClientWithController({
         console.warn("No user was found with email " + notValidUser.email);
         loadingOrErrorComponent = <NoAccessError authController={authController}/>
     } else if (projectConfig.configError) {
-        loadingOrErrorComponent = <CenteredView>
-            <ErrorView
-                error={projectConfig.configError as Error}/>
-            <Typography>This error may be caused when trying to access with a user that is not
-                registered in the project.</Typography>
-            <Button variant="text" onClick={authController.signOut}>Sign out</Button>
-        </CenteredView>
+        loadingOrErrorComponent = <NoAccessErrorView configError={projectConfig.configError}
+                                                     onLogout={fireCMSBackend.signOut}/>
     } else if (delegatedLoginError) {
-        loadingOrErrorComponent = <CenteredView>
-            <Typography variant={"h4"}>Error delegating login</Typography>
-            <ErrorView error={delegatedLoginError}/>
-            <Button variant="text" onClick={authController.signOut}>Sign out</Button>
-        </CenteredView>;
+        loadingOrErrorComponent = <ErrorDelegatingLoginView configError={delegatedLoginError}
+                                                            onLogout={fireCMSBackend.signOut}/>
     } else if (customizationLoading) {
         loadingOrErrorComponent = <CircularProgressCenter text={"Project customization loading"}/>;
     } else if (firebaseConfigLoading) {

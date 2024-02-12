@@ -92,7 +92,12 @@ export const testCollection = buildCollection({
         //     dataType: "string",
         //     propertyConfig: "color",
         // },
-
+        privacyPolicy: buildProperty({
+            name: "Privacy Policy",
+            dataType: "string",
+            validation: { required: false },
+            markdown: true,
+        }),
         multiline: {
             dataType: "string",
             name: "Multiline",
