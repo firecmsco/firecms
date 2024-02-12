@@ -15,6 +15,14 @@ export function useSaasPlugin({ projectConfig, firestoreDelegate, collectionConf
     const hasOwnTextSearchImplementation = Boolean(appConfig?.textSearchControllerBuilder);
     return {
         name: "Saas plugin",
+        // homePage:{
+        //     additionalChildrenStart: (
+        //         <div>
+        //             <h2>Custom section</h2>
+        //             <p>This is a custom section added by the plugin</p>
+        //         </div>
+        //     ),
+        // },
         collectionView: {
             showTextSearchBar: ({ context, path, collection }) => {
                 if (collection.textSearchEnabled === false) {
