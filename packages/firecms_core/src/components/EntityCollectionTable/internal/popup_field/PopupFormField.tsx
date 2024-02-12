@@ -14,16 +14,17 @@ import {
     ResolvedProperties,
     ResolvedProperty
 } from "../../../../types";
-import { Form, Formik, FormikProps } from "formik";
+import { Formex, useCreateFormex } from "@firecms/formex";
 import { useDraggable } from "./useDraggable";
 import { CustomFieldValidator, getYupEntitySchema } from "../../../../form/validation";
 import { useWindowSize } from "./useWindowSize";
 import { ElementResizeListener } from "./ElementResizeListener";
-import { ErrorView, OnCellValueChangeParams } from "../../../../components";
+import { ErrorView } from "../../../ErrorView";
 import { getPropertyInPath, isReadOnly, resolveCollection } from "../../../../util";
 import { Button, ClearIcon, DialogActions, IconButton, Typography } from "@firecms/ui";
 import { PropertyFieldBinding } from "../../../../form";
 import { useCustomizationController, useFireCMSContext } from "../../../../hooks";
+import { OnCellValueChangeParams } from "../../../common";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     entity?: Entity<M>;
@@ -218,139 +219,134 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     if (!entity)
         return <></>;
 
-    const form = entity && (
+    // enableReinitialize={true}
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const formex = useCreateFormex<M>({
+        initialValues: (entity?.values ?? {}) as EntityValues<M>,
+        validation: (values) => {
+            return validationSchema?.validate(values)
+        },
+        validateOnInitialRender: true,
+        onSubmit: (values, actions) => {
+            saveValue(values)
+                .then(() => onClose())
+                .finally(() => actions.setSubmitting(false));
+        }
+    });
+
+    const { values, isSubmitting, setFieldValue, handleSubmit } = formex;
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+        if (!equal(values, internalValue)) {
+            setInternalValue(values);
+        }
+    }, [values]);
+
+    if (!entity)
+        return <ErrorView
+            error={"PopupFormField misconfiguration"}/>;
+
+    if (!collection)
+        return <></>;
+
+    const disabled = isSubmitting;
+
+    const formContext: FormContext<M> = {
+        collection,
+        entityId,
+        values,
+        path,
+        setFieldValue,
+        save: saveValue
+    };
+
+    const property: ResolvedProperty<any> | undefined = propertyKey && getPropertyInPath(collection.properties, propertyKey as string);
+    const fieldProps: PropertyFieldBindingProps<any, M> | undefined = propertyKey && property
+        ? {
+            propertyKey: propertyKey as string,
+            disabled: isSubmitting || isReadOnly(property) || !!property.disabled,
+            property,
+            includeDescription: false,
+            underlyingValueHasChanged: false,
+            context: formContext,
+            tableMode: true,
+            partOfArray: false,
+            partOfBlock: false,
+            autoFocus: open
+        }
+        : undefined;
+
+    let internalForm = <>
         <div
-            className={`text-gray-900 dark:text-white overflow-auto rounded rounded-md bg-white dark:bg-gray-950 ${!open ? "hidden" : ""} cursor-grab max-w-[100vw]`}>
-            <Formik
-                initialValues={(entity?.values ?? {}) as EntityValues<M>}
-                enableReinitialize={true}
-                validationSchema={validationSchema}
-                validateOnMount={true}
-                validate={(values) => console.debug("Validating", values)}
-                onSubmit={(values, actions) => {
-                    saveValue(values)
-                        .then(() => onClose())
-                        .finally(() => actions.setSubmitting(false));
-                }}
-            >
-                {({
-                      values,
-                      setFieldValue,
-                      handleSubmit,
-                      isSubmitting
-                  }: FormikProps<EntityValues<M>>) => {
+            key={`popup_form_${tableKey}_${entityId}_${propertyKey}`}
+            className="w-[560px] max-w-full max-h-[85vh]">
+            <form
+                onSubmit={handleSubmit}
+                noValidate>
 
-                    // eslint-disable-next-line react-hooks/rules-of-hooks
-                    useEffect(() => {
-                        if (!equal(values, internalValue)) {
-                            setInternalValue(values);
-                        }
-                    }, [values]);
+                <div
+                    className="mb-1 p-4 flex flex-col relative">
+                    <div
+                        ref={innerRef}
+                        className="cursor-auto"
+                        style={{ cursor: "auto !important" }}>
+                        {fieldProps &&
+                            <PropertyFieldBinding {...fieldProps}/>}
+                    </div>
+                </div>
 
-                    if (!entity)
-                        return <ErrorView
-                            error={"PopupFormField misconfiguration"}/>;
+                <DialogActions>
+                    <Button
+                        variant="filled"
+                        color="primary"
+                        type="submit"
+                        disabled={disabled}
+                    >
+                        Save
+                    </Button>
+                </DialogActions>
 
-                    if (!collection)
-                        return <></>;
+            </form>
 
-                    const disabled = isSubmitting;
-
-                    const formContext: FormContext<M> = {
-                        collection,
-                        entityId,
-                        values,
-                        path,
-                        setFieldValue,
-                        save: saveValue
-                    };
-
-                    const property: ResolvedProperty<any> | undefined = propertyKey && getPropertyInPath(collection.properties, propertyKey as string);
-                    const fieldProps: PropertyFieldBindingProps<any, M> | undefined = propertyKey && property
-                        ? {
-                            propertyKey: propertyKey as string,
-                            disabled: isSubmitting || isReadOnly(property) || !!property.disabled,
-                            property,
-                            includeDescription: false,
-                            underlyingValueHasChanged: false,
-                            context: formContext,
-                            tableMode: true,
-                            partOfArray: false,
-                            partOfBlock: false,
-                            autoFocus: open
-                        }
-                        : undefined;
-
-                    let internalForm = <>
-                        <div
-                            key={`popup_form_${tableKey}_${entityId}_${propertyKey}`}
-                            className="w-[560px] max-w-full max-h-[85vh]">
-                            <Form
-                                onSubmit={handleSubmit}
-                                noValidate>
-
-                                <div
-                                    className="mb-1 p-4 flex flex-col relative">
-                                    <div
-                                        ref={innerRef}
-                                        className="cursor-auto"
-                                        style={{ cursor: "auto !important" }}>
-                                        {fieldProps &&
-                                            <PropertyFieldBinding {...fieldProps}/>}
-                                    </div>
-                                </div>
-
-                                <DialogActions>
-                                    <Button
-                                        variant="filled"
-                                        color="primary"
-                                        type="submit"
-                                        disabled={disabled}
-                                    >
-                                        Save
-                                    </Button>
-                                </DialogActions>
-
-                            </Form>
-
-                        </div>
-                    </>;
-
-                    const plugins = customizationController.plugins;
-                    if (plugins) {
-                        // const formController: FormContext<M> = {
-                        //     values,
-                        //     setFieldValue
-                        // }
-                        plugins.forEach((plugin: FireCMSPlugin) => {
-                            if (plugin.form?.provider) {
-                                internalForm = (
-                                    <plugin.form.provider.Component
-                                        status={"existing"}
-                                        path={path}
-                                        collection={collection}
-                                        entity={entity}
-                                        context={fireCMSContext}
-                                        currentEntityId={entityId}
-                                        formContext={formContext}
-                                        {...plugin.form.provider.props}>
-                                        {internalForm}
-                                    </plugin.form.provider.Component>
-                                );
-                            }
-                        });
-                    }
-                    return internalForm;
-                }}
-            </Formik>
-
-            {savingError &&
-                <Typography color={"error"}>
-                    {savingError.message}
-                </Typography>
-            }
         </div>
-    );
+
+    </>;
+
+    const plugins = customizationController.plugins;
+    if (plugins) {
+        // const formController: FormContext<M> = {
+        //     values,
+        //     setFieldValue
+        // }
+        plugins.forEach((plugin: FireCMSPlugin) => {
+            if (plugin.form?.provider) {
+                internalForm = (
+                    <plugin.form.provider.Component
+                        status={"existing"}
+                        path={path}
+                        collection={collection}
+                        entity={entity}
+                        context={fireCMSContext}
+                        currentEntityId={entityId}
+                        formContext={formContext}
+                        {...plugin.form.provider.props}>
+                        {internalForm}
+                    </plugin.form.provider.Component>
+                );
+            }
+        });
+    }
+    const form = <div
+        className={`text-gray-900 dark:text-white overflow-auto rounded rounded-md bg-white dark:bg-gray-950 ${!open ? "hidden" : ""} cursor-grab max-w-[100vw]`}>
+        {internalForm}
+
+        {savingError &&
+            <Typography color={"error"}>
+                {savingError.message}
+            </Typography>
+        }
+    </div>;
 
     const draggable = (
         <div
@@ -393,9 +389,10 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
     return (
         <Portal.Root asChild
-                     container={container}
-        >
-            {draggable}
+                     container={container}>
+            <Formex value={formex}>
+                {draggable}
+            </Formex>
         </Portal.Root>
     );
 

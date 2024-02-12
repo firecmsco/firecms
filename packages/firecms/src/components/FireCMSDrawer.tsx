@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { ADMIN_VIEWS, RESERVED_GROUPS } from "../utils";
 
 /**
- * Default drawer used in the CMS
+ * Default drawer used in FireCMS Cloud
  * @group Core
  */
 export function FireCMSDrawer({
@@ -63,7 +63,8 @@ export function FireCMSDrawer({
                                 group,
                             },
                             parentCollectionIds: [],
-                            redirect: true
+                            redirect: true,
+                            sourceClick: "drawer_new_collection"
                         });
                     }}>
                     <AddIcon size={"small"}/>

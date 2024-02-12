@@ -14,13 +14,13 @@ export type NavigationController = {
      * Each of the navigation entries in this field
      * generates an entry in the main menu.
      */
-    collections: EntityCollection[];
+    collections?: EntityCollection[];
 
     /**
      * Custom additional views created by the developer, added to the main
      * navigation
      */
-    views: CMSView[];
+    views?: CMSView[];
 
     /**
      * Configuration for the views that should be displayed at the top

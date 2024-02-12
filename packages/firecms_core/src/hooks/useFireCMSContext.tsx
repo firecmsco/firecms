@@ -10,6 +10,7 @@ import { useUserConfigurationPersistence } from "./useUserConfigurationPersisten
 import { useDialogsController } from "./useDialogsController";
 import { useCustomizationController } from "./useCustomizationController";
 import { useAnalyticsController } from "./useAnalyticsController";
+import React, { useEffect } from "react";
 
 /**
  * Hook to retrieve the {@link FireCMSContext}.
@@ -34,7 +35,7 @@ export const useFireCMSContext = <UserType extends User = User, AuthControllerTy
     const customizationController = useCustomizationController();
     const analyticsController = useAnalyticsController();
 
-    return {
+    const fireCMSContextRef = React.useRef<FireCMSContext<UserType, AuthControllerType>>({
         authController,
         sideDialogsController,
         sideEntityController,
@@ -46,6 +47,53 @@ export const useFireCMSContext = <UserType extends User = User, AuthControllerTy
         dialogsController,
         customizationController,
         analyticsController
-    };
+    });
 
-};
+    useEffect(() => {
+        fireCMSContextRef.current = {
+            authController,
+            sideDialogsController,
+            sideEntityController,
+            navigation,
+            dataSource,
+            storageSource,
+            snackbarController,
+            userConfigPersistence,
+            dialogsController,
+            customizationController,
+            analyticsController
+        };
+    }, [authController, dialogsController, navigation, sideDialogsController]);
+
+    return fireCMSContextRef.current;
+}
+
+// export const useFireCMSContext = <UserType extends User = User, AuthControllerType extends AuthController<UserType> = AuthController<UserType>>(): FireCMSContext<UserType, AuthControllerType> => {
+//
+//     const authController = useAuthController<UserType, AuthControllerType>();
+//     const sideDialogsController = useSideDialogsController();
+//     const sideEntityController = useSideEntityController();
+//     const navigation = useNavigationController();
+//     const dataSource = useDataSource();
+//     const storageSource = useStorageSource();
+//     const snackbarController = useSnackbarController();
+//     const userConfigPersistence = useUserConfigurationPersistence();
+//     const dialogsController = useDialogsController();
+//     const customizationController = useCustomizationController();
+//     const analyticsController = useAnalyticsController();
+//
+//     return {
+//         authController,
+//         sideDialogsController,
+//         sideEntityController,
+//         navigation,
+//         dataSource,
+//         storageSource,
+//         snackbarController,
+//         userConfigPersistence,
+//         dialogsController,
+//         customizationController,
+//         analyticsController
+//     };
+//
+// };

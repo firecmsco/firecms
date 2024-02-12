@@ -1,5 +1,5 @@
 import { useSideDialogsController } from "./useSideDialogsController";
-import { ReferenceSelectionInner, ReferenceSelectionInnerProps } from "../components";
+import { ReferenceSelectionTable, ReferenceSelectionInnerProps } from "../components";
 import { useCallback } from "react";
 import { useNavigationController } from "./useNavigationController";
 
@@ -31,7 +31,7 @@ export function useReferenceDialog<M extends Record<string, any>>(referenceDialo
             sideDialogsController.open({
                 key: `reference_${referenceDialogProps.path}`,
                 component:
-                    <ReferenceSelectionInner
+                    <ReferenceSelectionTable
                         collection={usedCollection}
                         {...referenceDialogProps as ReferenceSelectionInnerProps<M>}/>,
                 width: "90vw",

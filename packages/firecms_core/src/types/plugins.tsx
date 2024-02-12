@@ -29,15 +29,6 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
     collections?: {
 
         /**
-         * Use this method to inject collections to the CMS.
-         * You receive the current collections as a parameter, and you can return
-         * a new list of collections.
-         * @see {@link joinCollectionLists}
-         * @param collections
-         */
-        injectCollections?: (collections: EntityCollection[]) => EntityCollection[];
-
-        /**
          * Use this component to add custom actions to the entity collections
          * toolbar.
          */

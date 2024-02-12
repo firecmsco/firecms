@@ -24,6 +24,7 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
                                                                          ...props
                                                                      }: BooleanSwitchProps, ref: React.Ref<HTMLButtonElement>) {
         return <button
+            type="button"
             ref={ref}
             tabIndex={disabled ? -1 : undefined}
             onClick={disabled

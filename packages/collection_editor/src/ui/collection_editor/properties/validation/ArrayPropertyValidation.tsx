@@ -1,6 +1,6 @@
 import React from "react";
 
-import { getIn, useFormikContext } from "formik";
+import { getIn, useFormex } from "@firecms/formex";
 import { DebouncedTextField } from "@firecms/ui";
 import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
 
@@ -17,7 +17,7 @@ export function ArrayPropertyValidation({
     const {
         values,
         handleChange
-    } = useFormikContext();
+    } = useFormex();
 
     const validationMin = "validation.min";
     const validationMax = "validation.max";

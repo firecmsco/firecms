@@ -37,7 +37,6 @@ FireCMS is based on this great technologies:
 - Tailwind CSS
 - Firebase SDK 10
 - React + React Router 6
-- Formik + Yup
 
 ### Demo
 

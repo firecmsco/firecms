@@ -4,20 +4,26 @@ import { BrowserRouter, Route } from "react-router-dom";
 
 import {
     CircularProgressCenter,
+    EntityCollection,
     ErrorView,
     FireCMS,
     FireCMSAppBarProps,
     FireCMSPlugin,
+    joinCollectionLists,
+    makePropertiesEditable,
     ModeController,
     ModeControllerProvider,
+    ModifyCollectionProps,
     NavigationRoutes,
     PermissionsBuilder,
+    Properties,
     Scaffold,
     SideDialogs,
     SnackbarProvider,
     useBrowserTitleAndIcon,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
+    useBuildNavigationController,
     User
 } from "@firecms/core";
 
@@ -88,13 +94,13 @@ const DOCS_LIMIT = 200;
  * @group Firebase
  */
 export function FireCMSApp({
-                                projectId,
-                                appConfig,
-                                backendApiHost = "https://api-drplyi3b6q-ey.a.run.app", // TODO
-                                onAnalyticsEvent,
-                                basePath,
-                                baseCollectionPath,
-                            }: FireCMSAppProps) {
+                               projectId,
+                               appConfig,
+                               backendApiHost = "https://api-drplyi3b6q-ey.a.run.app", // TODO
+                               onAnalyticsEvent,
+                               basePath,
+                               baseCollectionPath,
+                           }: FireCMSAppProps) {
 
     const modeController = useBuildModeController();
 
@@ -184,10 +190,10 @@ function FullLoadingView(props: {
 }
 
 export const FireCMSClient = function FireCMSClient({
-                                                          projectId,
-                                                          fireCMSBackend,
-                                                          ...props
-                                                      }: FireCMSClientProps) {
+                                                        projectId,
+                                                        fireCMSBackend,
+                                                        ...props
+                                                    }: FireCMSClientProps) {
 
     const projectConfig = useBuildProjectConfig({
         projectId,
@@ -220,14 +226,14 @@ export const FireCMSClient = function FireCMSClient({
 };
 
 export function FireCMSClientWithController({
-                                                 projectConfig,
-                                                 userManagement,
-                                                 projectId,
-                                                 fireCMSBackend,
-                                                 appConfig,
-                                                 customizationLoading,
-                                                 ...props
-                                             }: FireCMSClientProps & {
+                                                projectConfig,
+                                                userManagement,
+                                                projectId,
+                                                fireCMSBackend,
+                                                appConfig,
+                                                customizationLoading,
+                                                ...props
+                                            }: FireCMSClientProps & {
     userManagement: UserManagement;
     projectConfig: ProjectConfig;
     projectId: string;
@@ -375,20 +381,20 @@ function NoAccessError({ authController }: {
 }
 
 function FireCMSAppAuthenticated({
-                                      fireCMSUser,
-                                      firebaseApp,
-                                      projectConfig,
-                                      userManagement,
-                                      collectionConfigController,
-                                      appConfig,
-                                      authController,
-                                      modeController,
-                                      fireCMSBackend,
-                                      FireCMSAppBarComponent,
-                                      onAnalyticsEvent,
-                                      basePath,
-                                      baseCollectionPath
-                                  }: Omit<FireCMSClientProps, "projectId"> & {
+                                     fireCMSUser,
+                                     firebaseApp,
+                                     projectConfig,
+                                     userManagement,
+                                     collectionConfigController,
+                                     appConfig,
+                                     authController,
+                                     modeController,
+                                     fireCMSBackend,
+                                     FireCMSAppBarComponent,
+                                     onAnalyticsEvent,
+                                     basePath,
+                                     baseCollectionPath
+                                 }: Omit<FireCMSClientProps, "projectId"> & {
     fireCMSUser: FireCMSUser;
     firebaseApp: FirebaseApp;
     projectConfig: ProjectConfig;
@@ -469,21 +475,39 @@ function FireCMSAppAuthenticated({
         localTextSearchEnabled: projectConfig.localTextSearchEnabled
     });
 
-    const saasPlugin = useSaasPlugin({
-        projectConfig,
-        firestoreDelegate,
-        collectionConfigController,
-        appConfig
-    });
-
-    const plugins: FireCMSPlugin<any, any, any>[] = [importExportPlugin, collectionEditorPlugin, dataEnhancementPlugin, saasPlugin];
-
     /**
      * Controller used for saving and fetching files in storage
      */
     const storageSource = useFirebaseStorageSource({
         firebaseApp
     });
+
+    const navigationController = useBuildNavigationController({
+        basePath,
+        baseCollectionPath,
+        authController,
+        collections: appConfig?.collections,
+        views: appConfig?.views,
+        userConfigPersistence,
+        dataSourceDelegate: firestoreDelegate,
+        injectCollections: useCallback(
+            (collections: EntityCollection[]) => injectCollections(
+                collections,
+                collectionConfigController.collections ?? [],
+                appConfig?.modifyCollection
+            ),
+            [appConfig?.modifyCollection, collectionConfigController.collections]),
+    });
+
+    const saasPlugin = useSaasPlugin({
+        projectConfig,
+        firestoreDelegate,
+        collectionConfigController,
+        appConfig,
+        collections: navigationController.collections
+    });
+
+    const plugins: FireCMSPlugin<any, any, any>[] = [importExportPlugin, collectionEditorPlugin, dataEnhancementPlugin, saasPlugin];
 
     return (
         <FireCMSBackEndProvider {...fireCMSBackend}>
@@ -492,10 +516,7 @@ function FireCMSAppAuthenticated({
                     <SnackbarProvider>
                         <ModeControllerProvider value={modeController}>
                             <FireCMS
-                                collections={appConfig?.collections}
-                                views={appConfig?.views}
-                                basePath={basePath}
-                                baseCollectionPath={baseCollectionPath}
+                                navigationController={navigationController}
                                 dateTimeFormat={appConfig?.dateTimeFormat}
                                 entityViews={appConfig?.entityViews}
                                 locale={appConfig?.locale}
@@ -556,6 +577,28 @@ function FireCMSAppAuthenticated({
         </FireCMSBackEndProvider>
     );
 
+}
+
+/**
+ * Function in charge of merging collections defined in code with those stored in the backend.
+ */
+const injectCollections = (baseCollections: EntityCollection[],
+                           backendCollections: PersistedCollection[],
+                           modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | void
+) => {
+
+    const markAsEditable = (c: PersistedCollection) => {
+        makePropertiesEditable(c.properties as Properties);
+        c.subcollections?.forEach(markAsEditable);
+    };
+    const storedCollections = backendCollections ?? [];
+    storedCollections.forEach(markAsEditable);
+
+    console.debug("Collections specified in code:", baseCollections);
+    console.debug("Collections stored in the backend", storedCollections);
+    const result = joinCollectionLists(baseCollections, storedCollections, [], modifyCollection);
+    console.debug("Collections after joining:", result);
+    return result;
 }
 
 function buildAdminRoutes() {

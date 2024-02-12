@@ -42,6 +42,8 @@ export type ProjectConfig = {
     secondaryColor?: string;
     updatePrimaryColor: (color?: string) => void;
     updateSecondaryColor: (color?: string) => void;
+
+    creationType?: "new" | "existing";
 };
 
 interface ProjectConfigParams {
@@ -69,6 +71,7 @@ export function useBuildProjectConfig({
     const [localTextSearchEnabled, setLocalTextSearchEnabled] = useState<boolean>(false);
 
     const [customizationRevision, setCustomizationRevision] = useState<string | undefined>();
+    const [creationType, setCreationType] = useState<"new" | "existing" | undefined>();
 
     const loadedProjectIdRef = useRef<string | undefined>(projectId);
 
@@ -175,6 +178,7 @@ export function useBuildProjectConfig({
 
                     const currentCustomizationRevision = snapshot.get("current_app_config_revision");
                     setCustomizationRevision(currentCustomizationRevision);
+                    setCreationType(snapshot.get("creation_type"));
 
                     const firebaseConfig = snapshot.get("firebase_config");
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { StringPropertyValidation } from "./validation/StringPropertyValidation";
 import { ValidationPanel } from "./validation/ValidationPanel";
-import { getIn, useFormikContext } from "formik";
+import { getIn, useFormex } from "@firecms/formex";
 
 import { Select, SelectItem, TextField } from "@firecms/ui";
 
@@ -13,7 +13,7 @@ export function UrlPropertyField({
     showErrors: boolean;
 }) {
 
-    const { values, setFieldValue } = useFormikContext();
+    const { values, setFieldValue } = useFormex();
 
     const urlValue = getIn(values, "url");
 

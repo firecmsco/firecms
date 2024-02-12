@@ -12,7 +12,7 @@ import {
     PropertyFieldBindingProps,
     ResolvedEntityCollection
 } from "../types";
-import { Form, Formik, FormikHelpers, FormikProps } from "formik";
+import { Formex, FormexController, getIn, setIn, useCreateFormex } from "@firecms/formex";
 import { PropertyFieldBinding } from "./PropertyFieldBinding";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import equal from "react-fast-compare"
@@ -41,6 +41,7 @@ import {
     deleteEntityAction
 } from "../components/EntityCollectionTable/internal/default_entity_actions";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
+import { ValidationError } from "yup";
 
 /**
  * @group Components
@@ -139,6 +140,23 @@ export const EntityForm = React.memo<EntityFormProps<any>>(EntityFormInternal,
             equal(a.entity?.values, b.entity?.values);
     }) as typeof EntityFormInternal;
 
+function getDataSourceEntityValues<M extends object>(initialResolvedCollection: ResolvedEntityCollection,
+                                                     status: "new" | "existing" | "copy",
+                                                     entity: Entity<M> | undefined): Partial<EntityValues<M>> {
+    const properties = initialResolvedCollection.properties;
+    if ((status === "existing" || status === "copy") && entity) {
+        return entity.values ?? getDefaultValuesFor(properties);
+    } else if (status === "new") {
+        return getDefaultValuesFor(properties);
+    } else {
+        console.error({
+            status,
+            entity
+        });
+        throw new Error("Form has not been initialised with the correct parameters");
+    }
+}
+
 function EntityFormInternal<M extends Record<string, any>>({
                                                                status,
                                                                path,
@@ -187,20 +205,7 @@ function EntityFormInternal<M extends Record<string, any>>({
 
     const closeAfterSaveRef = useRef(false);
 
-    const baseDataSourceValues: Partial<EntityValues<M>> = useMemo(() => {
-        const properties = initialResolvedCollection.properties;
-        if ((status === "existing" || status === "copy") && entity) {
-            return entity.values ?? getDefaultValuesFor(properties);
-        } else if (status === "new") {
-            return getDefaultValuesFor(properties);
-        } else {
-            console.error({
-                status,
-                entity
-            });
-            throw new Error("Form has not been initialised with the correct parameters");
-        }
-    }, [status, initialResolvedCollection, entity]);
+    const baseDataSourceValuesRef = useRef<Partial<EntityValues<M>>>(getDataSourceEntityValues(initialResolvedCollection, status, entity));
 
     const [entityId, setEntityId] = React.useState<string | undefined>(initialEntityId);
     const [entityIdError, setEntityIdError] = React.useState<boolean>(false);
@@ -208,11 +213,114 @@ function EntityFormInternal<M extends Record<string, any>>({
 
     const [customIdLoading, setCustomIdLoading] = React.useState<boolean>(false);
 
-    const initialValuesRef = useRef<EntityValues<M>>(entity?.values ?? baseDataSourceValues as EntityValues<M>);
-    const initialValues = initialValuesRef.current;
-    const [internalValues, setInternalValues] = useState<EntityValues<M> | undefined>(initialValues);
+    // const initialValuesRef = useRef<EntityValues<M>>(entity?.values ?? baseDataSourceValues as EntityValues<M>);
+    const [internalValues, setInternalValues] = useState<EntityValues<M> | undefined>(entity?.values ?? baseDataSourceValuesRef.current as EntityValues<M>);
+
+    const save = (values: EntityValues<M>): Promise<void> => {
+        return onEntitySaveRequested({
+            collection: resolvedCollection,
+            path,
+            entityId,
+            values,
+            previousValues: entity?.values,
+            closeAfterSave: closeAfterSaveRef.current,
+            autoSave: autoSave ?? false
+        }).then(_ => {
+            const eventName: CMSAnalyticsEvent = status === "new"
+                ? "new_entity_saved"
+                : (status === "copy" ? "entity_copied" : (status === "existing" ? "entity_edited" : "unmapped_event"));
+            analyticsController.onAnalyticsEvent?.(eventName, { path });
+        }).catch(e => {
+            console.error(e);
+            setSavingError(e);
+        }).finally(() => {
+            closeAfterSaveRef.current = false;
+        });
+    };
+
+    const onSubmit = (values: EntityValues<M>, formexController: FormexController<EntityValues<M>>) => {
+
+        if (mustSetCustomId && !entityId) {
+            console.error("Missing custom Id");
+            setEntityIdError(true);
+            formexController.setSubmitting(false);
+            return;
+        }
+
+        setSavingError(undefined);
+        setEntityIdError(false);
+
+        if (status === "existing") {
+            if (!entity?.id) throw Error("Form misconfiguration when saving, no id for existing entity");
+        } else if (status === "new" || status === "copy") {
+            if (inputCollection.customId) {
+                if (inputCollection.customId !== "optional" && !entityId) {
+                    throw Error("Form misconfiguration when saving, entityId should be set");
+                }
+            }
+        } else {
+            throw Error("New FormType added, check EntityForm");
+        }
+
+        return save(values)
+            ?.then(_ => {
+                formexController.resetForm({
+                    values,
+                    submitCount: 0,
+                    touched: {}
+                });
+            })
+            .finally(() => {
+                formexController.setSubmitting(false);
+            });
+
+    };
+
+    const formex: FormexController<M> = useCreateFormex<M>({
+        initialValues: baseDataSourceValuesRef.current as M,
+        onSubmit,
+        validation: (values) => {
+            return validationSchema?.validate(values, { abortEarly: false })
+                .then(() => {
+                    return {};
+                })
+                .catch((e) => {
+
+                    const errors: Record<string, string> = {};
+                    e.inner.forEach((error: any) => {
+                        errors[error.path] = error.message;
+                    });
+                    return yupToFormErrors(e);
+                });
+        }
+    });
+
+    useEffect(() => {
+        baseDataSourceValuesRef.current = getDataSourceEntityValues(initialResolvedCollection, status, entity);
+        const initialValues = formex.initialValues;
+        if (!formex.isSubmitting && initialValues && status === "existing") {
+            setUnderlyingChanges(
+                Object.entries(resolvedCollection.properties)
+                    .map(([key, property]) => {
+                        if (isHidden(property)) {
+                            return {};
+                        }
+                        const initialValue = initialValues[key];
+                        const latestValue = baseDataSourceValuesRef.current[key];
+                        if (!equal(initialValue, latestValue)) {
+                            return { [key]: latestValue };
+                        }
+                        return {};
+                    })
+                    .reduce((a, b) => ({ ...a, ...b }), {}) as Partial<EntityValues<M>>
+            );
+        } else {
+            setUnderlyingChanges({});
+        }
+    }, [entity, initialResolvedCollection, status]);
 
     const doOnValuesChanges = (values?: EntityValues<M>) => {
+        const initialValues = formex.initialValues;
         setInternalValues(values);
         if (onValuesChanged)
             onValuesChanged(values);
@@ -231,7 +339,7 @@ function EntityFormInternal<M extends Record<string, any>>({
         path,
         entityId,
         values: internalValues,
-        previousValues: initialValues,
+        previousValues: formex.initialValues,
         fields: customizationController.propertyConfigs
     });
 
@@ -261,88 +369,7 @@ function EntityFormInternal<M extends Record<string, any>>({
         doOnIdUpdate();
     }, [doOnIdUpdate]);
 
-    const underlyingChanges: Partial<EntityValues<M>> = useMemo(() => {
-        if (initialValues && status === "existing") {
-            return Object.entries(resolvedCollection.properties)
-                .map(([key, property]) => {
-                    if (isHidden(property)) {
-                        return {};
-                    }
-                    const initialValue = initialValues[key];
-                    const latestValue = baseDataSourceValues[key];
-                    if (!equal(initialValue, latestValue)) {
-                        return { [key]: latestValue };
-                    }
-                    return {};
-                })
-                .reduce((a, b) => ({ ...a, ...b }), {}) as Partial<EntityValues<M>>;
-        } else {
-            return {};
-        }
-    }, [baseDataSourceValues, resolvedCollection.properties, initialValues, status]);
-
-    const save = (values: EntityValues<M>) => {
-        return onEntitySaveRequested({
-            collection: resolvedCollection,
-            path,
-            entityId,
-            values,
-            previousValues: entity?.values,
-            closeAfterSave: closeAfterSaveRef.current,
-            autoSave: autoSave ?? false
-        }).then(_ => {
-            const eventName: CMSAnalyticsEvent = status === "new"
-                ? "new_entity_saved"
-                : (status === "copy" ? "entity_copied" : (status === "existing" ? "entity_edited" : "unmapped_event"));
-            analyticsController.onAnalyticsEvent?.(eventName, { path });
-            initialValuesRef.current = values;
-        })
-            .catch(e => {
-                console.error(e);
-                setSavingError(e);
-            })
-            .finally(() => {
-                closeAfterSaveRef.current = false;
-            });
-    };
-
-    const saveFormValues = (values: EntityValues<M>, formikActions: FormikHelpers<EntityValues<M>>) => {
-
-        if (mustSetCustomId && !entityId) {
-            console.error("Missing custom Id");
-            setEntityIdError(true);
-            formikActions.setSubmitting(false);
-            return;
-        }
-
-        setSavingError(undefined);
-        setEntityIdError(false);
-
-        if (status === "existing") {
-            if (!entity?.id) throw Error("Form misconfiguration when saving, no id for existing entity");
-        } else if (status === "new" || status === "copy") {
-            if (inputCollection.customId) {
-                if (inputCollection.customId !== "optional" && !entityId) {
-                    throw Error("Form misconfiguration when saving, entityId should be set");
-                }
-            }
-        } else {
-            throw Error("New FormType added, check EntityForm");
-        }
-
-        save(values)
-            ?.then(_ => {
-                formikActions.resetForm({
-                    values,
-                    submitCount: 0,
-                    touched: {}
-                });
-            })
-            .finally(() => {
-                formikActions.setSubmitting(false);
-            });
-
-    };
+    const [underlyingChanges, setUnderlyingChanges] = useState<Partial<EntityValues<M>>>({});
 
     const uniqueFieldValidator: CustomFieldValidator = useCallback(({
                                                                         name,
@@ -374,110 +401,102 @@ function EntityFormInternal<M extends Record<string, any>>({
         return actions;
     }, [authController, inputCollection, path]);
 
-    return (
-        <Formik
-            initialValues={baseDataSourceValues as M}
-            onSubmit={saveFormValues}
-            validationSchema={validationSchema}
-            validate={(values) => console.debug("Validating", values)}
-            onReset={() => onDiscard && onDiscard()}
-        >
-            {(props) => {
+    const pluginActions: React.ReactNode[] = [];
 
-                const pluginActions: React.ReactNode[] = [];
+    const formContext: FormContext<M> = {
+        setFieldValue: formex.setFieldValue,
+        values: formex.values,
+        collection: resolvedCollection,
+        entityId,
+        path,
+        save
+    };
 
-                const formContext: FormContext<M> = {
-                    setFieldValue: props.setFieldValue,
-                    values: props.values,
-                    collection: resolvedCollection,
-                    entityId,
-                    path,
-                    save
-                };
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+        if (onFormContextChange) {
+            onFormContextChange(formContext);
+        }
+    }, [onFormContextChange, formContext]);
 
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                useEffect(() => {
-                    if (onFormContextChange) {
-                        onFormContextChange(formContext);
-                    }
-                }, [onFormContextChange, formContext]);
+    if (plugins && inputCollection) {
+        const actionProps: PluginFormActionProps = {
+            entityId,
+            path,
+            status,
+            collection: inputCollection,
+            context,
+            currentEntityId: entityId,
+            formContext
+        };
+        pluginActions.push(...plugins.map((plugin, i) => (
+            plugin.form?.Actions
+                ? <plugin.form.Actions
+                    key={`actions_${plugin.name}`} {...actionProps}/>
+                : null
+        )).filter(Boolean));
+    }
 
-                if (plugins && inputCollection) {
-                    const actionProps: PluginFormActionProps = {
-                        entityId,
-                        path,
-                        status,
-                        collection: inputCollection,
-                        context,
-                        currentEntityId: entityId,
-                        formContext
-                    };
-                    pluginActions.push(...plugins.map((plugin, i) => (
-                        plugin.form?.Actions
-                            ? <plugin.form.Actions
-                                key={`actions_${plugin.name}`} {...actionProps}/>
-                            : null
-                    )).filter(Boolean));
-                }
+    return <Formex value={formex}>
+        <div className="h-full overflow-auto">
 
-                return <div className="h-full overflow-auto">
+            {pluginActions.length > 0 && <div
+                className={cn("w-full flex justify-end items-center sticky top-0 right-0 left-0 z-10 bg-opacity-60 bg-slate-200 dark:bg-opacity-60 dark:bg-slate-800 backdrop-blur-md")}>
+                {pluginActions}
+            </div>}
 
-                    {pluginActions.length > 0 && <div
-                        className={cn("w-full flex justify-end items-center sticky top-0 right-0 left-0 z-10 bg-opacity-60 bg-slate-200 dark:bg-opacity-60 dark:bg-slate-800 backdrop-blur-md")}>
-                        {pluginActions}
-                    </div>}
+            <div className="pt-12 pb-16 pl-8 pr-8 md:pl-10 md:pr-10">
+                <div
+                    className={`w-full py-2 flex flex-col items-start mt-${4 + (pluginActions ? 8 : 0)} lg:mt-${8 + (pluginActions ? 8 : 0)} mb-8`}>
 
-                    <div className="pl-4 pr-4 pt-12 pb-16 md:pl-8">
-                        <div
-                            className={`w-full py-2 flex flex-col items-start mt-${4 + (pluginActions ? 8 : 0)} lg:mt-${8 + (pluginActions ? 8 : 0)} mb-8`}>
-
-                            <Typography
-                                className={"mt-4 flex-grow " + inputCollection.hideIdFromForm ? "mb-2" : "mb-0"}
-                                variant={"h4"}>{inputCollection.singularName ?? inputCollection.name}
-                            </Typography>
-                            <Alert color={"base"} className={"w-full"} size={"small"}>
-                                <code className={"text-xs select-all"}>{path}/{entityId}</code>
-                            </Alert>
-                        </div>
-
-                        {!hideId &&
-                            <CustomIdField customId={inputCollection.customId}
-                                           entityId={entityId}
-                                           status={status}
-                                           onChange={setEntityId}
-                                           error={entityIdError}
-                                           loading={customIdLoading}
-                                           entity={entity}/>}
-
-                        {entityId && <InnerForm
-                            {...props}
-                            initialValues={initialValues}
-                            onModified={onModified}
-                            onValuesChanged={doOnValuesChanges}
-                            underlyingChanges={underlyingChanges}
-                            entity={entity}
-                            resolvedCollection={resolvedCollection}
-                            formContext={formContext}
-                            status={status}
-                            savingError={savingError}
-                            closeAfterSaveRef={closeAfterSaveRef}
-                            autoSave={autoSave}
-                            entityActions={getActionsForEntity({ entity, customEntityActions: inputCollection.entityActions })}/>}
-
-                    </div>
+                    <Typography
+                        className={"mt-4 flex-grow " + inputCollection.hideIdFromForm ? "mb-2" : "mb-0"}
+                        variant={"h4"}>{inputCollection.singularName ?? inputCollection.name}
+                    </Typography>
+                    <Alert color={"base"} className={"w-full"} size={"small"}>
+                        <code className={"text-xs select-all"}>{path}/{entityId}</code>
+                    </Alert>
                 </div>
-            }}
-        </Formik>
-    );
+
+                {!hideId &&
+                    <CustomIdField customId={inputCollection.customId}
+                                   entityId={entityId}
+                                   status={status}
+                                   onChange={setEntityId}
+                                   error={entityIdError}
+                                   loading={customIdLoading}
+                                   entity={entity}/>}
+
+                {entityId && <InnerForm
+                    {...formex}
+                    initialValues={formex.initialValues}
+                    onModified={onModified}
+                    onDiscard={onDiscard}
+                    onValuesChanged={doOnValuesChanges}
+                    underlyingChanges={underlyingChanges}
+                    entity={entity}
+                    resolvedCollection={resolvedCollection}
+                    formContext={formContext}
+                    status={status}
+                    savingError={savingError}
+                    closeAfterSaveRef={closeAfterSaveRef}
+                    autoSave={autoSave}
+                    entityActions={getActionsForEntity({ entity, customEntityActions: inputCollection.entityActions })}/>}
+
+            </div>
+        </div>
+    </Formex>
 }
 
-function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
+function InnerForm<M extends Record<string, any>>(props: FormexController<M> & {
+    initialValues: EntityValues<M>,
     onModified: ((modified: boolean) => void) | undefined,
     onValuesChanged?: (changedValues?: EntityValues<M>) => void,
     underlyingChanges: Partial<M>,
     entity: Entity<M> | undefined,
     resolvedCollection: ResolvedEntityCollection<M>,
     formContext: FormContext<M>,
+    onDiscard?: () => void,
     status: "new" | "existing" | "copy",
     savingError?: Error,
     closeAfterSaveRef: MutableRefObject<boolean>,
@@ -487,6 +506,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
 
     const {
         values,
+        onDiscard,
         onModified,
         onValuesChanged,
         underlyingChanges,
@@ -498,6 +518,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
         isSubmitting,
         status,
         handleSubmit,
+        resetForm,
         savingError,
         dirty,
         closeAfterSaveRef,
@@ -518,7 +539,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
     }, [modified, values]);
 
     useEffect(() => {
-        if (!autoSave && underlyingChanges && entity) {
+        if (!autoSave && !isSubmitting && underlyingChanges && entity) {
             // we update the form fields from the Firestore data
             // if they were not touched
             Object.entries(underlyingChanges).forEach(([key, value]) => {
@@ -529,7 +550,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                 }
             });
         }
-    }, [autoSave, underlyingChanges, entity, values, touched, setFieldValue]);
+    }, [isSubmitting, autoSave, underlyingChanges, entity, values, touched, setFieldValue]);
 
     const formFields = (
         <div className={"flex flex-col gap-8"}>
@@ -582,7 +603,12 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
 
     return (
 
-        <Form onSubmit={handleSubmit}
+        <form onSubmit={handleSubmit}
+              onReset={() => {
+                  console.debug("Resetting form")
+                  resetForm();
+                  return onDiscard && onDiscard();
+              }}
               noValidate>
             <div className="mt-12"
                  ref={formRef}>
@@ -662,6 +688,21 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                 </Button>
 
             </DialogActions>}
-        </Form>
+        </form>
     );
+}
+
+export function yupToFormErrors(yupError: ValidationError): Record<string, any> {
+    let errors: Record<string, any> = {};
+    if (yupError.inner) {
+        if (yupError.inner.length === 0) {
+            return setIn(errors, yupError.path!, yupError.message);
+        }
+        for (const err of yupError.inner) {
+            if (!getIn(errors, err.path!)) {
+                errors = setIn(errors, err.path!, err.message);
+            }
+        }
+    }
+    return errors;
 }

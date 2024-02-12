@@ -22,12 +22,12 @@ import {
     Tooltip,
     Typography,
 } from "@firecms/ui";
-import { useFormikContext } from "formik";
 import { CollectionEditorDialog } from "./CollectionEditorDialog";
 import { CollectionsConfigController } from "../../types/config_controller";
 import { PersistedCollection } from "../../types/persisted_collection";
 import { CollectionInference } from "../../types/collection_inference";
 import { EntityCustomViewsSelectDialog } from "./EntityCustomViewsSelectDialog";
+import { useFormex } from "@firecms/formex";
 
 export function SubcollectionsEditTab({
                                           collection,
@@ -59,7 +59,7 @@ export function SubcollectionsEditTab({
     const {
         values,
         setFieldValue,
-    } = useFormikContext<EntityCollection>();
+    } = useFormex<EntityCollection>();
 
     const subcollections = collection.subcollections ?? [];
     const resolvedEntityViews = values.entityViews?.filter(e => typeof e === "string")
@@ -101,7 +101,7 @@ export function SubcollectionsEditTab({
                                                                     onClick={(e) => {
                                                                         e.preventDefault();
                                                                         e.stopPropagation();
-                                                                        setSubcollectionToDelete(subcollection.path);
+                                                                        setSubcollectionToDelete(subcollection.id);
                                                                     }}
                                                                     color="inherit">
                                                             <DeleteIcon size={"small"}/>
@@ -209,10 +209,12 @@ export function SubcollectionsEditTab({
             {subcollectionToDelete &&
                 <DeleteConfirmationDialog open={Boolean(subcollectionToDelete)}
                                           onAccept={() => {
-                                              configController.deleteCollection({
-                                                  path: subcollectionToDelete,
-                                                  parentCollectionIds: [...(parentCollectionIds ?? []), collection.path]
-                                              });
+                                              const props = {
+                                                  id: subcollectionToDelete,
+                                                  parentCollectionIds: [...(parentCollectionIds ?? []), collection.id]
+                                              };
+                                              console.debug("Deleting subcollection", props)
+                                              configController.deleteCollection(props);
                                               setSubcollectionToDelete(undefined);
                                           }}
                                           onCancel={() => setSubcollectionToDelete(undefined)}

@@ -16,13 +16,10 @@ import {
     SelectionController
 } from "../../types";
 import {
+    EntityCollectionRowActions,
     EntityCollectionTable,
-    OnCellValueChange,
-    OnColumnResizeParams,
-    UniqueFieldValidator
+    useDataSourceEntityCollectionTableController
 } from "../EntityCollectionTable";
-
-import { EntityCollectionRowActions } from "../EntityCollectionTable/EntityCollectionRowActions";
 
 import {
     canCreateEntity,
@@ -40,16 +37,12 @@ import {
     useAuthController,
     useCustomizationController,
     useDataSource,
-    useFireCMSContext,
     useLargeLayout,
     useNavigationController,
     useSideEntityController
 } from "../../hooks";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
-import {
-    useDataSourceEntityCollectionTableController
-} from "../EntityCollectionTable/useDataSourceEntityCollectionTableController";
 import {
     AddIcon,
     Button,
@@ -64,9 +57,15 @@ import {
     Tooltip,
     Typography
 } from "@firecms/ui";
-import { setIn } from "formik";
+import { setIn } from "@firecms/formex";
 import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common";
-import { useColumnIds } from "./useColumnsIds";
+import {
+    OnCellValueChange,
+    OnColumnResizeParams,
+    UniqueFieldValidator,
+    useColumnIds,
+    useTableSearchHelper
+} from "../common";
 import { PopupFormField } from "../EntityCollectionTable/internal/popup_field/PopupFormField";
 import { GetPropertyForProps } from "../EntityCollectionTable/EntityCollectionTableProps";
 import {
@@ -130,7 +129,6 @@ export const EntityCollectionView = React.memo(
         const userConfigPersistence = useUserConfigurationPersistence();
         const analyticsController = useAnalyticsController();
         const customizationController = useCustomizationController();
-        const context = useFireCMSContext();
 
         const containerRef = React.useRef<HTMLDivElement>(null);
 
@@ -148,7 +146,6 @@ export const EntityCollectionView = React.memo(
         const [selectedNavigationEntity, setSelectedNavigationEntity] = useState<Entity<M> | undefined>(undefined);
         const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
 
-        const [textSearchLoading, setTextSearchLoading] = useState<boolean>(false);
         const [lastDeleteTimestamp, setLastDeleteTimestamp] = React.useState<number>(0);
 
         // number of entities in the collection
@@ -569,34 +566,16 @@ export const EntityCollectionView = React.memo(
             }
             : undefined;
 
-        const [textSearchInitialised, setTextSearchInitialised] = useState<boolean>(false);
-        let onTextSearchClick: (() => void) | undefined;
-        let textSearchEnabled = Boolean(collection.textSearchEnabled);
-        if (customizationController?.plugins) {
-            const addTextSearchClickListener = customizationController.plugins?.find(p => Boolean(p.collectionView?.onTextSearchClick));
-
-            onTextSearchClick = addTextSearchClickListener
-                ? () => {
-                    setTextSearchLoading(true);
-                    Promise.all(customizationController.plugins?.map(p => {
-                        if (p.collectionView?.onTextSearchClick)
-                            return p.collectionView.onTextSearchClick({ context, path: resolvedFullPath, collection, parentCollectionIds });
-                        return Promise.resolve(true);
-                    }) as Promise<boolean>[])
-                        .then((res) => {
-                            if (res.every(Boolean)) setTextSearchInitialised(true);
-                        })
-                        .finally(() => setTextSearchLoading(false));
-                }
-                : undefined;
-
-            customizationController.plugins?.forEach(p => {
-                if (!textSearchEnabled)
-                    if (p.collectionView?.showTextSearchBar) {
-                        textSearchEnabled = p.collectionView.showTextSearchBar({ context, path: resolvedFullPath, collection, parentCollectionIds });
-                    }
-            })
-        }
+        const {
+            textSearchLoading,
+            textSearchInitialised,
+            onTextSearchClick,
+            textSearchEnabled
+        } = useTableSearchHelper({
+            collection,
+            fullPath: resolvedFullPath,
+            parentCollectionIds
+        });
 
         return (
             <div className={cn("overflow-hidden h-full w-full", className)}

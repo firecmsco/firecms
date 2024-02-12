@@ -24,13 +24,13 @@ import { getPreviewSizeFrom } from "../../preview/util";
 import { isReadOnly } from "../../util";
 
 import { CustomFieldValidator, mapPropertyToYup } from "../../form/validation";
-import { useEntityCollectionTableController } from "./EntityCollectionTable";
 import { useClearRestoreValue, useFireCMSContext } from "../../hooks";
 
 import { EntityTableCell } from "./internal/EntityTableCell";
 import { EntityTableCellActions } from "./internal/EntityTableCellActions";
 
 import { getRowHeight } from "../VirtualTable/common";
+import { useSelectableTableController } from "../SelectableTable/SelectableTableContext";
 
 export interface PropertyTableCellProps<T extends CMSType, M extends Record<string, any>> {
     propertyKey: string;
@@ -84,7 +84,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
             selectedCell,
             select,
             setPopupCell
-        } = useEntityCollectionTableController();
+        } = useSelectableTableController();
 
         const selected = selectedCell?.propertyKey === propertyKey &&
             selectedCell?.entity.path === entity.path &&

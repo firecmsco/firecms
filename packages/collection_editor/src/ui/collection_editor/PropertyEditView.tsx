@@ -1,18 +1,19 @@
 import React, { useDeferredValue, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare"
 
-import { Formik, FormikErrors, FormikProps, getIn } from "formik";
+import { Formex, FormexController, getIn, useCreateFormex } from "@firecms/formex";
 import {
     DEFAULT_FIELD_CONFIGS,
     DeleteConfirmationDialog,
-    PropertyConfigBadge,
     FieldConfigId,
     getFieldConfig,
     getFieldId,
     isPropertyBuilder,
+    isValidRegExp,
     mergeDeep,
     Property,
     PropertyConfig,
+    PropertyConfigBadge,
 } from "@firecms/core";
 import {
     Button,
@@ -68,40 +69,42 @@ export type PropertyFormProps = {
     onPropertyChanged?: (params: OnPropertyChangedParams) => void;
     onPropertyChangedImmediate?: boolean;
     onDelete?: (id?: string, namespace?: string) => void;
-    onError?: (id: string, namespace?: string, error?: FormikErrors<any>) => void;
-    initialErrors?: FormikErrors<any>;
-    forceShowErrors?: boolean;
+    onError?: (id: string, namespace?: string, error?: Record<string, any>) => void;
+    initialErrors?: Record<string, any>;
     existingPropertyKeys?: string[];
+    forceShowErrors?: boolean;
     allowDataInference: boolean;
     getData?: () => Promise<object[]>;
-    getHelpers?: (formikProps: FormikProps<PropertyWithId>) => void;
+    getController?: (formex: FormexController<PropertyWithId>) => void;
     propertyConfigs: Record<string, PropertyConfig>;
     collectionEditable: boolean;
 };
 
 export const PropertyForm = React.memo(
-    function PropertyForm({
-                              includeIdAndName = true,
-                              autoOpenTypeSelect,
-                              existingProperty,
-                              autoUpdateId,
-                              inArray,
-                              propertyKey,
-                              propertyNamespace,
-                              property,
-                              onPropertyChanged,
-                              onPropertyChangedImmediate = true,
-                              onDelete,
-                              onError,
-                              initialErrors,
-                              forceShowErrors,
-                              existingPropertyKeys,
-                              allowDataInference,
-                              getHelpers,
-                              getData,
-                              propertyConfigs,
-                              collectionEditable
-                          }: PropertyFormProps) {
+    function PropertyForm(props: PropertyFormProps) {
+
+        const {
+            includeIdAndName = true,
+            autoOpenTypeSelect,
+            existingProperty,
+            autoUpdateId,
+            inArray,
+            propertyKey,
+            existingPropertyKeys,
+            propertyNamespace,
+            property,
+            onPropertyChanged,
+            onPropertyChangedImmediate = true,
+            onDelete,
+            onError,
+            initialErrors,
+            forceShowErrors,
+            allowDataInference,
+            getController,
+            getData,
+            propertyConfigs,
+            collectionEditable
+        } = props;
 
         const initialValue: PropertyWithId = {
             id: "",
@@ -130,13 +133,14 @@ export const PropertyForm = React.memo(
             onPropertyChanged?.(params);
         };
 
-        return <Formik
-            key={`property_view_${propertyKey}`}
-            initialErrors={initialErrors}
-            initialValues={property
+        const formexController = useCreateFormex<PropertyWithId>({
+            initialValues: property
                 ? { id: propertyKey, ...property } as PropertyWithId
-                : initialValue}
-            onSubmit={(newPropertyWithId: PropertyWithId, helpers) => {
+                : initialValue,
+            initialErrors,
+            validateOnChange: true,
+            validateOnInitialRender: true,
+            onSubmit: (newPropertyWithId, controller) => {
                 console.debug("onSubmit", newPropertyWithId);
                 const {
                     id,
@@ -147,52 +151,76 @@ export const PropertyForm = React.memo(
                     property: { ...property, editable: property.editable ?? true }
                 });
                 if (!existingProperty)
-                    helpers.resetForm({ values: initialValue });
-            }}
-            // validate={(values) => {
-            //     console.log("validate property", values)
-            //     const errors: any = {};
-            //     if (!values?.dataType || !getFieldConfig(values)) {
-            //         errors.selectedWidget = "Required";
-            //     }
-            //     if (existingPropertyKeys && values?.id && existingPropertyKeys.includes(values?.id)) {
-            //         errors.id = "";
-            //     }
-            //     console.log("errors", errors)
-            //     return errors;
-            // }}
-        >
-            {(props) => {
+                    controller.resetForm({ values: initialValue });
+            },
+            validation: (values) => {
+                const errors: Record<string, any> = {};
+                if (includeIdAndName) {
+                    if (!values.name) {
+                        errors.name = "Required";
+                    } else {
+                        const nameError = validateName(values.name);
+                        if (nameError)
+                            errors.name = nameError;
+                    }
+                    if (!values.id) {
+                        errors.id = "Required";
+                    } else {
+                        const idError = validateId(values.id, existingPropertyKeys);
+                        if (idError)
+                            errors.id = idError;
+                    }
+                }
 
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                useEffect(() => {
-                    getHelpers?.(props);
-                }, [props]);
+                if (values.dataType === "string") {
+                    if (values.validation?.matches && !isValidRegExp(values.validation?.matches.toString())) {
+                        errors.validation = {
+                            matches: "Invalid regular expression"
+                        }
+                    }
+                }
+                if (values.dataType === "reference" && !values.path) {
+                    errors.path = "You must specify a target collection for the field";
+                }
+                if (values.propertyConfig === "repeat") {
+                    if (!(values as any).of) {
+                        errors.of = "You need to specify a repeat field";
+                    }
+                }
+                if (values.propertyConfig === "block") {
+                    if (!(values as any).oneOf) {
+                        errors.oneOf = "You need to specify the properties of this block";
+                    }
+                }
+                return errors;
+            }
+        });
 
-                return <PropertyEditView
-                    onPropertyChanged={onPropertyChangedImmediate
-                        ? doOnPropertyChanged
-                        : undefined}
-                    onDelete={onDelete}
-                    includeIdAndTitle={includeIdAndName}
-                    propertyNamespace={propertyNamespace}
-                    onError={onError}
-                    showErrors={forceShowErrors || props.submitCount > 0}
-                    existing={existingProperty}
-                    autoUpdateId={autoUpdateId}
-                    inArray={inArray}
-                    autoOpenTypeSelect={autoOpenTypeSelect}
-                    existingPropertyKeys={existingPropertyKeys}
-                    disabled={disabled}
-                    getData={getData}
-                    allowDataInference={allowDataInference}
-                    propertyConfigs={propertyConfigs}
-                    collectionEditable={collectionEditable}
-                    {...props}/>;
+        useEffect(() => {
+            getController?.(formexController);
+        }, [formexController, getController]);
 
-            }}
-
-        </Formik>
+        return <Formex value={formexController}>
+            <PropertyEditFormFields
+                onPropertyChanged={onPropertyChangedImmediate
+                    ? doOnPropertyChanged
+                    : undefined}
+                onDelete={onDelete}
+                includeIdAndTitle={includeIdAndName}
+                propertyNamespace={propertyNamespace}
+                onError={onError}
+                showErrors={forceShowErrors || formexController.submitCount > 0}
+                existing={existingProperty}
+                autoUpdateId={autoUpdateId}
+                inArray={inArray}
+                autoOpenTypeSelect={autoOpenTypeSelect}
+                disabled={disabled}
+                getData={getData}
+                allowDataInference={allowDataInference}
+                propertyConfigs={propertyConfigs}
+                collectionEditable={collectionEditable}
+                {...formexController}/>
+        </Formex>;
     }, (a, b) =>
         a.getData === b.getData &&
         a.propertyKey === b.propertyKey &&
@@ -216,9 +244,9 @@ export function PropertyFormDialog({
     onOkClicked?: () => void;
     onCancel?: () => void;
 }) {
-    const helpersRef = useRef<FormikProps<PropertyWithId>>();
-    const getHelpers = (helpers: FormikProps<PropertyWithId>) => {
-        helpersRef.current = helpers;
+    const formexRef = useRef<FormexController<PropertyWithId>>();
+    const getController = (helpers: FormexController<PropertyWithId>) => {
+        formexRef.current = helpers;
     };
 
     return <Dialog
@@ -226,64 +254,68 @@ export function PropertyFormDialog({
         maxWidth={"xl"}
         fullWidth={true}
     >
+        <form noValidate={true}
+              autoComplete={"off"}
+              onSubmit={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  formexRef.current?.handleSubmit(e)
+              }}>
+            <DialogContent>
+                <PropertyForm {...formProps}
+                              onPropertyChanged={(params) => {
+                                  onPropertyChanged?.(params);
+                                  onOkClicked?.();
+                              }}
+                              collectionEditable={collectionEditable}
+                              onPropertyChangedImmediate={false}
+                              getController={getController}
+                              getData={getData}
+                />
+            </DialogContent>
 
-        <DialogContent>
-            <PropertyForm {...formProps}
-                          onPropertyChanged={(params) => {
-                              onPropertyChanged?.(params);
-                              onOkClicked?.();
-                          }}
-                          collectionEditable={collectionEditable}
-                          onPropertyChangedImmediate={false}
-                          getHelpers={getHelpers}
-                          getData={getData}
-            />
-        </DialogContent>
+            <DialogActions>
 
-        <DialogActions>
+                {onCancel && <Button
+                    variant={"text"}
+                    onClick={() => {
+                        onCancel();
+                        formexRef.current?.resetForm();
+                    }}>
+                    Cancel
+                </Button>}
 
-            {onCancel && <Button
-                variant={"text"}
-                onClick={() => {
-                    onCancel();
-                    helpersRef.current?.resetForm();
-                }}>
-                Cancel
-            </Button>}
-
-            <Button variant="outlined"
-                    color="primary"
-                    onClick={() => helpersRef.current?.submitForm()}>
-                Ok
-            </Button>
-        </DialogActions>
+                <Button variant="outlined"
+                        type={"submit"}
+                        color="primary">
+                    Ok
+                </Button>
+            </DialogActions>
+        </form>
     </Dialog>;
 
 }
 
-function PropertyEditView({
-                              values,
-                              errors,
-                              touched,
-                              setValues,
-                              setFieldValue,
-                              existing,
-                              autoUpdateId = false,
-                              autoOpenTypeSelect,
-                              includeIdAndTitle,
-                              onPropertyChanged,
-                              onDelete,
-                              propertyNamespace,
-                              onError,
-                              showErrors,
-                              disabled,
-                              inArray,
-                              existingPropertyKeys,
-                              getData,
-                              allowDataInference,
-                              propertyConfigs,
-                              collectionEditable
-                          }: {
+function PropertyEditFormFields({
+                                    values,
+                                    errors,
+                                    setValues,
+                                    existing,
+                                    autoUpdateId = false,
+                                    autoOpenTypeSelect,
+                                    includeIdAndTitle,
+                                    onPropertyChanged,
+                                    onDelete,
+                                    propertyNamespace,
+                                    onError,
+                                    showErrors,
+                                    disabled,
+                                    inArray,
+                                    getData,
+                                    allowDataInference,
+                                    propertyConfigs,
+                                    collectionEditable
+                                }: {
     includeIdAndTitle?: boolean;
     existing: boolean;
     autoUpdateId?: boolean;
@@ -291,16 +323,15 @@ function PropertyEditView({
     propertyNamespace?: string;
     onPropertyChanged?: (params: OnPropertyChangedParams) => void;
     onDelete?: (id?: string, namespace?: string) => void;
-    onError?: (id: string, namespace?: string, error?: FormikErrors<any>) => void;
+    onError?: (id: string, namespace?: string, error?: Record<string, any>) => void;
     showErrors: boolean;
     inArray: boolean;
     disabled: boolean;
-    existingPropertyKeys?: string[];
     getData?: () => Promise<object[]>;
     allowDataInference: boolean;
     propertyConfigs: Record<string, PropertyConfig>;
     collectionEditable: boolean;
-} & FormikProps<PropertyWithId>) {
+} & FormexController<PropertyWithId>) {
 
     const [selectOpen, setSelectOpen] = useState(autoOpenTypeSelect);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -339,7 +370,7 @@ function PropertyEditView({
     }, [deferredValues, includeIdAndTitle, onPropertyChanged, propertyNamespace]);
 
     useEffect(() => {
-        if (values?.id && onError && Object.keys(errors).length > 0) {
+        if (values?.id && onError) {
             onError(values?.id, propertyNamespace, errors);
         }
     }, [errors, onError, propertyNamespace, values?.id]);
@@ -532,7 +563,6 @@ function PropertyEditView({
                     <CommonPropertyFields showErrors={showErrors}
                                           disabledId={existing}
                                           isNewProperty={!existing}
-                                          existingPropertyKeys={existingPropertyKeys}
                                           disabled={disabled}
                                           autoUpdateId={autoUpdateId}
                                           ref={nameFieldRef}/>}
@@ -557,4 +587,29 @@ function PropertyEditView({
 
         </>
     );
+}
+
+const idRegEx = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
+
+function validateId(value?: string, existingPropertyKeys?: string[]) {
+
+    let error;
+    if (!value) {
+        error = "You must specify an id for the field";
+    }
+    if (value && !value.match(idRegEx)) {
+        error = "The id can only contain letters, numbers and underscores (_), and not start with a number";
+    }
+    if (value && existingPropertyKeys && existingPropertyKeys.includes(value)) {
+        error = "There is another field with this ID already";
+    }
+    return error;
+}
+
+function validateName(value: string) {
+    let error;
+    if (!value) {
+        error = "You must specify a title for the field";
+    }
+    return error;
 }

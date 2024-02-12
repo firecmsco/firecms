@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { getIn, useFormikContext } from "formik";
+import { getIn, useFormex } from "@firecms/formex";
 import { EnumValueConfig, resolveEnumValues, useSnackbarController } from "@firecms/core";
 import { Select, SelectItem } from "@firecms/ui";
 import { EnumForm } from "../EnumForm";
@@ -26,12 +26,9 @@ export function EnumPropertyField({
 
     const {
         values,
-        handleChange,
-        errors,
-        touched,
         setFieldError,
         setFieldValue
-    } = useFormikContext<PropertyWithId>();
+    } = useFormex<PropertyWithId>();
 
     const snackbarContext = useSnackbarController();
 
@@ -70,7 +67,7 @@ export function EnumPropertyField({
                           disabled={disabled}
                           allowDataInference={allowDataInference}
                           onError={(hasError) => {
-                              setFieldError(enumValuesPath, hasError ? "" : undefined);
+                              setFieldError(enumValuesPath, hasError ? "This enum property is missing some values" : undefined);
                           }}
                           getData={getData
                               ? () => getData()

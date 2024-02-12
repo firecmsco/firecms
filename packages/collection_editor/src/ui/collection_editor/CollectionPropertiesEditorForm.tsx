@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
-import { Field, FormikErrors, getIn, useFormikContext } from "formik";
+import { Field, getIn } from "@firecms/formex";
 import {
     EntityCollection,
     ErrorBoundary,
@@ -34,13 +34,13 @@ import { OnPropertyChangedParams, PropertyForm, PropertyFormDialog } from "./Pro
 import { PropertyTree } from "./PropertyTree";
 import { PersistedCollection } from "../../types/persisted_collection";
 import { GetCodeDialog } from "./GetCodeDialog";
-import { useFormex } from "../../form/Formex";
+import { useFormex } from "@firecms/formex";
 
 type CollectionEditorFormProps = {
     showErrors: boolean;
     isNewCollection: boolean;
     propertyErrorsRef?: React.MutableRefObject<any>;
-    onPropertyError: (propertyKey: string, namespace: string | undefined, error?: FormikErrors<any>) => void;
+    onPropertyError: (propertyKey: string, namespace: string | undefined, error?: Record<string, any>) => void;
     setDirty?: (dirty: boolean) => void;
     reservedGroups?: string[];
     extraIcon: React.ReactNode;
@@ -66,15 +66,6 @@ export function CollectionPropertiesEditorForm({
                                                    collectionEditable
                                                }: CollectionEditorFormProps) {
 
-    // const {
-    //     values,
-    //     setFieldValue,
-    //     setFieldTouched,
-    //     setFieldError,
-    //     errors,
-    //     dirty
-    // } = useFormex();
-
     const {
         values,
         setFieldValue,
@@ -82,7 +73,7 @@ export function CollectionPropertiesEditorForm({
         setFieldTouched,
         errors,
         dirty
-    } = useFormikContext<PersistedCollection>();
+    } = useFormex<PersistedCollection>();
 
     const snackbarController = useSnackbarController();
 
@@ -273,9 +264,9 @@ export function CollectionPropertiesEditorForm({
 
     };
 
-    const onPropertyErrorInternal = useCallback((id: string, namespace?: string, error?: FormikErrors<any>) => {
+    const onPropertyErrorInternal = useCallback((id: string, namespace?: string, error?: Record<string, any>) => {
         const propertyPath = id ? getFullId(id, namespace) : undefined;
-        console.warn("onPropertyErrorInternal", {
+        console.debug("onPropertyErrorInternal", {
             id,
             namespace,
             error,
@@ -387,7 +378,7 @@ export function CollectionPropertiesEditorForm({
                         onPropertyMove={onPropertyMove}
                         onPropertyRemove={isNewCollection ? deleteProperty : undefined}
                         collectionEditable={collectionEditable}
-                        errors={showErrors ? errors : {}}/>
+                        errors={errors}/>
                 </ErrorBoundary>
 
                 <Button className={"mt-8 w-full"}
@@ -401,7 +392,7 @@ export function CollectionPropertiesEditorForm({
             </div>
 
             {!asDialog &&
-                <div className={"col-span-12 lg:col-span-7 p-4 md:p-8 h-full overflow-auto pb-20 md:pb-20"}>
+                <div className={"col-span-12 lg:col-span-7 p-4 md:py-8 md:px-4 h-full overflow-auto pb-20 md:pb-20"}>
                     <Paper
                         className="sticky top-8 p-4 min-h-full border border-transparent w-full flex flex-col justify-center ">
 

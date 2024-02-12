@@ -1,20 +1,24 @@
-import { FireCMSPlugin } from "@firecms/core";
+import { EntityCollection, FireCMSPlugin } from "@firecms/core";
 import { ProjectConfig } from "./useBuildProjectConfig";
 import { TextSearchInfoDialog } from "../components/subscriptions/TextSearchInfoDialog";
 import { FirestoreDelegate } from "@firecms/firebase";
 import { CollectionsConfigController } from "@firecms/collection_editor";
 import { FireCMSAppConfig } from "../types";
 
-export function useSaasPlugin({ projectConfig, firestoreDelegate, collectionConfigController, appConfig }: {
+export function useSaasPlugin({ projectConfig, firestoreDelegate, collectionConfigController, appConfig, collections }: {
     projectConfig: ProjectConfig;
     appConfig?: FireCMSAppConfig;
     firestoreDelegate: FirestoreDelegate
     collectionConfigController: CollectionsConfigController;
+    collections?: EntityCollection[];
 }): FireCMSPlugin {
 
     const hasOwnTextSearchImplementation = Boolean(appConfig?.textSearchControllerBuilder);
     return {
         name: "Saas plugin",
+        homePage: {
+            additionalChildrenStart: collections !== undefined && collections.length === 0 ? <IntroWidget/> : undefined
+        },
         collectionView: {
             showTextSearchBar: ({ context, path, collection }) => {
                 if (collection.textSearchEnabled === false) {
@@ -26,18 +30,31 @@ export function useSaasPlugin({ projectConfig, firestoreDelegate, collectionConf
                 if (projectConfig.canUseLocalTextSearch && projectConfig.localTextSearchEnabled && collection.textSearchEnabled) {
                     return firestoreDelegate.initTextSearchController({ path, collection });
                 } else {
-                    context.dialogsController.open({
-                        key: "text_search_info",
-                        Component: (props) => <TextSearchInfoDialog {...props}
-                                                                    hasOwnTextSearchImplementation={hasOwnTextSearchImplementation}
-                                                                    collectionConfigController={collectionConfigController}
-                                                                    parentCollectionIds={parentCollectionIds}
-                                                                    path={path}
-                                                                    collection={collection}/>
-                    });
+                    if (parentCollectionIds === undefined) {
+                        console.warn("Enabling text search: Parent collection ids are undefined")
+                    } else {
+                        context.dialogsController.open({
+                            key: "text_search_info",
+                            Component: (props) => <TextSearchInfoDialog {...props}
+                                                                        hasOwnTextSearchImplementation={hasOwnTextSearchImplementation}
+                                                                        collectionConfigController={collectionConfigController}
+                                                                        parentCollectionIds={parentCollectionIds}
+                                                                        path={path}
+                                                                        collection={collection}/>
+                        });
+                    }
                 }
                 return Promise.resolve(false);
             }
         }
     }
+}
+
+export function IntroWidget() {
+    return (
+        <div>
+            <h2>Custom section</h2>
+            <p>This is a custom section added by the plugin</p>
+        </div>
+    );
 }

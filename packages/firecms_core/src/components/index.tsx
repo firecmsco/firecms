@@ -4,13 +4,17 @@ export { ErrorView } from "./ErrorView";
 export type { EntityPreviewProps } from "./EntityPreview";
 export { EntityPreview } from "./EntityPreview";
 
-export type { ReferenceSelectionInnerProps } from "./ReferenceSelectionInner";
-export { ReferenceSelectionInner } from "./ReferenceSelectionInner";
+export type { ReferenceSelectionInnerProps } from "./ReferenceTable/ReferenceSelectionTable";
+export { ReferenceSelectionTable } from "./ReferenceTable/ReferenceSelectionTable";
 
 export { CircularProgressCenter } from "./CircularProgressCenter";
 
+export * from "./common";
+
 export * from "./HomePage";
+export * from "./SelectableTable/SelectableTable";
 export * from "./EntityCollectionView/EntityCollectionView";
+export * from "./EntityCollectionView/EntityCollectionViewActions";
 
 export * from "./PropertyConfigBadge";
 

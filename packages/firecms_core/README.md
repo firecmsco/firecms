@@ -40,10 +40,9 @@ out-of-the-box experience for any project.
 FireCMS is based on this great technologies:
 
 - Typescript
-- Firebase SDK 9
+- Tailwind CSS
+- Firebase SDK 10
 - React + React Router 6
-- Material UI 5
-- Formik + Yup
 
 ### Quickstart
 

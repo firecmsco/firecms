@@ -8,7 +8,7 @@ import { CellRendererParams, VirtualTableColumn } from "../VirtualTable";
 import { getValueInPath } from "../../util";
 import { getRowHeight } from "../VirtualTable/common";
 import { EntityCollectionRowActions } from "./EntityCollectionRowActions";
-import { EntityCollectionTableController } from "./types";
+import { EntityCollectionTableController } from "../common/types";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
 import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
 import { EntityTableCell } from "./internal/EntityTableCell";
@@ -16,13 +16,8 @@ import { CustomFieldValidator } from "../../form/validation";
 import { renderSkeletonText } from "../../preview";
 import { propertiesToColumns } from "./column_utils";
 import { ErrorView } from "../ErrorView";
-import { SimpleTable } from "./SimpleTable";
+import { SelectableTable } from "../SelectableTable/SelectableTable";
 
-const DEFAULT_STATE = {} as any;
-
-export const EntityCollectionTableContext = React.createContext<EntityCollectionTableController<any>>(DEFAULT_STATE);
-
-export const useEntityCollectionTableController = () => useContext<EntityCollectionTableController<any>>(EntityCollectionTableContext);
 
 /**
  * This component is in charge of rendering a collection table with a high
@@ -313,21 +308,20 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     actions={actions}
                     loading={tableController.dataLoading}/>
 
-                <SimpleTable columns={columns}
-                             size={size}
-                             inlineEditing={inlineEditing}
-                             cellRenderer={cellRenderer}
-                             onEntityClick={onEntityClick}
-                             highlightedRow={useCallback((entity: Entity<M>) => selectedEntityIds?.includes(entity.id) ?? false, [selectedEntityIds])}
-                             tableController={tableController}
-                             onValueChange={onValueChange}
-                             onColumnResize={onColumnResize}
-                             hoverRow={hoverRow}
-                             filterable={filterable}
-                             emptyComponent={emptyComponent}
-                             endAdornment={endAdornment}
-                             AddColumnComponent={AddColumnComponent}/>
-
+                <SelectableTable columns={columns}
+                                 size={size}
+                                 inlineEditing={inlineEditing}
+                                 cellRenderer={cellRenderer}
+                                 onEntityClick={onEntityClick}
+                                 highlightedRow={useCallback((entity: Entity<M>) => selectedEntityIds?.includes(entity.id) ?? false, [selectedEntityIds])}
+                                 tableController={tableController}
+                                 onValueChange={onValueChange}
+                                 onColumnResize={onColumnResize}
+                                 hoverRow={hoverRow}
+                                 filterable={filterable}
+                                 emptyComponent={emptyComponent}
+                                 endAdornment={endAdornment}
+                                 AddColumnComponent={AddColumnComponent}/>
 
             </div>
         );

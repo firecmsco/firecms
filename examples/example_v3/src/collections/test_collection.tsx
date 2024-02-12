@@ -126,7 +126,6 @@ export const testCollection = buildCollection({
                             return null;
                         }
                         const parentValue = values.mainSaturation?.[index]?.type;
-                        console.log("callback propertyValue", { propertyValue, index, parentValue });
                         if (parentValue === "oneNum") {
                             return ({
                                 name: "Saturation",

@@ -29,7 +29,7 @@ export function PropertyAddColumnComponent({
                 // className={onHover ? "bg-white dark:bg-gray-950" : undefined}
                 onClick={() => {
                     collectionEditorController.editProperty({
-                        editedCollectionPath: fullPath,
+                        editedCollectionId: collection.id,
                         parentCollectionIds,
                         currentPropertiesOrder: getDefaultPropertiesOrder(collection),
                         collection

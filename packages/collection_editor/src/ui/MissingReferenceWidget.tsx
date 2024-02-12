@@ -16,7 +16,8 @@ export function MissingReferenceWidget({ path: pathProp }: {
                     collectionEditor.createCollection({
                         initialValues: { path, name: unslugify(path) },
                         parentCollectionIds,
-                        redirect: false
+                        redirect: false,
+                        sourceClick: "missing_reference"
                     });
                 }}>
             Create

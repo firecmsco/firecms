@@ -1,5 +1,5 @@
 import React from "react";
-import { getIn, useFormikContext } from "formik";
+import { getIn, useFormex } from "@firecms/formex";
 import { NumberProperty, StringProperty } from "@firecms/core";
 import { Select, SelectItem } from "@firecms/ui";
 import { GeneralPropertyValidation } from "./validation/GeneralPropertyValidation";
@@ -15,7 +15,7 @@ export function DateTimePropertyField({ disabled }: {
         errors,
         touched,
         setFieldValue
-    } = useFormikContext<StringProperty | NumberProperty>();
+    } = useFormex<StringProperty | NumberProperty>();
 
     const modePath = "mode";
     const modeValue: string | undefined = getIn(values, modePath);

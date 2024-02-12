@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { ArrayProperty, getFieldConfig, Property, PropertyConfig } from "@firecms/core";
 import { Button, Paper, Typography } from "@firecms/ui";
-import { Field, getIn, useFormikContext } from "formik";
+import { Field, getIn, useFormex } from "@firecms/formex";
 import { PropertyFormDialog } from "../PropertyEditView";
 import { PropertyFieldPreview } from "../PropertyFieldPreview";
 import { ArrayPropertyValidation } from "./validation/ArrayPropertyValidation";
@@ -31,16 +31,17 @@ export function RepeatPropertyField({
         errors,
         setFieldValue,
         touched
-    } = useFormikContext<ArrayProperty>();
+    } = useFormex<ArrayProperty>();
 
     const [propertyDialogOpen, setPropertyDialogOpen] = useState(false);
     const ofProperty = getIn(values, "of");
     const ofPropertyError = getIn(touched, "of") && getIn(errors, "of");
 
-    const onPropertyChanged = useCallback(({ id, property, namespace }:
-                                               { id?: string, property: Property, namespace?: string }) => {
+    const onPropertyChanged = ({ id, property, namespace }:
+                                   { id?: string, property: Property, namespace?: string }) => {
+        console.log("onPropertyChanged", id, property, namespace);
         setFieldValue("of", property);
-    }, []);
+    };
 
     const widget = ofProperty && getFieldConfig(ofProperty, propertyConfigs);
     return (
@@ -52,11 +53,11 @@ export function RepeatPropertyField({
                 <Field
                     name={"of"}
                     value={ofProperty}
-                    validate={(property: Property) => {
-                        return property?.dataType ? undefined : "You need to specify a repeat field";
-                    }}
+                    // validate={(property: Property) => {
+                    //     return property?.dataType ? undefined : "You need to specify a repeat field";
+                    // }}
                 >
-                    {() => (
+                    {({}) => (
                         <Paper className="p-2 mt-4">
 
                             {ofProperty && <PropertyFieldPreview

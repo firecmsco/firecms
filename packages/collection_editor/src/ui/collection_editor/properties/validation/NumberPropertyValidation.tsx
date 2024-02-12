@@ -1,9 +1,9 @@
 import React from "react";
 
-import { FastField, getIn, useFormikContext } from "formik";
-import { SwitchControl } from "@firecms/core";
+import { Field, FormexFieldProps, getIn, useFormex } from "@firecms/formex";
 import { DebouncedTextField } from "@firecms/ui";
 import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
+import { SwitchControl } from "../../SwitchControl";
 
 export function NumberPropertyValidation({ disabled }: {
     disabled: boolean;
@@ -12,7 +12,7 @@ export function NumberPropertyValidation({ disabled }: {
     const {
         values,
         handleChange
-    } = useFormikContext();
+    } = useFormex();
 
     const validationMin = "validation.min";
     const validationMax = "validation.max";
@@ -75,25 +75,40 @@ export function NumberPropertyValidation({ disabled }: {
             </div>
 
             <div className={"col-span-4"}>
-                <FastField type="checkbox"
-                           name={validationPositive}
-                           label={"Positive value"}
-                           disabled={disabled}
-                           component={SwitchControl}/>
+                <Field name={validationPositive}
+                       type="checkbox">
+                    {({ field, form }: FormexFieldProps) => {
+                        return <SwitchControl
+                            label={"Positive value"}
+                            disabled={disabled}
+                            form={form}
+                            field={field}/>
+                    }}
+                </Field>
             </div>
             <div className={"col-span-4"}>
-                <FastField type="checkbox"
-                           name={validationNegative}
-                           label={"Negative value"}
-                           disabled={disabled}
-                           component={SwitchControl}/>
+                <Field name={validationNegative}
+                       type="checkbox">
+                    {({ field, form }: FormexFieldProps) => {
+                        return <SwitchControl
+                            label={"Negative value"}
+                            disabled={disabled}
+                            form={form}
+                            field={field}/>
+                    }}
+                </Field>
             </div>
             <div className={"col-span-4"}>
-                <FastField type="checkbox"
-                           name={validationInteger}
-                           label={"Integer value"}
-                           disabled={disabled}
-                           component={SwitchControl}/>
+                <Field name={validationInteger}
+                       type="checkbox">
+                    {({ field, form }: FormexFieldProps) => {
+                        return <SwitchControl
+                            label={"Integer value"}
+                            disabled={disabled}
+                            form={form}
+                            field={field}/>
+                    }}
+                </Field>
             </div>
         </div>
     );

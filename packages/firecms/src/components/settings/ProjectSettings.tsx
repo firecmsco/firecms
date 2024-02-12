@@ -31,7 +31,7 @@ export function ProjectSettings() {
 
     return (
         <CenteredView maxWidth={"6xl"}
-                      className={"w-full flex flex-col gap-16 px-4 py-32"}>
+                      className={"w-full flex flex-col gap-16 px-4 py-16"}>
 
             <ProjectSubscriptionPlans uid={backendUid}/>
 

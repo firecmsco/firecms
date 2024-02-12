@@ -24,7 +24,7 @@ import {
 import { getValueInPath, mergeDeep } from "./objects";
 import { getDefaultValuesFor, isPropertyBuilder } from "./entities";
 import { DEFAULT_ONE_OF_TYPE } from "./common";
-import { getIn } from "formik";
+import { getIn } from "@firecms/formex";
 import { enumToObjectEntries } from "./enums";
 import { isDefaultFieldConfigId } from "../core";
 

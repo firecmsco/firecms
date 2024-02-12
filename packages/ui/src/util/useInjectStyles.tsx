@@ -16,6 +16,6 @@ export function useInjectStyles(key: string, styles: string) {
             style.innerHTML = styles;
             document.head.appendChild(style);
         }
-    }, [key, styles]);
+    }, []);
 
 }

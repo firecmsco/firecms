@@ -1,5 +1,11 @@
 import React from "react";
-import { DefaultHomePage, IconForView, NavigationGroup, useCustomizationController } from "@firecms/core";
+import {
+    DefaultHomePage,
+    IconForView,
+    NavigationGroup,
+    useCustomizationController,
+    useNavigationController
+} from "@firecms/core";
 import { ArrowForwardIcon, cardClickableMixin, cardMixin, cn, focusedMixin, Typography, } from "@firecms/ui";
 
 import { Link as ReactLink } from "react-router-dom";
@@ -15,6 +21,7 @@ import { SubscriptionPlanWidget } from "./subscriptions";
  */
 export function FireCMSProjectHomePage() {
 
+    const navigation = useNavigationController();
     const { plugins } = useCustomizationController();
 
     const pluginActions: React.ReactNode[] = [];
@@ -25,7 +32,9 @@ export function FireCMSProjectHomePage() {
     }
     return <DefaultHomePage
         additionalActions={<> {pluginActions} </>}
-        additionalChildrenStart={<SubscriptionPlanWidget showForPlans={["free"]}/>}
+        additionalChildrenStart={(navigation.collections ?? []).length > 0
+            ? <SubscriptionPlanWidget showForPlans={["free"]}/>
+            : undefined}
         additionalChildrenEnd={
             <NavigationGroup group={"ADMIN"}>
                 <div className={"grid grid-cols-12 gap-2"}>

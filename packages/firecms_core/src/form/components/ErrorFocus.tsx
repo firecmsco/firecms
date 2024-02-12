@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { useFormikContext } from "formik";
+import { useFormex } from "@firecms/formex";
 
 export const ErrorFocus = ({ containerRef }:
                                {
                                    containerRef?: React.RefObject<HTMLDivElement>
                                }) => {
-    const { isSubmitting, isValidating, errors } = useFormikContext();
+    const { isSubmitting, isValidating, errors } = useFormex();
 
     useEffect(() => {
         const keys = Object.keys(errors);

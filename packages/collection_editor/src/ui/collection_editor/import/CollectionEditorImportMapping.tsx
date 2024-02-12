@@ -4,7 +4,7 @@ import {
     ImportConfig,
     ImportNewPropertyFieldPreview
 } from "@firecms/data_import_export";
-import { getIn, useFormikContext } from "formik";
+import { getIn, useFormex } from "@firecms/formex";
 
 import { PropertyConfigBadge, getFieldConfig, getFieldId, Properties, Property, PropertyConfig, } from "@firecms/core";
 import { Container, Select, Tooltip, Typography } from "@firecms/ui";
@@ -16,7 +16,6 @@ import { updatePropertyFromWidget } from "../utils/update_property_for_widget";
 import { PropertySelectItem } from "../PropertySelectItem";
 import { supportedFields } from "../utils/supported_fields";
 import { buildPropertyFromData } from "@firecms/schema_inference";
-import { useFormex } from "../../../form/Formex";
 
 export function CollectionEditorImportMapping({
                                                   importConfig,
@@ -41,7 +40,7 @@ export function CollectionEditorImportMapping({
         setFieldValue,
         setFieldTouched,
         values
-    } = useFormikContext<PersistedCollection>();
+    } = useFormex<PersistedCollection>();
     const [selectedProperty, setSelectedProperty] = useState<PropertyWithId | undefined>(undefined);
 
     const currentPropertiesOrderRef = React.useRef<{

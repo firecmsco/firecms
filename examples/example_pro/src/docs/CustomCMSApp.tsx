@@ -18,6 +18,7 @@ import {
     SideDialogs,
     SnackbarProvider,
     useBuildModeController,
+    useBuildNavigationController,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
@@ -117,6 +118,12 @@ export function CustomCMSApp() {
         storageSource
     });
 
+    const navigationController = useBuildNavigationController({
+        collections: [productsCollection],
+        authController,
+        dataSourceDelegate: firestoreDelegate
+    });
+
     if (configError) {
         return <div> {configError} </div>;
     }
@@ -140,7 +147,7 @@ export function CustomCMSApp() {
                 <ModeControllerProvider
                     value={modeController}>
                     <FireCMS authController={authController}
-                             collections={[productsCollection]}
+                             navigationController={navigationController}
                              dataSourceDelegate={firestoreDelegate}
                              storageSource={storageSource}
                              entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}

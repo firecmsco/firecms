@@ -1,5 +1,5 @@
+import React, { useCallback, useMemo } from "react";
 import { useSnackbar } from "notistack";
-import { useCallback, useMemo } from "react";
 
 /**
  * Possible snackbar types
@@ -48,7 +48,6 @@ export const useSnackbarController = () => {
 
     const open = useCallback((props: {
         type: SnackbarMessageType;
-        // title?: string;
         message: React.ReactNode;
         autoHideDuration?: number;
     }) => {

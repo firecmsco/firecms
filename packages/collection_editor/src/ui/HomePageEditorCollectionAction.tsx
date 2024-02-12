@@ -25,13 +25,13 @@ export function HomePageEditorCollectionAction({
     });
 
     const onEditCollectionClicked = useCallback(() => {
-        collectionEditorController?.editCollection({ path, parentCollectionIds: [] });
+        collectionEditorController?.editCollection({ id: collection.id, parentCollectionIds: [] });
     }, [collectionEditorController, path]);
 
     const [deleteRequested, setDeleteRequested] = useState(false);
 
     const deleteCollection = useCallback(() => {
-        configController?.deleteCollection({ path }).then(() => {
+        configController?.deleteCollection({ id: collection.id }).then(() => {
             setDeleteRequested(false);
             snackbarController.open({
                 message: "Collection deleted",

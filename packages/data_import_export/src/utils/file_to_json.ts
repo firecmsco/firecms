@@ -4,14 +4,19 @@ export function convertFileToJson(file: File): Promise<object[]> {
     return new Promise((resolve, reject) => {
         // check if file is a JSON file
         if (file.type === "application/json") {
+            console.debug("Converting JSON file to JSON", file.name);
             const reader = new FileReader();
             reader.onload = function (e) {
                 const data = e.target?.result as string;
                 const jsonData = JSON.parse(data);
+                if (!Array.isArray(jsonData)) {
+                    reject(new Error("JSON file should contain an array of objects"));
+                }
                 resolve(jsonData);
             };
             reader.readAsText(file);
         } else {
+            console.debug("Converting Excel file to JSON", file.name);
             const reader = new FileReader();
             reader.onload = function (e) {
 

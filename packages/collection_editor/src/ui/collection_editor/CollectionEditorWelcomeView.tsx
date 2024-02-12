@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { EntityCollection, unslugify, } from "@firecms/core";
 import { Button, Card, Chip, CircularProgress, cn, Container, Icon, Tooltip, Typography, } from "@firecms/ui";
-import { useFormikContext } from "formik";
 
 import { productsCollectionTemplate } from "./templates/products_template";
 import { blogCollectionTemplate } from "./templates/blog_template";
 import { usersCollectionTemplate } from "./templates/users_template";
 import { ImportFileUpload } from "@firecms/data_import_export";
 import { pagesCollectionTemplate } from "./templates/pages_template";
-import { useFormex } from "../../form/Formex";
+import { useFormex } from "@firecms/formex";
 
 export function CollectionEditorWelcomeView({
                                                 path,
@@ -48,14 +47,14 @@ export function CollectionEditorWelcomeView({
     //     setFieldTouched,
     //     isSubmitting,
     //     submitCount
-    // } = useFormikContext<EntityCollection>();
+    // } = useFormex<EntityCollection>();
 
     const {
         values,
         setFieldValue,
         setValues,
         submitCount
-    } = useFormikContext<EntityCollection>();
+    } = useFormex<EntityCollection>();
 
     return (
         <div className={"overflow-auto my-auto"}>

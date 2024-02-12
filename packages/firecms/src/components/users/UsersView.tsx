@@ -51,9 +51,11 @@ export const UsersView = function UsersView() {
 
             <UsersTable onUserClicked={onUserClicked}/>
 
-            <UserDetailsForm open={dialogOpen ?? false}
-                             user={selectedUser}
-                             handleClose={handleClose}/>
+            <UserDetailsForm
+                key={selectedUser?.uid ?? "new"}
+                open={dialogOpen ?? false}
+                user={selectedUser}
+                handleClose={handleClose}/>
 
         </Container>
     )
