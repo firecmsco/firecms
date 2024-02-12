@@ -52,6 +52,9 @@
       ],
       "@firecms/data_import_export": [
         "../data_import_export/src"
+      ],
+      "@firecms/formex": [
+        "../formex/src"
       ]
     }
   },

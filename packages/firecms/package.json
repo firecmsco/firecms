@@ -39,6 +39,7 @@
     "@firecms/data_import_export": "^3.0.0-beta.2-pre.3",
     "@firecms/firebase": "^3.0.0-beta.2-pre.3",
     "@firecms/schema_inference": "^3.0.0-beta.2-pre.3",
+    "@firecms/formex": "^0.1.0",
     "react-router": "^6.22.0",
     "react-router-dom": "^6.22.0"
   },

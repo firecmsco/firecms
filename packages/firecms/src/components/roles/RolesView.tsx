@@ -53,11 +53,13 @@ export const RolesView = React.memo(
 
                 <RolesTable onRoleClicked={onRoleClicked} editable={canEditRoles}/>
 
-                <RolesDetailsForm open={dialogOpen}
-                                  role={selectedRole}
-                                  editable={canEditRoles}
-                                  collections={collections}
-                                  handleClose={handleClose}/>
+                <RolesDetailsForm
+                    key={selectedRole?.id ?? "new"}
+                    open={dialogOpen}
+                    role={selectedRole}
+                    editable={canEditRoles}
+                    collections={collections}
+                    handleClose={handleClose}/>
 
             </Container>
         )
