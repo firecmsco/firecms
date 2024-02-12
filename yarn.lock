@@ -2583,7 +2583,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firecms/cli@npm:^3.0.0-beta.2-pre.3, @firecms/cli@workspace:packages/firecms_cli":
+"@firecms/cli@npm:^3.0.0-beta.2-pre.4, @firecms/cli@workspace:packages/firecms_cli":
   version: 0.0.0-use.local
   resolution: "@firecms/cli@workspace:packages/firecms_cli"
   dependencies:
@@ -2611,14 +2611,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/collection_editor@npm:^3.0.0-beta.2-pre.3, @firecms/collection_editor@workspace:packages/collection_editor":
+"@firecms/collection_editor@npm:^3.0.0-beta.2-pre.4, @firecms/collection_editor@workspace:packages/collection_editor":
   version: 0.0.0-use.local
   resolution: "@firecms/collection_editor@workspace:packages/collection_editor"
   dependencies:
-    "@firecms/data_import_export": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/formex": "npm:^0.1.0"
-    "@firecms/schema_inference": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/ui": "npm:^3.0.0-beta.2-pre.3"
+    "@firecms/data_import_export": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/formex": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/schema_inference": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/ui": "npm:^3.0.0-beta.2-pre.4"
     "@jest/globals": "npm:^29.7.0"
     "@types/react": "npm:^18.2.54"
     "@types/react-dom": "npm:^18.2.18"
@@ -2649,11 +2649,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/core@npm:^3.0.0-beta.2-pre.3, @firecms/core@workspace:packages/firecms_core":
+"@firecms/core@npm:^3.0.0-beta.2-pre.4, @firecms/core@workspace:packages/firecms_core":
   version: 0.0.0-use.local
   resolution: "@firecms/core@workspace:packages/firecms_core"
   dependencies:
-    "@firecms/ui": "npm:^3.0.0-beta.2-pre.3"
+    "@firecms/formex": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/ui": "npm:^3.0.0-beta.2-pre.4"
     "@fontsource/ibm-plex-mono": "npm:^5.0.8"
     "@fontsource/roboto": "npm:^5.0.8"
     "@hello-pangea/dnd": "npm:^16.5.0"
@@ -2680,7 +2681,6 @@ __metadata:
     eslint-plugin-react: "npm:^7.33.2"
     eslint-plugin-react-hooks: "npm:^4.6.0"
     firebase: "npm:^10.8.0"
-    formik: "npm:^2.4.5"
     history: "npm:^5.3.0"
     jest: "npm:^29.7.0"
     js-search: "npm:^2.0.1"
@@ -2711,11 +2711,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_enhancement@npm:^3.0.0-beta.2-pre.3, @firecms/data_enhancement@workspace:packages/data_enhancement":
+"@firecms/data_enhancement@npm:^3.0.0-beta.2-pre.4, @firecms/data_enhancement@workspace:packages/data_enhancement":
   version: 0.0.0-use.local
   resolution: "@firecms/data_enhancement@workspace:packages/data_enhancement"
   dependencies:
-    "@firecms/core": "npm:^3.0.0-beta.2-pre.3"
+    "@firecms/core": "npm:^3.0.0-beta.2-pre.4"
     "@testing-library/jest-dom": "npm:^5.17.0"
     "@types/jest": "npm:^29.5.12"
     "@types/react": "npm:^18.2.54"
@@ -2745,12 +2745,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_import_export@npm:^3.0.0-beta.2-pre.3, @firecms/data_import_export@workspace:packages/data_import_export":
+"@firecms/data_import_export@npm:^3.0.0-beta.2-pre.4, @firecms/data_import_export@workspace:packages/data_import_export":
   version: 0.0.0-use.local
   resolution: "@firecms/data_import_export@workspace:packages/data_import_export"
   dependencies:
-    "@firecms/core": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/schema_inference": "npm:^3.0.0-beta.2-pre.3"
+    "@firecms/core": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/schema_inference": "npm:^3.0.0-beta.2-pre.4"
     "@jest/globals": "npm:^29.7.0"
     "@testing-library/jest-dom": "npm:^5.17.0"
     "@types/jest": "npm:^29.5.12"
@@ -2782,15 +2782,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/firebase@npm:^3.0.0-beta.2-pre.3, @firecms/firebase@workspace:packages/firebase_firecms":
+"@firecms/firebase@npm:^3.0.0-beta.2-pre.4, @firecms/firebase@workspace:packages/firebase_firecms":
   version: 0.0.0-use.local
   resolution: "@firecms/firebase@workspace:packages/firebase_firecms"
   dependencies:
-    "@firecms/collection_editor": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/core": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/data_enhancement": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/data_import_export": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/schema_inference": "npm:^3.0.0-beta.2-pre.3"
+    "@firecms/collection_editor": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/core": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/data_enhancement": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/data_import_export": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/schema_inference": "npm:^3.0.0-beta.2-pre.4"
     "@types/node": "npm:^20.11.16"
     "@types/react": "npm:^18.2.54"
     "@types/react-dom": "npm:^18.2.18"
@@ -2814,16 +2814,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/firebase_pro@npm:^3.0.0-beta.2-pre.3, @firecms/firebase_pro@workspace:packages/firebase_firecms_pro":
+"@firecms/firebase_pro@npm:^3.0.0-beta.2-pre.4, @firecms/firebase_pro@workspace:packages/firebase_firecms_pro":
   version: 0.0.0-use.local
   resolution: "@firecms/firebase_pro@workspace:packages/firebase_firecms_pro"
   dependencies:
-    "@firecms/core": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/firebase": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/ui": "npm:^3.0.0-beta.2-pre.3"
+    "@firecms/core": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/firebase": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/ui": "npm:^3.0.0-beta.2-pre.4"
     "@types/node": "npm:^20.11.16"
     firebase: "npm:^10.8.0"
-    firecms: "npm:^3.0.0-beta.2-pre.3"
+    firecms: "npm:^3.0.0-beta.2-pre.4"
     typescript: "npm:^5.3.3"
   peerDependencies:
     react: ^18.2.0
@@ -2832,7 +2832,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/formex@npm:^0.1.0, @firecms/formex@workspace:packages/formex":
+"@firecms/formex@npm:^3.0.0-beta.2-pre.4, @firecms/formex@workspace:packages/formex":
   version: 0.0.0-use.local
   resolution: "@firecms/formex@workspace:packages/formex"
   dependencies:
@@ -2847,6 +2847,7 @@ __metadata:
     eslint-plugin-promise: "npm:^6.1.1"
     eslint-plugin-react: "npm:^7.33.2"
     eslint-plugin-react-hooks: "npm:^4.6.0"
+    react-fast-compare: "npm:^3.2.2"
     typescript: "npm:^5.3.3"
   peerDependencies:
     firebase: ^10.7.1
@@ -2855,17 +2856,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/schema_inference@npm:^3.0.0-beta.2-pre.3, @firecms/schema_inference@workspace:packages/schema_inference":
+"@firecms/schema_inference@npm:^3.0.0-beta.2-pre.4, @firecms/schema_inference@workspace:packages/schema_inference":
   version: 0.0.0-use.local
   resolution: "@firecms/schema_inference@workspace:packages/schema_inference"
   dependencies:
-    "@firecms/core": "npm:^3.0.0-beta.2-pre.3"
+    "@firecms/core": "npm:^3.0.0-beta.2-pre.4"
     "@types/node": "npm:^20.11.16"
     typescript: "npm:^5.3.3"
   languageName: unknown
   linkType: soft
 
-"@firecms/ui@npm:^3.0.0-beta.2-pre.3, @firecms/ui@workspace:packages/ui":
+"@firecms/ui@npm:^3.0.0-beta.2-pre.4, @firecms/ui@workspace:packages/ui":
   version: 0.0.0-use.local
   resolution: "@firecms/ui@workspace:packages/ui"
   dependencies:
@@ -8451,7 +8452,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "create-firecms-app@workspace:packages/create_firecms_app"
   dependencies:
-    "@firecms/cli": "npm:^3.0.0-beta.2-pre.3"
+    "@firecms/cli": "npm:^3.0.0-beta.2-pre.4"
     "@types/node": "npm:^20.11.16"
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.3.3"
@@ -8761,13 +8762,6 @@ __metadata:
   version: 0.1.4
   resolution: "deep-is@npm:0.1.4"
   checksum: 10/ec12d074aef5ae5e81fa470b9317c313142c9e8e2afe3f8efa124db309720db96d1d222b82b84c834e5f87e7a614b44a4684b6683583118b87c833b3be40d4d8
-  languageName: node
-  linkType: hard
-
-"deepmerge@npm:^2.1.1":
-  version: 2.2.1
-  resolution: "deepmerge@npm:2.2.1"
-  checksum: 10/a3da411cd3d471a8ae86ff7fd5e19abb648377b3f8c42a9e4c822406c2960a391cb829e4cca53819b73715e68f56b06f53c643ca7bba21cab569fecc9a723de1
   languageName: node
   linkType: hard
 
@@ -10265,14 +10259,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms-example-v3@workspace:examples/example_v3"
   dependencies:
-    "@firecms/cli": "npm:^3.0.0-beta.2-pre.3"
+    "@firecms/cli": "npm:^3.0.0-beta.2-pre.4"
     "@originjs/vite-plugin-federation": "npm:^1.3.4"
     "@types/react": "npm:18.2.54"
     "@types/react-dom": "npm:18.2.18"
     "@vitejs/plugin-react": "npm:^4.2.1"
     autoprefixer: "npm:^10.4.17"
     firebase: "npm:^10.8.0"
-    firecms: "npm:^3.0.0-beta.2-pre.3"
+    firecms: "npm:^3.0.0-beta.2-pre.4"
     postcss: "npm:^8.4.34"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
@@ -10288,13 +10282,13 @@ __metadata:
   dependencies:
     "@blocknote/core": "npm:^0.11.2"
     "@blocknote/react": "npm:^0.11.2"
-    "@firecms/collection_editor": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/core": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/data_enhancement": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/data_import_export": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/firebase_pro": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/schema_inference": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/ui": "npm:^3.0.0-beta.2-pre.3"
+    "@firecms/collection_editor": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/core": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/data_enhancement": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/data_import_export": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/firebase_pro": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/schema_inference": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/ui": "npm:^3.0.0-beta.2-pre.4"
     "@tiptap/pm": "npm:^2.2.1"
     "@tiptap/react": "npm:^2.2.1"
     "@tiptap/starter-kit": "npm:^2.2.1"
@@ -10338,17 +10332,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"firecms@npm:^3.0.0-beta.2-pre.3, firecms@workspace:packages/firecms":
+"firecms@npm:^3.0.0-beta.2-pre.4, firecms@workspace:packages/firecms":
   version: 0.0.0-use.local
   resolution: "firecms@workspace:packages/firecms"
   dependencies:
-    "@firecms/cli": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/collection_editor": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/core": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/data_enhancement": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/data_import_export": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/firebase": "npm:^3.0.0-beta.2-pre.3"
-    "@firecms/schema_inference": "npm:^3.0.0-beta.2-pre.3"
+    "@firecms/cli": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/collection_editor": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/core": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/data_enhancement": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/data_import_export": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/firebase": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/formex": "npm:^3.0.0-beta.2-pre.4"
+    "@firecms/schema_inference": "npm:^3.0.0-beta.2-pre.4"
     "@types/node": "npm:^20.11.16"
     "@types/react": "npm:^18.2.54"
     "@types/react-dom": "npm:^18.2.18"
@@ -10436,24 +10431,6 @@ __metadata:
     combined-stream: "npm:^1.0.8"
     mime-types: "npm:^2.1.12"
   checksum: 10/7264aa760a8cf09482816d8300f1b6e2423de1b02bba612a136857413fdc96d7178298ced106817655facc6b89036c6e12ae31c9eb5bdc16aabf502ae8a5d805
-  languageName: node
-  linkType: hard
-
-"formik@npm:^2.4.5":
-  version: 2.4.5
-  resolution: "formik@npm:2.4.5"
-  dependencies:
-    "@types/hoist-non-react-statics": "npm:^3.3.1"
-    deepmerge: "npm:^2.1.1"
-    hoist-non-react-statics: "npm:^3.3.0"
-    lodash: "npm:^4.17.21"
-    lodash-es: "npm:^4.17.21"
-    react-fast-compare: "npm:^2.0.1"
-    tiny-warning: "npm:^1.0.2"
-    tslib: "npm:^2.0.0"
-  peerDependencies:
-    react: ">=16.8.0"
-  checksum: 10/223fb3e6b0a7803221c030364a015b9adb01b61f7aed7c64e28ef8341a3e7c94c7a70aef7ed9f65d03ac44e4e19972c1247fb0e39538e4e084833fd1fa3b11c4
   languageName: node
   linkType: hard
 
@@ -16468,13 +16445,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-fast-compare@npm:^2.0.1":
-  version: 2.0.4
-  resolution: "react-fast-compare@npm:2.0.4"
-  checksum: 10/e4e3218c0f5c29b88e9f184a12adb77b0a93a803dbd45cb98bbb754c8310dc74e6266c53dd70b90ba4d0939e0e1b8a182cb05d081bcab22507a0390fbcd768ac
-  languageName: node
-  linkType: hard
-
 "react-fast-compare@npm:^3.0.1, react-fast-compare@npm:^3.2.2":
   version: 3.2.2
   resolution: "react-fast-compare@npm:3.2.2"
@@ -18500,13 +18470,6 @@ __metadata:
   version: 1.3.1
   resolution: "tiny-invariant@npm:1.3.1"
   checksum: 10/872dbd1ff20a21303a2fd20ce3a15602cfa7fcf9b228bd694a52e2938224313b5385a1078cb667ed7375d1612194feaca81c4ecbe93121ca1baebe344de4f84c
-  languageName: node
-  linkType: hard
-
-"tiny-warning@npm:^1.0.2":
-  version: 1.0.3
-  resolution: "tiny-warning@npm:1.0.3"
-  checksum: 10/da62c4acac565902f0624b123eed6dd3509bc9a8d30c06e017104bedcf5d35810da8ff72864400ad19c5c7806fc0a8323c68baf3e326af7cb7d969f846100d71
   languageName: node
   linkType: hard
 
