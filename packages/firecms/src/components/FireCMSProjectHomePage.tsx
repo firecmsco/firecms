@@ -32,8 +32,8 @@ export function FireCMSProjectHomePage() {
     }
     return <DefaultHomePage
         additionalActions={<> {pluginActions} </>}
-        additionalChildrenStart={navigation.collections.length > 0 ?
-            <SubscriptionPlanWidget showForPlans={["free"]}/>
+        additionalChildrenStart={(navigation.collections ?? []).length > 0
+            ? <SubscriptionPlanWidget showForPlans={["free"]}/>
             : undefined}
         additionalChildrenEnd={
             <NavigationGroup group={"ADMIN"}>

@@ -17,7 +17,7 @@ export function RootCollectionSuggestions() {
 
     const rootPathSuggestions = collectionEditorController.rootPathSuggestions ?? [];
 
-    const showSuggestions = rootPathSuggestions.length > 3 || (navigationController.collections.length === 0 && rootPathSuggestions.length > 0);
+    const showSuggestions = rootPathSuggestions.length > 3 || ((navigationController.collections ?? []).length === 0 && rootPathSuggestions.length > 0);
     return <Collapse
         in={showSuggestions}>
 

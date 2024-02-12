@@ -80,7 +80,7 @@ export const ConfigControllerProvider = React.memo(
         const {
             collections
         } = navigation;
-        const existingPaths = collections.map(col => col.path.trim().toLowerCase());
+        const existingPaths = (collections ?? []).map(col => col.path.trim().toLowerCase());
 
         const [rootPathSuggestions, setRootPathSuggestions] = React.useState<string[] | undefined>();
         useEffect(() => {

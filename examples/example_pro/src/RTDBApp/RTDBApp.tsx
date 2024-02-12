@@ -18,6 +18,7 @@ import {
     SnackbarProvider,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
+    useBuildNavigationController,
     useFirebaseAuthController,
     useFirebaseRTDBDelegate,
     useFirebaseStorageSource,
@@ -108,7 +109,6 @@ function RTDBApp() {
         authController,
         dataSourceDelegate: firestoreDelegate
     });
-
 
     if (firebaseConfigLoading || !firebaseApp || appCheckLoading) {
         return <>

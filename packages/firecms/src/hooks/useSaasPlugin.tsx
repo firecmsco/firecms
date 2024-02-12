@@ -5,7 +5,7 @@ import { FirestoreDelegate } from "@firecms/firebase";
 import { CollectionsConfigController } from "@firecms/collection_editor";
 import { FireCMSAppConfig } from "../types";
 
-export function useSaasPlugin({ projectConfig, firestoreDelegate, collectionConfigController, appConfig }: {
+export function useSaasPlugin({ projectConfig, firestoreDelegate, collectionConfigController, appConfig, collections }: {
     projectConfig: ProjectConfig;
     appConfig?: FireCMSAppConfig;
     firestoreDelegate: FirestoreDelegate
@@ -16,14 +16,9 @@ export function useSaasPlugin({ projectConfig, firestoreDelegate, collectionConf
     const hasOwnTextSearchImplementation = Boolean(appConfig?.textSearchControllerBuilder);
     return {
         name: "Saas plugin",
-        // homePage:{
-        //     additionalChildrenStart: (
-        //         <div>
-        //             <h2>Custom section</h2>
-        //             <p>This is a custom section added by the plugin</p>
-        //         </div>
-        //     ),
-        // },
+        homePage: {
+            additionalChildrenStart: collections !== undefined && collections.length === 0 ? <IntroWidget/> : undefined
+        },
         collectionView: {
             showTextSearchBar: ({ context, path, collection }) => {
                 if (collection.textSearchEnabled === false) {
@@ -53,4 +48,13 @@ export function useSaasPlugin({ projectConfig, firestoreDelegate, collectionConf
             }
         }
     }
+}
+
+export function IntroWidget() {
+    return (
+        <div>
+            <h2>Custom section</h2>
+            <p>This is a custom section added by the plugin</p>
+        </div>
+    );
 }
