@@ -112,7 +112,6 @@ export function StringNumberFilterField({
                         updateFilter(operation, val);
                     }}
                     endAdornment={internalValue && <IconButton
-                        className="absolute right-3 top-2"
                         onClick={(e) => updateFilter(operation, undefined)}>
                         <ClearIcon/>
                     </IconButton>}

@@ -198,7 +198,7 @@ function FilterForm<M>({
                            onHover,
                            createFilterField,
                            hidden,
-                           setHidden,
+                           setHidden
                        }: FilterFormProps<M>) {
 
     const id = column.key;
@@ -232,7 +232,13 @@ function FilterForm<M>({
 
     if (!filterField) return null;
     return (
-        <div className={"text-gray-900 dark:text-white"}>
+        <form noValidate={true}
+              onSubmit={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  submit();
+              }}
+              className={"text-gray-900 dark:text-white"}>
             <div
                 className={cn(defaultBorderMixin, "py-4 px-6 text-xs font-semibold uppercase border-b")}>
                 {column.title ?? id}
@@ -252,9 +258,9 @@ function FilterForm<M>({
                 <Button
                     variant="outlined"
                     color="primary"
-                    onClick={submit}>Filter</Button>
+                    type="submit">Filter</Button>
             </div>
-        </div>
+        </form>
     );
 
 }

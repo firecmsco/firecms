@@ -348,26 +348,6 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         }
     </div>;
 
-    // const form = entity && (
-    //     <div
-    //         className={`text-gray-900 dark:text-white overflow-auto rounded rounded-md bg-white dark:bg-gray-950 ${!open ? "hidden" : ""} cursor-grab max-w-[100vw]`}>
-    //         <Formex
-    //
-    //         >
-    //             {({
-    //                   values,
-    //                   setFieldValue,
-    //                   handleSubmit,
-    //                   isSubmitting
-    //               }: FormikProps<EntityValues<M>>) => {
-    //
-    //             }}
-    //         </Formex>
-    //
-    //
-    //     </div>
-    // );
-
     const draggable = (
         <div
             key={`draggable_${propertyKey as string}_${entityId}_${open}`}
