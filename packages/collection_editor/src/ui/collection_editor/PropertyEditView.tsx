@@ -255,6 +255,7 @@ export function PropertyFormDialog({
         fullWidth={true}
     >
         <form noValidate={true}
+              autoComplete={"off"}
               onSubmit={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
