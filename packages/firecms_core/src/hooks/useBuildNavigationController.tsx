@@ -9,7 +9,6 @@ import {
     EntityCollection,
     EntityCollectionsBuilder,
     EntityReference,
-    FireCMSPlugin,
     NavigationController,
     TopNavigationEntry,
     TopNavigationResult,
@@ -35,8 +34,15 @@ type BuildNavigationContextProps<EC extends EntityCollection, UserType extends U
     collections?: EC[] | EntityCollectionsBuilder<EC>;
     views?: CMSView[] | CMSViewsBuilder;
     userConfigPersistence?: UserConfigurationPersistence;
-    plugins?: FireCMSPlugin[];
-    dataSource: DataSourceDelegate;
+    dataSourceDelegate: DataSourceDelegate;
+    /**
+     * Use this method to inject collections to the CMS.
+     * You receive the current collections as a parameter, and you can return
+     * a new list of collections.
+     * @see {@link joinCollectionLists}
+     * @param collections
+     */
+    injectCollections?: (collections: EntityCollection[]) => EntityCollection[];
 };
 
 export function useBuildNavigationController<EC extends EntityCollection, UserType extends User>({
@@ -46,8 +52,8 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
                                                                                                      collections: baseCollections,
                                                                                                      views: baseViews,
                                                                                                      userConfigPersistence,
-                                                                                                     plugins,
-                                                                                                     dataSource
+                                                                                                     dataSourceDelegate,
+                                                                                                     injectCollections
                                                                                                  }: BuildNavigationContextProps<EC, UserType>): NavigationController {
 
     const location = useLocation();
@@ -119,8 +125,8 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
 
         try {
             const [resolvedCollections = [], resolvedViews = []] = await Promise.all([
-                    resolveCollections(baseCollections, authController, dataSource, plugins),
-                    resolveCMSViews(baseViews, authController, dataSource)
+                    resolveCollections(baseCollections, authController, dataSourceDelegate, injectCollections),
+                    resolveCMSViews(baseViews, authController, dataSourceDelegate)
                 ]
             );
 
@@ -134,7 +140,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
 
         setNavigationLoading(false);
         setInitialised(true);
-    }, [baseCollections, authController.user, authController.initialLoading, plugins, baseViews, computeTopNavigation]);
+    }, [baseCollections, authController.user, authController.initialLoading, baseViews, computeTopNavigation, injectCollections]);
 
     useEffect(() => {
         refreshNavigation();
@@ -277,8 +283,8 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         , [getCollectionFromIds]);
 
     return useMemo(() => ({
-        collections: collections ?? [],
-        views: views ?? [],
+        collections,
+        views,
         loading: !initialised || navigationLoading,
         navigationLoadingError,
         homeUrl,
@@ -332,7 +338,10 @@ function filterOutNotAllowedCollections(resolvedCollections: EntityCollection[],
         });
 }
 
-async function resolveCollections(collections: undefined | EntityCollection[] | EntityCollectionsBuilder<any>, authController: AuthController, dataSource: DataSourceDelegate, plugins?: FireCMSPlugin[]) {
+async function resolveCollections(collections: undefined | EntityCollection[] | EntityCollectionsBuilder<any>,
+                                  authController: AuthController,
+                                  dataSource: DataSourceDelegate,
+                                  injectCollections?: (collections: EntityCollection[]) => EntityCollection[]) {
     let resolvedCollections: EntityCollection[] = [];
     if (typeof collections === "function") {
         resolvedCollections = await collections({
@@ -346,13 +355,10 @@ async function resolveCollections(collections: undefined | EntityCollection[] | 
 
     resolvedCollections = filterOutNotAllowedCollections(resolvedCollections, authController);
 
-    if (plugins) {
-        plugins.forEach((plugin: FireCMSPlugin) => {
-            if (plugin.collections?.injectCollections) {
-                resolvedCollections = plugin.collections?.injectCollections(resolvedCollections ?? []);
-            }
-        });
+    if (injectCollections) {
+        resolvedCollections = injectCollections(resolvedCollections ?? []);
     }
+
     return resolvedCollections;
 }
 

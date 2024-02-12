@@ -15,7 +15,6 @@ import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerC
 import { useLocaleConfig } from "../internal/useLocaleConfig";
 import { CenteredView } from "@firecms/ui";
 import { DialogsProvider } from "../contexts/DialogsProvider";
-import { useBuildNavigationController } from "../internal/useBuildNavigationController";
 import { useBuildDataSource } from "../internal/useBuildDataSource";
 import { useBuildCustomizationController } from "../internal/useBuildCustomizationController";
 import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext";
@@ -50,24 +49,10 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
         propertyConfigs,
         entityViews,
         components,
-        baseCollectionPath,
-        basePath,
-        collections,
-        views
+        navigationController,
     } = props;
 
     useLocaleConfig(locale);
-
-    const navigationController = useBuildNavigationController({
-        basePath,
-        baseCollectionPath,
-        authController,
-        collections,
-        views,
-        userConfigPersistence,
-        dataSource: dataSourceDelegate,
-        plugins
-    });
 
     /**
      * Controller in charge of fetching and persisting data

@@ -103,6 +103,13 @@ function RTDBApp() {
         storageSource
     });
 
+    const navigationController = useBuildNavigationController({
+        collections: [productsCollection],
+        authController,
+        dataSourceDelegate: firestoreDelegate
+    });
+
+
     if (firebaseConfigLoading || !firebaseApp || appCheckLoading) {
         return <>
             <CircularProgressCenter/>
@@ -119,7 +126,7 @@ function RTDBApp() {
                 <ModeControllerProvider value={modeController}>
 
                     <FireCMS
-                        collections={[productsCollection]}
+                        navigationController={navigationController}
                         authController={authController}
                         userConfigPersistence={userConfigPersistence}
                         dataSourceDelegate={firestoreDelegate}

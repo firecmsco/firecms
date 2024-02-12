@@ -3,7 +3,7 @@ import { User } from "./user";
 import { AuthController } from "./auth";
 import { DataSourceDelegate } from "./datasource";
 import { EntityCollection, EntityCustomView } from "./collections";
-import { CMSView } from "./navigation";
+import { CMSView, NavigationController } from "./navigation";
 import { FireCMSContext } from "./firecms_context";
 import { PropertyConfig } from "./property_config";
 import { Locale } from "./locales";
@@ -67,19 +67,6 @@ export type FireCMSProps<UserType extends User, EC extends EntityCollection> = {
         loading: boolean;
     }) => React.ReactNode;
 
-    /**
-     * List of the mapped collections in the CMS.
-     * Each entry relates to a collection in the root database.
-     * Each of the navigation entries in this field
-     * generates an entry in the main menu.
-     */
-    collections?: EC[] | EntityCollectionsBuilder<EC>;
-
-    /**
-     * Custom additional views created by the developer, added to the main
-     * navigation
-     */
-    views?: CMSView[] | CMSViewsBuilder;
 
     /**
      * Record of custom form fields to be used in the CMS.
@@ -87,6 +74,12 @@ export type FireCMSProps<UserType extends User, EC extends EntityCollection> = {
      * the `propertyConfig` prop of a property in a collection.
      */
     propertyConfigs?: Record<string, PropertyConfig>;
+
+    /**
+     * This controller is in charge of the navigation of the CMS.
+     * It is in charge of resolving the collection and entity paths.
+     */
+    navigationController: NavigationController;
 
     /**
      * List of additional custom views for entities.
@@ -123,20 +116,6 @@ export type FireCMSProps<UserType extends User, EC extends EntityCollection> = {
      * Delegate for implementing your auth operations.
      */
     authController: AuthController<UserType>;
-
-    /**
-     * Path under the navigation routes of the CMS will be created. Defaults to `/`.
-     * Internally FireCMS uses `react-router` to create the routes, the base path is attached to the
-     * `BrowserRouter` component. If you are using FireCMS in a subpath of your website, you can use
-     * this prop to specify the base path.
-     */
-    basePath?: string;
-
-    /**
-     * Path under the collection routes of the CMS will be created.
-     * Defaults to `/c`.
-     */
-    baseCollectionPath?: string;
 
     /**
      * Use this controller to access the configuration that is stored locally,

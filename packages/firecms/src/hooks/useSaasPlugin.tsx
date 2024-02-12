@@ -1,4 +1,4 @@
-import { FireCMSPlugin } from "@firecms/core";
+import { EntityCollection, FireCMSPlugin } from "@firecms/core";
 import { ProjectConfig } from "./useBuildProjectConfig";
 import { TextSearchInfoDialog } from "../components/subscriptions/TextSearchInfoDialog";
 import { FirestoreDelegate } from "@firecms/firebase";
@@ -10,6 +10,7 @@ export function useSaasPlugin({ projectConfig, firestoreDelegate, collectionConf
     appConfig?: FireCMSAppConfig;
     firestoreDelegate: FirestoreDelegate
     collectionConfigController: CollectionsConfigController;
+    collections?: EntityCollection[];
 }): FireCMSPlugin {
 
     const hasOwnTextSearchImplementation = Boolean(appConfig?.textSearchControllerBuilder);

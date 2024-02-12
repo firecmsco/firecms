@@ -37,7 +37,7 @@ export const useBuildSideEntityController = (navigation: NavigationController,
             if (navigation.isUrlCollectionPath(location.pathname)) {
                 const newFlag = location.hash === `#${NEW_URL_HASH}`;
                 const entityOrCollectionPath = navigation.urlPathToDataPath(location.pathname);
-                const panelsFromUrl = buildSidePanelsFromUrl(entityOrCollectionPath, navigation.collections, newFlag);
+                const panelsFromUrl = buildSidePanelsFromUrl(entityOrCollectionPath, navigation.collections ?? [], newFlag);
                 for (let i = 0; i < panelsFromUrl.length; i++) {
                     const panel = panelsFromUrl[i];
                     setTimeout(() => {

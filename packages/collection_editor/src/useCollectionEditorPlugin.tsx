@@ -86,27 +86,12 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
      onAnalyticsEvent
  }: CollectionConfigControllerProps<EC, UserType>): FireCMSPlugin<any, any, PersistedCollection> {
 
-    const injectCollections = (baseCollections: EntityCollection[]) => {
 
-        const markAsEditable = (c: PersistedCollection) => {
-            makePropertiesEditable(c.properties as Properties);
-            c.subcollections?.forEach(markAsEditable);
-        };
-        const storedCollections = collectionConfigController.collections ?? [];
-        storedCollections.forEach(markAsEditable);
-
-        console.debug("Collections specified in code:", baseCollections);
-        console.debug("Collections stored in the backend", storedCollections);
-        const result = joinCollectionLists(baseCollections, storedCollections, [], modifyCollection);
-        console.debug("Collections after joining:", result);
-        return result;
-    };
 
     return {
         name: "Collection Editor",
         loading: collectionConfigController.loading,
         collections: {
-            injectCollections,
             CollectionActions: EditorCollectionAction
         },
         provider: {

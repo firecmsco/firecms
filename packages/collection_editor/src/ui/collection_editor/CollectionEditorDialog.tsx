@@ -610,12 +610,10 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             isNewCollection={isNewCollection}
                             reservedGroups={reservedGroups}
                             onPropertyError={(propertyKey, namespace, error) => {
-                                console.debug("!!!onPropertyError", { propertyKey, namespace, error })
                                 const current = removeUndefined({
                                     ...propertyErrorsRef.current,
                                     [getFullIdPath(propertyKey, namespace)]: removeUndefined(error, true)
                                 }, true);
-                                console.debug("aa!!!onPropertyError", { current })
                                 propertyErrorsRef.current = current;
                                 formController.validate();
                             }}

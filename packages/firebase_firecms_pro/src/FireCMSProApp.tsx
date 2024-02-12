@@ -4,34 +4,23 @@ import { BrowserRouter } from "react-router-dom";
 
 import {
     CircularProgressCenter,
-    CMSAnalyticsEvent,
-    CMSView,
-    CMSViewsBuilder,
-    DataSourceDelegate,
-    EntityCollection,
-    EntityCollectionsBuilder,
     FireCMS,
-    FireCMSPlugin,
-    Locale,
     ModeControllerProvider,
     NavigationRoutes,
     PropertyConfig,
     Scaffold,
     SideDialogs,
     SnackbarProvider,
-    StorageSource,
     useBrowserTitleAndIcon,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
-    UserConfigurationPersistence
+    useBuildNavigationController
 } from "@firecms/core";
 
-import { ComponentsRegistry, FireCMSProAppProps } from "./FireCMSProAppProps";
+import { FireCMSProAppProps } from "./FireCMSProAppProps";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import {
     FirebaseAuthController,
-    FirebaseSignInOption,
-    FirebaseSignInProvider,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
@@ -39,7 +28,6 @@ import {
     useInitializeAppCheck,
     useValidateAuthenticator
 } from "@firecms/firebase";
-import { FirebaseApp } from "firebase/app";
 import { CenteredView } from "@firecms/ui";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
@@ -166,6 +154,15 @@ export function FireCMSProApp({
         storageSource
     });
 
+    const navigationController = useBuildNavigationController({
+        collections,
+        views,
+        basePath,
+        baseCollectionPath,
+        authController,
+        dataSourceDelegate: firestoreDelegate
+    });
+
     if (firebaseConfigLoading || !firebaseApp || appCheckLoading) {
         return <>
             <CircularProgressCenter/>
@@ -182,17 +179,14 @@ export function FireCMSProApp({
                 <ModeControllerProvider value={modeController}>
 
                     <FireCMS
-                        collections={collections}
-                        views={views}
                         authController={authController}
+                        navigationController={navigationController}
                         userConfigPersistence={userConfigPersistence}
                         dateTimeFormat={dateTimeFormat}
                         dataSourceDelegate={firestoreDelegate}
                         storageSource={storageSource}
                         entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
                         locale={locale}
-                        basePath={basePath}
-                        baseCollectionPath={baseCollectionPath}
                         onAnalyticsEvent={onAnalyticsEvent}
                         plugins={plugins}
                         propertyConfigs={propertyConfigs}>

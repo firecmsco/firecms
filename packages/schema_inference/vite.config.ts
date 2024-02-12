@@ -14,7 +14,7 @@ export default defineConfig(() => ({
         minify: true,
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
-            name: "FireCMS",
+            name: "FireCMS schema inference",
             fileName: (format) => `index.${format}.js`
         },
         target: "esnext",
