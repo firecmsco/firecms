@@ -536,7 +536,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                 </Tabs>}
 
                 <form noValidate
-                      onSubmit={formController.submitForm}
+                      onSubmit={formController.handleSubmit}
                       className={cn(
                           isNewCollection ? "h-full" : "h-[calc(100%-48px)]",
                           "flex-grow flex flex-col relative")}>

@@ -32,27 +32,27 @@ import React from 'react';
 import { useCreateFormex } from 'formex-library';
 
 const MyForm = () => {
-  const formController = useCreateFormex({
-    initialValues: {
-      name: '',
-      email: '',
-    },
-    // Optionally add a validation function
-    // validation: values => {
-    //   const errors = {};
-    //   if (!values.name) errors.name = 'Name is required';
-    //   return errors;
-    // },
-    onSubmit: (values) => {
-      console.log('Form Submitted:', values);
-    },
-  });
+    const formController = useCreateFormex({
+        initialValues: {
+            name: '',
+            email: '',
+        },
+        // Optionally add a validation function
+        // validation: values => {
+        //   const errors = {};
+        //   if (!values.name) errors.name = 'Name is required';
+        //   return errors;
+        // },
+        onSubmit: (values) => {
+            console.log('Form Submitted:', values);
+        },
+    });
 
-  return (
-    <form onSubmit={formController.submitForm}>
-      {/* Field components go here */}
-    </form>
-  );
+    return (
+        <form onSubmit={formController.handleSubmit}>
+            {/* Field components go here */}
+        </form>
+    );
 };
 ```
 
@@ -89,8 +89,8 @@ import { Field } from 'formex-library';
 Wrap your form inputs and submit button within a form element and pass the `submitForm` method from your form controller to the form's `onSubmit` event:
 
 ```jsx
-<form onSubmit={formController.submitForm}>
-  {/* Fields and submit button */}
+<form onSubmit={formController.handleSubmit}>
+    {/* Fields and submit button */}
 </form>
 ```
 

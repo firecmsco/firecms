@@ -24,7 +24,7 @@ export interface FieldProps<T extends CMSType = any, CustomProps = any, M extend
     /**
      * Initial value of this field
      */
-    initialValue: T | undefined;
+    // initialValue: T | undefined;
 
     /**
      * Set value of field directly

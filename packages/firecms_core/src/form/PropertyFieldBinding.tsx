@@ -1,7 +1,7 @@
 import React, { ComponentType, ReactElement, useCallback, useRef } from "react";
 import equal from "react-fast-compare"
 
-import { FastField, Field, FieldProps as FormikFieldProps, getIn } from "formik";
+import { Field, FieldProps as FormexFieldProps, getIn } from "@firecms/formex";
 
 import {
     CMSType,
@@ -85,14 +85,14 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
 
     const shouldAlwaysRerender = shouldPropertyReRender(property, customizationController.plugins);
     // we use the standard Field for user defined fields, since it rebuilds
-    // when there are changes in other values, in contrast to FastField
-    const FieldComponent = shouldAlwaysRerender ? Field : FastField;
+    // when there are changes in other values, in contrast to Field
+    const FieldComponent = Field;
 
     return (
         <FieldComponent
             name={propertyKey}
         >
-            {(fieldProps: FormikFieldProps<T>) => {
+            {(fieldProps) => {
 
                 let Component: ComponentType<FieldProps<T>> | undefined;
                 const resolvedProperty: ResolvedProperty<T> | null = resolveProperty({
@@ -186,14 +186,14 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
      {
          Component: ComponentType<FieldProps<T, any, M>>,
          componentProps: ResolvedPropertyFieldBindingProps<T, M>,
-         fieldProps: FormikFieldProps<T>
+         fieldProps: FormexFieldProps<T, any>
      }) {
 
     const { plugins } = useCustomizationController();
 
     const customFieldProps: any = property.customProps;
     const value = fieldProps.field.value;
-    const initialValue = fieldProps.meta.initialValue;
+    // const initialValue = fieldProps.meta.initialValue;
     const error = getIn(fieldProps.form.errors, propertyKey);
     const touched = getIn(fieldProps.form.touched, propertyKey);
 
@@ -219,7 +219,7 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
     const cmsFieldProps: FieldProps<T, CustomProps, M> = {
         propertyKey,
         value: value as T,
-        initialValue,
+        // initialValue,
         setValue,
         setFieldValue,
         error,

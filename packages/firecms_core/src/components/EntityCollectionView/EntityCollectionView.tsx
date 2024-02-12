@@ -57,7 +57,7 @@ import {
     Tooltip,
     Typography
 } from "@firecms/ui";
-import { setIn } from "formik";
+import { setIn } from "@firecms/formex";
 import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common";
 import {
     OnCellValueChange,

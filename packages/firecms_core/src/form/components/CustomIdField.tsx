@@ -1,7 +1,6 @@
 import React, { useMemo } from "react";
 
-import { ErrorMessage } from "formik";
-
+// import { ErrorMessage } from "@firecms/formex";
 import { Entity, EntityStatus, EnumValueConfig, EnumValues } from "../../types";
 
 import { useClipboard, useSnackbarController } from "../../hooks";
@@ -14,11 +13,13 @@ import {
     Select,
     SelectItem,
     TextField,
-    Tooltip
+    Tooltip,
+    Typography
 } from "@firecms/ui";
 import { EnumValuesChip } from "../../preview";
 import { useCustomizationController } from "../../hooks/useCustomizationController";
 import { CustomizationController } from "../../types/customization_controller";
+import { useFormex } from "@firecms/formex";
 
 export function CustomIdField<M extends Record<string, any>>({
                                                                  customId,
@@ -38,6 +39,7 @@ export function CustomIdField<M extends Record<string, any>>({
     loading: boolean
 }) {
 
+    const { errors } = useFormex();
     const disabled = status === "existing" || !customId;
     const idSetAutomatically = status !== "existing" && !customId;
 
@@ -128,10 +130,10 @@ export function CustomIdField<M extends Record<string, any>>({
                                return onChange(value.length ? value : undefined);
                            }}/>}
 
-            <ErrorMessage name={"id"}
-                          component="div">
-                {(_) => "You need to specify an ID"}
-            </ErrorMessage>
+            {errors.id && <Typography variant={"caption"}
+                                      className={"ml-3.5 text-red-500 dark:text-red-500"}>
+                {errors.id}
+            </Typography>}
 
         </>
     );

@@ -258,7 +258,7 @@ export function PropertyFormDialog({
               onSubmit={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  formexRef.current?.submitForm(e)
+                  formexRef.current?.handleSubmit(e)
               }}>
             <DialogContent>
                 <PropertyForm {...formProps}

@@ -2,6 +2,7 @@ import React, { FormEvent } from "react";
 
 export type FormexController<T extends object> = {
     values: T;
+    initialValues: T;
     setValues: (values: T) => void;
     setFieldValue: (key: string, value: any, shouldValidate?: boolean) => void;
     touched: Record<string, boolean>;
@@ -13,15 +14,18 @@ export type FormexController<T extends object> = {
     setFieldError: (key: string, error?: string) => void;
     handleChange: (event: React.SyntheticEvent) => void,
     handleBlur: (event: React.FocusEvent) => void,
-    submitForm: (event?: FormEvent<HTMLFormElement>) => void;
+    handleSubmit: (event?: FormEvent<HTMLFormElement>) => void;
     validate: () => void;
     resetForm: (props?: FormexResetProps<T>) => void;
     submitCount: number;
     isSubmitting: boolean;
+    setSubmitting: (isSubmitting: boolean) => void;
+    isValidating: boolean;
 }
 
 export type FormexResetProps<T extends object> = {
     values?: T;
+    submitCount?: number;
     errors?: Record<string, string>;
     touched?: Record<string, boolean>;
 };

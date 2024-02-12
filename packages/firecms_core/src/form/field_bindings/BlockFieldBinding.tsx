@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { FastField, FieldProps as FormikFieldProps, useFormikContext } from "formik";
+import { Field, useFormex } from "@firecms/formex";
 
 import { FieldHelperText, FormikArrayContainer } from "../components";
 import { LabelWithIcon } from "../../components";
@@ -148,7 +148,7 @@ function BlockEntry({
     const type = value && value[typeField];
     const [typeInternal, setTypeInternal] = useState<string | undefined>(type ?? undefined);
 
-    const formikContext = useFormikContext();
+    const formex = useFormex();
 
     useEffect(() => {
         if (!type) {
@@ -188,20 +188,20 @@ function BlockEntry({
     const updateType = (newType: any) => {
         const newSelectedProperty = newType ? properties[newType] : undefined;
         setTypeInternal(newType);
-        formikContext.setFieldTouched(typeFieldName);
-        formikContext.setFieldValue(typeFieldName, newType);
-        formikContext.setFieldValue(valueFieldName, newSelectedProperty ? getDefaultValueFor(newSelectedProperty) : null);
+        formex.setFieldTouched(typeFieldName, true);
+        formex.setFieldValue(typeFieldName, newType);
+        formex.setFieldValue(valueFieldName, newSelectedProperty ? getDefaultValueFor(newSelectedProperty) : null);
     };
 
     return (
         <div className={cn(paperMixin, "bg-transparent p-4 my-4 py-8")}>
 
-            <FastField
-                required={true}
+            <Field
                 name={typeFieldName}
             >
-                {(fieldProps: FormikFieldProps) =>
-                    (
+                {(fieldProps) => {
+                    const value1 = fieldProps.field.value !== undefined && fieldProps.field.value !== null ? fieldProps.field.value as string : "";
+                    return (
                         <>
                             <Select
                                 className="mb-2"
@@ -209,7 +209,7 @@ function BlockEntry({
                                                          className={"px-4 py-2 font-medium"}>Type</Typography>}
                                 size={"small"}
                                 position={"item-aligned"}
-                                value={fieldProps.field.value !== undefined && fieldProps.field.value !== null ? fieldProps.field.value : ""}
+                                value={value1}
                                 renderValue={(enumKey: any) =>
                                     <EnumValuesChip
                                         enumKey={enumKey}
@@ -231,9 +231,10 @@ function BlockEntry({
                                 )}
                             </Select>
                         </>
-                    )
+                    );
                 }
-            </FastField>
+                }
+            </Field>
 
             {fieldProps && (
                 // It is important to use this key to force a re-render of the field on type change

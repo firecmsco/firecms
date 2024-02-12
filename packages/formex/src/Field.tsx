@@ -27,7 +27,7 @@ export type FieldValidator = (
     value: any
 ) => string | void | Promise<string | void>;
 
-export interface FieldConfig<V = any, C extends React.ElementType | undefined = undefined> {
+export interface FieldConfig<Value, C extends React.ElementType | undefined = undefined> {
 
     /**
      * Component to render. Can either be a string e.g. 'select', 'input', or 'textarea', or a component.
@@ -40,7 +40,7 @@ export interface FieldConfig<V = any, C extends React.ElementType | undefined = 
     /**
      * Children render function <Field name>{props => ...}</Field>)
      */
-    children?: ((props: FormexFieldProps<V>) => React.ReactNode) | React.ReactNode;
+    children?: ((props: FormexFieldProps<Value>) => React.ReactNode) | React.ReactNode;
 
     /**
      * Validate a single field value independently
@@ -120,7 +120,7 @@ export function Field<T, C extends React.ElementType | undefined = undefined>({
     return React.createElement(asElement, { ...field, ...props, className }, children);
 }
 
-const getFieldProps = (nameOrOptions: string | FieldConfig<any>, formex:FormexController<any>): FieldInputProps<any> => {
+const getFieldProps = (nameOrOptions: string | FieldConfig<any>, formex: FormexController<any>): FieldInputProps<any> => {
     const isAnObject = isObject(nameOrOptions);
     const name = isAnObject
         ? (nameOrOptions as FieldConfig<any>).name
