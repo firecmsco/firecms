@@ -27,6 +27,7 @@
   "author": "firecms.co",
   "license": "MIT",
   "dependencies": {
+    "esm": "^3.2.25",
     "@firecms/cli": "^3.0.0-beta.2-pre.4"
   },
   "devDependencies": {
