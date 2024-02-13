@@ -38,6 +38,6 @@
   },
   "packageManager": "yarn@4.1.0",
   "devDependencies": {
-    "lerna": "^7.4.2"
+    "lerna": "^8.1.2"
   }
 }
