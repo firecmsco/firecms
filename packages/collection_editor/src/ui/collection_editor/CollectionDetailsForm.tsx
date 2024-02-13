@@ -21,7 +21,7 @@ import {
 } from "@firecms/ui";
 
 import { FieldHelperView } from "./properties/FieldHelperView";
-import { useFormex, Field, getIn } from "@firecms/formex";
+import { Field, getIn, useFormex } from "@firecms/formex";
 
 export function CollectionDetailsForm({
                                           isNewCollection,
@@ -51,11 +51,6 @@ export function CollectionDetailsForm({
         isSubmitting,
         submitCount
     } = useFormex<EntityCollection>();
-
-    console.log({
-        touched,
-        errors,
-    })
 
     const [iconDialogOpen, setIconDialogOpen] = useState(false);
     const [advancedPanelExpanded, setAdvancedPanelExpanded] = useState(false);

@@ -33,7 +33,7 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
         collection?: EntityCollection | ResolvedEntityCollection
     }): Promise<boolean> => {
 
-        console.log("Init local search controller", path, collectionProp)
+        console.debug("Init local search controller", path, collectionProp)
 
         if (currentPath && path !== currentPath) {
             destroyListener(currentPath)

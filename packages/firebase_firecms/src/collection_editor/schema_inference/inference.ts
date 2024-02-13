@@ -12,7 +12,7 @@ import { FirebaseApp } from "firebase/app";
  * @param parentPathSegments
  */
 export async function getInferredEntityCollection(firebaseApp: FirebaseApp, collectionPath: string, isCollectionGroup: boolean, parentPathSegments?: string[]): Promise<Partial<EntityCollection>> {
-    console.log("Building schema for collection", collectionPath, parentPathSegments)
+    console.debug("Building schema for collection", collectionPath, parentPathSegments)
     const firestore = getFirestore(firebaseApp);
     const cleanPath = removeInitialAndTrailingSlashes(collectionPath);
     const docs = await getDocuments(firestore, cleanPath, isCollectionGroup, parentPathSegments);

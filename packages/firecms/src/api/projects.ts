@@ -137,22 +137,29 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
             headers["x-admin-authorization"] = `Bearer ${googleAccessToken}`;
         }
 
+        async function retry() {
+            // wait 2 seconds
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            console.debug("Retrying getRootCollections", retries);
+            return getRootCollections(projectId, googleAccessToken, retries - 1);
+        }
+
         return fetch(host + "/projects/" + projectId + "/firestore_root_collections",
             {
                 method: "GET",
                 headers
             })
             .then(async (res) => {
+                if (res.status >= 300) {
+                    return await retry();
+                }
                 const result = await handleApiResponse<string[]>(res, projectId);
                 rootCollectionsCache[projectId] = result;
                 return result;
             })
             .catch(async (error) => {
                 if (retries > 0) {
-                    console.log("Retrying getRootCollections", retries, error);
-                    // wait 2 seconds
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    return getRootCollections(projectId, googleAccessToken, retries - 1);
+                    return await retry();
                 } else {
                     throw error;
                 }
