@@ -52,6 +52,11 @@ export function CollectionDetailsForm({
         submitCount
     } = useFormex<EntityCollection>();
 
+    console.log({
+        touched,
+        errors,
+    })
+
     const [iconDialogOpen, setIconDialogOpen] = useState(false);
     const [advancedPanelExpanded, setAdvancedPanelExpanded] = useState(false);
 
@@ -70,7 +75,7 @@ export function CollectionDetailsForm({
 
         const singularNameTouched = getIn(touched, "singularName");
         if (!singularNameTouched && isNewCollection && name) {
-            setFieldValue("singularName", singular(name))
+            setFieldValue("singularName", singular(name));
         }
 
     };
@@ -107,6 +112,8 @@ export function CollectionDetailsForm({
             customIdValue = "optional";
         }
     }
+
+    const showErrors = submitCount > 0;
     return (
         <div className={"overflow-auto my-auto"}>
             <Container maxWidth={"4xl"} className={"flex flex-col gap-4 p-8 m-auto"}>
@@ -141,7 +148,7 @@ export function CollectionDetailsForm({
                             onChange={(e: any) => updateName(e.target.value)}
                             label={"Name"}
                             required
-                            error={touched.name && Boolean(errors.name)}/>
+                            error={showErrors && Boolean(errors.name)}/>
                         <FieldHelperView error={touched.name && Boolean(errors.name)}>
                             {touched.name && Boolean(errors.name) ? errors.name : "Name of in this collection, usually a plural name (e.g. Products)"}
                         </FieldHelperView>
@@ -153,7 +160,7 @@ export function CollectionDetailsForm({
                                label={"Path"}
                                disabled={!isNewCollection}
                                required
-                               error={touched.path && Boolean(errors.path)}/>
+                               error={showErrors && Boolean(errors.path)}/>
 
                         <FieldHelperView error={touched.path && Boolean(errors.path)}>
                             {touched.path && Boolean(errors.path)
@@ -165,7 +172,7 @@ export function CollectionDetailsForm({
 
                     {!isSubcollection && <div className={"col-span-12 sm:col-span-4 relative"}>
 
-                        <TextField error={touched.group && Boolean(errors.group)}
+                        <TextField error={showErrors && Boolean(errors.group)}
                                    disabled={isSubmitting}
                                    value={values.group ?? ""}
                                    autoComplete="off"
@@ -191,7 +198,7 @@ export function CollectionDetailsForm({
                             })}
                         </Autocomplete>
                         <FieldHelperView>
-                            {touched.group && Boolean(errors.group) ? errors.group : "Group of the collection"}
+                            {showErrors && Boolean(errors.group) ? errors.group : "Group of the collection"}
                         </FieldHelperView>
                     </div>}
 
@@ -215,7 +222,7 @@ export function CollectionDetailsForm({
                                            as={DebouncedTextField}
                                            disabled={!isNewCollection}
                                            label={"Collection id"}
-                                           error={touched.id && Boolean(errors.id)}/>
+                                           error={showErrors && Boolean(errors.id)}/>
                                     <FieldHelperView error={touched.id && Boolean(errors.id)}>
                                         {touched.id && Boolean(errors.id) ? errors.id : "This id identifies this collection"}
                                     </FieldHelperView>
@@ -223,7 +230,7 @@ export function CollectionDetailsForm({
 
                                 <div className={"col-span-12"}>
                                     <TextField
-                                        error={touched.singularName && Boolean(errors.singularName)}
+                                        error={showErrors && Boolean(errors.singularName)}
                                         id={"singularName"}
                                         aria-describedby={"singularName-helper"}
                                         onChange={(e) => {
@@ -232,13 +239,13 @@ export function CollectionDetailsForm({
                                         }}
                                         value={values.singularName ?? ""}
                                         label={"Singular name"}/>
-                                    <FieldHelperView error={touched.singularName && Boolean(errors.singularName)}>
-                                        {touched.singularName && Boolean(errors.singularName) ? errors.singularName : "Optionally define a singular name for your entities"}
+                                    <FieldHelperView error={showErrors && Boolean(errors.singularName)}>
+                                        {showErrors && Boolean(errors.singularName) ? errors.singularName : "Optionally define a singular name for your entities"}
                                     </FieldHelperView>
                                 </div>
                                 <div className={"col-span-12"}>
                                     <TextField
-                                        error={touched.description && Boolean(errors.description)}
+                                        error={showErrors && Boolean(errors.description)}
                                         id="description"
                                         value={values.description ?? ""}
                                         onChange={handleChange}
@@ -247,8 +254,8 @@ export function CollectionDetailsForm({
                                         aria-describedby="description-helper-text"
                                         label="Description"
                                     />
-                                    <FieldHelperView error={touched.description && Boolean(errors.description)}>
-                                        {touched.description && Boolean(errors.description) ? errors.description : "Description of the collection, you can use markdown"}
+                                    <FieldHelperView error={showErrors && Boolean(errors.description)}>
+                                        {showErrors && Boolean(errors.description) ? errors.description : "Description of the collection, you can use markdown"}
                                     </FieldHelperView>
                                 </div>
 

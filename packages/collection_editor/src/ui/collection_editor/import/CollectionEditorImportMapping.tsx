@@ -140,7 +140,7 @@ export function CollectionEditorImportMapping({
 
     return (
 
-        <div className={"overflow-auto my-auto bg-gray-50 dark:bg-gray-900"}>
+        <div className={"overflow-auto my-auto"}>
             <Container maxWidth={"6xl"} className={"flex flex-col gap-4 p-8 m-auto"}>
 
                 <Typography variant="h6" className={"mt-4"}>Data property mapping</Typography>

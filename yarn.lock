@@ -2814,6 +2814,7 @@ __metadata:
     react-router: "npm:^6.22.0"
     react-router-dom: "npm:^6.22.0"
     typescript: "npm:^5.3.3"
+    vite: "npm:^5.1.1"
   peerDependencies:
     algoliasearch: ^4.14.2
     react: ^18.2.0
@@ -2832,6 +2833,7 @@ __metadata:
     firebase: "npm:^10.8.0"
     firecms: "npm:^3.0.0-beta.2-pre.4"
     typescript: "npm:^5.3.3"
+    vite: "npm:^5.1.1"
   peerDependencies:
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -2856,6 +2858,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^4.6.0"
     react-fast-compare: "npm:^3.2.2"
     typescript: "npm:^5.3.3"
+    vite: "npm:^5.1.1"
   peerDependencies:
     firebase: ^10.7.1
     react: ^18.2.0
@@ -2870,6 +2873,7 @@ __metadata:
     "@firecms/core": "npm:^3.0.0-beta.2-pre.4"
     "@types/node": "npm:^20.11.16"
     typescript: "npm:^5.3.3"
+    vite: "npm:^5.1.1"
   languageName: unknown
   linkType: soft
 
@@ -10471,6 +10475,7 @@ __metadata:
     react-router: "npm:^6.22.0"
     react-router-dom: "npm:^6.22.0"
     typescript: "npm:^5.3.3"
+    vite: "npm:^5.1.1"
   peerDependencies:
     firebase: ^10.7.1
     react: ^18.2.0

@@ -106,7 +106,6 @@ export function useCreateFormex<T extends object>({ initialValues, initialErrors
     }
 
     const resetForm = (props?: FormexResetProps<T>) => {
-        console.log("resetForm", props);
         const {
             submitCount: submitCountProp,
             values: valuesProp,

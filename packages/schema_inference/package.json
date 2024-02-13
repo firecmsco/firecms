@@ -8,10 +8,11 @@
   "module": "./dist/index.es.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
-  "dependencies": {
+  "devDependencies": {
     "@firecms/core": "^3.0.0-beta.2-pre.4",
     "@types/node": "^20.11.16",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vite": "^5.1.1"
   },
   "files": [
     "dist",

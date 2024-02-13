@@ -118,6 +118,12 @@ export function useBuildCollectionsConfigController<EC extends PersistedCollecti
                                                                            parentCollectionIds
                                                                        }: SaveCollectionParams<M>): Promise<void> => {
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        if (!id)
+            throw Error("Trying to save a collection with no id");
+        if (!collectionData.path)
+            throw Error("Trying to save a collection with no path");
+        if (!collectionData.name)
+            throw Error("Trying to save a collection with no name");
         const cleanedCollection = prepareCollectionForPersistence(collectionData, propertyConfigsMap);
         const strippedPath = buildCollectionId(id, parentCollectionIds);
         const previousStrippedId = previousId ? buildCollectionId(previousId, parentCollectionIds) : undefined;
@@ -150,7 +156,7 @@ export function useBuildCollectionsConfigController<EC extends PersistedCollecti
         const previousStrippedPath = previousId ? buildCollectionId(previousId, parentCollectionIds) : undefined;
         const ref = doc(firestore, configPath, "collections", strippedPath);
 
-        console.debug("Saving collection", {
+        console.debug("Updating collection", {
             id,
             collectionData,
             previousId,

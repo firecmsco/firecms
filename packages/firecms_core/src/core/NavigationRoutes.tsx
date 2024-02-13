@@ -2,7 +2,7 @@ import React from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView } from "../types";
-import { DefaultHomePage, EntityCollectionView, NotFoundPage } from "../components";
+import { DefaultHomePage, EntityCollectionView, ErrorBoundary, NotFoundPage } from "../components";
 import { useNavigationController } from "../hooks";
 import { toArray } from "../util/arrays";
 
@@ -70,13 +70,15 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
                     return <Route path={urlPath + "/*"}
                                   key={`navigation_${collection.id ?? collection.path}`}
                                   element={
-                                      <EntityCollectionView
-                                          key={`collection_view_${collection.id ?? collection.path}`}
-                                          isSubCollection={false}
-                                          parentCollectionIds={[]}
-                                          fullPath={collection.id ?? collection.path}
-                                          {...collection}
-                                          Actions={toArray(collection.Actions)}/>
+                                      <ErrorBoundary>
+                                          <EntityCollectionView
+                                              key={`collection_view_${collection.id ?? collection.path}`}
+                                              isSubCollection={false}
+                                              parentCollectionIds={[]}
+                                              fullPath={collection.id ?? collection.path}
+                                              {...collection}
+                                              Actions={toArray(collection.Actions)}/>
+                                      </ErrorBoundary>
                                   }/>;
                 }
             );

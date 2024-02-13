@@ -261,6 +261,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     const importConfig = useImportConfig();
     const navigation = useNavigationController();
     const snackbarController = useSnackbarController();
+    console.log({ importConfig })
 
     // Use this ref to store which properties have errors
     const propertyErrorsRef = useRef({});
@@ -374,7 +375,6 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             if (!isNewCollection) {
                 saveCollection(newCollectionState).then(() => {
                     formexController.resetForm({ values: initialValues });
-                    // setNextMode();
                     handleClose(newCollectionState);
                 });
                 return;
@@ -482,7 +482,6 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     const resolvedPath = !pathError ? navigation.resolveAliasesFrom(updatedFullPath) : undefined;
     const getDataWithPath = resolvedPath && getData ? () => getData(resolvedPath, parentPaths ?? []) : undefined;
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
         setFormDirty(dirty);
     }, [dirty]);
@@ -552,9 +551,9 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                     {currentView === "welcome" &&
                         <CollectionEditorWelcomeView
                             path={path}
-                            onContinue={(data) => {
-                                if (data) {
-                                    onImportDataSet(data);
+                            onContinue={(importData) => {
+                                if (importData) {
+                                    onImportDataSet(importData);
                                     setCurrentView("import_data_mapping");
                                 } else {
                                     setCurrentView("details");
@@ -577,12 +576,13 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                     {currentView === "import_data_saving" && importConfig &&
                         <ImportSaveInProgress importConfig={importConfig}
                                               collection={values}
-                                              onImportSuccess={(importedCollection) => {
-                                                  handleClose(importedCollection);
+                                              onImportSuccess={async (importedCollection) => {
                                                   snackbarController.open({
                                                       type: "info",
                                                       message: "Data imported successfully"
                                                   });
+                                                  await saveCollection(values);
+                                                  handleClose(importedCollection);
                                               }}
                         />}
 
@@ -649,7 +649,6 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             <Button variant={"text"}
                                     type="button"
                                     onClick={() => {
-                                        saveCollection(values);
                                         setCurrentView("import_data_mapping");
                                     }}>
                                 <ArrowBackIcon/>
@@ -718,7 +717,6 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             color="primary"
                             type="submit"
                             loading={isSubmitting}
-                            // disabled={isSubmitting || !dirty}
                         >
                             Update collection
                         </LoadingButton>}
