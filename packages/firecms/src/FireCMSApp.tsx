@@ -463,23 +463,6 @@ function FireCMSAppAuthenticated({
                                                 message={`Upgrade to export more than ${DOCS_LIMIT} entities`}/>
     });
 
-    const collectionEditorPlugin = useCollectionEditorPlugin<PersistedCollection, User>({
-        collectionConfigController,
-        configPermissions,
-        reservedGroups: RESERVED_GROUPS,
-        modifyCollection: appConfig?.modifyCollection,
-        pathSuggestions: (path?) => {
-            if (!path)
-                return fireCMSBackend.projectsApi.getRootCollections(projectConfig.projectId);
-            return Promise.resolve([]);
-        },
-        getUser: (uid) => {
-            return userManagement.users.find(u => u.uid === uid) ?? null;
-        },
-        collectionInference: buildCollectionInference(firebaseApp),
-        getData: (path, parentPaths) => getFirestoreDataInPath(firebaseApp, path, parentPaths, 400),
-        onAnalyticsEvent
-    });
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({
         SubscriptionMessage: FireCMSDataEnhancementSubscriptionMessage,
@@ -527,12 +510,31 @@ function FireCMSAppAuthenticated({
             [appConfig?.modifyCollection, collectionConfigController.collections]),
     });
 
+    const introMode = navigationController.collections !== undefined && navigationController.collections.length === 0;
     const saasPlugin = useSaasPlugin({
         projectConfig,
         firestoreDelegate,
         collectionConfigController,
         appConfig,
-        collections: navigationController.collections
+        introMode
+    });
+
+    const collectionEditorPlugin = useCollectionEditorPlugin<PersistedCollection, User>({
+        collectionConfigController,
+        configPermissions,
+        introMode: introMode ? (projectConfig.creationType === "new" ? "new_project" : "existing_project") : undefined,
+        reservedGroups: RESERVED_GROUPS,
+        pathSuggestions: (path?) => {
+            if (!path)
+                return fireCMSBackend.projectsApi.getRootCollections(projectConfig.projectId);
+            return Promise.resolve([]);
+        },
+        getUser: (uid) => {
+            return userManagement.users.find(u => u.uid === uid) ?? null;
+        },
+        collectionInference: buildCollectionInference(firebaseApp),
+        getData: (path, parentPaths) => getFirestoreDataInPath(firebaseApp, path, parentPaths, 400),
+        onAnalyticsEvent
     });
 
     const plugins: FireCMSPlugin<any, any, any>[] = [importExportPlugin, collectionEditorPlugin, dataEnhancementPlugin, saasPlugin];

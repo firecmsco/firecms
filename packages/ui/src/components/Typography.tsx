@@ -89,7 +89,7 @@ export function Typography<C extends React.ElementType>(
         align !== "inherit" && `text-${align}`,
         gutterBottom && "mb-[0.35em]",
         noWrap && "truncate",
-        paragraph && "mb-4",
+        paragraph && "mb-3",
         className
     );
 

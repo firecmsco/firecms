@@ -1,9 +1,9 @@
 import { unslugify, useAuthController, useNavigationController } from "@firecms/core";
-import { AddIcon, Chip, Collapse, Typography, } from "@firecms/ui";
+import { AddIcon, Chip, CircularProgress, Collapse, Typography, } from "@firecms/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import React from "react";
 
-export function RootCollectionSuggestions() {
+export function RootCollectionSuggestions({ introMode }: { introMode?: "new_project" | "existing_project" }) {
 
     const authController = useAuthController();
     const navigationController = useNavigationController();
@@ -15,22 +15,27 @@ export function RootCollectionSuggestions() {
         }).createCollections
         : true;
 
-    const rootPathSuggestions = collectionEditorController.rootPathSuggestions ?? [];
+    const rootPathSuggestions = collectionEditorController.rootPathSuggestions;
 
-    const showSuggestions = rootPathSuggestions.length > 3 || ((navigationController.collections ?? []).length === 0 && rootPathSuggestions.length > 0);
+    const showSuggestions = (rootPathSuggestions ?? []).length > 3 || ((navigationController.collections ?? []).length === 0 && (rootPathSuggestions ?? []).length > 0);
+    const forceShowSuggestions = introMode === "existing_project";
     return <Collapse
-        in={showSuggestions}>
+        in={forceShowSuggestions || showSuggestions}>
 
         <div
             className={"flex flex-col gap-1 p-2 my-4"}>
 
-            <Typography variant={"body2"} color={"secondary"}>
+            {!introMode && <Typography variant={"body2"} color={"secondary"}>
                 Create a collection from your data:
-            </Typography>
+            </Typography>}
+
+            {introMode === "existing_project" && <Typography>
+                You will see your <b>database collections</b> here, a few seconds after project creation
+            </Typography>}
 
             <div
                 className={"flex flex-row gap-1 overflow-scroll no-scrollbar "}>
-                {rootPathSuggestions.map((path) => {
+                {(rootPathSuggestions ?? []).map((path) => {
                     return (
                         <div key={path}>
                             <Chip
@@ -50,6 +55,8 @@ export function RootCollectionSuggestions() {
                         </div>
                     );
                 })}
+                {rootPathSuggestions === undefined && <CircularProgress size={"small"}/>}
+                {rootPathSuggestions?.length === 0 && <Typography variant={"caption"}>No suggestions</Typography>}
             </div>
         </div>
     </Collapse>

@@ -1,24 +1,23 @@
-import { EntityCollection, FireCMSPlugin } from "@firecms/core";
+import { FireCMSPlugin } from "@firecms/core";
 import { ProjectConfig } from "./useBuildProjectConfig";
 import { TextSearchInfoDialog } from "../components/subscriptions/TextSearchInfoDialog";
 import { FirestoreDelegate } from "@firecms/firebase";
 import { CollectionsConfigController } from "@firecms/collection_editor";
 import { FireCMSAppConfig } from "../types";
+import { AddIcon, Button, Typography } from "@firecms/ui";
 
-export function useSaasPlugin({ projectConfig, firestoreDelegate, collectionConfigController, appConfig, collections }: {
+export function useSaasPlugin({ projectConfig, firestoreDelegate, collectionConfigController, appConfig, introMode }: {
     projectConfig: ProjectConfig;
     appConfig?: FireCMSAppConfig;
     firestoreDelegate: FirestoreDelegate
     collectionConfigController: CollectionsConfigController;
-    collections?: EntityCollection[];
+    introMode?: boolean;
 }): FireCMSPlugin {
 
     const hasOwnTextSearchImplementation = Boolean(appConfig?.textSearchControllerBuilder);
+    const newProject = projectConfig.creationType === "new";
     return {
         name: "Saas plugin",
-        homePage: {
-            additionalChildrenStart: collections !== undefined && collections.length === 0 ? <IntroWidget/> : undefined
-        },
         collectionView: {
             showTextSearchBar: ({ context, path, collection }) => {
                 if (collection.textSearchEnabled === false) {
@@ -50,11 +49,3 @@ export function useSaasPlugin({ projectConfig, firestoreDelegate, collectionConf
     }
 }
 
-export function IntroWidget() {
-    return (
-        <div>
-            <h2>Custom section</h2>
-            <p>This is a custom section added by the plugin</p>
-        </div>
-    );
-}

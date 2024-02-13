@@ -99,7 +99,7 @@ function collectionToCode(collection: EntityCollection): object {
         customId: collection.customId,
         initialFilter: collection.initialFilter,
         initialSort: collection.initialSort,
-        properties: Object.entries(collection.properties)
+        properties: Object.entries(collection.properties ?? {})
             .map(([key, value]) => ({
                 [key]: propertyCleanup(value)
             }))

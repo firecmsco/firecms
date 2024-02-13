@@ -94,6 +94,5 @@ function NavigationCircularCard({
                 </div>
             </ReactLink>
 
-
         </>);
 }
