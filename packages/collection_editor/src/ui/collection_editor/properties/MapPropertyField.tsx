@@ -25,19 +25,23 @@ export function MapPropertyField({ disabled, getData, allowDataInference, proper
     const [selectedPropertyNamespace, setSelectedPropertyNamespace] = useState<string | undefined>();
 
     const propertiesOrder = values.propertiesOrder ?? Object.keys(values.properties ?? {});
-    const onPropertyCreated = useCallback(({
-                                               id,
-                                               property
-                                           }: { id?: string, property: Property }) => {
+    const onPropertyCreated = ({
+                                   id,
+                                   property
+                               }: { id?: string, property: Property }) => {
         if (!id)
             throw Error();
         setFieldValue("properties", {
             ...(values.properties ?? {}),
             [id]: property
         }, false);
-        setFieldValue("propertiesOrder", [...propertiesOrder, id], false);
+
+        const currentPropertiesOrder = values.propertiesOrder ?? Object.keys(values.properties ?? {});
+        const newPropertiesOrder = currentPropertiesOrder.includes(id) ? currentPropertiesOrder : [...currentPropertiesOrder, id];
+        setFieldValue("propertiesOrder", newPropertiesOrder, false);
+
         setPropertyDialogOpen(false);
-    }, [values.properties, propertiesOrder]);
+    };
 
     const deleteProperty = useCallback((propertyKey?: string, namespace?: string) => {
         const fullId = propertyKey ? getFullId(propertyKey, namespace) : undefined;
@@ -60,15 +64,6 @@ export function MapPropertyField({ disabled, getData, allowDataInference, proper
     const selectedPropertyFullId = selectedPropertyKey ? getFullId(selectedPropertyKey, selectedPropertyNamespace) : undefined;
     const selectedProperty = selectedPropertyFullId ? getIn(values.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
 
-    const addChildButton = <Button
-        color="primary"
-        variant={"outlined"}
-        onClick={() => setPropertyDialogOpen(true)}
-        startIcon={<AddIcon/>}
-    >
-        Add property to {values.name ?? "this group"}
-    </Button>;
-
     const empty = !propertiesOrder || propertiesOrder.length < 1;
 
     const onPropertyMove = useCallback((propertiesOrder: string[], namespace?: string) => {
@@ -80,7 +75,14 @@ export function MapPropertyField({ disabled, getData, allowDataInference, proper
             <div className={"col-span-12"}>
                 <div className="flex justify-between items-end my-4">
                     <Typography variant={"subtitle2"}>Properties in this group</Typography>
-                    {addChildButton}
+                    <Button
+                        color="primary"
+                        variant={"outlined"}
+                        onClick={() => setPropertyDialogOpen(true)}
+                        startIcon={<AddIcon/>}
+                    >
+                        Add property to {values.name ?? "this group"}
+                    </Button>
                 </div>
                 <Paper className="p-2 pl-8">
                     <PropertyTree

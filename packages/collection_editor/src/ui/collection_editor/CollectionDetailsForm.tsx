@@ -96,16 +96,14 @@ export function CollectionDetailsForm({
     const isSubcollection = !!parentCollection;
 
     let customIdValue: "true" | "false" | "optional" | "code_defined" | undefined;
-    if (customIdValue) {
-        if (typeof values.customId === "object") {
-            customIdValue = "code_defined";
-        } else if (values.customId === true) {
-            customIdValue = "true";
-        } else if (values.customId === false) {
-            customIdValue = "false";
-        } else if (values.customId === "optional") {
-            customIdValue = "optional";
-        }
+    if (typeof values.customId === "object") {
+        customIdValue = "code_defined";
+    } else if (values.customId === true) {
+        customIdValue = "true";
+    } else if (values.customId === false) {
+        customIdValue = "false";
+    } else if (values.customId === "optional") {
+        customIdValue = "optional";
     }
 
     const showErrors = submitCount > 0;
@@ -226,7 +224,7 @@ export function CollectionDetailsForm({
                                 <div className={"col-span-12"}>
                                     <TextField
                                         error={showErrors && Boolean(errors.singularName)}
-                                        id={"singularName"}
+                                        name={"singularName"}
                                         aria-describedby={"singularName-helper"}
                                         onChange={(e) => {
                                             setFieldTouched("singularName", true);
@@ -241,7 +239,7 @@ export function CollectionDetailsForm({
                                 <div className={"col-span-12"}>
                                     <TextField
                                         error={showErrors && Boolean(errors.description)}
-                                        id="description"
+                                        name="description"
                                         value={values.description ?? ""}
                                         onChange={handleChange}
                                         multiline

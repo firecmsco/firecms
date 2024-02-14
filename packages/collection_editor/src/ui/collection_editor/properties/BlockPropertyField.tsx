@@ -23,19 +23,22 @@ export function BlockPropertyField({ disabled, getData, allowDataInference, prop
     const [selectedPropertyKey, setSelectedPropertyKey] = useState<string | undefined>();
     const [selectedPropertyNamespace, setSelectedPropertyNamespace] = useState<string | undefined>();
 
-    const onPropertyCreated = useCallback(({
-                                               id,
-                                               property
-                                           }: { id?: string, property: Property }) => {
+    const onPropertyChanged = ({
+                                   id,
+                                   property
+                               }: { id?: string, property: Property }) => {
         if (!id)
             throw Error();
+
         setFieldValue("oneOf.properties", {
             ...(values.oneOf?.properties ?? {}),
             [id]: property
         }, false);
-        setFieldValue("oneOf.propertiesOrder", [...(values.oneOf?.propertiesOrder ?? Object.keys(values.oneOf?.properties ?? {})), id], false);
+        const currentPropertiesOrder = values.oneOf?.propertiesOrder ?? Object.keys(values.oneOf?.properties ?? {});
+        const newPropertiesOrder = currentPropertiesOrder.includes(id) ? currentPropertiesOrder : [...currentPropertiesOrder, id];
+        setFieldValue("oneOf.propertiesOrder", newPropertiesOrder, false);
         setPropertyDialogOpen(false);
-    }, [values.oneOf?.properties, values.oneOf?.propertiesOrder]);
+    };
 
     const selectedPropertyFullId = selectedPropertyKey ? getFullId(selectedPropertyKey, selectedPropertyNamespace) : undefined;
     const selectedProperty = selectedPropertyFullId ? getIn(values.oneOf?.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
@@ -127,7 +130,7 @@ export function BlockPropertyField({ disabled, getData, allowDataInference, prop
                 existingProperty={Boolean(selectedPropertyKey)}
                 autoUpdateId={!selectedPropertyKey}
                 autoOpenTypeSelect={!selectedPropertyKey}
-                onPropertyChanged={onPropertyCreated}
+                onPropertyChanged={onPropertyChanged}
                 existingPropertyKeys={selectedPropertyKey ? undefined : values.oneOf?.propertiesOrder}
                 propertyConfigs={propertyConfigs}/>}
 

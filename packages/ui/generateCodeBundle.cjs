@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { EOL } = require("os");
 
 function readFilesRecursively(folderPath, outputFile, allowedExtensions, excludeFolder) {
     fs.readdir(folderPath, { withFileTypes: true }, (err, files) => {
@@ -26,14 +27,22 @@ function readFilesRecursively(folderPath, outputFile, allowedExtensions, exclude
                             console.error(err);
                             return;
                         }
+                        const formattedContent = JSON.stringify({ messages: [{ role: 'system', content }] }) + EOL;
+
                         if (!filePath.endsWith("index.d.ts"))
-                            fs.appendFileSync(outputFile, content);
+                        fs.appendFileSync(outputFile, formattedContent);
                         console.log(`Content of '${filePath}' written to '${outputFile}'`);
                     });
                 }
             }
         });
     });
+}
+
+// delete the output file if it exists
+const outputFile = process.argv[3];
+if (fs.existsSync(outputFile)) {
+    fs.unlinkSync(outputFile);
 }
 
 // Usage: node script.js <folderPath> <outputFilePath> <ext1> <ext2> <excludeFolder>

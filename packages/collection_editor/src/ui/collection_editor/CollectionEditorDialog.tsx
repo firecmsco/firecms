@@ -261,7 +261,6 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     const importConfig = useImportConfig();
     const navigation = useNavigationController();
     const snackbarController = useSnackbarController();
-    console.log({ importConfig })
 
     // Use this ref to store which properties have errors
     const propertyErrorsRef = useRef({});
