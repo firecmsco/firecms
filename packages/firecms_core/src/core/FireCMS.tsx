@@ -19,6 +19,7 @@ import { useBuildDataSource } from "../internal/useBuildDataSource";
 import { useBuildCustomizationController } from "../internal/useBuildCustomizationController";
 import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext";
 import { AnalyticsContext } from "../contexts/AnalyticsContext";
+import { useProjectLog } from "../hooks/useProjectLog";
 
 /**
  * If you are using independent components of the CMS
@@ -78,11 +79,13 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
         entityViews: entityViews ?? [],
         propertyConfigs: propertyConfigs ?? {},
         components
-    })
+    });
 
     const analyticsController = useMemo(() => ({
         onAnalyticsEvent
     }), []);
+
+    useProjectLog(authController);
 
     if (navigationController.navigationLoadingError) {
         return (
