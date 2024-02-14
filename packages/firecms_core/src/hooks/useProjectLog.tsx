@@ -6,7 +6,7 @@ export const DEFAULT_SERVER = "https://api-drplyi3b6q-ey.a.run.app";
 
 async function makeRequest(authController: AuthController) {
     const firebaseToken = await authController.getAuthToken();
-    return fetch(DEFAULT_SERVER_DEV + "/access_log",
+    return fetch(DEFAULT_SERVER + "/access_log",
         {
             // mode: "no-cors",
             method: "POST",
