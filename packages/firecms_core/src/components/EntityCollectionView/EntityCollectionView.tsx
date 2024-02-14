@@ -670,6 +670,7 @@ export const EntityCollectionView = React.memo(
             equal(a.isSubCollection, b.isSubCollection) &&
             equal(a.className, b.className) &&
             equal(a.properties, b.properties) &&
+            equal(a.propertiesOrder, b.propertiesOrder) &&
             equal(a.hideIdFromCollection, b.hideIdFromCollection) &&
             equal(a.inlineEditing, b.inlineEditing) &&
             equal(a.selectionEnabled, b.selectionEnabled) &&
