@@ -115,6 +115,7 @@ export const SelectableTable = React.memo<SelectableTableProps<any>>(
          onEntityClick,
          onColumnResize,
          hoverRow = true,
+         size,
          inlineEditing = false,
          tableController:
              {
@@ -145,7 +146,6 @@ export const SelectableTable = React.memo<SelectableTableProps<any>>(
      }: SelectableTableProps<M>) {
 
         const ref = useRef<HTMLDivElement>(null);
-        const [size, setSize] = React.useState<CollectionSize>("m");
 
         const [selectedCell, setSelectedCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
 
@@ -207,7 +207,7 @@ export const SelectableTable = React.memo<SelectableTableProps<any>>(
                     setPopupCell: setPopupCell as ((cell?: SelectedCellProps<M>) => void),
                     select,
                     onValueChange,
-                    size,
+                    size: size ?? "m",
                     selectedCell,
                 }}
             >
