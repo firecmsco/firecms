@@ -20,9 +20,9 @@ export function ManageYour() {
                 sequence={[
                     "Products",
                     1000,
-                    "Invoices",
+                    "Blogs",
                     1000,
-                    "Inventory",
+                    "Invoices",
                     1000,
                     "Podcasts",
                     1000,
@@ -30,9 +30,11 @@ export function ManageYour() {
                     1000,
                     "Recipes",
                     1000,
-                    "Blogs",
+                    "Travel agency",
                     1000,
                     "Events",
+                    1000,
+                    "Inventory",
                     1000,
                 ]}
                 wrapper="div"

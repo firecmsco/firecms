@@ -47,6 +47,8 @@ function FirebaseIntro() {
             </div>
 
             <div
+                data-aos="fade-up"
+                data-aos-delay="50"
                 className="max-w-5xl mx-auto text-center mb-12">
                 <h2 className="h1 mb-4 mt-4">
                     Much more than a CMS
