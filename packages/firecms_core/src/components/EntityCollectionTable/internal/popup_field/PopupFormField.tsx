@@ -224,7 +224,15 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     const formex = useCreateFormex<M>({
         initialValues: (entity?.values ?? {}) as EntityValues<M>,
         validation: (values) => {
-            return validationSchema?.validate(values)
+            return validationSchema?.validate(values, { abortEarly: false })
+                .then(() => ({}))
+                .catch((e) => {
+                    const errors: Record<string, string> = {};
+                    e.inner.forEach((error: any) => {
+                        errors[error.path] = error.message;
+                    });
+                    return errors;
+                });
         },
         validateOnInitialRender: true,
         onSubmit: (values, actions) => {
@@ -339,6 +347,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     }
     const form = <div
         className={`text-gray-900 dark:text-white overflow-auto rounded rounded-md bg-white dark:bg-gray-950 ${!open ? "hidden" : ""} cursor-grab max-w-[100vw]`}>
+
         {internalForm}
 
         {savingError &&
