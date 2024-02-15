@@ -8,8 +8,8 @@ description: Discover how FireCMS Collections can streamline your data organizat
 In FireCMS, **collections** represent groups of entities.
 
 You can find collections at the **top level** of the navigation tree (the
-entries displayed in the home page and the navigation drawer), or as **
-subcollections**
+entries displayed in the home page and the navigation drawer), or as 
+**subcollections**
 
 Collections in FireCMS can be defined in two ways:
 
@@ -25,7 +25,7 @@ programmatically, and you can use all the features of FireCMS.
 
 ### Defining your collections
 
-You can create your collections in the UI or using code.
+You can create your collections **in the UI or using code**.
 You can also mix both approaches, but keep in mind that collections defined in
 the UI will take precedence. For example, you might have an enum property with 2
 values defined in code, and one extra value defined in the UI. When merged,

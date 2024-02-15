@@ -45,6 +45,7 @@ module.exports = {
                 "@firecms/firebase": path.resolve(__dirname, "../packages/firebase_firecms/src"),
                 "@firecms/data_import_export": path.resolve(__dirname, "../packages/data_import_export/src"),
                 "@firecms/schema_inference": path.resolve(__dirname, "../packages/schema_inference/src"),
+                "@firecms/data_enhancement": path.resolve(__dirname, "../packages/data_enhancement/src"),
                 "@firecms/formex": path.resolve(__dirname, "../packages/formex/src"),
               },
             },

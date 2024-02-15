@@ -92,7 +92,7 @@ h6 {
 
     --ifm-toc-border-color: var(--ifm-border-color);
 
-    --ifm-paragraph-margin-bottom: 1.5rem;
+    --ifm-paragraph-margin-bottom: 1.0rem;
     --ifm-leading-desktop: 1.25;
     --ifm-leading: calc(var(--ifm-leading-desktop) * 1rem);
     /*--ifm-custom-navbar-background-color: rgba(255, 255, 255, 0.33);*/

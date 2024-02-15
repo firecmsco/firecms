@@ -30,6 +30,7 @@
     "@firecms/firebase": "link:../packages/firebase_firecms",
     "@firecms/neat": "0.1.5",
     "@firecms/schema_inference": "link:../packages/schema_inference",
+    "@firecms/data_enhancement": "link:../packages/data_enhancement",
     "@firecms/ui": "link:../packages/ui",
     "@firecms/formex": "link:../packages/formex",
     "@mdx-js/react": "^3.0.0",
