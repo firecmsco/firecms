@@ -25,7 +25,8 @@ module.exports = {
                 "collections/text_search",
                 "collections/dynamic_collections",
                 "collections/entity_views",
-                "collections/collection_groups"
+                "collections/collection_groups",
+                "collections/eject_collections"
             ]
         },
         {
