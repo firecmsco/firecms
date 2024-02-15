@@ -1,7 +1,7 @@
 import React from "react";
 import { FieldProps, Properties, ResolvedProperties } from "../../types";
 
-import { LabelWithIcon } from "../../components";
+import { ErrorBoundary, LabelWithIcon } from "../../components";
 import { getIconForProperty, isHidden, pick } from "../../util";
 import { FieldHelperText } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
@@ -70,8 +70,10 @@ export function MapFieldBinding<T extends Record<string, any>>({
                         };
                         return (
                             <div key={`map-${propertyKey}-${index}`}>
-                                <PropertyFieldBinding
-                                    {...fieldProps}/>
+                                <ErrorBoundary>
+                                    <PropertyFieldBinding
+                                        {...fieldProps}/>
+                                </ErrorBoundary>
                             </div>
                         );
                     }
@@ -90,10 +92,10 @@ export function MapFieldBinding<T extends Record<string, any>>({
     );
 
     return (
-        <>
+        <ErrorBoundary>
 
             {!tableMode && !partOfBlock && <ExpandablePanel initiallyExpanded={expanded}
-                                                            className={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2"}
+                                                            className={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2 bg-slate-50 bg-opacity-50 dark:bg-gray-900"}
                                                             title={title}>{mapFormView}</ExpandablePanel>}
 
             {(tableMode || partOfBlock) && mapFormView}
@@ -104,7 +106,7 @@ export function MapFieldBinding<T extends Record<string, any>>({
                              disabled={disabled}
                              property={property}/>
 
-        </>
+        </ErrorBoundary>
     );
 }
 

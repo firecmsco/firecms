@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CMSType, FieldProps, ResolvedProperty } from "../../types";
 import { FieldHelperText, FormikArrayContainer } from "../components";
-import { LabelWithIcon } from "../../components";
+import { ErrorBoundary, LabelWithIcon } from "../../components";
 import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../util";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
@@ -62,7 +62,9 @@ export function RepeatFieldBinding<T extends Array<any>>({
             partOfBlock: false,
             autoFocus: internalId === lastAddedId
         };
-        return <PropertyFieldBinding {...fieldProps}/>;
+        return <ErrorBoundary>
+            <PropertyFieldBinding {...fieldProps}/>
+        </ErrorBoundary>;
     };
 
     const arrayContainer = <FormikArrayContainer value={value}

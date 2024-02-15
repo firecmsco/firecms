@@ -26,7 +26,7 @@ export function RootCollectionSuggestions({ introMode }: { introMode?: "new_proj
             className={"flex flex-col gap-1 p-2 my-4"}>
 
             {!introMode && <Typography variant={"body2"} color={"secondary"}>
-                Create a collection from your data:
+                Create a collection <b>automatically</b> from your data:
             </Typography>}
 
             {introMode === "existing_project" && <Typography>

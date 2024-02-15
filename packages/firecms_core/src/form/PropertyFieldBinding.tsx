@@ -67,7 +67,7 @@ export const PropertyFieldBinding = React.memo(PropertyFieldBindingInternal, (a:
     return false;
 }) as typeof PropertyFieldBindingInternal;
 
-function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps = any, M extends Record<string, any> = Record<string, any>>
+function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Record<string, any> = Record<string, any>>
 ({
      propertyKey,
      property,
@@ -83,13 +83,8 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
 
     const customizationController = useCustomizationController();
 
-    const shouldAlwaysRerender = shouldPropertyReRender(property, customizationController.plugins);
-    // we use the standard Field for user defined fields, since it rebuilds
-    // when there are changes in other values, in contrast to Field
-    const FieldComponent = Field;
-
     return (
-        <FieldComponent
+        <Field
             name={propertyKey}
         >
             {(fieldProps) => {
@@ -155,7 +150,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
                     componentProps={componentProps}
                     fieldProps={fieldProps}/>;
             }}
-        </FieldComponent>
+        </Field>
     );
 
 }

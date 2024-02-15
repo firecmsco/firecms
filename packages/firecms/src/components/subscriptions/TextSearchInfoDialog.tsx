@@ -78,8 +78,9 @@ export function TextSearchInfoDialog({
                     </Typography>
 
                     <Typography variant={"caption"}>
-                        If you are using a paid plan, you are encouraged to use an external
-                        search engine such as Algolia or Elastic Search.
+                        For larger collections, you are encouraged to use an external
+                        search engine such as Algolia or Elastic Search, and assign a
+                        search delegate to your config.
                     </Typography>
                 </div>
 

@@ -537,7 +537,7 @@ function FireCMSAppAuthenticated({
         onAnalyticsEvent
     });
 
-    const plugins: FireCMSPlugin<any, any, any>[] = [importExportPlugin, collectionEditorPlugin, dataEnhancementPlugin, saasPlugin];
+    const plugins: FireCMSPlugin<any, any, any>[] = [importExportPlugin, collectionEditorPlugin, saasPlugin];
 
     return (
         <FireCMSBackEndProvider {...fireCMSBackend}>
