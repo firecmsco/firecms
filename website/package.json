@@ -31,6 +31,7 @@
     "@firecms/neat": "0.1.5",
     "@firecms/schema_inference": "link:../packages/schema_inference",
     "@firecms/ui": "link:../packages/ui",
+    "@firecms/formex": "link:../packages/formex",
     "@mdx-js/react": "^3.0.0",
     "aos": "^2.3.4",
     "autoprefixer": "^10.4.14",

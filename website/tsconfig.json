@@ -45,6 +45,9 @@
             ],
             "@firecms/schema_inference": [
                 "../packages/schema_inference"
+            ],
+            "@firecms/formex": [
+                "../packages/formex"
             ]
         }
     },
