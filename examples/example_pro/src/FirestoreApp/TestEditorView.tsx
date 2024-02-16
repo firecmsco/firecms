@@ -1,9 +1,10 @@
-import { Editor } from "novel";
+import { Container } from "@firecms/ui";
+import { TailwindEditor } from "@firecms/editor";
 
 export function TestEditorView() {
     return (
-        <Editor className={"bg-initial"}
-                onDebouncedUpdate={(value) => console.log(value)}
-        />
+        <Container >
+            <TailwindEditor/>
+        </Container>
     )
 }

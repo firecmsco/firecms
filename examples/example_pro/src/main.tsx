@@ -1,10 +1,13 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
 import "./index.css"
-import RTDBApp from "./RTDBApp/RTDBApp"
+import { BrowserRouter } from "react-router-dom"
+import App from "./FirestoreApp/App"
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
-        <RTDBApp/>
+        <BrowserRouter basename={"/"}>
+            <App/>
+        </BrowserRouter>
     </React.StrictMode>
 )

@@ -2,6 +2,7 @@ export * from "./icon_keys";
 export * from "./cool_icon_keys";
 export * from "./Icon";
 export * from "./GitHubIcon";
+export * from "./HandleIcon";
 export * from "./components/_10kIcon";
 export * from "./components/_10mpIcon";
 export * from "./components/_11mpIcon";

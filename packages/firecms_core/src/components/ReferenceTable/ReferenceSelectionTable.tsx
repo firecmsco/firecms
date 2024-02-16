@@ -266,7 +266,6 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
         forceFilter
     });
 
-
     const {
         textSearchLoading,
         textSearchInitialised,

@@ -11,6 +11,7 @@
     "packages/firebase_firecms",
     "packages/firebase_firecms_pro",
     "packages/firecms_cli",
+    "packages/editor",
     "packages/create_firecms_app",
     "packages/collection_editor",
     "packages/schema_inference",

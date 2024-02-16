@@ -121,7 +121,6 @@ function RTDBApp() {
     }
 
     return (
-        <BrowserRouter basename={"/"}>
             <SnackbarProvider>
                 <ModeControllerProvider value={modeController}>
 
@@ -172,7 +171,6 @@ function RTDBApp() {
                     </FireCMS>
                 </ModeControllerProvider>
             </SnackbarProvider>
-        </BrowserRouter>
     );
 }
 

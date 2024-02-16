@@ -1,6 +1,5 @@
 import React from "react";
 import { GoogleAuthProvider } from "firebase/auth";
-import { BrowserRouter } from "react-router-dom";
 
 import {
     CircularProgressCenter,
@@ -174,65 +173,63 @@ export function FireCMSProApp({
     }
 
     return (
-        <BrowserRouter basename={basePath}>
-            <SnackbarProvider>
-                <ModeControllerProvider value={modeController}>
+        <SnackbarProvider>
+            <ModeControllerProvider value={modeController}>
 
-                    <FireCMS
-                        authController={authController}
-                        navigationController={navigationController}
-                        userConfigPersistence={userConfigPersistence}
-                        dateTimeFormat={dateTimeFormat}
-                        dataSourceDelegate={firestoreDelegate}
-                        storageSource={storageSource}
-                        entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
-                        locale={locale}
-                        onAnalyticsEvent={onAnalyticsEvent}
-                        plugins={plugins}
-                        propertyConfigs={propertyConfigs}>
-                        {({
-                              context,
-                              loading
-                          }) => {
+                <FireCMS
+                    authController={authController}
+                    navigationController={navigationController}
+                    userConfigPersistence={userConfigPersistence}
+                    dateTimeFormat={dateTimeFormat}
+                    dataSourceDelegate={firestoreDelegate}
+                    storageSource={storageSource}
+                    entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
+                    locale={locale}
+                    onAnalyticsEvent={onAnalyticsEvent}
+                    plugins={plugins}
+                    propertyConfigs={propertyConfigs}>
+                    {({
+                          context,
+                          loading
+                      }) => {
 
-                            let component;
-                            if (loading || authLoading) {
-                                component = <CircularProgressCenter size={"large"}/>;
+                        let component;
+                        if (loading || authLoading) {
+                            component = <CircularProgressCenter size={"large"}/>;
+                        } else {
+                            const usedLogo = modeController.mode === "dark" && logoDark ? logoDark : logo;
+                            if (!canAccessMainView) {
+                                const LoginViewUsed = components?.LoginView ?? FirebaseLoginView;
+                                component = (
+                                    <LoginViewUsed
+                                        logo={usedLogo}
+                                        allowSkipLogin={allowSkipLogin}
+                                        signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
+                                        firebaseApp={firebaseApp}
+                                        authController={authController}
+                                        notAllowedError={notAllowedError}/>
+                                );
                             } else {
-                                const usedLogo = modeController.mode === "dark" && logoDark ? logoDark : logo;
-                                if (!canAccessMainView) {
-                                    const LoginViewUsed = components?.LoginView ?? FirebaseLoginView;
-                                    component = (
-                                        <LoginViewUsed
-                                            logo={usedLogo}
-                                            allowSkipLogin={allowSkipLogin}
-                                            signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
-                                            firebaseApp={firebaseApp}
-                                            authController={authController}
-                                            notAllowedError={notAllowedError}/>
-                                    );
-                                } else {
-                                    component = (
-                                        <Scaffold
-                                            name={name}
-                                            logo={usedLogo}
-                                            fireCMSAppBarProps={{
-                                                endAdornment: toolbarExtraWidget
-                                            }}
-                                            autoOpenDrawer={autoOpenDrawer}>
-                                            <NavigationRoutes
-                                                HomePage={components?.HomePage}/>
-                                            <SideDialogs/>
-                                        </Scaffold>
-                                    );
-                                }
+                                component = (
+                                    <Scaffold
+                                        name={name}
+                                        logo={usedLogo}
+                                        fireCMSAppBarProps={{
+                                            endAdornment: toolbarExtraWidget
+                                        }}
+                                        autoOpenDrawer={autoOpenDrawer}>
+                                        <NavigationRoutes
+                                            HomePage={components?.HomePage}/>
+                                        <SideDialogs/>
+                                    </Scaffold>
+                                );
                             }
+                        }
 
-                            return component;
-                        }}
-                    </FireCMS>
-                </ModeControllerProvider>
-            </SnackbarProvider>
-        </BrowserRouter>
+                        return component;
+                    }}
+                </FireCMS>
+            </ModeControllerProvider>
+        </SnackbarProvider>
     );
 }

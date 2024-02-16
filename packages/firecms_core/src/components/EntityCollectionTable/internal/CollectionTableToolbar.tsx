@@ -8,7 +8,8 @@ import {
     FilterListOffIcon,
     SearchBar,
     Select,
-    SelectItem
+    SelectItem,
+    Tooltip
 } from "@firecms/ui";
 import { CollectionSize } from "../../../types";
 import { useLargeLayout } from "../../../hooks";
@@ -54,19 +55,21 @@ export function CollectionTableToolbar(props: CollectionTableToolbarProps) {
         </Button>;
 
     const sizeSelect = (
-        <Select
-            value={props.size as string}
-            className="w-16 h-10"
-            size={"small"}
-            onValueChange={(v) => props.onSizeChanged(v as CollectionSize)}
-            renderValue={(v) => <div className={"font-medium"}>{v.toUpperCase()}</div>}
-        >
-            {["xs", "s", "m", "l", "xl"].map((size) => (
-                <SelectItem key={size} value={size} className={"w-12 font-medium text-center"}>
-                    {size.toUpperCase()}
-                </SelectItem>
-            ))}
-        </Select>
+        <Tooltip title={"Table row size"} side={"right"} sideOffset={4}>
+            <Select
+                value={props.size as string}
+                className="w-16 h-10"
+                size={"small"}
+                onValueChange={(v) => props.onSizeChanged(v as CollectionSize)}
+                renderValue={(v) => <div className={"font-medium"}>{v.toUpperCase()}</div>}
+            >
+                {["xs", "s", "m", "l", "xl"].map((size) => (
+                    <SelectItem key={size} value={size} className={"w-12 font-medium text-center"}>
+                        {size.toUpperCase()}
+                    </SelectItem>
+                ))}
+            </Select>
+        </Tooltip>
     );
 
     return (

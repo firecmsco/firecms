@@ -18,6 +18,7 @@
     "packages/schema_inference",
     "packages/data_enhancement",
     "packages/formex",
+    "packages/editor",
     "examples/example_v3",
     "examples/example_pro"
   ],

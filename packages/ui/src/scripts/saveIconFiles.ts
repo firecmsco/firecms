@@ -18,7 +18,7 @@ export function saveIconFiles(iconKeys: string[]) {
     fs.mkdirSync(path.join(__dirname, "../icons/components"), { recursive: true });
 
 // create empty index file
-    fs.writeFileSync(path.join(__dirname, "../icons/index.ts"), "export * from \"./icon_keys\";\nexport * from \"./cool_icon_keys\";\nexport * from \"./Icon\";\nexport * from \"./GitHubIcon\";\n");
+    fs.writeFileSync(path.join(__dirname, "../icons/index.ts"), "export * from \"./icon_keys\";\nexport * from \"./cool_icon_keys\";\nexport * from \"./Icon\";\nexport * from \"./GitHubIcon\";\nexport * from \"./HandleIcon\";\n");
 
 // for each key, generate a file with an Icon ts component
     iconKeys.forEach((key: string) => {

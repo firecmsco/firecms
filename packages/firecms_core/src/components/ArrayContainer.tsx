@@ -7,7 +7,7 @@ import {
     AddIcon,
     Button,
     ContentCopyIcon,
-    fieldBackgroundHoverMixin,
+    fieldBackgroundHoverMixin, HandleIcon,
     IconButton,
     Menu,
     MenuItem,
@@ -253,6 +253,7 @@ export function ArrayContainerItem({
     </div>;
 }
 
+
 export function ArrayItemOptions({
                                      direction,
                                      disabled,
@@ -291,14 +292,7 @@ export function ArrayItemOptions({
                     setMenuOpen(false);
                 }}
                 className={`cursor-${disabled ? "inherit" : "grab"}`}>
-                <svg width="24" height="24" viewBox="0 0 100 100" fill="none">
-                    <circle cx="28" cy="50" r="9" fill={"currentColor"}/>
-                    <circle cx="28" cy="21" r="9" fill={"currentColor"}/>
-                    <circle cx="71" cy="21" r="9" fill={"currentColor"}/>
-                    <circle cx="71" cy="50" r="9" fill={"currentColor"}/>
-                    <circle cx="71" cy="78" r="9" fill={"currentColor"}/>
-                    <circle cx="28" cy="78" r="9" fill={"currentColor"}/>
-                </svg>
+                <HandleIcon/>
             </IconButton>
 
             <Menu
