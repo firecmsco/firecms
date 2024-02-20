@@ -171,12 +171,14 @@ function StyledDrawer(props: {
 
     const navigation = useNavigationController();
 
+    console.log("StyledDrawer", props.open)
+
     const width = !props.displayed ? 0 : (props.open ? DRAWER_WIDTH : 72);
     const innerDrawer = <div
         className={"relative h-full no-scrollbar overflow-y-auto overflow-x-hidden"}
         style={{
             width,
-            transition: "left 150ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, opacity 150ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, width 150ms cubic-bezier(0.4, 0, 0.6, 1) 0ms"
+            transition: "left 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, opacity 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, width 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms"
         }}
     >
 
@@ -201,8 +203,8 @@ function StyledDrawer(props: {
         <div className={"flex flex-col h-full"}>
             <div
                 style={{
-                    transition: "padding 150ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
-                    padding: props.open ? "32px 96px 0px 24px" : "72px 16px 0px"
+                    transition: "padding 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
+                    padding: props.open ? "32px 144px 0px 24px" : "72px 16px 0px"
                 }}
                 className={cn("cursor-pointer")}>
 
@@ -215,7 +217,7 @@ function StyledDrawer(props: {
                             ? <img src={props.logo}
                                    alt="Logo"
                                    className={cn("max-w-full max-h-full",
-                                       props.open ?? "w-[160px] h-[160px]")}/>
+                                       props.open ?? "w-[112px] h-[112px]")}/>
                             : <FireCMSLogo/>}
 
                     </Link>
@@ -259,7 +261,7 @@ function StyledDrawer(props: {
             onMouseLeave={props.onMouseLeave}
             style={{
                 width,
-                transition: "left 150ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, opacity 150ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, width 150ms cubic-bezier(0.4, 0, 0.6, 1) 0ms"
+                transition: "left 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, opacity 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, width 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms"
             }}>
 
             {innerDrawer}

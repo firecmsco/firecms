@@ -1,6 +1,6 @@
 import React from "react";
 
-export function useDebounce<T>(value: T, callback: () => void, immediate: boolean, timeoutMs = 300) {
+export function useDebouncedCallback<T>(value: T, callback: () => void, immediate: boolean, timeoutMs = 300) {
 
     const pendingUpdate = React.useRef(false);
     const performUpdate = () => {

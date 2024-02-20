@@ -45,12 +45,12 @@ export function Drawer({
     const ungroupedNavigationViews = Object.values(navigationEntries).filter(e => !e.group);
 
     const buildGroupHeader = useCallback((group?: string) => {
-        if (!drawerOpen) return <div className="h-4"/>;
+        if (!drawerOpen) return <div className="h-12 w-full"/>;
         return <div
             className="pt-8 pl-6 pr-8 pb-2 flex flex-row items-center">
             <Typography variant={"caption"}
                         color={"secondary"}
-                        className="font-medium flex-grow">
+                        className="font-medium flex-grow line-clamp-1">
                 {group ? group.toUpperCase() : "Views".toUpperCase()}
             </Typography>
 
@@ -128,12 +128,18 @@ export function DrawerNavigationItem({
 
     const listItem = <NavLink
         onClick={onClick}
+        style={{
+            width: !drawerOpen ? "72px" : "280px",
+            transition: drawerOpen ? "width 150ms ease-in" : undefined
+        }}
         className={({ isActive }: any) => cn("rounded-r-xl truncate",
-            "hover:bg-gray-200 hover:bg-opacity-75 dark:hover:bg-gray-700 dark:hover:bg-opacity-75 text-gray-800 dark:text-gray-200 hover:text-gray-900 hover:dark:text-gray-100",
-            "flex flex-row items-center w-full mr-8",
+            "hover:bg-slate-300 hover:bg-opacity-75 dark:hover:bg-gray-700 dark:hover:bg-opacity-75 text-gray-800 dark:text-gray-200 hover:text-gray-900 hover:dark:text-gray-100",
+            "flex flex-row items-center mr-8",
+            // "transition-all ease-in-out delay-100 duration-300",
+            // drawerOpen ? "w-full" : "w-18",
             drawerOpen ? "pl-8 h-12" : "pl-6 h-11",
             "font-medium text-sm",
-            isActive ? "bg-gray-100 dark:bg-gray-800" : ""
+            isActive ? "bg-slate-200 bg-opacity-75 dark:bg-gray-800" : ""
         )}
         to={url}
     >
@@ -149,14 +155,10 @@ export function DrawerNavigationItem({
         </div>
     </NavLink>;
 
-    // return listItem;
-    if (drawerOpen)
-        return listItem;
-    else
-        return <Tooltip
-            open={tooltipsOpen}
-            side="right"
-            title={name}>
-            {listItem}
-        </Tooltip>;
+    return <Tooltip
+        open={drawerOpen ? false : tooltipsOpen}
+        side="right"
+        title={name}>
+        {listItem}
+    </Tooltip>;
 }

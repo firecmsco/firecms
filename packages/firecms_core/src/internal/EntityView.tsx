@@ -16,7 +16,7 @@ import {
     removeInitialAndTrailingSlashes,
     resolveDefaultSelectedView,
     resolveEntityView,
-    useDebounce
+    useDebouncedCallback
 } from "../util";
 
 import {
@@ -79,7 +79,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
      * We use this only when autoSave is enabled.
      */
     const [valuesToBeSaved, setValuesToBeSaved] = useState<EntityValues<M> | undefined>(undefined);
-    useDebounce(valuesToBeSaved, () => {
+    useDebouncedCallback(valuesToBeSaved, () => {
         if (valuesToBeSaved)
             saveEntity({
                 entityId: usedEntity?.id,

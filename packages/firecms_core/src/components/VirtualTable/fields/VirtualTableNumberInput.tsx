@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useDebounce } from "../../../util";
+import { useDebouncedCallback } from "../../../util";
 
 export function VirtualTableNumberInput(props: {
     error: Error | undefined;
@@ -42,7 +42,7 @@ export function VirtualTableNumberInput(props: {
 
     }, [internalValue, value]);
 
-    useDebounce(internalValue, doUpdate, !focused, 2000);
+    useDebouncedCallback(internalValue, doUpdate, !focused, 2000);
 
     useEffect(
         () => {

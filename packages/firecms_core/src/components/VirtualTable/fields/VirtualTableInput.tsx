@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { useDebounce } from "../../../util";
+import { useDebouncedCallback } from "../../../util";
 import { TextareaAutosize } from "@firecms/ui";
 
 export function VirtualTableInput(props: {
@@ -43,7 +43,7 @@ export function VirtualTableInput(props: {
         }
     }, [internalValue, updateValue, value]);
 
-    useDebounce(internalValue, doUpdate, !focused, 2000);
+    useDebouncedCallback(internalValue, doUpdate, !focused, 2000);
 
     useEffect(() => {
         if (ref.current && focused && !focusedState.current) {
