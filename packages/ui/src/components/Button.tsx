@@ -1,7 +1,7 @@
 import React from "react";
 
-import { focusedMixin } from "../styles";
-import { cn } from "../util";
+import {focusedMixin} from "../styles";
+import {cn} from "../util";
 
 export type ButtonProps<P extends React.ElementType> =
     Omit<(P extends "button" ? React.ButtonHTMLAttributes<HTMLButtonElement> : React.ComponentProps<P>), "onClick">
@@ -17,7 +17,7 @@ export type ButtonProps<P extends React.ElementType> =
 };
 
 const ButtonInner = React.forwardRef<
-    ButtonProps<React.ElementType>
+    ButtonProps<React.ElementType<any>>
 >(({
        children,
        className,
@@ -102,4 +102,4 @@ const ButtonInner = React.forwardRef<
 
 ButtonInner.displayName = "Button"
 
-export const Button = ButtonInner as React.FC<ButtonProps<"button">>;
+export const Button = ButtonInner as React.FC<ButtonProps<any>>;
