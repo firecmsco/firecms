@@ -11,7 +11,7 @@ export function DefaultSubscriptionMessage({ projectId }: SubscriptionMessagePro
                 the plugin</Typography>
             <Button
                 href={`https://app.firecms.co/subscriptions?projectId=${projectId}`}
-                color={"warning"}
+                color={"primary"}
                 component={"a"}
                 rel="noopener noreferrer"
                 target="_blank">

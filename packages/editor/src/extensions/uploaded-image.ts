@@ -1,7 +1,7 @@
 import Image from "@tiptap/extension-image";
 
-const UpdatedImage = Image.extend({
-  name: "updated-image",
+const UploadedImage = Image.extend({
+  name: "uploaded-image",
   addAttributes() {
     return {
       ...this.parent?.(),
@@ -15,4 +15,4 @@ const UpdatedImage = Image.extend({
   },
 });
 
-export default UpdatedImage;
+export default UploadedImage;

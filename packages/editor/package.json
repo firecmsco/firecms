@@ -1,7 +1,7 @@
 {
   "name": "@firecms/editor",
   "version": "3.0.0-beta.2-pre.5",
-  "description": "Notion-style WYSIWYG editor with AI-powered autocompletions",
+  "description": "Notion-style WYSIWYG editor for FireCMS",
   "license": "Apache-2.0",
   "type": "module",
   "main": "dist/index.cjs",
@@ -32,7 +32,6 @@
     "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
   },
-  "sideEffects": false,
   "peerDependencies": {
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
@@ -69,22 +68,5 @@
     "@types/react-dom": "18.2.19",
     "typescript": "^5.3.3",
     "vite": "^5.1.1"
-  },
-  "author": "Steven Tey <stevensteel97@gmail.com>",
-  "homepage": "https://novel.sh",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/steven-tey/novel.git"
-  },
-  "bugs": {
-    "url": "https://github.com/steven-tey/novel/issues"
-  },
-  "keywords": [
-    "ai",
-    "novel",
-    "editor",
-    "markdown",
-    "nextjs",
-    "react"
-  ]
+  }
 }

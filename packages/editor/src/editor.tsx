@@ -1,18 +1,15 @@
 "use client";
-import React, { useDeferredValue, useEffect, useState } from "react";
-// import { useDebouncedCallback } from "use-debounce";
+import React, { useState } from "react";
 import {
-    defaultEditorProps,
-    type Editor,
     EditorBubble,
     EditorCommand,
     EditorCommandEmpty,
     EditorCommandItem,
     EditorContent,
     EditorRoot,
-    type JSONContent,
+    type JSONContent
 } from "./components";
-import { ImageResizer } from "./extensions";
+import { Command, createSuggestionItems, ImageResizer, renderItems } from "./extensions";
 import { defaultExtensions } from "./editor_extensions";
 // import { Separator } from "./ui/separator";
 import { NodeSelector } from "./selectors/node-selector";
@@ -20,61 +17,263 @@ import { LinkSelector } from "./selectors/link-selector";
 import { ColorSelector } from "./selectors/color-selector";
 
 import { TextButtons } from "./selectors/text-buttons";
-import { slashCommand, suggestionItems } from "./slash-command";
-import { defaultEditorContent } from "./content";
-import { cn, defaultBorderMixin, useInjectStyles } from "@firecms/ui";
+import {
+    CheckBoxIcon,
+    cn,
+    CodeIcon,
+    defaultBorderMixin,
+    FormatListBulletedIcon,
+    FormatListNumberedIcon,
+    FormatQuoteIcon,
+    ImageIcon,
+    Looks3Icon,
+    LooksOneIcon,
+    LooksTwoIcon,
+    TextFieldsIcon,
+    useInjectStyles
+} from "@firecms/ui";
+import { startImageUpload } from "./plugins";
+import { Editor, EditorProviderProps } from "@tiptap/react";
+import { useDebouncedCallback } from "./utils/useDebouncedCallback";
+import { removeClassesFromJson } from "./utils/remove_classes";
 
-const extensions = [...defaultExtensions, slashCommand];
+export type FireCMSEditorProps = {
+    initialContent?: JSONContent | string,
+    onMarkdownContentChange?: (content:string) => void,
+    onJsonContentChange?: (content: JSONContent | null) => void,
+    onHtmlContentChange?: (content: string) => void,
+    handleImageUpload: (file: File) => Promise<string | ArrayBuffer> | string | ArrayBuffer
+};
 
-export const TailwindEditor = () => {
-    const [initialContent, setInitialContent] = useState<null | JSONContent>(
-        null,
-    );
-    // const [saveStatus, setSaveStatus] = useState("Saved");
+export const FireCMSEditor = ({
+                                  handleImageUpload,
+                                  initialContent,
+                                  onJsonContentChange,
+                                  onHtmlContentChange,
+                                  onMarkdownContentChange
+                              }: FireCMSEditorProps) => {
 
+    const defaultEditorProps: EditorProviderProps["editorProps"] = {
+        handleDOMEvents: {
+            keydown: (_view, event) => {
+                // prevent default event listeners from firing when slash command is active
+                if (["ArrowUp", "ArrowDown", "Enter"].includes(event.key)) {
+                    const slashCommand = document.querySelector("#slash-command");
+                    if (slashCommand) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        },
+        handlePaste: (view, event) => {
+            if (event.clipboardData && event.clipboardData.files && event.clipboardData.files[0]) {
+                event.preventDefault();
+                const file = event.clipboardData.files[0];
+                const pos = view.state.selection.from;
+
+                startImageUpload({ file, view, pos, handleImageUpload });
+                return true;
+            }
+            return false;
+        },
+        handleDrop: (view, event, _slice, moved) => {
+            if (!moved && event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0]) {
+                event.preventDefault();
+                const file = event.dataTransfer.files[0];
+                const coordinates = view.posAtCoords({
+                    left: event.clientX,
+                    top: event.clientY
+                });
+                // here we deduct 1 from the pos or else the image will create an extra node
+                startImageUpload({
+                    file,
+                    view,
+                    pos: coordinates?.pos || 0 - 1,
+                    handleImageUpload
+                });
+                return true;
+            }
+            return false;
+        }
+    };
+
+    const suggestionItems = createSuggestionItems([
+        {
+            title: "Text",
+            description: "Just start typing with plain text.",
+            searchTerms: ["p", "paragraph"],
+            icon: <TextFieldsIcon size={18}/>,
+            command: ({ editor, range }) => {
+                editor
+                    .chain()
+                    .focus()
+                    .deleteRange(range)
+                    .toggleNode("paragraph", "paragraph")
+                    .run();
+            }
+        },
+        {
+            title: "To-do List",
+            description: "Track tasks with a to-do list.",
+            searchTerms: ["todo", "task", "list", "check", "checkbox"],
+            icon: <CheckBoxIcon size={18}/>,
+            command: ({ editor, range }) => {
+                editor.chain().focus().deleteRange(range).toggleTaskList().run();
+            }
+        },
+        {
+            title: "Heading 1",
+            description: "Big section heading.",
+            searchTerms: ["title", "big", "large"],
+            icon: <LooksOneIcon size={18}/>,
+            command: ({ editor, range }) => {
+                editor
+                    .chain()
+                    .focus()
+                    .deleteRange(range)
+                    .setNode("heading", { level: 1 })
+                    .run();
+            }
+        },
+        {
+            title: "Heading 2",
+            description: "Medium section heading.",
+            searchTerms: ["subtitle", "medium"],
+            icon: <LooksTwoIcon size={18}/>,
+            command: ({ editor, range }) => {
+                editor
+                    .chain()
+                    .focus()
+                    .deleteRange(range)
+                    .setNode("heading", { level: 2 })
+                    .run();
+            }
+        },
+        {
+            title: "Heading 3",
+            description: "Small section heading.",
+            searchTerms: ["subtitle", "small"],
+            icon: <Looks3Icon size={18}/>,
+            command: ({ editor, range }) => {
+                editor
+                    .chain()
+                    .focus()
+                    .deleteRange(range)
+                    .setNode("heading", { level: 3 })
+                    .run();
+            }
+        },
+        {
+            title: "Bullet List",
+            description: "Create a simple bullet list.",
+            searchTerms: ["unordered", "point"],
+            icon: <FormatListBulletedIcon size={18}/>,
+            command: ({ editor, range }) => {
+                editor.chain().focus().deleteRange(range).toggleBulletList().run();
+            }
+        },
+        {
+            title: "Numbered List",
+            description: "Create a list with numbering.",
+            searchTerms: ["ordered"],
+            icon: <FormatListNumberedIcon size={18}/>,
+            command: ({ editor, range }) => {
+                editor.chain().focus().deleteRange(range).toggleOrderedList().run();
+            }
+        },
+        {
+            title: "Quote",
+            description: "Capture a quote.",
+            searchTerms: ["blockquote"],
+            icon: <FormatQuoteIcon size={18}/>,
+            command: ({ editor, range }) =>
+                editor
+                    .chain()
+                    .focus()
+                    .deleteRange(range)
+                    .toggleNode("paragraph", "paragraph")
+                    .toggleBlockquote()
+                    .run()
+        },
+        {
+            title: "Code",
+            description: "Capture a code snippet.",
+            searchTerms: ["codeblock"],
+            icon: <CodeIcon size={18}/>,
+            command: ({ editor, range }) =>
+                editor.chain().focus().deleteRange(range).toggleCodeBlock().run()
+        },
+        {
+            title: "Image",
+            description: "Upload an image from your computer.",
+            searchTerms: ["photo", "picture", "media"],
+            icon: <ImageIcon size={18}/>,
+            command: ({ editor, range }) => {
+                editor.chain().focus().deleteRange(range).run();
+                // upload image
+                const input = document.createElement("input");
+                input.type = "file";
+                input.accept = "image/*";
+                input.onchange = async () => {
+                    if (input.files?.length) {
+                        const file = input.files[0];
+                        if (!file) return;
+                        const pos = editor.view.state.selection.from;
+                        startImageUpload({
+                            file,
+                            view: editor.view,
+                            pos,
+                            handleImageUpload
+                        });
+                    }
+                };
+                input.click();
+            }
+        }
+    ]);
+
+    const slashCommand = Command.configure({
+        suggestion: {
+            items: () => suggestionItems,
+            render: renderItems
+        }
+    });
+
+    const extensions = [...defaultExtensions, slashCommand];
     const [openNode, setOpenNode] = useState(false);
     const [openColor, setOpenColor] = useState(false);
     const [openLink, setOpenLink] = useState(false);
 
     useInjectStyles("Editor", cssStyles);
-    const [value, setValue] = useState<JSONContent | null>(null);
 
-    const debouncedUpdates = useDeferredValue(value);
-    // const debouncedUpdates = useDebouncedCallback(async (editor: Editor) => {
-    //     const json = editor.getJSON();
-    //
-    //     window.localStorage.setItem("novel-content", JSON.stringify(json));
-    //     // setSaveStatus("Saved");
-    // }, 500);
+    const [savedEditor, setSavedEditor] = useState<Editor | null>(null);
 
-    useEffect(() => {
-        const content = window.localStorage.getItem("novel-content");
-        if (content) setInitialContent(JSON.parse(content));
-        else setInitialContent(defaultEditorContent);
-    }, []);
+    useDebouncedCallback(savedEditor, () => {
+        if (savedEditor) {
+            onHtmlContentChange?.(savedEditor.getHTML());
+            onJsonContentChange?.(removeClassesFromJson(savedEditor.getJSON()));
+            onMarkdownContentChange?.(savedEditor.storage.markdown.getMarkdown());
+        }
+    }, false, 500);
 
     if (!initialContent) return null;
 
     return (
         <div className="relative w-full p-8">
-            {/*<div className="absolute right-5 top-5 z-10 mb-5 rounded-lg bg-blue-50 dark:bg-gray-700 px-2 py-1 text-sm text-gray-400 dark:text-gray-400">*/}
-            {/*  {saveStatus}*/}
-            {/*</div>*/}
             <EditorRoot>
                 <EditorContent
                     initialContent={initialContent}
                     extensions={extensions}
-                    className="relative min-h-[500px] w-full p-8 bg-white dark:bg-gray-900 sm:mb-[calc(20vh)] rounded-lg"
+                    className="relative min-h-[500px] w-full bg-white dark:bg-gray-900 rounded-lg"
                     editorProps={{
                         ...defaultEditorProps,
                         attributes: {
-                            class: `prose-lg prose-stone dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full`,
-                        },
+                            class: "prose-lg prose-headings:font-title font-default focus:outline-none max-w-full p-12"
+                        }
                     }}
                     onUpdate={({ editor }) => {
-                        setValue(editor.getJSON());
-                        // debouncedUpdates(editor);
-                        // setSaveStatus("Unsaved");
+                        setSavedEditor(editor as Editor);
                     }}
                     slotAfter={<ImageResizer/>}
                 >
@@ -87,7 +286,7 @@ export const TailwindEditor = () => {
                             <EditorCommandItem
                                 value={item.title}
                                 onCommand={(val) => item?.command?.(val)}
-                                className={`flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm hover:bg-blue-50 hover:dark:bg-gray-700 aria-selected:bg-blue-50 aria-selected:dark:bg-gray-700`}
+                                className={"flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm hover:bg-blue-50 hover:dark:bg-gray-700 aria-selected:bg-blue-50 aria-selected:dark:bg-gray-700"}
                                 key={item.title}
                             >
                                 <div
@@ -106,7 +305,7 @@ export const TailwindEditor = () => {
 
                     <EditorBubble
                         tippyOptions={{
-                            placement: "top",
+                            placement: "top"
                         }}
                         className={cn("flex w-fit max-w-[90vw] overflow-hidden rounded border bg-white dark:bg-gray-900 shadow", defaultBorderMixin)}
                     >
@@ -173,29 +372,29 @@ const cssStyles = `
   }
 }
 
-.img-placeholder {
-  position: relative;
-
-  &:before {
-    content: "";
-    box-sizing: border-box;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 3px solid var(--novel-stone-200);
-    border-top-color: var(--novel-stone-800);
-    animation: spinning 0.6s linear infinite;
-  }
-}
-
-@keyframes spinning {
-  to {
-    transform: rotate(360deg);
-  }
-}
+// .img-placeholder {
+//   position: relative;
+//
+//   &:before {
+//     content: "";
+//     box-sizing: border-box;
+//     position: absolute;
+//     top: 50%;
+//     left: 50%;
+//     width: 36px;
+//     height: 36px;
+//     border-radius: 50%;
+//     border: 3px solid var(--novel-stone-200);
+//     border-top-color: var(--novel-stone-800);
+//     animation: spinning 0.6s linear infinite;
+//   }
+// }
+//
+// @keyframes spinning {
+//   to {
+//     transform: rotate(360deg);
+//   }
+// }
 
 /* Custom TODO list checkboxes – shoutout to this awesome tutorial: https://moderncss.dev/pure-css-custom-checkbox-style/ */
 
@@ -314,12 +513,12 @@ ul[data-type="taskList"] li[data-checked="true"] > div > p {
   cursor: grab;
 
   &:hover {
-    background-color: var(--novel-stone-100);
+    background-color: rgb(241 245 249); //100
     transition: background-color 0.2s;
   }
 
   &:active {
-    background-color: var(--novel-stone-200);
+    background-color: rgb(226 232 240); //200
     transition: background-color 0.2s;
   }
 
@@ -338,4 +537,3 @@ ul[data-type="taskList"] li[data-checked="true"] > div > p {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' style='fill: rgba(255, 255, 255, 0.5)'%3E%3Cpath d='M3,2 C2.44771525,2 2,1.55228475 2,1 C2,0.44771525 2.44771525,0 3,0 C3.55228475,0 4,0.44771525 4,1 C4,1.55228475 3.55228475,2 3,2 Z M3,6 C2.44771525,6 2,5.55228475 2,5 C2,4.44771525 2.44771525,4 3,4 C3.55228475,4 4,4.44771525 4,5 C4,5.55228475 3.55228475,6 3,6 Z M3,10 C2.44771525,10 2,9.55228475 2,9 C2,8.44771525 2.44771525,8 3,8 C3.55228475,8 4,8.44771525 4,9 C4,9.55228475 3.55228475,10 3,10 Z M7,2 C6.44771525,2 6,1.55228475 6,1 C6,0.44771525 6.44771525,0 7,0 C7.55228475,0 8,0.44771525 8,1 C8,1.55228475 7.55228475,2 7,2 Z M7,6 C6.44771525,6 6,5.55228475 6,5 C6,4.44771525 6.44771525,4 7,4 C7.55228475,4 8,4.44771525 8,5 C8,5.55228475 7.55228475,6 7,6 Z M7,10 C6.44771525,10 6,9.55228475 6,9 C6,8.44771525 6.44771525,8 7,8 C7.55228475,8 8,8.44771525 8,9 C8,9.55228475 7.55228475,10 7,10 Z'%3E%3C/path%3E%3C/svg%3E");
 }
 `;
-

@@ -9,7 +9,7 @@ import { Color } from "@tiptap/extension-color";
 
 import { Markdown } from "tiptap-markdown";
 import Highlight from "@tiptap/extension-highlight";
-import UpdatedImage from "./updated-image";
+import UpdatedImage from "./uploaded-image";
 import CustomKeymap from "./custom-keymap";
 import DragAndDrop from "./drag-and-drop";
 import { ImageResizer } from "./image-resizer";
@@ -35,7 +35,6 @@ const simpleExtensions = [
   Highlight.configure({
     multicolor: true,
   }),
-
   Markdown.configure({
     html: false,
     transformCopiedText: true,

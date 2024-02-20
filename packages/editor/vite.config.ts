@@ -22,28 +22,24 @@ export default defineConfig(() => ({
         sourcemap: true,
 
         rollupOptions: {
-
-            // Entry points can be specified here similar to tsup's entry option
-            input: {
-                index: resolve(__dirname, 'src/components/index.ts'),
-                extensions: resolve(__dirname, 'src/extensions/index.ts'),
-                plugins: resolve(__dirname, 'src/plugins/index.ts'),
-            },
+            // input: {
+            //     index: resolve(__dirname, 'src/components/index.ts'),
+            //     extensions: resolve(__dirname, 'src/extensions/index.ts'),
+            //     plugins: resolve(__dirname, 'src/plugins/index.ts'),
+            // },
             external: isExternal,
-            // External dependencies
-            // external: ['react', 'react-dom'],
-            output: [
-                {
-                    format: 'cjs',
-                    dir: 'dist',
-                    entryFileNames: '[name].cjs.js',
-                },
-                {
-                    format: 'esm',
-                    dir: 'dist',
-                    entryFileNames: '[name].esm.js',
-                },
-            ],
+            // output: [
+            //     {
+            //         format: 'cjs',
+            //         dir: 'dist',
+            //         entryFileNames: '[name].cjs.js',
+            //     },
+            //     {
+            //         format: 'esm',
+            //         dir: 'dist',
+            //         entryFileNames: '[name].esm.js',
+            //     },
+            // ],
         },
     },
     resolve: {

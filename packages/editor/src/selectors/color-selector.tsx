@@ -15,7 +15,7 @@ interface ColorSelectorProps {
 const TEXT_COLORS: BubbleColorMenuItem[] = [
     {
         name: "Default",
-        color: "var(--novel-black)",
+        color: "black",
     },
     {
         name: "Purple",
@@ -54,39 +54,39 @@ const TEXT_COLORS: BubbleColorMenuItem[] = [
 const HIGHLIGHT_COLORS: BubbleColorMenuItem[] = [
     {
         name: "Default",
-        color: "var(--novel-highlight-default)",
+        color: "inherit",
     },
     {
         name: "Purple",
-        color: "var(--novel-highlight-purple)",
+        color: "#9333EA",
     },
     {
         name: "Red",
-        color: "var(--novel-highlight-red)",
+        color: "#E00000",
     },
     {
         name: "Yellow",
-        color: "var(--novel-highlight-yellow)",
+        color: "#EAB308",
     },
     {
         name: "Blue",
-        color: "var(--novel-highlight-blue)",
+        color: "#2563EB",
     },
     {
         name: "Green",
-        color: "var(--novel-highlight-green)",
+        color: "#008A00",
     },
     {
         name: "Orange",
-        color: "var(--novel-highlight-orange)",
+        color: "#FFA500",
     },
     {
         name: "Pink",
-        color: "var(--novel-highlight-pink)",
+        color: "#BA4081",
     },
     {
         name: "Gray",
-        color: "var(--novel-highlight-gray)",
+        color: "#A8A29E",
     },
 ];
 
@@ -119,7 +119,7 @@ export const ColorSelector = ({
             align={"start"}
             className="my-1 flex max-h-80 w-48 flex-col overflow-hidden overflow-y-auto rounded border p-1 shadow"
             trigger={
-                <Button className="gap-2 rounded-none" variant="text">
+                <Button className="gap-2 rounded-none" variant="text" color={"text"}>
                       <span
                           className="rounded px-1"
                           style={{
