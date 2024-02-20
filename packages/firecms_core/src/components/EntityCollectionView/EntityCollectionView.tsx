@@ -53,7 +53,6 @@ import {
     Popover,
     SearchIcon,
     Skeleton,
-    TextField,
     Tooltip,
     Typography
 } from "@firecms/ui";
@@ -805,13 +804,14 @@ function EntityIdHeaderWidget({
                       }}
                       className={"text-gray-900 dark:text-white w-96 max-w-full"}>
 
-                    <div className="flex p-4 w-full gap-4">
-                        <TextField
+                    <div className="flex p-2 w-full gap-4">
+                        <input
+                            autoFocus={openPopup}
                             placeholder={"Find entity by ID"}
-                            size={"small"}
+                            // size={"small"}
                             onChange={(e) => setSearchString(e.target.value)}
                             value={searchString}
-                            className={"flex-grow"}/>
+                            className={"flex-grow bg-transparent outline-none p-1"}/>
                         <Button variant={"outlined"}
                                 disabled={!searchString}
                                 type={"submit"}

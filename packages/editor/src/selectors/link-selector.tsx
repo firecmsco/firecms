@@ -39,6 +39,7 @@ export const LinkSelector = ({
     useEffect(() => {
         inputRef.current && inputRef.current?.focus();
     });
+
     if (!editor) return null;
 
     return (
@@ -48,11 +49,9 @@ export const LinkSelector = ({
                  trigger={<Button variant="text"
                                   className="gap-2 rounded-none"
                                   color={"text"}>
-                     {/*<p className="text-base">↗</p>*/}
                      <p className={cn("underline decoration-stone-400 underline-offset-4", {
                          "text-blue-500": editor.isActive("link"),
-                     })}
-                     >
+                     })}>
                          Link
                      </p>
                  </Button>}>
@@ -64,30 +63,32 @@ export const LinkSelector = ({
                     const url = getUrlFromString(input.value);
                     url && editor.chain().focus().setLink({ href: url }).run();
                 }}
-                className="flex  p-1 "
+                className="flex p-1"
             >
                 <input
                     ref={inputRef}
-                    type="text"
+                    autoFocus={open}
                     placeholder="Paste a link"
-                    className="flex-1 bg-white dark:bg-gray-900 p-1 text-sm outline-none"
                     defaultValue={editor.getAttributes("link").href || ""}
-                />
+                    className={"text-gray-900 dark:text-white flex-grow bg-transparent p-1 text-sm outline-none"}/>
+
                 {editor.getAttributes("link").href ? (
                     <Button
                         size="small"
-                        variant="outlined"
+                        variant="text"
                         type="button"
-                        className="flex h-8 items-center rounded p-1 text-red-600 transition-all hover:bg-red-100 dark:hover:bg-red-800"
+                        color={"text"}
+                        className="flex items-center"
                         onClick={() => {
                             editor.chain().focus().unsetLink().run();
                         }}
                     >
-                        <DeleteIcon className="h-4 w-4"/>
+                        <DeleteIcon size="small"/>
                     </Button>
                 ) : (
-                    <Button size="small" className="h-8">
-                        <CheckIcon className="h-4 w-4"/>
+                    <Button size="small"
+                            variant={"text"}>
+                        <CheckIcon size="small"/>
                     </Button>
                 )}
             </form>

@@ -10,7 +10,7 @@ export function FireCMSDataEnhancementSubscriptionMessage({ projectId, context }
             <Typography>You have finished your free usage quota.</Typography>
             <Typography>Please upgrade plans to continue using this feature in this project</Typography>
             <Button
-                color={"warning"}
+                color={"primary"}
                 component={"a"}
                 rel="noopener noreferrer"
                 target="_blank"

@@ -161,8 +161,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                                 ? <CircularProgress size={"small"}/>
                                 : <AutoAwesomeIcon
                                     size={"small"}/>}
-                        </IconButton>}
-                >
+                        </IconButton>}>
                     <MenuItem onClick={() => enhanceData()}>
                         <AutoAwesomeIcon
                             size="small"/>

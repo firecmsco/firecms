@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { ArrayProperty, getFieldConfig, Property, PropertyConfig } from "@firecms/core";
 import { Button, Paper, Typography } from "@firecms/ui";
 import { Field, getIn, useFormex } from "@firecms/formex";

@@ -104,6 +104,17 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
             Field: TextFieldBinding
         }
     },
+    switch: {
+        key: "switch",
+        name: "Switch",
+        description: "Boolean true or false field (or yes or no, 0 or 1...)",
+        Icon: FlagIcon,
+        color: "#20d9d2",
+        property: {
+            dataType: "boolean",
+            Field: SwitchFieldBinding
+        }
+    },
     select: {
         key: "select",
         name: "Select/enum",
@@ -223,17 +234,6 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
                 dataType: "reference",
             },
             Field: ArrayOfReferencesFieldBinding
-        }
-    },
-    switch: {
-        key: "switch",
-        name: "Switch",
-        description: "Boolean true or false field (or yes or no, 0 or 1...)",
-        Icon: FlagIcon,
-        color: "#20d9d2",
-        property: {
-            dataType: "boolean",
-            Field: SwitchFieldBinding
         }
     },
     date_time: {
