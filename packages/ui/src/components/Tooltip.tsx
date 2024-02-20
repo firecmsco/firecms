@@ -8,7 +8,7 @@ export type TooltipProps = {
     onOpenChange?: (open: boolean) => void,
     side?: "top" | "bottom" | "left" | "right",
     sideOffset?: number,
-    title?: string,
+    title?: string | React.ReactNode,
     delayDuration?: number;
     className?: string,
     tooltipClassName?: string,

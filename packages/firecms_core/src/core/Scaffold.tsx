@@ -171,8 +171,6 @@ function StyledDrawer(props: {
 
     const navigation = useNavigationController();
 
-    console.log("StyledDrawer", props.open)
-
     const width = !props.displayed ? 0 : (props.open ? DRAWER_WIDTH : 72);
     const innerDrawer = <div
         className={"relative h-full no-scrollbar overflow-y-auto overflow-x-hidden"}

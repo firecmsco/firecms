@@ -17,7 +17,6 @@ async function makeRequest(authController: AuthController) {
             body: JSON.stringify({})
         })
         .then(async (res) => {
-            console.log("res", res)
         });
 }
 

@@ -5,7 +5,7 @@ import { cn } from "../util";
 export type IconButtonProps<C extends React.ElementType> =
     Omit<(C extends "button" ? React.ButtonHTMLAttributes<HTMLButtonElement> : React.ComponentProps<C>), "onClick">
     & {
-    size?: "medium" | "small" | "large";
+    size?: "medium" | "small" | "smallest" | "large";
     variant?: "ghost" | "filled",
     shape?: "circular" | "square",
     disabled?: boolean;
@@ -22,6 +22,7 @@ const colorClasses = "text-slate-600 visited:text-slate-600 dark:text-slate-300 
 const sizeClasses = {
     medium: "w-10 !h-10 min-w-10 min-h-10",
     small: "w-8 !h-8 min-w-8 min-h-8",
+    smallest: "w-6 !h-6 min-w-6 min-h-6",
     large: "w-12 !h-12 min-w-12 min-h-12"
 }
 const shapeClasses = {

@@ -34,7 +34,7 @@ import {
 } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
-import { Alert, Button, cn, DialogActions, IconButton, Typography } from "@firecms/ui";
+import { Alert, Button, cn, DialogActions, IconButton, Tooltip, Typography } from "@firecms/ui";
 import { ErrorBoundary } from "../components";
 import {
     copyEntityAction,
@@ -42,6 +42,7 @@ import {
 } from "../components/EntityCollectionTable/internal/default_entity_actions";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { ValidationError } from "yup";
+import { PropertyIdCopyTooltipContent } from "../components/PropertyIdCopyTooltipContent";
 
 /**
  * @group Components
@@ -388,7 +389,10 @@ function EntityFormInternal<M extends Record<string, any>>({
 
     const authController = useAuthController();
 
-    const getActionsForEntity = useCallback(({ entity, customEntityActions }: { entity?: Entity<M>, customEntityActions?: EntityAction[] }): EntityAction[] => {
+    const getActionsForEntity = useCallback(({ entity, customEntityActions }: {
+        entity?: Entity<M>,
+        customEntityActions?: EntityAction[]
+    }): EntityAction[] => {
         const createEnabled = canCreateEntity(inputCollection, authController, fullPathToCollectionSegments(path), null);
         const deleteEnabled = entity ? canDeleteEntity(inputCollection, authController, fullPathToCollectionSegments(path), entity) : true;
         const actions: EntityAction[] = [];
@@ -481,7 +485,10 @@ function EntityFormInternal<M extends Record<string, any>>({
                     savingError={savingError}
                     closeAfterSaveRef={closeAfterSaveRef}
                     autoSave={autoSave}
-                    entityActions={getActionsForEntity({ entity, customEntityActions: inputCollection.entityActions })}/>}
+                    entityActions={getActionsForEntity({
+                        entity,
+                        customEntityActions: inputCollection.entityActions
+                    })}/>}
 
             </div>
         </div>
@@ -588,7 +595,12 @@ function InnerForm<M extends Record<string, any>>(props: FormexController<M> & {
                         <div id={`form_field_${key}`}
                              key={`field_${resolvedCollection.name}_${key}`}>
                             <ErrorBoundary>
-                                <PropertyFieldBinding {...cmsFormFieldProps}/>
+                                <Tooltip title={<PropertyIdCopyTooltipContent propertyId={key}/>}
+                                         delayDuration={800}
+                                         side={"left"}
+                                         sideOffset={16}>
+                                    <PropertyFieldBinding {...cmsFormFieldProps}/>
+                                </Tooltip>
                             </ErrorBoundary>
                         </div>
                     );
