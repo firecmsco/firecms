@@ -53,7 +53,7 @@ export function SubcollectionsEditTab({
 
     const [currentDialog, setCurrentDialog] = React.useState<{
         isNewCollection: boolean,
-        editedCollectionPath?: string,
+        editedCollectionId?: string,
     }>();
 
     const {
@@ -86,7 +86,7 @@ export function SubcollectionsEditTab({
                                             <TableRow key={subcollection.path}
                                                       onClick={() => setCurrentDialog({
                                                           isNewCollection: false,
-                                                          editedCollectionPath: subcollection.path,
+                                                          editedCollectionId: subcollection.id
                                                       })}>
                                                 <TableCell
                                                     align="left">
