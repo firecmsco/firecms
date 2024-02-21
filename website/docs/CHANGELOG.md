@@ -2,9 +2,11 @@
 id: changelog
 title: Changelog
 ---
-## [3.0.0-beta.2] - 2024-02-01
+## [3.0.0-beta.2] - 2024-02-21
 
-- Added Formex package to handle forms across the platform.
+- Added Formex package to handle forms across the platform. Formex is an in-house
+  form management library with a similar API to Formik, but with better performance,
+  and much more lightweight.
 - Enhanced onboarding process for new users.
 - Fixed data import issues for new collections.
 - Tweaked SaaS onboarding for better user experience.
@@ -21,6 +23,8 @@ title: Changelog
 - Fixed array container menu and multiline input bugs.
 - Migrated Tailwind configuration to lib for easier management.
 - Adjusted Sentry configuration for error reporting.
+- Fix for subcollections edit view showing empty.
+- Fixes for block and group properties in editor saving multiple entries when editing an existing sub property.
 
 ## [3.0.0-beta.1] - 2024-02-01
 

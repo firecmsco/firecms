@@ -19,6 +19,8 @@
 - Fixed array container menu and multiline input bugs.
 - Migrated Tailwind configuration to lib for easier management.
 - Adjusted Sentry configuration for error reporting.
+- Fix for subcollections edit view showing empty.
+- Fixes for block and group properties in editor saving multiple entries when editing an existing sub property.
 
 ## [3.0.0-beta.1] - 2024-02-01
 

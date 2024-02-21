@@ -40,7 +40,7 @@ export function ReferencePropertyField({
                 <Field name={pathPath}
                        pathPath={pathPath}
                        type="select"
-                       disabled={existing || disabled}
+                       disabled={(existing && Boolean(pathValue)) || disabled}
                        value={pathValue}
                        error={pathError}
                        handleChange={handleChange}
@@ -51,7 +51,6 @@ export function ReferencePropertyField({
         </>
     );
 }
-
 
 export function CollectionsSelect({
                                       disabled,
