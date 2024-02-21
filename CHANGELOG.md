@@ -1,6 +1,8 @@
-## [3.0.0-beta.2] - 2024-02-01
+## [3.0.0-beta.2] - 2024-02-21
 
-- Added Formex package to handle forms across the platform.
+- Added Formex package to handle forms across the platform. Formex is an in-house
+  form management library with a similar API to Formik, but with better performance,
+  and much more lightweight.
 - Enhanced onboarding process for new users.
 - Fixed data import issues for new collections.
 - Tweaked SaaS onboarding for better user experience.

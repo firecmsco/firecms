@@ -45,7 +45,7 @@ export type TextFieldProps<T extends string | number> = {
     style?: React.CSSProperties,
     inputClassName?: string,
     inputStyle?: React.CSSProperties,
-    inputRef?: React.MutableRefObject<any>,
+    inputRef?: React.ForwardedRef<any>
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">;
 
 export function TextField<T extends string | number>({
@@ -84,7 +84,7 @@ export function TextField<T extends string | number>({
         };
 
         // Current input element
-        const element = inputRef.current;
+        const element = "current" in inputRef ? inputRef.current : inputRef;
 
         // Add the event listener
         element.addEventListener("wheel", handleWheel);

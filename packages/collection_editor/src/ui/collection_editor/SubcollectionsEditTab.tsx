@@ -78,52 +78,53 @@ export function SubcollectionsEditTab({
                             Subcollections of {values.name}
                         </Typography>
 
-                        {subcollections && subcollections.length > 0 &&
-                            <Paper className={"flex flex-col gap-4 p-2 w-full"}>
-                                <Table>
-                                    <TableBody>
-                                        {subcollections.map((subcollection) => (
-                                            <TableRow key={subcollection.path}
-                                                      onClick={() => setCurrentDialog({
-                                                          isNewCollection: false,
-                                                          editedCollectionId: subcollection.id
-                                                      })}>
-                                                <TableCell
-                                                    align="left">
-                                                    <Typography variant={"subtitle2"} className={"flex-grow"}>
-                                                        {subcollection.name}
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell
-                                                    align="right">
-                                                    <Tooltip title={"Remove"}>
-                                                        <IconButton size="small"
-                                                                    onClick={(e) => {
-                                                                        e.preventDefault();
-                                                                        e.stopPropagation();
-                                                                        setSubcollectionToDelete(subcollection.id);
-                                                                    }}
-                                                                    color="inherit">
-                                                            <DeleteIcon size={"small"}/>
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </Paper>}
+                        <Paper className={"flex flex-col gap-4 p-2 w-full"}>
+                            {subcollections && subcollections.length > 0 && <Table>
+                                <TableBody>
+                                    {subcollections.map((subcollection) => (
+                                        <TableRow key={subcollection.path}
+                                                  onClick={() => setCurrentDialog({
+                                                      isNewCollection: false,
+                                                      editedCollectionId: subcollection.id
+                                                  })}>
+                                            <TableCell
+                                                align="left">
+                                                <Typography variant={"subtitle2"} className={"flex-grow"}>
+                                                    {subcollection.name}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell
+                                                align="right">
+                                                <Tooltip title={"Remove"}>
+                                                    <IconButton size="small"
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    e.stopPropagation();
+                                                                    setSubcollectionToDelete(subcollection.id);
+                                                                }}
+                                                                color="inherit">
+                                                        <DeleteIcon size={"small"}/>
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>}
 
-                        <Button
-                            onClick={() => {
-                                setCurrentDialog({
-                                    isNewCollection: true
-                                });
-                            }}
-                            variant={"outlined"}
-                            startIcon={<AddIcon/>}>
-                            Add subcollection
-                        </Button>
+                            <Button
+                                onClick={() => {
+                                    setCurrentDialog({
+                                        isNewCollection: true
+                                    });
+                                }}
+                                variant={"text"}
+                                startIcon={<AddIcon/>}>
+                                Add subcollection
+                            </Button>
+
+                        </Paper>
+
                     </div>
 
                     <div className={"flex-grow  flex flex-col gap-4 items-start"}>
@@ -131,7 +132,19 @@ export function SubcollectionsEditTab({
                             Custom views
                         </Typography>
 
-                        {totalEntityViews > 0 && <>
+
+                        {totalEntityViews === 0 &&
+                            <Alert action={<Button variant="text"
+                                                   size={"small"}
+                                                   href={"https://firecms.co/docs/customization_quickstart"}
+                                                   component={"a"}
+                                                   rel="noopener noreferrer"
+                                                   target="_blank">More info</Button>}>
+                                Define your own custom views by uploading it with the CLI.
+                            </Alert>
+                        }
+
+                        {<>
                             <Paper className={"flex flex-col gap-4 p-2 w-full"}>
                                 <Table>
                                     <TableBody>
@@ -175,29 +188,19 @@ export function SubcollectionsEditTab({
                                         ))}
                                     </TableBody>
                                 </Table>
+
+                                <Button
+                                    onClick={() => {
+                                        setAddEntityViewDialogOpen(true);
+                                    }}
+                                    variant={"text"}
+                                    startIcon={<AddIcon/>}>
+                                    Add custom entity view
+                                </Button>
                             </Paper>
 
                         </>}
 
-                        {totalEntityViews === 0 &&
-                            <Alert action={<Button variant="text"
-                                                   size={"small"}
-                                                   href={"https://firecms.co/docs/customization_quickstart"}
-                                                   component={"a"}
-                                                   rel="noopener noreferrer"
-                                                   target="_blank">More info</Button>}>
-                                Define your own custom views by uploading it with the CLI.
-                            </Alert>
-                        }
-
-                        <Button
-                            onClick={() => {
-                                setAddEntityViewDialogOpen(true);
-                            }}
-                            variant={"outlined"}
-                            startIcon={<AddIcon/>}>
-                            Add custom entity view
-                        </Button>
 
                     </div>
 
