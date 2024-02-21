@@ -6,15 +6,16 @@ export function PropertyIdCopyTooltipContent({ propertyId }: { propertyId: strin
     const [copied, setCopied] = useState(false);
 
     return (
-        <div className={"flex flex-row gap-2 items-center justify-center"}>
+        <div className={"flex flex-row gap-2 items-center justify-center text-white"}>
             <div>
-                <Typography variant={"caption"} className={"min-w-20"}
+                <Typography variant={"caption"} className={"min-w-20 text-slate-400"}
                             color={"disabled"}>{copied ? "Copied" : "Property ID"}</Typography>
-                <Typography variant={"caption"}><code>{propertyId}</code></Typography>
+                <Typography variant={"caption"} className={"text-white"}><code>{propertyId}</code></Typography>
             </div>
             {/*    Copy to clipboard button*/}
             <IconButton size={"small"}>
                 <ContentPasteIcon size={"smallest"}
+                                  className={"text-white"}
                                   onClick={useCallback(() => {
                                       navigator.clipboard.writeText(propertyId);
                                       setCopied(true);
