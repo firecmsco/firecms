@@ -10,7 +10,7 @@ export function PropertyIdCopyTooltipContent({ propertyId }: { propertyId: strin
             <div>
                 <Typography variant={"caption"} className={"min-w-20"}
                             color={"disabled"}>{copied ? "Copied" : "Property ID"}</Typography>
-                <Typography variant={"caption"}>{propertyId}</Typography>
+                <Typography variant={"caption"}><code>{propertyId}</code></Typography>
             </div>
             {/*    Copy to clipboard button*/}
             <IconButton size={"small"}>
