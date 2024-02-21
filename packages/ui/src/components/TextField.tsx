@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 
 import { TextareaAutosize } from "./TextareaAutosize";
 import {
@@ -45,7 +45,7 @@ export type TextFieldProps<T extends string | number> = {
     style?: React.CSSProperties,
     inputClassName?: string,
     inputStyle?: React.CSSProperties,
-    inputRef?: React.Ref<any>,
+    inputRef?: React.MutableRefObject<any>,
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">;
 
 export function TextField<T extends string | number>({
@@ -77,12 +77,26 @@ export function TextField<T extends string | number>({
     const [focused, setFocused] = React.useState(document.activeElement === inputRef.current);
     const hasValue = value !== undefined && value !== null && value !== "";
 
+    useEffect(() => {
+        if (type !== "number") return;
+        const handleWheel = (event: any) => {
+            event.preventDefault(); // Prevent scrolling the number input
+        };
+
+        // Current input element
+        const element = inputRef.current;
+
+        // Add the event listener
+        element.addEventListener("wheel", handleWheel);
+
+        // Remove event listener on cleanup
+        return () => {
+            element.removeEventListener("wheel", handleWheel);
+        };
+    }, [inputRef, type]);
+
     const numberInputOnWheelPreventChange = useCallback((e: any) => {
-        e.target.blur()
-        e.stopPropagation()
-        setTimeout(() => {
-            e.target.focus()
-        }, 0)
+        e.preventDefault()
     }, []);
 
     const input = multiline
@@ -159,7 +173,8 @@ export function TextField<T extends string | number>({
 
             {input}
 
-            {endAdornment && <div className="flex flex-row justify-center items-center absolute h-full right-0 top-0 mr-4 ">{endAdornment}</div>}
+            {endAdornment && <div
+                className="flex flex-row justify-center items-center absolute h-full right-0 top-0 mr-4 ">{endAdornment}</div>}
 
         </div>
     );
