@@ -5,16 +5,14 @@ import {
     EditorCommand,
     EditorCommandEmpty,
     EditorCommandItem,
-    EditorContent,
     EditorRoot,
     type JSONContent
 } from "./components";
-import { Command, createSuggestionItems, ImageResizer, renderItems } from "./extensions";
+import { Command, createSuggestionItems, renderItems, simpleExtensions } from "./extensions";
 import { defaultExtensions } from "./editor_extensions";
 // import { Separator } from "./ui/separator";
 import { NodeSelector } from "./selectors/node-selector";
 import { LinkSelector } from "./selectors/link-selector";
-import { ColorSelector } from "./selectors/color-selector";
 
 import { TextButtons } from "./selectors/text-buttons";
 import {
@@ -29,17 +27,18 @@ import {
     Looks3Icon,
     LooksOneIcon,
     LooksTwoIcon,
+    Separator,
     TextFieldsIcon,
     useInjectStyles
 } from "@firecms/ui";
 import { startImageUpload } from "./plugins";
-import { Editor, EditorProviderProps } from "@tiptap/react";
+import { Editor, EditorProvider, EditorProviderProps } from "@tiptap/react";
 import { useDebouncedCallback } from "./utils/useDebouncedCallback";
 import { removeClassesFromJson } from "./utils/remove_classes";
 
 export type FireCMSEditorProps = {
     initialContent?: JSONContent | string,
-    onMarkdownContentChange?: (content:string) => void,
+    onMarkdownContentChange?: (content: string) => void,
     onJsonContentChange?: (content: JSONContent | null) => void,
     onHtmlContentChange?: (content: string) => void,
     handleImageUpload: (file: File) => Promise<string | ArrayBuffer> | string | ArrayBuffer
@@ -240,21 +239,45 @@ export const FireCMSEditor = ({
         }
     });
 
-    const extensions = [...defaultExtensions, slashCommand];
+    const extensions = [...simpleExtensions, ...defaultExtensions, slashCommand];
     const [openNode, setOpenNode] = useState(false);
     const [openColor, setOpenColor] = useState(false);
     const [openLink, setOpenLink] = useState(false);
 
     useInjectStyles("Editor", cssStyles);
 
-    const [savedEditor, onEditorUpdate] = useState<Editor | null>(null);
+    const editorRef = React.useRef<Editor | null>(null);
+    const [markdownContent, setMarkdownContent] = useState<string | null>(null);
+    const [jsonContent, setJsonContent] = useState<JSONContent | null>(null);
+    const [htmlContent, setHtmlContent] = useState<string | null>(null);
 
-    useDebouncedCallback(savedEditor, () => {
-        if (savedEditor) {
-            onHtmlContentChange?.(savedEditor.getHTML());
-            onJsonContentChange?.(removeClassesFromJson(savedEditor.getJSON()));
-            onMarkdownContentChange?.(savedEditor.storage.markdown.getMarkdown());
+    const onEditorUpdate = (editor: Editor) => {
+        editorRef.current = editor;
+        if (onMarkdownContentChange) {
+            setMarkdownContent(editor.storage.markdown.getMarkdown());
         }
+        if (onJsonContentChange) {
+            setJsonContent(removeClassesFromJson(editor.getJSON()));
+        }
+        if (onHtmlContentChange) {
+            setHtmlContent(editor.storage.html.getHTML());
+        }
+    }
+
+    useDebouncedCallback(markdownContent, () => {
+        if (editorRef.current) {
+            onMarkdownContentChange?.(editorRef.current.storage.markdown.getMarkdown());
+        }
+    }, false, 500);
+
+    useDebouncedCallback(jsonContent, () => {
+        if (jsonContent)
+            onJsonContentChange?.(jsonContent);
+    }, false, 500);
+
+    useDebouncedCallback(htmlContent, () => {
+        if (htmlContent)
+            onHtmlContentChange?.(htmlContent);
     }, false, 500);
 
     if (!initialContent) return null;
@@ -262,64 +285,68 @@ export const FireCMSEditor = ({
     return (
         <div className="relative w-full p-8">
             <EditorRoot>
-                <EditorContent
-                    initialContent={initialContent}
-                    extensions={extensions}
-                    className="relative min-h-[500px] w-full bg-white dark:bg-gray-950 rounded-lg"
-                    editorProps={{
-                        ...defaultEditorProps,
-                        attributes: {
-                            class: "prose-lg prose-headings:font-title font-default focus:outline-none max-w-full p-12"
-                        }
-                    }}
-                    onUpdate={({ editor }) => {
-                        onEditorUpdate(editor as Editor);
-                    }}
-                    slotAfter={<ImageResizer/>}
-                >
-                    <EditorCommand
-                        className={cn("text-gray-900 dark:text-white z-50 h-auto max-h-[330px] w-72 overflow-y-auto rounded-md border bg-white dark:bg-gray-900 px-1 py-2 shadow transition-all", defaultBorderMixin)}>
-                        <EditorCommandEmpty className="px-2 text-gray-700 dark:text-gray-300">
-                            No results
-                        </EditorCommandEmpty>
-                        {suggestionItems.map((item) => (
-                            <EditorCommandItem
-                                value={item.title}
-                                onCommand={(val) => item?.command?.(val)}
-                                className={"flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm hover:bg-blue-50 hover:dark:bg-gray-700 aria-selected:bg-blue-50 aria-selected:dark:bg-gray-700"}
-                                key={item.title}
-                            >
-                                <div
-                                    className={cn("flex h-10 w-10 items-center justify-center rounded-md border bg-white dark:bg-gray-900", defaultBorderMixin)}>
-                                    {item.icon}
-                                </div>
-                                <div>
-                                    <p className="font-medium">{item.title}</p>
-                                    <p className="text-xs text-gray-700 dark:text-gray-300">
-                                        {item.description}
-                                    </p>
-                                </div>
-                            </EditorCommandItem>
-                        ))}
-                    </EditorCommand>
-
-                    <EditorBubble
-                        tippyOptions={{
-                            placement: "top"
+                <div
+                    className="relative min-h-[500px] w-full bg-white dark:bg-gray-950 rounded-lg">
+                    <EditorProvider
+                        content={initialContent}
+                        extensions={extensions}
+                        editorProps={{
+                            ...defaultEditorProps,
+                            attributes: {
+                                class: "prose-lg prose-headings:font-title font-default focus:outline-none max-w-full p-12"
+                            }
                         }}
-                        className={cn("flex w-fit max-w-[90vw] overflow-hidden rounded border bg-white dark:bg-gray-900 shadow", defaultBorderMixin)}
-                    >
-                        {/*<Separator orientation="vertical" />*/}
-                        <NodeSelector open={openNode} onOpenChange={setOpenNode}/>
-                        {/*<Separator orientation="vertical" />*/}
+                        onUpdate={({ editor }) => {
+                            console.log("editor updated");
+                            onEditorUpdate(editor as Editor);
+                        }}>
 
-                        <LinkSelector open={openLink} onOpenChange={setOpenLink}/>
-                        {/*<Separator orientation="vertical" />*/}
-                        <TextButtons/>
-                        {/*<Separator orientation="vertical" />*/}
-                        <ColorSelector open={openColor} onOpenChange={setOpenColor}/>
-                    </EditorBubble>
-                </EditorContent>
+                        <EditorCommand
+                            className={cn("text-gray-900 dark:text-white z-50 h-auto max-h-[330px] w-72 overflow-y-auto rounded-md border bg-white dark:bg-gray-900 px-1 py-2 shadow transition-all", defaultBorderMixin)}>
+                            <EditorCommandEmpty className="px-2 text-gray-700 dark:text-gray-300">
+                                No results
+                            </EditorCommandEmpty>
+                            {suggestionItems.map((item) => (
+                                <EditorCommandItem
+                                    value={item.title}
+                                    onCommand={(val) => item?.command?.(val)}
+                                    className={"flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm hover:bg-blue-50 hover:dark:bg-gray-700 aria-selected:bg-blue-50 aria-selected:dark:bg-gray-700"}
+                                    key={item.title}
+                                >
+                                    <div
+                                        className={cn("flex h-10 w-10 items-center justify-center rounded-md border bg-white dark:bg-gray-900", defaultBorderMixin)}>
+                                        {item.icon}
+                                    </div>
+                                    <div>
+                                        <p className="font-medium">{item.title}</p>
+                                        <p className="text-xs text-gray-700 dark:text-gray-300">
+                                            {item.description}
+                                        </p>
+                                    </div>
+                                </EditorCommandItem>
+                            ))}
+                        </EditorCommand>
+
+                        <EditorBubble
+                            tippyOptions={{
+                                placement: "top"
+                            }}
+                            className={cn("flex w-fit max-w-[90vw] h-10 overflow-hidden rounded border bg-white dark:bg-gray-900 shadow", defaultBorderMixin)}
+                        >
+                            {/*<Separator orientation="vertical"/>*/}
+                            <NodeSelector open={openNode} onOpenChange={setOpenNode}/>
+                            <Separator orientation="vertical"/>
+
+                            <LinkSelector open={openLink} onOpenChange={setOpenLink}/>
+                            <Separator orientation="vertical"/>
+                            <TextButtons/>
+                            {/*<Separator orientation="vertical"/>*/}
+                            {/*<ColorSelector open={openColor} onOpenChange={setOpenColor}/>*/}
+                        </EditorBubble>
+
+                    </EditorProvider>
+                </div>
+
             </EditorRoot>
         </div>
     );

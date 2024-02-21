@@ -1,7 +1,7 @@
 import { atom, useAtom, useSetAtom } from "jotai";
 import { useEffect, useRef, type ComponentPropsWithoutRef, forwardRef } from "react";
 import tunnel from "tunnel-rat";
-import { novelStore } from "./editor";
+import { editorStore } from "./editor";
 import { Command } from "cmdk";
 import type { Range } from "@tiptap/core";
 
@@ -17,8 +17,8 @@ export const EditorCommandOut = ({
   query: string;
   range: Range;
 }): JSX.Element => {
-  const setQuery = useSetAtom(queryAtom, { store: novelStore });
-  const setRange = useSetAtom(rangeAtom, { store: novelStore });
+  const setQuery = useSetAtom(queryAtom, { store: editorStore });
+  const setRange = useSetAtom(rangeAtom, { store: editorStore });
 
   useEffect(() => {
     setQuery(query);

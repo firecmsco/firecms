@@ -27,7 +27,7 @@ export * from "./MultiSelect";
 export * from "./Paper";
 export * from "./SearchBar";
 export * from "./Select";
-export * from "./Separator.tsx";
+export * from "./Separator";
 export * from "./Sheet";
 export * from "./Spinner";
 export * from "./TextareaAutosize";

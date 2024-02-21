@@ -463,7 +463,6 @@ function FireCMSAppAuthenticated({
                                                 message={`Upgrade to export more than ${DOCS_LIMIT} entities`}/>
     });
 
-
     const dataEnhancementPlugin = useDataEnhancementPlugin({
         SubscriptionMessage: FireCMSDataEnhancementSubscriptionMessage,
         host: fireCMSBackend.backendApiHost,
@@ -537,7 +536,7 @@ function FireCMSAppAuthenticated({
         onAnalyticsEvent
     });
 
-    const plugins: FireCMSPlugin<any, any, any>[] = [importExportPlugin, collectionEditorPlugin, saasPlugin];
+    const plugins: FireCMSPlugin<any, any, any>[] = [importExportPlugin, collectionEditorPlugin, saasPlugin, dataEnhancementPlugin];
 
     return (
         <FireCMSBackEndProvider {...fireCMSBackend}>

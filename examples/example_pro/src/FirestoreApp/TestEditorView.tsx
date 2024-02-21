@@ -28,12 +28,14 @@ export function TestEditorView() {
                     console.log(content);
                 }}
                 onJsonContentChange={(content) => {
+                    console.log("json content")
+                    console.log(content);
                     // console.log(JSON.stringify(content));
                     // window.localStorage.setItem("editor-content", JSON.stringify(content));
                 }}
                 onMarkdownContentChange={(content) => {
-                    console.log("markdown content")
-                    console.log(content);
+                    // console.log("markdown content")
+                    // console.log(content);
                     window.localStorage.setItem("editor-content", content);
                 }}
                 handleImageUpload={(file: File) => {

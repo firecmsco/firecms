@@ -1,11 +1,14 @@
 export default {
     darkMode: ["class", "[data-theme=\"dark\"]"],
     mode: "jit",
+    plugins: [
+        require("@tailwindcss/typography")
+    ],
     content: [
         "./index.html",
         "./src/**/*.{js,ts,jsx,tsx}",
         "./node_modules/firecms/src/**/*.{js,ts,jsx,tsx}",
-        "./node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}",
+        "./node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}"
     ],
     theme: {
         extend: {
@@ -61,8 +64,8 @@ export default {
                     800: "#35353A",
                     900: "#18181C",
                     950: "#101013"
-                },
+                }
             }
-        },
+        }
     }
 };
