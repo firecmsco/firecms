@@ -1,9 +1,6 @@
 export default {
     darkMode: ["class", "[data-theme=\"dark\"]"],
     mode: "jit",
-    plugins: [
-        require("@tailwindcss/typography")
-    ],
     content: [
         "./index.html",
         "./src/**/*.{js,ts,jsx,tsx}",

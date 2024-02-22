@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
-import { Field, getIn } from "@firecms/formex";
+import { Field, getIn, useFormex } from "@firecms/formex";
 import {
     EntityCollection,
     ErrorBoundary,
@@ -34,7 +34,6 @@ import { OnPropertyChangedParams, PropertyForm, PropertyFormDialog } from "./Pro
 import { PropertyTree } from "./PropertyTree";
 import { PersistedCollection } from "../../types/persisted_collection";
 import { GetCodeDialog } from "./GetCodeDialog";
-import { useFormex } from "@firecms/formex";
 
 type CollectionEditorFormProps = {
     showErrors: boolean;
@@ -138,7 +137,9 @@ export function CollectionPropertiesEditorForm({
                         ...newPropertyKeys.reduce((acc, propertyKey) => {
                             acc[propertyKey] = (newCollection.properties ?? {})[propertyKey];
                             return acc;
-                        }, {} as { [key: string]: PropertyOrBuilder }),
+                        }, {} as {
+                            [key: string]: PropertyOrBuilder
+                        }),
                         ...values.properties
                     };
                     const updatedPropertiesOrder = [
@@ -420,11 +421,19 @@ export function CollectionPropertiesEditorForm({
                             />}
 
                         {!selectedProperty &&
-                            <Typography variant={"label"} className="flex items-center justify-center h-full">
-                                {emptyCollection
-                                    ? "Now you can add your first property"
-                                    : "Select a property to edit it"}
-                            </Typography>}
+                            <div className={"w-full flex flex-col items-center justify-center h-full gap-4"}>
+                                <Typography variant={"label"} className="">
+                                    {emptyCollection
+                                        ? "Now you can add your first property"
+                                        : "Select a property to edit it"}
+                                </Typography>
+                                <Button variant={"outlined"}
+                                        onClick={() => setNewPropertyDialogOpen(true)}
+                                >
+                                    <AddIcon/>
+                                    Add new property
+                                </Button>
+                            </div>}
 
                         {selectedProperty && isPropertyBuilder(selectedProperty) &&
                             <Typography variant={"label"} className="flex items-center justify-center">
