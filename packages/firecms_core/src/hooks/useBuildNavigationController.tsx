@@ -256,7 +256,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
      */
     const baseLocation = state && state.base_location ? state.base_location : location;
 
-    const getAllParentCollectionsForPath = useCallback((path: string): EntityReference[] => {
+    const getAllParentReferencesForPath = useCallback((path: string): EntityReference[] => {
         return getParentReferencesFromPath({
             path,
             collections
@@ -264,8 +264,28 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
     }, [collections]);
 
     const getParentCollectionIds = useCallback((path: string): string[] => {
-        return getAllParentCollectionsForPath(path).map(r => r.id);
-    }, [getAllParentCollectionsForPath])
+
+        const strings = path.split("/");
+        const oddPathSegments = strings.filter((_, i) => i % 2 === 0);
+        oddPathSegments.pop();
+
+        const result: string[][] = [];
+
+        for (let i = 1; i <= oddPathSegments.length; i++) {
+            result.push(oddPathSegments.slice(0, i));
+        }
+
+        // for each odd path segment, get the collection
+        const parentCollectionIds = result.map(r => getCollectionFromPaths(r)?.id).filter(Boolean) as string[];
+
+        getCollectionFromPaths(oddPathSegments);
+
+        // const allParentCollectionsForPath = getAllParentReferencesForPath(path);
+        // console.log("allParentCollectionsForPath", allParentCollectionsForPath);
+        // const parentCollectionIds = allParentCollectionsForPath.map(r => r.id);
+        console.log("getParentCollectionIds", path, parentCollectionIds);
+        return parentCollectionIds;
+    }, [getAllParentReferencesForPath])
 
     const convertIdsToPaths = useCallback((ids: string[]): string[] => {
             let currentCollections = collections;
@@ -282,7 +302,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         }
         , [getCollectionFromIds]);
 
-    return useMemo(() => ({
+    return {
         collections,
         views,
         loading: !initialised || navigationLoading,
@@ -303,10 +323,10 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         topLevelNavigation,
         baseLocation,
         refreshNavigation,
-        getParentReferencesFromPath: getAllParentCollectionsForPath,
+        getParentReferencesFromPath: getAllParentReferencesForPath,
         getParentCollectionIds,
         convertIdsToPaths
-    }), [baseCollectionPath, baseLocation, basePath, buildCMSUrlPath, buildUrlCollectionPath, buildUrlEditCollectionPath, collections, getAllParentCollectionsForPath, getCollection, getCollectionFromPaths, homeUrl, initialised, isUrlCollectionPath, navigationLoading, navigationLoadingError, refreshNavigation, resolveAliasesFrom, topLevelNavigation, urlPathToDataPath, views]);
+    };
 }
 
 export function getSidePanelKey(path: string, entityId?: string) {

@@ -14,46 +14,43 @@ import { useFireCMSContext, useLargeLayout } from "../../hooks";
  * @param selectionEnabled
  * @param size
  * @param toggleEntitySelection
- * @param onCopyClicked
- * @param onEditClicked
- * @param onDeleteClicked
  * @param hideId
  * @constructor
  *
  * @group Collection components
  */
-export const EntityCollectionRowActions = React.memo(function EntityCollectionRowActions({
-                                                                                             entity,
-                                                                                             collection,
-                                                                                             fullPath,
-                                                                                             width,
-                                                                                             frozen,
-                                                                                             isSelected,
-                                                                                             selectionEnabled,
-                                                                                             size,
-                                                                                             highlightEntity,
-                                                                                             onCollectionChange,
-                                                                                             unhighlightEntity,
-                                                                                             actions = [],
-                                                                                             hideId,
-                                                                                             selectionController,
-                                                                                         }:
-                                                                                             {
-                                                                                                 entity: Entity<any>,
-                                                                                                 collection?: EntityCollection<any>,
-                                                                                                 fullPath?: string,
-                                                                                                 width: number,
-                                                                                                 frozen?: boolean,
-                                                                                                 size: CollectionSize,
-                                                                                                 isSelected?: boolean,
-                                                                                                 selectionEnabled?: boolean,
-                                                                                                 actions?: EntityAction[],
-                                                                                                 hideId?: boolean,
-                                                                                                 onCollectionChange?: () => void,
-                                                                                                 selectionController?: SelectionController;
-                                                                                                 highlightEntity?: (entity: Entity<any>) => void;
-                                                                                                 unhighlightEntity?: (entity: Entity<any>) => void;
-                                                                                             }) {
+export const EntityCollectionRowActions = function EntityCollectionRowActions({
+                                                                                  entity,
+                                                                                  collection,
+                                                                                  fullPath,
+                                                                                  width,
+                                                                                  frozen,
+                                                                                  isSelected,
+                                                                                  selectionEnabled,
+                                                                                  size,
+                                                                                  highlightEntity,
+                                                                                  onCollectionChange,
+                                                                                  unhighlightEntity,
+                                                                                  actions = [],
+                                                                                  hideId,
+                                                                                  selectionController,
+                                                                              }:
+                                                                                  {
+                                                                                      entity: Entity<any>,
+                                                                                      collection?: EntityCollection<any>,
+                                                                                      fullPath?: string,
+                                                                                      width: number,
+                                                                                      frozen?: boolean,
+                                                                                      size: CollectionSize,
+                                                                                      isSelected?: boolean,
+                                                                                      selectionEnabled?: boolean,
+                                                                                      actions?: EntityAction[],
+                                                                                      hideId?: boolean,
+                                                                                      onCollectionChange?: () => void,
+                                                                                      selectionController?: SelectionController;
+                                                                                      highlightEntity?: (entity: Entity<any>) => void;
+                                                                                      unhighlightEntity?: (entity: Entity<any>) => void;
+                                                                                  }) {
 
     const largeLayout = useLargeLayout();
 
@@ -171,4 +168,4 @@ export const EntityCollectionRowActions = React.memo(function EntityCollectionRo
         </div>
     );
 
-}, equal);
+};

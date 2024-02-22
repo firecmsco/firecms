@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useRef } from "react";
+import React, { useCallback, useMemo, useRef } from "react";
 import equal from "react-fast-compare";
 import { AdditionalFieldDelegate, CollectionSize, Entity, FireCMSContext, User } from "../../types";
 import { PropertyTableCell } from "./PropertyTableCell";
@@ -8,7 +8,6 @@ import { CellRendererParams, VirtualTableColumn } from "../VirtualTable";
 import { getValueInPath } from "../../util";
 import { getRowHeight } from "../VirtualTable/common";
 import { EntityCollectionRowActions } from "./EntityCollectionRowActions";
-import { EntityCollectionTableController } from "../common/types";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
 import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
 import { EntityTableCell } from "./internal/EntityTableCell";
@@ -111,12 +110,12 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator;
 
-        const propertyCellRenderer = useCallback(({
-                                                      column,
-                                                      columnIndex,
-                                                      rowData,
-                                                      rowIndex
-                                                  }: CellRendererParams<any>) => {
+        const propertyCellRenderer = ({
+                                          column,
+                                          columnIndex,
+                                          rowData,
+                                          rowIndex
+                                      }: CellRendererParams<any>) => {
 
             const entity: Entity<M> = rowData;
 
@@ -158,7 +157,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     }
                 </ErrorBoundary>);
 
-        }, [inlineEditing, size, selectedEntityIds]);
+        };
 
         const additionalCellRenderer = useCallback(({
                                                         column,
@@ -205,30 +204,29 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         }, [size, selectedEntityIds]);
 
-        const collectionColumns: VirtualTableColumn[] = useMemo(() => {
-                const columnsResult: VirtualTableColumn[] = propertiesToColumns({
-                    properties,
-                    sortable,
-                    forceFilter,
-                    disabledFilter: disabledFilterChange,
-                    AdditionalHeaderWidget
-                });
+        const collectionColumns: VirtualTableColumn[] = (() => {
+            const columnsResult: VirtualTableColumn[] = propertiesToColumns({
+                properties,
+                sortable,
+                forceFilter,
+                disabledFilter: disabledFilterChange,
+                AdditionalHeaderWidget
+            });
 
-                const additionalTableColumns: VirtualTableColumn[] = additionalFields
-                    ? additionalFields.map((additionalField) =>
-                        ({
-                            key: additionalField.key,
-                            align: "left",
-                            sortable: false,
-                            title: additionalField.name,
-                            width: additionalField.width ?? 200
-                        }))
-                    : [];
-                return [...columnsResult, ...additionalTableColumns];
-            },
-            [additionalFields, disabledFilterChange, forceFilter, properties, sortable]);
+            const additionalTableColumns: VirtualTableColumn[] = additionalFields
+                ? additionalFields.map((additionalField) =>
+                    ({
+                        key: additionalField.key,
+                        align: "left",
+                        sortable: false,
+                        title: additionalField.name,
+                        width: additionalField.width ?? 200
+                    }))
+                : [];
+            return [...columnsResult, ...additionalTableColumns];
+        })();
 
-        const idColumn: VirtualTableColumn = useMemo(() => ({
+        const idColumn: VirtualTableColumn = {
             key: "id_ewcfedcswdf3",
             width: getIdColumnWidth?.() ?? (largeLayout ? 160 : 130),
             title: "ID",
@@ -237,17 +235,17 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             headerAlign: "center",
             align: "center",
             AdditionalHeaderWidget: () => additionalIDHeaderWidget
-        }), [getIdColumnWidth, largeLayout])
+        }
 
-        const columns: VirtualTableColumn[] = useMemo(() => [
+        const columns: VirtualTableColumn[] = [
             idColumn,
             ...displayedColumnIds
                 .map((p) => {
                     return collectionColumns.find(c => c.key === p.key);
                 }).filter(Boolean) as VirtualTableColumn[]
-        ], [collectionColumns, displayedColumnIds, idColumn]);
+        ];
 
-        const cellRenderer = useCallback((props: CellRendererParams<any>) => {
+        const cellRenderer = (props: CellRendererParams<any>) => {
             const column = props.column;
             const columns = props.columns;
             const columnKey = column.key;
@@ -287,7 +285,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     <ErrorView error={e}/>
                 </EntityTableCell>;
             }
-        }, [additionalFieldsMap, tableRowActionsBuilder, size, additionalCellRenderer, propertyCellRenderer])
+        }
 
         return (
 

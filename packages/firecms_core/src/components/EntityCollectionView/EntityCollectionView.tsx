@@ -433,7 +433,7 @@ export const EntityCollectionView = React.memo(
 
         const largeLayout = useLargeLayout();
 
-        const getActionsForEntity = useCallback(({ entity, customEntityActions }: {
+        const getActionsForEntity = ({ entity, customEntityActions }: {
             entity?: Entity<M>,
             customEntityActions?: EntityAction[]
         }): EntityAction[] => {
@@ -446,7 +446,7 @@ export const EntityCollectionView = React.memo(
             if (customEntityActions)
                 actions.push(...customEntityActions);
             return actions;
-        }, [authController, collection, createEnabled, fullPath]);
+        };
 
         const getIdColumnWidth = useCallback(() => {
             const entityActions = getActionsForEntity({});
@@ -456,12 +456,12 @@ export const EntityCollectionView = React.memo(
             return (largeLayout ? (80 + actionsWidth) : (70 + actionsWidth)) + (collapsedActions.length > 0 ? (largeLayout ? 40 : 30) : 0);
         }, [largeLayout]);
 
-        const tableRowActionsBuilder = useCallback(({
-                                                        entity,
-                                                        size,
-                                                        width,
-                                                        frozen
-                                                    }: {
+        const tableRowActionsBuilder = ({
+                                            entity,
+                                            size,
+                                            width,
+                                            frozen
+                                        }: {
             entity: Entity<any>,
             size: CollectionSize,
             width: number,
@@ -491,7 +491,7 @@ export const EntityCollectionView = React.memo(
                 />
             );
 
-        }, [isEntitySelected, collection, authController, fullPath, selectionEnabled, toggleEntitySelection, createEnabled]);
+        };
 
         const title = <Popover
             open={popOverOpen}
