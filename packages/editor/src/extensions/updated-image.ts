@@ -1,6 +1,6 @@
 import Image from "@tiptap/extension-image";
 
-const UploadedImage = Image.extend({
+const UpdatedImage = Image.extend({
   name: "uploaded-image",
   addAttributes() {
     return {
@@ -15,4 +15,4 @@ const UploadedImage = Image.extend({
   },
 });
 
-export default UploadedImage;
+export default UpdatedImage;

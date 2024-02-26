@@ -1,11 +1,12 @@
 import { Container } from "@firecms/ui";
 import { FireCMSEditor, type JSONContent } from "@firecms/editor";
 import { useEffect, useState } from "react";
-import { CircularProgressCenter } from "@firecms/core";
+import { CircularProgressCenter, useStorageSource } from "@firecms/core";
 
 export function TestEditorView() {
 
     const [initialContent, setInitialContent] = useState<string | JSONContent | null>(null);
+    const storageSource = useStorageSource();
 
     useEffect(() => {
         const content = window.localStorage.getItem("editor-content");
@@ -24,160 +25,61 @@ export function TestEditorView() {
             {!initialContent && <CircularProgressCenter/>}
             {initialContent && <FireCMSEditor
                 initialContent={initialContent}
-                onHtmlContentChange={(content) => {
-                    console.log(content);
-                }}
-                onJsonContentChange={(content) => {
-                    console.log("json content")
-                    console.log(content);
-                    // console.log(JSON.stringify(content));
-                    // window.localStorage.setItem("editor-content", JSON.stringify(content));
-                }}
+                // onHtmlContentChange={(content) => {
+                //     console.log(content);
+                // }}
+                // onJsonContentChange={(content) => {
+                //     console.log("json content")
+                //     console.log(content);
+                //     // console.log(JSON.stringify(content));
+                //     // window.localStorage.setItem("editor-content", JSON.stringify(content));
+                // }}
                 onMarkdownContentChange={(content) => {
                     // console.log("markdown content")
-                    // console.log(content);
+                    console.log(content);
                     window.localStorage.setItem("editor-content", content);
                 }}
-                handleImageUpload={(file: File) => {
-                    return "https://picsum.photos/300"
-
+                handleImageUpload={async (file: File) => {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    const result = await storageSource.uploadFile({ file, path: "editor_test" });
+                    const downloadConfig = await storageSource.getDownloadURL(result.path);
+                    const url = downloadConfig.url;
+                    if (!url) {
+                        throw new Error("Error uploading image");
+                    }
+                    return url;
                 }}/>}
         </Container>
     )
 }
 
-const defaultEditorContent = `
+const defaultEditorContent = `![](https://firebasestorage.googleapis.com/v0/b/firecms-demo-27150.appspot.com/o/editor_test%2Fimage.png?alt=media&token=c5cae8f7-e13d-4b95-aee2-55962b5fbc57)
+# Introducing the FireCMS editor
 
-![header.png](https://firecms.co/assets/images/pawel-czerwinski-C2tWWNKExfw-unsplash-219b6fe0f2e6d87490cb81b76f309789.jpg "header.png")
+> The [FireCMS editor](https://firecms.co/) is a Notion-style WYSIWYG editor built with [Tiptap](https://tiptap.dev/).
+>
+> It is currently under development, but stable enough to try out 
 
-## Introducing the FireCMS editors
+## Features
 
-The [FireCMS editor](https://firecms.co/) is a Notion-style WYSIWYG editor built with [Tiptap](https://tiptap.dev/)
-
-### Features
-
-1. Slash menu & bubble menu
-2. Image uploads (drag & drop / copy & paste, or select from slash menu) 
+1. Slash menu (try hitting '/' in a new line)
+2. Bubble menu (try selecting some code)
+3. Image uploads (drag & drop / copy & paste)
+4. Bullet and numbered lists
+5. AI autocompletion (WIP)
+6. JSON, HTML or Markdown output
 
 \`\`\`
 code blocks
 \`\`\`
 
-![logo.png](https://firecms.co/img/firecms_logo.svg "logo.png")
+> I like to look at one or two random quotes each morning.
 
-### Learn more
+![](https://firebasestorage.googleapis.com/v0/b/firecms-demo-27150.appspot.com/o/editor_test%2Flogo_192.png?alt=media&token=8e1f2d8f-2fd3-406c-942d-3b9a848e2cff)
+## Learn more
 
-- [ ] Star us on [GitH](https://github.com/steven-tey/novel)[ub](https://github.com/firecmsco/firecms)
+This editor is in development and your **feedback** is very **valuable**. The content of this editor is only stored locally in this demo.
 
-- [ ] Leave us your comments on [Discord](https://discord.gg/fxy7xsQm3m) `
+- [x] Star us on [GitH](https://github.com/steven-tey/novel)[ub](https://github.com/firecmsco/firecms)
 
-// export const defaultEditorContent = {
-//     type: "doc",
-//     content: [{
-//         type: "heading",
-//         attrs: { level: 2 },
-//         content: [{ type: "text", text: "Introducing the FireCMS editor" }]
-//     }, {
-//         type: "paragraph",
-//         content: [{ type: "text", text: "The " }, {
-//             type: "text",
-//             marks: [{
-//                 type: "link",
-//                 attrs: { href: "https://firecms.co/", target: "_blank", rel: "noopener noreferrer nofollow" }
-//             }],
-//             text: "FireCMS editor"
-//         }, { type: "text", text: " is a Notion-style WYSIWYG editor built with " }, {
-//             type: "text",
-//             marks: [{
-//                 type: "link",
-//                 attrs: { href: "https://tiptap.dev/", target: "_blank", rel: "noopener noreferrer nofollow" }
-//             }],
-//             text: "Tiptap"
-//         }]
-//     }, {
-//         type: "heading",
-//         attrs: { level: 3 },
-//         content: [{ type: "text", text: "Features" }]
-//     }, {
-//         type: "orderedList",
-//         attrs: { tight: true, start: 1 },
-//         content: [{
-//             type: "listItem",
-//             content: [{ type: "paragraph", content: [{ type: "text", text: "Slash menu & bubble menu" }] }]
-//         }, {
-//             type: "listItem",
-//             content: [{
-//                 type: "paragraph",
-//                 content: [{
-//                     type: "text",
-//                     text: "Image uploads (drag & drop / copy & paste, or select from slash menu) "
-//                 }]
-//             }]
-//         }]
-//     }, {
-//         type: "codeBlock",
-//         attrs: { language: null },
-//         content: [{ type: "text", text: "code blocks" }]
-//     }, {
-//         type: "image",
-//         attrs: {
-//             src: "https://public.blob.vercel-storage.com/pJrjXbdONOnAeZAZ/banner-2wQk82qTwyVgvlhTW21GIkWgqPGD2C.png",
-//             alt: "banner.png",
-//             title: "banner.png"
-//         }
-//     }, { type: "horizontalRule" }, {
-//         type: "heading",
-//         attrs: { level: 3 },
-//         content: [{ type: "text", text: "Learn more" }]
-//     }, {
-//         type: "taskList",
-//         content: [{
-//             type: "taskItem",
-//             attrs: { checked: false },
-//             content: [{
-//                 type: "paragraph",
-//                 content: [{ type: "text", text: "Star us on " }, {
-//                     type: "text",
-//                     marks: [{
-//                         type: "link",
-//                         attrs: {
-//                             href: "https://github.com/steven-tey/novel",
-//                             target: "_blank",
-//                             rel: "noopener noreferrer nofollow"
-//                         }
-//                     }],
-//                     text: "GitH"
-//                 }, {
-//                     type: "text",
-//                     marks: [{
-//                         type: "link",
-//                         attrs: {
-//                             href: "https://github.com/firecmsco/firecms",
-//                             target: "_blank",
-//                             rel: "noopener noreferrer nofollow"
-//                         }
-//                     }],
-//                     text: "ub"
-//                 }]
-//             }]
-//         }, {
-//             type: "taskItem",
-//             attrs: { checked: false },
-//             content: [{
-//                 type: "paragraph",
-//                 content: [{ type: "text", text: "Leave us your comments on " }, {
-//                     type: "text",
-//                     marks: [{
-//                         type: "link",
-//                         attrs: {
-//                             href: "https://discord.gg/fxy7xsQm3m",
-//                             target: "_blank",
-//                             rel: "noopener noreferrer nofollow"
-//                         }
-//                     }],
-//                     text: "Discord"
-//                 }, { type: "text", text: " " }]
-//             }]
-//         }]
-//     }]
-// };
+- [x] Leave us your comments on [Discord](https://discord.gg/fxy7xsQm3m)`

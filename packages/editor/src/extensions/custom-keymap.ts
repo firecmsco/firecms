@@ -12,7 +12,7 @@ declare module "@tiptap/core" {
   }
 }
 
-const CustomKeymap = Extension.create({
+export const CustomKeymap = Extension.create({
   name: "CustomKeymap",
 
   addCommands() {
@@ -53,4 +53,3 @@ const CustomKeymap = Extension.create({
   },
 });
 
-export default CustomKeymap;

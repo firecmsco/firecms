@@ -132,7 +132,6 @@ export function SubcollectionsEditTab({
                             Custom views
                         </Typography>
 
-
                         {totalEntityViews === 0 &&
                             <Alert action={<Button variant="text"
                                                    size={"small"}

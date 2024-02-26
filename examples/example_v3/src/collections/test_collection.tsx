@@ -39,9 +39,35 @@ export const testCallbacks: EntityCallbacks = {
                 path
             }: EntityOnFetchProps) {
         const values = entity.values;
-        // values.name = "Forced name";
+        if (values.createdOn) {
+            values.createdOn = new Date(values.createdOn);
+        }
         return entity;
     },
+    onPreSave: ({
+                    collection,
+                    path,
+                    entityId,
+                    values,
+                    status,
+                    context
+                }) => {
+        if (values.createdOn) {
+            values.createdOn = values.createdOn.getTime();
+        }
+        return values;
+    }
+
+    // onFetch({
+    //             collection,
+    //             context,
+    //             entity,
+    //             path
+    //         }: EntityOnFetchProps) {
+    //     const values = entity.values;
+    //     // values.name = "Forced name";
+    //     return entity;
+    // },
     // onIdUpdate({
     //                collection,
     //                context,
@@ -51,22 +77,22 @@ export const testCallbacks: EntityCallbacks = {
     //            }: EntityIdUpdateProps): string {
     //     return toSnakeCase(values?.name)
     // },
-
-    onPreSave: ({
-                    collection,
-                    path,
-                    entityId,
-                    values,
-                    status,
-                    context
-                }) => {
-        return resolveNavigationFrom({
-            path: `${path}/${entityId}`,
-            context
-        }).then((navigationEntries) => {
-            return values;
-        });
-    }
+    //
+    // onPreSave: ({
+    //                 collection,
+    //                 path,
+    //                 entityId,
+    //                 values,
+    //                 status,
+    //                 context
+    //             }) => {
+    //     return resolveNavigationFrom({
+    //         path: `${path}/${entityId}`,
+    //         context
+    //     }).then((navigationEntries) => {
+    //         return values;
+    //     });
+    // }
 };
 
 const validatedCustom = buildProperty({
@@ -92,6 +118,10 @@ export const testCollection = buildCollection({
         //     dataType: "string",
         //     propertyConfig: "color",
         // },
+        createdOn: {
+            name: "Created on",
+            dataType: "date",
+        },
         privacyPolicy: buildProperty({
             name: "Privacy Policy",
             dataType: "string",

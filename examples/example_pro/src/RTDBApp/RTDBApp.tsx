@@ -27,7 +27,6 @@ import {
     useValidateAuthenticator
 } from "@firecms/firebase_pro";
 
-import { BrowserRouter } from "react-router-dom";
 import { productsCollection } from "./collections/products_collection";
 
 const firebaseConfig = {

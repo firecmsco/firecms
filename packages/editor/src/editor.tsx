@@ -1,5 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
+
+import TiptapUnderline from "@tiptap/extension-underline";
+import TextStyle from "@tiptap/extension-text-style";
+import { Color } from "@tiptap/extension-color";
+
+import { Markdown } from "tiptap-markdown";
+import Highlight from "@tiptap/extension-highlight";
+
 import {
     EditorBubble,
     EditorCommand,
@@ -8,13 +16,12 @@ import {
     EditorRoot,
     type JSONContent
 } from "./components";
-import { Command, createSuggestionItems, renderItems, simpleExtensions } from "./extensions";
-import { defaultExtensions } from "./editor_extensions";
-// import { Separator } from "./ui/separator";
+import { Command, createSuggestionItems, renderItems } from "./extensions";
+
 import { NodeSelector } from "./selectors/node-selector";
 import { LinkSelector } from "./selectors/link-selector";
-
 import { TextButtons } from "./selectors/text-buttons";
+
 import {
     CheckBoxIcon,
     cn,
@@ -31,17 +38,21 @@ import {
     TextFieldsIcon,
     useInjectStyles
 } from "@firecms/ui";
-import { startImageUpload } from "./plugins";
+// import { startImageUpload } from "./plugins";
 import { Editor, EditorProvider, EditorProviderProps } from "@tiptap/react";
 import { useDebouncedCallback } from "./utils/useDebouncedCallback";
 import { removeClassesFromJson } from "./utils/remove_classes";
+import { horizontalRule, placeholder, starterKit, taskItem, taskList, tiptapLink } from "./editor_extensions";
+import { createImageExtension } from "./extensions/Image";
+import { CustomKeymap } from "./extensions/custom-keymap";
+import { DragAndDrop } from "./extensions/drag-and-drop";
 
 export type FireCMSEditorProps = {
     initialContent?: JSONContent | string,
     onMarkdownContentChange?: (content: string) => void,
     onJsonContentChange?: (content: JSONContent | null) => void,
     onHtmlContentChange?: (content: string) => void,
-    handleImageUpload: (file: File) => Promise<string | ArrayBuffer> | string | ArrayBuffer
+    handleImageUpload: (file: File) => Promise<string>
 };
 
 export const FireCMSEditor = ({
@@ -65,36 +76,38 @@ export const FireCMSEditor = ({
                 return false;
             }
         },
-        handlePaste: (view, event) => {
-            if (event.clipboardData && event.clipboardData.files && event.clipboardData.files[0]) {
-                event.preventDefault();
-                const file = event.clipboardData.files[0];
-                const pos = view.state.selection.from;
-
-                startImageUpload({ file, view, pos, handleImageUpload });
-                return true;
-            }
-            return false;
-        },
-        handleDrop: (view, event, _slice, moved) => {
-            if (!moved && event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0]) {
-                event.preventDefault();
-                const file = event.dataTransfer.files[0];
-                const coordinates = view.posAtCoords({
-                    left: event.clientX,
-                    top: event.clientY
-                });
-                // here we deduct 1 from the pos or else the image will create an extra node
-                startImageUpload({
-                    file,
-                    view,
-                    pos: coordinates?.pos || 0 - 1,
-                    handleImageUpload
-                });
-                return true;
-            }
-            return false;
-        }
+        // handlePaste: (view, event) => {
+        //     if (event.clipboardData && event.clipboardData.files && event.clipboardData.files[0]) {
+        //         event.preventDefault();
+        //         const file = event.clipboardData.files[0];
+        //         const pos = view.state.selection.from;
+        //
+        //         // startImageUpload({ file, view, pos, handleImageUpload });
+        //         return true;
+        //     }
+        //     return false;
+        // },
+        // handleDrop: (view, event, _slice, moved) => {
+        //     console.log("handleDrop", { event, moved });
+        //     if (!moved && event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0]) {
+        //         console.log("handleDrop!!!", { event, moved });
+        //         event.preventDefault();
+        //         const file = event.dataTransfer.files[0];
+        //         const coordinates = view.posAtCoords({
+        //             left: event.clientX,
+        //             top: event.clientY
+        //         });
+        //         // here we deduct 1 from the pos or else the image will create an extra node
+        //         startImageUpload({
+        //             file,
+        //             view,
+        //             pos: coordinates?.pos || 0 - 1,
+        //             handleImageUpload,
+        //         });
+        //         return true;
+        //     }
+        //     return false;
+        // }
     };
 
     const suggestionItems = createSuggestionItems([
@@ -219,12 +232,12 @@ export const FireCMSEditor = ({
                         const file = input.files[0];
                         if (!file) return;
                         const pos = editor.view.state.selection.from;
-                        startImageUpload({
-                            file,
-                            view: editor.view,
-                            pos,
-                            handleImageUpload
-                        });
+                        // startImageUpload({
+                        //     file,
+                        //     view: editor.view,
+                        //     pos,
+                        //     handleImageUpload
+                        // });
                     }
                 };
                 input.click();
@@ -239,9 +252,32 @@ export const FireCMSEditor = ({
         }
     });
 
-    const extensions = [...simpleExtensions, ...defaultExtensions, slashCommand];
+    const imageExtension = useMemo(() => createImageExtension(handleImageUpload), []);
+
+    const extensions = [
+        TiptapUnderline,
+        TextStyle,
+        Color,
+        Highlight.configure({
+            multicolor: true,
+        }),
+        Markdown.configure({
+            html: false,
+            transformCopiedText: true,
+        }),
+        CustomKeymap,
+        DragAndDrop,
+        starterKit,
+        placeholder,
+        tiptapLink,
+        // tiptapImage,
+        imageExtension,
+        // updatedImage,
+        taskList,
+        taskItem,
+        horizontalRule,
+        slashCommand];
     const [openNode, setOpenNode] = useState(false);
-    const [openColor, setOpenColor] = useState(false);
     const [openLink, setOpenLink] = useState(false);
 
     useInjectStyles("Editor", cssStyles);
@@ -260,13 +296,15 @@ export const FireCMSEditor = ({
             setJsonContent(removeClassesFromJson(editor.getJSON()));
         }
         if (onHtmlContentChange) {
-            setHtmlContent(editor.storage.html.getHTML());
+            setHtmlContent(editor.getHTML());
         }
     }
 
     useDebouncedCallback(markdownContent, () => {
+
         if (editorRef.current) {
-            onMarkdownContentChange?.(editorRef.current.storage.markdown.getMarkdown());
+            const markdown = editorRef.current.storage.markdown.getMarkdown();
+            onMarkdownContentChange?.(addLineBreakAfterImages(markdown));
         }
     }, false, 500);
 
@@ -352,10 +390,14 @@ export const FireCMSEditor = ({
     );
 };
 
-const cssStyles = `
-.ProseMirror {
-  @apply p-12 px-8 sm:px-12;
+function addLineBreakAfterImages(markdown: string): string {
+    // Regular expression to match markdown image syntax
+    const imageRegex = /!\[.*?\]\(.*?\)/g;
+    // Replace image with image followed by a line break
+    return markdown.replace(imageRegex, (match) => `${match}\n`);
 }
+
+const cssStyles = `
 
 .ProseMirror .is-editor-empty:first-child::before {
   content: attr(data-placeholder);
@@ -398,30 +440,6 @@ const cssStyles = `
     filter: brightness(90%);
   }
 }
-
-// .img-placeholder {
-//   position: relative;
-//
-//   &:before {
-//     content: "";
-//     box-sizing: border-box;
-//     position: absolute;
-//     top: 50%;
-//     left: 50%;
-//     width: 36px;
-//     height: 36px;
-//     border-radius: 50%;
-//     border: 3px solid var(--novel-stone-200);
-//     border-top-color: var(--novel-stone-800);
-//     animation: spinning 0.6s linear infinite;
-//   }
-// }
-//
-// @keyframes spinning {
-//   to {
-//     transform: rotate(360deg);
-//   }
-// }
 
 /* Custom TODO list checkboxes – shoutout to this awesome tutorial: https://moderncss.dev/pure-css-custom-checkbox-style/ */
 

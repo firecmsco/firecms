@@ -186,7 +186,7 @@ function DragHandle(options: DragHandleOptions) {
   });
 }
 
-const DragAndDrop = Extension.create({
+export const DragAndDrop = Extension.create({
   name: "dragAndDrop",
 
   addProseMirrorPlugins() {
@@ -198,4 +198,3 @@ const DragAndDrop = Extension.create({
   },
 });
 
-export default DragAndDrop;
