@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-canary.3",
+  "version": "3.0.0-canary.4",
   "type": "module",
   "name": "@firecms/firebase_pro",
   "access": "public",
@@ -9,9 +9,9 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "^3.0.0-canary.3",
-    "@firecms/firebase": "^3.0.0-canary.3",
-    "@firecms/ui": "^3.0.0-canary.3",
+    "@firecms/core": "^3.0.0-canary.4",
+    "@firecms/firebase": "^3.0.0-canary.4",
+    "@firecms/ui": "^3.0.0-canary.4",
     "firebase": "^10.8.0"
   },
   "exports": {
@@ -48,5 +48,5 @@
       "react-app/jest"
     ]
   },
-  "gitHead": "24234382207c741094a561eb4b94a416f00e6b74"
+  "gitHead": "9d587b683991dfcefd28e1c13b693364b5de72b2"
 }
