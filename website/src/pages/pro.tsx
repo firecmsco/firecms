@@ -1,15 +1,14 @@
 import React from "react";
 import Layout from "@theme/Layout";
 
-import Features from "../partials/features/Features";
 import { Hero } from "../partials/general/Hero";
 import HeroButtons from "../partials/home/HeroButtons";
 import { Panel } from "../partials/general/Panel";
 import EnterpriseTeaser from "../partials/home/EnterpriseTeaser";
-import { IntroText } from "../partials/features/IntroText";
-import { FormInfo } from "../partials/features/FormInfo";
+import { FormInfo } from "../partials/pro/FormInfo";
+import { ProDeveloperFeatures } from "../partials/pro/ProDeveloperFeatures";
 
-function FeaturesPage() {
+function ProPage() {
 
     return (
         <Layout
@@ -20,30 +19,28 @@ function FeaturesPage() {
 
                 <main className="flex-grow">
                     <Hero
-                        color={"secondary"}
+                        color={"primary"}
                         title={
                             <>
                                 <span
-                                    className="block lg:inline">Features</span>
+                                    className="block lg:inline">FireCMS <b>PRO</b></span>
                             </>}
+                        subtitleColor={"secondary"}
                         subtitle={
                             <>
-                                <p>
-                                    Empowering Your Content Management: Easily
-                                    Create, Edit, and Publish with a CMS that
-                                    both <b>content managers and developers will
-                                    love</b>.
-
+                                <p className="max-w-7xl text-2xl md:text-5xl font-bold tracking-tight"
+                                   style={{ lineHeight: 1.35 }}>
+                                    FireCMS PRO is aimed at companies and teams that need to
+                                    manage complex projects and require advanced features and
+                                    support.
                                 </p>
                             </>
                         }
                     />
 
-                    <Features/>
-
-                    <IntroText/>
-
                     <FormInfo/>
+
+                    <ProDeveloperFeatures/>
 
                     <Panel color={"gray"} includePadding={true}>
                         <HeroButtons/>
@@ -57,5 +54,5 @@ function FeaturesPage() {
     );
 }
 
-export default FeaturesPage;
+export default ProPage;
 

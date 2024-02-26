@@ -16,10 +16,7 @@ import { Panel } from "../general/Panel";
 import clsx from "clsx";
 import { ContainerInnerPaddingMixin, defaultBorderMixin } from "../styles";
 
-export function DeveloperFeatures() {
-
-    const { colorMode } = useColorMode();
-    const isDarkTheme = colorMode === "dark";
+export function ProDeveloperFeatures() {
 
     return (<>
             <Panel color={"gray"} includeMargin={false} includePadding={false}>

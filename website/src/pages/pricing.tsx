@@ -23,8 +23,6 @@ function FeaturesPage() {
                     <>
                         <p>
                             Experience the power of FireCMS today completely for <b>free</b>.
-                        </p>
-                        <p>
                             Try <b>FireCMS
                             Cloud</b> for a fully-managed, full-service solution.
                         </p>

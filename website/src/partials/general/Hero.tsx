@@ -6,12 +6,14 @@ export function Hero({
                          title,
                          subtitle,
                          cta,
-                         color
+                         color,
+                         subtitleColor = "lighter",
                      }: {
     title: React.ReactNode,
     subtitle?: React.ReactNode,
     cta?: React.ReactNode,
-    color: "primary" | "secondary"
+    color: "primary" | "secondary",
+    subtitleColor?: "gray" | "light_gray" | "white" | "primary" | "secondary" | "light" | "lighter" | "transparent",
 }) {
     return (
         <>
@@ -35,7 +37,7 @@ export function Hero({
                 </Panel>
             </div>
 
-            <Panel color={"lighter"} includePadding={false} innerClassName={"py-8 md:py-12 p-4 md:p-8"}>
+            <Panel color={subtitleColor} includePadding={false} innerClassName={"py-8 md:py-12 p-4 md:p-8"}>
                 {subtitle &&
                     <div className="font-mono uppercase m-0 text-xl md:text-2xl">
                         {subtitle}

@@ -98,6 +98,18 @@ const data = [{
         cloud: "No",
         cloudPlus: "Yes",
         cloudPro: "Yes"
+    },{
+        feature: "Local text search",
+        selfHosted: "Dev managed",
+        cloud: "No",
+        cloudPlus: "Yes",
+        cloudPro: "Yes"
+    },{
+        feature: "Text search",
+        selfHosted: "Dev managed",
+        cloud: "No",
+        cloudPlus: "Dev managed",
+        cloudPro: "Dev managed"
     }, {
         feature: "Support",
         selfHosted: "Enterprise",
@@ -146,13 +158,7 @@ const data = [{
         cloud: "No",
         cloudPlus: "No",
         cloudPro: "Yes"
-    }, {
-        feature: "Text search",
-        selfHosted: "Dev managed",
-        cloud: "No",
-        cloudPlus: "Dev managed",
-        cloudPro: "Dev managed"
-    }, {
+    },  {
         feature: "Custom domain",
         selfHosted: "No",
         cloud: "No",
