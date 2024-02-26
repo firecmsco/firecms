@@ -1,0 +1,50 @@
+import { useCallback } from "react";
+import { BrowserRouter } from "react-router-dom";
+
+import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
+import { useImportExportPlugin } from "@firecms/data_import_export";
+
+import { User as FirebaseUser } from "firebase/auth";
+import { Authenticator, FireCMSProApp } from "@firecms/firebase_pro";
+
+import "typeface-rubik";
+import "@fontsource/ibm-plex-mono";
+
+import { firebaseConfig } from "./firebase-config";
+import { productsCollection } from "./collections/products";
+
+export default function SimpleApp() {
+
+    const myAuthenticator: Authenticator<FirebaseUser> = useCallback(async ({
+                                                                                user,
+                                                                                authController
+                                                                            }) => {
+
+        if (user?.email?.includes("flanders")) {
+            throw Error("Stupid Flanders!");
+        }
+
+        console.log("Allowing access to", user?.email);
+
+        return true;
+    }, []);
+
+    const importExportPlugin = useImportExportPlugin();
+
+    const dataEnhancementPlugin = useDataEnhancementPlugin({
+        // Paths that will be enhanced
+        getConfigForPath: ({ path }) => {
+            return true;
+        }
+    });
+
+    return <BrowserRouter>
+        <FireCMSProApp
+            name={"My Online Shop"}
+            plugins={[importExportPlugin, dataEnhancementPlugin]}
+            authentication={myAuthenticator}
+            collections={[productsCollection]}
+            firebaseConfig={firebaseConfig}
+        />
+    </BrowserRouter>;
+}
