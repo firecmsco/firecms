@@ -92,6 +92,7 @@ module.exports = {
             "collapsed": false,
             "items": [
                 "recipes/building_a_blog",
+                "recipes/data_type_adapter",
                 "recipes/copy_entity",
                 "recipes/documents_as_subcollections"
             ]
