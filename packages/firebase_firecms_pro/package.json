@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-canary.0",
+  "version": "3.0.0-canary.1",
   "type": "module",
   "name": "@firecms/firebase_pro",
   "access": "public",
@@ -9,10 +9,19 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "^3.0.0-canary.0",
-    "@firecms/firebase": "^3.0.0-canary.0",
-    "@firecms/ui": "^3.0.0-canary.0",
+    "@firecms/core": "^3.0.0-canary.1",
+    "@firecms/firebase": "^3.0.0-canary.1",
+    "@firecms/ui": "^3.0.0-canary.1",
     "firebase": "^10.8.0"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./package.json": "./package.json",
+    "./tailwind.config.js": "./tailwind.config.js"
   },
   "devDependencies": {
     "@types/node": "^20.11.16",
@@ -30,7 +39,8 @@
   },
   "files": [
     "dist",
-    "src"
+    "src",
+    "tailwind.config.js"
   ],
   "eslintConfig": {
     "extends": [
@@ -38,5 +48,5 @@
       "react-app/jest"
     ]
   },
-  "gitHead": "9c3561bc09311f2339bb6fa224c88a62d3b19617"
+  "gitHead": "165080f8a46d85fef75ce4e4cd3e7f38b80d59d5"
 }

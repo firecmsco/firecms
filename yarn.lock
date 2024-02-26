@@ -2557,7 +2557,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firecms/cli@npm:^3.0.0-canary.0, @firecms/cli@workspace:packages/firecms_cli":
+"@firecms/cli@npm:^3.0.0-canary.1, @firecms/cli@workspace:packages/firecms_cli":
   version: 0.0.0-use.local
   resolution: "@firecms/cli@workspace:packages/firecms_cli"
   dependencies:
@@ -2585,14 +2585,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/collection_editor@npm:^3.0.0-canary.0, @firecms/collection_editor@workspace:packages/collection_editor":
+"@firecms/collection_editor@npm:^3.0.0-canary.0, @firecms/collection_editor@npm:^3.0.0-canary.1, @firecms/collection_editor@workspace:packages/collection_editor":
   version: 0.0.0-use.local
   resolution: "@firecms/collection_editor@workspace:packages/collection_editor"
   dependencies:
-    "@firecms/data_import_export": "npm:^3.0.0-canary.0"
-    "@firecms/formex": "npm:^3.0.0-canary.0"
-    "@firecms/schema_inference": "npm:^3.0.0-canary.0"
-    "@firecms/ui": "npm:^3.0.0-canary.0"
+    "@firecms/data_import_export": "npm:^3.0.0-canary.1"
+    "@firecms/formex": "npm:^3.0.0-canary.1"
+    "@firecms/schema_inference": "npm:^3.0.0-canary.1"
+    "@firecms/ui": "npm:^3.0.0-canary.1"
     "@jest/globals": "npm:^29.7.0"
     "@types/react": "npm:^18.2.54"
     "@types/react-dom": "npm:^18.2.18"
@@ -2623,12 +2623,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/core@npm:^3.0.0-canary.0, @firecms/core@workspace:packages/firecms_core":
+"@firecms/core@npm:^3.0.0-canary.0, @firecms/core@npm:^3.0.0-canary.1, @firecms/core@workspace:packages/firecms_core":
   version: 0.0.0-use.local
   resolution: "@firecms/core@workspace:packages/firecms_core"
   dependencies:
-    "@firecms/formex": "npm:^3.0.0-canary.0"
-    "@firecms/ui": "npm:^3.0.0-canary.0"
+    "@firecms/formex": "npm:^3.0.0-canary.1"
+    "@firecms/ui": "npm:^3.0.0-canary.1"
     "@fontsource/ibm-plex-mono": "npm:^5.0.8"
     "@fontsource/roboto": "npm:^5.0.8"
     "@hello-pangea/dnd": "npm:^16.5.0"
@@ -2685,11 +2685,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_enhancement@npm:^3.0.0-canary.0, @firecms/data_enhancement@workspace:packages/data_enhancement":
+"@firecms/data_enhancement@npm:^3.0.0-canary.0, @firecms/data_enhancement@npm:^3.0.0-canary.1, @firecms/data_enhancement@workspace:packages/data_enhancement":
   version: 0.0.0-use.local
   resolution: "@firecms/data_enhancement@workspace:packages/data_enhancement"
   dependencies:
-    "@firecms/core": "npm:^3.0.0-canary.0"
+    "@firecms/core": "npm:^3.0.0-canary.1"
     "@testing-library/jest-dom": "npm:^5.17.0"
     "@types/jest": "npm:^29.5.12"
     "@types/react": "npm:^18.2.54"
@@ -2719,12 +2719,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_import_export@npm:^3.0.0-canary.0, @firecms/data_import_export@workspace:packages/data_import_export":
+"@firecms/data_import_export@npm:^3.0.0-canary.0, @firecms/data_import_export@npm:^3.0.0-canary.1, @firecms/data_import_export@workspace:packages/data_import_export":
   version: 0.0.0-use.local
   resolution: "@firecms/data_import_export@workspace:packages/data_import_export"
   dependencies:
-    "@firecms/core": "npm:^3.0.0-canary.0"
-    "@firecms/schema_inference": "npm:^3.0.0-canary.0"
+    "@firecms/core": "npm:^3.0.0-canary.1"
+    "@firecms/schema_inference": "npm:^3.0.0-canary.1"
     "@jest/globals": "npm:^29.7.0"
     "@testing-library/jest-dom": "npm:^5.17.0"
     "@types/jest": "npm:^29.5.12"
@@ -2756,11 +2756,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/editor@npm:^3.0.0-canary.0, @firecms/editor@workspace:packages/editor":
+"@firecms/editor@npm:^3.0.0-canary.0, @firecms/editor@npm:^3.0.0-canary.1, @firecms/editor@workspace:packages/editor":
   version: 0.0.0-use.local
   resolution: "@firecms/editor@workspace:packages/editor"
   dependencies:
-    "@firecms/ui": "npm:^3.0.0-canary.0"
+    "@firecms/ui": "npm:^3.0.0-canary.1"
     "@radix-ui/react-slot": "npm:^1.0.2"
     "@tiptap/core": "npm:^2.1.7"
     "@tiptap/extension-color": "npm:^2.1.7"
@@ -2795,15 +2795,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/firebase@npm:^3.0.0-canary.0, @firecms/firebase@workspace:packages/firebase_firecms":
+"@firecms/firebase@npm:^3.0.0-canary.1, @firecms/firebase@workspace:packages/firebase_firecms":
   version: 0.0.0-use.local
   resolution: "@firecms/firebase@workspace:packages/firebase_firecms"
   dependencies:
-    "@firecms/collection_editor": "npm:^3.0.0-canary.0"
-    "@firecms/core": "npm:^3.0.0-canary.0"
-    "@firecms/data_enhancement": "npm:^3.0.0-canary.0"
-    "@firecms/data_import_export": "npm:^3.0.0-canary.0"
-    "@firecms/schema_inference": "npm:^3.0.0-canary.0"
+    "@firecms/collection_editor": "npm:^3.0.0-canary.1"
+    "@firecms/core": "npm:^3.0.0-canary.1"
+    "@firecms/data_enhancement": "npm:^3.0.0-canary.1"
+    "@firecms/data_import_export": "npm:^3.0.0-canary.1"
+    "@firecms/schema_inference": "npm:^3.0.0-canary.1"
     "@types/node": "npm:^20.11.16"
     "@types/react": "npm:^18.2.54"
     "@types/react-dom": "npm:^18.2.18"
@@ -2828,13 +2828,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/firebase_pro@npm:^3.0.0-canary.0, @firecms/firebase_pro@workspace:packages/firebase_firecms_pro":
+"@firecms/firebase_pro@npm:^3.0.0-canary.0, @firecms/firebase_pro@npm:^3.0.0-canary.1, @firecms/firebase_pro@workspace:packages/firebase_firecms_pro":
   version: 0.0.0-use.local
   resolution: "@firecms/firebase_pro@workspace:packages/firebase_firecms_pro"
   dependencies:
-    "@firecms/core": "npm:^3.0.0-canary.0"
-    "@firecms/firebase": "npm:^3.0.0-canary.0"
-    "@firecms/ui": "npm:^3.0.0-canary.0"
+    "@firecms/core": "npm:^3.0.0-canary.1"
+    "@firecms/firebase": "npm:^3.0.0-canary.1"
+    "@firecms/ui": "npm:^3.0.0-canary.1"
     "@types/node": "npm:^20.11.16"
     firebase: "npm:^10.8.0"
     typescript: "npm:^5.3.3"
@@ -2846,7 +2846,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/formex@npm:^3.0.0-canary.0, @firecms/formex@workspace:packages/formex":
+"@firecms/formex@npm:^3.0.0-canary.1, @firecms/formex@workspace:packages/formex":
   version: 0.0.0-use.local
   resolution: "@firecms/formex@workspace:packages/formex"
   dependencies:
@@ -2871,18 +2871,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/schema_inference@npm:^3.0.0-canary.0, @firecms/schema_inference@workspace:packages/schema_inference":
+"@firecms/schema_inference@npm:^3.0.0-canary.0, @firecms/schema_inference@npm:^3.0.0-canary.1, @firecms/schema_inference@workspace:packages/schema_inference":
   version: 0.0.0-use.local
   resolution: "@firecms/schema_inference@workspace:packages/schema_inference"
   dependencies:
-    "@firecms/core": "npm:^3.0.0-canary.0"
+    "@firecms/core": "npm:^3.0.0-canary.1"
     "@types/node": "npm:^20.11.16"
     typescript: "npm:^5.3.3"
     vite: "npm:^5.1.1"
   languageName: unknown
   linkType: soft
 
-"@firecms/ui@npm:^3.0.0-canary.0, @firecms/ui@workspace:packages/ui":
+"@firecms/ui@npm:^3.0.0-canary.0, @firecms/ui@npm:^3.0.0-canary.1, @firecms/ui@workspace:packages/ui":
   version: 0.0.0-use.local
   resolution: "@firecms/ui@workspace:packages/ui"
   dependencies:
@@ -6081,6 +6081,75 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/d3-array@npm:^3.0.3":
+  version: 3.2.1
+  resolution: "@types/d3-array@npm:3.2.1"
+  checksum: 10/4a9ecacaa859cff79e10dcec0c79053f027a4749ce0a4badeaff7400d69a9c44eb8210b147916b6ff5309be049030e7d68a0e333294ff3fa11c44aa1af4ba458
+  languageName: node
+  linkType: hard
+
+"@types/d3-color@npm:*":
+  version: 3.1.3
+  resolution: "@types/d3-color@npm:3.1.3"
+  checksum: 10/1cf0f512c09357b25d644ab01b54200be7c9b15c808333b0ccacf767fff36f17520b2fcde9dad45e1bd7ce84befad39b43da42b4fded57680fa2127006ca3ece
+  languageName: node
+  linkType: hard
+
+"@types/d3-ease@npm:^3.0.0":
+  version: 3.0.2
+  resolution: "@types/d3-ease@npm:3.0.2"
+  checksum: 10/d8f92a8a7a008da71f847a16227fdcb53a8938200ecdf8d831ab6b49aba91e8921769761d3bfa7e7191b28f62783bfd8b0937e66bae39d4dd7fb0b63b50d4a94
+  languageName: node
+  linkType: hard
+
+"@types/d3-interpolate@npm:^3.0.1":
+  version: 3.0.4
+  resolution: "@types/d3-interpolate@npm:3.0.4"
+  dependencies:
+    "@types/d3-color": "npm:*"
+  checksum: 10/72a883afd52c91132598b02a8cdfced9e783c54ca7e4459f9e29d5f45d11fb33f2cabc844e42fd65ba6e28f2a931dcce1add8607d2f02ef6fb8ea5b83ae84127
+  languageName: node
+  linkType: hard
+
+"@types/d3-path@npm:*":
+  version: 3.1.0
+  resolution: "@types/d3-path@npm:3.1.0"
+  checksum: 10/7348d65c9b37c7023590d4e5ef11e37f9eee62df9fa23e0758da1fbd66a1cbff40e37cbe0b85e9388ab900451e9c18a5a973469e9fd725c8c85c4a3f84647b9d
+  languageName: node
+  linkType: hard
+
+"@types/d3-scale@npm:^4.0.2":
+  version: 4.0.8
+  resolution: "@types/d3-scale@npm:4.0.8"
+  dependencies:
+    "@types/d3-time": "npm:*"
+  checksum: 10/376e4f2199ee6db70906651587a4521976920fa5eaa847a976c434e7a8171cbfeeab515cc510c5130b1f64fcf95b9750a7fd21dfc0a40fc3398641aa7dd4e7e2
+  languageName: node
+  linkType: hard
+
+"@types/d3-shape@npm:^3.1.0":
+  version: 3.1.6
+  resolution: "@types/d3-shape@npm:3.1.6"
+  dependencies:
+    "@types/d3-path": "npm:*"
+  checksum: 10/75abf403ec5b8c11e761256aa6b3546533d61e2e12f15c82bed6b606e963dcdfb9868a2038c46099173c8830423b35ddaf14d1162f96ad9da18a2e90b0fa7d25
+  languageName: node
+  linkType: hard
+
+"@types/d3-time@npm:*, @types/d3-time@npm:^3.0.0":
+  version: 3.0.3
+  resolution: "@types/d3-time@npm:3.0.3"
+  checksum: 10/4e6bf24ec422f0893747e5020592e107bb3d96764a43d5f0bff666202bd71f052c73f735b50ec66296a6efd5766ca40b6a4e8ce3bbc61217dbe9467340608c12
+  languageName: node
+  linkType: hard
+
+"@types/d3-timer@npm:^3.0.0":
+  version: 3.0.2
+  resolution: "@types/d3-timer@npm:3.0.2"
+  checksum: 10/1643eebfa5f4ae3eb00b556bbc509444d88078208ec2589ddd8e4a24f230dd4cf2301e9365947e70b1bee33f63aaefab84cd907822aae812b9bc4871b98ab0e1
+  languageName: node
+  linkType: hard
+
 "@types/debug@npm:^4.0.0":
   version: 4.1.12
   resolution: "@types/debug@npm:4.1.12"
@@ -8232,7 +8301,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "create-firecms-app@workspace:packages/create_firecms_app"
   dependencies:
-    "@firecms/cli": "npm:^3.0.0-canary.0"
+    "@firecms/cli": "npm:^3.0.0-canary.1"
     "@types/node": "npm:^20.11.16"
     esm: "npm:^3.2.25"
     ts-node: "npm:^10.9.2"
@@ -8360,6 +8429,99 @@ __metadata:
   languageName: node
   linkType: hard
 
+"d3-array@npm:2 - 3, d3-array@npm:2.10.0 - 3, d3-array@npm:^3.1.6":
+  version: 3.2.4
+  resolution: "d3-array@npm:3.2.4"
+  dependencies:
+    internmap: "npm:1 - 2"
+  checksum: 10/5800c467f89634776a5977f6dae3f4e127d91be80f1d07e3e6e35303f9de93e6636d014b234838eea620f7469688d191b3f41207a30040aab750a63c97ec1d7c
+  languageName: node
+  linkType: hard
+
+"d3-color@npm:1 - 3":
+  version: 3.1.0
+  resolution: "d3-color@npm:3.1.0"
+  checksum: 10/536ba05bfd9f4fcd6fa289b5974f5c846b21d186875684637e22bf6855e6aba93e24a2eb3712985c6af3f502fbbfa03708edb72f58142f626241a8a17258e545
+  languageName: node
+  linkType: hard
+
+"d3-ease@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "d3-ease@npm:3.0.1"
+  checksum: 10/985d46e868494e9e6806fedd20bad712a50dcf98f357bf604a843a9f6bc17714a657c83dd762f183173dcde983a3570fa679b2bc40017d40b24163cdc4167796
+  languageName: node
+  linkType: hard
+
+"d3-format@npm:1 - 3":
+  version: 3.1.0
+  resolution: "d3-format@npm:3.1.0"
+  checksum: 10/a0fe23d2575f738027a3db0ce57160e5a473ccf24808c1ed46d45ef4f3211076b34a18b585547d34e365e78dcc26dd4ab15c069731fc4b1c07a26bfced09ea31
+  languageName: node
+  linkType: hard
+
+"d3-interpolate@npm:1.2.0 - 3, d3-interpolate@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "d3-interpolate@npm:3.0.1"
+  dependencies:
+    d3-color: "npm:1 - 3"
+  checksum: 10/988d66497ef5c190cf64f8c80cd66e1e9a58c4d1f8932d776a8e3ae59330291795d5a342f5a97602782ccbef21a5df73bc7faf1f0dc46a5145ba6243a82a0f0e
+  languageName: node
+  linkType: hard
+
+"d3-path@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "d3-path@npm:3.1.0"
+  checksum: 10/8e97a9ab4930a05b18adda64cf4929219bac913a5506cf8585631020253b39309549632a5cbeac778c0077994442ddaaee8316ee3f380e7baf7566321b84e76a
+  languageName: node
+  linkType: hard
+
+"d3-scale@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "d3-scale@npm:4.0.2"
+  dependencies:
+    d3-array: "npm:2.10.0 - 3"
+    d3-format: "npm:1 - 3"
+    d3-interpolate: "npm:1.2.0 - 3"
+    d3-time: "npm:2.1.1 - 3"
+    d3-time-format: "npm:2 - 4"
+  checksum: 10/e2dc4243586eae2a0fdf91de1df1a90d51dfacb295933f0ca7e9184c31203b01436bef69906ad40f1100173a5e6197ae753cb7b8a1a8fcfda43194ea9cad6493
+  languageName: node
+  linkType: hard
+
+"d3-shape@npm:^3.1.0":
+  version: 3.2.0
+  resolution: "d3-shape@npm:3.2.0"
+  dependencies:
+    d3-path: "npm:^3.1.0"
+  checksum: 10/2e861f4d4781ee8abd85d2b435f848d667479dcf01a4e0db3a06600a5bdeddedb240f88229ec7b3bf7fa300c2b3526faeaf7e75f9a24dbf4396d3cc5358ff39d
+  languageName: node
+  linkType: hard
+
+"d3-time-format@npm:2 - 4":
+  version: 4.1.0
+  resolution: "d3-time-format@npm:4.1.0"
+  dependencies:
+    d3-time: "npm:1 - 3"
+  checksum: 10/ffc0959258fbb90e3890bfb31b43b764f51502b575e87d0af2c85b85ac379120d246914d07fca9f533d1bcedc27b2841d308a00fd64848c3e2cad9eff5c9a0aa
+  languageName: node
+  linkType: hard
+
+"d3-time@npm:1 - 3, d3-time@npm:2.1.1 - 3, d3-time@npm:^3.0.0":
+  version: 3.1.0
+  resolution: "d3-time@npm:3.1.0"
+  dependencies:
+    d3-array: "npm:2 - 3"
+  checksum: 10/c110bed295ce63e8180e45b82a9b0ba114d5f33ff315871878f209c1a6d821caa505739a2b07f38d1396637155b8e7372632dacc018e11fbe8ceef58f6af806d
+  languageName: node
+  linkType: hard
+
+"d3-timer@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "d3-timer@npm:3.0.1"
+  checksum: 10/004128602bb187948d72c7dc153f0f063f38ac7a584171de0b45e3a841ad2e17f1e40ad396a4af9cce5551b6ab4a838d5246d23492553843d9da4a4050a911e2
+  languageName: node
+  linkType: hard
+
 "damerau-levenshtein@npm:^1.0.8":
   version: 1.0.8
   resolution: "damerau-levenshtein@npm:1.0.8"
@@ -8453,6 +8615,13 @@ __metadata:
   version: 1.2.0
   resolution: "decamelize@npm:1.2.0"
   checksum: 10/ad8c51a7e7e0720c70ec2eeb1163b66da03e7616d7b98c9ef43cce2416395e84c1e9548dd94f5f6ffecfee9f8b94251fc57121a8b021f2ff2469b2bae247b8aa
+  languageName: node
+  linkType: hard
+
+"decimal.js-light@npm:^2.4.1":
+  version: 2.5.1
+  resolution: "decimal.js-light@npm:2.5.1"
+  checksum: 10/6360911e31221a9b8b90e23020aa969d104e182c5c6518589cdfedc3ced31bf1f19cf931e265bd451ae6ee3a35ee15e81f5456a86813606fda96f8374616688f
   languageName: node
   linkType: hard
 
@@ -9570,7 +9739,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eventemitter3@npm:^4.0.0, eventemitter3@npm:^4.0.4":
+"eventemitter3@npm:^4.0.0, eventemitter3@npm:^4.0.1, eventemitter3@npm:^4.0.4":
   version: 4.0.7
   resolution: "eventemitter3@npm:4.0.7"
   checksum: 10/8030029382404942c01d0037079f1b1bc8fed524b5849c237b80549b01e2fc49709e1d0c557fa65ca4498fc9e24cff1475ef7b855121fcc15f9d61f93e282346
@@ -9677,6 +9846,13 @@ __metadata:
   version: 3.1.3
   resolution: "fast-deep-equal@npm:3.1.3"
   checksum: 10/e21a9d8d84f53493b6aa15efc9cfd53dd5b714a1f23f67fb5dc8f574af80df889b3bce25dc081887c6d25457cce704e636395333abad896ccdec03abaf1f3f9d
+  languageName: node
+  linkType: hard
+
+"fast-equals@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "fast-equals@npm:5.0.1"
+  checksum: 10/9dc1ef767903600e5694a89a787782fc3a4f56cc04d235afc13616c848c33563b8f415b1c6a248b2a236424f624aa1a7513f46b7fa69590a640e7784f1296bce
   languageName: node
   linkType: hard
 
@@ -9865,14 +10041,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms-example-v3@workspace:examples/example_v3"
   dependencies:
-    "@firecms/cli": "npm:^3.0.0-canary.0"
+    "@firecms/cli": "npm:^3.0.0-canary.1"
     "@originjs/vite-plugin-federation": "npm:^1.3.4"
     "@types/react": "npm:18.2.54"
     "@types/react-dom": "npm:18.2.18"
     "@vitejs/plugin-react": "npm:^4.2.1"
     autoprefixer: "npm:^10.4.17"
     firebase: "npm:^10.8.0"
-    firecms: "npm:^3.0.0-canary.0"
+    firecms: "npm:^3.0.0-canary.1"
     postcss: "npm:^8.4.35"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
@@ -9886,14 +10062,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms-example@workspace:examples/example_pro"
   dependencies:
-    "@firecms/collection_editor": "npm:^3.0.0-canary.0"
-    "@firecms/core": "npm:^3.0.0-canary.0"
-    "@firecms/data_enhancement": "npm:^3.0.0-canary.0"
-    "@firecms/data_import_export": "npm:^3.0.0-canary.0"
-    "@firecms/editor": "npm:^3.0.0-canary.0"
-    "@firecms/firebase_pro": "npm:^3.0.0-canary.0"
-    "@firecms/schema_inference": "npm:^3.0.0-canary.0"
-    "@firecms/ui": "npm:^3.0.0-canary.0"
+    "@firecms/collection_editor": "npm:^3.0.0-canary.1"
+    "@firecms/core": "npm:^3.0.0-canary.1"
+    "@firecms/data_enhancement": "npm:^3.0.0-canary.1"
+    "@firecms/data_import_export": "npm:^3.0.0-canary.1"
+    "@firecms/editor": "npm:^3.0.0-canary.1"
+    "@firecms/firebase_pro": "npm:^3.0.0-canary.1"
+    "@firecms/schema_inference": "npm:^3.0.0-canary.1"
+    "@firecms/ui": "npm:^3.0.0-canary.1"
     "@tailwindcss/typography": "npm:^0.5.10"
     "@types/react": "npm:^18.2.54"
     "@types/react-dom": "npm:18.2.18"
@@ -9933,18 +10109,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"firecms@npm:^3.0.0-canary.0, firecms@workspace:packages/firecms":
+"firecms@npm:^3.0.0-canary.1, firecms@workspace:packages/firecms":
   version: 0.0.0-use.local
   resolution: "firecms@workspace:packages/firecms"
   dependencies:
-    "@firecms/cli": "npm:^3.0.0-canary.0"
-    "@firecms/collection_editor": "npm:^3.0.0-canary.0"
-    "@firecms/core": "npm:^3.0.0-canary.0"
-    "@firecms/data_enhancement": "npm:^3.0.0-canary.0"
-    "@firecms/data_import_export": "npm:^3.0.0-canary.0"
-    "@firecms/firebase": "npm:^3.0.0-canary.0"
-    "@firecms/formex": "npm:^3.0.0-canary.0"
-    "@firecms/schema_inference": "npm:^3.0.0-canary.0"
+    "@firecms/cli": "npm:^3.0.0-canary.1"
+    "@firecms/collection_editor": "npm:^3.0.0-canary.1"
+    "@firecms/core": "npm:^3.0.0-canary.1"
+    "@firecms/data_enhancement": "npm:^3.0.0-canary.1"
+    "@firecms/data_import_export": "npm:^3.0.0-canary.1"
+    "@firecms/firebase": "npm:^3.0.0-canary.1"
+    "@firecms/formex": "npm:^3.0.0-canary.1"
+    "@firecms/schema_inference": "npm:^3.0.0-canary.1"
     "@types/node": "npm:^20.11.16"
     "@types/react": "npm:^18.2.54"
     "@types/react-dom": "npm:^18.2.18"
@@ -11006,6 +11182,13 @@ __metadata:
     hasown: "npm:^2.0.0"
     side-channel: "npm:^1.0.4"
   checksum: 10/bc2022eb1f277f2fcb2a60e7ced451c7ffc7a769b12e63c7a3fb247af8b5a1bed06428ce724046a8bca39ed6eb5b6832501a42f2e9a5ec4a9a7dc4e634431616
+  languageName: node
+  linkType: hard
+
+"internmap@npm:1 - 2":
+  version: 2.0.3
+  resolution: "internmap@npm:2.0.3"
+  checksum: 10/873e0e7fcfe32f999aa0997a0b648b1244508e56e3ea6b8259b5245b50b5eeb3853fba221f96692bd6d1def501da76c32d64a5cb22a0b26cdd9b445664f805e0
   languageName: node
   linkType: hard
 
@@ -14867,6 +15050,50 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prime_um@workspace:examples/prime_um":
+  version: 0.0.0-use.local
+  resolution: "prime_um@workspace:examples/prime_um"
+  dependencies:
+    "@firecms/collection_editor": "npm:^3.0.0-canary.0"
+    "@firecms/core": "npm:^3.0.0-canary.0"
+    "@firecms/data_enhancement": "npm:^3.0.0-canary.0"
+    "@firecms/data_import_export": "npm:^3.0.0-canary.0"
+    "@firecms/editor": "npm:^3.0.0-canary.0"
+    "@firecms/firebase_pro": "npm:^3.0.0-canary.0"
+    "@firecms/schema_inference": "npm:^3.0.0-canary.0"
+    "@firecms/ui": "npm:^3.0.0-canary.0"
+    "@tailwindcss/typography": "npm:^0.5.10"
+    "@types/react": "npm:^18.2.54"
+    "@types/react-dom": "npm:18.2.18"
+    "@typescript-eslint/eslint-plugin": "npm:^5.62.0"
+    "@typescript-eslint/parser": "npm:^5.62.0"
+    "@vitejs/plugin-react": "npm:^4.2.1"
+    autoprefixer: "npm:^10.4.17"
+    eslint: "npm:^8.56.0"
+    eslint-config-react-app: "npm:^7.0.1"
+    eslint-config-standard: "npm:^17.1.0"
+    eslint-plugin-import: "npm:^2.29.1"
+    eslint-plugin-n: "npm:^15.7.0"
+    eslint-plugin-promise: "npm:^6.1.1"
+    eslint-plugin-react: "npm:^7.33.2"
+    eslint-plugin-react-hooks: "npm:^4.6.0"
+    eslint-plugin-react-refresh: "npm:^0.3.5"
+    firebase: "npm:^10.8.0"
+    postcss: "npm:^8.4.35"
+    react: "npm:^18.2.0"
+    react-dom: "npm:^18.2.0"
+    react-router: "npm:^6.22.0"
+    react-router-dom: "npm:^6.22.0"
+    realm-web: "npm:^2.0.0"
+    recharts: "npm:^2.12.1"
+    tailwindcss: "npm:^3.4.1"
+    typescript: "npm:^5.3.3"
+    vite: "npm:^5.1.1"
+    vite-plugin-fonts: "npm:^0.7.0"
+    vite-plugin-svgr: "npm:^4.2.0"
+  languageName: unknown
+  linkType: soft
+
 "prism-react-renderer@npm:^2.3.1":
   version: 2.3.1
   resolution: "prism-react-renderer@npm:2.3.1"
@@ -15309,7 +15536,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^16.13.1, react-is@npm:^16.7.0":
+"react-is@npm:^16.10.2, react-is@npm:^16.13.1, react-is@npm:^16.7.0":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: 10/5aa564a1cde7d391ac980bedee21202fc90bdea3b399952117f54fb71a932af1e5902020144fb354b4690b2414a0c7aafe798eb617b76a3d441d956db7726fdf
@@ -15538,6 +15765,20 @@ __metadata:
   dependencies:
     selecto: "npm:~1.26.3"
   checksum: 10/7e1e7ee7242c70027f3616e49e426fdf8aff3cdf01574203506001c5d6436c457e9ee04f7bec312294380f42b39682ed48eb7eb7e906f665f3361a5a38527976
+  languageName: node
+  linkType: hard
+
+"react-smooth@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "react-smooth@npm:4.0.0"
+  dependencies:
+    fast-equals: "npm:^5.0.1"
+    prop-types: "npm:^15.8.1"
+    react-transition-group: "npm:^4.4.5"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 10/d7f31fe71d179f5d0d434cd71cc264b2a84b1cda4f5a2f6d2f2b4d78733e8641bdd738a6c53bcf3a228b6e3351fb56e15baf295c2bcf7bee902aeeb643e3325b
   languageName: node
   linkType: hard
 
@@ -15785,6 +16026,34 @@ __metadata:
     node-fetch:
       optional: true
   checksum: 10/100815252f3fb81fb60daede736d366de542a22bb5aa03d43470aea664635dbdc8309d214b60f1957997c896d1d2351d7aafa637f2a2e596db057632d4a3f24f
+  languageName: node
+  linkType: hard
+
+"recharts-scale@npm:^0.4.4":
+  version: 0.4.5
+  resolution: "recharts-scale@npm:0.4.5"
+  dependencies:
+    decimal.js-light: "npm:^2.4.1"
+  checksum: 10/6e1118635018bd0622b5e978e56a8764ced5741140709e025c5989a0cb40c4b0bebb7c4e231c11ab8d6127a85fef8c68d92662c6f3c22af9551737a767cea014
+  languageName: node
+  linkType: hard
+
+"recharts@npm:^2.12.1":
+  version: 2.12.1
+  resolution: "recharts@npm:2.12.1"
+  dependencies:
+    clsx: "npm:^2.0.0"
+    eventemitter3: "npm:^4.0.1"
+    lodash: "npm:^4.17.21"
+    react-is: "npm:^16.10.2"
+    react-smooth: "npm:^4.0.0"
+    recharts-scale: "npm:^0.4.4"
+    tiny-invariant: "npm:^1.3.1"
+    victory-vendor: "npm:^36.6.8"
+  peerDependencies:
+    react: ^16.0.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0
+  checksum: 10/66effa61835df5755cc320896004570d211a2954ceebc1bb6afb0b5cc9b84e0f9deba1a05b97920f52a4e6b56c2acecf3209b172194c04e9ef813c0e6c930b0f
   languageName: node
   linkType: hard
 
@@ -17123,6 +17392,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tiny-invariant@npm:^1.3.1":
+  version: 1.3.3
+  resolution: "tiny-invariant@npm:1.3.3"
+  checksum: 10/5e185c8cc2266967984ce3b352a4e57cb89dad5a8abb0dea21468a6ecaa67cd5bb47a3b7a85d08041008644af4f667fb8b6575ba38ba5fb00b3b5068306e59fe
+  languageName: node
+  linkType: hard
+
 "tippy.js@npm:^6.3.7":
   version: 6.3.7
   resolution: "tippy.js@npm:6.3.7"
@@ -17916,6 +18192,28 @@ __metadata:
     unist-util-stringify-position: "npm:^3.0.0"
     vfile-message: "npm:^3.0.0"
   checksum: 10/d8f59b419d4c83b3ed24f500cf02393149b728f8803f88519c18fe0733f62544fa9ab0d8425a8bc7835181d848b9ce29c014168dc45af72f416074bbe475f643
+  languageName: node
+  linkType: hard
+
+"victory-vendor@npm:^36.6.8":
+  version: 36.9.1
+  resolution: "victory-vendor@npm:36.9.1"
+  dependencies:
+    "@types/d3-array": "npm:^3.0.3"
+    "@types/d3-ease": "npm:^3.0.0"
+    "@types/d3-interpolate": "npm:^3.0.1"
+    "@types/d3-scale": "npm:^4.0.2"
+    "@types/d3-shape": "npm:^3.1.0"
+    "@types/d3-time": "npm:^3.0.0"
+    "@types/d3-timer": "npm:^3.0.0"
+    d3-array: "npm:^3.1.6"
+    d3-ease: "npm:^3.0.1"
+    d3-interpolate: "npm:^3.0.1"
+    d3-scale: "npm:^4.0.2"
+    d3-shape: "npm:^3.1.0"
+    d3-time: "npm:^3.0.0"
+    d3-timer: "npm:^3.0.1"
+  checksum: 10/e9a30a8650c203b8c1b4b425ea6ee3d6b87beca9506d9ecc4bc8a3cd46220ddb2b9d2a778e86e3c638361236adedc257875fa2004776b39791d4b09db9d43d80
   languageName: node
   linkType: hard
 

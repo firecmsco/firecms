@@ -1,7 +1,7 @@
 {
   "name": "firecms",
   "type": "module",
-  "version": "3.0.0-canary.0",
+  "version": "3.0.0-canary.1",
   "publishConfig": {
     "access": "public"
   },
@@ -32,14 +32,14 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/cli": "^3.0.0-canary.0",
-    "@firecms/collection_editor": "^3.0.0-canary.0",
-    "@firecms/core": "^3.0.0-canary.0",
-    "@firecms/data_enhancement": "^3.0.0-canary.0",
-    "@firecms/data_import_export": "^3.0.0-canary.0",
-    "@firecms/firebase": "^3.0.0-canary.0",
-    "@firecms/formex": "^3.0.0-canary.0",
-    "@firecms/schema_inference": "^3.0.0-canary.0",
+    "@firecms/cli": "^3.0.0-canary.1",
+    "@firecms/collection_editor": "^3.0.0-canary.1",
+    "@firecms/core": "^3.0.0-canary.1",
+    "@firecms/data_enhancement": "^3.0.0-canary.1",
+    "@firecms/data_import_export": "^3.0.0-canary.1",
+    "@firecms/firebase": "^3.0.0-canary.1",
+    "@firecms/formex": "^3.0.0-canary.1",
+    "@firecms/schema_inference": "^3.0.0-canary.1",
     "react-router": "^6.22.0",
     "react-router-dom": "^6.22.0"
   },
@@ -80,5 +80,5 @@
       "react-app/jest"
     ]
   },
-  "gitHead": "9c3561bc09311f2339bb6fa224c88a62d3b19617"
+  "gitHead": "165080f8a46d85fef75ce4e4cd3e7f38b80d59d5"
 }
