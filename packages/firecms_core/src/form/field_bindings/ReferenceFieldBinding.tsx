@@ -49,7 +49,7 @@ function ReferenceFieldBindingInternal<M extends Record<string, any>>({
         setValue
     });
 
-    const validValue = value && value instanceof EntityReference;
+    const validValue = value && value.isEntityReference && value.isEntityReference();
 
     const navigationController = useNavigationController();
     const collection: EntityCollection | undefined = useMemo(() => {

@@ -11,7 +11,6 @@ export default defineConfig(() => ({
         logOverride: { "this-is-undefined-in-esm": "silent" }
     },
     build: {
-        minify: true,
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
             name: "FireCMS schema inference",

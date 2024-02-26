@@ -178,7 +178,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
         }
     } else if (property.dataType === "reference") {
         if (typeof property.path === "string") {
-            if (value instanceof EntityReference) {
+            if (typeof value === "object" && "isEntityReference" in value && value.isEntityReference()) {
                 content = <ReferencePreview
                     disabled={!property.path}
                     previewProperties={property.previewProperties}

@@ -24,3 +24,16 @@ firecms init
 ```bash
 firecms deploy
 ```
+
+### Using different templates
+You can initialize a new project using different templates. For example:
+
+For version 2:
+```bash
+firecms init --v2
+```
+
+For FireCMS PRO:
+```bash
+firecms init --pro
+```

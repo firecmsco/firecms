@@ -16,7 +16,6 @@ export default defineConfig(() => ({
             name: "FireCMS data import/export",
             fileName: (format) => `index.${format}.js`
         },
-        minify: true,
         target: "esnext",
         sourcemap: true,
         rollupOptions: {

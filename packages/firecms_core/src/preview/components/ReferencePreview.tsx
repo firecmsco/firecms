@@ -32,7 +32,7 @@ export type ReferencePreviewProps = {
  */
 export const ReferencePreview = React.memo<ReferencePreviewProps>(function ReferencePreview(props: ReferencePreviewProps) {
     const reference = props.reference;
-    if (!((reference as unknown) instanceof EntityReference)) {
+    if (!(typeof reference === "object" && "isEntityReference" in reference && reference.isEntityReference())) {
         console.warn("Reference preview received value of type", typeof reference);
         return <ReferencePreviewContainer
             onClick={props.onClick}

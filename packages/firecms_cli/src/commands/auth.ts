@@ -8,7 +8,7 @@ import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common";
 import * as os from "os";
 import EventEmitter from "events";
 import chalk from "chalk";
-import { done_html } from "./done_html";
+import { done_html } from "../util/done_html";
 
 const https = require("https");
 const url = require("url");

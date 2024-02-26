@@ -17,7 +17,6 @@ export default defineConfig(() => ({
             name: "FireCMS Editor",
             fileName: (format) => `index.${format}.js`
         },
-        minify: true,
         target: "esnext",
         sourcemap: true,
 

@@ -1,5 +1,4 @@
 import React, { MouseEvent, useCallback } from "react";
-import equal from "react-fast-compare"
 
 import { CollectionSize, Entity, EntityAction, EntityCollection, SelectionController } from "../../types";
 import { Checkbox, cn, IconButton, Menu, MenuItem, MoreVertIcon, Skeleton, Tooltip, Typography } from "@firecms/ui";

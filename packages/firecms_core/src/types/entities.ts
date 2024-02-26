@@ -56,6 +56,10 @@ export class EntityReference<M extends Record<string, any> = any> {
     get pathWithId() {
         return `${this.path}/${this.id}`;
     }
+
+    isEntityReference() {
+        return true;
+    }
 }
 
 export class GeoPoint {

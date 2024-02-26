@@ -11,7 +11,6 @@ export default defineConfig(() => ({
         logOverride: { "this-is-undefined-in-esm": "silent" }
     },
     build: {
-        minify: true,
         target: "esnext",
         modulePreload: false,
         cssCodeSplit: false,

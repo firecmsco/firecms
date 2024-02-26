@@ -717,7 +717,7 @@ export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
         return deleteField();
     } else if (Array.isArray(data)) {
         return data.map(v => cmsToFirestoreModel(v, firestore));
-    } else if (data instanceof EntityReference) {
+    } else if (data.isEntityReference && data.isEntityReference()) {
         return doc(firestore, data.path, data.id);
     } else if (data instanceof GeoPoint) {
         return new FirestoreGeoPoint(data.latitude, data.longitude);

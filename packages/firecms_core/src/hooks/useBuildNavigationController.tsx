@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
+import equal from "react-fast-compare"
 
 import {
     AuthController,
@@ -49,7 +50,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
                                                                                                      basePath = DEFAULT_BASE_PATH,
                                                                                                      baseCollectionPath = DEFAULT_COLLECTION_PATH,
                                                                                                      authController,
-                                                                                                     collections: baseCollections,
+                                                                                                     collections: collectionsProp,
                                                                                                      views: baseViews,
                                                                                                      userConfigPersistence,
                                                                                                      dataSourceDelegate,
@@ -58,6 +59,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
 
     const location = useLocation();
 
+    const collectionsRef = useRef<EntityCollection[] | null>();
     const [collections, setCollections] = useState<EntityCollection[] | undefined>();
     const [views, setViews] = useState<CMSView[] | undefined>();
     const [initialised, setInitialised] = useState<boolean>(false);
@@ -80,7 +82,6 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         [baseCollectionPath]);
 
     const computeTopNavigation = useCallback((collections: EntityCollection[], views: CMSView[]): TopNavigationResult => {
-        // return (collection.editable && resolvePermissions(collection, authController, paths).editCollection) ?? DEFAULT_PERMISSIONS.editCollection;
         const navigationEntries: TopNavigationEntry[] = [
             ...(collections ?? []).map(collection => (!collection.hideFromNavigation
                 ? {
@@ -125,14 +126,16 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
 
         try {
             const [resolvedCollections = [], resolvedViews = []] = await Promise.all([
-                    resolveCollections(baseCollections, authController, dataSourceDelegate, injectCollections),
+                    resolveCollections(collectionsProp, authController, dataSourceDelegate, injectCollections),
                     resolveCMSViews(baseViews, authController, dataSourceDelegate)
                 ]
             );
-
-            setCollections(resolvedCollections);
-            setViews(resolvedViews);
-            setTopLevelNavigation(computeTopNavigation(resolvedCollections ?? [], resolvedViews));
+            if (!equal(collectionsRef.current, resolvedCollections) || !equal(views, resolvedViews) || !equal(topLevelNavigation, computeTopNavigation(resolvedCollections, resolvedViews))) {
+                collectionsRef.current = resolvedCollections;
+                setCollections(resolvedCollections);
+                setViews(resolvedViews);
+                setTopLevelNavigation(computeTopNavigation(resolvedCollections ?? [], resolvedViews));
+            }
         } catch (e) {
             console.error(e);
             setNavigationLoadingError(e as any);
@@ -140,7 +143,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
 
         setNavigationLoading(false);
         setInitialised(true);
-    }, [baseCollections, authController.user, authController.initialLoading, baseViews, computeTopNavigation, injectCollections]);
+    }, [collectionsProp, authController.user, authController.initialLoading, baseViews, computeTopNavigation, injectCollections]);
 
     useEffect(() => {
         refreshNavigation();
@@ -276,15 +279,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         }
 
         // for each odd path segment, get the collection
-        const parentCollectionIds = result.map(r => getCollectionFromPaths(r)?.id).filter(Boolean) as string[];
-
-        getCollectionFromPaths(oddPathSegments);
-
-        // const allParentCollectionsForPath = getAllParentReferencesForPath(path);
-        // console.log("allParentCollectionsForPath", allParentCollectionsForPath);
-        // const parentCollectionIds = allParentCollectionsForPath.map(r => r.id);
-        console.log("getParentCollectionIds", path, parentCollectionIds);
-        return parentCollectionIds;
+        return result.map(r => getCollectionFromPaths(r)?.id).filter(Boolean) as string[];
     }, [getAllParentReferencesForPath])
 
     const convertIdsToPaths = useCallback((ids: string[]): string[] => {

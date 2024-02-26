@@ -9,13 +9,13 @@ import { Button, cn } from "@firecms/ui";
 export type ReferenceWidgetProps<M extends Record<string, any>> = {
     name?: string,
     multiselect?: boolean,
-    value: EntityReference<M> | EntityReference<M>[] | null,
+    value: EntityReference | EntityReference[] | null,
     onReferenceSelected?: (params: {
-        reference: EntityReference<M> | null,
+        reference: EntityReference | null,
         entity: Entity<M> | null
     }) => void,
     onMultipleReferenceSelected?: (params: {
-        references: EntityReference<M>[] | null,
+        references: EntityReference[] | null,
         entities: Entity<M>[] | null
     }) => void,
     path: string,
@@ -113,7 +113,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
                     size={size}/>
             })}
         </div>
-    } else if (value instanceof EntityReference) {
+    } else if (value?.isEntityReference && value?.isEntityReference()) {
         child = <ReferencePreview
             reference={value}
             onClick={onEntryClick}

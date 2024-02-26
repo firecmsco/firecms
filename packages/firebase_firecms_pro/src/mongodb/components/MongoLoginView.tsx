@@ -3,12 +3,14 @@ import React, { ReactNode, useEffect, useRef, useState } from "react";
 import {
     ArrowBackIcon,
     EmailIcon,
-    ErrorView,
-    FireCMSLogo,
     IconButton,
     TextField,
+} from "@firecms/ui";
+import {
+    ErrorView,
+    FireCMSLogo,
     useModeController
-} from "firecms";
+} from "@firecms/core";
 
 import { MongoAuthController } from "../useMongoAuthController";
 import { Button, CircularProgress, Typography } from "@firecms/ui";

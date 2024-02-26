@@ -546,7 +546,7 @@ function getDataType(value: any): DataType | undefined {
         return "array";
     } else if (value instanceof Date) {
         return "date";
-    } else if (value instanceof EntityReference) {
+    } else if (value.isEntityReference && value.isEntityReference()) {
         return "reference";
     } else if (value instanceof GeoPoint) {
         return "geopoint";

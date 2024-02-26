@@ -342,7 +342,7 @@ export function cmsToDelegateModel(data: any,
         return buildDelete();
     } else if (Array.isArray(data)) {
         return data.map(v => cmsToDelegateModel(v, buildReference, buildGeoPoint, buildDate, buildDelete));
-    } else if (data instanceof EntityReference) {
+    } else if (data.isEntityReference && data.isEntityReference()) {
         return buildReference(data);
     } else if (data instanceof GeoPoint) {
         return buildGeoPoint(data);

@@ -14,10 +14,9 @@ import {
     FilterValues,
     ListenCollectionProps,
     ListenEntityProps,
-    ResolvedProperty,
     SaveEntityProps,
     WhereFilterOp
-} from "firecms";
+} from "@firecms/core";
 import {
     addValueAtIndex,
     getEntityIndex,
@@ -509,7 +508,7 @@ function valuesToMongoValues(values: EntityValues<any>) {
 }
 
 function valueToMongoValue(value: any): any {
-    if (value instanceof EntityReference) {
+    if (value.isEntityReference && value.isEntityReference()) {
         return {
             id: new BSON.ObjectId(value.id),
             path: value.path

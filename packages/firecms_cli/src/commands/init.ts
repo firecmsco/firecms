@@ -51,7 +51,6 @@ ${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
 `);
 
     let options = parseArgumentsIntoOptions(rawArgs);
-
     let currentUser = await getCurrentUser(options.env, options.debug);
     const shouldLogin = !options.v2 && !currentUser;
     if (shouldLogin) {
@@ -169,14 +168,12 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
         });
     }
 
-    if (!options.dir_name) {
-        questions.push({
-            type: "input",
-            name: "dir_name",
-            message: "Please choose which folder to create the project in",
-            default: defaultName,
-        });
-    }
+    questions.push({
+        type: "input",
+        name: "dir_name",
+        message: "Please choose which folder to create the project in",
+        default: options.dir_name ?? defaultName,
+    });
 
     if (!options.git) {
         questions.push({
@@ -197,7 +194,7 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
 
     return {
         ...options,
-        dir_name: options.dir_name || answers.dir_name,
+        dir_name: answers.dir_name ?? options.dir_name,
         git: options.git || answers.git,
         firebaseProjectId: answers.firebaseProjectId,
     };
@@ -248,7 +245,7 @@ export async function createProject(options: InitOptions) {
 
     const tasks = new Listr([
         {
-            title: "Copy project files",
+            title: "Copy project files: " + options.templateDirectory,
             task: (ctx) => copyTemplateFiles(options, ctx.webappConfig),
         },
         {

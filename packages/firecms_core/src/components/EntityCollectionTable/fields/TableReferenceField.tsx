@@ -96,7 +96,7 @@ export const TableReferenceFieldSuccess = React.memo(
         const valueNotSet = !internalValue || (Array.isArray(internalValue) && internalValue.length === 0);
 
         const buildSingleReferenceField = () => {
-            if (internalValue instanceof EntityReference)
+            if (internalValue && !Array.isArray(internalValue) && internalValue.isEntityReference && internalValue.isEntityReference())
                 return <ReferencePreview
                     onClick={disabled ? undefined : handleOpen}
                     size={getPreviewSizeFrom(size)}

@@ -20,3 +20,4 @@ export * from "./flatten_object";
 export * from "./make_properties_editable";
 export * from "./join_collections";
 export * from "./builders";
+export * from "./useTraceUpdate";

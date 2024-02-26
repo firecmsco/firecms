@@ -16,7 +16,6 @@ export default defineConfig(() => ({
             name: "FireCMS collection editor",
             fileName: (format) => `index.${format}.js`
         },
-        minify: true,
         target: "esnext",
         sourcemap: true,
         rollupOptions: {
