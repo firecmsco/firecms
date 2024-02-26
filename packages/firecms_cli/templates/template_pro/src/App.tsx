@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { BrowserRouter } from "react-router-dom";
 
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { useImportExportPlugin } from "@firecms/data_import_export";
@@ -37,11 +38,13 @@ export default function App() {
         }
     });
 
-    return <FireCMSProApp
-        name={"My Online Shop"}
-        plugins={[importExportPlugin, dataEnhancementPlugin]}
-        authentication={myAuthenticator}
-        collections={[productsCollection]}
-        firebaseConfig={firebaseConfig}
-    />;
+    return <BrowserRouter>
+        <FireCMSProApp
+            name={"My Online Shop"}
+            plugins={[importExportPlugin, dataEnhancementPlugin]}
+            authentication={myAuthenticator}
+            collections={[productsCollection]}
+            firebaseConfig={firebaseConfig}
+        />
+    </BrowserRouter>;
 }
