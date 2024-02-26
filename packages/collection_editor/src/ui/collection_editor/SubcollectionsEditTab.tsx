@@ -140,7 +140,7 @@ export function SubcollectionsEditTab({
                                                    component={"a"}
                                                    rel="noopener noreferrer"
                                                    target="_blank">More info</Button>}>
-                                Define your own custom views by uploading it with the CLI.
+                                Define your own custom views by uploading them with the CLI.
                             </Alert>
                         }
 

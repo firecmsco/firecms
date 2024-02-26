@@ -55,6 +55,7 @@ export const Alert: React.FC<AlertProps> = ({
             className={cn(
                 getSizeClasses(size),
                 "w-full",
+                "font-medium",
                 "rounded-md flex items-center gap-2",
                 classes,
                 className)}>
