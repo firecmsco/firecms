@@ -1,6 +1,6 @@
 {
   "name": "@firecms/editor",
-  "version": "3.0.0-canary.5",
+  "version": "3.0.0-canary.6",
   "description": "Notion-style WYSIWYG editor for FireCMS",
   "license": "Apache-2.0",
   "type": "module",
@@ -27,7 +27,7 @@
     "react-dom": "^18.0.0"
   },
   "dependencies": {
-    "@firecms/ui": "^3.0.0-canary.5",
+    "@firecms/ui": "^3.0.0-canary.6",
     "@radix-ui/react-slot": "^1.0.2",
     "@tiptap/core": "^2.1.7",
     "@tiptap/extension-color": "^2.1.7",
@@ -59,5 +59,5 @@
     "typescript": "^5.3.3",
     "vite": "^5.1.1"
   },
-  "gitHead": "b821bceb86cfbbcdfe34bb234e5adfd0e740a6cf"
+  "gitHead": "e3850e04c28ef87d561bdf651950c7fbac87a9ec"
 }
