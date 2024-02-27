@@ -330,6 +330,10 @@ export function useBuildDataSource({
  * bindings.
  * Also, Firestore references are replaced with {@link EntityReference}
  * @param data
+ * @param buildReference
+ * @param buildGeoPoint
+ * @param buildDate
+ * @param buildDelete
  * @group Firestore
  */
 export function cmsToDelegateModel(data: any,
@@ -357,4 +361,3 @@ export function cmsToDelegateModel(data: any,
     }
     return data;
 }
-

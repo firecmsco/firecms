@@ -149,7 +149,7 @@ function processValueForExport(inputValue: any,
         } else {
             value = inputValue;
         }
-    } else if (property.dataType === "reference" && inputValue.isEntityReference && inputValue.isEntityReference()) {
+    } else if (property.dataType === "reference" && inputValue && inputValue.isEntityReference && inputValue.isEntityReference()) {
         const ref = inputValue ? inputValue as EntityReference : undefined;
         value = ref ? ref.pathWithId : null;
     } else if (property.dataType === "date" && inputValue instanceof Date) {

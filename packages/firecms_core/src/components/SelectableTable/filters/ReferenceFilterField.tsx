@@ -60,7 +60,7 @@ export function ReferenceFilterField({
 
     const selectedEntityIds = internalValue
         ? (Array.isArray(internalValue) ? internalValue.map((ref) => {
-            if (!(ref.isEntityReference && ref.isEntityReference())) {
+            if (!(ref?.isEntityReference && ref?.isEntityReference())) {
                 return null;
             }
             return ref.id;
@@ -74,7 +74,7 @@ export function ReferenceFilterField({
         let newValue = val;
         if (prevOpIsArray !== newOpIsArray) {
             // @ts-ignore
-            newValue = newOpIsArray ? (newValue.isEntityReference && newValue.isEntityReference() ? [newValue] : []) : undefined
+            newValue = newOpIsArray ? (newValue?.isEntityReference && newValue?.isEntityReference() ? [newValue] : []) : undefined
         }
 
         setOperation(op);

@@ -508,6 +508,8 @@ function valuesToMongoValues(values: EntityValues<any>) {
 }
 
 function valueToMongoValue(value: any): any {
+    if(value === null)
+        return null;
     if (value.isEntityReference && value.isEntityReference()) {
         return {
             id: new BSON.ObjectId(value.id),

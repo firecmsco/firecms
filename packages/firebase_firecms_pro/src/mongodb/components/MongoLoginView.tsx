@@ -260,7 +260,7 @@ function LoginForm({
 
     return (
         <form onSubmit={handleSubmit}>
-            <div className="space-y-2">
+            <div className="container space-y-2">
                 <div className="w-full">
                     <IconButton onClick={onBackPressed}>
                         <ArrowBackIcon/>

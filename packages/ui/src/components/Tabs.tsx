@@ -19,7 +19,7 @@ export function Tabs({
 
     return <TabsPrimitive.Root value={value} onValueChange={onValueChange}>
         <TabsPrimitive.List className={cn(
-            "flex text-sm font-medium text-center text-slate-800 dark:text-slate-200",
+            "flex text-sm font-medium text-center text-slate-800 dark:text-slate-200 max-w-full overflow-auto no-scrollbar",
             className)
         }>
             {children}

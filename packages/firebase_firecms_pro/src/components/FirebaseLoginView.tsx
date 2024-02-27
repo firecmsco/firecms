@@ -428,7 +428,7 @@ function LoginForm({
 
     const passwordRef = useRef<HTMLInputElement | null>(null);
 
-    const [loginState, setLoginState] = useState<LoginFormMode>("email"); // ["email", "password", "registration"
+    const [loginState, setLoginState] = useState<LoginFormMode>("email"); // ["email", "password", "registration"]
     const [email, setEmail] = useState<string>();
     const [password, setPassword] = useState<string>();
     const [previouslyUsedMethodsForUser, setPreviouslyUsedMethodsForUser] = useState<string[] | undefined>();
@@ -495,15 +495,15 @@ function LoginForm({
     }
 
     const label = loginState === "registration"
-        ? "Pick a password to create a new account for " + email
+        ? "Please enter your email and password to create an account"
         : (loginState === "password" ? "Please enter your password" : "Please enter your email");
 
-    const button = loginState === "registration" ? "Create account" : (loginState === "password" ? "Login" : "Login");
-
     return (
-        <form onSubmit={handleSubmit}>
+        <form
+            className={"w-full"}
+            onSubmit={handleSubmit}>
 
-            <div className={"flex flex-col gap-1"}>
+            <div className={"max-w-[480px] w-full flex flex-col gap-4"}>
                 <IconButton
                     onClick={onBackPressed}>
                     <ArrowBackIcon className="w-5 h-5"/>
@@ -513,19 +513,15 @@ function LoginForm({
                     {loginState === "registration" && noUserComponent}
                 </div>
 
-                <div
-                    className={`p-4 ${loginState === "registration" && disableSignupScreen ? "hidden" : "flex"}`}>
-                    <Typography align={"center"}
-                                variant={"subtitle2"}>{label}</Typography>
-                </div>
+                <Typography
+                    className={`${loginState === "registration" && disableSignupScreen ? "hidden" : "flex"}`}
+                    variant={"subtitle2"}>{label}</Typography>
 
-                {loginState === "email" && <TextField placeholder="Email" autoFocus
-                                                      value={email ?? ""}
-                                                      disabled={authController.authLoading}
-                                                      type="email"
-                                                      onChange={(event) => setEmail(event.target.value)}/>}
-
-                {loginState === "registration" && noUserComponent}
+                {(loginState === "email" || loginState === "registration") && <TextField placeholder="Email" autoFocus
+                                                                                       value={email ?? ""}
+                                                                                       disabled={authController.authLoading}
+                                                                                       type="email"
+                                                                                       onChange={(event) => setEmail(event.target.value)}/>}
 
                 <div
                     className={`${loginState === "password" || (loginState === "registration" && !disableSignupScreen) ? "block" : "hidden"}`}>
@@ -538,18 +534,18 @@ function LoginForm({
                 </div>
 
                 <div
-                    className={`${loginState === "registration" && disableSignupScreen ? "hidden" : "flex"} justify-end items-center w-full`}>
+                    className={`${loginState === "registration" && disableSignupScreen ? "hidden" : "flex"} justify-end items-center w-full flex gap-2`}>
 
                     {authController.authLoading &&
                         <CircularProgress className="p-1" size={"small"}/>
                     }
 
-                    {loginState === "email" && <Button onClick={() => setLoginState("registration")}>
+                    {loginState === "email" && <Button variant="outlined" onClick={() => setLoginState("registration")}>
                         New user
                     </Button>}
 
                     <Button type="submit">
-                        {button}
+                        {loginState === "registration" ? "Create account" : (loginState === "password" ? "Login" : "Login")}
                     </Button>
                 </div>
 

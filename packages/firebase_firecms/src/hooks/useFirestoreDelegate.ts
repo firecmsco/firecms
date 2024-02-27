@@ -193,10 +193,10 @@ export function useFirestoreDelegate({
     }, [firebaseApp]);
 
     const performTextSearch = useCallback(<M extends Record<string, any>>({
-                                                                                    path,
-                                                                                    searchString,
-                                                                                    onUpdate
-                                                                                }: {
+                                                                              path,
+                                                                              searchString,
+                                                                              onUpdate
+                                                                          }: {
         path: string,
         searchString: string;
         onUpdate: (entities: Entity<M>[]) => void
@@ -715,6 +715,8 @@ function setDateToMidnight(input?: Timestamp): Timestamp | undefined {
 export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
     if (data === undefined) {
         return deleteField();
+    } else if (data === null) {
+        return null;
     } else if (Array.isArray(data)) {
         return data.map(v => cmsToFirestoreModel(v, firestore));
     } else if (data.isEntityReference && data.isEntityReference()) {

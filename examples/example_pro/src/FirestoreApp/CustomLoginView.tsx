@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { BooleanSwitchWithLabel, FirebaseLoginView, FirebaseLoginViewProps, Typography } from "@firecms/firebase_pro";
+import { Alert } from "@firecms/ui";
 
 export function CustomLoginView(props: FirebaseLoginViewProps) {
 
@@ -20,9 +21,9 @@ export function CustomLoginView(props: FirebaseLoginViewProps) {
         <FirebaseLoginView
             {...props}
             disableSignupScreen={false}
-            noUserComponent={<>
+            noUserComponent={<Alert>
                 Sample custom message when no user exists
-            </>}
+            </Alert>}
             disabled={!termsAccepted}
             additionalComponent={
                 <>

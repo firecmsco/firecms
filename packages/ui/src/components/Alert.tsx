@@ -29,7 +29,7 @@ const getColorClasses = (severity: string) => {
         case "warning":
             return "bg-amber-50 dark:bg-amber-800 dark:text-amber-100 text-amber-900";
         case "info":
-            return "bg-blue-50 dark:bg-blue-800 dark:text-blue-100 text-blue-900";
+            return "bg-blue-100 dark:bg-blue-800 dark:text-blue-100 text-blue-900";
         case "success":
             return "bg-emerald-50 dark:bg-emerald-800 dark:text-emerald-100 text-emerald-900";
         case "base":
