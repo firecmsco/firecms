@@ -8,7 +8,7 @@ import { ErrorView } from "../../components";
 import { ReferencePreview } from "../../preview";
 import { getIconForProperty, getReferenceFrom } from "../../util";
 import { Button } from "@firecms/ui";
-import { useClearRestoreValue } from "../../internal/useClearRestoreValue";
+import { useClearRestoreValue } from "../useClearRestoreValue";
 
 /**
  * Field that opens a reference selection dialog.

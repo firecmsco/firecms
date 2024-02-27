@@ -5,7 +5,7 @@ import { FieldProps, PreviewType } from "../../types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { getIconForProperty } from "../../util";
 import { PropertyPreview } from "../../preview";
-import { useClearRestoreValue } from "../../internal/useClearRestoreValue";
+import { useClearRestoreValue } from "../useClearRestoreValue";
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean

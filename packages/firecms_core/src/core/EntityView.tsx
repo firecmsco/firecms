@@ -32,8 +32,8 @@ import {
 import { EntityForm } from "../form";
 import { CircularProgress, CloseIcon, cn, defaultBorderMixin, IconButton, Tab, Tabs, Typography } from "@firecms/ui";
 import { EntityFormSaveParams } from "../form/EntityForm";
-import { FORM_CONTAINER_WIDTH } from "./common";
-import { useSideDialogContext } from "../core";
+import { FORM_CONTAINER_WIDTH } from "../internal/common";
+import { useSideDialogContext } from "./index";
 
 const MAIN_TAB_VALUE = "main_##Q$SC^#S6";
 

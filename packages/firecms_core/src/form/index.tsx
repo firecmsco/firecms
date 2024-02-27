@@ -40,3 +40,4 @@ export {
 } from "./EntityForm";
 
 export { PropertyFieldBinding } from "./PropertyFieldBinding";
+export * from "./useClearRestoreValue";

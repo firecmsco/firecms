@@ -4,7 +4,7 @@ import { FieldHelperText, LabelWithIcon } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel } from "@firecms/ui";
 import { getIconForProperty } from "../../util";
-import { useClearRestoreValue } from "../../internal/useClearRestoreValue";
+import { useClearRestoreValue } from "../useClearRestoreValue";
 
 /**
  * Array field used for custom

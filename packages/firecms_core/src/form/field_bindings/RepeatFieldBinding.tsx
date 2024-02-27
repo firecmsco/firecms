@@ -5,7 +5,7 @@ import { ErrorBoundary } from "../../components";
 import { getIconForProperty } from "../../util";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel } from "@firecms/ui";
-import { useClearRestoreValue } from "../../internal/useClearRestoreValue";
+import { useClearRestoreValue } from "../useClearRestoreValue";
 
 /**
  * Generic array field that allows reordering and renders the child property

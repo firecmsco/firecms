@@ -7,7 +7,7 @@ import { getIconForProperty, getReferenceFrom } from "../../util";
 
 import { useNavigationController, useReferenceDialog } from "../../hooks";
 import { Button, ExpandablePanel } from "@firecms/ui";
-import { useClearRestoreValue } from "../../internal/useClearRestoreValue";
+import { useClearRestoreValue } from "../useClearRestoreValue";
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
 
