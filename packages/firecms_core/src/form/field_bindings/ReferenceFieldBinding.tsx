@@ -1,13 +1,14 @@
 import React, { useCallback, useMemo } from "react";
 
 import { Entity, EntityCollection, EntityReference, FieldProps } from "../../types";
-import { useClearRestoreValue, useNavigationController, useReferenceDialog } from "../../hooks";
+import { useNavigationController, useReferenceDialog } from "../../hooks";
 import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
-import { FieldHelperText } from "../components";
-import { ErrorView, LabelWithIcon } from "../../components";
+import { FieldHelperText, LabelWithIcon } from "../components";
+import { ErrorView } from "../../components";
 import { ReferencePreview } from "../../preview";
 import { getIconForProperty, getReferenceFrom } from "../../util";
 import { Button } from "@firecms/ui";
+import { useClearRestoreValue } from "../../internal/useClearRestoreValue";
 
 /**
  * Field that opens a reference selection dialog.

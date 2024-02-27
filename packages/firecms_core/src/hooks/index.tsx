@@ -4,7 +4,6 @@ export * from "./data/useEntityFetch";
 export * from "./data/save";
 export * from "./data/delete";
 
-export * from "../form/useClearRestoreValue";
 export * from "./useNavigationController";
 
 export * from "./useResolvedNavigationFrom";
@@ -23,3 +22,6 @@ export * from "./useReferenceDialog";
 export * from "./useBrowserTitleAndIcon";
 export * from "./useCustomizationController";
 export * from "./useBuildNavigationController";
+
+export * from "./useBuildLocalConfigurationPersistence";
+export * from "./useBuildModeController";

@@ -10,11 +10,10 @@ import {
 } from "../../types";
 import { useDropzone } from "react-dropzone";
 import { PreviewSize } from "../../preview";
-import { FieldHelperText } from "../components";
-import { LabelWithIcon } from "../../components";
+import { FieldHelperText,LabelWithIcon } from "../components";
 
 import { getIconForProperty, isReadOnly } from "../../util";
-import { useClearRestoreValue, useSnackbarController, useStorageSource } from "../../hooks";
+import {  useSnackbarController, useStorageSource } from "../../hooks";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { StorageFieldItem, useStorageUploadController } from "../../util/useStorageUploadController";
 import { StorageUploadProgress } from "../components/StorageUploadProgress";
@@ -27,6 +26,7 @@ import {
     focusedMixin,
     Typography
 } from "@firecms/ui";
+import { useClearRestoreValue } from "../../internal/useClearRestoreValue";
 
 const dropZoneClasses = "box-border relative pt-[2px] items-center border border-transparent min-h-[254px] outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
 const disabledClasses = "border-dotted-gray"

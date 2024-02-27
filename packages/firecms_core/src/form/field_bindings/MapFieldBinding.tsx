@@ -1,9 +1,9 @@
 import React from "react";
 import { FieldProps, Properties, ResolvedProperties } from "../../types";
 
-import { ErrorBoundary, LabelWithIcon } from "../../components";
+import { ErrorBoundary } from "../../components";
 import { getIconForProperty, isHidden, pick } from "../../util";
-import { FieldHelperText } from "../components";
+import { FieldHelperText, LabelWithIcon } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel, InputLabel, Select, SelectItem } from "@firecms/ui";
 

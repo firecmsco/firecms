@@ -90,6 +90,7 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
 
 function buildIndex(collection: EntityCollection | ResolvedEntityCollection) {
     const search = new JsSearch.Search("id");
+    search.addIndex("id");
     Object.entries(collection.properties).forEach(([key, property]) => {
         search.addIndex(key);
     });

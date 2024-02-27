@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { DataType, EntityReference, FieldProps, GeoPoint } from "../../types";
+import { DataType, FieldProps, GeoPoint } from "../../types";
 
-import { ArrayContainer, LabelWithIcon } from "../../components";
-import { FieldHelperText } from "../components";
+import { ArrayContainer } from "../../components";
+import { FieldHelperText, LabelWithIcon } from "../components";
 import {
     AddIcon,
     ArrowDropDownIcon,

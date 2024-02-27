@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { CMSType, FieldProps, ResolvedProperty } from "../../types";
-import { FieldHelperText, FormikArrayContainer } from "../components";
-import { ErrorBoundary, LabelWithIcon } from "../../components";
-import { useClearRestoreValue } from "../../hooks";
+import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../components";
+import { ErrorBoundary } from "../../components";
 import { getIconForProperty } from "../../util";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel } from "@firecms/ui";
+import { useClearRestoreValue } from "../../internal/useClearRestoreValue";
 
 /**
  * Generic array field that allows reordering and renders the child property

@@ -4,8 +4,7 @@ import React, { useDeferredValue, useEffect, useRef } from "react";
 import MarkdownIt from "markdown-it";
 import MdEditor, { Plugins } from "react-markdown-editor-lite";
 
-import { FieldHelperText } from "../components";
-import { LabelWithIcon } from "../../components";
+import { FieldHelperText, LabelWithIcon } from "../components";
 import { FieldProps } from "../../types";
 import { getIconForProperty } from "../../util";
 import {

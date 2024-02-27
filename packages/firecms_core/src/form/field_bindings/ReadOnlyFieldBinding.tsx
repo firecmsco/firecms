@@ -3,8 +3,8 @@ import React from "react";
 import { Entity, FieldProps } from "../../types";
 
 import { PropertyPreview } from "../../preview";
-import { FieldHelperText } from "../components";
-import { ErrorBoundary, LabelWithIcon } from "../../components";
+import { FieldHelperText, LabelWithIcon } from "../components";
+import { ErrorBoundary } from "../../components";
 import { getIconForProperty } from "../../util";
 import { cn, paperMixin } from "@firecms/ui";
 

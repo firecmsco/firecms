@@ -2,15 +2,14 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import { Field, useFormex } from "@firecms/formex";
 
-import { FieldHelperText, FormikArrayContainer } from "../components";
-import { LabelWithIcon } from "../../components";
-import { useClearRestoreValue } from "../../hooks";
+import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";
 import { FieldProps, FormContext, PropertyFieldBindingProps, PropertyOrBuilder } from "../../types";
 import { getDefaultValueFor, getIconForProperty, } from "../../util";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../util/common";
 import { cn, ExpandablePanel, paperMixin, Select, SelectItem, Typography } from "@firecms/ui";
+import { useClearRestoreValue } from "../../internal/useClearRestoreValue";
 
 /**
  * If the `oneOf` property is specified, this fields render each array entry as

@@ -1,12 +1,11 @@
 import React, { useCallback } from "react";
 
 import { EnumType, FieldProps } from "../../types";
-import { FieldHelperText } from "../components";
-import { LabelWithIcon } from "../../components";
-import { useClearRestoreValue } from "../../hooks";
+import { FieldHelperText, LabelWithIcon } from "../components";
 import { EnumValuesChip } from "../../preview";
 import { getIconForProperty } from "../../util";
 import { ClearIcon, cn, IconButton, Select, SelectItem } from "@firecms/ui";
+import { useClearRestoreValue } from "../../internal/useClearRestoreValue";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 
