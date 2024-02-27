@@ -1,20 +1,23 @@
-import { CMSType, DataSource, Entity, EntityCollection, useDataSource } from "@firecms/core";
+import { DataSource, Entity, EntityCollection, useDataSource } from "@firecms/core";
 import { CenteredView, CircularProgress, Typography, } from "@firecms/ui";
 import { useEffect, useRef, useState } from "react";
 import { ImportConfig } from "../types";
 
 export function ImportSaveInProgress<C extends EntityCollection>
 ({
+     path,
      importConfig,
      collection,
      onImportSuccess
  }:
      {
+         path: string,
          importConfig: ImportConfig,
          collection: C,
          onImportSuccess: (collection: C) => void
      }) {
 
+    console.log("ImportSaveInProgress", path)
     const dataSource = useDataSource();
 
     const savingRef = useRef<boolean>(false);
@@ -31,6 +34,7 @@ export function ImportSaveInProgress<C extends EntityCollection>
         saveDataBatch(
             dataSource,
             collection,
+            path,
             importConfig.entities,
             0,
             25,
@@ -68,6 +72,7 @@ export function ImportSaveInProgress<C extends EntityCollection>
 
 function saveDataBatch(dataSource: DataSource,
                        collection: EntityCollection,
+                       path: string,
                        data: Partial<Entity<any>>[],
                        offset = 0,
                        batchSize = 25,
@@ -78,7 +83,7 @@ function saveDataBatch(dataSource: DataSource,
     const batch = data.slice(offset, offset + batchSize);
     return Promise.all(batch.map(d =>
         dataSource.saveEntity({
-            path: collection.path, // TODO: should check if this is correct, specially for subcollections
+            path,
             values: d.values,
             entityId: d.id,
             collection,
@@ -87,7 +92,7 @@ function saveDataBatch(dataSource: DataSource,
         .then(() => {
             if (offset + batchSize < data.length) {
                 onProgressUpdate(offset + batchSize);
-                return saveDataBatch(dataSource, collection, data, offset + batchSize, batchSize, onProgressUpdate);
+                return saveDataBatch(dataSource, collection, path, data, offset + batchSize, batchSize, onProgressUpdate);
             }
             onProgressUpdate(data.length);
             return Promise.resolve();

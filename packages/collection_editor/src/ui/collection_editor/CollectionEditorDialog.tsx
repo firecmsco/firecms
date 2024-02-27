@@ -473,7 +473,8 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         submitCount
     } = formController;
 
-    const path = values.path ?? editedCollectionId;
+    // TODO: getting data is only working in root collections with this code
+    const path = values.path;
     const updatedFullPath = fullPath?.includes("/") ? fullPath?.split("/").slice(0, -1).join("/") + "/" + path : path; // TODO: this path is wrong
     const pathError = validatePath(path, isNewCollection, existingPaths, values.id);
 
@@ -575,6 +576,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                     {currentView === "import_data_saving" && importConfig &&
                         <ImportSaveInProgress importConfig={importConfig}
                                               collection={values}
+                                              path={path}
                                               onImportSuccess={async (importedCollection) => {
                                                   snackbarController.open({
                                                       type: "info",

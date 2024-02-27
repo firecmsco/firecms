@@ -177,6 +177,7 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
                 {step === "import_data_saving" && importConfig &&
                     <ImportSaveInProgress importConfig={importConfig}
                                           collection={collection}
+                                          path={path}
                                           onImportSuccess={(importedCollection) => {
                                               handleClose();
                                               snackbarController.open({
