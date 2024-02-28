@@ -26,9 +26,9 @@ function getAmplitude(scroll: number) {
     return Math.min(max, Math.max(min, min + scroll / 50));
 }
 function getResolution(scroll: number) {
-    return 1 / 3.33335
+    return 1 / 2;
     // const min = 1 / 3.33335;
-    // const max = 1 / 6;
+    // const max = 1 / 2;
     // return Math.min(max, Math.max(min, min + scroll / 1000));
 }
 
@@ -70,7 +70,7 @@ export default function HomeHeroNeatGradient() {
         if (!canvasRef.current)
             return;
 
-        const backgroundColor = "rgb(17,39,117)";
+        const backgroundColor = "rgb(17,48,157)";
 
         const alphaFrom = getAlphaFrom(scrollRef.current);
         gradientRef.current = new NeatGradient({

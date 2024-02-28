@@ -1,14 +1,29 @@
 import React, { useEffect, useRef } from "react";
 import { NeatGradient } from "@firecms/neat";
 
+function getBrightnessFrom(scroll: number) {
+    const min = .4;
+    const max = .8;
+    return Math.min(max, Math.max(min, min + scroll / 1000));
+}
+
 function getAmplitude(scroll: number) {
-    const min = 10;
+    const min = 5;
     const max = 40;
     return Math.min(max, Math.max(min, min + scroll / 50));
 }
 
-export default function HeroNeatGradient({ color }: { color: "primary" | "secondary" }) {
+function getSaturation(scroll: number) {
+    const min = -10;
+    const max = 0;
+    return Math.min(max, Math.max(min, min + scroll / 50));
+}
 
+export default function HeroNeatGradient({ color }: {
+    color: "primary" | "secondary" | "dark"
+}) {
+
+    const isDark = color === "dark";
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const gradientRef = useRef<NeatGradient | null>(null);
     const scrollRef = useRef<number>(0);
@@ -16,7 +31,9 @@ export default function HeroNeatGradient({ color }: { color: "primary" | "second
     function onScrollUpdate(scroll: number) {
         scrollRef.current = scroll;
         if (gradientRef.current) {
-            gradientRef.current.waveAmplitude = getAmplitude(scroll);
+            gradientRef.current.colorBrightness = isDark ? getBrightnessFrom(scroll) : 1;
+            gradientRef.current.waveAmplitude = isDark ? getAmplitude(scroll) : 30;
+            gradientRef.current.colorSaturation = isDark ? getSaturation(scrollRef.current) : 0;
         }
     }
 
@@ -53,11 +70,11 @@ export default function HeroNeatGradient({ color }: { color: "primary" | "second
                     "enabled": true
                 },
                 {
-                    "color": "#05d5ef",
+                    "color": "#6D3BFF",
                     "enabled": true
                 },
                 {
-                    "color": "#6D3BFF",
+                    "color": "#05d5ef",
                     "enabled": true
                 },
                 {
@@ -65,7 +82,7 @@ export default function HeroNeatGradient({ color }: { color: "primary" | "second
                     "enabled": false
                 }
             ],
-            "speed": 4,
+            "speed": 5,
             "horizontalPressure": 4,
             "verticalPressure": 5,
             "waveFrequencyX": 2,
@@ -73,21 +90,31 @@ export default function HeroNeatGradient({ color }: { color: "primary" | "second
             "waveAmplitude": getAmplitude(scrollRef.current),
             "shadows": 0,
             "highlights": 1,
-            "colorSaturation": 0,
+            "colorSaturation": isDark ? getSaturation(scrollRef.current) : 1,
+            "colorBrightness": isDark ? getBrightnessFrom(scrollRef.current) : 1,
             "wireframe": true,
             "colorBlending": 6,
-            // "backgroundColor": "#0070F4",
             "backgroundAlpha": 0,
-            resolution: 1 / 3.33335
+            "resolution": 1 / 2
         });
 
         return gradientRef.current.destroy;
 
-    }, [canvasRef.current])
+    }, [canvasRef.current]);
+
+    let bgColor: string;
+    if (color === "primary") {
+        bgColor = "bg-blue-600";
+    } else if (color === "secondary") {
+        bgColor = "bg-rose-500";
+    } else {
+        bgColor = "bg-gray-800";
+    }
+
 
     return (
         <canvas
-            className={color === "primary" ? "bg-blue-600" : "bg-rose-500"}
+            className={bgColor}
             style={{
                 position: "absolute",
                 isolation: "isolate",

@@ -7,6 +7,7 @@ import { Panel } from "../partials/general/Panel";
 import EnterpriseTeaser from "../partials/home/EnterpriseTeaser";
 import { FormInfo } from "../partials/pro/FormInfo";
 import { ProDeveloperFeatures } from "../partials/pro/ProDeveloperFeatures";
+import { HeroCenter } from "../partials/general/HeroCenter";
 
 function ProPage() {
 
@@ -18,14 +19,15 @@ function ProPage() {
             <div className="flex flex-col min-h-screen">
 
                 <main className="flex-grow">
-                    <Hero
-                        color={"primary"}
+                    <HeroCenter
+                        height={"400px"}
+                        color={"dark"}
                         title={
                             <>
                                 <span
                                     className="block lg:inline">FireCMS <b>PRO</b></span>
                             </>}
-                        subtitleColor={"secondary"}
+                        subtitleColor={"gray"}
                         subtitle={
                             <>
                                 <p className="max-w-7xl text-2xl md:text-5xl font-bold tracking-tight"

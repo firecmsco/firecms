@@ -1,10 +1,11 @@
 import React, { Suspense } from "react";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 
-const LazyHomeHeroNeatGradient = React.lazy(() => import("../../shape/HomeHeroNeatGradient"));
 const LazyHeroNeatGradient = React.lazy(() => import("../../shape/HeroNeatGradient"));
 
-export function PagesHeroBackground({ color = "primary" }: { color?: "primary" | "secondary" }) {
+export function PagesHeroBackground({ color }: {
+    color: "primary" | "secondary" | "dark",
+}) {
 
     return <>
         <BrowserOnly

@@ -2,6 +2,18 @@
 id: changelog
 title: Changelog
 ---
+## [3.0.0-beta.3] - 2024-02-21
+
+- Fix for importing data in subcollections.
+- Code reordering.
+- Removed minification. Changed EntityReference type checks.
+- Editor image upload updates.
+- Cosmetic.
+- Moved tailwind.config.js editor plugin.
+- Removed callbacks in side navigation views, prevents bug.
+- PRO template fix.
+- PRO Login view cleanup.
+
 ## [3.0.0-beta.2] - 2024-02-21
 
 - Added Formex package to handle forms across the platform. Formex is an in-house

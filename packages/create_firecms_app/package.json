@@ -27,8 +27,7 @@
   "author": "firecms.co",
   "license": "MIT",
   "dependencies": {
-    "@firecms/cli": "^3.0.0-beta.3",
-    "esm": "^3.2.25"
+    "@firecms/cli": "^3.0.0-beta.3"
   },
   "devDependencies": {
     "@types/node": "^20.11.16",
@@ -45,5 +44,5 @@
     "node_modules",
     "template/node_modules"
   ],
-  "gitHead": "30ef9b29f5f624fca64e11ffda6001a98f998102"
+  "gitHead": "33cceff5d5bc2a7002cc5a3904b787e70bfb9c6e"
 }

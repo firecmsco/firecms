@@ -44,7 +44,7 @@ function Features() {
                     </BrowserFrame>
                 </div>
 
-                <div className={"container max-w-4xl"}>
+                <div className={"container max-w-5xl"}>
                     <div className={"flex items-center mb-4"}>
 
                         <div
