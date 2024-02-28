@@ -94,7 +94,8 @@ module.exports = {
                 "recipes/building_a_blog",
                 "recipes/data_type_adapter",
                 "recipes/copy_entity",
-                "recipes/documents_as_subcollections"
+                "recipes/documents_as_subcollections",
+                "recipes/entity_callbacks"
             ]
         },
         "icons/icons",
