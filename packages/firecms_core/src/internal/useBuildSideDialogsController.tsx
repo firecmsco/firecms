@@ -1,33 +1,54 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { SideDialogPanelProps, SideDialogsController } from "../types";
 import equal from "react-fast-compare"
 
 export function useBuildSideDialogsController(): SideDialogsController {
 
-    const location = useLocation();
-    const navigate = useNavigate();
-
     const [sidePanels, setSidePanels] = useState<SideDialogPanelProps[]>([]);
     const sidePanelsRef = useRef<SideDialogPanelProps[]>(sidePanels);
+    // record path => panel keys
+    const panelsHistory = useRef<Record<string, { baseLocation: string, keys: string[] }>>({});
 
     const routesStore = useRef<Record<string, SideDialogPanelProps>>({});
     const routesCount = useRef<number>(0);
 
-    const updateSidePanels = (newPanels: SideDialogPanelProps[]) => {
+    const updateSidePanels = useCallback((newPanels: SideDialogPanelProps[]) => {
         sidePanelsRef.current = newPanels;
         setSidePanels(newPanels);
-    };
+    }, []);
 
     useEffect(() => {
-        const state = location.state as any;
-        const panelKeys: string[] = state?.panels ?? [];
-        const newPanels = panelKeys
-            .map(key => routesStore.current[key])
-            .filter(p => Boolean(p)) as SideDialogPanelProps[];
-        if (!equal(sidePanelsRef.current.map(p => p.key), newPanels.map(p => p.key)))
-            updateSidePanels(newPanels);
-    }, [location]);
+        const handleLocationChange = () => {
+            const path = window.location.pathname;
+            const panelKeys = panelsHistory.current[path]?.keys ?? [];
+            const newPanels = panelKeys
+                .map(key => routesStore.current[key])
+                .filter(p => Boolean(p)) as SideDialogPanelProps[];
+            const currentPanelKeys = sidePanelsRef.current.map(p => p.key);
+            if (!equal(currentPanelKeys, newPanels.map(p => p.key)))
+                updateSidePanels(newPanels);
+        };
+
+        window.addEventListener("popstate", handleLocationChange);
+
+        handleLocationChange();
+
+        return () => {
+            window.removeEventListener("popstate", handleLocationChange);
+        };
+    }, [updateSidePanels]);
+
+    const updateBrowserUrl = useCallback((path: string, replace = false) => {
+        const currentPath = window.location.pathname
+        const url = `${window.location.origin}/${path}`;
+        if (replace) {
+            window.history.replaceState({}, "", url);
+        } else {
+            window.history.pushState({}, "", url);
+        }
+        const baseLocation = panelsHistory.current[currentPath]?.baseLocation ?? currentPath;
+        panelsHistory.current["/" + path] = { baseLocation, keys: sidePanelsRef.current.map(p => p.key) };
+    }, []);
 
     const close = useCallback(() => {
 
@@ -40,24 +61,16 @@ export function useBuildSideDialogsController(): SideDialogsController {
 
         if (routesCount.current > 0) {
             if (lastSidePanel.urlPath)
-                navigate(-1);
+                history.back();
             routesCount.current--;
         } else if (lastSidePanel.parentUrlPath) {
-            const baseLocation = (location.state as any)?.base_location ?? location;
-            navigate(
-                lastSidePanel.parentUrlPath,
-                {
-                    replace: true,
-                    state: {
-                        base_location: baseLocation,
-                        panels: updatedPanels.map(p => p.key)
-                    }
-                }
-            );
+            updateBrowserUrl(lastSidePanel.parentUrlPath, true);
         }
-    }, [sidePanels, navigate, location]);
+    }, [sidePanels, updateBrowserUrl, updateSidePanels]);
 
     const open = useCallback((panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => {
+
+        console.trace("open", panelProps)
 
         const newPanels: SideDialogPanelProps[] = Array.isArray(panelProps) ? panelProps : [panelProps];
 
@@ -66,26 +79,16 @@ export function useBuildSideDialogsController(): SideDialogsController {
         });
         routesCount.current = routesCount.current + newPanels.length;
 
-        const baseLocation = (location.state as any)?.base_location ?? location;
-
         const updatedPanels = [...sidePanels, ...newPanels];
         updateSidePanels(updatedPanels);
 
         newPanels.forEach((panel) => {
             if (panel.urlPath) {
-                navigate(
-                    panel.urlPath,
-                    {
-                        state: {
-                            base_location: baseLocation,
-                            panels: updatedPanels.map(p => p.key)
-                        }
-                    }
-                );
+                updateBrowserUrl(panel.urlPath, false);
             }
         });
 
-    }, [location, navigate, sidePanels]);
+    }, [sidePanels, updateBrowserUrl, updateSidePanels]);
 
     const replace = useCallback((panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => {
 
@@ -94,32 +97,22 @@ export function useBuildSideDialogsController(): SideDialogsController {
             routesStore.current[panel.key] = panel;
         });
 
-        const baseLocation = (location.state as any)?.base_location ?? location;
-
         const updatedPanels = [...sidePanels.slice(0, -newPanels.length), ...newPanels];
         updateSidePanels(updatedPanels);
 
         newPanels.forEach((panel) => {
             if (panel.urlPath) {
-                navigate(
-                    panel.urlPath,
-                    {
-                        replace: true,
-                        state: {
-                            base_location: baseLocation,
-                            panels: updatedPanels.map(p => p.key)
-                        }
-                    }
-                );
+                updateBrowserUrl(panel.urlPath, true);
             }
         });
 
-    }, [location, navigate, sidePanels]);
+    }, [sidePanels, updateBrowserUrl, updateSidePanels]);
 
     return {
         sidePanels,
         close,
         open,
-        replace
+        replace,
+        basePath: panelsHistory.current[window.location.pathname]?.baseLocation ?? window.location.pathname,
     };
 }

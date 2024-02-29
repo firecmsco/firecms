@@ -1,9 +1,9 @@
 import React from "react";
 
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { CMSView } from "../types";
 import { DefaultHomePage, EntityCollectionView, ErrorBoundary, NotFoundPage } from "../components";
-import { useNavigationController } from "../hooks";
+import { useNavigationController, useSideDialogsController } from "../hooks";
 import { toArray } from "../util/arrays";
 
 /**
@@ -35,20 +35,12 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
                                   customRoutes
                               }: NavigationRoutesProps) {
 
-        const location = useLocation();
+        const sideDialogsController = useSideDialogsController();
+
         const navigation = useNavigationController();
 
         if (!navigation)
             return <></>;
-
-        const state = location.state as any;
-
-        /**
-         * The location can be overridden if `base_location` is set in the
-         * state field of the current location. This can happen if you open
-         * a side entity, like `products`, from a different one, like `users`
-         */
-        const baseLocation = state && state.base_location ? state.base_location : location;
 
         const cmsViews: React.ReactNode[] = [];
         if (navigation.views) {
@@ -94,7 +86,7 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
                                      }/>;
 
         return (
-            <Routes location={baseLocation}>
+            <Routes location={sideDialogsController.basePath}>
 
                 {collectionRoutes}
 
