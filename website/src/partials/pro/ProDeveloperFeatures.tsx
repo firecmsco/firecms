@@ -3,8 +3,6 @@ import React from "react";
 // @ts-ignore
 import pricePreview from "@site/static/img/price.png";
 
-import { useColorMode } from "@docusaurus/theme-common";
-
 // @ts-ignore
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/hljs";
@@ -39,28 +37,22 @@ export function ProDeveloperFeatures() {
                             wrapLines={true}
                             style={dracula}
                         >
-                            {
-                                `const price = buildProperty({
-    name: "Price",
-    description: "Price with range validation",
-    dataType: "number",
-    validation: {
-        required: true,
-        requiredMessage: "Price must be between 0 and 1000",
-        min: 0,
-        max: 1000
-    }
+                            {`const firestoreDelegate = useFirestoreDelegate({
+    firebaseApp,
+    localTextSearchEnabled: false,
+    textSearchControllerBuilder: myAlgoliaSearchControllerBuilder
+});
+
+const firestoreDelegate = useFirebaseRTDBDelegate({
+    firebaseApp
+});
+
+const firestoreDelegate = useMongoDataSource({
+    mongoDBApp,
+    cluster: "my-cluster",
+    database: "my-database",
 });`}
                         </SyntaxHighlighter>
-                        <div
-                            className={"p-1 flex justify-center"}>
-                            <img loading="lazy"
-                                 className=""
-                                 src={pricePreview}
-                                 width="500"
-                                 alt="Element"
-                            />
-                        </div>
                     </div>
                     }
                     right={<div className="p-8">
@@ -73,28 +65,20 @@ export function ProDeveloperFeatures() {
                                 {arrowIcon}
                             </div>
                             <h3 className="h3 m-0 ml-3 ">
-                                Easy schema definition
+                                Custom data sources, storage and auth
                             </h3>
-
                         </div>
 
-                        <p className="text-xl md:text-2xl ">
-                            Define your schemas and choose from
-                            multiple form widgets and validation
-                            options.
+                        <p className="text-xl md:text-2xl">
+                            FireCMS has a great separation of concerns that will allow you to
+                            customize every aspect of it.
                         </p>
 
-                        <p className="text-xl md:text-2xl ">
-                            Use advanced features like conditional logic
-                            for your fields, references to other
-                            collections, markdown or file uploads
+                        <p className="text-xl md:text-2xl">
+                            Use the provided Firestore, Firebase Realtime Database, or MongoDB controllers, or create
+                            your own custom data sources.
                         </p>
 
-                        <p className="text-xl ">
-                            FireCMS provides a powerful schema
-                            definition API that allows you to
-                            customise your forms and views.
-                        </p>
                         <p className="text-xl ">
                             You can also use the schema definition
                             API to create custom views and

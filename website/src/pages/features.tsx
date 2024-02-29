@@ -5,7 +5,7 @@ import Features from "../partials/features/Features";
 import { Hero } from "../partials/general/Hero";
 import HeroButtons from "../partials/home/HeroButtons";
 import { Panel } from "../partials/general/Panel";
-import EnterpriseTeaser from "../partials/home/EnterpriseTeaser";
+import ProTeaser from "../partials/home/ProTeaser";
 import { IntroText } from "../partials/features/IntroText";
 import { FormInfo } from "../partials/features/FormInfo";
 
@@ -49,7 +49,7 @@ function FeaturesPage() {
                         <HeroButtons/>
                     </Panel>
 
-                    <EnterpriseTeaser/>
+                    <ProTeaser/>
                 </main>
             </div>
 

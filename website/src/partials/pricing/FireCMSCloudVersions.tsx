@@ -14,7 +14,7 @@ export function FireCMSCloudVersions() {
         <div
             className={clsx("w-full max-w-xl lg:max-w-none h-full mx-4 p-6 border rounded-lg dark:border-gray-700 flex flex-col", defaultBorderMixin)}>
 
-            <h3 className={"text-3xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300"}>
+            <h3 className={"text-3xl md:text-4xl font-bold  text-center text-gray-700 dark:text-gray-300 uppercase my-2"}>
                 Free
             </h3>
             <p className={"text-lg mb-4 font-bold text-center"}>
@@ -45,7 +45,7 @@ export function FireCMSCloudVersions() {
         <div
             className={clsx("w-full max-w-xl lg:max-w-none h-full mx-4 p-6 rounded-lg flex flex-col outline-none ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent")}>
 
-            <h3 className={"text-3xl md:text-4xl font-bold mb-4 text-center dark:text-primary text-primary"}>
+            <h3 className={"text-3xl md:text-4xl font-bold text-center dark:text-primary text-primary uppercase my-2"}>
                 Plus
             </h3>
             <p className={"text-lg mb-4 font-bold text-center"}>
@@ -74,7 +74,7 @@ export function FireCMSCloudVersions() {
         <div
             className={clsx("w-full max-w-xl lg:max-w-none h-full mx-4 p-6 border rounded-lg  dark:border-gray-700 flex flex-col", defaultBorderMixin)}>
 
-            <h3 className={"text-3xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300"}>
+            <h3 className={"text-3xl md:text-4xl font-bold text-center text-gray-700 dark:text-gray-300 uppercase my-2"}>
                 Pro
             </h3>
             <p className={"text-lg mb-4 font-bold text-center"}>
@@ -83,6 +83,7 @@ export function FireCMSCloudVersions() {
             <div className={"grow"}>
                 <ul>
                     <li className={"list-disc"}>Everything in PLUS</li>
+                    <li className={"list-disc"}>Self-hosted</li>
                     <li className={"list-disc"}>Custom authentication and access control</li>
                     <li className={"list-disc"}>SAML SSO</li>
                     <li className={"list-disc"}>Custom domain</li>

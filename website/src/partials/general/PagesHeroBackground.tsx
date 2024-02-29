@@ -4,7 +4,7 @@ import BrowserOnly from "@docusaurus/BrowserOnly";
 const LazyHeroNeatGradient = React.lazy(() => import("../../shape/HeroNeatGradient"));
 
 export function PagesHeroBackground({ color }: {
-    color: "primary" | "secondary" | "dark",
+    color: "primary" | "secondary" | "dark" | "transparent",
 }) {
 
     return <>

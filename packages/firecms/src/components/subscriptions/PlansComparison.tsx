@@ -40,7 +40,7 @@ export function PlansComparison() {
         <div
             className="h-full max-w-sm p-6 border border-solid border-gray-200 rounded-lg shadow dark:border-gray-700 flex flex-col">
 
-            <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300"}>
+            <h3 className={"text-2xl md:text-4xl font-bold text-center text-gray-700 dark:text-gray-300 uppercase my-4"}>
                 Free
             </h3>
             <div className={"grow"}>
@@ -69,7 +69,7 @@ export function PlansComparison() {
         <div
             className="h-full max-w-sm p-6 rounded-lg flex flex-col outline-none ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent">
 
-            <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center dark:text-primary text-primary"}>
+            <h3 className={"text-2xl md:text-4xl font-bold text-center dark:text-primary text-primary uppercase my-4"}>
                 Plus
             </h3>
             <div className={"grow"}>
@@ -101,7 +101,7 @@ export function PlansComparison() {
         <div
             className="h-full max-w-sm p-6 border border-solid border-gray-200 rounded-lg shadow dark:border-gray-700 flex flex-col">
 
-            <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300"}>
+            <h3 className={"text-2xl md:text-4xl font-bold text-center text-gray-700 dark:text-gray-300 uppercase my-4"}>
                 Pro
             </h3>
             <div className={"grow"}>
@@ -110,6 +110,7 @@ export function PlansComparison() {
                 </p>
                 <ul>
                     <li className={"ml-8 list-disc"}>Everything in PLUS</li>
+                    <li className={"ml-8 list-disc"}>Self-hosted</li>
                     <li className={"ml-8 list-disc"}>SAML SSO</li>
                     <li className={"ml-8 list-disc"}>Custom domain</li>
                     <li className={"ml-8 list-disc"}>Full CMS components customization</li>

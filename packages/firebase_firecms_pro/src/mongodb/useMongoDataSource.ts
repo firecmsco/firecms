@@ -34,7 +34,7 @@ type ChangeEvent = any;
 export interface UseMongoDataSourceProps {
     app: App,
     cluster: string,
-    dbName: string,
+    database: string,
     fields?: Record<string, PropertyConfig>;
 }
 
@@ -61,7 +61,7 @@ const firecmsToMongoDB: Record<WhereFilterOp, string> = {
 export function useMongoDataSource({
                                        app,
                                        cluster,
-                                       dbName,
+                                       database,
                                    }: UseMongoDataSourceProps): DataSource {
 
 
@@ -115,7 +115,7 @@ export function useMongoDataSource({
             throw Error("useMongoDataSource app not initialised");
 
         const mdb = app.currentUser.mongoClient(cluster);
-        const mongoCollection = mdb.db(dbName).collection(path);
+        const mongoCollection = mdb.db(database).collection(path);
 
         const [queryParams, options] = buildQuery(filter, searchString, orderBy, order, limit);
 
@@ -140,7 +140,7 @@ export function useMongoDataSource({
 
         const fetchedDocs = await mongoCollection.find(queryParams, options);
         return fetchedDocs.map((doc) => mongoToEntity(doc, path));
-    }, [app, buildQuery, cluster, dbName]);
+    }, [app, buildQuery, cluster, database]);
 
     const fetchEntity = useCallback(async <M extends Record<string, any>>({
                                                                               path,
@@ -150,14 +150,14 @@ export function useMongoDataSource({
     ): Promise<Entity<M> | undefined> => {
         if (!app?.currentUser) throw Error("useMongoDataSource app not initialised");
         const mdb = app.currentUser.mongoClient(cluster);
-        const mongoCollection = mdb.db(dbName).collection(path);
+        const mongoCollection = mdb.db(database).collection(path);
         const doc = await mongoCollection
             .findOne({
                 _id: new BSON.ObjectId(entityId)
             });
         if (!doc) return undefined;
         return mongoToEntity(doc, path);
-    }, [app.currentUser, cluster, dbName]);
+    }, [app.currentUser, cluster, database]);
 
     const saveEntity = useCallback(async <M extends Record<string, any>>(
         {
@@ -169,7 +169,7 @@ export function useMongoDataSource({
         }: SaveEntityProps<M>): Promise<Entity<M>> => {
         if (!app?.currentUser) throw Error("useMongoDataSource app not initialised");
         const mdb = app.currentUser.mongoClient(cluster);
-        const mongoCollection = mdb.db(dbName).collection(path);
+        const mongoCollection = mdb.db(database).collection(path);
         const mongoValues = valuesToMongoValues(values);
         if (status === "existing") {
             await mongoCollection
@@ -194,7 +194,7 @@ export function useMongoDataSource({
             path: path,
             values: values as M
         };
-    }, [app.currentUser, cluster, dbName]);
+    }, [app.currentUser, cluster, database]);
 
     const listenEntity = useCallback(<M extends Record<string, any>>(
         {
@@ -236,7 +236,7 @@ export function useMongoDataSource({
 
         if (!app?.currentUser) throw Error("useMongoDataSource app not initialised");
         const mdb = app.currentUser.mongoClient(cluster);
-        const mongoCollection = mdb.db(dbName).collection(path);
+        const mongoCollection = mdb.db(database).collection(path);
 
         let currentEntities: Entity<M>[] = [];
 
@@ -323,7 +323,7 @@ export function useMongoDataSource({
             // @ts-ignore
             stream?.return();
         }
-    }, [app.currentUser, cluster, dbName, fetchCollection]);
+    }, [app.currentUser, cluster, database, fetchCollection]);
 
     const generateEntityId = useCallback((path: string): string => {
         return new BSON.ObjectId().toString();
@@ -336,7 +336,7 @@ export function useMongoDataSource({
     ): Promise<void> => {
         if (!app?.currentUser) throw Error("useMongoDataSource app not initialised");
         const mdb = app.currentUser.mongoClient(cluster);
-        const mongoCollection = mdb.db(dbName).collection(entity.path);
+        const mongoCollection = mdb.db(database).collection(entity.path);
         const res = await mongoCollection
             .deleteOne({
                 _id: entity.id
@@ -347,7 +347,7 @@ export function useMongoDataSource({
         }
         return;
 
-    }, [app.currentUser, cluster, dbName]);
+    }, [app.currentUser, cluster, database]);
 
     const countEntities = useCallback(async (props: {
         path: string,
@@ -356,9 +356,9 @@ export function useMongoDataSource({
     }): Promise<number> => {
         if (!app?.currentUser) throw Error("useMongoDataSource app not initialised");
         const mdb = app.currentUser.mongoClient(cluster);
-        const mongoCollection = mdb.db(dbName).collection(props.path);
+        const mongoCollection = mdb.db(database).collection(props.path);
         return mongoCollection.count();
-    }, [app.currentUser, cluster, dbName]);
+    }, [app.currentUser, cluster, database]);
 
     const checkUniqueField = useCallback((
         path: string,

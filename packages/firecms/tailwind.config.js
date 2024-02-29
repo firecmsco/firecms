@@ -1,5 +1,5 @@
 export default {
-    darkMode: ["class", "[data-theme=\"dark\"]"],
+    darkMode: ["selector", "[data-theme=\"dark\"]"],
     mode: "jit",
     content: [
         "./index.html",

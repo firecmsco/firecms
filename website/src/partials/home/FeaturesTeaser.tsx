@@ -53,12 +53,17 @@ function FeaturesTeaser() {
                                     forms</b>.
                                 </p>
 
-                                <p className="">
+                                <p>
                                     FireCMS creates CRUD views based on your
                                     configurations with ease. It's simple to set up
                                     for
                                     common cases and just as easy to extend and
                                     customize to fit your specific needs.
+                                </p>
+
+                                <p>
+                                    FireCMS imposes no data structure restrictions, allowing
+                                    seamless integration with any project right from the start.
                                 </p>
 
                             </div>
@@ -118,7 +123,7 @@ function FeaturesTeaser() {
                                 className={"flex items-center mb-3 "}>
 
                                 <div
-                                    className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 ">
+                                    className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 ">
                                     <SettingsIcon/>
                                 </div>
                                 <h3 className="h3 m-0 ml-3 ">

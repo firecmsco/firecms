@@ -77,9 +77,9 @@ function RTDBApp() {
      */
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
-    const firestoreDelegate = useFirebaseRTDBDelegate({
+    const RTDBDelegate = useFirebaseRTDBDelegate({
         firebaseApp
-    })
+    });
 
     /**
      * Controller used for saving and fetching files in storage
@@ -99,14 +99,14 @@ function RTDBApp() {
         authController,
         authentication: () => true,
         getAppCheckToken,
-        dataSourceDelegate: firestoreDelegate,
+        dataSourceDelegate: RTDBDelegate,
         storageSource
     });
 
     const navigationController = useBuildNavigationController({
         collections: [productsCollection],
         authController,
-        dataSourceDelegate: firestoreDelegate
+        dataSourceDelegate: RTDBDelegate
     });
 
     if (firebaseConfigLoading || !firebaseApp || appCheckLoading) {
@@ -120,56 +120,53 @@ function RTDBApp() {
     }
 
     return (
-            <SnackbarProvider>
-                <ModeControllerProvider value={modeController}>
+        <SnackbarProvider>
+            <ModeControllerProvider value={modeController}>
 
-                    <FireCMS
-                        navigationController={navigationController}
-                        authController={authController}
-                        userConfigPersistence={userConfigPersistence}
-                        dataSourceDelegate={firestoreDelegate}
-                        storageSource={storageSource}
+                <FireCMS
+                    navigationController={navigationController}
+                    authController={authController}
+                    userConfigPersistence={userConfigPersistence}
+                    dataSourceDelegate={RTDBDelegate}
+                    storageSource={storageSource}
 
-                    >
-                        {({
-                              context,
-                              loading
-                          }) => {
+                >
+                    {({
+                          context,
+                          loading
+                      }) => {
 
-                            let component;
-                            if (loading || authLoading) {
-                                component = <CircularProgressCenter size={"large"}/>;
+                        let component;
+                        if (loading || authLoading) {
+                            component = <CircularProgressCenter size={"large"}/>;
+                        } else {
+                            if (!canAccessMainView) {
+                                const LoginViewUsed = FirebaseLoginView;
+                                component = (
+                                    <LoginViewUsed
+                                        allowSkipLogin={false}
+                                        signInOptions={signInOptions}
+                                        firebaseApp={firebaseApp}
+                                        authController={authController}
+                                        notAllowedError={notAllowedError}/>
+                                );
                             } else {
-                                if (!canAccessMainView) {
-                                    const LoginViewUsed = FirebaseLoginView;
-                                    component = (
-                                        <LoginViewUsed
-                                            allowSkipLogin={false}
-                                            signInOptions={signInOptions}
-                                            firebaseApp={firebaseApp}
-                                            authController={authController}
-                                            notAllowedError={notAllowedError}/>
-                                    );
-                                } else {
-                                    component = (
-                                        <Scaffold
-                                            name={name}
-                                            fireCMSAppBarProps={{
-                                                endAdornment: <div>Project select here</div>
-                                            }}
-                                            autoOpenDrawer={false}>
-                                            <NavigationRoutes/>
-                                            <SideDialogs/>
-                                        </Scaffold>
-                                    );
-                                }
+                                component = (
+                                    <Scaffold
+                                        name={name}
+                                        autoOpenDrawer={false}>
+                                        <NavigationRoutes/>
+                                        <SideDialogs/>
+                                    </Scaffold>
+                                );
                             }
+                        }
 
-                            return component;
-                        }}
-                    </FireCMS>
-                </ModeControllerProvider>
-            </SnackbarProvider>
+                        return component;
+                    }}
+                </FireCMS>
+            </ModeControllerProvider>
+        </SnackbarProvider>
     );
 }
 

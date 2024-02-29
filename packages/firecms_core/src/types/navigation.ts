@@ -117,13 +117,6 @@ export type NavigationController = {
     resolveAliasesFrom: (pathWithAliases: string) => string;
 
     /**
-     * Location used as the base for routes.
-     * This is the location that will be used underneath, when the url changes while
-     * opening a side dialog
-     */
-    baseLocation: string;
-
-    /**
      * Call this method to recalculate the navigation
      */
     refreshNavigation: () => void;

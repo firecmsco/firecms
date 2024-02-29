@@ -1,26 +1,29 @@
 import React, { useEffect, useRef } from "react";
 import { NeatGradient } from "@firecms/neat";
 
-function getBrightnessFrom(scroll: number) {
-    const min = .4;
-    const max = .8;
+function getBrightnessFrom(scroll: number, isDark: boolean) {
+    if (!isDark) return 1;
+    const min = .1;
+    const max = 2;
     return Math.min(max, Math.max(min, min + scroll / 1000));
 }
 
-function getAmplitude(scroll: number) {
+function getAmplitude(scroll: number, isDark: boolean) {
+    if (!isDark) return 10;
     const min = 5;
-    const max = 40;
+    const max = 20;
     return Math.min(max, Math.max(min, min + scroll / 50));
 }
 
-function getSaturation(scroll: number) {
-    const min = -10;
-    const max = 0;
+function getSaturation(scroll: number, isDark: boolean) {
+    if (!isDark) return 1;
+    const min = -8;
+    const max = 5;
     return Math.min(max, Math.max(min, min + scroll / 50));
 }
 
 export default function HeroNeatGradient({ color }: {
-    color: "primary" | "secondary" | "dark"
+    color: "primary" | "secondary" | "dark" | "transparent",
 }) {
 
     const isDark = color === "dark";
@@ -31,9 +34,9 @@ export default function HeroNeatGradient({ color }: {
     function onScrollUpdate(scroll: number) {
         scrollRef.current = scroll;
         if (gradientRef.current) {
-            gradientRef.current.colorBrightness = isDark ? getBrightnessFrom(scroll) : 1;
-            gradientRef.current.waveAmplitude = isDark ? getAmplitude(scroll) : 30;
-            gradientRef.current.colorSaturation = isDark ? getSaturation(scrollRef.current) : 0;
+            gradientRef.current.colorBrightness = getBrightnessFrom(scroll, isDark);
+            gradientRef.current.waveAmplitude = getAmplitude(scroll, isDark);
+            gradientRef.current.colorSaturation = getSaturation(scrollRef.current, isDark);
         }
     }
 
@@ -58,11 +61,10 @@ export default function HeroNeatGradient({ color }: {
         if (!canvasRef.current)
             return;
 
-        gradientRef.current = new NeatGradient({
-            ref: canvasRef.current,
+        const config = {
             "colors": [
                 {
-                    "color": "#FF5373",
+                    "color": "#F53755",
                     "enabled": true
                 },
                 {
@@ -70,32 +72,38 @@ export default function HeroNeatGradient({ color }: {
                     "enabled": true
                 },
                 {
+                    "color": "#17E7FF",
+                    "enabled": true
+                },
+                {
                     "color": "#6D3BFF",
                     "enabled": true
                 },
                 {
-                    "color": "#05d5ef",
+                    "color": "#007CFD",
                     "enabled": true
-                },
-                {
-                    "color": "#f5e1e5",
-                    "enabled": false
                 }
             ],
-            "speed": 5,
+            "speed": 2,
             "horizontalPressure": 4,
-            "verticalPressure": 5,
+            "verticalPressure": 8,
             "waveFrequencyX": 2,
             "waveFrequencyY": 3,
-            "waveAmplitude": getAmplitude(scrollRef.current),
             "shadows": 0,
-            "highlights": 1,
-            "colorSaturation": isDark ? getSaturation(scrollRef.current) : 1,
-            "colorBrightness": isDark ? getBrightnessFrom(scrollRef.current) : 1,
+            "highlights": 2,
             "wireframe": true,
-            "colorBlending": 6,
+            "colorBlending": 10,
             "backgroundAlpha": 0,
-            "resolution": 1 / 2
+            "resolution": .8,
+            "waveAmplitude": getAmplitude(scrollRef.current, isDark),
+            "colorSaturation": isDark ? getSaturation(scrollRef.current, isDark) : 1,
+            "colorBrightness": isDark ? getBrightnessFrom(scrollRef.current, isDark) : 1,
+
+        };
+
+        gradientRef.current = new NeatGradient({
+            ref: canvasRef.current,
+            ...config
         });
 
         return gradientRef.current.destroy;
@@ -107,8 +115,10 @@ export default function HeroNeatGradient({ color }: {
         bgColor = "bg-blue-600";
     } else if (color === "secondary") {
         bgColor = "bg-rose-500";
+    } else if(color === "dark"){
+        bgColor = "bg-gray-900";
     } else {
-        bgColor = "bg-gray-800";
+        bgColor = "bg-transparent";
     }
 
 

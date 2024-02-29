@@ -27,6 +27,7 @@ function FeaturesPanels() {
             <LinedSpace size={"large"}/>
 
             <div
+                data-theme="light"
                 data-aos="fade-up"
                 className={"flex items-center mb-4"}
             >

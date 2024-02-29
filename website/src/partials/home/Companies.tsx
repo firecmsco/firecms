@@ -109,6 +109,7 @@ export function Companies() {
             </a>
 
         </div>
+        <p className={"text-sm text-center font-bold"}>...and thousands more!</p>
     </Panel>;
 
 }

@@ -228,15 +228,15 @@ export function VersionsComparison() {
                             className="border-none rounded-lg md:px-6 py-6 invisible">
                         </th>
                         <th scope="col"
-                            className="border-none rounded-lg text-base md:px-4 md:py-4 text-center w-[90px]">
+                            className="border-none rounded-lg text-base md:px-4 md:py-4 text-center min-w-36">
                             Free
                         </th>
                         <th scope="col"
-                            className="border-none rounded-lg text-base md:px-4 md:py-4 text-center w-[90px]">
+                            className="border-none rounded-lg text-base md:px-4 md:py-4 text-center min-w-36">
                             Plus
                         </th>
                         <th scope="col"
-                            className="border-none rounded-lg text-base md:px-4 md:py-4 text-center w-[90px]">
+                            className="border-none rounded-lg text-base md:px-4 md:py-4 text-center min-w-36">
                             Pro
                         </th>
                         {/*<th scope="col"*/}

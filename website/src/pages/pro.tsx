@@ -1,13 +1,14 @@
 import React from "react";
 import Layout from "@theme/Layout";
 
-import { Hero } from "../partials/general/Hero";
 import HeroButtons from "../partials/home/HeroButtons";
 import { Panel } from "../partials/general/Panel";
-import EnterpriseTeaser from "../partials/home/EnterpriseTeaser";
-import { FormInfo } from "../partials/pro/FormInfo";
+import ProTeaser from "../partials/home/ProTeaser";
+import { ProInfo } from "../partials/pro/ProInfo";
 import { ProDeveloperFeatures } from "../partials/pro/ProDeveloperFeatures";
-import { HeroCenter } from "../partials/general/HeroCenter";
+import { HeroPro } from "../partials/pro/HeroPro";
+import { UnlimitedUsers } from "../partials/pro/UnlimitedUsers";
+import { SampleProDemo } from "../SampleProDemo";
 
 function ProPage() {
 
@@ -19,28 +20,16 @@ function ProPage() {
             <div className="flex flex-col min-h-screen">
 
                 <main className="flex-grow">
-                    <HeroCenter
-                        height={"400px"}
+                    <HeroPro
+                        height={"300px"}
                         color={"dark"}
-                        title={
-                            <>
-                                <span
-                                    className="block lg:inline">FireCMS <b>PRO</b></span>
-                            </>}
-                        subtitleColor={"gray"}
-                        subtitle={
-                            <>
-                                <p className="max-w-7xl text-2xl md:text-5xl font-bold tracking-tight"
-                                   style={{ lineHeight: 1.35 }}>
-                                    FireCMS PRO is aimed at companies and teams that need to
-                                    manage complex projects and require advanced features and
-                                    support.
-                                </p>
-                            </>
-                        }
                     />
 
-                    <FormInfo/>
+                    <ProInfo/>
+
+                    <SampleProDemo/>
+
+                    <UnlimitedUsers/>
 
                     <ProDeveloperFeatures/>
 
@@ -48,7 +37,7 @@ function ProPage() {
                         <HeroButtons/>
                     </Panel>
 
-                    <EnterpriseTeaser/>
+                    <ProTeaser/>
                 </main>
             </div>
 

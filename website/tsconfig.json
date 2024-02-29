@@ -51,6 +51,9 @@
             ],
             "@firecms/formex": [
                 "../packages/formex"
+            ],
+            "@firecms/firebase_pro": [
+                "../packages/firebase_firecms_pro"
             ]
         }
     },

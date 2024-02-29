@@ -14,7 +14,7 @@ function FeaturesPage() {
             description="Free self-hosted version and free Cloud tier, adaptive pricing for everyone">
 
             <Hero
-                color={"primary"}
+                color={"secondary"}
                 title={
                     <>
                         <span className="block lg:inline">Pricing</span>

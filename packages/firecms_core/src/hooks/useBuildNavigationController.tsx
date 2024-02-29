@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
 import equal from "react-fast-compare"
 
 import {
@@ -56,8 +55,6 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
                                                                                                      dataSourceDelegate,
                                                                                                      injectCollections
                                                                                                  }: BuildNavigationContextProps<EC, UserType>): NavigationController {
-
-    const location = useLocation();
 
     const collectionsRef = useRef<EntityCollection[] | null>();
     const [collections, setCollections] = useState<EntityCollection[] | undefined>();
@@ -251,14 +248,6 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         return resolveCollectionPathIds(path, collections);
     }, [collections]);
 
-    const state = location.state as any;
-    /**
-     * The location can be overridden if `base_location` is set in the
-     * state field of the current location. This can happen if you open
-     * a side entity, like `products`, from a different one, like `users`
-     */
-    const baseLocation = state && state.base_location ? state.base_location : location;
-
     const getAllParentReferencesForPath = useCallback((path: string): EntityReference[] => {
         return getParentReferencesFromPath({
             path,
@@ -316,7 +305,6 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         buildCMSUrlPath,
         resolveAliasesFrom,
         topLevelNavigation,
-        baseLocation,
         refreshNavigation,
         getParentReferencesFromPath: getAllParentReferencesForPath,
         getParentCollectionIds,
