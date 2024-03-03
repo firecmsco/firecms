@@ -49,7 +49,7 @@ import {
 } from "./hooks";
 
 import { FireCMSAppProps } from "./FireCMSAppProps";
-import { FireCMSAppConfig, FireCMSBackend, FireCMSUser } from "./types";
+import { ApiError, FireCMSAppConfig, FireCMSBackend, FireCMSUser } from "./types";
 import {
     ADMIN_VIEWS,
     getUserRoles,
@@ -225,23 +225,45 @@ export const FireCMSClient = function FireCMSClient({
     />;
 };
 
-function ErrorDelegatingLoginView(props: { configError: Error, onLogout: () => void }) {
+function ErrorDelegatingLoginView(props: { configError: Error | ApiError, onLogout: () => void }) {
+    let errorBody: JSX.Element;
+    if ("code" in props.configError && props.configError.code === "firecms-user-not-found") {
+        errorBody = <>
+            <Typography>
+                The user trying to log in is not registered in the client project.
+            </Typography>
+            <Typography>
+                Make sure the user exists in the client project and try again.
+                If the problem persists, reach us at <a href="mailto:hello@firecms.co?subject=FireCMS%20login%20error"
+                                                        rel="noopener noreferrer"
+                                                        target="_blank">
+                hello@firecms.co </a>, or in our <a
+                rel="noopener noreferrer"
+                target="_blank"
+                href={"https://discord.gg/fxy7xsQm3m"}>Discord channel</a>.
+            </Typography>
+        </>;
+    } else {
+        errorBody = <>
+            <Typography>{props.configError.message}</Typography>
+            <Typography>
+                This error may be caused when a user has been deleted from the client project.
+                Make sure a user exists in the client project with the same email as the one trying to log in.
+                If the problem persists, reach us at <a href="mailto:hello@firecms.co?subject=FireCMS%20login%20error"
+                                                        rel="noopener noreferrer"
+                                                        target="_blank"> hello@firecms.co </a>, or in our <a
+                rel="noopener noreferrer"
+                target="_blank"
+                href={"https://discord.gg/fxy7xsQm3m"}>Discord channel</a>.
+            </Typography>
+        </>;
+    }
     return <CenteredView maxWidth={"2xl"} className={"flex flex-col gap-4"}>
         <div className={"flex gap-4 items-center"}>
             <ErrorIcon color={"error"}/>
             <Typography variant={"h4"}>Error logging in</Typography>
         </div>
-        <Typography>{props.configError.message}</Typography>
-        <Typography>
-            This error may be caused when a user has been deleted from the client project.
-            Make sure a user exists in the client project with the same email as the one trying to log in.
-            If the problem persists, reach us at <a href="mailto:hello@firecms.co?subject=FireCMS%20login%20error"
-                                                    rel="noopener noreferrer"
-                                                    target="_blank"> hello@firecms.co </a>, or in our <a
-            rel="noopener noreferrer"
-            target="_blank"
-            href={"https://discord.gg/fxy7xsQm3m"}>Discord channel</a>.
-        </Typography>
+        {errorBody}
         <Button variant="outlined" onClick={props.onLogout}>Sign out</Button>
     </CenteredView>;
 }
@@ -348,15 +370,15 @@ export function FireCMSClientWithController({
     let loadingOrErrorComponent;
     if (userManagement.loading) {
         loadingOrErrorComponent = <CircularProgressCenter text={"Project loading"}/>;
+    } else if (delegatedLoginError) {
+        loadingOrErrorComponent = <ErrorDelegatingLoginView configError={delegatedLoginError}
+                                                            onLogout={fireCMSBackend.signOut}/>
     } else if (notValidUser) {
         console.warn("No user was found with email " + notValidUser.email);
         loadingOrErrorComponent = <NoAccessError authController={authController}/>
     } else if (projectConfig.configError) {
         loadingOrErrorComponent = <NoAccessErrorView configError={projectConfig.configError}
                                                      onLogout={fireCMSBackend.signOut}/>
-    } else if (delegatedLoginError) {
-        loadingOrErrorComponent = <ErrorDelegatingLoginView configError={delegatedLoginError}
-                                                            onLogout={fireCMSBackend.signOut}/>
     } else if (customizationLoading) {
         loadingOrErrorComponent = <CircularProgressCenter text={"Project customization loading"}/>;
     } else if (firebaseConfigLoading) {

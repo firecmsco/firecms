@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { getAuth, signInWithCustomToken, User as FirebaseUser } from "firebase/auth";
 import { ProjectsApi } from "../api/projects";
 import { cacheDelegatedLoginToken, getDelegatedLoginTokenFromCache } from "../utils";
+import { ApiError } from "../types";
 
 export type DelegatedLoginProps = {
     projectsApi: ProjectsApi;
@@ -21,7 +22,7 @@ export function useDelegatedLogin({
 
     const [loginSuccessful, setLoginSuccessful] = useState(false);
     const [delegatedLoginLoading, setDelegatedLoginLoading] = useState(false);
-    const [delegatedLoginError, setDelegatedLoginError] = useState<Error | undefined>(undefined);
+    const [delegatedLoginError, setDelegatedLoginError] = useState<Error | ApiError | undefined>(undefined);
 
     const checkLogin = useCallback(async (skipCache = false) => {
         console.debug("Checking delegated login", {skipCache, projectId})
@@ -37,7 +38,7 @@ export function useDelegatedLogin({
                         console.debug("Delegating login", projectId);
                         delegatedToken = await projectsApi.doDelegatedLogin(projectId);
                     } catch (e) {
-                        console.error("Error delegating login", e);
+                        console.error("Error delegating login", JSON.stringify(e));
                         setDelegatedLoginError(e as any);
                     }
                 } else {

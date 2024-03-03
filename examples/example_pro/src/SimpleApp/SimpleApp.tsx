@@ -3,8 +3,6 @@ import React, { useCallback } from "react";
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
 import "@fontsource/roboto"
-
-import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
 
 import {
@@ -12,6 +10,7 @@ import {
     CenteredView,
     CircularProgressCenter,
     FirebaseAuthController,
+    FirebaseLoginView,
     FirebaseSignInProvider,
     FireCMS,
     ModeControllerProvider,
@@ -25,11 +24,11 @@ import {
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
-    useInitialiseFirebase,
-    useInitializeAppCheck
+    useInitialiseFirebase
 } from "@firecms/firebase_pro";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { booksCollection } from "./books_collection";
+import { useImportExportPlugin } from "@firecms/data_import_export";
 
 export const firebaseConfig = {
     apiKey: "AIzaSyBzt-JvcXvpDrdNU7jYX3fC3v0EAHjTKEw",
@@ -44,6 +43,7 @@ export const firebaseConfig = {
 
 function ProSample() {
 
+    // Use your own authentication logic here
     const myAuthenticator: Authenticator<FirebaseUser> = useCallback(async ({
                                                                                 user,
                                                                                 authController
@@ -56,33 +56,16 @@ function ProSample() {
         // This is an example of retrieving async data related to the user
         // and storing it in the controller's extra field
         const idTokenResult = await user?.getIdTokenResult();
-        const userIsAdmin = idTokenResult?.claims.admin || user?.email?.endsWith("@camberi.com");
+        const userIsAdmin = idTokenResult?.claims.admin || user?.email?.endsWith("@firecms.co");
 
         console.log("Allowing access to", user);
-        return true;
+        return Boolean(userIsAdmin);
     }, []);
 
     const collections = [
-        booksCollection
+        booksCollection,
+        // Your collections here
     ];
-
-    const onAnalyticsEvent = useCallback((event: string, data?: object) => {
-        const analytics = getAnalytics();
-        logEvent(analytics, event, data);
-    }, []);
-
-    const dataEnhancementPlugin = useDataEnhancementPlugin({
-        getConfigForPath: ({ path }) => {
-            if (process.env.NODE_ENV !== "production")
-                return true;
-            if (path === "books")
-                return true;
-            if (path === "blog")
-                return true;
-            return false;
-        }
-    });
-
 
     const {
         firebaseApp,
@@ -92,50 +75,47 @@ function ProSample() {
         firebaseConfig
     });
 
-    /**
-     * Controller used to manage the dark or light color mode
-     */
+    // Controller used to manage the dark or light color mode
     const modeController = useBuildModeController();
 
-    const {
-        appCheckLoading,
-        getAppCheckToken
-    } = useInitializeAppCheck({
-        firebaseApp,
-    });
-
     const signInOptions: FirebaseSignInProvider[] = ["google.com"];
-    /**
-     * Controller for managing authentication
-     */
+
+    // Controller for managing authentication
     const authController: FirebaseAuthController = useFirebaseAuthController({
         firebaseApp,
         signInOptions
     });
 
-    /**
-     * Controller for saving some user preferences locally.
-     */
+    // Controller for saving some user preferences locally.
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
+    // Delegate used for fetching and saving data in Firestore
     const firestoreDelegate = useFirestoreDelegate({
         firebaseApp
     });
 
-    /**
-     * Controller used for saving and fetching files in storage
-     */
+    // Controller used for saving and fetching files in storage
     const storageSource = useFirebaseStorageSource({
         firebaseApp
     });
 
     const navigationController = useBuildNavigationController({
-        collections: [booksCollection],
+        collections,
         authController,
         dataSourceDelegate: firestoreDelegate
     });
 
-    if (firebaseConfigLoading || !firebaseApp || appCheckLoading) {
+    const dataEnhancementPlugin = useDataEnhancementPlugin({
+        getConfigForPath: ({ path }) => {
+            if (path === "books")
+                return true;
+            return false;
+        }
+    });
+
+    const importExportPlugin = useImportExportPlugin();
+
+    if (firebaseConfigLoading || !firebaseApp) {
         return <>
             <CircularProgressCenter/>
         </>;
@@ -147,13 +127,14 @@ function ProSample() {
     return (
         <SnackbarProvider>
             <ModeControllerProvider value={modeController}>
-
                 <FireCMS
                     navigationController={navigationController}
                     authController={authController}
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
-                    storageSource={storageSource}>
+                    storageSource={storageSource}
+                    plugins={[dataEnhancementPlugin, importExportPlugin]}
+                >
                     {({
                           context,
                           loading
@@ -161,6 +142,11 @@ function ProSample() {
 
                         if (loading) {
                             return <CircularProgressCenter size={"large"}/>;
+                        }
+                        if (authController.user === null) {
+                            return <FirebaseLoginView authController={authController}
+                                                      firebaseApp={firebaseApp}
+                                                      signInOptions={signInOptions}/>
                         }
 
                         return <Scaffold
