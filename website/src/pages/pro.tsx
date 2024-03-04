@@ -9,6 +9,7 @@ import { ProDeveloperFeatures } from "../partials/pro/ProDeveloperFeatures";
 import { HeroPro } from "../partials/pro/HeroPro";
 import { UnlimitedUsers } from "../partials/pro/UnlimitedUsers";
 import { SampleProDemo } from "../SampleProDemo";
+import { PublicFacingApps } from "../partials/pro/PublicFacingApps";
 
 function ProPage() {
 
@@ -27,9 +28,10 @@ function ProPage() {
 
                     <ProInfo/>
 
-                    <SampleProDemo/>
+                    {/*<SampleProDemo/>*/}
 
                     <UnlimitedUsers/>
+                    <PublicFacingApps/>
 
                     <ProDeveloperFeatures/>
 

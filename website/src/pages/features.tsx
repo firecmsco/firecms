@@ -45,7 +45,7 @@ function FeaturesPage() {
 
                     <FormInfo/>
 
-                    <Panel color={"gray"} includePadding={true}>
+                    <Panel color={"light"} includePadding={true}>
                         <HeroButtons/>
                     </Panel>
 

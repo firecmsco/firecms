@@ -55,7 +55,7 @@ export const QuotesSection: React.FC = () => {
                                         data-aos-delay={i * 50}
                                         className={clsx(
                                             "flex flex-col",
-                                            "not-italic w-96 min-w-[380px] bg-gray-50 dark:bg-gray-700 relative flex flex-col items-center justify-center px-8 py-6 rounded-2xl border", defaultBorderMixin)}>
+                                            "not-italic w-96 min-w-[380px] bg-gray-50 relative flex flex-col items-center justify-center px-8 py-6 rounded-2xl border", defaultBorderMixin)}>
 
                                 <div className={"flex-grow flex flex-col items-center justify-center"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" className={"text-inherit"} width="24"

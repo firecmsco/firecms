@@ -23,7 +23,7 @@ function FeaturesTeaser() {
     const isDarkTheme = colorMode === "dark";
 
     return (<>
-            <Panel >
+            <Panel color={"light"}>
 
                 <TwoColumns
                     includeBorder={false}
@@ -38,7 +38,7 @@ function FeaturesTeaser() {
                                         {lightningIcon}
                                     </div>
 
-                                    <h3 className="h3 m-0">
+                                    <h3 className="h3 m-0 gradient-text uppercase">
                                         Advanced Editing Features
                                     </h3>
 
@@ -126,7 +126,7 @@ function FeaturesTeaser() {
                                     className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 ">
                                     <SettingsIcon/>
                                 </div>
-                                <h3 className="h3 m-0 ml-3 ">
+                                <h3 className="h3 m-0 ml-3 gradient-text uppercase">
                                     Simple and Flexible Customization
                                 </h3>
 

@@ -20,14 +20,13 @@ function FeaturesPanels() {
 
     return (
         <Panel
-            color={"transparent"}
+            color={"white"}
             includePadding={false}
         >
 
             <LinedSpace size={"large"}/>
 
             <div
-                data-theme="light"
                 data-aos="fade-up"
                 className={"flex items-center mb-4"}
             >
@@ -42,7 +41,7 @@ function FeaturesPanels() {
                             {lightningIcon}
                         </div>
 
-                        <h2 className="h1 m-0">
+                        <h2 className="h1 m-0 gradient-text">
                             Batteries included
                         </h2>
 

@@ -15,7 +15,7 @@ export function AutofillFeature() {
     const { colorMode } = useColorMode();
     const isDarkTheme = colorMode === "dark";
     return (
-        <Panel color={"gray"}>
+        <Panel color={"lighter"}>
             <TwoColumns
                 left={<>
                     <div
@@ -25,7 +25,7 @@ export function AutofillFeature() {
                             maxWidth: "550px"
                         }}
                         data-aos="fade-up"
-                        className={" flex content-center justify-center"}>
+                        className={" flex content-center justify-center items-center"}>
                         <video
                             key={isDarkTheme ? "dark" : "light"}
                             className={clsx("rounded-xl border border-solid", defaultBorderMixin)}
@@ -39,8 +39,8 @@ export function AutofillFeature() {
 
                 </>}
                 right={<>
-                    <h2 className={"h2"}>
-                        Populate Details for Nike Air Max 90
+                    <h2 className={"h2 gradient-text uppercase"}>
+                        Fill in Details for Nike Air Max 90
                     </h2>
                     <p className="text-xl">
                         Define a prompt to guide the autofill feature according to

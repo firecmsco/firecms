@@ -82,7 +82,7 @@ data.
 
 ### ✨ Robust Forms
 
-![fields](https://firecms.co/img/post_editing.webp)
+![fields](https://firecms.co/img/form_editing.webp)
 
 When editing an entity, FireCMS offers a nested system of side dialogs for
 navigating through **subcollections** and accessing custom views (such as custom

@@ -52,7 +52,7 @@ function Features() {
                             <LightingIcon height={12} width={12}/>
                         </div>
 
-                        <h3 className="h3 m-0">
+                        <h3 className="h3 m-0 gradient-text uppercase">
                             Inline editing
                         </h3>
 
@@ -99,7 +99,7 @@ function Features() {
                                     <DashboardIcon height={24} width={24}/>
                                 </div>
 
-                                <h3 className="h3 m-0">
+                                <h3 className="h3 m-0 gradient-text uppercase">
                                     Dedicated form view
                                 </h3>
 
@@ -176,7 +176,7 @@ function Features() {
                                     className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 ">
                                     <SettingsIcon/>
                                 </div>
-                                <h3 className="h3 m-0 ml-3 ">
+                                <h3 className="h3 m-0 ml-3 gradient-text uppercase">
                                     Easy to customise
                                 </h3>
 

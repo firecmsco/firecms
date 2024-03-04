@@ -12,8 +12,7 @@ export function EnterpriseFeatures() {
     return (
         <>
 
-
-            <Panel color={"light"}>
+            <Panel color={"white"}>
                 <div className={"flex items-center my-4 "}>
 
                     <div

@@ -5,7 +5,7 @@ import useBaseUrl from "@docusaurus/useBaseUrl";
 
 export function CLIInstructions() {
 
-    return <Panel color={"gray"}
+    return <Panel color={"light"}
                   includeMargin={false}
                   centered={false}
                   includePadding={true}>

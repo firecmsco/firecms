@@ -98,13 +98,13 @@ const data = [{
         cloud: "No",
         cloudPlus: "Yes",
         cloudPro: "Yes"
-    },{
+    }, {
         feature: "Local text search",
         selfHosted: "Dev managed",
         cloud: "No",
         cloudPlus: "Yes",
         cloudPro: "Yes"
-    },{
+    }, {
         feature: "Text search",
         selfHosted: "Dev managed",
         cloud: "No",
@@ -158,7 +158,7 @@ const data = [{
         cloud: "No",
         cloudPlus: "No",
         cloudPro: "Yes"
-    },  {
+    }, {
         feature: "Custom domain",
         selfHosted: "No",
         cloud: "No",
@@ -192,7 +192,7 @@ export function VersionsComparison() {
 
     return <>
 
-        <Panel includePadding={false} innerClassName={" flex flex-col items-center justify-center"}>
+        <Panel includePadding={false} color={"lighter"} innerClassName={" flex flex-col items-center justify-center"}>
 
             <LinedSpace/>
 
@@ -208,7 +208,7 @@ export function VersionsComparison() {
                     className="font-medium border-separate text-sm text-left my-8 mx-auto">
 
                     {/*<thead*/}
-                    {/*    className="text-xs text-gray-800 uppercase font-mono bg-gray-50 dark:bg-gray-800 dark:text-gray-300 font-bold">*/}
+                    {/*    className="text-xs text-gray-800 uppercase font-mono bg-gray-50  font-bold">*/}
                     {/*<tr>*/}
                     {/*    <th colSpan={1} scope="col"*/}
                     {/*        className="border-none rounded-lg md:px-6 md:py-4 invisible">*/}
@@ -222,7 +222,7 @@ export function VersionsComparison() {
                     {/*</thead>*/}
 
                     <thead
-                        className="text-sm text-gray-800 uppercase font-mono bg-gray-50 dark:bg-gray-800 dark:text-gray-300 font-bold">
+                        className="text-sm text-gray-800 uppercase font-mono bg-gray-50 font-bold">
                     <tr>
                         <th scope="col"
                             className="border-none rounded-lg md:px-6 py-6 invisible">
@@ -251,19 +251,19 @@ export function VersionsComparison() {
                         (
                             <tr className="border-b ">
                                 <td scope="row"
-                                    className="bg-gray-50 mx-2 dark:bg-gray-900 border-none rounded-lg px-6 py-2 text-gray-800 dark:text-gray-300 font-bold">
+                                    className="bg-gray-50 mx-2 border-none rounded-lg px-6 py-2 text-gray-800 font-bold">
                                     {row.feature}
                                 </td>
-                                <td className={"bg-gray-50 mx-2 dark:bg-gray-800 border-none rounded-lg px-4 py-2 text-gray-800 dark:text-gray-200 text-center " + getEntryClass(row.cloud)}>
+                                <td className={"bg-gray-50 mx-2  border-none rounded-lg px-4 py-2 text-gray-800  text-center " + getEntryClass(row.cloud)}>
                                     {getFeatureComponent(row.cloud)}
                                 </td>
-                                <td className={"bg-gray-50 mx-2 dark:bg-gray-800 border-none rounded-lg px-4 py-2 text-gray-800 dark:text-gray-200 text-center " + getEntryClass(row.cloudPlus)}>
+                                <td className={"bg-gray-50 mx-2  border-none rounded-lg px-4 py-2 text-gray-800  text-center " + getEntryClass(row.cloudPlus)}>
                                     {getFeatureComponent(row.cloudPlus)}
                                 </td>
-                                <td className={"bg-gray-50 mx-2 dark:bg-gray-800 border-none rounded-lg px-4 py-2 text-gray-800 dark:text-gray-200 text-center " + getEntryClass(row.cloudPro)}>
+                                <td className={"bg-gray-50 mx-2  border-none rounded-lg px-4 py-2 text-gray-800  text-center " + getEntryClass(row.cloudPro)}>
                                     {getFeatureComponent(row.cloudPro)}
                                 </td>
-                                {/*<td className={"bg-gray-50 mx-2 dark:bg-gray-800 border-none rounded-lg px-6 py-2 text-gray-800 dark:text-gray-200 text-center " + getEntryClass(row.selfHosted)}>*/}
+                                {/*<td className={"bg-gray-50 mx-2  border-none rounded-lg px-6 py-2 text-gray-800  text-center " + getEntryClass(row.selfHosted)}>*/}
                                 {/*    {getFeatureComponent(row.selfHosted)}*/}
                                 {/*</td>*/}
                             </tr>
@@ -272,7 +272,7 @@ export function VersionsComparison() {
                     </tbody>
 
                     <tfoot
-                        className="text-xs text-gray-800 uppercase font-mono bg-gray-50 dark:bg-gray-800 dark:text-gray-300 font-bold">
+                        className="text-xs text-gray-800 uppercase font-mono bg-gray-50  font-bold">
                     <tr>
                         <th scope="col"
                             className="border-none rounded-lg px-6 py-3 invisible">
@@ -305,12 +305,12 @@ export function VersionsComparison() {
 
 function getEntryClass(value: React.ReactNode) {
     if (value === "Yes")
-        return "bg-green-100 text-green-900 dark:bg-green-900 dark:text-green-100";
+        return "bg-green-100 text-green-900";
     if (value === "Pro")
-        return "bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100 font-bold";
+        return "bg-blue-100 text-blue-900 font-bold";
     if (value === "Plus" || value === "Enterprise")
-        return "bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100";
+        return "bg-blue-100 text-blue-900";
     if (value === "WIP")
-        return "bg-yellow-100 text-yellow-900 dark:bg-yellow-900 dark:text-yellow-100";
+        return "bg-yellow-100 text-yellow-900";
     return "";
 }

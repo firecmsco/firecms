@@ -1,7 +1,13 @@
 import React from "react";
 
 import { useColorMode } from "@docusaurus/theme-common";
-import { CTAButtonMixin, CTACaret, defaultBorderMixin } from "../styles";
+import {
+    CTAButtonMixin,
+    CTACaret,
+    CTAOutlinedButtonMixin,
+    CTAOutlinedButtonWhiteMixin,
+    defaultBorderMixin
+} from "../styles";
 import { TwoColumns } from "../general/TwoColumns";
 import clsx from "clsx";
 import { Panel } from "../general/Panel";
@@ -11,7 +17,7 @@ export function DataEnhancementHero() {
     const { colorMode } = useColorMode();
     const isDarkTheme = colorMode === "dark";
 
-    return <Panel color={"white"}>
+    return <Panel color={"white"} className={"border-none"}>
         <TwoColumns
             left={
                 <div>
@@ -37,11 +43,12 @@ export function DataEnhancementHero() {
 
                     <div
                         className="mt-5 sm:mt-8">
-                        <a href="/docs/openai"
+
+                        <a href="https://demo.firecms.co/c/books"
                            rel="noopener noreferrer"
-                           target="_blank"
-                           className={CTAButtonMixin}>
-                            Get started
+                           className={CTAOutlinedButtonMixin}
+                           target="_blank">
+                            Check this demo online
                             <CTACaret/>
                         </a>
 
@@ -69,11 +76,6 @@ export function DataEnhancementHero() {
                             type="video/mp4"/>
                     </video>
 
-                    <a href="https://demo.firecms.co/c/books"
-                       rel="noopener noreferrer"
-                       target="_blank">
-                        Check this demo online
-                    </a>
                 </div>
 
 

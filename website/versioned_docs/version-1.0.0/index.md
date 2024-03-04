@@ -106,8 +106,7 @@ if you are using Firestore), as well as **filtering and sorting** and
 **exporting** data
 
 ### ✨ Powerful forms
-
-![fields](/img/post_editing.png)
+![fields](/img/form_editing.webp)
 
 When editing an entity, FireCMS offers a nested system of side dialogs that
 allow to navigate through **subcollections** and access custom views (such as a

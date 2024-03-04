@@ -44,7 +44,7 @@ export function UsageExamples() {
     const parallaxOffset = easeInOut(Math.max(0, Math.min(1, (300 + currentTop) / offsetHeight))) * 2 - 1;
 
     return <div ref={ref}
-                className={clsx("overflow-hidden flex flex-col items-center justify-center bg-white dark:bg-gray-700", ContainerPaddingMixin)}>
+                className={clsx("overflow-hidden flex flex-col items-center justify-center bg-white")}>
 
 
         <LinedSpace position={"bottom"} size={"large"}/>
@@ -75,7 +75,6 @@ export function UsageExamples() {
 
             {/* EDITOR */}
             <BrowserFrame
-                // mode={"light"}
                 style={{
                     right: -30 + 20 * parallaxOffset,
                     top: -50 - 50 * parallaxOffset,
@@ -86,9 +85,6 @@ export function UsageExamples() {
 
                 <img loading="lazy" src={overlay}
                      className={"rounded-xl"}
-                     style={{
-                         // aspectRatio: 1280 / 700,
-                     }}
                      alt="Overlay"/>
             </BrowserFrame>
 

@@ -22,12 +22,14 @@ export function Translations() {
                         Are you managing translations?
                     </h2>
                     <p className="text-xl">
-                        Translate your content to any language with the click of a
-                        button.
+                        Translate your content to any language with the click of a button.
                     </p>
                     <p className="text-xl">
                         Let FireCMS handle the translation for you. You can then
                         edit the generated content and save it to your database.
+                    </p>
+                    <p className="text-xl">
+                        You can also manage translations for your custom fields.
                     </p>
                 </>}
                 right={<>
@@ -37,11 +39,11 @@ export function Translations() {
                         }}
                         data-aos="fade-up"
                         className={" flex content-center justify-center"}>
-                        <img loading="lazy" 
-                            className={clsx("rounded-xl border", defaultBorderMixin)}
-                            src={isDarkTheme ? translationDark : translationLight}
-                            width="500"
-                            alt="Element"
+                        <img loading="lazy"
+                             className={clsx("rounded-xl border", defaultBorderMixin)}
+                             src={isDarkTheme ? translationDark : translationLight}
+                             width="500"
+                             alt="Element"
                         />
                     </div>
                 </>}/>

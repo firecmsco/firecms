@@ -16,7 +16,7 @@ export function HeroPro({
         bgColor = "bg-blue-600";
     } else if (color === "secondary") {
         bgColor = "bg-rose-500";
-    } else if(color === "dark"){
+    } else if (color === "dark") {
         bgColor = "bg-gray-900";
     } else {
         bgColor = "bg-transparent";
@@ -80,6 +80,12 @@ export function HeroPro({
                                lineHeight: 1.35,
                            }}>
                             The most customizable headless CMS. Ever.
+                        </p>
+                        <p className="max-w-7xl text-2xl md:text-5xl font-bold tracking-tight text-white"
+                           style={{
+                               lineHeight: 1.35,
+                           }}>
+                            The perfect solution for your team or public facing applications, built on top of Firebase.
                         </p>
                     </div>
                 </Panel>

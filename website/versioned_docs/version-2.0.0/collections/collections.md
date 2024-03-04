@@ -12,8 +12,7 @@ them using a callback, as described in [Navigation](../navigation).
 In FireCMS, **collections** represent groups of entities.
 
 You can find collections at the **top level** of the navigation tree (the
-entries displayed in the home page and the navigation drawer), or as **
-subcollections**
+entries displayed in the home page and the navigation drawer), or as **subcollections**
 
 The `name` and `properties` you define for your entity collection, will be used
 to generate the fields in the spreadsheet like collection tables, and the fields
@@ -113,7 +112,7 @@ in [Entity collections]
 
 * `initialFilter` Initial filters applied to this collection.
   Defaults to none. Filters applied with this prop can be changed by the user.
-  e.g. 
+  e.g.
   ```
   initialFilter: { age: [ ">=", 18 ] }
   ```

@@ -21,9 +21,9 @@ export function Panel({
 }) {
 
     const colorClass = color === "transparent" ? "" :
-        color === "white" ? "bg-white dark:bg-gray-900 text-text-primary dark:text-text-primary-dark" :
-            color === "light" ? "bg-gray-100 dark:bg-gray-700 dark:bg-opacity-30 text-text-primary dark:text-text-primary-dark" :
-                color === "lighter" ? "bg-gray-50 dark:bg-gray-800 text-text-primary dark:text-text-primary-dark" :
+        color === "white" ? "bg-white text-text-primary" :
+            color === "light" ? "bg-gray-100 text-text-primary" :
+                color === "lighter" ? "bg-gray-50 text-text-primary" :
                     color === "light_gray" ? "bg-gray-600 text-white dark:text-white" :
                         color === "gray" ? "bg-gray-800 text-white dark:text-white" :
                             color === "primary" ? "bg-primary text-white dark:text-white" :

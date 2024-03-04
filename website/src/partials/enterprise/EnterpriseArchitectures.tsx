@@ -14,47 +14,47 @@ export function EnterpriseArchitectures() {
                 </h4>
             </Panel>
 
-            <TwoColumns
-                left={<div className={"text-2xl p-8"}>
+            <Panel color={"light"} includePadding={false}>
+                <TwoColumns
+                    left={<div className={"text-2xl p-8"}>
 
-                    <h2 className={"h2"}>Adaptable to Your Architecture</h2>
-                    <p>
-                        Our team has developed comprehensive solutions for
-                        numerous successful companies and gained expertise in
-                        various architectures. We can assist you in building a
-                        scalable infrastructure.
+                        <h2 className={"h2"}>Adaptable to Your Architecture</h2>
+                        <p>
+                            Our team has developed comprehensive solutions for
+                            numerous successful companies and gained expertise in
+                            various architectures.
+                        </p>
+                        <p>
+                            Firebase and FireCMS can be integrated into your
+                            existing architecture, or we can help you develop a new
+                            one.
 
-                    </p>
-                    <p>
-                        Firebase and FireCMS can be integrated into your
-                        existing architecture, or we can help you develop a new
-                        one.
+                        </p>
+                        <p>
+                            Your data and services will be hosted in your own
+                            Firebase project, allowing you to implement your own
+                            authentication and authorization system.
 
-                    </p>
-                    <p>
-                        Your data and services will be hosted in your own
-                        Firebase project, allowing you to implement your own
-                        authentication and authorization system.
+                        </p>
 
-                    </p>
+                        <p>
+                            As a headless CMS, FireCMS is compatible with <b>any
+                            frontend framework</b> and is not limited to a specific
+                            rendering layer, unlike traditional CMSs.
 
-                    <p>
-                        As a headless CMS, FireCMS is compatible with <b>any
-                        frontend framework</b> and is not limited to a specific
-                        rendering layer, unlike traditional CMSs.
+                        </p>
 
-                    </p>
-
-                </div>}
-                right={<div className={"p-8 flex flex-col"}>
-                    <SimpleArchitecture className={"w-full mt-8"}/>
-                    <label className={"text-sm text-center m-4"}>Simple
-                        architecture</label>
-                    <ComplexArchitecture className={"w-full mt-16"}/>
-                    <label className={"text-sm text-center m-4"}>Architecture
-                        using microservices</label>
-                </div>
-                }/>
+                    </div>}
+                    right={<div className={"p-8 flex flex-col"}>
+                        <SimpleArchitecture className={"w-full mt-8"}/>
+                        <label className={"text-sm text-center m-4"}>Simple
+                            architecture</label>
+                        <ComplexArchitecture className={"w-full mt-16"}/>
+                        <label className={"text-sm text-center m-4"}>Architecture
+                            using microservices</label>
+                    </div>
+                    }/>
+            </Panel>
 
         </>
     );

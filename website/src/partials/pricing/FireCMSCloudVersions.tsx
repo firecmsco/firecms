@@ -14,7 +14,7 @@ export function FireCMSCloudVersions() {
         <div
             className={clsx("w-full max-w-xl lg:max-w-none h-full mx-4 p-6 border rounded-lg dark:border-gray-700 flex flex-col", defaultBorderMixin)}>
 
-            <h3 className={"text-3xl md:text-4xl font-bold  text-center text-gray-700 dark:text-gray-300 uppercase my-2"}>
+            <h3 className={"text-3xl md:text-4xl font-bold  text-center text-gray-700 uppercase my-2"}>
                 Free
             </h3>
             <p className={"text-lg mb-4 font-bold text-center"}>
@@ -34,7 +34,7 @@ export function FireCMSCloudVersions() {
                     <li className={"list-disc"}>3 users</li>
                 </ul>
             </div>
-            <div className={"text-center mt-4 text-gray-600 dark:text-gray-400 w-full"}>
+            <div className={"text-center mt-4 text-gray-600 w-full"}>
                 <span className={"text-2xl font-bold "}>€0 user/month</span>
             </div>
 
@@ -45,7 +45,7 @@ export function FireCMSCloudVersions() {
         <div
             className={clsx("w-full max-w-xl lg:max-w-none h-full mx-4 p-6 rounded-lg flex flex-col outline-none ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent")}>
 
-            <h3 className={"text-3xl md:text-4xl font-bold text-center dark:text-primary text-primary uppercase my-2"}>
+            <h3 className={"text-3xl md:text-4xl font-bold text-center text-primary uppercase my-2"}>
                 Plus
             </h3>
             <p className={"text-lg mb-4 font-bold text-center"}>
@@ -72,9 +72,9 @@ export function FireCMSCloudVersions() {
 
     const proTier = (
         <div
-            className={clsx("w-full max-w-xl lg:max-w-none h-full mx-4 p-6 border rounded-lg  dark:border-gray-700 flex flex-col", defaultBorderMixin)}>
+            className={clsx("w-full max-w-xl lg:max-w-none h-full mx-4 p-6 border rounded-lg  flex flex-col", defaultBorderMixin)}>
 
-            <h3 className={"text-3xl md:text-4xl font-bold text-center text-gray-700 dark:text-gray-300 uppercase my-2"}>
+            <h3 className={"text-3xl md:text-4xl font-bold text-center text-gray-700 uppercase my-2"}>
                 Pro
             </h3>
             <p className={"text-lg mb-4 font-bold text-center"}>
@@ -107,7 +107,7 @@ export function FireCMSCloudVersions() {
     );
 
     return <section
-        className={clsx(defaultBorderMixin, "flex flex-col items-center justify-center text-lg border-0 border-t bg-white dark:bg-gray-800")}>
+        className={clsx(defaultBorderMixin, "flex flex-col text-gray-900 items-center justify-center text-lg border-0 border-t bg-white")}>
 
         <div className={clsx(ContainerMixin, ContainerPaddingMixin, "flex flex-col items-center gap-8")}>
 

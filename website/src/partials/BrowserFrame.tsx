@@ -10,7 +10,7 @@ export function BrowserFrame({ children, className, style, mode = "dark" }: {
 }) {
     return <div
         style={style}
-        className={clsx("rounded-lg mx-auto w-fit flex flex-col content-center justify-center border",
+        className={clsx("rounded-lg w-fit flex flex-col content-center justify-center border",
             defaultBorderMixin,
             className
         )}>

@@ -32,7 +32,7 @@ function Home() {
 
             <HeroHome/>
 
-            <main>
+            <main className={"bg-white"}>
 
                 <UsageExamples/>
 
