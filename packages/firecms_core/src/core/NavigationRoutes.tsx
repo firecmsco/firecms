@@ -76,12 +76,15 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
             );
 
         const homeRoute = (
-            <Route path={"/"} element={<HomePage/>}/>
+            <Route path={"/"}
+                   element={<HomePage/>}/>
         );
 
-        const notFoundRoute = <Route path={"*"} element={<NotFoundPage/>}/>;
+        const notFoundRoute = <Route path={"*"}
+                                     element={
+                                         <NotFoundPage/>
+                                     }/>;
 
-        console.log("sideDialogsController.basePath", sideDialogsController.basePath)
         return (
             <Routes location={sideDialogsController.basePath}>
 

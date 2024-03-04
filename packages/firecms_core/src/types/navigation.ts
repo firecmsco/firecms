@@ -87,10 +87,14 @@ export type NavigationController = {
      */
     buildCMSUrlPath: (path: string) => string;
 
+    buildUrlEditCollectionPath: (props: {
+        path: string
+    }) => string;
+
     /**
      * Base url path for the home screen
      */
-    homePath: string;
+    homeUrl: string;
 
     /**
      * Check if a url path belongs to a collection
@@ -104,7 +108,7 @@ export type NavigationController = {
      * `products/B34SAP8Z` => `/c/products/B34SAP8Z`
      * @param path
      */
-    buildUrlCollectionPath: (path: string, includeBasePath?: boolean) => string;
+    buildUrlCollectionPath: (path: string) => string;
 
     /**
      * Turn a path with aliases into a resolved path

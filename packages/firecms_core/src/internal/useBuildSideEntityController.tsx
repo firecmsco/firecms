@@ -149,8 +149,8 @@ const propsToSidePanel = (props: EntitySidePanelProps<any>, navigation: Navigati
         const collectionPath = removeInitialAndTrailingSlashes(props.path);
 
         const newPath = props.entityId
-            ? navigation.buildUrlCollectionPath(`${collectionPath}/${props.entityId}/${props.selectedSubPath || ""}`, true)
-            : navigation.buildUrlCollectionPath(`${collectionPath}#${NEW_URL_HASH}`, true);
+            ? navigation.buildUrlCollectionPath(`${collectionPath}/${props.entityId}/${props.selectedSubPath || ""}`)
+            : navigation.buildUrlCollectionPath(`${collectionPath}#${NEW_URL_HASH}`);
         const resolvedPath = navigation.resolveAliasesFrom(props.path);
 
         const resolvedPanelProps: EntitySidePanelProps<any> = {
@@ -162,7 +162,7 @@ const propsToSidePanel = (props: EntitySidePanelProps<any>, navigation: Navigati
             key: `${props.path}/${props.entityId}`,
             component: <EntitySidePanel {...resolvedPanelProps}/>,
             urlPath: newPath,
-            parentUrlPath: navigation.buildUrlCollectionPath(collectionPath, true),
+            parentUrlPath: navigation.buildUrlCollectionPath(collectionPath),
             width: getEntityViewWidth(props, smallLayout),
             onClose: props.onClose
         });

@@ -127,7 +127,7 @@ export function DefaultHomePage({
         <div id="home_page"
              ref={containerRef}
              className="py-2 overflow-auto h-full w-full">
-            <Container maxWidth={"6xl"} className={"2xl:max-w-7xl"}>
+            <Container maxWidth={"6xl"}>
                 <div
                     className="w-full sticky py-4 transition-all duration-400 ease-in-out top-0 z-10 flex flex-row gap-4"
                     style={{ top: direction === "down" ? -84 : 0 }}>

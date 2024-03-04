@@ -39,7 +39,7 @@ export function useBuildSideDialogsController(): SideDialogsController {
     }, [updateSidePanels]);
 
     const updateBrowserUrl = useCallback((path: string, replace = false) => {
-        const currentPath = window.location.pathname;
+        const currentPath = window.location.pathname
         const url = `${window.location.origin}/${path}`;
         if (replace) {
             window.history.replaceState({}, "", url);
@@ -108,12 +108,11 @@ export function useBuildSideDialogsController(): SideDialogsController {
 
     }, [sidePanels, updateBrowserUrl, updateSidePanels]);
 
-    const currentBaseLocation = panelsHistory.current[window.location.pathname]?.baseLocation;
     return {
         sidePanels,
         close,
         open,
         replace,
-        basePath: (sidePanels.length > 0 ? currentBaseLocation : undefined),
+        basePath: panelsHistory.current[window.location.pathname]?.baseLocation ?? window.location.pathname,
     };
 }
