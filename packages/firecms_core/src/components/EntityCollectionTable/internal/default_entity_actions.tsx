@@ -9,6 +9,7 @@ export const editEntityAction: EntityAction = {
     onClick({
                 entity,
                 collection,
+                fullPath,
                 context,
                 highlightEntity,
                 unhighlightEntity
@@ -20,7 +21,7 @@ export const editEntityAction: EntityAction = {
         });
         context.sideEntityController.open({
             entityId: entity.id,
-            path: entity.path,
+            path: fullPath ?? entity.path,
             collection,
             updateUrl: true,
             onClose: () => unhighlightEntity?.(entity)
