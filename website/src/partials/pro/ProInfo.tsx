@@ -16,7 +16,7 @@ import mmDark from "@site/static/img/mm_dark.png";
 import oikosAviationDemo from "@site/static/img/oikos_aviation_demo.png";
 
 export function ProInfo() {
-    return <Panel>
+    return <Panel color={"white"}>
         <h2 className={"h2 mb-3 uppercase gradient-text"}>
             BUILD BETTER BACK-OFFICE APPS FASTER
         </h2>

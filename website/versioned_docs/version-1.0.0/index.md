@@ -110,8 +110,7 @@ if you are using Firestore), as well as **filtering and sorting** and
 
 When editing an entity, FireCMS offers a nested system of side dialogs that
 allow to navigate through **subcollections** and access custom views (such as a
-custom form, or a blog preview). This functionality can be also accessed
-programmatically though the hook `useSideEntityController`.
+custom form, or a blog preview). 
 
 FireCMS includes **more than 15 built-in fields** with hundreds of customization
 and validation options. The components have been meticulously crafted for a

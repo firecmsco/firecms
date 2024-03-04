@@ -2,6 +2,7 @@ import React from "react";
 import { Panel } from "../general/Panel";
 import { PagesHeroBackground } from "../general/PagesHeroBackground";
 import clsx from "clsx";
+import { Button, EventIcon } from "@firecms/ui";
 
 export function HeroPro({
                             color,
@@ -87,6 +88,10 @@ export function HeroPro({
                            }}>
                             The perfect solution for your team or public facing applications, built on top of Firebase.
                         </p>
+                    </div>
+                    <div className={"space-x-4"}>
+                        <Button size={"large"}>See demo</Button>
+                        <Button size={"large"} variant={"outlined"}>Book a meeting <EventIcon/></Button>
                     </div>
                 </Panel>
             </div>
