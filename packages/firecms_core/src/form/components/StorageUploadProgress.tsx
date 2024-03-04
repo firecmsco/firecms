@@ -4,6 +4,7 @@ import { useSnackbarController, useStorageSource } from "../../hooks";
 import { StorageFieldItem } from "../../util/useStorageUploadController";
 import { ErrorView } from "../../components";
 import { cn, paperMixin, Skeleton } from "@firecms/ui";
+import { EntityCollection, StorageSource } from "../../types";
 
 export interface StorageUploadItemProps {
     storagePath: string;
@@ -22,10 +23,10 @@ export function StorageUploadProgress({
                                           metadata,
                                           onFileUploadComplete,
                                           imageSize,
-                                          simple
+                                          simple,
                                       }: StorageUploadItemProps) {
 
-    const storage = useStorageSource();
+    const storageSource = useStorageSource();
 
     const snackbarController = useSnackbarController();
 
@@ -41,7 +42,7 @@ export function StorageUploadProgress({
         setError(undefined);
         setLoading(true);
 
-        storage.uploadFile({
+        storageSource.uploadFile({
             file,
             fileName,
             path: storagePath,
@@ -67,7 +68,7 @@ export function StorageUploadProgress({
             .finally(() => {
                 uploading.current = false;
             });
-    }, [entry, metadata, onFileUploadComplete, storage, storagePath]);
+    }, [entry, metadata, onFileUploadComplete, storageSource, storagePath]);
 
     React.useEffect(() => {
         mounted.current = true;
@@ -89,7 +90,7 @@ export function StorageUploadProgress({
 
         <div className={cn(paperMixin,
             "relative m-4 border-box flex items-center justify-center",
-             `min-w-[${imageSize}px] min-h-[${imageSize}px]`)}>
+            `min-w-[${imageSize}px] min-h-[${imageSize}px]`)}>
 
             {loading &&
                 <Skeleton className="w-full h-full"/>}

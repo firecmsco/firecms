@@ -370,7 +370,7 @@ export function ImportDataPreview<M extends Record<string, any>>({
                                                                  }: {
     importConfig: ImportConfig,
     properties: ResolvedProperties<M>,
-    propertiesOrder: Extract<keyof M, string>[]
+    propertiesOrder: Extract<keyof M, string>[],
 }) {
 
     useEffect(() => {

@@ -53,7 +53,7 @@ export function ReadOnlyFieldBinding({
                     <PropertyPreview propertyKey={propertyKey}
                                      value={value}
                                      property={property}
-                                     // entity={entity}
+                        // entity={entity}
                                      size={"medium"}/>
                 </ErrorBoundary>
 

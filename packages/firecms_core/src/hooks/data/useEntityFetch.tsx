@@ -43,7 +43,7 @@ export function useEntityFetch<M extends Record<string, any>, UserType extends U
         useCache = false
     }: EntityFetchProps<M>): EntityFetchResult<M> {
 
-    const dataSource = useDataSource();
+    const dataSource = useDataSource(collection);
     const navigationController = useNavigationController();
 
     const path = navigationController.resolveAliasesFrom(inputPath);

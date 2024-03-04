@@ -9,7 +9,7 @@ import { CustomShapedArrayProps } from "./CustomShapedArrayProps";
 export default function CustomShapedArrayPreview({
                                                      value,
                                                      size,
-                                                     customProps
+                                                     customProps,
                                                  }: PropertyPreviewProps<any[], CustomShapedArrayProps>)
      {
 

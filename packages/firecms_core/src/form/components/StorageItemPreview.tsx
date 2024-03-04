@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Entity, ResolvedStringProperty } from "../../types";
+import { Entity, EntityCollection, ResolvedStringProperty } from "../../types";
 import { PreviewSize, PropertyPreview } from "../../preview";
 
 import { cn, IconButton, paperMixin, RemoveIcon, Tooltip } from "@firecms/ui";
@@ -14,6 +14,7 @@ interface StorageItemPreviewProps {
     onRemove: (value: string) => void;
     size: PreviewSize;
     disabled: boolean;
+    collection: EntityCollection;
 }
 
 export function StorageItemPreview({
@@ -23,7 +24,8 @@ export function StorageItemPreview({
                                        entity,
                                        onRemove,
                                        disabled,
-                                       size
+                                       size,
+                                       collection
                                    }: StorageItemPreviewProps) {
 
     return (
@@ -54,7 +56,7 @@ export function StorageItemPreview({
                     <PropertyPreview propertyKey={name}
                                      value={value}
                                      property={property}
-                                     // entity={entity}
+                        // entity={entity}
                                      size={size}/>
                 </ErrorBoundary>
             }

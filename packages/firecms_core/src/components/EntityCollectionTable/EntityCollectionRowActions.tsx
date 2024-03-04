@@ -99,7 +99,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                                         selectionController,
                                         highlightEntity,
                                         unhighlightEntity,
-                                        onCollectionChange
+                                        onCollectionChange,
                                     });
                                 }}
                                 size={largeLayout ? "medium" : "small"}>
@@ -127,7 +127,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                                             selectionController,
                                             highlightEntity,
                                             unhighlightEntity,
-                                            onCollectionChange
+                                            onCollectionChange,
                                         });
                                     }}>
                                     {action.icon}

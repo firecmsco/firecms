@@ -35,7 +35,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
                                                                       path
                                                                   }: DeleteEntityDialogProps<M>) {
 
-    const dataSource = useDataSource();
+    const dataSource = useDataSource(collection);
     const customizationController = useCustomizationController();
     const snackbarController = useSnackbarController();
     const [loading, setLoading] = useState(false);

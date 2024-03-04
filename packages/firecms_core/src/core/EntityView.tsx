@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
-    Entity,
+    Entity, EntityOverrides,
     EntityCollection,
     EntityCustomView,
     EntityStatus,
@@ -66,7 +66,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                                                                                      onValuesAreModified,
                                                                                      formWidth,
                                                                                      onUpdate,
-                                                                                     onClose
+                                                                                     onClose,
                                                                                  }: EntityViewProps<M>) {
 
     if (collection.customId && collection.formAutoSave) {
@@ -95,7 +95,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
 
     const resolvedFormWidth: string = typeof formWidth === "number" ? `${formWidth}px` : formWidth ?? FORM_CONTAINER_WIDTH;
 
-    const dataSource = useDataSource();
+    const dataSource = useDataSource(collection);
     const sideDialogContext = useSideDialogContext();
     const sideEntityController = useSideEntityController();
     const snackbarController = useSnackbarController();
@@ -222,7 +222,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                 entityId: updatedEntity.id,
                 selectedSubPath: selectedTabRef.current,
                 updateUrl: true,
-                collection
+                collection,
             });
         }
 
@@ -382,7 +382,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
             entityId,
             selectedSubPath: value === MAIN_TAB_VALUE ? undefined : value,
             updateUrl: true,
-            collection
+            collection,
         });
     };
 

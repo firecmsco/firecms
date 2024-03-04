@@ -7,7 +7,7 @@ import {
     CollectionSize,
     Entity,
     EntityAction,
-    EntityCollection,
+    EntityCollection, EntityOverrides,
     FilterValues,
     PartialEntityCollection,
     PropertyOrBuilder,
@@ -121,7 +121,7 @@ export const EntityCollectionView = React.memo(
                                                                  }: EntityCollectionViewProps<M>
     ) {
 
-        const dataSource = useDataSource();
+        const dataSource = useDataSource(collectionProp);
         const navigation = useNavigationController();
         const sideEntityController = useSideEntityController();
         const authController = useAuthController();
@@ -210,7 +210,7 @@ export const EntityCollectionView = React.memo(
                 path: clickedEntity.path,
                 collection,
                 updateUrl: true,
-                onClose: unselectNavigatedEntity
+                onClose: unselectNavigatedEntity,
             });
         }, [unselectNavigatedEntity]);
 
@@ -224,7 +224,7 @@ export const EntityCollectionView = React.memo(
                 path: fullPath,
                 collection,
                 updateUrl: true,
-                onClose: unselectNavigatedEntity
+                onClose: unselectNavigatedEntity,
             });
         }, [fullPath]);
 
@@ -387,7 +387,7 @@ export const EntityCollectionView = React.memo(
                                         entityId: entity.id,
                                         selectedSubPath: subcollection.id ?? subcollection.path,
                                         collection,
-                                        updateUrl: true
+                                        updateUrl: true,
                                     });
                                 }}>
                             {subcollection.name}
@@ -723,7 +723,7 @@ function EntitiesCount({
     onCountChange?: (count: number) => void,
 }) {
 
-    const dataSource = useDataSource();
+    const dataSource = useDataSource(collection);
     const navigation = useNavigationController();
     const [count, setCount] = useState<number | undefined>(undefined);
     const [error, setError] = useState<Error | undefined>(undefined);
@@ -799,7 +799,7 @@ function EntityIdHeaderWidget({
                               entityId: searchString,
                               path,
                               collection,
-                              updateUrl: true
+                              updateUrl: true,
                           });
                       }}
                       className={"text-gray-900 dark:text-white w-96 max-w-full"}>

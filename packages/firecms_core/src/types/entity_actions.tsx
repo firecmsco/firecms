@@ -4,6 +4,7 @@ import { Entity } from "./entities";
 import { EntityCollection, SelectionController } from "./collections";
 import { User } from "./user";
 import { SideEntityController } from "./side_entity_controller";
+import { EntityOverrides } from "./entity_overrides";
 
 export type EntityAction<M extends object = any, UserType extends User = User> = {
     name: string;
@@ -21,7 +22,10 @@ export type EntityAction<M extends object = any, UserType extends User = User> =
      * Show this action in the form, defaults to true
      */
     includeInForm?: boolean;
+
 }
+
+
 
 export type EntityActionClickProps<M extends object, UserType extends User = User> = {
     entity: Entity<M>;

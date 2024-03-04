@@ -4,6 +4,7 @@ import {
     CMSAnalyticsEvent,
     Entity,
     EntityAction,
+    EntityOverrides,
     EntityCollection,
     EntityStatus,
     EntityValues,
@@ -171,7 +172,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                                                                onFormContextChange,
                                                                hideId,
                                                                autoSave,
-                                                               onIdUpdateError
+                                                               onIdUpdateError,
                                                            }: EntityFormProps<M>) {
 
     const analyticsController = useAnalyticsController();
@@ -179,7 +180,7 @@ function EntityFormInternal<M extends Record<string, any>>({
     const customizationController = useCustomizationController();
 
     const context = useFireCMSContext();
-    const dataSource = useDataSource();
+    const dataSource = useDataSource(inputCollection);
     const plugins = customizationController.plugins;
 
     const initialResolvedCollection = useMemo(() => resolveCollection({
@@ -508,7 +509,7 @@ function InnerForm<M extends Record<string, any>>(props: FormexController<M> & {
     savingError?: Error,
     closeAfterSaveRef: MutableRefObject<boolean>,
     autoSave?: boolean,
-    entityActions: EntityAction[]
+    entityActions: EntityAction[],
 }) {
 
     const {
@@ -530,7 +531,7 @@ function InnerForm<M extends Record<string, any>>(props: FormexController<M> & {
         dirty,
         closeAfterSaveRef,
         autoSave,
-        entityActions
+        entityActions,
     } = props;
 
     const context = useFireCMSContext();
@@ -655,7 +656,7 @@ function InnerForm<M extends Record<string, any>>(props: FormexController<M> & {
                                         fullPath: resolvedCollection.path,
                                         collection: resolvedCollection,
                                         context,
-                                        sideEntityController
+                                        sideEntityController,
                                     });
                             }}>
                             {action.icon}

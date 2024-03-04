@@ -24,7 +24,7 @@ import { getPreviewSizeFrom } from "../../preview/util";
 import { isReadOnly } from "../../util";
 
 import { CustomFieldValidator, mapPropertyToYup } from "../../form/validation";
-import {  useFireCMSContext } from "../../hooks";
+import { useFireCMSContext } from "../../hooks";
 
 import { EntityTableCell } from "./internal/EntityTableCell";
 import { EntityTableCellActions } from "./internal/EntityTableCellActions";
@@ -33,7 +33,7 @@ import { getRowHeight } from "../VirtualTable/common";
 import { useSelectableTableController } from "../SelectableTable/SelectableTableContext";
 import { useClearRestoreValue } from "../../form/useClearRestoreValue";
 
-export interface PropertyTableCellProps<T extends CMSType, M extends Record<string, any>> {
+export interface PropertyTableCellProps<T extends CMSType> {
     propertyKey: string;
     columnIndex: number;
     align: "right" | "left" | "center";
@@ -62,7 +62,7 @@ function isStorageProperty(property: ResolvedProperty) {
     return false;
 }
 
-export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
+export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
     function PropertyTableCell<T extends CMSType, M extends Record<string, any>>({
                                                                                      propertyKey,
                                                                                      customFieldValidator,
@@ -75,7 +75,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                                                      entity,
                                                                                      readonly,
                                                                                      disabled: disabledProp
-                                                                                 }: PropertyTableCellProps<T, M>) {
+                                                                                 }: PropertyTableCellProps<T>) {
 
         const context = useFireCMSContext();
 
@@ -403,14 +403,13 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
             allowScroll = false;
             showExpandIcon = selected && !innerComponent && !disabled && !readOnlyProperty;
             innerComponent = (
-                <PropertyPreview
-                    width={width}
-                    height={height}
+                <PropertyPreview                                  width={width}
+                                 height={height}
                     // entity={entity}
-                    propertyKey={propertyKey as string}
-                    value={internalValue}
-                    property={property}
-                    size={getPreviewSizeFrom(size)}
+                                 propertyKey={propertyKey as string}
+                                 value={internalValue}
+                                 property={property}
+                                 size={getPreviewSizeFrom(size)}
                 />
             );
         }
@@ -447,9 +446,9 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
         );
 
     },
-    areEqual) as React.FunctionComponent<PropertyTableCellProps<any, any>>;
+    areEqual) as React.FunctionComponent<PropertyTableCellProps<any>>;
 
-function areEqual(prevProps: PropertyTableCellProps<any, any>, nextProps: PropertyTableCellProps<any, any>) {
+function areEqual(prevProps: PropertyTableCellProps<any>, nextProps: PropertyTableCellProps<any>) {
     return prevProps.height === nextProps.height &&
         prevProps.propertyKey === nextProps.propertyKey &&
         prevProps.align === nextProps.align &&

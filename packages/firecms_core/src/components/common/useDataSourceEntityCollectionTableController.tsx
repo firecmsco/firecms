@@ -65,7 +65,7 @@ export function useDataSourceEntityCollectionTableController<M extends Record<st
 
     const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
     const navigation = useNavigationController();
-    const dataSource = useDataSource();
+    const dataSource = useDataSource(collection);
     const resolvedPath = useMemo(() => navigation.resolveAliasesFrom(fullPath), [fullPath, navigation.resolveAliasesFrom]);
 
     const forceFilter = forceFilterFromProps ?? forceFilterFromCollection;

@@ -7,7 +7,7 @@ import { getIconForProperty } from "../../util";
 import { PropertyPreview } from "../../preview";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
-interface TextFieldProps<T extends string | number> extends FieldProps<T> {
+interface TextFieldBindingProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean
 }
 
@@ -18,6 +18,7 @@ interface TextFieldProps<T extends string | number> extends FieldProps<T> {
  * @group Form fields
  */
 export function TextFieldBinding<T extends string | number>({
+                                                                context,
                                                                 propertyKey,
                                                                 value,
                                                                 setValue,
@@ -27,7 +28,7 @@ export function TextFieldBinding<T extends string | number>({
                                                                 autoFocus,
                                                                 property,
                                                                 includeDescription,
-                                                            }: TextFieldProps<T>) {
+                                                            }: TextFieldBindingProps<T>) {
 
     let multiline: boolean | undefined;
     let url: boolean | PreviewType | undefined;
@@ -96,9 +97,10 @@ export function TextFieldBinding<T extends string | number>({
             {url && <Collapse
                 className="mt-1 ml-1"
                 in={Boolean(value)}>
-                <PropertyPreview value={value}
-                                 property={property}
-                                 size={"medium"}/>
+                <PropertyPreview
+                    value={value}
+                    property={property}
+                    size={"medium"}/>
             </Collapse>}
 
         </>

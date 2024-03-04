@@ -17,6 +17,7 @@ export * from "./side_entity_controller";
 export * from "./side_dialogs_controller";
 export * from "./firecms_context";
 export * from "./entity_callbacks";
+export * from "./entity_overrides";
 export * from "./local_config_persistence";
 export * from "./plugins";
 export * from "./analytics";

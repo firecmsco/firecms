@@ -3,6 +3,7 @@ import React, { useCallback } from "react";
 import {
     ArrayProperty,
     Entity,
+    EntityCollection,
     FieldProps,
     ResolvedArrayProperty,
     ResolvedStringProperty,
@@ -10,10 +11,10 @@ import {
 } from "../../types";
 import { useDropzone } from "react-dropzone";
 import { PreviewSize } from "../../preview";
-import { FieldHelperText,LabelWithIcon } from "../components";
+import { FieldHelperText, LabelWithIcon } from "../components";
 
 import { getIconForProperty, isReadOnly } from "../../util";
-import {  useSnackbarController, useStorageSource } from "../../hooks";
+import { useSnackbarController, useStorageSource } from "../../hooks";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { StorageFieldItem, useStorageUploadController } from "../../util/useStorageUploadController";
 import { StorageUploadProgress } from "../components/StorageUploadProgress";
@@ -55,13 +56,13 @@ export function StorageUploadFieldBinding({
                                               property,
                                               includeDescription,
                                               context,
-                                              isSubmitting
+                                              isSubmitting,
                                           }: StorageUploadFieldProps) {
 
     if (!context.entityId)
         throw new Error("StorageUploadFieldBinding: Entity id is null");
 
-    const storageSource = useStorageSource();
+    const storageSource = useStorageSource(context.collection);
     const disabled = isReadOnly(property) || !!property.disabled || isSubmitting;
 
     const {
@@ -108,6 +109,7 @@ export function StorageUploadFieldBinding({
 
             <StorageUpload
                 value={internalValue}
+                collection={context.collection}
                 name={propertyKey}
                 disabled={disabled}
                 autoFocus={autoFocus}
@@ -133,6 +135,7 @@ export function StorageUploadFieldBinding({
 
 function FileDropComponent({
                                storage,
+                               collection,
                                disabled,
                                isDraggingOver,
                                onFilesAdded,
@@ -151,6 +154,7 @@ function FileDropComponent({
                                helpText
                            }: {
     storage: StorageConfig,
+    collection: EntityCollection,
     disabled: boolean,
     isDraggingOver: boolean,
     droppableProvided: any,
@@ -231,6 +235,7 @@ function FileDropComponent({
                     if (entry.storagePathOrDownloadUrl) {
                         child = (
                             <StorageItemPreview
+                                collection={collection}
                                 name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
                                 property={property}
                                 disabled={disabled}
@@ -294,6 +299,7 @@ function FileDropComponent({
 
 export interface StorageUploadProps {
     value: StorageFieldItem[];
+    collection: EntityCollection;
     setInternalValue: (v: StorageFieldItem[]) => void;
     name: string;
     property: ResolvedStringProperty | ResolvedArrayProperty<string[]>;
@@ -309,6 +315,7 @@ export interface StorageUploadProps {
 }
 
 export function StorageUpload({
+                                  collection,
                                   property,
                                   name,
                                   value,
@@ -321,7 +328,7 @@ export function StorageUpload({
                                   autoFocus,
                                   storage,
                                   entity,
-                                  storagePathBuilder
+                                  storagePathBuilder,
                               }: StorageUploadProps) {
 
     if (multipleFilesSupported) {
@@ -401,6 +408,7 @@ export function StorageUpload({
                             className="rounded"
                         >
                             <StorageItemPreview
+                                collection={collection}
                                 name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
                                 property={renderProperty}
                                 disabled={true}
@@ -414,6 +422,7 @@ export function StorageUpload({
             >
                 {(provided, snapshot) => {
                     return <FileDropComponent storage={storage}
+                                              collection={collection}
                                               disabled={disabled}
                                               isDraggingOver={snapshot.isDraggingOver}
                                               droppableProvided={provided}

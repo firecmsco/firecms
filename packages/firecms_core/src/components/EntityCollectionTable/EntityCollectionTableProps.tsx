@@ -2,7 +2,7 @@ import React from "react";
 import {
     AdditionalFieldDelegate,
     CollectionSize,
-    Entity,
+    Entity, EntityCollection,
     EntityTableController,
     FilterValues,
     ResolvedProperties,

@@ -109,7 +109,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
 
     const fullPath = navigation.resolveAliasesFrom(pathInput);
 
-    const dataSource = useDataSource();
+    const dataSource = useDataSource(collection);
 
     const [entitiesDisplayedFirst, setEntitiesDisplayedFirst] = useState<Entity<any>[]>([]);
 

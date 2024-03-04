@@ -70,7 +70,7 @@ export function useCollectionFetch<M extends Record<string, any>, UserType exten
         searchString
     }: CollectionFetchProps<M>): CollectionFetchResult<M> {
 
-    const dataSource = useDataSource();
+    const dataSource = useDataSource(collection);
     const navigationController = useNavigationController();
 
     const path = navigationController.resolveAliasesFrom(inputPath);

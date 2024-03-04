@@ -8,6 +8,7 @@ import { EnumValues, PropertiesOrBuilders } from "./properties";
 import { FormContext } from "./fields";
 import { EntityAction } from "./entity_actions";
 import { ExportConfig } from "./export_import";
+import { EntityOverrides } from "./entity_overrides";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -276,6 +277,8 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
      *
      */
     exportable?: boolean | ExportConfig<UserType>;
+
+    overrides?: EntityOverrides;
 }
 
 /**

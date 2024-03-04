@@ -1,4 +1,4 @@
-import { EntityAction } from "../../../types";
+import { EntityAction, EntityOverrides } from "../../../types";
 import { ArchiveIcon, DeleteIcon, FileCopyIcon, KeyboardTabIcon, OpenInNewIcon } from "@firecms/ui";
 import { DeleteEntityDialog } from "../../DeleteEntityDialog";
 
@@ -12,7 +12,7 @@ export const editEntityAction: EntityAction = {
                 fullPath,
                 context,
                 highlightEntity,
-                unhighlightEntity
+                unhighlightEntity,
             }): Promise<void> {
         highlightEntity?.(entity);
         context.analyticsController?.onAnalyticsEvent?.("entity_click", {
@@ -24,7 +24,7 @@ export const editEntityAction: EntityAction = {
             path: fullPath ?? entity.path,
             collection,
             updateUrl: true,
-            onClose: () => unhighlightEntity?.(entity)
+            onClose: () => unhighlightEntity?.(entity),
         });
         return Promise.resolve(undefined);
     }
@@ -38,7 +38,7 @@ export const copyEntityAction: EntityAction = {
                 collection,
                 context,
                 highlightEntity,
-                unhighlightEntity
+                unhighlightEntity,
             }): Promise<void> {
         highlightEntity?.(entity);
         context.analyticsController?.onAnalyticsEvent?.("copy_entity_click", {
@@ -51,11 +51,12 @@ export const copyEntityAction: EntityAction = {
             copy: true,
             collection,
             updateUrl: true,
-            onClose: () => unhighlightEntity?.(entity)
+            onClose: () => unhighlightEntity?.(entity),
         });
         return Promise.resolve(undefined);
     }
 }
+
 export const archiveEntityAction: EntityAction = {
     icon: <ArchiveIcon/>,
     name: "Archive",
@@ -70,6 +71,7 @@ export const archiveEntityAction: EntityAction = {
         return Promise.resolve(undefined);
     }
 }
+
 export const openWebsiteAction: EntityAction = {
     icon: <OpenInNewIcon/>,
     name: "See in website",

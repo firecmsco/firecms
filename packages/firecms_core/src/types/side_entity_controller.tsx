@@ -1,6 +1,7 @@
 import { EntityCollection } from "./collections";
 import { ResolvedEntityCollection } from "./resolved_entities";
 import { Entity } from "./entities";
+import { EntityOverrides } from "./entity_overrides";
 
 /**
  * Props used to open a side dialog

@@ -120,7 +120,7 @@ export function DataEnhancementControllerProvider({
 
     }, [getConfigForPath, updateConfig]);
 
-    const dataSource = useDataSource();
+    const dataSource =  useDataSource(collection);
     const navigationController = useNavigationController();
 
     const clearSuggestion = useCallback((propertyKey: string) => {

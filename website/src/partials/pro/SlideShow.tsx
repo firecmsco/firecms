@@ -10,7 +10,6 @@ export const Slideshow: React.FC<SlideshowProps> = ({ images, speed = 1 }) => {
 
     useEffect(() => {
         const slideshowContainer = slideshowContainerRef.current;
-
         const animate = () => {
             if (slideshowContainer) {
                 const maxScrollLeft =

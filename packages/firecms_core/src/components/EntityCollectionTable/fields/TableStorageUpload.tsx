@@ -1,7 +1,14 @@
 import * as React from "react";
 import { useMemo, useState } from "react";
 
-import { Entity, ResolvedArrayProperty, ResolvedStringProperty, StorageConfig } from "../../../types";
+import {
+    Entity,
+    EntityCollection,
+    ResolvedArrayProperty,
+    ResolvedStringProperty,
+    StorageConfig,
+    StorageSource
+} from "../../../types";
 import { useDropzone } from "react-dropzone";
 import { PreviewSize, PropertyPreview } from "../../../preview";
 import { ErrorBoundary } from "../../ErrorBoundary";
@@ -51,7 +58,7 @@ export function TableStorageUpload(props: {
         entity,
         path,
         previewSize,
-        updateValue
+        updateValue,
     } = props;
 
     const storageSource = useStorageSource();
@@ -137,7 +144,7 @@ function StorageUpload({
                            storage,
                            onFilesAdded,
                            onFileUploadComplete,
-                           storagePathBuilder
+                           storagePathBuilder,
                        }: StorageUploadProps) {
 
     const [onHover, setOnHover] = useState(false);
