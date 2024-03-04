@@ -25,11 +25,6 @@ export interface SideDialogsController {
      * @param props
      */
     replace: (panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => void;
-
-    /**
-     * URL displayed under the side dialogs
-     */
-    basePath?: string;
 }
 
 /**
