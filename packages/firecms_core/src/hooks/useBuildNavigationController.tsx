@@ -68,14 +68,16 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
     const cleanBasePath = removeInitialAndTrailingSlashes(basePath);
     const cleanBaseCollectionPath = removeInitialAndTrailingSlashes(baseCollectionPath);
 
-    const homeUrl = cleanBasePath ? `/${cleanBasePath}` : "/";
+    const homePath = cleanBasePath ? `/${cleanBasePath}` : "/";
 
     const fullCollectionPath = cleanBasePath ? `/${cleanBasePath}/${cleanBaseCollectionPath}` : `/${cleanBaseCollectionPath}`;
 
     const buildCMSUrlPath = useCallback((path: string): string => cleanBasePath ? `/${cleanBasePath}/${encodePath(path)}` : `/${encodePath(path)}`,
         [cleanBasePath]);
 
-    const buildUrlCollectionPath = useCallback((path: string): string => `${removeInitialAndTrailingSlashes(baseCollectionPath)}/${encodePath(path)}`,
+    const buildUrlCollectionPath = useCallback((path: string, includeBasePath = false): string => {
+            return `${removeInitialAndTrailingSlashes(includeBasePath ? fullCollectionPath : baseCollectionPath)}/${encodePath(path)}`;
+        },
         [baseCollectionPath]);
 
     const computeTopNavigation = useCallback((collections: EntityCollection[], views: CMSView[]): TopNavigationResult => {
@@ -233,15 +235,6 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         throw Error("Expected path starting with " + fullCollectionPath);
     }, [fullCollectionPath]);
 
-    const buildUrlEditCollectionPath = useCallback(({
-                                                        path
-                                                    }: {
-            path: string
-        }): string => {
-            return `s/edit/${encodePath(path)}`;
-        },
-        []);
-
     const resolveAliasesFrom = useCallback((path: string): string => {
         if (!collections)
             throw Error("Collections have not been initialised yet");
@@ -291,7 +284,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         views,
         loading: !initialised || navigationLoading,
         navigationLoadingError,
-        homeUrl,
+        homePath,
         basePath,
         baseCollectionPath,
         initialised,
@@ -301,7 +294,6 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         isUrlCollectionPath,
         urlPathToDataPath,
         buildUrlCollectionPath,
-        buildUrlEditCollectionPath,
         buildCMSUrlPath,
         resolveAliasesFrom,
         topLevelNavigation,

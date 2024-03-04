@@ -10,7 +10,6 @@ import {
     useSnackbarController
 } from "@firecms/core";
 import { CollectionEditorDialog } from "./ui/collection_editor/CollectionEditorDialog";
-import { useNavigate } from "react-router";
 import { CollectionEditorController } from "./types/collection_editor_controller";
 import { CollectionEditorPermissionsBuilder } from "./types/config_permissions";
 import { CollectionInference } from "./types/collection_inference";
@@ -73,7 +72,6 @@ export const ConfigControllerProvider = React.memo(
                                       }: PropsWithChildren<ConfigControllerProviderProps>) {
 
         const navigation = useNavigationController();
-        const navigate = useNavigate();
         const snackbarController = useSnackbarController();
         const { propertyConfigs } = useCustomizationController();
 
@@ -247,7 +245,7 @@ export const ConfigControllerProvider = React.memo(
                             if (currentDialog?.redirect) {
                                 if (collection && currentDialog?.isNewCollection && !currentDialog.parentCollectionIds.length) {
                                     const url = navigation.buildUrlCollectionPath(collection.id ?? collection.path);
-                                    navigate(url);
+                                    window.history.replaceState({}, "", url);
                                 }
                             }
                             setCurrentDialog(undefined);
