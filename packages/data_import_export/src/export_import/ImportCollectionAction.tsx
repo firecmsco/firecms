@@ -5,10 +5,12 @@ import {
     getFieldConfig,
     getPropertiesWithPropertiesOrder,
     getPropertyInPath,
+    PropertiesOrBuilders,
     Property,
     PropertyConfigBadge,
     resolveCollection,
     ResolvedProperties,
+    slugify,
     useCustomizationController,
     User,
     useSelectionController,
@@ -80,7 +82,8 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
             const originProperties = await buildEntityPropertiesFromData(data, getInferenceType);
             importConfig.setOriginProperties(originProperties);
 
-            const headersMapping = buildHeadersMappingFromData(data);
+            const headersMapping = buildHeadersMappingFromData(data, collection?.properties);
+            console.log("headersMapping", headersMapping);
             importConfig.setHeadersMapping(headersMapping);
             const firstKey = Object.keys(headersMapping)?.[0];
             if (firstKey?.includes("id") || firstKey?.includes("key")) {
@@ -407,18 +410,34 @@ export function ImportDataPreview<M extends Record<string, any>>({
 
 }
 
-function buildHeadersMappingFromData(objArr: object[]) {
+function buildHeadersMappingFromData(objArr: object[], properties?: PropertiesOrBuilders<any>) {
     const headersMapping: Record<string, string> = {};
     objArr.filter(Boolean).forEach((obj) => {
         Object.keys(obj).forEach((key) => {
             // @ts-ignore
             const child = obj[key];
             if (typeof child === "object" && !Array.isArray(child)) {
-                Object.entries(buildHeadersMappingFromData([child])).forEach(([subKey, mapping]) => {
+                const childProperty = properties?.[key];
+                const childProperties = childProperty && "properties" in childProperty ? childProperty.properties : undefined;
+                const childHeadersMapping = buildHeadersMappingFromData([child], childProperties);
+                Object.entries(childHeadersMapping).forEach(([subKey, mapping]) => {
                     headersMapping[`${key}.${subKey}`] = `${key}.${mapping}`;
                 });
             }
-            headersMapping[key] = key;
+
+            if (!properties) {
+                headersMapping[key] = key;
+            } else if (key in properties) {
+                headersMapping[key] = key;
+            } else {
+                const slug = slugify(key);
+                if (slug in properties) {
+                    headersMapping[key] = slug;
+                } else {
+                    headersMapping[key] = key;
+                }
+            }
+
         });
     });
     return headersMapping;
