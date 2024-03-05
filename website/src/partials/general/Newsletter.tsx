@@ -45,7 +45,7 @@ export const Newsletter = () => {
     return (
         <Panel color={"gray"} className="relative" includePadding={false}>
             <div
-                className={"mx-auto px-4 sm:px-6 bg-gray-200 dark:bg-gray-800 "}
+                className={"mx-auto px-4 sm:px-6"}
                 // data-aos="fade-up"
                 // data-aos-delay="100"
             >

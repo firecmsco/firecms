@@ -1,5 +1,5 @@
 import React from "react";
-import { ContainerPaddingMixin, defaultBorderMixin } from "../styles";
+import { ContainerPaddingMixin } from "../styles";
 import { gridIcon } from "../icons";
 import { Panel } from "../general/Panel";
 import { LinedSpace } from "../layout/LinedSpace";
@@ -9,12 +9,31 @@ import clsx from "clsx";
 function ProFeaturesPanels() {
 
     const features = [
-        { icon: iconDoor, title: 'Users and Roles Management', description: 'Configure app settings according to the logged-in user, and connect with your existing user management system. This feature allows for a seamless integration between your application\'s user base and the management system, ensuring a cohesive experience across your platform.' },
-        { icon: gridIcon, title: 'Components reuse', description: 'Use our top-level spreadsheet view to create custom components. This feature is designed to maximize efficiency and streamline your development process by enabling the reuse of components across different parts of your application.' },
-        { icon: iconCards, title: 'Self-hosted', description: 'Completely independent, no reliance on third-party services. This allows for full control over your data and infrastructure, ensuring that your application remains secure and operates according to your own standards and regulations.' },
-        { icon: iconArrows, title: 'Subcollection Compatibility', description: 'Seamless navigation for collections within other entities. This feature enhances the user experience by providing intuitive navigation and interaction with nested data structures, making complex data more accessible and manageable.' },
-        { icon: iconRadar, title: 'Dedicated Support', description: 'Get priority support for your projects, with a dedicated account manager. This ensures that any issues or questions you have are addressed promptly, allowing you to maintain momentum in your development cycle and focus on delivering great products.' },
-        { icon: iconStars, title: 'Data enhancement', description: 'Use LLMs to enhance your data with additional information. This cutting-edge feature enables you to enrich your datasets automatically, leveraging large language models to add context, insights, and value to your information, thereby improving the overall quality and utility of your data.' }
+        {
+            icon: iconDoor,
+            title: 'Users and Roles Management',
+            description: 'Control app settings based on who\'s logged in. Connect with your existing user management system for a unified experience.'
+        },
+        {
+            icon: gridIcon,
+            title: 'High-quality components',
+            description: 'Design custom views using the full component set that FireCMS uses internally. Save time and effort by reusing them across your application.'
+        },
+        {
+            icon: iconCards,
+            title: 'Self-hosted',
+            description: 'Operate independently without external services. Enjoy full control over your data and infrastructure for enhanced security and compliance.'
+        },
+        {
+            icon: iconRadar,
+            title: 'Dedicated Support',
+            description: 'Receive dedicated support with a personal account manager. Address questions or issues quickly and stay focused on delivering your best work.'
+        },
+        {
+            icon: iconStars,
+            title: 'Data enhancement',
+            description: 'Use large language models (LLMs) to automatically enrich data for you and your clients. Gain valuable insights, context, and added value from your information.'
+        }
     ];
 
     return (
@@ -41,7 +60,8 @@ function ProFeaturesPanels() {
 
                             FireCMS PRO elevates your control and efficiency, offering an unmatched user
                             experience designed for professionals. Seamlessly manage your data with
-                            enhanced tools, including an intuitive <strong className={"gradient-text"}>spreadsheet view</strong> and <strong className={"gradient-text"}>dynamic,
+                            enhanced tools, including an intuitive <strong className={"gradient-text"}>spreadsheet
+                            view</strong> and <strong className={"gradient-text"}>dynamic,
                             feature-rich forms</strong>. It's the professional edge
                             your projects demand.
                         </p>

@@ -54,7 +54,7 @@ export const TextButtons = () => {
                         item.command(editor);
                     }}
                 >
-                    <Button size="small"
+                    <Button size={"small"}
                             color="text"
                             className="gap-2 rounded-none h-full"
                             variant="text">

@@ -360,7 +360,6 @@ function ReferenceDialogActions({
             </Button>
             : <Button
                 onClick={onClick}
-                size="medium"
                 variant="outlined"
                 color="primary"
             >

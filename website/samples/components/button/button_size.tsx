@@ -5,7 +5,7 @@ export default function ButtonSizeDemo() {
     return (
         <>
             <Button
-                size={"sm"}
+                size={"small"}
                 onClick={() => console.log("Button clicked")}>
                 Small
             </Button>
@@ -13,7 +13,7 @@ export default function ButtonSizeDemo() {
                 Medium
             </Button>
             <Button
-                size={"lg"}
+                size={"large"}
                 onClick={() => console.log("Button clicked")}>
                 Large
             </Button>

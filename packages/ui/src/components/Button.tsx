@@ -9,7 +9,7 @@ export type ButtonProps<P extends React.ElementType> =
     variant?: "filled" | "outlined" | "text";
     disabled?: boolean;
     color?: "primary" | "secondary" | "text" | "error";
-    size?: "sm" | "md" | "lg" | "xl" | "2xl";
+    size?: "small" | "medium" | "large" | "xl" | "2xl";
     startIcon?: React.ReactNode;
     fullWidth?: boolean;
     className?: string;
@@ -23,7 +23,7 @@ const ButtonInner = React.forwardRef<
        className,
        variant = "filled",
        disabled = false,
-       size = "md",
+       size = "medium",
        startIcon = null,
        fullWidth = false,
        component: Component,
@@ -33,18 +33,6 @@ const ButtonInner = React.forwardRef<
 
     const baseClasses =
         "h-fit rounded-md uppercase inline-flex items-center justify-center p-2 px-4 text-sm font-medium focus:outline-none transition ease-in-out duration-150 gap-2";
-
-    // const buttonClasses = cn(
-    //     {
-    //         "w-full": fullWidth,
-    //         "w-fit": !fullWidth,
-    //         "border-transparent bg-primary hover:bg-primary-dark focus:ring-primary !text-white shadow hover:ring-1 hover:ring-primary": variant === "filled" && !disabled,
-    //         "border-transparent !text-primary !hover:text-primary-dark hover:bg-primary hover:bg-primary-bg": variant === "text" && !disabled,
-    //         "border-primary !text-primary hover:bg-primary-bg hover:border-primary-dark !hover:text-primary-dark focus:ring-primary hover:ring-1 hover:ring-primary": variant === "outlined" && !disabled,
-    //         "border-primary-dark border-opacity-50 dark:border-primary dark:border-opacity-50 opacity-50 !text-primary-dark !dark:text-primary text-opacity-50 dark:text-opacity-50": variant === "outlined" && disabled,
-    //         "border-transparent outline-none opacity-50 !text-slate-600 !dark:text-slate-500": (variant === "filled" || variant === "text") && disabled
-    //     }
-    // );
 
     const buttonClasses = cn({
         "w-full": fullWidth,
@@ -70,9 +58,9 @@ const ButtonInner = React.forwardRef<
 
     const sizeClasses = cn(
         {
-            "py-1 px-2": size === "sm",
-            "py-2 px-4": size === "md",
-            "py-2.5 px-5": size === "lg",
+            "py-1 px-2": size === "small",
+            "py-2 px-4": size === "medium",
+            "py-2.5 px-5": size === "large",
             "py-3 px-6": size === "xl",
             "py-4 px-10": size === "2xl",
         }

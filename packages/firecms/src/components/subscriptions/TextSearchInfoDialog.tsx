@@ -104,7 +104,7 @@ export function TextSearchInfoDialog({
                 {(hasOwnTextSearchImplementation || projectConfig.localTextSearchEnabled) && !collection.textSearchEnabled &&
                     <LoadingButton variant={"outlined"}
                                    loading={enablingForCollection}
-                                   size={"lg"}
+                                   size={"large"}
                                    onClick={() => {
                                        setEnablingForCollection(true);
                                        enableTextSearchForCollection()
@@ -124,7 +124,7 @@ export function TextSearchInfoDialog({
                 {!hasOwnTextSearchImplementation && !projectConfig.localTextSearchEnabled &&
                     <LoadingButton variant={"outlined"}
                                    loading={enablingLocalSearch}
-                                   size={"lg"}
+                                   size={"large"}
                                    onClick={() => {
                                        setEnablingLocalSearch(true);
                                        projectConfig.updateLocalTextSearchEnabled(true)

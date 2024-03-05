@@ -57,7 +57,6 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
             : <Button
                 id={`add_entity_${path}`}
                 onClick={onNewClick}
-                size="medium"
                 variant="filled"
                 color="primary"
             >

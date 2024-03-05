@@ -49,7 +49,7 @@ export function CollectionTableToolbar(props: CollectionTableToolbarProps) {
             className="h-fit-content"
             aria-label="filter clear"
             onClick={props.clearFilter}
-            size="small">
+            size={"small"}>
             <FilterListOffIcon/>
             Clear filter
         </Button>;

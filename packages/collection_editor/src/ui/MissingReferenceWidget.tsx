@@ -11,7 +11,8 @@ export function MissingReferenceWidget({ path: pathProp }: {
     const collectionEditor = useCollectionEditorController();
     return <div className={"p-1 flex flex-col items-center"}>
         <ErrorView error={"No collection for path: " + path}/>
-        <Button className={"mx-2"} variant={"outlined"} size={"small"}
+        <Button className={"mx-2"} variant={"outlined"}
+                size={"small"}
                 onClick={() => {
                     collectionEditor.createCollection({
                         initialValues: { path, name: unslugify(path) },

@@ -1,5 +1,5 @@
 import { DataSource, Entity, EntityCollection, useDataSource } from "@firecms/core";
-import { CenteredView, CircularProgress, Typography, } from "@firecms/ui";
+import { Button, CenteredView, CircularProgress, Typography, } from "@firecms/ui";
 import { useEffect, useRef, useState } from "react";
 import { ImportConfig } from "../types";
 
@@ -17,7 +17,7 @@ export function ImportSaveInProgress<C extends EntityCollection>
          onImportSuccess: (collection: C) => void
      }) {
 
-    console.log("ImportSaveInProgress", path)
+    const [errorSaving, setErrorSaving] = useState<Error | undefined>(undefined);
     const dataSource = useDataSource();
 
     const savingRef = useRef<boolean>(false);
@@ -42,12 +42,34 @@ export function ImportSaveInProgress<C extends EntityCollection>
         ).then(() => {
             onImportSuccess(collection);
             savingRef.current = false;
+        }).catch((e) => {
+            setErrorSaving(e);
+            savingRef.current = false;
         });
     }
 
     useEffect(() => {
         save();
     }, []);
+
+    if (errorSaving) {
+        return (
+            <CenteredView className={"flex flex-col gap-4 items-center"}>
+                <Typography variant={"h6"}>
+                    Error saving data
+                </Typography>
+
+                <Typography variant={"body2"} color={"error"}>
+                    {errorSaving.message}
+                </Typography>
+                <Button
+                    onClick={save}
+                    variant={"outlined"}>
+                    Retry
+                </Button>
+            </CenteredView>
+        );
+    }
 
     return (
         <CenteredView className={"flex flex-col gap-4 items-center"}>

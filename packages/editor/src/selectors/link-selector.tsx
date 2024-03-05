@@ -4,6 +4,7 @@ import { Button, CheckIcon, cn, DeleteIcon, Popover } from "@firecms/ui";
 
 export function isValidUrl(url: string) {
     try {
+        // eslint-disable-next-line no-new
         new URL(url);
         return true;
     } catch (e) {
@@ -74,7 +75,7 @@ export const LinkSelector = ({
 
                 {editor.getAttributes("link").href ? (
                     <Button
-                        size="small"
+                        size={"small"}
                         variant="text"
                         type="button"
                         color={"text"}
@@ -86,7 +87,7 @@ export const LinkSelector = ({
                         <DeleteIcon size="small"/>
                     </Button>
                 ) : (
-                    <Button size="small"
+                    <Button size={"small"}
                             variant={"text"}>
                         <CheckIcon size="small"/>
                     </Button>
