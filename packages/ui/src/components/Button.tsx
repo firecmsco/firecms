@@ -1,7 +1,7 @@
 import React from "react";
 
-import {focusedMixin} from "../styles";
-import {cn} from "../util";
+import { focusedMixin } from "../styles";
+import { cn } from "../util";
 
 export type ButtonProps<P extends React.ElementType> =
     Omit<(P extends "button" ? React.ButtonHTMLAttributes<HTMLButtonElement> : React.ComponentProps<P>), "onClick">
@@ -9,7 +9,7 @@ export type ButtonProps<P extends React.ElementType> =
     variant?: "filled" | "outlined" | "text";
     disabled?: boolean;
     color?: "primary" | "secondary" | "text" | "error";
-    size?: "small" | "medium" | "large";
+    size?: "sm" | "md" | "lg" | "xl" | "2xl";
     startIcon?: React.ReactNode;
     fullWidth?: boolean;
     className?: string;
@@ -23,7 +23,7 @@ const ButtonInner = React.forwardRef<
        className,
        variant = "filled",
        disabled = false,
-       size = "medium",
+       size = "md",
        startIcon = null,
        fullWidth = false,
        component: Component,
@@ -70,9 +70,11 @@ const ButtonInner = React.forwardRef<
 
     const sizeClasses = cn(
         {
-            "py-1 px-2": size === "small",
-            "py-2 px-4": size === "medium",
-            "py-2.5 px-5": size === "large"
+            "py-1 px-2": size === "sm",
+            "py-2 px-4": size === "md",
+            "py-2.5 px-5": size === "lg",
+            "py-3 px-6": size === "xl",
+            "py-4 px-10": size === "2xl",
         }
     );
 

@@ -148,10 +148,6 @@ module.exports = {
               to: "/openai",
             },
             {
-              label: "Your admin panel",
-              to: "/admin_panel",
-            },
-            {
               label: "The most powerful backend",
               to: "/f/backend_extension",
             },
@@ -169,8 +165,8 @@ module.exports = {
           position: "left"
         },
         {
-          label: "Blog",
-          to: "blog",
+          label: "Pro",
+          to: "pro",
           position: "left"
         },
         {
@@ -237,6 +233,10 @@ module.exports = {
             {
               label: "Contact",
               href: "mailto: hello@firecms.co"
+            },
+            {
+              label: "Book a meeting",
+              href: "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0INW8ihjQ90S4gkdo8_rbL_Zx7gagZShLIpHyW43zDXkQDPole6a1coo1sT2O6Gl05X8lxFDlp?gv=true"
             }
           ]
         },
@@ -252,6 +252,10 @@ module.exports = {
             {
               label: "Demo",
               to: "https://demo.firecms.co"
+            },
+            {
+              label: "FireCMS PRO",
+              to: "pro",
             },
             {
               label: "Blog",

@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { Panel } from "./Panel";
 
 export const Newsletter = () => {
     const [email, setEmail] = useState("");
@@ -42,8 +43,7 @@ export const Newsletter = () => {
     }
 
     return (
-        <section
-            className="relative">
+        <Panel color={"gray"} className="relative" includePadding={false}>
             <div
                 className={"mx-auto px-4 sm:px-6 bg-gray-200 dark:bg-gray-800 "}
                 // data-aos="fade-up"
@@ -102,7 +102,7 @@ export const Newsletter = () => {
                     </div>
                 </div>
             </div>
-        </section>
+        </Panel>
     )
 }
 

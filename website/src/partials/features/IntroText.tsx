@@ -5,7 +5,7 @@ export function IntroText() {
     return (
 
         <Panel color={"secondary"}>
-            <p className="max-w-7xl text-2xl md:text-5xl font-bold tracking-tight"
+            <p className="max-w-7xl text-2xl md:text-5xl font-bold tracking-tight uppercase"
                style={{ lineHeight: 1.35 }}>
                 FireCMS is a versatile and user-friendly content management
                 system built on Firebase, empowering users to effectively manage

@@ -11,7 +11,7 @@ function getBrightnessFrom(scroll: number, isDark: boolean) {
 function getAmplitude(scroll: number, isDark: boolean) {
     if (!isDark) return 10;
     const min = 5;
-    const max = 20;
+    const max = 10;
     return Math.min(max, Math.max(min, min + scroll / 50));
 }
 

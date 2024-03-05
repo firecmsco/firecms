@@ -2,7 +2,7 @@ import React from "react";
 import { Panel } from "../general/Panel";
 import { PagesHeroBackground } from "../general/PagesHeroBackground";
 import clsx from "clsx";
-import { Button, EventIcon } from "@firecms/ui";
+import { CTAButtonDarkMixin, CTAButtonMixin, CTACaret } from "../styles";
 
 export function HeroPro({
                             color,
@@ -27,6 +27,7 @@ export function HeroPro({
         <div className={"w-full relative -mt-20 " + bgColor}>
 
             <PagesHeroBackground color={color}/>
+
             <div>
                 <Panel includeMargin={false}
                        includePadding={false}
@@ -89,9 +90,28 @@ export function HeroPro({
                             The perfect solution for your team or public facing applications, built on top of Firebase.
                         </p>
                     </div>
-                    <div className={"space-x-4"}>
-                        <Button size={"large"}>See demo</Button>
-                        <Button size={"large"} variant={"outlined"}>Book a meeting <EventIcon/></Button>
+                    <div className={"space-y-4 space-x-4"}>
+
+                        <a
+                            className={CTAButtonMixin + "  "}
+                            href={"https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0INW8ihjQ90S4gkdo8_rbL_Zx7gagZShLIpHyW43zDXkQDPole6a1coo1sT2O6Gl05X8lxFDlp?gv=true"}
+                            rel="noopener noreferrer"
+                            target="_blank"
+                        >
+                            Book a meeting
+                        </a>
+
+                        <a
+                            className={CTAButtonDarkMixin + " "}
+                            href={"https://demo.firecms.co"}
+                        >
+                            Check the demo
+                            <CTACaret/>
+                        </a>
+
+
+                        {/*<Button size={"2xl"}>See demo</Button>*/}
+                        {/*<Button size={"2xl"} variant={"outlined"}>Book a meeting <EventIcon/></Button>*/}
                     </div>
                 </Panel>
             </div>

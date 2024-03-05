@@ -10,7 +10,7 @@ export const lightningIcon = <svg
 </svg>;
 
 export const gridIcon = <svg
-    className="w-16 h-16 p-1 -mt-1 mb-2"
+    className="w-16 h-16 p-1"
     width="64px" height="64px" viewBox="0 0 64 64" version="1.1">
     <g  stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <circle id="Oval"

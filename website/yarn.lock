@@ -11516,6 +11516,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-fast-marquee@npm:^1.6.4":
+  version: 1.6.4
+  resolution: "react-fast-marquee@npm:1.6.4"
+  peerDependencies:
+    react: ">= 16.8.0 || 18.0.0"
+    react-dom: ">= 16.8.0 || 18.0.0"
+  checksum: 30bb2c967b5162e7de130cccfcf51654ac1e29ecbf82116225a13958a05a79bc0ec11d72c49f172fa8c4d1f226b51cc93f9db5cb595c5a3529de8b41f60cbc2c
+  languageName: node
+  linkType: hard
+
 "react-helmet-async@npm:*":
   version: 2.0.4
   resolution: "react-helmet-async@npm:2.0.4"
@@ -13847,6 +13857,7 @@ __metadata:
     raw-loader: ^4.0.2
     react: "link:../../node_modules/react"
     react-dom: "link:../../node_modules/react-dom"
+    react-fast-marquee: ^1.6.4
     react-syntax-highlighter: ^15.5.0
     react-transition-group: ^4.4.5
     react-type-animation: ^2.1.2

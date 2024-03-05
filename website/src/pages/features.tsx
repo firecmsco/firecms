@@ -8,6 +8,8 @@ import { Panel } from "../partials/general/Panel";
 import ProTeaser from "../partials/home/ProTeaser";
 import { IntroText } from "../partials/features/IntroText";
 import { FormInfo } from "../partials/features/FormInfo";
+import { EnterpriseFeatures } from "../partials/enterprise/EnterpriseFeatures";
+import { EnterpriseArchitectures } from "../partials/enterprise/EnterpriseArchitectures";
 
 function FeaturesPage() {
 
@@ -48,6 +50,9 @@ function FeaturesPage() {
                     <Panel color={"light"} includePadding={true}>
                         <HeroButtons/>
                     </Panel>
+
+                    <EnterpriseFeatures/>
+                    <EnterpriseArchitectures/>
 
                     <ProTeaser/>
                 </main>

@@ -52,7 +52,6 @@ export const onBooksUpdateIndexAlgolia = functions
         return updateIndex(snap, indexName);
     });
 
-
 /**
  * This function is only used to reset the database daily
  */
@@ -71,13 +70,13 @@ export const sign_up_newsletter = functions
 
         const data = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
         console.log("sign_up_newsletter", data, typeof data);
-        res.set('Access-Control-Allow-Origin', '*');
+        res.set("Access-Control-Allow-Origin", "*");
 
-        if (req.method === 'OPTIONS') {
-            res.set('Access-Control-Allow-Methods', 'POST');
-            res.set('Access-Control-Allow-Headers', 'Content-Type');
-            res.set('Access-Control-Max-Age', '3600');
-            res.status(204).send('');
+        if (req.method === "OPTIONS") {
+            res.set("Access-Control-Allow-Methods", "POST");
+            res.set("Access-Control-Allow-Headers", "Content-Type");
+            res.set("Access-Control-Max-Age", "3600");
+            res.status(204).send("");
             return Promise.resolve();
         } else {
 

@@ -8,7 +8,7 @@ import { BrowserFrame } from "../BrowserFrame";
 
 
 export function PublicFacingApps() {
-    return <Panel color={"light"}>
+    return <Panel color={"light"} className={"overflow-hidden"}>
 
         {/* Two column layout*/}
         <div className="">
@@ -17,18 +17,24 @@ export function PublicFacingApps() {
                     Public Facing Applications
                 </h2>
                 <p className="text-xl md:text-2xl">
-                    If you are building a public facing application based on Firebase, FireCMS PRO is the perfect
+                    If you are building a CRUD public facing application based on Firebase, FireCMS PRO is the perfect
                     solution for you. Define exactly what each user can do and customize the experience for each role.
                 </p>
                 <p className="text-xl md:text-2xl">
                     Use all the internal components of FireCMS, including the schema editor, data inference, advanced
                     data import and export, default roles and more.
                 </p>
+                <p className={"text-xl md:text-2xl"}>
+                    With your FireCMS PRO license, you can build projects with <span className={"gradient-text"}>unlimited users</span>.
+                </p>
             </div>
-            <div className={"relative p-16 mb-32"}>
+            <div className={"relative p-16 "}>
                 <BrowserFrame
+                    style={{
+                        marginBottom: "20%"
+                    }}
                     className={
-                        " md:w-[800px] bg-gray-900"
+                        "md:w-[800px] bg-gray-900"
                     }>
 
                     <img loading="lazy"
@@ -37,10 +43,10 @@ export function PublicFacingApps() {
                          alt="Overlay"/>
                 </BrowserFrame>
                 <video
-                    className={"absolute z-10"}
+                    className={"absolute z-10 rounded-xl"}
                     style={{
-                        top: "50%",
-                        right: 0,
+                        bottom: 0,
+                        right: "5%",
                         maxWidth: "900px",
                         aspectRatio: 631 / 337.828
                     }}
@@ -50,7 +56,12 @@ export function PublicFacingApps() {
                         src={pixelGeniusLogin}
                         type="video/mp4"/>
                 </video>
+            </div>
 
+            <div className={"text-sm text-center p-8 text-gray-700"}>
+                Pixel Genius is a public facing application that allows users to manage their augmented reality
+                experiences. It is built on top of Firebase and uses FireCMS PRO, and it integrated the three.js
+                editor.
             </div>
         </div>
     </Panel>

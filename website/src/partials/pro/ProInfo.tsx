@@ -1,6 +1,7 @@
 import React from "react";
+import Marquee from "react-fast-marquee";
 import { Panel } from "../general/Panel";
-import { Slideshow } from "./SlideShow";
+
 // @ts-ignore
 import MMApp from "@site/static/img/mm_app.webp";
 // @ts-ignore
@@ -18,23 +19,25 @@ import oikosAviationDemo from "@site/static/img/oikos_aviation_demo.png";
 export function ProInfo() {
     return <Panel color={"white"}>
         <h2 className={"h2 mb-3 uppercase gradient-text"}>
-            BUILD BETTER BACK-OFFICE APPS FASTER
+            Build better applications faster
         </h2>
         <p className="text-xl md:text-2xl">
             FireCMS PRO allows you to use all the internal components and features of FireCMS, but also provides
             additional tools and components to help you build better back-office applications faster.
         </p>
-        <p className="text-xl md:text-2xl">
+        <p className="text-xl md:text-2xl mb-16">
             Customizable, extensible and with a strong focus on developer experience, FireCMS PRO is the perfect
             solution for your next project.
         </p>
-        <Slideshow
-            images={[
+        <Marquee className={"rounded-xl"}>
+            {[
                 MMApp,
                 overlay,
                 primeUm,
                 mmDark,
                 oikosAviationDemo
-            ]}/>
+            ].map((image, index) => <img key={index} src={image} alt={`Slide ${index}`}
+                                         className="mx-4 rounded-xl w-auto h-full max-h-72 object-cover inline-block"/>)}
+        </Marquee>
     </Panel>
 }

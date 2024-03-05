@@ -41,6 +41,7 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
                                                                                              }: CollectionActionsProps<M, UserType, EntityCollection<M, any>> & {
     exportAllowed?: (props: { collectionEntitiesCount: number, path: string, collection: EntityCollection }) => boolean;
     notAllowedView?: React.ReactNode;
+    onAnalyticsEvent?: (event: string, params?: any) => void;
 }) {
 
     const customizationController = useCustomizationController();

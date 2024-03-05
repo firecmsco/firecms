@@ -1,141 +1,72 @@
-import useBaseUrl from "@docusaurus/useBaseUrl";
 import React from "react";
-import { ContainerInnerPaddingMixin, CTACaret, CTAOutlinedButtonMixin, defaultBorderMixin } from "../styles";
-import { gridIcon, lightningIcon } from "../icons";
-
-import { useColorMode } from "@docusaurus/theme-common";
+import { ContainerPaddingMixin, defaultBorderMixin } from "../styles";
+import { gridIcon } from "../icons";
 import { Panel } from "../general/Panel";
 import { LinedSpace } from "../layout/LinedSpace";
 import clsx from "clsx";
 
-function FeaturesPanels() {
 
-    const { colorMode } = useColorMode();
-    const isDarkTheme = colorMode === "dark";
+function ProFeaturesPanels() {
+
+    const features = [
+        { icon: iconDoor, title: 'Users and Roles Management', description: 'Configure app settings according to the logged-in user, and connect with your existing user management system. This feature allows for a seamless integration between your application\'s user base and the management system, ensuring a cohesive experience across your platform.' },
+        { icon: gridIcon, title: 'Components reuse', description: 'Use our top-level spreadsheet view to create custom components. This feature is designed to maximize efficiency and streamline your development process by enabling the reuse of components across different parts of your application.' },
+        { icon: iconCards, title: 'Self-hosted', description: 'Completely independent, no reliance on third-party services. This allows for full control over your data and infrastructure, ensuring that your application remains secure and operates according to your own standards and regulations.' },
+        { icon: iconArrows, title: 'Subcollection Compatibility', description: 'Seamless navigation for collections within other entities. This feature enhances the user experience by providing intuitive navigation and interaction with nested data structures, making complex data more accessible and manageable.' },
+        { icon: iconRadar, title: 'Dedicated Support', description: 'Get priority support for your projects, with a dedicated account manager. This ensures that any issues or questions you have are addressed promptly, allowing you to maintain momentum in your development cycle and focus on delivering great products.' },
+        { icon: iconStars, title: 'Data enhancement', description: 'Use LLMs to enhance your data with additional information. This cutting-edge feature enables you to enrich your datasets automatically, leveraging large language models to add context, insights, and value to your information, thereby improving the overall quality and utility of your data.' }
+    ];
 
     return (
         <Panel
             color={"white"}
-            includePadding={false}
-        >
+            includePadding={false}>
 
-            <LinedSpace size={"large"}/>
+            <LinedSpace size={"larger"} position={"bottom"}/>
+            <div className={ContainerPaddingMixin}>
+                <div
+                    data-aos="fade-up"
+                    className={"flex items-center mb-4 "}>
+                    <div>
 
-            <div
-                data-aos="fade-up"
-                className={"flex items-center mb-4"}
-            >
-                <div>
-
-                    <div
-                        className={clsx("flex mb-4 relative items-center uppercase border-b border-0",
-                            ContainerInnerPaddingMixin,
-                            defaultBorderMixin)}>
-                        <div
-                            className="flex items-center justify-center text-white w-10 h-10 gradient-bg rounded-full shadow flex-shrink-0 mr-4">
-                            {lightningIcon}
-                        </div>
-
-                        <h2 className="h1 m-0 gradient-text">
-                            Batteries included
+                        <h2 className="h2 mb-3 uppercase gradient-text">
+                            Advanced Functionality, Built-In
                         </h2>
 
+                        <p className={clsx("text-xl md:text-2xl py-4")}>
+                            <b>FireCMS PRO</b> allows you to use all the internal components and features of FireCMS,
+                            while allowing total styling and customization. It also provides additional tools and
+                            components
+                            to help you build better back-office applications faster.
+
+                            FireCMS PRO elevates your control and efficiency, offering an unmatched user
+                            experience designed for professionals. Seamlessly manage your data with
+                            enhanced tools, including an intuitive <strong className={"gradient-text"}>spreadsheet view</strong> and <strong className={"gradient-text"}>dynamic,
+                            feature-rich forms</strong>. It's the professional edge
+                            your projects demand.
+                        </p>
                     </div>
 
-                    <p className={clsx("text-xl md:text-2xl  px-8 py-4 md:px-8")}>
-                        FireCMS provides all the flexibility you
-                        need with the best UX.
-                        Edit your collections and entities using
-                        both a <b>spreadsheet
-                        view</b> and <b>powerful forms</b>.
-                    </p>
-                </div>
-
-            </div>
-
-
-            <div
-                className="mx-auto grid md:grid-cols-2 lg:grid-cols-3 items-start text-xl gap-4 px-8">
-                <div className={clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
-                    {iconStars}
-                    <h4 className="text-xl font-bold leading-snug tracking-tight  mt-2  mb-0 text-center">
-                        Consistent Data Management
-                    </h4>
-                    <p className=" text-center">
-                        Establish schemas for your data types and set
-                        validation options
-                    </p>
-                </div>
-
-                <div
-                    className={clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
-                    {gridIcon}
-                    <h4 className="text-xl font-bold leading-snug tracking-tight  mt-2  mb-0 text-center">
-                        Sophisticated Editing Tools
-                    </h4>
-                    <p className=" text-center">
-                        Spreadsheet-style editing, robust forms,
-                        file storage, entity references...
-                    </p>
-                </div>
-
-                <div
-                    className={ clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin) }>
-                    {iconDoor}
-                    <h4 className="text-xl font-bold leading-snug tracking-tight  mt-2  mb-0 text-center">
-                        Role-Based System
-                    </h4>
-                    <p className=" text-center">
-                        Configure app settings according to the logged-in
-                        user
-                    </p>
                 </div>
 
 
-                <div
-                    className={ clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin) }>
-                    {iconCards}
-                    <h4 className="text-xl font-bold leading-snug tracking-tight  mt-2  mb-0 text-center">
-                        Flexible Customization
-                    </h4>
-                    <p className=" text-center">
-                        Incorporate custom form fields, hooks, and full views based on React
-                    </p>
-                </div>
-                <div
-                    className={ clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin) }>
-                    {iconArrows}
-                    <h4 className="text-xl font-bold leading-snug tracking-tight  mt-2  mb-0 text-center">
-                        Subcollection Compatibility
-                    </h4>
-                    <p className=" text-center">
-                        Seamless navigation for collections within other entities
-                    </p>
+                <div className="mx-auto px-4 md:px-8">
+                    <table className="w-full text-xl border-none">
+                        <tbody>
+                        {features.map((feature, index) => (
+                            <tr key={index} className={"border-none"}>
+                                <td className="text-center border-none">{feature.icon}</td>
+                                <td className={"border-none"}>
+                                    <div className={"h4"}>{feature.title}</div>
+                                    <div className={"text-sm"}>{feature.description}</div>
+                                </td>
+                                {/*<td className={"text-sm border-none"}>{feature.description}</td>*/}
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
                 </div>
 
-                <div
-                    className={ clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin) }>
-
-                    {iconRadar}
-
-                    <h4 className="text-xl font-bold leading-snug tracking-tight  mt-2  mb-0 text-center">
-                        Real-Time Support
-                    </h4>
-                    <p className=" text-center">
-                        Live updates in every view of your CMS, ideal for background updates
-                    </p>
-                </div>
-            </div>
-
-            <div
-                className="max-w-3xl mx-auto text-center py-8 md:py-12">
-                <a
-                    className={CTAOutlinedButtonMixin + " mx-auto"}
-                    href={useBaseUrl("features/")}
-                >
-                    See all features
-                    <CTACaret/>
-                </a>
             </div>
 
             <LinedSpace size={"larger"} position={"top"}/>
@@ -144,10 +75,10 @@ function FeaturesPanels() {
     );
 }
 
-export default FeaturesPanels;
+export default ProFeaturesPanels;
 
 const iconStars = <svg
-    className="w-16 h-16 p-1 "
+    className="w-16 h-16 p-1"
     viewBox="0 0 64 64"
     xmlns="http://www.w3.org/2000/svg"
 >

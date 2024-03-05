@@ -8,90 +8,74 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
-import { ContainerInnerPaddingMixin, CTACaret, CTAOutlinedButtonMixin, defaultBorderMixin } from "../styles";
+import { ContainerInnerPaddingMixin, CTAButtonMixin, CTACaret, CTAOutlinedButtonMixin, defaultBorderMixin } from "../styles";
 import LightingIcon from "@site/static/img/icons/lighting.svg";
 
+
+// developer features:
+// - use all the internal hooks
+// - use all the internal components
+// - use all the internal controllers
+// - use all the internal plugins
+// - use custom data sources, storage and auth
 export function ProDeveloperFeatures() {
 
     return (<>
-            <Panel color={"gray"} includeMargin={false} includePadding={false}>
 
+            <Panel color={"gray"} includeMargin={false} includePadding={false}>
                 <p className={clsx("text-center text-secondary uppercase font-mono font-bold border-0 border-b", ContainerInnerPaddingMixin, defaultBorderMixin)}>
                     For developers
                 </p>
 
-                {/*                <TwoColumns*/}
-                {/*                    reverseSmall={true}*/}
-                {/*                    animation={false}*/}
-                {/*                    className={"p-8"}*/}
-                {/*                    left={<div*/}
-                {/*                        className="relative flex-col font-mono">*/}
-
-                {/*                        <SyntaxHighlighter*/}
-                {/*                            className={clsx("p-4 max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid", defaultBorderMixin)}*/}
-                {/*                            language={"typescript"}*/}
-                {/*                            showLineNumbers={false}*/}
-                {/*                            wrapLines={true}*/}
-                {/*                            style={dracula}*/}
-                {/*                        >*/}
-                {/*                            {`const firestoreDelegate = useFirestoreDelegate({*/}
-                {/*    firebaseApp,*/}
-                {/*    localTextSearchEnabled: false,*/}
-                {/*    textSearchControllerBuilder: myAlgoliaSearchControllerBuilder*/}
-                {/*});*/}
-
-                {/*const firestoreDelegate = useFirebaseRTDBDelegate({*/}
-                {/*    firebaseApp*/}
-                {/*});*/}
-
-                {/*const mongoDBDelegate = useMongoDataSource({*/}
-                {/*    mongoDBApp,*/}
-                {/*    cluster: "my-cluster",*/}
-                {/*    database: "my-database",*/}
-                {/*});`}*/}
-                {/*                        </SyntaxHighlighter>*/}
-                {/*                    </div>*/}
-                {/*                    }*/}
-                {/*                    right={<div className="p-8">*/}
-
-                {/*                        <div*/}
-                {/*                            className={"flex items-center mb-3"}>*/}
-
-                {/*                            <div*/}
-                {/*                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 ">*/}
-                {/*                                {arrowIcon}*/}
-                {/*                            </div>*/}
-                {/*                            <h3 className="h3 m-0 ml-3 ">*/}
-                {/*                                Custom data sources, storage and auth*/}
-                {/*                            </h3>*/}
-                {/*                        </div>*/}
-
-                {/*                        <p className="text-xl md:text-2xl">*/}
-                {/*                            FireCMS has a great separation of concerns that will allow you to*/}
-                {/*                            customize every aspect of it.*/}
-                {/*                        </p>*/}
-
-                {/*                        <p className="text-xl md:text-2xl">*/}
-                {/*                            Use the provided Firestore, Firebase Realtime Database, or MongoDB controllers, or create*/}
-                {/*                            your own custom data sources.*/}
-                {/*                        </p>*/}
-
-                {/*                        <p className="text-xl ">*/}
-                {/*                            You can also use the schema definition*/}
-                {/*                            API to create custom views and*/}
-                {/*                            components.*/}
-                {/*                        </p>*/}
-
-                {/*                    </div>*/}
-                {/*                    }/>*/}
-            </Panel>
-
-            <Panel color={"gray"} includePadding={true}>
                 <div
-                    className={"max-w-6xl md:w-full mx-auto md:col-span-9 md:pr-8 flex justify-center flex-col h-full mb-16"}>
+                    className={"max-w-6xl w-full mx-auto md:col-span-9 md:pr-8 flex justify-center flex-col h-full mb-16"}>
+
+
+                    <div className={"flex items-center mb-4 mt-16"}>
+
+                        {/*<div*/}
+                        {/*    className="flex items-center justify-center text-white w-10 h-10 gradient-bg rounded-full shadow flex-shrink-0 mr-3">*/}
+                        {/*    <LightingIcon height={12} width={12}/>*/}
+                        {/*</div>*/}
+
+                        <h3 className="h2 m-0 uppercase font-mono">
+                            No config, just React components
+                        </h3>
+
+                    </div>
+                    <p className="text-xl md:text-2xl ">
+                        FireCMS is simply a set of React components and hooks. You can use them to build your own
+                        back-office applications, with your own authentication, data sources and storage.
+                    </p>
+
+                    <p className="text-xl ">
+                        No need to learn a new framework or a new way of doing things. Just use the components and hooks
+                        you need. No magic, no hidden logic, no configuration.
+                    </p>
+
+                    <div className={"space-y-4 space-x-4"}>
+                        <a
+                            className={CTAOutlinedButtonMixin + " w-fit"}
+                            href="https://demo.firecms.co"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                        >
+                            Try the demo
+                            <CTACaret/>
+                        </a>
+
+                        <a
+                            className={CTAButtonMixin + "  "}
+                            href={"https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0INW8ihjQ90S4gkdo8_rbL_Zx7gagZShLIpHyW43zDXkQDPole6a1coo1sT2O6Gl05X8lxFDlp?gv=true"}
+                            rel="noopener noreferrer"
+                            target="_blank"
+                        >
+                            Book a meeting
+                        </a>
+                    </div>
 
                     <SyntaxHighlighter
-                        className={clsx("p-4 max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid", defaultBorderMixin)}
+                        className={clsx("mt-16 p-4 max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid", defaultBorderMixin)}
                         language={"typescript"}
                         showLineNumbers={false}
                         style={dracula}
@@ -99,44 +83,6 @@ export function ProDeveloperFeatures() {
                         {proExampleCode}
                     </SyntaxHighlighter>
 
-                    <div className={"flex items-center mb-4 mt-16"}>
-
-                        <div
-                            className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-3">
-                            <LightingIcon height={12} width={12}/>
-                        </div>
-
-                        <h3 className="h3 m-0">
-                            Inline editing
-                        </h3>
-
-                    </div>
-                    <p className="text-xl md:text-2xl ">
-                        FireCMS provides all the flexibility you
-                        need with the best UX.
-                        Edit your collections and entities using
-                        both a <b>spreadsheet
-                        view</b> and <b>powerful forms</b>.
-                    </p>
-
-                    <p className="text-xl ">
-                        Inline editing is very useful when you want to
-                        quickly edit a few fields of a
-                        document. For example, if you have a list of users,
-                        you can quickly edit the
-                        name of the user by clicking on the name and editing
-                        it.
-                    </p>
-
-                    <a
-                        className={CTAOutlinedButtonMixin + " w-fit"}
-                        href="https://demo.firecms.co"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                    >
-                        Try the demo
-                        <CTACaret/>
-                    </a>
                 </div>
 
 

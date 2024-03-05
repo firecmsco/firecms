@@ -9,8 +9,6 @@ import editingDemoVideo from "@site/static/img/editing_demo.mp4";
 // @ts-ignore
 import editingDemoDarkVideo from "@site/static/img/editing_demo_dark.mp4";
 // @ts-ignore
-import customFieldVideo from "@site/static/img/custom_fields.mp4";
-// @ts-ignore
 import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
 // @ts-ignore
 import inlineEditingVideo from "@site/static/img/inline_table_editing.mp4";
@@ -44,11 +42,12 @@ function Features() {
                     </BrowserFrame>
                 </div>
 
-                <div className={"max-w-5xl md:max-w-5xl md:w-full mx-auto md:col-span-9 md:pr-8 flex justify-center flex-col h-full mb-16"}>
+                <div
+                    className={"max-w-5xl md:max-w-5xl md:w-full mx-auto md:col-span-9 md:pr-8 flex justify-center flex-col h-full mb-16"}>
                     <div className={"flex items-center mb-4"}>
 
                         <div
-                            className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-3">
+                            className="flex items-center justify-center text-white w-10 h-10 gradient-bg rounded-full shadow flex-shrink-0 mr-3">
                             <LightingIcon height={12} width={12}/>
                         </div>
 
@@ -95,7 +94,7 @@ function Features() {
                             <div className={"flex items-center mb-3 "}>
 
                                 <div
-                                    className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
+                                    className="flex items-center justify-center text-white w-10 h-10 gradient-bg rounded-full shadow flex-shrink-0 mr-3">
                                     <DashboardIcon height={24} width={24}/>
                                 </div>
 
@@ -161,7 +160,7 @@ function Features() {
                                 }}
                                 width="100%" loop autoPlay muted>
                                 <source
-                                    src={isDarkTheme ? customFieldDarkVideo : customFieldVideo}
+                                    src={customFieldDarkVideo}
                                     type="video/mp4"/>
                             </video>
                         </div>
@@ -173,7 +172,7 @@ function Features() {
                                 className={"flex items-center mb-3"}>
 
                                 <div
-                                    className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 ">
+                                    className="flex items-center justify-center text-white w-10 h-10 gradient-bg rounded-full shadow flex-shrink-0 ">
                                     <SettingsIcon/>
                                 </div>
                                 <h3 className="h3 m-0 ml-3 gradient-text uppercase">
@@ -184,10 +183,8 @@ function Features() {
 
                             <p className="text-xl md:text-2xl ">
                                 FireCMS offers developers an easy way to adapt the
-                                platform to their specific needs while keeping the
-                                <b>initial setup simple</b>. Our practical defaults
-                                can be
-                                conveniently <b>overridden or expanded</b>.
+                                platform to their specific needs while keeping the <b>initial setup simple</b>. Our
+                                practical defaults can be conveniently <b>overridden or expanded</b>.
                             </p>
                             <p className="text-xl ">
                                 Effortlessly integrate your custom form fields as
@@ -206,7 +203,7 @@ function Features() {
                                 <li> A representation of how the content is
                                     going to look like in your <b>app or website</b>.
                                 </li>
-                                <li> And <b>everything</b> you can imagine.</li>
+                                <li> And <b>anything</b> you can imagine.</li>
                             </p>
 
                         </div>

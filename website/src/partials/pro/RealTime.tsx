@@ -20,7 +20,7 @@ function RealTime() {
             <div className={"flex items-center mb-3 "}>
 
                 <div
-                    className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
+                    className="flex items-center justify-center text-white w-10 h-10 gradient-bg rounded-full shadow flex-shrink-0 mr-3">
                     <LightingIcon height={12} width={12}/>
                 </div>
 

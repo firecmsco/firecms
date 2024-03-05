@@ -95,11 +95,9 @@ export function FireCMSCloudVersions() {
             <div className={"text-center mt-4 text-primary w-full"}>
                 <a
                     className={CTAOutlinedButtonMixin}
-                    href="mailto:hello@firecms.co?subject=FireCMS%20Cloud%20Pro"
-                    rel="noopener noreferrer"
-                    target="_blank"
+                    href="/pro"
                 >
-                    Talk to us
+                    More info
                 </a>
             </div>
 

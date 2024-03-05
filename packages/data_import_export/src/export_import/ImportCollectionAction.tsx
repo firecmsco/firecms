@@ -2,11 +2,11 @@ import React, { useCallback, useEffect } from "react";
 import {
     CollectionActionsProps,
     EntityCollectionTable,
-    PropertyConfigBadge,
     getFieldConfig,
     getPropertiesWithPropertiesOrder,
     getPropertyInPath,
     Property,
+    PropertyConfigBadge,
     resolveCollection,
     ResolvedProperties,
     useCustomizationController,
@@ -40,8 +40,12 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
                                                                                                  collection,
                                                                                                  path,
                                                                                                  collectionEntitiesCount,
-                                                                                             }: CollectionActionsProps<M, UserType>
+                                                                                                 onAnalyticsEvent
+                                                                                             }: CollectionActionsProps<M, UserType> & {
+                                                                                                 onAnalyticsEvent?: (event: string, params?: any) => void;
+                                                                                             }
 ) {
+
     const customizationController = useCustomizationController();
 
     const snackbarController = useSnackbarController();

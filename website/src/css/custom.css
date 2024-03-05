@@ -27,9 +27,14 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
 }
 
 .gradient-text {
+    font-weight: 500;
     width: fit-content;
     color: transparent;
     background-clip: text;
+    background-image: linear-gradient(to right, rgb(236, 76, 81), rgb(149, 67, 193), rgb(98 85 250));
+}
+
+.gradient-bg {
     background-image: linear-gradient(to right, rgb(236, 76, 81), rgb(149, 67, 193), rgb(98 85 250));
 }
 
@@ -339,7 +344,7 @@ article p img {
     max-width: 100%;
 }
 
-article img, video {
+article img, article video {
     border-radius: 8px;
 }
 

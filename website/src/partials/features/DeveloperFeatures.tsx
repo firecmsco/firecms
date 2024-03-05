@@ -72,7 +72,7 @@ export function DeveloperFeatures() {
                             className={"flex items-center mb-3"}>
 
                             <div
-                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 ">
+                                className="flex items-center justify-center text-white w-10 h-10 gradient-bg rounded-full shadow flex-shrink-0 ">
                                 {arrowIcon}
                             </div>
                             <h3 className="h3 m-0 ml-3 ">
@@ -117,7 +117,7 @@ export function DeveloperFeatures() {
                             <div className={"flex items-center mb-3"}>
 
                                 <div
-                                    className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-3">
+                                    className="flex items-center justify-center text-white w-10 h-10 gradient-bg rounded-full shadow flex-shrink-0 mr-3">
                                     <TickIcon/>
                                 </div>
 

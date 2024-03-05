@@ -16,7 +16,7 @@ export function EnterpriseFeatures() {
                 <div className={"flex items-center my-4 "}>
 
                     <div
-                        className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
+                        className="flex items-center justify-center text-white w-10 h-10 gradient-bg rounded-full shadow flex-shrink-0 mr-3">
                         <SettingsIcon width={"20px"} height={"20px"}/>
                     </div>
                     <h2 className={"h2 m-0"}>Not just a CMS</h2>
@@ -85,17 +85,6 @@ export function EnterpriseFeatures() {
 
             </Panel>
 
-            <Panel color={"light_gray"} includeMargin={false}>
-                <div
-                    className={"max-w-7xl text-2xl md:text-5xl font-bold tracking-tight"}>
-                    <p>
-                        FireCMS was crafted through collaboration with various <strong>companies</strong>, out of the
-                        need to have a CMS that could be used in <strong>different scenarios</strong> and that
-                        could be easily customized to fit different needs.
-                    </p>
-                </div>
-            </Panel>
-
             <Panel color={"white"}>
 
                 <TwoColumns
@@ -104,7 +93,7 @@ export function EnterpriseFeatures() {
                         <div className={"flex items-center my-4 "}>
 
                             <div
-                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
+                                className="flex items-center justify-center text-white w-10 h-10 gradient-bg rounded-full shadow flex-shrink-0 mr-3">
                                 <AutoModeIcon width={"20px"} height={"20px"}/>
                             </div>
                             <h2 className={"h2 m-0"}>Why Choose FireCMS?</h2>

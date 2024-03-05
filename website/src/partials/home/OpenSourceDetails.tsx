@@ -10,7 +10,7 @@ function OpenSourceDetails() {
 
             <div
                 className="max-w-3xl mx-auto text-center pb-8">
-                <h2 className="h2 mb-4 gradient-text"
+                <h2 className="h2 mb-4 gradient-text mx-auto"
                     data-aos="zoom-y-out">
                     All the power of Firebase and open source
                 </h2>
