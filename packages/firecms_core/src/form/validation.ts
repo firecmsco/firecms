@@ -62,7 +62,6 @@ export function getYupEntitySchema<M extends Record<string, any>>(
 
 export function mapPropertyToYup<T extends CMSType>(propertyContext: PropertyContext<T>): AnySchema<unknown> {
 
-    console.log("propertyContext", propertyContext);
     const property = propertyContext.property;
     if (isPropertyBuilder(property)) {
         console.error("Error in property", propertyContext);
