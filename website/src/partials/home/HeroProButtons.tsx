@@ -20,7 +20,7 @@ function HeroProButtons() {
     return <div
         className="mt-8 mb-8 ">
 
-        <div className={"flex justify-center lg:flex-row flex-col-reverse items-center gap-4 px-4"}>
+        <div className={"flex md:flex-row flex-col-reverse items-center gap-4 px-4"}>
             <a
                 aria-label="Join our Discord"
                 className={"btn shadow-none py-4 text-white dark:hover:bg-gray-900 hover:bg-gray-200 uppercase border border-solid w-full lg:w-auto rounded"}
@@ -30,7 +30,7 @@ function HeroProButtons() {
             </a>
 
             <a
-                className={CTAButtonDarkMixin + " w-full lg:w-auto "}
+                className={CTAButtonDarkMixin}
                 href={"https://demo.firecms.co"}
             >
                 Check the demo
@@ -38,7 +38,7 @@ function HeroProButtons() {
             </a>
 
             <a
-                className={CTAButtonMixin + "  "}
+                className={CTAButtonMixin}
                 href={"https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0INW8ihjQ90S4gkdo8_rbL_Zx7gagZShLIpHyW43zDXkQDPole6a1coo1sT2O6Gl05X8lxFDlp?gv=true"}
                 rel="noopener noreferrer"
                 target="_blank"

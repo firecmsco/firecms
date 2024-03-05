@@ -9,8 +9,7 @@ import {
 } from "../types";
 import * as yup from "yup";
 import { AnySchema, ArraySchema, BooleanSchema, DateSchema, NumberSchema, ObjectSchema, StringSchema } from "yup";
-import { enumToObjectEntries } from "../util/enums";
-import { getValueInPath, hydrateRegExp, isPropertyBuilder } from "../util";
+import { enumToObjectEntries, getValueInPath, hydrateRegExp, isPropertyBuilder } from "../util";
 
 // Add custom unique function for array values
 declare module "yup" {
@@ -63,6 +62,7 @@ export function getYupEntitySchema<M extends Record<string, any>>(
 
 export function mapPropertyToYup<T extends CMSType>(propertyContext: PropertyContext<T>): AnySchema<unknown> {
 
+    console.log("propertyContext", propertyContext);
     const property = propertyContext.property;
     if (isPropertyBuilder(property)) {
         console.error("Error in property", propertyContext);
