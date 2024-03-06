@@ -83,12 +83,10 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
             importConfig.setOriginProperties(originProperties);
 
             const headersMapping = buildHeadersMappingFromData(data, collection?.properties);
-            console.log("headersMapping", headersMapping);
             importConfig.setHeadersMapping(headersMapping);
             const firstKey = Object.keys(headersMapping)?.[0];
             if (firstKey?.includes("id") || firstKey?.includes("key")) {
-                const idColumn = firstKey;
-                importConfig.setIdColumn(idColumn);
+                importConfig.setIdColumn(firstKey);
             }
         }
         setTimeout(() => {

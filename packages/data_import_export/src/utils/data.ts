@@ -36,8 +36,22 @@ export function convertDataToEntity(data: Record<any, any>,
         })
         .reduce((acc, curr) => ({ ...acc, ...curr }), {});
     const values = unflattenObject(mappedKeysObject);
+    let id = idColumn ? data[idColumn] : undefined;
+    if (typeof id === "string") {
+        id = id.trim();
+    } else if (typeof id === "number") {
+        id = id.toString();
+    } else if (typeof id === "boolean") {
+        id = id.toString();
+    } else if (id instanceof Date) {
+        id = id.toISOString();
+    } else if ("toString" in id) {
+        id = id.toString();
+    } else {
+        throw new Error("Import error: ids must be strings or have a toString method.");
+    }
     return {
-        id: idColumn ? data[idColumn] : undefined,
+        id,
         values,
         path
     };
