@@ -5,4 +5,4 @@ export * from "./useDelegatedLogin";
 export * from "./useSubscriptionsForUserController";
 export * from "./useBuildFireCMSBackend";
 export * from "./useFireCMSBackend";
-export * from "./useBuildUserManagement";
+export * from "./useBuildSaasUserManagement";

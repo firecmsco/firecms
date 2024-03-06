@@ -252,7 +252,7 @@ export type VirtualTableFilterValues<Key extends string> = Partial<Record<Key, [
 
 /**
  * Filter conditions in a `Query.where()` clause are specified using the
- * strings '<', '<=', '==', '>=', '>', 'array-contains', 'in', 'not-in', and 'array-contains-any'.
+ * strings `<`, `<=`, `==`, `>=`, `>`, `array-contains`, `in`, and `array-contains-any`.
  * @see Table
  * @group Models
  */

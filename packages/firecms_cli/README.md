@@ -1,13 +1,6 @@
 ## FireCMS CLI
 
-This CLI tool allows you to create new FireCMS projects.
-
-#### To run locally
-
-```bash
-npm link
-firecms
-```
+This CLI tool allows you to create new FireCMS projects and to deploy them to FireCMS Cloud.
 
 ### CLI
 
@@ -36,4 +29,11 @@ firecms init --v2
 For FireCMS PRO:
 ```bash
 firecms init --pro
+```
+
+#### To run locally
+
+```bash
+npm link
+firecms
 ```

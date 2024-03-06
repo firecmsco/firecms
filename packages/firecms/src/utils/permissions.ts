@@ -2,7 +2,7 @@ import { CMSType, Permissions, User } from "@firecms/core";
 import { CollectionEditorPermissions, PersistedCollection } from "@firecms/collection_editor";
 import { FireCMSUserProject } from "../types";
 import { Role } from "@firecms/firebase";
-import { UserManagement } from "../hooks/useBuildUserManagement";
+import { UserManagement } from "../hooks/useBuildSaasUserManagement";
 
 export const RESERVED_GROUPS = ["Admin"];
 

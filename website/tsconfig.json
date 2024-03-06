@@ -58,7 +58,8 @@
         }
     },
     "include": [
-        "src"
+        "src",
+        "../packages/firecms/src/**/*.ts"
     ]
 }
 

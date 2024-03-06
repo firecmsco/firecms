@@ -43,7 +43,7 @@ import {
     useBuildCollectionsConfigController,
     useBuildFireCMSBackend,
     useBuildProjectConfig,
-    useBuildUserManagement,
+    useBuildSaasUserManagement,
     useDelegatedLogin,
     UserManagement,
 } from "./hooks";
@@ -200,7 +200,7 @@ export const FireCMSClient = function FireCMSClient({
         backendFirebaseApp: fireCMSBackend.backendFirebaseApp,
     });
 
-    const userManagement = useBuildUserManagement({
+    const userManagement = useBuildSaasUserManagement({
         backendFirebaseApp: fireCMSBackend.backendFirebaseApp,
         projectId,
         projectsApi: fireCMSBackend.projectsApi,

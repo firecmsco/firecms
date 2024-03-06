@@ -1,14 +1,7 @@
 import * as React from "react";
 import { useMemo, useState } from "react";
 
-import {
-    Entity,
-    EntityCollection,
-    ResolvedArrayProperty,
-    ResolvedStringProperty,
-    StorageConfig,
-    StorageSource
-} from "../../../types";
+import { Entity, ResolvedArrayProperty, ResolvedStringProperty, StorageConfig } from "../../../types";
 import { useDropzone } from "react-dropzone";
 import { PreviewSize, PropertyPreview } from "../../../preview";
 import { ErrorBoundary } from "../../ErrorBoundary";

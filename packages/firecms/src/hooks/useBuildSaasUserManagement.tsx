@@ -40,7 +40,7 @@ interface UserManagementParams {
     canEditRoles?: boolean;
 }
 
-export function useBuildUserManagement({
+export function useBuildSaasUserManagement({
                                            backendFirebaseApp,
                                            projectId,
                                            projectsApi,

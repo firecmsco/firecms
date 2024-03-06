@@ -695,7 +695,7 @@ export interface ArrayPropertyValidationSchema extends PropertyValidationSchema 
  * Additional configuration related to Storage related fields
  * @group Entity properties
  */
-export interface StorageConfig {
+export type StorageConfig = {
 
     /**
      * File MIME types that can be uploaded to this reference. Don't specify for

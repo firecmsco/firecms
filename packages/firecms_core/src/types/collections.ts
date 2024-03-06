@@ -349,7 +349,7 @@ export type SelectionController<M extends Record<string, any> = any> = {
 
 /**
  * Filter conditions in a `Query.where()` clause are specified using the
- * strings '<', '<=', '==', '>=', '>', 'array-contains', 'in', and 'array-contains-any'.
+ * strings `<`, `<=`, `==`, `>=`, `>`, `array-contains`, `in`, and `array-contains-any`.
  * @group Models
  */
 export type WhereFilterOp =

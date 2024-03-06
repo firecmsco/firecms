@@ -3777,7 +3777,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^18.2.61":
+"@types/react@npm:*":
   version: 18.2.61
   resolution: "@types/react@npm:18.2.61"
   dependencies:
@@ -3785,6 +3785,17 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: a100c09bc0d6d1a0a42b3fa0944b71d209b5adea6515fc21109972ec3267185372cc416c0467b1998afce6b90fc80f4c0029b5d975afb0b3070d864c7a924a5e
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^18.2.63":
+  version: 18.2.63
+  resolution: "@types/react@npm:18.2.63"
+  dependencies:
+    "@types/prop-types": "*"
+    "@types/scheduler": "*"
+    csstype: ^3.0.2
+  checksum: f3d496b9e3c40fe984aa2f22e0f3776a4f0be223f436ad3a2b79fed4b496ba1549999083408c2c975e5c8b029bfc9e8a2924788325e00de205cf70a10ef772d0
   languageName: node
   linkType: hard
 
@@ -4392,6 +4403,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"autoprefixer@npm:^10.4.18":
+  version: 10.4.18
+  resolution: "autoprefixer@npm:10.4.18"
+  dependencies:
+    browserslist: ^4.23.0
+    caniuse-lite: ^1.0.30001591
+    fraction.js: ^4.3.7
+    normalize-range: ^0.1.2
+    picocolors: ^1.0.0
+    postcss-value-parser: ^4.2.0
+  peerDependencies:
+    postcss: ^8.1.0
+  bin:
+    autoprefixer: bin/autoprefixer
+  checksum: 3c6fe631db3c36f36e5d56ef93891ac44be00bc2d50001b23703e99c3618bdb8807a97413af1252314ec043aee57ef80775f4f2cc3599db2662cbf05a08210df
+  languageName: node
+  linkType: hard
+
 "babel-loader@npm:^9.1.3":
   version: 9.1.3
   resolution: "babel-loader@npm:9.1.3"
@@ -4605,7 +4634,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserslist@npm:^4.0.0, browserslist@npm:^4.18.1, browserslist@npm:^4.21.10, browserslist@npm:^4.21.4, browserslist@npm:^4.22.2, browserslist@npm:^4.22.3":
+"browserslist@npm:^4.0.0, browserslist@npm:^4.18.1, browserslist@npm:^4.21.10, browserslist@npm:^4.21.4, browserslist@npm:^4.22.2, browserslist@npm:^4.22.3, browserslist@npm:^4.23.0":
   version: 4.23.0
   resolution: "browserslist@npm:4.23.0"
   dependencies:
@@ -4749,6 +4778,13 @@ __metadata:
   version: 1.0.30001591
   resolution: "caniuse-lite@npm:1.0.30001591"
   checksum: e48f924cdefff86d29d38ee1bffe2cdb1ef55e179d08ae2f1f5546d9d563e030f13755a0096ea87a09498daffd18666d1fe0b2759aea8421bbf4c214b47d410d
+  languageName: node
+  linkType: hard
+
+"caniuse-lite@npm:^1.0.30001591":
+  version: 1.0.30001594
+  resolution: "caniuse-lite@npm:1.0.30001594"
+  checksum: 59e52b2213f34fa9317813037fbab4f9b163f9bfeaeeb53035a57046ee2366b69eafc257997eab22982dc061d0576d1f4ef97c29425e1989f6589a7b1d8ed2d5
   languageName: node
   linkType: hard
 
@@ -11211,12 +11247,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postprocessing@npm:^6.34.3":
-  version: 6.34.3
-  resolution: "postprocessing@npm:6.34.3"
+"postprocessing@npm:^6.35.1":
+  version: 6.35.1
+  resolution: "postprocessing@npm:6.35.1"
   peerDependencies:
-    three: ">= 0.138.0 < 0.162.0"
-  checksum: 86a134bfa5c3b3716e1417872181df41ca3f0d2a34d1bdad599db32b1bd334512c8d80c59297c3e98b9427f7bd0d9028b9175e3671adb7354ce4a302cd77c071
+    three: ">= 0.152.0 < 0.163.0"
+  checksum: 277b08e4e54440173d8926a151e8445479b325b2e4d8798d63b526d6a4f73e124ce295d173ab2d0e4d6328a3e21046b2b52890fdc33121c27b89e67a867d5bcc
   languageName: node
   linkType: hard
 
@@ -13197,9 +13233,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typedoc@npm:^0.25.9":
-  version: 0.25.9
-  resolution: "typedoc@npm:0.25.9"
+"typedoc@npm:^0.25.10":
+  version: 0.25.10
+  resolution: "typedoc@npm:0.25.10"
   dependencies:
     lunr: ^2.3.9
     marked: ^4.3.0
@@ -13209,7 +13245,7 @@ __metadata:
     typescript: 4.6.x || 4.7.x || 4.8.x || 4.9.x || 5.0.x || 5.1.x || 5.2.x || 5.3.x
   bin:
     typedoc: bin/typedoc
-  checksum: c2e7d81e19083bda9289b9d6984c8ce1978b46272d5189c1bdca1518050975ad8fe4d48b2994d3e2e0ee2ebedb57354079674bf8d1466f8d61d74fc810f77f62
+  checksum: 44c173dc1f2d8c55c9a17a3da882f20a06057c669fffb844dc2e337ff9f284706eef601f066809987ef1e937a6b93677e2490b9a555742013bde5d989f568b88
   languageName: node
   linkType: hard
 
@@ -13835,11 +13871,11 @@ __metadata:
     "@firecms/ui": "link:../packages/ui"
     "@mdx-js/react": ^3.0.1
     "@tsconfig/docusaurus": ^2.0.2
-    "@types/react": ^18.2.61
+    "@types/react": ^18.2.63
     "@types/react-helmet": ^6.1.11
     "@types/react-router-dom": ^5.3.3
     aos: ^2.3.4
-    autoprefixer: ^10.4.17
+    autoprefixer: ^10.4.18
     clsx: ^2.1.0
     docusaurus-plugin-sass: ^0.2.5
     docusaurus-plugin-typedoc: ^0.22.0
@@ -13852,7 +13888,7 @@ __metadata:
     postcss-import: ^16.0.1
     postcss-loader: ^8.1.1
     postcss-preset-env: ^9.4.0
-    postprocessing: ^6.34.3
+    postprocessing: ^6.35.1
     prism-react-renderer: ^2.3.1
     raw-loader: ^4.0.2
     react: "link:../../node_modules/react"
@@ -13864,7 +13900,7 @@ __metadata:
     sass: ^1.71.1
     tailwindcss: ^3.4.1
     three: ^0.149.0
-    typedoc: ^0.25.9
+    typedoc: ^0.25.10
     typedoc-plugin-markdown: ^3.17.1
     typedoc-theme-hierarchy: ^4.1.2
     typescript: ^5.3.3
