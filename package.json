@@ -16,6 +16,7 @@
     "packages/user_management",
     "packages/data_import_export",
     "packages/schema_inference",
+    "packages/doflow",
     "packages/data_enhancement",
     "packages/user_management",
     "packages/formex",

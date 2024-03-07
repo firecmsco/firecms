@@ -37,6 +37,7 @@ import CustomColorTextField from "./custom_field/CustomColorTextField";
 import { booksCollection } from "./collections/books_collection";
 import { FirebaseApp } from "firebase/app";
 import { TestEditorView } from "./TestEditorView";
+import { useDoflowPlugin } from "@firecms/doflow";
 
 function App() {
     // const appCheckOptions: AppCheckOptions = {
@@ -136,6 +137,7 @@ function App() {
     });
 
     const importExportPlugin = useImportExportPlugin();
+    const doflowPlugin = useDoflowPlugin();
 
     const firestoreIndexesBuilder: FirestoreIndexesBuilder = ({ path }) => {
         if (path === "products") {
@@ -166,7 +168,7 @@ function App() {
         // appCheckOptions={appCheckOptions}
         authentication={myAuthenticator}
         allowSkipLogin={true}
-        plugins={[importExportPlugin, dataEnhancementPlugin]}
+        plugins={[doflowPlugin, importExportPlugin, dataEnhancementPlugin]}
         signInOptions={[
             "password",
             "google.com"
