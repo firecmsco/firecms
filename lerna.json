@@ -15,6 +15,7 @@
     "packages/create_firecms_app",
     "packages/collection_editor",
     "packages/schema_inference",
+    "packages/user_management",
     "packages/formex",
     "examples/example_v3",
     "examples/example_pro"

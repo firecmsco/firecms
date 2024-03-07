@@ -17,6 +17,7 @@
     "packages/data_import_export",
     "packages/schema_inference",
     "packages/data_enhancement",
+    "packages/user_management",
     "packages/formex",
     "packages/editor",
     "examples/example_v3",

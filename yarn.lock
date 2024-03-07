@@ -2944,6 +2944,7 @@ __metadata:
   dependencies:
     "@firecms/core": ^3.0.0-beta.3
     "@firecms/formex": ^3.0.0-beta.3
+    "@firecms/ui": ^3.0.0-beta.3
     "@types/node": ^20.11.16
     "@types/react": ^18.2.54
     "@types/react-dom": ^18.2.18
