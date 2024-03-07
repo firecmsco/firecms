@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { EntityCollection, IconForView, SearchIconsView, singular, toSnakeCase, } from "@firecms/core";
+import { EntityCollection, FieldCaption, IconForView, SearchIconsView, singular, toSnakeCase, } from "@firecms/core";
 import {
     Autocomplete,
     AutocompleteItem,
@@ -20,7 +20,6 @@ import {
     useAutoComplete
 } from "@firecms/ui";
 
-import { FieldHelperView } from "./properties/FieldHelperView";
 import { Field, getIn, useFormex } from "@firecms/formex";
 
 export function CollectionDetailsForm({
@@ -142,9 +141,9 @@ export function CollectionDetailsForm({
                             label={"Name"}
                             required
                             error={showErrors && Boolean(errors.name)}/>
-                        <FieldHelperView error={touched.name && Boolean(errors.name)}>
+                        <FieldCaption error={touched.name && Boolean(errors.name)}>
                             {touched.name && Boolean(errors.name) ? errors.name : "Name of in this collection, usually a plural name (e.g. Products)"}
-                        </FieldHelperView>
+                        </FieldCaption>
                     </div>
 
                     <div className={cn("col-span-12 ", isSubcollection ? "" : "sm:col-span-8")}>
@@ -155,11 +154,11 @@ export function CollectionDetailsForm({
                                required
                                error={showErrors && Boolean(errors.path)}/>
 
-                        <FieldHelperView error={touched.path && Boolean(errors.path)}>
+                        <FieldCaption error={touched.path && Boolean(errors.path)}>
                             {touched.path && Boolean(errors.path)
                                 ? errors.path
                                 : isSubcollection ? "Relative path to the parent (no need to include the parent path)" : "Path that this collection is stored in, in the database"}
-                        </FieldHelperView>
+                        </FieldCaption>
 
                     </div>
 
@@ -190,9 +189,9 @@ export function CollectionDetailsForm({
                                 </AutocompleteItem>;
                             })}
                         </Autocomplete>
-                        <FieldHelperView>
+                        <FieldCaption>
                             {showErrors && Boolean(errors.group) ? errors.group : "Group of the collection"}
-                        </FieldHelperView>
+                        </FieldCaption>
                     </div>}
 
                     <div className={"col-span-12"}>
@@ -216,9 +215,9 @@ export function CollectionDetailsForm({
                                            disabled={!isNewCollection}
                                            label={"Collection id"}
                                            error={showErrors && Boolean(errors.id)}/>
-                                    <FieldHelperView error={touched.id && Boolean(errors.id)}>
+                                    <FieldCaption error={touched.id && Boolean(errors.id)}>
                                         {touched.id && Boolean(errors.id) ? errors.id : "This id identifies this collection"}
-                                    </FieldHelperView>
+                                    </FieldCaption>
                                 </div>
 
                                 <div className={"col-span-12"}>
@@ -232,9 +231,9 @@ export function CollectionDetailsForm({
                                         }}
                                         value={values.singularName ?? ""}
                                         label={"Singular name"}/>
-                                    <FieldHelperView error={showErrors && Boolean(errors.singularName)}>
+                                    <FieldCaption error={showErrors && Boolean(errors.singularName)}>
                                         {showErrors && Boolean(errors.singularName) ? errors.singularName : "Optionally define a singular name for your entities"}
-                                    </FieldHelperView>
+                                    </FieldCaption>
                                 </div>
                                 <div className={"col-span-12"}>
                                     <TextField
@@ -247,9 +246,9 @@ export function CollectionDetailsForm({
                                         aria-describedby="description-helper-text"
                                         label="Description"
                                     />
-                                    <FieldHelperView error={showErrors && Boolean(errors.description)}>
+                                    <FieldCaption error={showErrors && Boolean(errors.description)}>
                                         {showErrors && Boolean(errors.description) ? errors.description : "Description of the collection, you can use markdown"}
-                                    </FieldHelperView>
+                                    </FieldCaption>
                                 </div>
 
                                 <div className={"col-span-12"}>
@@ -316,11 +315,11 @@ export function CollectionDetailsForm({
                                         onValueChange={(v) => setFieldValue("collectionGroup", v)}
                                         value={values.collectionGroup ?? false}
                                     />
-                                    <FieldHelperView>
+                                    <FieldCaption>
                                         A collection group consists of all collections with the same path. This allows
                                         you
                                         to query over multiple collections at once.
-                                    </FieldHelperView>
+                                    </FieldCaption>
                                 </div>
                                 <div className={"col-span-12"}>
                                     <BooleanSwitchWithLabel
@@ -329,11 +328,11 @@ export function CollectionDetailsForm({
                                         onValueChange={(v) => setFieldValue("textSearchEnabled", v)}
                                         value={values.textSearchEnabled ?? false}
                                     />
-                                    <FieldHelperView>
+                                    <FieldCaption>
                                         Allow text search for this collection. If you have not specified a text search
                                         delegate, this will use the built-in local text search. This is not recommended
                                         for large collections, as it may incur in performance and cost issues.
-                                    </FieldHelperView>
+                                    </FieldCaption>
                                 </div>
                             </div>
                         </ExpandablePanel>

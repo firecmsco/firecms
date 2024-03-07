@@ -1,10 +1,9 @@
 import React from "react";
 import { getIn, useFormex } from "@firecms/formex";
-import { NumberProperty, StringProperty } from "@firecms/core";
+import { FieldCaption, NumberProperty, StringProperty } from "@firecms/core";
 import { Select, SelectItem } from "@firecms/ui";
 import { GeneralPropertyValidation } from "./validation/GeneralPropertyValidation";
 import { ValidationPanel } from "./validation/ValidationPanel";
-import { FieldHelperView } from "./FieldHelperView";
 
 export function DateTimePropertyField({ disabled }: {
     disabled: boolean;
@@ -47,9 +46,9 @@ export function DateTimePropertyField({ disabled }: {
                     <SelectItem value={"date_time"}> Date/Time </SelectItem>
                     <SelectItem value={"date"}> Date </SelectItem>
                 </Select>
-                <FieldHelperView error={Boolean(modeError)}>
+                <FieldCaption error={Boolean(modeError)}>
                     {modeError}
-                </FieldHelperView>
+                </FieldCaption>
 
                 <Select name={autoValuePath}
                         disabled={disabled}
@@ -71,9 +70,9 @@ export function DateTimePropertyField({ disabled }: {
                     <SelectItem value={"on_create"}> On create </SelectItem>
                     <SelectItem value={"on_update"}> On any update </SelectItem>
                 </Select>
-                <FieldHelperView error={Boolean(autoValueError)}>
+                <FieldCaption error={Boolean(autoValueError)}>
                     {autoValueError ?? "Update this field automatically when creating or updating the entity"}
-                </FieldHelperView>
+                </FieldCaption>
 
             </div>
 

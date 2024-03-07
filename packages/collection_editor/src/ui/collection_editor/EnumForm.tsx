@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import equal from "react-fast-compare"
 
-import { ArrayContainer, EnumValueConfig, EnumValues, } from "@firecms/core";
+import { ArrayContainer, EnumValueConfig, EnumValues, FieldCaption, } from "@firecms/core";
 import {
     AutoAwesomeIcon,
     Badge,
@@ -17,7 +17,6 @@ import {
     SettingsIcon,
     Typography
 } from "@firecms/ui";
-import { FieldHelperView } from "./properties/FieldHelperView";
 import { extractEnumFromValues } from "@firecms/schema_inference";
 import { Field, Formex, getIn, useCreateFormex, useFormex } from "@firecms/formex";
 
@@ -337,9 +336,9 @@ function EnumEntryDialog({
                            autoComplete="off"
                            error={Boolean(idError)}/>
 
-                    <FieldHelperView error={Boolean(idError)}>
+                    <FieldCaption error={Boolean(idError)}>
                         {idError ?? "Value saved in the data source"}
-                    </FieldHelperView>
+                    </FieldCaption>
                 </div>}
         </DialogContent>
 

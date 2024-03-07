@@ -1,8 +1,7 @@
 import React from "react";
 import { Field, getIn, useFormex } from "@firecms/formex";
-import { IconForView, NumberProperty, StringProperty, useNavigationController } from "@firecms/core";
+import { FieldCaption, IconForView, NumberProperty, StringProperty, useNavigationController } from "@firecms/core";
 import { CircularProgress, Select, SelectGroup, SelectItem, Typography, } from "@firecms/ui";
-import { FieldHelperView } from "./FieldHelperView";
 
 export function ReferencePropertyField({
                                            existing,
@@ -152,10 +151,10 @@ export function CollectionsSelect({
 
             </Select>
 
-            <FieldHelperView>
+            <FieldCaption>
                 You can only edit the reference collection upon field
                 creation.
-            </FieldHelperView>
+            </FieldCaption>
         </>
     );
 }

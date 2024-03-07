@@ -1,10 +1,9 @@
 import React from "react";
 
 import { Field, FormexFieldProps, getIn, useFormex } from "@firecms/formex";
-import { serializeRegExp } from "@firecms/core";
+import { FieldCaption, serializeRegExp } from "@firecms/core";
 import { DebouncedTextField, } from "@firecms/ui";
 import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
-import { FieldHelperView } from "../FieldHelperView";
 import { SwitchControl } from "../../SwitchControl";
 
 export function StringPropertyValidation({
@@ -140,9 +139,9 @@ export function StringPropertyValidation({
                        disabled={disabled}
                        value={matchesStringValue}
                        error={Boolean(matchesError)}/>
-                <FieldHelperView error={Boolean(matchesError)}>
+                <FieldCaption error={Boolean(matchesError)}>
                     {matchesError ? "Not a valid regexp" : "e.g. /^\\d+$/ for digits only"}
-                </FieldHelperView>
+                </FieldCaption>
             </div>}
 
         </div>

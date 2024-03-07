@@ -13,11 +13,10 @@ import {
     Typography,
 } from "@firecms/ui";
 import { Role } from "@firecms/firebase";
-import { useSnackbarController } from "@firecms/core";
+import { FieldCaption, useSnackbarController } from "@firecms/core";
 
 import { FireCMSUserProject } from "../../types/firecms_user";
 import { areRolesEqual } from "../../utils/permissions";
-import { FieldHelperView } from "../FieldHelperView";
 import { useFireCMSBackend } from "../../hooks";
 import { useUserManagement } from "../../hooks/useUserManagement";
 import { RoleChip } from "../roles/RoleChip";
@@ -163,9 +162,9 @@ export function UserDetailsForm({
                                     aria-describedby="name-helper-text"
                                     label="Name"
                                 />
-                                <FieldHelperView>
+                                <FieldCaption>
                                     {submitCount > 0 && Boolean(errors.displayName) ? errors.displayName : "Name of this user"}
-                                </FieldHelperView>
+                                </FieldCaption>
                             </div>
                             <div className={"col-span-12"}>
                                 <TextField
@@ -177,9 +176,9 @@ export function UserDetailsForm({
                                     aria-describedby="email-helper-text"
                                     label="Email"
                                 />
-                                <FieldHelperView>
+                                <FieldCaption>
                                     {submitCount > 0 && Boolean(errors.email) ? errors.email : "Email of this user"}
-                                </FieldHelperView>
+                                </FieldCaption>
                             </div>
                             <div className={"col-span-12"}>
                                 <MultiSelect

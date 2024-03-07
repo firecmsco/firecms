@@ -1,11 +1,10 @@
 import React, { useCallback, useState } from "react";
-import { MapProperty, Property, PropertyConfig, } from "@firecms/core";
+import { FieldCaption, MapProperty, Property, PropertyConfig, } from "@firecms/core";
 import { AddIcon, BooleanSwitchWithLabel, Button, Paper, Typography } from "@firecms/ui";
 import { PropertyFormDialog } from "../PropertyEditView";
 import { getIn, useFormex } from "@firecms/formex";
 import { PropertyTree } from "../PropertyTree";
 import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath, namespaceToPropertiesPath } from "../util";
-import { FieldHelperView } from "./FieldHelperView";
 
 export function MapPropertyField({ disabled, getData, allowDataInference, propertyConfigs, collectionEditable }: {
     disabled: boolean;
@@ -113,9 +112,9 @@ export function MapPropertyField({ disabled, getData, allowDataInference, proper
                     onValueChange={(v) => setFieldValue("spreadChildren", v)}
                     value={values.spreadChildren ?? false}
                 />
-                <FieldHelperView>
+                <FieldCaption>
                     Set this flag to true if you want to display the children of this group as individual columns.
-                </FieldHelperView>
+                </FieldCaption>
             </div>
 
             <PropertyFormDialog

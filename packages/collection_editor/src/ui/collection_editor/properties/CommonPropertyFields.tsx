@@ -2,8 +2,7 @@ import { Field, getIn, useFormex } from "@firecms/formex";
 import { DebouncedTextField } from "@firecms/ui";
 import { PropertyWithId } from "../PropertyEditView";
 import React from "react";
-import { FieldHelperView } from "./FieldHelperView";
-import { toSnakeCase, unslugify } from "@firecms/core";
+import { FieldCaption, toSnakeCase, unslugify } from "@firecms/core";
 
 type CommonPropertyFieldsProps = {
     showErrors: boolean,
@@ -64,9 +63,9 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
                         disabled={disabled}
                         error={Boolean(nameError)}/>
 
-                    <FieldHelperView error={Boolean(nameError)}>
+                    <FieldCaption error={Boolean(nameError)}>
                         {nameError}
-                    </FieldHelperView>
+                    </FieldCaption>
                 </div>
 
                 <div>
@@ -88,9 +87,9 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
                         required
                         size="small"
                         error={Boolean(idError)}/>
-                    <FieldHelperView error={Boolean(idError)}>
+                    <FieldCaption error={Boolean(idError)}>
                         {idError}
-                    </FieldHelperView>
+                    </FieldCaption>
                 </div>
 
                 <div>
@@ -99,9 +98,9 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
                            label={"Description"}
                            disabled={disabled}
                            error={Boolean(descriptionError)}/>
-                    <FieldHelperView error={Boolean(descriptionError)}>
+                    <FieldCaption error={Boolean(descriptionError)}>
                         {descriptionError}
-                    </FieldHelperView>
+                    </FieldCaption>
                 </div>
 
             </div>

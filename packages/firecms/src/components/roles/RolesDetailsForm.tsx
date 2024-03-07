@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import * as Yup from "yup";
 
-import { EntityCollection, toSnakeCase, } from "@firecms/core";
+import { EntityCollection, FieldCaption, toSnakeCase, } from "@firecms/core";
 import {
     Button,
     Checkbox,
@@ -22,7 +22,6 @@ import {
     Tooltip,
     Typography
 } from "@firecms/ui";
-import { FieldHelperView } from "../FieldHelperView";
 import { Role } from "@firecms/firebase";
 import { useUserManagement } from "../../hooks/useUserManagement";
 import { Formex, getIn, useCreateFormex } from "@firecms/formex";
@@ -157,9 +156,9 @@ export function RolesDetailsForm({
                                     aria-describedby="name-helper-text"
                                     label="Name"
                                 />
-                                <FieldHelperView>
+                                <FieldCaption>
                                     {touched.name && Boolean(errors.name) ? errors.name : "Name of this role"}
-                                </FieldHelperView>
+                                </FieldCaption>
                             </div>
 
                             <div className={"col-span-12 md:col-span-4"}>
@@ -176,9 +175,9 @@ export function RolesDetailsForm({
                                     aria-describedby="id-helper-text"
                                     label="ID"
                                 />
-                                <FieldHelperView>
+                                <FieldCaption>
                                     {touched.id && Boolean(errors.id) ? errors.id : "ID of this role"}
-                                </FieldHelperView>
+                                </FieldCaption>
                             </div>
 
                             <div className={"col-span-12"}>
@@ -299,12 +298,12 @@ export function RolesDetailsForm({
                                         </TableBody>
                                     </Table>
                                 </Paper>
-                                <FieldHelperView>
+                                <FieldCaption>
                                     You can customise the permissions
                                     that the users related to this
                                     role can perform in the entities
                                     of each collection
-                                </FieldHelperView>
+                                </FieldCaption>
                             </div>
 
                             <div className={"col-span-12 md:col-span-4"}>
@@ -325,9 +324,9 @@ export function RolesDetailsForm({
                                         value={"false"}> No </SelectItem>
                                 </Select>
 
-                                <FieldHelperView>
+                                <FieldCaption>
                                     {touched.config && Boolean(errors.config) ? errors.config : "Can the user create collections"}
-                                </FieldHelperView>
+                                </FieldCaption>
                             </div>
 
                             <div className={"col-span-12 md:col-span-4"}>
@@ -351,9 +350,9 @@ export function RolesDetailsForm({
                                         his/her own </SelectItem>
                                 </Select>
 
-                                <FieldHelperView>
+                                <FieldCaption>
                                     {touched.config && Boolean(errors.config) ? errors.config : "Can the user edit collections"}
-                                </FieldHelperView>
+                                </FieldCaption>
                             </div>
 
                             <div className={"col-span-12 md:col-span-4"}>
@@ -377,9 +376,9 @@ export function RolesDetailsForm({
                                         his/her own </SelectItem>
                                 </Select>
 
-                                <FieldHelperView>
+                                <FieldCaption>
                                     {touched.config && Boolean(errors.config) ? errors.config : "Can the user delete collections"}
-                                </FieldHelperView>
+                                </FieldCaption>
 
                             </div>
 
