@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { FireCMSPlugin } from "@firecms/core";
-import { DoFlowCollectionAction } from "./export_import/DoFlowCollectionAction";
+import { DoFlowCollectionAction } from "./action/DoFlowCollectionAction";
 
 /**
  *
