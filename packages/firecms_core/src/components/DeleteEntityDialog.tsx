@@ -176,7 +176,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
 
     return (
         <Dialog
-            maxWidth={"2xl"}
+            maxWidth={multipleEntities ? "lg" : "2xl"}
             aria-labelledby="delete-dialog"
             open={open}
             onOpenChange={(open) => !open ? onClose() : undefined}

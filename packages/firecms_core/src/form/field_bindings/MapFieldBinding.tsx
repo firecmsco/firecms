@@ -14,21 +14,21 @@ import { ExpandablePanel, InputLabel, Select, SelectItem } from "@firecms/ui";
  * and tables to the specified properties.
  * @group Form fields
  */
-export function MapFieldBinding<T extends Record<string, any>>({
-                                                                   propertyKey,
-                                                                   value,
-                                                                   showError,
-                                                                   error,
-                                                                   disabled,
-                                                                   property,
-                                                                   setValue,
-                                                                   partOfBlock,
-                                                                   tableMode,
-                                                                   includeDescription,
-                                                                   underlyingValueHasChanged,
-                                                                   autoFocus,
-                                                                   context
-                                                               }: FieldProps<T>) {
+export function MapFieldBinding({
+                                    propertyKey,
+                                    value,
+                                    showError,
+                                    error,
+                                    disabled,
+                                    property,
+                                    setValue,
+                                    partOfBlock,
+                                    tableMode,
+                                    includeDescription,
+                                    underlyingValueHasChanged,
+                                    autoFocus,
+                                    context
+                                }: FieldProps<Record<string, any>>) {
 
     const pickOnlySomeKeys = property.pickOnlySomeKeys || false;
     const expanded = (property.expanded === undefined ? true : property.expanded) || autoFocus;

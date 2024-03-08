@@ -89,12 +89,12 @@ export function mapPropertyToYup<T extends CMSType>(propertyContext: PropertyCon
     throw Error("Unsupported data type in yup mapping");
 }
 
-export function getYupMapObjectSchema<M extends Record<string, any>>({
+export function getYupMapObjectSchema({
                                                                          property,
                                                                          entityId,
                                                                          customFieldValidator,
                                                                          name
-                                                                     }: PropertyContext<M>): ObjectSchema<any> {
+                                                                     }: PropertyContext<Record<string, any>>): ObjectSchema<any> {
     const objectSchema: any = {};
     const validation = property.validation;
     if (property.properties)

@@ -12,7 +12,7 @@
     "@firecms/core": "^3.0.0-beta.3",
     "@firecms/firebase": "^3.0.0-beta.3",
     "@firecms/ui": "^3.0.0-beta.3",
-    "firebase": "^10.8.0"
+    "firebase": "^10.8.1"
   },
   "exports": {
     ".": {
@@ -24,9 +24,9 @@
     "./tailwind.config.js": "./tailwind.config.js"
   },
   "devDependencies": {
-    "@types/node": "^20.11.16",
-    "typescript": "^5.3.3",
-    "vite": "^5.1.1"
+    "@types/node": "^20.11.25",
+    "typescript": "^5.4.2",
+    "vite": "^5.1.5"
   },
   "peerDependencies": {
     "react": "^18.2.0",

@@ -30,9 +30,9 @@
     "@firecms/cli": "^3.0.0-beta.3"
   },
   "devDependencies": {
-    "@types/node": "^20.11.16",
+    "@types/node": "^20.11.25",
     "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.2"
   },
   "files": [
     "bin/",

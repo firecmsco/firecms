@@ -32,20 +32,20 @@ type MapEditViewRowState = [number, {
  *
  * @group Form fields
  */
-export function KeyValueFieldBinding<T extends Record<string, any>>({
-                                                                        propertyKey,
-                                                                        value,
-                                                                        showError,
-                                                                        error,
-                                                                        disabled,
-                                                                        property,
-                                                                        setValue,
-                                                                        tableMode,
-                                                                        includeDescription,
-                                                                        underlyingValueHasChanged,
-                                                                        autoFocus,
-                                                                        context
-                                                                    }: FieldProps<T>) {
+export function KeyValueFieldBinding({
+                                         propertyKey,
+                                         value,
+                                         showError,
+                                         error,
+                                         disabled,
+                                         property,
+                                         setValue,
+                                         tableMode,
+                                         includeDescription,
+                                         underlyingValueHasChanged,
+                                         autoFocus,
+                                         context
+                                     }: FieldProps<Record<string, any>>) {
 
     const expanded = (property.expanded === undefined ? true : property.expanded) || autoFocus;
 

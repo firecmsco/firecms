@@ -127,7 +127,7 @@ export function Select({
                         "w-full h-full",
                         size === "small" ? "h-[42px]" : "h-[64px]",
                         padding ? "px-4 " : "",
-                        "outlin e-none focus:outline-none",
+                        "outline-none focus:outline-none",
                         "select-none rounded-md text-sm",
                         error ? "text-red-500 dark:text-red-600" : "focus:text-text-primary dark:focus:text-text-primary-dark",
                         error ? "border border-red-500 dark:border-red-600" : "",
@@ -137,28 +137,28 @@ export function Select({
                         inputClassName
                     )}>
 
-                    <SelectPrimitive.Value asChild>
-                        <div className={cn(
-                            "flex-grow w-full max-w-full flex flex-row gap-2 items-center",
-                            "overflow-visible",
-                            size === "small" ? "h-[42px]" : "h-[64px]"
-                        )}>
-                            {renderValue &&
-                                (value && Array.isArray(value)
-                                    ? value.map((v, i) => (
-                                        <div key={v} className={"flex items-center gap-1 max-w-full"}>
-                                            {renderValue ? renderValue(v, i) : v}
-                                        </div>))
-                                    : (typeof value === "string" ? (renderValue ? renderValue(value, 0) : value) : placeholder))}
+                    <div className={cn(
+                        "flex-grow w-full max-w-full flex flex-row gap-2 items-center",
+                        "overflow-visible",
+                        size === "small" ? "h-[42px]" : "h-[64px]"
+                    )}>
+                    <SelectPrimitive.Value >
+                        {renderValue &&
+                            (value && Array.isArray(value)
+                                ? value.map((v, i) => (
+                                    <div key={v} className={"flex items-center gap-1 max-w-full"}>
+                                        {renderValue ? renderValue(v, i) : v}
+                                    </div>))
+                                : (typeof value === "string" ? (renderValue ? renderValue(value, 0) : value) : placeholder))}
 
-                            {renderValues && (!value || Array.isArray(value))
-                                ? renderValues(value as string[] ?? [])
-                                : null}
+                        {renderValues && (!value || Array.isArray(value))
+                            ? renderValues(value as string[] ?? [])
+                            : null}
 
-                            {!renderValue && !renderValues && value}
+                        {!renderValue && !renderValues && value}
 
-                        </div>
                     </SelectPrimitive.Value>
+                    </div>
 
                     <SelectPrimitive.Icon className={cn(
                         "px-2 h-full flex items-center",
