@@ -46,7 +46,8 @@ export default defineConfig(({ command }) => {
                 "@firecms/data_enhancement": path.resolve(__dirname, "../../packages/data_enhancement/src"),
                 "@firecms/data_import_export": path.resolve(__dirname, "../../packages/data_import_export/src"),
                 "@firecms/schema_inference": path.resolve(__dirname, "../../packages/schema_inference/src"),
-                "@firecms/collection_editor": path.resolve(__dirname, "../../packages/collection_editor/src")
+                "@firecms/collection_editor": path.resolve(__dirname, "../../packages/collection_editor/src"),
+                "@firecms/user_management": path.resolve(__dirname, "../../packages/user_management/src")
             }
         }
     });

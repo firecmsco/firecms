@@ -14,8 +14,16 @@ export function getIcon(iconKey?: string, className?: string): React.ReactElemen
     return iconKey in iconKeysMap ? <Icon iconKey={iconKey} size={"medium"} className={className}/> : undefined;
 }
 
+export type IconViewProps = {
+    path: string;
+    name: string;
+    singularName?: string;
+    group?: string;
+    icon?: string;
+}
+
 export const IconForView = React.memo(
-    function IconForView({ collectionOrView, className }: { collectionOrView: EntityCollection | CMSView, className?: string }): React.ReactElement {
+    function IconForView({ collectionOrView, className }: { collectionOrView: IconViewProps, className?: string }): React.ReactElement {
         const icon = getIcon(collectionOrView.icon, className);
         if (collectionOrView?.icon && icon)
             return icon;

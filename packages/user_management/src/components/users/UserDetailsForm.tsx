@@ -14,12 +14,12 @@ import {
 } from "@firecms/ui";
 import { Role } from "@firecms/firebase";
 import { FieldCaption, useSnackbarController } from "@firecms/core";
-
-import { FireCMSUserProject } from "../../types/firecms_user";
-import { areRolesEqual } from "../../utils/permissions";
-import { useUserManagement } from "../../hooks/useUserManagement";
-import { RoleChip } from "../roles/RoleChip";
 import { Formex, useCreateFormex } from "@firecms/formex";
+
+import { FireCMSUserProject } from "../../types";
+import { areRolesEqual } from "../../utils";
+import { useUserManagement } from "../../hooks";
+import { RoleChip } from "../roles";
 
 export const UserYupSchema = Yup.object().shape({
     displayName: Yup.string().required("Required"),
@@ -60,15 +60,14 @@ export function UserDetailsForm({
     const {
         saveUser,
         users,
-        roles
+        roles,
+        loggedUser
     } = useUserManagement();
     const isNewUser = !userProp;
 
     const onUserUpdated = useCallback((savedUser: FireCMSUserProject): Promise<FireCMSUserProject> => {
-        const loggedUser = null; // TODO
-        // const loggedUser = users.find(u => u.uid === fireCMSBackend.user?.uid);
         if (!loggedUser) {
-            throw new Error("User not found");
+            throw new Error("Logged user not found");
         }
         try {
             canUserBeEdited(loggedUser, savedUser, users, roles, userProp);
@@ -76,7 +75,7 @@ export function UserDetailsForm({
         } catch (e: any) {
             return Promise.reject(e);
         }
-    }, [roles, saveUser, userProp, users]);
+    }, [roles, saveUser, userProp, users, loggedUser]);
 
     const formex = useCreateFormex({
         initialValues: userProp ?? {

@@ -1,4 +1,4 @@
-export * from "./FireCMSDrawer";
+export * from "./FireCMSCloudDrawer";
 export * from "./FireCMSDataEnhancementSubscriptionMessage";
 export * from "./SecurityRulesInstructions";
 export * from "./subscriptions";

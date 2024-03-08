@@ -40,30 +40,24 @@ import {
     FireCMSBackEndProvider,
     ProjectConfig,
     ProjectConfigProvider,
+    useBuildCloudUserManagement,
     useBuildCollectionsConfigController,
     useBuildFireCMSBackend,
     useBuildProjectConfig,
-    useBuildSaasUserManagement,
     useDelegatedLogin,
-    UserManagement,
 } from "./hooks";
 
 import { FireCMSAppProps } from "./FireCMSAppProps";
 import { ApiError, FireCMSAppConfig, FireCMSBackend, FireCMSUser } from "./types";
-import {
-    ADMIN_VIEWS,
-    getUserRoles,
-    RESERVED_GROUPS,
-    resolveCollectionConfigPermissions,
-    resolveUserRolePermissions
-} from "./utils";
+import { getUserRoles, RESERVED_GROUPS, resolveCollectionConfigPermissions, resolveUserRolePermissions } from "./utils";
 import {
     FireCMSDataEnhancementSubscriptionMessage,
-    FireCMSDrawer,
+    FireCMSCloudDrawer,
     FireCMSLoginView,
+    ProjectSettings,
     SubscriptionPlanWidget
 } from "./components";
-import { FireCMSProjectHomePage } from "./components/FireCMSProjectHomePage";
+import { FireCMSCloudHomePage } from "./components/FireCMSCloudHomePage";
 import {
     buildCollectionInference,
     FirebaseAuthController,
@@ -74,9 +68,9 @@ import {
     useInitialiseFirebase
 } from "@firecms/firebase";
 import { ExportAllowedParams, useImportExportPlugin } from "@firecms/data_import_export";
-import { UserManagementProvider } from "./hooks/useUserManagement";
 import { Button, CenteredView, ErrorIcon, Typography } from "@firecms/ui";
 import { useSaasPlugin } from "./hooks/useSaasPlugin";
+import { RolesView, UserManagement, UserManagementProvider, UsersView } from "@firecms/user_management";
 
 const DOCS_LIMIT = 200;
 
@@ -200,12 +194,13 @@ export const FireCMSClient = function FireCMSClient({
         backendFirebaseApp: fireCMSBackend.backendFirebaseApp,
     });
 
-    const userManagement = useBuildSaasUserManagement({
+    const userManagement = useBuildCloudUserManagement({
         backendFirebaseApp: fireCMSBackend.backendFirebaseApp,
         projectId,
         projectsApi: fireCMSBackend.projectsApi,
         usersLimit: projectConfig.usersLimit,
-        canEditRoles: projectConfig.canEditRoles
+        canEditRoles: projectConfig.canEditRoles,
+        fireCMSBackend
     });
 
     if (userManagement.loading || (!projectConfig.clientFirebaseConfig && !projectConfig.configError)) {
@@ -458,7 +453,7 @@ function FireCMSAppAuthenticated({
         throw Error("You can only use FireCMSAppAuthenticated with an authenticated user");
     }
 
-    const adminRoutes = useMemo(buildAdminRoutes, []);
+    const adminRoutes = useMemo(() => buildAdminRoutes(userManagement.usersLimit), [userManagement.usersLimit]);
 
     const configPermissions: CollectionEditorPermissionsBuilder<User, PersistedCollection> = useCallback(({
                                                                                                               user,
@@ -606,12 +601,12 @@ function FireCMSAppAuthenticated({
                                                 key={"project_scaffold_" + projectConfig.projectId}
                                                 name={projectConfig.projectName ?? ""}
                                                 logo={projectConfig.logo}
-                                                Drawer={FireCMSDrawer}
+                                                Drawer={FireCMSCloudDrawer}
                                                 FireCMSAppBar={FireCMSAppBarComponent}
                                                 fireCMSAppBarProps={appConfig?.fireCMSAppBarComponentProps}
                                                 autoOpenDrawer={appConfig?.autoOpenDrawer}>
                                                 <NavigationRoutes
-                                                    HomePage={appConfig?.HomePage ?? FireCMSProjectHomePage}
+                                                    HomePage={appConfig?.HomePage ?? FireCMSCloudHomePage}
                                                     customRoutes={adminRoutes}/>
                                                 <SideDialogs/>
                                             </Scaffold>
@@ -652,15 +647,48 @@ const injectCollections = (baseCollections: EntityCollection[],
     return result;
 }
 
-function buildAdminRoutes() {
-    return ADMIN_VIEWS.map(({
-                                path,
-                                name,
-                                view
-                            }) => <Route
+function buildAdminRoutes(usersLimit: number | null) {
+
+    return [
+        {
+            path: "users",
+            name: "CMS Users",
+            group: "Admin",
+            icon: "face",
+            hideFromNavigation: true,
+            view: <UsersView>
+                <SubscriptionPlanWidget
+                    showForPlans={["free"]}
+                    message={<>Upgrade to PLUS to remove the <b>{usersLimit} users limit</b></>}/>
+            </UsersView>
+        },
+        {
+            path: "roles",
+            name: "Roles",
+            group: "Admin",
+            icon: "gpp_good",
+            hideFromNavigation: true,
+            view: <RolesView>
+                <SubscriptionPlanWidget
+                    showForPlans={["free"]}
+                    message={<>Upgrade to PLUS to be able to customise <b>roles</b></>}/>
+            </RolesView>
+        },
+        {
+            path: "settings",
+            name: "Project settings",
+            group: "Admin",
+            icon: "settings",
+            hideFromNavigation: true,
+            view: <ProjectSettings/>
+        }
+    ].map(({
+               path,
+               name,
+               view
+           }) => <Route
         key={"navigation_admin_" + path}
         path={path}
         element={view}
     />)
 }
-

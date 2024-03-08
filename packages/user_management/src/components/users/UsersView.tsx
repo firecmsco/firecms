@@ -6,7 +6,7 @@ import React, { useCallback, useState } from "react";
 import { FireCMSUserProject } from "../../types";
 import { useUserManagement } from "../../hooks/useUserManagement";
 
-export const UsersView = function UsersView() {
+export const UsersView = function UsersView({ children }: { children?: React.ReactNode }) {
 
     const [dialogOpen, setDialogOpen] = useState<boolean>();
     const [selectedUser, setSelectedUser] = useState<FireCMSUserProject | undefined>();
@@ -26,12 +26,9 @@ export const UsersView = function UsersView() {
     }, []);
 
     return (
-        <Container className="w-full flex flex-col py-2 gap-4" maxWidth={"6xl"}>
+        <Container className="w-full flex flex-col py-4 gap-4" maxWidth={"6xl"}>
 
-            // TODO
-            {/*<SubscriptionPlanWidget*/}
-            {/*    showForPlans={["free"]}*/}
-            {/*    message={<>Upgrade to PLUS to remove the <b>{usersLimit} users limit</b></>}/>*/}
+            {children}
 
             <div
                 className="flex items-center mt-12">

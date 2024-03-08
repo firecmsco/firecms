@@ -15,4 +15,6 @@ export type UserManagement = {
     usersLimit: number | null;
     canEditRoles: boolean;
 
+    loggedUser: FireCMSUserProject | null;
+
 };

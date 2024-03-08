@@ -9,8 +9,8 @@ import {
 import { ArrowForwardIcon, cardClickableMixin, cardMixin, cn, focusedMixin, Typography, } from "@firecms/ui";
 
 import { Link as ReactLink } from "react-router-dom";
-import { ADMIN_VIEWS } from "../utils";
 import { SubscriptionPlanWidget } from "./subscriptions";
+import { ADMIN_VIEWS_CONFIG } from "../utils";
 
 /**
  * Default entry view for the CMS under the path "/"
@@ -19,7 +19,7 @@ import { SubscriptionPlanWidget } from "./subscriptions";
  * @constructor
  * @group Components
  */
-export function FireCMSProjectHomePage() {
+export function FireCMSCloudHomePage() {
 
     const navigation = useNavigationController();
     const { plugins } = useCustomizationController();
@@ -38,11 +38,10 @@ export function FireCMSProjectHomePage() {
         additionalChildrenEnd={
             <NavigationGroup group={"ADMIN"}>
                 <div className={"grid grid-cols-12 gap-2"}>
-                    {ADMIN_VIEWS.map((view) => <div className={"col-span-12 sm:col-span-6 lg:col-span-4"}
-                                                    key={`nav_${view.path}`}>
+                    {ADMIN_VIEWS_CONFIG.map((view) => <div className={"col-span-12 sm:col-span-6 lg:col-span-4"}
+                                                          key={`nav_${view.path}`}>
                         <NavigationCircularCard
                             name={view.name}
-                            description={view.description}
                             url={view.path}
                             icon={<IconForView collectionOrView={view}
                                                className={"text-gray-400 dark:text-gray-600"}/>}/>

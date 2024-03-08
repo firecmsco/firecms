@@ -10,13 +10,13 @@ import {
 import { AddIcon, Button, cn, IconButton, Menu, MenuItem, MoreVertIcon, Tooltip, Typography, } from "@firecms/ui";
 import { useCollectionEditorController } from "@firecms/collection_editor";
 import { useNavigate } from "react-router-dom";
-import { ADMIN_VIEWS, RESERVED_GROUPS } from "../utils";
+import { ADMIN_VIEWS_CONFIG, RESERVED_GROUPS } from "../utils";
 
 /**
  * Default drawer used in FireCMS Cloud
  * @group Core
  */
-export function FireCMSDrawer({
+export function FireCMSCloudDrawer({
                                   hovered,
                                   drawerOpen,
                                   closeDrawer
@@ -132,7 +132,7 @@ export function FireCMSDrawer({
                         </div>}
                     </IconButton>}
             >
-                {ADMIN_VIEWS.map((view, index) =>
+                {ADMIN_VIEWS_CONFIG.map((view, index) =>
                     <MenuItem
                         onClick={(event) => {
                             event.preventDefault();

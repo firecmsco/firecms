@@ -10,27 +10,12 @@ import {
     setDoc
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
-import { FireCMSUserProject } from "../types";
+import { FireCMSBackend, FireCMSUserProject } from "../types";
 import { CMSType } from "@firecms/core";
 import { FirebaseStorage, getStorage } from "firebase/storage";
 import { ProjectsApi } from "../api/projects";
 import { Role } from "@firecms/firebase";
-
-export type UserManagement = {
-    loading: boolean;
-
-    users: FireCMSUserProject[];
-    saveUser: (user: FireCMSUserProject) => Promise<FireCMSUserProject>;
-    deleteUser: (user: FireCMSUserProject) => Promise<void>;
-
-    roles: Role[];
-    saveRole: (role: Role) => Promise<void>;
-    deleteRole: (role: Role) => Promise<void>;
-
-    usersLimit: number | null;
-    canEditRoles: boolean;
-
-};
+import { UserManagement } from "@firecms/user_management";
 
 interface UserManagementParams {
     backendFirebaseApp?: FirebaseApp;
@@ -38,15 +23,17 @@ interface UserManagementParams {
     projectsApi: ProjectsApi;
     usersLimit: number | null;
     canEditRoles?: boolean;
+    fireCMSBackend: FireCMSBackend
 }
 
-export function useBuildSaasUserManagement({
-                                           backendFirebaseApp,
-                                           projectId,
-                                           projectsApi,
-                                           usersLimit,
-                                           canEditRoles
-                                       }: UserManagementParams): UserManagement {
+export function useBuildCloudUserManagement({
+                                                backendFirebaseApp,
+                                                projectId,
+                                                projectsApi,
+                                                usersLimit,
+                                                canEditRoles,
+                                                fireCMSBackend
+                                            }: UserManagementParams): UserManagement {
 
     const configPath = projectId ? `projects/${projectId}` : undefined;
 
@@ -163,6 +150,8 @@ export function useBuildSaasUserManagement({
         return deleteDoc(ref);
     }, [configPath]);
 
+    const loggedUser = users.find(u => u.uid === fireCMSBackend.user?.uid);
+
     return {
         loading: rolesLoading || usersLoading,
         roles,
@@ -172,7 +161,8 @@ export function useBuildSaasUserManagement({
         deleteUser: removeUser,
         deleteRole,
         usersLimit,
-        canEditRoles: canEditRoles === undefined ? true : canEditRoles
+        canEditRoles: canEditRoles === undefined ? true : canEditRoles,
+        loggedUser: loggedUser ?? null
     }
 }
 

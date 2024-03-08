@@ -30,6 +30,7 @@ export default defineConfig(() => ({
             "@firecms/ui": path.resolve(__dirname, "../ui/src"),
             "@firecms/formex": path.resolve(__dirname, "../formex/src"),
             "@firecms/firebase": path.resolve(__dirname, "../firebase_firecms/src"),
+            "@firecms/user_management": path.resolve(__dirname, "../user_management/src"),
             "@firecms/schema_inference": path.resolve(__dirname, "../schema_inference/src"),
             "@firecms/collection_editor": path.resolve(__dirname, "../collection_editor/src"),
             "@firecms/data_enhancement": path.resolve(__dirname, "../data_enhancement/src"),

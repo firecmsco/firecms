@@ -9,7 +9,7 @@ import { Role } from "@firecms/firebase";
 import { useUserManagement } from "../../hooks/useUserManagement";
 
 export const RolesView = React.memo(
-    function RolesView() {
+    function RolesView({ children }: { children?: React.ReactNode }) {
 
         const { collections } = useCollectionsConfigController();
         const [dialogOpen, setDialogOpen] = useState(false);
@@ -28,12 +28,9 @@ export const RolesView = React.memo(
         };
 
         return (
-            <Container className="w-full flex flex-col py-2 gap-4" maxWidth={"6xl"}>
+            <Container className="w-full flex flex-col py-4 gap-4" maxWidth={"6xl"}>
 
-                {/* TODO */}
-                {/*<SubscriptionPlanWidget*/}
-                {/*    showForPlans={["free"]}*/}
-                {/*    message={<>Upgrade to PLUS to be able to customise <b>roles</b></>}/>*/}
+                {children}
 
                 <div className="flex items-center mt-12">
                     <Typography gutterBottom variant="h4"
