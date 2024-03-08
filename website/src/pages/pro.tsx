@@ -12,8 +12,8 @@ function ProPage() {
 
     return (
         <Layout
-            title={"Features - FireCMS"}
-            description="FireCMS includes all the features you need to kickstart your project and all the customization options you may need.">
+            title={"PRO - FireCMS"}
+            description="FireCMS PRO is the CMS aimed at companies and agencies that need a high degree of customization and support.">
 
             <div className="flex flex-col min-h-screen">
 

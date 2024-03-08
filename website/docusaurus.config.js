@@ -26,12 +26,12 @@ module.exports = {
     plugins: [
         "docusaurus-tailwindcss-loader",
         "docusaurus-plugin-sass",
-        generateAPI ? [
-            "docusaurus-plugin-typedoc",
-            {
-                watch: false,
-            }
-        ] : [],
+        // generateAPI ? [
+        //     "docusaurus-plugin-typedoc",
+        //     {
+        //         watch: false,
+        //     }
+        // ] : [],
         function () {
 
             return {
