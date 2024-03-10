@@ -44,6 +44,7 @@ export function ProductDetailPreview({
 
                         {product.images?.map((image, index) => (
                             <button
+                                key={`image_${index}`}
                                 onClick={() => setSelectedImage(image)}
                                 className={cn("border hover:border-gray-900 rounded-lg overflow-hidden transition-colors dark:hover:border-gray-50", defaultBorderMixin)}>
                                 <StorageImage storagePath={image}
