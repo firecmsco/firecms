@@ -25,7 +25,8 @@
       "@firecms/ui": ["../../packages/ui/src"],
       "@firecms/editor": ["../../packages/editor/src"],
       "@firecms/data_enhancement": ["../../packages/data_enhancement/src"],
-      "@firecms/data_import_export": ["../../packages/data_import_export/src"]
+      "@firecms/data_import_export": ["../../packages/data_import_export/src"],
+      "@firecms/user_management": ["../../packages/user_management/src"]
     }
   },
   "include": ["./src"]

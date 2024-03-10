@@ -1,2 +1,2 @@
-export * from "./useBuildUserManagement";
+export * from "./useBuildFirestoreUserManagement";
 export * from "./useUserManagement";

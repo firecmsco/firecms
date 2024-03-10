@@ -3,8 +3,6 @@ import path from "path";
 import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
 
-// import svgr from "vite-plugin-svgr";
-
 export default defineConfig({
     esbuild: {
         logOverride: { "this-is-undefined-in-esm": "silent" }
@@ -17,7 +15,6 @@ export default defineConfig({
     },
     optimizeDeps: { include: ["react/jsx-runtime"] },
     plugins: [
-        // svgr(),
         react({})
     ],
     resolve: {
@@ -32,7 +29,8 @@ export default defineConfig({
             "@firecms/data_enhancement": path.resolve(__dirname, "../../packages/data_enhancement/src"),
             "@firecms/data_import_export": path.resolve(__dirname, "../../packages/data_import_export/src"),
             "@firecms/schema_inference": path.resolve(__dirname, "../../packages/schema_inference/src"),
-            "@firecms/collection_editor": path.resolve(__dirname, "../../packages/collection_editor/src")
+            "@firecms/collection_editor": path.resolve(__dirname, "../../packages/collection_editor/src"),
+            "@firecms/user_management": path.resolve(__dirname, "../../packages/user_management/src")
         }
     }
 })

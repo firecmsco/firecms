@@ -1,7 +1,7 @@
 import * as React from "react"
 import * as LabelPrimitive from "@radix-ui/react-label"
 import { cn } from "../util";
-import { defaultBorderMixin } from "../styles.ts";
+import { defaultBorderMixin } from "../styles";
 
 const Label = React.forwardRef<
     React.ElementRef<typeof LabelPrimitive.Root>,

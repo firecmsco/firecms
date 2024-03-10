@@ -10,11 +10,9 @@ import {
     setDoc
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
-import { FireCMSUserProject } from "../types";
+import { FireCMSUserProject, UserManagement } from "../types";
 import { CMSType } from "@firecms/core";
-import { FirebaseStorage, getStorage } from "firebase/storage";
 import { Role } from "@firecms/firebase";
-import { UserManagement } from "firecms";
 
 interface UserManagementParams {
     backendFirebaseApp?: FirebaseApp;
@@ -23,17 +21,24 @@ interface UserManagementParams {
     canEditRoles?: boolean;
 }
 
-export function useBuildUserManagement({
-                                           backendFirebaseApp,
-                                           projectId,
-                                           usersLimit,
-                                           canEditRoles
-                                       }: UserManagementParams): UserManagement {
+/**
+ * This hook is used to build a user management object that can be used to
+ * manage users and roles in a Firestore backend.
+ * @param backendFirebaseApp
+ * @param projectId
+ * @param usersLimit
+ * @param canEditRoles
+ */
+export function useBuildFirestoreUserManagement({
+                                                    backendFirebaseApp,
+                                                    projectId,
+                                                    usersLimit,
+                                                    canEditRoles
+                                                }: UserManagementParams): UserManagement {
 
     const configPath = projectId ? `projects/${projectId}` : undefined;
 
     const firestoreRef = useRef<Firestore>();
-    const storageRef = useRef<FirebaseStorage>();
 
     const [rolesLoading, setRolesLoading] = React.useState<boolean>(true);
     const [usersLoading, setUsersLoading] = React.useState<boolean>(true);
@@ -46,7 +51,6 @@ export function useBuildUserManagement({
     useEffect(() => {
         if (!backendFirebaseApp) return;
         firestoreRef.current = getFirestore(backendFirebaseApp);
-        storageRef.current = getStorage(backendFirebaseApp);
     }, [backendFirebaseApp]);
 
     useEffect(() => {
@@ -117,7 +121,9 @@ export function useBuildUserManagement({
         throw new Error("Not implemented");
     }, [configPath, projectId]);
 
-    const saveRole = useCallback(<M extends { [Key: string]: CMSType }>(role: Role): Promise<void> => {
+    const saveRole = useCallback(<M extends {
+        [Key: string]: CMSType
+    }>(role: Role): Promise<void> => {
         const firestore = firestoreRef.current;
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         console.debug("Persisting", role);
@@ -157,7 +163,8 @@ export function useBuildUserManagement({
         deleteUser: removeUser,
         deleteRole,
         usersLimit,
-        canEditRoles: canEditRoles === undefined ? true : canEditRoles
+        canEditRoles: canEditRoles === undefined ? true : canEditRoles,
+        loggedUser: null // TODO
     }
 }
 

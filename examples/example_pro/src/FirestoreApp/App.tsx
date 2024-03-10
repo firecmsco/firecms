@@ -37,6 +37,7 @@ import CustomColorTextField from "./custom_field/CustomColorTextField";
 import { booksCollection } from "./collections/books_collection";
 import { FirebaseApp } from "firebase/app";
 import { TestEditorView } from "./TestEditorView";
+// import { useBuildFirestoreUserManagement } from "@firecms/user_management";
 
 function App() {
     // const appCheckOptions: AppCheckOptions = {
@@ -134,6 +135,9 @@ function App() {
             return false;
         }
     });
+
+    // const userManagement = useBuildFirestoreUserManagement();
+    // const userManagementPlugin = useUserManagementPlugin({userManagement});
 
     const importExportPlugin = useImportExportPlugin();
 

@@ -12,7 +12,6 @@ import {
 import { FirebaseApp } from "firebase/app";
 import { FireCMSBackend, FireCMSUserProject } from "../types";
 import { CMSType } from "@firecms/core";
-import { FirebaseStorage, getStorage } from "firebase/storage";
 import { ProjectsApi } from "../api/projects";
 import { Role } from "@firecms/firebase";
 import { UserManagement } from "@firecms/user_management";
@@ -38,7 +37,6 @@ export function useBuildCloudUserManagement({
     const configPath = projectId ? `projects/${projectId}` : undefined;
 
     const firestoreRef = useRef<Firestore>();
-    const storageRef = useRef<FirebaseStorage>();
 
     const [rolesLoading, setRolesLoading] = React.useState<boolean>(true);
     const [usersLoading, setUsersLoading] = React.useState<boolean>(true);
@@ -51,7 +49,6 @@ export function useBuildCloudUserManagement({
     useEffect(() => {
         if (!backendFirebaseApp) return;
         firestoreRef.current = getFirestore(backendFirebaseApp);
-        storageRef.current = getStorage(backendFirebaseApp);
     }, [backendFirebaseApp]);
 
     useEffect(() => {

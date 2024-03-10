@@ -26,7 +26,7 @@ export * from "./Markdown";
 export * from "./Menu";
 export * from "./MultiSelect";
 export * from "./Paper";
-export * from "./RadioGroup.tsx";
+export * from "./RadioGroup";
 export * from "./SearchBar";
 export * from "./Select";
 export * from "./Separator";
