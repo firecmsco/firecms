@@ -26,18 +26,6 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
      */
     loading?: boolean;
 
-    collections?: {
-
-        /**
-         * Use this component to add custom actions to the entity collections
-         * toolbar.
-         */
-        CollectionActions?: React.ComponentType<CollectionActionsProps<any, any, EC> & COL_ACTIONS_PROPS> | React.ComponentType<CollectionActionsProps<any, any, EC> & COL_ACTIONS_PROPS>[];
-
-        collectionActionsProps?: COL_ACTIONS_PROPS;
-
-    }
-
     form?: {
         provider?: {
             Component: React.ComponentType<PropsWithChildren<FORM_PROPS & PluginFormActionProps<any, EC>>>;
@@ -112,6 +100,14 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
     }
 
     collectionView?: {
+
+        /**
+         * Use this component to add custom actions to the entity collections
+         * toolbar.
+         */
+        CollectionActions?: React.ComponentType<CollectionActionsProps<any, any, EC> & COL_ACTIONS_PROPS> | React.ComponentType<CollectionActionsProps<any, any, EC> & COL_ACTIONS_PROPS>[];
+
+        collectionActionsProps?: COL_ACTIONS_PROPS;
 
         showTextSearchBar?: (props: {
             context: FireCMSContext,

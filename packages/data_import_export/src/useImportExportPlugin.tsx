@@ -10,7 +10,7 @@ export function useImportExportPlugin(props?: ImportExportPluginProps): FireCMSP
 
     return useMemo(() => ({
         name: "Import/Export",
-        collections: {
+        collectionView: {
             CollectionActions: [ImportCollectionAction, ExportCollectionAction],
             collectionActionsProps: props
         }

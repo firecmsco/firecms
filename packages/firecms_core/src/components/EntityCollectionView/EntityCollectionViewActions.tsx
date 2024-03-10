@@ -111,11 +111,11 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
 
     if (plugins) {
         plugins.forEach((plugin, i) => {
-            if (plugin.collections?.CollectionActions) {
-                actions.push(...toArray(plugin.collections?.CollectionActions)
+            if (plugin.collectionView?.CollectionActions) {
+                actions.push(...toArray(plugin.collectionView?.CollectionActions)
                     .map((Action, j) => (
                         <ErrorBoundary key={`plugin_actions_${i}_${j}`}>
-                            <Action {...actionProps} {...plugin.collections?.collectionActionsProps}/>
+                            <Action {...actionProps} {...plugin.collectionView?.collectionActionsProps}/>
                         </ErrorBoundary>
                     )));
             }

@@ -83,9 +83,6 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
     return {
         name: "Collection Editor",
         loading: collectionConfigController.loading,
-        collections: {
-            CollectionActions: EditorCollectionAction
-        },
         provider: {
             Component: ConfigControllerProvider,
             props: {
@@ -108,6 +105,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
             AdditionalCards: introMode ? undefined : NewCollectionCard,
         },
         collectionView: {
+            CollectionActions: EditorCollectionAction,
             HeaderAction: CollectionViewHeaderAction,
             AddColumnComponent: PropertyAddColumnComponent
         }
