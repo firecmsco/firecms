@@ -14,6 +14,7 @@ export type DialogProps = {
     scrollable?: boolean;
     maxWidth?: keyof typeof widthClasses;
     modal?: boolean;
+    onOpenAutoFocus?: (e: Event) => void;
 };
 
 const widthClasses = {
@@ -41,7 +42,8 @@ export const Dialog = ({
                            fullScreen,
                            scrollable = true,
                            maxWidth = "lg",
-                           modal = true
+                           modal = true,
+                           onOpenAutoFocus
                        }: DialogProps) => {
     const [displayed, setDisplayed] = useState(false);
 
@@ -77,6 +79,7 @@ export const Dialog = ({
                     />
 
                     <DialogPrimitive.Content
+                        onOpenAutoFocus={onOpenAutoFocus}
                         className={cn("h-full outline-none flex justify-center items-center z-40 opacity-100 transition-all duration-200 ease-in-out")}
                     >
                         <div

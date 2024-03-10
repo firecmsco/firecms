@@ -1,11 +1,10 @@
-import { buildCollection } from "firecms";
-import { ArchiveIcon, EntityCallbacks } from "firecms";
+import { ArchiveIcon, buildCollection, EntityCallbacks } from "firecms";
 
 import { Product } from "../types";
-import { SampleEntityView } from "../custom_entity_view/SampleEntityView";
 import CustomColorTextField from "../custom_field/CustomColorTextField";
 import { PriceTextPreview } from "../custom_field/PriceTextPreview";
 import { categories, currencies } from "./enums";
+import { ProductDetailPreview } from "../custom_entity_view/ProductDetailPreview";
 
 export const productCallbacks: EntityCallbacks<Product> = {
     onPreSave: ({
@@ -66,8 +65,8 @@ export const productsCollection = buildCollection<Product>({
     entityViews: [
         {
             key: "sample_custom_view",
-            name: "Custom hardcoded view",
-            Builder: SampleEntityView
+            name: "Custom preview",
+            Builder: ProductDetailPreview
         }
     ],
     additionalFields: [

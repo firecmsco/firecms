@@ -6,6 +6,7 @@ import { SampleProductsView } from "../custom_entity_view/SampleProductsView";
 import { Locale, Product } from "../types";
 import { categories, currencies, locales } from "./enums";
 import CustomColorTextField from "../custom_field/CustomColorTextField";
+import { ProductDetailPreview } from "../custom_entity_view/ProductDetailPreview";
 
 export const localeCollection = buildCollection<Locale>({
     id: "product_locales",
@@ -120,14 +121,8 @@ export const productsCollection = buildCollection<Product>({
     entityViews: [
         {
             key: "sample_custom_view",
-            name: "Custom view",
-            Builder: ({
-                          collection,
-                          entity,
-                          modifiedValues
-                      }) =>
-                <SampleProductsView entity={entity}
-                                    modifiedValues={modifiedValues}/>
+            name: "Custom preview",
+            Builder: ProductDetailPreview
         }
     ],
     additionalFields: [productAdditionalField],
