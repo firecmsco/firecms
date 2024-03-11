@@ -5,7 +5,7 @@ import { PluginGenericProps, PluginHomePageAdditionalCardsProps } from "../../ty
 
 import { toArray } from "../../util/arrays";
 import { NavigationGroup } from "./NavigationGroup";
-import { NavigationCollectionCard } from "./NavigationCollectionCard";
+import { NavigationCardBinding } from "./NavigationCardBinding";
 
 // @ts-ignore
 import * as JsSearch from "js-search";
@@ -173,7 +173,7 @@ export function DefaultHomePage({
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {thisGroupCollections.map((entry) => (
                                     <div key={`nav_${entry.group}_${entry.name}`} className="col-span-1">
-                                        <NavigationCollectionCard
+                                        <NavigationCardBinding
                                             {...entry}
                                             onClick={() => {
                                                 const event =

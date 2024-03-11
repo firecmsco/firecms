@@ -1,3 +1,4 @@
+import React from "react";
 import { EntityCollection } from "./collections";
 import { EntityReference } from "./entities";
 
@@ -187,6 +188,11 @@ export interface CMSView {
      * navigation view.
      */
     group?: string;
+
+    /**
+     * Optional size of the card in the home page
+     */
+    cardSize?: "small" | "medium";
 
 }
 
