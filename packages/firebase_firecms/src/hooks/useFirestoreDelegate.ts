@@ -262,7 +262,7 @@ export function useFirestoreDelegate({
 
     return {
         setDateToMidnight,
-        delegateToCMSModel,
+        delegateToCMSModel: firestoreToCMSModel,
         buildDate,
         buildDeleteFieldValue,
         currentTime,
@@ -669,40 +669,6 @@ function buildDate(date: Date): any {
     return Timestamp.fromDate(date);
 }
 
-function delegateToCMSModel(data: any): any {
-    if (data === null || data === undefined) return null;
-    if (deleteField().isEqual(data)) {
-        return undefined;
-    }
-    if (serverTimestamp().isEqual(data)) {
-        return null;
-    }
-    if (data instanceof Timestamp || (typeof data.toDate === "function" && data.toDate() instanceof Date)) {
-        return data.toDate();
-    }
-    if (data instanceof Date) {
-        return data;
-    }
-    if (data instanceof FirestoreGeoPoint) {
-        return new GeoPoint(data.latitude, data.longitude);
-    }
-    if (data instanceof DocumentReference) {
-        return new EntityReference(data.id, getCMSPathFromFirestorePath(data.path));
-    }
-    if (Array.isArray(data)) {
-        return data.map(delegateToCMSModel).filter(v => v !== undefined);
-    }
-    if (typeof data === "object") {
-        const result: Record<string, any> = {};
-        for (const key of Object.keys(data)) {
-            const childValue = delegateToCMSModel(data[key]);
-            if (childValue !== undefined)
-                result[key] = childValue;
-        }
-        return result;
-    }
-    return data;
-}
 
 function setDateToMidnight(input?: Timestamp): Timestamp | undefined {
     if (!input) return input;
@@ -718,7 +684,7 @@ export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
     } else if (data === null) {
         return null;
     } else if (Array.isArray(data)) {
-        return data.map(v => cmsToFirestoreModel(v, firestore));
+        return data.filter(v => v !== undefined).map(v => cmsToFirestoreModel(v, firestore));
     } else if (data.isEntityReference && data.isEntityReference()) {
         return doc(firestore, data.path, data.id);
     } else if (data instanceof GeoPoint) {
