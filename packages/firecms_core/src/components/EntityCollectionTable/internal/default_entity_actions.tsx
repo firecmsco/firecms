@@ -1,4 +1,4 @@
-import { EntityAction, EntityOverrides } from "../../../types";
+import { EntityAction } from "../../../types";
 import { ArchiveIcon, DeleteIcon, FileCopyIcon, KeyboardTabIcon, OpenInNewIcon } from "@firecms/ui";
 import { DeleteEntityDialog } from "../../DeleteEntityDialog";
 

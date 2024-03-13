@@ -200,6 +200,7 @@ export const EntityCollectionView = React.memo(
         }, [tableController.setPopupCell]);
 
         const onEntityClick = useCallback((clickedEntity: Entity<M>) => {
+            console.log("Entity clicked", clickedEntity)
             const collection = collectionRef.current;
             setSelectedNavigationEntity(clickedEntity);
             analyticsController.onAnalyticsEvent?.("edit_entity_clicked", {
@@ -213,7 +214,7 @@ export const EntityCollectionView = React.memo(
                 updateUrl: true,
                 onClose: unselectNavigatedEntity,
             });
-        }, [unselectNavigatedEntity]);
+        }, [unselectNavigatedEntity, sideEntityController]);
 
         const onNewClick = useCallback(() => {
 
@@ -227,7 +228,7 @@ export const EntityCollectionView = React.memo(
                 updateUrl: true,
                 onClose: unselectNavigatedEntity,
             });
-        }, [fullPath]);
+        }, [fullPath, sideEntityController]);
 
         const onMultipleDeleteClick = () => {
             analyticsController.onAnalyticsEvent?.("multiple_delete_dialog_open", {
@@ -426,7 +427,7 @@ export const EntityCollectionView = React.memo(
                 ...subcollectionColumns,
                 ...collectionGroupParentCollections
             ];
-        }, [collection, fullPath]);
+        }, [collection, fullPath, sideEntityController]);
 
         const updateLastDeleteTimestamp = useCallback(() => {
             setLastDeleteTimestamp(Date.now());
@@ -449,13 +450,13 @@ export const EntityCollectionView = React.memo(
             return actions;
         };
 
-        const getIdColumnWidth = useCallback(() => {
+        const getIdColumnWidth = () => {
             const entityActions = getActionsForEntity({});
             const collapsedActions = entityActions.filter(a => a.collapsed !== false);
             const uncollapsedActions = entityActions.filter(a => a.collapsed === false);
             const actionsWidth = uncollapsedActions.length * (largeLayout ? 40 : 30);
             return (largeLayout ? (80 + actionsWidth) : (70 + actionsWidth)) + (collapsedActions.length > 0 ? (largeLayout ? 40 : 30) : 0);
-        }, [largeLayout]);
+        };
 
         const tableRowActionsBuilder = ({
                                             entity,
