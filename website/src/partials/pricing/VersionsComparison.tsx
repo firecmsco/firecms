@@ -192,7 +192,7 @@ export function VersionsComparison() {
 
     return <>
 
-        <Panel includePadding={false} color={"lighter"} innerClassName={" flex flex-col items-center justify-center"}>
+        <Panel includePadding={false} color={"white"} innerClassName={" flex flex-col items-center justify-center"}>
 
             <LinedSpace/>
 

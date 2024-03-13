@@ -64,7 +64,7 @@ export function useDelegatedLogin({
                     })
                     .catch(async (error) => {
                         if (usedCachedToken) {
-                            await checkLogin(true);
+                            return await checkLogin(true);
                         } else {
                             console.error("Error signing in with delegated token", error);
                             setLoginSuccessful(false);

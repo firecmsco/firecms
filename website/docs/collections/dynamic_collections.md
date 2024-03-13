@@ -5,12 +5,13 @@ sidebar_label: Dynamic collections
 description: Unlock personalized content management with Dynamic Collections in FireCMS, where collections can adapt to the logged-in user's profile using asynchronous callbacks. Tailor your CMS with custom properties built on-the-fly, ensuring a highly responsive and secure environment that aligns with user roles and permissions. Through strategic utilization of `EntityCollectionsBuilder` and `AuthController`, dynamically generate data schemas suitable for each user, enhancing their CMS experience with intelligent, role-specific interfaces.
 ---
 
-You can change the collections based on the logged-in user, by using an
-asynchronous callback. Using an async `EntityCollectionsBuilder` you can
-also fetch some data in order to build your collections dynamically.
+FireCMS offers the possibility to define collections dynamically. This means
+that collections can be built asynchronously, based on the logged-in user,
+based on the data of other collections, or based on any other arbitrary
+condition.
 
-You can also fetch data to create custom properties, for example, if you
-want to use the ids of a collection as the enum values of a `string`.
+Instead of defining your collections as an array, use a `EntityCollectionsBuilder`,
+a function that returns a promise of an object containing the collections.
 
 ```tsx
 import { useCallback } from "react";
@@ -39,8 +40,61 @@ const collectionsBuilder: EntityCollectionsBuilder = useCallback(async ({
 
 :::note
 If you want to make customizations at the property level only, check the
-[conditional fields](../properties/conditional_fields.md) section.
+[conditional fields](../properties/conditional_fields.md) section. But note that conditional fields are not
+suitable for asynchronous operations.
 :::
+
+### Fetch data from a different collection
+
+It may be the case that a collection config depends on the data of another
+one. For example, you may want to fetch the enum values of a property from
+a different collection.
+
+In this example we will fetch data from a collection called `categories` and
+use it to populate the enum values of a property called `category`, in the `products`
+collection.
+
+```tsx
+import { useCallback } from "react";
+import { buildCollection, EntityCollectionsBuilder } from "firecms";
+
+const collectionsBuilder: EntityCollectionsBuilder = useCallback(async ({
+                                                                            user,
+                                                                            authController,
+                                                                            dataSource
+                                                                        }) => {
+
+    // let's assume you have a database collection called "categories"
+    const categoriesData: Entity<any>[] = await dataSource.fetchCollection({
+        path: "categories"
+    });
+
+    return {
+        collections: [
+            buildCollection({
+                path: "products",
+                properties: {
+                    // ...
+                    category: {
+                        dataType: "string",
+                        name: "Category",
+                        // we can use the enumValues property to define the enum values
+                        // the stored value will be the id of the category
+                        // and the UI label will be the name of the category
+                        enumValues: categoriesData.map((category: any) => ({
+                            id: category.id,
+                            label: category.values.name
+                        }))
+                    }
+                    // ...
+                },
+                name: "Products"
+            })
+        ]
+    }
+}, []);
+
+```
 
 ### Use in conjunction with authentication
 
@@ -99,4 +153,27 @@ const collectionsBuilder: EntityCollectionsBuilder = useCallback(async ({
         };
     }
 }, []);
+```
+
+### Where to use the `collectionsBuilder`
+
+In the **Cloud version** of FireCMS, simply add the `collectionsBuilder` to the `collections` prop of your main app
+config.
+
+```tsx
+
+const collectionsBuilder: EntityCollectionsBuilder = useCallback(async ({
+                                                                            user,
+                                                                            authController,
+                                                                            dataSource
+                                                                        }) => {
+    return {
+        collections: [] // your collections here
+    };
+}, []);
+
+export const appConfig: FireCMSAppConfig = {
+    version: "1",
+    collections: collectionsBuilder
+};
 ```

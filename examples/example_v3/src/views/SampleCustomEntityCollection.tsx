@@ -105,7 +105,6 @@ export function SampleCustomEntityCollection() {
             <ErrorBoundary>
                 {entity
                     ? <PropertyTableCell
-                        collection={collection}
                         key={`property_table_cell_${entity.id}_${propertyKey}`}
                         readonly={false}
                         align={column.align ?? "left"}

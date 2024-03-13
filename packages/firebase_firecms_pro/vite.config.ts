@@ -5,7 +5,6 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react"
 
 const isExternal = (id: string) => {
-    console.log("isExternal", id);
     return !id.startsWith(".") && !path.isAbsolute(id);
 };
 

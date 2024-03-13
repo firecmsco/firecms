@@ -6,7 +6,7 @@ import { User } from "./user";
  * to do it as the result of a hook.
  * @group Hooks and utilities
  */
-export type AuthController<UserType extends User = User> = {
+export type AuthController<UserType extends User = User, ExtraData extends any = any> = {
 
     /**
      * The user currently logged in
@@ -51,5 +51,9 @@ export type AuthController<UserType extends User = User> = {
      * Has the user skipped the login process
      */
     loginSkipped: boolean;
+
+    extra: ExtraData;
+
+    setExtra: (extra: ExtraData) => void;
 
 };

@@ -45,6 +45,7 @@ export const useFirebaseAuthController = ({
     const [authLoading, setAuthLoading] = useState(true);
     const [loginSkipped, setLoginSkipped] = useState<boolean>(false);
     const [confirmationResult, setConfirmationResult] = useState<undefined | ConfirmationResult>();
+    const [extra, setExtra] = useState<any>();
 
     // const [userRoles, setUserRoles] = useState<Role[] | null>(null);
     const authRef = useRef(firebaseApp ? getAuth(firebaseApp) : null);
@@ -85,7 +86,7 @@ export const useFirebaseAuthController = ({
         if (options?.customParameters)
             provider.setCustomParameters(options.customParameters);
         const auth = authRef.current;
-        if(!auth) throw Error("No auth");
+        if (!auth) throw Error("No auth");
         signInWithPopup(auth, provider).catch(setAuthProviderError);
     }, [getProviderOptions]);
 
@@ -97,7 +98,7 @@ export const useFirebaseAuthController = ({
 
     const emailPasswordLogin = useCallback((email: string, password: string) => {
         const auth = authRef.current;
-        if(!auth) throw Error("No auth");
+        if (!auth) throw Error("No auth");
         setAuthLoading(true);
         signInWithEmailAndPassword(auth, email, password)
             .catch(setAuthProviderError)
@@ -106,7 +107,7 @@ export const useFirebaseAuthController = ({
 
     const createUserWithEmailAndPassword = useCallback((email: string, password: string) => {
         const auth = authRef.current;
-        if(!auth) throw Error("No auth");
+        if (!auth) throw Error("No auth");
         setAuthLoading(true);
         createUserWithEmailAndPasswordFirebase(auth, email, password)
             .catch(setAuthProviderError)
@@ -115,7 +116,7 @@ export const useFirebaseAuthController = ({
 
     const fetchSignInMethodsForEmail = useCallback((email: string): Promise<string[]> => {
         const auth = authRef.current;
-        if(!auth) throw Error("No auth");
+        if (!auth) throw Error("No auth");
         setAuthLoading(true);
         return fetchSignInMethodsForEmailFirebase(auth, email)
             .then((res) => {
@@ -126,7 +127,7 @@ export const useFirebaseAuthController = ({
 
     const onSignOut = useCallback(() => {
         const auth = authRef.current;
-        if(!auth) throw Error("No auth");
+        if (!auth) throw Error("No auth");
         signOut(auth)
             .then(_ => {
                 setLoggedUser(null);
@@ -149,7 +150,7 @@ export const useFirebaseAuthController = ({
 
     const anonymousLogin = useCallback(() => {
         const auth = authRef.current;
-        if(!auth) throw Error("No auth");
+        if (!auth) throw Error("No auth");
         setAuthLoading(true);
         signInAnonymously(auth)
             .catch(setAuthProviderError)
@@ -158,7 +159,7 @@ export const useFirebaseAuthController = ({
 
     const phoneLogin = useCallback((phone: string, applicationVerifier: ApplicationVerifier) => {
         const auth = authRef.current;
-        if(!auth) throw Error("No auth");
+        if (!auth) throw Error("No auth");
         setAuthLoading(true);
         return signInWithPhoneNumber(auth, phone, applicationVerifier)
             .catch(setAuthProviderError)
@@ -176,7 +177,7 @@ export const useFirebaseAuthController = ({
         if (options?.customParameters)
             provider.setCustomParameters(options.customParameters);
         const auth = authRef.current;
-        if(!auth) throw Error("No auth");
+        if (!auth) throw Error("No auth");
         doOauthLogin(auth, provider);
     }, [doOauthLogin, getProviderOptions]);
 
@@ -188,7 +189,7 @@ export const useFirebaseAuthController = ({
         if (options?.customParameters)
             provider.setCustomParameters(options.customParameters);
         const auth = authRef.current;
-        if(!auth) throw Error("No auth");
+        if (!auth) throw Error("No auth");
         doOauthLogin(auth, provider);
     }, [doOauthLogin, getProviderOptions]);
 
@@ -200,7 +201,7 @@ export const useFirebaseAuthController = ({
         if (options?.customParameters)
             provider.setCustomParameters(options.customParameters);
         const auth = authRef.current;
-        if(!auth) throw Error("No auth");
+        if (!auth) throw Error("No auth");
         doOauthLogin(auth, provider);
     }, [doOauthLogin, getProviderOptions]);
 
@@ -212,7 +213,7 @@ export const useFirebaseAuthController = ({
         if (options?.customParameters)
             provider.setCustomParameters(options.customParameters);
         const auth = authRef.current;
-        if(!auth) throw Error("No auth");
+        if (!auth) throw Error("No auth");
         doOauthLogin(auth, provider);
     }, [doOauthLogin, getProviderOptions]);
 
@@ -222,7 +223,7 @@ export const useFirebaseAuthController = ({
         if (options?.customParameters)
             provider.setCustomParameters(options.customParameters);
         const auth = authRef.current;
-        if(!auth) throw Error("No auth");
+        if (!auth) throw Error("No auth");
         doOauthLogin(auth, provider);
     }, [doOauthLogin, getProviderOptions]);
 
@@ -242,8 +243,6 @@ export const useFirebaseAuthController = ({
         googleLogin,
         skipLogin,
         loginSkipped,
-        // userRoles,
-        // setUserRoles,
         emailPasswordLogin,
         createUserWithEmailAndPassword,
         fetchSignInMethodsForEmail,
@@ -254,6 +253,8 @@ export const useFirebaseAuthController = ({
         githubLogin,
         microsoftLogin,
         twitterLogin,
-        confirmationResult
+        confirmationResult,
+        extra,
+        setExtra
     };
 };

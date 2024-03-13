@@ -62,10 +62,6 @@ export type FirebaseAuthController =
 
     setUser: (user: FirebaseUser | null) => void;
 
-    // userRoles: Role[] | null;
-    //
-    // setUserRoles: (roles: Role[]| null) => void;
-
 };
 
 /**

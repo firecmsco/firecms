@@ -1,4 +1,4 @@
-import { FireCMSAppConfig } from "firecms";
+import { Entity, EntityCollection, FireCMSAppConfig } from "firecms";
 import { testCollection } from "./collections/test_collection";
 import { productsCollection } from "./collections/products_collection";
 import { SampleEntityView } from "./custom_entity_view/SampleEntityView";
@@ -10,9 +10,28 @@ import { SampleCustomEntityCollection } from "./views/SampleCustomEntityCollecti
 
 const appConfig: FireCMSAppConfig = {
     version: "1",
-    collections: async (props) => {
+    collections: async ({ authController, dataSource }) => {
+        const firstProducts = await dataSource.fetchCollection({
+            path: "products",
+            limit: 5
+        });
+        const newTestCollection = {
+            ...testCollection,
+            properties: {
+                ...testCollection.properties,
+                fetched_products: {
+                    dataType: "string",
+                    name: "Fetched products",
+                    enumValues: firstProducts.map((product: Entity<any>) => ({
+                        id: product.id,
+                        label: product.values.name
+                    }))
+                }
+            }
+        } satisfies EntityCollection;
+
         return ([
-            testCollection,
+            newTestCollection,
             productsCollection,
             usersCollection,
             // pagesCollection

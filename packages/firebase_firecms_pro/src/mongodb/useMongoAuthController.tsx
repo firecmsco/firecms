@@ -24,6 +24,7 @@ export const useMongoAuthController = ({
     const [authProviderError, setAuthProviderError] = useState<any>();
     const [initialLoading, setInitialLoading] = useState(false);
     const [authLoading, setAuthLoading] = useState(false);
+    const [extra, setExtra] = useState<any>();
 
     const [currentUser, setCurrentUser] = React.useState(app.currentUser);
 
@@ -90,6 +91,8 @@ export const useMongoAuthController = ({
         getAuthToken,
         signOut: logOut,
         register,
-        emailPasswordLogin
+        emailPasswordLogin,
+        extra,
+        setExtra
     };
 };

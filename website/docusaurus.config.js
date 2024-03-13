@@ -167,14 +167,20 @@ module.exports = {
                     position: "left"
                 },
                 {
-                    label: "Pro",
-                    to: "pro",
+                    label: "Blog",
+                    to: "blog",
                     position: "left"
                 },
                 {
                     type: "docSidebar",
                     sidebarId: "docsSidebar",
                     label: "Docs",
+                    position: "left"
+                },
+                {
+                    label: "Pro",
+                    to: "pro",
+                    className: "gradient-text",
                     position: "left"
                 },
                 {
