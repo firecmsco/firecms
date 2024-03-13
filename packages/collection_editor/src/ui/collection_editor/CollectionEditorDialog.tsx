@@ -735,9 +735,11 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 function applyPropertyConfigs<M extends Record<string, any> = any>(collection: PersistedCollection<M>, propertyConfigs: Record<string, PropertyConfig<any>>): PersistedCollection<M> {
     const { properties, ...rest } = collection;
     const propertiesResult: PropertiesOrBuilders<any> = {};
-    Object.keys(properties).forEach((key) => {
-        propertiesResult[key] = applyPropertiesConfig(properties[key] as PropertyOrBuilder, propertyConfigs);
-    });
+    if (properties) {
+        Object.keys(properties).forEach((key) => {
+            propertiesResult[key] = applyPropertiesConfig(properties[key] as PropertyOrBuilder, propertyConfigs);
+        });
+    }
 
     return { ...rest, properties: propertiesResult };
 }
