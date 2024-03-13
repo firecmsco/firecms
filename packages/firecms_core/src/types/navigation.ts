@@ -24,6 +24,12 @@ export type NavigationController = {
     views?: CMSView[];
 
     /**
+     * Custom additional views created by the developer, added to the admin
+     * navigation
+     */
+    adminViews?: CMSView[];
+
+    /**
      * Configuration for the views that should be displayed at the top
      * level of the navigation (e.g. in the home page or the navigation
      * drawer)
@@ -186,13 +192,9 @@ export interface CMSView {
     /**
      * Optional field used to group top level navigation entries under a
      * navigation view.
+     * This prop is ignored for admin views.
      */
     group?: string;
-
-    /**
-     * Optional size of the card in the home page
-     */
-    cardSize?: "small" | "medium";
 
 }
 
@@ -200,11 +202,11 @@ export interface TopNavigationEntry {
     url: string;
     name: string;
     path: string;
-    type: "collection" | "view";
+    type: "collection" | "view" | "admin";
     collection?: EntityCollection;
-    view: CMSView;
+    view?: CMSView;
     description?: string;
-    group?: string;
+    group: string;
 }
 
 export type TopNavigationResult = {

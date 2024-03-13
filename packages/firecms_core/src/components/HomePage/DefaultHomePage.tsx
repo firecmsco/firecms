@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 
 import { useCustomizationController, useFireCMSContext, useNavigationController } from "../../hooks";
-import { PluginGenericProps, PluginHomePageAdditionalCardsProps } from "../../types";
+import { CMSAnalyticsEvent, PluginGenericProps, PluginHomePageAdditionalCardsProps } from "../../types";
 
 import { toArray } from "../../util/arrays";
 import { NavigationGroup } from "./NavigationGroup";
@@ -176,12 +176,16 @@ export function DefaultHomePage({
                                         <NavigationCardBinding
                                             {...entry}
                                             onClick={() => {
-                                                const event =
-                                                    entry.type === "collection"
-                                                        ? "home_navigate_to_collection"
-                                                        : entry.type === "view"
-                                                            ? "home_navigate_to_view"
-                                                            : "unmapped_event";
+                                                let event: CMSAnalyticsEvent;
+                                                if (entry.type === "collection") {
+                                                    event = "home_navigate_to_collection";
+                                                } else if (entry.type === "view") {
+                                                    event = "home_navigate_to_view";
+                                                } else if (entry.type === "admin") {
+                                                    event = "home_navigate_to_admin_view";
+                                                } else {
+                                                    event = "unmapped_event";
+                                                }
                                                 context.analyticsController?.onAnalyticsEvent?.(event, { path: entry.path });
                                             }}
                                         />

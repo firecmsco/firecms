@@ -6,6 +6,7 @@ import { IconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
 import { IconButton, StarBorderIcon, StarIcon } from "@firecms/ui";
 import { NavigationCard } from "./NavigationCard";
+import { SmallNavigationCard } from "./SmallNavigationCard";
 
 /**
  * This is the component used in the home page to render a card for each
@@ -27,7 +28,8 @@ export function NavigationCardBinding({
                                           url,
                                           name,
                                           description,
-                                          onClick
+                                          onClick,
+                                          type
                                       }: TopNavigationEntry & {
     onClick?: () => void
 }) {
@@ -90,6 +92,12 @@ export function NavigationCardBinding({
     const actions: React.ReactNode | undefined = <>
         {actionsArray}
     </>
+
+    if (type === "admin") {
+        return <SmallNavigationCard icon={collectionIcon}
+                                    name={name}
+                                    url={url}/>
+    }
 
     return <NavigationCard
         icon={collectionIcon}

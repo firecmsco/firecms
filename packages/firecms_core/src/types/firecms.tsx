@@ -67,7 +67,6 @@ export type FireCMSProps<UserType extends User, EC extends EntityCollection> = {
         loading: boolean;
     }) => React.ReactNode;
 
-
     /**
      * Record of custom form fields to be used in the CMS.
      * You can use the key to reference the custom field in

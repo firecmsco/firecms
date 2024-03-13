@@ -28,7 +28,7 @@ export type ProjectConfig = {
 
     subscriptionPlan?: ProjectSubscriptionPlan;
     customizationRevision?: string;
-    usersLimit: number | null;
+    usersLimit?: number;
 
     canEditRoles: boolean;
     canModifyTheme: boolean;
@@ -208,7 +208,7 @@ export function useBuildProjectConfig({
         );
     }, [backendFirebaseApp, projectId]);
 
-    const usersLimit = subscriptionPlan === "free" ? 3 : null;
+    const usersLimit = subscriptionPlan === "free" ? 3 : undefined;
     const canEditRoles = subscriptionPlan !== "free";
     const canModifyTheme = subscriptionPlan !== "free";
     const canExport = subscriptionPlan !== "free";

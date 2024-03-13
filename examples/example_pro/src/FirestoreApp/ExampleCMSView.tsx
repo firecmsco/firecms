@@ -1,10 +1,12 @@
 import React from "react";
 
 import {
-    buildCollection, Chip,
+    buildCollection,
+    Chip,
     Entity,
     EntityCollectionView,
     EntityReference,
+    FilterValues,
     ReferenceWidget,
     useAuthController,
     useReferenceDialog,
@@ -12,14 +14,7 @@ import {
     useSideEntityController,
     useSnackbarController
 } from "@firecms/firebase_pro";
-import {
-    Button,
-    GitHubIcon,
-    IconButton,
-    Paper,
-    Tooltip,
-    Typography,
-} from "@firecms/ui";
+import { Button, GitHubIcon, IconButton, Paper, Tooltip, Typography } from "@firecms/ui";
 import { Product } from "./types";
 import { usersCollection } from "./collections/users_collection";
 
@@ -41,6 +36,8 @@ export function ExampleCMSView() {
 
     // hook to do operations related to authentication
     const authController = useAuthController();
+
+    const [forceFilter, setForceFilter] = React.useState<FilterValues<any> | undefined>(undefined);
 
     // hook to open a reference dialog
     const referenceDialog = useReferenceDialog({
@@ -104,7 +101,8 @@ export function ExampleCMSView() {
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <Paper className={"w-full flex flex-col p-4 items-start"}>
                             <p className="mb-4 flex-grow">
-                                Use this button to select an entity under the path <code>products</code> programmatically
+                                Use this button to select an entity under the
+                                path <code>products</code> programmatically
                             </p>
                             <Button
                                 variant={"outlined"}
@@ -151,6 +149,11 @@ export function ExampleCMSView() {
                         <Typography className={"mb-4"}>
                             You can include reference widgets in your views:
                         </Typography>
+                        <Button
+                            onClick={() => setForceFilter({ name: ["==", "A"] })}
+                        >
+                            Filter A
+                        </Button>
                         <ReferenceWidget
                             name={"Sample reference widget"}
                             value={sampleSelectedProduct ?? null}
@@ -167,6 +170,7 @@ export function ExampleCMSView() {
                         <Paper
                             className={"h-[400px]"}>
                             <EntityCollectionView {...usersCollection}
+                                                  forceFilter={forceFilter}
                                                   fullPath={"users"}
                                                   selectionController={selectionController}/>
                         </Paper>

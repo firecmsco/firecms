@@ -108,26 +108,6 @@ export function prepareCollectionForPersistence<M extends {
     return newCollection;
 }
 
-/**
- * If a collection is not applying permissions, we apply the given permissionsBuilder.
- * This is used to apply the role permissions to the collections, unless they are already
- * applying permissions.
- * @param collections
- * @param permissionsBuilder
- */
-export const applyPermissionsFunctionIfEmpty = (collections: PersistedCollection[], permissionsBuilder?: PermissionsBuilder): PersistedCollection[] => {
-
-    return collections.map(collection => {
-        if (collection.permissions) {
-            return collection;
-        }
-        return ({
-            ...collection,
-            permissions: permissionsBuilder
-        });
-    });
-}
-
 function cleanPropertyConfigs(properties: PropertiesOrBuilders<any>, propertyConfigs: Record<string, PropertyConfig>) {
     const res: Record<string, Property> = {};
     Object.entries(properties).forEach(([key, property]) => {

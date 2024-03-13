@@ -17,7 +17,7 @@ import {
 import { ErrorView } from "../ErrorView";
 import { AddIcon, Button, DialogActions, Typography } from "@firecms/ui";
 import { canCreateEntity, fullPathToCollectionSegments, resolveCollection } from "../../util";
-import { useSelectionController } from "../EntityCollectionView/EntityCollectionView";
+import { useSelectionController } from "../EntityCollectionView/useSelectionController";
 import { useColumnIds, useTableSearchHelper } from "../common";
 import { useSideDialogContext } from "../../core";
 import { useAnalyticsController } from "../../hooks/useAnalyticsController";
@@ -349,7 +349,7 @@ function ReferenceDialogActions({
             onNewClick();
         }
         : undefined;
-    const addButton = canCreateEntity(collection, authController, fullPathToCollectionSegments(path), null) &&
+    const addButton = canCreateEntity(collection, authController, path, null) &&
         onClick && (largeLayout
             ? <Button
                 onClick={onClick}

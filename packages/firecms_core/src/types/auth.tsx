@@ -22,6 +22,12 @@ export type AuthController<UserType extends User = User> = {
     initialLoading?: boolean;
 
     /**
+     * Loading flag. It is used to display a loading screen when the user is
+     * logging in or out.
+     */
+    authLoading: boolean;
+
+    /**
      * Sign out
      */
     signOut: () => void;

@@ -1,9 +1,3 @@
-import React from "react";
-
-import { CMSView } from "@firecms/core";
-import { ProjectSettings } from "../components";
-import { RolesView, UsersView } from "@firecms/user_management";
-
 export const ADMIN_VIEWS_CONFIG = [
         {
             path: "users",

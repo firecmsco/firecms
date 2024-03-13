@@ -12,11 +12,10 @@ import {
     TextField,
     Typography,
 } from "@firecms/ui";
-import { Role } from "@firecms/firebase";
 import { FieldCaption, useSnackbarController } from "@firecms/core";
 import { Formex, useCreateFormex } from "@firecms/formex";
 
-import { FireCMSUserProject } from "../../types";
+import { Role, UserWithRoles } from "../../types";
 import { areRolesEqual } from "../../utils";
 import { useUserManagement } from "../../hooks";
 import { RoleChip } from "../roles";
@@ -27,9 +26,9 @@ export const UserYupSchema = Yup.object().shape({
     roles: Yup.array().min(1)
 });
 
-function canUserBeEdited(loggedUser: FireCMSUserProject, user: FireCMSUserProject, users: FireCMSUserProject[], roles: Role[], prevUser?: FireCMSUserProject) {
-    const admins = users.filter(u => u.roles.includes("admin"));
-    const loggedUserIsAdmin = loggedUser.roles.includes("admin");
+function canUserBeEdited(loggedUser: UserWithRoles, user: UserWithRoles, users: UserWithRoles[], roles: Role[], prevUser?: UserWithRoles) {
+    const admins = users.filter(u => u.roles.map(r => r.id).includes("admin"));
+    const loggedUserIsAdmin = loggedUser.roles.map(r => r.id).includes("admin");
     const didRolesChange = !prevUser || !areRolesEqual(prevUser.roles, user.roles);
 
     if (didRolesChange && !loggedUserIsAdmin) {
@@ -37,7 +36,7 @@ function canUserBeEdited(loggedUser: FireCMSUserProject, user: FireCMSUserProjec
     }
 
     // was the admin role removed
-    const adminRoleRemoved = prevUser && prevUser.roles.includes("admin") && !user.roles.includes("admin");
+    const adminRoleRemoved = prevUser && prevUser.roles.map(r => r.id).includes("admin") && !user.roles.map(r => r.id).includes("admin");
 
     // avoid removing the last admin
     if (adminRoleRemoved && admins.length === 1) {
@@ -52,37 +51,37 @@ export function UserDetailsForm({
                                     handleClose
                                 }: {
     open: boolean,
-    user?: FireCMSUserProject,
+    user?: UserWithRoles,
     handleClose: () => void
 }) {
 
     const snackbarController = useSnackbarController();
     const {
+        loggedInUser,
         saveUser,
         users,
         roles,
-        loggedUser
     } = useUserManagement();
     const isNewUser = !userProp;
 
-    const onUserUpdated = useCallback((savedUser: FireCMSUserProject): Promise<FireCMSUserProject> => {
-        if (!loggedUser) {
+    const onUserUpdated = useCallback((savedUser: UserWithRoles): Promise<UserWithRoles> => {
+        if (!loggedInUser) {
             throw new Error("Logged user not found");
         }
         try {
-            canUserBeEdited(loggedUser, savedUser, users, roles, userProp);
+            canUserBeEdited(loggedInUser, savedUser, users, roles, userProp);
             return saveUser(savedUser);
         } catch (e: any) {
             return Promise.reject(e);
         }
-    }, [roles, saveUser, userProp, users, loggedUser]);
+    }, [roles, saveUser, userProp, users, loggedInUser]);
 
     const formex = useCreateFormex({
         initialValues: userProp ?? {
             displayName: "",
             email: "",
-            roles: ["editor"]
-        } as FireCMSUserProject,
+            roles: roles.filter(r => r.id === "editor")
+        } as UserWithRoles,
         validation: (values) => {
             return UserYupSchema.validate(values, { abortEarly: false })
                 .then(() => {
@@ -94,7 +93,8 @@ export function UserDetailsForm({
                     }, {});
                 });
         },
-        onSubmit: (user: FireCMSUserProject, formexController) => {
+        onSubmit: (user: UserWithRoles, formexController) => {
+
             return onUserUpdated(user)
                 .then(() => {
                     handleClose();
@@ -181,8 +181,8 @@ export function UserDetailsForm({
                             <div className={"col-span-12"}>
                                 <MultiSelect
                                     label="Roles"
-                                    value={values.roles ?? []}
-                                    onMultiValueChange={(value: string[]) => setFieldValue("roles", value)}
+                                    value={values.roles.map(r => r.id) ?? []}
+                                    onMultiValueChange={(value: string[]) => setFieldValue("roles", value.map(id => roles.find(r => r.id === id) as Role))}
                                     renderValue={(value: string) => {
                                         const userRole = roles
                                             .find((role) => role.id === value);

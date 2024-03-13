@@ -42,6 +42,11 @@ export interface PermissionsBuilderProps<EC extends EntityCollection = EntityCol
     entity: Entity<M> | null;
 
     /**
+     * Path of the collection e.g. 'products/12345/locales'
+     */
+    path: string;
+
+    /**
      * Path segments of the collection e.g. ['products', 'locales']
      */
     pathSegments: string[];
@@ -73,4 +78,4 @@ export type PermissionsBuilder<EC extends EntityCollection = EntityCollection, U
           user,
           collection,
           authController
-      }: PermissionsBuilderProps<EC, UserType, M>) => Permissions);
+      }: PermissionsBuilderProps<EC, UserType, M>) => Permissions | undefined);

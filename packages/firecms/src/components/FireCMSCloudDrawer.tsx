@@ -40,8 +40,6 @@ export function FireCMSCloudDrawer({
         groups
     }: TopNavigationResult = navigation.topLevelNavigation;
 
-    const ungroupedNavigationViews = Object.values(navigationEntries).filter(e => !e.group);
-
     const buildGroupHeader = useCallback((group?: string) => {
         if (!drawerOpen) return <div style={{ height: 16 }}/>;
         const reservedGroup = group && RESERVED_GROUPS.includes(group);
@@ -93,21 +91,6 @@ export function FireCMSCloudDrawer({
                                 name={view.name}/>)}
                     </React.Fragment>
                 ))}
-
-                {ungroupedNavigationViews.length > 0 && <>
-                    {buildGroupHeader()}
-                </>}
-
-                {ungroupedNavigationViews.map((view, index) => <DrawerNavigationItem
-                    key={`navigation_${index}`}
-                    icon={<IconForView collectionOrView={view.collection ?? view.view}/>}
-                    tooltipsOpen={tooltipsOpen}
-                    drawerOpen={drawerOpen}
-                    url={view.url}
-                    name={view.name}/>)}
-
-                {/*<Divider/>*/}
-                {/*{buildGroupHeader("Admin")}*/}
 
             </div>
 

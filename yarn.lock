@@ -10141,6 +10141,7 @@ __metadata:
     "@firecms/firebase_pro": ^3.0.0-beta.3
     "@firecms/schema_inference": ^3.0.0-beta.3
     "@firecms/ui": ^3.0.0-beta.3
+    "@firecms/user_management": ^3.0.0-beta.3
     "@tailwindcss/typography": ^0.5.10
     "@types/react": ^18.2.64
     "@types/react-dom": 18.2.21

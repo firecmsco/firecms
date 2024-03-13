@@ -20,6 +20,7 @@ import { useBuildCustomizationController } from "../internal/useBuildCustomizati
 import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext";
 import { AnalyticsContext } from "../contexts/AnalyticsContext";
 import { useProjectLog } from "../hooks/useProjectLog";
+import { useTraceUpdate } from "../util";
 
 /**
  * If you are using independent components of the CMS
@@ -81,6 +82,7 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
         components
     });
 
+    // useTraceUpdate({ dataSource, dataSourceDelegate, navigationController, propertyConfigs });
     const analyticsController = useMemo(() => ({
         onAnalyticsEvent
     }), []);
@@ -106,6 +108,7 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
             </CenteredView>
         );
     }
+
 
     return (
         <ModeControllerContext.Provider value={modeController}>

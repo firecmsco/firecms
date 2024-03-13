@@ -59,6 +59,14 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
                     cmsViews.push(buildCMSViewRoute(cmsView.path, cmsView));
             });
         }
+        if (navigation.adminViews) {
+            navigation.adminViews.forEach((cmsView) => {
+                if (Array.isArray(cmsView.path))
+                    cmsViews.push(...cmsView.path.map(path => buildCMSViewRoute(path, cmsView)));
+                else
+                    cmsViews.push(buildCMSViewRoute(cmsView.path, cmsView));
+            });
+        }
 
         // we reorder collections so that nested paths are included first
         const sortedCollections = [...(navigation.collections ?? [])]

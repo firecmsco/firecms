@@ -1,17 +1,16 @@
 import React, { useCallback, useState } from "react";
-import { useCollectionsConfigController } from "@firecms/collection_editor";
 
+import { useNavigationController } from "@firecms/core";
 import { AddIcon, Button, Container, Tooltip, Typography } from "@firecms/ui";
 import { RolesTable } from "./RolesTable";
 import { RolesDetailsForm } from "./RolesDetailsForm";
-import { Role } from "@firecms/firebase";
-// import { SubscriptionPlanWidget } from "../subscriptions";
-import { useUserManagement } from "../../hooks/useUserManagement";
+import { useUserManagement } from "../../hooks";
+import { Role } from "../../types";
 
 export const RolesView = React.memo(
     function RolesView({ children }: { children?: React.ReactNode }) {
 
-        const { collections } = useCollectionsConfigController();
+        const { collections } = useNavigationController();
         const [dialogOpen, setDialogOpen] = useState(false);
         const [selectedRole, setSelectedRole] = useState<Role | undefined>();
 
@@ -49,7 +48,7 @@ export const RolesView = React.memo(
                     </Tooltip>
                 </div>
 
-                <RolesTable onRoleClicked={onRoleClicked} editable={canEditRoles}/>
+                <RolesTable onRoleClicked={onRoleClicked} editable={Boolean(canEditRoles)}/>
 
                 <RolesDetailsForm
                     key={selectedRole?.id ?? "new"}

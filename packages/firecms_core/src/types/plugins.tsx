@@ -7,6 +7,7 @@ import { FieldProps, FormContext } from "./fields";
 import { CMSType, Property } from "./properties";
 import { EntityStatus } from "./entities";
 import { ResolvedProperty } from "./resolved_entities";
+import { CMSView } from "./navigation";
 
 /**
  * Interface used to define plugins for FireCMS.
@@ -25,19 +26,6 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
      * until the plugin is fully loaded.
      */
     loading?: boolean;
-
-    form?: {
-        provider?: {
-            Component: React.ComponentType<PropsWithChildren<FORM_PROPS & PluginFormActionProps<any, EC>>>;
-            props?: FORM_PROPS;
-        }
-
-        Actions?: React.ComponentType<PluginFormActionProps<any, EC>>;
-
-        fieldBuilder?: <T extends CMSType = CMSType>(props: PluginFieldBuilderParams<T, any, EC>) => React.ComponentType<FieldProps<T>> | null;
-
-        fieldBuilderEnabled?: <T extends CMSType = CMSType>(props: PluginFieldBuilderParams<T>) => boolean;
-    }
 
     /**
      * You can use this prop to add higher order components to the CMS.
@@ -145,6 +133,19 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
             parentCollectionIds: string[],
             collection: EC;
         }>;
+    }
+
+    form?: {
+        provider?: {
+            Component: React.ComponentType<PropsWithChildren<FORM_PROPS & PluginFormActionProps<any, EC>>>;
+            props?: FORM_PROPS;
+        }
+
+        Actions?: React.ComponentType<PluginFormActionProps<any, EC>>;
+
+        fieldBuilder?: <T extends CMSType = CMSType>(props: PluginFieldBuilderParams<T, any, EC>) => React.ComponentType<FieldProps<T>> | null;
+
+        fieldBuilderEnabled?: <T extends CMSType = CMSType>(props: PluginFieldBuilderParams<T>) => boolean;
     }
 
 }

@@ -2,12 +2,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare";
 
 import { AppCheckTokenResult, AuthController, DataSourceDelegate, StorageSource, User } from "@firecms/core";
-import { Authenticator } from "../types/auth";
+import { Authenticator } from "../types";
 
 /**
  * This hook is used internally for validating an authenticator.
- * You may want to use it if you are not using {@link FireCMSApp}, but
- * building your own custom {@link FireCMS} instance.
+ *
  * @param authController
  * @param authentication
  * @param getAppCheckToken
@@ -16,6 +15,7 @@ import { Authenticator } from "../types/auth";
  * @param dataSource
  */
 export function useValidateAuthenticator<UserType extends User = User>({
+                                                                           disabled,
                                                                            authController,
                                                                            authentication,
                                                                            getAppCheckToken,
@@ -24,6 +24,7 @@ export function useValidateAuthenticator<UserType extends User = User>({
                                                                            dataSourceDelegate
                                                                        }:
                                                                            {
+                                                                               disabled?: boolean,
                                                                                authController: AuthController<UserType>,
                                                                                authentication?: boolean | Authenticator<UserType>,
                                                                                getAppCheckToken?: (forceRefresh: boolean) => Promise<AppCheckTokenResult> | undefined,
@@ -54,11 +55,15 @@ export function useValidateAuthenticator<UserType extends User = User>({
 
     /**
      * We use this ref to check the authentication only if the user has
-     * changed
+     * changed.
      */
     const checkedUserRef = useRef<User | undefined>();
 
     const checkAuthentication = useCallback(async () => {
+
+        if (disabled) {
+            return;
+        }
 
         if (authController.initialLoading) {
             return;
@@ -72,6 +77,7 @@ export function useValidateAuthenticator<UserType extends User = User>({
         }
 
         const delegateUser = authController.user;
+        console.debug("Checking authentication for user", delegateUser);
 
         if (getAppCheckToken) {
             try {
@@ -93,7 +99,7 @@ export function useValidateAuthenticator<UserType extends User = User>({
                 const allowed = await authentication({
                     user: delegateUser,
                     authController,
-                    dataSourceDelegate ,
+                    dataSourceDelegate,
                     storageSource
                 });
                 if (!allowed) {
@@ -115,7 +121,7 @@ export function useValidateAuthenticator<UserType extends User = User>({
             setAuthVerified(true);
         }
 
-    }, [authController, authentication, getAppCheckToken, appCheckForceRefresh, dataSourceDelegate, storageSource]);
+    }, [disabled, authController, authentication, getAppCheckToken, appCheckForceRefresh, dataSourceDelegate, storageSource]);
 
     useEffect(() => {
         checkAuthentication();

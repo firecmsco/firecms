@@ -22,9 +22,9 @@ import {
     Tooltip,
     Typography
 } from "@firecms/ui";
-import { Role } from "@firecms/firebase";
-import { useUserManagement } from "../../hooks/useUserManagement";
+import { useUserManagement } from "../../hooks";
 import { Formex, getIn, useCreateFormex } from "@firecms/formex";
+import { Role } from "../../types";
 
 export const RoleYupSchema = Yup.object().shape({
     id: Yup.string().required("Required"),
@@ -100,23 +100,11 @@ export function RolesDetailsForm({
     const defaultEdit = values.defaultPermissions?.edit ?? false;
     const defaultDelete = values.defaultPermissions?.delete ?? false;
 
-    console.log({
-        values,
-        errors,
-        touched,
-        isAdmin,
-        defaultCreate,
-        defaultRead,
-        defaultEdit,
-        defaultDelete
-    });
-
     React.useEffect(() => {
         const idTouched = getIn(touched, "id");
         if (!idTouched && values.name) {
             setFieldValue("id", toSnakeCase(values.name))
         }
-
     }, [touched, values.name]);
 
     return (

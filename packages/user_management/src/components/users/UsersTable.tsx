@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { User as FirebaseUser } from "firebase/auth";
 
 import { format } from "date-fns";
 import * as locales from "date-fns/locale";
@@ -6,32 +7,45 @@ import * as locales from "date-fns/locale";
 import {
     defaultDateFormat,
     DeleteConfirmationDialog,
+    useAuthController,
     useCustomizationController,
     useSnackbarController
 } from "@firecms/core";
-import { DeleteIcon, IconButton, Table, TableBody, TableCell, TableHeader, TableRow, Tooltip, } from "@firecms/ui";
-import { FireCMSUserProject } from "../../types";
-import { getUserRoles } from "../../utils";
+import {
+    Button,
+    CenteredView,
+    DeleteIcon,
+    IconButton,
+    Table,
+    TableBody,
+    TableCell,
+    TableHeader,
+    TableRow,
+    Tooltip,
+    Typography,
+} from "@firecms/ui";
+import { Role, UserWithRoles } from "../../types";
 import { useUserManagement } from "../../hooks/useUserManagement";
 import { RoleChip } from "../roles/RoleChip";
 
 export function UsersTable({ onUserClicked }: {
-    onUserClicked: (user: FireCMSUserProject) => void;
+    onUserClicked: (user: UserWithRoles) => void;
 }) {
 
     const {
         users,
-        roles,
+        saveUser,
         deleteUser
     } = useUserManagement();
 
+    const authController = useAuthController<FirebaseUser>();
     const snackbarController = useSnackbarController();
 
     const customizationController = useCustomizationController();
     const dateUtilsLocale = customizationController?.locale ? locales[customizationController?.locale as keyof typeof locales] : undefined;
     const dateFormat: string = customizationController?.dateTimeFormat ?? defaultDateFormat;
 
-    const [userToBeDeleted, setUserToBeDeleted] = useState<FireCMSUserProject | undefined>(undefined);
+    const [userToBeDeleted, setUserToBeDeleted] = useState<UserWithRoles | undefined>(undefined);
     const [deleteInProgress, setDeleteInProgress] = useState<boolean>(false);
 
     return (
@@ -50,9 +64,7 @@ export function UsersTable({ onUserClicked }: {
                 <TableBody>
                     {users && users.map((user) => {
 
-                        const userRoleIds: string[] | undefined = user.roles;
-                        if (!userRoleIds) return null;
-                        const userRoles = getUserRoles(roles, user);
+                        const userRoles: Role[] | undefined = user.roles;
 
                         const formattedDate = user.created_on ? format(user.created_on, dateFormat, { locale: dateUtilsLocale }) : "";
 
@@ -91,6 +103,48 @@ export function UsersTable({ onUserClicked }: {
                             </TableRow>
                         );
                     })}
+
+                    {(!users || users.length === 0) && <TableRow>
+                        <TableCell colspan={6}>
+                            <CenteredView className={"flex flex-col gap-4 my-8 items-center"}>
+                                <Typography variant={"label"}>
+                                    There are no users yet
+                                </Typography>
+                                <Button variant={"outlined"}
+                                        onClick={() => {
+                                            if (!authController.user?.uid) {
+                                                throw Error("UsersTable, authController misconfiguration");
+                                            }
+                                            saveUser({
+                                                uid: authController.user?.uid,
+                                                email: authController.user?.email,
+                                                displayName: authController.user?.displayName,
+                                                photoURL: authController.user?.photoURL,
+                                                providerId: authController.user?.providerId,
+                                                isAnonymous: authController.user?.isAnonymous,
+                                                roles: [{ id: "admin", name: "Admin" }],
+                                                created_on: new Date()
+                                            })
+                                                .then(() => {
+                                                    snackbarController.open({
+                                                        type: "success",
+                                                        message: "User added successfully"
+                                                    })
+                                                })
+                                                .catch((error) => {
+                                                    snackbarController.open({
+                                                        type: "error",
+                                                        message: "Error adding user: " + error.message,
+                                                    })
+                                                });
+                                        }}>
+
+                                    Add the logged user as an admin
+                                </Button>
+                            </CenteredView>
+                        </TableCell>
+                    </TableRow>}
+
                 </TableBody>
             </Table>
 

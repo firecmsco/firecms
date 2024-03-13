@@ -1,8 +1,5 @@
-import { CMSType, Permissions, User } from "@firecms/core";
-import { CollectionEditorPermissions, PersistedCollection } from "@firecms/collection_editor";
-import { FireCMSUserProject } from "../types";
-import { Role } from "@firecms/firebase";
-import { UserManagement } from "../types/user_management";
+import { CMSType, EntityCollection, Permissions } from "@firecms/core";
+import { Role, UserWithRoles } from "../types";
 
 export const RESERVED_GROUPS = ["Admin"];
 
@@ -13,16 +10,13 @@ const DEFAULT_PERMISSIONS = {
     delete: false
 };
 
-export function resolveUserRolePermissions<M extends {
-    [Key: string]: CMSType
-}, UserType extends User>
-({ collection, roles, paths, user }: {
-    collection: PersistedCollection<M>,
-    roles?: Role[],
-    paths: string[],
+export function resolveUserRolePermissions<UserType extends UserWithRoles>
+({ collection, user }: {
+    collection: EntityCollection<any>,
     user: UserType | null
 }): Permissions {
 
+    const roles = user?.roles;
     if (!roles) {
         return DEFAULT_PERMISSIONS;
     } else if (collection.ownerId === user?.uid) {
@@ -72,55 +66,18 @@ const mergePermissions = (permA: Permissions, permB: Permissions) => {
     };
 }
 
-export function getUserRoles(roles: Role[], fireCMSUser: FireCMSUserProject): Role[] | undefined {
+export function getUserRoles(roles: Role[], fireCMSUser: UserWithRoles): Role[] | undefined {
     return !roles
         ? undefined
         : (fireCMSUser.roles
             ? fireCMSUser.roles
-                .map(roleId => roles.find((r) => r.id === roleId))
+                .map(role => roles.find((r) => r.id === role.id))
                 .filter(Boolean) as Role[]
             : []);
 }
 
-export function resolveCollectionConfigPermissions({
-                                                       user,
-                                                       userManagement,
-                                                       collection
-                                                   }: {
-    user: User | null,
-    userManagement: UserManagement,
-    collection?: PersistedCollection
-}): CollectionEditorPermissions {
-
-    const baseConfigPermissions = {
-        createCollections: false,
-        editCollections: false,
-        deleteCollections: false
-    };
-
-    const fireCMSUser = user && userManagement.users.find((u) => u.uid === user.uid);
-    const userRoles: Role[] | undefined = fireCMSUser ? getUserRoles(userManagement.roles, fireCMSUser) : undefined;
-    if (!fireCMSUser || !userRoles) {
-        return baseConfigPermissions;
-    }
-
-    return userRoles
-        .map(role => ({
-            createCollections: role.isAdmin || role.config?.createCollections === true,
-            editCollections: role.isAdmin || role.config?.editCollections === true || (role.config?.editCollections === "own" && collection?.ownerId === fireCMSUser?.uid),
-            deleteCollections: role.isAdmin || role.config?.deleteCollections === true || (role.config?.deleteCollections === "own" && collection?.ownerId === fireCMSUser?.uid)
-        }))
-        .reduce(mergeConfigPermissions, baseConfigPermissions);
-}
-
-const mergeConfigPermissions = (permA: CollectionEditorPermissions, permB: CollectionEditorPermissions) => {
-    return {
-        createCollections: permA.createCollections || permB.createCollections,
-        editCollections: permA.editCollections || permB.editCollections,
-        deleteCollections: permA.deleteCollections || permB.deleteCollections
-    };
-}
-
-export const areRolesEqual = (rolesA: string[], rolesB: string[]) => {
-    return rolesA.length === rolesB.length && rolesA.every((role) => rolesB.includes(role));
+export const areRolesEqual = (rolesA: Role[], rolesB: Role[]) => {
+    const rolesAIds = rolesA.map(r => r.id);
+    const rolesBIds = rolesB.map(r => r.id);
+    return rolesAIds.length === rolesB.length && rolesAIds.every((role) => rolesBIds.includes(role));
 }

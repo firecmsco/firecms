@@ -53,7 +53,9 @@ const ButtonInner = React.forwardRef<
         "border border-red-500 text-red-500 hover:bg-red-500": variant === "outlined" && color === "error" && !disabled,
         "border border-slate-400 text-text-primary dark:text-text-primary-dark hover:bg-slate-200": variant === "outlined" && color === "text" && !disabled,
         // Disabled states for all variants
-        "border border-transparent opacity-50": disabled
+        "border border-transparent opacity-50": variant === "text" && disabled,
+        "border border-gray-500 opacity-50": variant === "outlined" && disabled,
+        "border border-gray-500 bg-gray-500 opacity-50": variant === "filled" && disabled,
     });
 
     const sizeClasses = cn(

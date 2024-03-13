@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { FirebaseApp } from "firebase/app";
 import { BrowserRouter, Route } from "react-router-dom";
 
@@ -48,11 +48,11 @@ import {
 } from "./hooks";
 
 import { FireCMSAppProps } from "./FireCMSAppProps";
-import { ApiError, FireCMSAppConfig, FireCMSBackend, FireCMSUser } from "./types";
-import { getUserRoles, RESERVED_GROUPS, resolveCollectionConfigPermissions, resolveUserRolePermissions } from "./utils";
+import { ApiError, FireCMSAppConfig, FireCMSBackend, FireCMSCloudUser, FireCMSCloudUserWithRoles } from "./types";
+import { RESERVED_GROUPS, resolveCollectionConfigPermissions } from "./utils";
 import {
-    FireCMSDataEnhancementSubscriptionMessage,
     FireCMSCloudDrawer,
+    FireCMSDataEnhancementSubscriptionMessage,
     FireCMSLoginView,
     ProjectSettings,
     SubscriptionPlanWidget
@@ -70,7 +70,13 @@ import {
 import { ExportAllowedParams, useImportExportPlugin } from "@firecms/data_import_export";
 import { Button, CenteredView, ErrorIcon, Typography } from "@firecms/ui";
 import { useSaasPlugin } from "./hooks/useSaasPlugin";
-import { RolesView, UserManagement, UserManagementProvider, UsersView } from "@firecms/user_management";
+import {
+    resolveUserRolePermissions,
+    RolesView,
+    UserManagement,
+    UserManagementProvider,
+    UsersView
+} from "@firecms/user_management";
 
 const DOCS_LIMIT = 200;
 
@@ -287,7 +293,7 @@ export function FireCMSClientWithController({
                                                 customizationLoading,
                                                 ...props
                                             }: FireCMSClientProps & {
-    userManagement: UserManagement;
+    userManagement: UserManagement<FireCMSCloudUserWithRoles>;
     projectConfig: ProjectConfig;
     projectId: string;
     customizationLoading: boolean;
@@ -329,18 +335,16 @@ export function FireCMSClientWithController({
         onAnalyticsEvent: props.onAnalyticsEvent
     });
 
-    const permissions: PermissionsBuilder<PersistedCollection, FireCMSUser> = useCallback(({
-                                                                                               pathSegments,
-                                                                                               collection,
-                                                                                               user,
-                                                                                               entity
-                                                                                           }) =>
-        resolveUserRolePermissions({
+    const permissions: PermissionsBuilder<PersistedCollection> = useCallback(({
+                                                                                  pathSegments,
+                                                                                  collection,
+                                                                                  user,
+                                                                                  entity
+                                                                              }) =>
+        resolveUserRolePermissions<FireCMSCloudUserWithRoles>({
             collection,
-            roles: authController.userRoles ?? undefined,
-            paths: pathSegments,
-            user
-        }), [authController.userRoles]);
+            user: userManagement.loggedInUser ?? null
+        }), [userManagement.loggedInUser]);
 
     const configController = useBuildCollectionsConfigController({
         firebaseApp: fireCMSBackend.backendFirebaseApp,
@@ -348,19 +352,6 @@ export function FireCMSClientWithController({
         permissions,
         propertyConfigs: appConfig?.propertyConfigs
     });
-
-    useEffect(() => {
-        if (userManagement.loading || authController.authLoading) return;
-        const user = authController.user;
-        if (!user) return;
-        if (!fireCMSUser) {
-            setNotValidUser(user);
-        } else {
-            setNotValidUser(undefined);
-            const userRoles = getUserRoles(userManagement.roles, fireCMSUser);
-            authController.setUserRoles(userRoles ?? null);
-        }
-    }, [authController.user, userManagement.loading, userManagement.roles, userManagement.users, fireCMSUser, authController.authLoading]);
 
     let loadingOrErrorComponent;
     if (userManagement.loading) {
@@ -440,10 +431,10 @@ function FireCMSAppAuthenticated({
                                      basePath,
                                      baseCollectionPath
                                  }: Omit<FireCMSClientProps, "projectId"> & {
-    fireCMSUser: FireCMSUser;
+    fireCMSUser: FireCMSCloudUser;
     firebaseApp: FirebaseApp;
     projectConfig: ProjectConfig;
-    userManagement: UserManagement;
+    userManagement: UserManagement<FireCMSCloudUserWithRoles>;
     fireCMSBackend: FireCMSBackend,
     collectionConfigController: CollectionsConfigController;
     authController: FirebaseAuthController;
@@ -647,7 +638,7 @@ const injectCollections = (baseCollections: EntityCollection[],
     return result;
 }
 
-function buildAdminRoutes(usersLimit: number | null) {
+function buildAdminRoutes(usersLimit?: number) {
 
     return [
         {

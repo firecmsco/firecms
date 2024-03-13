@@ -293,7 +293,7 @@ export function TableStorageItemPreview({
 
     return (
         <div
-            className={"relative m-2"}
+            className={"relative p-2 max-w-full"}
         >
 
             {value &&

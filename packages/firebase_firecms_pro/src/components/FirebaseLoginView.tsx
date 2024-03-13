@@ -222,7 +222,7 @@ export function FirebaseLoginView({
     return (
 
         <div
-            className="flex flex-col items-center justify-center min-h-screen min-w-full p-2">
+            className="flex flex-col items-center justify-center min-h-screen min-w-full p-4">
             <div id="recaptcha"></div>
             <div
                 className="flex flex-col items-center w-full max-w-[500px]">
@@ -238,7 +238,7 @@ export function FirebaseLoginView({
 
                 {buildErrorView()}
 
-                {(!passwordLoginSelected && !phoneLoginSelected) && <>
+                {(!passwordLoginSelected && !phoneLoginSelected) && <div className={"my-4 w-full"}>
 
                     {buildOauthLoginButtons(authController, resolvedSignInOptions, modeState.mode, disabled)}
 
@@ -274,7 +274,7 @@ export function FirebaseLoginView({
                         </Button>
                     }
 
-                </>}
+                </div>}
 
                 {passwordLoginSelected && <LoginForm
                     authController={authController}

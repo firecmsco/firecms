@@ -21,7 +21,7 @@ import {
     User as FirebaseUser
 } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
-import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider, Role } from "../types";
+import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider } from "../types";
 
 interface FirebaseAuthControllerProps {
     firebaseApp?: FirebaseApp;
@@ -46,7 +46,7 @@ export const useFirebaseAuthController = ({
     const [loginSkipped, setLoginSkipped] = useState<boolean>(false);
     const [confirmationResult, setConfirmationResult] = useState<undefined | ConfirmationResult>();
 
-    const [userRoles, setUserRoles] = useState<Role[] | null>(null);
+    // const [userRoles, setUserRoles] = useState<Role[] | null>(null);
     const authRef = useRef(firebaseApp ? getAuth(firebaseApp) : null);
 
     useEffect(() => {
@@ -242,8 +242,8 @@ export const useFirebaseAuthController = ({
         googleLogin,
         skipLogin,
         loginSkipped,
-        userRoles,
-        setUserRoles,
+        // userRoles,
+        // setUserRoles,
         emailPasswordLogin,
         createUserWithEmailAndPassword,
         fetchSignInMethodsForEmail,

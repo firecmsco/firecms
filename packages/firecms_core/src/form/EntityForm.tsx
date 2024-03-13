@@ -394,8 +394,8 @@ function EntityFormInternal<M extends Record<string, any>>({
         entity?: Entity<M>,
         customEntityActions?: EntityAction[]
     }): EntityAction[] => {
-        const createEnabled = canCreateEntity(inputCollection, authController, fullPathToCollectionSegments(path), null);
-        const deleteEnabled = entity ? canDeleteEntity(inputCollection, authController, fullPathToCollectionSegments(path), entity) : true;
+        const createEnabled = canCreateEntity(inputCollection, authController, path, null);
+        const deleteEnabled = entity ? canDeleteEntity(inputCollection, authController, path, entity) : true;
         const actions: EntityAction[] = [];
         if (createEnabled)
             actions.push(copyEntityAction);

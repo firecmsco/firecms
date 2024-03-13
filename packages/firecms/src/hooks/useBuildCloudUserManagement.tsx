@@ -10,17 +10,18 @@ import {
     setDoc
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
-import { FireCMSBackend, FireCMSUserProject } from "../types";
-import { CMSType } from "@firecms/core";
+import { FireCMSBackend, FireCMSCloudUserWithRoles } from "../types";
+import { CMSType, PermissionsBuilder, User } from "@firecms/core";
 import { ProjectsApi } from "../api/projects";
-import { Role } from "@firecms/firebase";
-import { UserManagement } from "@firecms/user_management";
+import { resolveUserRolePermissions, Role, UserManagement } from "@firecms/user_management";
+
+type UserWithRoleIds = User & { roles: string[] };
 
 interface UserManagementParams {
     backendFirebaseApp?: FirebaseApp;
     projectId: string;
     projectsApi: ProjectsApi;
-    usersLimit: number | null;
+    usersLimit?: number;
     canEditRoles?: boolean;
     fireCMSBackend: FireCMSBackend
 }
@@ -32,7 +33,7 @@ export function useBuildCloudUserManagement({
                                                 usersLimit,
                                                 canEditRoles,
                                                 fireCMSBackend
-                                            }: UserManagementParams): UserManagement {
+                                            }: UserManagementParams): UserManagement<FireCMSCloudUserWithRoles> {
 
     const configPath = projectId ? `projects/${projectId}` : undefined;
 
@@ -41,7 +42,11 @@ export function useBuildCloudUserManagement({
     const [rolesLoading, setRolesLoading] = React.useState<boolean>(true);
     const [usersLoading, setUsersLoading] = React.useState<boolean>(true);
     const [roles, setRoles] = React.useState<Role[]>([]);
-    const [users, setUsers] = React.useState<FireCMSUserProject[]>([]);
+    const [usersWithRoleIds, setUsersWithRoleIds] = React.useState<UserWithRoleIds[]>([]);
+    const users = usersWithRoleIds.map(u => ({
+        ...u,
+        roles: roles.filter(r => u.roles.includes(r.id))
+    } as FireCMSCloudUserWithRoles));
 
     const [rolesError, setRolesError] = React.useState<Error | undefined>();
     const [usersError, setUsersError] = React.useState<Error | undefined>();
@@ -86,7 +91,7 @@ export function useBuildCloudUserManagement({
                     setUsersError(undefined);
                     try {
                         const newUsers = docsToUsers(snapshot.docs);
-                        setUsers(newUsers);
+                        setUsersWithRoleIds(newUsers);
                     } catch (e) {
                         // console.error(e);
                         setUsersError(e as Error);
@@ -101,7 +106,7 @@ export function useBuildCloudUserManagement({
         );
     }, [configPath]);
 
-    const saveUser = useCallback(async (user: FireCMSUserProject): Promise<FireCMSUserProject> => {
+    const saveUser = useCallback(async (user: FireCMSCloudUserWithRoles): Promise<FireCMSCloudUserWithRoles> => {
 
         const firestore = firestoreRef.current;
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
@@ -129,7 +134,7 @@ export function useBuildCloudUserManagement({
         return setDoc(ref, roleData, { merge: true });
     }, [configPath]);
 
-    const removeUser = useCallback(async (user: FireCMSUserProject): Promise<void> => {
+    const removeUser = useCallback(async (user: FireCMSCloudUserWithRoles): Promise<void> => {
         const firestore = firestoreRef.current;
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         console.debug("Deleting", user);
@@ -147,9 +152,19 @@ export function useBuildCloudUserManagement({
         return deleteDoc(ref);
     }, [configPath]);
 
-    const loggedUser = users.find(u => u.uid === fireCMSBackend.user?.uid);
+    const loggedInUser = users.find((u) => u.email.toLowerCase() === fireCMSBackend.user?.email?.toLowerCase());
+
+    const collectionPermissions: PermissionsBuilder = useCallback(({
+                                                                       collection,
+                                                                   }) => resolveUserRolePermissions({
+        collection,
+        user: loggedInUser ?? null
+    }), [loggedInUser?.uid]);
 
     return {
+        allowDefaultRolesCreation: false,
+        includeCollectionConfigPermissions: true,
+        loggedInUser,
         loading: rolesLoading || usersLoading,
         roles,
         users,
@@ -159,17 +174,17 @@ export function useBuildCloudUserManagement({
         deleteRole,
         usersLimit,
         canEditRoles: canEditRoles === undefined ? true : canEditRoles,
-        loggedUser: loggedUser ?? null
+        collectionPermissions
     }
 }
 
-const docsToUsers = (docs: DocumentSnapshot[]): FireCMSUserProject[] => {
+const docsToUsers = (docs: DocumentSnapshot[]): UserWithRoleIds[] => {
     return docs.map((doc) => ({
         uid: doc.id,
         ...doc.data(),
         created_on: doc.data()?.created_on?.toDate(),
         updated_on: doc.data()?.updated_on?.toDate()
-    } as FireCMSUserProject));
+    } as unknown as UserWithRoleIds));
 }
 
 const docsToRoles = (docs: DocumentSnapshot[]): Role[] => {

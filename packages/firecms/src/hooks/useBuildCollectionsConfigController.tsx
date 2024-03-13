@@ -9,9 +9,16 @@ import {
     SaveCollectionParams,
     UpdateCollectionParams
 } from "@firecms/collection_editor";
-import { PermissionsBuilder, Property, PropertyConfig, removeFunctions, removeUndefined, User } from "@firecms/core";
 import {
     applyPermissionsFunctionIfEmpty,
+    PermissionsBuilder,
+    Property,
+    PropertyConfig,
+    removeFunctions,
+    removeUndefined,
+    User
+} from "@firecms/core";
+import {
     buildCollectionId,
     docsToCollectionTree,
     prepareCollectionForPersistence,

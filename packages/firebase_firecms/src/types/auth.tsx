@@ -1,7 +1,6 @@
 import { ApplicationVerifier, ConfirmationResult, User as FirebaseUser } from "firebase/auth";
 
 import { AuthController, DataSourceDelegate, StorageSource, User } from "@firecms/core";
-import { Role } from "./roles";
 
 /**
  * @group Firebase
@@ -31,8 +30,6 @@ export type FirebaseSignInOption = {
  */
 export type FirebaseAuthController =
     AuthController<FirebaseUser> & {
-
-    authLoading: boolean;
 
     confirmationResult?: ConfirmationResult;
 
@@ -65,16 +62,14 @@ export type FirebaseAuthController =
 
     setUser: (user: FirebaseUser | null) => void;
 
-    userRoles: Role[] | null;
-
-    setUserRoles: (roles: Role[]| null) => void;
+    // userRoles: Role[] | null;
+    //
+    // setUserRoles: (roles: Role[]| null) => void;
 
 };
 
 /**
  * Implement this function to allow access to specific users.
- * You might also want to load additional data for a user asynchronously
- * and store it using the `setExtra` method in the `authController`.
  * @group Firebase
  */
 export type Authenticator<UserType extends User = User> = ({ user }: {

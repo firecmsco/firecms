@@ -23,6 +23,7 @@ export const useMongoAuthController = ({
     const [authError, setAuthError] = useState<any>();
     const [authProviderError, setAuthProviderError] = useState<any>();
     const [initialLoading, setInitialLoading] = useState(false);
+    const [authLoading, setAuthLoading] = useState(false);
 
     const [currentUser, setCurrentUser] = React.useState(app.currentUser);
 
@@ -45,6 +46,7 @@ export const useMongoAuthController = ({
     }, []);
 
     const emailPasswordLogin = useCallback(async (email: string, password: string) => {
+        setAuthLoading(true);
         try {
             console.log("Logging in with email and password", email);
             await app.logIn(Realm.Credentials.emailPassword(email, password));
@@ -53,9 +55,11 @@ export const useMongoAuthController = ({
             console.error(err);
             setAuthProviderError(err);
         }
+        setAuthLoading(false);
     }, [app]);
 
     const register = useCallback(async (email: string, password: string) => {
+        setAuthLoading(true);
         try {
             console.log("Registering with email and password", email);
             app.fetcher.clone({});
@@ -66,10 +70,12 @@ export const useMongoAuthController = ({
             console.error(err);
             setAuthProviderError(err);
         }
+        setAuthLoading(false);
     }, [app.currentUser, app.emailPasswordAuth]);
 
     return {
         loginSkipped: false,
+        authLoading,
         user: currentUser ? {
             uid: currentUser.id,
             displayName: currentUser.profile?.name ?? null,

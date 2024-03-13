@@ -278,6 +278,11 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
      */
     exportable?: boolean | ExportConfig<UserType>;
 
+    /**
+     * User id of the owner of this collection. This is used only by plugins, or if you
+     * are writing custom code
+     */
+    ownerId?: string;
     overrides?: EntityOverrides;
 }
 

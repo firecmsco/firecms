@@ -1,6 +1,8 @@
 import {
     DefaultSelectedViewBuilder,
     DefaultSelectedViewParams,
+    EntityCollection,
+    PermissionsBuilder,
     PropertiesOrBuilders,
     PropertyOrBuilder
 } from "../types";
@@ -47,4 +49,24 @@ export function resolveDefaultSelectedView(
     } else {
         return defaultSelectedView(params);
     }
+}
+
+/**
+ * If a collection is not applying permissions, we apply the given permissionsBuilder.
+ * This is used to apply the role permissions to the collections, unless they are already
+ * applying permissions.
+ * @param collections
+ * @param permissionsBuilder
+ */
+export const applyPermissionsFunctionIfEmpty = (collections: EntityCollection[], permissionsBuilder?: PermissionsBuilder): EntityCollection[] => {
+
+    return collections.map(collection => {
+        if (collection.permissions) {
+            return collection;
+        }
+        return ({
+            ...collection,
+            permissions: permissionsBuilder
+        });
+    });
 }

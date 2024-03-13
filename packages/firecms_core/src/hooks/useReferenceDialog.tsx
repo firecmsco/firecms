@@ -1,5 +1,5 @@
 import { useSideDialogsController } from "./useSideDialogsController";
-import { ReferenceSelectionTable, ReferenceSelectionInnerProps } from "../components";
+import { ReferenceSelectionInnerProps, ReferenceSelectionTable } from "../components";
 import { useCallback } from "react";
 import { useNavigationController } from "./useNavigationController";
 
@@ -27,7 +27,7 @@ export function useReferenceDialog<M extends Record<string, any>>(referenceDialo
             if (!usedCollection)
                 usedCollection = navigation.getCollection(referenceDialogProps.path);
             if (!usedCollection)
-                throw Error("Not able to resolve the collection in useReferenceDialog");
+                throw Error("Not able to resolve the collection in useReferenceDialog. Make sure a collection is registered in path " + referenceDialogProps.path);
             sideDialogsController.open({
                 key: `reference_${referenceDialogProps.path}`,
                 component:

@@ -26,6 +26,7 @@ export type CMSAnalyticsEvent =
     | "home_navigate_to_collection"
     | "home_favorite_navigate_to_collection"
     | "home_navigate_to_view"
+    | "home_navigate_to_admin_view"
     | "home_favorite_navigate_to_view"
 
     | "collection_inline_editing"

@@ -301,7 +301,7 @@ export function CollectionPropertiesEditorForm({
         ? values.propertiesOrder
         : Object.keys(values.properties)) as string[];
 
-    const owner = useMemo(() => getUser(values.ownerId), [getUser, values.ownerId]);
+    const owner = useMemo(() => values.ownerId ? getUser(values.ownerId) : null, [getUser, values.ownerId]);
 
     const onPropertyClick = useCallback((propertyKey: string, namespace?: string) => {
         console.debug("CollectionEditor: onPropertyClick", {

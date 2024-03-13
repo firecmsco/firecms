@@ -10,12 +10,14 @@ import {
     EntityCollectionsBuilder,
     EntityReference,
     NavigationController,
+    PermissionsBuilder,
     TopNavigationEntry,
     TopNavigationResult,
     User,
     UserConfigurationPersistence
 } from "../types";
 import {
+    applyPermissionsFunctionIfEmpty,
     getCollectionByPathOrId,
     mergeDeep,
     removeInitialAndTrailingSlashes,
@@ -32,7 +34,10 @@ type BuildNavigationContextProps<EC extends EntityCollection, UserType extends U
     baseCollectionPath?: string,
     authController: AuthController<UserType>;
     collections?: EC[] | EntityCollectionsBuilder<EC>;
+    collectionPermissions?: PermissionsBuilder;
     views?: CMSView[] | CMSViewsBuilder;
+    adminViews?: CMSView[] | CMSViewsBuilder;
+    viewsOrder?: string[];
     userConfigPersistence?: UserConfigurationPersistence;
     dataSourceDelegate: DataSourceDelegate;
     /**
@@ -45,20 +50,25 @@ type BuildNavigationContextProps<EC extends EntityCollection, UserType extends U
     injectCollections?: (collections: EntityCollection[]) => EntityCollection[];
 };
 
-export function useBuildNavigationController<EC extends EntityCollection, UserType extends User>({
-                                                                                                     basePath = DEFAULT_BASE_PATH,
-                                                                                                     baseCollectionPath = DEFAULT_COLLECTION_PATH,
-                                                                                                     authController,
-                                                                                                     collections: collectionsProp,
-                                                                                                     views: baseViews,
-                                                                                                     userConfigPersistence,
-                                                                                                     dataSourceDelegate,
-                                                                                                     injectCollections
-                                                                                                 }: BuildNavigationContextProps<EC, UserType>): NavigationController {
+export function useBuildNavigationController<EC extends EntityCollection, UserType extends User>(props: BuildNavigationContextProps<EC, UserType>): NavigationController {
+    const {
+        basePath = DEFAULT_BASE_PATH,
+        baseCollectionPath = DEFAULT_COLLECTION_PATH,
+        authController,
+        collections: collectionsProp,
+        collectionPermissions,
+        views: viewsProp,
+        adminViews: adminViewsProp,
+        viewsOrder,
+        userConfigPersistence,
+        dataSourceDelegate,
+        injectCollections
+    } = props;
 
     const collectionsRef = useRef<EntityCollection[] | null>();
     const [collections, setCollections] = useState<EntityCollection[] | undefined>();
     const [views, setViews] = useState<CMSView[] | undefined>();
+    const [adminViews, setAdminViews] = useState<CMSView[] | undefined>();
     const [initialised, setInitialised] = useState<boolean>(false);
 
     const [topLevelNavigation, setTopLevelNavigation] = useState<TopNavigationResult | undefined>(undefined);
@@ -78,18 +88,18 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
     const buildUrlCollectionPath = useCallback((path: string): string => `${removeInitialAndTrailingSlashes(baseCollectionPath)}/${encodePath(path)}`,
         [baseCollectionPath]);
 
-    const computeTopNavigation = useCallback((collections: EntityCollection[], views: CMSView[]): TopNavigationResult => {
-        const navigationEntries: TopNavigationEntry[] = [
+    const computeTopNavigation = useCallback((collections: EntityCollection[], views: CMSView[], adminViews: CMSView[], viewsOrder?: string[]): TopNavigationResult => {
+        let navigationEntries: TopNavigationEntry[] = [
             ...(collections ?? []).map(collection => (!collection.hideFromNavigation
-                ? {
+                ? ({
                     url: buildUrlCollectionPath(collection.id ?? collection.path),
                     type: "collection",
                     name: collection.name.trim(),
                     path: collection.id ?? collection.path,
                     collection,
                     description: collection.description?.trim(),
-                    group: collection.group?.trim()
-                }
+                    group: collection.group?.trim() ?? "Views"
+                } satisfies TopNavigationEntry)
                 : undefined))
                 .filter(Boolean) as TopNavigationEntry[],
             ...(views ?? []).map(view =>
@@ -98,18 +108,50 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
                         url: buildCMSUrlPath(Array.isArray(view.path) ? view.path[0] : view.path),
                         name: view.name.trim(),
                         type: "view",
+                        path: view.path,
                         view,
                         description: view.description?.trim(),
-                        group: view.group?.trim()
-                    })
+                        group: view.group?.trim() ?? "Views"
+                    }satisfies TopNavigationEntry)
+                    : undefined)
+                .filter(Boolean) as TopNavigationEntry[],
+            ...(adminViews ?? []).map(view =>
+                !view.hideFromNavigation
+                    ? ({
+                        url: buildCMSUrlPath(Array.isArray(view.path) ? view.path[0] : view.path),
+                        name: view.name.trim(),
+                        type: "admin",
+                        path: view.path,
+                        view,
+                        description: view.description?.trim(),
+                        group: "Admin"
+                    } satisfies TopNavigationEntry)
                     : undefined)
                 .filter(Boolean) as TopNavigationEntry[]
         ];
+
+        if (viewsOrder) {
+            navigationEntries = navigationEntries.sort((a, b) => {
+                const aIndex = viewsOrder.indexOf(a.path);
+                const bIndex = viewsOrder.indexOf(b.path);
+                if (aIndex === -1 && bIndex === -1) {
+                    return 0;
+                }
+                if (aIndex === -1) {
+                    return 1;
+                }
+                if (bIndex === -1) {
+                    return -1;
+                }
+                return aIndex - bIndex;
+            });
+        }
 
         const groups: string[] = Object.values(navigationEntries)
             .map(e => e.group)
             .filter(Boolean)
             .filter((value, index, array) => array.indexOf(value) === index) as string[];
+
         return {
             navigationEntries,
             groups
@@ -122,16 +164,23 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
             return;
 
         try {
-            const [resolvedCollections = [], resolvedViews = []] = await Promise.all([
-                    resolveCollections(collectionsProp, authController, dataSourceDelegate, injectCollections),
-                    resolveCMSViews(baseViews, authController, dataSourceDelegate)
+            const [resolvedCollections = [], resolvedViews, resolvedAdminViews = []] = await Promise.all([
+                    resolveCollections(collectionsProp, collectionPermissions, authController, dataSourceDelegate, injectCollections),
+                    resolveCMSViews(viewsProp, authController, dataSourceDelegate),
+                    resolveCMSViews(adminViewsProp, authController, dataSourceDelegate)
                 ]
             );
-            if (!equal(collectionsRef.current, resolvedCollections) || !equal(views, resolvedViews) || !equal(topLevelNavigation, computeTopNavigation(resolvedCollections, resolvedViews))) {
+            if (
+                !equal(collectionsRef.current, resolvedCollections) ||
+                !equal(views, resolvedViews) ||
+                !equal(adminViews, resolvedAdminViews) ||
+                !equal(topLevelNavigation, computeTopNavigation(resolvedCollections, resolvedViews, resolvedAdminViews, viewsOrder))
+            ) {
                 collectionsRef.current = resolvedCollections;
                 setCollections(resolvedCollections);
                 setViews(resolvedViews);
-                setTopLevelNavigation(computeTopNavigation(resolvedCollections ?? [], resolvedViews));
+                setAdminViews(resolvedAdminViews);
+                setTopLevelNavigation(computeTopNavigation(resolvedCollections ?? [], resolvedViews, resolvedAdminViews, viewsOrder));
             }
         } catch (e) {
             console.error(e);
@@ -140,7 +189,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
 
         setNavigationLoading(false);
         setInitialised(true);
-    }, [collectionsProp, authController.user, authController.initialLoading, baseViews, computeTopNavigation, injectCollections]);
+    }, [collectionsProp, collectionPermissions, authController.user, authController.initialLoading, viewsProp, adminViewsProp, computeTopNavigation, injectCollections]);
 
     useEffect(() => {
         refreshNavigation();
@@ -182,7 +231,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
     }, [
         basePath,
         baseCollectionPath,
-        collections,
+        collections
     ]);
 
     const getCollectionFromPaths = useCallback(<EC extends EntityCollection>(pathSegments: string[]): EC | undefined => {
@@ -289,6 +338,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
     return {
         collections,
         views,
+        adminViews,
         loading: !initialised || navigationLoading,
         navigationLoadingError,
         homeUrl,
@@ -329,8 +379,8 @@ function filterOutNotAllowedCollections(resolvedCollections: EntityCollection[],
     return resolvedCollections
         .filter((c) => {
             if (!c.permissions) return true;
-            const resolvedPermissions = resolvePermissions(c, authController, [c.path], null,)
-            return resolvedPermissions.read !== false;
+            const resolvedPermissions = resolvePermissions(c, authController, c.path, null)
+            return resolvedPermissions?.read !== false;
         })
         .map((c) => {
             if (!c.subcollections) return c;
@@ -342,6 +392,7 @@ function filterOutNotAllowedCollections(resolvedCollections: EntityCollection[],
 }
 
 async function resolveCollections(collections: undefined | EntityCollection[] | EntityCollectionsBuilder<any>,
+                                  collectionPermissions: PermissionsBuilder | undefined,
                                   authController: AuthController,
                                   dataSource: DataSourceDelegate,
                                   injectCollections?: (collections: EntityCollection[]) => EntityCollection[]) {
@@ -355,6 +406,8 @@ async function resolveCollections(collections: undefined | EntityCollection[] | 
     } else if (Array.isArray(collections)) {
         resolvedCollections = collections;
     }
+
+    resolvedCollections = applyPermissionsFunctionIfEmpty(resolvedCollections, collectionPermissions);
 
     resolvedCollections = filterOutNotAllowedCollections(resolvedCollections, authController);
 

@@ -58,6 +58,7 @@ export function FireCMSProApp({
                                   authentication,
                                   collections,
                                   views,
+                                  adminViews,
                                   textSearchControllerBuilder,
                                   allowSkipLogin,
                                   signInOptions = DEFAULT_SIGN_IN_OPTIONS,
@@ -159,6 +160,7 @@ export function FireCMSProApp({
         basePath,
         baseCollectionPath,
         authController,
+        adminViews,
         dataSourceDelegate: firestoreDelegate
     });
 

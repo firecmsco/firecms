@@ -74,6 +74,7 @@ import {
 } from "../EntityCollectionTable/internal/default_entity_actions";
 import { DeleteEntityDialog } from "../DeleteEntityDialog";
 import { useAnalyticsController } from "../../hooks/useAnalyticsController";
+import { useSelectionController } from "./useSelectionController";
 
 const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
 
@@ -141,7 +142,7 @@ export const EntityCollectionView = React.memo(
             collectionRef.current = collection;
         }, [collection]);
 
-        const canCreateEntities = canCreateEntity(collection, authController, fullPathToCollectionSegments(fullPath), null);
+        const canCreateEntities = canCreateEntity(collection, authController, fullPath, null);
         const [selectedNavigationEntity, setSelectedNavigationEntity] = useState<Entity<M> | undefined>(undefined);
         const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
 
@@ -160,7 +161,7 @@ export const EntityCollectionView = React.memo(
 
         const checkInlineEditing = useCallback((entity?: Entity<any>): boolean => {
             const collection = collectionRef.current;
-            if (!canEditEntity(collection, authController, fullPathToCollectionSegments(fullPath), entity ?? null)) {
+            if (!canEditEntity(collection, authController, fullPath, entity ?? null)) {
                 return false;
             }
             return collection.inlineEditing === undefined || collection.inlineEditing;
@@ -288,7 +289,7 @@ export const EntityCollectionView = React.memo(
                 onCollectionModifiedForUser(fullPath, { defaultSize: size })
         }, [onCollectionModifiedForUser, fullPath, userConfigPersistence]);
 
-        const createEnabled = canCreateEntity(collection, authController, fullPathToCollectionSegments(fullPath), null);
+        const createEnabled = canCreateEntity(collection, authController, fullPath, null);
 
         const uniqueFieldValidator: UniqueFieldValidator = useCallback(
             ({
@@ -437,7 +438,7 @@ export const EntityCollectionView = React.memo(
             entity?: Entity<M>,
             customEntityActions?: EntityAction[]
         }): EntityAction[] => {
-            const deleteEnabled = entity ? canDeleteEntity(collection, authController, fullPathToCollectionSegments(fullPath), entity) : true;
+            const deleteEnabled = entity ? canDeleteEntity(collection, authController, fullPath, entity) : true;
             const actions: EntityAction[] = [editEntityAction];
             if (createEnabled)
                 actions.push(copyEntityAction);
@@ -681,33 +682,6 @@ export const EntityCollectionView = React.memo(
             equal(a.forceFilter, b.forceFilter);
     }) as React.FunctionComponent<EntityCollectionViewProps<any>>
 
-export function useSelectionController<M extends Record<string, any> = any>(
-    onSelectionChange?: (entity: Entity<M>, selected: boolean) => void
-): SelectionController<M> {
-
-    const [selectedEntities, setSelectedEntities] = useState<Entity<M>[]>([]);
-
-    const toggleEntitySelection = useCallback((entity: Entity<M>) => {
-        let newValue;
-        if (selectedEntities.map(e => e.id).includes(entity.id)) {
-            onSelectionChange?.(entity, false);
-            newValue = selectedEntities.filter((item: Entity<M>) => item.id !== entity.id);
-        } else {
-            onSelectionChange?.(entity, true);
-            newValue = [...selectedEntities, entity];
-        }
-        setSelectedEntities(newValue);
-    }, [selectedEntities]);
-
-    const isEntitySelected = useCallback((entity: Entity<M>) => selectedEntities.map(e => e.id).includes(entity.id), [selectedEntities]);
-
-    return {
-        selectedEntities,
-        setSelectedEntities,
-        isEntitySelected,
-        toggleEntitySelection
-    };
-}
 
 function EntitiesCount({
                            fullPath,

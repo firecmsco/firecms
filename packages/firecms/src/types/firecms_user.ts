@@ -1,4 +1,6 @@
-export interface FireCMSUser {
+import { Role } from "@firecms/user_management";
+
+export type FireCMSCloudUser = {
     uid: string;
     email: string;
     displayName: string;
@@ -11,6 +13,6 @@ export interface FireCMSUser {
     firebase_uid: string;
 }
 
-export type FireCMSUserProject = FireCMSUser & {
-    roles: string[];
+export type FireCMSCloudUserWithRoles = FireCMSCloudUser & {
+    roles: Role[];
 }

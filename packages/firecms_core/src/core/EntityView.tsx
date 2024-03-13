@@ -154,28 +154,11 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
         if (status === "new") {
             setReadOnly(false);
         } else {
-            const editEnabled = usedEntity ? canEditEntity(collection, authController, fullPathToCollectionSegments(path), usedEntity ?? null) : false;
+            const editEnabled = usedEntity ? canEditEntity(collection, authController, path, usedEntity ?? null) : false;
             if (usedEntity)
                 setReadOnly(!editEnabled);
         }
     }, [authController, usedEntity, status]);
-
-    // useEffect(() => {
-    //     if (largeLayoutTabSelected.current === largeLayout)
-    //         return;
-    //     // open first tab by default in large layouts
-    //     if (selectedSubPath !== defaultSelectedView) {
-    //         console.log("Replacing url 1", defaultSelectedView);
-    //         sideEntityController.replace({
-    //             path,
-    //             entityId,
-    //             selectedSubPath: defaultSelectedView,
-    //             updateUrl: true,
-    //             collection
-    //         });
-    //     }
-    //     largeLayoutTabSelected.current = largeLayout;
-    // }, [defaultSelectedView, largeLayout, selectedSubPath]);
 
     const onPreSaveHookError = useCallback((e: Error) => {
         setSaving(false);

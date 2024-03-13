@@ -52,9 +52,9 @@ export function ReferenceWidget<M extends Record<string, any>>({
         return navigationController.getCollection(path);
     }, [path, navigationController]);
 
-    if (!collection) {
-        throw Error(`Couldn't find the corresponding collection for the path: ${path}`);
-    }
+    // if (!collection) {
+    //     throw Error(`Couldn't find the corresponding collection for the path: ${path}`);
+    // }
 
     const onSingleEntitySelected = useCallback((entity: Entity<M> | null) => {
         if (disabled)

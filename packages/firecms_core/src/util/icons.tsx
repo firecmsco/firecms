@@ -1,5 +1,4 @@
 import React from "react";
-import { CMSView, EntityCollection } from "../types";
 import { hashString } from "./hash";
 import { coolIconKeys, Icon, iconKeys } from "@firecms/ui";
 import { slugify } from "./strings";
@@ -23,7 +22,8 @@ export type IconViewProps = {
 }
 
 export const IconForView = React.memo(
-    function IconForView({ collectionOrView, className }: { collectionOrView: IconViewProps, className?: string }): React.ReactElement {
+    function IconForView({ collectionOrView, className }: { collectionOrView?: IconViewProps, className?: string }): React.ReactElement {
+        if (!collectionOrView) return <></>;
         const icon = getIcon(collectionOrView.icon, className);
         if (collectionOrView?.icon && icon)
             return icon;
@@ -47,7 +47,7 @@ export const IconForView = React.memo(
 
         return <Icon iconKey={key} size={"medium"} className={className}/>;
     }, (prevProps, nextProps) => {
-        return equal(prevProps.collectionOrView.icon, nextProps.collectionOrView.icon);
+        return equal(prevProps.collectionOrView?.icon, nextProps.collectionOrView?.icon);
     });
 
 const iconKeysMap: Record<string, string> = iconKeys.reduce((acc: Record<string, string>, key) => {

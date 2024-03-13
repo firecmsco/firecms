@@ -2,10 +2,10 @@ import React, { useCallback } from "react";
 
 import { useLargeLayout, useNavigationController } from "../hooks";
 
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { CMSAnalyticsEvent, TopNavigationEntry, TopNavigationResult } from "../types";
 import { IconForView } from "../util";
-import { cn, Tooltip, Typography } from "@firecms/ui";
+import { cn, IconButton, Menu, MenuItem, MoreVertIcon, Tooltip, Typography } from "@firecms/ui";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 
 /**
@@ -33,6 +33,9 @@ export function Drawer({
 
     const tooltipsOpen = hovered && !drawerOpen;
     const largeLayout = useLargeLayout();
+    const navigate = useNavigate();
+
+    const [adminMenuOpen, setAdminMenuOpen] = React.useState(false);
 
     if (!navigation.topLevelNavigation)
         throw Error("Navigation not ready in Drawer");
@@ -42,7 +45,8 @@ export function Drawer({
         groups
     }: TopNavigationResult = navigation.topLevelNavigation;
 
-    const ungroupedNavigationViews = Object.values(navigationEntries).filter(e => !e.group);
+    const adminViews = navigationEntries.filter(e => e.type === "admin") ?? [];
+    const groupsWithoutAdmin = groups.filter(g => g !== "Admin");
 
     const buildGroupHeader = useCallback((group?: string) => {
         if (!drawerOpen) return <div className="h-12 w-full"/>;
@@ -67,41 +71,64 @@ export function Drawer({
     };
 
     return (
-        <div className={"flex-grow overflow-scroll no-scrollbar"}>
+        <>
 
-            {groups.map((group) => (
-                <React.Fragment
-                    key={`drawer_group_${group}`}>
-                    {buildGroupHeader(group)}
-                    {Object.values(navigationEntries)
-                        .filter(e => e.group === group)
-                        .map((view, index) =>
-                            <DrawerNavigationItem
-                                key={`navigation_${index}`}
-                                icon={<IconForView collectionOrView={view.collection ?? view.view}/>}
-                                tooltipsOpen={tooltipsOpen}
-                                drawerOpen={drawerOpen}
-                                onClick={() => onClick(view)}
-                                url={view.url}
-                                name={view.name}/>)}
-                </React.Fragment>
-            ))}
+            <div className={"flex-grow overflow-scroll no-scrollbar"}>
 
-            {ungroupedNavigationViews.length > 0 && buildGroupHeader()}
+                {groupsWithoutAdmin.map((group) => (
+                    <React.Fragment
+                        key={`drawer_group_${group}`}>
+                        {buildGroupHeader(group)}
+                        {Object.values(navigationEntries)
+                            .filter(e => e.group === group)
+                            .map((view, index) =>
+                                <DrawerNavigationItem
+                                    key={`navigation_${index}`}
+                                    icon={<IconForView collectionOrView={view.collection ?? view.view}/>}
+                                    tooltipsOpen={tooltipsOpen}
+                                    drawerOpen={drawerOpen}
+                                    onClick={() => onClick(view)}
+                                    url={view.url}
+                                    name={view.name}/>)}
+                    </React.Fragment>
+                ))}
 
-            {ungroupedNavigationViews.map((view, index) => {
+            </div>
 
-                return <DrawerNavigationItem
-                    key={`navigation_${index}`}
-                    icon={<IconForView collectionOrView={view.collection ?? view.view}/>}
-                    tooltipsOpen={tooltipsOpen}
-                    onClick={() => onClick(view)}
-                    drawerOpen={drawerOpen}
-                    url={view.url}
-                    name={view.name}/>;
-            })}
+            {adminViews.length > 0 && <Menu
+                open={adminMenuOpen}
+                onOpenChange={setAdminMenuOpen}
+                trigger={
+                    <IconButton
+                        shape={"square"}
+                        className={"m-4 text-gray-900 dark:text-white w-fit"}>
+                        <Tooltip title={"Admin"}
+                                 open={tooltipsOpen}
+                                 side={"right"} sideOffset={28}>
+                            <MoreVertIcon/>
+                        </Tooltip>
+                        {drawerOpen && <div
+                            className={cn(
+                                drawerOpen ? "opacity-100" : "opacity-0 hidden",
+                                "mx-4 font-inherit text-inherit"
+                            )}>
+                            ADMIN
+                        </div>}
+                    </IconButton>}
+            >
+                {adminViews.map((entry, index) =>
+                    <MenuItem
+                        onClick={(event) => {
+                            event.preventDefault();
+                            navigate(entry.path);
+                        }}
+                        key={`navigation_${index}`}>
+                        {<IconForView collectionOrView={entry.view}/>}
+                        {entry.name}
+                    </MenuItem>)}
 
-        </div>
+            </Menu>}
+        </>
     );
 }
 

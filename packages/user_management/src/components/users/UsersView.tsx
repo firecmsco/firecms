@@ -3,19 +3,19 @@ import { AddIcon, Button, Container, Typography } from "@firecms/ui";
 import { UsersTable } from "./UsersTable";
 import { UserDetailsForm } from "./UserDetailsForm";
 import React, { useCallback, useState } from "react";
-import { FireCMSUserProject } from "../../types";
+import { UserWithRoles } from "../../types";
 import { useUserManagement } from "../../hooks/useUserManagement";
 
 export const UsersView = function UsersView({ children }: { children?: React.ReactNode }) {
 
     const [dialogOpen, setDialogOpen] = useState<boolean>();
-    const [selectedUser, setSelectedUser] = useState<FireCMSUserProject | undefined>();
+    const [selectedUser, setSelectedUser] = useState<UserWithRoles | undefined>();
 
     const { users, usersLimit } = useUserManagement();
 
-    const reachedUsersLimit = usersLimit !== null && (users && users.length >= usersLimit);
+    const reachedUsersLimit = usersLimit !== undefined && (users && users.length >= usersLimit);
 
-    const onUserClicked = useCallback((user: FireCMSUserProject) => {
+    const onUserClicked = useCallback((user: UserWithRoles) => {
         setSelectedUser(user);
         setDialogOpen(true);
     }, []);

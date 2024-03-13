@@ -1,5 +1,7 @@
 import { useState } from "react";
 import {
+    Button,
+    CenteredView,
     Checkbox,
     DeleteIcon,
     IconButton,
@@ -8,12 +10,14 @@ import {
     TableCell,
     TableHeader,
     TableRow,
-    Tooltip
+    Tooltip,
+    Typography
 } from "@firecms/ui";
 import { DeleteConfirmationDialog } from "@firecms/core";
-import { Role } from "@firecms/firebase";
-import { useUserManagement } from "../../hooks/useUserManagement";
+import { useUserManagement } from "../../hooks";
+import { Role } from "../../types";
 import { RoleChip } from "./RoleChip";
+import { DEFAULT_ROLES } from "./default_roles";
 
 export function RolesTable({
                                onRoleClicked,
@@ -25,7 +29,9 @@ export function RolesTable({
 
     const {
         roles,
-        deleteRole
+        saveRole,
+        deleteRole,
+        allowDefaultRolesCreation
     } = useUserManagement();
 
     const [roleToBeDeleted, setRoleToBeDeleted] = useState<Role | undefined>(undefined);
@@ -85,8 +91,29 @@ export function RolesTable({
                         </TableRow>
                     );
                 })}
+
+                {(!roles || roles.length === 0) && <TableRow>
+                    <TableCell colspan={4}>
+                        <CenteredView className={"flex flex-col gap-4 my-8 items-center"}>
+                            <Typography variant={"label"}>
+                                You don&apos;t have any roles yet.
+                            </Typography>
+                            {allowDefaultRolesCreation && <Button variant={"outlined"}
+                                                                  onClick={() => {
+                                                                      DEFAULT_ROLES.forEach((role) => {
+                                                                          saveRole(role);
+                                                                      });
+                                                                  }}>
+                                Create default roles
+                            </Button>}
+                        </CenteredView>
+                    </TableCell>
+                </TableRow>}
+
             </TableBody>
+
         </Table>
+
         <DeleteConfirmationDialog
             open={Boolean(roleToBeDeleted)}
             loading={deleteInProgress}
@@ -107,5 +134,6 @@ export function RolesTable({
             }}
             title={<>Delete?</>}
             body={<>Are you sure you want to delete this role?</>}/>
+
     </div>;
 }
