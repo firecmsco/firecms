@@ -45,11 +45,10 @@ export function convertDataToEntity(data: Record<any, any>,
         id = id.toString();
     } else if (id instanceof Date) {
         id = id.toISOString();
-    } else if ("toString" in id) {
+    } else if (id && "toString" in id) {
         id = id.toString();
-    } else {
-        throw new Error("Import error: ids must be strings or have a toString method.");
     }
+
     return {
         id,
         values,
