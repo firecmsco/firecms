@@ -84,8 +84,13 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
 
     async function updateUser(projectId: string,
                               uid: string,
-                              user: FireCMSCloudUser): Promise<FireCMSCloudUserWithRoles> {
+                              user: FireCMSCloudUserWithRoles): Promise<FireCMSCloudUserWithRoles> {
         const firebaseAccessToken = await getBackendAuthToken();
+        const persistedUserData = {
+            ...user,
+            roles: user.roles.map(r => r.id),
+            updated_on: new Date()
+        }
         return fetch(host + "/projects/" + projectId + "/users/" + uid,
             {
                 method: "PATCH",
@@ -93,7 +98,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${firebaseAccessToken}`
                 },
-                body: JSON.stringify(user)
+                body: JSON.stringify(persistedUserData)
             })
             .then((res) => {
                 return handleApiResponse<FireCMSCloudUserWithRoles>(res, projectId);
