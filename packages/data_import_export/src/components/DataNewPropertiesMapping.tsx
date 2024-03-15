@@ -16,7 +16,7 @@ export interface DataPropertyMappingProps {
     headersMapping: Record<string, string | null>;
     originProperties: Record<string, Property>;
     destinationProperties: Record<string, Property>;
-    onIdPropertyChanged: (value: string) => void;
+    onIdPropertyChanged: (value: string | null) => void;
     buildPropertyView?: (props: {
         isIdColumn: boolean,
         property: Property | null,
@@ -103,14 +103,15 @@ function IdSelectField({
                        }: {
     idColumn?: string,
     headersMapping: Record<string, string | null>;
-    onChange: (value: string) => void
+    onChange: (value: string | null) => void
 }) {
     return <div>
         <Select
             size={"small"}
             value={idColumn ?? ""}
             onChange={(event) => {
-                onChange(event.target.value as string);
+                const value = event.target.value;
+                onChange(value === "none" ? null : value);
             }}
             renderValue={(value) => {
                 return <Typography variant={"body2"}>
@@ -118,7 +119,7 @@ function IdSelectField({
                 </Typography>;
             }}
             label={"Column that will be used as ID for each document"}>
-            <SelectItem value={""}>Autogenerate ID</SelectItem>
+            <SelectItem value={"none"}>Autogenerate ID</SelectItem>
             {Object.entries(headersMapping).map(([key, value]) => {
                 return <SelectItem key={key} value={key}>{key}</SelectItem>;
             })}

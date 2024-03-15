@@ -161,7 +161,7 @@ export const ConfigControllerProvider = React.memo(
             parentCollectionIds: string[],
             collection: PersistedCollection,
         }) => {
-            console.debug("edit property", propertyKey, property, editedCollectionId, currentPropertiesOrder, parentCollectionIds, collection);
+            console.debug("Edit property", propertyKey, property, editedCollectionId, currentPropertiesOrder, parentCollectionIds, collection);
             onAnalyticsEvent?.("edit_property", { propertyKey, editedCollectionId });
             // namespace is all the path until the last dot
             const namespace = propertyKey && propertyKey.includes(".")

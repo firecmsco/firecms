@@ -53,7 +53,7 @@ export function DateTimePropertyField({ disabled }: {
                 <Select name={autoValuePath}
                         disabled={disabled}
                         value={autoValueValue ?? ""}
-                        onValueChange={(v) => setFieldValue(autoValuePath, v)}
+                        onValueChange={(v) => setFieldValue(autoValuePath, v === "none" ? null : v)}
                         renderValue={(v) => {
                             switch (v) {
                                 case "on_create":
@@ -66,7 +66,7 @@ export function DateTimePropertyField({ disabled }: {
                         }}
                         error={Boolean(autoValueError)}
                         label={"Automatic value"}>
-                    <SelectItem value={""}> None </SelectItem>
+                    <SelectItem value={"none"}> None </SelectItem>
                     <SelectItem value={"on_create"}> On create </SelectItem>
                     <SelectItem value={"on_update"}> On any update </SelectItem>
                 </Select>

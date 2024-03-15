@@ -136,7 +136,7 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
                                               idColumn={importConfig.idColumn}
                                               originProperties={importConfig.originProperties}
                                               destinationProperties={properties}
-                                              onIdPropertyChanged={(value) => importConfig.setIdColumn(value)}
+                                              onIdPropertyChanged={(value) => importConfig.setIdColumn(value ?? undefined)}
                                               buildPropertyView={({
                                                                       isIdColumn,
                                                                       property,
@@ -264,7 +264,7 @@ function PropertyTreeSelect({
         if (value === internalIDValue) {
             onIdSelected();
             onPropertySelected(null);
-        } else if (value === "") {
+        } else if (value === "__do_not_import") {
             onPropertySelected(null);
         } else {
             onPropertySelected(value);
@@ -275,7 +275,7 @@ function PropertyTreeSelect({
                    onValueChange={onSelectValueChange}
                    renderValue={renderValue}>
 
-        <SelectItem value={""}>
+        <SelectItem value={"__do_not_import"}>
             <Typography variant={"body2"} className={"p-4"}>Do not import this property</Typography>
         </SelectItem>
 

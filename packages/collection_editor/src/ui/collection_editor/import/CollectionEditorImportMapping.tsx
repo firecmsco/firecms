@@ -149,7 +149,7 @@ export function CollectionEditorImportMapping({
                                           idColumn={importConfig.idColumn}
                                           originProperties={importConfig.originProperties}
                                           destinationProperties={values.properties as Properties}
-                                          onIdPropertyChanged={(value) => importConfig.setIdColumn(value)}
+                                          onIdPropertyChanged={(value) => importConfig.setIdColumn(value ?? undefined)}
                                           buildPropertyView={({
                                                                   property,
                                                                   propertyKey,
