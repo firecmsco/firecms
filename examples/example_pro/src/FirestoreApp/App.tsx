@@ -57,6 +57,7 @@ import CustomColorTextField from "./custom_field/CustomColorTextField";
 import { booksCollection } from "./collections/books_collection";
 import { FirebaseApp } from "firebase/app";
 import { TestEditorView } from "./TestEditorView";
+import { TestBoardView } from "./BoardView/TestBoardView";
 
 function App() {
 
@@ -93,6 +94,12 @@ function App() {
             group: "Content",
             description: "This is an example of an additional view that is defined by the user",
             view: <ExampleCMSView/>
+        },
+        {
+            path: "board_test",
+            name: "Board test",
+            group: "Content",
+            view: <TestBoardView/>
         },
         {
             path: "editor_test",
