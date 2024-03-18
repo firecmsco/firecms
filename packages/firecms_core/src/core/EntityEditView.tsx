@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
-    Entity, EntityOverrides,
+    Entity,
     EntityCollection,
     EntityCustomView,
     EntityStatus,
@@ -9,10 +9,9 @@ import {
     FormContext,
     User
 } from "../types";
-import { CircularProgressCenter, EntityCollectionView, EntityPreview, ErrorBoundary, } from "../components";
+import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary, } from "../components";
 import {
     canEditEntity,
-    fullPathToCollectionSegments,
     removeInitialAndTrailingSlashes,
     resolveDefaultSelectedView,
     resolveEntityView,
@@ -37,7 +36,7 @@ import { useSideDialogContext } from "./index";
 
 const MAIN_TAB_VALUE = "main_##Q$SC^#S6";
 
-export interface EntityViewProps<M extends Record<string, any>> {
+export interface EntityEditViewProps<M extends Record<string, any>> {
     path: string;
     collection: EntityCollection<M>;
     entityId?: string;
@@ -56,18 +55,18 @@ export interface EntityViewProps<M extends Record<string, any>> {
  * You probably don't want to use this view directly since it is bound to the
  * side panel. Instead, you might want to use {@link EntityForm} or {@link EntityCollectionView}
  */
-export function EntityView<M extends Record<string, any>, UserType extends User>({
-                                                                                     path,
-                                                                                     entityId,
-                                                                                     selectedSubPath,
-                                                                                     copy,
-                                                                                     collection,
-                                                                                     parentCollectionIds,
-                                                                                     onValuesAreModified,
-                                                                                     formWidth,
-                                                                                     onUpdate,
-                                                                                     onClose,
-                                                                                 }: EntityViewProps<M>) {
+export function EntityEditView<M extends Record<string, any>, UserType extends User>({
+                                                                                         path,
+                                                                                         entityId,
+                                                                                         selectedSubPath,
+                                                                                         copy,
+                                                                                         collection,
+                                                                                         parentCollectionIds,
+                                                                                         onValuesAreModified,
+                                                                                         formWidth,
+                                                                                         onUpdate,
+                                                                                         onClose,
+                                                                                     }: EntityEditViewProps<M>) {
 
     if (collection.customId && collection.formAutoSave) {
         console.warn(`The collection ${collection.path} has customId and formAutoSave enabled. This is not supported and formAutoSave will be ignored`);
@@ -285,6 +284,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
             .map(e => resolveEntityView(e, customizationController.entityViews))
             .filter(Boolean) as EntityCustomView[]
         : [];
+
     const customViewsView: React.ReactNode[] | undefined = customViews && resolvedEntityViews
         .map(
             (customView, colIndex) => {
@@ -446,7 +446,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                         className={"mt-16 mb-8 mx-8"}
                         variant={"h4"}>{collection.singularName ?? collection.name}
                     </Typography>
-                    <EntityPreview
+                    <EntityView
                         className={"px-12"}
                         entity={usedEntity as Entity<M>}
                         path={path}

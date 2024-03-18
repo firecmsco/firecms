@@ -95,6 +95,7 @@ function ReferenceFieldBindingInternal<M extends Record<string, any>>({
                 {value && <ReferencePreview
                     disabled={!property.path}
                     previewProperties={property.previewProperties}
+                    hover={!disabled}
                     size={"medium"}
                     onClick={disabled || isSubmitting ? undefined : onEntryClick}
                     reference={value}

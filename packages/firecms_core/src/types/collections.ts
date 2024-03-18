@@ -78,6 +78,13 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
     properties: PropertiesOrBuilders<M>;
 
     /**
+     * Title property of the entity. This is the property that will be used
+     * as the title in entity related views and references.
+     * If not specified, the first property simple text property will be used.
+     */
+    titleProperty?: keyof M,
+
+    /**
      * Can this collection be edited by the end user.
      * Defaults to `true`.
      * Keep in mind that you can also set this prop to individual properties.

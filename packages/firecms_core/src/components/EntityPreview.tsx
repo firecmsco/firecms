@@ -1,84 +1,190 @@
-import React, { useMemo } from "react";
-import { PropertyPreview } from "../preview";
-import { Entity, EntityCollection, ResolvedEntityCollection, ResolvedProperties } from "../types";
-import { resolveCollection } from "../util";
-import { cn, defaultBorderMixin, IconButton, OpenInNewIcon } from "@firecms/ui";
-import { CustomizationController } from "../types/customization_controller";
-import { useCustomizationController } from "../hooks/useCustomizationController";
+import * as React from "react";
+import { useMemo } from "react";
+
+import { Entity, EntityCollection, ResolvedProperty } from "../types";
+
+import {
+    getEntityImagePreviewPropertyKey,
+    getEntityPreviewKeys,
+    getEntityTitlePropertyKey,
+    getValueInPath,
+    resolveCollection
+} from "../util";
+import { cn, defaultBorderMixin, Skeleton, Typography } from "@firecms/ui";
+import { PreviewSize, PropertyPreview, SkeletonPropertyComponent } from "../preview";
+import { useCustomizationController, useNavigationController } from "../hooks";
+
+export type EntityPreviewProps = {
+    size: PreviewSize,
+    actions?: React.ReactNode,
+    collection?: EntityCollection,
+    hover?: boolean;
+    previewProperties?: string[],
+    disabled: undefined | boolean,
+    entity: Entity<any>,
+    onClick?: (e: React.SyntheticEvent) => void;
+};
 
 /**
- * @group Components
+ * This view is used to display a preview of an entity.
+ * It is used by default in reference fields and whenever a reference is displayed.
  */
-export interface EntityPreviewProps<M extends Record<string, any>> {
-    entity: Entity<M>;
-    collection: EntityCollection<M>;
-    path: string;
-    className?: string;
-}
+export function EntityPreview({
+                                  actions,
+                                  disabled,
+                                  hover,
+                                  collection: collectionProp,
+                                  previewProperties,
+                                  onClick,
+                                  size,
+                                  entity
+                              }: EntityPreviewProps) {
 
-export function EntityPreview<M extends Record<string, any>>(
-    {
-        entity,
-        collection,
-        path,
-        className
-    }: EntityPreviewProps<M>) {
+    const customizationController = useCustomizationController();
 
-    const customizationController: CustomizationController = useCustomizationController();
-    const resolvedCollection: ResolvedEntityCollection<M> = useMemo(() => resolveCollection<M>({
+    const navigationController = useNavigationController();
+
+    const collection = collectionProp ?? navigationController.getCollection<EntityCollection>(entity.path);
+
+    if (!collection) {
+        throw Error(`Couldn't find the corresponding collection view for the path: ${entity.path}`);
+    }
+
+    const resolvedCollection = React.useMemo(() => resolveCollection({
         collection,
-        path,
-        entityId: entity.id,
+        path: entity.path,
         values: entity.values,
         fields: customizationController.propertyConfigs
-    }), [collection, path, entity]);
+    }), [collection]);
 
-    const properties: ResolvedProperties = resolvedCollection.properties;
+    const listProperties = useMemo(() => getEntityPreviewKeys(resolvedCollection, customizationController.propertyConfigs, previewProperties, size === "small" || size === "medium" ? 3 : 1),
+        [previewProperties, resolvedCollection, size]);
 
-    return (
-        <div className={"w-full " + className}>
-            <div className={"w-full mb-4"}>
-                <div className={cn(defaultBorderMixin, "flex justify-between py-2 border-b last:border-b-0")}>
-                    <div className="flex items-center w-1/4">
-                        <span className="pl-2 text-sm text-gray-600">Id</span>
-                    </div>
-                    <div
-                        className="flex-grow p-2 ml-2 w-3/4 text-gray-900 dark:text-white min-h-[56px] flex items-center">
-                        <span className="flex-grow mr-2">{entity.id}</span>
-                        {customizationController?.entityLinkBuilder &&
-                            <a href={customizationController.entityLinkBuilder({ entity })}
-                               rel="noopener noreferrer"
-                               target="_blank">
-                                <IconButton>
-                                    <OpenInNewIcon
-                                        size={"small"}/>
-                                </IconButton>
-                            </a>}
-                    </div>
-                </div>
-                {Object.entries(properties)
-                    .map(([key, property]) => {
-                        const value = (entity.values)[key];
-                        return (
-                            <div
-                                key={`reference_previews_${key}`}
-                                className={cn(defaultBorderMixin, "flex justify-between py-2 border-b last:border-b-0")}>
-                                <div className="flex items-center w-1/4">
-                                    <span className="pl-2 text-sm text-gray-600">{property.name}</span>
-                                </div>
-                                <div
-                                    className="flex-grow p-2 ml-2 w-3/4 text-gray-900 dark:text-white min-h-[56px] flex items-center">
-                                    <PropertyPreview
-                                        propertyKey={key}
-                                        value={value}
-                                        // entity={entity}
-                                        property={property}
-                                        size={"medium"}/>
-                                </div>
-                            </div>
-                        )
-                    })}
+    const titleProperty = getEntityTitlePropertyKey(resolvedCollection, customizationController.propertyConfigs);
+    const imagePropertyKey = getEntityImagePreviewPropertyKey(resolvedCollection);
+    const imageProperty = imagePropertyKey ? resolvedCollection.properties[imagePropertyKey] : undefined;
+
+    const restProperties = listProperties.filter(p => p !== titleProperty && p !== imagePropertyKey);
+
+    return <EntityPreviewContainer onClick={disabled ? undefined : onClick}
+                                   hover={disabled ? undefined : hover}
+                                   size={size}>
+        {imageProperty && (
+            <div className={cn("self-start mr-2 shrink-0 grow-0", size === "tiny" ? "my-0.5" : "m-2")}>
+                <PropertyPreview property={imageProperty}
+                                 propertyKey={imagePropertyKey as string}
+                                 size={"tiny"}
+                                 value={getValueInPath(entity.values, imagePropertyKey as string)}/>
             </div>
+        )}
+
+        <div className={"flex flex-col flex-grow w-full m-1"}>
+
+            {size !== "tiny" && (
+                entity
+                    ? <div className={`${
+                        size !== "medium"
+                            ? "block whitespace-nowrap overflow-hidden truncate"
+                            : ""
+                    }`}>
+                        <Typography variant={"caption"}
+                                    color={"disabled"}
+                                    className={"font-mono"}>
+                            {entity.id}
+                        </Typography>
+                    </div>
+                    : <Skeleton/>)}
+
+            {titleProperty && (
+                <div className={"my-0.5 text-sm font-medium"}>
+                    {
+                        entity
+                            ? <PropertyPreview
+                                propertyKey={titleProperty as string}
+                                value={getValueInPath(entity.values, titleProperty)}
+                                property={resolvedCollection.properties[titleProperty as string] as ResolvedProperty}
+                                size={"medium"}/>
+                            : <SkeletonPropertyComponent
+                                property={resolvedCollection.properties[titleProperty as string] as ResolvedProperty}
+                                size={"medium"}/>
+                    }
+                </div>
+            )}
+
+            {restProperties && restProperties.map((key) => {
+                const childProperty = resolvedCollection.properties[key as string];
+                if (!childProperty) return null;
+
+                return (
+                    <div key={"ref_prev_" + key}
+                         className={restProperties.length > 1 ? "my-0.5" : "my-0"}>
+                        {
+                            entity
+                                ? <PropertyPreview
+                                    propertyKey={key as string}
+                                    value={getValueInPath(entity.values, key)}
+                                    property={childProperty as ResolvedProperty}
+                                    size={"tiny"}/>
+                                : <SkeletonPropertyComponent
+                                    property={childProperty as ResolvedProperty}
+                                    size={"tiny"}/>
+                        }
+                    </div>
+                );
+            })}
+
         </div>
-    );
+
+        {actions}
+
+    </EntityPreviewContainer>;
 }
+
+type EntityPreviewContainerProps = {
+    children: React.ReactNode;
+    hover?: boolean;
+    size: PreviewSize;
+    className?: string;
+    style?: React.CSSProperties;
+    onClick?: (e: React.SyntheticEvent) => void;
+};
+
+const EntityPreviewContainerInner = React.forwardRef<HTMLDivElement, EntityPreviewContainerProps>(({
+                                                                                                       children,
+                                                                                                       hover,
+                                                                                                       onClick,
+                                                                                                       size,
+                                                                                                       style,
+                                                                                                       className,
+                                                                                                       ...props
+                                                                                                   }, ref) => {
+    return <div
+        ref={ref}
+        style={{
+            ...style,
+            // @ts-ignore
+            tabindex: 0
+        }}
+        className={cn(
+            "bg-white dark:bg-gray-900",
+            "items-center",
+            hover ? "hover:bg-slate-50 dark:hover:bg-gray-800 group-hover:bg-slate-50 dark:group-hover:bg-gray-800" : "",
+            size === "tiny" ? "p-1" : "p-2",
+            "flex border rounded-lg",
+            onClick ? "cursor-pointer" : "",
+            defaultBorderMixin,
+            className)}
+        onClick={(event) => {
+            if (onClick) {
+                event.preventDefault();
+                onClick(event);
+            }
+        }}
+        {...props}>
+        {children}
+    </div>;
+});
+
+EntityPreviewContainerInner.displayName = "EntityPreviewContainer";
+
+export const EntityPreviewContainer = React.memo(EntityPreviewContainerInner) as React.FC<EntityPreviewContainerProps>;

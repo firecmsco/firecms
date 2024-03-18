@@ -8,15 +8,15 @@ const getBackgroundColor = (
     isDragging: boolean,
     isGroupedOver: boolean
 ): string => {
-    // if (isDragging) {
-    //     return "bg-gray-100 dark:bg-gray-800";
-    // }
+    if (isDragging) {
+        return "bg-gray-100 dark:bg-gray-800";
+    }
 
     if (isGroupedOver) {
         return "bg-gray-200";
     }
 
-    return "bg-white dark:bg-gray-900";
+    return "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800";
 };
 
 const getBorderColor = (
@@ -36,44 +36,47 @@ const QuoteItemView: FC<ItemViewProps<Quote>> = ({
                                                      isClone,
                                                      index
                                                  }) => (
-    <a
+    <div
         ref={provided.innerRef}
         {...provided.draggableProps}
         {...provided.dragHandleProps}
         style={getStyle(provided, style)}
-        className={cn("border flex p-2 rounded-lg items-start my-2",
-            defaultBorderMixin,
-            getBorderColor(isDragging),
-            getBackgroundColor(isDragging, !!isGroupedOver))}
+        className={"py-1"}
         data-is-dragging={isDragging}
         data-testid={item.id}
         data-index={index}
         aria-label={`${item.content.author}`}
     >
-        <img
-            src={"https://picsum.photos/70"}
-            className="w-10 h-10 rounded-full mr-2 shrink-0 grow-0"
-        />
-        {isClone && (
-            <div
-                className="absolute bg-green-500 bottom-1 right-[-13px] top-[-13px] rotate-12 w-10 h-10 flex justify-center items-center border-2 border-green-700 rounded-full text-xs">
-                Clone
-            </div>
-        )}
-        <div className="grow">
-            <div className="before:content-['“'] after:content-['”']">
-                {item.content.quote}
-            </div>
-            <div className="flex mt-2 items-center">
-                <small className={"rounded-full p-1"}>
-                    {item.content.author}
-                </small>
-                <small className="grow shrink text-right">
-                    id:{item.id}
-                </small>
+        <div className={cn(
+            "p-2 items-start flex border rounded-lg",
+            defaultBorderMixin,
+            getBorderColor(isDragging),
+            getBackgroundColor(isDragging, !!isGroupedOver))}>
+            <img
+                src={"https://picsum.photos/70"}
+                className="w-10 h-10 rounded-full mr-2 shrink-0 grow-0"
+            />
+            {isClone && (
+                <div
+                    className="absolute bg-green-500 bottom-1 right-[-13px] top-[-13px] rotate-12 w-10 h-10 flex justify-center items-center border-2 border-green-700 rounded-full text-xs">
+                    Clone
+                </div>
+            )}
+            <div className="grow">
+                <div className="before:content-['“'] after:content-['”']">
+                    {item.content.quote}
+                </div>
+                <div className="flex mt-2 items-center">
+                    <small className={"rounded-full p-1"}>
+                        {item.content.author}
+                    </small>
+                    <small className="grow shrink text-right">
+                        id:{item.id}
+                    </small>
+                </div>
             </div>
         </div>
-    </a>
+    </div>
 );
 
 export default QuoteItemView;

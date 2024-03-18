@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import equal from "react-fast-compare"
 
-import { ReferencePreview, ReferencePreviewContainer } from "../../../preview";
+import { ReferencePreview } from "../../../preview";
 import { CollectionSize, Entity, EntityCollection, EntityReference, FilterValues } from "../../../types";
 
 import { getPreviewSizeFrom } from "../../../preview/util";
@@ -9,6 +9,7 @@ import { getReferenceFrom } from "../../../util";
 import { useCustomizationController, useNavigationController, useReferenceDialog } from "../../../hooks";
 import { ErrorView } from "../../ErrorView";
 import { Button } from "@firecms/ui";
+import { EntityPreviewContainer } from "../../EntityPreview";
 
 type TableReferenceFieldProps = {
     name: string;
@@ -57,11 +58,6 @@ export const TableReferenceFieldSuccess = React.memo(
             collection
         } = props;
 
-        const [onHover, setOnHover] = useState(false);
-
-        const hoverTrue = useCallback(() => setOnHover(true), []);
-        const hoverFalse = useCallback(() => setOnHover(false), []);
-
         const onSingleEntitySelected = useCallback((entity: Entity<any>) => {
             updateValue(entity ? getReferenceFrom(entity) : null);
         }, [updateValue]);
@@ -101,29 +97,29 @@ export const TableReferenceFieldSuccess = React.memo(
                     onClick={disabled ? undefined : handleOpen}
                     size={getPreviewSizeFrom(size)}
                     reference={internalValue as EntityReference}
-                    onHover={onHover}
+                    hover={!disabled}
                     disabled={!path}
                     previewProperties={previewProperties}
                 />;
             else
-                return <ReferencePreviewContainer
+                return <EntityPreviewContainer
                     onClick={disabled ? undefined : handleOpen}
                     size={getPreviewSizeFrom(size)}>
                     <ErrorView title="Value is not a reference." error={"Click to edit"}/>
-                </ReferencePreviewContainer>;
+                </EntityPreviewContainer>;
         };
 
         const buildMultipleReferenceField = () => {
             if (Array.isArray(internalValue))
                 return <>
                     {internalValue.map((reference, index) =>
-                        <div className="m-1 w-full"
+                        <div className="w-full my-0.5"
                              key={`preview_array_ref_${name}_${index}`}>
                             <ReferencePreview
                                 onClick={disabled ? undefined : handleOpen}
                                 size={"tiny"}
                                 reference={reference}
-                                onHover={onHover}
+                                hover={!disabled}
                                 disabled={!path}
                                 previewProperties={previewProperties}
                             />
@@ -139,10 +135,7 @@ export const TableReferenceFieldSuccess = React.memo(
             return <ErrorView error={"The specified collection does not exist"}/>;
 
         return (
-            <div className="w-full"
-                 onMouseEnter={hoverTrue}
-                 onMouseMove={hoverTrue}
-                 onMouseLeave={hoverFalse}>
+            <div className="w-full group">
 
                 {internalValue && !multiselect && buildSingleReferenceField()}
 

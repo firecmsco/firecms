@@ -48,8 +48,6 @@ export function ReferenceFilterField({
         ? ["array-contains"]
         : ["==", "!=", ">", "<", ">=", "<="];
 
-    const [onHover, setOnHover] = React.useState(false);
-
     isArray
         ? possibleOperations.push("array-contains-any")
         : possibleOperations.push("in", "not-in");
@@ -129,21 +127,15 @@ export function ReferenceFilterField({
 
     const buildEntry = (reference: EntityReference) => {
         return (
-            <div
-                className="mb-0.5"
-                onMouseEnter={() => setOnHover(true)}
-                onMouseMove={() => setOnHover(true)}
-                onMouseLeave={() => setOnHover(false)}>
-                <ReferencePreview
-                    disabled={!path}
-                    previewProperties={previewProperties}
-                    size={"medium"}
-                    onClick={doOpenDialog}
-                    reference={reference}
-                    onHover={onHover}
-                    allowEntityNavigation={false}
-                />
-            </div>
+            <ReferencePreview
+                disabled={!path}
+                previewProperties={previewProperties}
+                size={"medium"}
+                onClick={doOpenDialog}
+                reference={reference}
+                hover={true}
+                allowEntityNavigation={false}
+            />
         );
     };
 

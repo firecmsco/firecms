@@ -6,7 +6,7 @@ import { ErrorView } from "../../components";
 import { getIconForProperty, getReferenceFrom } from "../../util";
 
 import { useNavigationController, useReferenceDialog } from "../../hooks";
-import { Button, ExpandablePanel } from "@firecms/ui";
+import { Button, cn, ExpandablePanel, fieldBackgroundMixin } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
@@ -38,7 +38,6 @@ export function ArrayOfReferencesFieldBinding({
     }
 
     const expanded = property.expanded === undefined ? true : property.expanded;
-    const [onHover, setOnHover] = React.useState(false);
     const selectedEntityIds = value && Array.isArray(value) ? value.map((ref) => ref.id) : [];
 
     useClearRestoreValue({
@@ -81,21 +80,17 @@ export function ArrayOfReferencesFieldBinding({
         if (!entryValue)
             return <div>Internal ERROR</div>;
         return (
-            <div
-                onMouseEnter={() => setOnHover(true)}
-                onMouseMove={() => setOnHover(true)}
-                onMouseLeave={() => setOnHover(false)}>
                 <ReferencePreview
+                    key={internalId}
                     disabled={!ofProperty.path}
                     previewProperties={ofProperty.previewProperties}
                     size={"medium"}
                     onClick={onEntryClick}
+                    hover={!disabled}
                     reference={entryValue}
-                    onHover={onHover}
                 />
-            </div>
         );
-    }, [ofProperty.path, ofProperty.previewProperties, onHover, value]);
+    }, [ofProperty.path, ofProperty.previewProperties, value]);
 
     const title = (
         <LabelWithIcon icon={getIconForProperty(property, "small")}
@@ -108,7 +103,7 @@ export function ArrayOfReferencesFieldBinding({
         {!collection && <ErrorView
             error={"The specified collection does not exist. Check console"}/>}
 
-        {collection && <>
+        {collection && <div className={"group"}>
 
             <FormikArrayContainer value={value}
                                   addLabel={property.name ? "Add reference to " + property.name : "Add reference"}
@@ -126,7 +121,7 @@ export function ArrayOfReferencesFieldBinding({
                 onClick={onEntryClick}>
                 Edit {property.name}
             </Button>
-        </>}
+        </div>}
     </>;
 
     return (
@@ -134,7 +129,8 @@ export function ArrayOfReferencesFieldBinding({
 
             {!tableMode &&
                 <ExpandablePanel
-                    className={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2"}
+                    titleClassName={fieldBackgroundMixin}
+                    className={cn("px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2", fieldBackgroundMixin)}
                     initiallyExpanded={expanded}
                     title={title}>
                     {body}

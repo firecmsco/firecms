@@ -1,8 +1,8 @@
 export type { ErrorViewProps } from "./ErrorView";
 export { ErrorView } from "./ErrorView";
 
-export type { EntityPreviewProps } from "./EntityPreview";
-export { EntityPreview } from "./EntityPreview";
+export type { EntityViewProps } from "./EntityView";
+export { EntityView } from "./EntityView";
 
 export type { ReferenceSelectionInnerProps } from "./ReferenceTable/ReferenceSelectionTable";
 export { ReferenceSelectionTable } from "./ReferenceTable/ReferenceSelectionTable";

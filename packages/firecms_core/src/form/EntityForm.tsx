@@ -4,7 +4,6 @@ import {
     CMSAnalyticsEvent,
     Entity,
     EntityAction,
-    EntityOverrides,
     EntityCollection,
     EntityStatus,
     EntityValues,
@@ -20,8 +19,9 @@ import equal from "react-fast-compare"
 import {
     canCreateEntity,
     canDeleteEntity,
-    fullPathToCollectionSegments,
     getDefaultValuesFor,
+    getEntityTitlePropertyKey,
+    getValueInPath,
     isHidden,
     isReadOnly,
     resolveCollection
@@ -345,6 +345,9 @@ function EntityFormInternal<M extends Record<string, any>>({
         fields: customizationController.propertyConfigs
     });
 
+    const titlePropertyKey = getEntityTitlePropertyKey(resolvedCollection, customizationController.propertyConfigs);
+    const title = internalValues && titlePropertyKey ? getValueInPath(internalValues, titlePropertyKey) : undefined;
+
     const onIdUpdate = inputCollection.callbacks?.onIdUpdate;
 
     const doOnIdUpdate = useCallback(async () => {
@@ -390,7 +393,10 @@ function EntityFormInternal<M extends Record<string, any>>({
 
     const authController = useAuthController();
 
-    const getActionsForEntity = useCallback(({ entity, customEntityActions }: {
+    const getActionsForEntity = useCallback(({
+                                                 entity,
+                                                 customEntityActions
+                                             }: {
         entity?: Entity<M>,
         customEntityActions?: EntityAction[]
     }): EntityAction[] => {
@@ -455,8 +461,8 @@ function EntityFormInternal<M extends Record<string, any>>({
                     className={`w-full py-2 flex flex-col items-start mt-${4 + (pluginActions ? 8 : 0)} lg:mt-${8 + (pluginActions ? 8 : 0)} mb-8`}>
 
                     <Typography
-                        className={"mt-4 flex-grow " + inputCollection.hideIdFromForm ? "mb-2" : "mb-0"}
-                        variant={"h4"}>{inputCollection.singularName ?? inputCollection.name}
+                        className={"mt-4 flex-grow line-clamp-1 " + inputCollection.hideIdFromForm ? "mb-2" : "mb-0"}
+                        variant={"h4"}>{title ?? inputCollection.singularName ?? inputCollection.name}
                     </Typography>
                     <Alert color={"base"} className={"w-full"} size={"small"}>
                         <code className={"text-xs select-all"}>{path}/{entityId}</code>
@@ -599,6 +605,7 @@ function InnerForm<M extends Record<string, any>>(props: FormexController<M> & {
                                 <Tooltip title={<PropertyIdCopyTooltipContent propertyId={key}/>}
                                          delayDuration={800}
                                          side={"left"}
+                                         align={"start"}
                                          sideOffset={16}>
                                     <PropertyFieldBinding {...cmsFormFieldProps}/>
                                 </Tooltip>

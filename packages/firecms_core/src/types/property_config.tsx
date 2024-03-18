@@ -11,7 +11,7 @@ export type PropertyConfig<T extends CMSType = any> = {
     /**
      * Key used to identify this property config.
      */
-    key: string,
+    key: PropertyConfigId | string;
 
     /**
      * Name of this field type.
@@ -48,7 +48,7 @@ export type PropertyConfig<T extends CMSType = any> = {
 
 }
 
-export type FieldConfigId =
+export type PropertyConfigId =
     "text_field" |
     "multiline" |
     "markdown" |

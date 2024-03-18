@@ -7,13 +7,12 @@ import {
     CollectionSize,
     Entity,
     EntityAction,
-    EntityCollection, EntityOverrides,
+    EntityCollection,
     FilterValues,
     PartialEntityCollection,
     PropertyOrBuilder,
     ResolvedProperty,
-    SaveEntityProps,
-    SelectionController
+    SaveEntityProps
 } from "../../types";
 import {
     EntityCollectionRowActions,
@@ -25,7 +24,6 @@ import {
     canCreateEntity,
     canDeleteEntity,
     canEditEntity,
-    fullPathToCollectionSegments,
     getPropertyInPath,
     mergeDeep,
     resolveCollection,
@@ -129,6 +127,7 @@ export const EntityCollectionView = React.memo(
         const userConfigPersistence = useUserConfigurationPersistence();
         const analyticsController = useAnalyticsController();
         const customizationController = useCustomizationController();
+
 
         const containerRef = React.useRef<HTMLDivElement>(null);
 
@@ -435,7 +434,10 @@ export const EntityCollectionView = React.memo(
 
         const largeLayout = useLargeLayout();
 
-        const getActionsForEntity = ({ entity, customEntityActions }: {
+        const getActionsForEntity = ({
+                                         entity,
+                                         customEntityActions
+                                     }: {
             entity?: Entity<M>,
             customEntityActions?: EntityAction[]
         }): EntityAction[] => {
@@ -472,7 +474,10 @@ export const EntityCollectionView = React.memo(
 
             const isSelected = isEntitySelected(entity);
 
-            const actions = getActionsForEntity({ entity, customEntityActions: collection.entityActions });
+            const actions = getActionsForEntity({
+                entity,
+                customEntityActions: collection.entityActions
+            });
 
             return (
                 <EntityCollectionRowActions
@@ -579,7 +584,7 @@ export const EntityCollectionView = React.memo(
         });
 
         return (
-            <div className={cn("overflow-hidden h-full w-full", className)}
+            <div className={cn("overflow-hidden h-full w-full rounded-md", className)}
                  ref={containerRef}>
                 <EntityCollectionTable
                     key={`collection_table_${fullPath}`}
@@ -682,7 +687,6 @@ export const EntityCollectionView = React.memo(
             equal(a.additionalFields, b.additionalFields) &&
             equal(a.forceFilter, b.forceFilter);
     }) as React.FunctionComponent<EntityCollectionViewProps<any>>
-
 
 function EntitiesCount({
                            fullPath,

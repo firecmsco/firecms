@@ -9,7 +9,7 @@ import {
     useSnackbarController
 } from "../hooks";
 import { resolveCollection } from "../util";
-import { EntityPreview } from "./EntityPreview";
+import { EntityView } from "./EntityView";
 
 export interface DeleteEntityDialogProps<M extends Record<string, any>> {
     entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],
@@ -163,7 +163,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
     } else {
         const entity = entityOrEntities as Entity<M> | undefined;
         content = entity
-            ? <EntityPreview
+            ? <EntityView
                 entity={entity}
                 collection={collection}
                 path={path}/>

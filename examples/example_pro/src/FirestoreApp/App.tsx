@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
@@ -32,6 +32,7 @@ import {
     useFirebaseStorageSource,
     useFirestoreDelegate,
     useInitialiseFirebase,
+    useTraceUpdate,
     useValidateAuthenticator
 } from "@firecms/firebase_pro";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
@@ -59,6 +60,8 @@ import { FirebaseApp } from "firebase/app";
 import { TestEditorView } from "./TestEditorView";
 import { TestBoardView } from "./BoardView/TestBoardView";
 
+const signInOptions: FirebaseSignInProvider[] = ["google.com"];
+
 function App() {
 
     console.debug("Render App");
@@ -77,17 +80,33 @@ function App() {
         </Tooltip>
     );
 
-    const collections = [
-        booksCollection,
-        productsCollection,
-        localeCollectionGroup,
-        usersCollection,
-        blogCollection,
-        showcaseCollection,
-        cryptoCollection
-    ];
+    const onFirebaseInit = (config: object, app: FirebaseApp) => {
+        // Just calling analytics enables screen tracking
+        // getAnalytics(app);
 
-    const views: CMSView[] = [
+        // This is an example of connecting to a local emulator (move import to top)
+        // import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
+        // connectFirestoreEmulator(getFirestore(app), '127.0.0.1', 8080);
+    };
+
+    // It is important to memoize the collections and views
+    const collections = useMemo(() => {
+        const cols = [
+            booksCollection,
+            productsCollection,
+            localeCollectionGroup,
+            usersCollection,
+            blogCollection,
+            showcaseCollection,
+            cryptoCollection
+        ];
+        if (process.env.NODE_ENV !== "production") {
+            cols.push(testCollection);
+        }
+        return cols;
+    }, []);
+
+    const views: CMSView[] = useMemo(() => ([
         {
             path: "additional",
             name: "Additional",
@@ -107,19 +126,7 @@ function App() {
             group: "Content",
             view: <TestEditorView/>
         }
-    ];
-    const onFirebaseInit = (config: object, app: FirebaseApp) => {
-        // Just calling analytics enables screen tracking
-        // getAnalytics(app);
-
-        // This is an example of connecting to a local emulator (move import to top)
-        // import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
-        // connectFirestoreEmulator(getFirestore(app), '127.0.0.1', 8080);
-    };
-
-    if (process.env.NODE_ENV !== "production") {
-        collections.push(testCollection);
-    }
+    ]), []);
 
     // Example of adding a custom field
     const propertyConfigs: Record<string, PropertyConfig> = {
@@ -162,8 +169,6 @@ function App() {
     // Controller used to manage the dark or light color mode
     const modeController = useBuildModeController();
 
-    const signInOptions: FirebaseSignInProvider[] = ["google.com"];
-
     // Controller for managing authentication
     const authController: FirebaseAuthController = useFirebaseAuthController({
         firebaseApp,
@@ -176,10 +181,22 @@ function App() {
     const firestoreIndexesBuilder: FirestoreIndexesBuilder = ({ path }) => {
         if (path === "products") {
             return [
-                { category: "asc", available: "desc" },
-                { category: "asc", available: "asc" },
-                { category: "desc", available: "desc" },
-                { category: "desc", available: "asc" }
+                {
+                    category: "asc",
+                    available: "desc"
+                },
+                {
+                    category: "asc",
+                    available: "asc"
+                },
+                {
+                    category: "desc",
+                    available: "desc"
+                },
+                {
+                    category: "desc",
+                    available: "asc"
+                }
             ];
         }
         return undefined;
@@ -196,7 +213,10 @@ function App() {
         firebaseApp
     });
 
-    const userManagement = useBuildFirestoreUserManagement({ firebaseApp, authController });
+    const userManagement = useBuildFirestoreUserManagement({
+        firebaseApp,
+        authController
+    });
     const userManagementPlugin = useUserManagementPlugin({ userManagement });
 
     const importExportPlugin = useImportExportPlugin();
@@ -206,7 +226,7 @@ function App() {
                                                                                authController
                                                                            }) => {
 
-        console.log("authentication", user, userManagement);
+        // console.log("authentication", user, userManagement);
         if (userManagement.loading) {
             console.log("User management is still loading");
             return false;

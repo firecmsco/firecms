@@ -4,7 +4,7 @@ import { EntitySidePanelProps } from "../types";
 import { useNavigationController } from "../hooks";
 
 import { ErrorBoundary } from "../components";
-import { EntityView } from "./EntityView";
+import { EntityEditView } from "./EntityEditView";
 import { useSideDialogContext } from "./SideDialogs";
 
 /**
@@ -77,7 +77,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     return (
         <>
             <ErrorBoundary>
-                <EntityView
+                <EntityEditView
                     {...props}
                     formWidth={props.width}
                     collection={collection}

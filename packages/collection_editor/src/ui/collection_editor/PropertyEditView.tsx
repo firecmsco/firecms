@@ -5,7 +5,7 @@ import { Formex, FormexController, getIn, useCreateFormex } from "@firecms/forme
 import {
     DEFAULT_FIELD_CONFIGS,
     DeleteConfirmationDialog,
-    FieldConfigId,
+    PropertyConfigId,
     getFieldConfig,
     getFieldId,
     isPropertyBuilder,
@@ -375,7 +375,7 @@ function PropertyEditFormFields({
         }
     }, [errors, onError, propertyNamespace, values?.id]);
 
-    const onWidgetSelectChanged = (newSelectedWidgetId: FieldConfigId) => {
+    const onWidgetSelectChanged = (newSelectedWidgetId: PropertyConfigId) => {
         setSelectedFieldConfigId(newSelectedWidgetId);
         setValues(updatePropertyFromWidget(values, newSelectedWidgetId, propertyConfigs));
         // Ugly hack to autofocus the name field
@@ -495,7 +495,7 @@ function PropertyEditFormFields({
                                 return <em>Select a property
                                     widget</em>;
                             }
-                            const key = value as FieldConfigId;
+                            const key = value as PropertyConfigId;
                             const propertyConfig = DEFAULT_FIELD_CONFIGS[key] ?? propertyConfigs[key];
                             const baseProperty = propertyConfig.property;
                             const baseFieldConfig = baseProperty && !isPropertyBuilder(baseProperty) ? getFieldConfig(baseProperty, propertyConfigs) : undefined;
@@ -524,7 +524,7 @@ function PropertyEditFormFields({
                             </div>
                         }}
                         onValueChange={(value) => {
-                            onWidgetSelectChanged(value as FieldConfigId);
+                            onWidgetSelectChanged(value as PropertyConfigId);
                         }}>
                         {displayedWidgets.map(([key, propertyConfig]) => {
                             const baseProperty = propertyConfig.property;

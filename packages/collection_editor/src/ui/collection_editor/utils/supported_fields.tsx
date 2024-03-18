@@ -1,6 +1,6 @@
-import { DEFAULT_FIELD_CONFIGS, FieldConfigId, PropertyConfig } from "@firecms/core";
+import { DEFAULT_FIELD_CONFIGS, PropertyConfigId, PropertyConfig } from "@firecms/core";
 
-export const supportedFieldsIds: FieldConfigId[] = [
+export const supportedFieldsIds: PropertyConfigId[] = [
     "text_field",
     "multiline",
     "markdown",
@@ -24,6 +24,6 @@ export const supportedFieldsIds: FieldConfigId[] = [
 ];
 
 export const supportedFields: Record<string, PropertyConfig> = Object.entries(DEFAULT_FIELD_CONFIGS)
-    .filter(([id]) => supportedFieldsIds.includes(id as FieldConfigId))
+    .filter(([id]) => supportedFieldsIds.includes(id as PropertyConfigId))
     .map(([id, config]) => ({ [id]: config }))
     .reduce((a, b) => ({ ...a, ...b }), {});

@@ -1,10 +1,10 @@
-import { EntityViewProps } from "./EntityView";
 import { User } from "../types";
 import { useSideDialogContext } from "./SideDialogs";
 import { useSideEntityController } from "../hooks";
 import { FORM_CONTAINER_WIDTH } from "../internal/common";
+import { EntityEditViewProps } from "./EntityEditView";
 
-export type SideEntityViewProps<M extends Record<string, any>> = EntityViewProps<M> & {
+export type SideEntityViewProps<M extends Record<string, any>> = EntityEditViewProps<M> & {
     formWidth?: number | string;
     onClose?: () => void;
 }
