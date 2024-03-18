@@ -19,9 +19,10 @@ export const editEntityAction: EntityAction = {
             path: entity.path,
             entityId: entity.id
         });
+        const path = collection?.collectionGroup ? entity.path : (fullPath ?? entity.path);
         context.sideEntityController.open({
             entityId: entity.id,
-            path: fullPath ?? entity.path,
+            path,
             collection,
             updateUrl: true,
             onClose: () => unhighlightEntity?.(entity),
