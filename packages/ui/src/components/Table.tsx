@@ -13,7 +13,7 @@ export const Table = ({
                           className,
                           style
                       }: TableProps) => (
-    <table className={cn("w-full text-left text-gray-800 dark:text-gray-100 rounded-md overflow-x-auto",
+    <table className={cn("w-full text-left text-gray-800 dark:text-white rounded-md overflow-x-auto",
         className)}
            style={style}>
         {children}

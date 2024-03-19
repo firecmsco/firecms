@@ -46,7 +46,7 @@ export function Chip({
                 "text-ellipsis",
                 onClick ? "cursor-pointer hover:bg-slate-300 hover:dark:bg-slate-700" : "",
                 sizeClassNames[size],
-                error || !usedColorScheme ? "bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-gray-100" : "",
+                error || !usedColorScheme ? "bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-white" : "",
                 error ? "text-red-500 dark:text-red-400" : "",
                 className)}
             onClick={onClick}

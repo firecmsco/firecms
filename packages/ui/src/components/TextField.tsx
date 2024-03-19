@@ -132,7 +132,7 @@ export function TextField<T extends string | number>({
                 label ? (size === "medium" ? "pt-[28px] pb-2" : "pt-4 pb-2") : "py-2",
                 focused ? "text-text-primary dark:text-text-primary-dark" : "",
                 endAdornment ? "pr-10" : "pr-3",
-                disabled && "border border-transparent outline-none opacity-50 dark:opacity-50 text-slate-800 dark:text-gray-100",
+                disabled && "border border-transparent outline-none opacity-50 dark:opacity-50 text-slate-800 dark:text-white",
                 inputClassName
             )}
             placeholder={focused || hasValue || !label ? placeholder : undefined}

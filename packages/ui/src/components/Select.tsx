@@ -131,7 +131,7 @@ export function Select({
                         "select-none rounded-md text-sm",
                         error ? "text-red-500 dark:text-red-600" : "focus:text-text-primary dark:focus:text-text-primary-dark",
                         error ? "border border-red-500 dark:border-red-600" : "",
-                        disabled ? "text-slate-600 dark:text-slate-400" : "text-slate-800 dark:text-gray-100",
+                        disabled ? "text-slate-600 dark:text-slate-400" : "text-slate-800 dark:text-white",
                         "relative flex items-center",
                         includeFocusOutline ? focusedMixin : "",
                         inputClassName
@@ -249,7 +249,7 @@ export function SelectGroup({
     return <>
         <SelectPrimitive.Group
             className={cn(
-                "text-xs text-slate-900 dark:text-gray-100 uppercase tracking-wider font-bold mt-6 first:mt-2",
+                "text-xs text-slate-900 dark:text-white uppercase tracking-wider font-bold mt-6 first:mt-2",
                 "px-2 py-2",
                 className
             )}>

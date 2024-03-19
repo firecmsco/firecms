@@ -19,7 +19,7 @@ export function Tabs({
 
     return <TabsPrimitive.Root value={value} onValueChange={onValueChange}>
         <TabsPrimitive.List className={cn(
-            "flex text-sm font-medium text-center text-slate-800 dark:text-gray-100 max-w-full overflow-auto no-scrollbar",
+            "flex text-sm font-medium text-center text-slate-800 dark:text-white max-w-full overflow-auto no-scrollbar",
             className)
         }>
             {children}
@@ -48,7 +48,7 @@ export function Tab({
                                       disabled
                                           ? "text-slate-400 dark:text-slate-500"
                                           : cn("text-slate-700 dark:text-gray-300",
-                                              "data-[state=active]:text-slate-900 data-[state=active]:dark:text-gray-100",
+                                              "data-[state=active]:text-slate-900 data-[state=active]:dark:text-white",
                                               "hover:text-slate-800 dark:hover:text-slate-200"),
                                       // disabled ? "text-slate-400 dark:text-slate-500" : "data-[state=active]:text-primary",
                                       // "data-[state=active]:bg-slate-50 data-[state=active]:dark:bg-slate-800",
