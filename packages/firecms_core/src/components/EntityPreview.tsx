@@ -10,9 +10,10 @@ import {
     getValueInPath,
     resolveCollection
 } from "../util";
-import { cn, defaultBorderMixin, Skeleton, Typography } from "@firecms/ui";
+import { cn, defaultBorderMixin, IconButton, KeyboardTabIcon, Skeleton, Tooltip, Typography } from "@firecms/ui";
 import { PreviewSize, PropertyPreview, SkeletonPropertyComponent } from "../preview";
-import { useCustomizationController, useNavigationController } from "../hooks";
+import { useCustomizationController, useNavigationController, useSideEntityController } from "../hooks";
+import { useAnalyticsController } from "../hooks/useAnalyticsController";
 
 export type EntityPreviewProps = {
     size: PreviewSize,
@@ -22,6 +23,7 @@ export type EntityPreviewProps = {
     previewProperties?: string[],
     disabled: undefined | boolean,
     entity: Entity<any>,
+    includeEntityNavigation?: boolean,
     onClick?: (e: React.SyntheticEvent) => void;
 };
 
@@ -37,9 +39,12 @@ export function EntityPreview({
                                   previewProperties,
                                   onClick,
                                   size,
+                                  includeEntityNavigation,
                                   entity
                               }: EntityPreviewProps) {
 
+    const analyticsController = useAnalyticsController();
+    const sideEntityController = useSideEntityController();
     const customizationController = useCustomizationController();
 
     const navigationController = useNavigationController();
@@ -70,7 +75,7 @@ export function EntityPreview({
                                    hover={disabled ? undefined : hover}
                                    size={size}>
         {imageProperty && (
-            <div className={cn("self-start mr-2 shrink-0 grow-0", size === "tiny" ? "my-0.5" : "m-2")}>
+            <div className={cn("mr-2 shrink-0 grow-0", size === "tiny" ? "my-0.5" : "m-2 self-start")}>
                 <PropertyPreview property={imageProperty}
                                  propertyKey={imagePropertyKey as string}
                                  size={"tiny"}
@@ -134,6 +139,29 @@ export function EntityPreview({
             })}
 
         </div>
+
+        {entity && includeEntityNavigation &&
+            <Tooltip title={`See details for ${entity.id}`}
+                     className={size !== "tiny" ? "self-start" : ""}>
+                <IconButton
+                    color={"inherit"}
+                    size={"small"}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        analyticsController.onAnalyticsEvent?.("entity_click_from_reference", {
+                            path: entity.path,
+                            entityId: entity.id
+                        });
+                        sideEntityController.open({
+                            entityId: entity.id,
+                            path: entity.path,
+                            collection,
+                            updateUrl: true
+                        });
+                    }}>
+                    <KeyboardTabIcon size={"small"}/>
+                </IconButton>
+            </Tooltip>}
 
         {actions}
 

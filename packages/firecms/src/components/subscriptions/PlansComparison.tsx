@@ -88,10 +88,10 @@ export function PlansComparison() {
                 </ul>
             </div>
 
-            <span className={"text-2xl font-bold text-primary text-center my-8"}>€9.99 user/month</span>
-
-            <div className={"flex items-center justify-center"}>
-                <UpgradeToPlusButton/>
+            <div className={"flex flex-col gap-4 items-center justify-center mt-8"}>
+                <UpgradeToPlusButton includePriceSelect={true}
+                                     includePriceLabel={false}
+                                     largePriceLabel={true}/>
             </div>
 
         </div>
@@ -121,12 +121,13 @@ export function PlansComparison() {
             <div className={"text-center mt-4 text-primary w-full"}>
                 <Button
                     component={"a"}
+                    size={"large"}
                     variant={"outlined"}
-                    href="mailto:hello@firecms.co?subject=FireCMS%20Cloud%20Pro"
+                    href="https://firecms.co/pro"
                     rel="noopener noreferrer"
                     target="_blank"
                 >
-                    Talk to us
+                    More info
                 </Button>
             </div>
 

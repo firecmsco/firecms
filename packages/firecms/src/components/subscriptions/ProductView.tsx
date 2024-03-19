@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
 import { Alert, Chip, LoadingButton, RocketLaunchIcon, Select, SelectItem } from "@firecms/ui";
-import { ProductPrice, ProductWithPrices, SubscriptionType } from "../../types/subscriptions";
+import { ProductPrice, ProductWithPrices, SubscriptionType } from "../../types";
 import { getPriceString, getSubscriptionPlanName } from "../settings/common";
 
 export function ProductView({
                                 product,
                                 includePriceSelect = true,
+                                includePriceLabel = true,
+                                largePriceLabel = false,
                                 subscribe,
                                 projectId
                             }: {
     product: ProductWithPrices,
     projectId?: string,
     includePriceSelect?: boolean,
+    includePriceLabel?: boolean,
+    largePriceLabel?: boolean,
     subscribe: (projectId: string,
                 productPrice: ProductPrice,
                 onCheckoutSessionReady: (url: string, error: Error) => void,
@@ -38,14 +42,23 @@ export function ProductView({
         ? <>
             <Select
                 size={"small"}
+                invisible={true}
+                padding={false}
                 onChange={(e) => {
                     setSelectedPrice(productPrices.find(price => price.id === e.target.value));
                 }}
                 position={"item-aligned"}
-                label={"Choose pricing plan"}
+                // label={"Choose pricing plan"}
                 renderValue={(value) => {
                     const price = productPrices.find(price => price.id === value);
-                    return price ? getPriceString(price) : "";
+                    if (!price) return null;
+                    if (largePriceLabel) {
+                        return <span
+                            className={"ml-4 mb-4 text-2xl font-bold text-primary text-center my-8"}>{getPriceString(price)}</span>
+                    }
+                    return <Chip>
+                        {price ? getPriceString(price) : ""}
+                    </Chip>;
                 }}
                 value={selectedPrice?.id ?? ""}>
                 {productPrices && productPrices.map(price =>
@@ -55,10 +68,14 @@ export function ProductView({
                 )}
             </Select>
         </>
-        : <Chip
-            size={"small"}>
-            {getPriceString(productPrices[0]) + " per user"}
-        </Chip>;
+        : productPrices ?
+            (largePriceLabel ? <span
+                    className={"ml-4 mb-4 text-2xl font-bold text-primary text-center my-8"}>{getPriceString(productPrices[0])}</span>
+                : <Chip
+                    size={"small"}>
+                    {getPriceString(productPrices[0])}
+                </Chip>)
+            : null;
 
     const [linkLoading, setLinkLoading] = useState<boolean>(false);
 
@@ -86,9 +103,12 @@ export function ProductView({
 
     return <>
 
-        {includePriceSelect && <div className={"my-2"}>
-            You can upgrade your project for {priceSelect}
-        </div>}
+        {includePriceSelect && <>
+            {includePriceLabel && <div className={"my-2 flex items-center gap-2"}>
+                You can upgrade your project for {priceSelect}
+            </div>}
+            {!includePriceLabel && priceSelect}
+        </>}
 
         <LoadingButton
             variant={"filled"}

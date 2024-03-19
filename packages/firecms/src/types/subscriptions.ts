@@ -19,7 +19,7 @@ export type ProductPrice = {
     id: string;
     active: boolean;
     billing_scheme: string;
-    currency: "eur";
+    currency: "eur" | "usd";
     description: string;
     interval: "month";
     interval_count: number;

@@ -2,10 +2,18 @@ import { ProductPrice, Subscription } from "../../types/subscriptions";
 import { ProjectSubscriptionPlan } from "../../types/projects";
 
 export function getPriceString(price: ProductPrice) {
+
+    if(price.currency === "usd") {
+        return new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: price.currency
+        }).format(price.unit_amount / 100) + " user/" + price.interval;
+    }
+
     return new Intl.NumberFormat("es-ES", {
         style: "currency",
         currency: price.currency
-    }).format(price.unit_amount / 100) + " per " + price.interval;
+    }).format(price.unit_amount / 100) + " user/" + price.interval;
 }
 
 

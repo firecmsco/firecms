@@ -97,11 +97,6 @@ function ReferencePreviewExisting<M extends Record<string, any> = any>({
     collection: EntityCollection<M>
 }) {
 
-    const customizationController = useCustomizationController();
-
-    const analyticsController = useAnalyticsController();
-    const sideEntityController = useSideEntityController();
-
     const {
         entity,
         dataLoading,
@@ -163,30 +158,8 @@ function ReferencePreviewExisting<M extends Record<string, any> = any>({
                           entity={usedEntity}
                           collection={collection}
                           onClick={onClick}
-                          hover={hover}
-                          actions={!disabled && usedEntity && allowEntityNavigation &&
-                              <Tooltip title={`See details for ${usedEntity.id}`}
-                                       className={"self-start"}>
-                                  <IconButton
-                                      color={"inherit"}
-                                      size={"small"}
-                                      onClick={(e) => {
-                                          e.stopPropagation();
-                                          analyticsController.onAnalyticsEvent?.("entity_click_from_reference", {
-                                              path: usedEntity.path,
-                                              entityId: usedEntity.id
-                                          });
-                                          sideEntityController.open({
-                                              entityId: usedEntity.id,
-                                              path: usedEntity.path,
-                                              collection,
-                                              updateUrl: true
-                                          });
-                                      }}>
-                                      <KeyboardTabIcon size={"small"}/>
-                                  </IconButton>
-                              </Tooltip>
-                          }/>;
+                          includeEntityNavigation={allowEntityNavigation}
+                          hover={hover}/>;
 
 }
 

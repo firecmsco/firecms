@@ -13,7 +13,7 @@ export const Table = ({
                           className,
                           style
                       }: TableProps) => (
-    <table className={cn("w-full text-left text-gray-800 dark:text-slate-200 rounded-md overflow-x-auto",
+    <table className={cn("w-full text-left text-gray-800 dark:text-gray-100 rounded-md overflow-x-auto",
         className)}
            style={style}>
         {children}
@@ -46,7 +46,7 @@ export const TableHeader = ({
     <thead>
     <tr className={cn(
         defaultBorderMixin,
-        "text-sm font-medium text-gray-700 dark:text-slate-300",
+        "text-sm font-medium text-gray-700 dark:text-gray-300",
         "bg-slate-50 border-b dark:bg-gray-900", className)}>
         {children}
     </tr>

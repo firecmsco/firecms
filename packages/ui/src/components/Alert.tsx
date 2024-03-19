@@ -34,7 +34,7 @@ const getColorClasses = (severity: string) => {
             return "bg-emerald-50 dark:bg-emerald-800 dark:text-emerald-100 text-emerald-900";
         case "base":
         default:
-            return "bg-slate-50 dark:bg-slate-800 dark:text-slate-100 text-slate-900";
+            return "bg-slate-50 dark:bg-slate-800 dark:text-gray-100 text-slate-900";
     }
 };
 

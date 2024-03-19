@@ -1,8 +1,17 @@
 import { ProductView } from "./ProductView";
 import { useFireCMSBackend, useProjectConfig, useSubscriptionsForUserController } from "../../hooks";
 import { LoadingButton, RocketLaunchIcon } from "@firecms/ui";
+import { ProductPrice } from "../../types";
 
-export function UpgradeToPlusButton({}: {}) {
+export function UpgradeToPlusButton({
+                                        includePriceSelect,
+                                        includePriceLabel,
+                                        largePriceLabel
+                                    }: {
+    includePriceSelect: boolean,
+    includePriceLabel: boolean,
+    largePriceLabel: boolean
+}) {
     const { backendFirebaseApp } = useFireCMSBackend();
     const {
         subscriptionPlan,
@@ -18,15 +27,7 @@ export function UpgradeToPlusButton({}: {}) {
         firebaseApp: backendFirebaseApp,
     });
 
-    // if (products === undefined) {
-    //     return <CircularProgress/>
-    // }
-
-    const cloudProducts = products
-        ? products.filter(p => p.metadata?.type === "cloud_plus" || p.metadata?.type === "cloud_pro")
-        : [];
-
-    const plusProduct = cloudProducts.find(p => p.metadata?.type === "cloud_plus");
+    const plusProduct = products?.find(p => p.metadata?.type === "cloud_plus");
 
     if (!plusProduct) {
         return <LoadingButton
@@ -38,8 +39,17 @@ export function UpgradeToPlusButton({}: {}) {
     }
 
     return <ProductView
-        includePriceSelect={false}
+        includePriceSelect={includePriceSelect}
+        includePriceLabel={includePriceLabel}
+        largePriceLabel={largePriceLabel}
         product={plusProduct}
         projectId={projectId}
         subscribe={subscribe}/>
+}
+
+function getPriceString(price: ProductPrice) {
+    return new Intl.NumberFormat("es-ES", {
+        style: "currency",
+        currency: price.currency
+    }).format(price.unit_amount / 100) + " per " + price.interval;
 }
