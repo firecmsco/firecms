@@ -1,8 +1,13 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AuthController } from "../types";
 
 export const DEFAULT_SERVER_DEV = "https://api-kdoe6pj3qq-ey.a.run.app";
 export const DEFAULT_SERVER = "https://api-drplyi3b6q-ey.a.run.app";
+
+export type AccessResponse = {
+    blocked?: boolean;
+    message?: string;
+}
 
 async function makeRequest(authController: AuthController) {
     const firebaseToken = await authController.getAuthToken();
@@ -17,15 +22,18 @@ async function makeRequest(authController: AuthController) {
             body: JSON.stringify({})
         })
         .then(async (res) => {
+            return res.json();
         });
 }
 
-export function useProjectLog(authController: AuthController) {
+export function useProjectLog(authController: AuthController): AccessResponse | null {
+    const [accessResponse, setAccessResponse] = useState<AccessResponse | null>(null);
     const accessedUserRef = useRef<string | null>(null);
     useEffect(() => {
         if (authController.user && authController.user.uid !== accessedUserRef.current && !authController.initialLoading) {
-            makeRequest(authController);
+            makeRequest(authController).then(setAccessResponse);
             accessedUserRef.current = authController.user.uid;
         }
     }, [authController]);
+    return accessResponse;
 }

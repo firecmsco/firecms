@@ -7,7 +7,7 @@ export const placeholder = Placeholder;
 export const tiptapLink = TiptapLink.configure({
     HTMLAttributes: {
         class: cn(
-            "text-gray-600 dark:text-gray-300 underline underline-offset-[3px] hover:text-primary transition-colors cursor-pointer",
+            "text-gray-600 dark:text-slate-300 underline underline-offset-[3px] hover:text-primary transition-colors cursor-pointer",
         ),
     },
 });

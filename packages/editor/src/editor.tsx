@@ -341,7 +341,7 @@ export const FireCMSEditor = ({
 
                         <EditorCommand
                             className={cn("text-gray-900 dark:text-white z-50 h-auto max-h-[330px] w-72 overflow-y-auto rounded-md border bg-white dark:bg-gray-900 px-1 py-2 shadow transition-all", defaultBorderMixin)}>
-                            <EditorCommandEmpty className="px-2 text-gray-700 dark:text-gray-300">
+                            <EditorCommandEmpty className="px-2 text-gray-700 dark:text-slate-300">
                                 No results
                             </EditorCommandEmpty>
                             {suggestionItems.map((item) => (
@@ -357,7 +357,7 @@ export const FireCMSEditor = ({
                                     </div>
                                     <div>
                                         <p className="font-medium">{item.title}</p>
-                                        <p className="text-xs text-gray-700 dark:text-gray-300">
+                                        <p className="text-xs text-gray-700 dark:text-slate-300">
                                             {item.description}
                                         </p>
                                     </div>

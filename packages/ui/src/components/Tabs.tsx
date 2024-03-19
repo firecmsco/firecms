@@ -47,7 +47,7 @@ export function Tab({
                                       "data-[state=active]:border-secondary",
                                       disabled
                                           ? "text-slate-400 dark:text-slate-500"
-                                          : cn("text-slate-700 dark:text-gray-300",
+                                          : cn("text-slate-700 dark:text-slate-300",
                                               "data-[state=active]:text-slate-900 data-[state=active]:dark:text-white",
                                               "hover:text-slate-800 dark:hover:text-slate-200"),
                                       // disabled ? "text-slate-400 dark:text-slate-500" : "data-[state=active]:text-primary",

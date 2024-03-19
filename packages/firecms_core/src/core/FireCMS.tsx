@@ -13,14 +13,13 @@ import { SideEntityControllerContext } from "../contexts/SideEntityControllerCon
 import { NavigationContext } from "../contexts/NavigationContext";
 import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerContext";
 import { useLocaleConfig } from "../internal/useLocaleConfig";
-import { CenteredView } from "@firecms/ui";
+import { CenteredView, Typography } from "@firecms/ui";
 import { DialogsProvider } from "../contexts/DialogsProvider";
 import { useBuildDataSource } from "../internal/useBuildDataSource";
 import { useBuildCustomizationController } from "../internal/useBuildCustomizationController";
 import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext";
 import { AnalyticsContext } from "../contexts/AnalyticsContext";
 import { useProjectLog } from "../hooks/useProjectLog";
-import { useTraceUpdate } from "../util";
 
 /**
  * If you are using independent components of the CMS
@@ -82,12 +81,11 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
         components
     });
 
-    // useTraceUpdate({ dataSource, dataSourceDelegate, navigationController, propertyConfigs });
     const analyticsController = useMemo(() => ({
         onAnalyticsEvent
     }), []);
 
-    useProjectLog(authController);
+    const accessResponse = useProjectLog(authController);
 
     if (navigationController.navigationLoadingError) {
         return (
@@ -109,6 +107,21 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
         );
     }
 
+    if (accessResponse?.blocked) {
+        return (
+            <CenteredView maxWidth={"md"} fullScreen={true}>
+                <Typography variant={"h4"}>
+                    Access blocked
+                </Typography>
+                <Typography>
+                    This app has been blocked. Please reach out at <a
+                    href={"mailto:hello@firecms.co"}>hello@firecms.co</a> for more information.
+                </Typography>
+                {accessResponse?.message &&
+                    <Typography>Response from the server: {accessResponse?.message}</Typography>}
+            </CenteredView>
+        );
+    }
 
     return (
         <ModeControllerContext.Provider value={modeController}>

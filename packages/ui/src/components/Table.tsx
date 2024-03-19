@@ -46,7 +46,7 @@ export const TableHeader = ({
     <thead>
     <tr className={cn(
         defaultBorderMixin,
-        "text-sm font-medium text-gray-700 dark:text-gray-300",
+        "text-sm font-medium text-gray-700 dark:text-slate-300",
         "bg-slate-50 border-b dark:bg-gray-900", className)}>
         {children}
     </tr>

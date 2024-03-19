@@ -216,7 +216,7 @@ export function SelectItem({
         }}
         className={cn(
             "w-full",
-            "relative relative flex items-center p-2 rounded-md text-sm text-slate-700 dark:text-gray-300",
+            "relative relative flex items-center p-2 rounded-md text-sm text-slate-700 dark:text-slate-300",
             focusedMixin,
             "focus:z-10",
             "data-[state=checked]:bg-slate-100 data-[state=checked]:dark:bg-slate-900 focus:bg-slate-100 dark:focus:bg-slate-950",

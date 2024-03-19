@@ -184,7 +184,7 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
                                    onChange={() => setExportType("csv")}
                                    className={cn(focusedMixin, "w-4 text-primary-dark bg-gray-100 border-gray-300 dark:bg-gray-700 dark:border-gray-600")}/>
                             <label htmlFor="radio-csv"
-                                   className="p-2 text-sm font-medium text-gray-900 dark:text-gray-300">CSV</label>
+                                   className="p-2 text-sm font-medium text-gray-900 dark:text-slate-300">CSV</label>
                         </div>
                         <div className="flex items-center">
                             <input id="radio-json" type="radio" value="json" name="exportType"
@@ -192,7 +192,7 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
                                    onChange={() => setExportType("json")}
                                    className={cn(focusedMixin, "w-4 text-primary-dark bg-gray-100 border-gray-300 dark:bg-gray-700 dark:border-gray-600")}/>
                             <label htmlFor="radio-json"
-                                   className="p-2 text-sm font-medium text-gray-900 dark:text-gray-300">JSON</label>
+                                   className="p-2 text-sm font-medium text-gray-900 dark:text-slate-300">JSON</label>
                         </div>
                     </div>
 
@@ -203,7 +203,7 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
                                    onChange={() => setDateExportType("timestamp")}
                                    className={cn(focusedMixin, "w-4 text-primary-dark bg-gray-100 border-gray-300 dark:bg-gray-700 dark:border-gray-600")}/>
                             <label htmlFor="radio-timestamp"
-                                   className="p-2 text-sm font-medium text-gray-900 dark:text-gray-300">Dates as
+                                   className="p-2 text-sm font-medium text-gray-900 dark:text-slate-300">Dates as
                                 timestamps ({dateRef.current.getTime()})</label>
                         </div>
                         <div className="flex items-center">
@@ -212,7 +212,7 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
                                    onChange={() => setDateExportType("string")}
                                    className={cn(focusedMixin, "w-4 text-primary-dark bg-gray-100 border-gray-300 dark:bg-gray-700 dark:border-gray-600")}/>
                             <label htmlFor="radio-string"
-                                   className="p-2 text-sm font-medium text-gray-900 dark:text-gray-300">Dates as
+                                   className="p-2 text-sm font-medium text-gray-900 dark:text-slate-300">Dates as
                                 strings ({dateRef.current.toISOString()})</label>
                         </div>
                     </div>

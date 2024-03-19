@@ -32,7 +32,6 @@ import {
     useFirebaseStorageSource,
     useFirestoreDelegate,
     useInitialiseFirebase,
-    useTraceUpdate,
     useValidateAuthenticator
 } from "@firecms/firebase_pro";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
