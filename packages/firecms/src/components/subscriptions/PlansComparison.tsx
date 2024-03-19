@@ -40,11 +40,11 @@ export function PlansComparison() {
         <div
             className="h-full max-w-sm p-6 border border-solid border-gray-200 rounded-lg shadow dark:border-gray-700 flex flex-col">
 
-            <h3 className={"text-2xl md:text-4xl font-bold text-center text-gray-700 dark:text-gray-300 uppercase my-4"}>
+            <h3 className={"text-2xl md:text-4xl font-bold text-center text-gray-800 dark:text-gray-200 uppercase my-4"}>
                 Free
             </h3>
             <div className={"grow"}>
-                <p className={"text-lg mb-4"}>
+                <p className={"text-lg mb-4 text-center font-semibold"}>
                     Try FireCMS and upgrade to a paid plan when you
                     need more features.
                 </p>
@@ -73,8 +73,8 @@ export function PlansComparison() {
                 Plus
             </h3>
             <div className={"grow"}>
-                <p className={"text-lg mb-4"}>
-                    Perfect for startups and larger companies
+                <p className={"text-lg mb-4 text-center font-semibold"}>
+                    Perfect for startups
                 </p>
                 <ul>
                     <li className={"ml-8 list-disc"}>Everything in the free tier</li>
@@ -101,12 +101,12 @@ export function PlansComparison() {
         <div
             className="h-full max-w-sm p-6 border border-solid border-gray-200 rounded-lg shadow dark:border-gray-700 flex flex-col">
 
-            <h3 className={"text-2xl md:text-4xl font-bold text-center text-gray-700 dark:text-gray-300 uppercase my-4"}>
+            <h3 className={"text-2xl md:text-4xl font-bold text-center text-gray-800 dark:text-gray-200 uppercase my-4"}>
                 Pro
             </h3>
             <div className={"grow"}>
-                <p className={"text-lg mb-4"}>
-                    Perfect for agencies.
+                <p className={"text-lg mb-4 text-center font-semibold"}>
+                    Perfect for agencies and larger organizations
                 </p>
                 <ul>
                     <li className={"ml-8 list-disc"}>Everything in PLUS</li>

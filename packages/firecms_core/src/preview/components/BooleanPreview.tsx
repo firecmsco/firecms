@@ -1,11 +1,24 @@
 import React from "react";
 import { Checkbox } from "@firecms/ui";
+import { PreviewSize } from "../PropertyPreviewProps";
+import { Property } from "../../types";
 
 /**
  * @group Preview components
  */
-export function BooleanPreview({ value }: {
-    value: boolean
+export function BooleanPreview({
+                                   value,
+                                   size,
+                                   property
+                               }: {
+    value: boolean,
+    size: PreviewSize,
+    property: Property,
 }): React.ReactElement {
-    return <Checkbox checked={value} color={"secondary"}/>;
+    return <div className={"flex flex-row gap-2 items-center"}>
+        <Checkbox checked={value}
+                  size={size}
+                  color={"secondary"}/>
+        {property.name && <span className={size === "tiny" ? "text-sm" : ""}>{property.name}</span>}
+    </div>;
 }

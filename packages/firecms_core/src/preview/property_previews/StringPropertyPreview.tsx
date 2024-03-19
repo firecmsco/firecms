@@ -6,7 +6,7 @@ import { PreviewType } from "../../types";
 import { UrlComponentPreview } from "../components/UrlComponentPreview";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
 import { ErrorBoundary } from "../../components";
-import { Chip, getColorSchemeForSeed } from "@firecms/ui";
+import { Chip, cn, getColorSchemeForSeed } from "@firecms/ui";
 
 /**
  * @group Preview components
@@ -24,14 +24,14 @@ export function StringPropertyPreview({
         return <EnumValuesChip
             enumKey={enumKey}
             enumValues={resolvedProperty.enumValues}
-            size={size !== "medium" ? "small" : "medium"}/>;
+            size={size}/>;
     } else if (property.previewAsTag) {
         const colorScheme = getColorSchemeForSeed(propertyKey ?? "");
         return (
             <ErrorBoundary>
                 <Chip
                     colorScheme={colorScheme}
-                    size={size !== "medium" ? "small" : "medium"}>
+                    size={size}>
                     {value}
                 </Chip>
             </ErrorBoundary>);
@@ -45,15 +45,16 @@ export function StringPropertyPreview({
         if (!value) return <></>;
         const lines = value.split("\n");
         return value && value.includes("\n")
-            ? <div className={"overflow-x-scroll"}>
+            ? <div className={cn("overflow-x-scroll", size === "tiny" ? "text-sm" : "")}>
                 {lines.map((str, index) =>
                     <React.Fragment key={`string_preview_${index}`}>
                         <span>{str}</span>
                         {index !== lines.length - 1 && <br/>}
                     </React.Fragment>)}
             </div>
-            : <>
-                {value}
-            </>;
+            : (size === "tiny"
+                    ? <span className={"text-sm"}>{value}</span>
+                    : <>{value}</>
+            );
     }
 }

@@ -144,6 +144,7 @@ export function TextSearchInfoDialog({
                     </LoadingButton>}
 
                 {!projectConfig.canUseLocalTextSearch && <UpgradeToPlusButton includePriceSelect={true}
+                                                                              largePriceLabel={false}
                                                                               includePriceLabel={false}/>}
 
             </div>

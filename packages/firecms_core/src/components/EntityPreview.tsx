@@ -75,7 +75,7 @@ export function EntityPreview({
                                    hover={disabled ? undefined : hover}
                                    size={size}>
         {imageProperty && (
-            <div className={cn("mr-2 shrink-0 grow-0", size === "tiny" ? "my-0.5" : "m-2 self-start")}>
+            <div className={cn("w-10 h-10 mr-2 shrink-0 grow-0", size === "tiny" ? "my-0.5" : "m-2 self-start")}>
                 <PropertyPreview property={imageProperty}
                                  propertyKey={imagePropertyKey as string}
                                  size={"tiny"}

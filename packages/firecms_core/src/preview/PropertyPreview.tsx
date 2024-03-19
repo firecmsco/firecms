@@ -195,7 +195,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
 
     } else if (property.dataType === "boolean") {
         if (typeof value === "boolean") {
-            content = <BooleanPreview value={value}/>;
+            content = <BooleanPreview value={value} size={size} property={property}/>;
         } else {
             content = buildWrongValueType(propertyKey, property.dataType, value);
         }

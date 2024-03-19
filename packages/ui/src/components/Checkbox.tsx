@@ -9,20 +9,22 @@ interface CheckboxProps {
     disabled?: boolean;
     indeterminate?: boolean;
     onCheckedChange?: (checked: boolean) => void;
-    size?: "small" | "medium" | "large";
+    size?: "tiny" | "small" | "medium" | "large";
     color?: "primary" | "secondary";
 }
 
 const sizeClasses = {
     large: "w-6 h-6 rounded flex items-center justify-center",
     medium: "w-5 h-5 rounded flex items-center justify-center",
-    small: "w-4 h-4 rounded flex items-center justify-center"
+    small: "w-4 h-4 rounded flex items-center justify-center",
+    tiny: "w-4 h-4 rounded flex items-center justify-center"
 };
 
 const outerSizeClasses = {
-    medium: "w-10 h-10",
-    small: "w-8 h-8",
-    large: "w-12 h-12"
+    medium: "w-10 h-10 p-2",
+    small: "w-8 h-8 p-2",
+    large: "w-12 h-12 p-2",
+    tiny: "w-6 h-6"
 }
 
 const colorClasses = {
@@ -45,11 +47,13 @@ export const Checkbox = ({
         ? 20
         : size === "small"
             ? 16
-            : 24;
+            : size === "tiny"
+                ? 14
+                : 24;
     return (
         <div className={cn(
             outerSizeClasses[size],
-            "inline-flex items-center justify-center p-2 text-sm font-medium focus:outline-none transition-colors ease-in-out duration-150",
+            "inline-flex items-center justify-center text-sm font-medium focus:outline-none transition-colors ease-in-out duration-150",
             onCheckedChange ? "rounded-full hover:bg-slate-200 hover:bg-opacity-75 dark:hover:bg-slate-700 dark:hover:bg-opacity-75" : "",
             onCheckedChange ? "cursor-pointer" : "cursor-default"
         )}>

@@ -6,7 +6,7 @@ import { Chip } from "@firecms/ui";
 export interface EnumValuesChipProps {
     enumValues?: EnumValues;
     enumKey: string | number;
-    size: "small" | "medium";
+    size: "tiny" | "small" | "medium";
     className?: string;
     children?: React.ReactNode;
 }
