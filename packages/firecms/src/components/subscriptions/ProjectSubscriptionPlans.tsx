@@ -4,7 +4,7 @@ import { AutoAwesomeIcon, Card, Chip, CircularProgress, cn, Typography, } from "
 import { useSubscriptionsForUserController } from "../../hooks/useSubscriptionsForUserController";
 import { ProductView } from "./ProductView";
 import { getPriceString, getStatusText } from "../settings/common";
-import { Subscription } from "../../types/subscriptions";
+import { Subscription } from "../../types";
 import { StripeDisclaimer } from "./StripeDisclaimer";
 import { useFireCMSBackend, useProjectConfig } from "../../hooks";
 import { PlanChip } from "./PlanChip";
@@ -146,7 +146,7 @@ function CurrentSubscriptionView({
                 <>
                     The subscription is <Chip
                     className={"inline"}
-                    size={"smaller"}
+                    size={"tiny"}
                     colorScheme={statusText === "Active" ? "greenDark" : "orangeDark"}>
                     {statusText} </Chip>.
                 </>
@@ -156,7 +156,7 @@ function CurrentSubscriptionView({
 
                 <>
                     The current price is <Chip
-                    size={"smaller"}>{getPriceString(subscription.price)}
+                    size={"tiny"}>{getPriceString(subscription.price)}
                 </Chip>per active user.
                 </>
 
