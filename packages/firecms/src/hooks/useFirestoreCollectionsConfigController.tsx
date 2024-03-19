@@ -1,6 +1,6 @@
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { FirebaseApp } from "firebase/app";
 import { collection, deleteDoc, doc, Firestore, getFirestore, onSnapshot, runTransaction } from "firebase/firestore";
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import {
     CollectionsConfigController,
     DeleteCollectionParams,
@@ -33,9 +33,10 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection,
     firebaseApp?: FirebaseApp;
 
     /**
-     * Firestore collection where the configuration is saved.
+     * Firestore document where the configuration is saved. e.g. "projects/my_project"
+     * Must be a 2 path string.
      */
-    projectId: string;
+    configPath: string;
 
     /**
      * Define what actions can be performed on data.
@@ -51,11 +52,11 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection,
  * Firestore, but also allows including collections added in code.
  * @param firebaseApp
  * @param collections
- * @param projectId
+ * @param configPath
  */
-export function useBuildCollectionsConfigController<EC extends PersistedCollection, UserType extends User = User>({
+export function useFirestoreCollectionsConfigController<EC extends PersistedCollection, UserType extends User = User>({
                                                                                                                       firebaseApp,
-                                                                                                                      projectId,
+                                                                                                                      configPath,
                                                                                                                       permissions,
                                                                                                                       propertyConfigs
                                                                                                                   }: CollectionConfigControllerProps<EC, UserType>): CollectionsConfigController {
@@ -67,8 +68,6 @@ export function useBuildCollectionsConfigController<EC extends PersistedCollecti
         });
         return map;
     }, [propertyConfigs]);
-
-    const configPath = projectId ? `projects/${projectId}` : undefined;
 
     const firestoreRef = useRef<Firestore>();
     const firestore = firestoreRef.current;

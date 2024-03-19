@@ -44,9 +44,9 @@
     "@tiptap/react": "^2.2.4",
     "@tiptap/starter-kit": "^2.2.4",
     "@tiptap/suggestion": "^2.2.4",
-    "@types/node": "18.19.22",
+    "@types/node": "18.19.26",
     "cmdk": "^0.2.1",
-    "jotai": "^2.7.0",
+    "jotai": "^2.7.1",
     "react-markdown": "^9.0.1",
     "react-moveable": "^0.56.0",
     "tippy.js": "^6.3.7",
@@ -54,10 +54,10 @@
     "tunnel-rat": "^0.1.2"
   },
   "devDependencies": {
-    "@types/react": "^18.2.64",
-    "@types/react-dom": "18.2.21",
+    "@types/react": "^18.2.67",
+    "@types/react-dom": "18.2.22",
     "typescript": "^5.4.2",
-    "vite": "^5.1.5"
+    "vite": "^5.1.6"
   },
   "gitHead": "33cceff5d5bc2a7002cc5a3904b787e70bfb9c6e"
 }

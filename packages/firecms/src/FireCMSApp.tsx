@@ -41,10 +41,10 @@ import {
     ProjectConfig,
     ProjectConfigProvider,
     useBuildCloudUserManagement,
-    useBuildCollectionsConfigController,
     useBuildFireCMSBackend,
     useBuildProjectConfig,
     useDelegatedLogin,
+    useFirestoreCollectionsConfigController,
 } from "./hooks";
 
 import { FireCMSAppProps } from "./FireCMSAppProps";
@@ -346,9 +346,9 @@ export function FireCMSClientWithController({
             user: userManagement.loggedInUser ?? null
         }), [userManagement.loggedInUser]);
 
-    const configController = useBuildCollectionsConfigController({
+    const configController = useFirestoreCollectionsConfigController({
         firebaseApp: fireCMSBackend.backendFirebaseApp,
-        projectId,
+        configPath: `projects/${projectId}`,
         permissions,
         propertyConfigs: appConfig?.propertyConfigs
     });
