@@ -10,8 +10,8 @@
     "deploy": "vite build && firecms deploy --project=firecms-demo-27150"
   },
   "dependencies": {
+    "@firecms/cloud": "^3.0.0-beta.3",
     "firebase": "^10.9.0",
-    "firecms": "^3.0.0-beta.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

@@ -15,7 +15,7 @@ import {
     useSelectionController,
     useSideEntityController,
     useSnackbarController
-} from "firecms";
+} from "@firecms/cloud";
 
 const usersCollection = buildCollection({
     path: "users",

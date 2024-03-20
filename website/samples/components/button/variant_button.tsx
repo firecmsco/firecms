@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "firecms";
+import { Button } from "@firecms/cloud";
 
 export default function VariantButtonDemo() {
     return (

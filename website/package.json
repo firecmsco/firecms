@@ -75,7 +75,7 @@
     "docusaurus-plugin-typedoc": "^0.22.0",
     "docusaurus-tailwindcss-loader": "file:plugins/docusaurus-tailwindcss-loader",
     "esbuild-loader": "^4.0.3",
-    "firecms": "link:../packages/firecms",
+    "@firecms/cloud": "link:../packages/firecms_cloud",
     "fontaine": "^0.4.1",
     "postcss": "^8.4.35",
     "postcss-import": "^16.0.1",

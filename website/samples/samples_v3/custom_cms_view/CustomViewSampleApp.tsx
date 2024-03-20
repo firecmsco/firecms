@@ -1,4 +1,4 @@
-import { buildCollection, CMSView, FireCMSApp, FireCMSAppConfig } from "firecms";
+import { buildCollection, CMSView, FireCMSApp, FireCMSAppConfig } from "@firecms/cloud";
 import { ExampleCMSView } from "./ExampleCMSView";
 
 const projectId = "YOUR_PROJECT_ID";

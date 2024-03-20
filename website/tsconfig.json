@@ -59,7 +59,7 @@
     },
     "include": [
         "src",
-        "../packages/firecms/src/**/*.ts"
+        "../packages/firecms_cloud/src/**/*.ts"
     ]
 }
 

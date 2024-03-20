@@ -1,4 +1,4 @@
-import fireCMSConfig from "firecms/tailwind.config.js";
+import fireCMSConfig from "@firecms/firebase_pro/tailwind.config.js";
 
 export default {
     presets: [fireCMSConfig],

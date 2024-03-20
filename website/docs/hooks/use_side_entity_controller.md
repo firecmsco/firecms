@@ -41,7 +41,7 @@ Example:
 
 ```tsx
 import React from "react";
-import { useSideEntityController } from "firecms";
+import { useSideEntityController } from "@firecms/cloud";
 
 export function ExampleCMSView() {
 
@@ -86,7 +86,7 @@ can specify a custom `schema` (including callbacks and custom views),
 `permissions` and `subcollections`
 
 ```tsx
-import { buildCollection, SchemaOverrideHandler } from "firecms";
+import { buildCollection, SchemaOverrideHandler } from "@firecms/cloud";
 
 const customSchemaOverrideHandler: SchemaOverrideHandler = ({
                                                   entityId,

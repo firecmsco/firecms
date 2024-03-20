@@ -46,7 +46,7 @@ If you just need to add some code to a collection defined in the UI, you can
 use the `modifyCollection` function in your `FireCMSAppConfig` object.
 
 ```tsx
-import { FireCMSAppConfig } from "firecms";
+import { FireCMSAppConfig } from "@firecms/cloud";
 
 const appConfig: FireCMSAppConfig = {
   version: "1",
@@ -101,7 +101,7 @@ import {
     buildCollection,
     buildProperty,
     EntityReference
-} from "firecms";
+} from "@firecms/cloud";
 
 type Product = {
     name: string;
@@ -232,7 +232,7 @@ can specify the filters that you have enabled in your Firestore configuration.
 In order to do so, just pass the indexes configuration to your collection:
 
 ```tsx
-import { buildCollection } from "firecms";
+import { buildCollection } from "@firecms/cloud";
 
 const productsCollection = buildCollection<Product>({
     path: "products",

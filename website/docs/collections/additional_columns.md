@@ -27,7 +27,7 @@ import {
     buildCollection,
     buildCollection,
     AdditionalFieldDelegate
-} from "firecms";
+} from "@firecms/cloud";
 
 type User = { name: string }
 
@@ -60,7 +60,7 @@ import {
     buildCollection,
     AdditionalFieldDelegate,
     AsyncPreviewComponent
-} from "firecms";
+} from "@firecms/cloud";
 
 export const productAdditionalField: AdditionalFieldDelegate<Product> = {
     id: "spanish_title",

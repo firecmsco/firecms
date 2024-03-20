@@ -28,7 +28,7 @@ to your schema. Like in this example:
 
 ```tsx
 import React from "react";
-import { EntityCustomView, buildCollection } from "firecms";
+import { EntityCustomView, buildCollection } from "@firecms/cloud";
 
 const sampleView: EntityCustomView = {
     path: "preview",
@@ -47,7 +47,7 @@ If you are editing a collection in code you can add your custom view
 directly to the collection:
 
 ```tsx
-import { buildCollection } from "firecms";
+import { buildCollection } from "@firecms/cloud";
 
 const blogCollection = buildCollection({
     id: "blog",
@@ -77,7 +77,7 @@ In that case you can add it to the entity view registry in your
 main `FireCMSAppConfig` export:
 
 ```tsx
-import { FireCMSAppConfig } from "firecms";
+import { FireCMSAppConfig } from "@firecms/cloud";
 
 const appConfig: FireCMSAppConfig = {
     version: "1",
@@ -101,7 +101,7 @@ It is also possible to use the `entityView` prop in the collection
 with the key of the entity view you want to use:
 
 ```tsx
-import { buildCollection } from "firecms";
+import { buildCollection } from "@firecms/cloud";
 
 const blogCollection = buildCollection({
     id: "blog",

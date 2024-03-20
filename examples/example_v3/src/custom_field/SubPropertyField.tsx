@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { FieldHelperText, FieldProps, Property, PropertyFieldBinding } from "firecms";
+import { FieldHelperText, FieldProps, Property, PropertyFieldBinding } from "@firecms/cloud";
 import { Paper } from "@firecms/ui";
 
 /**

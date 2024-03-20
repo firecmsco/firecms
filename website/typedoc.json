@@ -5,7 +5,7 @@
     "readme": "docs/api_index.md",
     "name": "FireCMS API",
     "categorizeByGroup": true,
-    "entryPoints": ["../packages/firecms/src/index.ts"],
+    "entryPoints": ["../packages/firecms_cloud/src/index.ts"],
     "hideGenerator": true,
     "hideParameterTypesInTitle": true,
     "excludeExternals": true,

@@ -1,4 +1,4 @@
-import { ArchiveIcon, buildCollection, EntityCallbacks } from "firecms";
+import { ArchiveIcon, buildCollection, EntityCallbacks } from "@firecms/cloud";
 
 import { Product } from "../types";
 import CustomColorTextField from "../custom_field/CustomColorTextField";

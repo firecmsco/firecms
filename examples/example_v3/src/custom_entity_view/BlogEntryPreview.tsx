@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, EntityCustomViewParams, ErrorView, Markdown, Typography, useStorageSource } from "firecms";
+import { Container, EntityCustomViewParams, ErrorView, Markdown, Typography, useStorageSource } from "@firecms/cloud";
 import { BlogEntry } from "../types";
 import { StorageImage } from "./components/StorageImage";
 import { ProductGroupPreview } from "./components/ProductPreview";

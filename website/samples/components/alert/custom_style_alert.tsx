@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert } from "firecms";
+import { Alert } from "@firecms/cloud";
 
 export default function CustomStyleAlertDemo() {
     return (

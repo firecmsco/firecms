@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "firecms";
+import { Card } from "@firecms/cloud";
 
 export default function CardBasicDemo() {
     return (

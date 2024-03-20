@@ -40,7 +40,7 @@ module.exports = {
                     return {
                         resolve: {
                             alias: {
-                                "firecms": path.resolve(__dirname, "../packages/firecms/src"),
+                                "@firecms/cloud": path.resolve(__dirname, "../packages/firecms_cloud/src"),
                                 "@firecms/core": path.resolve(__dirname, "../packages/firecms_core/src"),
                                 "@firecms/ui": path.resolve(__dirname, "../packages/ui/src"),
                                 "@firecms/collection_editor": path.resolve(__dirname, "../packages/collection_editor/src"),

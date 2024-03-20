@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { buildCollection, buildProperty, EntityReference, FireCMSApp, } from "firecms";
+import { buildCollection, buildProperty, EntityReference, FireCMSApp, } from "@firecms/cloud";
 
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";

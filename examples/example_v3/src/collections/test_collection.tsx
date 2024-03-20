@@ -5,7 +5,7 @@ import {
     EntityOnFetchProps,
     EnumValues,
     resolveNavigationFrom
-} from "firecms";
+} from "@firecms/cloud";
 import { CustomField } from "../custom_field/SubPropertyField";
 
 const relaxedStatus: EnumValues = [

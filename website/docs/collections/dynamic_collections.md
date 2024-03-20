@@ -14,19 +14,15 @@ Instead of defining your collections as an array, use a `EntityCollectionsBuilde
 a function that returns a promise of an object containing the collections.
 
 ```tsx
-import { useCallback } from "react";
-import {
-// ...
-    EntityCollectionsBuilder,
-} from "firecms";
+import { EntityCollectionsBuilder, } from "@firecms/cloud";
 
 // ...
 
-const collectionsBuilder: EntityCollectionsBuilder = useCallback(async ({
-                                                                            user,
-                                                                            authController,
-                                                                            dataSource
-                                                                        }) =>
+const collectionsBuilder: EntityCollectionsBuilder = async ({
+                                                                user,
+                                                                authController,
+                                                                dataSource
+                                                            }) =>
     ({
         collections: [
             buildCollection({
@@ -35,7 +31,7 @@ const collectionsBuilder: EntityCollectionsBuilder = useCallback(async ({
                 name: "Products"
             })
         ]
-    }), []);
+    });
 ```
 
 :::note
@@ -56,13 +52,13 @@ collection.
 
 ```tsx
 import { useCallback } from "react";
-import { buildCollection, EntityCollectionsBuilder } from "firecms";
+import { buildCollection, EntityCollectionsBuilder } from "@firecms/cloud";
 
-const collectionsBuilder: EntityCollectionsBuilder = useCallback(async ({
-                                                                            user,
-                                                                            authController,
-                                                                            dataSource
-                                                                        }) => {
+const collectionsBuilder: EntityCollectionsBuilder = async ({
+                                                                user,
+                                                                authController,
+                                                                dataSource
+                                                            }) => {
 
     // let's assume you have a database collection called "categories"
     const categoriesData: Entity<any>[] = await dataSource.fetchCollection({
@@ -72,6 +68,7 @@ const collectionsBuilder: EntityCollectionsBuilder = useCallback(async ({
     return {
         collections: [
             buildCollection({
+                id: "products",
                 path: "products",
                 properties: {
                     // ...
@@ -92,7 +89,7 @@ const collectionsBuilder: EntityCollectionsBuilder = useCallback(async ({
             })
         ]
     }
-}, []);
+};
 
 ```
 
@@ -162,15 +159,15 @@ config.
 
 ```tsx
 
-const collectionsBuilder: EntityCollectionsBuilder = useCallback(async ({
-                                                                            user,
-                                                                            authController,
-                                                                            dataSource
-                                                                        }) => {
+const collectionsBuilder: EntityCollectionsBuilder = async ({
+                                                                user,
+                                                                authController,
+                                                                dataSource
+                                                            }) => {
     return {
         collections: [] // your collections here
     };
-}, []);
+};
 
 export const appConfig: FireCMSAppConfig = {
     version: "1",

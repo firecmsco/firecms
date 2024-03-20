@@ -1,5 +1,5 @@
 import React from "react";
-import { AnchorIcon, Badge, Button, IconButton } from "firecms";
+import { AnchorIcon, Badge, Button, IconButton } from "@firecms/cloud";
 
 export default function BadgeIconDemo() {
     return (

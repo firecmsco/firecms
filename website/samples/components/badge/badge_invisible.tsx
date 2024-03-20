@@ -1,5 +1,5 @@
 import React from "react";
-import { Badge, Button, Chip } from "firecms";
+import { Badge, Button, Chip } from "@firecms/cloud";
 
 export default function BadgeInvisibleDemo() {
     const [visible, setVisible] = React.useState<boolean | null>(true);

@@ -8,7 +8,7 @@ import {
     useDataSource,
     useReferenceDialog,
     useSnackbarController
-} from "firecms";
+} from "@firecms/cloud";
 import { useCallback } from "react";
 
 type Product = {

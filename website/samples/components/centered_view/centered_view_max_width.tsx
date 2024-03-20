@@ -1,5 +1,5 @@
 import React from "react";
-import { CenteredView } from "firecms";
+import { CenteredView } from "@firecms/cloud";
 
 export default function CenteredViewMaxWidthDemo() {
     return (
