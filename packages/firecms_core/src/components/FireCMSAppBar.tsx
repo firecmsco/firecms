@@ -141,6 +141,14 @@ export const FireCMSAppBar = function FireCMSAppBar({
                 </IconButton>
 
                 <Menu trigger={avatarComponent}>
+                    {user && <div className={"px-4 py-2 mb-2"}>
+                        {user.displayName && <Typography variant={"body1"} color={"secondary"}>
+                            {user.displayName}
+                        </Typography>}
+                        {user.email && <Typography variant={"body2"} color={"secondary"}>
+                            {user.email}
+                        </Typography>}
+                    </div>}
 
                     {dropDownActions}
 
