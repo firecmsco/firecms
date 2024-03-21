@@ -1,12 +1,15 @@
 {
   "name": "@firecms/editor",
-  "version": "3.0.0-3.0.0-beta.4.pre.1.0",
+  "version": "3.0.0-beta.4.pre.1",
   "description": "Notion-style WYSIWYG editor for FireCMS",
   "license": "Apache-2.0",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/components/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "dist"
   ],
@@ -27,7 +30,7 @@
     "react-dom": "^18.0.0"
   },
   "dependencies": {
-    "@firecms/ui": "^3.0.0-3.0.0-beta.4.pre.1.0",
+    "@firecms/ui": "^3.0.0-beta.4.pre.1",
     "@radix-ui/react-slot": "^1.0.2",
     "@tiptap/core": "^2.2.4",
     "@tiptap/extension-color": "^2.2.4",
@@ -59,5 +62,5 @@
     "typescript": "^5.4.2",
     "vite": "^5.1.6"
   },
-  "gitHead": "33cceff5d5bc2a7002cc5a3904b787e70bfb9c6e"
+  "gitHead": "bfe875c02132b5763ac0c9d8c8a885c791bb5a24"
 }
