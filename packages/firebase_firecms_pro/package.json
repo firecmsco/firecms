@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-beta.4.pre.1",
+  "version": "3.0.0-beta.4.pre.2",
   "type": "module",
   "name": "@firecms/firebase_pro",
   "access": "public",
@@ -9,9 +9,9 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "^3.0.0-beta.4.pre.1",
-    "@firecms/firebase": "^3.0.0-beta.4.pre.1",
-    "@firecms/ui": "^3.0.0-beta.4.pre.1",
+    "@firecms/core": "^3.0.0-beta.4.pre.2",
+    "@firecms/firebase": "^3.0.0-beta.4.pre.2",
+    "@firecms/ui": "^3.0.0-beta.4.pre.2",
     "firebase": "^10.9.0"
   },
   "exports": {

@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "version": "3.0.0-beta.4.pre.1",
+  "version": "3.0.0-beta.4.pre.2",
   "packages": [
     "packages/firecms_cloud",
     "packages/firecms_core",
