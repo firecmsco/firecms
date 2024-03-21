@@ -2557,7 +2557,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firecms/cli@^3.0.0-beta.3, @firecms/cli@workspace:packages/firecms_cli":
+"@firecms/cli@^3.0.0-3.0.0-beta.4.pre.1.0, @firecms/cli@workspace:packages/firecms_cli":
   version: 0.0.0-use.local
   resolution: "@firecms/cli@workspace:packages/firecms_cli"
   dependencies:
@@ -2584,19 +2584,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/cloud@^3.0.0-beta.3, @firecms/cloud@workspace:packages/firecms_cloud":
+"@firecms/cloud@^3.0.0-3.0.0-beta.4.pre.1.0, @firecms/cloud@workspace:packages/firecms_cloud":
   version: 0.0.0-use.local
   resolution: "@firecms/cloud@workspace:packages/firecms_cloud"
   dependencies:
-    "@firecms/cli": ^3.0.0-beta.3
-    "@firecms/collection_editor": ^3.0.0-beta.3
-    "@firecms/core": ^3.0.0-beta.3
-    "@firecms/data_enhancement": ^3.0.0-beta.3
-    "@firecms/data_import_export": ^3.0.0-beta.3
-    "@firecms/firebase": ^3.0.0-beta.3
-    "@firecms/formex": ^3.0.0-beta.3
-    "@firecms/schema_inference": ^3.0.0-beta.3
-    "@firecms/user_management": ^3.0.0-beta.3
+    "@firecms/cli": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/collection_editor": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/core": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/data_enhancement": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/data_import_export": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/firebase": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/formex": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/schema_inference": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/user_management": ^3.0.0-3.0.0-beta.4.pre.1.0
     "@types/node": ^20.11.30
     "@types/react": ^18.2.67
     "@types/react-dom": ^18.2.22
@@ -2621,14 +2621,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/collection_editor@^3.0.0-beta.3, @firecms/collection_editor@workspace:packages/collection_editor":
+"@firecms/collection_editor@^3.0.0-3.0.0-beta.4.pre.1.0, @firecms/collection_editor@workspace:packages/collection_editor":
   version: 0.0.0-use.local
   resolution: "@firecms/collection_editor@workspace:packages/collection_editor"
   dependencies:
-    "@firecms/data_import_export": ^3.0.0-beta.3
-    "@firecms/formex": ^3.0.0-beta.3
-    "@firecms/schema_inference": ^3.0.0-beta.3
-    "@firecms/ui": ^3.0.0-beta.3
+    "@firecms/data_import_export": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/formex": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/schema_inference": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/ui": ^3.0.0-3.0.0-beta.4.pre.1.0
     "@jest/globals": ^29.7.0
     "@types/react": ^18.2.67
     "@types/react-dom": ^18.2.22
@@ -2659,12 +2659,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/core@^3.0.0-beta.3, @firecms/core@workspace:packages/firecms_core":
+"@firecms/core@^3.0.0-3.0.0-beta.4.pre.1.0, @firecms/core@workspace:packages/firecms_core":
   version: 0.0.0-use.local
   resolution: "@firecms/core@workspace:packages/firecms_core"
   dependencies:
-    "@firecms/formex": ^3.0.0-beta.3
-    "@firecms/ui": ^3.0.0-beta.3
+    "@firecms/formex": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/ui": ^3.0.0-3.0.0-beta.4.pre.1.0
     "@fontsource/ibm-plex-mono": ^5.0.12
     "@fontsource/roboto": ^5.0.12
     "@hello-pangea/dnd": ^16.5.0
@@ -2721,11 +2721,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_enhancement@^3.0.0-beta.3, @firecms/data_enhancement@workspace:packages/data_enhancement":
+"@firecms/data_enhancement@^3.0.0-3.0.0-beta.4.pre.1.0, @firecms/data_enhancement@workspace:packages/data_enhancement":
   version: 0.0.0-use.local
   resolution: "@firecms/data_enhancement@workspace:packages/data_enhancement"
   dependencies:
-    "@firecms/core": ^3.0.0-beta.3
+    "@firecms/core": ^3.0.0-3.0.0-beta.4.pre.1.0
     "@testing-library/jest-dom": ^6.4.2
     "@types/jest": ^29.5.12
     "@types/react": ^18.2.67
@@ -2755,12 +2755,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_import_export@^3.0.0-beta.3, @firecms/data_import_export@workspace:packages/data_import_export":
+"@firecms/data_import_export@^3.0.0-3.0.0-beta.4.pre.1.0, @firecms/data_import_export@workspace:packages/data_import_export":
   version: 0.0.0-use.local
   resolution: "@firecms/data_import_export@workspace:packages/data_import_export"
   dependencies:
-    "@firecms/core": ^3.0.0-beta.3
-    "@firecms/schema_inference": ^3.0.0-beta.3
+    "@firecms/core": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/schema_inference": ^3.0.0-3.0.0-beta.4.pre.1.0
     "@jest/globals": ^29.7.0
     "@testing-library/jest-dom": ^6.4.2
     "@types/jest": ^29.5.12
@@ -2792,11 +2792,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/editor@^3.0.0-beta.3, @firecms/editor@workspace:packages/editor":
+"@firecms/editor@^3.0.0-3.0.0-beta.4.pre.1.0, @firecms/editor@workspace:packages/editor":
   version: 0.0.0-use.local
   resolution: "@firecms/editor@workspace:packages/editor"
   dependencies:
-    "@firecms/ui": ^3.0.0-beta.3
+    "@firecms/ui": ^3.0.0-3.0.0-beta.4.pre.1.0
     "@radix-ui/react-slot": ^1.0.2
     "@tiptap/core": ^2.2.4
     "@tiptap/extension-color": ^2.2.4
@@ -2831,15 +2831,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/firebase@^3.0.0-beta.3, @firecms/firebase@workspace:packages/firebase_firecms":
+"@firecms/firebase@^3.0.0-3.0.0-beta.4.pre.1.0, @firecms/firebase@workspace:packages/firebase_firecms":
   version: 0.0.0-use.local
   resolution: "@firecms/firebase@workspace:packages/firebase_firecms"
   dependencies:
-    "@firecms/collection_editor": ^3.0.0-beta.3
-    "@firecms/core": ^3.0.0-beta.3
-    "@firecms/data_enhancement": ^3.0.0-beta.3
-    "@firecms/data_import_export": ^3.0.0-beta.3
-    "@firecms/schema_inference": ^3.0.0-beta.3
+    "@firecms/collection_editor": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/core": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/data_enhancement": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/data_import_export": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/schema_inference": ^3.0.0-3.0.0-beta.4.pre.1.0
     "@types/node": ^20.11.30
     "@types/react": ^18.2.67
     "@types/react-dom": ^18.2.22
@@ -2864,13 +2864,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/firebase_pro@^3.0.0-beta.3, @firecms/firebase_pro@workspace:packages/firebase_firecms_pro":
+"@firecms/firebase_pro@^3.0.0-3.0.0-beta.4.pre.1.0, @firecms/firebase_pro@workspace:packages/firebase_firecms_pro":
   version: 0.0.0-use.local
   resolution: "@firecms/firebase_pro@workspace:packages/firebase_firecms_pro"
   dependencies:
-    "@firecms/core": ^3.0.0-beta.3
-    "@firecms/firebase": ^3.0.0-beta.3
-    "@firecms/ui": ^3.0.0-beta.3
+    "@firecms/core": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/firebase": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/ui": ^3.0.0-3.0.0-beta.4.pre.1.0
     "@types/node": ^20.11.30
     firebase: ^10.9.0
     typescript: ^5.4.2
@@ -2882,7 +2882,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/formex@^3.0.0-beta.3, @firecms/formex@workspace:packages/formex":
+"@firecms/formex@^3.0.0-3.0.0-beta.4.pre.1.0, @firecms/formex@workspace:packages/formex":
   version: 0.0.0-use.local
   resolution: "@firecms/formex@workspace:packages/formex"
   dependencies:
@@ -2907,18 +2907,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/schema_inference@^3.0.0-beta.3, @firecms/schema_inference@workspace:packages/schema_inference":
+"@firecms/schema_inference@^3.0.0-3.0.0-beta.4.pre.1.0, @firecms/schema_inference@workspace:packages/schema_inference":
   version: 0.0.0-use.local
   resolution: "@firecms/schema_inference@workspace:packages/schema_inference"
   dependencies:
-    "@firecms/core": ^3.0.0-beta.3
+    "@firecms/core": ^3.0.0-3.0.0-beta.4.pre.1.0
     "@types/node": ^20.11.30
     typescript: ^5.4.2
     vite: ^5.1.6
   languageName: unknown
   linkType: soft
 
-"@firecms/ui@^3.0.0-beta.3, @firecms/ui@workspace:packages/ui":
+"@firecms/ui@^3.0.0-3.0.0-beta.4.pre.1.0, @firecms/ui@workspace:packages/ui":
   version: 0.0.0-use.local
   resolution: "@firecms/ui@workspace:packages/ui"
   dependencies:
@@ -2977,13 +2977,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/user_management@^3.0.0-beta.3, @firecms/user_management@workspace:packages/user_management":
+"@firecms/user_management@^3.0.0-3.0.0-beta.4.pre.1.0, @firecms/user_management@workspace:packages/user_management":
   version: 0.0.0-use.local
   resolution: "@firecms/user_management@workspace:packages/user_management"
   dependencies:
-    "@firecms/core": ^3.0.0-beta.3
-    "@firecms/formex": ^3.0.0-beta.3
-    "@firecms/ui": ^3.0.0-beta.3
+    "@firecms/core": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/formex": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/ui": ^3.0.0-3.0.0-beta.4.pre.1.0
     "@types/node": ^20.11.30
     "@types/react": ^18.2.67
     "@types/react-dom": ^18.2.22
@@ -8402,7 +8402,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "create-firecms-app@workspace:packages/create_firecms_app"
   dependencies:
-    "@firecms/cli": ^3.0.0-beta.3
+    "@firecms/cli": ^3.0.0-3.0.0-beta.4.pre.1.0
     "@types/node": ^20.11.30
     ts-node: ^10.9.2
     typescript: ^5.4.2
@@ -10097,8 +10097,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms-example-v3@workspace:examples/example_v3"
   dependencies:
-    "@firecms/cli": ^3.0.0-beta.3
-    "@firecms/cloud": ^3.0.0-beta.3
+    "@firecms/cli": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/cloud": ^3.0.0-3.0.0-beta.4.pre.1.0
     "@originjs/vite-plugin-federation": ^1.3.5
     "@types/react": 18.2.67
     "@types/react-dom": 18.2.22
@@ -10118,15 +10118,15 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms-example@workspace:examples/example_pro"
   dependencies:
-    "@firecms/collection_editor": ^3.0.0-beta.3
-    "@firecms/core": ^3.0.0-beta.3
-    "@firecms/data_enhancement": ^3.0.0-beta.3
-    "@firecms/data_import_export": ^3.0.0-beta.3
-    "@firecms/editor": ^3.0.0-beta.3
-    "@firecms/firebase_pro": ^3.0.0-beta.3
-    "@firecms/schema_inference": ^3.0.0-beta.3
-    "@firecms/ui": ^3.0.0-beta.3
-    "@firecms/user_management": ^3.0.0-beta.3
+    "@firecms/collection_editor": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/core": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/data_enhancement": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/data_import_export": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/editor": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/firebase_pro": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/schema_inference": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/ui": ^3.0.0-3.0.0-beta.4.pre.1.0
+    "@firecms/user_management": ^3.0.0-3.0.0-beta.4.pre.1.0
     "@tailwindcss/typography": ^0.5.10
     "@types/react": ^18.2.67
     "@types/react-dom": 18.2.22
