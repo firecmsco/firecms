@@ -7,33 +7,32 @@ import "@fontsource/roboto"
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
 
+import { CenteredView, GitHubIcon, IconButton, Tooltip, } from "@firecms/ui";
 import {
-    Authenticator,
-    CenteredView,
     CircularProgressCenter,
     CMSView,
-    FirebaseAuthController,
-    FirebaseSignInProvider,
     FireCMS,
-    FirestoreIndexesBuilder,
-    GitHubIcon,
-    IconButton,
     ModeControllerProvider,
     NavigationRoutes,
     PropertyConfig,
     Scaffold,
     SideDialogs,
     SnackbarProvider,
-    Tooltip,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     useBuildNavigationController,
+} from "@firecms/core";
+import {
+    Authenticator,
+    FirebaseAuthController,
+    FirebaseSignInProvider,
+    FirestoreIndexesBuilder,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
     useInitialiseFirebase,
     useValidateAuthenticator
-} from "@firecms/firebase_pro";
+} from "@firecms/firebase";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { useImportExportPlugin } from "@firecms/data_import_export";
 import {

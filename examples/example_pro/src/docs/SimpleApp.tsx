@@ -1,10 +1,11 @@
 import React, { useCallback } from "react";
 
 import { User as FirebaseUser } from "firebase/auth";
-import { Authenticator, buildCollection, buildProperty, EntityReference, FireCMSProApp } from "@firecms/firebase_pro";
+import { buildCollection, buildProperty, EntityReference } from "@firecms/core";
 
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
+import { Authenticator, FireCMSFirebaseApp } from "@firecms/firebase";
 
 // TODO: Replace with your config
 const firebaseConfig = {
@@ -198,7 +199,7 @@ export default function App() {
         return true;
     }, []);
 
-    return <FireCMSProApp
+    return <FireCMSFirebaseApp
         name={"My Online Shop"}
         authentication={myAuthenticator}
         collections={[productsCollection]}

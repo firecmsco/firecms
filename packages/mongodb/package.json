@@ -1,7 +1,7 @@
 {
   "version": "3.0.0-canary.8",
   "type": "module",
-  "name": "@firecms/firebase_pro",
+  "name": "@firecms/mongodb",
   "access": "public",
   "packageManager": "yarn@4.1.0",
   "main": "./dist/index.umd.js",
@@ -20,8 +20,7 @@
       "require": "./dist/index.umd.js",
       "types": "./dist/index.d.ts"
     },
-    "./package.json": "./package.json",
-    "./tailwind.config.js": "./tailwind.config.js"
+    "./package.json": "./package.json"
   },
   "devDependencies": {
     "@types/node": "^20.11.30",

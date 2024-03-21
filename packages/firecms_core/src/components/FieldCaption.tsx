@@ -1,3 +1,4 @@
+import React from "react";
 import { Typography } from "@firecms/ui";
 
 export function FieldCaption({

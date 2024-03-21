@@ -10,7 +10,7 @@
     "packages/firecms_cli",
     "packages/ui",
     "packages/create_firecms_app",
-    "packages/firebase_firecms_pro",
+    "packages/mongodb",
     "packages/firebase_firecms",
     "packages/collection_editor",
     "packages/user_management",

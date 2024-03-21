@@ -1,4 +1,4 @@
-import { buildCollection } from "@firecms/firebase_pro";
+import { buildCollection } from "@firecms/core";
 
 export const productsCollection = buildCollection<any>({
     id: "products",

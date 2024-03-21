@@ -9,7 +9,7 @@
     "packages/data_enhancement",
     "packages/data_import_export",
     "packages/firebase_firecms",
-    "packages/firebase_firecms_pro",
+    "packages/mongodb",
     "packages/firecms_cli",
     "packages/editor",
     "packages/create_firecms_app",

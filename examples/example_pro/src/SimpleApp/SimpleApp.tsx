@@ -6,12 +6,7 @@ import "@fontsource/roboto"
 import { User as FirebaseUser } from "firebase/auth";
 
 import {
-    Authenticator,
-    CenteredView,
     CircularProgressCenter,
-    FirebaseAuthController,
-    FirebaseLoginView,
-    FirebaseSignInProvider,
     FireCMS,
     ModeControllerProvider,
     NavigationRoutes,
@@ -21,14 +16,21 @@ import {
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     useBuildNavigationController,
+} from "@firecms/core";
+import {
+    Authenticator,
+    FirebaseAuthController,
+    FirebaseLoginView,
+    FirebaseSignInProvider,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
     useInitialiseFirebase
-} from "@firecms/firebase_pro";
+} from "@firecms/firebase";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { booksCollection } from "./books_collection";
 import { useImportExportPlugin } from "@firecms/data_import_export";
+import { CenteredView } from "@firecms/ui";
 
 export const firebaseConfig = {
     apiKey: "AIzaSyBzt-JvcXvpDrdNU7jYX3fC3v0EAHjTKEw",

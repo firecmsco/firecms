@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { User as FirebaseUser } from "firebase/auth";
 
 import { format } from "date-fns";
 import * as locales from "date-fns/locale";
@@ -25,8 +24,8 @@ import {
     Typography,
 } from "@firecms/ui";
 import { Role, UserWithRoles } from "../../types";
-import { useUserManagement } from "../../hooks/useUserManagement";
-import { RoleChip } from "../roles/RoleChip";
+import { useUserManagement } from "../../hooks";
+import { RoleChip } from "../roles";
 
 export function UsersTable({ onUserClicked }: {
     onUserClicked: (user: UserWithRoles) => void;
@@ -38,7 +37,7 @@ export function UsersTable({ onUserClicked }: {
         deleteUser
     } = useUserManagement();
 
-    const authController = useAuthController<FirebaseUser>();
+    const authController = useAuthController();
     const snackbarController = useSnackbarController();
 
     const customizationController = useCustomizationController();

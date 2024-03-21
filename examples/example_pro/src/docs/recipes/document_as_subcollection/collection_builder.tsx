@@ -1,4 +1,4 @@
-import { buildCollection, EntityCollectionsBuilder } from "@firecms/firebase_pro";
+import { buildCollection, EntityCollectionsBuilder } from "@firecms/core";
 import { Unit, unitsCollection } from "./unit_collection";
 
 const collectionBuilder: EntityCollectionsBuilder = async ({ dataSource }) => {

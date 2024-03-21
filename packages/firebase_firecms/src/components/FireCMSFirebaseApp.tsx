@@ -16,18 +16,18 @@ import {
     useBuildNavigationController
 } from "@firecms/core";
 
-import { FireCMSProAppProps } from "./FireCMSProAppProps";
-import { FirebaseLoginView } from "./components/FirebaseLoginView";
+import { FireCMSFirebaseAppProps } from "./FireCMSFirebaseAppProps";
+import { FirebaseLoginView } from "./FirebaseLoginView";
 import {
-    FirebaseAuthController,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
     useInitialiseFirebase,
     useInitializeAppCheck,
     useValidateAuthenticator
-} from "@firecms/firebase";
+} from "../hooks";
 import { CenteredView } from "@firecms/ui";
+import { FirebaseAuthController } from "../types";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -50,7 +50,7 @@ const DEFAULT_SIGN_IN_OPTIONS = [
  * @constructor
  * @category Firebase
  */
-export function FireCMSProApp({
+export function FireCMSFirebaseApp({
                                   name,
                                   logo,
                                   logoDark,
@@ -76,7 +76,7 @@ export function FireCMSProApp({
                                   firestoreIndexesBuilder,
                                   components,
                                   localTextSearchEnabled = false,
-                              }: FireCMSProAppProps) {
+                              }: FireCMSFirebaseAppProps) {
 
     /**
      * Update the browser title and icon

@@ -1,9 +1,9 @@
 import React from "react";
-import { buildCollection, EntityCollectionsBuilder, } from "@firecms/firebase_pro";
+import { buildCollection, EntityCollectionsBuilder, } from "@firecms/core";
 
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
-import { FireCMSProApp } from "@firecms/firebase_pro";
+import { FireCMSFirebaseApp } from "@firecms/firebase";
 
 // TODO: Replace with your config
 const firebaseConfig = {
@@ -77,7 +77,7 @@ export default function App() {
         ]
     };
 
-    return <FireCMSProApp
+    return <FireCMSFirebaseApp
         name={"My learning app"}
         collections={collectionBuilder}
         firebaseConfig={firebaseConfig}

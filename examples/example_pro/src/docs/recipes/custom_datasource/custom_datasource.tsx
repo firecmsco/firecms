@@ -6,10 +6,10 @@ import {
     Entity,
     FetchCollectionProps,
     FetchEntityProps,
-    SaveEntityProps,
-    useFirestoreDelegate
-} from "@firecms/firebase_pro";
+    SaveEntityProps
+} from "@firecms/core";
 import { FirebaseApp } from "firebase/app";
+import { useFirestoreDelegate } from "@firecms/firebase";
 
 type CustomDataSourceProps = {
     firebaseApp?: FirebaseApp,

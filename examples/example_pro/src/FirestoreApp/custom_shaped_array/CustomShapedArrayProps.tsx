@@ -1,4 +1,4 @@
-import { Property } from "@firecms/firebase_pro";
+import { Property } from "@firecms/core";
 
 export interface CustomShapedArrayProps {
     properties: Property[]

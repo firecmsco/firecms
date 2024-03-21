@@ -12,21 +12,21 @@ import {
     Locale,
     PropertyConfig
 } from "@firecms/core";
-import { FirebaseLoginViewProps } from "./components/FirebaseLoginView";
 import { FirebaseApp } from "firebase/app";
+import { FirebaseLoginViewProps } from "./FirebaseLoginView";
 import {
     Authenticator,
     FirebaseSignInOption,
     FirebaseSignInProvider,
-    FirestoreIndexesBuilder,
     FirestoreTextSearchControllerBuilder
-} from "@firecms/firebase";
+} from "../types";
+import { FirestoreIndexesBuilder } from "../hooks";
 
 /**
  * Main entry point that defines the CMS configuration
  * @category Firebase
  */
-export type FireCMSProAppProps = {
+export type FireCMSFirebaseAppProps = {
 
     /**
      * Name of the app, displayed as the main title and in the tab title

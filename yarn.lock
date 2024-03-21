@@ -2864,24 +2864,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/firebase_pro@^3.0.0-canary.8, @firecms/firebase_pro@workspace:packages/firebase_firecms_pro":
-  version: 0.0.0-use.local
-  resolution: "@firecms/firebase_pro@workspace:packages/firebase_firecms_pro"
-  dependencies:
-    "@firecms/core": ^3.0.0-canary.8
-    "@firecms/firebase": ^3.0.0-canary.8
-    "@firecms/ui": ^3.0.0-canary.8
-    "@types/node": ^20.11.30
-    firebase: ^10.9.0
-    typescript: ^5.4.2
-    vite: ^5.1.6
-  peerDependencies:
-    react: ^18.2.0
-    react-dom: ^18.2.0
-    realm-web: ^2.0.0
-  languageName: unknown
-  linkType: soft
-
 "@firecms/formex@^3.0.0-canary.8, @firecms/formex@workspace:packages/formex":
   version: 0.0.0-use.local
   resolution: "@firecms/formex@workspace:packages/formex"
@@ -2904,6 +2886,24 @@ __metadata:
     firebase: ^10.7.1
     react: ^18.2.0
     react-dom: ^18.2.0
+  languageName: unknown
+  linkType: soft
+
+"@firecms/mongodb@workspace:packages/mongodb":
+  version: 0.0.0-use.local
+  resolution: "@firecms/mongodb@workspace:packages/mongodb"
+  dependencies:
+    "@firecms/core": ^3.0.0-canary.8
+    "@firecms/firebase": ^3.0.0-canary.8
+    "@firecms/ui": ^3.0.0-canary.8
+    "@types/node": ^20.11.30
+    firebase: ^10.9.0
+    typescript: ^5.4.2
+    vite: ^5.1.6
+  peerDependencies:
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    realm-web: ^2.0.0
   languageName: unknown
   linkType: soft
 
@@ -10124,7 +10124,6 @@ __metadata:
     "@firecms/data_enhancement": ^3.0.0-canary.8
     "@firecms/data_import_export": ^3.0.0-canary.8
     "@firecms/editor": ^3.0.0-canary.8
-    "@firecms/firebase_pro": ^3.0.0-canary.8
     "@firecms/schema_inference": ^3.0.0-canary.8
     "@firecms/ui": ^3.0.0-canary.8
     "@firecms/user_management": ^3.0.0-canary.8

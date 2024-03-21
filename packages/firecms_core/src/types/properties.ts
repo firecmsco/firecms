@@ -770,7 +770,8 @@ export type StorageConfig = {
      * Postprocess the saved value (storage path or URL)
      * after it has been resolved.
      */
-    postProcess?: (pathOrUrl: string) => Promise<string>
+    postProcess?: (pathOrUrl: string) => Promise<string>;
+
 }
 
 /**

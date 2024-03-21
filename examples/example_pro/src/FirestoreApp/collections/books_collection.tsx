@@ -1,4 +1,4 @@
-import { buildCollection } from "@firecms/firebase_pro";
+import { buildCollection } from "@firecms/core";
 import {
     OpenAIInstructionsActions
 } from "../collection_actions/OpenAIInstructionsActions";

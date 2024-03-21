@@ -2,19 +2,17 @@ import React from "react";
 
 import {
     buildCollection,
-    Chip,
     Entity,
     EntityCollectionView,
     EntityReference,
-    FilterValues,
     ReferenceWidget,
     useAuthController,
     useReferenceDialog,
     useSelectionController,
     useSideEntityController,
     useSnackbarController
-} from "@firecms/firebase_pro";
-import { Button, GitHubIcon, IconButton, Paper, Tooltip, Typography } from "@firecms/ui";
+} from "@firecms/core";
+import { Button, Chip, GitHubIcon, IconButton, Paper, Tooltip, Typography } from "@firecms/ui";
 import { Product } from "./types";
 import { usersCollection } from "./collections/users_collection";
 

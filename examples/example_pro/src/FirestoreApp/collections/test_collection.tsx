@@ -5,7 +5,7 @@ import {
     EntityOnFetchProps,
     EnumValues,
     resolveNavigationFrom
-} from "@firecms/firebase_pro";
+} from "@firecms/core";
 import { CustomField } from "../custom_field/SubPropertyField";
 import { usersCollection } from "./users_collection";
 

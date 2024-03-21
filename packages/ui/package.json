@@ -33,7 +33,8 @@
             "require": "./dist/index.umd.js",
             "types": "./dist/src/index.d.ts"
         },
-        "./package.json": "./package.json"
+        "./package.json": "./package.json",
+        "./tailwind.config.js": "./tailwind.config.js"
     },
     "scripts": {
         "watch": "vite build --watch",
@@ -110,7 +111,8 @@
     },
     "files": [
         "dist",
-        "src"
+        "src",
+        "tailwind.config.js"
     ],
     "gitHead": "bfe875c02132b5763ac0c9d8c8a885c791bb5a24",
     "publishConfig": {

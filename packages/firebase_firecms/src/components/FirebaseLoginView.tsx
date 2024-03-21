@@ -27,7 +27,7 @@ import {
     FirebaseSignInProvider,
     RECAPTCHA_CONTAINER_ID,
     useRecaptcha
-} from "@firecms/firebase";
+} from "../index";
 
 /**
  * @category Firebase

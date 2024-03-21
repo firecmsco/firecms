@@ -5,11 +5,7 @@ import "@fontsource/ibm-plex-mono";
 import "@fontsource/roboto"
 
 import {
-    CenteredView,
     CircularProgressCenter,
-    FirebaseAuthController,
-    FirebaseLoginView,
-    FirebaseSignInProvider,
     FireCMS,
     ModeControllerProvider,
     NavigationRoutes,
@@ -19,15 +15,22 @@ import {
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     useBuildNavigationController,
+} from "@firecms/core";
+
+import {
+    FirebaseAuthController,
+    FirebaseLoginView,
+    FirebaseSignInProvider,
     useFirebaseAuthController,
     useFirebaseRTDBDelegate,
     useFirebaseStorageSource,
     useInitialiseFirebase,
     useInitializeAppCheck,
     useValidateAuthenticator
-} from "@firecms/firebase_pro";
+} from "@firecms/firebase";
 
 import { productsCollection } from "./collections/products_collection";
+import { CenteredView } from "@firecms/ui";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCIZxRC_0uy9zU2sQrEo88MigD4Z9ktYzo",
