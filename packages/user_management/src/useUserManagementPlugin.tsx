@@ -6,7 +6,7 @@ export function useUserManagementPlugin({ userManagement }: {
     userManagement: UserManagement,
 }): FireCMSPlugin {
     return {
-        name: "User management plugin",
+        key: "user_management",
         loading: userManagement.loading,
         provider: {
             Component: UserManagementProvider,

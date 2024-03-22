@@ -4,18 +4,18 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@firecms/collection_editor": "^3.0.0-beta",
-    "@firecms/data_enhancement": "^3.0.0-beta",
-    "@firecms/data_import_export": "^3.0.0-beta",
-    "@firecms/schema_inference": "^3.0.0-beta",
-    "@firecms/firebase": "^3.0.0-beta",
-    "@firecms/core": "^3.0.0-beta",
-    "@firecms/ui": "^3.0.0-beta",
+    "@firecms/collection_editor": "^3.0.0-canary",
+    "@firecms/data_enhancement": "^3.0.0-canary",
+    "@firecms/data_import_export": "^3.0.0-canary",
+    "@firecms/schema_inference": "^3.0.0-canary",
+    "@firecms/firebase": "^3.0.0-canary",
+    "@firecms/core": "^3.0.0-canary",
+    "@firecms/ui": "^3.0.0-canary",
     "firebase": "^10.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router": "^6.21.0",
-    "react-router-dom": "^6.21.0"
+    "react-router": "^6.22.0",
+    "react-router-dom": "^6.22.0"
   },
   "scripts": {
     "dev": "vite --mode development",

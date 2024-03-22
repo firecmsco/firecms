@@ -17,9 +17,9 @@ import { CMSView } from "./navigation";
 export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollection = EntityCollection, COL_ACTIONS_PROPS = any> = {
 
     /**
-     * Name of the plugin
+     * Key of the plugin. This is used to identify the plugin in the CMS.
      */
-    name: string;
+    key: string;
 
     /**
      * If this flag is set to true, no content will be shown in the CMS

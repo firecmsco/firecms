@@ -9,7 +9,7 @@ import { ExportCollectionAction } from "./export_import/ExportCollectionAction";
 export function useImportExportPlugin(props?: ImportExportPluginProps): FireCMSPlugin<any, any, any, ImportExportPluginProps> {
 
     return useMemo(() => ({
-        name: "Import/Export",
+        key: "import_export",
         collectionView: {
             CollectionActions: [ImportCollectionAction, ExportCollectionAction],
             collectionActionsProps: props

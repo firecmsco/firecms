@@ -17,7 +17,7 @@ export function useSaasPlugin({ projectConfig, firestoreDelegate, collectionConf
     const hasOwnTextSearchImplementation = Boolean(appConfig?.textSearchControllerBuilder);
     const newProject = projectConfig.creationType === "new";
     return {
-        name: "Saas plugin",
+        key: "saas",
         collectionView: {
             showTextSearchBar: ({ context, path, collection }) => {
                 if (collection.textSearchEnabled === false) {

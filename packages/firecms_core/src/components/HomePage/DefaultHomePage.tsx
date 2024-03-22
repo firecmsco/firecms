@@ -102,7 +102,7 @@ export function DefaultHomePage({
                     return (
                         <NavigationGroup
                             group={section.title}
-                            key={`plugin_section_${plugin.name}`}>
+                            key={`plugin_section_${plugin.key}`}>
                             {section.children}
                         </NavigationGroup>
                     );

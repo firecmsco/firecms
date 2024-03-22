@@ -21,8 +21,8 @@
     "firebase": "^10.5.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router": "^6.22.2",
-    "react-router-dom": "^6.22.2"
+    "react-router": "^6.22.0",
+    "react-router-dom": "^6.22.0"
   },
   "scripts": {
     "dev": "vite",
@@ -91,5 +91,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "bfe875c02132b5763ac0c9d8c8a885c791bb5a24"
+  "gitHead": "5bd7f971be5956d225835af3b6cbe9f71d3e7e50"
 }

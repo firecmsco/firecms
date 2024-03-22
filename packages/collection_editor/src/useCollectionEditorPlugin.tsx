@@ -81,7 +81,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
  }: CollectionConfigControllerProps<EC, UserType>): FireCMSPlugin<any, any, PersistedCollection> {
 
     return {
-        name: "Collection Editor",
+        key: "collection_editor",
         loading: collectionConfigController.loading,
         provider: {
             Component: ConfigControllerProvider,

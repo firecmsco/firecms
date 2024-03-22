@@ -60,7 +60,7 @@ export function useDataEnhancementPlugin(props?: DataEnhancementPluginProps): Fi
     }, [getConfigForPath, authController.user]);
 
     return {
-        name: "Data augmentation",
+        key: "data_enhancement",
         form: {
             Actions: FormEnhanceAction,
             provider: {

@@ -24,7 +24,7 @@ export function FireCMSCloudHomePage() {
     const pluginActions: React.ReactNode[] = [];
     if (plugins) {
         pluginActions.push(...plugins.map((plugin, i) => (
-            <React.Fragment key={plugin.name}>{plugin.homePage?.additionalActions ?? null}</React.Fragment>
+            <React.Fragment key={plugin.key}>{plugin.homePage?.additionalActions ?? null}</React.Fragment>
         )).filter(Boolean));
     }
     return <DefaultHomePage

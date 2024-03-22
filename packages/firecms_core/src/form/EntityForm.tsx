@@ -443,7 +443,7 @@ function EntityFormInternal<M extends Record<string, any>>({
         pluginActions.push(...plugins.map((plugin, i) => (
             plugin.form?.Actions
                 ? <plugin.form.Actions
-                    key={`actions_${plugin.name}`} {...actionProps}/>
+                    key={`actions_${plugin.key}`} {...actionProps}/>
                 : null
         )).filter(Boolean));
     }
