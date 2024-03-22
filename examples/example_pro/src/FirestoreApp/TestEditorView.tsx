@@ -36,7 +36,7 @@ export function TestEditorView() {
                 // }}
                 onMarkdownContentChange={(content) => {
                     // console.log("markdown content")
-                    console.log(content);
+                    // console.log(content);
                     window.localStorage.setItem("editor-content", content);
                 }}
                 handleImageUpload={async (file: File) => {
