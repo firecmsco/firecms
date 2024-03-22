@@ -9,7 +9,7 @@ import { StorageSource } from "./storage";
  * to do it as the result of a hook.
  * @group Hooks and utilities
  */
-export type AuthController<UserType extends User = User, ExtraData extends any = any> = {
+export type AuthController<UserType extends User = any, ExtraData extends any = any> = {
 
     /**
      * The user currently logged in
@@ -64,6 +64,9 @@ export type AuthController<UserType extends User = User, ExtraData extends any =
 
     setExtra: (extra: ExtraData) => void;
 
+    setUser?: (user: UserType | null) => void;
+
+    setRoles?: (roles: Role[]) => void;
 };
 
 /**

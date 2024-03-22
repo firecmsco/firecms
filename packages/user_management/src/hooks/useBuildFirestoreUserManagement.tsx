@@ -92,14 +92,6 @@ export function useBuildFirestoreUserManagement({
 
     const loading = rolesLoading || usersLoading;
 
-    const loggedInUser: User | undefined = users.find(u => u.email?.toLowerCase() === authController.user?.email?.toLowerCase());
-    // console.log("authController", authController);
-    // if (!loading && !authController.authLoading) {
-    //     const user = authController.user;
-    //     if (user) {
-    //         loggedInUser = users.find(u => u.email?.toLowerCase() === user.email?.toLowerCase());
-    //     }
-    // }
 
     useEffect(() => {
         if (!firebaseApp) return;
@@ -201,14 +193,14 @@ export function useBuildFirestoreUserManagement({
 
     const collectionPermissions: PermissionsBuilder = useCallback(({
                                                                        collection,
+                                                                       user
                                                                    }) => resolveUserRolePermissions({
         collection,
-        user: loggedInUser ?? null
-    }), [loggedInUser?.uid]);
+        user
+    }), []);
 
     return {
         loading,
-        loggedInUser,
         roles,
         users,
         saveUser,

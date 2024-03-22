@@ -64,7 +64,7 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, Use
                                                                                                         onPreSaveHookError,
                                                                                                         onSaveSuccessHookError
                                                                                                     }: SaveEntityWithCallbacksProps<M> & {
-                                                                                                        collection: EntityCollection<M>,
+                                                                                                        collection: EntityCollection<M, UserType>,
                                                                                                         dataSource: DataSource,
                                                                                                         context: FireCMSContext<UserType>,
                                                                                                     }

@@ -12,10 +12,10 @@ import {
 /**
  * @group Hooks and utilities
  */
-export type DeleteEntityWithCallbacksProps<M extends Record<string, any>> =
+export type DeleteEntityWithCallbacksProps<M extends Record<string, any>, UserType extends User = User> =
     DeleteEntityProps<M>
     & {
-    callbacks?: EntityCallbacks<M>;
+    callbacks?: EntityCallbacks<M, UserType>;
     onDeleteSuccess?: (entity: Entity<M>) => void;
     onDeleteFailure?: (entity: Entity<M>, e: Error) => void;
     onPreDeleteHookError?: (entity: Entity<M>, e: Error) => void;
@@ -62,7 +62,7 @@ export async function deleteEntityWithCallbacks<M extends Record<string, any>, U
 
     console.debug("Deleting entity", entity.path, entity.id);
 
-    const entityDeleteProps: EntityOnDeleteProps<M, UserType> = {
+    const entityDeleteProps: EntityOnDeleteProps<M, any> = {
         entity,
         collection,
         entityId: entity.id,

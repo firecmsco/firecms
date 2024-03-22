@@ -24,15 +24,10 @@ import { FirebaseApp } from "firebase/app";
 import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider } from "../types";
 import { Role } from "@firecms/core";
 
-export interface FirebaseAuthControllerProps<ExtraData> {
+export interface FirebaseAuthControllerProps {
     firebaseApp?: FirebaseApp;
     signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>;
     onSignOut?: () => void;
-    onUserLoggedIn?: (params: {
-        user: FirebaseUser,
-        setUser: (user: FirebaseUser) => void;
-        setRoles?: (roles: Role[]) => void;
-    }) => void;
 }
 
 /**
@@ -43,8 +38,7 @@ export const useFirebaseAuthController = <ExtraData>({
                                                          firebaseApp,
                                                          signInOptions,
                                                          onSignOut: onSignOutProp,
-                                                         onUserLoggedIn
-                                                     }: FirebaseAuthControllerProps<ExtraData>): FirebaseAuthController<ExtraData> => {
+                                                     }: FirebaseAuthControllerProps): FirebaseAuthController<ExtraData> => {
 
     const [loggedUser, setLoggedUser] = useState<FirebaseUser | null | undefined>(undefined); // logged user, anonymous or logged out
     const [authError, setAuthError] = useState<any>();
@@ -148,13 +142,7 @@ export const useFirebaseAuthController = <ExtraData>({
     const updateUser = useCallback((user: FirebaseUser | null) => {
         setLoggedUser(user);
         setAuthLoading(false);
-        if (user && onUserLoggedIn)
-            onUserLoggedIn({
-                user,
-                setRoles,
-                setUser: setLoggedUser
-            });
-    }, [onUserLoggedIn]);
+    }, []);
 
     const doOauthLogin = useCallback((auth: Auth, provider: OAuthProvider | FacebookAuthProvider | GithubAuthProvider | TwitterAuthProvider) => {
         setAuthLoading(true);
@@ -250,6 +238,7 @@ export const useFirebaseAuthController = <ExtraData>({
     const firebaseUserWrapper = loggedUser
         ? {
             ...loggedUser,
+            roles,
             firebaseUser: loggedUser
         }
         : null;

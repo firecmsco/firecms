@@ -58,7 +58,7 @@ export function resolveDefaultSelectedView(
  * @param collections
  * @param permissionsBuilder
  */
-export const applyPermissionsFunctionIfEmpty = (collections: EntityCollection[], permissionsBuilder?: PermissionsBuilder): EntityCollection[] => {
+export const applyPermissionsFunctionIfEmpty = (collections: EntityCollection[], permissionsBuilder?: PermissionsBuilder<any, any>): EntityCollection[] => {
 
     return collections.map(collection => {
         if (collection.permissions) {

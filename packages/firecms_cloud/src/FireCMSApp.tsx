@@ -331,11 +331,14 @@ export function FireCMSClientWithController({
         projectsApi: fireCMSBackend.projectsApi,
         firebaseApp: clientFirebaseApp,
         projectId,
-        onUserChanged: (user) => authController.setUser(user ?? null),
+        onUserChanged: (user) => {
+            authController.setUser(user ?? null);
+            authController.setRoles(fireCMSUser?.roles ?? []);
+        },
         onAnalyticsEvent: props.onAnalyticsEvent
     });
 
-    const permissions: PermissionsBuilder<PersistedCollection> = useCallback(({
+    const permissions: PermissionsBuilder<PersistedCollection, FireCMSCloudUserWithRoles> = useCallback(({
                                                                                   pathSegments,
                                                                                   collection,
                                                                                   user,
@@ -343,8 +346,8 @@ export function FireCMSClientWithController({
                                                                               }) =>
         resolveUserRolePermissions<FireCMSCloudUserWithRoles>({
             collection,
-            user: userManagement.loggedInUser ?? null
-        }), [userManagement.loggedInUser]);
+            user
+        }), []);
 
     const configController = useFirestoreCollectionsConfigController({
         firebaseApp: fireCMSBackend.backendFirebaseApp,

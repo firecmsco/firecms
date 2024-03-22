@@ -8,7 +8,7 @@ import { ResolvedEntityCollection } from "./resolved_entities";
 export interface FetchEntityProps<M extends Record<string, any> = any> {
     path: string;
     entityId: string;
-    collection?: EntityCollection<M>
+    collection?: EntityCollection<M, any>
 }
 
 /**

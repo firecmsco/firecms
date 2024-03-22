@@ -7,10 +7,10 @@ import { useFireCMSContext } from "../useFireCMSContext";
 /**
  * @group Hooks and utilities
  */
-export interface EntityFetchProps<M extends Record<string, any>> {
+export interface EntityFetchProps<M extends Record<string, any>, UserType extends User = User> {
     path: string;
     entityId?: string;
-    collection: EntityCollection<M>;
+    collection: EntityCollection<M, UserType>;
     useCache?: boolean;
 }
 
@@ -41,7 +41,7 @@ export function useEntityFetch<M extends Record<string, any>, UserType extends U
         entityId,
         collection,
         useCache = false
-    }: EntityFetchProps<M>): EntityFetchResult<M> {
+    }: EntityFetchProps<M, UserType>): EntityFetchResult<M> {
 
     const dataSource = useDataSource(collection);
     const navigationController = useNavigationController();

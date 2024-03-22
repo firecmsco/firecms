@@ -98,7 +98,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
                     path: collection.id ?? collection.path,
                     collection,
                     description: collection.description?.trim(),
-                    group: collection.group?.trim() ?? "Views"
+                    group: getGroup(collection)
                 } satisfies TopNavigationEntry)
                 : undefined))
                 .filter(Boolean) as TopNavigationEntry[],
@@ -111,8 +111,8 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
                         path: view.path,
                         view,
                         description: view.description?.trim(),
-                        group: view.group?.trim() ?? "Views"
-                    }satisfies TopNavigationEntry)
+                        group: getGroup(view)
+                    } satisfies TopNavigationEntry)
                     : undefined)
                 .filter(Boolean) as TopNavigationEntry[],
             ...(adminViews ?? []).map(view =>
@@ -430,4 +430,12 @@ async function resolveCMSViews(baseViews: CMSView[] | CMSViewsBuilder | undefine
         resolvedViews = baseViews;
     }
     return resolvedViews;
+}
+
+function getGroup(collectionOrView: EntityCollection<any, any> | CMSView) {
+    const trimmed = collectionOrView.group?.trim();
+    if (!trimmed || trimmed === "") {
+        return "Views";
+    }
+    return trimmed ?? "Views";
 }

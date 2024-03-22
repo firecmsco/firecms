@@ -4,13 +4,6 @@ export type UserManagement<USER extends User = User> = {
 
     loading: boolean;
 
-    /**
-     * The user currently logged in, in the user management system.
-     * This is the same user that is logged in the Authenticator, but with the roles
-     * and permissions loaded.
-     */
-    loggedInUser: USER | undefined;
-
     users: USER[];
     saveUser: (user: USER) => Promise<USER>;
     deleteUser: (user: USER) => Promise<void>;

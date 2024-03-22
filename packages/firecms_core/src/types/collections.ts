@@ -17,7 +17,7 @@ import { EntityOverrides } from "./entity_overrides";
  *
  * @group Models
  */
-export interface EntityCollection<M extends Record<string, any> = any, UserType extends User = User> {
+export interface EntityCollection<M extends Record<string, any> = any, UserType extends User = any> {
 
     /**
      * You can set an alias that will be used internally instead of the `path`.
@@ -147,7 +147,7 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
      * is being created, updated or deleted.
      * Useful for adding your own logic or blocking the execution of the operation.
      */
-    callbacks?: EntityCallbacks<M>;
+    callbacks?: EntityCallbacks<M, UserType>;
 
     /**
      * Builder for rendering additional components such as buttons in the
@@ -451,7 +451,7 @@ export interface AdditionalFieldDelegate<M extends Record<string, any> = any,
      * view.
      * @param entity
      */
-    value?: (props: { entity: Entity<M>, context: FireCMSContext }) => string | number | Promise<string | number> | undefined;
+    value?: (props: { entity: Entity<M>, context: FireCMSContext<any> }) => string | number | Promise<string | number> | undefined;
 }
 
 /**

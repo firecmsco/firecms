@@ -55,11 +55,11 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection,
  * @param configPath
  */
 export function useFirestoreCollectionsConfigController<EC extends PersistedCollection, UserType extends User = User>({
-                                                                                                                      firebaseApp,
-                                                                                                                      configPath,
-                                                                                                                      permissions,
-                                                                                                                      propertyConfigs
-                                                                                                                  }: CollectionConfigControllerProps<EC, UserType>): CollectionsConfigController {
+                                                                                                                          firebaseApp,
+                                                                                                                          configPath,
+                                                                                                                          permissions,
+                                                                                                                          propertyConfigs
+                                                                                                                      }: CollectionConfigControllerProps<EC, UserType>): CollectionsConfigController {
 
     const propertyConfigsMap = useMemo(() => {
         const map: Record<string, any> = {};
@@ -179,7 +179,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         });
     }, [configPath, firestore, propertyConfigsMap]);
 
-    const collections = persistedCollections !== undefined ? applyPermissionsFunctionIfEmpty(persistedCollections, permissions as PermissionsBuilder) : undefined;
+    const collections = persistedCollections !== undefined ? applyPermissionsFunctionIfEmpty(persistedCollections, permissions as PermissionsBuilder<any, any>) : undefined;
 
     const getCollection = useCallback((id: string) => {
         if (!collections) throw Error("Collections not initialised");

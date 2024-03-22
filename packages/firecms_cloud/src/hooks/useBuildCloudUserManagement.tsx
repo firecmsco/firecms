@@ -164,7 +164,6 @@ export function useBuildCloudUserManagement({
     return {
         allowDefaultRolesCreation: false,
         includeCollectionConfigPermissions: true,
-        loggedInUser,
         loading: rolesLoading || usersLoading,
         roles,
         users,

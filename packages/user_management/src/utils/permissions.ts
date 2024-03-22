@@ -10,7 +10,10 @@ const DEFAULT_PERMISSIONS = {
 };
 
 export function resolveUserRolePermissions<UserType extends User>
-({ collection, user }: {
+({
+     collection,
+     user
+ }: {
     collection: EntityCollection<any>,
     user: UserType | null
 }): Permissions {

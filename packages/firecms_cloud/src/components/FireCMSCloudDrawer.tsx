@@ -17,10 +17,10 @@ import { ADMIN_VIEWS_CONFIG, RESERVED_GROUPS } from "../utils";
  * @group Core
  */
 export function FireCMSCloudDrawer({
-                                  hovered,
-                                  drawerOpen,
-                                  closeDrawer
-                              }: DrawerProps) {
+                                       hovered,
+                                       drawerOpen,
+                                       closeDrawer
+                                   }: DrawerProps) {
 
     const navigate = useNavigate();
 

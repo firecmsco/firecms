@@ -12,7 +12,7 @@ import {
     TextField,
     Typography,
 } from "@firecms/ui";
-import { FieldCaption, Role, User, useSnackbarController } from "@firecms/core";
+import { FieldCaption, Role, useAuthController, User, useSnackbarController } from "@firecms/core";
 import { Formex, useCreateFormex } from "@firecms/formex";
 
 import { areRolesEqual } from "../../utils";
@@ -56,7 +56,9 @@ export function UserDetailsForm({
 
     const snackbarController = useSnackbarController();
     const {
-        loggedInUser,
+        user: loggedInUser
+    } = useAuthController();
+    const {
         saveUser,
         users,
         roles,

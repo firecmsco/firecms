@@ -78,7 +78,7 @@ export interface EntityOnFetchProps<M extends Record<string, any> = any, UserTyp
     /**
      * Collection of the entity
      */
-    collection: EntityCollection<M>;
+    collection: EntityCollection<M, UserType>;
 
     /**
      * Full path of the CMS where this collection is being fetched.
@@ -193,7 +193,7 @@ export interface EntityOnDeleteProps<M extends Record<string, any> = any, UserTy
     /**
      * Context of the app status
      */
-    context: FireCMSContext;
+    context: FireCMSContext<UserType>;
 }
 
 /**

@@ -25,7 +25,7 @@ export type FirebaseSignInOption = {
     customParameters?: Record<string, string>;
 }
 
-export type FirebaseUserWrapper = User & {
+export type FirebaseUserWrapper = User & FirebaseUser & {
     firebaseUser: FirebaseUser | null;
 }
 
