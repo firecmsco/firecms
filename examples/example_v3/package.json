@@ -1,5 +1,5 @@
 {
-  "name": "firecms-example-v3",
+  "name": "firecms-example-cloud",
   "private": true,
   "version": "3.0.0-canary.9",
   "scripts": {
@@ -26,6 +26,6 @@
     "postcss": "^8.4.37",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.4.2",
-    "vite": "^5.1.6"
+    "vite": "^5.2.3"
   }
 }

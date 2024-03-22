@@ -60,7 +60,7 @@
     "@types/react": "^18.2.67",
     "@types/react-dom": "18.2.22",
     "typescript": "^5.4.2",
-    "vite": "^5.1.6"
+    "vite": "^5.2.3"
   },
   "gitHead": "5bd7f971be5956d225835af3b6cbe9f71d3e7e50"
 }

@@ -71,7 +71,7 @@
     "react-router-dom": "^6.22.0",
     "ts-jest": "^29.1.2",
     "typescript": "^5.4.2",
-    "vite": "^5.1.6",
+    "vite": "^5.2.3",
     "vite-plugin-fonts": "^0.7.0"
   },
   "files": [

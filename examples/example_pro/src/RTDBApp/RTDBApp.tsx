@@ -15,6 +15,7 @@ import {
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     useBuildNavigationController,
+    useValidateAuthenticator
 } from "@firecms/core";
 
 import {
@@ -26,7 +27,6 @@ import {
     useFirebaseStorageSource,
     useInitialiseFirebase,
     useInitializeAppCheck,
-    useValidateAuthenticator
 } from "@firecms/firebase";
 
 import { productsCollection } from "./collections/products_collection";

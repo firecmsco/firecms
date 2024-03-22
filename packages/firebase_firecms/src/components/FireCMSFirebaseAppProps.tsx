@@ -2,6 +2,7 @@ import React from "react";
 import { User as FirebaseUser } from "firebase/auth";
 
 import {
+    Authenticator,
     AppCheckOptions,
     CMSAnalyticsEvent,
     CMSView,
@@ -15,9 +16,8 @@ import {
 import { FirebaseApp } from "firebase/app";
 import { FirebaseLoginViewProps } from "./FirebaseLoginView";
 import {
-    Authenticator,
     FirebaseSignInOption,
-    FirebaseSignInProvider,
+    FirebaseSignInProvider, FirebaseUserWrapper,
     FirestoreTextSearchControllerBuilder
 } from "../types";
 import { FirestoreIndexesBuilder } from "../hooks";
@@ -78,7 +78,7 @@ export type FireCMSFirebaseAppProps = {
      * If not specified, authentication is enabled but no user restrictions
      * apply
      */
-    authentication?: boolean | Authenticator<FirebaseUser>;
+    authentication?: boolean | Authenticator<FirebaseUserWrapper>;
 
     /**
      * List of sign in options that will be displayed in the login

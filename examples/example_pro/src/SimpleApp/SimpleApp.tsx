@@ -6,6 +6,7 @@ import "@fontsource/roboto"
 import { User as FirebaseUser } from "firebase/auth";
 
 import {
+    Authenticator,
     CircularProgressCenter,
     FireCMS,
     ModeControllerProvider,
@@ -16,17 +17,16 @@ import {
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     useBuildNavigationController,
+    useValidateAuthenticator
 } from "@firecms/core";
 import {
-    Authenticator,
     FirebaseAuthController,
     FirebaseLoginView,
-    FirebaseSignInProvider,
+    FirebaseSignInProvider, FirebaseUserWrapper,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
     useInitialiseFirebase,
-    useValidateAuthenticator
 } from "@firecms/firebase";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { booksCollection } from "./books_collection";
@@ -47,7 +47,7 @@ export const firebaseConfig = {
 function ProSample() {
 
     // Use your own authentication logic here
-    const myAuthenticator: Authenticator<FirebaseUser> = useCallback(async ({
+    const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
                                                                                 user,
                                                                                 authController
                                                                             }) => {
@@ -58,7 +58,7 @@ function ProSample() {
 
         // This is an example of retrieving async data related to the user
         // and storing it in the controller's extra field
-        const idTokenResult = await user?.getIdTokenResult();
+        const idTokenResult = await user?.firebaseUser?.getIdTokenResult();
         const userIsAdmin = idTokenResult?.claims.admin || user?.email?.endsWith("@firecms.co");
 
         console.log("Allowing access to", user);

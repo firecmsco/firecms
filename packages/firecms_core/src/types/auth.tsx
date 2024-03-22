@@ -1,5 +1,7 @@
 import { User } from "./user";
 import { Role } from "./roles";
+import { DataSourceDelegate } from "./datasource";
+import { StorageSource } from "./storage";
 
 /**
  * Controller for retrieving the logged user or performing auth related operations.
@@ -63,3 +65,31 @@ export type AuthController<UserType extends User = User, ExtraData extends any =
     setExtra: (extra: ExtraData) => void;
 
 };
+
+/**
+ * Implement this function to allow access to specific users.
+ * @group Hooks and utilities
+ */
+export type Authenticator<UserType extends User = User, Controller extends AuthController<UserType> = AuthController<UserType>> = ({ user }: {
+
+    /**
+     * Logged-in user or null
+     */
+    user: UserType | null;
+
+    /**
+     * AuthController
+     */
+    authController: Controller;
+
+    /**
+     * Connector to your database, e.g. your Firestore database
+     */
+    dataSourceDelegate: DataSourceDelegate;
+
+    /**
+     * Used storage implementation
+     */
+    storageSource: StorageSource;
+
+}) => boolean | Promise<boolean>;

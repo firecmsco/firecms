@@ -94,7 +94,7 @@ export function ProDeveloperFeatures() {
 const proExampleCode = `function ProSample() {
 
     // Use your own authentication logic here
-    const myAuthenticator: Authenticator<FirebaseUser> = useCallback(async ({
+    const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
                                                                                 user,
                                                                                 authController
                                                                             }) => {

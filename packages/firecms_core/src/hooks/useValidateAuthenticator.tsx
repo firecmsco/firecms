@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare";
 
-import { AppCheckTokenResult, AuthController, DataSourceDelegate, StorageSource, User } from "@firecms/core";
-import { Authenticator } from "../types";
+import { AppCheckTokenResult, AuthController, Authenticator, DataSourceDelegate, StorageSource, User } from "../index";
 
 /**
  * This hook is used internally for validating an authenticator.

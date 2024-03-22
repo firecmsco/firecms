@@ -104,7 +104,7 @@ example, the roles or the permissions.
 ```tsx
 import { useCallback } from "react";
 
-const myAuthenticator: Authenticator<FirebaseUser> = useCallback(async ({
+const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
                                                                             user,
                                                                             authController
                                                                         }) => {

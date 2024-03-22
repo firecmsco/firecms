@@ -17,18 +17,18 @@ import {
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     useBuildNavigationController,
+    useValidateAuthenticator
 } from "@firecms/core";
 import {
     FirebaseAuthController,
+    FirebaseLoginView,
     FirebaseSignInProvider,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
     useInitialiseFirebase,
-    useInitializeAppCheck,
-    useValidateAuthenticator
+    useInitializeAppCheck
 } from "@firecms/firebase";
-import { FirebaseLoginView } from "@firecms/firebase";
 
 import { firebaseConfig } from "./firebase-config";
 import { productsCollection } from "./collections/products";
@@ -66,7 +66,7 @@ function AppInner() {
         appCheckLoading,
         getAppCheckToken
     } = useInitializeAppCheck({
-        firebaseApp,
+        firebaseApp
     });
 
     /**

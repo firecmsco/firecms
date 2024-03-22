@@ -9,6 +9,7 @@ import { User as FirebaseUser } from "firebase/auth";
 
 import { CenteredView, GitHubIcon, IconButton, Tooltip, } from "@firecms/ui";
 import {
+    Authenticator,
     CircularProgressCenter,
     CMSView,
     FireCMS,
@@ -21,17 +22,16 @@ import {
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     useBuildNavigationController,
+    useValidateAuthenticator,
 } from "@firecms/core";
 import {
-    Authenticator,
     FirebaseAuthController,
-    FirebaseSignInProvider,
+    FirebaseSignInProvider, FirebaseUserWrapper,
     FirestoreIndexesBuilder,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
-    useInitialiseFirebase,
-    useValidateAuthenticator
+    useInitialiseFirebase
 } from "@firecms/firebase";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { useImportExportPlugin } from "@firecms/data_import_export";
@@ -220,10 +220,12 @@ function App() {
 
     const importExportPlugin = useImportExportPlugin();
 
-    const authentication: Authenticator<FirebaseUser, FirebaseAuthController> = useCallback(async ({
+    const authentication: Authenticator<FirebaseUserWrapper, FirebaseAuthController> = useCallback(async ({
                                                                                                        user,
                                                                                                        authController
                                                                                                    }) => {
+
+        console.log("Authenticating user", user);
 
         // console.log("authentication", user, userManagement);
         if (userManagement.loading) {
@@ -232,7 +234,7 @@ function App() {
         }
 
         // This is an example of retrieving async data related to the user: the Firebase user id token in this case
-        const idTokenResult = await user?.getIdTokenResult();
+        const idTokenResult = await user?.firebaseUser?.getIdTokenResult();
 
         // This is an example of how you can link the access system to the user management plugin
         if (userManagement.users.length === 0) {

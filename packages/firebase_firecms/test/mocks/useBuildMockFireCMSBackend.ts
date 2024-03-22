@@ -8,7 +8,7 @@
 //
 // export function useBuildMockFireCMSBackend(): FireCMSBackend {
 //
-//     const [loggedUser, setLoggedUser] = useState<FirebaseUser | null>();
+//     const [loggedUser, setLoggedUser] = useState<FirebaseUserWrapper | null>();
 //
 //     const signOut = () => setLoggedUser(null);
 //     const googleLogin = () => setLoggedUser(createMockUser());

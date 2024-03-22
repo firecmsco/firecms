@@ -7,7 +7,7 @@
 //
 // export function useBuildMockAuthController(): FirebaseAuthController {
 //
-//     const [user, setUser] = useState<FirebaseUser | null>(null);
+//     const [user, setUser] = useState<FirebaseUserWrapper | null>(null);
 //
 //     return {
 //         anonymousLogin(): void {

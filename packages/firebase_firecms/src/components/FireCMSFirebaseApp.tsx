@@ -13,7 +13,8 @@ import {
     useBrowserTitleAndIcon,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
-    useBuildNavigationController
+    useBuildNavigationController,
+    useValidateAuthenticator
 } from "@firecms/core";
 
 import { FireCMSFirebaseAppProps } from "./FireCMSFirebaseAppProps";
@@ -24,7 +25,6 @@ import {
     useFirestoreDelegate,
     useInitialiseFirebase,
     useInitializeAppCheck,
-    useValidateAuthenticator
 } from "../hooks";
 import { CenteredView } from "@firecms/ui";
 import { FirebaseAuthController } from "../types";

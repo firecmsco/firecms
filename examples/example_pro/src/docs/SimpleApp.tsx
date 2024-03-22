@@ -1,11 +1,9 @@
 import React, { useCallback } from "react";
-
-import { User as FirebaseUser } from "firebase/auth";
-import { buildCollection, buildProperty, EntityReference } from "@firecms/core";
+import { Authenticator, buildCollection, buildProperty, EntityReference } from "@firecms/core";
 
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
-import { Authenticator, FireCMSFirebaseApp } from "@firecms/firebase";
+import { FirebaseUserWrapper, FireCMSFirebaseApp } from "@firecms/firebase";
 
 // TODO: Replace with your config
 const firebaseConfig = {
@@ -187,7 +185,7 @@ const productsCollection = buildCollection<Product>({
 
 export default function App() {
 
-    const myAuthenticator: Authenticator<FirebaseUser> = useCallback(async ({
+    const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
                                                                                 user,
                                                                                 authController
                                                                             }) => {

@@ -16,7 +16,8 @@ import {
     SideDialogs,
     SnackbarProvider,
     useBuildModeController,
-    useBuildNavigationController
+    useBuildNavigationController,
+    useValidateAuthenticator
 } from "@firecms/core";
 import {
     FirebaseAuthController,
@@ -25,7 +26,6 @@ import {
     useFirebaseStorageSource,
     useFirestoreDelegate,
     useInitialiseFirebase,
-    useValidateAuthenticator
 } from "@firecms/firebase";
 
 import { firebaseConfig } from "../firebase_config";

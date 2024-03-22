@@ -25,3 +25,5 @@ export * from "./useBuildNavigationController";
 
 export * from "./useBuildLocalConfigurationPersistence";
 export * from "./useBuildModeController";
+
+export * from "./useValidateAuthenticator";

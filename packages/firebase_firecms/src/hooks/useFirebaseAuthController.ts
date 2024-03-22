@@ -247,12 +247,15 @@ export const useFirebaseAuthController = <ExtraData>({
         setRoles(undefined);
     }, []);
 
-    const userWithRoles = loggedUser ? {
-        ...loggedUser,
-        roles
-    } : null;
+    const firebaseUserWrapper = loggedUser
+        ? {
+            ...loggedUser,
+            firebaseUser: loggedUser
+        }
+        : null;
+
     return {
-        user: userWithRoles,
+        user: firebaseUserWrapper,
         roles,
         setUser: updateUser,
         setRoles,

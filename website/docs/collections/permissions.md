@@ -75,7 +75,7 @@ initialised:
 import { User as FirebaseUser } from "firebase/auth";
 import { Authenticator } from "@firecms/cloud";
 
-const myAuthenticator: Authenticator<FirebaseUser> = async ({
+const myAuthenticator: Authenticator<FirebaseUserWrapper> = async ({
                                                                 user,
                                                                 authController,
                                                                 dataSource
