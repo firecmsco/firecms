@@ -1,33 +1,27 @@
 import { FirebaseApp } from "firebase/app";
-import { FirebaseStorage, getDownloadURL, getMetadata, getStorage, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, getMetadata, getStorage, ref, uploadBytes } from "firebase/storage";
 import { DownloadConfig, DownloadMetadata, StorageSource, UploadFileProps } from "@firecms/core";
-import { useEffect, useState } from "react";
 
 /**
  * @group Firebase
  */
 export interface FirebaseStorageSourceProps {
     firebaseApp?: FirebaseApp
+    bucketUrl?: string
 }
 
 /**
  * Use this hook to build an {@link StorageSource} based on Firebase storage
  * @group Firebase
  */
-export function useFirebaseStorageSource({ firebaseApp }: FirebaseStorageSourceProps): StorageSource {
-
-    const [storage, setStorage] = useState<FirebaseStorage>();
-
-    useEffect(() => {
-        if (!firebaseApp) return;
-        setStorage(getStorage(firebaseApp));
-    }, [firebaseApp]);
-
+export function useFirebaseStorageSource({ firebaseApp, bucketUrl }: FirebaseStorageSourceProps): StorageSource {
     const urlsCache: Record<string, DownloadConfig> = {};
-
     return {
-        uploadFile({ file, fileName, path, metadata }: UploadFileProps)
+        uploadFile({ file, fileName, path, metadata, bucket }: UploadFileProps)
             : Promise<any> {
+            if (!firebaseApp) throw Error("useFirebaseStorageSource Firebase not initialised");
+            const storageBucketUrl = bucket ?? bucketUrl;
+            const storage = getStorage(firebaseApp, storageBucketUrl);
             if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
             const usedFilename = fileName ?? file.name;
             console.debug("Uploading file", usedFilename, file, path, metadata);
@@ -36,11 +30,12 @@ export function useFirebaseStorageSource({ firebaseApp }: FirebaseStorageSourceP
             }));
         },
 
-        async getFile(path: string): Promise<File | null> {
+        async getFile(path: string, bucket?: string): Promise<File | null> {
             try {
-
-                if (!storage)
-                    throw Error("useFirebaseStorageSource Firebase not initialised");
+                if (!firebaseApp) throw Error("useFirebaseStorageSource Firebase not initialised");
+                const storageBucketUrl = bucket ?? bucketUrl;
+                const storage = getStorage(firebaseApp, storageBucketUrl);
+                if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
                 const fileRef = ref(storage, path);
                 const url = await getDownloadURL(fileRef);
                 const response = await fetch(url);
@@ -52,7 +47,10 @@ export function useFirebaseStorageSource({ firebaseApp }: FirebaseStorageSourceP
             }
         },
 
-        async getDownloadURL(storagePathOrUrl: string): Promise<DownloadConfig> {
+        async getDownloadURL(storagePathOrUrl: string, bucket?: string): Promise<DownloadConfig> {
+            if (!firebaseApp) throw Error("useFirebaseStorageSource Firebase not initialised");
+            const storageBucketUrl = bucket ?? bucketUrl;
+            const storage = getStorage(firebaseApp, storageBucketUrl);
             if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
             if (urlsCache[storagePathOrUrl])
                 return urlsCache[storagePathOrUrl];
