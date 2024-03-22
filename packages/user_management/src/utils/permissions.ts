@@ -1,5 +1,4 @@
-import { CMSType, EntityCollection, Permissions } from "@firecms/core";
-import { Role, UserWithRoles } from "../types";
+import { EntityCollection, Permissions, Role, User } from "@firecms/core";
 
 export const RESERVED_GROUPS = ["Admin"];
 
@@ -10,7 +9,7 @@ const DEFAULT_PERMISSIONS = {
     delete: false
 };
 
-export function resolveUserRolePermissions<UserType extends UserWithRoles>
+export function resolveUserRolePermissions<UserType extends User>
 ({ collection, user }: {
     collection: EntityCollection<any>,
     user: UserType | null
@@ -66,7 +65,7 @@ const mergePermissions = (permA: Permissions, permB: Permissions) => {
     };
 }
 
-export function getUserRoles(roles: Role[], fireCMSUser: UserWithRoles): Role[] | undefined {
+export function getUserRoles(roles: Role[], fireCMSUser: User): Role[] | undefined {
     return !roles
         ? undefined
         : (fireCMSUser.roles

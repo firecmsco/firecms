@@ -6,11 +6,9 @@ import "@fontsource/roboto"
 
 import { getAnalytics, logEvent } from "firebase/analytics";
 
+import { CenteredView, } from "@firecms/ui";
 import {
-    CenteredView,
     CircularProgressCenter,
-    FirebaseAuthController,
-    FirebaseSignInProvider,
     FireCMS,
     ModeControllerProvider,
     NavigationRoutes,
@@ -20,12 +18,16 @@ import {
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     useBuildNavigationController,
+} from "@firecms/core";
+import {
+    FirebaseAuthController,
+    FirebaseSignInProvider,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
     useInitialiseFirebase,
     useInitializeAppCheck
-} from "@firecms/firebase_pro";
+} from "@firecms/firebase";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { booksCollection } from "./books_collection";
 import { BrowserRouter } from "react-router-dom";
@@ -71,7 +73,6 @@ function ProSampleInner() {
             return false;
         }
     });
-
 
     const {
         firebaseApp,

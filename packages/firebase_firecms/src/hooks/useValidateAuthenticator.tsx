@@ -14,7 +14,7 @@ import { Authenticator } from "../types";
  * @param storageSource
  * @param dataSource
  */
-export function useValidateAuthenticator<UserType extends User = User>({
+export function useValidateAuthenticator<UserType extends User = User, Controller extends AuthController<UserType> = AuthController<UserType>>({
                                                                            disabled,
                                                                            authController,
                                                                            authentication,
@@ -25,8 +25,8 @@ export function useValidateAuthenticator<UserType extends User = User>({
                                                                        }:
                                                                            {
                                                                                disabled?: boolean,
-                                                                               authController: AuthController<UserType>,
-                                                                               authentication?: boolean | Authenticator<UserType>,
+                                                                               authController: Controller,
+                                                                               authentication?: boolean | Authenticator<UserType, Controller>,
                                                                                getAppCheckToken?: (forceRefresh: boolean) => Promise<AppCheckTokenResult> | undefined,
                                                                                appCheckForceRefresh?: boolean,
                                                                                dataSourceDelegate: DataSourceDelegate;
@@ -93,7 +93,7 @@ export function useValidateAuthenticator<UserType extends User = User>({
             }
         }
 
-        if (authentication instanceof Function && delegateUser && !equal(checkedUserRef.current, delegateUser)) {
+        if (authentication instanceof Function && delegateUser && !equal(checkedUserRef.current?.uid, delegateUser.uid)) {
             setAuthLoading(true);
             try {
                 const allowed = await authentication({

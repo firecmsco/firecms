@@ -1,3 +1,5 @@
+import { Role } from "./roles";
+
 /**
  * This interface represents a user.
  * It has some of the same fields as a Firebase User.
@@ -33,5 +35,10 @@ export type User = {
      *
      */
     readonly isAnonymous: boolean;
+
+    /**
+     *
+     */
+    roles?: Role[];
 
 };

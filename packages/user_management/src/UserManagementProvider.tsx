@@ -1,13 +1,14 @@
 import React, { PropsWithChildren } from "react";
-import { UserManagement, UserWithRoles } from "./types";
+import { UserManagement } from "./types";
+import { User } from "@firecms/core";
 
 export const UserManagementContext = React.createContext<UserManagement<any>>({} as any);
 
-export interface UserManagementProviderProps<U extends UserWithRoles = UserWithRoles> {
+export interface UserManagementProviderProps<U extends User = User> {
     userManagement: UserManagement<U>
 }
 
-export function UserManagementProvider<U extends UserWithRoles = UserWithRoles>({
+export function UserManagementProvider<U extends User = User>({
                                            children,
                                            userManagement
                                        }: PropsWithChildren<UserManagementProviderProps<U>>) {

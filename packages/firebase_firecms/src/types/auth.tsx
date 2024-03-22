@@ -1,6 +1,6 @@
 import { ApplicationVerifier, ConfirmationResult, User as FirebaseUser } from "firebase/auth";
 
-import { AuthController, DataSourceDelegate, StorageSource, User } from "@firecms/core";
+import { AuthController, DataSourceDelegate, Role, StorageSource, User } from "@firecms/core";
 
 /**
  * @group Firebase
@@ -28,8 +28,7 @@ export type FirebaseSignInOption = {
 /**
  * @group Firebase
  */
-export type FirebaseAuthController =
-    AuthController<FirebaseUser> & {
+export type FirebaseAuthController<ExtraData = any> = AuthController<FirebaseUser, ExtraData> & {
 
     confirmationResult?: ConfirmationResult;
 
@@ -62,13 +61,15 @@ export type FirebaseAuthController =
 
     setUser: (user: FirebaseUser | null) => void;
 
+    setRoles: (roles: Role[]) => void;
+
 };
 
 /**
  * Implement this function to allow access to specific users.
  * @group Firebase
  */
-export type Authenticator<UserType extends User = User> = ({ user }: {
+export type Authenticator<UserType extends User = User, Controller extends AuthController<UserType> = AuthController<UserType>> = ({ user }: {
     /**
      * Logged-in user or null
      */
@@ -77,7 +78,7 @@ export type Authenticator<UserType extends User = User> = ({ user }: {
     /**
      * AuthController
      */
-    authController: AuthController<UserType>;
+    authController: Controller;
 
     /**
      * Connector to your database, e.g. your Firestore database

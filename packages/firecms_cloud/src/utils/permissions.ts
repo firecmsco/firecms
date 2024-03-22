@@ -1,14 +1,14 @@
-import { User } from "@firecms/core";
+import { Role, User } from "@firecms/core";
 import { CollectionEditorPermissions, PersistedCollection } from "@firecms/collection_editor";
-import { getUserRoles, Role, UserManagement, UserWithRoles } from "@firecms/user_management";
+import { getUserRoles, UserManagement } from "@firecms/user_management";
 
 export const RESERVED_GROUPS = ["Admin"];
 
-export function resolveCollectionConfigPermissions<U extends UserWithRoles = UserWithRoles>({
-                                                       user,
-                                                       userManagement,
-                                                       collection
-                                                   }: {
+export function resolveCollectionConfigPermissions<U extends User = User>({
+                                                                              user,
+                                                                              userManagement,
+                                                                              collection
+                                                                          }: {
     user: User | null,
     userManagement: UserManagement<U>,
     collection?: PersistedCollection

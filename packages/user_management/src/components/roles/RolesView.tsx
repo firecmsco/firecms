@@ -1,11 +1,10 @@
 import React, { useCallback, useState } from "react";
 
-import { useNavigationController } from "@firecms/core";
+import { Role, useNavigationController } from "@firecms/core";
 import { AddIcon, Button, Container, Tooltip, Typography } from "@firecms/ui";
 import { RolesTable } from "./RolesTable";
 import { RolesDetailsForm } from "./RolesDetailsForm";
 import { useUserManagement } from "../../hooks";
-import { Role } from "../../types";
 
 export const RolesView = React.memo(
     function RolesView({ children }: { children?: React.ReactNode }) {

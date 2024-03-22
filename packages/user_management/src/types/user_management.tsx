@@ -1,8 +1,6 @@
-import { UserWithRoles } from "./firecms_user";
-import { Role } from "./roles";
-import { PermissionsBuilder } from "@firecms/core";
+import { PermissionsBuilder, Role, User } from "@firecms/core";
 
-export type UserManagement<USER extends UserWithRoles = UserWithRoles> = {
+export type UserManagement<USER extends User = User> = {
 
     loading: boolean;
 

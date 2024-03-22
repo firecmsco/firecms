@@ -20,6 +20,7 @@
     "react-router-dom": "^6.22.3"
   },
   "scripts": {
+    "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
     "dev": "vite --mode development",
     "build": "vite build && tsc",
     "preview": "vite build && vite preview",

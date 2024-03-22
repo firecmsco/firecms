@@ -1,4 +1,4 @@
-import { Role } from "../../types";
+import { Role } from "@firecms/core";
 
 export const DEFAULT_ROLES: Role[] = [
     {

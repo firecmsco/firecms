@@ -1,4 +1,4 @@
-import { Role } from "@firecms/user_management";
+import { Role } from "@firecms/core";
 
 export type FireCMSCloudUser = {
     uid: string;

@@ -1,4 +1,5 @@
 import { User } from "./user";
+import { Role } from "./roles";
 
 /**
  * Controller for retrieving the logged user or performing auth related operations.
@@ -13,6 +14,11 @@ export type AuthController<UserType extends User = User, ExtraData extends any =
      * The values can be: the user object, null if they skipped login
      */
     user: UserType | null;
+
+    /**
+     * Roles related to the logged user
+     */
+    roles?: Role[];
 
     /**
      * Initial loading flag. It is used not to display the login screen

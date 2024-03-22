@@ -1,4 +1,4 @@
-import { buildCollection, buildProperty, EntityReference } from "@firecms/firebase_pro";
+import { buildCollection, buildProperty, EntityReference } from "@firecms/core";
 import { localeCollection } from "./locales";
 
 export type Product = {

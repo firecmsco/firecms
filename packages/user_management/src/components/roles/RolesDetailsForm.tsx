@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import * as Yup from "yup";
 
-import { EntityCollection, FieldCaption, toSnakeCase, } from "@firecms/core";
+import { EntityCollection, FieldCaption, Role, toSnakeCase, } from "@firecms/core";
 import {
     Button,
     Checkbox,
@@ -24,7 +24,6 @@ import {
 } from "@firecms/ui";
 import { useUserManagement } from "../../hooks";
 import { Formex, getIn, useCreateFormex } from "@firecms/formex";
-import { Role } from "../../types";
 
 export const RoleYupSchema = Yup.object().shape({
     id: Yup.string().required("Required"),

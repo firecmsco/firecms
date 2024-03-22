@@ -22,22 +22,29 @@ import {
 } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
 import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider } from "../types";
+import { Role } from "@firecms/core";
 
-interface FirebaseAuthControllerProps {
+export interface FirebaseAuthControllerProps<ExtraData> {
     firebaseApp?: FirebaseApp;
-    signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>; // TODO
+    signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>;
     onSignOut?: () => void;
+    onUserLoggedIn?: (params: {
+        user: FirebaseUser,
+        setUser: (user: FirebaseUser) => void;
+        setRoles?: (roles: Role[]) => void;
+    }) => void;
 }
 
 /**
  * Use this hook to build an {@link AuthController} based on Firebase Auth
  * @group Firebase
  */
-export const useFirebaseAuthController = ({
-                                              firebaseApp,
-                                              signInOptions,
-                                              onSignOut: onSignOutProp
-                                          }: FirebaseAuthControllerProps): FirebaseAuthController => {
+export const useFirebaseAuthController = <ExtraData>({
+                                                         firebaseApp,
+                                                         signInOptions,
+                                                         onSignOut: onSignOutProp,
+                                                         onUserLoggedIn
+                                                     }: FirebaseAuthControllerProps<ExtraData>): FirebaseAuthController<ExtraData> => {
 
     const [loggedUser, setLoggedUser] = useState<FirebaseUser | null | undefined>(undefined); // logged user, anonymous or logged out
     const [authError, setAuthError] = useState<any>();
@@ -45,9 +52,9 @@ export const useFirebaseAuthController = ({
     const [authLoading, setAuthLoading] = useState(true);
     const [loginSkipped, setLoginSkipped] = useState<boolean>(false);
     const [confirmationResult, setConfirmationResult] = useState<undefined | ConfirmationResult>();
+    const [roles, setRoles] = useState<Role[] | undefined>();
     const [extra, setExtra] = useState<any>();
 
-    // const [userRoles, setUserRoles] = useState<Role[] | null>(null);
     const authRef = useRef(firebaseApp ? getAuth(firebaseApp) : null);
 
     useEffect(() => {
@@ -56,7 +63,7 @@ export const useFirebaseAuthController = ({
             const auth = getAuth(firebaseApp);
             authRef.current = auth;
             setAuthError(undefined);
-            setLoggedUser(auth.currentUser)
+            updateUser(auth.currentUser)
             return onAuthStateChanged(
                 auth,
                 updateUser,
@@ -131,6 +138,7 @@ export const useFirebaseAuthController = ({
         signOut(auth)
             .then(_ => {
                 setLoggedUser(null);
+                setRoles(undefined);
                 setAuthProviderError(null);
                 onSignOutProp && onSignOutProp();
             });
@@ -140,7 +148,13 @@ export const useFirebaseAuthController = ({
     const updateUser = useCallback((user: FirebaseUser | null) => {
         setLoggedUser(user);
         setAuthLoading(false);
-    }, []);
+        if (user && onUserLoggedIn)
+            onUserLoggedIn({
+                user,
+                setRoles,
+                setUser: setLoggedUser
+            });
+    }, [onUserLoggedIn]);
 
     const doOauthLogin = useCallback((auth: Auth, provider: OAuthProvider | FacebookAuthProvider | GithubAuthProvider | TwitterAuthProvider) => {
         setAuthLoading(true);
@@ -230,11 +244,18 @@ export const useFirebaseAuthController = ({
     const skipLogin = useCallback(() => {
         setLoginSkipped(true);
         setLoggedUser(null);
+        setRoles(undefined);
     }, []);
 
+    const userWithRoles = loggedUser ? {
+        ...loggedUser,
+        roles
+    } : null;
     return {
-        user: loggedUser ?? null,
+        user: userWithRoles,
+        roles,
         setUser: updateUser,
+        setRoles,
         authProviderError,
         authLoading,
         initialLoading: authLoading,

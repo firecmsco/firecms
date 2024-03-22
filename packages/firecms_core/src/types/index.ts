@@ -22,6 +22,7 @@ export * from "./local_config_persistence";
 export * from "./plugins";
 export * from "./analytics";
 export * from "./firecms";
+export * from "./roles";
 export * from "./appcheck";
 export * from "./export_import";
 export * from "./modify_collections";

@@ -1,4 +1,4 @@
-import { Permissions } from "@firecms/core";
+import { Permissions } from "../index";
 
 export type Role = {
 

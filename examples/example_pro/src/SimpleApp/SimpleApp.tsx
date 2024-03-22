@@ -25,7 +25,8 @@ import {
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
-    useInitialiseFirebase
+    useInitialiseFirebase,
+    useValidateAuthenticator
 } from "@firecms/firebase";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { booksCollection } from "./books_collection";
@@ -101,6 +102,17 @@ function ProSample() {
         firebaseApp
     });
 
+    const {
+        authLoading,
+        canAccessMainView,
+        notAllowedError
+    } = useValidateAuthenticator({
+        authController,
+        authentication: myAuthenticator,
+        dataSourceDelegate: firestoreDelegate,
+        storageSource
+    });
+
     const navigationController = useBuildNavigationController({
         collections,
         authController,
@@ -142,13 +154,14 @@ function ProSample() {
                           loading
                       }) => {
 
-                        if (loading) {
+                        if (loading || authLoading) {
                             return <CircularProgressCenter size={"large"}/>;
                         }
-                        if (authController.user === null) {
+                        if (!canAccessMainView) {
                             return <FirebaseLoginView authController={authController}
                                                       firebaseApp={firebaseApp}
-                                                      signInOptions={signInOptions}/>
+                                                      signInOptions={signInOptions}
+                                                      notAllowedError={notAllowedError}/>;
                         }
 
                         return <Scaffold

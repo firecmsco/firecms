@@ -215,14 +215,15 @@ function App() {
         firebaseApp,
         authController
     });
+
     const userManagementPlugin = useUserManagementPlugin({ userManagement });
 
     const importExportPlugin = useImportExportPlugin();
 
-    const authentication: Authenticator<FirebaseUser> = useCallback(async ({
-                                                                               user,
-                                                                               authController
-                                                                           }) => {
+    const authentication: Authenticator<FirebaseUser, FirebaseAuthController> = useCallback(async ({
+                                                                                                       user,
+                                                                                                       authController
+                                                                                                   }) => {
 
         // console.log("authentication", user, userManagement);
         if (userManagement.loading) {
@@ -238,8 +239,9 @@ function App() {
             return true; // If there are no users created yet, we allow access to every user
         }
 
-        const userExists = userManagement.users.find(u => u.email?.toLowerCase() === user?.email?.toLowerCase());
-        if (userExists) {
+        const mgmtUser = userManagement.users.find(u => u.email?.toLowerCase() === user?.email?.toLowerCase());
+        if (mgmtUser) {
+            authController.setRoles(mgmtUser.roles ?? [])
             return true;
         }
 

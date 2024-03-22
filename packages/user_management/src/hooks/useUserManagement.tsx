@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { UserManagement } from "../types/user_management";
+import { UserManagement } from "../types";
 import { UserManagementContext } from "../UserManagementProvider";
-
-export const useUserManagement = () => useContext<UserManagement>(UserManagementContext);
+import { User } from "@firecms/core";
+export const useUserManagement = <USER extends User>() => useContext<UserManagement<USER>>(UserManagementContext);

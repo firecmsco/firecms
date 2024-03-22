@@ -4,6 +4,7 @@
   "version": "3.0.0-canary.8",
   "scripts": {
     "dev": "vite",
+    "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
     "build": "vite build",
     "preview": "vite preview",
     "serve": "vite preview",

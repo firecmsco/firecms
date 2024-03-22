@@ -10,8 +10,8 @@ import {
     setDoc
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
-import { Role, UserManagement, UserWithRoles } from "../types";
-import { AuthController, PermissionsBuilder, User } from "@firecms/core";
+import { UserManagement } from "../types";
+import { AuthController, PermissionsBuilder, Role, User } from "@firecms/core";
 import { resolveUserRolePermissions } from "../utils";
 
 type UserWithRoleIds = User & { roles: string[] };
@@ -85,14 +85,14 @@ export function useBuildFirestoreUserManagement({
     const users = usersWithRoleIds.map(u => ({
         ...u,
         roles: roles.filter(r => u.roles?.includes(r.id))
-    }) as UserWithRoles);
+    }) as User);
 
     const [rolesError, setRolesError] = React.useState<Error | undefined>();
     const [usersError, setUsersError] = React.useState<Error | undefined>();
 
     const loading = rolesLoading || usersLoading;
 
-    const loggedInUser: UserWithRoles | undefined = users.find(u => u.email?.toLowerCase() === authController.user?.email?.toLowerCase());
+    const loggedInUser: User | undefined = users.find(u => u.email?.toLowerCase() === authController.user?.email?.toLowerCase());
     // console.log("authController", authController);
     // if (!loading && !authController.authLoading) {
     //     const user = authController.user;
@@ -155,16 +155,19 @@ export function useBuildFirestoreUserManagement({
         );
     }, [firebaseApp, usersPath]);
 
-    const saveUser = useCallback(async (user: UserWithRoles): Promise<UserWithRoles> => {
+    const saveUser = useCallback(async (user: User): Promise<User> => {
         const firestore = firestoreRef.current;
         if (!firestore || !usersPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         console.debug("Persisting user", user);
-        const roleIds = user.roles.map(r => r.id);
+        const roleIds = user.roles?.map(r => r.id);
         const {
             uid,
             ...userData
         } = user;
-        return setDoc(doc(firestore, usersPath, uid), { ...userData, roles: roleIds }, { merge: true }).then(() => user);
+        return setDoc(doc(firestore, usersPath, uid), {
+            ...userData,
+            roles: roleIds
+        }, { merge: true }).then(() => user);
     }, [usersPath]);
 
     const saveRole = useCallback((role: Role): Promise<void> => {
@@ -179,7 +182,7 @@ export function useBuildFirestoreUserManagement({
         return setDoc(ref, roleData, { merge: true });
     }, [rolesPath]);
 
-    const deleteUser = useCallback(async (user: UserWithRoles): Promise<void> => {
+    const deleteUser = useCallback(async (user: User): Promise<void> => {
         const firestore = firestoreRef.current;
         if (!firestore || !usersPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         console.debug("Deleting", user);

@@ -5,9 +5,9 @@ import * as locales from "date-fns/locale";
 
 import {
     defaultDateFormat,
-    DeleteConfirmationDialog,
+    DeleteConfirmationDialog, Role,
     useAuthController,
-    useCustomizationController,
+    useCustomizationController, User,
     useSnackbarController
 } from "@firecms/core";
 import {
@@ -23,19 +23,19 @@ import {
     Tooltip,
     Typography,
 } from "@firecms/ui";
-import { Role, UserWithRoles } from "../../types";
 import { useUserManagement } from "../../hooks";
 import { RoleChip } from "../roles";
+import { PersistedUser } from "../../types";
 
 export function UsersTable({ onUserClicked }: {
-    onUserClicked: (user: UserWithRoles) => void;
+    onUserClicked: (user: User) => void;
 }) {
 
     const {
         users,
         saveUser,
         deleteUser
-    } = useUserManagement();
+    } = useUserManagement<PersistedUser>();
 
     const authController = useAuthController();
     const snackbarController = useSnackbarController();
@@ -44,7 +44,7 @@ export function UsersTable({ onUserClicked }: {
     const dateUtilsLocale = customizationController?.locale ? locales[customizationController?.locale as keyof typeof locales] : undefined;
     const dateFormat: string = customizationController?.dateTimeFormat ?? defaultDateFormat;
 
-    const [userToBeDeleted, setUserToBeDeleted] = useState<UserWithRoles | undefined>(undefined);
+    const [userToBeDeleted, setUserToBeDeleted] = useState<User | undefined>(undefined);
     const [deleteInProgress, setDeleteInProgress] = useState<boolean>(false);
 
     return (

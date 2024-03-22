@@ -28,7 +28,7 @@ import {
     useInitializeAppCheck,
     useValidateAuthenticator
 } from "@firecms/firebase";
-import { FirebaseLoginView } from "@firecms/firebase_pro";
+import { FirebaseLoginView } from "@firecms/firebase";
 
 import { firebaseConfig } from "./firebase-config";
 import { productsCollection } from "./collections/products";

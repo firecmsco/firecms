@@ -11,9 +11,9 @@ import {
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
 import { FireCMSBackend, FireCMSCloudUserWithRoles } from "../types";
-import { CMSType, PermissionsBuilder, User } from "@firecms/core";
+import { CMSType, PermissionsBuilder, Role, User } from "@firecms/core";
 import { ProjectsApi } from "../api/projects";
-import { resolveUserRolePermissions, Role, UserManagement } from "@firecms/user_management";
+import { resolveUserRolePermissions, UserManagement } from "@firecms/user_management";
 
 type UserWithRoleIds = User & { roles: string[] };
 

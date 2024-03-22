@@ -12,10 +12,9 @@ import {
     TextField,
     Typography,
 } from "@firecms/ui";
-import { FieldCaption, useSnackbarController } from "@firecms/core";
+import { FieldCaption, Role, User, useSnackbarController } from "@firecms/core";
 import { Formex, useCreateFormex } from "@firecms/formex";
 
-import { Role, UserWithRoles } from "../../types";
 import { areRolesEqual } from "../../utils";
 import { useUserManagement } from "../../hooks";
 import { RoleChip } from "../roles";
@@ -26,17 +25,17 @@ export const UserYupSchema = Yup.object().shape({
     roles: Yup.array().min(1)
 });
 
-function canUserBeEdited(loggedUser: UserWithRoles, user: UserWithRoles, users: UserWithRoles[], roles: Role[], prevUser?: UserWithRoles) {
-    const admins = users.filter(u => u.roles.map(r => r.id).includes("admin"));
-    const loggedUserIsAdmin = loggedUser.roles.map(r => r.id).includes("admin");
-    const didRolesChange = !prevUser || !areRolesEqual(prevUser.roles, user.roles);
+function canUserBeEdited(loggedUser: User, user: User, users: User[], roles: Role[], prevUser?: User) {
+    const admins = users.filter(u => u.roles?.map(r => r.id).includes("admin"));
+    const loggedUserIsAdmin = loggedUser.roles?.map(r => r.id).includes("admin");
+    const didRolesChange = !prevUser || !areRolesEqual(prevUser.roles ?? [], user.roles ?? []);
 
     if (didRolesChange && !loggedUserIsAdmin) {
         throw new Error("Only admins can change roles");
     }
 
     // was the admin role removed
-    const adminRoleRemoved = prevUser && prevUser.roles.map(r => r.id).includes("admin") && !user.roles.map(r => r.id).includes("admin");
+    const adminRoleRemoved = prevUser && prevUser.roles?.map(r => r.id).includes("admin") && !user.roles?.map(r => r.id).includes("admin");
 
     // avoid removing the last admin
     if (adminRoleRemoved && admins.length === 1) {
@@ -51,7 +50,7 @@ export function UserDetailsForm({
                                     handleClose
                                 }: {
     open: boolean,
-    user?: UserWithRoles,
+    user?: User,
     handleClose: () => void
 }) {
 
@@ -64,7 +63,7 @@ export function UserDetailsForm({
     } = useUserManagement();
     const isNewUser = !userProp;
 
-    const onUserUpdated = useCallback((savedUser: UserWithRoles): Promise<UserWithRoles> => {
+    const onUserUpdated = useCallback((savedUser: User): Promise<User> => {
         if (!loggedInUser) {
             throw new Error("Logged user not found");
         }
@@ -81,7 +80,7 @@ export function UserDetailsForm({
             displayName: "",
             email: "",
             roles: roles.filter(r => r.id === "editor")
-        } as UserWithRoles,
+        } as User,
         validation: (values) => {
             return UserYupSchema.validate(values, { abortEarly: false })
                 .then(() => {
@@ -93,7 +92,7 @@ export function UserDetailsForm({
                     }, {});
                 });
         },
-        onSubmit: (user: UserWithRoles, formexController) => {
+        onSubmit: (user: User, formexController) => {
 
             return onUserUpdated(user)
                 .then(() => {
@@ -181,7 +180,7 @@ export function UserDetailsForm({
                             <div className={"col-span-12"}>
                                 <MultiSelect
                                     label="Roles"
-                                    value={values.roles.map(r => r.id) ?? []}
+                                    value={values.roles?.map(r => r.id) ?? []}
                                     onMultiValueChange={(value: string[]) => setFieldValue("roles", value.map(id => roles.find(r => r.id === id) as Role))}
                                     renderValue={(value: string) => {
                                         const userRole = roles

@@ -1,4 +1,4 @@
-import { AuthController, FireCMSPlugin } from "@firecms/core";
+import { FireCMSPlugin } from "@firecms/core";
 import { UserManagementProvider } from "./UserManagementProvider";
 import { UserManagement } from "./types";
 
