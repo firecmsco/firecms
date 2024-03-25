@@ -15,6 +15,11 @@ import { getCurrentUser, getTokens, login, refreshCredentials } from "./auth";
 import ora from "ora";
 
 import ncp from "ncp";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const access = promisify(fs.access);
 const copy = promisify(ncp);
@@ -230,9 +235,10 @@ export async function createProject(options: InitOptions) {
     } else {
         templateFolder = "template_v3";
     }
+    console.log("__dirname", __dirname);
     const templateDir = path.resolve(
         __dirname,
-        "../../templates/" + templateFolder
+        "../templates/" + templateFolder
     );
     options.templateDirectory = templateDir;
 
