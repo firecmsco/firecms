@@ -64,9 +64,9 @@ export type AuthController<UserType extends User = any, ExtraData extends any = 
 
     setExtra: (extra: ExtraData) => void;
 
-    setUser?: (user: UserType | null) => void;
+    // setUser?: (user: UserType | null) => void;
 
-    setRoles?: (roles: Role[]) => void;
+    // setRoles?: (roles: Role[]) => void;
 };
 
 /**

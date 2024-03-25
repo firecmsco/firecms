@@ -22,12 +22,14 @@ import {
 } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
 import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider } from "../types";
-import { Role } from "@firecms/core";
+import { Role, User } from "@firecms/core";
 
 export interface FirebaseAuthControllerProps {
+    loading?: boolean;
     firebaseApp?: FirebaseApp;
     signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>;
     onSignOut?: () => void;
+    defineRolesFor?: (user: User) => Promise<Role[]> | Role[] | undefined;
 }
 
 /**
@@ -35,9 +37,11 @@ export interface FirebaseAuthControllerProps {
  * @group Firebase
  */
 export const useFirebaseAuthController = <ExtraData>({
+                                                         loading,
                                                          firebaseApp,
                                                          signInOptions,
                                                          onSignOut: onSignOutProp,
+                                                         defineRolesFor
                                                      }: FirebaseAuthControllerProps): FirebaseAuthController<ExtraData> => {
 
     const [loggedUser, setLoggedUser] = useState<FirebaseUser | null | undefined>(undefined); // logged user, anonymous or logged out
@@ -50,6 +54,16 @@ export const useFirebaseAuthController = <ExtraData>({
     const [extra, setExtra] = useState<any>();
 
     const authRef = useRef(firebaseApp ? getAuth(firebaseApp) : null);
+
+    const updateUser = useCallback(async (user: FirebaseUser | null) => {
+        if (loading) return;
+        if (defineRolesFor && user) {
+            const userRoles = await defineRolesFor(user);
+            setRoles(userRoles);
+        }
+        setLoggedUser(user);
+        setAuthLoading(false);
+    }, [loading]);
 
     useEffect(() => {
         if (!firebaseApp) return;
@@ -68,7 +82,13 @@ export const useFirebaseAuthController = <ExtraData>({
             return () => {
             };
         }
-    }, [firebaseApp]);
+    }, [firebaseApp, updateUser]);
+
+    useEffect(() => {
+        if (!loading && authRef.current) {
+            updateUser(authRef.current.currentUser);
+        }
+    }, [loading, updateUser]);
 
     const getProviderOptions = useCallback((providerId: FirebaseSignInProvider): FirebaseSignInOption | undefined => {
         return signInOptions?.find((option) => {
@@ -138,11 +158,6 @@ export const useFirebaseAuthController = <ExtraData>({
             });
         setLoginSkipped(false);
     }, [firebaseApp, onSignOutProp]);
-
-    const updateUser = useCallback((user: FirebaseUser | null) => {
-        setLoggedUser(user);
-        setAuthLoading(false);
-    }, []);
 
     const doOauthLogin = useCallback((auth: Auth, provider: OAuthProvider | FacebookAuthProvider | GithubAuthProvider | TwitterAuthProvider) => {
         setAuthLoading(true);
@@ -250,7 +265,7 @@ export const useFirebaseAuthController = <ExtraData>({
         setRoles,
         authProviderError,
         authLoading,
-        initialLoading: authLoading,
+        initialLoading: loading || authLoading,
         signOut: onSignOut,
         getAuthToken,
         googleLogin,

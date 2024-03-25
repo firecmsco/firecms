@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-function printChanged(props: any, prev: any, path = "", depth = 0, maxDepth: number) {
+export function printChanged(props: any, prev: any, path: string | undefined = "", depth: number | undefined = 0, maxDepth: number | undefined = 10) {
     if (depth > maxDepth) {
         return;
     }

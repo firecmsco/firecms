@@ -97,8 +97,6 @@ export function CustomCMSApp() {
 
     const firestoreDelegate = useFirestoreDelegate({
         firebaseApp,
-        // textSearchController: textSearchController,
-        // firestoreIndexesBuilder: firestoreIndexesBuilder
         localTextSearchEnabled: true
     });
 

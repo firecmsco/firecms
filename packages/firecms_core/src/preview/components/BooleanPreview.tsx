@@ -1,5 +1,5 @@
 import React from "react";
-import { Checkbox } from "@firecms/ui";
+import { Checkbox, cn } from "@firecms/ui";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { Property } from "../../types";
 
@@ -17,8 +17,10 @@ export function BooleanPreview({
 }): React.ReactElement {
     return <div className={"flex flex-row gap-2 items-center"}>
         <Checkbox checked={value}
+                  padding={false}
                   size={size}
                   color={"secondary"}/>
-        {property.name && <span className={size === "tiny" ? "text-sm" : ""}>{property.name}</span>}
+        {property.name && <span
+            className={cn("text-text-secondary dark:text-text-secondary-dark", size === "tiny" ? "text-sm" : "")}>{property.name}</span>}
     </div>;
 }

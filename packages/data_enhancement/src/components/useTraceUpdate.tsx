@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-function printChanged(props: any, prev: any, path = "", depth = 0) {
+export function printChanged(props: any, prev: any, path = "", depth = 0) {
     if (depth > 10) {
         return;
     }

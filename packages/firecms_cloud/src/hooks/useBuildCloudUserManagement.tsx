@@ -161,6 +161,13 @@ export function useBuildCloudUserManagement({
         user: loggedInUser ?? null
     }), [loggedInUser?.uid]);
 
+    const userIds = users.map(u => u.uid);
+    const defineRolesFor: ((user: User) => Role[] | undefined) = useCallback((user) => {
+        if (!users) throw Error("Users not loaded");
+        const mgmtUser = users.find(u => u.email?.toLowerCase() === user?.email?.toLowerCase());
+        return mgmtUser?.roles;
+    }, [userIds]);
+
     return {
         allowDefaultRolesCreation: false,
         includeCollectionConfigPermissions: true,
@@ -169,6 +176,7 @@ export function useBuildCloudUserManagement({
         users,
         saveUser,
         saveRole,
+        defineRolesFor,
         deleteUser: removeUser,
         deleteRole,
         usersLimit,

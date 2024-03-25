@@ -38,4 +38,10 @@ export type UserManagement<USER extends User = User> = {
      */
     collectionPermissions: PermissionsBuilder;
 
+    /**
+     * Define the roles for a given user.
+     * @param user
+     */
+    defineRolesFor: (user: User) => Promise<Role[]> | Role[] | undefined;
+
 };

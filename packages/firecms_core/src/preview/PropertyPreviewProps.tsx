@@ -8,7 +8,7 @@ export type PreviewSize = "medium" | "small" | "tiny";
 /**
  * @group Preview components
  */
-export interface PropertyPreviewProps<T extends CMSType = any, CustomProps = any, M extends Record<string, any> = Record<string, any>> {
+export interface PropertyPreviewProps<T extends CMSType = any, CustomProps = any> {
     /**
      * Name of the property
      */
@@ -23,11 +23,6 @@ export interface PropertyPreviewProps<T extends CMSType = any, CustomProps = any
      * Property this display is related to
      */
     property: Property<T> | ResolvedProperty<T>;
-
-    /**
-     * Click handler
-     */
-    // onClick?: () => void;
 
     /**
      * Desired size of the preview, depending on the context.
@@ -50,10 +45,5 @@ export interface PropertyPreviewProps<T extends CMSType = any, CustomProps = any
      * Additional properties set by the developer
      */
     customProps?: CustomProps;
-
-    /**
-     * Entity this property refers to
-     */
-    // entity?: Entity<M>;
 
 }

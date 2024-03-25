@@ -4,11 +4,12 @@ import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { Icon } from "../icons";
 import { cn } from "../util";
 
-interface CheckboxProps {
+export interface CheckboxProps {
     checked: boolean;
     disabled?: boolean;
     indeterminate?: boolean;
     onCheckedChange?: (checked: boolean) => void;
+    padding?: boolean;
     size?: "tiny" | "small" | "medium" | "large";
     color?: "primary" | "secondary";
 }
@@ -21,10 +22,16 @@ const sizeClasses = {
 };
 
 const outerSizeClasses = {
-    medium: "w-10 h-10 p-2",
-    small: "w-8 h-8 p-2",
-    large: "w-12 h-12 p-2",
+    medium: "w-10 h-10",
+    small: "w-8 h-8",
+    large: "w-12 h-12 ",
     tiny: "w-6 h-6"
+}
+const paddingClasses = {
+    medium: "p-2",
+    small: "p-2",
+    large: "p-2",
+    tiny: ""
 }
 
 const colorClasses = {
@@ -35,6 +42,7 @@ const colorClasses = {
 export const Checkbox = ({
                              checked,
                              indeterminate = false,
+                             padding = true,
                              disabled,
                              size = "medium",
                              onCheckedChange,
@@ -51,17 +59,19 @@ export const Checkbox = ({
                 ? 14
                 : 24;
     return (
-        <div className={cn(
-            outerSizeClasses[size],
-            "inline-flex items-center justify-center text-sm font-medium focus:outline-none transition-colors ease-in-out duration-150",
-            onCheckedChange ? "rounded-full hover:bg-slate-200 hover:bg-opacity-75 dark:hover:bg-slate-700 dark:hover:bg-opacity-75" : "",
-            onCheckedChange ? "cursor-pointer" : "cursor-default"
-        )}>
-            <CheckboxPrimitive.Root
-                asChild
-                checked={indeterminate || isChecked}
-                disabled={disabled}
-                onCheckedChange={disabled ? undefined : onCheckedChange}>
+        <CheckboxPrimitive.Root
+            asChild
+            checked={indeterminate || isChecked}
+            disabled={disabled}
+            onCheckedChange={disabled ? undefined : onCheckedChange}>
+
+            <div className={cn(
+                padding ? paddingClasses[size] : "",
+                outerSizeClasses[size],
+                "inline-flex items-center justify-center text-sm font-medium focus:outline-none transition-colors ease-in-out duration-150",
+                onCheckedChange ? "rounded-full hover:bg-slate-200 hover:bg-opacity-75 dark:hover:bg-slate-700 dark:hover:bg-opacity-75" : "",
+                onCheckedChange ? "cursor-pointer" : "cursor-default"
+            )}>
                 <div
                     className={cn(
                         "border-2 relative transition-colors ease-in-out duration-150",
@@ -84,12 +94,7 @@ export const Checkbox = ({
                             )}
                     </CheckboxPrimitive.Indicator>
                 </div>
-            </CheckboxPrimitive.Root>
-            {/*{indeterminate && (*/}
-            {/*    <div >*/}
-            {/*         YO*/}
-            {/*    </div>*/}
-            {/*)}*/}
-        </div>
+            </div>
+        </CheckboxPrimitive.Root>
     );
 };

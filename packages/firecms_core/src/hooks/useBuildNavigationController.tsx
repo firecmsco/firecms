@@ -65,10 +65,10 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         injectCollections
     } = props;
 
-    const collectionsRef = useRef<EntityCollection[] | null>();
-    const [collections, setCollections] = useState<EntityCollection[] | undefined>();
-    const [views, setViews] = useState<CMSView[] | undefined>();
-    const [adminViews, setAdminViews] = useState<CMSView[] | undefined>();
+    const collectionsRef = useRef<EntityCollection[] | undefined>();
+    const viewsRef = useRef<CMSView[] | undefined>();
+    const adminViewsRef = useRef<CMSView[] | undefined>();
+
     const [initialised, setInitialised] = useState<boolean>(false);
 
     const [topLevelNavigation, setTopLevelNavigation] = useState<TopNavigationResult | undefined>(undefined);
@@ -164,6 +164,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
             return;
 
         try {
+            console.debug("Refreshing navigation")
             const [resolvedCollections = [], resolvedViews, resolvedAdminViews = []] = await Promise.all([
                     resolveCollections(collectionsProp, collectionPermissions, authController, dataSourceDelegate, injectCollections),
                     resolveCMSViews(viewsProp, authController, dataSourceDelegate),
@@ -172,14 +173,13 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
             );
             if (
                 !equal(collectionsRef.current, resolvedCollections) ||
-                !equal(views, resolvedViews) ||
-                !equal(adminViews, resolvedAdminViews) ||
+                !equal(viewsRef.current, resolvedViews) ||
+                !equal(adminViewsRef.current, resolvedAdminViews) ||
                 !equal(topLevelNavigation, computeTopNavigation(resolvedCollections, resolvedViews, resolvedAdminViews, viewsOrder))
             ) {
                 collectionsRef.current = resolvedCollections;
-                setCollections(resolvedCollections);
-                setViews(resolvedViews);
-                setAdminViews(resolvedAdminViews);
+                viewsRef.current = resolvedViews;
+                adminViewsRef.current = resolvedAdminViews;
                 setTopLevelNavigation(computeTopNavigation(resolvedCollections ?? [], resolvedViews, resolvedAdminViews, viewsOrder));
             }
         } catch (e) {
@@ -189,7 +189,17 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
 
         setNavigationLoading(false);
         setInitialised(true);
-    }, [collectionsProp, collectionPermissions, authController.user, authController.initialLoading, viewsProp, adminViewsProp, computeTopNavigation, injectCollections]);
+
+    }, [
+        collectionsProp,
+        collectionPermissions,
+        authController.user,
+        authController.initialLoading,
+        viewsProp,
+        adminViewsProp,
+        computeTopNavigation,
+        injectCollections
+    ]);
 
     useEffect(() => {
         refreshNavigation();
@@ -200,7 +210,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         entityId?: string,
         includeUserOverride = false
     ): EC | undefined => {
-
+        const collections = collectionsRef.current;
         if (!collections)
             return undefined;
 
@@ -231,11 +241,12 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
     }, [
         basePath,
         baseCollectionPath,
-        collections
     ]);
 
     const getCollectionFromPaths = useCallback(<EC extends EntityCollection>(pathSegments: string[]): EC | undefined => {
-        let currentCollections = collections;
+
+        const collections = collectionsRef.current;
+        let currentCollections: EntityCollection[] | undefined = [...(collections ?? [])];
         if (!currentCollections)
             throw Error("Collections have not been initialised yet");
 
@@ -251,10 +262,12 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
 
         return undefined;
 
-    }, [collections]);
+    }, []);
 
     const getCollectionFromIds = useCallback(<EC extends EntityCollection>(ids: string[]): EC | undefined => {
-        let currentCollections = collections;
+
+        const collections = collectionsRef.current;
+        let currentCollections: EntityCollection[] | undefined = [...(collections ?? [])];
         if (!currentCollections)
             throw Error("Collections have not been initialised yet");
 
@@ -270,7 +283,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
 
         return undefined;
 
-    }, [collections]);
+    }, []);
 
     const isUrlCollectionPath = useCallback(
         (path: string): boolean => removeInitialAndTrailingSlashes(path + "/").startsWith(removeInitialAndTrailingSlashes(fullCollectionPath) + "/"),
@@ -292,17 +305,19 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         []);
 
     const resolveAliasesFrom = useCallback((path: string): string => {
+        const collections = collectionsRef.current;
         if (!collections)
             throw Error("Collections have not been initialised yet");
         return resolveCollectionPathIds(path, collections);
-    }, [collections]);
+    }, []);
 
     const getAllParentReferencesForPath = useCallback((path: string): EntityReference[] => {
+        const collections = collectionsRef.current ?? [];
         return getParentReferencesFromPath({
             path,
             collections
         });
-    }, [collections]);
+    }, []);
 
     const getParentCollectionIds = useCallback((path: string): string[] => {
 
@@ -321,24 +336,24 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
     }, [getAllParentReferencesForPath])
 
     const convertIdsToPaths = useCallback((ids: string[]): string[] => {
-            let currentCollections = collections;
-            const paths: string[] = [];
-            for (let i = 0; i < ids.length; i++) {
-                const id = ids[i];
-                const collection: EntityCollection | undefined = currentCollections!.find(c => c.id === id);
-                if (!collection)
-                    throw Error(`Collection with id ${id} not found`);
-                paths.push(collection.path);
-                currentCollections = collection.subcollections;
-            }
-            return paths;
+        const collections = collectionsRef.current;
+        let currentCollections = collections;
+        const paths: string[] = [];
+        for (let i = 0; i < ids.length; i++) {
+            const id = ids[i];
+            const collection: EntityCollection | undefined = currentCollections!.find(c => c.id === id);
+            if (!collection)
+                throw Error(`Collection with id ${id} not found`);
+            paths.push(collection.path);
+            currentCollections = collection.subcollections;
         }
-        , [getCollectionFromIds]);
+        return paths;
+    }, [getCollectionFromIds]);
 
     return {
-        collections,
-        views,
-        adminViews,
+        collections: collectionsRef.current,
+        views: viewsRef.current,
+        adminViews: adminViewsRef.current,
         loading: !initialised || navigationLoading,
         navigationLoadingError,
         homeUrl,

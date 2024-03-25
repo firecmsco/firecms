@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
 import { UserManagement } from "../types";
-import { AuthController, PermissionsBuilder, Role, User } from "@firecms/core";
+import { PermissionsBuilder, Role, User } from "@firecms/core";
 import { resolveUserRolePermissions } from "../utils";
 
 type UserWithRoleIds = User & { roles: string[] };
@@ -41,8 +41,6 @@ export interface UserManagementParams {
 
     canEditRoles?: boolean;
 
-    authController: AuthController;
-
     /**
      * If there are no roles in the database, provide a button to create the default roles.
      */
@@ -70,7 +68,6 @@ export function useBuildFirestoreUserManagement({
                                                     rolesPath = "__FIRECMS/config/roles",
                                                     usersLimit,
                                                     canEditRoles = true,
-                                                    authController,
                                                     allowDefaultRolesCreation,
                                                     includeCollectionConfigPermissions
                                                 }: UserManagementParams): UserManagement {
@@ -91,7 +88,6 @@ export function useBuildFirestoreUserManagement({
     const [usersError, setUsersError] = React.useState<Error | undefined>();
 
     const loading = rolesLoading || usersLoading;
-
 
     useEffect(() => {
         if (!firebaseApp) return;
@@ -199,6 +195,13 @@ export function useBuildFirestoreUserManagement({
         user
     }), []);
 
+    const userIds = users.map(u => u.uid);
+    const defineRolesFor: ((user: User) => Role[] | undefined) = useCallback((user) => {
+        if (!users) throw Error("Users not loaded");
+        const mgmtUser = users.find(u => u.email?.toLowerCase() === user?.email?.toLowerCase());
+        return mgmtUser?.roles;
+    }, [userIds]);
+
     return {
         loading,
         roles,
@@ -211,7 +214,8 @@ export function useBuildFirestoreUserManagement({
         canEditRoles: canEditRoles === undefined ? true : canEditRoles,
         allowDefaultRolesCreation: allowDefaultRolesCreation === undefined ? true : allowDefaultRolesCreation,
         includeCollectionConfigPermissions: Boolean(includeCollectionConfigPermissions),
-        collectionPermissions
+        collectionPermissions,
+        defineRolesFor
     }
 }
 

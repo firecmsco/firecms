@@ -5,7 +5,6 @@ import "@fontsource/ibm-plex-mono";
 import "@fontsource/roboto"
 
 import { getAnalytics, logEvent } from "firebase/analytics";
-import { User as FirebaseUser } from "firebase/auth";
 
 import { CenteredView, GitHubIcon, IconButton, Tooltip, } from "@firecms/ui";
 import {
@@ -26,7 +25,8 @@ import {
 } from "@firecms/core";
 import {
     FirebaseAuthController,
-    FirebaseSignInProvider, FirebaseUserWrapper,
+    FirebaseSignInProvider,
+    FirebaseUserWrapper,
     FirestoreIndexesBuilder,
     useFirebaseAuthController,
     useFirebaseStorageSource,
@@ -167,10 +167,16 @@ function App() {
     // Controller used to manage the dark or light color mode
     const modeController = useBuildModeController();
 
+    const userManagement = useBuildFirestoreUserManagement({
+        firebaseApp,
+    });
+
     // Controller for managing authentication
     const authController: FirebaseAuthController = useFirebaseAuthController({
+        loading: userManagement.loading,
         firebaseApp,
-        signInOptions
+        signInOptions,
+        defineRolesFor: userManagement.defineRolesFor
     });
 
     // Controller for saving some user preferences locally.
@@ -211,19 +217,14 @@ function App() {
         firebaseApp
     });
 
-    const userManagement = useBuildFirestoreUserManagement({
-        firebaseApp,
-        authController
-    });
-
     const userManagementPlugin = useUserManagementPlugin({ userManagement });
 
     const importExportPlugin = useImportExportPlugin();
 
     const authentication: Authenticator<FirebaseUserWrapper, FirebaseAuthController> = useCallback(async ({
-                                                                                                       user,
-                                                                                                       authController
-                                                                                                   }) => {
+                                                                                                              user,
+                                                                                                              authController
+                                                                                                          }) => {
 
         console.log("Authenticating user", user);
 
@@ -243,7 +244,7 @@ function App() {
 
         const mgmtUser = userManagement.users.find(u => u.email?.toLowerCase() === user?.email?.toLowerCase());
         if (mgmtUser) {
-            authController.setRoles(mgmtUser.roles ?? [])
+            // authController.setRoles(mgmtUser.roles ?? [])
             return true;
         }
 

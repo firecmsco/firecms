@@ -308,12 +308,12 @@ export function FireCMSClientWithController({
     } = useInitialiseFirebase({
         onFirebaseInit: appConfig?.onFirebaseInit,
         firebaseConfig: projectConfig.clientFirebaseConfig,
-        // name: projectId
     });
 
     const authController: FirebaseAuthController = useFirebaseAuthController({
         firebaseApp: clientFirebaseApp,
-        onSignOut: fireCMSBackend.signOut
+        onSignOut: fireCMSBackend.signOut,
+        defineRolesFor: userManagement.defineRolesFor
     });
 
     const fireCMSUser = useMemo(() => {
@@ -339,15 +339,16 @@ export function FireCMSClientWithController({
     });
 
     const permissions: PermissionsBuilder<PersistedCollection, FireCMSCloudUserWithRoles> = useCallback(({
-                                                                                  pathSegments,
-                                                                                  collection,
-                                                                                  user,
-                                                                                  entity
-                                                                              }) =>
-        resolveUserRolePermissions<FireCMSCloudUserWithRoles>({
+                                                                                                             pathSegments,
+                                                                                                             collection,
+                                                                                                             user,
+                                                                                                             entity
+                                                                                                         }) => {
+        return resolveUserRolePermissions<FireCMSCloudUserWithRoles>({
             collection,
             user
-        }), []);
+        });
+    }, []);
 
     const configController = useFirestoreCollectionsConfigController({
         firebaseApp: fireCMSBackend.backendFirebaseApp,
