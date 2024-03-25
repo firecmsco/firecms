@@ -1,6 +1,6 @@
 {
   "name": "@firecms/editor",
-  "version": "3.0.0-canary.12",
+  "version": "3.0.0-canary.13",
   "description": "Notion-style WYSIWYG editor for FireCMS",
   "license": "Apache-2.0",
   "type": "module",
@@ -16,8 +16,8 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.esm.js",
-      "require": "./dist/index.cjs.js"
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js"
     }
   },
   "scripts": {
@@ -30,7 +30,7 @@
     "react-dom": "^18.0.0"
   },
   "dependencies": {
-    "@firecms/ui": "^3.0.0-canary.12",
+    "@firecms/ui": "^3.0.0-canary.13",
     "@radix-ui/react-slot": "^1.0.2",
     "@tiptap/core": "^2.2.4",
     "@tiptap/extension-color": "^2.2.4",
@@ -62,5 +62,5 @@
     "typescript": "^5.4.2",
     "vite": "^5.2.3"
   },
-  "gitHead": "b1353723c0d01e56aa29a406aa7d6689d0bbce1c"
+  "gitHead": "8bbe4916c2901f1cd63e6f507b844fc527c573c9"
 }

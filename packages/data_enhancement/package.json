@@ -1,7 +1,7 @@
 {
   "name": "@firecms/data_enhancement",
   "type": "module",
-  "version": "3.0.0-canary.12",
+  "version": "3.0.0-canary.13",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
@@ -15,7 +15,7 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/core": "^3.0.0-canary.12"
+    "@firecms/core": "^3.0.0-canary.13"
   },
   "peerDependencies": {
     "firebase": "^10.5.2",
@@ -91,5 +91,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "b1353723c0d01e56aa29a406aa7d6689d0bbce1c"
+  "gitHead": "8bbe4916c2901f1cd63e6f507b844fc527c573c9"
 }
