@@ -1,2 +1,4 @@
 #!/usr/bin/env node
-require("@firecms/cli").createFireCMSApp(process.argv);
+import { createFireCMSApp } from "@firecms/cli";
+
+createFireCMSApp(process.argv);

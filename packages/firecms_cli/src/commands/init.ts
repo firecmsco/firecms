@@ -334,8 +334,6 @@ async function copyWebAppConfig(options: InitOptions, firebaseConfig: object) {
 }
 
 async function replaceProjectIdInTemplateFiles(options: InitOptions, files: string[] = []) {
-    const fs = require("fs");
-
     for (const file of files) {
         const fullFileName = path.resolve(options.targetDirectory, file);
         await fs.readFile(fullFileName, "utf8", function (err, data) {

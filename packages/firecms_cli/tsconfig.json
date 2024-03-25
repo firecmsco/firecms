@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "build",
-    "module": "commonjs",
+    "outDir": "dist",
     "lib": [
       "dom",
       "esnext"

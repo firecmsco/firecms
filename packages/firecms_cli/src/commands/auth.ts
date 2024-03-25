@@ -10,8 +10,9 @@ import EventEmitter from "events";
 import chalk from "chalk";
 import { done_html } from "../util/done_html";
 
-const https = require("https");
-const url = require("url");
+import https from "https";
+
+import url from "url";
 
 export async function getCurrentUser(env: "prod" | "dev", debug: boolean): Promise<object | null> {
     if (debug) console.log("Getting current user");
@@ -49,7 +50,7 @@ export async function login(env: "prod" | "dev", debug: boolean) {
             if (q.error) {
                 console.log("Error:" + q.error);
                 server.close();
-                throw new Error(q.error);
+                throw q.error;
             } else {
                 // return the imported html
                 res.writeHead(200);
