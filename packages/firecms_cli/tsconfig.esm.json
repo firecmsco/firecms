@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "outDir": "build",
+    "module": "commonjs",
+    "lib": [
+      "dom",
+      "esnext"
+    ],
+    "moduleResolution": "node",
+
+    "declaration": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "es2018",
+    "experimentalDecorators": true,
+
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true
+  },
+  "compileOnSave": true,
+  "include": [
+    "src"
+  ],
+}

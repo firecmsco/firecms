@@ -1,11 +1,11 @@
 {
   "name": "@firecms/cli",
-  "version": "3.0.0-canary.11",
+  "version": "3.0.0-canary.12",
   "description": "A CLI to perform FireCMS operations",
   "packageManager": "yarn@4.1.0",
-  "main": "./build/index.js",
-  "module": "./build/index.js",
-  "types": "./build/index.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
   "source": "src/index.ts",
   "bin": {
     "firecms": "bin/firecms"
@@ -14,8 +14,10 @@
     "access": "public"
   },
   "scripts": {
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf templates/template_v3/node_modules && rm -rf templates/template_v3/yarn.lock && tsc",
+    "build": "rm -rf templates/template_v3/node_modules && rm -rf templates/template_v3/yarn.lock && run-s build:esm build:cjs",
     "dev": "ts-node src/index.ts",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
   },
@@ -50,6 +52,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.30",
+    "npm-run-all": "^4.1.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.2"
   },
@@ -59,9 +62,16 @@
     "src/",
     "templates/"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/esm/index.d.ts"
+    }
+  },
   "exclude": [
     "node_modules",
     "template/node_modules"
   ],
-  "gitHead": "0cfaa281907c2626dd3d446747c3ac53a10bc8ea"
+  "gitHead": "b1353723c0d01e56aa29a406aa7d6689d0bbce1c"
 }
