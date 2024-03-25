@@ -168,9 +168,10 @@ export function EntityPreview({
     </EntityPreviewContainer>;
 }
 
-type EntityPreviewContainerProps = {
+export type EntityPreviewContainerProps = {
     children: React.ReactNode;
     hover?: boolean;
+    fullwidth?: boolean;
     size: PreviewSize;
     className?: string;
     style?: React.CSSProperties;
@@ -184,6 +185,7 @@ const EntityPreviewContainerInner = React.forwardRef<HTMLDivElement, EntityPrevi
                                                                                                        size,
                                                                                                        style,
                                                                                                        className,
+                                                                                                       fullwidth = true,
                                                                                                        ...props
                                                                                                    }, ref) => {
     return <div
@@ -195,6 +197,7 @@ const EntityPreviewContainerInner = React.forwardRef<HTMLDivElement, EntityPrevi
         }}
         className={cn(
             "bg-white dark:bg-gray-900",
+            fullwidth ? "w-full" : "",
             "items-center",
             hover ? "hover:bg-slate-50 dark:hover:bg-gray-800 group-hover:bg-slate-50 dark:group-hover:bg-gray-800" : "",
             size === "tiny" ? "p-1" : "p-2",
