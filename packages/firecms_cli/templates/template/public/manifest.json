@@ -1,0 +1,20 @@
+{
+  "short_name": "FireCMS",
+  "name": "FireCMS demo app",
+  "icons": [
+    {
+      "src": "demo_logo.png",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "demo_logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "fullscreen",
+  "theme_color": "#0070f4",
+  "background_color": "#ffffff"
+}

@@ -1,0 +1,71 @@
+{
+  "name": "firecms-example",
+  "version": "3.0.0-canary.18",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@firecms/collection_editor": "^3.0.0-canary.18",
+    "@firecms/core": "^3.0.0-canary.18",
+    "@firecms/data_enhancement": "^3.0.0-canary.18",
+    "@firecms/data_import_export": "^3.0.0-canary.18",
+    "@firecms/editor": "^3.0.0-canary.18",
+    "@firecms/schema_inference": "^3.0.0-canary.18",
+    "@firecms/ui": "^3.0.0-canary.18",
+    "@firecms/user_management": "^3.0.0-canary.18",
+    "@tailwindcss/typography": "^0.5.10",
+    "firebase": "^10.9.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router": "^6.22.0",
+    "react-router-dom": "^6.22.0"
+  },
+  "scripts": {
+    "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+    "dev": "vite --mode development",
+    "build": "vite build && tsc",
+    "preview": "vite build && vite preview",
+    "deploy": "vite build && firebase deploy --only hosting:firecms-demo-27150"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.67",
+    "@types/react-dom": "18.2.22",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.18",
+    "eslint": "^8.57.0",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "postcss": "^8.4.37",
+    "realm-web": "^2.0.0",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.4.2",
+    "vite": "^5.2.3",
+    "vite-plugin-fonts": "^0.7.0",
+    "vite-plugin-svgr": "^4.2.0"
+  }
+}

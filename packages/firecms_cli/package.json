@@ -1,6 +1,6 @@
 {
   "name": "@firecms/cli",
-  "version": "3.0.0-canary.17",
+  "version": "3.0.0-canary.18",
   "description": "A CLI to perform FireCMS operations",
   "packageManager": "yarn@4.1.0",
   "main": "./dist/index.umd.js",
@@ -17,7 +17,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -rf templates/template_cloud/node_modules && rm -rf templates/template_cloud/yarn.lock && vite build && tsc --emitDeclarationOnly -p tsconfig.json",
-    "dev": "ts-node src/index.ts",
+    "dev": "ts-node src/test.ts",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
   },
   "keywords": [
