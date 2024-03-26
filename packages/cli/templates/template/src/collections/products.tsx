@@ -1,5 +1,4 @@
 import { buildCollection, buildProperty, EntityReference } from "@firecms/core";
-import { localeCollection } from "./locales";
 
 export type Product = {
     name: string;
@@ -19,7 +18,6 @@ export type Product = {
     expires_on: Date
 }
 
-
 export const productsCollection = buildCollection<Product>({
     name: "Products",
     singularName: "Product",
@@ -33,9 +31,6 @@ export const productsCollection = buildCollection<Product>({
         create: true,
         delete: true
     }),
-    subcollections: [
-        localeCollection
-    ],
     properties: {
         name: {
             name: "Name",

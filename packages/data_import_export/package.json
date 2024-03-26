@@ -1,15 +1,15 @@
 {
   "name": "@firecms/data_import_export",
   "type": "module",
-  "version": "3.0.0-canary.19",
+  "version": "3.0.0-canary.20",
   "access": "public",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "^3.0.0-canary.19",
-    "@firecms/schema_inference": "^3.0.0-canary.19",
+    "@firecms/core": "^3.0.0-canary.20",
+    "@firecms/schema_inference": "^3.0.0-canary.20",
     "xlsx": "^0.18.5"
   },
   "peerDependencies": {
@@ -99,5 +99,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "56dc6d6af0b2cfb0f91ac91a4f30be6d796efd98"
+  "gitHead": "599f60d49fe738eca60a14df9ca577773acd4c1b"
 }

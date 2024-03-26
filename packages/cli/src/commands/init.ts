@@ -1,7 +1,7 @@
 import arg from "arg";
 import inquirer from "inquirer";
 import chalk from "chalk";
-import path from "path";
+import path, { dirname } from "path";
 import fs from "fs";
 
 import { promisify } from "util";
@@ -15,15 +15,42 @@ import { getCurrentUser, getTokens, login, refreshCredentials } from "./auth";
 import ora from "ora";
 
 import ncp from "ncp";
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { fileURLToPath } from "url";
 
+
+
+// Function to find a specific parent directory by name
+function findSpecificParentDir(currentDir:string, targetDirName:string) {
+    console.log("findSpecificParentDir", currentDir, targetDirName);
+    // Prevent infinite loop in case root is reached without finding target
+    const rootDir = path.parse(currentDir).root;
+
+    while (currentDir && currentDir !== rootDir) {
+        // Check if the current directory is the target directory
+        if (path.basename(currentDir) === targetDirName) {
+            // Target directory found
+            return currentDir;
+        }
+
+        // Move to the parent directory
+        currentDir = path.dirname(currentDir);
+    }
+
+    // Target directory not found
+    return null;
+}
+
+// For ES Modules, where __dirname is not defined directly
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = path.dirname(__filename);
+
+// Usage example; find 'firecms_cli' directory starting from __dirname
+const targetDirPath = findSpecificParentDir(__dirname, 'firecms_cli');
 
 const access = promisify(fs.access);
 const copy = promisify(ncp);
 
+export type Template = "cloud" | "v2" | "pro" | "community";
 export type InitOptions = Partial<{
     // skipPrompts: boolean;
     git: boolean;
@@ -37,8 +64,7 @@ export type InitOptions = Partial<{
     authToken?: string;
     firebaseProjectId?: string;
 
-    v2: boolean;
-    pro: boolean;
+    template: Template;
 
     env: "prod" | "dev";
     debug: boolean;
@@ -57,7 +83,7 @@ ${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
 
     let options = parseArgumentsIntoOptions(rawArgs);
     let currentUser = await getCurrentUser(options.env, options.debug);
-    const shouldLogin = !options.v2 && !currentUser;
+    const shouldLogin = ["cloud", "pro", "community"].includes(options.template) && !currentUser;
     if (shouldLogin) {
         console.log("You need to be logged in to create a project");
         await inquirer.prompt([
@@ -97,6 +123,7 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
             "--projectId": String,
             "--v2": Boolean,
             "--pro": Boolean,
+            "--community": Boolean,
             "--debug": Boolean,
             "--env": String
         },
@@ -111,11 +138,19 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
         return;
     }
 
+    let template: Template = "cloud";
+    if (args["--v2"]) {
+        template = "v2";
+    } else if (args["--pro"]) {
+        template = "pro";
+    } else if (args["--community"]) {
+        template = "community";
+    }
+
     return {
         git: args["--git"] || false,
         dir_name: args._[0],
-        v2: args["--v2"] || false,
-        pro: args["--pro"] || false,
+        template,
         debug: args["--debug"] || false,
         firebaseProjectId: args["--projectId"],
         env
@@ -132,18 +167,22 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
     // }
 
     const questions = [];
-    if (!options.v2) {
-        questions.push({
-            type: "confirm",
-            name: "existing_firecms_project",
-            message: "Do you already have a FireCMS project?",
-            default: true,
-        });
+    if (options.template !== "v2") {
+        if (options.template === "cloud") {
+            questions.push({
+                type: "confirm",
+                name: "existing_firecms_project",
+                message: "Do you already have a FireCMS Cloud project?",
+                default: true,
+            });
+        }
 
         const spinner = ora("Loading your projects").start();
-        const projects = await getProjects(options.env, options.debug, onErr => {
-            spinner.fail("Error loading projects");
-        })
+        const projects = await getProjects(options.env,
+            options.debug,
+            onErr => {
+                spinner.fail("Error loading projects");
+            })
             .then((res) => {
                 if (!res) {
                     if (spinner.isSpinning)
@@ -168,7 +207,7 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
             type: "list",
             name: "firebaseProjectId",
             message: "Select your project",
-            when: (answers) => Boolean(answers.existing_firecms_project),
+            when: (answers) => Boolean(answers.existing_firecms_project) || options.template !== "cloud",
             choices: projects.map(project => project.projectId)
         });
     }
@@ -192,7 +231,7 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
 
     const answers = await inquirer.prompt(questions);
 
-    if (!options.v2 && !answers.existing_firecms_project) {
+    if (options.template === "cloud" && !answers.existing_firecms_project) {
         console.log("Please create a FireCMS project first. Head to https://app.firecms.co to get started and then run this command again!");
         process.exit(1);
     }
@@ -228,17 +267,21 @@ export async function createProject(options: InitOptions) {
     };
 
     let templateFolder: string;
-    if (options.v2) {
+    if (options.template === "v2") {
         templateFolder = "template_v2";
-    } else if (options.pro) {
+    } else if (options.template === "pro") {
         templateFolder = "template_pro";
-    } else {
+    } else if (options.template === "community") {
+        templateFolder = "template";
+    } else if (options.template === "cloud") {
         templateFolder = "template_cloud";
+    } else {
+        throw new Error("createProject: Invalid template");
     }
 
     const templateDir = path.resolve(
-        __dirname,
-        "../templates/" + templateFolder
+        targetDirPath,
+        "./templates/" + templateFolder
     );
     options.templateDirectory = templateDir;
 
@@ -267,7 +310,7 @@ export async function createProject(options: InitOptions) {
     console.log("%s Your project is ready!", chalk.green.bold("DONE"));
     console.log("");
 
-    if (options.v2) {
+    if (options.template === "v2") {
         console.log("First update your firebase config in");
         console.log(chalk.bgYellow.black.bold("src/firebase-config.ts"));
         console.log("");
@@ -276,13 +319,13 @@ export async function createProject(options: InitOptions) {
         console.log(chalk.cyan.bold("yarn"));
         console.log(chalk.cyan.bold("yarn dev"));
         console.log("");
-    } else if (options.pro) {
+    } else if (options.template === "pro" || options.template === "community") {
         console.log("Run:");
         console.log(chalk.cyan.bold("cd " + options.dir_name));
         console.log(chalk.cyan.bold("yarn"));
         console.log(chalk.cyan.bold("yarn dev"));
         console.log("");
-    } else {
+    } else if (options.template === "cloud") {
         console.log("If you want to run your project locally, run:");
         console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
         console.log(chalk.bgYellow.black.bold("yarn install"));
@@ -291,6 +334,8 @@ export async function createProject(options: InitOptions) {
         console.log("If you want to deploy your project, run:");
         console.log(chalk.bgYellow.black.bold("yarn deploy"));
         console.log("and see it running in https://app.firecms.co");
+    } else {
+        throw new Error("createProject: Invalid template");
     }
 
     return true;
@@ -301,11 +346,11 @@ async function copyTemplateFiles(options: InitOptions, webappConfig?: object) {
         clobber: false,
         dot: true,
     }).then(async _ => {
-        if (options.v2 && webappConfig) {
-            writeWebAppConfig(options, webappConfig);
-        }
-        if (!options.v2) {
-            if (options.pro) {
+        if (options.template === "v2") {
+            if (webappConfig)
+                writeWebAppConfig(options, webappConfig);
+        } else {
+            if (options.template === "pro" || options.template === "community") {
 
                 const firebaseConfig = await getProjectWebappConfig(options.env, options.firebaseProjectId, options.debug);
                 await copyWebAppConfig(options, firebaseConfig);
@@ -316,7 +361,7 @@ async function copyTemplateFiles(options: InitOptions, webappConfig?: object) {
                     "./package.json",
                     "./.firebaserc",
                 ]);
-            } else {
+            } else if (options.template === "cloud") {
 
                 return replaceProjectIdInTemplateFiles(options, [
                     "./src/App.tsx",

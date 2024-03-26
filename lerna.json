@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "version": "3.0.0-canary.19",
+  "version": "3.0.0-canary.20",
   "packages": [
     "packages/firecms_cloud",
     "packages/firecms_core",
@@ -10,7 +10,7 @@
     "packages/data_import_export",
     "packages/firebase_firecms",
     "packages/mongodb",
-    "packages/firecms_cli",
+    "packages/cli",
     "packages/editor",
     "packages/create_firecms_app",
     "packages/collection_editor",

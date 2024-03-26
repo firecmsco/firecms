@@ -5,22 +5,23 @@
       "dom",
       "esnext"
     ],
-    "module": "ES2022",
+    "module": "ESNext",
+    "target": "ESNext",
     "moduleResolution": "node",
-
     "declaration": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "target": "es2018",
     "experimentalDecorators": true,
-
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "isolatedModules": true
   },
+  "ts-node": {
+    "esm": true
+  },
   "compileOnSave": true,
   "include": [
     "src"
-  ],
+  ]
 }
