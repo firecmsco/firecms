@@ -171,6 +171,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
                     resolveCMSViews(adminViewsProp, authController, dataSourceDelegate)
                 ]
             );
+
             if (
                 !equal(collectionsRef.current, resolvedCollections) ||
                 !equal(viewsRef.current, resolvedViews) ||
@@ -205,7 +206,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         refreshNavigation();
     }, [refreshNavigation]);
 
-    const getCollection = useCallback(<EC extends EntityCollection>(
+    const getCollection = useCallback((
         idOrPath: string,
         entityId?: string,
         includeUserOverride = false
@@ -238,10 +239,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
 
         return { ...overriddenCollection, ...result } as EC;
 
-    }, [
-        basePath,
-        baseCollectionPath,
-    ]);
+    }, [userConfigPersistence]);
 
     const getCollectionFromPaths = useCallback(<EC extends EntityCollection>(pathSegments: string[]): EC | undefined => {
 

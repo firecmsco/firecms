@@ -17,6 +17,7 @@ export function printChanged(props: any, prev: any, path: string | undefined = "
 export function useTraceUpdate(props: any, maxDepth = 3) {
     const prev = useRef(props);
     useEffect(() => {
+        console.log("Changed props:");
         printChanged(props, prev.current, "", 0, maxDepth);
         prev.current = props;
     });

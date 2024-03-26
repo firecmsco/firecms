@@ -7,7 +7,7 @@ import { EntityReference } from "./entities";
  * attributes.
  * @group Models
  */
-export type NavigationController = {
+export type NavigationController<EC extends EntityCollection = EntityCollection<any>> = {
 
     /**
      * List of the mapped collections in the CMS.
@@ -56,18 +56,18 @@ export type NavigationController = {
      * Get the collection configuration for a given path.
      * The collection is resolved from the given path or alias.
      */
-    getCollection: <EC extends EntityCollection = EntityCollection<any>>(pathOrAlias: string,
-                                                                         entityId?: string,
-                                                                         includeUserOverride?: boolean) => EC | undefined;
+    getCollection: (pathOrAlias: string,
+                    entityId?: string,
+                    includeUserOverride?: boolean) => EC | undefined;
     /**
      * Get the collection configuration from its parent path segments.
      */
-    getCollectionFromIds: <EC extends EntityCollection = EntityCollection<any>>(ids: string[]) => EC | undefined;
+    getCollectionFromIds: (ids: string[]) => EC | undefined;
 
     /**
      * Get the collection configuration from its parent path segments.
      */
-    getCollectionFromPaths: <EC extends EntityCollection = EntityCollection<any>>(pathSegments: string[]) => EC | undefined;
+    getCollectionFromPaths: (pathSegments: string[]) => EC | undefined;
 
     /**
      * Default path under the navigation routes of the CMS will be created

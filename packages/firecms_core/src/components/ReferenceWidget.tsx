@@ -50,7 +50,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
 
     const collection: EntityCollection | undefined = useMemo(() => {
         return navigationController.getCollection(path);
-    }, [path, navigationController]);
+    }, [path, navigationController.getCollection]);
 
     // if (!collection) {
     //     throw Error(`Couldn't find the corresponding collection for the path: ${path}`);

@@ -35,8 +35,6 @@ export function ExampleCMSView() {
     // hook to do operations related to authentication
     const authController = useAuthController();
 
-    // const [forceFilter, setForceFilter] = React.useState<FilterValues<any> | undefined>(undefined);
-
     // hook to open a reference dialog
     const referenceDialog = useReferenceDialog({
         path: "products",
@@ -147,11 +145,6 @@ export function ExampleCMSView() {
                         <Typography className={"mb-4"}>
                             You can include reference widgets in your views:
                         </Typography>
-                        {/*<Button*/}
-                        {/*    onClick={() => setForceFilter({ name: ["==", "A"] })}*/}
-                        {/*>*/}
-                        {/*    Filter A*/}
-                        {/*</Button>*/}
                         <ReferenceWidget
                             name={"Sample reference widget"}
                             value={sampleSelectedProduct ?? null}
