@@ -8,7 +8,6 @@ import { getAnalytics, logEvent } from "firebase/analytics";
 
 import { CenteredView, GitHubIcon, IconButton, Tooltip, } from "@firecms/ui";
 import {
-    Authenticator,
     CircularProgressCenter,
     CMSView,
     FireCMS,
@@ -26,7 +25,6 @@ import {
 import {
     FirebaseAuthController,
     FirebaseSignInProvider,
-    FirebaseUserWrapper,
     FirestoreIndexesBuilder,
     useFirebaseAuthController,
     useFirebaseStorageSource,
@@ -221,40 +219,8 @@ function App() {
 
     const importExportPlugin = useImportExportPlugin();
 
-    const authentication: Authenticator<FirebaseUserWrapper, FirebaseAuthController> = useCallback(async ({
-                                                                                                              user,
-                                                                                                              authController
-                                                                                                          }) => {
-
-        console.log("Authenticating user", user);
-        // return true;"
-
-        // console.log("authentication", user, userManagement);
-        if (userManagement.loading) {
-            console.log("User management is still loading");
-            return false;
-        }
-
-        // This is an example of retrieving async data related to the user: the Firebase user id token in this case
-        const idTokenResult = await user?.firebaseUser?.getIdTokenResult();
-
-        // This is an example of how you can link the access system to the user management plugin
-        if (userManagement.users.length === 0) {
-            return true; // If there are no users created yet, we allow access to every user
-        }
-
-        const mgmtUser = userManagement.users.find(u => u.email?.toLowerCase() === user?.email?.toLowerCase());
-        if (mgmtUser) {
-            // authController.setRoles(mgmtUser.roles ?? [])
-            return true;
-        }
-
-        throw Error("Could not find a user with the provided email");
-
-    }, [userManagement]);
-
     /**
-     * Validate authenticator
+     * Check if the user is allowed to access the main view
      */
     const {
         authLoading,
@@ -263,7 +229,7 @@ function App() {
     } = useValidateAuthenticator({
         disabled: userManagement.loading,
         authController,
-        authentication,
+        authentication: userManagement.authenticator,
         dataSourceDelegate: firestoreDelegate,
         storageSource
     });

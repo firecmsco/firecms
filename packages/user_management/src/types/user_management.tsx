@@ -1,4 +1,4 @@
-import { PermissionsBuilder, Role, User } from "@firecms/core";
+import { Authenticator, PermissionsBuilder, Role, User } from "@firecms/core";
 
 export type UserManagement<USER extends User = User> = {
 
@@ -39,9 +39,15 @@ export type UserManagement<USER extends User = User> = {
     collectionPermissions: PermissionsBuilder;
 
     /**
-     * Define the roles for a given user.
+     * Define the roles for a given user. You will typically want to plug this into your auth controller.
      * @param user
      */
     defineRolesFor: (user: User) => Promise<Role[]> | Role[] | undefined;
+
+    /**
+     * You can build an authenticator callback from the current configuration of the user management.
+     * It will only allow access to users with the required roles.
+     */
+    authenticator?: Authenticator;
 
 };

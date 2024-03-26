@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
 import { UserManagement } from "../types";
-import { PermissionsBuilder, Role, User } from "@firecms/core";
+import { Authenticator, PermissionsBuilder, Role, User } from "@firecms/core";
 import { resolveUserRolePermissions } from "../utils";
 
 type UserWithRoleIds = User & { roles: string[] };
@@ -208,6 +208,30 @@ export function useBuildFirestoreUserManagement({
         return mgmtUser?.roles;
     }, [userIds]);
 
+    const authenticator: Authenticator = useCallback(({ user }) => {
+        console.log("Authenticating user", user);
+        // return true;"
+
+        // console.log("authentication", user, userManagement);
+        if (loading) {
+            console.log("User management is still loading");
+            return false;
+        }
+
+        // This is an example of how you can link the access system to the user management plugin
+        if (users.length === 0) {
+            return true; // If there are no users created yet, we allow access to every user
+        }
+
+        const mgmtUser = users.find(u => u.email?.toLowerCase() === user?.email?.toLowerCase());
+        if (mgmtUser) {
+            // authController.setRoles(mgmtUser.roles ?? [])
+            return true;
+        }
+
+        throw Error("Could not find a user with the provided email");
+    }, [loading, users])
+
     return {
         loading,
         roles,
@@ -221,7 +245,8 @@ export function useBuildFirestoreUserManagement({
         allowDefaultRolesCreation: allowDefaultRolesCreation === undefined ? true : allowDefaultRolesCreation,
         includeCollectionConfigPermissions: Boolean(includeCollectionConfigPermissions),
         collectionPermissions,
-        defineRolesFor
+        defineRolesFor,
+        authenticator
     }
 }
 

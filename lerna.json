@@ -17,7 +17,7 @@
     "packages/schema_inference",
     "packages/user_management",
     "packages/formex",
-    "examples/example_v3",
+    "examples/example_cloud",
     "examples/example_pro"
   ],
   "npmClient": "yarn"

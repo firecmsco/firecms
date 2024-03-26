@@ -73,7 +73,7 @@ export type AuthController<UserType extends User = any, ExtraData extends any = 
  * Implement this function to allow access to specific users.
  * @group Hooks and utilities
  */
-export type Authenticator<UserType extends User = User, Controller extends AuthController<UserType> = AuthController<UserType>> = ({ user }: {
+export type Authenticator<UserType extends User = User, Controller extends AuthController<UserType> = AuthController<UserType>> = (props: {
 
     /**
      * Logged-in user or null

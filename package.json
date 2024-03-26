@@ -20,12 +20,12 @@
     "packages/user_management",
     "packages/formex",
     "packages/editor",
-    "examples/example_v3",
+    "examples/example_cloud",
     "examples/example_pro"
   ],
   "scripts": {
     "pro": "cd examples/example_pro && yarn dev",
-    "dev": "cd examples/example_v3 && yarn dev",
+    "dev": "cd examples/example_cloud && yarn dev",
     "saas": "cd saas && yarn dev",
     "deploy:demo": "cd examples/example_pro && yarn deploy",
     "preview": "cd examples/example_pro && yarn preview",
