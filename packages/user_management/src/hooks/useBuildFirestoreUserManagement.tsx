@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import {
+    addDoc,
     collection,
     deleteDoc,
     doc,
@@ -152,10 +153,15 @@ export function useBuildFirestoreUserManagement({
             uid,
             ...userData
         } = user;
-        return setDoc(doc(firestore, usersPath, uid), {
+        const data = {
             ...userData,
             roles: roleIds
-        }, { merge: true }).then(() => user);
+        };
+        if (uid) {
+            return setDoc(doc(firestore, usersPath, uid), data, { merge: true }).then(() => user);
+        } else {
+            return addDoc(collection(firestore, usersPath), data).then(() => user);
+        }
     }, [usersPath]);
 
     const saveRole = useCallback((role: Role): Promise<void> => {

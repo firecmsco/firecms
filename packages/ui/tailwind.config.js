@@ -7,6 +7,9 @@ export default {
         "./node_modules/firecms/src/**/*.{js,ts,jsx,tsx}",
         "./node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}"
     ],
+    plugins: [
+        require("@tailwindcss/typography")
+    ],
     theme: {
         extend: {
             fontFamily: {

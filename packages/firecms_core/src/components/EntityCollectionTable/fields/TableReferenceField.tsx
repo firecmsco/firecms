@@ -29,7 +29,7 @@ export function TableReferenceField(props: TableReferenceFieldProps) {
 
     const navigationController = useNavigationController();
     const { path } = props;
-    const collection = navigationController.getCollection<EntityCollection>(path);
+    const collection = navigationController.getCollection(path);
     if (!collection) {
         if (customizationController.components?.missingReference) {
             return <customizationController.components.missingReference path={path}/>;

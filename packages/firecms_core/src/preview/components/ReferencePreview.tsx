@@ -64,7 +64,7 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
 
     const navigationController = useNavigationController();
 
-    const collection = navigationController.getCollection<EntityCollection<M>>(reference.path);
+    const collection = navigationController.getCollection(reference.path);
     if (!collection) {
         if (customizationController.components?.missingReference) {
             return <customizationController.components.missingReference path={reference.path}/>;

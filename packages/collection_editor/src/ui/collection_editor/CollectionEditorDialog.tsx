@@ -136,7 +136,7 @@ type EditorView = "welcome"
     | "extra_view"
     | "subcollections";
 
-export function CollectionEditor<M extends Record<string, any>>(props: CollectionEditorDialogProps & {
+export function CollectionEditor(props: CollectionEditorDialogProps & {
     handleCancel: () => void,
     setFormDirty: (dirty: boolean) => void
 }) {
@@ -154,14 +154,14 @@ export function CollectionEditor<M extends Record<string, any>>(props: Collectio
     const collectionsInThisLevel = (props.parentCollection ? props.parentCollection.subcollections : collections) ?? [];
     const existingPaths = collectionsInThisLevel.map(col => col.path.trim().toLowerCase());
     const existingIds = collectionsInThisLevel.map(col => col.id?.trim().toLowerCase()).filter(Boolean) as string[];
-    const [collection, setCollection] = React.useState<PersistedCollection<M> | undefined>();
+    const [collection, setCollection] = React.useState<PersistedCollection<any> | undefined>();
     const [initialLoadingCompleted, setInitialLoadingCompleted] = React.useState(false);
 
     useEffect(() => {
         try {
             if (navigation.initialised) {
                 if (props.editedCollectionId) {
-                    setCollection(navigation.getCollectionFromPaths<PersistedCollection<M>>([...(props.parentCollectionIds ?? []), props.editedCollectionId]));
+                    setCollection(navigation.getCollectionFromPaths([...(props.parentCollectionIds ?? []), props.editedCollectionId]));
                 } else {
                     setCollection(undefined);
                 }
@@ -186,14 +186,14 @@ export function CollectionEditor<M extends Record<string, any>>(props: Collectio
         }
         : undefined;
 
-    const initialValues: PersistedCollection<M> = initialCollection
+    const initialValues: PersistedCollection<any> = initialCollection
         ? applyPropertyConfigs(initialCollection, propertyConfigs)
         : {
             id: initialValuesProp?.path ?? randomString(16),
             path: initialValuesProp?.path ?? "",
             name: initialValuesProp?.name ?? "",
             group: initialValuesProp?.group ?? "",
-            properties: {} as PropertiesOrBuilders<M>,
+            properties: {} as PropertiesOrBuilders,
             propertiesOrder: [],
             icon: coolIconKeys[Math.floor(Math.random() * coolIconKeys.length)],
             ownerId: authController.user?.uid ?? ""

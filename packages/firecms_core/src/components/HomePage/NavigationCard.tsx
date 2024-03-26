@@ -52,7 +52,7 @@ export function NavigationCard({
                 {description && <Typography variant="body2"
                                             color="secondary"
                                             component="div">
-                    <Markdown source={description}/>
+                    <Markdown source={description} size={"small"}/>
                 </Typography>}
             </div>
 

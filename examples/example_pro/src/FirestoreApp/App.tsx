@@ -227,6 +227,7 @@ function App() {
                                                                                                           }) => {
 
         console.log("Authenticating user", user);
+        // return true;"
 
         // console.log("authentication", user, userManagement);
         if (userManagement.loading) {

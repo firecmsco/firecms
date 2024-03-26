@@ -233,9 +233,9 @@ export async function createProject(options: InitOptions) {
     } else if (options.pro) {
         templateFolder = "template_pro";
     } else {
-        templateFolder = "template_v3";
+        templateFolder = "template_cloud";
     }
-    console.log("__dirname", __dirname);
+
     const templateDir = path.resolve(
         __dirname,
         "../templates/" + templateFolder
