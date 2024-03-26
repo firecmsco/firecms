@@ -44,8 +44,8 @@ function findSpecificParentDir(currentDir:string, targetDirName:string) {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Usage example; find 'firecms_cli' directory starting from __dirname
-const targetDirPath = findSpecificParentDir(__dirname, 'firecms_cli');
+// Usage example; find 'cli' directory starting from __dirname
+const targetDirPath = findSpecificParentDir(__dirname, 'cli');
 
 const access = promisify(fs.access);
 const copy = promisify(ncp);

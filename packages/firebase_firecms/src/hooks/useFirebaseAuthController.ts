@@ -47,6 +47,7 @@ export const useFirebaseAuthController = <ExtraData>({
     const [loggedUser, setLoggedUser] = useState<FirebaseUser | null | undefined>(undefined); // logged user, anonymous or logged out
     const [authError, setAuthError] = useState<any>();
     const [authProviderError, setAuthProviderError] = useState<any>();
+    const [initialLoading, setInitialLoading] = useState<boolean>(true);
     const [authLoading, setAuthLoading] = useState(true);
     const [loginSkipped, setLoginSkipped] = useState<boolean>(false);
     const [confirmationResult, setConfirmationResult] = useState<undefined | ConfirmationResult>();
@@ -62,7 +63,7 @@ export const useFirebaseAuthController = <ExtraData>({
             setRoles(userRoles);
         }
         setLoggedUser(user);
-        setAuthLoading(false);
+        setInitialLoading(false);
     }, [loading]);
 
     useEffect(() => {
@@ -74,11 +75,15 @@ export const useFirebaseAuthController = <ExtraData>({
             updateUser(auth.currentUser)
             return onAuthStateChanged(
                 auth,
-                updateUser,
+                (user) => {
+                    updateUser(user);
+                    setAuthLoading(false);
+                },
                 error => setAuthProviderError(error)
             );
         } catch (e) {
             setAuthError(e);
+            setInitialLoading(false);
             return () => {
             };
         }
@@ -265,7 +270,7 @@ export const useFirebaseAuthController = <ExtraData>({
         setRoles,
         authProviderError,
         authLoading,
-        initialLoading: loading || authLoading,
+        initialLoading: loading || initialLoading,
         signOut: onSignOut,
         getAuthToken,
         googleLogin,

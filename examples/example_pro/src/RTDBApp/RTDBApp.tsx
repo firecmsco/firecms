@@ -100,7 +100,7 @@ function RTDBApp() {
         notAllowedError
     } = useValidateAuthenticator({
         authController,
-        authentication: () => true,
+        authenticator: () => true,
         getAppCheckToken,
         dataSourceDelegate: RTDBDelegate,
         storageSource

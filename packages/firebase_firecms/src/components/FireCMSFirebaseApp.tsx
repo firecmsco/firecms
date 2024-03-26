@@ -55,7 +55,7 @@ export function FireCMSFirebaseApp({
                                   logo,
                                   logoDark,
                                   toolbarExtraWidget,
-                                  authentication,
+                                  authenticator,
                                   collections,
                                   views,
                                   adminViews,
@@ -147,7 +147,7 @@ export function FireCMSFirebaseApp({
         notAllowedError
     } = useValidateAuthenticator({
         authController,
-        authentication,
+        authenticator,
         getAppCheckToken,
         appCheckForceRefresh: (appCheckOptions && appCheckOptions.forceRefresh) ? appCheckOptions.forceRefresh! : false,
         dataSourceDelegate: firestoreDelegate,

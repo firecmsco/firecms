@@ -42,7 +42,7 @@ export const firebaseConfig = {
     measurementId: "G-8HRE8MVXZJ"
 };
 
-function SimpleCMSApp() {
+function App() {
 
     // Use your own authentication logic here
     const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
@@ -169,4 +169,4 @@ function SimpleCMSApp() {
 
 }
 
-export default SimpleCMSApp;
+export default App;

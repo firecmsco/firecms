@@ -162,7 +162,8 @@ export function FirebaseLoginView({
                     <>
                         <div className="p-4">
                             <ErrorView
-                                error={"You need to enable Firebase auth and the corresponding login provider in your Firebase project"}/>
+                                title={"Firebase Auth not enabled"}
+                                error={"You need to enable Firebase Auth and the corresponding login provider in your Firebase project"}/>
                         </div>
                         {firebaseApp &&
                             <div className="p-4">
@@ -170,7 +171,7 @@ export function FirebaseLoginView({
                                    rel="noopener noreferrer"
                                    target="_blank">
                                     <Button variant="text"
-                                            color="primary">
+                                            color="error">
                                         Open Firebase configuration
                                     </Button>
                                 </a>
@@ -518,10 +519,10 @@ function LoginForm({
                     variant={"subtitle2"}>{label}</Typography>
 
                 {(loginState === "email" || loginState === "registration") && <TextField placeholder="Email" autoFocus
-                                                                                       value={email ?? ""}
-                                                                                       disabled={authController.authLoading}
-                                                                                       type="email"
-                                                                                       onChange={(event) => setEmail(event.target.value)}/>}
+                                                                                         value={email ?? ""}
+                                                                                         disabled={authController.authLoading}
+                                                                                         type="email"
+                                                                                         onChange={(event) => setEmail(event.target.value)}/>}
 
                 <div
                     className={`${loginState === "password" || (loginState === "registration" && !disableSignupScreen) ? "block" : "hidden"}`}>

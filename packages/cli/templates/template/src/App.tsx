@@ -1,9 +1,5 @@
 import React, { useCallback, useMemo } from "react";
 
-import "typeface-rubik";
-import "@fontsource/ibm-plex-mono";
-import "@fontsource/roboto"
-
 import {
     Authenticator,
     CircularProgressCenter,

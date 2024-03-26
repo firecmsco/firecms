@@ -78,7 +78,7 @@ export type FireCMSFirebaseAppProps = {
      * If not specified, authentication is enabled but no user restrictions
      * apply
      */
-    authentication?: boolean | Authenticator<FirebaseUserWrapper>;
+    authenticator?: boolean | Authenticator<FirebaseUserWrapper>;
 
     /**
      * List of sign in options that will be displayed in the login

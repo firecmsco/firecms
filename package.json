@@ -7,7 +7,7 @@
   "workspaces": [
     "packages/firecms_cloud",
     "packages/firecms_core",
-    "packages/firecms_cli",
+    "packages/cli",
     "packages/ui",
     "packages/create_firecms_app",
     "packages/mongodb",
@@ -21,11 +21,13 @@
     "packages/formex",
     "packages/editor",
     "examples/example_cloud",
+    "examples/example",
     "examples/example_pro"
   ],
   "scripts": {
+    "dev": "cd examples/example && yarn dev",
     "pro": "cd examples/example_pro && yarn dev",
-    "dev": "cd examples/example_cloud && yarn dev",
+    "cloud": "cd examples/example_cloud && yarn dev",
     "saas": "cd saas && yarn dev",
     "deploy:demo": "cd examples/example_pro && yarn deploy",
     "preview": "cd examples/example_pro && yarn preview",

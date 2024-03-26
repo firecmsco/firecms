@@ -97,7 +97,7 @@ function AppInner() {
     });
 
     /**
-     * Validate authenticator
+     * Use the authenticator to control access to the main view
      */
     const {
         authLoading,
@@ -105,7 +105,7 @@ function AppInner() {
         notAllowedError
     } = useValidateAuthenticator({
         authController,
-        authentication: () => true,
+        authenticator: () => true,
         getAppCheckToken,
         dataSourceDelegate: firestoreDelegate,
         storageSource

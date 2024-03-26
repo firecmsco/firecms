@@ -229,7 +229,7 @@ function App() {
     } = useValidateAuthenticator({
         disabled: userManagement.loading,
         authController,
-        authentication: userManagement.authenticator,
+        authenticator: userManagement.authenticator,
         dataSourceDelegate: firestoreDelegate,
         storageSource
     });

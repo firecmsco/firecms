@@ -11,33 +11,33 @@ import { AppCheckTokenResult, AuthController, Authenticator, DataSourceDelegate,
  * @param getAppCheckToken
  * @param appCheckForceRefresh
  * @param storageSource
- * @param dataSource
+ * @param dataSourceDelegate
  */
 export function useValidateAuthenticator<UserType extends User = User, Controller extends AuthController<UserType> = AuthController<UserType>>({
-                                                                           disabled,
-                                                                           authController,
-                                                                           authentication,
-                                                                           getAppCheckToken,
-                                                                           appCheckForceRefresh = false,
-                                                                           storageSource,
-                                                                           dataSourceDelegate
-                                                                       }:
-                                                                           {
-                                                                               disabled?: boolean,
-                                                                               authController: Controller,
-                                                                               authentication?: boolean | Authenticator<UserType, Controller>,
-                                                                               getAppCheckToken?: (forceRefresh: boolean) => Promise<AppCheckTokenResult> | undefined,
-                                                                               appCheckForceRefresh?: boolean,
-                                                                               dataSourceDelegate: DataSourceDelegate;
-                                                                               storageSource: StorageSource;
-                                                                           }): {
+                                                                                                                                                   disabled,
+                                                                                                                                                   authController,
+                                                                                                                                                   authenticator,
+                                                                                                                                                   getAppCheckToken,
+                                                                                                                                                   appCheckForceRefresh = false,
+                                                                                                                                                   storageSource,
+                                                                                                                                                   dataSourceDelegate
+                                                                                                                                               }:
+                                                                                                                                                   {
+                                                                                                                                                       disabled?: boolean,
+                                                                                                                                                       authController: Controller,
+                                                                                                                                                       authenticator?: boolean | Authenticator<UserType, Controller>,
+                                                                                                                                                       getAppCheckToken?: (forceRefresh: boolean) => Promise<AppCheckTokenResult> | undefined,
+                                                                                                                                                       appCheckForceRefresh?: boolean,
+                                                                                                                                                       dataSourceDelegate: DataSourceDelegate;
+                                                                                                                                                       storageSource: StorageSource;
+                                                                                                                                                   }): {
     canAccessMainView: boolean,
     authLoading: boolean,
     notAllowedError: any,
     authVerified: boolean,
 } {
 
-    const authenticationEnabled = Boolean(authentication);
+    const authenticationEnabled = Boolean(authenticator);
 
     const [authLoading, setAuthLoading] = useState<boolean>(authenticationEnabled);
     const [notAllowedError, setNotAllowedError] = useState<any>(false);
@@ -92,10 +92,10 @@ export function useValidateAuthenticator<UserType extends User = User, Controlle
             }
         }
 
-        if (authentication instanceof Function && delegateUser && !equal(checkedUserRef.current?.uid, delegateUser.uid)) {
+        if (authenticator instanceof Function && delegateUser && !equal(checkedUserRef.current?.uid, delegateUser.uid)) {
             setAuthLoading(true);
             try {
-                const allowed = await authentication({
+                const allowed = await authenticator({
                     user: delegateUser,
                     authController,
                     dataSourceDelegate,
@@ -120,7 +120,7 @@ export function useValidateAuthenticator<UserType extends User = User, Controlle
             setAuthVerified(true);
         }
 
-    }, [disabled, authController, authentication, getAppCheckToken, appCheckForceRefresh, dataSourceDelegate, storageSource]);
+    }, [disabled, authController, authenticator, getAppCheckToken, appCheckForceRefresh, dataSourceDelegate, storageSource]);
 
     useEffect(() => {
         checkAuthentication();

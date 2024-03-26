@@ -108,7 +108,7 @@ function ProSample() {
         notAllowedError
     } = useValidateAuthenticator({
         authController,
-        authentication: myAuthenticator,
+        authenticator: myAuthenticator,
         dataSourceDelegate: firestoreDelegate,
         storageSource
     });

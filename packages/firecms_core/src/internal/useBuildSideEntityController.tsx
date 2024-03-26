@@ -34,6 +34,7 @@ export const useBuildSideEntityController = (navigation: NavigationController,
     // only on initialisation, create panels from URL
     useEffect(() => {
         if (!navigation.loading && !initialised.current) {
+            console.debug("Initialising side entity controller");
             if (navigation.isUrlCollectionPath(location.pathname)) {
                 const newFlag = location.hash === `#${NEW_URL_HASH}`;
                 const entityOrCollectionPath = navigation.urlPathToDataPath(location.pathname);

@@ -204,7 +204,7 @@ export default function CMS() {
     return <FireCMSFirebaseApp
         name={"My Online Shop"}
         basePath={"/cms"}
-        authentication={myAuthenticator}
+        authenticator={myAuthenticator}
         collections={[productsCollection]}
         firebaseConfig={firebaseConfig}
     />;

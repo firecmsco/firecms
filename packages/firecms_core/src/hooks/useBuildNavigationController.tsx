@@ -164,7 +164,9 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
             return;
 
         try {
-            console.debug("Refreshing navigation")
+            console.debug("Refreshing navigation", {
+                authController
+            })
             const [resolvedCollections = [], resolvedViews, resolvedAdminViews = []] = await Promise.all([
                     resolveCollections(collectionsProp, collectionPermissions, authController, dataSourceDelegate, injectCollections),
                     resolveCMSViews(viewsProp, authController, dataSourceDelegate),

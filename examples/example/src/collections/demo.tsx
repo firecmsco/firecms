@@ -3,7 +3,8 @@ import { buildCollection, buildProperty } from "@firecms/cloud";
 // This is a demo collection with many of the available properties
 export const demoCollection = buildCollection({
     id: "Demo",
-    name: "Demo",
+    name: "Demo collection",
+    description: "This is a demo collection with many of the **available properties**",
     path: "demo",
     properties: {
 

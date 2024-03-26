@@ -110,7 +110,7 @@ export function CustomCMSApp() {
         notAllowedError
     } = useValidateAuthenticator({
         authController,
-        authentication: async ({ user }) => {
+        authenticator: async ({ user }) => {
             console.log("Allowing access to", user?.email);
             return true;
         },

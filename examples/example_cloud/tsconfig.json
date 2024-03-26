@@ -20,7 +20,7 @@
       "@firecms/cloud": ["../../packages/firecms_cloud/src"],
       "@firecms/ui": ["../../packages/ui/src"],
       "@firecms/core": ["../../packages/firecms_core/src"],
-      "@firecms/cli": ["../../packages/firecms_cli/src"],
+      "@firecms/cli": ["../../packages/cli/src"],
       "@firecms/firebase": ["../../packages/firebase_firecms/src"],
       "@firecms/data_enhancement": ["../../packages/data_enhancement/src"],
       "@firecms/data_import_export": ["../../packages/data_import_export/src"],

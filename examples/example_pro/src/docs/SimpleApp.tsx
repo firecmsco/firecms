@@ -199,7 +199,7 @@ export default function App() {
 
     return <FireCMSFirebaseApp
         name={"My Online Shop"}
-        authentication={myAuthenticator}
+        authenticator={myAuthenticator}
         collections={[productsCollection]}
         firebaseConfig={firebaseConfig}
     />;
