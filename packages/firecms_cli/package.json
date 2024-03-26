@@ -1,6 +1,6 @@
 {
   "name": "@firecms/cli",
-  "version": "3.0.0-canary.18",
+  "version": "3.0.0-canary.19",
   "description": "A CLI to perform FireCMS operations",
   "packageManager": "yarn@4.1.0",
   "main": "./dist/index.umd.js",
@@ -73,5 +73,5 @@
     "node_modules",
     "template/node_modules"
   ],
-  "gitHead": "e905f9a4ba3f15e311819c10fdd6c3a2393ebb90"
+  "gitHead": "56dc6d6af0b2cfb0f91ac91a4f30be6d796efd98"
 }

@@ -1,7 +1,7 @@
 {
   "name": "@firecms/user_management",
   "type": "module",
-  "version": "3.0.0-canary.18",
+  "version": "3.0.0-canary.19",
   "publishConfig": {
     "access": "public"
   },
@@ -30,9 +30,9 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "^3.0.0-canary.18",
-    "@firecms/formex": "^3.0.0-canary.18",
-    "@firecms/ui": "^3.0.0-canary.18",
+    "@firecms/core": "^3.0.0-canary.19",
+    "@firecms/formex": "^3.0.0-canary.19",
+    "@firecms/ui": "^3.0.0-canary.19",
     "date-fns": "^3.6.0"
   },
   "peerDependencies": {
@@ -71,5 +71,5 @@
       "react-app/jest"
     ]
   },
-  "gitHead": "e905f9a4ba3f15e311819c10fdd6c3a2393ebb90"
+  "gitHead": "56dc6d6af0b2cfb0f91ac91a4f30be6d796efd98"
 }
