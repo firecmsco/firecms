@@ -14,7 +14,12 @@ export default defineConfig(() => ({
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
             name: "FireCMS Firebase",
-            fileName: (format) => `index.${format}.js`
+            fileName: (format) => {
+                if (format === "es")
+                    return `index.${format}.js`;
+                else if (format === "umd")
+                    return `index.cjs`;
+            }
         },
         target: "esnext",
         sourcemap: true,

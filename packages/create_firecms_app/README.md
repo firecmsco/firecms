@@ -3,6 +3,10 @@
 Use this package to create a new FireCMS app.
 
 ```bash
+npx create-firecms-app
+```
+or
+```bash
 yarn create firecms-app
 ```
 

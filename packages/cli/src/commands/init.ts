@@ -23,7 +23,6 @@ const copy = promisify(ncp);
 
 // Function to find a specific parent directory by name
 function findSpecificParentDir(currentDir:string, targetDirName:string) {
-    console.log("findSpecificParentDir", currentDir, targetDirName);
     // Prevent infinite loop in case root is reached without finding target
     const rootDir = path.parse(currentDir).root;
 

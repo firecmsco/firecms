@@ -34,11 +34,11 @@ export function CLIInstructions() {
                 className={"select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
                 npx create-firecms-app
             </div>
-            or
-            <div
-                className={"select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
-                yarn create firecms-app
-            </div>
+            {/*or*/}
+            {/*<div*/}
+            {/*    className={"select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>*/}
+            {/*    yarn create firecms-app*/}
+            {/*</div>*/}
 
             <a
                 className={CTAOutlinedButtonMixin}

@@ -1,6 +1,74 @@
-## [2.2.0] - 2023-11-07
+## [3.0.0-beta.4] - 2024-03-27
 
-### Changed
+- [BREAKING] The package name for FireCMS Cloud has changed from `firecms` to `@firecms/cloud`. This is done
+  to avoid conflicts with the main FireCMS package. If you are using FireCMS Cloud, you will need to update your
+  imports.
+- Minor performance improvements and bug fixes.
+- Enhanced filtering and sorting capability for indexed fields.
+- Extended StorageSource to support custom `bucketUrl`.
+- Cleanup for navigation controller generics and Markdown prose classes.
+- Addressed User Management saving issues and renamed Cloud template.
+- Fixed ReferenceWidget.tsx rerenders.
+- Fixed homepage new collection button issue.
+- Fixed CLI templates path.
+- Roles integrated into AuthController.
+- Small change to plugins API.
+- Added user details to navigation bar dropdown.
+- Dependencies updated.
+- Entity view preview and title refactor.
+- Kanban board work in progress.
+- Fix for new radix empty select values.
+- Fixes for undefined properties in arrays and editor.
+- Additional parameters added in auth controllers.
+- Navigation cards refactor and Plugin API cleanup.
+- Fix for importing data with non-string IDs.
+- Documentation: Added recipe for managing entity callbacks.
+- Web updates and CLI fix for yarn.
+
+## [3.0.0-beta.3] - 2024-02-21
+
+- Fix for importing data in subcollections.
+- Code reordering.
+- Removed minification. Changed EntityReference type checks.
+- Editor image upload updates.
+- Cosmetic.
+- Moved tailwind.config.js editor plugin.
+- Removed callbacks in side navigation views, prevents bug.
+- PRO template fix.
+- PRO Login view cleanup.
+
+## [3.0.0-beta.2] - 2024-02-21
+
+- Added Formex package to handle forms across the platform. Formex is an in-house
+  form management library with a similar API to Formik, but with better performance,
+  and much more lightweight.
+- Enhanced onboarding process for new users.
+- Fixed data import issues for new collections.
+- Tweaked SaaS onboarding for better user experience.
+- Implemented regexp validation for input fields.
+- Improved login error feedback.
+- Extracted navigation controller for better manageability.
+- Updated styles for consistency.
+- Updated Vite and dependencies for performance and security.
+- Refactored user and role forms to use Formex.
+- Fixed table header forms and collection editor issues.
+- Addressed incorrect JSON import problems.
+- Removed Formik, enhancing form management with Formex.
+- Made minor HTML nesting and debounce fixes.
+- Fixed array container menu and multiline input bugs.
+- Migrated Tailwind configuration to lib for easier management.
+- Adjusted Sentry configuration for error reporting.
+- Fix for subcollections edit view showing empty.
+- Fixes for block and group properties in editor saving multiple entries when editing an existing sub property.
+
+## [3.0.0-beta.1] - 2024-02-01
+
+The first beta release of FireCMS v3.0.0.
+Check all the new features and improvements in the [documentation](./docs/what_is_new_v3)
+and the [migration guide](./docs/migrating_from_v2).
+
+## [2.2.0] - 2023-11-09
+
 - Fix for missing subcollection links.
 - New email and password login flow
 - Removed add button in collection group
@@ -9,15 +77,14 @@
 
 ## [2.1.0] - 2023-09-12
 
-### Changed
-
 - [BREAKING] The logic to verify valid filter combinations has been moved to the `DataSource` interface.
   This improves the ability to customize the data source and allows for more complex filters.
-  This change will only affect you if you have implemented a custom data source. You will need to 
+  This change will only affect you if you have implemented a custom data source. You will need to
   add a `isFilterCombinationValid` method to your data source.
 - [BREAKING] The prop `filterCombinations` has been removed from the `EntityCollection` component.
   This is now handled by the data source. If you need to allow multiple filters, you can use the
-  new `FireStoreIndexesBuilder` callback. Check the [documentation](https://firecms.co/docs/collections/multiple_filters)
+  new `FireStoreIndexesBuilder` callback. Check
+  the [documentation](https://firecms.co/docs/collections/multiple_filters)
   for more information.
 - You can now use nested `spreadChildren` in map properties, allowing to show arbitrary
   nested structures as single columns in the collection view.
@@ -28,8 +95,6 @@
 
 ## [2.0.5] - 2023-07-11
 
-### Changed
-
 - Default value for string properties is now `null` instead of `""`.
 - Fix for changing text search controller not updating as a dependency.
 - Fix for setting a unique field using a reference, which was
@@ -37,28 +102,20 @@
 
 ## [2.0.4] - 2023-06-15
 
-### Changed
-
 - Fix for `forceFilter` not being applied correctly in reference views.
 - Fix for nullable enum validation config.
 
 ## [2.0.3] - 2023-06-15
 
-### Changed
-
 - Fix for form resetting values when saving.
 
 ## [2.0.2] - 2023-06-14
-
-### Changed
 
 - Replaced `flexsearch` with `js-search`. Their imports are too messed up.
 - Fix for form assigning wrong ids
 -
 
 ## [2.0.1] - 2023-06-12
-
-### Changed
 
 - Fix for block entries not generating the correct default value when adding a new entry. This was causing
   a bug when the child property is an array, like in the blog example.
@@ -69,14 +126,10 @@
 
 ## [2.0.0] - 2023-06-07
 
-### Changed
-
 - You can use a callback to define the default view of an entity now.
 - Fix when opening entities from a custom view, that also uses subcollections.
 
 ## [2.0.0-rc.2] - 2023-06-05
-
-### Changed
 
 - `@mui/x-date-pickers` dependency reverted to `^5.0.0`
 - Assigned default values to every property now, based on the property type.
@@ -85,8 +138,6 @@
 - Removed empty space for hidden properties in the entity side dialog.
 
 ## [2.0.0-rc.1] - 2023-05-31
-
-### Changed
 
 - Added arbitrary key-value fields with the prop `keyValue` in map properties
 - `@mui/x-date-pickers` dependency updated (you may need to bump your version
@@ -97,10 +148,8 @@
 
 ## [2.0.0-beta.7] - 2023-05-23
 
-### Changed
-
 - Added support for collection groups
-- [BREAKING] The `countEntities` function in the data source not takes an
+- [BREAKING] The `countEntities` function in the data source now takes an
   object instead of a string as parameter. This will only affect you if you
   have built a custom component using that function.
 - Added string url previews to fields
@@ -108,16 +157,12 @@
 
 ## [2.0.0-beta.6] - 2023-05-11
 
-### Changed
-
 - Fix for Typescript types not being exported correctly and giving errors
   when using the library with the quickstart.
 - Fix for error messages not showing up correctly in new text inputs.
 - Fix for flexsearch import causing crash using webpack
 
 ## [2.0.0-beta.5] - 2023-04-28
-
-### Changed
 
 - Updated fields Look and Feel. Text fields are now custom, not the ones
   provided by Material UI. This allows for more customization, less code, and
@@ -131,8 +176,6 @@
 
 ## [2.0.0-beta.4] - 2023-03-30
 
-### Changed
-
 - Fixed table header bug
 - Added search bar in home page
 - Added favourites and recent collections view in home page.
@@ -144,8 +187,6 @@
 - Renamed `builder` to `Builder` in collection custom views for consistency.
 
 ## [2.0.0-beta.3] - 2023-03-21
-
-### Changed
 
 - Fixed bug regarding custom selection controllers.
 - Fix for default value not being set in array properties.
@@ -163,8 +204,6 @@
 - You can now change the value of any property within a custom field.
 
 ## [2.0.0-beta.2] - 2023-01-30
-
-### Changed
 
 - Fixed bug where collection actions were getting their internal state reset.
 - Improved preview of files that are not images, videos, or audio files.
