@@ -1,7 +1,7 @@
 {
   "name": "@firecms/formex",
   "type": "module",
-  "version": "3.0.0-canary.27",
+  "version": "3.0.0-canary.28",
   "publishConfig": {
     "access": "public"
   },
@@ -69,5 +69,5 @@
       "react-app/jest"
     ]
   },
-  "gitHead": "17a60c250932174649cf62f3794247ff5b2e07e2"
+  "gitHead": "ef40be7c86c3b063bea3286da7ac82452cfad897"
 }
