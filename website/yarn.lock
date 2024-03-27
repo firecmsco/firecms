@@ -2896,12 +2896,6 @@ __metadata:
   languageName: node
   linkType: soft
 
-"@firecms/firebase_pro@link:../packages/firebase_firecms_pro::locator=website%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "@firecms/firebase_pro@link:../packages/firebase_firecms_pro::locator=website%40workspace%3A."
-  languageName: node
-  linkType: soft
-
 "@firecms/formex@link:../packages/formex::locator=website%40workspace%3A.":
   version: 0.0.0-use.local
   resolution: "@firecms/formex@link:../packages/formex::locator=website%40workspace%3A."

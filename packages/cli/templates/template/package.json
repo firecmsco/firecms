@@ -1,15 +1,11 @@
 {
-  "name": "my-firecms-pro-project",
+  "name": "my-firecms-project",
   "version": "1.0.0",
   "private": true,
   "type": "module",
   "dependencies": {
-    "@firecms/collection_editor": "^3.0.0-canary",
     "@firecms/core": "^3.0.0-canary",
-    "@firecms/data_enhancement": "^3.0.0-canary",
-    "@firecms/data_import_export": "^3.0.0-canary",
     "@firecms/firebase": "^3.0.0-canary",
-    "@firecms/schema_inference": "^3.0.0-canary",
     "@firecms/ui": "^3.0.0-canary",
     "firebase": "^10.9.0",
     "react": "^18.2.0",

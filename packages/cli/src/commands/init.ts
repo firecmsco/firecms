@@ -377,8 +377,6 @@ async function copyWebAppConfig(options: InitOptions, firebaseConfig: object) {
     fs.writeFile(fullFileName, "export const firebaseConfig = " + JSON.stringify(firebaseConfig, null, 4), err => {
         if (err) {
             console.error("Failed to write file:", err);
-        } else {
-            console.log("File written successfully");
         }
     });
 }

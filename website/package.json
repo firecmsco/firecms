@@ -29,7 +29,6 @@
     "@firecms/data_enhancement": "link:../packages/data_enhancement",
     "@firecms/data_import_export": "link:../packages/data_import_export",
     "@firecms/firebase": "link:../packages/firebase_firecms",
-    "@firecms/firebase_pro": "link:../packages/firebase_firecms_pro",
     "@firecms/formex": "link:../packages/formex",
     "@firecms/neat": "0.2.1",
     "@firecms/schema_inference": "link:../packages/schema_inference",

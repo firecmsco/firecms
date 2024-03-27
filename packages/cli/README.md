@@ -19,11 +19,17 @@ firecms deploy
 ```
 
 ### Using different templates
-You can initialize a new project using different templates. For example:
+You can initialize a new project using different templates. Please not that these templates can't 
+be deployed to FireCMS Cloud. For example:
 
 For version 2:
 ```bash
 firecms init --v2
+```
+
+For FireCMS Community edition:
+```bash
+firecms init --community
 ```
 
 For FireCMS PRO:

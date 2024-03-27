@@ -164,9 +164,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
             return;
 
         try {
-            console.debug("Refreshing navigation", {
-                authController
-            })
+
             const [resolvedCollections = [], resolvedViews, resolvedAdminViews = []] = await Promise.all([
                     resolveCollections(collectionsProp, collectionPermissions, authController, dataSourceDelegate, injectCollections),
                     resolveCMSViews(viewsProp, authController, dataSourceDelegate),
@@ -350,10 +348,6 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         return paths;
     }, [getCollectionFromIds]);
 
-    console.debug("Navigation", {
-        initialised,
-        navigationLoading
-    });
     return {
         collections: collectionsRef.current,
         views: viewsRef.current,

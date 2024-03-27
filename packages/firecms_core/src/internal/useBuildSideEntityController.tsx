@@ -48,6 +48,8 @@ export const useBuildSideEntityController = (navigation: NavigationController,
                             sideDialogsController.open(propsToSidePanel(panel, navigation, smallLayout))
                     }, 1);
                 }
+            } else {
+                console.warn("Location path is not a collection path");
             }
             initialised.current = true;
         }
