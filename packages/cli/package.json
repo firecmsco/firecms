@@ -1,9 +1,9 @@
 {
   "name": "@firecms/cli",
-  "version": "3.0.0-canary.28",
+  "version": "3.0.0-canary.29",
   "description": "A CLI to perform FireCMS operations",
   "packageManager": "yarn@4.1.0",
-  "main": "./dist/index.umd.js",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.es.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -65,7 +65,7 @@
   "exports": {
     ".": {
       "import": "./dist/index.es.js",
-      "require": "./dist/index.umd.js",
+      "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
     }
   },
@@ -73,5 +73,5 @@
     "node_modules",
     "template/node_modules"
   ],
-  "gitHead": "ef40be7c86c3b063bea3286da7ac82452cfad897"
+  "gitHead": "441a5992df035cea5efef3b618d7f1c665cfe284"
 }
