@@ -6,6 +6,7 @@ export interface UploadFileProps {
     fileName?: string,
     path?: string,
     metadata?: any,
+    bucket?: string
 }
 
 /**
@@ -16,6 +17,10 @@ export interface UploadFileResult {
      * Storage path including the file name where the file was uploaded.
      */
     path: string;
+    /**
+     * Bucket where the file was uploaded
+     */
+    bucket: string;
 }
 
 /**
@@ -73,24 +78,28 @@ export interface StorageSource {
      * @param fileName
      * @param path
      * @param metadata
+     * @param bucket
      */
     uploadFile: ({
                      file,
                      fileName,
                      path,
-                     metadata
+                     metadata,
+                     bucket
                  }: UploadFileProps) => Promise<UploadFileResult>;
 
     /**
      * Convert a storage path or URL into a download configuration
      * @param path
+     * @param bucket
      */
-    getDownloadURL: (pathOrUrl: string) => Promise<DownloadConfig>;
+    getDownloadURL: (pathOrUrl: string, bucket?: string) => Promise<DownloadConfig>;
 
     /**
      * Get a file from a storage path.
      * It returns null if the file does not exist.
      * @param props
+     * @param bucket
      */
-    getFile: (path:string) => Promise<File | null>;
+    getFile: (path:string, bucket?: string) => Promise<File | null>;
 }
