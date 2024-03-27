@@ -56,15 +56,17 @@ export const useFirebaseAuthController = <ExtraData>({
 
     const authRef = useRef(firebaseApp ? getAuth(firebaseApp) : null);
 
-    const updateUser = useCallback(async (user: FirebaseUser | null) => {
+    const updateUser = useCallback(async (user: FirebaseUser | null, initialize?: boolean) => {
         if (loading) return;
         if (defineRolesFor && user) {
             const userRoles = await defineRolesFor(user);
             setRoles(userRoles);
         }
         setLoggedUser(user);
-        setInitialLoading(false);
         setAuthLoading(false);
+        if (initialize) {
+            setInitialLoading(false);
+        }
     }, [loading]);
 
     useEffect(() => {
@@ -73,12 +75,12 @@ export const useFirebaseAuthController = <ExtraData>({
             const auth = getAuth(firebaseApp);
             authRef.current = auth;
             setAuthError(undefined);
-            updateUser(auth.currentUser)
+            updateUser(auth.currentUser, false)
             return onAuthStateChanged(
                 auth,
-                (user) => {
+                async (user) => {
                     console.log("User state changed", user);
-                    updateUser(user);
+                    await updateUser(user, true);
                 },
                 error => setAuthProviderError(error)
             );
@@ -92,7 +94,7 @@ export const useFirebaseAuthController = <ExtraData>({
 
     useEffect(() => {
         if (!loading && authRef.current) {
-            updateUser(authRef.current.currentUser);
+            updateUser(authRef.current.currentUser, false);
         }
     }, [loading, updateUser]);
 
