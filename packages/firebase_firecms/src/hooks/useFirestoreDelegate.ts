@@ -568,9 +568,6 @@ export function useFirestoreDelegate({
 
             // Order by clause cannot contain a field with an equality filter
             const values: [WhereFilterOp, any][] = Object.values(filterValues) as [WhereFilterOp, any][];
-            if (sortKey && values.map((v) => v[0]).includes("==")) {
-                return false;
-            }
 
             const filterKeys = Object.keys(filterValues);
             const filtersCount = filterKeys.length;
