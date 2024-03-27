@@ -64,6 +64,7 @@ export const useFirebaseAuthController = <ExtraData>({
         }
         setLoggedUser(user);
         setInitialLoading(false);
+        setAuthLoading(false);
     }, [loading]);
 
     useEffect(() => {
@@ -76,8 +77,8 @@ export const useFirebaseAuthController = <ExtraData>({
             return onAuthStateChanged(
                 auth,
                 (user) => {
+                    console.log("User state changed", user);
                     updateUser(user);
-                    setAuthLoading(false);
                 },
                 error => setAuthProviderError(error)
             );

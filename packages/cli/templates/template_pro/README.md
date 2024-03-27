@@ -6,7 +6,7 @@ This is a starter template for your next project. It includes the basic
 configuration to get you started.
 
 In order to run this project, you will need to create a Firebase project,
-create a web app and copy the configuration to the `firebase-config.ts`.
+create a web app and copy the configuration to the `firebase_config.ts`.
 
 Then simply run:
 

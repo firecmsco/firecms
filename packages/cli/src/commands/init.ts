@@ -17,6 +17,8 @@ import ora from "ora";
 import ncp from "ncp";
 import { fileURLToPath } from "url";
 
+const access = promisify(fs.access);
+const copy = promisify(ncp);
 
 
 // Function to find a specific parent directory by name
@@ -44,11 +46,8 @@ function findSpecificParentDir(currentDir:string, targetDirName:string) {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Usage example; find 'cli' directory starting from __dirname
 const targetDirPath = findSpecificParentDir(__dirname, 'cli');
 
-const access = promisify(fs.access);
-const copy = promisify(ncp);
 
 export type Template = "cloud" | "v2" | "pro" | "community";
 export type InitOptions = Partial<{
@@ -312,7 +311,7 @@ export async function createProject(options: InitOptions) {
 
     if (options.template === "v2") {
         console.log("First update your firebase config in");
-        console.log(chalk.bgYellow.black.bold("src/firebase-config.ts"));
+        console.log(chalk.bgYellow.black.bold("src/firebase_config.ts"));
         console.log("");
         console.log("Then run:");
         console.log(chalk.cyan.bold("cd " + options.dir_name));
@@ -374,7 +373,7 @@ async function copyTemplateFiles(options: InitOptions, webappConfig?: object) {
 
 async function copyWebAppConfig(options: InitOptions, firebaseConfig: object) {
 
-    const fullFileName = path.resolve(options.targetDirectory, "src/firebase-config.ts");
+    const fullFileName = path.resolve(options.targetDirectory, "src/firebase_config.ts");
     fs.writeFile(fullFileName, "export const firebaseConfig = " + JSON.stringify(firebaseConfig, null, 4), err => {
         if (err) {
             console.error("Failed to write file:", err);

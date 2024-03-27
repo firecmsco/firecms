@@ -27,7 +27,7 @@ import {
 import { CenteredView } from "@firecms/ui";
 import { demoCollection } from "./collections/demo";
 
-import { firebaseConfig } from "./firebase-config";
+import { firebaseConfig } from "./firebase_config";
 
 function App() {
 
@@ -96,12 +96,6 @@ function App() {
         authenticator: myAuthenticator,
         dataSourceDelegate: firestoreDelegate,
         storageSource
-    });
-
-    console.log("authLoading", {
-        authenticationEnabled: Boolean(myAuthenticator),
-        authLoading,
-        canAccessMainView
     });
 
     const navigationController = useBuildNavigationController({

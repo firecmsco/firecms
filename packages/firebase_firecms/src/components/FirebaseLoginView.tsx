@@ -181,7 +181,7 @@ export function FirebaseLoginView({
                 errorView = <div className="p-4">
                     <ErrorView
                         title={"Invalid API key"}
-                        error={"auth/invalid-api-key: Check that your Firebase config is set correctly in your `firebase-config.ts` file"}/>
+                        error={"auth/invalid-api-key: Check that your Firebase config is set correctly in your `firebase_config.ts` file"}/>
                 </div>;
             } else if (!ignoredCodes.includes(authController.authProviderError.code)) {
                 if (authController.authProviderError.code === "auth/multi-factor-auth-required") {

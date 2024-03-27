@@ -31,5 +31,5 @@
     "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
   },
-  "gitHead": "3f36b3c0c63449e35a00c121e2df3acf605f81a8"
+  "gitHead": "c8d7ad2f2d5f2ac8efc118d1588c47e38fd14559"
 }

@@ -30,7 +30,7 @@ import {
     useInitializeAppCheck
 } from "@firecms/firebase";
 
-import { firebaseConfig } from "./firebase-config";
+import { firebaseConfig } from "./firebase_config";
 import { productsCollection } from "./collections/products";
 
 function App() {

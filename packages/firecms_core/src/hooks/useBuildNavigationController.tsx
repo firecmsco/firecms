@@ -350,6 +350,10 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         return paths;
     }, [getCollectionFromIds]);
 
+    console.debug("Navigation", {
+        initialised,
+        navigationLoading
+    });
     return {
         collections: collectionsRef.current,
         views: viewsRef.current,
