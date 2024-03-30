@@ -77,7 +77,8 @@ export function ExpandablePanel({
             <Collapsible.Root
                 className={cn(
                     !invisible && defaultBorderMixin + " border",
-                    "rounded-md"
+                    "rounded-md",
+                    "w-full"
                 )}
                 open={open}
                 onOpenChange={(updatedOpen: boolean) => {

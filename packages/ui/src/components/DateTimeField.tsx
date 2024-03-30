@@ -17,12 +17,12 @@ import { Typography } from "./Typography";
 
 interface DateTimeFieldProps {
     value?: Date;
-    onChange: (date: Date | null) => void;
+    onChange: (date: Date | undefined) => void;
     mode?: "date" | "date_time";
     disabled?: boolean;
     clearable?: boolean;
     error?: boolean;
-    size: "small" | "medium";
+    size?: "small" | "medium";
     label?: React.ReactNode;
     className?: string;
     style?: React.CSSProperties;
@@ -40,7 +40,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                                                                 clearable,
                                                                 mode = "date",
                                                                 error,
-                                                                size,
+                                                                size = "medium",
                                                                 className,
                                                                 style,
                                                                 inputClassName,
@@ -60,7 +60,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
 
     const handleClear = (e: React.MouseEvent) => {
         e.preventDefault();
-        onChange(null);
+        onChange(undefined);
     }
 
     return (

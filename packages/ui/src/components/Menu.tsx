@@ -43,18 +43,24 @@ export type MenuItemProps = {
     children: React.ReactNode;
     dense?: boolean;
     onClick?: (event: React.MouseEvent) => void;
-}
+};
 
 export function MenuItem({
                              children,
-                             dense,
+                             dense = false, // Default value is false if not provided
                              onClick
                          }: MenuItemProps) {
+    // Dynamically adjusting the class based on the "dense" prop
+    const classNames = cn(
+        focusedMixin,
+        onClick && "cursor-pointer",
+        "rounded-md text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900 flex items-center gap-4",
+        dense ? "px-3 py-1.5" : "px-4 py-2"
+    );
+
     return (
         <DropdownMenu.Item
-            className={cn(focusedMixin,
-                onClick && "cursor-pointer",
-                "rounded-md px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900 flex items-center gap-4")}
+            className={classNames}
             onClick={onClick}>
             {children}
         </DropdownMenu.Item>
