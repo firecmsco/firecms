@@ -29,7 +29,7 @@ import { getParentReferencesFromPath } from "../util/parent_references_from_path
 const DEFAULT_BASE_PATH = "/";
 const DEFAULT_COLLECTION_PATH = "/c";
 
-type BuildNavigationContextProps<EC extends EntityCollection, UserType extends User> = {
+export type BuildNavigationContextProps<EC extends EntityCollection, UserType extends User> = {
     basePath?: string,
     baseCollectionPath?: string,
     authController: AuthController<UserType>;
@@ -218,7 +218,6 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         const baseCollection = getCollectionByPathOrId(removeInitialAndTrailingSlashes(idOrPath), collections);
 
         const userOverride = includeUserOverride ? userConfigPersistence?.getCollectionConfig(idOrPath) : undefined;
-
         const overriddenCollection = baseCollection ? mergeDeep(baseCollection, userOverride) : undefined;
 
         let result: Partial<EntityCollection> | undefined = overriddenCollection;

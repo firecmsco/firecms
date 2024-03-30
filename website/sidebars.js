@@ -101,7 +101,7 @@ module.exports = {
         "icons/icons",
         {
             "type": "category",
-            "label": "Components",
+            "label": "UI components",
             "collapsed": false,
             "items": [
                 "components",
