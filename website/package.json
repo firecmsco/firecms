@@ -66,6 +66,7 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.1.1",
     "@docusaurus/types": "^3.1.1",
+    "@firecms/cloud": "link:../packages/firecms_cloud",
     "@tsconfig/docusaurus": "^2.0.2",
     "@types/react": "^18.2.63",
     "@types/react-helmet": "^6.1.11",
@@ -74,8 +75,8 @@
     "docusaurus-plugin-typedoc": "^0.22.0",
     "docusaurus-tailwindcss-loader": "file:plugins/docusaurus-tailwindcss-loader",
     "esbuild-loader": "^4.0.3",
-    "@firecms/cloud": "link:../packages/firecms_cloud",
     "fontaine": "^0.4.1",
+    "openai": "^4.26.0",
     "postcss": "^8.4.35",
     "postcss-import": "^16.0.1",
     "postcss-loader": "^8.1.1",

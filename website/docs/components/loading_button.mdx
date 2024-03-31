@@ -1,0 +1,40 @@
+---
+id: loading_button
+title: Loading Button
+sidebar_label: Loading Button
+---
+
+The Loading Button component is utilized to display an actionable button with integrated loading feedback. This is useful to provide users immediate feedback on their actions that require asynchronous operations.
+
+## Usage
+
+To use the `LoadingButton`, import it along with necessary props. You can pass `loading`, `disabled`, `onClick`, `startIcon`, and other button props.
+
+import CodeSample from "../../src/CodeSample";
+import CodeBlock from "@theme/CodeBlock";
+
+## Basic Loading Button
+
+A simple loading button showcasing the loading state and default appearance.
+
+import LoadingButtonBasicDemo from '../../samples/components/loading_button/loading_button_basic';
+import LoadingButtonBasicSource from '!!raw-loader!../../samples/components/loading_button/loading_button_basic';
+
+<CodeSample>
+    <LoadingButtonBasicDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{LoadingButtonBasicSource}</CodeBlock>
+
+## Loading Button with Start Icon
+
+A loading button example that includes a start icon which is displayed when the button is not in loading state.
+
+import LoadingButtonWithIconDemo from '../../samples/components/loading_button/loading_button_with_icon';
+import LoadingButtonWithIconSource from '!!raw-loader!../../samples/components/loading_button/loading_button_with_icon';
+
+<CodeSample>
+    <LoadingButtonWithIconDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{LoadingButtonWithIconSource}</CodeBlock>

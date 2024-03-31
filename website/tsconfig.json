@@ -1,63 +1,64 @@
 {
-    "extends": "@tsconfig/docusaurus/tsconfig.json",
-    "compilerOptions": {
-        "target": "esnext",
-        "lib": [
-            "dom",
-            "dom.iterable",
-            "esnext"
-        ],
-        "noImplicitAny": false,
-        "allowJs": true,
-        "skipLibCheck": true,
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "strict": true,
-        "forceConsistentCasingInFileNames": true,
-        "noFallthroughCasesInSwitch": true,
-        "module": "esnext",
-        "moduleResolution": "node",
-        "resolveJsonModule": true,
-        "isolatedModules": true,
-        "noEmit": true,
-        "jsx": "react-jsx",
-        "sourceMap": true,
-        "declaration": true,
-        "noImplicitReturns": true,
-        "noImplicitThis": true,
-        "strictNullChecks": true,
-        "baseUrl": ".",
-        "paths": {
-            "@firecms/ui": [
-                "../packages/ui",
-            ],
-            "@firecms/core": [
-                "../packages/firecms_core"
-            ],
-            "@firecms/firebase": [
-                "../packages/firebase_firecms"
-            ],
-            "@firecms/collection_editor": [
-                "../packages/collection_editor"
-            ],
-            "@firecms/data_import_export": [
-                "../packages/data_import_export"
-            ],
-            "@firecms/schema_inference": [
-                "../packages/schema_inference"
-            ],
-            "@firecms/data_enhancement": [
-                "../packages/data_enhancement"
-            ],
-            "@firecms/formex": [
-                "../packages/formex"
-            ]
-        }
-    },
-    "include": [
-        "src",
-        "../packages/firecms_cloud/src/**/*.ts"
-    ]
+  "extends": "@tsconfig/docusaurus/tsconfig.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "noImplicitAny": false,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "sourceMap": true,
+    "declaration": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "baseUrl": ".",
+    "paths": {
+      "@firecms/ui": [
+        "../packages/ui"
+      ],
+      "@firecms/core": [
+        "../packages/firecms_core"
+      ],
+      "@firecms/firebase": [
+        "../packages/firebase_firecms"
+      ],
+      "@firecms/collection_editor": [
+        "../packages/collection_editor"
+      ],
+      "@firecms/data_import_export": [
+        "../packages/data_import_export"
+      ],
+      "@firecms/schema_inference": [
+        "../packages/schema_inference"
+      ],
+      "@firecms/data_enhancement": [
+        "../packages/data_enhancement"
+      ],
+      "@firecms/formex": [
+        "../packages/formex"
+      ]
+    }
+  },
+  "include": [
+    "src",
+    "samples",
+    "../packages/firecms_cloud/src/**/*.ts"
+  ]
 }
 
 

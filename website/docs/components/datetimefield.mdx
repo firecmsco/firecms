@@ -1,0 +1,53 @@
+---
+id: datetimefield
+title: DateTimeField
+sidebar_label: DateTime Field
+---
+
+DateTimeField is a versatile component allowing users to easily select dates and times. It can be configured for various modes such as date only or date-time selection, and it supports localization.
+
+## Usage
+
+`DateTimeField` component can be used to capture date or date-time values from users. It supports customization for disabling the field, clearing the selection, displaying errors, and more.
+
+import CodeSample from "../../src/CodeSample";
+import CodeBlock from "@theme/CodeBlock";
+
+## Basic Usage
+
+Provides a basic date-picker functionality where users can select a date.
+
+import DateTimeFieldBasicDemo from '../../samples/components/datetimefield/datetimefield_basic';
+import DateTimeFieldBasicSource from '!!raw-loader!../../samples/components/datetimefield/datetimefield_basic';
+
+<CodeSample>
+    <DateTimeFieldBasicDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{DateTimeFieldBasicSource}</CodeBlock>
+
+## Date-Time Selection
+
+Enables selection of both date and time, suitable for scenarios where precise timing is crucial.
+
+import DateTimeFieldDateTimeDemo from '../../samples/components/datetimefield/datetimefield_datetime';
+import DateTimeFieldDateTimeSource from '!!raw-loader!../../samples/components/datetimefield/datetimefield_datetime';
+
+<CodeSample>
+    <DateTimeFieldDateTimeDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{DateTimeFieldDateTimeSource}</CodeBlock>
+
+## Localization
+
+Showcases how to localize the DateTimeField component, adjusting it for different locales.
+
+import DateTimeFieldLocalizationDemo from '../../samples/components/datetimefield/datetimefield_localization';
+import DateTimeFieldLocalizationSource from '!!raw-loader!../../samples/components/datetimefield/datetimefield_localization';
+
+<CodeSample>
+    <DateTimeFieldLocalizationDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{DateTimeFieldLocalizationSource}</CodeBlock>

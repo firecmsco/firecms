@@ -1,0 +1,66 @@
+---
+id: dialog
+title: Dialog
+sidebar_label: Dialog
+---
+
+Dialog components are used to present content in a layer above the app's main content, and they often request a user response. They are a critical component for modal dialogs, lightboxes, notification pop-ups, and custom content popups.
+
+## Usage
+
+To use the `Dialog`, import it from your components and pass the necessary props including `open`, `onOpenChange`, and the dialog's content as children. Optionally, you can customize its appearance with `className`, `fullWidth`, `fullHeight`, `fullScreen`, `scrollable`, `maxWidth`, `modal`, and `onOpenAutoFocus` props.
+
+import CodeSample from "../../src/CodeSample";
+import CodeBlock from "@theme/CodeBlock";
+
+## Basic Dialog
+
+A basic example of using the dialog component to show a simple pop-up.
+
+import DialogBasicDemo from '../../samples/components/dialog/dialog_basic';
+import DialogBasicSource from '!!raw-loader!../../samples/components/dialog/dialog_basic';
+
+<CodeSample>
+    <DialogBasicDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{DialogBasicSource}</CodeBlock>
+
+## Full-Screen Dialog
+
+An example of a dialog that covers the entire screen.
+
+import DialogFullScreenDemo from '../../samples/components/dialog/dialog_full_screen';
+import DialogFullScreenSource from '!!raw-loader!../../samples/components/dialog/dialog_full_screen';
+
+<CodeSample>
+    <DialogFullScreenDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{DialogFullScreenSource}</CodeBlock>
+
+## Scrollable Dialog
+
+Illustrates how to make a dialog's content scrollable.
+
+import DialogScrollableDemo from '../../samples/components/dialog/dialog_scrollable';
+import DialogScrollableSource from '!!raw-loader!../../samples/components/dialog/dialog_scrollable';
+
+<CodeSample>
+    <DialogScrollableDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{DialogScrollableSource}</CodeBlock>
+
+## Dialog with Custom Width
+
+Demonstrates usage of the `maxWidth` prop to customize the dialog's width.
+
+import DialogCustomWidthDemo from '../../samples/components/dialog/dialog_custom_width';
+import DialogCustomWidthSource from '!!raw-loader!../../samples/components/dialog/dialog_custom_width';
+
+<CodeSample>
+    <DialogCustomWidthDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{DialogCustomWidthSource}</CodeBlock>
