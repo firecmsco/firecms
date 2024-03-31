@@ -1,5 +1,5 @@
 import React from "react";
-import { AddIcon, Button } from "@firecms/cloud";
+import { AddIcon, Button } from "@firecms/ui";
 
 export default function StartIconButtonDemo() {
     return (

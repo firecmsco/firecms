@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar } from "@firecms/cloud";
+import { Avatar } from "@firecms/ui";
 
 export default function CustomStyleAvatarDemo() {
     return (

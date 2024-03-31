@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "@firecms/cloud";
+import { Card } from "@firecms/ui";
 
 export default function CardCustomStyleDemo() {
     const styles = {

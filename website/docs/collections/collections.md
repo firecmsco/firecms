@@ -13,7 +13,7 @@ entries displayed in the home page and the navigation drawer), or as
 
 Collections in FireCMS can be defined in two ways:
 
-- Using the **FireCMS UI**.
+- Using the **FireCMS Cloud UI**.
 - Using **code**.
 
 If the logged-in user has the required permissions, they will be able to create
@@ -116,6 +116,7 @@ type Product = {
 }
 
 const productsCollection = buildCollection<Product>({
+    id: "products",
     path: "products",
     name: "Products",
     group: "Main",
@@ -235,6 +236,7 @@ In order to do so, just pass the indexes configuration to your collection:
 import { buildCollection } from "@firecms/cloud";
 
 const productsCollection = buildCollection<Product>({
+    id: "products",
     path: "products",
     name: "Product",
     properties: {

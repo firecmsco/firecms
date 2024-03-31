@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, Button } from "@firecms/cloud";
+import { Alert, Button } from "@firecms/ui";
 
 export default function AlertActionButtonDemo() {
     return (

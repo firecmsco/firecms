@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert } from "@firecms/cloud";
+import { Alert } from "@firecms/ui";
 
 export default function DismissableAlertDemo() {
     const [visible, setVisible] = useState(true);

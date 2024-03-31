@@ -25,7 +25,7 @@ export function VirtualTableDateField(props: {
     return (
         <DateTimeField
             value={internalValue ?? undefined}
-            onChange={(dateValue) => updateValue(dateValue)}
+            onChange={(dateValue) => updateValue(dateValue ?? null)}
             size={"medium"}
             invisible={true}
             className={"w-full h-full"}

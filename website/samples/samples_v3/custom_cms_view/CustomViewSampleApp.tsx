@@ -13,6 +13,7 @@ const customViews: CMSView[] = [{
 
 const productCollection = buildCollection({
     name: "Product",
+    id: "products",
     path: "products",
     properties: {
         name: {

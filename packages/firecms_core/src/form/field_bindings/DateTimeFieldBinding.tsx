@@ -43,7 +43,7 @@ export function DateTimeFieldBinding({
         <>
             <DateTimeField
                 value={internalValue}
-                onChange={(dateValue) => setValue(dateValue)}
+                onChange={(dateValue) => setValue(dateValue ?? null)}
                 size={"medium"}
                 mode={property.mode}
                 clearable={property.clearable}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@firecms/cloud";
+import { Button } from "@firecms/ui";
 
 export default function DisabledButtonDemo() {
     return (

@@ -6,7 +6,7 @@ another.
 This example is used for development purposes.
 
 IMPORTANT: If you want to get started using FireCMS it is advisable to check the
-[quickstart](https://firecms.co/docs/quickstart)
+[docs](https://firecms.co/docs)
 
 You need to specify a valid **Firebase config** in the file `firebase_config.ts`
 which is not in VCS, but there is a template `firebase_config.ts.template`

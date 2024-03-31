@@ -1,19 +1,25 @@
 import React, { useState } from "react";
-import { Dialog } from "@firecms/ui";
+import { Button, Dialog, DialogActions } from "@firecms/ui";
 
 export default function DialogScrollableDemo() {
     const [open, setOpen] = useState(false);
 
     return (
         <>
-            <button onClick={() => setOpen(true)}>Open Scrollable Dialog</button>
-            <Dialog 
-                open={open} 
+            <Button onClick={() => setOpen(true)}>Open Scrollable Dialog</Button>
+            <Dialog
+                open={open}
                 onOpenChange={setOpen}
                 scrollable={true}
             >
-                <div style={{height: '200vh'}}>Scrollable Dialog Content</div>
-                <button onClick={() => setOpen(false)}>Close</button>
+                <div className={"p-8 bg-red-500 text-white"} style={{ height: "200vh" }}>Scrollable Dialog Content</div>
+
+                <DialogActions>
+                    <Button onClick={() => setOpen(false)}
+                            variant={"filled"}>
+                        Got it!
+                    </Button>
+                </DialogActions>
             </Dialog>
         </>
     );

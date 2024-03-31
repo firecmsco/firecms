@@ -1,19 +1,26 @@
 import React, { useState } from "react";
-import { Dialog } from "@firecms/ui";
+import { Button, Dialog, DialogActions, DialogContent } from "@firecms/ui";
 
 export default function DialogCustomWidthDemo() {
     const [open, setOpen] = useState(false);
 
     return (
         <>
-            <button onClick={() => setOpen(true)}>Open Custom Width Dialog</button>
-            <Dialog 
-                open={open} 
+            <Button onClick={() => setOpen(true)}>Open Custom Width Dialog</Button>
+            <Dialog
+                open={open}
                 onOpenChange={setOpen}
-                maxWidth="md"
+                maxWidth="5xl"
             >
-                Dialog with Custom Width
-                <button onClick={() => setOpen(false)}>Close</button>
+                <DialogContent className="p-8">
+                    Dialog with Custom Width
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpen(false)}
+                            variant={"filled"}>
+                        Close
+                    </Button>
+                </DialogActions>
             </Dialog>
         </>
     );

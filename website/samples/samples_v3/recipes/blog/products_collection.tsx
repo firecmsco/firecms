@@ -2,8 +2,8 @@ import { buildCollection } from "@firecms/cloud";
 import { Product } from "./types";
 
 export const productsCollection = buildCollection<Product>({
-    path: "products",
     id: "ppp",
+    path: "products",
     name: "Products",
     singularName: "Product",
     group: "Main",

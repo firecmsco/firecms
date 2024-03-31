@@ -32,6 +32,7 @@ type Product = {
 }
 
 const localeCollection = buildCollection({
+    id: "locale",
     path: "locale",
     customId: locales,
     name: "Locales",
@@ -53,6 +54,7 @@ const localeCollection = buildCollection({
 const productsCollection = buildCollection<Product>({
     name: "Products",
     singularName: "Product",
+    id: "products",
     path: "products",
     permissions: ({ authController }) => ({
         edit: true,

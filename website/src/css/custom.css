@@ -105,6 +105,8 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     --ifm-border-color: #141518;
     --ifm-background-color: white;
 
+    --ifm-z-index-fixed: 20;
+
     --ifm-toc-border-color: var(--ifm-border-color);
 
     --ifm-paragraph-margin-bottom: 1.0rem;
@@ -250,6 +252,15 @@ article blockquote {
 [role='banner'] {
     z-index: 5;
     border: none;
+}
+
+article code {
+    font-weight: 600;
+    font-size: .9rem;
+}
+
+.theme-code-block {
+    font-size: 1rem;
 }
 
 .font-mono code {

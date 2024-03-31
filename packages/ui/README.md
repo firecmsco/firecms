@@ -49,7 +49,7 @@ FireCMS is based on this great technologies:
 The easiest way to get going is to check our quickstart guide! You will just
 need to follow some quick steps:
 
-https://firecms.co/docs/quickstart
+https://firecms.co/docs
 
 ### Demo
 
