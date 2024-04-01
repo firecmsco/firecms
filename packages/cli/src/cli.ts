@@ -94,6 +94,12 @@ async function deployArgs(rawArgs) {
         console.log("firecms deploy --project=your-project-id --env=dev");
         return;
     }
+
+    const currentUser = await getCurrentUser(env, debug);
+    if (!currentUser) {
+        await login(env, debug);
+    }
+
     await deploy(project, env, debug);
 }
 

@@ -3,6 +3,38 @@
 - [BREAKING] The package name for FireCMS Cloud has changed from `firecms` to `@firecms/cloud`. This is done
   to avoid conflicts with the main FireCMS package. If you are using FireCMS Cloud, you will need to update your
   imports.
+- [BREAKING] If you are importing the tailwind configuration, you can now find the import at: 
+  `import fireCMSConfig from "@firecms/ui/tailwind.config.js";`
+- [BREAKING] In that case, you also need to add `@tailwindcss/typography` to your dev dependencies.
+- [BREAKING] You need to update your `vite.config.js` and replace the package name in the federated configuration:
+    ```javascript
+    import { defineConfig } from "vite"
+    import react from "@vitejs/plugin-react"
+    import federation from "@originjs/vite-plugin-federation"
+    
+    // https://vitejs.dev/config/
+    export default defineConfig({
+        esbuild: {
+            logOverride: { "this-is-undefined-in-esm": "silent" }
+        },
+        plugins: [
+            react(),
+            federation({
+                name: "remote_app",
+                filename: "remoteEntry.js",
+                exposes: {
+                    "./config": "./src/index"
+                },
+                shared: ["react", "react-dom", "@firecms/cloud", "@firecms/core", "@firecms/firebase", "@firecms/ui"]
+            })
+        ],
+        build: {
+            modulePreload: false,
+            target: "esnext",
+            cssCodeSplit: false,
+        }
+    })
+    ```
 - Minor performance improvements and bug fixes.
 - Enhanced filtering and sorting capability for indexed fields.
 - Extended StorageSource to support custom `bucketUrl`.

@@ -43,3 +43,10 @@ firecms init --pro
 npm link
 firecms
 ```
+
+### Development only
+You can change the environment when deploying to FireCMS Cloud by defining the --env variable.
+Possible values are `prod` (default) and `dev`.
+```bash
+firecms deploy --env dev
+```

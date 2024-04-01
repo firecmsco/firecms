@@ -18,7 +18,6 @@ export async function deploy(projectId: string, env: "prod" | "dev", debug: bool
         return;
     }
     console.log("Starting deploy");
-    // await build();
     const zipFilePath = await createZipFromBuild();
     await uploadZip(projectId, zipFilePath, env, debug);
 }
@@ -53,7 +52,7 @@ export async function createZipFromBuild(): Promise<string> {
 
 export async function uploadZip(projectId: string, zipFilePath: string, env: "prod" | "dev", debug: boolean) {
 
-    if(env === "dev") {
+    if (env === "dev") {
         console.log("!!! Uploading to dev server");
     }
     const spinner = ora("Uploading build of project " + projectId).start();
@@ -83,7 +82,9 @@ export async function uploadZip(projectId: string, zipFilePath: string, env: "pr
 
         if (response.status === 200) {
             spinner.succeed();
-            console.log("🔥 Successfully uploaded new build");
+            console.log("\n🔥 Successfully uploaded new build");
+            const baseUrl = env === "prod" ? "https://app.firecms.co/" : "https://staging.app.firecms.co/";
+            console.log("You can find the build at: ", baseUrl + `p/${projectId}`);
         } else {
             console.error("There was an error uploading the build");
             console.error(response.data);
