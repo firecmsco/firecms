@@ -1,4 +1,5 @@
 #!/usr/bin/env node
-import { entry } from "../dist/index.es.js";
-
-entry(process.argv);
+(async () => {
+  const fireCMS = await import("@firecms/cli");
+  fireCMS.createFireCMSApp(process.argv);
+})();

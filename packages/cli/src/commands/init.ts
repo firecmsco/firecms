@@ -45,7 +45,7 @@ function findSpecificParentDir(currentDir:string, targetDirName:string) {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const targetDirPath = findSpecificParentDir(__dirname, 'firecms');
+const targetDirPath = findSpecificParentDir(__dirname, "cli");
 
 
 export type Template = "cloud" | "v2" | "pro" | "community";
@@ -214,6 +214,7 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
         type: "input",
         name: "dir_name",
         message: "Please choose which folder to create the project in",
+        when: (answers) => Boolean(answers.existing_firecms_project) || options.template !== "cloud",
         default: options.dir_name ?? defaultName,
     });
 
@@ -230,7 +231,7 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
     const answers = await inquirer.prompt(questions);
 
     if (options.template === "cloud" && !answers.existing_firecms_project) {
-        console.log("Please create a FireCMS project first. Head to https://app.firecms.co to get started and then run this command again!");
+        console.log("Please create a FireCMS Cloud project first. Head to https://app.firecms.co to get started and then run this command again!");
         process.exit(1);
     }
 
