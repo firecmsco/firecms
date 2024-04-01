@@ -1,6 +1,6 @@
 {
   "name": "@firecms/cli",
-  "version": "3.0.0-canary.30",
+  "version": "3.0.0-canary.31",
   "description": "A CLI to perform FireCMS operations",
   "packageManager": "yarn@4.1.0",
   "main": "./dist/index.cjs",
