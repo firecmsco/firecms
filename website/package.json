@@ -77,7 +77,7 @@
     "esbuild-loader": "^4.0.3",
     "fontaine": "^0.4.1",
     "openai": "^4.26.0",
-    "postcss": "^8.4.35",
+    "postcss": "^8.4.38",
     "postcss-import": "^16.0.1",
     "postcss-loader": "^8.1.1",
     "postcss-preset-env": "^9.4.0",

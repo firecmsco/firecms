@@ -111,8 +111,6 @@ function App() {
         storageSource
     });
 
-    console.log("authLoading", { authenticationEnabled: Boolean(myAuthenticator), authLoading, canAccessMainView });
-
     const navigationController = useBuildNavigationController({
         collections,
         authController,
