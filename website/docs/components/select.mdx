@@ -1,0 +1,54 @@
+---
+id: select
+title: Select
+sidebar_label: Select
+---
+
+Select is a form component that provides a dropdown menu for users to choose from among several options. It supports single and multiple selections, customizable styles, and integration with form libraries.
+
+## Usage
+
+To use the `Select` component, import it along with the `SelectItem` and `SelectGroup` for group options. You can customize its appearance, behavior, and content according to your needs.
+
+import CodeSample from "../../src/CodeSample";
+import CodeBlock from "@theme/CodeBlock";
+
+## Basic Select
+
+A basic usage of the select component with minimal configuration.
+
+import SelectBasicDemo from '../../samples/components/select/select_basic';
+import SelectBasicSource from '!!raw-loader!../../samples/components/select/select_basic';
+
+<CodeSample>
+    <SelectBasicDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{SelectBasicSource}</CodeBlock>
+
+## Customized Select
+
+A select component with custom styles and functionalities.
+
+import SelectCustomDemo from '../../samples/components/select/select_custom';
+import SelectCustomSource from '!!raw-loader!../../samples/components/select/select_custom';
+
+<CodeSample>
+    <SelectCustomDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{SelectCustomSource}</CodeBlock>
+
+## Select with Groups
+
+Demonstrates how to group options under labels using `SelectGroup`.
+
+import SelectGroupDemo from '../../samples/components/select/select_group';
+import SelectGroupSource from '!!raw-loader!../../samples/components/select/select_group';
+
+<CodeSample>
+    <SelectGroupDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{SelectGroupSource}</CodeBlock>
+

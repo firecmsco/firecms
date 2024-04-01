@@ -1,6 +1,6 @@
 {
   "name": "firecms",
-  "version": "3.0.0-canary.38",
+  "version": "3.0.0-beta.5",
   "description": "A CLI to perform FireCMS operations. This package is just a wrapper around @firecms/cli",
   "packageManager": "yarn@4.1.0",
   "bin": "bin/firecms.js",
@@ -25,7 +25,7 @@
   "author": "firecms.co",
   "license": "MIT",
   "dependencies": {
-    "@firecms/cli": "^3.0.0-canary.38"
+    "@firecms/cli": "^3.0.0-beta.5"
   },
   "devDependencies": {
     "@types/node": "^20.11.30",
@@ -38,5 +38,5 @@
   "exclude": [
     "node_modules"
   ],
-  "gitHead": "241b56d35ecc9c8155a2ea0d387974a41a231bb7"
+  "gitHead": "5298cbadc3e73fe0bca71c418ef062faf56368de"
 }

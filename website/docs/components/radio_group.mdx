@@ -1,0 +1,54 @@
+---
+id: radio_group
+title: Radio Group
+sidebar_label: Radio Group
+---
+
+Radio Group allows users to select one option from a set. It's useful for exclusive selection scenarios where only one choice is permissible.
+Each radio group item is represented by a `RadioGroupItem` component, and typically wrapped by a `Label` component.
+
+## Usage
+
+To use the `RadioGroup` and `RadioGroupItem`, import them from your components and structure your options using the `RadioGroup` as the container and `RadioGroupItem` for each option.
+
+import CodeSample from "../../src/CodeSample";
+import CodeBlock from "@theme/CodeBlock";
+
+## Basic Radio Group
+
+A basic example of a radio group, allowing for simple selection.
+
+import RadioGroupBasicDemo from '../../samples/components/radio_group/radio_group_basic';
+import RadioGroupBasicSource from '!!raw-loader!../../samples/components/radio_group/radio_group_basic';
+
+<CodeSample>
+    <RadioGroupBasicDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{RadioGroupBasicSource}</CodeBlock>
+
+## Customizing Radio Group Item Appearance
+
+This example demonstrates how to customize the appearance of individual radio group items.
+
+import RadioGroupCustomDemo from '../../samples/components/radio_group/radio_group_custom';
+import RadioGroupCustomSource from '!!raw-loader!../../samples/components/radio_group/radio_group_custom';
+
+<CodeSample>
+    <RadioGroupCustomDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{RadioGroupCustomSource}</CodeBlock>
+
+## Disabled Radio Group
+
+How to disable the entire radio group or individual items within it.
+
+import RadioGroupDisabledDemo from '../../samples/components/radio_group/radio_group_disabled';
+import RadioGroupDisabledSource from '!!raw-loader!../../samples/components/radio_group/radio_group_disabled';
+
+<CodeSample>
+    <RadioGroupDisabledDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{RadioGroupDisabledSource}</CodeBlock>

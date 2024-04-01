@@ -1,7 +1,7 @@
 {
   "name": "@firecms/cloud",
   "type": "module",
-  "version": "3.0.0-canary.38",
+  "version": "3.0.0-beta.5",
   "publishConfig": {
     "access": "public"
   },
@@ -33,15 +33,15 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/cli": "^3.0.0-canary.38",
-    "@firecms/collection_editor": "^3.0.0-canary.38",
-    "@firecms/core": "^3.0.0-canary.38",
-    "@firecms/data_enhancement": "^3.0.0-canary.38",
-    "@firecms/data_import_export": "^3.0.0-canary.38",
-    "@firecms/firebase": "^3.0.0-canary.38",
-    "@firecms/formex": "^3.0.0-canary.38",
-    "@firecms/schema_inference": "^3.0.0-canary.38",
-    "@firecms/user_management": "^3.0.0-canary.38",
+    "@firecms/cli": "^3.0.0-beta.5",
+    "@firecms/collection_editor": "^3.0.0-beta.5",
+    "@firecms/core": "^3.0.0-beta.5",
+    "@firecms/data_enhancement": "^3.0.0-beta.5",
+    "@firecms/data_import_export": "^3.0.0-beta.5",
+    "@firecms/firebase": "^3.0.0-beta.5",
+    "@firecms/formex": "^3.0.0-beta.5",
+    "@firecms/schema_inference": "^3.0.0-beta.5",
+    "@firecms/user_management": "^3.0.0-beta.5",
     "react-router": "^6.22.0",
     "react-router-dom": "^6.22.0"
   },
@@ -81,5 +81,5 @@
       "react-app/jest"
     ]
   },
-  "gitHead": "241b56d35ecc9c8155a2ea0d387974a41a231bb7"
+  "gitHead": "5298cbadc3e73fe0bca71c418ef062faf56368de"
 }

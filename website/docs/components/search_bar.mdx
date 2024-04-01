@@ -1,0 +1,66 @@
+---
+id: search_bar
+title: SearchBar
+sidebar_label: SearchBar
+---
+
+The `SearchBar` component is designed for implementing search functionalities. It supports features like debouncing search input, expandable input sizes, and showing loading state.
+
+## Usage
+
+To use the `SearchBar`, import it from your components and pass the necessary props like `onTextSearch`, `placeholder`, `expandable`, `large`, `autoFocus`, `disabled`, `loading`, and `inputRef`.
+
+import CodeSample from "../../src/CodeSample";
+import CodeBlock from "@theme/CodeBlock";
+
+## Basic SearchBar
+
+The basic usage of `SearchBar` with minimal configuration.
+
+import SearchBarBasicDemo from '../../samples/components/search_bar/search_bar_basic';
+import SearchBarBasicSource from '!!raw-loader!../../samples/components/search_bar/search_bar_basic';
+
+<CodeSample>
+    <SearchBarBasicDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{SearchBarBasicSource}</CodeBlock>
+
+## SearchBar with Loading State
+
+A demonstration of the `SearchBar` showing a loading indicator.
+
+import SearchBarLoadingDemo from '../../samples/components/search_bar/search_bar_loading';
+import SearchBarLoadingSource from '!!raw-loader!../../samples/components/search_bar/search_bar_loading';
+
+<CodeSample>
+    <SearchBarLoadingDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{SearchBarLoadingSource}</CodeBlock>
+
+## SearchBar Expandable
+
+This example shows how to make the `SearchBar` expandable upon focusing.
+
+import SearchBarExpandableDemo from '../../samples/components/search_bar/search_bar_expandable';
+import SearchBarExpandableSource from '!!raw-loader!../../samples/components/search_bar/search_bar_expandable';
+
+<CodeSample>
+    <SearchBarExpandableDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{SearchBarExpandableSource}</CodeBlock>
+
+## Large SearchBar
+
+Showcases a larger variant of the `SearchBar`.
+
+import SearchBarLargeDemo from '../../samples/components/search_bar/search_bar_large';
+import SearchBarLargeSource from '!!raw-loader!../../samples/components/search_bar/search_bar_large';
+
+<CodeSample>
+    <SearchBarLargeDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{SearchBarLargeSource}</CodeBlock>
