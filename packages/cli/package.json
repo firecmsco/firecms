@@ -1,6 +1,6 @@
 {
   "name": "@firecms/cli",
-  "version": "3.0.0-canary.33",
+  "version": "3.0.0-canary.34",
   "description": "A CLI to perform FireCMS operations",
   "packageManager": "yarn@4.1.0",
   "type": "commonjs",
@@ -11,10 +11,9 @@
     "access": "public"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf templates/template_cloud/node_modules && rm -rf templates/template_cloud/yarn.lock && vite build && tsc --emitDeclarationOnly -p tsconfig.json",
-    "dev": "ts-node src/test.ts",
-    "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
+    "build": "echo \"@firecms/cli: no need to build\" && exit 0",
+    "clean": "echo \"@firecms/cli: no need to clean\" && exit 0",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "cli",
@@ -29,7 +28,7 @@
   "author": "firecms.co",
   "license": "MIT",
   "dependencies": {
-    "firecms": "^3.0.0-canary.33"
+    "firecms": "^3.0.0-canary.34"
   },
   "devDependencies": {
     "@types/node": "^20.11.30",
@@ -54,5 +53,5 @@
   "exclude": [
     "node_modules"
   ],
-  "gitHead": "e26534245ded1f4523f180233cfda316c061fa8c"
+  "gitHead": "fc18d2b601a2106ed2796c640b0e8915e4a646e8"
 }

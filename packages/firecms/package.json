@@ -1,6 +1,6 @@
 {
   "name": "firecms",
-  "version": "3.0.0-canary.33",
+  "version": "3.0.0-canary.34",
   "description": "A CLI to perform FireCMS operations",
   "packageManager": "yarn@4.1.0",
   "main": "./dist/index.cjs",
@@ -31,7 +31,22 @@
   "author": "firecms.co",
   "license": "MIT",
   "dependencies": {
-    "firecms": "^3.0.0-canary.32"
+    "arg": "^5.0.2",
+    "axios": "^0.28.0",
+    "chalk": "^4.1.2",
+    "execa": "^4.1.0",
+    "firecms": "^3.0.0-canary.32",
+    "form-data": "^4.0.0",
+    "googleapis": "^134.0.0",
+    "inquirer": "^7.3.3",
+    "json5": "^2.2.3",
+    "listr": "^0.14.3",
+    "ncp": "^2.0.0",
+    "nocache": "^4.0.0",
+    "open": "^10.1.0",
+    "ora": "^8.0.1",
+    "ws": "^8.16.0",
+    "zip-folder": "^1.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.30",
@@ -54,7 +69,8 @@
     }
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "template/node_modules"
   ],
-  "gitHead": "e26534245ded1f4523f180233cfda316c061fa8c"
+  "gitHead": "fc18d2b601a2106ed2796c640b0e8915e4a646e8"
 }
