@@ -1,6 +1,6 @@
 {
   "name": "@firecms/cli",
-  "version": "3.0.0-canary.31",
+  "version": "3.0.0-canary.32",
   "description": "A CLI to perform FireCMS operations",
   "packageManager": "yarn@4.1.0",
   "main": "./dist/index.cjs",
@@ -9,7 +9,7 @@
   "type": "module",
   "source": "src/index.ts",
   "bin": {
-    "firecms": "bin/firecms"
+    "firecms": "bin/firecms.js"
   },
   "publishConfig": {
     "access": "public"
@@ -73,5 +73,5 @@
     "node_modules",
     "template/node_modules"
   ],
-  "gitHead": "ef347a3a787e808176cd79e2ac7568faca37148b"
+  "gitHead": "e0160839147a52060b659fcd778418de07883312"
 }
