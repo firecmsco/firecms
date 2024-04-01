@@ -1,7 +1,7 @@
 {
   "name": "firecms-example-cloud",
   "private": true,
-  "version": "3.0.0-canary.36",
+  "version": "3.0.0-canary.37",
   "scripts": {
     "dev": "vite",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
@@ -11,7 +11,7 @@
     "deploy": "vite build && firecms deploy --project=firecms-demo-27150"
   },
   "dependencies": {
-    "@firecms/cloud": "^3.0.0-canary.36",
+    "@firecms/cloud": "^3.0.0-canary.37",
     "firebase": "^10.9.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
