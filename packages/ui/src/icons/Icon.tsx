@@ -8,7 +8,7 @@ export type IconProps = {
     color?: IconColor,
     className?: string,
     onClick?: (e: React.SyntheticEvent) => void,
-    style?: React.CSSProperties
+    style?: React.CSSProperties,
 }
 
 const colorClassesMapping: Record<IconColor, string> = {
@@ -21,43 +21,46 @@ const colorClassesMapping: Record<IconColor, string> = {
     error: "text-red-500"
 }
 
-export function Icon({
-                         iconKey,
-                         size = "medium",
-                         color,
-                         className,
-                         onClick,
-                         style
-                     }: IconProps & { iconKey: string }) {
-    let sizeInPx: number;
-    switch (size) {
-        case "smallest":
-            sizeInPx = 16;
-            break;
-        case "small":
-            sizeInPx = 20;
-            break;
-        case "medium":
-            sizeInPx = 24;
-            break;
-        case "large":
-            sizeInPx = 28;
-            break
-        default:
-            sizeInPx = size;
-    }
-    if (!sizeInPx) sizeInPx = 24;
+export const Icon = React.forwardRef<HTMLSpanElement, IconProps & { iconKey: string }>(
+    ({
+         iconKey,
+         size = "medium",
+         color,
+         className,
+         onClick,
+         style
+     }, ref) => {
+        let sizeInPx: number;
+        switch (size) {
+            case "smallest":
+                sizeInPx = 16;
+                break;
+            case "small":
+                sizeInPx = 20;
+                break;
+            case "medium":
+                sizeInPx = 24;
+                break;
+            case "large":
+                sizeInPx = 28;
+                break
+            default:
+                sizeInPx = typeof size === "number" ? size : 24;
+        }
 
-    return <span
-        style={{
-            fontSize: `${sizeInPx}px`,
-            display: "block",
-            ...style
-        }}
-        className={
-            cn("material-icons",
-                color ? colorClassesMapping[color] : "",
-                "select-none",
-                className)}
-        onClick={onClick}>{iconKey}</span>
-}
+        return <span
+            ref={ref} // Attach the ref to the span
+            style={{
+                fontSize: `${sizeInPx}px`,
+                display: "block",
+                ...style
+            }}
+            className={
+                cn("material-icons",
+                    color ? colorClassesMapping[color] : "",
+                    "select-none",
+                    className)}
+            onClick={onClick}>{iconKey}</span>
+    });
+
+Icon.displayName = "Icon";
