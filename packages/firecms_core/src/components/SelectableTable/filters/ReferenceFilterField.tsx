@@ -4,7 +4,7 @@ import { Entity, EntityCollection, EntityReference } from "../../../types";
 import { ReferencePreview } from "../../../preview";
 import { getReferenceFrom } from "../../../util";
 import { useNavigationController, useReferenceDialog } from "../../../hooks";
-import { Button, Select, SelectItem } from "@firecms/ui";
+import { Button, Checkbox, Label, Select, SelectItem } from "@firecms/ui";
 
 interface ReferenceFilterFieldProps {
     name: string,
@@ -54,7 +54,7 @@ export function ReferenceFilterField({
 
     const [fieldOperation, fieldValue] = value || [possibleOperations[0], undefined];
     const [operation, setOperation] = useState<VirtualTableWhereFilterOp>(fieldOperation);
-    const [internalValue, setInternalValue] = useState<EntityReference | EntityReference[] | undefined>(fieldValue);
+    const [internalValue, setInternalValue] = useState<EntityReference | EntityReference[] | undefined | null>(fieldValue);
 
     const selectedEntityIds = internalValue
         ? (Array.isArray(internalValue) ? internalValue.map((ref) => {
@@ -65,7 +65,7 @@ export function ReferenceFilterField({
         }).filter(Boolean) as string[] : [internalValue.id])
         : [];
 
-    function updateFilter(op: VirtualTableWhereFilterOp, val?: EntityReference | EntityReference[]) {
+    function updateFilter(op: VirtualTableWhereFilterOp, val?: EntityReference | EntityReference[] | null) {
 
         const prevOpIsArray = multipleSelectOperations.includes(operation);
         const newOpIsArray = multipleSelectOperations.includes(op);
@@ -142,7 +142,7 @@ export function ReferenceFilterField({
     return (
 
         <div className="flex w-[440px] flex-row">
-            <div className="w-[120px]">
+            <div className="w-[140px]">
                 <Select value={operation}
                         onValueChange={(value) => {
                             updateFilter(value as VirtualTableWhereFilterOp, internalValue);
@@ -156,21 +156,40 @@ export function ReferenceFilterField({
                 </Select>
             </div>
 
-            <div className="flex-grow ml-2 h-full">
+            <div className="flex-grow ml-2 h-full gap-2 flex flex-col">
 
                 {internalValue && Array.isArray(internalValue) && <div>
                     {internalValue.map((ref, index) => buildEntry(ref))}
                 </div>}
+
                 {internalValue && !Array.isArray(internalValue) && <div>
                     {buildEntry(internalValue)}
                 </div>}
+
                 {(!internalValue || (Array.isArray(internalValue) && internalValue.length === 0)) &&
                     <Button onClick={doOpenDialog}
                             variant={"outlined"}
+                            size={"large"}
                             className="h-full w-full">
                         {multiple ? "Select references" : "Select reference"}
                     </Button>
                 }
+
+                {!isArray && <Label
+                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
+                    htmlFor="null-filter"
+                >
+                    <Checkbox id="null-filter"
+                              checked={internalValue === null}
+                              size={"small"}
+                              onCheckedChange={(checked) => {
+                                  if (internalValue !== null)
+                                      updateFilter(operation, null);
+                                  else updateFilter(operation, undefined);
+                              }}/>
+                    Filter for null values
+                </Label>}
+
             </div>
 
         </div>

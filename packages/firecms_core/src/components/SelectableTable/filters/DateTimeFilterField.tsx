@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { VirtualTableWhereFilterOp } from "../../VirtualTable";
-import { DateTimeField, Select, SelectItem } from "@firecms/ui";
+import { Checkbox, DateTimeField, Label, Select, SelectItem } from "@firecms/ui";
 import { useCustomizationController } from "../../../hooks";
 
 interface DateTimeFilterFieldProps {
@@ -43,10 +43,10 @@ export function DateTimeFilterField({
 
     const [fieldOperation, fieldValue] = value || [possibleOperations[0], undefined];
     const [operation, setOperation] = useState<VirtualTableWhereFilterOp>(fieldOperation);
-    const [internalValue, setInternalValue] = useState<Date | undefined>(fieldValue);
+    const [internalValue, setInternalValue] = useState<Date | null | undefined>(fieldValue);
 
-    function updateFilter(op: VirtualTableWhereFilterOp, val: Date | undefined) {
-        let newValue: Date | undefined = val;
+    function updateFilter(op: VirtualTableWhereFilterOp, val: Date | undefined | null) {
+        let newValue: Date | null | undefined = val;
         const prevOpIsArray = multipleSelectOperations.includes(operation);
         const newOpIsArray = multipleSelectOperations.includes(op);
         if (prevOpIsArray !== newOpIsArray) {
@@ -73,7 +73,7 @@ export function DateTimeFilterField({
 
     return (
 
-        <div className="flex w-[440px] items-center">
+        <div className="flex w-[440px]">
             <div className="w-[80px]">
                 <Select value={operation}
                         onValueChange={(value) => {
@@ -88,18 +88,33 @@ export function DateTimeFilterField({
                 </Select>
             </div>
 
-            <div className="flex-grow ml-2">
+            <div className="flex-grow ml-2 flex flex-col gap-2">
 
                 <DateTimeField
                     mode={mode}
                     size={"medium"}
                     locale={locale}
-                    value={internalValue}
+                    value={internalValue ?? undefined}
                     onChange={(dateValue: Date | undefined) => {
                         updateFilter(operation, dateValue === null ? undefined : dateValue);
                     }}
                     clearable={true}
                 />
+
+                <Label
+                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
+                    htmlFor="null-filter"
+                >
+                    <Checkbox id="null-filter"
+                              checked={internalValue === null}
+                              size={"small"}
+                              onCheckedChange={(checked) => {
+                                  if (internalValue !== null)
+                                      updateFilter(operation, null);
+                                  else updateFilter(operation, undefined);
+                              }}/>
+                    Filter for null values
+                </Label>
 
             </div>
 

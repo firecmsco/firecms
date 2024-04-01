@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { EnumValuesChip } from "../../../preview";
 import { VirtualTableWhereFilterOp } from "../../VirtualTable";
-import { ClearIcon, IconButton, Select, SelectItem, TextField } from "@firecms/ui";
+import { Checkbox, ClearIcon, IconButton, Label, Select, SelectItem, TextField } from "@firecms/ui";
 import { EnumValueConfig } from "../../../types";
 
 interface StringNumberFilterFieldProps {
@@ -50,9 +50,10 @@ export function StringNumberFilterField({
 
     const [fieldOperation, fieldValue] = value || [possibleOperations[0], undefined];
     const [operation, setOperation] = useState<VirtualTableWhereFilterOp>(fieldOperation);
-    const [internalValue, setInternalValue] = useState<string | number | string[] | number[] | undefined>(fieldValue);
+    const [internalValue, setInternalValue] = useState<string | number | string[] | number[] | null | undefined>(fieldValue);
+    console.log("internalValue", internalValue)
 
-    function updateFilter(op: VirtualTableWhereFilterOp, val: string | number | string[] | number[] | undefined) {
+    function updateFilter(op: VirtualTableWhereFilterOp, val: string | number | string[] | number[] | null | undefined) {
         let newValue = val;
         const prevOpIsArray = multipleSelectOperations.includes(operation);
         const newOpIsArray = multipleSelectOperations.includes(op);
@@ -84,7 +85,7 @@ export function StringNumberFilterField({
     const multiple = multipleSelectOperations.includes(operation);
     return (
 
-        <div className="flex w-[440px] items-center">
+        <div className="flex w-[440px]">
             <div className={"w-[80px]"}>
                 <Select value={operation}
                         position={"item-aligned"}
@@ -100,11 +101,11 @@ export function StringNumberFilterField({
                 </Select>
             </div>
 
-            <div className="flex-grow ml-2">
+            <div className="flex-grow ml-2 flex flex-col gap-2">
 
                 {!enumValues && <TextField
                     type={dataType === "number" ? "number" : undefined}
-                    value={internalValue !== undefined ? String(internalValue) : ""}
+                    value={internalValue !== undefined && internalValue != null ? String(internalValue) : ""}
                     onChange={(evt) => {
                         const val = dataType === "number"
                             ? parseFloat(evt.target.value)
@@ -149,6 +150,21 @@ export function StringNumberFilterField({
                         ))}
                     </Select>
                 }
+
+                {!isArray && <Label
+                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
+                    htmlFor="null-filter"
+                >
+                    <Checkbox id="null-filter"
+                              checked={internalValue === null}
+                              size={"small"}
+                              onCheckedChange={(checked) => {
+                                  if (internalValue !== null)
+                                      updateFilter(operation, null);
+                                  else updateFilter(operation, undefined);
+                              }}/>
+                    Filter for null values
+                </Label>}
 
             </div>
 

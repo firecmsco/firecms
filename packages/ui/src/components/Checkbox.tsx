@@ -6,6 +6,7 @@ import { cn } from "../util";
 
 export interface CheckboxProps {
     checked: boolean;
+    id?: string;
     disabled?: boolean;
     indeterminate?: boolean;
     onCheckedChange?: (checked: boolean) => void;
@@ -40,6 +41,7 @@ const colorClasses = {
 }
 
 export const Checkbox = ({
+                             id,
                              checked,
                              indeterminate = false,
                              padding = true,
@@ -60,7 +62,7 @@ export const Checkbox = ({
                 : 24;
     return (
         <CheckboxPrimitive.Root
-            asChild
+            id={id}
             checked={indeterminate || isChecked}
             disabled={disabled}
             onCheckedChange={disabled ? undefined : onCheckedChange}>
