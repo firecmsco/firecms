@@ -28,7 +28,6 @@ export default {
                     "sans-serif"
                 ],
                 mono: [
-                    "SFMono-Regular",
                     "IBM Plex Mono",
                     "Space Mono",
                     "Lucida Console",

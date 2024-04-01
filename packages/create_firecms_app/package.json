@@ -4,7 +4,7 @@
   "description": "A CLI to bootstrap FireCMS",
   "packageManager": "yarn@4.1.0",
   "type": "commonjs",
-  "bin": "bin/create-firecms-app",
+  "bin": "bin/create-firecms-app.js",
   "publishConfig": {
     "access": "public"
   },
@@ -35,14 +35,10 @@
     "typescript": "^5.4.2"
   },
   "files": [
-    "bin/",
-    "build/",
-    "src/",
-    "template/"
+    "bin/"
   ],
   "exclude": [
-    "node_modules",
-    "template/node_modules"
+    "node_modules"
   ],
-  "gitHead": "e0160839147a52060b659fcd778418de07883312"
+  "gitHead": "e26534245ded1f4523f180233cfda316c061fa8c"
 }
