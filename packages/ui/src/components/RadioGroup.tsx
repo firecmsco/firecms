@@ -3,6 +3,8 @@ import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
 import { cn } from "../util";
 
 export interface RadioGroupProps {
+    id?: string;
+    children: React.ReactNode;
     name?: string
     required?: boolean;
     disabled?: boolean;
@@ -14,7 +16,7 @@ export interface RadioGroupProps {
     defaultValue?: string;
     value?: string;
 
-    onValueChange(value: string): void;
+    onValueChange?(value: string): void;
 
     className?: string;
 }
@@ -37,6 +39,7 @@ const RadioGroup = React.forwardRef<
 RadioGroup.displayName = RadioGroupPrimitive.Root.displayName
 
 export interface RadioGroupItemProps {
+    id?: string;
     value: string;
     checked?: boolean;
     required?: boolean;
