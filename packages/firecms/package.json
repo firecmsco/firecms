@@ -1,22 +1,16 @@
 {
   "name": "firecms",
-  "version": "3.0.0-canary.35",
-  "description": "A CLI to perform FireCMS operations",
+  "version": "3.0.0-canary.36",
+  "description": "A CLI to perform FireCMS operations. This package is just a wrapper around @firecms/cli",
   "packageManager": "yarn@4.1.0",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.es.js",
-  "types": "dist/index.d.ts",
-  "type": "module",
-  "source": "src/index.ts",
   "bin": "bin/firecms.js",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf templates/template_cloud/node_modules && rm -rf templates/template_cloud/yarn.lock && vite build && tsc --emitDeclarationOnly -p tsconfig.json",
-    "dev": "ts-node src/test.ts",
-    "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
+    "build": "echo \"create-firecms-app: no need to build\" && exit 0",
+    "clean": "echo \"create-firecms-app: no need to clean\" && exit 0"
   },
   "keywords": [
     "cli",
@@ -31,46 +25,18 @@
   "author": "firecms.co",
   "license": "MIT",
   "dependencies": {
-    "arg": "^5.0.2",
-    "axios": "^0.28.0",
-    "chalk": "^4.1.2",
-    "execa": "^4.1.0",
-    "firecms": "^3.0.0-canary.32",
-    "form-data": "^4.0.0",
-    "googleapis": "^134.0.0",
-    "inquirer": "^7.3.3",
-    "json5": "^2.2.3",
-    "listr": "^0.14.3",
-    "ncp": "^2.0.0",
-    "nocache": "^4.0.0",
-    "open": "^10.1.0",
-    "ora": "^8.0.1",
-    "ws": "^8.16.0",
-    "zip-folder": "^1.0.0"
+    "@firecms/cli": "^3.0.0-canary.36"
   },
   "devDependencies": {
     "@types/node": "^20.11.30",
-    "npm-run-all": "^4.1.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.2",
-    "vite": "^5.2.3"
+    "typescript": "^5.4.2"
   },
   "files": [
-    "bin/",
-    "dist/",
-    "src/",
-    "templates/"
+    "bin/"
   ],
-  "exports": {
-    ".": {
-      "import": "./dist/index.es.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
-    }
-  },
   "exclude": [
-    "node_modules",
-    "template/node_modules"
+    "node_modules"
   ],
   "gitHead": "be279b162f84cd024430c59bc4f2a2f12e2ff35b"
 }

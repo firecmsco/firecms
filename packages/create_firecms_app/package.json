@@ -1,6 +1,6 @@
 {
   "name": "create-firecms-app",
-  "version": "3.0.0-canary.35",
+  "version": "3.0.0-canary.36",
   "description": "A CLI to bootstrap FireCMS",
   "packageManager": "yarn@4.1.0",
   "type": "commonjs",
@@ -11,8 +11,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "echo \"create-firecms-app: no need to build\" && exit 0",
-    "clean": "echo \"create-firecms-app: no need to clean\" && exit 0",
-    "dev": "ts-node src/index.ts"
+    "clean": "echo \"create-firecms-app: no need to clean\" && exit 0"
   },
   "keywords": [
     "cli",
@@ -27,7 +26,7 @@
   "author": "firecms.co",
   "license": "MIT",
   "dependencies": {
-    "@firecms/cli": "^3.0.0-canary.35"
+    "@firecms/cli": "^3.0.0-canary.36"
   },
   "devDependencies": {
     "@types/node": "^20.11.30",

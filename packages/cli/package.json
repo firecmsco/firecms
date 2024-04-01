@@ -1,19 +1,22 @@
 {
   "name": "@firecms/cli",
-  "version": "3.0.0-canary.35",
+  "version": "3.0.0-canary.36",
   "description": "A CLI to perform FireCMS operations",
   "packageManager": "yarn@4.1.0",
-  "type": "commonjs",
-  "bin": {
-    "firecms": "bin/firecms.js"
-  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "source": "src/index.ts",
+  "bin": "bin/firecms.js",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "echo \"@firecms/cli: no need to build\" && exit 0",
-    "clean": "echo \"@firecms/cli: no need to clean\" && exit 0",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf templates/template_cloud/node_modules && rm -rf templates/template_cloud/yarn.lock && vite build && tsc --emitDeclarationOnly -p tsconfig.json",
+    "dev": "ts-node src/test.ts",
+    "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
   },
   "keywords": [
     "cli",
@@ -28,7 +31,21 @@
   "author": "firecms.co",
   "license": "MIT",
   "dependencies": {
-    "firecms": "^3.0.0-canary.35"
+    "arg": "^5.0.2",
+    "axios": "^0.28.0",
+    "chalk": "^4.1.2",
+    "execa": "^4.1.0",
+    "form-data": "^4.0.0",
+    "googleapis": "^134.0.0",
+    "inquirer": "^7.3.3",
+    "json5": "^2.2.3",
+    "listr": "^0.14.3",
+    "ncp": "^2.0.0",
+    "nocache": "^4.0.0",
+    "open": "^10.1.0",
+    "ora": "^8.0.1",
+    "ws": "^8.16.0",
+    "zip-folder": "^1.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.30",
@@ -51,7 +68,8 @@
     }
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "template/node_modules"
   ],
-  "gitHead": "44aa642c7493b8a0e3e330b837f6c13374d6fbc9"
+  "gitHead": "be279b162f84cd024430c59bc4f2a2f12e2ff35b"
 }
