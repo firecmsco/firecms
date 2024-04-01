@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../util";
+import { Label } from "./Label";
 
 export type InputLabelProps = {
     children?: React.ReactNode;
@@ -27,7 +28,7 @@ export const InputLabel = React.forwardRef<HTMLLabelElement, InputLabelProps>(fu
         }, className);
 
     return (
-        <label
+        <Label
             data-shrink={shrink}
             ref={ref}
             className={computedClassName}

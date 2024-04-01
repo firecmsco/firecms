@@ -17,7 +17,7 @@ Consider this before migrating!
 
 ## Create a project in app.firecms.co
 
-FireCMS 3.0 now requires to create a project in [app.firecms.co](https://app.firecms.co).
+FireCMS Cloud requires the creation of a project in [app.firecms.co](https://app.firecms.co).
 
 The new version relies on a backend that allows you to manage your
 collections and schemas. The final users are now able to modify collections,
@@ -101,7 +101,7 @@ of your project needs to be in a specific format.
 The `index.ts` file should export a `FireCMSAppConfig` object, which is defined as follows:
 
 ```typescript
-import {CMSView,CMSViewsBuilder, EntityCollection,EntityCollectionsBuilder,EntityCustomView,PropertyConfig } from "@firecms/cloud";
+import {CMSView, CMSViewsBuilder, EntityCollection, EntityCollectionsBuilder, EntityCustomView, PropertyConfig} from "@firecms/cloud";
 export type FireCMSAppConfig = {
 
     /**

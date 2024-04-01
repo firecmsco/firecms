@@ -9,10 +9,19 @@ All the components in this package are exported in the package `@firecms/ui`,
 but also reexported in `@firecms/cloud`, for convenience.
 :::
 
-**FireCMS** has a high quality set of components that you can use to build your own custom views.
-You can use them in your own React applications or in your own CMS views.
+**FireCMS UI** is a high quality set of components that you can use to build your own custom views. You can
+use these components to build your own FireCMS views, or in any other React application. You just need to install
+`tailwindcss` and the `@firecms/ui` package.
+
 All the components are exported from the `@firecms/ui` package. These are the same components used internally in **FireCMS**.
 
+:::note Why build this UI kit?
+FireCMS was using MUI until version 3.0. MUI provides ready to use components with intuitive APIs, but it also
+comes with a lot of complexity and overhead. We wanted to build a simpler and more flexible UI kit that could be used
+in any React project, not just in FireCMS.
+We also wanted to make it easy to transition from MUI to our new UI kit, so we kept the API as similar as possible.
+The result it a set of components that are easy to use, easy to customize, **much more performant** and with a smaller bundle size.
+:::
 
 The components are primarily built using **Radix UI** primitives and **tailwindcss**. This means that you can easily customize them
 using tailwindcss classes or override the styles using CSS.

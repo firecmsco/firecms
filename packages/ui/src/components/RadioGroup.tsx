@@ -1,12 +1,31 @@
 import * as React from "react"
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
 import { cn } from "../util";
-import { CircleIcon } from "../icons";
+
+export interface RadioGroupProps {
+    name?: string
+    required?: boolean;
+    disabled?: boolean;
+    /**
+     * Whether keyboard navigation should loop around
+     * @defaultValue false
+     */
+    loop?: boolean;
+    defaultValue?: string;
+    value?: string;
+
+    onValueChange(value: string): void;
+
+    className?: string;
+}
 
 const RadioGroup = React.forwardRef<
     React.ElementRef<typeof RadioGroupPrimitive.Root>,
-    React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>
->(({ className, ...props }, ref) => {
+    RadioGroupProps
+>(({
+       className,
+       ...props
+   }, ref) => {
     return (
         <RadioGroupPrimitive.Root
             className={cn("grid gap-2", className)}
@@ -17,10 +36,19 @@ const RadioGroup = React.forwardRef<
 })
 RadioGroup.displayName = RadioGroupPrimitive.Root.displayName
 
+export interface RadioGroupItemProps {
+    value: string;
+    checked?: boolean;
+    required?: boolean;
+    className?: string;
+}
 const RadioGroupItem = React.forwardRef<
     React.ElementRef<typeof RadioGroupPrimitive.Item>,
-    React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>
->(({ className, ...props }, ref) => {
+    RadioGroupItemProps
+>(({
+       className,
+       ...props
+   }, ref) => {
     return (
         <RadioGroupPrimitive.Item
             ref={ref}
@@ -31,7 +59,7 @@ const RadioGroupItem = React.forwardRef<
             {...props}
         >
             <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
-                <div className="h-2.5 w-2.5 fill-current text-current bg-primary rounded-lg" />
+                <div className="h-2.5 w-2.5 fill-current text-current bg-primary rounded-lg"/>
             </RadioGroupPrimitive.Indicator>
         </RadioGroupPrimitive.Item>
     )

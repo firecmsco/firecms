@@ -110,8 +110,9 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     --ifm-toc-border-color: var(--ifm-border-color);
 
     --ifm-paragraph-margin-bottom: 1.0rem;
-    --ifm-leading-desktop: 1.25;
-    --ifm-leading: calc(var(--ifm-leading-desktop) * 1rem);
+    --ifm-leading-desktop: 1;
+    /*--ifm-leading-desktop: 1.25;*/
+    /*--ifm-leading: calc(var(--ifm-leading-desktop) * 1rem);*/
     /*--ifm-custom-navbar-background-color: rgba(255, 255, 255, 0.33);*/
     /*--ifm-heading-font-family: 'Spline Sans Mono', "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
     /*--ifm-font-family-base: 'IBM Plex Mono', 'Noto Sans', sans-serif,  Helvetica, Arial, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, system-ui, "Segoe UI",  sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
@@ -257,6 +258,10 @@ article blockquote {
 article code {
     font-weight: 600;
     font-size: .9rem;
+}
+
+code {
+    background: #FFFFFF22;
 }
 
 .theme-code-block {
