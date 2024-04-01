@@ -126,7 +126,7 @@ module.exports = {
                 "components/loading_button",
                 "components/markdown",
                 "components/menu",
-                "components/multi_select",
+                // "components/multi_select",
                 "components/paper",
                 "components/popover",
                 "components/radio_group",

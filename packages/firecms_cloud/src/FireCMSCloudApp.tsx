@@ -47,7 +47,7 @@ import {
     useFirestoreCollectionsConfigController,
 } from "./hooks";
 
-import { FireCMSAppProps } from "./FireCMSAppProps";
+import { FireCMSCloudAppProps } from "./FireCMSCloudAppProps";
 import { ApiError, FireCMSAppConfig, FireCMSBackend, FireCMSCloudUser, FireCMSCloudUserWithRoles } from "./types";
 import { RESERVED_GROUPS, resolveCollectionConfigPermissions } from "./utils";
 import {
@@ -93,14 +93,14 @@ const DOCS_LIMIT = 200;
  * @constructor
  * @group Firebase
  */
-export function FireCMSApp({
+export function FireCMSCloudApp({
                                projectId,
                                appConfig,
                                backendApiHost = "https://api-drplyi3b6q-ey.a.run.app", // TODO
                                onAnalyticsEvent,
                                basePath,
                                baseCollectionPath,
-                           }: FireCMSAppProps) {
+                           }: FireCMSCloudAppProps) {
 
     const modeController = useBuildModeController();
 

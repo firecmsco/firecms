@@ -142,7 +142,7 @@ export function Select({
                         "overflow-visible",
                         size === "small" ? "h-[42px]" : "h-[64px]"
                     )}>
-                    <SelectPrimitive.Value >
+                    <SelectPrimitive.Value placeholder={placeholder}>
                         {renderValue &&
                             (value && Array.isArray(value)
                                 ? value.map((v, i) => (

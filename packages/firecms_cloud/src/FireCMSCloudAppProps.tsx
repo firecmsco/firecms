@@ -1,10 +1,10 @@
 import { FireCMSAppConfig } from "./types";
 
 /**
- * Main entry point that defines the CMS configuration
+ * Main entry point that defines the FireCMS Cloud configuration
  * @group Firebase
  */
-export type FireCMSAppProps = {
+export type FireCMSCloudAppProps = {
 
     /**
      * Firebase project id this CMS is connected to.

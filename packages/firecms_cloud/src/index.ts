@@ -6,7 +6,8 @@ export * from "./utils";
 export * from "./api/projects";
 
 export * from "./FireCMSApp";
-export type { FireCMSAppProps } from "./FireCMSAppProps";
+export * from "./FireCMSCloudApp";
+export type { FireCMSCloudAppProps } from "./FireCMSCloudAppProps";
 
 // we export everything in these packages for simplicity
 export * from "@firecms/firebase";

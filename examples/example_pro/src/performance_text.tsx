@@ -36,15 +36,13 @@ function onFinished() {
     alert(`"finished, avg: ${avg}, count: ${measurements.length}`);
 }
 
-
 function onRenderCallback(
     id: string,
     phase: "mount" | "update" | "nested-update",
     actualDuration: number,
     baseDuration: number,
     startTime: number,
-    commitTime: number,
-    interactions: Set<any>
+    commitTime: number
 ) {
     measurements.push(actualDuration)
     // if (actualDuration > 10)

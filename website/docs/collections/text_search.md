@@ -48,7 +48,7 @@ import {
     FirestoreTextSearchController,
     buildCollection,
     buildCollection,
-    FireCMSApp,
+    FireCMSCloudApp,
     EntityCollectionsBuilder
 } from "@firecms/cloud";
 
@@ -57,7 +57,10 @@ const client: SearchClient | undefined = algoliasearch("YOUR_ALGOLIA_APP_ID", "Y
 const productsIndex = client.initIndex("products");
 
 const textSearchController: FirestoreTextSearchController =
-    ({ path, searchString }) => {
+    ({
+         path,
+         searchString
+     }) => {
         if (path === "products")
             return performAlgoliaTextSearch(productsIndex, searchString);
         return undefined;
@@ -78,7 +81,7 @@ export default function App() {
         }
     });
 
-    return <FireCMSApp
+    return <FireCMSCloudApp
         name={"My Online Shop"}
         collections={[productCollection]}
         textSearchController={textSearchController}
