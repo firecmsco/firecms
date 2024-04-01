@@ -19,7 +19,6 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            "@firecms/cli": path.resolve(__dirname, "../../packages/cli/src"),
             "@firecms/core": path.resolve(__dirname, "../../packages/firecms_core/src"),
             "@firecms/ui": path.resolve(__dirname, "../../packages/ui/src"),
             "@firecms/formex": path.resolve(__dirname, "../../packages/formex/src"),

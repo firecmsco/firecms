@@ -496,11 +496,12 @@ export function CollectionPropertiesEditorForm({
                 collectionEditable={collectionEditable}
                 existingPropertyKeys={values.propertiesOrder as string[]}/>
 
-            <GetCodeDialog
-                collection={values}
-                open={codeDialogOpen}
-                onOpenChange={setCodeDialogOpen}/>
-
+            <ErrorBoundary>
+                <GetCodeDialog
+                    collection={values}
+                    open={codeDialogOpen}
+                    onOpenChange={setCodeDialogOpen}/>
+            </ErrorBoundary>
         </>
     );
 }

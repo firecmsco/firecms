@@ -82,9 +82,9 @@ export async function uploadZip(projectId: string, zipFilePath: string, env: "pr
 
         if (response.status === 200) {
             spinner.succeed();
-            console.log("\n🔥 Successfully uploaded new build");
+            console.log("🔥 Successfully uploaded new build");
             const baseUrl = env === "prod" ? "https://app.firecms.co/" : "https://staging.app.firecms.co/";
-            console.log("You can find the build at: ", baseUrl + `p/${projectId}`);
+            console.log("\nCheck it out at", baseUrl + `p/${projectId}`);
         } else {
             console.error("There was an error uploading the build");
             console.error(response.data);

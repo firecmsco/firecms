@@ -5,11 +5,17 @@ import JSON5 from "json5";
 import { Highlight, themes } from "prism-react-renderer"
 import { camelCase } from "./utils/strings";
 
-export function GetCodeDialog({ collection, onOpenChange, open }: { onOpenChange: (open: boolean) => void, collection: any, open: any }) {
+export function GetCodeDialog({
+                                  collection,
+                                  onOpenChange,
+                                  open
+                              }: { onOpenChange: (open: boolean) => void, collection: any, open: any }) {
 
     const snackbarController = useSnackbarController();
 
-    const code = "import { EntityCollection } from \"firecms\";\n\nconst " + (collection.name ? camelCase(collection.name) : "my") + "Collection:EntityCollection = " + JSON5.stringify(collectionToCode(collection), null, "\t");
+    const code = collection
+        ? "import { EntityCollection } from \"firecms\";\n\nconst " + (collection?.name ? camelCase(collection.name) : "my") + "Collection:EntityCollection = " + JSON5.stringify(collectionToCode(collection), null, "\t")
+        : "No collection selected";
     return <Dialog open={open}
                    onOpenChange={onOpenChange}
                    maxWidth={"4xl"}>
@@ -29,7 +35,13 @@ export function GetCodeDialog({ collection, onOpenChange, open }: { onOpenChange
                 code={code}
                 language="typescript"
             >
-                {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                {({
+                      className,
+                      style,
+                      tokens,
+                      getLineProps,
+                      getTokenProps
+                  }) => (
                     <pre style={style} className={"p-4 rounded text-sm"}>
         {tokens.map((line, i) => (
             <div key={i} {...getLineProps({ line })}>

@@ -45,7 +45,7 @@ function findSpecificParentDir(currentDir:string, targetDirName:string) {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const targetDirPath = findSpecificParentDir(__dirname, 'cli');
+const targetDirPath = findSpecificParentDir(__dirname, 'firecms');
 
 
 export type Template = "cloud" | "v2" | "pro" | "community";

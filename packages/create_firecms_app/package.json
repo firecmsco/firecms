@@ -27,7 +27,7 @@
   "author": "firecms.co",
   "license": "MIT",
   "dependencies": {
-    "firecms": "^3.0.0-canary.35"
+    "@firecms/cli": "^3.0.0-canary.35"
   },
   "devDependencies": {
     "@types/node": "^20.11.30",
@@ -40,5 +40,5 @@
   "exclude": [
     "node_modules"
   ],
-  "gitHead": "44aa642c7493b8a0e3e330b837f6c13374d6fbc9"
+  "gitHead": "be279b162f84cd024430c59bc4f2a2f12e2ff35b"
 }

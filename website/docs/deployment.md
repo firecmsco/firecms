@@ -30,8 +30,10 @@ update your code.
 ### FireCMS CLI
 
 The FireCMS CLI is a tool that allows you to deploy your CMS to FireCMS Cloud
-with a single command. In your project, you should have `@firecms/cli` as a dev
-dependency:
+with a single command. In your project, you should have `firecms` as a dev
+dependency. This package was previously `@firecms/cli`.
+
+```bash
 
 The available commands are:
 

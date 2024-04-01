@@ -13,12 +13,13 @@ export default defineConfig(() => ({
     build: {
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
-            name: "FireCMS Firebase",
+            name: "FireCMS CLI",
             fileName: (format) => {
                 if (format === "es")
                     return `index.${format}.js`;
                 else if (format === "umd")
                     return `index.cjs`;
+                throw new Error("Unexpected format");
             }
         },
         target: "esnext",
