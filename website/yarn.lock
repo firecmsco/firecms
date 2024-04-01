@@ -11705,9 +11705,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@link:../../node_modules/react-dom::locator=website%40workspace%3A.":
+"react-dom@link:../node_modules/react-dom::locator=website%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "react-dom@link:../../node_modules/react-dom::locator=website%40workspace%3A."
+  resolution: "react-dom@link:../node_modules/react-dom::locator=website%40workspace%3A."
   languageName: node
   linkType: soft
 
@@ -11882,9 +11882,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@link:../../node_modules/react::locator=website%40workspace%3A.":
+"react@link:../node_modules/react::locator=website%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "react@link:../../node_modules/react::locator=website%40workspace%3A."
+  resolution: "react@link:../node_modules/react::locator=website%40workspace%3A."
   languageName: node
   linkType: soft
 
@@ -14078,8 +14078,8 @@ __metadata:
     postprocessing: ^6.35.1
     prism-react-renderer: ^2.3.1
     raw-loader: ^4.0.2
-    react: "link:../../node_modules/react"
-    react-dom: "link:../../node_modules/react-dom"
+    react: "link:../node_modules/react"
+    react-dom: "link:../node_modules/react-dom"
     react-fast-marquee: ^1.6.4
     react-syntax-highlighter: ^15.5.0
     react-transition-group: ^4.4.5
