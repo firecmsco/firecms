@@ -123,7 +123,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
 
     async function getRootCollections(projectId: string,
                                       googleAccessToken?: string,
-                                      retries = 20): Promise<string[]> {
+                                      retries = 10): Promise<string[]> {
         if (rootCollectionsCache[projectId]) {
             return rootCollectionsCache[projectId];
         }
@@ -144,7 +144,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
 
         async function retry() {
             // wait 2 seconds
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            await new Promise(resolve => setTimeout(resolve, 5000));
             console.debug("Retrying getRootCollections", retries);
             return getRootCollections(projectId, googleAccessToken, retries - 1);
         }
