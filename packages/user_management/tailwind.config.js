@@ -25,7 +25,7 @@ export default {
                     "sans-serif"
                 ],
                 mono: [
-                    "IBM Plex Mono",
+                    "JetBrains Mono",
                     "Space Mono",
                     "Lucida Console",
                     "monospace"

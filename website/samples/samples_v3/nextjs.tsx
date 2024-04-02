@@ -4,7 +4,7 @@ import React from "react";
 import { buildCollection, buildProperty, EntityReference, FireCMSCloudApp, } from "@firecms/cloud";
 
 import "typeface-rubik";
-import "@fontsource/ibm-plex-mono";
+import "@fontsource/jetbrains-mono";
 
 const projectId = "YOUR_PROJECT_ID";
 

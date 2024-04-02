@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { BrowserRouter } from "react-router-dom";
 
 import "typeface-rubik";
-import "@fontsource/ibm-plex-mono";
+import "@fontsource/jetbrains-mono";
 import "@fontsource/roboto"
 
 import { CenteredView } from "@firecms/ui";

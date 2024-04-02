@@ -2686,7 +2686,7 @@ __metadata:
   dependencies:
     "@firecms/formex": ^3.0.0-beta.5
     "@firecms/ui": ^3.0.0-beta.5
-    "@fontsource/ibm-plex-mono": ^5.0.12
+    "@fontsource/jetbrains-mono": ^5.0.19
     "@fontsource/roboto": ^5.0.12
     "@hello-pangea/dnd": ^16.5.0
     "@jest/globals": ^29.7.0
@@ -3078,10 +3078,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource/ibm-plex-mono@npm:^5.0.12":
-  version: 5.0.12
-  resolution: "@fontsource/ibm-plex-mono@npm:5.0.12"
-  checksum: 0568bc922ecbc072163c304df784d849d962df1005df0ec0a915848fca30d72804b0732ca248f9c8c7db8bee9dddcb7b229490571094b8cbc36a67a82c72727c
+"@fontsource/jetbrains-mono@npm:^5.0.19":
+  version: 5.0.19
+  resolution: "@fontsource/jetbrains-mono@npm:5.0.19"
+  checksum: 9f28e321cfb3603c691c28a398edf5f21cae8a9037470a0a5d3ad66acb82535f2b27144e25489d29a184d93d522c023b416b703db8f1b7bf2a12e752ae411fd5
   languageName: node
   linkType: hard
 

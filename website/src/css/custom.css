@@ -38,13 +38,22 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     background-image: linear-gradient(to right, rgb(236, 76, 81), rgb(149, 67, 193), rgb(98 85 250));
 }
 
+/* latin-ext */
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 100 800;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbV2o-flEEny0FZhsfKu5WU4xD1OwGtT0rU3BE.woff2) format('woff2');
+    unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
 /* latin */
 @font-face {
-    font-family: 'IBM Plex Mono';
+    font-family: 'JetBrains Mono';
     font-style: normal;
-    font-weight: 400;
+    font-weight: 100 800;
     font-display: swap;
-    src: url(https://fonts.gstatic.com/s/ibmplexmono/v19/-F63fjptAgt5VM-kVkqdyU8n1i8q131nj-o.woff2) format('woff2');
+    src: url(https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbV2o-flEEny0FZhsfKu5WU4xD7OwGtT0rU.woff2) format('woff2');
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -115,7 +124,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     /*--ifm-leading: calc(var(--ifm-leading-desktop) * 1rem);*/
     /*--ifm-custom-navbar-background-color: rgba(255, 255, 255, 0.33);*/
     /*--ifm-heading-font-family: 'Spline Sans Mono', "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
-    /*--ifm-font-family-base: 'IBM Plex Mono', 'Noto Sans', sans-serif,  Helvetica, Arial, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, system-ui, "Segoe UI",  sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
+    /*--ifm-font-family-base: 'JetBrains Mono', 'Noto Sans', sans-serif,  Helvetica, Arial, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, system-ui, "Segoe UI",  sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
 
     --ifm-font-family-base: 'Rubik', "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     --ifm-heading-font-family: 'Rubik', 'Noto Sans', sans-serif, Helvetica, Arial, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, system-ui, "Segoe UI", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -155,7 +164,7 @@ html[data-theme=dark] .DocSearch-Button:hover {
 }
 
 [role="banner"] {
-    font-family: "IBM Plex Mono";
+    font-family: "JetBrains Mono";
 }
 
 html[data-theme='dark'] {

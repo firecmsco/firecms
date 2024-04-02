@@ -4,7 +4,7 @@ import { GoogleAuthProvider } from "firebase/auth";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import "typeface-rubik";
-import "@fontsource/ibm-plex-mono";
+import "@fontsource/jetbrains-mono";
 
 import {
     buildCollection,

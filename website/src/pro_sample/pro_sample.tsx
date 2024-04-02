@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 
 import "typeface-rubik";
-import "@fontsource/ibm-plex-mono";
+import "@fontsource/jetbrains-mono";
 import "@fontsource/roboto"
 
 import { getAnalytics, logEvent } from "firebase/analytics";

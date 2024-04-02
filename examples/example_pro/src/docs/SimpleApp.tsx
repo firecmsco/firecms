@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { Authenticator, buildCollection, buildProperty, EntityReference } from "@firecms/core";
 
 import "typeface-rubik";
-import "@fontsource/ibm-plex-mono";
+import "@fontsource/jetbrains-mono";
 import { FirebaseUserWrapper, FireCMSFirebaseApp } from "@firecms/firebase";
 
 // TODO: Replace with your config

@@ -26,7 +26,7 @@ No need to add any subscription key or anything like that.
 import React from "react";
 import { FirebaseCMSApp } from "@firecms/core";
 import "typeface-rubik";
-import "@fontsource/ibm-plex-mono";
+import "@fontsource/jetbrains-mono";
 
 import { useDataImportPlugin } from "@firecms/data_import_export";
 

@@ -2,7 +2,7 @@ import React from "react";
 import { buildCollection, EntityCollectionsBuilder, } from "@firecms/core";
 
 import "typeface-rubik";
-import "@fontsource/ibm-plex-mono";
+import "@fontsource/jetbrains-mono";
 import { FireCMSFirebaseApp } from "@firecms/firebase";
 
 // TODO: Replace with your config
