@@ -107,6 +107,10 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
      *       `subcollection:`. e.g. `subcollection:orders`.
      *     - If you are using a collection group, you will also have an
      *       additional `collectionGroupParent` column.
+     * You can use this prop to hide some properties from the table view.
+     * Note that if you set this prop, other ways to hide fields, like
+     * `hidden` in the property definition,will be ignored.
+     * `propertiesOrder` has precedence over `hidden`.
      */
     propertiesOrder?: Extract<keyof M, string>[];
 
