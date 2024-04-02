@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { doc, Firestore, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
+import { doc, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
 import { ProjectSubscriptionPlan } from "../types";
 import { UploadFileProps } from "@firecms/core";
@@ -75,19 +75,11 @@ export function useBuildProjectConfig({
 
     const loadedProjectIdRef = useRef<string | undefined>(projectId);
 
-    const firestoreRef = useRef<Firestore>();
-    const storageRef = useRef<FirebaseStorage>();
-
     const [logo, setLogo] = React.useState<string | undefined>();
 
     useEffect(() => {
-        if (!backendFirebaseApp) return;
-        firestoreRef.current = getFirestore(backendFirebaseApp);
-        storageRef.current = getStorage(backendFirebaseApp);
-    }, [backendFirebaseApp]);
-
-    useEffect(() => {
-        const firestore = firestoreRef.current;
+        if (!backendFirebaseApp) throw Error("useBuildProjectConfig Firebase not initialised");
+        const firestore = getFirestore(backendFirebaseApp);
         if (!firestore || !configPath) return;
 
         return onSnapshot(doc(firestore, configPath),
@@ -122,9 +114,10 @@ export function useBuildProjectConfig({
     }, [primaryColor, secondaryColor]);
 
     const uploadLogo = useCallback(async (file: File): Promise<void> => {
-        const firestore = firestoreRef.current;
+        if (!backendFirebaseApp) throw Error("useBuildProjectConfig Firebase not initialised");
+        const firestore = getFirestore(backendFirebaseApp);
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        const storage = storageRef.current;
+        const storage = getStorage(backendFirebaseApp);
         if (!storage) throw Error("useFirestoreConfigurationPersistence Storage not initialised");
         const fileRef = await uploadFile(storage, {
             file,
@@ -135,13 +128,15 @@ export function useBuildProjectConfig({
     }, [configPath]);
 
     const updateProjectName = useCallback(async (name: string): Promise<void> => {
-        const firestore = firestoreRef.current;
+        if (!backendFirebaseApp) throw Error("useBuildProjectConfig Firebase not initialised");
+        const firestore = getFirestore(backendFirebaseApp);
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         return setDoc(doc(firestore, configPath), { name }, { merge: true });
     }, [configPath]);
 
     const updateLocalTextSearchEnabled = useCallback(async (allowed: boolean): Promise<void> => {
-        const firestore = firestoreRef.current;
+        if (!backendFirebaseApp) throw Error("useBuildProjectConfig Firebase not initialised");
+        const firestore = getFirestore(backendFirebaseApp);
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         return setDoc(doc(firestore, configPath), { local_text_search_enabled: allowed }, { merge: true });
     }, [configPath]);
@@ -215,7 +210,8 @@ export function useBuildProjectConfig({
     const canUseLocalTextSearch = subscriptionPlan !== "free";
 
     const updatePrimaryColor = useCallback(async (color?: string): Promise<void> => {
-        const firestore = firestoreRef.current;
+        if (!backendFirebaseApp) throw Error("useBuildProjectConfig Firebase not initialised");
+        const firestore = getFirestore(backendFirebaseApp);
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         setPrimaryColor(color);
         if (canModifyTheme)
@@ -223,7 +219,8 @@ export function useBuildProjectConfig({
     }, [configPath, canModifyTheme]);
 
     const updateSecondaryColor = useCallback(async (color?: string): Promise<void> => {
-        const firestore = firestoreRef.current;
+        if (!backendFirebaseApp) throw Error("useBuildProjectConfig Firebase not initialised");
+        const firestore = getFirestore(backendFirebaseApp);
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         setSecondaryColor(color);
         if (canModifyTheme)

@@ -1,18 +1,17 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect } from "react";
 import {
     addDoc,
     collection,
     deleteDoc,
     doc,
     DocumentSnapshot,
-    Firestore,
     getFirestore,
     onSnapshot,
     setDoc
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
 import { UserManagement } from "../types";
-import { Authenticator, PermissionsBuilder, Role, User } from "@firecms/core";
+import { Authenticator, PermissionsBuilder, Role, User, useTraceUpdate } from "@firecms/core";
 import { resolveUserRolePermissions } from "../utils";
 
 type UserWithRoleIds = User & { roles: string[] };
@@ -73,8 +72,6 @@ export function useBuildFirestoreUserManagement({
                                                     includeCollectionConfigPermissions
                                                 }: UserManagementParams): UserManagement {
 
-    const firestoreRef = useRef<Firestore>();
-
     const [rolesLoading, setRolesLoading] = React.useState<boolean>(true);
     const [usersLoading, setUsersLoading] = React.useState<boolean>(true);
     const [roles, setRoles] = React.useState<Role[]>([]);
@@ -89,11 +86,6 @@ export function useBuildFirestoreUserManagement({
     const [usersError, setUsersError] = React.useState<Error | undefined>();
 
     const loading = rolesLoading || usersLoading;
-
-    useEffect(() => {
-        if (!firebaseApp) return;
-        firestoreRef.current = getFirestore(firebaseApp);
-    }, [firebaseApp]);
 
     useEffect(() => {
         if (!firebaseApp || !rolesPath) return;
@@ -145,7 +137,8 @@ export function useBuildFirestoreUserManagement({
     }, [firebaseApp, usersPath]);
 
     const saveUser = useCallback(async (user: User): Promise<User> => {
-        const firestore = firestoreRef.current;
+        if (!firebaseApp) throw Error("useFirestoreConfigurationPersistence Firebase not initialised");
+        const firestore = getFirestore(firebaseApp);
         if (!firestore || !usersPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         console.debug("Persisting user", user);
         const roleIds = user.roles?.map(r => r.id);
@@ -165,7 +158,8 @@ export function useBuildFirestoreUserManagement({
     }, [usersPath]);
 
     const saveRole = useCallback((role: Role): Promise<void> => {
-        const firestore = firestoreRef.current;
+        if (!firebaseApp) throw Error("useFirestoreConfigurationPersistence Firebase not initialised");
+        const firestore = getFirestore(firebaseApp);
         if (!firestore || !rolesPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         console.debug("Persisting role", role);
         const {
@@ -177,7 +171,8 @@ export function useBuildFirestoreUserManagement({
     }, [rolesPath]);
 
     const deleteUser = useCallback(async (user: User): Promise<void> => {
-        const firestore = firestoreRef.current;
+        if (!firebaseApp) throw Error("useFirestoreConfigurationPersistence Firebase not initialised");
+        const firestore = getFirestore(firebaseApp);
         if (!firestore || !usersPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         console.debug("Deleting", user);
         const { uid } = user;
@@ -185,7 +180,8 @@ export function useBuildFirestoreUserManagement({
     }, [usersPath]);
 
     const deleteRole = useCallback((role: Role): Promise<void> => {
-        const firestore = firestoreRef.current;
+        if (!firebaseApp) throw Error("useFirestoreConfigurationPersistence Firebase not initialised");
+        const firestore = getFirestore(firebaseApp);
         if (!firestore || !rolesPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         console.debug("Deleting", role);
         const { id } = role;
@@ -230,7 +226,7 @@ export function useBuildFirestoreUserManagement({
         }
 
         throw Error("Could not find a user with the provided email");
-    }, [loading, users])
+    }, [loading, userIds])
 
     return {
         loading,

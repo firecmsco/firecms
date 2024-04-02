@@ -243,6 +243,18 @@ function App() {
         dataSourceDelegate: firestoreDelegate
     });
 
+    // useTraceUpdate({
+    //     collections,
+    //     views,
+    //     propertyConfigs,
+    //     userManagement,
+    //     userConfigPersistence,
+    //     firestoreDelegate,
+    //     storageSource,
+    //     authController,
+    //     navigationController
+    // });
+
     if (firebaseConfigLoading || !firebaseApp) {
         return <CircularProgressCenter/>;
     }
