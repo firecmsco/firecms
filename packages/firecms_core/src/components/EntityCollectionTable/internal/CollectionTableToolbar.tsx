@@ -84,9 +84,9 @@ export function CollectionTableToolbar(props: CollectionTableToolbarProps) {
 
                 {sizeSelect}
 
-                {props.actionsStart}
-
                 {clearFilterButton}
+
+                {props.actionsStart}
 
             </div>
 

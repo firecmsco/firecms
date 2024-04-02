@@ -14,6 +14,7 @@ import { PropertyAddColumnComponent } from "./ui/PropertyAddColumnComponent";
 import { NewCollectionButton } from "./ui/NewCollectionButton";
 import { AddIcon, Button, Typography } from "@firecms/ui";
 import { useCollectionEditorController } from "./useCollectionEditorController";
+import { EditorCollectionActionStart } from "./ui/EditorCollectionActionStart";
 
 export interface CollectionConfigControllerProps<EC extends PersistedCollection = PersistedCollection, UserType extends User = User> {
 
@@ -105,6 +106,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
             AdditionalCards: introMode ? undefined : NewCollectionCard,
         },
         collectionView: {
+            CollectionActionsStart: EditorCollectionActionStart,
             CollectionActions: EditorCollectionAction,
             HeaderAction: CollectionViewHeaderAction,
             AddColumnComponent: PropertyAddColumnComponent

@@ -23,8 +23,6 @@ export function EditorCollectionAction({
     const authController = useAuthController();
     const navigationController = useNavigationController();
     const collectionEditorController = useCollectionEditorController();
-    const configController = useCollectionsConfigController();
-    const snackbarController = useSnackbarController();
 
     const parentCollection = navigationController.getCollectionFromIds(parentCollectionIds);
 
@@ -34,54 +32,6 @@ export function EditorCollectionAction({
             collection
         }).editCollections
         : true;
-
-    let saveDefaultFilterButton = null;
-    if (!equal(getObjectOrNull(tableController.filterValues), getObjectOrNull(collection.initialFilter)) ||
-        !equal(getObjectOrNull(tableController.sortBy), getObjectOrNull(collection.initialSort))) {
-        saveDefaultFilterButton = <>
-            {(collection.initialFilter || collection.initialSort) && <Tooltip
-                title={"Reset to default filter and sort"}>
-                <Button
-                    color={"primary"}
-                    size={"small"}
-                    variant={"text"}
-                    onClick={() => {
-                        tableController.clearFilter?.();
-                        if (collection?.initialFilter)
-                            tableController.setFilterValues?.(collection?.initialFilter);
-                        if (collection?.initialSort)
-                            tableController.setSortBy?.(collection?.initialSort);
-                    }}>
-                    <UndoIcon/>
-                </Button>
-            </Tooltip>}
-
-            <Tooltip
-                title={tableController.sortBy || tableController.filterValues ? "Save default filter and sort" : "Clear default filter and sort"}>
-                <Button
-                    color={"primary"}
-                    size={"small"}
-                    variant={"outlined"}
-                    onClick={() => configController
-                        ?.saveCollection({
-                            id: collection.id,
-                            parentCollectionIds,
-                            collectionData: mergeDeep(collection as PersistedCollection,
-                                {
-                                    initialFilter: tableController.filterValues ?? null,
-                                    initialSort: tableController.sortBy ?? null
-                                })
-                        }).then(() => {
-                            snackbarController.open({
-                                type: "success",
-                                message: "Default config saved"
-                            });
-                        })}>
-                    <SaveIcon/>
-                </Button>
-            </Tooltip>
-        </>;
-    }
 
     const editorButton = <Tooltip
         title={canEditCollection ? "Edit collection" : "You don't have permissions to edit this collection"}>
@@ -96,7 +46,6 @@ export function EditorCollectionAction({
     </Tooltip>;
 
     return <>
-        {canEditCollection && saveDefaultFilterButton}
         {editorButton}
     </>
 

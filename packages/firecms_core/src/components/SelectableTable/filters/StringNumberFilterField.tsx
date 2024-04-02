@@ -51,7 +51,6 @@ export function StringNumberFilterField({
     const [fieldOperation, fieldValue] = value || [possibleOperations[0], undefined];
     const [operation, setOperation] = useState<VirtualTableWhereFilterOp>(fieldOperation);
     const [internalValue, setInternalValue] = useState<string | number | string[] | number[] | null | undefined>(fieldValue);
-    console.log("internalValue", internalValue)
 
     function updateFilter(op: VirtualTableWhereFilterOp, val: string | number | string[] | number[] | null | undefined) {
         let newValue = val;
@@ -59,7 +58,7 @@ export function StringNumberFilterField({
         const newOpIsArray = multipleSelectOperations.includes(op);
         if (prevOpIsArray !== newOpIsArray) {
             // @ts-ignore
-            newValue = newOpIsArray ? (typeof val === "string" || typeof val === "number" ? [val] : []) : "";
+            newValue = newOpIsArray ? (typeof val === "string" || typeof val === "number" ? [val] : []) : undefined;
         }
 
         if (typeof newValue === "number" && isNaN(newValue))
@@ -119,26 +118,31 @@ export function StringNumberFilterField({
                 />}
 
                 {enumValues &&
-
                     <Select
                         position={"item-aligned"}
                         value={internalValue !== undefined
                             ? (Array.isArray(internalValue) ? internalValue.map(e => String(e)) : String(internalValue))
                             : isArray ? [] : ""}
                         onValueChange={(value) => {
-                            updateFilter(operation, dataType === "number" ? parseInt(value as string) : value as string)
+                            if (value !== "")
+                                updateFilter(operation, dataType === "number" ? parseInt(value as string) : value as string)
                         }}
                         multiple={multiple}
                         endAdornment={internalValue && <IconButton
-                            className="absolute right-3 top-2"
+                            className="absolute right-2 top-3"
                             onClick={(e) => updateFilter(operation, undefined)}>
                             <ClearIcon/>
                         </IconButton>}
-                        renderValue={(enumKey) => <EnumValuesChip
-                            key={`select_value_${name}_${enumKey}`}
-                            enumKey={enumKey}
-                            enumValues={enumValues}
-                            size={"small"}/>}>
+                        renderValue={(enumKey) => {
+                            if (enumKey === null)
+                                return "Filter for null values";
+
+                            return <EnumValuesChip
+                                key={`select_value_${name}_${enumKey}`}
+                                enumKey={enumKey}
+                                enumValues={enumValues}
+                                size={"small"}/>;
+                        }}>
                         {enumValues.map((enumConfig) => (
                             <SelectItem key={`select_value_${name}_${enumConfig.id}`}
                                         value={String(enumConfig.id)}>

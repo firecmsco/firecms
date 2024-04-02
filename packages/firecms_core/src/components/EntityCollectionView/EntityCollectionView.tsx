@@ -73,6 +73,7 @@ import {
 import { DeleteEntityDialog } from "../DeleteEntityDialog";
 import { useAnalyticsController } from "../../hooks/useAnalyticsController";
 import { useSelectionController } from "./useSelectionController";
+import { EntityCollectionViewStartActions } from "./EntityCollectionViewStartActions";
 
 const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
 
@@ -606,6 +607,14 @@ export const EntityCollectionView = React.memo(
                     onTextSearchClick={textSearchInitialised ? undefined : onTextSearchClick}
                     textSearchLoading={textSearchLoading}
                     textSearchEnabled={textSearchEnabled}
+                    actionsStart={<EntityCollectionViewStartActions
+                        parentCollectionIds={parentCollectionIds ?? []}
+                        collection={collection}
+                        tableController={tableController}
+                        path={fullPath}
+                        relativePath={collection.path}
+                        selectionController={usedSelectionController}
+                        collectionEntitiesCount={docsCount}/>}
                     actions={<EntityCollectionViewActions
                         parentCollectionIds={parentCollectionIds ?? []}
                         collection={collection}
@@ -683,6 +692,8 @@ export const EntityCollectionView = React.memo(
             equal(a.selectionController, b.selectionController) &&
             equal(a.Actions, b.Actions) &&
             equal(a.defaultSize, b.defaultSize) &&
+            equal(a.initialFilter, b.initialFilter) &&
+            equal(a.initialSort, b.initialSort) &&
             equal(a.textSearchEnabled, b.textSearchEnabled) &&
             equal(a.additionalFields, b.additionalFields) &&
             equal(a.forceFilter, b.forceFilter);

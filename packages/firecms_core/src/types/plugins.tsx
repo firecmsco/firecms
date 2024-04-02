@@ -7,14 +7,13 @@ import { FieldProps, FormContext } from "./fields";
 import { CMSType, Property } from "./properties";
 import { EntityStatus } from "./entities";
 import { ResolvedProperty } from "./resolved_entities";
-import { CMSView } from "./navigation";
 
 /**
  * Interface used to define plugins for FireCMS.
  * NOTE: This is a work in progress and the API is not stable yet.
  * @group Core
  */
-export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollection = EntityCollection, COL_ACTIONS_PROPS = any> = {
+export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollection = EntityCollection, COL_ACTIONS_PROPS = any, COL_ACTIONS_START__PROPS = any> = {
 
     /**
      * Key of the plugin. This is used to identify the plugin in the CMS.
@@ -94,8 +93,10 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
          * toolbar.
          */
         CollectionActions?: React.ComponentType<CollectionActionsProps<any, any, EC> & COL_ACTIONS_PROPS> | React.ComponentType<CollectionActionsProps<any, any, EC> & COL_ACTIONS_PROPS>[];
-
         collectionActionsProps?: COL_ACTIONS_PROPS;
+
+        CollectionActionsStart?: React.ComponentType<CollectionActionsProps<any, any, EC> & COL_ACTIONS_START__PROPS> | React.ComponentType<CollectionActionsProps<any, any, EC> & COL_ACTIONS_START__PROPS>[];
+        collectionActionsStartProps?: COL_ACTIONS_START__PROPS;
 
         showTextSearchBar?: (props: {
             context: FireCMSContext,
