@@ -16,20 +16,27 @@ import { useLargeLayout } from "../../../hooks";
 
 interface CollectionTableToolbarProps {
     size: CollectionSize;
-    filterIsSet: boolean;
     loading: boolean;
-    forceFilter?: boolean;
     actionsStart?: React.ReactNode;
     actions?: React.ReactNode;
     title?: React.ReactNode,
     onTextSearchClick?: () => void;
     onTextSearch?: (searchString?: string) => void;
     onSizeChanged: (size: CollectionSize) => void;
-    clearFilter?: () => void;
     textSearchLoading?: boolean;
 }
 
-export function CollectionTableToolbar(props: CollectionTableToolbarProps) {
+export function CollectionTableToolbar({
+                                           actions,
+                                           actionsStart,
+                                           loading,
+                                           onSizeChanged,
+                                           onTextSearch,
+                                           onTextSearchClick,
+                                           size,
+                                           textSearchLoading,
+                                           title
+                                       }: CollectionTableToolbarProps) {
 
     const searchInputRef = React.useRef<HTMLInputElement>(null);
     const largeLayout = useLargeLayout();
@@ -37,30 +44,20 @@ export function CollectionTableToolbar(props: CollectionTableToolbarProps) {
     const searchLoading = React.useRef<boolean>(false);
 
     useEffect(() => {
-        if (searchInputRef.current && searchLoading.current && !props.textSearchLoading) {
+        if (searchInputRef.current && searchLoading.current && !textSearchLoading) {
             searchInputRef.current.focus();
         }
-        searchLoading.current = props.textSearchLoading ?? false;
-    }, [props.textSearchLoading]);
+        searchLoading.current = textSearchLoading ?? false;
+    }, [textSearchLoading]);
 
-    const clearFilterButton = !props.forceFilter && props.filterIsSet && props.clearFilter &&
-        <Button
-            variant={"outlined"}
-            className="h-fit-content"
-            aria-label="filter clear"
-            onClick={props.clearFilter}
-            size={"small"}>
-            <FilterListOffIcon/>
-            Clear filter
-        </Button>;
 
     const sizeSelect = (
         <Tooltip title={"Table row size"} side={"right"} sideOffset={4}>
             <Select
-                value={props.size as string}
+                value={size as string}
                 className="w-16 h-10"
                 size={"small"}
-                onValueChange={(v) => props.onSizeChanged(v as CollectionSize)}
+                onValueChange={(v) => onSizeChanged(v as CollectionSize)}
                 renderValue={(v) => <div className={"font-medium"}>{v.toUpperCase()}</div>}
             >
                 {["xs", "s", "m", "l", "xl"].map((size) => (
@@ -78,36 +75,34 @@ export function CollectionTableToolbar(props: CollectionTableToolbarProps) {
 
             <div className="flex items-center gap-2 md:mr-4 mr-2">
 
-                {props.title && <div className={"hidden lg:block"}>
-                    {props.title}
+                {title && <div className={"hidden lg:block"}>
+                    {title}
                 </div>}
 
                 {sizeSelect}
 
-                {clearFilterButton}
-
-                {props.actionsStart}
+                {actionsStart}
 
             </div>
 
             <div className="flex items-center gap-2">
 
                 {largeLayout && <div className="w-[22px]">
-                    {props.loading &&
+                    {loading &&
                         <CircularProgress size={"small"}/>}
                 </div>}
 
-                {(props.onTextSearch || props.onTextSearchClick) &&
+                {(onTextSearch || onTextSearchClick) &&
                     <SearchBar
                         key={"search-bar"}
                         inputRef={searchInputRef}
-                        loading={props.textSearchLoading}
-                        disabled={Boolean(props.onTextSearchClick)}
-                        onClick={props.onTextSearchClick}
-                        onTextSearch={props.onTextSearchClick ? undefined : props.onTextSearch}
+                        loading={textSearchLoading}
+                        disabled={Boolean(onTextSearchClick)}
+                        onClick={onTextSearchClick}
+                        onTextSearch={onTextSearchClick ? undefined : onTextSearch}
                         expandable={true}/>}
 
-                {props.actions}
+                {actions}
 
             </div>
 

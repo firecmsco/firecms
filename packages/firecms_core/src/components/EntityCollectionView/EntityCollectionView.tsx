@@ -74,6 +74,7 @@ import { DeleteEntityDialog } from "../DeleteEntityDialog";
 import { useAnalyticsController } from "../../hooks/useAnalyticsController";
 import { useSelectionController } from "./useSelectionController";
 import { EntityCollectionViewStartActions } from "./EntityCollectionViewStartActions";
+import { ClearFilterSortButton } from "../ClearFilterSortButton";
 
 const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
 
@@ -128,7 +129,6 @@ export const EntityCollectionView = React.memo(
         const userConfigPersistence = useUserConfigurationPersistence();
         const analyticsController = useAnalyticsController();
         const customizationController = useCustomizationController();
-
 
         const containerRef = React.useRef<HTMLDivElement>(null);
 

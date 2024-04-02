@@ -88,8 +88,6 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
 
     const selectedEntityIds = selectedEntities?.map(e => e.id);
 
-    const filterIsSet = !!tableController.filterValues && Object.keys(tableController.filterValues).length > 0;
-
     const updateSize = useCallback((size: CollectionSize) => {
         if (onSizeChanged)
             onSizeChanged(size);
@@ -291,12 +289,9 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
              className="h-full w-full flex flex-col bg-white dark:bg-gray-950">
 
             <CollectionTableToolbar
-                forceFilter={disabledFilterChange}
-                filterIsSet={filterIsSet}
                 onTextSearch={textSearchEnabled ? onTextSearch : undefined}
                 textSearchLoading={textSearchLoading}
                 onTextSearchClick={textSearchEnabled ? onTextSearchClick : undefined}
-                clearFilter={tableController.clearFilter}
                 size={size}
                 onSizeChanged={updateSize}
                 title={title}

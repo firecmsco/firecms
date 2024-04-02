@@ -523,7 +523,7 @@ export type EntityTableController<M extends Record<string, any> = any> = {
     filterValues?: FilterValues<Extract<keyof M, string>>;
     setFilterValues?: (filterValues: FilterValues<Extract<keyof M, string>>) => void;
     sortBy?: [Extract<keyof M, string>, "asc" | "desc"];
-    setSortBy?: (sortBy: [Extract<keyof M, string>, "asc" | "desc"]) => void;
+    setSortBy?: (sortBy?: [Extract<keyof M, string>, "asc" | "desc"]) => void;
     searchString?: string;
     setSearchString?: (searchString?: string) => void;
     clearFilter?: () => void;

@@ -3,6 +3,7 @@ import { useCustomizationController, useFireCMSContext } from "../../hooks";
 import { CollectionActionsProps, EntityCollection, EntityTableController, SelectionController } from "../../types";
 import { toArray } from "../../util/arrays";
 import { ErrorBoundary } from "../ErrorBoundary";
+import { ClearFilterSortButton } from "../ClearFilterSortButton";
 
 export type EntityCollectionViewStartActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
@@ -39,8 +40,12 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
         tableController,
         collectionEntitiesCount
     };
-
-    const actions: React.ReactNode[] = [];
+    const actions: React.ReactNode[] = [
+        <ClearFilterSortButton
+            key={"clear_filter"}
+            tableController={tableController}
+            enabled={!collection.forceFilter}/>
+    ];
 
     if (plugins) {
         plugins.forEach((plugin, i) => {
