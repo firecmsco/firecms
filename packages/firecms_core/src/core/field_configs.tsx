@@ -359,8 +359,7 @@ export function getDefaultFieldId(property: Property | ResolvedProperty) {
     } else if (property.dataType === "map") {
         if (property.keyValue)
             return "key_value";
-        if (property.properties)
-            return "group";
+        return "group";
     } else if (property.dataType === "array") {
         const of = (property as ArrayProperty).of;
         const oneOf = (property as ArrayProperty).oneOf;

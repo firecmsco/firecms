@@ -10200,6 +10200,7 @@ __metadata:
     react-dom: ^18.2.0
     react-router: ^6.22.0
     react-router-dom: ^6.22.0
+    react18-json-view: ^0.2.7
     realm-web: ^2.0.0
     tailwindcss: ^3.4.1
     typescript: ^5.4.2
@@ -16079,6 +16080,15 @@ __metadata:
     react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
     react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
   checksum: e8830f32e3ad4bf91af9cdc5cead84148c7694ce6abd9fdb447fb609da6cd4bbd0bbc75ff985f78828f4bbbd3ba4cbc98235cc9c056b5e5787578518f7fafbb9
+  languageName: node
+  linkType: hard
+
+"react18-json-view@npm:^0.2.7":
+  version: 0.2.7
+  resolution: "react18-json-view@npm:0.2.7"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 3912b96f07f77d95ef3e9bd2d7d78a431deae528cbe6e33dc31fa95c5d1346046152cf7f6767a2498014e4e6497f6660608cb692e144a11f029470cc8ff91027
   languageName: node
   linkType: hard
 
