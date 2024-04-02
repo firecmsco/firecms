@@ -130,6 +130,30 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
                 .filter(Boolean) as TopNavigationEntry[]
         ];
 
+        // Sort by group, entries with group "Admin" will go last, and second to last will be the group "Views"
+        navigationEntries = navigationEntries.sort((a, b) => {
+            if (a.group !== "Views" && a.group !== "Admin" && (b.group === "Views" || b.group === "Admin")) {
+                return -1;
+            }
+            if (b.group !== "Views" && b.group !== "Admin" && (a.group === "Views" || a.group === "Admin")) {
+                return 1;
+            }
+            if (a.group === "Admin" && b.group !== "Admin") {
+                return 1;
+            }
+            if (a.group !== "Admin" && b.group === "Admin") {
+                return -1;
+            }
+            if (a.group === "Views" && b.group !== "Views") {
+                return -1;
+            }
+            if (a.group !== "Views" && b.group === "Views") {
+                return 1;
+            }
+            return 0;
+
+        });
+
         if (viewsOrder) {
             navigationEntries = navigationEntries.sort((a, b) => {
                 const aIndex = viewsOrder.indexOf(a.path);
