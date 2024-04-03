@@ -8,8 +8,13 @@ import { ModeController } from "./index";
  */
 export function useBuildModeController(): ModeController {
 
-    const prefersDarkModeQuery = typeof window !== "undefined" &&
-        window.matchMedia("(prefers-color-scheme: dark)");
+    const prefersDarkModeQuery = useCallback((): boolean => {
+        if (typeof window === "undefined")
+            return false;
+        const mediaQueryList = window.matchMedia("(prefers-color-scheme: dark)");
+        return mediaQueryList.matches;
+    }, []);
+
     const prefersDarkModeStorage: boolean | null = localStorage.getItem("prefers-dark-mode") != null ? localStorage.getItem("prefers-dark-mode") === "true" : null;
     const prefersDarkMode = prefersDarkModeStorage ?? prefersDarkModeQuery;
     const [mode, setMode] = useState<"light" | "dark">(prefersDarkMode ? "dark" : "light");
@@ -23,7 +28,7 @@ export function useBuildModeController(): ModeController {
     const setDarkMode = useCallback(() => {
         setMode("dark");
         setDocumentMode("dark");
-    }, [prefersDarkModeQuery]);
+    }, []);
 
     const setLightMode = useCallback(() => {
         setMode("light");
@@ -37,14 +42,15 @@ export function useBuildModeController(): ModeController {
 
     const toggleMode = useCallback(() => {
 
+        const prefersDarkModeQueryResult = prefersDarkModeQuery();
         if (mode === "light") {
-            if (!prefersDarkModeQuery)
+            if (!prefersDarkModeQueryResult)
                 localStorage.setItem("prefers-dark-mode", "true");
             else
                 localStorage.removeItem("prefers-dark-mode");
             setDarkMode();
         } else {
-            if (prefersDarkModeQuery)
+            if (prefersDarkModeQueryResult)
                 localStorage.setItem("prefers-dark-mode", "false");
             else
                 localStorage.removeItem("prefers-dark-mode");

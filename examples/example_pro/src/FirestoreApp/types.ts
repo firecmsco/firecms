@@ -9,6 +9,7 @@ export type Product = {
     currency: string;
     public: boolean;
     brand: string;
+    json_field: any;
     description: string;
     amazon_link: string;
     images: string[];
