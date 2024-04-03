@@ -440,7 +440,7 @@ async function resolveCollections(collections: undefined | EntityCollection[] | 
                                   collectionPermissions: PermissionsBuilder | undefined,
                                   authController: AuthController,
                                   dataSource: DataSourceDelegate,
-                                  injectCollections?: (collections: EntityCollection[]) => EntityCollection[]) {
+                                  injectCollections?: (collections: EntityCollection[]) => EntityCollection[]): Promise<EntityCollection[]> {
     let resolvedCollections: EntityCollection[] = [];
     if (typeof collections === "function") {
         resolvedCollections = await collections({
@@ -489,8 +489,10 @@ function areCollectionListsEqual(a: EntityCollection[], b: EntityCollection[]) {
     if (a.length !== b.length) {
         return false;
     }
-    const aSorted = a.sort((a, b) => a.id.localeCompare(b.id));
-    const bSorted = b.sort((a, b) => a.id.localeCompare(b.id));
+    const aCopy = [...a];
+    const bCopy = [...b];
+    const aSorted = aCopy.sort((x, y) => x.id.localeCompare(y.id));
+    const bSorted = bCopy.sort((x, y) => x.id.localeCompare(y.id));
     return aSorted.every((value, index) => areCollectionsEqual(value, bSorted[index]));
 }
 

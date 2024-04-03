@@ -178,9 +178,10 @@ export const productsCollection = buildCollection<Product>({
             dataType: "number",
             name: "Price",
             validation: {
-                requiredMessage: "You must set a price between 0 and 1000",
+                required: true,
+                requiredMessage: "You must set a price between 0 and 10000",
                 min: 0,
-                max: 1000
+                max: 10000
             },
             disabled: !values.available && {
                 clearOnDisabled: true,
