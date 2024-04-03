@@ -112,8 +112,13 @@ export const useFirebaseAuthController = <ExtraData>({
         const options = getProviderOptions("google.com");
         if (options?.scopes)
             options.scopes.forEach((scope) => provider.addScope(scope));
-        if (options?.customParameters)
+        if (options?.customParameters) {
             provider.setCustomParameters(options.customParameters);
+        } else {
+            provider.setCustomParameters({
+                prompt: "select_account"
+            });
+        }
         const auth = authRef.current;
         if (!auth) throw Error("No auth");
         signInWithPopup(auth, provider).catch(setAuthProviderError);

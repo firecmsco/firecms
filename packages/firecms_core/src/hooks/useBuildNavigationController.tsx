@@ -187,6 +187,8 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         if (authController.initialLoading)
             return;
 
+        console.debug("Refreshing navigation");
+
         try {
 
             const [resolvedCollections = [], resolvedViews, resolvedAdminViews = []] = await Promise.all([
@@ -196,16 +198,23 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
                 ]
             );
 
-            if (
-                !equal(collectionsRef.current, resolvedCollections) ||
-                !equal(viewsRef.current, resolvedViews) ||
-                !equal(adminViewsRef.current, resolvedAdminViews) ||
-                !equal(topLevelNavigation, computeTopNavigation(resolvedCollections, resolvedViews, resolvedAdminViews, viewsOrder))
-            ) {
+            let shouldUpdateTopLevelNav = false;
+            if (!areCollectionListsEqual(collectionsRef.current ?? [], resolvedCollections)) {
                 collectionsRef.current = resolvedCollections;
+                shouldUpdateTopLevelNav = true;
+            }
+            if (!equal(viewsRef.current, resolvedViews)) {
                 viewsRef.current = resolvedViews;
+                shouldUpdateTopLevelNav = true;
+            }
+            if (!equal(adminViewsRef.current, resolvedAdminViews)) {
                 adminViewsRef.current = resolvedAdminViews;
-                setTopLevelNavigation(computeTopNavigation(resolvedCollections ?? [], resolvedViews, resolvedAdminViews, viewsOrder));
+                shouldUpdateTopLevelNav = true;
+            }
+
+            const computedTopLevelNav = computeTopNavigation(resolvedCollections, resolvedViews, resolvedAdminViews, viewsOrder);
+            if (shouldUpdateTopLevelNav && !equal(topLevelNavigation, computedTopLevelNav)) {
+                setTopLevelNavigation(computedTopLevelNav);
             }
         } catch (e) {
             console.error(e);
@@ -474,4 +483,28 @@ function getGroup(collectionOrView: EntityCollection<any, any> | CMSView) {
         return "Views";
     }
     return trimmed ?? "Views";
+}
+
+function areCollectionListsEqual(a: EntityCollection[], b: EntityCollection[]) {
+    if (a.length !== b.length) {
+        return false;
+    }
+    const aSorted = a.sort((a, b) => a.id.localeCompare(b.id));
+    const bSorted = b.sort((a, b) => a.id.localeCompare(b.id));
+    return aSorted.every((value, index) => areCollectionsEqual(value, bSorted[index]));
+}
+
+function areCollectionsEqual(a: EntityCollection, b: EntityCollection) {
+    const {
+        subcollections: subcollectionsA,
+        ...restA
+    } = a;
+    const {
+        subcollections: subcollectionsB,
+        ...restB
+    } = b;
+    if (!areCollectionListsEqual(subcollectionsA ?? [], subcollectionsB ?? [])) {
+        return false;
+    }
+    return equal(restA, restB);
 }
