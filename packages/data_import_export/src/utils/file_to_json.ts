@@ -7,12 +7,17 @@ export function convertFileToJson(file: File): Promise<object[]> {
             console.debug("Converting JSON file to JSON", file.name);
             const reader = new FileReader();
             reader.onload = function (e) {
-                const data = e.target?.result as string;
-                const jsonData = JSON.parse(data);
-                if (!Array.isArray(jsonData)) {
-                    reject(new Error("JSON file should contain an array of objects"));
+                try {
+                    const data = e.target?.result as string;
+                    const jsonData = JSON.parse(data);
+                    if (!Array.isArray(jsonData)) {
+                        reject(new Error("JSON file should contain an array of objects"));
+                    }
+                    resolve(jsonData);
+                } catch (e) {
+                    console.error("Error parsing JSON file", e);
+                    reject(e);
                 }
-                resolve(jsonData);
             };
             reader.readAsText(file);
         } else {
