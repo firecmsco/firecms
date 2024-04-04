@@ -9,14 +9,10 @@ import {
     FireCMS,
     FireCMSAppBarProps,
     FireCMSPlugin,
-    joinCollectionLists,
-    makePropertiesEditable,
     ModeController,
     ModeControllerProvider,
-    ModifyCollectionProps,
     NavigationRoutes,
     PermissionsBuilder,
-    Properties,
     Scaffold,
     SideDialogs,
     SnackbarProvider,
@@ -30,6 +26,7 @@ import {
 import {
     CollectionEditorPermissionsBuilder,
     CollectionsConfigController,
+    mergeCollections,
     MissingReferenceWidget,
     PersistedCollection,
     useCollectionEditorPlugin
@@ -44,7 +41,6 @@ import {
     useBuildFireCMSBackend,
     useBuildProjectConfig,
     useDelegatedLogin,
-    useFirestoreCollectionsConfigController,
 } from "./hooks";
 
 import { FireCMSCloudAppProps } from "./FireCMSCloudAppProps";
@@ -77,6 +73,7 @@ import {
     UserManagementProvider,
     UsersView
 } from "@firecms/user_management";
+import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 
 const DOCS_LIMIT = 200;
 
@@ -94,13 +91,13 @@ const DOCS_LIMIT = 200;
  * @group Firebase
  */
 export function FireCMSCloudApp({
-                               projectId,
-                               appConfig,
-                               backendApiHost = "https://api-drplyi3b6q-ey.a.run.app", // TODO
-                               onAnalyticsEvent,
-                               basePath,
-                               baseCollectionPath,
-                           }: FireCMSCloudAppProps) {
+                                    projectId,
+                                    appConfig,
+                                    backendApiHost = "https://api-drplyi3b6q-ey.a.run.app", // TODO
+                                    onAnalyticsEvent,
+                                    basePath,
+                                    baseCollectionPath,
+                                }: FireCMSCloudAppProps) {
 
     const modeController = useBuildModeController();
 
@@ -352,7 +349,7 @@ export function FireCMSClientWithController({
 
     const configController = useFirestoreCollectionsConfigController({
         firebaseApp: fireCMSBackend.backendFirebaseApp,
-        configPath: `projects/${projectId}`,
+        configPath: `projects/${projectId}/collections`,
         permissions,
         propertyConfigs: appConfig?.propertyConfigs
     });
@@ -513,7 +510,7 @@ function FireCMSAppAuthenticated({
         userConfigPersistence,
         dataSourceDelegate: firestoreDelegate,
         injectCollections: useCallback(
-            (collections: EntityCollection[]) => injectCollections(
+            (collections: EntityCollection[]) => mergeCollections(
                 collections,
                 collectionConfigController.collections ?? [],
                 appConfig?.modifyCollection
@@ -618,28 +615,6 @@ function FireCMSAppAuthenticated({
         </FireCMSBackEndProvider>
     );
 
-}
-
-/**
- * Function in charge of merging collections defined in code with those stored in the backend.
- */
-const injectCollections = (baseCollections: EntityCollection[],
-                           backendCollections: PersistedCollection[],
-                           modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | void
-) => {
-
-    const markAsEditable = (c: PersistedCollection) => {
-        makePropertiesEditable(c.properties as Properties);
-        c.subcollections?.forEach(markAsEditable);
-    };
-    const storedCollections = backendCollections ?? [];
-    storedCollections.forEach(markAsEditable);
-
-    console.debug("Collections specified in code:", baseCollections);
-    console.debug("Collections stored in the backend", storedCollections);
-    const result = joinCollectionLists(baseCollections, storedCollections, [], modifyCollection);
-    console.debug("Collections after joining:", result);
-    return result;
 }
 
 function buildAdminRoutes(usersLimit?: number) {

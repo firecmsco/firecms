@@ -17,36 +17,31 @@ function HeroProButtons() {
         </defs>
     </svg>;
 
-    return <div
-        className="mt-8 mb-8 ">
+    return <div className={"m-auto mt-8 mb-8 flex md:flex-row flex-col-reverse items-center gap-4 px-4 justify-center"}>
+        <a
+            aria-label="Join our Discord"
+            className={"btn shadow-none py-4 text-white dark:hover:bg-gray-900 hover:bg-gray-200 uppercase border border-solid w-full lg:w-auto rounded"}
+            href={"https://discord.gg/fxy7xsQm3m"}
+        >
+            {discordIcon}
+        </a>
 
-        <div className={"flex md:flex-row flex-col-reverse items-center gap-4 px-4"}>
-            <a
-                aria-label="Join our Discord"
-                className={"btn shadow-none py-4 text-white dark:hover:bg-gray-900 hover:bg-gray-200 uppercase border border-solid w-full lg:w-auto rounded"}
-                href={"https://discord.gg/fxy7xsQm3m"}
-            >
-                {discordIcon}
-            </a>
+        <a
+            className={CTAButtonDarkMixin}
+            href={"https://demo.firecms.co"}
+        >
+            Check the demo
+            <CTACaret/>
+        </a>
 
-            <a
-                className={CTAButtonDarkMixin}
-                href={"https://demo.firecms.co"}
-            >
-                Check the demo
-                <CTACaret/>
-            </a>
-
-            <a
-                className={CTAButtonMixin}
-                href={"https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0INW8ihjQ90S4gkdo8_rbL_Zx7gagZShLIpHyW43zDXkQDPole6a1coo1sT2O6Gl05X8lxFDlp?gv=true"}
-                rel="noopener noreferrer"
-                target="_blank"
-            >
-                Book a meeting
-            </a>
-        </div>
-        {/*<b className={"text-primary"}>Check the new FireCMS Cloud version!</b>*/}
+        <a
+            className={CTAButtonMixin}
+            href={"https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0INW8ihjQ90S4gkdo8_rbL_Zx7gagZShLIpHyW43zDXkQDPole6a1coo1sT2O6Gl05X8lxFDlp?gv=true"}
+            rel="noopener noreferrer"
+            target="_blank"
+        >
+            Book a meeting
+        </a>
     </div>;
 }
 

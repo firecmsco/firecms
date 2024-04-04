@@ -12,6 +12,7 @@ export {
 export {
     editableProperty, removeNonEditableProperties
 } from "./utils/entities";
+export * from "./utils/collections";
 
 export type {
     CollectionsConfigController, DeleteCollectionParams, SaveCollectionParams, UpdateCollectionParams

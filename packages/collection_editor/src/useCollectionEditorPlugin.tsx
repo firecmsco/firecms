@@ -33,7 +33,7 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
      * names when creating collections.
      * e.g. ["admin"]
      */
-    reservedGroups: string[];
+    reservedGroups?: string[];
 
     extraView?: {
         View: React.ComponentType<{
@@ -48,7 +48,7 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
 
     getData?: (path: string, parentPaths: string[]) => Promise<object[]>;
 
-    getUser: (uid: string) => UserType | null;
+    getUser?: (uid: string) => UserType | null;
 
     onAnalyticsEvent?: (event: string, params?: object) => void;
 

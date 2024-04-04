@@ -10,6 +10,7 @@ import { CenteredView, GitHubIcon, IconButton, Tooltip, } from "@firecms/ui";
 import {
     CircularProgressCenter,
     CMSView,
+    EntityCollection,
     FireCMS,
     ModeControllerProvider,
     NavigationRoutes,
@@ -55,6 +56,8 @@ import { booksCollection } from "./collections/books_collection";
 import { FirebaseApp } from "firebase/app";
 import { TestEditorView } from "./TestEditorView";
 import { TestBoardView } from "./BoardView/TestBoardView";
+import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
+import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com"];
 
@@ -217,6 +220,14 @@ function App() {
 
     const userManagementPlugin = useUserManagementPlugin({ userManagement });
 
+    const collectionConfigController = useFirestoreCollectionsConfigController({
+        firebaseApp
+    });
+
+    const collectionEditorPlugin = useCollectionEditorPlugin({
+        collectionConfigController
+    });
+
     const importExportPlugin = useImportExportPlugin();
 
     /**
@@ -240,7 +251,13 @@ function App() {
         views,
         adminViews: userManagementAdminViews,
         authController,
-        dataSourceDelegate: firestoreDelegate
+        dataSourceDelegate: firestoreDelegate,
+        injectCollections: useCallback(
+            (collections: EntityCollection[]) => mergeCollections(
+                collections,
+                collectionConfigController.collections ?? []
+            ),
+            [collectionConfigController.collections])
     });
 
     if (firebaseConfigLoading || !firebaseApp) {
@@ -260,7 +277,7 @@ function App() {
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
-                    plugins={[userManagementPlugin, dataEnhancementPlugin, importExportPlugin]}
+                    plugins={[userManagementPlugin, dataEnhancementPlugin, importExportPlugin, collectionEditorPlugin]}
                     onAnalyticsEvent={onAnalyticsEvent}
                     propertyConfigs={propertyConfigs}
                 >

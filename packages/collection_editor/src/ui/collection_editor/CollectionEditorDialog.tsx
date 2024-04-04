@@ -76,7 +76,7 @@ export interface CollectionEditorDialogProps {
         icon: React.ReactNode
     };
     pathSuggestions?: (path?: string) => Promise<string[]>;
-    getUser: (uid: string) => User | null;
+    getUser?: (uid: string) => User | null;
     getData?: (path: string, parentPaths: string[]) => Promise<object[]>;
     parentCollection?: PersistedCollection;
 }

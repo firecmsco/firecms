@@ -43,7 +43,7 @@ type CollectionEditorFormProps = {
     setDirty?: (dirty: boolean) => void;
     reservedGroups?: string[];
     extraIcon: React.ReactNode;
-    getUser: (uid: string) => User | null;
+    getUser?: (uid: string) => User | null;
     getData?: () => Promise<object[]>;
     doCollectionInference: (collection: PersistedCollection) => Promise<Partial<EntityCollection> | null> | undefined;
     propertyConfigs: Record<string, PropertyConfig>;
@@ -301,7 +301,7 @@ export function CollectionPropertiesEditorForm({
         ? values.propertiesOrder
         : Object.keys(values.properties)) as string[];
 
-    const owner = useMemo(() => values.ownerId ? getUser(values.ownerId) : null, [getUser, values.ownerId]);
+    const owner = useMemo(() => values.ownerId && getUser ? getUser(values.ownerId) : null, [getUser, values.ownerId]);
 
     const onPropertyClick = useCallback((propertyKey: string, namespace?: string) => {
         console.debug("CollectionEditor: onPropertyClick", {

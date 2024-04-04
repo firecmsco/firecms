@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { FirebaseApp } from "firebase/app";
-import { collection, deleteDoc, doc, Firestore, getFirestore, onSnapshot, runTransaction } from "firebase/firestore";
+import { collection, deleteDoc, doc, getFirestore, onSnapshot, runTransaction } from "firebase/firestore";
 import {
     CollectionsConfigController,
     DeleteCollectionParams,
@@ -36,13 +36,16 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection,
      * Firestore document where the configuration is saved. e.g. "projects/my_project"
      * Must be a 2 path string.
      */
-    configPath: string;
+    configPath?: string;
 
     /**
      * Define what actions can be performed on data.
      */
     permissions?: PermissionsBuilder<EC, UserType>;
 
+    /**
+     * If you are defining custom properties, you can pass them here.
+     */
     propertyConfigs?: PropertyConfig[]
 
 }
@@ -56,7 +59,7 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection,
  */
 export function useFirestoreCollectionsConfigController<EC extends PersistedCollection, UserType extends User = User>({
                                                                                                                           firebaseApp,
-                                                                                                                          configPath,
+                                                                                                                          configPath = "__FIRECMS/config/collections",
                                                                                                                           permissions,
                                                                                                                           propertyConfigs
                                                                                                                       }: CollectionConfigControllerProps<EC, UserType>): CollectionsConfigController {
@@ -69,23 +72,17 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         return map;
     }, [propertyConfigs]);
 
-    const firestoreRef = useRef<Firestore>();
-    const firestore = firestoreRef.current;
-
     const [collectionsLoading, setCollectionsLoading] = React.useState<boolean>(true);
     const [persistedCollections, setPersistedCollections] = React.useState<PersistedCollection[] | undefined>();
 
     const [collectionsError, setCollectionsError] = React.useState<Error | undefined>();
 
     useEffect(() => {
-        if (!firebaseApp) return;
-        firestoreRef.current = getFirestore(firebaseApp);
-    }, [firebaseApp]);
+        if (!firebaseApp || !configPath) return;
 
-    useEffect(() => {
-        if (!firestore || !configPath) return;
+        const firestore = getFirestore(firebaseApp);
 
-        return onSnapshot(collection(firestore, configPath, "collections"),
+        return onSnapshot(collection(firestore, configPath),
             {
                 next: (snapshot) => {
                     setCollectionsError(undefined);
@@ -104,18 +101,20 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
                 }
             }
         );
-    }, [configPath, firestore]);
+    }, [configPath, firebaseApp]);
 
     const deleteCollection = useCallback(({
                                               id,
                                               parentCollectionIds
                                           }: DeleteCollectionParams): Promise<void> => {
-        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+
+        if (!firebaseApp || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        const firestore = getFirestore(firebaseApp);
         const collectionPath = buildCollectionId(id, parentCollectionIds);
         console.debug("!!Deleting collection", collectionPath);
-        const ref = doc(firestore, configPath, "collections", collectionPath);
+        const ref = doc(firestore, configPath, collectionPath);
         return deleteDoc(ref);
-    }, [configPath, firestore]);
+    }, [configPath, firebaseApp]);
 
     const saveCollection = useCallback(<M extends Record<string, any>>({
                                                                            id,
@@ -123,7 +122,8 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
                                                                            previousId,
                                                                            parentCollectionIds
                                                                        }: SaveCollectionParams<M>): Promise<void> => {
-        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        if (!firebaseApp || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        const firestore = getFirestore(firebaseApp);
         if (!id)
             throw Error("Trying to save a collection with no id");
         if (!collectionData.path)
@@ -133,7 +133,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         const cleanedCollection = prepareCollectionForPersistence(collectionData, propertyConfigsMap);
         const strippedPath = buildCollectionId(id, parentCollectionIds);
         const previousStrippedId = previousId ? buildCollectionId(previousId, parentCollectionIds) : undefined;
-        const ref = doc(firestore, configPath, "collections", strippedPath);
+        const ref = doc(firestore, configPath, strippedPath);
         console.debug("Saving collection", {
             id,
             collectionData,
@@ -144,11 +144,11 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         return runTransaction(firestore, async (transaction) => {
             transaction.set(ref, cleanedCollection, { merge: true });
             if (previousStrippedId && previousStrippedId !== strippedPath) {
-                const previousRef = doc(firestore, configPath, "collections", previousStrippedId);
+                const previousRef = doc(firestore, configPath, previousStrippedId);
                 transaction.delete(previousRef);
             }
         });
-    }, [configPath, firestore, propertyConfigsMap]);
+    }, [configPath, firebaseApp, propertyConfigsMap]);
 
     const updateCollection = useCallback(<M extends Record<string, any>>({
                                                                              id,
@@ -156,11 +156,12 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
                                                                              previousId,
                                                                              parentCollectionIds
                                                                          }: UpdateCollectionParams<M>): Promise<void> => {
-        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        if (!firebaseApp || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        const firestore = getFirestore(firebaseApp);
         const cleanedCollection = prepareCollectionForPersistence(collectionData, propertyConfigsMap);
         const strippedPath = buildCollectionId(id, parentCollectionIds);
         const previousStrippedPath = previousId ? buildCollectionId(previousId, parentCollectionIds) : undefined;
-        const ref = doc(firestore, configPath, "collections", strippedPath);
+        const ref = doc(firestore, configPath, strippedPath);
 
         console.debug("Updating collection", {
             id,
@@ -173,11 +174,11 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         return runTransaction(firestore, async (transaction) => {
             transaction.set(ref, cleanedCollection, { merge: true });
             if (previousStrippedPath && previousStrippedPath !== strippedPath) {
-                const previousRef = doc(firestore, configPath, "collections", previousStrippedPath);
+                const previousRef = doc(firestore, configPath, previousStrippedPath);
                 transaction.delete(previousRef);
             }
         });
-    }, [configPath, firestore, propertyConfigsMap]);
+    }, [configPath, firebaseApp, propertyConfigsMap]);
 
     const collections = persistedCollections !== undefined ? applyPermissionsFunctionIfEmpty(persistedCollections, permissions as PermissionsBuilder<any, any>) : undefined;
 
@@ -204,9 +205,10 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         namespace?: string
     }): Promise<void> => {
 
-        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        if (!firebaseApp || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        const firestore = getFirestore(firebaseApp);
         const collectionPath = buildCollectionId(path, parentCollectionIds);
-        const ref = doc(firestore, configPath, "collections", collectionPath);
+        const ref = doc(firestore, configPath, collectionPath);
         return runTransaction(firestore, async (transaction) => {
             const data = {
                 [namespaceToPropertiesPath(namespace) + "." + propertyKey]: setUndefinedToDelete(removeFunctions(removeUndefined(property))),
@@ -225,7 +227,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
             transaction.update(ref, data);
         });
 
-    }, [configPath, firestore]);
+    }, [configPath, firebaseApp]);
 
     const deleteProperty = useCallback(({
                                             path,
@@ -241,9 +243,10 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         namespace?: string
     }): Promise<void> => {
 
-        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        if (!firebaseApp || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        const firestore = getFirestore(firebaseApp);
         const collectionPath = buildCollectionId(path, parentCollectionIds);
-        const ref = doc(firestore, configPath, "collections", collectionPath);
+        const ref = doc(firestore, configPath, collectionPath);
         return runTransaction(firestore, async (transaction) => {
             const data: any = setUndefinedToDelete({
                 [namespaceToPropertiesPath(namespace) + "." + propertyKey]: undefined,
@@ -260,7 +263,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
             });
             transaction.update(ref, data);
         });
-    }, [configPath, firestore]);
+    }, [configPath, firebaseApp]);
 
     return useMemo(() => ({
         loading: collectionsLoading,

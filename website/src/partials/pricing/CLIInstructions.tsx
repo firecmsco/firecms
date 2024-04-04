@@ -28,7 +28,7 @@ export function CLIInstructions() {
             This way you can create a CMS tailored to your needs.
         </p>
 
-        <div className={"flex gap-4"}>
+        <div className={"flex gap-4 items-center flex-col md:flex-row"}>
 
             <div
                 className={"select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>

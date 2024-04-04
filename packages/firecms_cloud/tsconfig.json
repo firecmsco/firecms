@@ -44,6 +44,9 @@
       "@firecms/collection_editor": [
         "../collection_editor/src"
       ],
+      "@firecms/collection_editor_firebase": [
+        "../collection_editor_firebase/src"
+      ],
       "@firecms/user_management": [
         "../user_management/src"
       ],

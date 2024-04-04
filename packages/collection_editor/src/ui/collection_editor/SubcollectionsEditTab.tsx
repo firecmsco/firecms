@@ -41,7 +41,7 @@ export function SubcollectionsEditTab({
     parentCollection?: EntityCollection,
     configController: CollectionsConfigController;
     collectionInference?: CollectionInference;
-    getUser: (uid: string) => User | null;
+    getUser?: (uid: string) => User | null;
     parentCollectionIds?: string[];
 }) {
 
