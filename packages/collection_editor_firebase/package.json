@@ -30,7 +30,9 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/collection_editor": "^3.0.0-canary.40"
+    "@firecms/collection_editor": "^3.0.0-canary.40",
+    "@firecms/core": "^3.0.0-canary.40",
+    "@firecms/firebase": "^3.0.0-canary.40"
   },
   "peerDependencies": {
     "firebase": "^10.7.1",

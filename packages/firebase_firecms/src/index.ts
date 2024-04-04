@@ -4,4 +4,3 @@ export * from "./utils";
 export * from "./components";
 
 export * from "./collection_editor/infer_collection";
-
