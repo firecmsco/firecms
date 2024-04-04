@@ -3,7 +3,6 @@ import { BrowserRouter } from "react-router-dom";
 
 import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
-import "@fontsource/roboto"
 
 import { CenteredView } from "@firecms/ui";
 import {

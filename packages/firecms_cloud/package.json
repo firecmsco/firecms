@@ -27,7 +27,6 @@
     },
     "./package.json": "./package.json"
   },
-  "packageManager": "yarn@4.1.0",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
   "types": "dist/index.d.ts",

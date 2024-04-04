@@ -2,8 +2,6 @@ import React, { useCallback } from "react";
 
 import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
-import "@fontsource/roboto"
-import { User as FirebaseUser } from "firebase/auth";
 
 import {
     Authenticator,

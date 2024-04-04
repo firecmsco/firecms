@@ -2,7 +2,6 @@ import React from "react";
 
 import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
-import "@fontsource/roboto"
 
 import {
     CircularProgressCenter,

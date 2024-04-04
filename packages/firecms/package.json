@@ -2,7 +2,6 @@
   "name": "firecms",
   "version": "3.0.0-canary.40",
   "description": "A CLI to perform FireCMS operations. This package is just a wrapper around @firecms/cli",
-  "packageManager": "yarn@4.1.0",
   "bin": "bin/firecms.js",
   "publishConfig": {
     "access": "public"
