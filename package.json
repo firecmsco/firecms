@@ -27,23 +27,23 @@
     "examples/example_pro"
   ],
   "scripts": {
-    "dev": "cd examples/example && yarn dev",
-    "pro": "cd examples/example_pro && yarn dev",
-    "cloud": "cd examples/example_cloud && yarn dev",
-    "saas": "cd saas && yarn dev",
-    "deploy:demo": "cd examples/example_pro && yarn deploy",
-    "preview": "cd examples/example_pro && yarn preview",
-    "deploy:staging": "lerna run build && cd saas && yarn build && yarn deploy:staging",
-    "deploy:prod": "lerna run build && cd saas && yarn build && yarn deploy:prod",
-    "web": "cd website && yarn dev",
-    "deploy:web": "cd website && yarn deploy",
+    "dev": "cd examples/example && run-s dev",
+    "pro": "cd examples/example_pro && run-s dev",
+    "cloud": "cd examples/example_cloud && run-s dev",
+    "saas": "cd saas && run-s dev",
+    "deploy:demo": "cd examples/example_pro && run-s deploy",
+    "preview": "cd examples/example_pro && run-s preview",
+    "deploy:staging": "lerna run build && cd saas && run-s build && run-s deploy:staging",
+    "deploy:prod": "lerna run build && cd saas && run-s build && run-s deploy:prod",
+    "web": "cd website && run-s dev",
+    "deploy:web": "cd website && run-s deploy",
     "build": "lerna run build",
     "build:stream": "lerna run build --stream --loglevel=info",
     "clean": "lerna run clean",
     "release": "git push origin main:release"
   },
-  "packageManager": "yarn@3.8.1",
   "devDependencies": {
-    "lerna": "^8.1.2"
+    "lerna": "^8.1.2",
+    "npm-run-all": "^4.1.5"
   }
 }
