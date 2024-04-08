@@ -209,7 +209,6 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
 
         const onFilterUpdateInternal = useCallback((column: VirtualTableColumn, filterForProperty?: [VirtualTableWhereFilterOp, any]) => {
 
-            console.log("onFilterUpdateInternal", column, filterForProperty);
             endReachCallbackThreshold.current = 0;
             const filter = filterRef.current;
             let newFilterValue: VirtualTableFilterValues<any> = filter ? { ...filter } : {};
