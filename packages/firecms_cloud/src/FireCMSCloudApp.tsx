@@ -533,8 +533,9 @@ function FireCMSAppAuthenticated({
         introMode: introMode ? (projectConfig.creationType === "new" ? "new_project" : "existing_project") : undefined,
         reservedGroups: RESERVED_GROUPS,
         pathSuggestions: (path?) => {
+            const googleAccessToken = fireCMSBackend.googleCredential?.accessToken;
             if (!path)
-                return fireCMSBackend.projectsApi.getRootCollections(projectConfig.projectId);
+                return fireCMSBackend.projectsApi.getRootCollections(projectConfig.projectId, googleAccessToken);
             return Promise.resolve([]);
         },
         getUser: (uid) => {
