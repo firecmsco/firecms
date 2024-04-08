@@ -20,7 +20,7 @@ import { VirtualTableContextProps } from "./types";
 import { VirtualTableHeaderRow } from "./VirtualTableHeaderRow";
 import { VirtualTableRow } from "./VirtualTableRow";
 import { VirtualTableCell } from "./VirtualTableCell";
-import { AssignmentIcon, cn, Markdown, Typography } from "@firecms/ui";
+import { AssignmentIcon, cn, Typography } from "@firecms/ui";
 
 const VirtualListContext = createContext<VirtualTableContextProps<any>>({} as any);
 VirtualListContext.displayName = "VirtualListContext";
@@ -209,6 +209,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
 
         const onFilterUpdateInternal = useCallback((column: VirtualTableColumn, filterForProperty?: [VirtualTableWhereFilterOp, any]) => {
 
+            console.log("onFilterUpdateInternal", column, filterForProperty);
             endReachCallbackThreshold.current = 0;
             const filter = filterRef.current;
             let newFilterValue: VirtualTableFilterValues<any> = filter ? { ...filter } : {};
@@ -225,11 +226,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             }
 
             if (onFilterUpdate) onFilterUpdate(newFilterValue);
-
-            if (column.key !== sortByProperty) {
-                resetSort();
-            }
-        }, [checkFilterCombination, currentSort, onFilterUpdate, resetSort, sortByProperty]);
+        }, [checkFilterCombination, currentSort, onFilterUpdate, sortByProperty]);
 
         const buildErrorView = useCallback(() => (
             <div
@@ -239,7 +236,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                     {"Error fetching data from the data source"}
                 </Typography>
 
-                {error?.message && <Markdown className={"px-4 break-all"} source={error.message}/>}
+                {error?.message && <SafeLinkRenderer text={error.message}/>}
 
             </div>
         ), [error?.message]);
@@ -403,3 +400,17 @@ function MemoizedList({
         {Row}
     </List>;
 }
+
+const SafeLinkRenderer: React.FC<{
+    text: string;
+}> = ({ text }) => {
+    const urlRegex = /https?:\/\/[^\s]+/g;
+    const htmlContent = text.replace(urlRegex, (url) => {
+        // For each URL found, replace it with an HTML <a> tag
+        return `<a href="${url}" target="_blank">Link to your console</a>`;
+    });
+
+    return (
+        <div className={"px-4 break-all"} dangerouslySetInnerHTML={{ __html: htmlContent }}/>
+    );
+};

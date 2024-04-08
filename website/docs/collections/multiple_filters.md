@@ -5,10 +5,18 @@ sidebar_label: Multiple filters
 ---
 
 Firestore is a bit limited when filtering and sorting. limited to a single `where` clause per query by default.
-This means that filtering by multiple fields is not possible out of the box.
+This means that filtering by multiple fields is not possible out of the box. This is a limitation of Firestore, not of
+FireCMS.
 
-Anyhow, you can define indexes in Firestore to allow queries per multiple fields.
-This is a limitation of Firestore, not of FireCMS.
+:::important
+Since FireCMS 3.0, if you don't define indexes manually, FireCMS will attempt to run your query anyway, if it fails
+it will show a link to the Firestore console to create the required indexes.
+:::
+
+If you want to restrict the UI operations that can be performed in a collection, based on your existing indexes, you can
+define them in FireCMS, by using a `FirestoreIndexesBuilder`. This is a builder that allows you to declare your Firestore indexes.
+If you define your indexes, FireCMS will only allow you to filter by the fields you have defined, or the fields that can
+be filtered and sorted without indexes.
 
 :::note
 Firestore and FireCMS allow certain queries without indexes, but they are limited.
@@ -17,10 +25,8 @@ filtering by equality (but not other operators like `>`, `<`, `>=`, `<=`).
 Check the [Firestore documentation](https://firebase.google.com/docs/firestore/query-data/indexing)
 :::
 
-FireCMS allows you to define multiple filters if you specify it using a `FirestoreIndexesBuilder`.
-This is a builder that allows you to declare your Firestore indexes.
 
-This callback will be called with the current path of the collection being rendered.
+This is an example of how you can define a `FirestoreIndexesBuilder`.
 You can then return an array of indexes that will be used to filter the collection.
 
 ```tsx

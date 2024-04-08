@@ -182,34 +182,9 @@ function App() {
     // Controller for saving some user preferences locally.
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
-    const firestoreIndexesBuilder: FirestoreIndexesBuilder = ({ path }) => {
-        if (path === "products") {
-            return [
-                {
-                    category: "asc",
-                    available: "desc"
-                },
-                {
-                    category: "asc",
-                    available: "asc"
-                },
-                {
-                    category: "desc",
-                    available: "desc"
-                },
-                {
-                    category: "desc",
-                    available: "asc"
-                }
-            ];
-        }
-        return undefined;
-    }
-
     // Delegate used for fetching and saving data in Firestore
     const firestoreDelegate = useFirestoreDelegate({
-        firebaseApp,
-        firestoreIndexesBuilder
+        firebaseApp
     });
 
     // Controller used for saving and fetching files in storage

@@ -561,7 +561,12 @@ export function useFirestoreDelegate({
             filterValues: FilterValues<any>,
             sortBy?: [string, "asc" | "desc"]
         }): boolean => {
+
             if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
+
+            // If no indexes are defined, we assume the query is valid.
+            // If there is no index in Firestore, and error message will be shown
+            if (firestoreIndexesBuilder === undefined) return true;
 
             const indexes = firestoreIndexesBuilder?.({
                 path,
