@@ -276,9 +276,9 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
     const getCollectionFromPaths = useCallback(<EC extends EntityCollection>(pathSegments: string[]): EC | undefined => {
 
         const collections = collectionsRef.current;
+        if (collections === undefined)
+            throw Error("getCollectionFromPaths: Collections have not been initialised yet");
         let currentCollections: EntityCollection[] | undefined = [...(collections ?? [])];
-        if (!currentCollections)
-            throw Error("Collections have not been initialised yet");
 
         for (let i = 0; i < pathSegments.length; i++) {
             const pathSegment = pathSegments[i];
@@ -297,9 +297,9 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
     const getCollectionFromIds = useCallback(<EC extends EntityCollection>(ids: string[]): EC | undefined => {
 
         const collections = collectionsRef.current;
+        if (collections === undefined)
+            throw Error("getCollectionFromIds: Collections have not been initialised yet");
         let currentCollections: EntityCollection[] | undefined = [...(collections ?? [])];
-        if (!currentCollections)
-            throw Error("Collections have not been initialised yet");
 
         for (let i = 0; i < ids.length; i++) {
             const id = ids[i];
@@ -335,9 +335,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         []);
 
     const resolveAliasesFrom = useCallback((path: string): string => {
-        const collections = collectionsRef.current;
-        if (!collections)
-            throw Error("Collections have not been initialised yet");
+        const collections = collectionsRef.current ?? [];
         return resolveCollectionPathIds(path, collections);
     }, []);
 

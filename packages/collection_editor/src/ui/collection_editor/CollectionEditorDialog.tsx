@@ -170,7 +170,8 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
         } catch (e) {
             console.error(e);
         }
-    }, [navigation.getCollectionFromPaths, props.editedCollectionId, props.parentCollectionIds, navigation.initialised]);
+    }, [props.editedCollectionId, props.parentCollectionIds, navigation]);
+
     if (!topLevelNavigation) {
         throw Error("Internal: Navigation not ready in collection editor");
     }
@@ -733,7 +734,10 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 }
 
 function applyPropertyConfigs<M extends Record<string, any> = any>(collection: PersistedCollection<M>, propertyConfigs: Record<string, PropertyConfig<any>>): PersistedCollection<M> {
-    const { properties, ...rest } = collection;
+    const {
+        properties,
+        ...rest
+    } = collection;
     const propertiesResult: PropertiesOrBuilders<any> = {};
     if (properties) {
         Object.keys(properties).forEach((key) => {
@@ -741,7 +745,10 @@ function applyPropertyConfigs<M extends Record<string, any> = any>(collection: P
         });
     }
 
-    return { ...rest, properties: propertiesResult };
+    return {
+        ...rest,
+        properties: propertiesResult
+    };
 }
 
 function applyPropertiesConfig(property: PropertyOrBuilder, propertyConfigs: Record<string, PropertyConfig<any>>) {
@@ -761,7 +768,10 @@ function applyPropertiesConfig(property: PropertyOrBuilder, propertyConfigs: Rec
                 Object.keys(internalProperty.properties).forEach((key) => {
                     properties[key] = applyPropertiesConfig(((internalProperty as MapProperty).properties as Properties)[key] as Property, propertyConfigs);
                 });
-                internalProperty = { ...internalProperty, properties };
+                internalProperty = {
+                    ...internalProperty,
+                    properties
+                };
             }
 
         }
