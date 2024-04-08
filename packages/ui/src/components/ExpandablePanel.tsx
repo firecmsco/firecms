@@ -3,7 +3,8 @@ import React, { PropsWithChildren, useEffect, useState } from "react";
 import * as Collapsible from "@radix-ui/react-collapsible";
 import { defaultBorderMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
 import { ExpandMoreIcon } from "../icons";
-import { cn, useInjectStyles } from "../util";
+import { cn } from "../util";
+import { useInjectStyles } from "../hooks";
 
 export function ExpandablePanel({
                                     title,

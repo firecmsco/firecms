@@ -6,8 +6,9 @@ import { Command as CommandPrimitive } from "cmdk";
 
 import { ExpandMoreIcon } from "../icons";
 import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
-import { cn, useOutsideAlerter } from "../util";
+import { cn } from "../util";
 import { SelectInputLabel } from "./common/SelectInputLabel";
+import { useOutsideAlerter } from "../hooks";
 
 export type MultiSelectProps = {
     open?: boolean,

@@ -453,8 +453,13 @@ export function useFirestoreDelegate({
             const firestore = getFirestore(firebaseApp);
 
             const collectionReference: CollectionReference = collectionClause(firestore, path);
-
-            console.debug("Saving entity", path, entityId, values);
+            const cleanedValues = firestoreToCMSModel(values);
+            console.debug("Saving entity", {
+                path,
+                entityId,
+                values,
+                cleanedValues
+            });
 
             let documentReference: DocumentReference;
             if (entityId)
@@ -462,7 +467,7 @@ export function useFirestoreDelegate({
             else
                 documentReference = doc(collectionReference);
 
-            return setDoc(documentReference, values, { merge: true })
+            return setDoc(documentReference, values, { merge: true }) // TODO: use cleaned values
                 .then(() => ({
                     id: documentReference.id,
                     path,
@@ -665,7 +670,6 @@ function getCMSPathFromFirestorePath(fsPath: string): string {
 function buildDate(date: Date): any {
     return Timestamp.fromDate(date);
 }
-
 
 function setDateToMidnight(input?: Timestamp): Timestamp | undefined {
     if (!input) return input;

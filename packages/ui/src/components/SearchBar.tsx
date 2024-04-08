@@ -4,7 +4,7 @@ import { defaultBorderMixin, focusedMixin } from "../styles";
 import { CircularProgress, IconButton } from "./index";
 import { ClearIcon, SearchIcon } from "../icons";
 import { cn } from "../util";
-import { useDebounceValue } from "../util/useDebounceValue";
+import { useDebounceValue } from "../hooks";
 
 interface SearchBarProps {
     onClick?: () => void;
