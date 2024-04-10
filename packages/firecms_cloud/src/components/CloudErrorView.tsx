@@ -30,8 +30,6 @@ export function CloudErrorView({
         projectId
     } = error;
 
-    console.log("CloudErrorView", error);
-
     if (code === "service-account-missing" && projectId && fireCMSBackend) {
         return <CloudMissingServiceAccountErrorView projectId={projectId}
                                                     fireCMSBackend={fireCMSBackend}
@@ -227,7 +225,7 @@ function ServiceAccountMissingPermissions(props: {
         className="flex flex-col space-y-2 py-4">
 
         <Typography color={"error"}>
-            The Service Account is missing permissions.
+            Missing permissions
         </Typography>
 
         {props.missingPermissions && <>

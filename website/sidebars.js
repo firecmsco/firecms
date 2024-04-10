@@ -6,11 +6,10 @@ module.exports = {
       "id": "intro"
     },
     "what_is_new_v3",
-    "migrating_from_v3_beta",
-    "migrating_from_v2",
     "customization_quickstart",
     "app_config",
     "deployment",
+    "creating_service_account",
     "firebase_setup",
     {
       "type": "category",
@@ -135,6 +134,8 @@ module.exports = {
         "components/select",
       ]
     },
+    "migrating_from_v3_beta",
+    "migrating_from_v2",
     "changelog",
     // {
     //     "type":"category",
