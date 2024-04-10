@@ -1,10 +1,17 @@
+import { useEffect, useState } from "react";
 import { useSnackbarController } from "@firecms/core";
 import { BuildIcon, Button, LoadingButton, Typography } from "@firecms/ui";
-import { useEffect, useState } from "react";
 import { FireCMSBackend } from "../types";
 import { useFireCMSBackend } from "../hooks";
 
-export type CloudError = { code?: string, message: string, projectId?: string };
+export type CloudError = {
+    code?: string,
+    message: string,
+    projectId?: string,
+    data?:{
+        missingPermissions?: string[]
+    }
+};
 
 export function CloudErrorView({
                                    error,
@@ -13,7 +20,7 @@ export function CloudErrorView({
                                    onRetry
                                }: {
     error: CloudError,
-    fireCMSBackend: FireCMSBackend,
+    fireCMSBackend?: FireCMSBackend,
     onFixed?: () => void,
     onRetry?: () => void,
 }) {
@@ -22,7 +29,10 @@ export function CloudErrorView({
         message,
         projectId
     } = error;
-    if (code === "service-account-missing" && projectId) {
+
+    console.log("CloudErrorView", error);
+
+    if (code === "service-account-missing" && projectId && fireCMSBackend) {
         return <CloudMissingServiceAccountErrorView projectId={projectId}
                                                     fireCMSBackend={fireCMSBackend}
                                                     onFixed={onFixed}/>;
@@ -33,7 +43,7 @@ export function CloudErrorView({
         return <CloudNoPreviousFirebaseProjectsErrorView projectId={projectId}
                                                          onFixed={onFixed}/>;
     } else if (code === "firecms-user-not-found") {
-        return <>
+        return <div className="flex flex-col items-center space-y-2 py-4">
             <Typography>
                 The user trying to log in is not registered in the client project.
             </Typography>
@@ -47,9 +57,11 @@ export function CloudErrorView({
                 target="_blank"
                 href={"https://discord.gg/fxy7xsQm3m"}>Discord channel</a>.
             </Typography>
-        </>;
+        </div>;
+    } else if (code === "service-account-missing-permissions") {
+        return <ServiceAccountMissingPermissions missingPermissions={error.data?.missingPermissions}/>;
     }
-    return (<>
+    return (<div className="flex flex-col items-center space-y-2 py-4">
             <Typography className="text-center text-red-300">
                 {message}
             </Typography>
@@ -61,7 +73,7 @@ export function CloudErrorView({
             >
                 Retry
             </Button>}
-        </>
+        </div>
     );
 }
 
@@ -120,7 +132,7 @@ function CloudMissingServiceAccountErrorView({
         }
     };
     return <div
-        className="flex flex-col items-center space-x-2">
+        className="flex flex-col items-center space-y-2 py-4">
         <Typography color={"error"}>
             Service account missing
         </Typography>
@@ -145,7 +157,7 @@ function CloudNeedsToAcceptTermsErrorView({
 }) {
 
     return <div
-        className="flex flex-col items-center space-y-2">
+        className="flex flex-col items-center space-y-2 py-4">
         <Typography color={"error"}>
             You need to accept Google&apos;s terms of service
             before you can use this service.
@@ -180,7 +192,7 @@ function CloudNoPreviousFirebaseProjectsErrorView({
 }) {
 
     return <div
-        className="flex flex-col items-center space-y-2">
+        className="flex flex-col items-center space-y-2 py-4">
         <Typography color={"error"}>
             You need to accept Firebase&apos;s terms of service
             before you can use this service.
@@ -205,4 +217,30 @@ function CloudNoPreviousFirebaseProjectsErrorView({
             I have accepted the terms
         </Button>
     </div>
+}
+
+function ServiceAccountMissingPermissions(props: {
+    missingPermissions: string[] | undefined,
+}) {
+
+    return <div
+        className="flex flex-col space-y-2 py-4">
+
+        <Typography color={"error"}>
+            The Service Account is missing permissions.
+        </Typography>
+
+        {props.missingPermissions && <>
+            <Typography variant={"body2"}>
+                This service account is missing the following permissions:
+            </Typography>
+
+            <Typography variant={"caption"} component={"ul"}>
+                {props.missingPermissions.map((permission) => <li key={permission}>
+                    <code>{permission}</code>
+                </li>)}
+            </Typography>
+        </>}
+
+    </div>;
 }

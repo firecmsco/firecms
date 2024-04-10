@@ -2,23 +2,33 @@ import React from "react";
 import { Container } from "./Container";
 import { cn } from "../util";
 
-export function CenteredView({
-                                 children,
-                                 maxWidth,
-                                 className,
-                                 fullScreen
-                             }: {
+export type CenteredViewProps = {
     children: React.ReactNode;
     maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl";
+    outerClassName?: string;
     className?: string;
     fullScreen?: boolean;
-}) {
+};
 
-    return <div className={cn("flex flex-col flex-grow", fullScreen ? "h-screen" : "h-full")}>
-        <Container className={cn("m-auto", className)}
-                   maxWidth={maxWidth}>
-            {children}
-        </Container>
-    </div>
+export const CenteredView = React.forwardRef<HTMLDivElement, CenteredViewProps>(({
+                                                                                     children,
+                                                                                     maxWidth,
+                                                                                     outerClassName,
+                                                                                     className,
+                                                                                     fullScreen,
+                                                                                     ...rest
+                                                                                 }, ref) => { // Notice how the ref is now received as the second argument
 
-}
+    return (
+        <div ref={ref}
+             className={cn("flex flex-col flex-grow", fullScreen ? "h-screen" : "h-full", outerClassName)}
+             {...rest}>
+            <Container className={cn("m-auto", className)} maxWidth={maxWidth}>
+                {children}
+            </Container>
+        </div>
+    );
+
+});
+
+CenteredView.displayName = "CenteredView";

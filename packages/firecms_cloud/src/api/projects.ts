@@ -170,7 +170,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
             .then(async (res) => {
                 const data = await res.json();
                 if (!res.ok) {
-                    throw new ApiError(data.message, data.code, projectId);
+                    throw new ApiError(data.message, data.code, projectId, data.data);
                 }
                 return data.data as string;
             });

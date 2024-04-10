@@ -38,7 +38,7 @@ export function FileUpload({
                                disabled,
                                maxFiles,
                                title,
-                               uploadDescription = "Drag and drop a file here or click",
+                               uploadDescription,
                                children,
                                preventDropOnDocument = true,
                                size

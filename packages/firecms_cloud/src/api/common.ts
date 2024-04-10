@@ -7,6 +7,6 @@ export async function handleApiResponse<T>(res: Response, projectId: string): Pr
     } else {
         if (res.status === 409) // already exists
             throw new ApiError(jsonResponse.message ?? jsonResponse.error ?? "This already exists.", jsonResponse.code ?? "already-exists", projectId);
-        throw new ApiError(jsonResponse.message ?? jsonResponse.error, jsonResponse.code, projectId);
+        throw new ApiError(jsonResponse.message ?? jsonResponse.error, jsonResponse.code, projectId, jsonResponse.data);
     }
 }
