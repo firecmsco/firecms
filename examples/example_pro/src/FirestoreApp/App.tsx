@@ -25,7 +25,6 @@ import {
 import {
     FirebaseAuthController,
     FirebaseSignInProvider,
-    FirestoreIndexesBuilder,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,

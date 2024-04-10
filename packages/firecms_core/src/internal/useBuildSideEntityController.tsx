@@ -49,7 +49,7 @@ export const useBuildSideEntityController = (navigation: NavigationController,
                     }, 1);
                 }
             } else {
-                console.warn("Location path is not a collection path");
+                // console.warn("Location path is not a collection path");
             }
             initialised.current = true;
         }

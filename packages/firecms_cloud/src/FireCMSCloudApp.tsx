@@ -40,13 +40,14 @@ import {
     useBuildCloudUserManagement,
     useBuildFireCMSBackend,
     useBuildProjectConfig,
-    useDelegatedLogin,
+    useDelegatedLogin
 } from "./hooks";
 
 import { FireCMSCloudAppProps } from "./FireCMSCloudAppProps";
 import { ApiError, FireCMSAppConfig, FireCMSBackend, FireCMSCloudUser, FireCMSCloudUserWithRoles } from "./types";
 import { RESERVED_GROUPS, resolveCollectionConfigPermissions } from "./utils";
 import {
+    CloudErrorView,
     FireCMSCloudDrawer,
     FireCMSDataEnhancementSubscriptionMessage,
     FireCMSLoginView,
@@ -96,7 +97,7 @@ export function FireCMSCloudApp({
                                     backendApiHost = "https://api-drplyi3b6q-ey.a.run.app", // TODO
                                     onAnalyticsEvent,
                                     basePath,
-                                    baseCollectionPath,
+                                    baseCollectionPath
                                 }: FireCMSCloudAppProps) {
 
     const modeController = useBuildModeController();
@@ -113,7 +114,7 @@ export function FireCMSCloudApp({
 
     const fireCMSBackend = useBuildFireCMSBackend({
         backendApiHost,
-        backendFirebaseApp,
+        backendFirebaseApp
     });
 
     let component;
@@ -131,7 +132,7 @@ export function FireCMSCloudApp({
     } else if (!fireCMSBackend.user) {
         component = <CenteredView maxWidth={"lg"}>
             <FireCMSLoginView
-                authController={fireCMSBackend}
+                fireCMSBackend={fireCMSBackend}
                 includeLogo={true}
                 includeGoogleAdminScopes={false}
                 includeTermsAndNewsLetter={false}
@@ -194,7 +195,7 @@ export const FireCMSClient = function FireCMSClient({
 
     const projectConfig = useBuildProjectConfig({
         projectId,
-        backendFirebaseApp: fireCMSBackend.backendFirebaseApp,
+        backendFirebaseApp: fireCMSBackend.backendFirebaseApp
     });
 
     const userManagement = useBuildCloudUserManagement({
@@ -223,27 +224,21 @@ export const FireCMSClient = function FireCMSClient({
     />;
 };
 
-function ErrorDelegatingLoginView(props: { configError: Error | ApiError, onLogout: () => void }) {
-    let errorBody: JSX.Element;
-    if ("code" in props.configError && props.configError.code === "firecms-user-not-found") {
-        errorBody = <>
-            <Typography>
-                The user trying to log in is not registered in the client project.
-            </Typography>
-            <Typography>
-                Make sure the user exists in the client project and try again.
-                If the problem persists, reach us at <a href="mailto:hello@firecms.co?subject=FireCMS%20login%20error"
-                                                        rel="noopener noreferrer"
-                                                        target="_blank">
-                hello@firecms.co </a>, or in our <a
-                rel="noopener noreferrer"
-                target="_blank"
-                href={"https://discord.gg/fxy7xsQm3m"}>Discord channel</a>.
-            </Typography>
-        </>;
-    } else {
-        errorBody = <>
-            <Typography>{props.configError.message}</Typography>
+function ErrorDelegatingLoginView({
+                                      configError,
+                                      onLogout,
+                                      fireCMSBackend
+                                  }: {
+    configError: Error | ApiError,
+    onLogout: () => void,
+    fireCMSBackend: FireCMSBackend
+}) {
+
+    const errorBody = "code" in configError
+        ? <CloudErrorView error={configError}
+                          fireCMSBackend={fireCMSBackend}/>
+        : <>
+            <Typography>{configError.message}</Typography>
             <Typography>
                 This error may be caused when a user has been deleted from the client project.
                 Make sure a user exists in the client project with the same email as the one trying to log in.
@@ -255,14 +250,15 @@ function ErrorDelegatingLoginView(props: { configError: Error | ApiError, onLogo
                 href={"https://discord.gg/fxy7xsQm3m"}>Discord channel</a>.
             </Typography>
         </>;
-    }
+
     return <CenteredView maxWidth={"2xl"} className={"flex flex-col gap-4"}>
         <div className={"flex gap-4 items-center"}>
             <ErrorIcon color={"error"}/>
             <Typography variant={"h4"}>Error logging in</Typography>
         </div>
+
         {errorBody}
-        <Button variant="outlined" onClick={props.onLogout}>Sign out</Button>
+        <Button variant="outlined" onClick={onLogout}>Sign out</Button>
     </CenteredView>;
 }
 
@@ -304,7 +300,7 @@ export function FireCMSClientWithController({
         configError: firebaseConfigError
     } = useInitialiseFirebase({
         onFirebaseInit: appConfig?.onFirebaseInit,
-        firebaseConfig: projectConfig.clientFirebaseConfig,
+        firebaseConfig: projectConfig.clientFirebaseConfig
     });
 
     const authController: FirebaseAuthController = useFirebaseAuthController({
@@ -359,6 +355,7 @@ export function FireCMSClientWithController({
         loadingOrErrorComponent = <CircularProgressCenter text={"Project loading"}/>;
     } else if (delegatedLoginError) {
         loadingOrErrorComponent = <ErrorDelegatingLoginView configError={delegatedLoginError}
+                                                            fireCMSBackend={fireCMSBackend}
                                                             onLogout={fireCMSBackend.signOut}/>
     } else if (notValidUser) {
         console.warn("No user was found with email " + notValidUser.email);
@@ -474,7 +471,7 @@ function FireCMSAppAuthenticated({
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({
         SubscriptionMessage: FireCMSDataEnhancementSubscriptionMessage,
-        host: fireCMSBackend.backendApiHost,
+        host: fireCMSBackend.backendApiHost
     });
 
     /**
@@ -515,10 +512,10 @@ function FireCMSAppAuthenticated({
                 collectionConfigController.collections ?? [],
                 appConfig?.modifyCollection
             ),
-            [appConfig?.modifyCollection, collectionConfigController.collections]),
+            [appConfig?.modifyCollection, collectionConfigController.collections])
     });
 
-    const introMode = navigationController.collections !== undefined && navigationController.collections.length === 0;
+    const introMode = (navigationController.collections ?? []).length === 0;
     const saasPlugin = useSaasPlugin({
         projectConfig,
         firestoreDelegate,

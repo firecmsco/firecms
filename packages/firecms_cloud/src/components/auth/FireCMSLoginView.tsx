@@ -6,7 +6,7 @@ import { GoogleLoginButton } from "./GoogleLoginButton";
 import { FireCMSBackend } from "../../types";
 
 export interface FireCMSLoginViewProps {
-    authController: FireCMSBackend;
+    fireCMSBackend: FireCMSBackend;
     includeGoogleAdminScopes: boolean;
     includeLogo: boolean;
     includeGoogleDisclosure: boolean;
@@ -20,7 +20,7 @@ export interface FireCMSLoginViewProps {
  * @group Firebase
  */
 export function FireCMSLoginView({
-                                  authController,
+                                  fireCMSBackend,
                                   includeGoogleAdminScopes,
                                   includeLogo,
                                   includeGoogleDisclosure,
@@ -33,19 +33,19 @@ export function FireCMSLoginView({
     const submittedNewsletter = useRef(false);
 
     useEffect(() => {
-        if (newsletterSubscribed && authController.user?.email && !submittedNewsletter.current) {
+        if (newsletterSubscribed && fireCMSBackend.user?.email && !submittedNewsletter.current) {
             submittedNewsletter.current = true;
-            handleSubmit(authController.user.email);
+            handleSubmit(fireCMSBackend.user.email);
         }
-    }, [newsletterSubscribed, authController.user]);
+    }, [newsletterSubscribed, fireCMSBackend.user]);
 
     function buildErrorView() {
         let errorView: any;
         const ignoredCodes = ["auth/popup-closed-by-user", "auth/cancelled-popup-request"];
-        if (authController.authProviderError && !ignoredCodes.includes(authController.authProviderError.code)) {
+        if (fireCMSBackend.authProviderError && !ignoredCodes.includes(fireCMSBackend.authProviderError.code)) {
             errorView =
                 <div className={"p-4"}>
-                    <ErrorView error={authController.authProviderError}/>
+                    <ErrorView error={fireCMSBackend.authProviderError}/>
                 </div>;
         }
         return errorView;
@@ -106,11 +106,11 @@ export function FireCMSLoginView({
             <GoogleLoginButton
                 disabled={!termsAccepted && includeTermsAndNewsLetter}
                 onClick={() => {
-                    authController.googleLogin(includeGoogleAdminScopes);
+                    fireCMSBackend.googleLogin(includeGoogleAdminScopes);
                 }}/>
 
             {includeGoogleAdminScopes &&
-                authController.permissionsNotGrantedError &&
+                fireCMSBackend.permissionsNotGrantedError &&
                 <ErrorView
                     error={"You need to grant additional permissions in order to manage your Google Cloud projects"}/>}
 

@@ -58,7 +58,7 @@ export function EntityView<M extends Record<string, any>>(
                 </div>
                 {Object.entries(properties)
                     .map(([key, property]) => {
-                        const value = (entity.values)[key];
+                        const value = entity.values?.[key];
                         return (
                             <div
                                 key={`reference_previews_${key}`}

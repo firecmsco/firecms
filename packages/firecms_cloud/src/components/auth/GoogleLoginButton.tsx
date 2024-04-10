@@ -12,7 +12,7 @@ export function GoogleLoginButton({
 }) {
     return (
         <div className={"m-4 w-full"}>
-            <Button className={"w-full bg-white"}
+            <Button className={cn("w-full bg-white text-gray-900 dark:text-gray-900", disabled ? "" : "hover:text-white hover:dark:text-white")}
                     style={{
                         height: "40px",
                         borderRadius: "4px",
@@ -22,7 +22,7 @@ export function GoogleLoginButton({
                     disabled={disabled}
                     onClick={onClick}>
                 <div
-                    className={cn("flex items-center justify-items-center text-gray-900 dark:text-gray-900", disabled ? "" : "hover:text-white hover:dark:text-white")}>
+                    className={cn("flex items-center justify-items-center ")}>
                     <div className="flex flex-col items-center justify-center w-4.5 h-4.5">
                         {googleIcon()}
                     </div>

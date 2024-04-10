@@ -7,20 +7,17 @@ const rootCollectionsCache: { [key: string]: string[] } = {};
 
 export function buildProjectsApi(host: string, getBackendAuthToken: () => Promise<string>) {
 
-    async function createNewFireCMSProject(projectId: string, googleAccessToken: string, creationType: "new" | "existing") {
+    async function createNewFireCMSProject(projectId: string, googleAccessToken: string | undefined, serviceAccount: object | undefined, creationType: "new" | "existing") {
 
         const firebaseAccessToken = await getBackendAuthToken();
         return fetch(host + "/projects",
             {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${firebaseAccessToken}`,
-                    "x-admin-authorization": `Bearer ${googleAccessToken}`
-                },
+                headers: buildHeaders({ firebaseAccessToken, googleAccessToken, serviceAccount }),
                 body: JSON.stringify({
                     projectId,
-                    creationType
+                    creationType,
+                    serviceAccount: serviceAccount ?? null
                 })
             })
             .then(async (res) => {
@@ -34,10 +31,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         return fetch(host + `/projects/${projectId}/firebase_webapp`,
             {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${firebaseAccessToken}`
-                },
+                headers: buildHeaders({ firebaseAccessToken }),
                 body: JSON.stringify({
                     projectId
                 })
@@ -47,17 +41,13 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
             });
     }
 
-    async function addSecurityRules(projectId: string, googleAccessToken: string) {
+    async function addSecurityRules(projectId: string, googleAccessToken?: string, serviceAccount?: object) {
 
         const firebaseAccessToken = await getBackendAuthToken();
         return fetch(host + `/projects/${projectId}/firestore_security_rules`,
             {
                 method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${firebaseAccessToken}`,
-                    "x-admin-authorization": `Bearer ${googleAccessToken}`
-                }
+                headers: buildHeaders({ firebaseAccessToken, googleAccessToken, serviceAccount }),
             })
             .then(async (res) => {
                 return handleApiResponse(res, projectId).then((_) => true);
@@ -71,10 +61,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         return fetch(host + "/projects/" + projectId + "/users",
             {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${firebaseAccessToken}`
-                },
+                headers: buildHeaders({ firebaseAccessToken }),
                 body: JSON.stringify(user)
             })
             .then((res) => {
@@ -94,10 +81,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         return fetch(host + "/projects/" + projectId + "/users/" + uid,
             {
                 method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${firebaseAccessToken}`
-                },
+                headers: buildHeaders({ firebaseAccessToken }),
                 body: JSON.stringify(persistedUserData)
             })
             .then((res) => {
@@ -111,10 +95,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         return fetch(host + "/projects/" + projectId + "/users/" + uid,
             {
                 method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${firebaseAccessToken}`
-                }
+                headers: buildHeaders({ firebaseAccessToken })
             })
             .then((res) => {
                 return handleApiResponse<void>(res, projectId);
@@ -123,36 +104,25 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
 
     async function getRootCollections(projectId: string,
                                       googleAccessToken?: string,
+                                      serviceAccount?: object,
                                       retries = 10): Promise<string[]> {
         if (rootCollectionsCache[projectId]) {
             return rootCollectionsCache[projectId];
         }
 
         const firebaseAccessToken = await getBackendAuthToken();
-        const headers: {
-            "Content-Type": string;
-            Authorization: string;
-            "x-admin-authorization"?: string;
-        } = {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${firebaseAccessToken}`
-        };
-
-        if (googleAccessToken) {
-            headers["x-admin-authorization"] = `Bearer ${googleAccessToken}`;
-        }
 
         async function retry() {
             // wait 2 seconds
             await new Promise(resolve => setTimeout(resolve, 5000));
             console.debug("Retrying getRootCollections", retries);
-            return getRootCollections(projectId, googleAccessToken, retries - 1);
+            return getRootCollections(projectId, googleAccessToken, serviceAccount,retries - 1);
         }
 
         return fetch(host + "/projects/" + projectId + "/firestore_root_collections",
             {
                 method: "GET",
-                headers
+                headers: buildHeaders({ firebaseAccessToken, googleAccessToken, serviceAccount }),
             })
             .then(async (res) => {
                 if (res.status >= 300) {
@@ -177,11 +147,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         return fetch(host + "/projects/" + projectId + "/service_accounts",
             {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${firebaseAccessToken}`,
-                    "x-admin-authorization": `Bearer ${googleAccessToken}`
-                }
+                headers: buildHeaders({ firebaseAccessToken, googleAccessToken }),
             })
             .then(async (res) => {
                 if (res.status === 409) // already exists
@@ -196,10 +162,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         return fetch(host + "/projects/" + projectId + "/delegated_login",
             {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${firebaseAccessToken}`
-                },
+                headers: buildHeaders({ firebaseAccessToken }),
                 body: JSON.stringify({
                     projectId
                 })
@@ -218,10 +181,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         return fetch(`${host}/customer/stripe_portal_link?return_url=${encodeURIComponent(window.location.href)}&project_id=${projectId}`,
             {
                 method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${firebaseAccessToken}`
-                }
+                headers: buildHeaders({ firebaseAccessToken }),
             })
             .then(async (res) => {
                 const data = await res.json();
@@ -248,4 +208,28 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
 
         getRemoteConfigUrl
     }
+}
+
+function buildHeaders({
+                          firebaseAccessToken,
+                          googleAccessToken,
+                          serviceAccount
+                      }: {
+    firebaseAccessToken: string,
+    googleAccessToken?: string,
+    serviceAccount?: object
+}): Record<string, string> {
+    const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+    };
+    if (firebaseAccessToken) {
+        headers.Authorization = `Bearer ${firebaseAccessToken}`;
+    }
+    if (googleAccessToken) {
+        headers["x-admin-authorization"] = `Bearer ${googleAccessToken}`;
+    }
+    if (serviceAccount) {
+        headers["x-admin-service-account"] = `Bearer ${btoa(JSON.stringify(serviceAccount))}`;
+    }
+    return headers;
 }

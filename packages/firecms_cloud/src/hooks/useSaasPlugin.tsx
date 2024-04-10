@@ -4,7 +4,6 @@ import { TextSearchInfoDialog } from "../components/subscriptions/TextSearchInfo
 import { FirestoreDelegate } from "@firecms/firebase";
 import { CollectionsConfigController } from "@firecms/collection_editor";
 import { FireCMSAppConfig } from "../types";
-import { AddIcon, Button, Typography } from "@firecms/ui";
 
 export function useSaasPlugin({ projectConfig, firestoreDelegate, collectionConfigController, appConfig, introMode }: {
     projectConfig: ProjectConfig;

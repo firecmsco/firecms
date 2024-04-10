@@ -87,7 +87,7 @@ export function Typography<C extends React.ElementType>(
         variantToClasses[variant],
         color ? colorToClasses[color] : "",
         align !== "inherit" && `text-${align}`,
-        gutterBottom && "mb-[0.35em]",
+        gutterBottom && "mb-2",
         noWrap && "truncate",
         paragraph && "mb-3",
         className

@@ -50,7 +50,7 @@ const ButtonInner = React.forwardRef<
         // Outlined Variants
         "border border-primary text-primary hover:bg-primary-bg": variant === "outlined" && color === "primary" && !disabled,
         "border border-secondary text-secondary hover:bg-secondary-bg": variant === "outlined" && color === "secondary" && !disabled,
-        "border border-red-500 text-red-500 hover:bg-red-500": variant === "outlined" && color === "error" && !disabled,
+        "border border-red-500 text-red-500 hover:bg-red-500 hover:text-white": variant === "outlined" && color === "error" && !disabled,
         "border border-slate-400 text-text-primary dark:text-text-primary-dark hover:bg-slate-200": variant === "outlined" && color === "text" && !disabled,
         // Disabled states for all variants
         "border border-transparent opacity-50": variant === "text" && disabled,

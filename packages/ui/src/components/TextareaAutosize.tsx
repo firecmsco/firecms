@@ -288,7 +288,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
             />
         </React.Fragment>
     );
-});
+}) as React.FC<TextareaAutosizeProps & { ref?: React.ForwardedRef<Element> }>;
 
 export type TextareaAutosizeProps = Omit<React.InputHTMLAttributes<HTMLTextAreaElement>, "onResize"> & {
 
