@@ -7,7 +7,7 @@ import * as admin from "firebase-admin";
  * gcloud firestore export gs://firecms_firestore_backups --project firecms-demo-27150
  * ```
  */
-const bucket = "gs://firecms_firestore_backups/2023-07-13T22:31:21_98124";
+const bucket = "gs://firecms_firestore_backups/2024-04-11T14:25:44_76567";
 
 export function eraseDatabase() {
     const firebase_tools = require("firebase-tools");
