@@ -132,7 +132,7 @@ export function IntroWidget({ introMode }: {
         : true;
 
     return (
-        <div className={"mt-8 flex flex-col mt-8 p-2"}>
+        <div className={"mt-8 flex flex-col p-2"}>
             <Typography variant={"h4"} className="mb-4">Welcome</Typography>
             <Typography paragraph={true}>Your admin panel is ready ✌️</Typography>
             <Typography paragraph={true}>

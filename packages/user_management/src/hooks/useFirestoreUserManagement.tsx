@@ -37,8 +37,14 @@ export interface UserManagementParams {
      */
     rolesPath?: string;
 
+    /**
+     * Maximum number of users that can be created.
+     */
     usersLimit?: number;
 
+    /**
+     * Can the logged user edit roles
+     */
     canEditRoles?: boolean;
 
     /**
@@ -99,12 +105,13 @@ export function useFirestoreUserManagement({
                         const newRoles = docsToRoles(snapshot.docs);
                         setRoles(newRoles);
                     } catch (e) {
-                        // console.error(e);
+                        console.error("Error loading roles", e);
                         setRolesError(e as Error);
                     }
                     setRolesLoading(false);
                 },
                 error: (e) => {
+                    console.error("Error loading roles", e);
                     setRolesError(e);
                     setRolesLoading(false);
                 }
@@ -124,11 +131,13 @@ export function useFirestoreUserManagement({
                         const newUsers = docsToUsers(snapshot.docs);
                         setUsersWithRoleIds(newUsers);
                     } catch (e) {
+                        console.error("Error loading users", e);
                         setUsersError(e as Error);
                     }
                     setUsersLoading(false);
                 },
                 error: (e) => {
+                    console.error("Error loading users", e);
                     setUsersError(e);
                     setUsersLoading(false);
                 }
@@ -204,12 +213,10 @@ export function useFirestoreUserManagement({
     }, [users]);
 
     const authenticator: Authenticator = useCallback(({ user }) => {
-        console.log("Authenticating user", user);
-        // return true;"
+        console.debug("Authenticating user", user);
 
-        // console.log("authentication", user, userManagement);
         if (loading) {
-            console.log("User management is still loading");
+            console.warn("User management is still loading");
             return false;
         }
 
@@ -220,11 +227,10 @@ export function useFirestoreUserManagement({
 
         const mgmtUser = users.find(u => u.email?.toLowerCase() === user?.email?.toLowerCase());
         if (mgmtUser) {
-            // authController.setRoles(mgmtUser.roles ?? [])
             return true;
         }
 
-        throw Error("Could not find a user with the provided email");
+        throw Error("Could not find a user with the provided email in the user management system.");
     }, [loading, users])
 
     return {
@@ -233,9 +239,11 @@ export function useFirestoreUserManagement({
         users,
         saveUser,
         saveRole,
+        rolesError,
         deleteUser,
         deleteRole,
         usersLimit,
+        usersError,
         canEditRoles: canEditRoles === undefined ? true : canEditRoles,
         allowDefaultRolesCreation: allowDefaultRolesCreation === undefined ? true : allowDefaultRolesCreation,
         includeCollectionConfigPermissions: Boolean(includeCollectionConfigPermissions),

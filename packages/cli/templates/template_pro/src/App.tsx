@@ -60,7 +60,7 @@ function AppInner() {
         view: <ExampleCMSView/>
     }]), []);
 
-    const signInOptions: FirebaseSignInProvider[] = ["google.com"];
+    const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
 
     const {
         firebaseApp,
@@ -199,9 +199,6 @@ function AppInner() {
                                 component = (
                                     <Scaffold
                                         name={name}
-                                        fireCMSAppBarProps={{
-                                            endAdornment: <div>Project select here</div>
-                                        }}
                                         autoOpenDrawer={false}>
                                         <NavigationRoutes/>
                                         <SideDialogs/>

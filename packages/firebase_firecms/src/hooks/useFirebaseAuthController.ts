@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import equal from "react-fast-compare"
 
 import {
     ApplicationVerifier,
@@ -29,7 +30,7 @@ export interface FirebaseAuthControllerProps {
     firebaseApp?: FirebaseApp;
     signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>;
     onSignOut?: () => void;
-    defineRolesFor?: (user: User) => Promise<Role[]> | Role[] | undefined;
+    defineRolesFor?: (user: User) => Promise<Role[] | undefined>;
 }
 
 /**
@@ -57,17 +58,33 @@ export const useFirebaseAuthController = <ExtraData>({
     const authRef = useRef(firebaseApp ? getAuth(firebaseApp) : null);
 
     const updateUser = useCallback(async (user: FirebaseUser | null, initialize?: boolean) => {
+        console.log("Updating user", user);
         if (loading) return;
-        if (defineRolesFor && user) {
-            const userRoles = await defineRolesFor(user);
-            setRoles(userRoles);
-        }
+        // if (defineRolesFor && user) {
+        //     const userRoles = await defineRolesFor(user);
+        //     setRoles(userRoles);
+        // }
         setLoggedUser(user);
         setAuthLoading(false);
         if (initialize) {
             setInitialLoading(false);
         }
     }, [loading]);
+
+    const updateRoles = useCallback(async (user: FirebaseUser | null) => {
+        if (defineRolesFor && user) {
+            const userRoles = await defineRolesFor(user);
+            if (!equal(userRoles, roles)) {
+                setRoles(userRoles);
+            }
+        }
+    }, [defineRolesFor, roles]);
+
+    useEffect(() => {
+        if (updateRoles && loggedUser) {
+            updateRoles(loggedUser);
+        }
+    }, [updateRoles, loggedUser]);
 
     useEffect(() => {
         if (!firebaseApp) return;
@@ -170,7 +187,7 @@ export const useFirebaseAuthController = <ExtraData>({
                 onSignOutProp && onSignOutProp();
             });
         setLoginSkipped(false);
-    }, [firebaseApp, onSignOutProp]);
+    }, [onSignOutProp]);
 
     const doOauthLogin = useCallback((auth: Auth, provider: OAuthProvider | FacebookAuthProvider | GithubAuthProvider | TwitterAuthProvider) => {
         setAuthLoading(true);
