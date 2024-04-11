@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
 import { UserManagement } from "../types";
-import { Authenticator, PermissionsBuilder, Role, User, useTraceUpdate } from "@firecms/core";
+import { Authenticator, PermissionsBuilder, Role, User } from "@firecms/core";
 import { resolveUserRolePermissions } from "../utils";
 
 type UserWithRoleIds = User & { roles: string[] };
@@ -62,15 +62,15 @@ export interface UserManagementParams {
  * @param usersLimit
  * @param canEditRoles
  */
-export function useBuildFirestoreUserManagement({
-                                                    firebaseApp,
-                                                    usersPath = "__FIRECMS/config/users",
-                                                    rolesPath = "__FIRECMS/config/roles",
-                                                    usersLimit,
-                                                    canEditRoles = true,
-                                                    allowDefaultRolesCreation,
-                                                    includeCollectionConfigPermissions
-                                                }: UserManagementParams): UserManagement {
+export function useFirestoreUserManagement({
+                                               firebaseApp,
+                                               usersPath = "__FIRECMS/config/users",
+                                               rolesPath = "__FIRECMS/config/roles",
+                                               usersLimit,
+                                               canEditRoles = true,
+                                               allowDefaultRolesCreation,
+                                               includeCollectionConfigPermissions
+                                           }: UserManagementParams): UserManagement {
 
     const [rolesLoading, setRolesLoading] = React.useState<boolean>(true);
     const [usersLoading, setUsersLoading] = React.useState<boolean>(true);
@@ -137,9 +137,9 @@ export function useBuildFirestoreUserManagement({
     }, [firebaseApp, usersPath]);
 
     const saveUser = useCallback(async (user: User): Promise<User> => {
-        if (!firebaseApp) throw Error("useFirestoreConfigurationPersistence Firebase not initialised");
+        if (!firebaseApp) throw Error("useFirestoreUserManagement Firebase not initialised");
         const firestore = getFirestore(firebaseApp);
-        if (!firestore || !usersPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        if (!firestore || !usersPath) throw Error("useFirestoreUserManagement Firestore not initialised");
         console.debug("Persisting user", user);
         const roleIds = user.roles?.map(r => r.id);
         const {
@@ -155,12 +155,12 @@ export function useBuildFirestoreUserManagement({
         } else {
             return addDoc(collection(firestore, usersPath), data).then(() => user);
         }
-    }, [usersPath]);
+    }, [usersPath, firebaseApp]);
 
     const saveRole = useCallback((role: Role): Promise<void> => {
-        if (!firebaseApp) throw Error("useFirestoreConfigurationPersistence Firebase not initialised");
+        if (!firebaseApp) throw Error("useFirestoreUserManagement Firebase not initialised");
         const firestore = getFirestore(firebaseApp);
-        if (!firestore || !rolesPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        if (!firestore || !rolesPath) throw Error("useFirestoreUserManagement Firestore not initialised");
         console.debug("Persisting role", role);
         const {
             id,
@@ -168,26 +168,26 @@ export function useBuildFirestoreUserManagement({
         } = role;
         const ref = doc(firestore, rolesPath, id);
         return setDoc(ref, roleData, { merge: true });
-    }, [rolesPath]);
+    }, [rolesPath, firebaseApp]);
 
     const deleteUser = useCallback(async (user: User): Promise<void> => {
-        if (!firebaseApp) throw Error("useFirestoreConfigurationPersistence Firebase not initialised");
+        if (!firebaseApp) throw Error("useFirestoreUserManagement Firebase not initialised");
         const firestore = getFirestore(firebaseApp);
-        if (!firestore || !usersPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        if (!firestore || !usersPath) throw Error("useFirestoreUserManagement Firestore not initialised");
         console.debug("Deleting", user);
         const { uid } = user;
         return deleteDoc(doc(firestore, usersPath, uid));
-    }, [usersPath]);
+    }, [usersPath, firebaseApp]);
 
     const deleteRole = useCallback((role: Role): Promise<void> => {
-        if (!firebaseApp) throw Error("useFirestoreConfigurationPersistence Firebase not initialised");
+        if (!firebaseApp) throw Error("useFirestoreUserManagement Firebase not initialised");
         const firestore = getFirestore(firebaseApp);
-        if (!firestore || !rolesPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        if (!firestore || !rolesPath) throw Error("useFirestoreUserManagement Firestore not initialised");
         console.debug("Deleting", role);
         const { id } = role;
         const ref = doc(firestore, rolesPath, id);
         return deleteDoc(ref);
-    }, [rolesPath]);
+    }, [rolesPath, firebaseApp]);
 
     const collectionPermissions: PermissionsBuilder = useCallback(({
                                                                        collection,
@@ -197,12 +197,11 @@ export function useBuildFirestoreUserManagement({
         user
     }), []);
 
-    const userIds = users.map(u => u.uid);
     const defineRolesFor: ((user: User) => Role[] | undefined) = useCallback((user) => {
         if (!users) throw Error("Users not loaded");
         const mgmtUser = users.find(u => u.email?.toLowerCase() === user?.email?.toLowerCase());
         return mgmtUser?.roles;
-    }, [userIds]);
+    }, [users]);
 
     const authenticator: Authenticator = useCallback(({ user }) => {
         console.log("Authenticating user", user);
@@ -226,7 +225,7 @@ export function useBuildFirestoreUserManagement({
         }
 
         throw Error("Could not find a user with the provided email");
-    }, [loading, userIds])
+    }, [loading, users])
 
     return {
         loading,
