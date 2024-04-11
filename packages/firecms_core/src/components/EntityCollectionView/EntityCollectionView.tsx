@@ -74,7 +74,6 @@ import { DeleteEntityDialog } from "../DeleteEntityDialog";
 import { useAnalyticsController } from "../../hooks/useAnalyticsController";
 import { useSelectionController } from "./useSelectionController";
 import { EntityCollectionViewStartActions } from "./EntityCollectionViewStartActions";
-import { ClearFilterSortButton } from "../ClearFilterSortButton";
 
 const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
 
@@ -82,8 +81,18 @@ const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
  * @group Components
  */
 export type EntityCollectionViewProps<M extends Record<string, any>> = {
-    fullPath: string;
+    /**
+     * Complete path where this collection is located.
+     * It defaults to the collection path if not provided.
+     */
+    fullPath?: string;
+    /**
+     * If this is a subcollection, specify the parent collection ids.
+     */
     parentCollectionIds?: string[];
+    /**
+     * Whether this is a subcollection or not.
+     */
     isSubCollection?: boolean;
     className?: string;
 } & EntityCollection<M>;
@@ -114,7 +123,7 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
  */
 export const EntityCollectionView = React.memo(
     function EntityCollectionView<M extends Record<string, any>>({
-                                                                     fullPath,
+                                                                     fullPath: fullPathProp,
                                                                      parentCollectionIds,
                                                                      isSubCollection,
                                                                      className,
@@ -122,6 +131,7 @@ export const EntityCollectionView = React.memo(
                                                                  }: EntityCollectionViewProps<M>
     ) {
 
+        const fullPath = fullPathProp ?? collectionProp.path;
         const dataSource = useDataSource(collectionProp);
         const navigation = useNavigationController();
         const sideEntityController = useSideEntityController();
@@ -176,7 +186,6 @@ export const EntityCollectionView = React.memo(
         const usedSelectionController = collection.selectionController ?? selectionController;
         const {
             selectedEntities,
-            toggleEntitySelection,
             isEntitySelected,
             setSelectedEntities
         } = usedSelectionController;

@@ -13,8 +13,8 @@ import {
     useSnackbarController
 } from "@firecms/core";
 import { Button, Chip, GitHubIcon, IconButton, Paper, Tooltip, Typography } from "@firecms/ui";
-import { Product } from "./types";
-import { usersCollection } from "./collections/users_collection";
+import { Product } from "../types";
+import { productsCollection } from "../collections/products";
 
 /**
  * Sample CMS view not bound to a collection, customizable by the developer.
@@ -167,8 +167,7 @@ export function ExampleCMSView() {
                         </p>
                         <Paper
                             className={"h-[400px]"}>
-                            <EntityCollectionView {...usersCollection}
-                                                  fullPath={"users"}
+                            <EntityCollectionView {...productsCollection}
                                                   selectionController={tableSelectionController}/>
                         </Paper>
                     </div>

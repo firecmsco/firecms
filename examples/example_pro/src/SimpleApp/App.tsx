@@ -20,16 +20,21 @@ import {
 import {
     FirebaseAuthController,
     FirebaseLoginView,
-    FirebaseSignInProvider, FirebaseUserWrapper,
+    FirebaseSignInProvider,
+    FirebaseUserWrapper,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
     useInitialiseFirebase,
 } from "@firecms/firebase";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
-import { booksCollection } from "./books_collection";
 import { useImportExportPlugin } from "@firecms/data_import_export";
-import { CenteredView } from "@firecms/ui";
+import {
+    useFirestoreUserManagement,
+    userManagementAdminViews,
+    useUserManagementPlugin
+} from "@firecms/user_management";
+import { booksCollection } from "./books_collection";
 
 export const firebaseConfig = {
     apiKey: "AIzaSyBzt-JvcXvpDrdNU7jYX3fC3v0EAHjTKEw",
@@ -46,9 +51,9 @@ function ProSample() {
 
     // Use your own authentication logic here
     const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
-                                                                                user,
-                                                                                authController
-                                                                            }) => {
+                                                                                       user,
+                                                                                       authController
+                                                                                   }) => {
 
         if (user?.email?.includes("flanders")) {
             throw Error("Stupid Flanders!");
@@ -81,10 +86,17 @@ function ProSample() {
 
     const signInOptions: FirebaseSignInProvider[] = ["google.com"];
 
+    // controller in charge of user management
+    const userManagement = useFirestoreUserManagement({
+        firebaseApp
+    });
+
     // Controller for managing authentication
     const authController: FirebaseAuthController = useFirebaseAuthController({
         firebaseApp,
-        signInOptions
+        signInOptions,
+        loading: userManagement.loading,
+        defineRolesFor: userManagement.defineRolesFor
     });
 
     // Controller for saving some user preferences locally.
@@ -105,14 +117,18 @@ function ProSample() {
         canAccessMainView,
         notAllowedError
     } = useValidateAuthenticator({
+        disabled: userManagement.loading,
+        authenticator: userManagement.authenticator,
         authController,
-        authenticator: myAuthenticator,
+        // authenticator: myAuthenticator,
         dataSourceDelegate: firestoreDelegate,
         storageSource
     });
 
     const navigationController = useBuildNavigationController({
         collections,
+        collectionPermissions: userManagement.collectionPermissions,
+        adminViews: userManagementAdminViews,
         authController,
         dataSourceDelegate: firestoreDelegate
     });
@@ -125,16 +141,16 @@ function ProSample() {
         }
     });
 
+    const userManagementPlugin = useUserManagementPlugin({ userManagement });
+
     const importExportPlugin = useImportExportPlugin();
 
     if (firebaseConfigLoading || !firebaseApp) {
-        return <>
-            <CircularProgressCenter/>
-        </>;
+        return <><CircularProgressCenter/></>;
     }
 
     if (configError) {
-        return <CenteredView>{configError}</CenteredView>;
+        return <>{configError}</>;
     }
     return (
         <SnackbarProvider>
@@ -145,7 +161,7 @@ function ProSample() {
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
-                    plugins={[dataEnhancementPlugin, importExportPlugin]}
+                    plugins={[dataEnhancementPlugin, importExportPlugin, userManagementPlugin]}
                 >
                     {({
                           context,

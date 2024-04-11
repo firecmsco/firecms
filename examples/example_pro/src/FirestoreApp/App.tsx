@@ -33,7 +33,7 @@ import {
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { useImportExportPlugin } from "@firecms/data_import_export";
 import {
-    useBuildFirestoreUserManagement,
+    useFirestoreUserManagement,
     userManagementAdminViews,
     useUserManagementPlugin
 } from "@firecms/user_management";
@@ -166,7 +166,7 @@ function App() {
     // Controller used to manage the dark or light color mode
     const modeController = useBuildModeController();
 
-    const userManagement = useBuildFirestoreUserManagement({
+    const userManagement = useFirestoreUserManagement({
         firebaseApp,
     });
 

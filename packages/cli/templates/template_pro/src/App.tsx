@@ -3,10 +3,9 @@ import { BrowserRouter } from "react-router-dom";
 
 import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
-
-import { CenteredView } from "@firecms/ui";
 import {
     CircularProgressCenter,
+    CMSView,
     FireCMS,
     ModeControllerProvider,
     NavigationRoutes,
@@ -25,12 +24,19 @@ import {
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
-    useInitialiseFirebase,
-    useInitializeAppCheck
+    useInitialiseFirebase
 } from "@firecms/firebase";
 
 import { firebaseConfig } from "./firebase_config";
 import { productsCollection } from "./collections/products";
+import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
+import {
+    useFirestoreUserManagement,
+    userManagementAdminViews,
+    useUserManagementPlugin
+} from "@firecms/user_management";
+import { useImportExportPlugin } from "@firecms/data_import_export";
+import { ExampleCMSView } from "./views/ExampleCMSView";
 
 function App() {
     return <BrowserRouter>
@@ -42,9 +48,17 @@ function AppInner() {
 
     const name = "My CMS app";
 
-    // is is important to memoize the collections and views
-    const collections = useMemo(() => [productsCollection], []);
-    const views = useMemo(() => [], []);
+    // Here you define the collections that will be available in your CMS
+    const collections = useMemo(() => [
+        productsCollection
+    ], []);
+
+    // Here you define your custom top-level views
+    const views: CMSView[] = useMemo(() => ([{
+        path: "example",
+        name: "Example CMS view",
+        view: <ExampleCMSView/>
+    }]), []);
 
     const signInOptions: FirebaseSignInProvider[] = ["google.com"];
 
@@ -61,10 +75,10 @@ function AppInner() {
      */
     const modeController = useBuildModeController();
 
-    const {
-        appCheckLoading,
-        getAppCheckToken
-    } = useInitializeAppCheck({
+    /**
+     * Controller in charge of user management
+     */
+    const userManagement = useFirestoreUserManagement({
         firebaseApp
     });
 
@@ -73,7 +87,9 @@ function AppInner() {
      */
     const authController: FirebaseAuthController = useFirebaseAuthController({
         firebaseApp,
-        signInOptions
+        signInOptions,
+        loading: userManagement.loading,
+        defineRolesFor: userManagement.defineRolesFor
     });
 
     /**
@@ -104,25 +120,48 @@ function AppInner() {
         notAllowedError
     } = useValidateAuthenticator({
         authController,
-        authenticator: () => true,
-        getAppCheckToken,
+        disabled: userManagement.loading,
+        authenticator: userManagement.authenticator, // you can define your own authenticator here
         dataSourceDelegate: firestoreDelegate,
         storageSource
     });
 
     const navigationController = useBuildNavigationController({
         collections,
+        collectionPermissions: userManagement.collectionPermissions,
         views,
+        adminViews: userManagementAdminViews,
         authController,
         dataSourceDelegate: firestoreDelegate
     });
 
-    if (firebaseConfigLoading || !firebaseApp || appCheckLoading) {
+    /**
+     * Data enhancement plugin
+     */
+    const dataEnhancementPlugin = useDataEnhancementPlugin({
+        getConfigForPath: ({ path }) => {
+            if (path === "products")
+                return true;
+            return false;
+        }
+    });
+
+    /**
+     * User management plugin
+     */
+    const userManagementPlugin = useUserManagementPlugin({ userManagement });
+
+    /**
+     * Allow import and export data plugin
+     */
+    const importExportPlugin = useImportExportPlugin();
+
+    if (firebaseConfigLoading || !firebaseApp) {
         return <CircularProgressCenter/>;
     }
 
     if (configError) {
-        return <CenteredView>{configError}</CenteredView>;
+        return <>{configError}</>;
     }
 
     return (
@@ -135,7 +174,7 @@ function AppInner() {
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
-
+                    plugins={[dataEnhancementPlugin, importExportPlugin, userManagementPlugin]}
                 >
                     {({
                           context,

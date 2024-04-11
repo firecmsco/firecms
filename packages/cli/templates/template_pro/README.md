@@ -7,11 +7,19 @@ configuration to get you started.
 
 In order to run this project, you will need to create a Firebase project,
 create a web app and copy the configuration to the `firebase_config.ts`.
+(but it is likely it was configured for you already).
 
 Then simply run:
 
 ### Running the project
 
+Install the dependencies:
+
+```bash
+yarn
+```
+
+And run the project locally:
 ```bash
 yarn dev
 ```
@@ -25,5 +33,3 @@ project name. Then run:
 yarn build
 ```
 
-> Note: this may not work if you have set up your Firebase hosting with
-> a custom config.
