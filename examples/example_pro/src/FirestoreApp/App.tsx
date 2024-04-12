@@ -9,7 +9,6 @@ import { CenteredView, GitHubIcon, IconButton, Tooltip, } from "@firecms/ui";
 import {
     CircularProgressCenter,
     CMSView,
-    EntityCollection,
     FireCMS,
     ModeControllerProvider,
     NavigationRoutes,
@@ -86,9 +85,22 @@ function App() {
         // connectFirestoreEmulator(getFirestore(app), '127.0.0.1', 8080);
     };
 
+    const {
+        firebaseApp,
+        firebaseConfigLoading,
+        configError
+    } = useInitialiseFirebase({
+        firebaseConfig,
+        onFirebaseInit
+    });
+
+    const collectionConfigController = useFirestoreCollectionsConfigController({
+        firebaseApp
+    });
+
     // It is important to memoize the collections and views
-    const collections = useMemo(() => {
-        const cols = [
+    const collections = useCallback(() => {
+        const sourceCollections = [
             booksCollection,
             productsCollection,
             localeCollectionGroup,
@@ -98,10 +110,13 @@ function App() {
             cryptoCollection
         ];
         if (process.env.NODE_ENV !== "production") {
-            cols.push(testCollection);
+            sourceCollections.push(testCollection);
         }
-        return cols;
-    }, []);
+        return mergeCollections(
+            sourceCollections,
+            collectionConfigController.collections ?? []
+        )
+    }, [collectionConfigController.collections]);
 
     const views: CMSView[] = useMemo(() => ([
         {
@@ -154,15 +169,6 @@ function App() {
         }
     });
 
-    const {
-        firebaseApp,
-        firebaseConfigLoading,
-        configError
-    } = useInitialiseFirebase({
-        firebaseConfig,
-        onFirebaseInit
-    });
-
     // Controller used to manage the dark or light color mode
     const modeController = useBuildModeController();
 
@@ -193,10 +199,6 @@ function App() {
 
     const userManagementPlugin = useUserManagementPlugin({ userManagement });
 
-    const collectionConfigController = useFirestoreCollectionsConfigController({
-        firebaseApp
-    });
-
     const collectionEditorPlugin = useCollectionEditorPlugin({
         collectionConfigController
     });
@@ -224,13 +226,7 @@ function App() {
         views,
         adminViews: userManagementAdminViews,
         authController,
-        dataSourceDelegate: firestoreDelegate,
-        injectCollections: useCallback(
-            (collections: EntityCollection[]) => mergeCollections(
-                collections,
-                collectionConfigController.collections ?? []
-            ),
-            [collectionConfigController.collections])
+        dataSourceDelegate: firestoreDelegate
     });
 
     if (firebaseConfigLoading || !firebaseApp) {

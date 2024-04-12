@@ -450,13 +450,13 @@ async function resolveCollections(collections: undefined | EntityCollection[] | 
         resolvedCollections = collections;
     }
 
-    resolvedCollections = applyPermissionsFunctionIfEmpty(resolvedCollections, collectionPermissions);
-
-    resolvedCollections = filterOutNotAllowedCollections(resolvedCollections, authController);
-
     if (injectCollections) {
         resolvedCollections = injectCollections(resolvedCollections ?? []);
     }
+
+    resolvedCollections = applyPermissionsFunctionIfEmpty(resolvedCollections, collectionPermissions);
+
+    resolvedCollections = filterOutNotAllowedCollections(resolvedCollections, authController);
 
     return resolvedCollections;
 }

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { FirebaseApp } from "firebase/app";
 import { BrowserRouter, Route } from "react-router-dom";
 
@@ -11,6 +11,7 @@ import {
     FireCMSPlugin,
     ModeController,
     ModeControllerProvider,
+    NavigationController,
     NavigationRoutes,
     PermissionsBuilder,
     Scaffold,
@@ -414,6 +415,31 @@ function NoAccessError({ authController }: {
     </CenteredView>;
 }
 
+function usePathSuggestions(fireCMSBackend: FireCMSBackend, projectConfig: ProjectConfig, navigationController: NavigationController) {
+
+    const {
+        collections
+    } = navigationController;
+    const existingPaths = (collections ?? []).map(col => col.path.trim().toLowerCase());
+
+    const [rootPathSuggestions, setRootPathSuggestions] = React.useState<string[] | undefined>();
+    useEffect(() => {
+        const googleAccessToken = fireCMSBackend.googleCredential?.accessToken;
+        fireCMSBackend.projectsApi.getRootCollections(projectConfig.projectId, googleAccessToken).then((paths) => {
+            setRootPathSuggestions(paths.filter(p => !existingPaths.includes(p.trim().toLowerCase())));
+        })
+    }, []);
+
+    const getPathSuggestions = useCallback((path?: string) => {
+        if (!path && rootPathSuggestions) {
+            return Promise.resolve(rootPathSuggestions);
+        }
+        return Promise.resolve([]);
+    }, [rootPathSuggestions]);
+
+    return { getPathSuggestions };
+}
+
 function FireCMSAppAuthenticated({
                                      fireCMSUser,
                                      firebaseApp,
@@ -521,20 +547,16 @@ function FireCMSAppAuthenticated({
         firestoreDelegate,
         collectionConfigController,
         appConfig,
-        introMode
+        introMode: introMode ? (projectConfig.creationType === "new" ? "new_project" : "existing_project") : undefined,
     });
+
+    const { getPathSuggestions } = usePathSuggestions(fireCMSBackend, projectConfig, navigationController);
 
     const collectionEditorPlugin = useCollectionEditorPlugin<PersistedCollection, User>({
         collectionConfigController,
         configPermissions,
-        introMode: introMode ? (projectConfig.creationType === "new" ? "new_project" : "existing_project") : undefined,
         reservedGroups: RESERVED_GROUPS,
-        pathSuggestions: (path?) => {
-            const googleAccessToken = fireCMSBackend.googleCredential?.accessToken;
-            if (!path)
-                return fireCMSBackend.projectsApi.getRootCollections(projectConfig.projectId, googleAccessToken);
-            return Promise.resolve([]);
-        },
+        getPathSuggestions,
         getUser: (uid) => {
             return userManagement.users.find(u => u.uid === uid) ?? null;
         },
@@ -543,7 +565,7 @@ function FireCMSAppAuthenticated({
         onAnalyticsEvent
     });
 
-    const plugins: FireCMSPlugin<any, any, any>[] = [importExportPlugin, collectionEditorPlugin, saasPlugin, dataEnhancementPlugin];
+    const plugins: FireCMSPlugin<any, any, any>[] = [saasPlugin, importExportPlugin, collectionEditorPlugin, dataEnhancementPlugin];
 
     return (
         <FireCMSBackEndProvider {...fireCMSBackend}>

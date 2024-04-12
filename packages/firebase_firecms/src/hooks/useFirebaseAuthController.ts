@@ -30,7 +30,7 @@ export interface FirebaseAuthControllerProps {
     firebaseApp?: FirebaseApp;
     signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>;
     onSignOut?: () => void;
-    defineRolesFor?: (user: User) => Promise<Role[] | undefined>;
+    defineRolesFor?: (user: User) => Promise<Role[] | undefined> | Role[] | undefined;
 }
 
 /**

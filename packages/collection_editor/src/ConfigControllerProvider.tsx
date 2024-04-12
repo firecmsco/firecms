@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useCallback, useEffect } from "react";
+import React, { PropsWithChildren, useCallback } from "react";
 import equal from "react-fast-compare"
 
 import { CollectionsConfigController } from "./types/config_controller";
@@ -48,7 +48,7 @@ export interface ConfigControllerProviderProps {
         icon: React.ReactNode
     };
 
-    pathSuggestions?: (path?: string) => Promise<string[]>;
+    getPathSuggestions?: (path?: string) => Promise<string[]>;
 
     getUser?: (uid: string) => User | null
 
@@ -66,7 +66,7 @@ export const ConfigControllerProvider = React.memo(
                                           reservedGroups,
                                           collectionInference,
                                           extraView,
-                                          pathSuggestions,
+                                          getPathSuggestions,
                                           getUser,
                                           getData,
                                           onAnalyticsEvent
@@ -76,20 +76,6 @@ export const ConfigControllerProvider = React.memo(
         const navigate = useNavigate();
         const snackbarController = useSnackbarController();
         const { propertyConfigs } = useCustomizationController();
-
-        const {
-            collections
-        } = navigation;
-        const existingPaths = (collections ?? []).map(col => col.path.trim().toLowerCase());
-
-        const [rootPathSuggestions, setRootPathSuggestions] = React.useState<string[] | undefined>();
-        useEffect(() => {
-            if (pathSuggestions) {
-                pathSuggestions().then((paths) => {
-                    setRootPathSuggestions(paths.filter(p => !existingPaths.includes(p.trim().toLowerCase())));
-                });
-            }
-        }, [pathSuggestions]);
 
         const [currentDialog, setCurrentDialog] = React.useState<{
             isNewCollection: boolean,
@@ -135,7 +121,10 @@ export const ConfigControllerProvider = React.memo(
             parentCollection?: PersistedCollection
         }) => {
             console.debug("Edit collection", id, fullPath, parentCollectionIds, parentCollection);
-            onAnalyticsEvent?.("edit_collection", { id, fullPath });
+            onAnalyticsEvent?.("edit_collection", {
+                id,
+                fullPath
+            });
             setCurrentDialog({
                 editedCollectionId: id,
                 fullPath,
@@ -162,7 +151,10 @@ export const ConfigControllerProvider = React.memo(
             collection: PersistedCollection,
         }) => {
             console.debug("Edit property", propertyKey, property, editedCollectionId, currentPropertiesOrder, parentCollectionIds, collection);
-            onAnalyticsEvent?.("edit_property", { propertyKey, editedCollectionId });
+            onAnalyticsEvent?.("edit_property", {
+                propertyKey,
+                editedCollectionId
+            });
             // namespace is all the path until the last dot
             const namespace = propertyKey && propertyKey.includes(".")
                 ? propertyKey.substring(0, propertyKey.lastIndexOf("."))
@@ -175,7 +167,7 @@ export const ConfigControllerProvider = React.memo(
                 property,
                 namespace,
                 currentPropertiesOrder,
-                editedCollectionId: editedCollectionId,
+                editedCollectionId,
                 parentCollectionIds,
                 collectionEditable: collection?.editable ?? false
             });
@@ -198,8 +190,20 @@ export const ConfigControllerProvider = React.memo(
             redirect: boolean,
             sourceClick?: string
         }) => {
-            console.debug("Create collection", { parentCollectionIds, parentCollection, initialValues, redirect, sourceClick });
-            onAnalyticsEvent?.("create_collection", { parentCollectionIds, parentCollection, initialValues, redirect, sourceClick });
+            console.debug("Create collection", {
+                parentCollectionIds,
+                parentCollection,
+                initialValues,
+                redirect,
+                sourceClick
+            });
+            onAnalyticsEvent?.("create_collection", {
+                parentCollectionIds,
+                parentCollection,
+                initialValues,
+                redirect,
+                sourceClick
+            });
             setCurrentDialog({
                 isNewCollection: true,
                 parentCollectionIds,
@@ -209,16 +213,6 @@ export const ConfigControllerProvider = React.memo(
             });
         }, []);
 
-        const getPathSuggestions = !pathSuggestions
-            ? undefined
-            : (path?: string) => {
-                if (!path && rootPathSuggestions)
-                    return Promise.resolve(rootPathSuggestions);
-                else {
-                    return pathSuggestions?.(path);
-                }
-            }
-
         return (
             <ConfigControllerContext.Provider value={collectionConfigController}>
                 <CollectionEditorContext.Provider
@@ -227,7 +221,7 @@ export const ConfigControllerProvider = React.memo(
                         createCollection,
                         editProperty,
                         configPermissions: configPermissions ?? defaultConfigPermissions,
-                        rootPathSuggestions
+                        getPathSuggestions
                     }}>
 
                     {children}

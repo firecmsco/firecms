@@ -191,7 +191,7 @@ export function DefaultHomePage({
                                         />
                                     </div>
                                 ))}
-                                {AdditionalCards &&
+                                {group?.toLowerCase() !== "admin" && AdditionalCards &&
                                     AdditionalCards.map((AdditionalCard, i) => (
                                         <div key={`nav_${group}_add_${i}`}>
                                             <AdditionalCard {...actionProps} />

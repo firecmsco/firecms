@@ -4,17 +4,16 @@ import { ConfigControllerProvider } from "./ConfigControllerProvider";
 import { CollectionEditorPermissionsBuilder } from "./types/config_permissions";
 import { EditorCollectionAction } from "./ui/EditorCollectionAction";
 import { HomePageEditorCollectionAction } from "./ui/HomePageEditorCollectionAction";
-import { NewCollectionCard } from "./ui/NewCollectionCard";
 import { PersistedCollection } from "./types/persisted_collection";
 import { CollectionInference } from "./types/collection_inference";
 import { CollectionsConfigController } from "./types/config_controller";
-import { RootCollectionSuggestions } from "./ui/RootCollectionSuggestions";
 import { CollectionViewHeaderAction } from "./ui/CollectionViewHeaderAction";
 import { PropertyAddColumnComponent } from "./ui/PropertyAddColumnComponent";
 import { NewCollectionButton } from "./ui/NewCollectionButton";
-import { AddIcon, Button, Typography } from "@firecms/ui";
+import { AddIcon, Button, Paper, Typography } from "@firecms/ui";
 import { useCollectionEditorController } from "./useCollectionEditorController";
 import { EditorCollectionActionStart } from "./ui/EditorCollectionActionStart";
+import { NewCollectionCard } from "./ui/NewCollectionCard";
 
 export interface CollectionConfigControllerProps<EC extends PersistedCollection = PersistedCollection, UserType extends User = User> {
 
@@ -42,7 +41,7 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
         icon: React.ReactNode
     };
 
-    pathSuggestions?: (path: string) => Promise<string[]>;
+    getPathSuggestions?: (path?: string) => Promise<string[]>;
 
     collectionInference?: CollectionInference;
 
@@ -51,8 +50,6 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
     getUser?: (uid: string) => UserType | null;
 
     onAnalyticsEvent?: (event: string, params?: object) => void;
-
-    introMode?: "new_project" | "existing_project";
 
 }
 
@@ -63,18 +60,17 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
  * @param configPermissions
  * @param reservedGroups
  * @param extraView
- * @param pathSuggestions
+ * @param getPathsSuggestions
  * @param getUser
  * @param collectionInference
  */
 export function useCollectionEditorPlugin<EC extends PersistedCollection = PersistedCollection, UserType extends User = User>
 ({
      collectionConfigController,
-     introMode,
      configPermissions,
      reservedGroups,
      extraView,
-     pathSuggestions,
+     getPathSuggestions,
      getUser,
      collectionInference,
      getData,
@@ -92,7 +88,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
                 collectionInference,
                 reservedGroups,
                 extraView,
-                pathSuggestions,
+                getPathSuggestions,
                 getUser,
                 getData,
                 onAnalyticsEvent
@@ -100,10 +96,10 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
         },
         homePage: {
             additionalActions: <NewCollectionButton/>,
-            additionalChildrenStart: introMode ? <IntroWidget introMode={introMode}/> : undefined,
-            additionalChildrenEnd: <RootCollectionSuggestions introMode={introMode}/>,
+            additionalChildrenStart: <IntroWidget/>,
+            // additionalChildrenEnd: <RootCollectionSuggestions introMode={introMode}/>,
             CollectionActions: HomePageEditorCollectionAction,
-            AdditionalCards: introMode ? undefined : NewCollectionCard,
+            AdditionalCards: NewCollectionCard,
         },
         collectionView: {
             CollectionActionsStart: EditorCollectionActionStart,
@@ -131,17 +127,19 @@ export function IntroWidget({ introMode }: {
         }).createCollections
         : true;
 
+    if ((navigation.collections ?? []).length > 0) {
+        return null;
+    }
+
     return (
-        <div className={"mt-8 flex flex-col p-2"}>
-            <Typography variant={"h4"} className="mb-4">Welcome</Typography>
-            <Typography paragraph={true}>Your admin panel is ready ✌️</Typography>
-            <Typography paragraph={true}>
+        <Paper
+            className={"my-4 flex flex-col p-4 bg-white dark:bg-slate-800 gap-2"}>
+            <Typography variant={"subtitle2"} className={"uppercase"}>No collections found</Typography>
+            <Typography>
                 Start building collections in FireCMS easily. Map them to your existing
-                database data, import from files, or use our templates. Simplify your data management process
-                now.
+                database data, import from files, or use our templates.
             </Typography>
             {canCreateCollections && <Button
-                className={"mt-4"}
                 onClick={collectionEditorController && canCreateCollections
                     ? () => collectionEditorController.createCollection({
                         parentCollectionIds: [],
@@ -151,6 +149,6 @@ export function IntroWidget({ introMode }: {
                     : undefined}>
                 <AddIcon/>Create your first collection
             </Button>}
-        </div>
+        </Paper>
     );
 }

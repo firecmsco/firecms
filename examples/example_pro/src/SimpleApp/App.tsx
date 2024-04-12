@@ -36,7 +36,7 @@ import {
 } from "@firecms/user_management";
 import { booksCollection } from "./books_collection";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
-import { useCollectionEditorPlugin } from "@firecms/collection_editor";
+import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
 
 export const firebaseConfig = {
     apiKey: "AIzaSyC5uF_VGluR1uTs4w0E0XLfDZSl0utGtME",
@@ -77,11 +77,6 @@ function ProSample() {
         console.log("Allowing access to", user);
         return Boolean(userIsAdmin);
     }, []);
-
-    const collections = [
-        booksCollection,
-        // Your collections here
-    ];
 
     const {
         firebaseApp,
@@ -127,6 +122,7 @@ function ProSample() {
     });
 
     const collectionEditorPlugin = useCollectionEditorPlugin({
+        introMode: "existing_project",
         collectionConfigController
     });
 
@@ -143,8 +139,16 @@ function ProSample() {
         storageSource
     });
 
+    const collectionsBuilder = useCallback(() => {
+        const collections = [
+            booksCollection,
+            // Your collections here
+        ];
+        return mergeCollections([], collectionConfigController.collections ?? []);
+    }, [collectionConfigController.collections]);
+
     const navigationController = useBuildNavigationController({
-        collections,
+        collections: collectionsBuilder,
         collectionPermissions: userManagement.collectionPermissions,
         adminViews: userManagementAdminViews,
         authController,
@@ -179,7 +183,7 @@ function ProSample() {
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
-                    plugins={[dataEnhancementPlugin, importExportPlugin, userManagementPlugin]}
+                    plugins={[dataEnhancementPlugin, importExportPlugin, userManagementPlugin, collectionEditorPlugin]}
                 >
                     {({
                           context,

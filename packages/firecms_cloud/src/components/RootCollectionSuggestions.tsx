@@ -1,7 +1,7 @@
+import React, { useEffect } from "react";
 import { unslugify, useAuthController, useNavigationController } from "@firecms/core";
 import { AddIcon, Chip, CircularProgress, Collapse, Typography, } from "@firecms/ui";
-import { useCollectionEditorController } from "../useCollectionEditorController";
-import React from "react";
+import { useCollectionEditorController } from "@firecms/collection_editor";
 
 export function RootCollectionSuggestions({ introMode }: { introMode?: "new_project" | "existing_project" }) {
 
@@ -15,7 +15,14 @@ export function RootCollectionSuggestions({ introMode }: { introMode?: "new_proj
         }).createCollections
         : true;
 
-    const rootPathSuggestions = collectionEditorController.rootPathSuggestions;
+    const [rootPathSuggestions, setRootPathSuggestions] = React.useState<string[] | undefined>(undefined);
+    useEffect(() => {
+        collectionEditorController.getPathSuggestions?.("").then(setRootPathSuggestions);
+    }, [collectionEditorController.getPathSuggestions]);
+
+    if (!collectionEditorController.getPathSuggestions) {
+        return null;
+    }
 
     const showSuggestions = (rootPathSuggestions ?? []).length > 3 || ((navigationController.collections ?? []).length === 0 && (rootPathSuggestions ?? []).length > 0);
     const forceShowSuggestions = introMode === "existing_project";
@@ -43,7 +50,10 @@ export function RootCollectionSuggestions({ introMode }: { introMode?: "new_proj
                                 colorScheme={"cyanLighter"}
                                 onClick={collectionEditorController && canCreateCollections
                                     ? () => collectionEditorController.createCollection({
-                                        initialValues: { path, name: unslugify(path) },
+                                        initialValues: {
+                                            path,
+                                            name: unslugify(path)
+                                        },
                                         parentCollectionIds: [],
                                         redirect: true,
                                         sourceClick: "root_collection_suggestion"
