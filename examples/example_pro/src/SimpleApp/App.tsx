@@ -38,24 +38,24 @@ import { booksCollection } from "./books_collection";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
 
-export const firebaseConfig = {
-    apiKey: "AIzaSyC5uF_VGluR1uTs4w0E0XLfDZSl0utGtME",
-    authDomain: "yellow-oyster-9fdru.firebaseapp.com",
-    projectId: "yellow-oyster-9fdru",
-    storageBucket: "yellow-oyster-9fdru.appspot.com",
-    messagingSenderId: "515014740752",
-    appId: "1:515014740752:web:491f211d544d5022a9b395"
-};
 // export const firebaseConfig = {
-//     apiKey: "AIzaSyBzt-JvcXvpDrdNU7jYX3fC3v0EAHjTKEw",
-//     authDomain: "demo.firecms.co",
-//     databaseURL: "https://firecms-demo-27150.firebaseio.com",
-//     projectId: "firecms-demo-27150",
-//     storageBucket: "firecms-demo-27150.appspot.com",
-//     messagingSenderId: "837544933711",
-//     appId: "1:837544933711:web:75822ffc0840e3ae01ad3a",
-//     measurementId: "G-8HRE8MVXZJ"
+//     apiKey: "AIzaSyC5uF_VGluR1uTs4w0E0XLfDZSl0utGtME",
+//     authDomain: "yellow-oyster-9fdru.firebaseapp.com",
+//     projectId: "yellow-oyster-9fdru",
+//     storageBucket: "yellow-oyster-9fdru.appspot.com",
+//     messagingSenderId: "515014740752",
+//     appId: "1:515014740752:web:491f211d544d5022a9b395"
 // };
+export const firebaseConfig = {
+    apiKey: "AIzaSyBzt-JvcXvpDrdNU7jYX3fC3v0EAHjTKEw",
+    authDomain: "demo.firecms.co",
+    databaseURL: "https://firecms-demo-27150.firebaseio.com",
+    projectId: "firecms-demo-27150",
+    storageBucket: "firecms-demo-27150.appspot.com",
+    messagingSenderId: "837544933711",
+    appId: "1:837544933711:web:75822ffc0840e3ae01ad3a",
+    measurementId: "G-8HRE8MVXZJ"
+};
 
 function ProSample() {
 
@@ -122,7 +122,6 @@ function ProSample() {
     });
 
     const collectionEditorPlugin = useCollectionEditorPlugin({
-        introMode: "existing_project",
         collectionConfigController
     });
 
@@ -144,7 +143,7 @@ function ProSample() {
             booksCollection,
             // Your collections here
         ];
-        return mergeCollections([], collectionConfigController.collections ?? []);
+        return mergeCollections(collections, collectionConfigController.collections ?? []);
     }, [collectionConfigController.collections]);
 
     const navigationController = useBuildNavigationController({

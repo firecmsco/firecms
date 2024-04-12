@@ -20,7 +20,7 @@ import { VirtualTableContextProps } from "./types";
 import { VirtualTableHeaderRow } from "./VirtualTableHeaderRow";
 import { VirtualTableRow } from "./VirtualTableRow";
 import { VirtualTableCell } from "./VirtualTableCell";
-import { AssignmentIcon, cn, Typography } from "@firecms/ui";
+import { AssignmentIcon, CenteredView, cn, Typography } from "@firecms/ui";
 
 const VirtualListContext = createContext<VirtualTableContextProps<any>>({} as any);
 VirtualListContext.displayName = "VirtualListContext";
@@ -227,19 +227,6 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             if (onFilterUpdate) onFilterUpdate(newFilterValue);
         }, [checkFilterCombination, currentSort, onFilterUpdate, sortByProperty]);
 
-        const buildErrorView = useCallback(() => (
-            <div
-                className="h-full flex flex-col items-center justify-center sticky left-0">
-
-                <Typography variant={"h6"}>
-                    {"Error fetching data from the data source"}
-                </Typography>
-
-                {error?.message && <SafeLinkRenderer text={error.message}/>}
-
-            </div>
-        ), [error?.message]);
-
         const buildEmptyView = useCallback(() => {
             if (loading)
                 return <CircularProgressCenter/>;
@@ -251,7 +238,18 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         }, [emptyComponent, loading]);
 
         const empty = !loading && (data?.length ?? 0) === 0;
-        const customView = error ? buildErrorView() : (empty ? buildEmptyView() : undefined);
+        const customView = error
+            ? <CenteredView maxWidth={"2xl"}
+                className="flex flex-col gap-2">
+
+                <Typography variant={"h6"}>
+                    {"Error fetching data from the data source"}
+                </Typography>
+
+                {error?.message && <SafeLinkRenderer text={error.message}/>}
+
+            </CenteredView>
+            : (empty ? buildEmptyView() : undefined);
 
         const virtualListController = {
             data,
@@ -406,10 +404,10 @@ const SafeLinkRenderer: React.FC<{
     const urlRegex = /https?:\/\/[^\s]+/g;
     const htmlContent = text.replace(urlRegex, (url) => {
         // For each URL found, replace it with an HTML <a> tag
-        return `<a href="${url}" target="_blank">Link to your console</a>`;
+        return `<a href="${url}" target="_blank">Link</a><br/>`;
     });
 
     return (
-        <div className={"px-4 break-all"} dangerouslySetInnerHTML={{ __html: htmlContent }}/>
+        <div className={"break-all"} dangerouslySetInnerHTML={{ __html: htmlContent }}/>
     );
 };
