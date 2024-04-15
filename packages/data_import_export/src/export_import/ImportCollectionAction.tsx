@@ -142,7 +142,7 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
                                                                       isIdColumn,
                                                                       property,
                                                                       propertyKey,
-                                                                      importKey
+                                                                      importKey,
                                                                   }) => {
                                                   return <PropertyTreeSelect
                                                       selectedPropertyKey={propertyKey ?? ""}

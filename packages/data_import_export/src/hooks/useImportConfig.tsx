@@ -21,7 +21,7 @@ export const useImportConfig = (): ImportConfig => {
         setEntities,
         importData,
         setImportData,
-        headingsOrder: headingsOrder ?? Object.keys(headersMapping),
+        headingsOrder: (headingsOrder ?? []).length > 0 ? headingsOrder : Object.keys(headersMapping),
         setHeadingsOrder,
         headersMapping,
         setHeadersMapping,

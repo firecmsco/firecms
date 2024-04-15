@@ -1,5 +1,11 @@
 import React from "react";
-import { ErrorBoundary, PropertyConfigBadge, getFieldConfig, Property, useCustomizationController } from "@firecms/core";
+import {
+    ErrorBoundary,
+    getFieldConfig,
+    Property,
+    PropertyConfigBadge,
+    useCustomizationController
+} from "@firecms/core";
 import { EditIcon, IconButton, TextField, } from "@firecms/ui";
 
 export function ImportNewPropertyFieldPreview({
@@ -48,7 +54,6 @@ export function ImportNewPropertyFieldPreview({
                 </div>
 
             </div>
-
 
         </div>
     </ErrorBoundary>

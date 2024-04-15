@@ -493,18 +493,17 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             .then((properties) => {
                 const res = cleanPropertiesFromImport(properties);
 
-                setFieldValue("properties", res.properties);
-                setFieldValue("propertiesOrder", propertiesOrder ?? Object.keys(res.properties));
-
                 importConfig.setIdColumn(res.idColumn);
                 importConfig.setImportData(data);
                 importConfig.setHeadersMapping(res.headersMapping);
-                const mappedHeadingsOrder = (propertiesOrder ?? Object.keys(res.properties))
-                    .filter((key) => res.headersMapping[key]) as string[];
-                console.log("res.headersMapping", res.headersMapping);
-                console.log("Mapped headings order", mappedHeadingsOrder);
-                importConfig.setHeadingsOrder(mappedHeadingsOrder);
+                const filteredHeadingsOrder = ((propertiesOrder ?? [])
+                    .filter((key) => res.headersMapping[key]) as string[]) ?? Object.keys(res.properties);
+                importConfig.setHeadingsOrder(filteredHeadingsOrder);
                 importConfig.setOriginProperties(res.properties);
+
+                const mappedHeadings = (propertiesOrder ?? []).map((key) => res.headersMapping[key]).filter(Boolean) as string[] ?? Object.keys(res.properties);
+                setFieldValue("properties", res.properties);
+                setFieldValue("propertiesOrder", mappedHeadings);
             });
     }
 

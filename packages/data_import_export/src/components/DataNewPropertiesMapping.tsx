@@ -36,6 +36,11 @@ export function DataNewPropertiesMapping({
                                              buildPropertyView,
                                          }: DataPropertyMappingProps) {
 
+    console.log({
+        headersMapping,
+        headingsOrder,
+    })
+
     return (
         <>
 

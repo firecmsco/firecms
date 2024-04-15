@@ -6,7 +6,7 @@ import {
 } from "@firecms/data_import_export";
 import { getIn, useFormex } from "@firecms/formex";
 
-import { PropertyConfigBadge, getFieldConfig, getFieldId, Properties, Property, PropertyConfig, } from "@firecms/core";
+import { getFieldConfig, getFieldId, Properties, Property, PropertyConfig, PropertyConfigBadge, } from "@firecms/core";
 import { Container, Select, Tooltip, Typography } from "@firecms/ui";
 import React, { useState } from "react";
 import { OnPropertyChangedParams, PropertyFormDialog, PropertyWithId } from "../PropertyEditView";
@@ -138,7 +138,6 @@ export function CollectionEditorImportMapping({
         }
     };
 
-    console.log("importConfig", importConfig);
     return (
 
         <div className={"overflow-auto my-auto"}>
@@ -155,8 +154,13 @@ export function CollectionEditorImportMapping({
                                           buildPropertyView={({
                                                                   property,
                                                                   propertyKey,
-                                                                  importKey
+                                                                  importKey,
+                                                                  isIdColumn
                                                               }) => {
+                                              if (isIdColumn) {
+                                                  return <Typography> This column will be used as ID</Typography>
+                                              }
+
                                               return <ImportNewPropertyFieldPreview
                                                   property={property}
                                                   propertyKey={propertyKey}
