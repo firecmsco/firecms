@@ -5,7 +5,7 @@ import {
     Properties,
     Property,
     resolveEnumValues,
-    StringProperty,
+    StringProperty, toKebabCase,
     unslugify
 } from "@firecms/core";
 import {
@@ -226,7 +226,7 @@ function buildPropertyFromCount(key: string, totalDocsCount: number, mostProbabl
     let title: string | undefined;
 
     if (key) {
-        title = unslugify(key);
+        title = formatString(key.toLowerCase());
     }
 
     let result: Property | undefined = undefined;
@@ -330,5 +330,22 @@ function checkTypesCountHighVariability(typesCount: TypesCount) {
             }
         });
     return keysWithFewValues / Object.entries(typesCount.map ?? {}).length > 0.5;
+}
+
+function formatString(input: string): string {
+    const normalized = input
+        .replace(/[_\-]+/g, " ")
+        .replace(/([a-z])([A-Z])/g, '$1 $2')
+        .toLowerCase();
+
+    // Split the normalized string into words
+    const words = normalized.split(" ");
+
+    // Capitalize the first letter of each word and join them with a space
+    const formatted = words
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+
+    return formatted;
 }
 

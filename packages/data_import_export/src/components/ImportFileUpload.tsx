@@ -2,7 +2,9 @@ import { FileUpload, UploadIcon } from "@firecms/ui";
 import { convertFileToJson } from "../utils/file_to_json";
 import { useSnackbarController } from "@firecms/core";
 
-export function ImportFileUpload({ onDataAdded }: { onDataAdded: (data: object[]) => void }) {
+export function ImportFileUpload({ onDataAdded }: {
+    onDataAdded: (data: object[], propertiesOrder?: string[]) => void
+}) {
     const snackbarController = useSnackbarController();
     return <FileUpload
         accept={{
@@ -22,12 +24,18 @@ export function ImportFileUpload({ onDataAdded }: { onDataAdded: (data: object[]
         onFilesAdded={(files: File[]) => {
             if (files.length > 0) {
                 convertFileToJson(files[0])
-                    .then((jsonData) => {
-                        onDataAdded(jsonData);
+                    .then(({
+                               data,
+                               propertiesOrder
+                           }) => {
+                        onDataAdded(data, propertiesOrder);
                     })
                     .catch((error) => {
                         console.error("Error parsing file", error);
-                        snackbarController.open({ type: "error", message: error.message });
+                        snackbarController.open({
+                            type: "error",
+                            message: error.message
+                        });
                     });
             }
         }}/>

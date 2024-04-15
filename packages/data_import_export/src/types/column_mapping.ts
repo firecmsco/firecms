@@ -22,6 +22,9 @@ export type ImportConfig = {
     originProperties: Record<string, Property>;
     setOriginProperties: React.Dispatch<React.SetStateAction<Record<string, Property>>>;
 
+    headingsOrder: string[];
+    setHeadingsOrder: React.Dispatch<React.SetStateAction<string[]>>;
+
 }
 
 export type DataTypeMapping = {

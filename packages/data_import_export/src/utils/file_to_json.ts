@@ -1,8 +1,13 @@
 import * as XLSX from "xlsx";
+import { getXLSXHeaders } from "./file_headers";
 
-export function convertFileToJson(file: File): Promise<object[]> {
+type ConversionResult = {
+    data: object[];
+    propertiesOrder: string[]
+}
+
+export function convertFileToJson(file: File): Promise<ConversionResult> {
     return new Promise((resolve, reject) => {
-        // check if file is a JSON file
         if (file.type === "application/json") {
             console.debug("Converting JSON file to JSON", file.name);
             const reader = new FileReader();
@@ -12,8 +17,14 @@ export function convertFileToJson(file: File): Promise<object[]> {
                     const jsonData = JSON.parse(data);
                     if (!Array.isArray(jsonData)) {
                         reject(new Error("JSON file should contain an array of objects"));
+                    } else {
+                        // Assuming all objects in the array have the same structure/order
+                        const propertiesOrder = jsonData.length > 0 ? Object.keys(jsonData[0]) : [];
+                        resolve({
+                            data: jsonData,
+                            propertiesOrder
+                        });
                     }
-                    resolve(jsonData);
                 } catch (e) {
                     console.error("Error parsing JSON file", e);
                     reject(e);
@@ -24,20 +35,22 @@ export function convertFileToJson(file: File): Promise<object[]> {
             console.debug("Converting Excel file to JSON", file.name);
             const reader = new FileReader();
             reader.onload = function (e) {
-
                 const data = new Uint8Array(e.target?.result as ArrayBuffer);
-                const workbook = XLSX.read(data,
-                    {
-                        type: "array",
-                        codepage: 65001,
-                        cellDates: true,
-                    });
+                const workbook = XLSX.read(data, {
+                    type: "array",
+                    codepage: 65001,
+                    cellDates: true,
+                });
                 const worksheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[worksheetName];
                 const parsedData: Array<any> = XLSX.utils.sheet_to_json(worksheet);
+                const headers = getXLSXHeaders(worksheet);
                 const cleanedData = parsedData.map(mapJsonParse);
                 const jsonData = cleanedData.map(unflattenObject);
-                resolve(jsonData);
+                resolve({
+                    data: jsonData,
+                    propertiesOrder: headers
+                });
             };
             reader.readAsArrayBuffer(file);
         }

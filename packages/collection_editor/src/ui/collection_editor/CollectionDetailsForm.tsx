@@ -216,7 +216,7 @@ export function CollectionDetailsForm({
                                            label={"Collection id"}
                                            error={showErrors && Boolean(errors.id)}/>
                                     <FieldCaption error={touched.id && Boolean(errors.id)}>
-                                        {touched.id && Boolean(errors.id) ? errors.id : "This id identifies this collection"}
+                                        {touched.id && Boolean(errors.id) ? errors.id : "This id identifies this collection. Typically the same as the path."}
                                     </FieldCaption>
                                 </div>
 

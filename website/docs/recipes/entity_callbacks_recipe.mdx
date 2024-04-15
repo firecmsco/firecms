@@ -29,7 +29,7 @@ In FireCMS we have been using these features in all versions, and it's also avai
 
 For illustrative purposes, let's create a simple `cars` collection.
 
-The intreface of the collection will look like this:
+The interface of the collection will look like this:
 
 ```tsx
 interface Car {
@@ -147,7 +147,7 @@ export const carsCollection = buildCollection<Car>({
 ```
 
 
-Simple enough, right? Now let's add the callbacks. 
+Simple enough, right? Now let's add the callbacks.
 
 ### Create the entity callbacks
 
@@ -160,7 +160,7 @@ Now, you can check the interface of the [EntityCallbacks in the documentation](/
 - `onDelete`: Called when an entity is deleted successfully from the database.
 - `onIdUpdate`: Callback fired when any value in the form changes. You can use it to define the ID of the entity based on the current values
 
-We want to save the user who made the last change and the timestamp of the last change. We can use the `onPreSave` callback to achieve this. We are going use the builder util function `buildEntityCallbacks` to create the callbacks. This is helpful for creating the callbacks for a specific entity type. So we have the types inside the functions.
+We want to save the user who made the last change and the date of the last change. We can use the `onPreSave` callback to achieve this. We are going use the builder util function `buildEntityCallbacks` to create the callbacks. This is helpful for creating the callbacks for a specific entity type. So we have the types inside the functions.
 
 ```tsx
 const carsCallbacks = buildEntityCallbacks<Car>({

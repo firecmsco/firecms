@@ -19,7 +19,7 @@ export function CollectionEditorWelcomeView({
     path: string;
     pathSuggestions?: (path: string) => Promise<string[]>;
     parentCollection?: EntityCollection;
-    onContinue: (importData?: object[]) => void;
+    onContinue: (importData?: object[], propertiesOrder?: string[]) => void;
     existingCollectionPaths?: string[];
 }) {
 
@@ -154,7 +154,7 @@ export function CollectionEditorWelcomeView({
                         ● Create a collection from a file (csv, json, xls, xslx...)
                     </Typography>
 
-                    <ImportFileUpload onDataAdded={(data) => onContinue(data)}/>
+                    <ImportFileUpload onDataAdded={(data, propertiesOrder) => onContinue(data, propertiesOrder)}/>
 
                 </div>}
 

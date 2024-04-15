@@ -487,18 +487,23 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         setFormDirty(dirty);
     }, [dirty]);
 
-    function onImportDataSet(data: object[]) {
+    function onImportDataSet(data: object[], propertiesOrder?: string[]) {
         importConfig.setInUse(true);
         buildEntityPropertiesFromData(data, getInferenceType)
             .then((properties) => {
                 const res = cleanPropertiesFromImport(properties);
 
                 setFieldValue("properties", res.properties);
-                setFieldValue("propertiesOrder", Object.keys(res.properties));
+                setFieldValue("propertiesOrder", propertiesOrder ?? Object.keys(res.properties));
 
                 importConfig.setIdColumn(res.idColumn);
                 importConfig.setImportData(data);
                 importConfig.setHeadersMapping(res.headersMapping);
+                const mappedHeadingsOrder = (propertiesOrder ?? Object.keys(res.properties))
+                    .filter((key) => res.headersMapping[key]) as string[];
+                console.log("res.headersMapping", res.headersMapping);
+                console.log("Mapped headings order", mappedHeadingsOrder);
+                importConfig.setHeadingsOrder(mappedHeadingsOrder);
                 importConfig.setOriginProperties(res.properties);
             });
     }
@@ -552,9 +557,10 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                     {currentView === "welcome" &&
                         <CollectionEditorWelcomeView
                             path={path}
-                            onContinue={(importData) => {
+                            onContinue={(importData, propertiesOrder) => {
+                                // console.log("Import data", importData, propertiesOrder)
                                 if (importData) {
-                                    onImportDataSet(importData);
+                                    onImportDataSet(importData, propertiesOrder);
                                     setCurrentView("import_data_mapping");
                                 } else {
                                     setCurrentView("details");

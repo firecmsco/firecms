@@ -135,6 +135,7 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
                     <DataNewPropertiesMapping headersMapping={importConfig.headersMapping}
                                               idColumn={importConfig.idColumn}
                                               originProperties={importConfig.originProperties}
+                                              headingsOrder={importConfig.headingsOrder}
                                               destinationProperties={properties}
                                               onIdPropertyChanged={(value) => importConfig.setIdColumn(value ?? undefined)}
                                               buildPropertyView={({

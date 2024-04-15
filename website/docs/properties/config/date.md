@@ -1,7 +1,7 @@
 ---
 id: date
 title: Date/Time
-sidebar_label: Timestamp
+sidebar_label: Date/Time
 ---
 
 ```tsx
@@ -14,7 +14,7 @@ const publicationProperty = buildProperty({
 ```
 ### `autoValue` "on_create" | "on_update"
 
-Used this prop to update this timestamp automatically upon entity creation
+Use this prop to update this date automatically upon entity creation
 or update.
 
 ### `mode` "date" | "date_time"

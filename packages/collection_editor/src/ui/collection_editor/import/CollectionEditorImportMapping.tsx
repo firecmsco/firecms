@@ -138,14 +138,16 @@ export function CollectionEditorImportMapping({
         }
     };
 
+    console.log("importConfig", importConfig);
     return (
 
         <div className={"overflow-auto my-auto"}>
             <Container maxWidth={"6xl"} className={"flex flex-col gap-4 p-8 m-auto"}>
 
-                <Typography variant="h6" className={"mt-4"}>Data property mapping</Typography>
+                <Typography variant="h6" className={"my-4 ml-3.5"}>Data property mapping</Typography>
 
                 <DataNewPropertiesMapping headersMapping={importConfig.headersMapping}
+                                          headingsOrder={importConfig.headingsOrder}
                                           idColumn={importConfig.idColumn}
                                           originProperties={importConfig.originProperties}
                                           destinationProperties={values.properties as Properties}

@@ -212,7 +212,7 @@ If you need to have some filters and sorting applied by default, you can use the
 prop. You can also force a filter combination to be always applied by using the `forceFilter`prop.
 :::
 
-Filtering is enabled by default for string, numbers, booleans, timestamps, and arrays. A dropdown is included in every
+Filtering is enabled by default for string, numbers, booleans, dates, and arrays. A dropdown is included in every
 column of the collection where applicable.
 
 Since Firestore has limited querying capabilities, each time you apply a filter or new sort, the previous sort/filter
