@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { BooleanSwitchWithLabel, Typography, Alert } from "@firecms/ui";
+import { Alert, BooleanSwitchWithLabel, Typography } from "@firecms/ui";
 import { FirebaseLoginView, FirebaseLoginViewProps } from "@firecms/firebase";
 
 export function CustomLoginView(props: FirebaseLoginViewProps) {
@@ -62,7 +62,7 @@ export function CustomLoginView(props: FirebaseLoginViewProps) {
 }
 
 const handleSubmit = (email: string) => {
-    fetch("https://europe-west3-firecms-demo-27150.cloudfunctions.net/sign_up_newsletter", {
+    fetch("https://api-kdoe6pj3qq-ey.a.run.app" + "/notifications/newsletter", {
         method: "POST",
         mode: "no-cors",
         headers: {

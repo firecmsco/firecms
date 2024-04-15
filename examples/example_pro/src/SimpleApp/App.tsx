@@ -121,10 +121,6 @@ function ProSample() {
         firebaseApp
     });
 
-    const collectionEditorPlugin = useCollectionEditorPlugin({
-        collectionConfigController
-    });
-
     const {
         authLoading,
         canAccessMainView,
@@ -165,6 +161,10 @@ function ProSample() {
     const userManagementPlugin = useUserManagementPlugin({ userManagement });
 
     const importExportPlugin = useImportExportPlugin();
+
+    const collectionEditorPlugin = useCollectionEditorPlugin({
+        collectionConfigController
+    });
 
     if (firebaseConfigLoading || !firebaseApp) {
         return <><CircularProgressCenter/></>;

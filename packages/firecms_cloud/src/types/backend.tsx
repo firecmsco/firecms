@@ -13,7 +13,7 @@ export type FireCMSBackend = {
 
     user: FirebaseUser | null;
 
-    googleLogin: (includeGoogleAdminScopes?: boolean) => void;
+    googleLogin: (includeGoogleAdminScopes?: boolean) => Promise<FirebaseUser | null>;
 
     signOut: () => void;
 

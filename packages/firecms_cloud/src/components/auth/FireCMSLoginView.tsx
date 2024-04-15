@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 
 import { BooleanSwitchWithLabel, Typography } from "@firecms/ui";
 import { ErrorView, FireCMSLogo } from "@firecms/core";
@@ -20,24 +20,15 @@ export interface FireCMSLoginViewProps {
  * @group Firebase
  */
 export function FireCMSLoginView({
-                                  fireCMSBackend,
-                                  includeGoogleAdminScopes,
-                                  includeLogo,
-                                  includeGoogleDisclosure,
-                                  includeTermsAndNewsLetter
-                              }: FireCMSLoginViewProps) {
+                                     fireCMSBackend,
+                                     includeGoogleAdminScopes,
+                                     includeLogo,
+                                     includeGoogleDisclosure,
+                                     includeTermsAndNewsLetter
+                                 }: FireCMSLoginViewProps) {
 
     const [termsAccepted, setTermsAccepted] = useState(false);
-    const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
-
-    const submittedNewsletter = useRef(false);
-
-    useEffect(() => {
-        if (newsletterSubscribed && fireCMSBackend.user?.email && !submittedNewsletter.current) {
-            submittedNewsletter.current = true;
-            handleSubmit(fireCMSBackend.user.email);
-        }
-    }, [newsletterSubscribed, fireCMSBackend.user]);
+    const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(false);
 
     function buildErrorView() {
         let errorView: any;
@@ -75,8 +66,8 @@ export function FireCMSLoginView({
                 <>
                     <BooleanSwitchWithLabel size="small"
                                             invisible={true}
-                                            value={newsletterSubscribed}
-                                            onValueChange={setNewsletterSubscribed}
+                                            value={subscribeToNewsletter}
+                                            onValueChange={setSubscribeToNewsletter}
                                             position={"start"}
                                             label={
                                                 <Typography variant={"caption"} color={"primary"}>
@@ -106,7 +97,12 @@ export function FireCMSLoginView({
             <GoogleLoginButton
                 disabled={!termsAccepted && includeTermsAndNewsLetter}
                 onClick={() => {
-                    fireCMSBackend.googleLogin(includeGoogleAdminScopes);
+                    console.log("Google login");
+                    fireCMSBackend.googleLogin(includeGoogleAdminScopes).then((user) => {
+                        if (subscribeToNewsletter && user?.email) {
+                            subscribeNewsletter(user.email);
+                        }
+                    });
                 }}/>
 
             {includeGoogleAdminScopes &&
@@ -131,8 +127,11 @@ export function FireCMSLoginView({
 
 }
 
-const handleSubmit = (email: string) => {
-    fetch("https://europe-west3-firecms-demo-27150.cloudfunctions.net/sign_up_newsletter", {
+const SERVER = import.meta.env.VITE_API_SERVER;
+const subscribeNewsletter = (email: string) => {
+    const url = SERVER + "/notifications/newsletter";
+    console.log("newsletter request", url, email);
+    fetch(url, {
         method: "POST",
         mode: "no-cors",
         headers: {
@@ -141,7 +140,7 @@ const handleSubmit = (email: string) => {
         },
         body: JSON.stringify({
             email_address: email,
-            source: "demo-saas"
+            source: "saas"
         })
     }).then((res) => {
         console.log("newsletter response", res);

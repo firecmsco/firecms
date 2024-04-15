@@ -25,7 +25,11 @@ export interface FireCMSBackendProps {
     onUserChange?: (user: FirebaseUser | null) => void;
 }
 
-export function useBuildFireCMSBackend({ backendApiHost, backendFirebaseApp, onUserChange }: FireCMSBackendProps): FireCMSBackend {
+export function useBuildFireCMSBackend({
+                                           backendApiHost,
+                                           backendFirebaseApp,
+                                           onUserChange
+                                       }: FireCMSBackendProps): FireCMSBackend {
 
     const [loggedUser, setLoggedUser] = useState<FirebaseUser | null | undefined>(undefined); // logged user, anonymous or logged out
 
@@ -106,8 +110,9 @@ export function useBuildFireCMSBackend({ backendApiHost, backendFirebaseApp, onU
         );
     }, [loggedUser]);
 
-    const googleLogin = useCallback((includeGoogleAdminScopes?: boolean) => {
-        if (!backendFirebaseApp) return;
+    const googleLogin = useCallback((includeGoogleAdminScopes?: boolean): Promise<FirebaseUser | null> => {
+        if (!backendFirebaseApp)
+            throw Error("useBuildFireCMSBackend googleLogin error");
         const provider = new GoogleAuthProvider();
         provider.setCustomParameters({
             access_type: "offline"
@@ -115,7 +120,7 @@ export function useBuildFireCMSBackend({ backendApiHost, backendFirebaseApp, onU
         if (includeGoogleAdminScopes)
             AUTH_SCOPES.forEach((scope) => provider.addScope(scope));
         const auth = getAuth(backendFirebaseApp);
-        signInWithPopup(auth, provider)
+        return signInWithPopup(auth, provider)
             .then(credential => {
                 if (includeGoogleAdminScopes) {
                     // @ts-ignore
@@ -130,8 +135,12 @@ export function useBuildFireCMSBackend({ backendApiHost, backendFirebaseApp, onU
                         setPermissionsNotGrantedError(false);
                     }
                 }
+                return credential.user;
             })
-            .catch(setAuthProviderError);
+            .catch((e) => {
+                setAuthProviderError(e);
+                return null;
+            });
     }, [backendFirebaseApp]);
 
     const onSignOut = useCallback(() => {

@@ -1,5 +1,4 @@
-import React, { useMemo } from "react";
-import { BrowserRouter } from "react-router-dom";
+import React, { useCallback, useMemo } from "react";
 
 import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
@@ -37,21 +36,38 @@ import {
 } from "@firecms/user_management";
 import { useImportExportPlugin } from "@firecms/data_import_export";
 import { ExampleCMSView } from "./views/ExampleCMSView";
+import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
+import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
 
-function App() {
-    return <BrowserRouter>
-        <AppInner/>
-    </BrowserRouter>
-}
-
-function AppInner() {
+export function App() {
 
     const name = "My CMS app";
 
-    // Here you define the collections that will be available in your CMS
-    const collections = useMemo(() => [
-        productsCollection
-    ], []);
+    const {
+        firebaseApp,
+        firebaseConfigLoading,
+        configError
+    } = useInitialiseFirebase({
+        firebaseConfig
+    });
+
+    /**
+     * Controller used to save the collection configuration in Firestore.
+     * Note that this is optional and you can define your collections in code.
+     */
+    const collectionConfigController = useFirestoreCollectionsConfigController({
+        firebaseApp
+    });
+
+    const collectionsBuilder = useCallback(() => {
+        // Here we define a sample collection in code.
+        const collections = [
+            productsCollection
+            // Your collections here
+        ];
+        // You can merge collections defined in the collection editor (UI) with your own collections
+        return mergeCollections(collections, collectionConfigController.collections ?? []);
+    }, [collectionConfigController.collections]);
 
     // Here you define your custom top-level views
     const views: CMSView[] = useMemo(() => ([{
@@ -61,14 +77,6 @@ function AppInner() {
     }]), []);
 
     const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
-
-    const {
-        firebaseApp,
-        firebaseConfigLoading,
-        configError
-    } = useInitialiseFirebase({
-        firebaseConfig
-    });
 
     /**
      * Controller used to manage the dark or light color mode
@@ -127,7 +135,7 @@ function AppInner() {
     });
 
     const navigationController = useBuildNavigationController({
-        collections,
+        collections: collectionsBuilder,
         collectionPermissions: userManagement.collectionPermissions,
         views,
         adminViews: userManagementAdminViews,
@@ -156,6 +164,10 @@ function AppInner() {
      */
     const importExportPlugin = useImportExportPlugin();
 
+    const collectionEditorPlugin = useCollectionEditorPlugin({
+        collectionConfigController
+    });
+
     if (firebaseConfigLoading || !firebaseApp) {
         return <CircularProgressCenter/>;
     }
@@ -174,7 +186,7 @@ function AppInner() {
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
-                    plugins={[dataEnhancementPlugin, importExportPlugin, userManagementPlugin]}
+                    plugins={[dataEnhancementPlugin, importExportPlugin, userManagementPlugin, collectionEditorPlugin]}
                 >
                     {({
                           context,
@@ -215,4 +227,3 @@ function AppInner() {
     );
 }
 
-export default App;

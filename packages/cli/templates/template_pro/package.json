@@ -5,6 +5,7 @@
   "type": "module",
   "dependencies": {
     "@firecms/collection_editor": "^3.0.0-canary",
+    "@firecms/collection_editor_firebase": "^3.0.0-canary",
     "@firecms/core": "^3.0.0-canary",
     "@firecms/data_enhancement": "^3.0.0-canary",
     "@firecms/data_import_export": "^3.0.0-canary",
