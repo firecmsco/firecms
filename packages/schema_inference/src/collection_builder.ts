@@ -5,8 +5,7 @@ import {
     Properties,
     Property,
     resolveEnumValues,
-    StringProperty, toKebabCase,
-    unslugify
+    StringProperty
 } from "@firecms/core";
 import {
     InferencePropertyBuilderProps,
@@ -335,7 +334,7 @@ function checkTypesCountHighVariability(typesCount: TypesCount) {
 function formatString(input: string): string {
     const normalized = input
         .replace(/[_\-]+/g, " ")
-        .replace(/([a-z])([A-Z])/g, '$1 $2')
+        .replace(/([a-z])([A-Z])/g, "$1 $2")
         .toLowerCase();
 
     // Split the normalized string into words
@@ -347,5 +346,14 @@ function formatString(input: string): string {
         .join(" ");
 
     return formatted;
+}
+
+export function inferTypeFromValue(value: any): DataType {
+    if (typeof value === "string") return "string";
+    if (typeof value === "number") return "number";
+    if (typeof value === "boolean") return "boolean";
+    if (Array.isArray(value)) return "array";
+    if (typeof value === "object") return "map";
+    return "string";
 }
 

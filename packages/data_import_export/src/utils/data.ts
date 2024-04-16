@@ -1,20 +1,25 @@
-import { DataType, Entity, EntityReference, getPropertyInPath, Properties } from "@firecms/core";
+import {
+    Entity,
+    EntityReference,
+    getPropertyInPath,
+    isPropertyBuilder,
+    mergeDeep,
+    Properties,
+    Property,
+    PropertyOrBuilder,
+    ResolvedProperty,
+    resolveProperty
+} from "@firecms/core";
 import { unflattenObject } from "./file_to_json";
 import { getIn } from "@firecms/formex";
-
-type DataTypeMapping = {
-    from: DataType;
-    fromSubtype?: DataType;
-    to: DataType;
-    toSubtype?: DataType;
-}
+import { inferTypeFromValue } from "@firecms/schema_inference";
 
 export function convertDataToEntity(data: Record<any, any>,
                                     idColumn: string | undefined,
                                     headersMapping: Record<string, string | null>,
                                     properties: Properties,
-                                    propertiesMapping: Record<string, DataTypeMapping>,
-                                    path: string): Entity<any> {
+                                    path: string,
+                                    defaultValues: Record<string, any>): Entity<any> {
     const flatObject = flattenEntry(data);
     if (idColumn)
         delete flatObject[idColumn];
@@ -23,31 +28,17 @@ export function convertDataToEntity(data: Record<any, any>,
             const mappedKey = getIn(headersMapping, key) ?? key;
 
             const mappedProperty = getPropertyInPath(properties, mappedKey);
-            if (!mappedProperty)
+            if (!mappedProperty) {
                 return {};
-
-            console.log({
-                mappedKey,
-                mappedProperty,
-                value,
-            })
-            const propertyMapping = propertiesMapping[mappedKey];
-            let valueResult = value;
-            if (propertyMapping) {
-                valueResult = processValueMapping(value, propertyMapping);
             }
+            const processedValue = processValueMapping(value, mappedProperty);
             return ({
-                [mappedKey]: valueResult
+                [mappedKey]: processedValue
             });
         })
         .reduce((acc, curr) => ({ ...acc, ...curr }), {});
 
-    // console.log({
-    //     data,
-    //     mappedKeysObject
-    // })
-
-    const values = unflattenObject(mappedKeysObject);
+    const values = mergeDeep(defaultValues ?? {}, unflattenObject(mappedKeysObject));
     let id = idColumn ? data[idColumn] : undefined;
     if (typeof id === "string") {
         id = id.trim();
@@ -61,7 +52,6 @@ export function convertDataToEntity(data: Record<any, any>,
         id = id.toString();
     }
 
-
     return {
         id,
         values,
@@ -73,7 +63,7 @@ export function flattenEntry(obj: any, parent = ""): any {
     return Object.keys(obj).reduce((acc, key) => {
         const prefixedKey = parent ? `${parent}.${key}` : key;
 
-        if (typeof obj[key] === "object" && obj[key] !== null && !Array.isArray(obj[key])) {
+        if (typeof obj[key] === "object" && !(obj[key] instanceof Date) && obj[key] !== null && !Array.isArray(obj[key])) {
             Object.assign(acc, flattenEntry(obj[key], prefixedKey));
         } else {
             // @ts-ignore
@@ -84,116 +74,24 @@ export function flattenEntry(obj: any, parent = ""): any {
     }, {});
 }
 
-// export function convertDataEntryValue({
-//                                           key,
-//                                           fullKey,
-//                                           value,
-//                                           idColumn,
-//                                           headersMapping,
-//                                           properties,
-//                                           propertiesMapping
-//                                       }: {
-//     key?: string,
-//     fullKey: string,
-//     value: any,
-//     idColumn?: string,
-//     headersMapping: Record<string, string | null>,
-//     properties: Properties,
-//     propertiesMapping: Record<string, DataTypeMapping>
-// }): any {
-//
-//     if (value === undefined) return value;
-//     if (value === null) return value;
-//
-//     if (Array.isArray(value)) {
-//         const mappedKey = headersMapping[fullKey] || fullKey;
-//         const valueMapping = propertiesMapping[mappedKey];
-//         return processValueMapping(value, valueMapping);
-//         // return value.map(v => convertDataEntryValue({ value: v, fullKey, idColumn, headersMapping, propertiesMapping }));
-//     } else if (typeof value === "object") {
-//         return convertDataObjectValue({
-//             key,
-//             fullKey,
-//             value,
-//             idColumn,
-//             headersMapping,
-//             properties,
-//             propertiesMapping
-//         });
-//     } else {
-//         const mappedKey = headersMapping[fullKey] || fullKey;
-//         const valueMapping = propertiesMapping[mappedKey];
-//         return processValueMapping(value, valueMapping);
-//     }
-// }
+export function processValueMapping(value: any, property?: PropertyOrBuilder): any {
+    if (value === null) return null;
 
-// export function convertDataObjectValue({
-//                                            key,
-//                                            fullKey,
-//                                            value,
-//                                            idColumn,
-//                                            headersMapping,
-//                                            properties,
-//                                            propertiesMapping
-//                                        }: {
-//     key?: string,
-//     fullKey?: string,
-//     value: object,
-//     idColumn?: string,
-//     headersMapping: Record<string, string | null>,
-//     properties: Properties,
-//     propertiesMapping: Record<string, DataTypeMapping>
-// }): object {
-//
-//     if (value instanceof Date) {
-//         const mappedKey = fullKey ? headersMapping[fullKey] || fullKey : undefined;
-//         const valueMapping = mappedKey ? propertiesMapping[mappedKey] : undefined;
-//         return processValueMapping(value, valueMapping);
-//     }
-//
-//     return Object.entries(value)
-//         .map(([childKey, childValue]) => {
-//             const childFullKey = fullKey ? `${fullKey}.${childKey}` : childKey;
-//             const mappedKey = headersMapping[childFullKey] ?? childFullKey;
-//             const mappedKeyLastPart = mappedKey.split(".").slice(-1)[0];
-//             const property = getPropertyInPath(properties, mappedKey);
-//             // if (!property) {
-//             //     console.log("ppp", { properties, mappedKey,  })
-//             //     return {};
-//             // }
-//             return ({
-//                 [mappedKeyLastPart]: convertDataEntryValue({
-//                     key: childKey,
-//                     fullKey: childFullKey,
-//                     value: childValue,
-//                     idColumn,
-//                     headersMapping,
-//                     properties,
-//                     propertiesMapping
-//                 })
-//             });
-//         })
-//         .reduce((acc, curr) => ({ ...acc, ...curr }), {});
-// }
+    if (property === undefined) return value;
+    const usedProperty: ResolvedProperty | null = resolveProperty({
+        propertyOrBuilder: property,
+        propertyValue: value
+    })
+    if (usedProperty === null) return value;
+    const from = inferTypeFromValue(value);
+    const to = usedProperty.dataType;
 
-export function processValueMapping(value: any, valueMapping?: DataTypeMapping): any {
-    if (valueMapping === undefined) return value;
-    const {
-        from,
-        to
-    } = valueMapping;
-    if (from === "array" && to === "array" && valueMapping.fromSubtype && valueMapping.toSubtype && Array.isArray(value)) {
-        return value.map(v => processValueMapping(v, {
-            from: valueMapping.fromSubtype!,
-            to: valueMapping.toSubtype!
-        }));
+    if (from === "array" && to === "array" && Array.isArray(value) && usedProperty.of && !isPropertyBuilder(usedProperty.of as PropertyOrBuilder)) {
+        return value.map(v => processValueMapping(v, usedProperty.of as Property));
     } else if (from === "string" && to === "number" && typeof value === "string") {
         return Number(value);
-    } else if (from === "string" && to === "array" && valueMapping.toSubtype && typeof value === "string") {
-        return value.split(",").map((v: string) => processValueMapping(v, {
-            from: "string",
-            to: valueMapping.toSubtype!
-        }));
+    } else if (from === "string" && to === "array" && typeof value === "string" && usedProperty.of && !isPropertyBuilder(usedProperty.of as PropertyOrBuilder)) {
+        return value.split(",").map((v: string) => processValueMapping(v, usedProperty.of));
     } else if (from === "string" && to === "boolean") {
         return value === "true";
     } else if (from === "number" && to === "boolean") {

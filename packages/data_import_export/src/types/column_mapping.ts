@@ -30,10 +30,3 @@ export type ImportConfig = {
     setDefaultValues: React.Dispatch<React.SetStateAction<Record<string, any>>>;
 
 }
-
-export type DataTypeMapping = {
-    from: DataType;
-    fromSubtype?: DataType;
-    to: DataType;
-    toSubtype?: DataType;
-}

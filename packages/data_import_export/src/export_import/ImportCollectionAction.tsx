@@ -32,7 +32,7 @@ import {
 } from "@firecms/ui";
 import { buildEntityPropertiesFromData } from "@firecms/schema_inference";
 import { useImportConfig } from "../hooks";
-import { convertDataToEntity, getInferenceType, getPropertiesMapping } from "../utils";
+import { convertDataToEntity, getInferenceType } from "../utils";
 import { DataNewPropertiesMapping, ImportFileUpload, ImportSaveInProgress } from "../components";
 import { ImportConfig } from "../types";
 
@@ -109,6 +109,10 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
     if (collection.collectionGroup) {
         return null;
     }
+
+    console.log({
+        headersMapping: importConfig.headersMapping,
+    })
     return <>
 
         <Tooltip title={"Import"}>
@@ -150,6 +154,7 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
                                                       }}
                                                       onPropertySelected={(newPropertyKey) => {
 
+                                                          console.log("previous headers mapping", importConfig.headersMapping)
                                                           const newHeadersMapping: Record<string, string | null> = Object.entries(importConfig.headersMapping)
                                                               .map(([currentImportKey, currentPropertyKey]) => {
                                                                   if (currentPropertyKey === newPropertyKey) {
@@ -250,14 +255,15 @@ function PropertyTreeSelect({
         }
 
         if (!selectedPropertyKey || !selectedProperty) {
-            return <Typography variant={"body2"} className={"p-4"}>Do not import this property</Typography>;
+            return <Typography variant={"body2"} color="disabled" className={"p-4"}>Do not import this
+                property</Typography>;
         }
 
         return <PropertySelectEntry propertyKey={selectedPropertyKey}
                                     property={selectedProperty as Property}/>;
     }, [selectedProperty]);
 
-    const onSelectValueChange = useCallback((value: string) => {
+    const onSelectValueChange = (value: string) => {
         if (value === internalIDValue) {
             onIdSelected();
             onPropertySelected(null);
@@ -266,14 +272,14 @@ function PropertyTreeSelect({
         } else {
             onPropertySelected(value);
         }
-    }, []);
+    };
 
     return <Select value={isIdColumn ? internalIDValue : (selectedPropertyKey ?? undefined)}
                    onValueChange={onSelectValueChange}
                    renderValue={renderValue}>
 
         <SelectItem value={"__do_not_import"}>
-            <Typography variant={"body2"} className={"p-4"}>Do not import this property</Typography>
+            <Typography variant={"body2"} color={"disabled"} className={"p-4"}>Do not import this property</Typography>
         </SelectItem>
 
         <SelectItem value={internalIDValue}>
@@ -376,8 +382,8 @@ export function ImportDataPreview<M extends Record<string, any>>({
 }) {
 
     useEffect(() => {
-        const propertiesMapping = getPropertiesMapping(importConfig.originProperties, properties, importConfig.headersMapping,);
-        const mappedData = importConfig.importData.map(d => convertDataToEntity(d, importConfig.idColumn, importConfig.headersMapping, properties, propertiesMapping, "TEMP_PATH"));
+        const mappedData = importConfig.importData.map(d => convertDataToEntity(d, importConfig.idColumn, importConfig.headersMapping, properties, "TEMP_PATH", importConfig.defaultValues));
+        console.log("Mapped data", { importConfig, mappedData })
         importConfig.setEntities(mappedData);
     }, []);
 
