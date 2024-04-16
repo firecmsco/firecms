@@ -92,7 +92,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
                     size={props.size}
                     storagePathOrDownloadUrl={value}/>;
             } else if (stringProperty.markdown) {
-                content = <Markdown source={value}/>;
+                content = <Markdown source={value} size={"small"}/>;
             } else {
                 content = <StringPropertyPreview {...props}
                                                  property={stringProperty}
@@ -113,17 +113,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
                     content = <ArrayPropertyPreview {...props}
                                                     value={value}
                                                     property={property as ResolvedArrayProperty}/>;
-                }
-                    // else if (arrayProperty.of.dataType === "map") {
-                    //     content =
-                    //         <ArrayOfMapsPreview propertyKey={propertyKey}
-                    //                             property={property as ResolvedArrayProperty}
-                    //                             value={value as Record<string, any>[]} // This might be wrong
-                    //                             entity={entity}
-                    //                             size={size}
-                    //         />;
-                // }
-                else if (arrayProperty.of.dataType === "reference") {
+                } else if (arrayProperty.of.dataType === "reference") {
                     content = <ArrayOfReferencesPreview {...props}
                                                         value={value}
                                                         property={property as ResolvedArrayProperty}/>;
