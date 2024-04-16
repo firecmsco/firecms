@@ -60,20 +60,23 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
 
     const handleClickOpen = useCallback(() => {
         setOpen(true);
+        onAnalyticsEvent?.("import_open");
         setStep("initial");
-    }, [setOpen]);
+    }, [onAnalyticsEvent]);
 
     const handleClose = useCallback(() => {
         setOpen(false);
     }, [setOpen]);
 
     const onMappingComplete = useCallback(() => {
+        onAnalyticsEvent?.("import_mapping_complete");
         setStep("preview");
-    }, []);
+    }, [onAnalyticsEvent]);
 
     const onPreviewComplete = useCallback(() => {
+        onAnalyticsEvent?.("import_data_save");
         setStep("import_data_saving");
-    }, []);
+    }, [onAnalyticsEvent]);
 
     const onDataAdded = async (data: object[]) => {
         importConfig.setImportData(data);
@@ -90,6 +93,7 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
             }
         }
         setTimeout(() => {
+            onAnalyticsEvent?.("import_data_added");
             setStep("mapping");
         }, 100);
         // setStep("mapping");
@@ -154,7 +158,7 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
                                                       }}
                                                       onPropertySelected={(newPropertyKey) => {
 
-                                                          console.log("previous headers mapping", importConfig.headersMapping)
+                                                          onAnalyticsEvent?.("import_mapping_field_updated");
                                                           const newHeadersMapping: Record<string, string | null> = Object.entries(importConfig.headersMapping)
                                                               .map(([currentImportKey, currentPropertyKey]) => {
                                                                   if (currentPropertyKey === newPropertyKey) {
@@ -383,7 +387,10 @@ export function ImportDataPreview<M extends Record<string, any>>({
 
     useEffect(() => {
         const mappedData = importConfig.importData.map(d => convertDataToEntity(d, importConfig.idColumn, importConfig.headersMapping, properties, "TEMP_PATH", importConfig.defaultValues));
-        console.log("Mapped data", { importConfig, mappedData })
+        console.log("Mapped data", {
+            importConfig,
+            mappedData
+        })
         importConfig.setEntities(mappedData);
     }, []);
 

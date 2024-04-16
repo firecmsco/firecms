@@ -491,6 +491,7 @@ function FireCMSAppAuthenticated({
         exportAllowed: useCallback(({ collectionEntitiesCount }: ExportAllowedParams) => {
             return projectConfig.canExport || collectionEntitiesCount <= DOCS_LIMIT;
         }, [projectConfig.canExport]),
+        onAnalyticsEvent,
         notAllowedView: <SubscriptionPlanWidget showForPlans={["free"]}
                                                 message={`Upgrade to export more than ${DOCS_LIMIT} entities`}/>
     });

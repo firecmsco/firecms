@@ -36,6 +36,7 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
                                                                                                  collection: inputCollection,
                                                                                                  path: inputPath,
                                                                                                  collectionEntitiesCount,
+                                                                                                 onAnalyticsEvent,
                                                                                                  exportAllowed,
                                                                                                  notAllowedView
                                                                                              }: CollectionActionsProps<M, UserType, EntityCollection<M, any>> & {
@@ -123,6 +124,9 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
     const doDownload = useCallback(async (collection: ResolvedEntityCollection<M>,
                                           exportConfig: ExportConfig<any> | undefined) => {
 
+        onAnalyticsEvent?.("export_collection", {
+            collection: collection.path
+        });
         setDataLoading(true);
         dataSource.fetchCollection<M>({
             path,
@@ -136,6 +140,9 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
                     ...collection.additionalFields?.map(field => field.key) ?? []
                 ];
                 downloadExport(data, additionalData, collection, flattenArrays, additionalHeaders, exportType, dateExportType);
+                onAnalyticsEvent?.("export_collection_success", {
+                    collection: collection.path
+                });
             })
             .catch((e) => {
                 console.error("Error loading export data", e);
@@ -143,7 +150,7 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
             })
             .finally(() => setDataLoading(false));
 
-    }, [dataSource, path, fetchAdditionalFields, flattenArrays, exportType, dateExportType]);
+    }, [onAnalyticsEvent, dataSource, path, fetchAdditionalFields, flattenArrays, exportType, dateExportType]);
 
     const onOkClicked = useCallback(() => {
         doDownload(collection, exportConfig);
