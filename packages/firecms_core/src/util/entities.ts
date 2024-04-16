@@ -139,7 +139,7 @@ export function sanitizeData<M extends Record<string, any>>
     return result;
 }
 
-export function getReferenceFrom<M extends Record<string, any>>(entity: Entity<M>): EntityReference<M> {
+export function getReferenceFrom<M extends Record<string, any>>(entity: Entity<M>): EntityReference {
     return new EntityReference(entity.id, entity.path);
 }
 

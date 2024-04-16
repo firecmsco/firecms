@@ -96,7 +96,7 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
         const [onHover, setOnHover] = useState(false);
         const [internalSaved, setInternalSaved] = useState(saved);
 
-        const showError = !disabled && error;
+        const showError = !disabled && Boolean(error);
 
         useEffect(() => {
             if (saved) {
@@ -176,21 +176,26 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
         const setOnHoverTrue = useCallback(() => setOnHover(true), []);
         const setOnHoverFalse = useCallback(() => setOnHover(false), []);
 
+        const borderClass = showError
+            ? "border-red-500"
+            : internalSaved
+                ? "border-green-500"
+                : isSelected
+                    ? "border-primary"
+                    : "border-transparent";
+
         return (
             <div
-                ref={ref}
                 className={cn(
                     "transition-colors duration-100 ease-in-out",
                     `flex relative h-full rounded-md p-${p} border border-4  border-opacity-75`,
                     onHover && !disabled ? "bg-gray-50 dark:bg-gray-900" : "",
                     saved ? "bg-gray-100 bg-opacity-75 dark:bg-gray-800 dark:bg-opacity-75" : "",
-                    !isSelected && !internalSaved && !showError ? "border-transparent" : "",
                     hideOverflow ? "overflow-hidden" : "",
                     isSelected ? "bg-gray-50 dark:bg-gray-900" : "",
-                    isSelected && !internalSaved ? "border-primary" : "",
-                    internalSaved ? "border-green-500 " : "",
-                    showError ? "border-red-500" : ""
+                    borderClass
                 )}
+                ref={ref}
                 style={{
                     justifyContent,
                     alignItems: disabled || !isOverflowing ? "center" : undefined,

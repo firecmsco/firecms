@@ -120,7 +120,7 @@ export function DataEnhancementControllerProvider({
 
     }, [getConfigForPath, updateConfig]);
 
-    const dataSource =  useDataSource(collection);
+    const dataSource = useDataSource(collection);
     const navigationController = useNavigationController();
 
     const clearSuggestion = useCallback((propertyKey: string) => {
@@ -223,10 +223,16 @@ export function DataEnhancementControllerProvider({
 
     const enhance = async (props: EnhanceParams<any>): Promise<EnhancedDataResult> => {
 
+        if (!authController.user) {
+            snackbarController.open({
+                type: "warning",
+                message: "You need to be logged in to enhance data"
+            });
+            return Promise.reject(new Error("Not logged in"));
+        }
+
         const resolvedPath = navigationController.resolveAliasesFrom(path);
         const firebaseToken = await authController.getAuthToken();
-
-        // preEnhanceValuesRef.current = formContext?.values ?? {};
 
         if (props.propertyKey) {
             clearSuggestion(props.propertyKey)

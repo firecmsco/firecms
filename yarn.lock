@@ -2593,9 +2593,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@firecms/cli@workspace:packages/cli"
   dependencies:
-    "@types/node": ^20.11.30
+    "@types/node": ^20.12.7
     arg: ^5.0.2
-    axios: ^0.28.0
+    axios: ^0.28.1
     chalk: ^4.1.2
     execa: ^4.1.0
     form-data: ^4.0.0
@@ -2609,8 +2609,8 @@ __metadata:
     open: ^10.1.0
     ora: ^8.0.1
     ts-node: ^10.9.2
-    typescript: ^5.4.2
-    vite: ^5.2.3
+    typescript: ^5.4.5
+    vite: ^5.2.9
     ws: ^8.16.0
     zip-folder: ^1.0.0
   bin:
@@ -2632,10 +2632,10 @@ __metadata:
     "@firecms/formex": ^3.0.0-canary.42
     "@firecms/schema_inference": ^3.0.0-canary.42
     "@firecms/user_management": ^3.0.0-canary.42
-    "@types/node": ^20.11.30
-    "@types/react": ^18.2.67
-    "@types/react-dom": ^18.2.22
-    "@typescript-eslint/parser": ^7.3.1
+    "@types/node": ^20.12.7
+    "@types/react": ^18.2.79
+    "@types/react-dom": ^18.2.25
+    "@typescript-eslint/parser": ^7.7.0
     eslint: ^8.57.0
     eslint-config-standard: ^17.1.0
     eslint-plugin-import: ^2.29.1
@@ -2643,10 +2643,10 @@ __metadata:
     eslint-plugin-promise: ^6.1.1
     eslint-plugin-react: ^7.34.1
     eslint-plugin-react-hooks: ^4.6.0
-    react-router: ^6.22.0
-    react-router-dom: ^6.22.0
-    typescript: ^5.4.2
-    vite: ^5.2.3
+    react-router: ^6.22.3
+    react-router-dom: ^6.22.3
+    typescript: ^5.4.5
+    vite: ^5.2.9
   peerDependencies:
     firebase: ^10.7.1
     react: ^18.2.0
@@ -2665,10 +2665,10 @@ __metadata:
     "@firecms/schema_inference": ^3.0.0-canary.42
     "@firecms/ui": ^3.0.0-canary.42
     "@jest/globals": ^29.7.0
-    "@types/react": ^18.2.67
-    "@types/react-dom": ^18.2.22
-    "@typescript-eslint/eslint-plugin": ^7.3.1
-    "@typescript-eslint/parser": ^7.3.1
+    "@types/react": ^18.2.79
+    "@types/react-dom": ^18.2.25
+    "@typescript-eslint/eslint-plugin": ^7.7.0
+    "@typescript-eslint/parser": ^7.7.0
     "@vitejs/plugin-react": ^4.2.1
     eslint: ^8.57.0
     eslint-config-standard: ^17.1.0
@@ -2680,11 +2680,11 @@ __metadata:
     jest: ^29.7.0
     json5: ^2.2.3
     prism-react-renderer: ^2.3.1
-    react-router: ^6.22.0
-    react-router-dom: ^6.22.0
+    react-router: ^6.22.3
+    react-router-dom: ^6.22.3
     ts-jest: ^29.1.2
-    typescript: ^5.4.2
-    vite: ^5.2.3
+    typescript: ^5.4.5
+    vite: ^5.2.9
     vite-plugin-fonts: ^0.7.0
   peerDependencies:
     react: ^18.2.0
@@ -2701,10 +2701,10 @@ __metadata:
     "@firecms/collection_editor": ^3.0.0-canary.42
     "@firecms/core": ^3.0.0-canary.42
     "@firecms/firebase": ^3.0.0-canary.42
-    "@types/node": ^20.11.30
-    "@types/react": ^18.2.67
-    "@types/react-dom": ^18.2.22
-    "@typescript-eslint/parser": ^7.3.1
+    "@types/node": ^20.12.7
+    "@types/react": ^18.2.79
+    "@types/react-dom": ^18.2.25
+    "@typescript-eslint/parser": ^7.7.0
     eslint: ^8.57.0
     eslint-config-standard: ^17.1.0
     eslint-plugin-import: ^2.29.1
@@ -2712,8 +2712,8 @@ __metadata:
     eslint-plugin-promise: ^6.1.1
     eslint-plugin-react: ^7.34.1
     eslint-plugin-react-hooks: ^4.6.0
-    typescript: ^5.4.2
-    vite: ^5.2.3
+    typescript: ^5.4.5
+    vite: ^5.2.9
   peerDependencies:
     firebase: ^10.7.1
     react: ^18.2.0
@@ -2728,20 +2728,20 @@ __metadata:
     "@firecms/formex": ^3.0.0-canary.42
     "@firecms/ui": ^3.0.0-canary.42
     "@fontsource/jetbrains-mono": ^5.0.19
-    "@hello-pangea/dnd": ^16.5.0
+    "@hello-pangea/dnd": ^16.6.0
     "@jest/globals": ^29.7.0
     "@radix-ui/react-portal": ^1.0.4
     "@testing-library/jest-dom": ^6.4.2
-    "@testing-library/react": ^14.2.1
+    "@testing-library/react": ^14.3.1
     "@testing-library/user-event": ^14.5.2
     "@types/jest": ^29.5.12
-    "@types/node": ^20.11.30
+    "@types/node": ^20.12.7
     "@types/object-hash": ^3.0.6
-    "@types/react": ^18.2.67
-    "@types/react-dom": ^18.2.22
+    "@types/react": ^18.2.79
+    "@types/react-dom": ^18.2.25
     "@types/react-measure": ^2.0.12
-    "@typescript-eslint/eslint-plugin": ^7.3.1
-    "@typescript-eslint/parser": ^7.3.1
+    "@typescript-eslint/eslint-plugin": ^7.7.0
+    "@typescript-eslint/parser": ^7.7.0
     "@vitejs/plugin-react": ^4.2.1
     clsx: ^2.1.0
     cross-env: ^7.0.3
@@ -2753,7 +2753,7 @@ __metadata:
     eslint-plugin-promise: ^6.1.1
     eslint-plugin-react: ^7.34.1
     eslint-plugin-react-hooks: ^4.6.0
-    firebase: ^10.9.0
+    firebase: ^10.11.0
     history: ^5.3.0
     jest: ^29.7.0
     js-search: ^2.0.1
@@ -2765,17 +2765,17 @@ __metadata:
     react-fast-compare: ^3.2.2
     react-image-file-resizer: ^0.4.8
     react-markdown-editor-lite: ^1.3.4
-    react-router: ^6.22.0
-    react-router-dom: ^6.22.0
+    react-router: ^6.22.3
+    react-router-dom: ^6.22.3
     react-transition-group: ^4.4.5
     react-use-measure: ^2.1.1
     react-window: ^1.8.10
     ts-jest: ^29.1.2
     ts-node: ^10.9.2
-    tsd: ^0.30.7
+    tsd: ^0.31.0
     typeface-rubik: ^1.1.13
-    typescript: ^5.4.2
-    vite: ^5.2.3
+    typescript: ^5.4.5
+    vite: ^5.2.9
     yup: ^0.32.11
   peerDependencies:
     firebase: ^10.5.2
@@ -2793,10 +2793,10 @@ __metadata:
     "@firecms/core": ^3.0.0-canary.42
     "@testing-library/jest-dom": ^6.4.2
     "@types/jest": ^29.5.12
-    "@types/react": ^18.2.67
-    "@types/react-dom": ^18.2.22
-    "@typescript-eslint/eslint-plugin": ^7.3.1
-    "@typescript-eslint/parser": ^7.3.1
+    "@types/react": ^18.2.79
+    "@types/react-dom": ^18.2.25
+    "@typescript-eslint/eslint-plugin": ^7.7.0
+    "@typescript-eslint/parser": ^7.7.0
     "@vitejs/plugin-react": ^4.2.1
     babel-jest: ^29.7.0
     eslint: ^8.57.0
@@ -2808,8 +2808,8 @@ __metadata:
     eslint-plugin-react-hooks: ^4.6.0
     jest: ^29.7.0
     ts-jest: ^29.1.2
-    typescript: ^5.4.2
-    vite: ^5.2.3
+    typescript: ^5.4.5
+    vite: ^5.2.9
     vite-plugin-fonts: ^0.7.0
   peerDependencies:
     firebase: ^10.5.2
@@ -2829,10 +2829,10 @@ __metadata:
     "@jest/globals": ^29.7.0
     "@testing-library/jest-dom": ^6.4.2
     "@types/jest": ^29.5.12
-    "@types/react": ^18.2.67
-    "@types/react-dom": ^18.2.22
-    "@typescript-eslint/eslint-plugin": ^7.3.1
-    "@typescript-eslint/parser": ^7.3.1
+    "@types/react": ^18.2.79
+    "@types/react-dom": ^18.2.25
+    "@typescript-eslint/eslint-plugin": ^7.7.0
+    "@typescript-eslint/parser": ^7.7.0
     "@vitejs/plugin-react": ^4.2.1
     babel-jest: ^29.7.0
     eslint: ^8.57.0
@@ -2844,8 +2844,8 @@ __metadata:
     eslint-plugin-react-hooks: ^4.6.0
     jest: ^29.7.0
     ts-jest: ^29.1.2
-    typescript: ^5.4.2
-    vite: ^5.2.3
+    typescript: ^5.4.5
+    vite: ^5.2.9
     vite-plugin-fonts: ^0.7.0
     xlsx: ^0.18.5
   peerDependencies:
@@ -2863,33 +2863,33 @@ __metadata:
   dependencies:
     "@firecms/ui": ^3.0.0-canary.42
     "@radix-ui/react-slot": ^1.0.2
-    "@tiptap/core": ^2.2.4
-    "@tiptap/extension-color": ^2.2.4
-    "@tiptap/extension-highlight": ^2.2.4
-    "@tiptap/extension-horizontal-rule": ^2.2.4
-    "@tiptap/extension-image": ^2.2.4
-    "@tiptap/extension-link": ^2.2.4
-    "@tiptap/extension-placeholder": 2.2.4
-    "@tiptap/extension-task-item": ^2.2.4
-    "@tiptap/extension-task-list": ^2.2.4
-    "@tiptap/extension-text-style": ^2.2.4
-    "@tiptap/extension-underline": ^2.2.4
-    "@tiptap/pm": ^2.2.4
-    "@tiptap/react": ^2.2.4
-    "@tiptap/starter-kit": ^2.2.4
-    "@tiptap/suggestion": ^2.2.4
-    "@types/node": 18.19.26
-    "@types/react": ^18.2.67
-    "@types/react-dom": 18.2.22
+    "@tiptap/core": ^2.3.0
+    "@tiptap/extension-color": ^2.3.0
+    "@tiptap/extension-highlight": ^2.3.0
+    "@tiptap/extension-horizontal-rule": ^2.3.0
+    "@tiptap/extension-image": ^2.3.0
+    "@tiptap/extension-link": ^2.3.0
+    "@tiptap/extension-placeholder": 2.3.0
+    "@tiptap/extension-task-item": ^2.3.0
+    "@tiptap/extension-task-list": ^2.3.0
+    "@tiptap/extension-text-style": ^2.3.0
+    "@tiptap/extension-underline": ^2.3.0
+    "@tiptap/pm": ^2.3.0
+    "@tiptap/react": ^2.3.0
+    "@tiptap/starter-kit": ^2.3.0
+    "@tiptap/suggestion": ^2.3.0
+    "@types/node": 18.19.31
+    "@types/react": ^18.2.79
+    "@types/react-dom": 18.2.25
     cmdk: ^0.2.1
-    jotai: ^2.7.1
+    jotai: ^2.8.0
     react-markdown: ^9.0.1
     react-moveable: ^0.56.0
     tippy.js: ^6.3.7
-    tiptap-markdown: ^0.8.9
+    tiptap-markdown: ^0.8.10
     tunnel-rat: ^0.1.2
-    typescript: ^5.4.2
-    vite: ^5.2.3
+    typescript: ^5.4.5
+    vite: ^5.2.9
   peerDependencies:
     react: ^18.0.0
     react-dom: ^18.0.0
@@ -2905,10 +2905,10 @@ __metadata:
     "@firecms/data_enhancement": ^3.0.0-canary.42
     "@firecms/data_import_export": ^3.0.0-canary.42
     "@firecms/schema_inference": ^3.0.0-canary.42
-    "@types/node": ^20.11.30
-    "@types/react": ^18.2.67
-    "@types/react-dom": ^18.2.22
-    algoliasearch: ^4.22.1
+    "@types/node": ^20.12.7
+    "@types/react": ^18.2.79
+    "@types/react-dom": ^18.2.25
+    algoliasearch: ^4.23.3
     eslint: ^8.57.0
     eslint-config-standard: ^17.1.0
     eslint-plugin-import: ^2.29.1
@@ -2916,12 +2916,12 @@ __metadata:
     eslint-plugin-promise: ^6.1.1
     eslint-plugin-react: ^7.34.1
     eslint-plugin-react-hooks: ^4.6.0
-    firebase: ^10.9.0
+    firebase: ^10.11.0
     js-search: ^2.0.1
-    react-router: ^6.22.0
-    react-router-dom: ^6.22.0
-    typescript: ^5.4.2
-    vite: ^5.2.3
+    react-router: ^6.22.3
+    react-router-dom: ^6.22.3
+    typescript: ^5.4.5
+    vite: ^5.2.9
   peerDependencies:
     algoliasearch: ^4.14.2
     react: ^18.2.0
@@ -2933,10 +2933,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@firecms/formex@workspace:packages/formex"
   dependencies:
-    "@types/node": ^20.11.30
-    "@types/react": ^18.2.67
-    "@types/react-dom": ^18.2.22
-    "@typescript-eslint/parser": ^7.3.1
+    "@types/node": ^20.12.7
+    "@types/react": ^18.2.79
+    "@types/react-dom": ^18.2.25
+    "@typescript-eslint/parser": ^7.7.0
     eslint: ^8.57.0
     eslint-config-standard: ^17.1.0
     eslint-plugin-import: ^2.29.1
@@ -2945,8 +2945,8 @@ __metadata:
     eslint-plugin-react: ^7.34.1
     eslint-plugin-react-hooks: ^4.6.0
     react-fast-compare: ^3.2.2
-    typescript: ^5.4.2
-    vite: ^5.2.3
+    typescript: ^5.4.5
+    vite: ^5.2.9
   peerDependencies:
     firebase: ^10.7.1
     react: ^18.2.0
@@ -2961,10 +2961,10 @@ __metadata:
     "@firecms/core": ^3.0.0-canary.42
     "@firecms/firebase": ^3.0.0-canary.42
     "@firecms/ui": ^3.0.0-canary.42
-    "@types/node": ^20.11.30
-    firebase: ^10.9.0
-    typescript: ^5.4.2
-    vite: ^5.2.3
+    "@types/node": ^20.12.7
+    firebase: ^10.11.0
+    typescript: ^5.4.5
+    vite: ^5.2.9
   peerDependencies:
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -2977,9 +2977,9 @@ __metadata:
   resolution: "@firecms/schema_inference@workspace:packages/schema_inference"
   dependencies:
     "@firecms/core": ^3.0.0-canary.42
-    "@types/node": ^20.11.30
-    typescript: ^5.4.2
-    vite: ^5.2.3
+    "@types/node": ^20.12.7
+    typescript: ^5.4.5
+    vite: ^5.2.9
   languageName: unknown
   linkType: soft
 
@@ -3004,16 +3004,16 @@ __metadata:
     "@radix-ui/react-tabs": ^1.0.4
     "@radix-ui/react-tooltip": ^1.0.7
     "@testing-library/jest-dom": ^6.4.2
-    "@testing-library/react": ^14.2.1
+    "@testing-library/react": ^14.3.1
     "@testing-library/user-event": ^14.5.2
     "@types/jest": ^29.5.12
-    "@types/node": ^20.11.30
+    "@types/node": ^20.12.7
     "@types/object-hash": ^3.0.6
-    "@types/react": ^18.2.67
-    "@types/react-dom": ^18.2.22
+    "@types/react": ^18.2.79
+    "@types/react-dom": ^18.2.25
     "@types/react-measure": ^2.0.12
-    "@typescript-eslint/eslint-plugin": ^7.3.1
-    "@typescript-eslint/parser": ^7.3.1
+    "@typescript-eslint/eslint-plugin": ^7.7.0
+    "@typescript-eslint/parser": ^7.7.0
     "@vitejs/plugin-react": ^4.2.1
     clsx: ^2.1.0
     cmdk: ^0.2.1
@@ -3026,18 +3026,18 @@ __metadata:
     eslint-plugin-promise: ^6.1.1
     eslint-plugin-react: ^7.34.1
     eslint-plugin-react-hooks: ^4.6.0
-    firebase: ^10.9.0
+    firebase: ^10.11.0
     jest: ^29.7.0
     npm-run-all: ^4.1.5
-    react-datepicker: ^6.4.0
+    react-datepicker: ^6.8.0
     react-dropzone: ^14.2.3
     react-fast-compare: ^3.2.2
     tailwind-merge: ^2.2.2
     ts-jest: ^29.1.2
     ts-node: ^10.9.2
-    tsd: ^0.30.7
-    typescript: ^5.4.2
-    vite: ^5.2.3
+    tsd: ^0.31.0
+    typescript: ^5.4.5
+    vite: ^5.2.9
   peerDependencies:
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -3051,10 +3051,10 @@ __metadata:
     "@firecms/core": ^3.0.0-canary.42
     "@firecms/formex": ^3.0.0-canary.42
     "@firecms/ui": ^3.0.0-canary.42
-    "@types/node": ^20.11.30
-    "@types/react": ^18.2.67
-    "@types/react-dom": ^18.2.22
-    "@typescript-eslint/parser": ^7.3.1
+    "@types/node": ^20.12.7
+    "@types/react": ^18.2.79
+    "@types/react-dom": ^18.2.25
+    "@typescript-eslint/parser": ^7.7.0
     date-fns: ^3.6.0
     eslint: ^8.57.0
     eslint-config-standard: ^17.1.0
@@ -3063,8 +3063,8 @@ __metadata:
     eslint-plugin-promise: ^6.1.1
     eslint-plugin-react: ^7.34.1
     eslint-plugin-react-hooks: ^4.6.0
-    typescript: ^5.4.2
-    vite: ^5.2.3
+    typescript: ^5.4.5
+    vite: ^5.2.9
   peerDependencies:
     firebase: ^10.7.1
     react: ^18.2.0
@@ -3155,7 +3155,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hello-pangea/dnd@npm:^16.5.0":
+"@hello-pangea/dnd@npm:^16.6.0":
   version: 16.6.0
   resolution: "@hello-pangea/dnd@npm:16.6.0"
   dependencies:
@@ -5614,7 +5614,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tailwindcss/typography@npm:^0.5.10":
+"@tailwindcss/typography@npm:^0.5.12":
   version: 0.5.12
   resolution: "@tailwindcss/typography@npm:0.5.12"
   dependencies:
@@ -5677,9 +5677,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:^14.2.1":
-  version: 14.3.0
-  resolution: "@testing-library/react@npm:14.3.0"
+"@testing-library/react@npm:^14.3.1":
+  version: 14.3.1
+  resolution: "@testing-library/react@npm:14.3.1"
   dependencies:
     "@babel/runtime": ^7.12.5
     "@testing-library/dom": ^9.0.0
@@ -5687,7 +5687,7 @@ __metadata:
   peerDependencies:
     react: ^18.0.0
     react-dom: ^18.0.0
-  checksum: 4aa7e583feac7e9bd93ff981d1dc5113329181bf01ad955af2f748f263dc52cdbff6ead6664a8762481e30b70d7f402aaac7a497d9d1a1747ad6906dfb0eabad
+  checksum: b057d4c9db5a523acfc24d7bc4665a924ab8d6f252c7f51eecf7dd30f1239413e1134925fd5cc9cbdef80496af64c04e6719b2081f89fe05ba87e8c6305bcc16
   languageName: node
   linkType: hard
 
@@ -5700,7 +5700,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/core@npm:^2.2.4, @tiptap/core@npm:^2.3.0":
+"@tiptap/core@npm:^2.3.0":
   version: 2.3.0
   resolution: "@tiptap/core@npm:2.3.0"
   peerDependencies:
@@ -5767,7 +5767,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/extension-color@npm:^2.2.4":
+"@tiptap/extension-color@npm:^2.3.0":
   version: 2.3.0
   resolution: "@tiptap/extension-color@npm:2.3.0"
   peerDependencies:
@@ -5836,7 +5836,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/extension-highlight@npm:^2.2.4":
+"@tiptap/extension-highlight@npm:^2.3.0":
   version: 2.3.0
   resolution: "@tiptap/extension-highlight@npm:2.3.0"
   peerDependencies:
@@ -5855,7 +5855,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/extension-horizontal-rule@npm:^2.2.4, @tiptap/extension-horizontal-rule@npm:^2.3.0":
+"@tiptap/extension-horizontal-rule@npm:^2.3.0":
   version: 2.3.0
   resolution: "@tiptap/extension-horizontal-rule@npm:2.3.0"
   peerDependencies:
@@ -5865,7 +5865,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/extension-image@npm:^2.2.4":
+"@tiptap/extension-image@npm:^2.3.0":
   version: 2.3.0
   resolution: "@tiptap/extension-image@npm:2.3.0"
   peerDependencies:
@@ -5883,7 +5883,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/extension-link@npm:^2.2.4":
+"@tiptap/extension-link@npm:^2.3.0":
   version: 2.3.0
   resolution: "@tiptap/extension-link@npm:2.3.0"
   dependencies:
@@ -5922,13 +5922,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/extension-placeholder@npm:2.2.4":
-  version: 2.2.4
-  resolution: "@tiptap/extension-placeholder@npm:2.2.4"
+"@tiptap/extension-placeholder@npm:2.3.0":
+  version: 2.3.0
+  resolution: "@tiptap/extension-placeholder@npm:2.3.0"
   peerDependencies:
     "@tiptap/core": ^2.0.0
     "@tiptap/pm": ^2.0.0
-  checksum: d749c4e1ba5858e22a267138f669da68e501d7d1e4383085f821821c3b8bf414700c80a62f7203585f8e923076f5f7b6301c2fa48d0c84370ca763e25c936e73
+  checksum: 1b7638f17f295a3197faf0600371c1ab1733bb52f5b19b389700e4225ea8decc5b08989c5ec4d965aaf724b7e802a3308accce428630ae0d399a4217f455d743
   languageName: node
   linkType: hard
 
@@ -5941,7 +5941,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/extension-task-item@npm:^2.2.4":
+"@tiptap/extension-task-item@npm:^2.3.0":
   version: 2.3.0
   resolution: "@tiptap/extension-task-item@npm:2.3.0"
   peerDependencies:
@@ -5951,7 +5951,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/extension-task-list@npm:^2.2.4":
+"@tiptap/extension-task-list@npm:^2.3.0":
   version: 2.3.0
   resolution: "@tiptap/extension-task-list@npm:2.3.0"
   peerDependencies:
@@ -5960,7 +5960,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/extension-text-style@npm:^2.2.4":
+"@tiptap/extension-text-style@npm:^2.3.0":
   version: 2.3.0
   resolution: "@tiptap/extension-text-style@npm:2.3.0"
   peerDependencies:
@@ -5978,7 +5978,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/extension-underline@npm:^2.2.4":
+"@tiptap/extension-underline@npm:^2.3.0":
   version: 2.3.0
   resolution: "@tiptap/extension-underline@npm:2.3.0"
   peerDependencies:
@@ -5987,7 +5987,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/pm@npm:^2.2.4":
+"@tiptap/pm@npm:^2.3.0":
   version: 2.3.0
   resolution: "@tiptap/pm@npm:2.3.0"
   dependencies:
@@ -6013,7 +6013,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/react@npm:^2.2.4":
+"@tiptap/react@npm:^2.3.0":
   version: 2.3.0
   resolution: "@tiptap/react@npm:2.3.0"
   dependencies:
@@ -6028,7 +6028,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/starter-kit@npm:^2.2.4":
+"@tiptap/starter-kit@npm:^2.3.0":
   version: 2.3.0
   resolution: "@tiptap/starter-kit@npm:2.3.0"
   dependencies:
@@ -6055,7 +6055,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/suggestion@npm:^2.2.4":
+"@tiptap/suggestion@npm:^2.3.0":
   version: 2.3.0
   resolution: "@tiptap/suggestion@npm:2.3.0"
   peerDependencies:
@@ -6100,10 +6100,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsd/typescript@npm:~5.3.3":
-  version: 5.3.3
-  resolution: "@tsd/typescript@npm:5.3.3"
-  checksum: 0d7815cfe8038c3fcc172cf3f8f6fdcaded965466cf8b2cff31ada57db9d9788ecd9590bca4576afcb4785d8b3271bc978b1f3ff338f49b3fffdce33ec135afe
+"@tsd/typescript@npm:~5.4.3":
+  version: 5.4.5
+  resolution: "@tsd/typescript@npm:5.4.5"
+  checksum: 86498d5e15d9395ab428c121be7e87baf3d03f5b6e513c35662a7a76e185ed7b52d7d3cd7a7c374db40ccae0081ddd68c79bfbe9d783b8fea79d3384690f33d1
   languageName: node
   linkType: hard
 
@@ -6362,7 +6362,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:>=12.12.47, @types/node@npm:>=13.7.0, @types/node@npm:^20.11.30":
+"@types/node@npm:*, @types/node@npm:>=12.12.47, @types/node@npm:>=13.7.0, @types/node@npm:^20.12.7":
   version: 20.12.7
   resolution: "@types/node@npm:20.12.7"
   dependencies:
@@ -6371,12 +6371,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.19.26":
-  version: 18.19.26
-  resolution: "@types/node@npm:18.19.26"
+"@types/node@npm:18.19.31":
+  version: 18.19.31
+  resolution: "@types/node@npm:18.19.31"
   dependencies:
     undici-types: ~5.26.4
-  checksum: d72d4e7e520206a2a05cb3e03a73696fc3bdcdc6ba5330a75cfef4818cb137b260c32dfe85e8b4ea28e8fe92f1d1497e26336c607254c5eaf47032a1b1c8bb6e
+  checksum: 949bddfd7071bd47300d1f33d380ee34695ccd5f046f1a03e4d2be0d953ace896905144d44a6f483f241b5ef34b86f0e40a0e312201117782eecf89e81a4ff13
   languageName: node
   linkType: hard
 
@@ -6415,16 +6415,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:18.2.22":
-  version: 18.2.22
-  resolution: "@types/react-dom@npm:18.2.22"
+"@types/react-dom@npm:18.2.25, @types/react-dom@npm:^18.2.25":
+  version: 18.2.25
+  resolution: "@types/react-dom@npm:18.2.25"
   dependencies:
     "@types/react": "*"
-  checksum: 83bb3ddcd7894f20a9a6cbc2befe75d8b76984734020c455b4c50cad625a4025250d8e1d247ef6264e484d47d5a94f2dd11f77c1dcac6a5de998cb447d85b720
+  checksum: 85f9278d6456c6cdc76da6806a33b472588cdd029b08dde32e8b5636b25a3eae529b4ac2e08c848a3d7ca44e4e97ee9a3df406c96fa0768de935c8eed6e07590
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^18.0.0, @types/react-dom@npm:^18.2.22":
+"@types/react-dom@npm:^18.0.0":
   version: 18.2.24
   resolution: "@types/react-dom@npm:18.2.24"
   dependencies:
@@ -6442,7 +6442,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^18.2.67":
+"@types/react@npm:*":
   version: 18.2.75
   resolution: "@types/react@npm:18.2.75"
   dependencies:
@@ -6452,21 +6452,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:18.2.67":
-  version: 18.2.67
-  resolution: "@types/react@npm:18.2.67"
+"@types/react@npm:18.2.79, @types/react@npm:^18.2.79":
+  version: 18.2.79
+  resolution: "@types/react@npm:18.2.79"
   dependencies:
     "@types/prop-types": "*"
-    "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 9e48122b0e8d0ae20601f613aca32289eeb94d55c58ff03a7dc532d80ed289a1ba9715f14b773bd926ccdd63e503717f14264143ef531dc370063abe09dee0b2
-  languageName: node
-  linkType: hard
-
-"@types/scheduler@npm:*":
-  version: 0.23.0
-  resolution: "@types/scheduler@npm:0.23.0"
-  checksum: 874d753aa65c17760dfc460a91e6df24009bde37bfd427a031577b30262f7770c1b8f71a21366c7dbc76111967384cf4090a31d65315155180ef14bd7acccb32
+  checksum: 85aa96e0e88725c84d8fc5f04f10a4da6a1f507dde33557ac9cc211414756867721264bfefd9e02bae1288ce2905351d949b652b931e734ea24519ee5c625138
   languageName: node
   linkType: hard
 
@@ -6545,15 +6537,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:^7.3.1":
-  version: 7.6.0
-  resolution: "@typescript-eslint/eslint-plugin@npm:7.6.0"
+"@typescript-eslint/eslint-plugin@npm:^7.7.0":
+  version: 7.7.0
+  resolution: "@typescript-eslint/eslint-plugin@npm:7.7.0"
   dependencies:
     "@eslint-community/regexpp": ^4.10.0
-    "@typescript-eslint/scope-manager": 7.6.0
-    "@typescript-eslint/type-utils": 7.6.0
-    "@typescript-eslint/utils": 7.6.0
-    "@typescript-eslint/visitor-keys": 7.6.0
+    "@typescript-eslint/scope-manager": 7.7.0
+    "@typescript-eslint/type-utils": 7.7.0
+    "@typescript-eslint/utils": 7.7.0
+    "@typescript-eslint/visitor-keys": 7.7.0
     debug: ^4.3.4
     graphemer: ^1.4.0
     ignore: ^5.3.1
@@ -6566,7 +6558,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 4e5a5ab8abf71cc46bcbe462673421b68651be7c72f0bb00d9660eedaeb1db2b51c5f8c7a869761be355cf15900ed2cb5b37a838dd52cd246aaca45c2a0903e7
+  checksum: f97348425d114282407f4f524cdc618199d0d6d86e4e556709063b07611192068872cbd7f612cbd670617d958ee4519b25eeca0bccbac1b08433ce41511d3825
   languageName: node
   linkType: hard
 
@@ -6598,21 +6590,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^7.3.1":
-  version: 7.6.0
-  resolution: "@typescript-eslint/parser@npm:7.6.0"
+"@typescript-eslint/parser@npm:^7.7.0":
+  version: 7.7.0
+  resolution: "@typescript-eslint/parser@npm:7.7.0"
   dependencies:
-    "@typescript-eslint/scope-manager": 7.6.0
-    "@typescript-eslint/types": 7.6.0
-    "@typescript-eslint/typescript-estree": 7.6.0
-    "@typescript-eslint/visitor-keys": 7.6.0
+    "@typescript-eslint/scope-manager": 7.7.0
+    "@typescript-eslint/types": 7.7.0
+    "@typescript-eslint/typescript-estree": 7.7.0
+    "@typescript-eslint/visitor-keys": 7.7.0
     debug: ^4.3.4
   peerDependencies:
     eslint: ^8.56.0
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 96f8219765c7427d679c8a69180ddceafe595ed7fcd796ef00ce7bf5b289725191f0d26bd7009e092010085e7cb54446965b7cdc94e9b30adad80004c34fbbbe
+  checksum: 44dc88eae2fafd3ae92338683d70d077d0c4342dcd4949dc05ffa7686de2753b8565c643eedb3bf1c6b6c1b4a2f0849000474b8e70572184ebe366b0b1dbb1ee
   languageName: node
   linkType: hard
 
@@ -6626,13 +6618,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/scope-manager@npm:7.6.0":
-  version: 7.6.0
-  resolution: "@typescript-eslint/scope-manager@npm:7.6.0"
+"@typescript-eslint/scope-manager@npm:7.7.0":
+  version: 7.7.0
+  resolution: "@typescript-eslint/scope-manager@npm:7.7.0"
   dependencies:
-    "@typescript-eslint/types": 7.6.0
-    "@typescript-eslint/visitor-keys": 7.6.0
-  checksum: 07c0215bb9631dc580801d860b90d30bf5815bd3acfa1f50d7d7c28625ec90b6c74076d352a1f4d3b2043345b7c2f72575cee7cfc9ad8dcb3d6c8f1ddc7bc2f3
+    "@typescript-eslint/types": 7.7.0
+    "@typescript-eslint/visitor-keys": 7.7.0
+  checksum: cb280d4aa64cdefee362ef97b6fde3ae86a376fccff7f012e4e635ffe544dd90be37b340c7099784d0fbebb37b925aab6b53195825b41cee38e2382d0b552871
   languageName: node
   linkType: hard
 
@@ -6653,12 +6645,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/type-utils@npm:7.6.0":
-  version: 7.6.0
-  resolution: "@typescript-eslint/type-utils@npm:7.6.0"
+"@typescript-eslint/type-utils@npm:7.7.0":
+  version: 7.7.0
+  resolution: "@typescript-eslint/type-utils@npm:7.7.0"
   dependencies:
-    "@typescript-eslint/typescript-estree": 7.6.0
-    "@typescript-eslint/utils": 7.6.0
+    "@typescript-eslint/typescript-estree": 7.7.0
+    "@typescript-eslint/utils": 7.7.0
     debug: ^4.3.4
     ts-api-utils: ^1.3.0
   peerDependencies:
@@ -6666,7 +6658,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: eb86c475c21ad573877c6c71eb92b501eb2a7a945cb0aad373a11be0df4410dc8a8fa08ef390653f402de929ac9e2721c427d18e681f96d7dd38deaa4a97d051
+  checksum: 74c07e4fcc8e6ee7870a161596d25ecfa22624947d94ca9af7147590caa13b6388f0e55101961ab02f77e7e6cffdaf19895575d7329dda50fa18fc71bf15f6b7
   languageName: node
   linkType: hard
 
@@ -6677,10 +6669,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/types@npm:7.6.0":
-  version: 7.6.0
-  resolution: "@typescript-eslint/types@npm:7.6.0"
-  checksum: 5e3157ff8d24e9dd384ed189e89e920bb2525c95330e9f87a9f9fc65c12ab4a2e701b380ede5a655dc4c4517ae27f1b9ca6b3cfb3dada02f03dd634559f06ea1
+"@typescript-eslint/types@npm:7.7.0":
+  version: 7.7.0
+  resolution: "@typescript-eslint/types@npm:7.7.0"
+  checksum: c47aae2c1474b85fab012e0518c57685c595f11775b615b6a6749f943aa7a98554d9eb7054114850679f46699578049998408a492e0c1abd3bded2aee8e261a5
   languageName: node
   linkType: hard
 
@@ -6702,12 +6694,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/typescript-estree@npm:7.6.0":
-  version: 7.6.0
-  resolution: "@typescript-eslint/typescript-estree@npm:7.6.0"
+"@typescript-eslint/typescript-estree@npm:7.7.0":
+  version: 7.7.0
+  resolution: "@typescript-eslint/typescript-estree@npm:7.7.0"
   dependencies:
-    "@typescript-eslint/types": 7.6.0
-    "@typescript-eslint/visitor-keys": 7.6.0
+    "@typescript-eslint/types": 7.7.0
+    "@typescript-eslint/visitor-keys": 7.7.0
     debug: ^4.3.4
     globby: ^11.1.0
     is-glob: ^4.0.3
@@ -6717,7 +6709,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 8a19895fc58de1094787e03b31a4a7fe96728e1071b0ddfbaeaecfdb15aca3cdc38944ca27a9c3ea0a5304c0c5339f587e67e97f958c1cbb7678c4f99c91d58d
+  checksum: 54d16b2a083bff3c6d38fbee56465403bbcba411bf25e94f2d8bbbbd8b4b35c151c7845997e5141224f8dba5bc1f34964762713035d49113700efd7381246d02
   languageName: node
   linkType: hard
 
@@ -6739,20 +6731,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/utils@npm:7.6.0":
-  version: 7.6.0
-  resolution: "@typescript-eslint/utils@npm:7.6.0"
+"@typescript-eslint/utils@npm:7.7.0":
+  version: 7.7.0
+  resolution: "@typescript-eslint/utils@npm:7.7.0"
   dependencies:
     "@eslint-community/eslint-utils": ^4.4.0
     "@types/json-schema": ^7.0.15
     "@types/semver": ^7.5.8
-    "@typescript-eslint/scope-manager": 7.6.0
-    "@typescript-eslint/types": 7.6.0
-    "@typescript-eslint/typescript-estree": 7.6.0
+    "@typescript-eslint/scope-manager": 7.7.0
+    "@typescript-eslint/types": 7.7.0
+    "@typescript-eslint/typescript-estree": 7.7.0
     semver: ^7.6.0
   peerDependencies:
     eslint: ^8.56.0
-  checksum: 22475182efee7b19b18d6aee2fe7dbac6303c9b41d99b3323a6cb295bf2cd3505ac2ebc6a0acffccbd8af2917ba42c055404bbed9687af760badd5f0bdbc17b8
+  checksum: 830ff3af96538083d7513c211e39f07375b7e973c135a2b9bbae1ad7509bd4dce33a144a22d896a2ff4c18e9fcccd423535b6f9bb8adafe36e800f16bc53378c
   languageName: node
   linkType: hard
 
@@ -6766,13 +6758,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/visitor-keys@npm:7.6.0":
-  version: 7.6.0
-  resolution: "@typescript-eslint/visitor-keys@npm:7.6.0"
+"@typescript-eslint/visitor-keys@npm:7.7.0":
+  version: 7.7.0
+  resolution: "@typescript-eslint/visitor-keys@npm:7.7.0"
   dependencies:
-    "@typescript-eslint/types": 7.6.0
+    "@typescript-eslint/types": 7.7.0
     eslint-visitor-keys: ^3.4.3
-  checksum: 9f0378435636a6a80dfcbedfcdf5fd43f200628e0359879f2d8b7ed0b73563e727ad356f7fe9c07d5e09a642c45927b1380a8418a60b8169f7ae749f59f14b9a
+  checksum: 16d0b63b9d98ea1d3d20bd6f9dc3cbd2674055845ad493d98118669d54792b1c167f57ae25beaae2c1107ed07012ac3c3093cca978b2ab49833dc491bc302b33
   languageName: node
   linkType: hard
 
@@ -6942,7 +6934,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"algoliasearch@npm:^4.22.1":
+"algoliasearch@npm:^4.23.3":
   version: 4.23.3
   resolution: "algoliasearch@npm:4.23.3"
   dependencies:
@@ -7356,7 +7348,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autoprefixer@npm:^10.4.18":
+"autoprefixer@npm:^10.4.19":
   version: 10.4.19
   resolution: "autoprefixer@npm:10.4.19"
   dependencies:
@@ -7390,7 +7382,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.28.0":
+"axios@npm:^0.28.1":
   version: 0.28.1
   resolution: "axios@npm:0.28.1"
   dependencies:
@@ -8506,9 +8498,9 @@ __metadata:
   resolution: "create-firecms-app@workspace:packages/create_firecms_app"
   dependencies:
     "@firecms/cli": ^3.0.0-canary.42
-    "@types/node": ^20.11.30
+    "@types/node": ^20.12.7
     ts-node: ^10.9.2
-    typescript: ^5.4.2
+    typescript: ^5.4.5
   bin:
     create-firecms-app: bin/create-firecms-app.js
   languageName: unknown
@@ -10157,7 +10149,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase@npm:^10.9.0":
+"firebase@npm:^10.11.0":
   version: 10.11.0
   resolution: "firebase@npm:10.11.0"
   dependencies:
@@ -10197,18 +10189,18 @@ __metadata:
   dependencies:
     "@firecms/cloud": ^3.0.0-canary.42
     "@originjs/vite-plugin-federation": ^1.3.5
-    "@tailwindcss/typography": ^0.5.10
-    "@types/react": 18.2.67
-    "@types/react-dom": 18.2.22
+    "@tailwindcss/typography": ^0.5.12
+    "@types/react": 18.2.79
+    "@types/react-dom": 18.2.25
     "@vitejs/plugin-react": ^4.2.1
-    autoprefixer: ^10.4.18
-    firebase: ^10.9.0
+    autoprefixer: ^10.4.19
+    firebase: ^10.11.0
     postcss: ^8.4.38
     react: ^18.2.0
     react-dom: ^18.2.0
-    tailwindcss: ^3.4.1
-    typescript: ^5.4.2
-    vite: ^5.2.3
+    tailwindcss: ^3.4.3
+    typescript: ^5.4.5
+    vite: ^5.2.9
   languageName: unknown
   linkType: soft
 
@@ -10225,13 +10217,13 @@ __metadata:
     "@firecms/schema_inference": ^3.0.0-canary.42
     "@firecms/ui": ^3.0.0-canary.42
     "@firecms/user_management": ^3.0.0-canary.42
-    "@tailwindcss/typography": ^0.5.10
-    "@types/react": ^18.2.67
-    "@types/react-dom": 18.2.22
-    "@typescript-eslint/eslint-plugin": ^7.3.1
-    "@typescript-eslint/parser": ^7.3.1
+    "@tailwindcss/typography": ^0.5.12
+    "@types/react": ^18.2.79
+    "@types/react-dom": 18.2.25
+    "@typescript-eslint/eslint-plugin": ^7.7.0
+    "@typescript-eslint/parser": ^7.7.0
     "@vitejs/plugin-react": ^4.2.1
-    autoprefixer: ^10.4.18
+    autoprefixer: ^10.4.19
     eslint: ^8.57.0
     eslint-config-react-app: ^7.0.1
     eslint-config-standard: ^17.1.0
@@ -10241,17 +10233,17 @@ __metadata:
     eslint-plugin-react: ^7.34.1
     eslint-plugin-react-hooks: ^4.6.0
     eslint-plugin-react-refresh: ^0.4.6
-    firebase: ^10.9.0
+    firebase: ^10.11.0
     postcss: ^8.4.38
     react: ^18.2.0
     react-dom: ^18.2.0
-    react-router: ^6.22.0
-    react-router-dom: ^6.22.0
-    react18-json-view: ^0.2.7
+    react-router: ^6.22.3
+    react-router-dom: ^6.22.3
+    react18-json-view: ^0.2.8
     realm-web: ^2.0.0
-    tailwindcss: ^3.4.1
-    typescript: ^5.4.2
-    vite: ^5.2.3
+    tailwindcss: ^3.4.3
+    typescript: ^5.4.5
+    vite: ^5.2.9
     vite-plugin-fonts: ^0.7.0
     vite-plugin-svgr: ^4.2.0
   languageName: unknown
@@ -10271,13 +10263,13 @@ __metadata:
     "@firecms/user_management": ^3.0.0-canary.42
     "@fontsource/jetbrains-mono": ^5.0.19
     "@radix-ui/react-portal": ^1.0.4
-    "@tailwindcss/typography": ^0.5.10
-    "@types/react": ^18.2.67
-    "@types/react-dom": 18.2.22
-    "@typescript-eslint/eslint-plugin": ^7.3.1
-    "@typescript-eslint/parser": ^7.3.1
+    "@tailwindcss/typography": ^0.5.12
+    "@types/react": ^18.2.79
+    "@types/react-dom": 18.2.25
+    "@typescript-eslint/eslint-plugin": ^7.7.0
+    "@typescript-eslint/parser": ^7.7.0
     "@vitejs/plugin-react": ^4.2.1
-    autoprefixer: ^10.4.18
+    autoprefixer: ^10.4.19
     clsx: ^2.1.0
     eslint: ^8.57.0
     eslint-config-react-app: ^7.0.1
@@ -10288,20 +10280,20 @@ __metadata:
     eslint-plugin-react: ^7.34.1
     eslint-plugin-react-hooks: ^4.6.0
     eslint-plugin-react-refresh: ^0.4.6
-    firebase: ^10.9.0
+    firebase: ^10.11.0
     postcss: ^8.4.38
     react: ^18.2.0
-    react-datepicker: ^6.6.0
+    react-datepicker: ^6.8.0
     react-dom: ^18.2.0
     react-dropzone: ^14.2.3
     react-fast-compare: ^3.2.2
-    react-router: ^6.22.0
-    react-router-dom: ^6.22.0
+    react-router: ^6.22.3
+    react-router-dom: ^6.22.3
     realm-web: ^2.0.0
-    tailwindcss: ^3.4.1
+    tailwindcss: ^3.4.3
     typeface-rubik: ^1.1.13
-    typescript: ^5.4.2
-    vite: ^5.2.3
+    typescript: ^5.4.5
+    vite: ^5.2.9
     vite-plugin-fonts: ^0.7.0
     vite-plugin-svgr: ^4.2.0
   languageName: unknown
@@ -10321,9 +10313,9 @@ __metadata:
   resolution: "firecms@workspace:packages/firecms"
   dependencies:
     "@firecms/cli": ^3.0.0-canary.42
-    "@types/node": ^20.11.30
+    "@types/node": ^20.12.7
     ts-node: ^10.9.2
-    typescript: ^5.4.2
+    typescript: ^5.4.5
   bin:
     firecms: bin/firecms.js
   languageName: unknown
@@ -12550,7 +12542,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jotai@npm:^2.7.1":
+"jotai@npm:^2.8.0":
   version: 2.8.0
   resolution: "jotai@npm:2.8.0"
   peerDependencies:
@@ -15815,9 +15807,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-datepicker@npm:^6.4.0, react-datepicker@npm:^6.6.0":
-  version: 6.6.0
-  resolution: "react-datepicker@npm:6.6.0"
+"react-datepicker@npm:^6.8.0":
+  version: 6.8.0
+  resolution: "react-datepicker@npm:6.8.0"
   dependencies:
     "@floating-ui/react": ^0.26.2
     clsx: ^2.1.0
@@ -15827,7 +15819,7 @@ __metadata:
   peerDependencies:
     react: ^16.9.0 || ^17 || ^18
     react-dom: ^16.9.0 || ^17 || ^18
-  checksum: 3706e3a43a92ad1ff19287f6f6c4320fe7942a637dc7d46617b60b9f120a8843d121e9e5e53379ba86bc4b4e02bf8ccdf7bee40bb4362e27f2eb2958f9d60b1e
+  checksum: e76f53aaa35bfc0a1a5d490027f8c50baa66ff63b80c5c98f30b2239826ffac8c8a332a36c47d25e7dc73d995b8b8977222a05e11628e547e37d621a5e8c6c04
   languageName: node
   linkType: hard
 
@@ -16050,7 +16042,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:^6.22.0":
+"react-router-dom@npm:^6.22.3":
   version: 6.22.3
   resolution: "react-router-dom@npm:6.22.3"
   dependencies:
@@ -16063,7 +16055,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:6.22.3, react-router@npm:^6.22.0":
+"react-router@npm:6.22.3, react-router@npm:^6.22.3":
   version: 6.22.3
   resolution: "react-router@npm:6.22.3"
   dependencies:
@@ -16140,7 +16132,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react18-json-view@npm:^0.2.7":
+"react18-json-view@npm:^0.2.8":
   version: 0.2.8
   resolution: "react18-json-view@npm:0.2.8"
   peerDependencies:
@@ -17583,7 +17575,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:^3.4.1":
+"tailwindcss@npm:^3.4.3":
   version: 3.4.3
   resolution: "tailwindcss@npm:3.4.3"
   dependencies:
@@ -17752,7 +17744,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tiptap-markdown@npm:^0.8.9":
+"tiptap-markdown@npm:^0.8.10":
   version: 0.8.10
   resolution: "tiptap-markdown@npm:0.8.10"
   dependencies:
@@ -17950,11 +17942,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsd@npm:^0.30.7":
-  version: 0.30.7
-  resolution: "tsd@npm:0.30.7"
+"tsd@npm:^0.31.0":
+  version: 0.31.0
+  resolution: "tsd@npm:0.31.0"
   dependencies:
-    "@tsd/typescript": ~5.3.3
+    "@tsd/typescript": ~5.4.3
     eslint-formatter-pretty: ^4.1.0
     globby: ^11.0.1
     jest-diff: ^29.0.3
@@ -17963,7 +17955,7 @@ __metadata:
     read-pkg-up: ^7.0.0
   bin:
     tsd: dist/cli.js
-  checksum: cb73f934303196041f31068d2705d7dd3d81049cccfe29a71c35e40d36bf7b5d83918ff0070c9d9ca40bb98f09b0d3c0e440a8f12b25e214aa8d6bb3c0e0651b
+  checksum: 30bdf5f02593b32d2d73e9b2d853d6ac3ed7356171f188d442774687a7cd7e4a1218f5f4ce06ae74e32ed68210a4f39a456142394977efabf296f23d04e580cd
   languageName: node
   linkType: hard
 
@@ -18147,7 +18139,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:>=3 < 6, typescript@npm:^5.4.2":
+"typescript@npm:>=3 < 6, typescript@npm:^5.4.5":
   version: 5.4.5
   resolution: "typescript@npm:5.4.5"
   bin:
@@ -18157,7 +18149,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@>=3 < 6#~builtin<compat/typescript>, typescript@patch:typescript@^5.4.2#~builtin<compat/typescript>":
+"typescript@patch:typescript@>=3 < 6#~builtin<compat/typescript>, typescript@patch:typescript@^5.4.5#~builtin<compat/typescript>":
   version: 5.4.5
   resolution: "typescript@patch:typescript@npm%3A5.4.5#~builtin<compat/typescript>::version=5.4.5&hash=d69c25"
   bin:
@@ -18549,9 +18541,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^5.2.3":
-  version: 5.2.8
-  resolution: "vite@npm:5.2.8"
+"vite@npm:^5.2.9":
+  version: 5.2.9
+  resolution: "vite@npm:5.2.9"
   dependencies:
     esbuild: ^0.20.1
     fsevents: ~2.3.3
@@ -18585,7 +18577,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: c0a77271b548fce443af59a383939924ffcba8e6d0ba6ecb2e481d0ec2318465d2116ce9317599c448e6d6d8af11a67b8efc5b52cb1deab37d2e83311ac4f1b5
+  checksum: 7a97f9547af8550c55bc2529cc6827c1ef0a043a09e9686cf20b615e8d59305cbe917954e806c5fdad6c33bfb883c1ce51325a9c474b5aa5bc13c377a74805fd
   languageName: node
   linkType: hard
 

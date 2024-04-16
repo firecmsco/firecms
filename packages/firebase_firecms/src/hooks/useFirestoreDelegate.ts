@@ -608,7 +608,6 @@ export function useFirestoreDelegate({
 const createEntityFromDocument = <M extends Record<string, any>>(
     docSnap: DocumentSnapshot,
 ): Entity<M> => {
-
     const values = firestoreToCMSModel(docSnap.data());
     return {
         id: docSnap.id,
@@ -641,6 +640,10 @@ export function firestoreToCMSModel(data: any): any {
     if (data instanceof Date) {
         return data;
     }
+    if (typeof data === "object" && "__type__" in data && data.__type__ === "__vector__") {
+        return data; // TODO: removing vector for now, since they break when being saved
+    }
+
     if (data instanceof FirestoreGeoPoint) {
         return new GeoPoint(data.latitude, data.longitude);
     }
@@ -697,6 +700,8 @@ export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
         return new FirestoreGeoPoint(data.latitude, data.longitude);
     } else if (data instanceof Date) {
         return Timestamp.fromDate(data);
+    } else if (data && typeof data === "object" && "__type__" in data && data.__type__ === "__vector__") {
+        return data;
     } else if (data && typeof data === "object") {
         return Object.entries(data)
             .map(([key, v]) => ({ [key]: cmsToFirestoreModel(v, firestore) }))

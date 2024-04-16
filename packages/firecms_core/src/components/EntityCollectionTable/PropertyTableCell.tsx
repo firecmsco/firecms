@@ -95,6 +95,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
         const internalValueRef = useRef(value);
 
         const [error, setError] = useState<Error | undefined>();
+        const [validationError, setValidationError] = useState<Error | undefined>();
         const [saved, setSaved] = useState<boolean>(false);
 
         const onValueUpdated = useCallback(() => {
@@ -120,7 +121,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
         useEffect(
             () => {
                 if (!equal(value, internalValueRef.current)) {
-                    setError(undefined);
+                    setValidationError(undefined);
                     setInternalValue(value);
                     internalValueRef.current = value;
                     onValueUpdated();
@@ -136,7 +137,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
             validation
                 .validate(value)
                 .then(() => {
-                    setError(undefined);
+                    setValidationError(undefined);
                     internalValueRef.current = value;
                     if (onValueChange) {
                         onValueChange({
@@ -151,17 +152,15 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                     }
                 })
                 .catch((e) => {
-                    setError(e);
+                    setValidationError(e);
                 });
         };
 
         useEffect(() => {
             validation
                 .validate(internalValue)
-                .then(() => setError(undefined))
-                .catch((e) => {
-                    setError(e);
-                });
+                .then(() => setValidationError(undefined))
+                .catch(setValidationError);
         }, [internalValue, validation, propertyKey, property, entity]);
 
         const updateValue = (newValue: any | null) => {
@@ -247,7 +246,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
         if (!customField && (!customPreview || selected)) {
             const isAStorageProperty = isStorageProperty(property);
             if (isAStorageProperty) {
-                innerComponent = <TableStorageUpload error={error}
+                innerComponent = <TableStorageUpload error={validationError ?? error}
                                                      disabled={disabled}
                                                      focused={selected}
                                                      selected={selected}
@@ -274,7 +273,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                                          valueType={"number"}
                                                          small={getPreviewSizeFrom(size) !== "medium"}
                                                          enumValues={numberProperty.enumValues}
-                                                         error={error}
+                                                         error={validationError ?? error}
                                                          internalValue={internalValue as string | number}
                                                          updateValue={updateValue}
                     />;
@@ -282,7 +281,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 } else {
                     innerComponent = <VirtualTableNumberInput
                         align={align}
-                        error={error}
+                        error={validationError ?? error}
                         focused={selected}
                         disabled={disabled}
                         value={internalValue as number}
@@ -300,14 +299,14 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                                          valueType={"string"}
                                                          small={getPreviewSizeFrom(size) !== "medium"}
                                                          enumValues={stringProperty.enumValues}
-                                                         error={error}
+                                                         error={validationError ?? error}
                                                          internalValue={internalValue as string | number}
                                                          updateValue={updateValue}
                     />;
                     fullHeight = true;
                 } else if (!stringProperty.storage) {
                     const multiline = Boolean(stringProperty.multiline) || Boolean(stringProperty.markdown);
-                    innerComponent = <VirtualTableInput error={error}
+                    innerComponent = <VirtualTableInput error={validationError ?? error}
                                                         disabled={disabled}
                                                         multiline={multiline}
                                                         focused={selected}
@@ -317,7 +316,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                     allowScroll = true;
                 }
             } else if (property.dataType === "boolean") {
-                innerComponent = <VirtualTableSwitch error={error}
+                innerComponent = <VirtualTableSwitch error={validationError ?? error}
                                                      disabled={disabled}
                                                      focused={selected}
                                                      internalValue={internalValue as boolean}
@@ -325,7 +324,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 />;
             } else if (property.dataType === "date") {
                 innerComponent = <VirtualTableDateField name={propertyKey as string}
-                                                        error={error}
+                                                        error={validationError ?? error}
                                                         disabled={disabled}
                                                         mode={property.mode}
                                                         focused={selected}
@@ -368,7 +367,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                                     small={getPreviewSizeFrom(size) !== "medium"}
                                                     valueType={arrayProperty.of.dataType}
                                                     enumValues={arrayProperty.of.enumValues}
-                                                    error={error}
+                                                    error={validationError ?? error}
                                                     internalValue={internalValue as string | number}
                                                     updateValue={updateValue}
                                 />;
@@ -403,9 +402,8 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
             allowScroll = false;
             showExpandIcon = selected && !innerComponent && !disabled && !readOnlyProperty;
             innerComponent = (
-                <PropertyPreview                                  width={width}
+                <PropertyPreview width={width}
                                  height={height}
-                    // entity={entity}
                                  propertyKey={propertyKey as string}
                                  value={internalValue}
                                  property={property}
@@ -426,7 +424,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 removePadding={removePadding}
                 fullHeight={fullHeight}
                 saved={saved}
-                error={error}
+                error={validationError ?? error}
                 align={align}
                 allowScroll={allowScroll}
                 showExpandIcon={showExpandIcon}

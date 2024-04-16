@@ -9,9 +9,9 @@
   "source": "src/index.ts",
   "devDependencies": {
     "@firecms/core": "^3.0.0-canary.42",
-    "@types/node": "^20.11.30",
-    "typescript": "^5.4.2",
-    "vite": "^5.2.3"
+    "@types/node": "^20.12.7",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.9"
   },
   "exports": {
     ".": {

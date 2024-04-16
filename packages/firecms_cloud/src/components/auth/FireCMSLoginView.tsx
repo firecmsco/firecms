@@ -127,16 +127,13 @@ export function FireCMSLoginView({
 
 }
 
-const SERVER = import.meta.env.VITE_API_SERVER;
 const subscribeNewsletter = (email: string) => {
-    const url = SERVER + "/notifications/newsletter";
+    const url = "https://api-drplyi3b6q-ey.a.run.app/notifications/newsletter";
     console.log("newsletter request", url, email);
     fetch(url, {
         method: "POST",
-        mode: "no-cors",
         headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
+            "Content-Type": "application/json"
         },
         body: JSON.stringify({
             email_address: email,

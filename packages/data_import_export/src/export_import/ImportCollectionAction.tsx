@@ -131,7 +131,7 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
                 </>}
 
                 {step === "mapping" && <>
-                    <Typography variant={"h6"}>Map fields</Typography>
+                    <Typography variant={"h6"} className={"ml-3.5"}>Map fields</Typography>
                     <DataNewPropertiesMapping headersMapping={importConfig.headersMapping}
                                               idColumn={importConfig.idColumn}
                                               originProperties={importConfig.originProperties}

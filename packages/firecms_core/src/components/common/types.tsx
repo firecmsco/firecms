@@ -36,7 +36,7 @@ export interface OnCellValueChangeParams<T = any, M extends Record<string, any> 
     propertyKey: string,
     entity: Entity<M>,
     onValueUpdated: () => void
-    setError: (e: Error) => void
+    setError: (e: Error | undefined) => void
     fullPath: string
     context: FireCMSContext
 }

@@ -337,7 +337,10 @@ export const EntityCollectionView = React.memo(
                 callbacks: collection.callbacks,
                 dataSource,
                 context,
-                onSaveSuccess: () => onValueUpdated(),
+                onSaveSuccess: () => {
+                    setError(undefined);
+                    onValueUpdated();
+                },
                 onSaveFailure: (e: Error) => {
                     console.error("Save failure");
                     console.error(e);

@@ -37,7 +37,7 @@ export type EntityValues<M extends object> = M;
 /**
  * Class used to create a reference to an entity in a different path
  */
-export class EntityReference<M extends Record<string, any> = any> {
+export class EntityReference {
     /**
      * ID of the entity
      */
@@ -76,5 +76,13 @@ export class GeoPoint {
     constructor(latitude: number, longitude: number) {
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+}
+
+export class Vector {
+    readonly value: number[];
+
+    constructor(value: number[]) {
+        this.value = value;
     }
 }

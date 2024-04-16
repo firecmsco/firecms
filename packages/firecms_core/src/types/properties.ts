@@ -1,7 +1,7 @@
 import React from "react";
 import { FieldProps } from "./fields";
 import { PropertyPreviewProps } from "../preview";
-import { EntityReference, EntityValues, GeoPoint } from "./entities";
+import { EntityReference, EntityValues, GeoPoint, Vector } from "./entities";
 import { ResolvedArrayProperty, ResolvedStringProperty } from "./resolved_entities";
 import { FilterValues } from "./collections";
 import { ChipColorKey, ChipColorScheme } from "@firecms/ui";
@@ -15,9 +15,10 @@ export type DataType<T extends CMSType = CMSType> =
             T extends boolean ? "boolean" :
                 T extends Date ? "date" :
                     T extends GeoPoint ? "geopoint" :
-                        T extends EntityReference ? "reference" :
-                            T extends Array<CMSType> ? "array" :
-                                T extends Record<string, any> ? "map" : never;
+                        T extends Vector ? "vector" :
+                            T extends EntityReference ? "reference" :
+                                T extends Array<CMSType> ? "array" :
+                                    T extends Record<string, any> ? "map" : never;
 
 /**
  * @group Entity properties

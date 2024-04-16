@@ -1,6 +1,7 @@
 import { getPropertyInPath, Property, } from "@firecms/core";
 import {
     ChevronRightIcon,
+    ExpandablePanel,
     Select,
     SelectItem,
     Table,
@@ -8,6 +9,7 @@ import {
     TableCell,
     TableHeader,
     TableRow,
+    TextField,
     Typography
 } from "@firecms/ui";
 
@@ -36,10 +38,9 @@ export function DataNewPropertiesMapping({
                                              buildPropertyView,
                                          }: DataPropertyMappingProps) {
 
-    console.log({
-        headersMapping,
-        headingsOrder,
-    })
+    const unmappedKeys = headingsOrder
+        .map((key) => headersMapping[key])
+        .filter((mappedKey) => !mappedKey || (!getPropertyInPath(destinationProperties, mappedKey) && mappedKey !== idColumn))
 
     return (
         <>
@@ -93,14 +94,59 @@ export function DataNewPropertiesMapping({
                                             property,
                                             propertyKey,
                                             importKey
-                                        })
-                                        }
+                                        })}
                                     </TableCell>
                                 </TableRow>;
                             }
                         )}
                 </TableBody>
             </Table>
+
+            <ExpandablePanel title="Default values" initiallyExpanded={false} className={"p-4 mt-4"}>
+
+                <div className={"text-sm text-slate-500 dark:text-slate-300 font-medium ml-3.5 mb-1"}>
+                    You can select a default value for unmapped columns and empty values:
+                </div>
+                <Typography variant={"body2"} color={"secondary"}>
+                    Unmapped columns: {unmappedKeys.join(", ")}
+                </Typography>
+                <Table style={{
+                    tableLayout: "fixed"
+                }}>
+                    <TableHeader>
+                        <TableCell header={true} style={{ width: "20%" }}>
+                            Property
+                        </TableCell>
+                        <TableCell header={true}>
+                        </TableCell>
+                        <TableCell header={true} style={{ width: "75%" }}>
+                            Default value
+                        </TableCell>
+                    </TableHeader>
+                    <TableBody>
+                        {destinationProperties &&
+                            Object.entries(destinationProperties).map(([key, property]) => {
+                                    if (["number", "string", "boolean"].includes(property.dataType)) {
+                                        return null;
+                                    }
+                                    return <TableRow key={key} style={{ height: "90px" }}>
+                                        <TableCell style={{ width: "20%" }}>
+                                            <Typography variant={"body2"}>{key}</Typography>
+
+                                        </TableCell>
+                                        <TableCell>
+                                            <ChevronRightIcon/>
+                                        </TableCell>
+                                        <TableCell className={key === idColumn ? "text-center" : undefined}
+                                                   style={{ width: "75%" }}>
+                                            <DefaultValuesField property={property}/>
+                                        </TableCell>
+                                    </TableRow>;
+                                }
+                            )}
+                    </TableBody>
+                </Table>
+            </ExpandablePanel>
         </>
     );
 }
@@ -135,4 +181,39 @@ function IdSelectField({
             })}
         </Select>
     </div>;
+}
+
+function DefaultValuesField({
+                                property,
+                                onValueChange
+                            }: { property: Property, onValueChange: (value: any) => void }) {
+    if (property.dataType === "string") {
+        return <TextField size={"small"}
+                          placeholder={"Default value"}
+                          onChange={(event) => onValueChange(event.target.value)}/>;
+    } else if (property.dataType === "number") {
+        return <TextField size={"small"}
+                          type={"number"}
+                          placeholder={"Default value"}
+                          onChange={(event) => onValueChange(event.target.value)}/>;
+    } else if (property.dataType === "boolean") {
+        return <Select
+            size={"small"}
+            value={false}
+            onChange={(event) => {
+                onValueChange(event.target.value === "true");
+            }}
+            renderValue={(value) => {
+                return <Typography variant={"body2"}>
+                    {value ? "True" : "False"}
+                </Typography>;
+            }}
+            label={"Default value"}>
+            <SelectItem value={true}>True</SelectItem>
+            <SelectItem value={false}>False</SelectItem>
+        </Select>;
+    }
+
+
+    return null;
 }
