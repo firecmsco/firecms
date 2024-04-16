@@ -5,6 +5,7 @@ import { ImportConfig } from "../types";
 export const useImportConfig = (): ImportConfig => {
 
     const [inUse, setInUse] = useState<boolean>(false);
+    const [defaultValues, setDefaultValues] = useState<Record<string, any>>({});
     const [idColumn, setIdColumn] = useState<string | undefined>();
     const [importData, setImportData] = useState<object[]>([]);
     const [entities, setEntities] = useState<Entity<any>[]>([]);
@@ -27,5 +28,7 @@ export const useImportConfig = (): ImportConfig => {
         setHeadersMapping,
         originProperties,
         setOriginProperties,
+        defaultValues,
+        setDefaultValues
     };
 };

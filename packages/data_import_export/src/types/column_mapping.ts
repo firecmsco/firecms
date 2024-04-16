@@ -26,6 +26,9 @@ export type ImportConfig = {
     headingsOrder: string[];
     setHeadingsOrder: React.Dispatch<React.SetStateAction<string[]>>;
 
+    defaultValues: Record<string, any>;
+    setDefaultValues: React.Dispatch<React.SetStateAction<Record<string, any>>>;
+
 }
 
 export type DataTypeMapping = {

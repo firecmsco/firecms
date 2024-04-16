@@ -132,12 +132,8 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
 
                 {step === "mapping" && <>
                     <Typography variant={"h6"} className={"ml-3.5"}>Map fields</Typography>
-                    <DataNewPropertiesMapping headersMapping={importConfig.headersMapping}
-                                              idColumn={importConfig.idColumn}
-                                              originProperties={importConfig.originProperties}
-                                              headingsOrder={importConfig.headingsOrder}
+                    <DataNewPropertiesMapping importConfig={importConfig}
                                               destinationProperties={properties}
-                                              onIdPropertyChanged={(value) => importConfig.setIdColumn(value ?? undefined)}
                                               buildPropertyView={({
                                                                       isIdColumn,
                                                                       property,
@@ -380,7 +376,7 @@ export function ImportDataPreview<M extends Record<string, any>>({
 }) {
 
     useEffect(() => {
-        const propertiesMapping = getPropertiesMapping(importConfig.originProperties, properties);
+        const propertiesMapping = getPropertiesMapping(importConfig.originProperties, properties, importConfig.headersMapping,);
         const mappedData = importConfig.importData.map(d => convertDataToEntity(d, importConfig.idColumn, importConfig.headersMapping, properties, propertiesMapping, "TEMP_PATH"));
         importConfig.setEntities(mappedData);
     }, []);
@@ -401,10 +397,6 @@ export function ImportDataPreview<M extends Record<string, any>>({
         filterable={false}
         sortable={false}
         selectionController={selectionController}
-        displayedColumnIds={propertiesOrder.map(p => ({
-            key: p,
-            disabled: false
-        }))}
         properties={properties}/>
 
 }

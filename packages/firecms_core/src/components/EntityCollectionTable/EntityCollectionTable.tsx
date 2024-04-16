@@ -16,7 +16,6 @@ import { propertiesToColumns } from "./column_utils";
 import { ErrorView } from "../ErrorView";
 import { SelectableTable } from "../SelectableTable/SelectableTable";
 
-
 /**
  * This component is in charge of rendering a collection table with a high
  * degree of customization.
@@ -177,7 +176,10 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
 
         const child = Builder
             ? <Builder entity={entity} context={context}/>
-            : <>{additionalField.value?.({ entity, context })}</>;
+            : <>{additionalField.value?.({
+                entity,
+                context
+            })}</>;
 
         return (
             <EntityTableCell
@@ -235,10 +237,12 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
 
     const columns: VirtualTableColumn[] = [
         idColumn,
-        ...displayedColumnIds
-            .map((p) => {
-                return collectionColumns.find(c => c.key === p.key);
-            }).filter(Boolean) as VirtualTableColumn[]
+        ...(displayedColumnIds
+            ? displayedColumnIds
+                .map((p) => {
+                    return collectionColumns.find(c => c.key === p.key);
+                }).filter(Boolean)
+            : collectionColumns) as VirtualTableColumn[]
     ];
 
     const cellRenderer = (props: CellRendererParams<any>) => {

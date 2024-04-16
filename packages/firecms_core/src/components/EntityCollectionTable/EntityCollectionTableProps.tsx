@@ -92,7 +92,7 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
      */
     tableController: EntityTableController<M>;
 
-    displayedColumnIds: PropertyColumnConfig[];
+    displayedColumnIds?: PropertyColumnConfig[];
 
     forceFilter?: FilterValues<Extract<keyof M, string>>;
 

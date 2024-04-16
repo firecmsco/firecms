@@ -145,12 +145,8 @@ export function CollectionEditorImportMapping({
 
                 <Typography variant="h6" className={"my-4 ml-3.5"}>Data property mapping</Typography>
 
-                <DataNewPropertiesMapping headersMapping={importConfig.headersMapping}
-                                          headingsOrder={importConfig.headingsOrder}
-                                          idColumn={importConfig.idColumn}
-                                          originProperties={importConfig.originProperties}
+                <DataNewPropertiesMapping importConfig={importConfig}
                                           destinationProperties={values.properties as Properties}
-                                          onIdPropertyChanged={(value) => importConfig.setIdColumn(value ?? undefined)}
                                           buildPropertyView={({
                                                                   property,
                                                                   propertyKey,

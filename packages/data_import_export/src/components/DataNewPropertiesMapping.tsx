@@ -1,6 +1,8 @@
-import { getPropertyInPath, Property, } from "@firecms/core";
+import { getPropertyInPath, PropertiesOrBuilders, Property } from "@firecms/core";
 import {
+    BooleanSwitchWithLabel,
     ChevronRightIcon,
+    DateTimeField,
     ExpandablePanel,
     Select,
     SelectItem,
@@ -12,14 +14,12 @@ import {
     TextField,
     Typography
 } from "@firecms/ui";
+import { ImportConfig } from "../types";
+import { getIn, setIn } from "@firecms/formex";
 
 export interface DataPropertyMappingProps {
-    idColumn?: string;
-    headersMapping: Record<string, string | null>;
-    headingsOrder: string[];
-    originProperties: Record<string, Property>;
+    importConfig: ImportConfig;
     destinationProperties: Record<string, Property>;
-    onIdPropertyChanged: (value: string | null) => void;
     buildPropertyView?: (props: {
         isIdColumn: boolean,
         property: Property | null,
@@ -29,25 +29,22 @@ export interface DataPropertyMappingProps {
 }
 
 export function DataNewPropertiesMapping({
-                                             idColumn,
-                                             headersMapping,
-                                             headingsOrder,
-                                             originProperties,
+                                             importConfig,
                                              destinationProperties,
-                                             onIdPropertyChanged,
-                                             buildPropertyView,
+                                             buildPropertyView
                                          }: DataPropertyMappingProps) {
 
-    const unmappedKeys = headingsOrder
-        .map((key) => headersMapping[key])
-        .filter((mappedKey) => !mappedKey || (!getPropertyInPath(destinationProperties, mappedKey) && mappedKey !== idColumn))
+    const headersMapping = importConfig.headersMapping;
+    const headingsOrder = importConfig.headingsOrder;
+    const idColumn = importConfig.idColumn;
+    const originProperties = importConfig.originProperties;
 
     return (
         <>
 
             <IdSelectField idColumn={idColumn}
                            headersMapping={headersMapping}
-                           onChange={onIdPropertyChanged}/>
+                           onChange={(value) => importConfig.setIdColumn(value ?? undefined)}/>
 
             <div className={"h-4"}/>
 
@@ -72,7 +69,8 @@ export function DataNewPropertiesMapping({
                                 const property = mappedKey ? getPropertyInPath(destinationProperties, mappedKey) as Property : null;
 
                                 const originProperty = getPropertyInPath(originProperties, importKey) as Property | undefined;
-                                const originDataType = originProperty ? (originProperty.dataType === "array" && typeof originProperty.of === "object"
+                                const originDataType = originProperty
+                                    ? (originProperty.dataType === "array" && typeof originProperty.of === "object"
                                         ? `${originProperty.dataType} - ${(originProperty.of as Property).dataType}`
                                         : originProperty.dataType)
                                     : undefined;
@@ -107,39 +105,44 @@ export function DataNewPropertiesMapping({
                 <div className={"text-sm text-slate-500 dark:text-slate-300 font-medium ml-3.5 mb-1"}>
                     You can select a default value for unmapped columns and empty values:
                 </div>
-                <Typography variant={"body2"} color={"secondary"}>
-                    Unmapped columns: {unmappedKeys.join(", ")}
-                </Typography>
                 <Table style={{
                     tableLayout: "fixed"
                 }}>
                     <TableHeader>
-                        <TableCell header={true} style={{ width: "20%" }}>
+                        <TableCell header={true} style={{ width: "30%" }}>
                             Property
                         </TableCell>
                         <TableCell header={true}>
                         </TableCell>
-                        <TableCell header={true} style={{ width: "75%" }}>
+                        <TableCell header={true} style={{ width: "65%" }}>
                             Default value
                         </TableCell>
                     </TableHeader>
                     <TableBody>
                         {destinationProperties &&
-                            Object.entries(destinationProperties).map(([key, property]) => {
-                                    if (["number", "string", "boolean"].includes(property.dataType)) {
+                            getAllPropertyKeys(destinationProperties).map((key) => {
+                                    const property = getPropertyInPath(destinationProperties, key);
+                                    if (typeof property !== "object" || property === null) {
                                         return null;
                                     }
-                                    return <TableRow key={key} style={{ height: "90px" }}>
+                                    if (!["number", "string", "boolean", "map"].includes(property.dataType)) {
+                                        return null;
+                                    }
+                                    return <TableRow key={key} style={{ height: "70px" }}>
                                         <TableCell style={{ width: "20%" }}>
                                             <Typography variant={"body2"}>{key}</Typography>
-
                                         </TableCell>
                                         <TableCell>
                                             <ChevronRightIcon/>
                                         </TableCell>
                                         <TableCell className={key === idColumn ? "text-center" : undefined}
                                                    style={{ width: "75%" }}>
-                                            <DefaultValuesField property={property}/>
+                                            <DefaultValuesField property={property}
+                                                                defaultValue={getIn(importConfig.defaultValues, key)}
+                                                                onValueChange={(value) => {
+                                                                    const newValues = setIn(importConfig.defaultValues, key, value);
+                                                                    importConfig.setDefaultValues(newValues);
+                                                                }}/>
                                         </TableCell>
                                     </TableRow>;
                                 }
@@ -149,6 +152,17 @@ export function DataNewPropertiesMapping({
             </ExpandablePanel>
         </>
     );
+}
+
+function getAllPropertyKeys(properties: PropertiesOrBuilders, currentKey?: string): string[] {
+    return Object.entries(properties).reduce((acc, [key, property]) => {
+        const accumulatedKey = currentKey ? `${currentKey}.${key}` : key;
+        if (typeof property !== "function" && property.dataType === "map" && property.properties) {
+            const childProperties = getAllPropertyKeys(property.properties, accumulatedKey);
+            return [...acc, ...childProperties];
+        }
+        return [...acc, accumulatedKey];
+    }, [] as string[]);
 }
 
 function IdSelectField({
@@ -185,35 +199,43 @@ function IdSelectField({
 
 function DefaultValuesField({
                                 property,
-                                onValueChange
-                            }: { property: Property, onValueChange: (value: any) => void }) {
+                                onValueChange,
+                                defaultValue
+                            }: { property: Property, onValueChange: (value: any) => void, defaultValue?: any }) {
     if (property.dataType === "string") {
         return <TextField size={"small"}
                           placeholder={"Default value"}
+                          value={defaultValue ?? ""}
                           onChange={(event) => onValueChange(event.target.value)}/>;
     } else if (property.dataType === "number") {
         return <TextField size={"small"}
                           type={"number"}
+                          value={defaultValue ?? ""}
                           placeholder={"Default value"}
                           onChange={(event) => onValueChange(event.target.value)}/>;
     } else if (property.dataType === "boolean") {
-        return <Select
+        return <BooleanSwitchWithLabel
+            value={defaultValue ?? null}
+            allowIndeterminate={true}
             size={"small"}
-            value={false}
-            onChange={(event) => {
-                onValueChange(event.target.value === "true");
+            onValueChange={(v: boolean | null) => onValueChange(v === null ? undefined : v)}
+            label={defaultValue === undefined
+                ? "Do not set value"
+                : defaultValue === true
+                    ? "Set value to true"
+                    : "Set value to false"}
+        />
+    } else if (property.dataType === "date") {
+        return <DateTimeField
+            mode={property.mode ?? "date"}
+            size={"small"}
+            value={defaultValue ?? undefined}
+            onChange={(dateValue: Date | undefined) => {
+                onValueChange(dateValue);
             }}
-            renderValue={(value) => {
-                return <Typography variant={"body2"}>
-                    {value ? "True" : "False"}
-                </Typography>;
-            }}
-            label={"Default value"}>
-            <SelectItem value={true}>True</SelectItem>
-            <SelectItem value={false}>False</SelectItem>
-        </Select>;
+            clearable={true}
+        />
     }
-
 
     return null;
 }

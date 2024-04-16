@@ -1,5 +1,6 @@
 import { DataType, Entity, EntityReference, getPropertyInPath, Properties } from "@firecms/core";
 import { unflattenObject } from "./file_to_json";
+import { getIn } from "@firecms/formex";
 
 type DataTypeMapping = {
     from: DataType;
@@ -19,12 +20,17 @@ export function convertDataToEntity(data: Record<any, any>,
         delete flatObject[idColumn];
     const mappedKeysObject = Object.entries(flatObject)
         .map(([key, value]) => {
-            const mappedKey = headersMapping[key] ?? key;
+            const mappedKey = getIn(headersMapping, key) ?? key;
 
             const mappedProperty = getPropertyInPath(properties, mappedKey);
             if (!mappedProperty)
                 return {};
 
+            console.log({
+                mappedKey,
+                mappedProperty,
+                value,
+            })
             const propertyMapping = propertiesMapping[mappedKey];
             let valueResult = value;
             if (propertyMapping) {
@@ -35,6 +41,12 @@ export function convertDataToEntity(data: Record<any, any>,
             });
         })
         .reduce((acc, curr) => ({ ...acc, ...curr }), {});
+
+    // console.log({
+    //     data,
+    //     mappedKeysObject
+    // })
+
     const values = unflattenObject(mappedKeysObject);
     let id = idColumn ? data[idColumn] : undefined;
     if (typeof id === "string") {
@@ -48,6 +60,7 @@ export function convertDataToEntity(data: Record<any, any>,
     } else if (id && "toString" in id) {
         id = id.toString();
     }
+
 
     return {
         id,

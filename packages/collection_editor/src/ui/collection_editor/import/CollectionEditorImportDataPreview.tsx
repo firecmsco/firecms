@@ -16,7 +16,7 @@ export function CollectionEditorImportDataPreview({
     const [loading, setLoading] = useState<boolean>(false);
 
     async function loadEntities() {
-        const propertiesMapping = getPropertiesMapping(importConfig.originProperties, properties);
+        const propertiesMapping = getPropertiesMapping(importConfig.originProperties, properties, importConfig.headersMapping);
         const mappedData = importConfig.importData.map(d => convertDataToEntity(d, importConfig.idColumn, importConfig.headersMapping, properties, propertiesMapping, "TEMP_PATH"));
         importConfig.setEntities(mappedData);
     }

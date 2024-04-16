@@ -32,7 +32,7 @@ export function BooleanFilterField({
     const valueSet = !!value;
 
     return (
-        <div className="w-[200px]">
+        <div className="w-[300px]">
             <BooleanSwitchWithLabel
                 value={valueSetToTrue}
                 allowIndeterminate={true}
@@ -44,6 +44,5 @@ export function BooleanFilterField({
                         : `${title} is false`}
             />
         </div>
-    )
-        ;
+    );
 }

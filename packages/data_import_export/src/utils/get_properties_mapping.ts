@@ -1,7 +1,9 @@
 import { DataType, getPropertyInPath, Properties, Property } from "@firecms/core";
 import { DataTypeMapping } from "../types";
 
-export function getPropertiesMapping(originProperties: Properties, newProperties: Properties): Record<string, DataTypeMapping> {
+export function getPropertiesMapping(originProperties: Properties,
+                                     newProperties: Properties,
+                                     headersMapping: Record<string, string | null>): Record<string, DataTypeMapping> {
 
     function updateMapping(properties: Record<string, Property>, namespace?: string): Record<string, DataTypeMapping> {
 
@@ -12,7 +14,9 @@ export function getPropertiesMapping(originProperties: Properties, newProperties
             const currentKey = namespace ? `${namespace}.${key}` : key;
 
             const property = getPropertyInPath(properties, key) as Property;
-            const inferredProperty = getPropertyInPath(originProperties, currentKey) as Property;
+            // reverse lookup
+            const mappedKey = Object.entries(headersMapping).find(([_, value]) => value === currentKey)?.[0];
+            const inferredProperty = mappedKey ? getPropertyInPath(originProperties, mappedKey) as Property : null;
 
             if (property) {
                 if (property.dataType === "map" && property.properties) {
@@ -39,7 +43,7 @@ export function getPropertiesMapping(originProperties: Properties, newProperties
                     }
 
                     if (from !== to || fromSubtype !== toSubtype) {
-                        dataMapping[key] = {
+                        dataMapping[currentKey] = {
                             from,
                             to,
                             fromSubtype,
