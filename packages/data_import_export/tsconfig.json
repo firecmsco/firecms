@@ -40,6 +40,9 @@
       ],
       "@firecms/ui": [
         "../ui/src"
+      ],
+      "@firecms/formex": [
+        "../formex/src"
       ]
     }
   },
