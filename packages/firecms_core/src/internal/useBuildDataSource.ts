@@ -316,7 +316,7 @@ export function useBuildDataSource({
                     sortBy
                 }
             )
-        }, [delegate.isFilterCombinationValid])
+        }, [delegate.isFilterCombinationValid]),
 
     };
 

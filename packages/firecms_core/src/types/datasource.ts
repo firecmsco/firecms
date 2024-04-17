@@ -216,6 +216,7 @@ export interface DataSource {
      * @param props
      */
     isFilterCombinationValid?(props: FilterCombinationValidProps): boolean;
+
 }
 
 export type FilterCombinationValidProps = {
