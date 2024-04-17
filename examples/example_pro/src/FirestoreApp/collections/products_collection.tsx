@@ -1,10 +1,4 @@
-import {
-    AdditionalFieldDelegate,
-    AsyncPreviewComponent,
-    buildCollection,
-    buildProperty,
-    EntityCallbacks
-} from "@firecms/core";
+import { AdditionalFieldDelegate, AsyncPreviewComponent, buildCollection, EntityCallbacks } from "@firecms/core";
 
 import PriceTextPreview from "../custom_field_preview/PriceTextPreview";
 import { SampleCollectionActions } from "../collection_actions/SampleCollectionActions";
@@ -12,7 +6,6 @@ import { Locale, Product } from "../types";
 import { categories, currencies, locales } from "./enums";
 import CustomColorTextField from "../custom_field/CustomColorTextField";
 import { ProductDetailPreview } from "../custom_entity_view/ProductDetailPreview";
-import { JSONEditorField } from "../custom_field/JSONEditorField";
 
 export const localeCollection = buildCollection<Locale>({
     id: "product_locales",
@@ -108,7 +101,7 @@ export const productCallbacks: EntityCallbacks<Product> = {
 
 export const productsCollection = buildCollection<Product>({
     path: "products",
-    id: "ppp",
+    id: "products",
     callbacks: productCallbacks,
     name: "Products",
     singularName: "Product",
@@ -216,28 +209,6 @@ export const productsCollection = buildCollection<Product>({
                 color: "gold"
             }
         },
-        json_field: buildProperty({
-            name: "Body",
-            validation: { required: false },
-            dataType: "map",
-            customProps: {
-                defaultValue: {
-                    clientIp: "client.ip",
-                    clientDeviceType: "client.deviceType",
-                    clientLanguage: "client.language",
-                    clientReferral: "client.referral",
-                    clientUserAgent: "client.userAgent",
-                    infoConversationCreatedAt: "info.createdAt",
-                    infoConversationCompleted: "info.conversationCompleted",
-                    dataPhone: "data.phone",
-                    dataEmail: "data.email",
-                    dataName: "data.name",
-                    dataAppointmentRequested: "data.appointment_requested"
-                }
-            },
-            description: "This field is the body payload of the request",
-            Field: JSONEditorField
-        }),
         description: {
             dataType: "string",
             name: "Description",

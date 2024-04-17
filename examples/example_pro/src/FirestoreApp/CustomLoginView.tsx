@@ -62,12 +62,11 @@ export function CustomLoginView(props: FirebaseLoginViewProps) {
 }
 
 const handleSubmit = (email: string) => {
-    fetch("https://api-kdoe6pj3qq-ey.a.run.app" + "/notifications/newsletter", {
+    const url = "https://api-drplyi3b6q-ey.a.run.app/notifications/newsletter";
+    fetch(url, {
         method: "POST",
-        mode: "no-cors",
         headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
+            "Content-Type": "application/json"
         },
         body: JSON.stringify({
             email_address: email,

@@ -55,6 +55,7 @@ import { TestEditorView } from "./TestEditorView";
 import { TestBoardView } from "./BoardView/TestBoardView";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
+import { DBTalk } from "./DBTalk";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com"];
 
@@ -101,8 +102,8 @@ function App() {
     // It is important to memoize the collections and views
     const collections = useCallback(() => {
         const sourceCollections = [
-            booksCollection,
             productsCollection,
+            booksCollection,
             localeCollectionGroup,
             usersCollection,
             blogCollection,
@@ -126,12 +127,18 @@ function App() {
             description: "This is an example of an additional view that is defined by the user",
             view: <ExampleCMSView/>
         },
-        {
-            path: "board_test",
-            name: "Board test",
-            group: "Content",
-            view: <TestBoardView/>
-        },
+        // {
+        //     path: "db_talk",
+        //     name: "DB Talk",
+        //     group: "Content",
+        //     view: <DBTalk/>
+        // },
+        // {
+        //     path: "board_test",
+        //     name: "Board test",
+        //     group: "Content",
+        //     view: <TestBoardView/>
+        // },
         {
             path: "editor_test",
             name: "Editor test",
@@ -246,7 +253,9 @@ function App() {
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
-                    plugins={[userManagementPlugin, dataEnhancementPlugin, importExportPlugin, collectionEditorPlugin]}
+                    plugins={[userManagementPlugin, dataEnhancementPlugin, importExportPlugin,
+                        // collectionEditorPlugin
+                    ]}
                     onAnalyticsEvent={onAnalyticsEvent}
                     propertyConfigs={propertyConfigs}
                 >
