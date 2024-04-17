@@ -1,22 +1,25 @@
 import { buildEntityPropertiesFromData, buildPropertiesOrder } from "@firecms/schema_inference";
-import { DocumentReference, getFirestore, Timestamp } from "firebase/firestore";
+import { DocumentReference, Firestore, Timestamp } from "firebase/firestore";
 import { DataType, EntityCollection, GeoPoint, removeInitialAndTrailingSlashes, unslugify } from "@firecms/core";
 import { getDocuments } from "./firestore";
-import { FirebaseApp } from "firebase/app";
 
 /**
  * Build the guessed schema from a data collection
- * @param firebaseApp
+ * @param firestore
  * @param collectionPath
  * @param isCollectionGroup
  * @param parentPathSegments
  */
-export async function getInferredEntityCollection(firebaseApp: FirebaseApp, collectionPath: string, isCollectionGroup: boolean, parentPathSegments?: string[]): Promise<Partial<EntityCollection>> {
+export async function getInferredEntityCollection(firestore: Firestore, collectionPath: string, isCollectionGroup: boolean, parentPathSegments?: string[]): Promise<Partial<EntityCollection>> {
     console.debug("Building schema for collection", collectionPath, parentPathSegments)
-    const firestore = getFirestore(firebaseApp);
     const cleanPath = removeInitialAndTrailingSlashes(collectionPath);
     const docs = await getDocuments(firestore, cleanPath, isCollectionGroup, parentPathSegments);
     const data = docs.map(doc => doc.data()).filter(Boolean) as object[];
+    return getInferredEntityCollectionFromData(collectionPath, data);
+}
+
+export async function getInferredEntityCollectionFromData(collectionPath: string, data: object[]): Promise<Partial<EntityCollection>> {
+    const cleanPath = removeInitialAndTrailingSlashes(collectionPath);
     const properties = await buildEntityPropertiesFromData(data, getType);
     const propertiesOrder = buildPropertiesOrder(properties);
     const lastPathSegment = cleanPath.includes("/") ? cleanPath.split("/").slice(-1)[0] : cleanPath;
@@ -26,6 +29,10 @@ export async function getInferredEntityCollection(firebaseApp: FirebaseApp, coll
         properties,
         propertiesOrder
     };
+}
+
+export async function getPropertiesFromData(data: object[]) {
+    return buildEntityPropertiesFromData(data, getType);
 }
 
 function getType(value: any): DataType {

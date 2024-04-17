@@ -145,6 +145,7 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, Use
             onSaveSuccess(entity);
     })
         .catch((e) => {
+            console.error("!!!", e);
             if (callbacks?.onSaveFailure) {
 
                 const resolvedCollection = resolveCollection<M>({

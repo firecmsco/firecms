@@ -129,7 +129,6 @@ export function FireCMSLoginView({
 
 const subscribeNewsletter = (email: string) => {
     const url = "https://api-drplyi3b6q-ey.a.run.app/notifications/newsletter";
-    console.log("newsletter request", url, email);
     fetch(url, {
         method: "POST",
         headers: {

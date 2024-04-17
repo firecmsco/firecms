@@ -1,1 +1,1 @@
-export { getInferredEntityCollection } from "./inference";
+export * from "./inference";

@@ -467,12 +467,17 @@ export function useFirestoreDelegate({
             else
                 documentReference = doc(collectionReference);
 
-            return setDoc(documentReference, values, { merge: true }) // TODO: use cleaned values
+            return setDoc(documentReference, cleanedValues, { merge: true }) // TODO: use cleaned values
                 .then(() => ({
                     id: documentReference.id,
                     path,
-                    values: values as M
-                }));
+                    values: cleanedValues as M
+                }))
+                .catch((error) => {
+                    console.error("Error saving entity", error);
+                    throw error;
+
+                });
         }, [firebaseApp]),
 
         /**
@@ -641,7 +646,7 @@ export function firestoreToCMSModel(data: any): any {
         return data;
     }
     if (typeof data === "object" && "__type__" in data && data.__type__ === "__vector__") {
-        return data; // TODO: removing vector for now, since they break when being saved
+        return undefined; // TODO: removing vector for now, since they break when being saved
     }
 
     if (data instanceof FirestoreGeoPoint) {
@@ -701,10 +706,16 @@ export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
     } else if (data instanceof Date) {
         return Timestamp.fromDate(data);
     } else if (data && typeof data === "object" && "__type__" in data && data.__type__ === "__vector__") {
-        return data;
+        return undefined; // TODO: removing vector for now, since they break when being saved
     } else if (data && typeof data === "object") {
         return Object.entries(data)
-            .map(([key, v]) => ({ [key]: cmsToFirestoreModel(v, firestore) }))
+            .map(([key, v]) => {
+                const firestoreModel = cmsToFirestoreModel(v, firestore);
+                if (firestoreModel !== undefined)
+                    return ({ [key]: firestoreModel });
+                else
+                    return {};
+            })
             .reduce((a, b) => ({ ...a, ...b }), {});
     }
     return data;

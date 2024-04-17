@@ -10,7 +10,7 @@ import {
 } from "../../types";
 import { CellRendererParams, VirtualTable, VirtualTableColumn } from "../VirtualTable";
 import { enumToObjectEntries } from "../../util";
-import { OnCellValueChange, OnColumnResizeParams } from "../common/types";
+import { OnCellValueChange, OnColumnResizeParams } from "../common";
 import { FilterFormFieldProps } from "../VirtualTable/VirtualTableHeader";
 import { ReferenceFilterField } from "./filters/ReferenceFilterField";
 import { StringNumberFilterField } from "./filters/StringNumberFilterField";
