@@ -31,7 +31,6 @@ export function CodeBlock({ initialCode }: { initialCode?: string }) {
     const [properties, setProperties] = useState<Properties | null>(null);
     const [executionResult, setExecutionResult] = useState<any | null>();
     const [codeHasBeenRun, setCodeHasBeenRun] = useState<boolean>(false);
-    const [consoleOutput, setConsoleOutput] = useState<string>("");
 
     const [executionError, setExecutionError] = useState<Error | null>(null);
 
@@ -59,7 +58,7 @@ export function CodeBlock({ initialCode }: { initialCode?: string }) {
                 behavior: "smooth",
                 block: "start"
             })
-        }, 250);
+        }, 100);
 
         if (!queryText) {
             return;
@@ -69,30 +68,20 @@ export function CodeBlock({ initialCode }: { initialCode?: string }) {
         setExecutionError(null);
 
         try {
-            channelConsole((...args) => {
-                setConsoleOutput((prev) => prev + Array.from(args).join(" ") + "\n");
-            });
+            console.log("Executing query:", queryText);
+
             const encodedJs = encodeURIComponent(queryText);
             const dataUri = "data:text/javascript;charset=utf-8," + buildAuxScript() + encodedJs;
             const promise = import(/* @vite-ignore */dataUri);
             promise.then((module) => {
-                originalConsoleLog("Module loaded", module);
-                setConsoleOutput("");
+                console.log("Module loaded", module);
                 module.default()
-                    .then(async (codeExport: any) => {
-                        originalConsoleLog("Code loaded", codeExport, typeof codeExport);
-                        let codeResult;
-                        if (codeExport instanceof Promise) {
-                            codeResult = await codeExport;
-                        } else if (typeof codeExport === "function") {
-                            codeResult = await codeExport();
-                        } else {
-                            codeResult = codeExport;
-                        }
-
+                    .then(async (codePromise: any) => {
+                        console.log("Query loaded", codePromise, typeof codePromise);
+                        const codeResult = await codePromise;
                         if (codeResult instanceof firestoreLibrary.QuerySnapshot) {
                             return displayQuerySnapshotData(codeResult);
-                        } else if (typeof codeExport === "undefined") {
+                        } else if (typeof codePromise === "undefined") {
                             return setExecutionResult("Code executed successfully");
                         } else {
                             return setExecutionResult(codeResult);
@@ -103,7 +92,6 @@ export function CodeBlock({ initialCode }: { initialCode?: string }) {
                         console.error("Error executing query:", error);
                     })
                     .finally(() => {
-                        resetConsole();
                         setLoading(false);
                     });
             })
@@ -188,11 +176,8 @@ export function CodeBlock({ initialCode }: { initialCode?: string }) {
                         }}
                         properties={properties}/>}
 
-                    {(consoleOutput || executionResult) && (
+                    {executionResult && (
                         <Paper className={"w-full p-4 min-h-[92px]"}>
-                            {consoleOutput && <pre className={"text-sm font-mono text-gray-700 dark:text-gray-300"}>
-                                {consoleOutput}
-                            </pre>}
                             {typeof executionResult === "string"
                                 ? executionResult
                                 : <pre className={"text-sm font-mono text-gray-700 dark:text-gray-300"}>
@@ -206,21 +191,8 @@ export function CodeBlock({ initialCode }: { initialCode?: string }) {
     );
 }
 
-const originalConsoleLog = console.log;
-
-function resetConsole() {
-    console.log = originalConsoleLog;
-}
-
-function channelConsole(onConsoleLog: (...message: any) => void) {
-    console.log = function (message) {
-        onConsoleLog(message);
-        originalConsoleLog(message);
-    };
-}
-
 function buildAuxScript() {
-    return `console.log("Inner log");${Object.keys(firestoreLibrary).map(key => `const ${key} = window.firestoreLibrary.${key};`).join("\n")}\n`;
+    return `${Object.keys(firestoreLibrary).map(key => `const ${key} = window.firestoreLibrary.${key};`).join("\n")}\n`;
 }
 
-console.log(console);
+console.log(Object.keys(firestoreLibrary))
