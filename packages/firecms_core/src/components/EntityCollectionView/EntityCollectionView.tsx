@@ -94,7 +94,9 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
      * Whether this is a subcollection or not.
      */
     isSubCollection?: boolean;
+
     className?: string;
+
 } & EntityCollection<M>;
 
 /**
@@ -334,7 +336,6 @@ export const EntityCollectionView = React.memo(
             return saveEntityWithCallbacks({
                 ...saveProps,
                 collection,
-                callbacks: collection.callbacks,
                 dataSource,
                 context,
                 onSaveSuccess: () => {

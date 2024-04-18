@@ -140,15 +140,21 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                     setValidationError(undefined);
                     internalValueRef.current = value;
                     if (onValueChange) {
-                        onValueChange({
-                            value,
-                            propertyKey,
-                            setError,
-                            onValueUpdated,
-                            entity,
-                            fullPath: path,
-                            context
-                        });
+                        try {
+                            onValueChange({
+                                value,
+                                propertyKey,
+                                setError,
+                                onValueUpdated,
+                                entity,
+                                fullPath: path,
+                                context
+                            });
+                        } catch (e:any) {
+                            console.error("onValueChange error", e);
+                            setError(e);
+                        }
+
                     }
                 })
                 .catch((e) => {

@@ -2859,6 +2859,24 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@firecms/datatalk@^3.0.0-canary.42, @firecms/datatalk@workspace:packages/datatalk":
+  version: 0.0.0-use.local
+  resolution: "@firecms/datatalk@workspace:packages/datatalk"
+  dependencies:
+    "@firecms/core": ^3.0.0-canary.42
+    "@firecms/firebase": ^3.0.0-canary.42
+    "@firecms/ui": ^3.0.0-canary.42
+    "@types/node": 18.19.31
+    "@types/react": ^18.2.79
+    "@types/react-dom": 18.2.25
+    typescript: ^5.4.5
+    vite: ^5.2.9
+  peerDependencies:
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  languageName: unknown
+  linkType: soft
+
 "@firecms/editor@^3.0.0-canary.42, @firecms/editor@workspace:packages/editor":
   version: 0.0.0-use.local
   resolution: "@firecms/editor@workspace:packages/editor"
@@ -10215,6 +10233,7 @@ __metadata:
     "@firecms/core": ^3.0.0-canary.42
     "@firecms/data_enhancement": ^3.0.0-canary.42
     "@firecms/data_import_export": ^3.0.0-canary.42
+    "@firecms/datatalk": ^3.0.0-canary.42
     "@firecms/editor": ^3.0.0-canary.42
     "@firecms/schema_inference": ^3.0.0-canary.42
     "@firecms/ui": ^3.0.0-canary.42
