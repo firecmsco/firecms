@@ -9,6 +9,7 @@
     "@firecms/core": "^3.0.0-beta.6",
     "@firecms/data_enhancement": "^3.0.0-beta.6",
     "@firecms/data_import_export": "^3.0.0-beta.6",
+    "@firecms/datatalk": "^3.0.0-beta.6",
     "@firecms/editor": "^3.0.0-beta.6",
     "@firecms/schema_inference": "^3.0.0-beta.6",
     "@firecms/ui": "^3.0.0-beta.6",

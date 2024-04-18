@@ -57,6 +57,7 @@ import { FirebaseApp } from "firebase/app";
 import { TestEditorView } from "./TestEditorView";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
+import { DataTalk } from "@firecms/datatalk";
 import { ReCaptchaEnterpriseProvider } from "firebase/app-check";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com"];
@@ -155,12 +156,12 @@ function App() {
             description: "This is an example of an additional view that is defined by the user",
             view: <ExampleCMSView/>
         },
-        // {
-        //     path: "db_talk",
-        //     name: "DB Talk",
-        //     group: "Content",
-        //     view: <DBTalk/>
-        // },
+        {
+            path: "datatalk",
+            name: "DataTalk",
+            group: "Content",
+            view: <DataTalk/>
+        },
         // {
         //     path: "board_test",
         //     name: "Board test",

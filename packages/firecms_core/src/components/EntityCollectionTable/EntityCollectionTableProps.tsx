@@ -12,13 +12,13 @@ import {
 } from "../../types";
 import { OnCellValueChange, OnColumnResizeParams, UniqueFieldValidator } from "../common/types";
 
-
 /**
  * @group Collection components
  */
 export type EntityCollectionTableProps<M extends Record<string, any>,
     UserType extends User = User> = {
 
+    className?: string;
     /**
      * Display these entities as selected
      */
@@ -131,7 +131,7 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
     onTextSearchClick?: () => void;
 
     textSearchLoading?: boolean;
-}
+};
 
 export type GetPropertyForProps<M extends Record<string, any>> = {
     propertyKey: string,
