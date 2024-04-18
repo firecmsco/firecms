@@ -467,11 +467,11 @@ export function useFirestoreDelegate({
             else
                 documentReference = doc(collectionReference);
 
-            return setDoc(documentReference, cleanedValues, { merge: true }) // TODO: use cleaned values
+            return setDoc(documentReference, values, { merge: true })
                 .then(() => ({
                     id: documentReference.id,
                     path,
-                    values: cleanedValues as M
+                    values: values as M
                 }))
                 .catch((error) => {
                     console.error("Error saving entity", error);
