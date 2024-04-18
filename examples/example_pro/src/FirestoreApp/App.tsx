@@ -7,6 +7,7 @@ import { getAnalytics, logEvent } from "firebase/analytics";
 
 import { CenteredView, GitHubIcon, IconButton, Tooltip, } from "@firecms/ui";
 import {
+    Authenticator,
     CircularProgressCenter,
     CMSView,
     FireCMS,
@@ -24,6 +25,7 @@ import {
 import {
     FirebaseAuthController,
     FirebaseSignInProvider,
+    FirebaseUserWrapper,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
@@ -62,6 +64,25 @@ const signInOptions: FirebaseSignInProvider[] = ["google.com"];
 function App() {
 
     console.debug("Render App");
+
+    const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
+                                                                                       user,
+                                                                                       authController
+                                                                                   }) => {
+
+        if (user?.email?.includes("flanders")) {
+            // You can throw an error to prevent access
+            throw Error("Stupid Flanders!");
+        }
+
+        const idTokenResult = await user?.firebaseUser?.getIdTokenResult();
+        const userIsAdmin = idTokenResult?.claims.admin || user?.email?.endsWith("@firecms.co");
+
+        console.log("Allowing access to", user);
+
+        // we allow access to every user in this case
+        return true;
+    }, []);
 
     const githubLink = (
         <Tooltip
@@ -222,14 +243,15 @@ function App() {
     } = useValidateAuthenticator({
         disabled: userManagement.loading,
         authController,
-        authenticator: userManagement.authenticator,
+        authenticator: myAuthenticator,
+        // authenticator: userManagement.authenticator,
         dataSourceDelegate: firestoreDelegate,
         storageSource
     });
 
     const navigationController = useBuildNavigationController({
         collections,
-        collectionPermissions: userManagement.collectionPermissions,
+        // collectionPermissions: userManagement.collectionPermissions,
         views,
         adminViews: userManagementAdminViews,
         authController,
