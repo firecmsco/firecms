@@ -22,6 +22,7 @@
       "@firecms/firebase": ["../../packages/firebase_firecms/src"],
       "@firecms/ui": ["../../packages/ui/src"],
       "@firecms/editor": ["../../packages/editor/src"],
+      "@firecms/datatalk": ["../../packages/datatalk/src"],
       "@firecms/data_enhancement": ["../../packages/data_enhancement/src"],
       "@firecms/collection_editor": ["../../packages/collection_editor/src"],
       "@firecms/collection_editor_firebase": ["../../packages/collection_editor_firebase/src"],

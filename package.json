@@ -10,6 +10,7 @@
     "packages/firecms_core",
     "packages/cli",
     "packages/ui",
+    "packages/datatalk",
     "packages/create_firecms_app",
     "packages/mongodb",
     "packages/firebase_firecms",

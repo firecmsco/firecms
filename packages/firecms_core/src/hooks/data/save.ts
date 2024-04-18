@@ -17,7 +17,6 @@ import { resolveCollection } from "../../util";
 export type SaveEntityWithCallbacksProps<M extends Record<string, any>> =
     SaveEntityProps<M> &
     {
-        callbacks?: EntityCallbacks<M>;
         onSaveSuccess?: (updatedEntity: Entity<M>) => void,
         onSaveFailure?: (e: Error) => void,
         onPreSaveHookError?: (e: Error) => void,

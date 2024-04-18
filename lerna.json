@@ -6,6 +6,7 @@
     "packages/firecms_cloud",
     "packages/firecms_core",
     "packages/ui",
+    "packages/datatalk",
     "packages/collection_editor",
     "packages/data_enhancement",
     "packages/data_import_export",
