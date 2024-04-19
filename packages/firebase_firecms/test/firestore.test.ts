@@ -6,13 +6,13 @@ it("cmsToFirestoreModel", () => {
     const inputValues = {
         content:
             [{
-                type: 'question',
-                id: 'question_1',
-                question_type: 'single_choice'
+                type: "question",
+                id: "question_1",
+                question_type: "single_choice"
             }],
         main_image: null,
         order: 2,
-        title: { en: 'Test pill in english' }
+        title: { en: "Test pill in english" }
     };
     const result = cmsToFirestoreModel(inputValues, {} as any);
     expect(result).toEqual(inputValues);
@@ -41,4 +41,3 @@ it("Initial values", () => {
 // TODO
 
 });
-
