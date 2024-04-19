@@ -1,5 +1,6 @@
 import { FirebaseApp } from "firebase/app";
 import {
+    Database,
     get,
     getDatabase,
     limitToFirst,
@@ -18,10 +19,8 @@ import {
     DataSourceDelegate,
     DeleteEntityProps,
     Entity,
-    EntityReference,
     FetchCollectionDelegateProps,
     FetchEntityProps,
-    GeoPoint,
     ListenCollectionDelegateProps,
     ListenEntityProps,
     SaveEntityProps
@@ -102,7 +101,11 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
 
         const snapshot = await get(ref(database, `${path}/${entityId}`));
         if (snapshot.exists()) {
-            return { id: entityId, path, values: snapshot.val() as M };
+            return {
+                id: entityId,
+                path,
+                values: snapshot.val() as M
+            };
         }
         return undefined;
     }, [firebaseApp]);
@@ -121,7 +124,11 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
         const dbRef = ref(database, `${path}/${entityId}`);
         const unsubscribe = onValue(dbRef, (snapshot) => {
             if (snapshot.exists()) {
-                onUpdate({ id: entityId, path, values: snapshot.val() as M });
+                onUpdate({
+                    id: entityId,
+                    path,
+                    values: snapshot.val() as M
+                });
             } else {
                 onError?.(new Error("Entity does not exist"));
             }
@@ -146,7 +153,11 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
             throw new Error("Could not generate a new id");
         }
         await set(ref(database, `${path}/${finalId}`), values);
-        return { id: finalId, path, values: values as M };
+        return {
+            id: finalId,
+            path,
+            values: values as M
+        };
     }, [firebaseApp]);
 
     const deleteEntity = useCallback(async <M extends Record<string, any>>({
@@ -211,17 +222,14 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
         checkUniqueField,
         generateEntityId,
         isFilterCombinationValid,
-        buildReference: (reference: EntityReference) => {
+        cmsToDelegateModel: (data: any) => {
             if (!firebaseApp) {
                 throw new Error("Firebase app not provided");
             }
             const database = getDatabase(firebaseApp);
-            return ref(database, `${reference.path}/${reference.id}`);
+            return cmsToRTDBModel(data, database);
         },
-        buildGeoPoint: (geoPoint: GeoPoint) => null,
         currentTime: () => new Date(),
-        buildDate: (date: Date) => date,
-        buildDeleteFieldValue: () => null,
         delegateToCMSModel,
         setDateToMidnight
     };
@@ -250,5 +258,31 @@ function delegateToCMSModel(data: any): any {
         return result;
     }
 
+    return data;
+}
+
+export function cmsToRTDBModel(data: any, database: Database): any {
+    if (data === undefined) {
+        return null;
+    } else if (data === null) {
+        return null;
+    } else if (Array.isArray(data)) {
+        return data.filter(v => v !== undefined).map(v => cmsToRTDBModel(v, database));
+    } else if (data.isEntityReference && data.isEntityReference()) {
+        return ref(database, `${data.path}/${data.id}`);
+    } else if (data instanceof Date) {
+        // For dates, convert to ISO string or timestamp.
+        return data.toISOString();
+    } else if (data && typeof data === "object") {
+        return Object.entries(data)
+            .map(([key, v]) => {
+                const rtdbModel = cmsToRTDBModel(v, database);
+                if (rtdbModel !== undefined)
+                    return ({ [key]: rtdbModel });
+                else
+                    return {};
+            })
+            .reduce((a, b) => ({ ...a, ...b }), {});
+    }
     return data;
 }

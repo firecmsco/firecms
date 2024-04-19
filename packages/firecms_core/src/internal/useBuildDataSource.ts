@@ -5,12 +5,10 @@ import {
     DeleteEntityProps,
     Entity,
     EntityCollection,
-    EntityReference,
     EntityValues,
     FetchCollectionProps,
     FetchEntityProps,
     FilterValues,
-    GeoPoint,
     ListenCollectionProps,
     ListenEntityProps,
     NavigationController,
@@ -207,13 +205,10 @@ export function useBuildDataSource({
 
             const properties: ResolvedProperties<M> | undefined = resolvedCollection?.properties;
 
-            const firestoreValues = cmsToDelegateModel(
+            const firestoreValues = delegate.cmsToDelegateModel(
                 values,
-                delegate.buildReference,
-                delegate.buildGeoPoint,
-                delegate.buildDate,
-                delegate.buildDeleteFieldValue
             );
+
             const updatedFirestoreValues: EntityValues<M> = properties
                 ? updateDateAutoValues(
                     {
@@ -322,42 +317,42 @@ export function useBuildDataSource({
 
 }
 
-/**
- * Recursive function that converts Firestore data types into CMS or plain
- * JS types.
- * FireCMS uses Javascript dates internally instead of Firestore timestamps.
- * This makes it easier to interact with the rest of the libraries and
- * bindings.
- * Also, Firestore references are replaced with {@link EntityReference}
- * @param data
- * @param buildReference
- * @param buildGeoPoint
- * @param buildDate
- * @param buildDelete
- * @group Firestore
- */
-export function cmsToDelegateModel(data: any,
-                                   buildReference: (reference: EntityReference) => any,
-                                   buildGeoPoint: (geoPoint: GeoPoint) => any,
-                                   buildDate: (date: Date) => any,
-                                   buildDelete: () => any
-): any {
-    if (data === undefined) {
-        return buildDelete();
-    } else if (data === null) {
-        return null;
-    } else if (Array.isArray(data)) {
-        return data.map(v => cmsToDelegateModel(v, buildReference, buildGeoPoint, buildDate, buildDelete));
-    } else if (data.isEntityReference && data.isEntityReference()) {
-        return buildReference(data);
-    } else if (data instanceof GeoPoint) {
-        return buildGeoPoint(data);
-    } else if (data instanceof Date) {
-        return buildDate(data);
-    } else if (data && typeof data === "object") {
-        return Object.entries(data)
-            .map(([key, v]) => ({ [key]: cmsToDelegateModel(v, buildReference, buildGeoPoint, buildDate, buildDelete) }))
-            .reduce((a, b) => ({ ...a, ...b }), {});
-    }
-    return data;
-}
+// /**
+//  * Recursive function that converts Firestore data types into CMS or plain
+//  * JS types.
+//  * FireCMS uses Javascript dates internally instead of Firestore timestamps.
+//  * This makes it easier to interact with the rest of the libraries and
+//  * bindings.
+//  * Also, Firestore references are replaced with {@link EntityReference}
+//  * @param data
+//  * @param buildReference
+//  * @param buildGeoPoint
+//  * @param buildDate
+//  * @param buildDelete
+//  * @group Firestore
+//  */
+// export function cmsToDelegateModel(data: any,
+//                                    buildReference: (reference: EntityReference) => any,
+//                                    buildGeoPoint: (geoPoint: GeoPoint) => any,
+//                                    buildDate: (date: Date) => any,
+//                                    buildDelete: () => any
+// ): any {
+//     if (data === undefined) {
+//         return buildDelete();
+//     } else if (data === null) {
+//         return null;
+//     } else if (Array.isArray(data)) {
+//         return data.map(v => cmsToDelegateModel(v, buildReference, buildGeoPoint, buildDate, buildDelete));
+//     } else if (data.isEntityReference && data.isEntityReference()) {
+//         return buildReference(data);
+//     } else if (data instanceof GeoPoint) {
+//         return buildGeoPoint(data);
+//     } else if (data instanceof Date) {
+//         return buildDate(data);
+//     } else if (data && typeof data === "object") {
+//         return Object.entries(data)
+//             .map(([key, v]) => ({ [key]: cmsToDelegateModel(v, buildReference, buildGeoPoint, buildDate, buildDelete) }))
+//             .reduce((a, b) => ({ ...a, ...b }), {});
+//     }
+//     return data;
+// }

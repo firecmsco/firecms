@@ -263,16 +263,11 @@ export function useFirestoreDelegate({
     return {
         setDateToMidnight,
         delegateToCMSModel: firestoreToCMSModel,
-        buildDate,
-        buildDeleteFieldValue,
-        currentTime,
-        buildGeoPoint,
-
-        buildReference: useCallback((reference: EntityReference): any => {
+        cmsToDelegateModel: (values) => {
             if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
-            const firestore = getFirestore(firebaseApp);
-            return doc(firestore, reference.path, reference.id);
-        }, [firebaseApp]),
+            return cmsToFirestoreModel(values, getFirestore(firebaseApp));
+        },
+        currentTime,
 
         initTextSearchController: useCallback(async (props: {
             path: string,
@@ -680,10 +675,6 @@ function getCMSPathFromFirestorePath(fsPath: string): string {
     return fsPath.substring(0, to);
 }
 
-function buildDate(date: Date): any {
-    return Timestamp.fromDate(date);
-}
-
 function setDateToMidnight(input?: Timestamp): Timestamp | undefined {
     if (!input) return input;
     if (!(input instanceof Timestamp)) return input;
@@ -721,16 +712,8 @@ export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
     return data;
 }
 
-function buildDeleteFieldValue(): any {
-    return deleteField();
-}
-
 function currentTime(): any {
     return serverTimestamp();
-}
-
-function buildGeoPoint(geoPoint: GeoPoint): any {
-    return new FirestoreGeoPoint(geoPoint.latitude, geoPoint.longitude)
 }
 
 function buildTextSearchControllerWithLocalSearch({

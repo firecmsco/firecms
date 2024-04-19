@@ -367,24 +367,26 @@ export interface DataSourceDelegate {
      * Convert a FireCMS reference to a reference that can be used by the datasource
      * @param reference
      */
-    buildReference: (reference: EntityReference) => any,
+    // buildReference: (reference: EntityReference) => any,
 
     /**
      * Convert a FireCMS GeoPoint to a GeoPoint that can be used by the datasource
      * @param geoPoint
      */
-    buildGeoPoint: (geoPoint: GeoPoint) => any,
+    // buildGeoPoint: (geoPoint: GeoPoint) => any,
 
     /**
      * Get the object to generate the current time in the datasource
      */
     currentTime(): any;
 
-    buildDate: (date: Date) => any;
+    // buildDate: (date: Date) => any;
 
-    buildDeleteFieldValue: () => any;
+    // buildDeleteFieldValue: () => any;
 
     delegateToCMSModel: (data: any) => any;
+
+    cmsToDelegateModel: (data: any) => any;
 
     setDateToMidnight: (input?: any) => any;
 }
