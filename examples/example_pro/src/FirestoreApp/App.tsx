@@ -119,7 +119,7 @@ function App() {
     const appCheckResult = useAppCheck({
         firebaseApp,
         options: {
-            provider: new ReCaptchaEnterpriseProvider(process.env.VITE_RECAPTCHA_SITE_KEY as string)
+            provider: new ReCaptchaEnterpriseProvider(import.meta.env.VITE_RECAPTCHA_SITE_KEY as string)
         }
     });
 

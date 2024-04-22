@@ -27,16 +27,35 @@ const {
 ```
 This snippet sets up Firebase, checks for loading status, and handles configuration errors, ensuring a smooth setup process.
 
-### Collection Configuration
+### Collection Configuration Plugin
 
-The flexibility to configure collections directly within Firestore allows for dynamic content structure management.
+The collection editor plugin allows you to include a UI for editing collection configurations. You can choose where
+the config is stored, and pass the configuration to the plugin. We include a controller that saves the configuration
+in your Firestore database. The default path is `__FIRECMS/config/collections`.
+
+The controller includes a few methods you can use in your own components to manage the collection configuration.
 
 ```jsx
 const collectionConfigController = useFirestoreCollectionsConfigController({
     firebaseApp
 });
 ```
-Using `useFirestoreCollectionsConfigController`, developers can adjust collection configurations in real-time, enhancing CMS flexibility.
+
+You are free to define your collections in code, or use the UI to define them. You can also allow the modification in
+the UI of the collections defined in code. You can then merge the collections defined in code with the ones defined in
+the UI.
+```jsx
+    const collectionsBuilder = useCallback(() => {
+        // Here we define a sample collection in code.
+        const collections = [
+            productsCollection
+            // Your collections here
+        ];
+        // You can merge collections defined in the collection editor (UI) with your own collections
+        return mergeCollections(collections, collectionConfigController.collections ?? []);
+    }, [collectionConfigController.collections]);
+```
+
 
 ### Authentication Management
 
@@ -52,20 +71,7 @@ const authController: FirebaseAuthController = useFirebaseAuthController({
 ```
 This code sets up authentication with custom sign-in options and integrates with a user management system for role definition.
 
-## Collections and Custom Views
 
-Developers can define collections and views, merging predefined ones with those from the UI for a tailored content management experience.
-
-```jsx
-const collectionsBuilder = useCallback(() => {
-    return mergeCollections([productsCollection], collectionConfigController.collections ?? []);
-}, [collectionConfigController.collections]);
-```
-`mergeCollections` combines code-defined collections with UI-configured ones, enriching the CMS structure.
-
-## Controllers and Persistence
-
-Important for managing user preferences and navigating the CMS efficiently.
 
 ### Mode Controller & User Config Persistence
 

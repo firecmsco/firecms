@@ -1,4 +1,4 @@
-## FireCMS starter template
+## FireCMS PRO starter template
 
 Welcome to FireCMS!
 
