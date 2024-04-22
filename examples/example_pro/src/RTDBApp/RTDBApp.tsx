@@ -25,7 +25,7 @@ import {
     useFirebaseRTDBDelegate,
     useFirebaseStorageSource,
     useInitialiseFirebase,
-    useInitializeAppCheck,
+    useAppCheck,
 } from "@firecms/firebase";
 
 import { productsCollection } from "./collections/products_collection";
@@ -57,13 +57,6 @@ function RTDBApp() {
      * Controller used to manage the dark or light color mode
      */
     const modeController = useBuildModeController();
-
-    const {
-        appCheckLoading,
-        getAppCheckToken
-    } = useInitializeAppCheck({
-        firebaseApp,
-    });
 
     const signInOptions: FirebaseSignInProvider[] = ["google.com"];
     /**
@@ -100,7 +93,6 @@ function RTDBApp() {
     } = useValidateAuthenticator({
         authController,
         authenticator: () => true,
-        getAppCheckToken,
         dataSourceDelegate: RTDBDelegate,
         storageSource
     });
@@ -111,7 +103,7 @@ function RTDBApp() {
         dataSourceDelegate: RTDBDelegate
     });
 
-    if (firebaseConfigLoading || !firebaseApp || appCheckLoading) {
+    if (firebaseConfigLoading || !firebaseApp) {
         return <>
             <CircularProgressCenter/>
         </>;

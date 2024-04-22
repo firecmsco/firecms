@@ -6,10 +6,26 @@ module.exports = {
       "id": "intro"
     },
     "what_is_new_v3",
-    "customization_quickstart",
-    "app_config",
-    "deployment",
-    "creating_service_account",
+    {
+      "type": "category",
+      "label": "☁️ FireCMS Cloud",
+      "collapsed": false,
+      "items": [
+        "cloud_quickstart",
+        "app_config",
+        "deployment",
+        "creating_service_account",
+      ]
+    },
+    {
+      "type": "category",
+      "label": "FireCMS PRO",
+      "collapsed": false,
+      "items": [
+        "pro/pro_quickstart",
+        "pro/sample_pro",
+      ]
+    },
     "firebase_setup",
     {
       "type": "category",

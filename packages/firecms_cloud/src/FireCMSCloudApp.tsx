@@ -60,6 +60,7 @@ import {
     buildCollectionInference,
     FirebaseAuthController,
     getFirestoreDataInPath,
+    useAppCheck,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
@@ -304,6 +305,11 @@ export function FireCMSClientWithController({
         firebaseConfig: projectConfig.clientFirebaseConfig
     });
 
+    const appCheckResult = useAppCheck({
+        firebaseApp: clientFirebaseApp,
+        options: appConfig?.appCheck
+    });
+
     const authController: FirebaseAuthController = useFirebaseAuthController({
         firebaseApp: clientFirebaseApp,
         onSignOut: fireCMSBackend.signOut,
@@ -354,7 +360,10 @@ export function FireCMSClientWithController({
     let loadingOrErrorComponent;
     if (userManagement.loading) {
         loadingOrErrorComponent = <CircularProgressCenter text={"Project loading"}/>;
+    } else if (appCheckResult.loading) {
+        loadingOrErrorComponent = <CircularProgressCenter text={"AppCheck loading"}/>;
     } else if (delegatedLoginError) {
+        console.log("Delegated login error", delegatedLoginError)
         loadingOrErrorComponent = <ErrorDelegatingLoginView configError={delegatedLoginError}
                                                             fireCMSBackend={fireCMSBackend}
                                                             onLogout={fireCMSBackend.signOut}/>
@@ -542,13 +551,16 @@ function FireCMSAppAuthenticated({
             [appConfig?.modifyCollection, collectionConfigController.collections])
     });
 
-    const introMode = (navigationController.collections ?? []).length === 0;
+    const introMode = navigationController.initialised &&
+        navigationController.collections !== undefined &&
+        navigationController.collections.length === 0;
+
     const saasPlugin = useSaasPlugin({
         projectConfig,
         firestoreDelegate,
         collectionConfigController,
         appConfig,
-        introMode: introMode ? (projectConfig.creationType === "new" ? "new_project" : "existing_project") : undefined,
+        introMode: introMode ? (projectConfig.creationType === "new" ? "new_project" : "existing_project") : undefined
     });
 
     const { getPathSuggestions } = usePathSuggestions(fireCMSBackend, projectConfig, navigationController);

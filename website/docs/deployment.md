@@ -33,7 +33,6 @@ The FireCMS CLI is a tool that allows you to deploy your CMS to FireCMS Cloud
 with a single command. In your project, you should have `firecms` as a dev
 dependency. This package was previously `@firecms/cli`.
 
-```bash
 
 The available commands are:
 
@@ -54,7 +53,7 @@ firecms deploy --project=your-project-id
 ## Deployment to Firebase Hosting
 
 :::important
-You can only deploy outside of FireCMS Cloud if you have a **PRO plan**.
+You can only deploy outside FireCMS Cloud if you have a **PRO plan**.
 :::
 
 If you would like to deploy your CMS to Firebase Hosting, you need to enable

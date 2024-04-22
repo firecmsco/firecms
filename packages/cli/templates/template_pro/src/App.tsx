@@ -51,6 +51,14 @@ export function App() {
         firebaseConfig
     });
 
+    // Uncomment this to enable App Check
+    // const { error: appCheckError } = useAppCheck({
+    //     firebaseApp,
+    //     options: {
+    //         provider: new ReCaptchaEnterpriseProvider(process.env.VITE_RECAPTCHA_SITE_KEY as string)
+    //     }
+    // });
+
     /**
      * Controller used to save the collection configuration in Firestore.
      * Note that this is optional and you can define your collections in code.

@@ -1,0 +1,50 @@
+---
+id: pro_quickstart
+title: Pro Quickstart
+sidebar_label: Pro Quickstart
+---
+
+:::important
+This is a preview version of FireCMS PRO. While we don't expect major changes, we are still working on the final
+release. The documentation is still a work in progress, and we are working on improving it. If you have any feedback,
+please let us know.
+:::
+
+FireCMS PRO is the self-hosted version of FireCMS. It is designed for projects that require more control over the
+infrastructure, data and user management. It is a great option for companies that need to comply with specific regulations, or that have specific requirements that are not covered by the cloud version.
+
+FireCMS PRO is a fully open-source project, and it is built on top of Firebase, Firestore, and Firebase Authentication.
+It is designed to be deployed on your own infrastructure, and it is fully customizable.
+
+It allows you a high level of customization, and it is designed to be extended with your own components,
+authentication providers, custom views, dashboard, custom logic, you name it.
+
+You can even replace Firebase with your own backend, as long as you implement the required interfaces.
+
+### Create a new project using the CLI
+
+To create a new project using the CLI, you can run the following command:
+```bash
+npx create-firecms-app my-pro-cms --pro
+```
+or:
+
+```bash
+yarn create firecms-app my-pro-cms --pro
+```
+
+This will create a new FireCMS PRO project in the `my-pro-cms` folder.
+A FireCMS project is a React application that you can customize to fit your needs.
+The initial project will have a basic structure with a few collections and a couple of custom views.
+
+### Running the project
+
+To run the project, you run the following commands:
+
+```bash
+cd my-pro-cms
+yarn
+yarn dev
+```
+
+This will install the dependencies and start the development server.

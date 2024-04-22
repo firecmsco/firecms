@@ -110,9 +110,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
     };
 }
 
-export function IntroWidget({ introMode }: {
-    introMode?: "new_project" | "existing_project";
-}) {
+export function IntroWidget({}: {}) {
 
     const navigation = useNavigationController();
     if (!navigation.topLevelNavigation)
@@ -127,7 +125,7 @@ export function IntroWidget({ introMode }: {
         }).createCollections
         : true;
 
-    if ((navigation.collections ?? []).length > 0) {
+    if (!navigation.initialised || navigation.collections === undefined || (navigation.collections ?? []).length > 0) {
         return null;
     }
 

@@ -1,9 +1,7 @@
 import React from "react";
-import { User as FirebaseUser } from "firebase/auth";
 
 import {
     Authenticator,
-    AppCheckOptions,
     CMSAnalyticsEvent,
     CMSView,
     CMSViewsBuilder,
@@ -16,8 +14,10 @@ import {
 import { FirebaseApp } from "firebase/app";
 import { FirebaseLoginViewProps } from "./FirebaseLoginView";
 import {
+    AppCheckOptions,
     FirebaseSignInOption,
-    FirebaseSignInProvider, FirebaseUserWrapper,
+    FirebaseSignInProvider,
+    FirebaseUserWrapper,
     FirestoreTextSearchControllerBuilder
 } from "../types";
 import { FirestoreIndexesBuilder } from "../hooks";

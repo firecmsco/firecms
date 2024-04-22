@@ -1,15 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare";
 
-import { AppCheckTokenResult, AuthController, Authenticator, DataSourceDelegate, StorageSource, User } from "../index";
+import { AuthController, Authenticator, DataSourceDelegate, StorageSource, User } from "../index";
 
 /**
  * This hook is used internally for validating an authenticator.
  *
  * @param authController
  * @param authentication
- * @param getAppCheckToken
- * @param appCheckForceRefresh
  * @param storageSource
  * @param dataSourceDelegate
  */
@@ -17,8 +15,6 @@ export function useValidateAuthenticator<UserType extends User = User, Controlle
                                                                                                                                                    disabled,
                                                                                                                                                    authController,
                                                                                                                                                    authenticator,
-                                                                                                                                                   getAppCheckToken,
-                                                                                                                                                   appCheckForceRefresh = false,
                                                                                                                                                    storageSource,
                                                                                                                                                    dataSourceDelegate
                                                                                                                                                }:
@@ -26,8 +22,6 @@ export function useValidateAuthenticator<UserType extends User = User, Controlle
                                                                                                                                                        disabled?: boolean,
                                                                                                                                                        authController: Controller,
                                                                                                                                                        authenticator?: boolean | Authenticator<UserType, Controller>,
-                                                                                                                                                       getAppCheckToken?: (forceRefresh: boolean) => Promise<AppCheckTokenResult> | undefined,
-                                                                                                                                                       appCheckForceRefresh?: boolean,
                                                                                                                                                        dataSourceDelegate: DataSourceDelegate;
                                                                                                                                                        storageSource: StorageSource;
                                                                                                                                                    }): {
@@ -78,20 +72,6 @@ export function useValidateAuthenticator<UserType extends User = User, Controlle
         const delegateUser = authController.user;
         console.debug("Checking authentication for user", delegateUser);
 
-        if (getAppCheckToken) {
-            try {
-                if (!await getAppCheckToken(appCheckForceRefresh)) {
-                    setNotAllowedError("App Check failed.");
-                    authController.signOut();
-                } else {
-                    console.debug("App Check success.");
-                }
-            } catch (e: any) {
-                setNotAllowedError(e.message);
-                authController.signOut();
-            }
-        }
-
         if (authenticator instanceof Function && delegateUser && !equal(checkedUserRef.current?.uid, delegateUser.uid)) {
             setAuthLoading(true);
             try {
@@ -120,7 +100,7 @@ export function useValidateAuthenticator<UserType extends User = User, Controlle
             setAuthVerified(true);
         }
 
-    }, [disabled, authController, authenticator, getAppCheckToken, appCheckForceRefresh, dataSourceDelegate, storageSource]);
+    }, [disabled, authController, authenticator, dataSourceDelegate, storageSource]);
 
     useEffect(() => {
         checkAuthentication();

@@ -4,7 +4,7 @@ title: App Config
 description: A comprehensive guide to configuring FireCMS, a customizable CMS. It provides detailed instructions on how to initialize a new project, customize the CMS with reusable properties, fields, collections, entity views, and CMS views. It also explains the customization options available, including collections, views, propertyConfigs, entityViews, HomePage, fireCMSAppBarComponentProps, firestoreIndexesBuilder, onFirebaseInit, dateTimeFormat, locale, textSearchController, and autoOpenDrawer. This page is a valuable resource for developers seeking to tailor FireCMS to their specific needs.
 ---
 
-The app config is the main configuration object of FireCMS. It is defined
+The app config is the main configuration object of FireCMS Cloud. It is defined
 by the interface `FireCMSAppConfig`. In order to customize the CMS, you need
 to create a project in [app.firecms.co](https://app.firecms.co) and
 initialise a new project in code with `npx create-firecms-app` or `yarn create firecms-app`.
@@ -35,6 +35,7 @@ Let's see all the customization options available:
     You can use the key to reference the custom view in the `entityViews` prop of a collection.
     You can also define an entity view from the UI.
     See [Entity views](./collections/entity_views) for more information.
+
 * `HomePage`: Use this component to override the home page.
 * `fireCMSAppBarComponentProps`: Additional props passed to the custom AppBar.
 * `firestoreIndexesBuilder`: Use this builder to indicate which indexes are available in your Firestore database.
@@ -46,3 +47,8 @@ Let's see all the customization options available:
 * `locale`: Locale of the CMS, currently only affecting dates.
 * `textSearchController`: Use this controller to return text search results as document ids, that get then fetched from Firestore.
 * `autoOpenDrawer`: Experimental feature to open the drawer automatically when hovering.
+* `appCheck`: Firebase App Check configuration.
+    - `provider`: The provider to use for App Check.
+    - `isTokenAutoRefreshEnabled`: Whether to automatically refresh the token.
+    - `debugToken`: Debug token to use for App Check.
+    - `forceRefresh`: Whether to force refresh the token.

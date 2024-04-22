@@ -114,9 +114,6 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
         return null;
     }
 
-    console.log({
-        headersMapping: importConfig.headersMapping,
-    })
     return <>
 
         <Tooltip title={"Import"}>

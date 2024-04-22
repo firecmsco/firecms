@@ -1,18 +1,10 @@
-import { FirebaseApp } from "firebase/app";
-
-/**
- * @group Firebase
- */
-export interface AppCheck {
-    firebaseApp?: FirebaseApp;
-}
+import { CustomProvider, ReCaptchaEnterpriseProvider, ReCaptchaV3Provider } from "firebase/app-check";
 
 /**
  * @group Firebase
  */
 export interface AppCheckOptions {
-    providerKey: string;
-    useEnterpriseRecaptcha: boolean;
+    provider: CustomProvider | ReCaptchaV3Provider | ReCaptchaEnterpriseProvider;
     isTokenAutoRefreshEnabled?: boolean;
     debugToken?: string;
     forceRefresh?: boolean;

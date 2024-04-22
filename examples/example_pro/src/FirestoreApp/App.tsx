@@ -26,6 +26,7 @@ import {
     FirebaseAuthController,
     FirebaseSignInProvider,
     FirebaseUserWrapper,
+    useAppCheck,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
@@ -54,10 +55,9 @@ import CustomColorTextField from "./custom_field/CustomColorTextField";
 import { booksCollection } from "./collections/books_collection";
 import { FirebaseApp } from "firebase/app";
 import { TestEditorView } from "./TestEditorView";
-import { TestBoardView } from "./BoardView/TestBoardView";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
-import { DBTalk } from "./DBTalk";
+import { ReCaptchaEnterpriseProvider } from "firebase/app-check";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com"];
 
@@ -114,6 +114,13 @@ function App() {
     } = useInitialiseFirebase({
         firebaseConfig,
         onFirebaseInit
+    });
+
+    const appCheckResult = useAppCheck({
+        firebaseApp,
+        options: {
+            provider: new ReCaptchaEnterpriseProvider(process.env.VITE_RECAPTCHA_SITE_KEY as string)
+        }
     });
 
     const collectionConfigController = useFirestoreCollectionsConfigController({
@@ -264,6 +271,10 @@ function App() {
 
     if (configError) {
         return <CenteredView>{configError}</CenteredView>;
+    }
+
+    if (appCheckResult.error) {
+        return <CenteredView>{appCheckResult.error}</CenteredView>;
     }
 
     return (

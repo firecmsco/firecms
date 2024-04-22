@@ -20,11 +20,11 @@ import {
 import { FireCMSFirebaseAppProps } from "./FireCMSFirebaseAppProps";
 import { FirebaseLoginView } from "./FirebaseLoginView";
 import {
+    useAppCheck,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
     useInitialiseFirebase,
-    useInitializeAppCheck,
 } from "../hooks";
 import { CenteredView } from "@firecms/ui";
 import { FirebaseAuthController } from "../types";
@@ -51,32 +51,32 @@ const DEFAULT_SIGN_IN_OPTIONS = [
  * @category Firebase
  */
 export function FireCMSFirebaseApp({
-                                  name,
-                                  logo,
-                                  logoDark,
-                                  toolbarExtraWidget,
-                                  authenticator,
-                                  collections,
-                                  views,
-                                  adminViews,
-                                  textSearchControllerBuilder,
-                                  allowSkipLogin,
-                                  signInOptions = DEFAULT_SIGN_IN_OPTIONS,
-                                  firebaseConfig,
-                                  onFirebaseInit,
-                                  appCheckOptions,
-                                  dateTimeFormat,
-                                  locale,
-                                  basePath,
-                                  baseCollectionPath,
-                                  onAnalyticsEvent,
-                                  propertyConfigs: propertyConfigsProp,
-                                  plugins,
-                                  autoOpenDrawer,
-                                  firestoreIndexesBuilder,
-                                  components,
-                                  localTextSearchEnabled = false,
-                              }: FireCMSFirebaseAppProps) {
+                                       name,
+                                       logo,
+                                       logoDark,
+                                       toolbarExtraWidget,
+                                       authenticator,
+                                       collections,
+                                       views,
+                                       adminViews,
+                                       textSearchControllerBuilder,
+                                       allowSkipLogin,
+                                       signInOptions = DEFAULT_SIGN_IN_OPTIONS,
+                                       firebaseConfig,
+                                       onFirebaseInit,
+                                       appCheckOptions,
+                                       dateTimeFormat,
+                                       locale,
+                                       basePath,
+                                       baseCollectionPath,
+                                       onAnalyticsEvent,
+                                       propertyConfigs: propertyConfigsProp,
+                                       plugins,
+                                       autoOpenDrawer,
+                                       firestoreIndexesBuilder,
+                                       components,
+                                       localTextSearchEnabled = false,
+                                   }: FireCMSFirebaseAppProps) {
 
     /**
      * Update the browser title and icon
@@ -104,9 +104,10 @@ export function FireCMSFirebaseApp({
     const modeController = useBuildModeController();
 
     const {
-        appCheckLoading,
-        getAppCheckToken
-    } = useInitializeAppCheck({
+        loading,
+        appCheckVerified,
+        error
+    } = useAppCheck({
         firebaseApp,
         options: appCheckOptions
     });
@@ -148,8 +149,6 @@ export function FireCMSFirebaseApp({
     } = useValidateAuthenticator({
         authController,
         authenticator,
-        getAppCheckToken,
-        appCheckForceRefresh: (appCheckOptions && appCheckOptions.forceRefresh) ? appCheckOptions.forceRefresh! : false,
         dataSourceDelegate: firestoreDelegate,
         storageSource
     });
@@ -164,7 +163,7 @@ export function FireCMSFirebaseApp({
         dataSourceDelegate: firestoreDelegate
     });
 
-    if (firebaseConfigLoading || !firebaseApp || appCheckLoading) {
+    if (firebaseConfigLoading || !firebaseApp || loading) {
         return <>
             <CircularProgressCenter/>
         </>;

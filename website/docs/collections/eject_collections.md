@@ -15,7 +15,7 @@ Any text, dates, images, list of text or other fields that you may think of.
 
 But what if you need to **customize** the view **further**, or prefer to use code to create the collection? FireCMS
 allows you to do just that. You can start a customization process with
-our [quickstart guide](https://firecms.co/docs/customization_quickstart) and then upload it to the Cloud, using the same
+our [quickstart guide](https://firecms.co/docs/cloud_quickstart) and then upload it to the Cloud, using the same
 hosted app.
 
 A common question we receive is how to import the code of a collection. It's as simple as navigating to the Schema

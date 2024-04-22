@@ -11,7 +11,7 @@ import {
     PropertyConfig
 } from "@firecms/core";
 import { FirebaseApp } from "firebase/app";
-import { FirestoreIndexesBuilder, FirestoreTextSearchControllerBuilder } from "@firecms/firebase";
+import { AppCheckOptions, FirestoreIndexesBuilder, FirestoreTextSearchControllerBuilder } from "@firecms/firebase";
 
 export type FireCMSAppConfig = {
 
@@ -104,5 +104,10 @@ export type FireCMSAppConfig = {
      * get then fetched from Firestore.
      */
     textSearchControllerBuilder?: FirestoreTextSearchControllerBuilder;
+
+    /**
+     * App Check configuration.
+     */
+    appCheck?: AppCheckOptions;
 
 }

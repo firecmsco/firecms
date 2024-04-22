@@ -25,7 +25,7 @@ import {
     useFirebaseStorageSource,
     useFirestoreDelegate,
     useInitialiseFirebase,
-    useInitializeAppCheck
+    useAppCheck
 } from "@firecms/firebase";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { booksCollection } from "./books_collection";
@@ -87,9 +87,9 @@ function ProSampleInner() {
     const modeController = useBuildModeController();
 
     const {
-        appCheckLoading,
+        loading,
         getAppCheckToken
-    } = useInitializeAppCheck({
+    } = useAppCheck({
         firebaseApp,
     });
 
@@ -124,7 +124,7 @@ function ProSampleInner() {
         dataSourceDelegate: firestoreDelegate
     });
 
-    if (firebaseConfigLoading || !firebaseApp || appCheckLoading) {
+    if (firebaseConfigLoading || !firebaseApp || loading) {
         return <>
             <CircularProgressCenter/>
         </>;

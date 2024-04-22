@@ -10,7 +10,7 @@ image: /img/blog_example.webp
 
 :::note
 In this tutorial we assume you have set up a Firebase project and a FireCMS instance with custom code.
-If you don't, check the [Quickstart](customization_quickstart.mdx) section.
+If you don't, check the [Quickstart](cloud_quickstart.mdx) section.
 :::
 
 We don't need to explain the benefits of using a headless CMS instead of a
@@ -287,7 +287,7 @@ You could also have more complex setup that sends your data to your SSR app
 through an API and render the result.
 
 You can find the code for `BlogEntryPreview` in
-[BlogEntryPreview](https://github.com/FireCMSco/firecms/blob/master/example/src/docs/recipes/blog/BlogEntryPreview.tsx).
+[BlogEntryPreview](https://github.com/firecmsco/firecms/blob/main/website/samples/samples_v3/recipes/blog/BlogEntryPreview.tsx).
 
 When you have created your component, there are 2 ways you can add it to your component:
 
@@ -299,7 +299,7 @@ the collection.
 In order to do so, you need to add it to the `entityViews` prop of the FireCMS main app config export:
 
 ```tsx
-    import { FireCMSAppConfig } from "@firecms/cloud";
+import { FireCMSAppConfig } from "@firecms/cloud";
 const appConfig: FireCMSAppConfig = {
     version: "1",
     collections: [],
