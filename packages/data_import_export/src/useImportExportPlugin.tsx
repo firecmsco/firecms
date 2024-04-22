@@ -19,7 +19,7 @@ export function useImportExportPlugin(props?: ImportExportPluginProps): FireCMSP
 
 export type ImportExportPluginProps = {
     exportAllowed?: (props: ExportAllowedParams) => boolean;
-    notAllowedView: React.ReactNode;
+    notAllowedView?: React.ReactNode;
     onAnalyticsEvent?: (event: string, params?: any) => void;
 }
 export type ExportAllowedParams = { collectionEntitiesCount: number, path: string, collection: EntityCollection };
