@@ -36,6 +36,11 @@ export default async () => {
   return await batch.commit();
 }
 \`\`\``;
+const sampleSystemMessage3 = `This is a console log
+
+\`\`\`javascript
+console.log("Hello world");
+\`\`\``;
 
 export function DataTalk() {
 
@@ -52,6 +57,10 @@ export function DataTalk() {
         date: new Date()
     }, {
         text: sampleSystemMessage2,
+        user: "SYSTEM",
+        date: new Date()
+    }, {
+        text: sampleSystemMessage3,
         user: "SYSTEM",
         date: new Date()
     }]);
