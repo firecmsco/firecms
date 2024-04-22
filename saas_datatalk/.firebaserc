@@ -1,0 +1,22 @@
+{
+  "projects": {
+    "staging": "firecms-dev-2da42",
+    "prod": "firecms-backend"
+  },
+  "targets": {
+    "firecms-dev-2da42": {
+      "hosting": {
+        "firecms-saas": [
+          "firecms-dev-2da42"
+        ]
+      }
+    },
+    "firecms-backend": {
+      "hosting": {
+        "firecms-saas": [
+          "firecms-backend"
+        ]
+      }
+    }
+  }
+}
