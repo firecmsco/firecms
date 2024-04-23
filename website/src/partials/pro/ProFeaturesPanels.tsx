@@ -48,7 +48,7 @@ function ProFeaturesPanels() {
                     className={"flex items-center mb-4 "}>
                     <div>
 
-                        <h2 className="h2 mb-3 uppercase gradient-text">
+                        <h2 className="h2 mb-3 uppercase font-mono">
                             Advanced Functionality, Built-In
                         </h2>
 

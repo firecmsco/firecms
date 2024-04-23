@@ -59,7 +59,18 @@ export function HeroPro({
                     </div>
                 </Panel>
             </div>
-
+            <Panel color={"secondary"}>
+                <p className={"text-gray-900 uppercase font-mono font-bold"}>
+                    For a limited time
+                </p>
+                <h2 className={"h2 mt-0 uppercase font-mono"}>
+                    Try FireCMS PRO at the <b>same price</b> as FireCMS Cloud
+                </h2>
+                <div
+                    className={"mt-8 select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
+                    yarn create firecms-app --pro
+                </div>
+            </Panel>
             <div className={"relative"}>
                 <div className="h-full w-full mix-blend-multiply"
                      style={{
@@ -90,7 +101,7 @@ export function HeroPro({
                             The perfect solution for your team or public facing applications, built on top of Firebase.
                         </p>
                     </div>
-                    <div className={"space-y-4 space-x-4"}>
+                    <div className={"mt-16 flex flex-row flex-wrap gap-4"}>
 
                         <a
                             className={CTAButtonMixin + "  "}
@@ -109,9 +120,11 @@ export function HeroPro({
                             <CTACaret/>
                         </a>
 
+                        {/*<div*/}
+                        {/*    className={"select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>*/}
+                        {/*    yarn create firecms-app --pro*/}
+                        {/*</div>*/}
 
-                        {/*<Button size={"2xl"}>See demo</Button>*/}
-                        {/*<Button size={"2xl"} variant={"outlined"}>Book a meeting <EventIcon/></Button>*/}
                     </div>
                 </Panel>
             </div>

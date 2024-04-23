@@ -2,6 +2,24 @@
 id: changelog
 title: Changelog
 ---
+## [3.0.0-beta.6] - 2024-04-23
+
+- Added AppCheck to every FireCMS variant.
+- Various fixes for datasource delegate.
+- Fix in saving cleaned data.
+- Cloud new user roles creation issue fixed.
+- Error message display issue in table cells fixed.
+- Subcollections updating issue fixed.
+- Import/export analytics and related data mapping conversions updated.
+- Updated and improved handling of user roles and permissions.
+- Enhanced the handling of service account files and project creation using SA.
+- Updated the behavior of unindexed queries.
+- User management connection to demo removed.
+- Dependency updates to mitigate security issues.
+- Exposing additional methods from data inference for better customization.
+- Pro template updates for improved UI/UX.
+- Updated documentation for collections and user management.
+
 ## [3.0.0-beta.5] - 2024-04-01
 
 - [BREAKING] The main component for FireCMS Cloud has been renamed from `FireCMSApp` to `FireCMSCloudApp`. Please update
