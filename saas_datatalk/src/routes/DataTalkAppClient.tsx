@@ -5,9 +5,7 @@ import {
     FireCMSAppBarProps,
     FireCMSPlugin,
     ModeControllerProvider,
-    NavigationRoutes,
     Scaffold,
-    SideDialogs,
     SnackbarProvider,
     useBrowserTitleAndIcon,
     useBuildLocalConfigurationPersistence,
@@ -47,6 +45,7 @@ import { WebappCreationView } from "../components/WebappCreationView";
 import { RolesView, UserManagement, UserManagementProvider, UsersView } from "@firecms/user_management";
 import { useImportExportPlugin } from "@firecms/data_import_export";
 import { Typography } from "@firecms/ui";
+import { DataTalk } from "@firecms/datatalk";
 
 export const DataTalkAppClient = function SaasCMSAppClient({
                                                                fireCMSBackend,
@@ -326,10 +325,7 @@ function FireCMSAppAuthenticated({
                                                 logo={projectConfig.logo}
                                                 // Drawer={FireCMSCloudDrawer}
                                                 FireCMSAppBar={FireCMSAppBarComponent}>
-                                                <NavigationRoutes
-                                                    // HomePage={ FireCMSCloudHomePage}
-                                                    customRoutes={adminRoutes}/>
-                                                <SideDialogs/>
+                                                <DataTalk projectId={projectConfig.projectId}/>
                                             </Scaffold>
                                         );
                                     }

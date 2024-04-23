@@ -53,7 +53,7 @@ export function SaasAnalyticsProvider({ children, backendFirebaseApp }: PropsWit
 
     const logEventInternal = useCallback((eventName: string, eventParams?: Record<string, any>) => {
         console.debug("Analytics event", eventName, eventParams);
-        logEvent(getAnalytics(backendFirebaseApp), eventName, eventParams);
+        // logEvent(getAnalytics(backendFirebaseApp), eventName, eventParams);
     }, []);
 
     const logGoogleLogin = useCallback(() => {

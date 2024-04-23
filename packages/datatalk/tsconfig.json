@@ -32,6 +32,24 @@
     "paths": {
       "@firecms/ui": [
         "../ui/src"
+      ],
+      "@firecms/core": [
+        "../core/src"
+      ],
+      "@firecms/firebase": [
+        "../firebase_firecms/src"
+      ],
+      "@firecms/formex": [
+        "../formex/src"
+      ],
+      "@firecms/collection_editor_firebase": [
+        "../collection_editor_firebase/src"
+      ],
+      "@firecms/schema_inference": [
+        "../schema_inference/src"
+      ],
+      "@firecms/data_import_export": [
+        "../data_import_export/src"
       ]
     }
   }

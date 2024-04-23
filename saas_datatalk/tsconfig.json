@@ -22,6 +22,7 @@
       "@firecms/ui": ["../packages/ui/src"],
       "@firecms/formex": ["../packages/formex/src"],
       "@firecms/firebase": ["../packages/firebase_firecms/src"],
+      "@firecms/collection_editor_firebase": ["../packages/collection_editor_firebase/src"],
       "@firecms/data_enhancement": ["../packages/data_enhancement/src"],
       "@firecms/data_import_export": ["../packages/data_import_export/src"],
       "@firecms/schema_inference": ["../packages/schema_inference/src"],

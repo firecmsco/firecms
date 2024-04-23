@@ -30,15 +30,9 @@ import { backendFirebaseConfig } from "./backend_firebase_config";
 import { NewFireCMSProjectStart } from "./routes/NewFireCMSProjectStart";
 import { SassDebugView } from "./routes/SassDebugView";
 import { NewGoogleCloudProjectFlow } from "./routes/NewGoogleCloudProjectFlow";
-import { SaasCMSAppClient } from "./routes/SaasCMSAppClient";
-import { FireCMSDoctorProjectPage } from "./routes/FireCMSDoctorProjectPage";
 import { DataTalkMainPage } from "./routes/DataTalkMainPage";
 import { SaasScaffold } from "./components/SaasScaffold";
-import { FireCMSDoctorListPage } from "./routes/FireCMSDoctorListPage";
-import { SelfHostedSubscriptions } from "./routes/SelfHostedSubscriptions";
 import { SaasAnalyticsProvider, useSaasAnalytics } from "./components/SaasAnalyticsProvider";
-import { UserSubscriptions } from "./routes/UserSubscriptions";
-import { FireCMSCLIView } from "./cli/cli";
 import { DataTalkAppClient } from "./routes/DataTalkAppClient";
 
 export type SaasClientController = {
@@ -223,10 +217,6 @@ export function SaasAppInternal({
                                                   fireCMSBackend={fireCMSBackend}
                                                   onNewProject={onNewProject}/>}/>
 
-                                   <Route path="cli"
-                                          element={<FireCMSCLIView
-                                              fireCMSBackend={fireCMSBackend}/>}/>
-
                                    <Route path="new/*"
                                           element={
                                               <NewFireCMSProjectStart
@@ -244,27 +234,6 @@ export function SaasAppInternal({
                                                       analytics.logProjectCreationNewProjectSelectedSuccess(projectId);
                                                       selectProject(projectId);
                                                   }}/>}/>
-
-                                   <Route path="doctor/:projectId"
-                                          element={
-                                              <FireCMSDoctorProjectPage
-                                                  fireCMSBackend={fireCMSBackend}/>}/>
-
-                                   <Route path="doctor"
-                                          element={
-                                              <FireCMSDoctorListPage
-                                                  goToDoctor={goToDoctor}
-                                                  fireCMSBackend={fireCMSBackend}/>}/>
-
-                                   <Route path="user"
-                                          element={
-                                              <UserSubscriptions
-                                                  fireCMSBackend={fireCMSBackend}/>}/>
-
-                                   <Route path="subscriptions"
-                                          element={
-                                              <SelfHostedSubscriptions
-                                                  fireCMSBackend={fireCMSBackend}/>}/>
 
                                    <Route path={"*"}
                                           element={

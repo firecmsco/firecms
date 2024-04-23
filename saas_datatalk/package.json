@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@firecms/cloud": "link:../packages/firecms_cloud",
+    "@firecms/collection_editor_firebase": "link:../packages/collection_editor_firebase",
     "@firecms/core": "link:../packages/firecms_core",
     "@firecms/data_import_export": "link:../packages/data_import_export",
     "@firecms/datatalk": "link:../packages/datatalk",

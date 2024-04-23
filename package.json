@@ -32,6 +32,7 @@
     "pro": "cd examples/example_pro && run-s dev",
     "cloud": "cd examples/example_cloud && run-s dev",
     "saas": "cd saas && run-s dev",
+    "datatalk": "cd saas_datatalk && run-s dev",
     "deploy:demo": "cd examples/example_pro && run-s deploy",
     "preview": "cd examples/example_pro && run-s preview",
     "deploy:staging": "lerna run build && cd saas && run-s build && run-s deploy:staging",

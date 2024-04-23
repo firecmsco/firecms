@@ -47,10 +47,9 @@ export function parseMarkdown(text: string): MarkdownElement[] {
     if (buffer.length) {
         elements.push({
             type: inCodeBlock ? "code" : "html",
-            content: buffer.join("\n")
+            content: inCodeBlock ? buffer.join("\n") : md.render(buffer.join("\n"))
         });
     }
 
     return elements;
 }
-

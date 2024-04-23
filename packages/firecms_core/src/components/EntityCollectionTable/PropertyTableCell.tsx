@@ -77,8 +77,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                                                                      disabled: disabledProp
                                                                                  }: PropertyTableCellProps<T>) {
 
-        const context = useFireCMSContext();
-
         const {
             onValueChange,
             size,
@@ -146,9 +144,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                 propertyKey,
                                 setError,
                                 onValueUpdated,
-                                entity,
-                                fullPath: path,
-                                context
+                                data: entity,
                             });
                         } catch (e:any) {
                             console.error("onValueChange error", e);

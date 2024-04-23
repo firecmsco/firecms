@@ -23,7 +23,7 @@ import {
     useBuildNavigationController,
     User
 } from "@firecms/core";
-
+import { buildCollectionInference, useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import {
     CollectionEditorPermissionsBuilder,
     CollectionsConfigController,
@@ -57,7 +57,6 @@ import {
 } from "./components";
 import { FireCMSCloudHomePage } from "./components/FireCMSCloudHomePage";
 import {
-    buildCollectionInference,
     FirebaseAuthController,
     getFirestoreDataInPath,
     useAppCheck,
@@ -76,7 +75,6 @@ import {
     UserManagementProvider,
     UsersView
 } from "@firecms/user_management";
-import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 
 const DOCS_LIMIT = 200;
 

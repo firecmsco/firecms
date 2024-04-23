@@ -19,7 +19,6 @@ import {
     useBuildCloudUserManagement
 } from "@firecms/cloud";
 import { SaasCMSAppBar } from "../components/SaasAppBar";
-import { getRemoteConfig } from "../remote/remote_config";
 import { saveRecentProject } from "../utils/recent_projects_prefs";
 import { WebappCreationView } from "../components/WebappCreationView";
 
@@ -61,7 +60,6 @@ export const SaasCMSAppClientInner = function SaasCMSAppClientInner({
                                                                     }: FireCMSClientProps) {
 
     const snackbarController = useSnackbarController();
-    const [customizationLoading, setCustomizationLoading] = useState<boolean>(false);
     const [appConfig, setAppConfig] = useState<FireCMSAppConfig | undefined>();
 
     const projectConfig = useBuildProjectConfig({
@@ -77,33 +75,6 @@ export const SaasCMSAppClientInner = function SaasCMSAppClientInner({
         canEditRoles: projectConfig.canEditRoles,
         fireCMSBackend
     });
-
-    useEffect(() => {
-        setCustomizationLoading(true);
-        setAppConfig(undefined);
-        if (projectConfig.customizationRevision) {
-            console.debug("Loading remote config", projectConfig.customizationRevision)
-            fireCMSBackend.projectsApi.getRemoteConfigUrl(projectId, projectConfig.customizationRevision)
-                .then(remoteConfigUrl => {
-                    console.log("Loading remote config from", remoteConfigUrl);
-                    getRemoteConfig(remoteConfigUrl)
-                        .then((config) => {
-                            console.log("Remote config loaded", projectId, config);
-                            setAppConfig(config);
-                        })
-                        .catch((e) => {
-                            console.error("Error loading remote config", e);
-                            snackbarController.open({
-                                message: "Error loading remote config. Check logs",
-                                type: "error"
-                            });
-                        })
-                        .finally(() => setCustomizationLoading(false));
-                })
-        } else {
-            setCustomizationLoading(false);
-        }
-    }, [projectConfig.customizationRevision, projectId]);
 
     if (!userManagement.loading && projectConfig.clientFirebaseMissing) {
         return <WebappCreationView projectId={projectId}/>;
@@ -126,7 +97,7 @@ export const SaasCMSAppClientInner = function SaasCMSAppClientInner({
         fireCMSBackend={fireCMSBackend}
         basePath={`/p/${projectId}`}
         appConfig={appConfig}
-        customizationLoading={customizationLoading}
+        customizationLoading={false}
         FireCMSAppBarComponent={SaasCMSAppBar}
         onAnalyticsEvent={(event: string, data?: object) => onAnalyticsEvent?.(event, data)}/>;
 

@@ -34,7 +34,7 @@ import {
     saveEntityWithCallbacks,
     useAuthController,
     useCustomizationController,
-    useDataSource,
+    useDataSource, useFireCMSContext,
     useLargeLayout,
     useNavigationController,
     useSideEntityController
@@ -133,6 +133,7 @@ export const EntityCollectionView = React.memo(
                                                                  }: EntityCollectionViewProps<M>
     ) {
 
+        const context = useFireCMSContext();
         const fullPath = fullPathProp ?? collectionProp.path;
         const dataSource = useDataSource(collectionProp);
         const navigation = useNavigationController();
@@ -313,13 +314,11 @@ export const EntityCollectionView = React.memo(
             [fullPath]);
 
         const onValueChange: OnCellValueChange<any, any> = ({
-                                                                fullPath,
-                                                                context,
                                                                 value,
                                                                 propertyKey,
                                                                 onValueUpdated,
                                                                 setError,
-                                                                entity,
+                                                                data: entity,
                                                             }) => {
 
             const updatedValues = setIn({ ...entity.values }, propertyKey, value);

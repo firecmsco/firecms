@@ -7,6 +7,7 @@ export interface AvatarProps {
     alt?: string;
     children?: React.ReactNode;
     className?: string;
+    outerClassName?: string;
     style?: React.CSSProperties;
 }
 
@@ -17,6 +18,7 @@ const AvatarInner: React.ForwardRefRenderFunction<HTMLButtonElement, AvatarProps
         children,
         className,
         style,
+        outerClassName,
         ...props
     }, ref) => {
 
@@ -28,6 +30,7 @@ const AvatarInner: React.ForwardRefRenderFunction<HTMLButtonElement, AvatarProps
             className={cn("rounded-full flex items-center justify-center overflow-hidden",
                 focusedMixin,
                 "p-1 hover:bg-slate-200 hover:dark:bg-slate-700 w-12 h-12",
+                outerClassName
             )}>
             {src
                 ? (

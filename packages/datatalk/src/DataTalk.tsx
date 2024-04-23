@@ -3,12 +3,7 @@ import { Button, TextareaAutosize } from "@firecms/ui";
 import { UserMessage } from "./components/UserMessage";
 import { SystemMessage } from "./components/SystemMessage";
 import { sendDataTalkCommand } from "./api";
-
-export type ChatMessage = {
-    text: string;
-    user: "USER" | "SYSTEM";
-    date: Date;
-};
+import { ChatMessage } from "./types";
 
 const sampleSystemMessage = `This is system message.
 
@@ -37,24 +32,26 @@ export default async () => {
 }
 \`\`\``;
 
-export function DataTalk() {
+export function DataTalk({ projectId }: { projectId: string }) {
 
     const [textInput, setTextInput] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
 
     const [messages, setMessages] = useState<ChatMessage[]>([{
-        text: "This is test message",
-        user: "USER",
-        date: new Date()
-    }, {
-        text: sampleSystemMessage,
+        text: "Welcome to **DataTalk**! How can I help you?\n\nTry typing a command like `What collections are available?` or `Show me products cheaper than 50 euros`.",
         user: "SYSTEM",
         date: new Date()
-    }, {
-        text: sampleSystemMessage2,
-        user: "SYSTEM",
-        date: new Date()
-    }]);
+    },
+        {
+            text: sampleSystemMessage,
+            user: "SYSTEM",
+            date: new Date()
+        }, {
+            text: sampleSystemMessage2,
+            user: "SYSTEM",
+            date: new Date()
+        }
+    ]);
 
     const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -69,15 +66,12 @@ export function DataTalk() {
             }];
         setMessages(updatedMessages);
         setTextInput("");
-        sendDataTalkCommand(textInput)
-            .then(({ code }) => {
+        sendDataTalkCommand(textInput, projectId, messages)
+            .then((newMessage) => {
                 setMessages([
                     ...updatedMessages,
-                    {
-                        text: code,
-                        user: "SYSTEM",
-                        date: new Date()
-                    }]);
+                    newMessage
+                ]);
             })
             .finally(() => {
                 setLoading(false);
@@ -111,7 +105,7 @@ export function DataTalk() {
                             return null;
                         }
                     })}
-                    {loading && <SystemMessage text={"Loading"}/>}
+                    {loading && <SystemMessage key="loading" loading={true}/>}
                 </div>
             </div>
             <div className="container sticky bottom-0 right-0 left-0 mx-auto px-4 md:px-6 pb-8 pt-4">

@@ -1,4 +1,4 @@
-import { CollectionSize, Entity, FireCMSContext, ResolvedProperty, SelectedCellProps } from "../../types";
+import { CollectionSize, FireCMSContext, ResolvedProperty, SelectedCellProps } from "../../types";
 
 export type EntityCollectionTableController<M extends Record<string, any>> = {
 
@@ -31,14 +31,12 @@ export type EntityCollectionTableController<M extends Record<string, any>> = {
  * Props passed in a callback when the content of a cell in a table has been edited
  * @group Collection components
  */
-export interface OnCellValueChangeParams<T = any, M extends Record<string, any> = any> {
+export interface OnCellValueChangeParams<T = any, D = any> {
     value: T,
     propertyKey: string,
-    entity: Entity<M>,
+    data?: D,
     onValueUpdated: () => void
     setError: (e: Error | undefined) => void
-    fullPath: string
-    context: FireCMSContext
 }
 
 /**

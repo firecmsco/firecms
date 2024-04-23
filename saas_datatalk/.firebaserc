@@ -6,15 +6,15 @@
   "targets": {
     "firecms-dev-2da42": {
       "hosting": {
-        "firecms-saas": [
+        "firecms-datatalk-saas": [
           "firecms-dev-2da42"
         ]
       }
     },
     "firecms-backend": {
       "hosting": {
-        "firecms-saas": [
-          "firecms-backend"
+        "firecms-datatalk-saas": [
+          "datatalk-preview"
         ]
       }
     }

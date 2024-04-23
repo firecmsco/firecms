@@ -74,6 +74,7 @@ export default defineConfig(({ command, mode }) => {
                 "@firecms/ui": build ? path.resolve(__dirname, "../packages/ui") : path.resolve(__dirname, "../packages/ui/src"),
                 "@firecms/formex": build ? path.resolve(__dirname, "../packages/formex") : path.resolve(__dirname, "../packages/formex/src"),
                 "@firecms/firebase": build ? path.resolve(__dirname, "../packages/firebase_firecms") : path.resolve(__dirname, "../packages/firebase_firecms/src"),
+                "@firecms/collection_editor_firebase": build ? path.resolve(__dirname, "../packages/collection_editor_firebase") : path.resolve(__dirname, "../packages/collection_editor_firebase/src"),
                 "@firecms/data_enhancement": build ? path.resolve(__dirname, "../packages/data_enhancement") : path.resolve(__dirname, "../packages/data_enhancement/src"),
                 "@firecms/data_import_export": build ? path.resolve(__dirname, "../packages/data_import_export") : path.resolve(__dirname, "../packages/data_import_export/src"),
                 "@firecms/schema_inference": build ? path.resolve(__dirname, "../packages/schema_inference") : path.resolve(__dirname, "../packages/schema_inference/src"),

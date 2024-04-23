@@ -141,5 +141,5 @@ export type GetPropertyForProps<M extends Record<string, any>> = {
 
 export type PropertyColumnConfig = {
     key: string,
-    disabled: boolean,
+    disabled?: boolean,
 };

@@ -404,7 +404,7 @@ const SafeLinkRenderer: React.FC<{
     const urlRegex = /https?:\/\/[^\s]+/g;
     const htmlContent = text.replace(urlRegex, (url) => {
         // For each URL found, replace it with an HTML <a> tag
-        return `<a href="${url}" target="_blank">Link</a><br/>`;
+        return `<a href="${url}" class="underline" target="_blank">Link</a><br/>`;
     });
 
     return (
