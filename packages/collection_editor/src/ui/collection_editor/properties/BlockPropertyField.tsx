@@ -2,11 +2,17 @@ import React, { useCallback, useState } from "react";
 import { AddIcon, Button, Paper, Typography } from "@firecms/ui";
 import { getIn, useFormex } from "@firecms/formex";
 import { PropertyFormDialog } from "../PropertyEditView";
-import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath } from "../util";
+import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath, namespaceToPropertiesPath } from "../util";
 import { PropertyTree } from "../PropertyTree";
 import { ArrayProperty, Property, PropertyConfig } from "@firecms/core";
 
-export function BlockPropertyField({ disabled, getData, allowDataInference, propertyConfigs, collectionEditable }: {
+export function BlockPropertyField({
+                                       disabled,
+                                       getData,
+                                       allowDataInference,
+                                       propertyConfigs,
+                                       collectionEditable
+                                   }: {
     disabled: boolean;
     getData?: () => Promise<object[]>;
     allowDataInference: boolean;
@@ -50,7 +56,7 @@ export function BlockPropertyField({ disabled, getData, allowDataInference, prop
 
         setFieldValue(`oneOf.${idToPropertiesPath(fullId)}`, undefined, false);
         const propertiesOrderPath = `oneOf.${namespaceToPropertiesOrderPath(namespace)}`;
-        const currentPropertiesOrder: string[] = getIn(values, propertiesOrderPath);
+        const currentPropertiesOrder: string[] = getIn(values, propertiesOrderPath) ?? Object.keys(getIn(values, namespaceToPropertiesPath(namespace)));
         setFieldValue(propertiesOrderPath, currentPropertiesOrder.filter((p) => p !== propertyKey), false);
 
         setPropertyDialogOpen(false);
