@@ -59,6 +59,7 @@ import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { DataTalk } from "@firecms/datatalk";
 import { ReCaptchaEnterpriseProvider } from "firebase/app-check";
+import { getAuth } from "firebase/auth";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com"];
 
@@ -160,7 +161,10 @@ function App() {
             path: "datatalk",
             name: "DataTalk",
             group: "Content",
-            view: <DataTalk/>
+            view: <DataTalk projectId={firebaseConfig.projectId}
+                            getBackendAuthToken={() => {
+                                return getAuth(firebaseApp).currentUser?.getIdToken() ?? Promise.resolve("");
+                            }}/>
         },
         // {
         //     path: "board_test",

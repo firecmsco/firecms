@@ -325,7 +325,8 @@ function FireCMSAppAuthenticated({
                                                 logo={projectConfig.logo}
                                                 // Drawer={FireCMSCloudDrawer}
                                                 FireCMSAppBar={FireCMSAppBarComponent}>
-                                                <DataTalk projectId={projectConfig.projectId}/>
+                                                <DataTalk projectId={projectConfig.projectId}
+                                                          getBackendAuthToken={fireCMSBackend.getBackendAuthToken}/>
                                             </Scaffold>
                                         );
                                     }

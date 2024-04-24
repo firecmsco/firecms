@@ -26,7 +26,7 @@ import {
     useInitialiseFirebase
 } from "@firecms/cloud";
 
-import { backendFirebaseConfig } from "./backend_firebase_config";
+import { backendFirebaseConfig, backendFirebaseProdConfig } from "./backend_firebase_config";
 import { NewFireCMSProjectStart } from "./routes/NewFireCMSProjectStart";
 import { SassDebugView } from "./routes/SassDebugView";
 import { NewGoogleCloudProjectFlow } from "./routes/NewGoogleCloudProjectFlow";
@@ -57,8 +57,9 @@ export function SaasApp() {
         firebaseConfigError
     } = useInitialiseFirebase({
         name: "firecms-backend",
-        firebaseConfig: process.env.NODE_ENV !== "production" ? backendFirebaseConfig : undefined,
-        authDomain: backendFirebaseConfig.authDomain
+        // firebaseConfig: process.env.NODE_ENV !== "production" ? backendFirebaseConfig : undefined,
+        firebaseConfig: backendFirebaseProdConfig,
+        authDomain: backendFirebaseProdConfig.authDomain
     });
 
     const modeController = useBuildModeController();

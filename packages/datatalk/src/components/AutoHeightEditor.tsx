@@ -7,6 +7,7 @@ export type AutoHeightEditorProps = {
     value?: string;
     onChange?: (value?: string) => void;
     onMount?: (editor: any) => void;
+    maxWidth?: number;
 };
 
 export function AutoHeightEditor({
@@ -18,10 +19,6 @@ export function AutoHeightEditor({
     const editorRef = useRef<any>(null);
 
     function handleEditorDidMount(editor: any, monaco: any) {
-        console.log("editor mounted", {
-            editor,
-            monaco
-        })
         console.log(editor.layout, monaco.layout)
         editorRef.current = editor;
     }

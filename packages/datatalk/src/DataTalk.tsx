@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
-import { Button, TextareaAutosize } from "@firecms/ui";
-import { UserMessage } from "./components/UserMessage";
-import { SystemMessage } from "./components/SystemMessage";
+import { Button, Checkbox, Label, TextareaAutosize } from "@firecms/ui";
+import { MessageLayout } from "./components/MessageLayout";
 import { sendDataTalkCommand } from "./api";
 import { ChatMessage } from "./types";
 
@@ -32,28 +31,36 @@ export default async () => {
 }
 \`\`\``;
 
-export function DataTalk({ projectId }: { projectId: string }) {
+export function DataTalk({
+                             projectId,
+                             getBackendAuthToken
+                         }: {
+    projectId: string,
+    getBackendAuthToken: () => Promise<string>;
+}) {
 
     const [textInput, setTextInput] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
+    const [autoRunCode, setAutoRunCode] = useState<boolean>(false);
 
-    const [messages, setMessages] = useState<ChatMessage[]>([{
-        text: "Welcome to **DataTalk**! How can I help you?\n\nTry typing a command like `What collections are available?` or `Show me products cheaper than 50 euros`.",
-        user: "SYSTEM",
-        date: new Date()
-    },
-        {
-            text: sampleSystemMessage,
-            user: "SYSTEM",
-            date: new Date()
-        }, {
-            text: sampleSystemMessage2,
-            user: "SYSTEM",
-            date: new Date()
-        }
+    const [messages, setMessages] = useState<ChatMessage[]>([
+        // {
+        //     text: "Welcome to **DataTalk**! How can I help you?\n\nTry typing a command like `What collections are available?` or `Show me products cheaper than 50 euros`.",
+        //     user: "SYSTEM",
+        //     date: new Date()
+        // },
+        // {
+        //     text: sampleSystemMessage,
+        //     user: "SYSTEM",
+        //     date: new Date()
+        // }, {
+        //     text: sampleSystemMessage2,
+        //     user: "SYSTEM",
+        //     date: new Date()
+        // }
     ]);
 
-    const onSubmit = (e: React.FormEvent) => {
+    const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!textInput) return;
         setLoading(true);
@@ -66,7 +73,9 @@ export function DataTalk({ projectId }: { projectId: string }) {
             }];
         setMessages(updatedMessages);
         setTextInput("");
-        sendDataTalkCommand(textInput, projectId, messages)
+
+        const firebaseToken = await getBackendAuthToken();
+        sendDataTalkCommand(firebaseToken, textInput, projectId, messages)
             .then((newMessage) => {
                 setMessages([
                     ...updatedMessages,
@@ -91,21 +100,27 @@ export function DataTalk({ projectId }: { projectId: string }) {
         <div className="h-full w-full flex flex-col bg-slate-100 dark:bg-gray-900">
             <div className="h-full overflow-auto" ref={containerRef}>
                 <div className="container mx-auto px-4 md:px-6 py-8 flex-1 flex flex-col gap-4">
+                    <Label
+                        className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800 w-fit self-end"
+                        htmlFor="autoRunCode"
+                    >
+                        <Checkbox id="autoRunCode"
+                                  checked={autoRunCode}
+                                  size={"small"}
+                                  onCheckedChange={setAutoRunCode}/>
+                        Run code automatically
+                    </Label>
                     {messages.map((message, index) => {
-                        if (message.user === "SYSTEM") {
-                            return (
-                                <SystemMessage key={index} text={message.text}/>
-                            );
-                        } else if (message.user === "USER") {
-                            return (
-                                <UserMessage key={index} text={message.text}/>
-                            );
-                        } else {
-                            console.error("Unmapped message type", message);
-                            return null;
-                        }
+                        return <MessageLayout key={message.date.toISOString() + index}
+                                              onRemove={() => {
+                                                  const newMessages = [...messages];
+                                                  newMessages.splice(index, 1);
+                                                  setMessages(newMessages);
+                                              }}
+                                              message={message}
+                                              autoRunCode={autoRunCode}/>;
                     })}
-                    {loading && <SystemMessage key="loading" loading={true}/>}
+                    {loading && <MessageLayout key="loading" loading={true}/>}
                 </div>
             </div>
             <div className="container sticky bottom-0 right-0 left-0 mx-auto px-4 md:px-6 pb-8 pt-4">

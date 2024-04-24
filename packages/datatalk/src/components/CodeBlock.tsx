@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as firestoreLibrary from "firebase/firestore";
 import { doc, DocumentReference, getFirestore, setDoc } from "firebase/firestore";
 import { cmsToFirestoreModel, firestoreToCMSModel } from "@firecms/firebase";
@@ -40,8 +40,13 @@ function ExecutionErrorView(props: { executionError: Error }) {
 
 export function CodeBlock({
                               initialCode,
-                              maxWidth
-                          }: { initialCode?: string, maxWidth?: string }) {
+                              maxWidth,
+                              autoRunCode
+                          }: {
+    initialCode?: string,
+    maxWidth?: number,
+    autoRunCode?: boolean
+}) {
 
     const textAreaRef = React.useRef<HTMLDivElement>(null);
     const [inputCode, setInputCode] = useState<string | undefined>(initialCode);
@@ -55,6 +60,14 @@ export function CodeBlock({
     const [consoleOutput, setConsoleOutput] = useState<string>("");
 
     const [executionError, setExecutionError] = useState<Error | null>(null);
+    const mounted = React.useRef(false);
+
+    useEffect(() => {
+        if (autoRunCode && !mounted.current && initialCode) {
+            executeQuery();
+        }
+        mounted.current = true;
+    }, []);
 
     const handleCodeChange = (value?: string) => {
         setInputCode(value);
@@ -76,17 +89,11 @@ export function CodeBlock({
 
     const executeQuery = async () => {
 
-        setCodeHasBeenRun(true);
-        setTimeout(() => {
-            textAreaRef.current?.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            })
-        }, 200);
-
         if (!inputCode) {
             return;
         }
+
+        setCodeHasBeenRun(true);
 
         setLoading(true);
         setExecutionError(null);
@@ -132,6 +139,12 @@ export function CodeBlock({
                     })
                     .finally(() => {
                         setLoading(false);
+                        setTimeout(() => {
+                            textAreaRef.current?.scrollIntoView({
+                                behavior: "smooth",
+                                block: "start"
+                            })
+                        }, 100);
                     });
             })
                 .catch((error) => {

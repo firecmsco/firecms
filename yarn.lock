@@ -2865,6 +2865,7 @@ __metadata:
   dependencies:
     "@firecms/collection_editor_firebase": ^3.0.0-beta.6
     "@firecms/core": ^3.0.0-beta.6
+    "@firecms/data_import_export": ^3.0.0-beta.6
     "@firecms/firebase": ^3.0.0-beta.6
     "@firecms/formex": ^3.0.0-beta.6
     "@firecms/schema_inference": ^3.0.0-beta.6
