@@ -71,10 +71,10 @@ function ProFeaturesPanels() {
 
 
                 <div className="mx-auto px-4 md:px-8">
-                    <table className="w-full text-xl border-none">
+                    <table className="w-full text-xl border-none table-auto">
                         <tbody>
                         {features.map((feature, index) => (
-                            <tr key={index} className={"border-none"}>
+                            <tr key={index} className={"border-none !bg-white"}>
                                 <td className="text-center border-none">{feature.icon}</td>
                                 <td className={"border-none"}>
                                     <div className={"h4"}>{feature.title}</div>

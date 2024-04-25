@@ -1,6 +1,6 @@
 ---
 id: eject_collections
-title: Eject Collections. Balancing the Power of Code with the Flexibility of No Code for Collection Management
+title: Eject Collections.
 sidebar_label: Eject Collections
 ---
 

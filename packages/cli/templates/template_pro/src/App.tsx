@@ -206,9 +206,8 @@ export function App() {
                             component = <CircularProgressCenter size={"large"}/>;
                         } else {
                             if (!canAccessMainView) {
-                                const LoginViewUsed = FirebaseLoginView;
                                 component = (
-                                    <LoginViewUsed
+                                    <FirebaseLoginView
                                         allowSkipLogin={false}
                                         signInOptions={signInOptions}
                                         firebaseApp={firebaseApp}
@@ -234,4 +233,3 @@ export function App() {
         </SnackbarProvider>
     );
 }
-

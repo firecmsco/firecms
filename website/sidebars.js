@@ -94,7 +94,8 @@ module.exports = {
         },
         "properties/conditional_fields",
         "properties/custom_fields",
-        "properties/custom_previews"
+        "properties/custom_previews",
+        "properties/reusing_properties"
       ]
     },
     "top_level_views",
