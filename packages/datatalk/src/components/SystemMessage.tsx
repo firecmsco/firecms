@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MarkdownElement, parseMarkdown } from "../utils/parser";
 import { CodeBlock } from "./CodeBlock";
 
@@ -16,11 +16,14 @@ export function SystemMessage({
 
     const [parsedElements, setParsedElements] = useState<MarkdownElement[] | null>();
 
+    const scrolled = useRef(false);
     useEffect(() => {
+        if (scrolled.current) return;
         if (text) {
             const markdownElements = parseMarkdown(text);
             setParsedElements(markdownElements);
             scrollInto();
+            scrolled.current = true;
         }
     }, [scrollInto, text]);
 
@@ -29,7 +32,7 @@ export function SystemMessage({
         {parsedElements && parsedElements.map((element, index) => {
             if (element.type === "html") {
                 return <div
-                    className={"max-w-full prose-sm dark:prose-invert prose-headings:font-title text-base text-gray-700 dark:text-gray-300"}
+                    className={"max-w-full prose dark:prose-invert prose-headings:font-title text-base text-gray-700 dark:text-gray-300"}
                     dangerouslySetInnerHTML={{ __html: element.content }}
                     key={index}/>;
             } else if (element.type === "code") {

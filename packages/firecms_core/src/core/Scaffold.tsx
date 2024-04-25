@@ -17,7 +17,7 @@ export interface ScaffoldProps<ExtraDrawerProps = object, ExtraAppbarProps = obj
     /**
      * Name of the app, displayed as the main title and in the tab title
      */
-    name: string;
+    name: React.ReactNode;
 
     /**
      * Logo to be displayed in the drawer of the CMS
@@ -112,9 +112,10 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                 }}>
 
                 <FireCMSAppBar title={name}
-                                        includeDrawer={includeDrawer}
-                                        drawerOpen={computedDrawerOpen}
-                                        {...fireCMSAppBarProps}/>
+                               includeDrawer={includeDrawer}
+                               logo={logo}
+                               drawerOpen={computedDrawerOpen}
+                               {...fireCMSAppBarProps}/>
 
                 <StyledDrawer
                     displayed={includeDrawer}

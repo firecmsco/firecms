@@ -20,11 +20,12 @@ export function MessageLayout({
 
     const scrollInto = useCallback(() => {
         setTimeout(() => {
+            console.log("scrolling")
             ref.current?.scrollIntoView({
                 behavior: "smooth",
-                block: "end"
+                block: "start"
             });
-        }, 120);
+        }, 220);
     }, []);
 
     useEffect(() => {

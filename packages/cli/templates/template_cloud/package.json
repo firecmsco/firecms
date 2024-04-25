@@ -7,7 +7,9 @@
     "dev": "vite --port 5001",
     "build": "vite build",
     "serve": "vite preview --port 5001",
-    "deploy": "run-s build && firecms deploy --project=[REPLACE_WITH_PROJECT_ID]"
+    "deploy": "run-s build && firecms deploy --project=[REPLACE_WITH_PROJECT_ID]",
+    "login": "firecms login",
+    "logout": "firecms logout"
   },
   "dependencies": {
     "@firecms/cloud": "^3.0.0-beta",

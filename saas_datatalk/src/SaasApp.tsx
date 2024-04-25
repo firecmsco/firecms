@@ -18,22 +18,17 @@ import {
 } from "@firecms/core";
 
 import { CenteredView } from "@firecms/ui";
-import {
-    FireCMSBackend,
-    FireCMSBackEndProvider,
-    FireCMSLoginView,
-    useBuildFireCMSBackend,
-    useInitialiseFirebase
-} from "@firecms/cloud";
+import { FireCMSBackend, FireCMSBackEndProvider, useBuildFireCMSBackend, useInitialiseFirebase } from "@firecms/cloud";
 
-import { backendFirebaseConfig, backendFirebaseProdConfig } from "./backend_firebase_config";
+import { backendFirebaseProdConfig } from "./backend_firebase_config";
 import { NewFireCMSProjectStart } from "./routes/NewFireCMSProjectStart";
 import { SassDebugView } from "./routes/SassDebugView";
 import { NewGoogleCloudProjectFlow } from "./routes/NewGoogleCloudProjectFlow";
 import { DataTalkMainPage } from "./routes/DataTalkMainPage";
-import { SaasScaffold } from "./components/SaasScaffold";
+import { DataTalkScaffold } from "./components/DataTalkScaffold";
 import { SaasAnalyticsProvider, useSaasAnalytics } from "./components/SaasAnalyticsProvider";
 import { DataTalkAppClient } from "./routes/DataTalkAppClient";
+import { DataTalkLoginView } from "./components/DataTalkLoginView";
 
 export type SaasClientController = {
     selectProject: (projectId?: string) => void;
@@ -164,11 +159,11 @@ export function SaasAppInternal({
     } else if (!fireCMSBackend.user) {
 
         component = <CenteredView maxWidth={"lg"}>
-            <FireCMSLoginView fireCMSBackend={fireCMSBackend}
-                              includeGoogleAdminScopes={adminRequiredForPath}
-                              includeLogo={true}
-                              includeGoogleDisclosure={false}
-                              includeTermsAndNewsLetter={true}/>
+            <DataTalkLoginView fireCMSBackend={fireCMSBackend}
+                               includeGoogleAdminScopes={adminRequiredForPath}
+                               includeLogo={true}
+                               includeGoogleDisclosure={false}
+                               includeTermsAndNewsLetter={true}/>
         </CenteredView>;
 
     } else if (backendFirebaseApp) {
@@ -190,8 +185,7 @@ export function SaasAppInternal({
 
                 <Route path={"*"}
                        element={
-                           <SaasScaffold
-                               includeLogo={true}
+                           <DataTalkScaffold
                                includeProjectSelect={!hideProjectSelect && (fireCMSBackend.availableProjectIds ?? [])?.length > 0}>
 
                                <Routes>
@@ -243,7 +237,7 @@ export function SaasAppInternal({
                                               </CenteredView>}/>
                                </Routes>
 
-                           </SaasScaffold>
+                           </DataTalkScaffold>
                        }
                 />
 

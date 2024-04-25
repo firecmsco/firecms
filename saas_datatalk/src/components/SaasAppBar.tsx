@@ -7,13 +7,11 @@ import { useSaasClientController } from "../SaasApp";
 import { Link, useNavigate } from "react-router-dom";
 
 export const SaasCMSAppBar = function SaasCMSAppBar({
-                                                        includeLogo,
                                                         title,
                                                         drawerOpen,
                                                         includeProjectSelect = true,
                                                         includeDrawer
                                                     }: FireCMSAppBarProps & {
-    includeLogo?: boolean;
     includeProjectSelect?: boolean;
     includeDrawer?: boolean;
 }) {
@@ -27,13 +25,6 @@ export const SaasCMSAppBar = function SaasCMSAppBar({
     return <FireCMSAppBar title={title}
                           drawerOpen={drawerOpen}
                           includeDrawer={includeDrawer}
-                          startAdornment={includeLogo &&
-                              <Link
-                                  to={"/"}>
-                                  <FireCMSLogo width={"32px"} height={"32px"} className={"mr-4 ml-2"}/>
-                              </Link>
-
-                          }
                           user={fireCMSBackend?.user ?? undefined}
                           endAdornment={includeProjectSelect && <ProjectsSelect key={"project_select"}/>}
                           dropDownActions={

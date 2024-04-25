@@ -6,7 +6,6 @@ import { SaasCMSAppBar } from "./SaasAppBar";
  * @group Core
  */
 export interface SaasScaffoldProps {
-    includeLogo?: boolean;
     includeProjectSelect?: boolean;
 }
 
@@ -16,22 +15,20 @@ export interface SaasScaffoldProps {
  * @constructor
  * @group Core
  */
-export const SaasScaffold = function SaasScaffold(props: PropsWithChildren<SaasScaffoldProps>) {
+export const DataTalkScaffold = function SaasScaffold(props: PropsWithChildren<SaasScaffoldProps>) {
 
     const {
         children,
         includeProjectSelect,
-        includeLogo
     } = props;
 
     const scaffoldProps: ScaffoldProps<{}, SaasScaffoldProps> = {
-        name: "FireCMS Cloud",
+        name: "",
         FireCMSAppBar: SaasCMSAppBar,
         includeDrawer: false,
         fireCMSAppBarProps: {
             includeDrawer: false,
             includeProjectSelect,
-            includeLogo
         }
     }
 

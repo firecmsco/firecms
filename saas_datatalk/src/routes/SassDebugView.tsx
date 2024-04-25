@@ -1,5 +1,5 @@
 import { CenteredView, Paper } from "@firecms/ui";
-import { FireCMSBackend, FireCMSLoginView } from "@firecms/cloud";
+import { FireCMSBackend, FireCMSCloudLoginView } from "@firecms/cloud";
 import { useEffect, useState } from "react";
 import { ProjectsSelect } from "../components/ProjectsSelect";
 
@@ -35,11 +35,11 @@ export function SassDebugView({
                 {JSON.stringify(fireCMSBackend.googleCredential, null, 2)}
             </pre>
             <ProjectsSelect/>
-            <FireCMSLoginView fireCMSBackend={fireCMSBackend}
-                              includeLogo={true}
-                              includeGoogleDisclosure={false}
-                              includeGoogleAdminScopes={true}
-                              includeTermsAndNewsLetter={false}/>
+            <FireCMSCloudLoginView fireCMSBackend={fireCMSBackend}
+                                   includeLogo={true}
+                                   includeGoogleDisclosure={false}
+                                   includeGoogleAdminScopes={true}
+                                   includeTermsAndNewsLetter={false}/>
         </Paper>
     </CenteredView>;
 }

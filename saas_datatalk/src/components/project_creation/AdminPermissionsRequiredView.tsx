@@ -1,5 +1,5 @@
 import { CenteredView, Typography } from "@firecms/ui";
-import { FireCMSBackend, FireCMSLoginView } from "@firecms/cloud";
+import { FireCMSBackend, FireCMSCloudLoginView } from "@firecms/cloud";
 import { useEffect } from "react";
 import { useSaasAnalytics } from "../SaasAnalyticsProvider";
 
@@ -21,11 +21,11 @@ export function AdminPermissionsRequiredView({ fireCMSBackend, projectId }: { fi
                 In order to create and manage projects, we need permissions to
                 create and manage Firebase projects on your behalf.
             </Typography>
-            <FireCMSLoginView fireCMSBackend={fireCMSBackend}
-                              includeGoogleAdminScopes={true}
-                              includeLogo={false}
-                              includeGoogleDisclosure={true}
-                              includeTermsAndNewsLetter={false}/>
+            <FireCMSCloudLoginView fireCMSBackend={fireCMSBackend}
+                                   includeGoogleAdminScopes={true}
+                                   includeLogo={false}
+                                   includeGoogleDisclosure={true}
+                                   includeTermsAndNewsLetter={false}/>
         </div>
     </CenteredView>;
 }

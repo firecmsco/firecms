@@ -145,14 +145,13 @@ export function CodeBlock({
                                 block: "start"
                             })
                         }, 100);
+                        resetConsole();
                     });
             })
                 .catch((error) => {
                     setExecutionError(error);
                     console.error("Error loading module:", error);
                     setLoading(false);
-                })
-                .finally(() => {
                     resetConsole();
                 });
         } catch (error: any) {
@@ -217,7 +216,7 @@ export function CodeBlock({
                 <ExecutionErrorView executionError={executionError}/>
             )}
 
-            {(queryResults || loading) && (
+            {(queryResults || loading || consoleOutput || executionResult) && (
                 <div className={cn("w-full rounded-lg shadow-sm overflow-hidden transition-all", {
                     "h-[480px]": queryResults,
                     "h-[92px]": !queryResults && loading
@@ -246,20 +245,21 @@ export function CodeBlock({
                         displayedColumnIds={displayedColumnIds}
                         properties={properties}/>}
 
-                </div>
-            )}
-            {(consoleOutput || executionResult) && (
-                <Paper className={"w-full p-4 min-h-[92px] font-mono text-sm overflow-auto"}>
-                    {consoleOutput && <pre className={"text-sm font-mono text-gray-700 dark:text-gray-300"}>
+                    {(consoleOutput || executionResult) && (
+                        <Paper className={"w-full p-4 min-h-[92px] font-mono text-sm overflow-auto"}>
+                            {consoleOutput && <pre className={"text-sm font-mono text-gray-700 dark:text-gray-300"}>
                                 {consoleOutput}
                             </pre>}
-                    {executionResult && (typeof executionResult === "string"
-                        ? executionResult
-                        : <pre className={"text-sm font-mono text-gray-700 dark:text-gray-300"}>
+                            {executionResult && (typeof executionResult === "string"
+                                ? executionResult
+                                : <pre className={"text-sm font-mono text-gray-700 dark:text-gray-300"}>
                                 {JSON.stringify(executionResult, null, 2)}
                             </pre>)}
-                </Paper>
+                        </Paper>
+                    )}
+                </div>
             )}
+
         </div>
     );
 }

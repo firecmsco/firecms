@@ -5,7 +5,8 @@ import {
     FireCMSAppBarProps,
     FireCMSPlugin,
     ModeControllerProvider,
-    Scaffold,
+    NavigationRoutes,
+    Scaffold, SideDialogs,
     SnackbarProvider,
     useBrowserTitleAndIcon,
     useBuildLocalConfigurationPersistence,
@@ -46,6 +47,7 @@ import { RolesView, UserManagement, UserManagementProvider, UsersView } from "@f
 import { useImportExportPlugin } from "@firecms/data_import_export";
 import { Typography } from "@firecms/ui";
 import { DataTalk } from "@firecms/datatalk";
+import { DataTalkDrawer } from "../components/DataTalkDrawer";
 
 export const DataTalkAppClient = function SaasCMSAppClient({
                                                                fireCMSBackend,
@@ -274,6 +276,7 @@ function FireCMSAppAuthenticated({
         firebaseApp
     });
 
+    const adminRoutes = useMemo(() => buildAdminRoutes(userManagement.usersLimit), [userManagement.usersLimit]);
     const navigationController = useBuildNavigationController({
         basePath,
         baseCollectionPath,
@@ -283,7 +286,6 @@ function FireCMSAppAuthenticated({
     });
 
     const plugins: FireCMSPlugin<any, any, any>[] = [importExportPlugin];
-    const adminRoutes = useMemo(() => buildAdminRoutes(userManagement.usersLimit), [userManagement.usersLimit]);
 
     return (
         <FireCMSBackEndProvider {...fireCMSBackend}>
@@ -307,11 +309,16 @@ function FireCMSAppAuthenticated({
                                   }) => {
 
                                     let component;
+                                    const title = <Typography variant="subtitle1"
+                                                              noWrap
+                                                              className={"ml-2 !font-sm uppercase font-mono"}>
+                                        DataTalk
+                                    </Typography>;
                                     if (loading) {
                                         component =
                                             <Scaffold
                                                 key={"project_scaffold_" + projectConfig.projectId}
-                                                name={projectConfig.projectName ?? ""}
+                                                name={title}
                                                 logo={projectConfig.logo}
                                                 includeDrawer={false}
                                                 FireCMSAppBar={FireCMSAppBarComponent}>
@@ -321,12 +328,16 @@ function FireCMSAppAuthenticated({
                                         component = (
                                             <Scaffold
                                                 key={"project_scaffold_" + projectConfig.projectId}
-                                                name={projectConfig.projectName ?? ""}
+                                                name={title}
                                                 logo={projectConfig.logo}
-                                                // Drawer={FireCMSCloudDrawer}
+                                                // includeDrawer={false}
+                                                Drawer={DataTalkDrawer}
                                                 FireCMSAppBar={FireCMSAppBarComponent}>
-                                                <DataTalk projectId={projectConfig.projectId}
-                                                          getBackendAuthToken={fireCMSBackend.getBackendAuthToken}/>
+                                                <NavigationRoutes
+                                                    homePage={<DataTalk projectId={projectConfig.projectId}
+                                                                        getBackendAuthToken={fireCMSBackend.getBackendAuthToken}/>}
+                                                    customRoutes={adminRoutes}/>
+                                                <SideDialogs/>
                                             </Scaffold>
                                         );
                                     }
