@@ -224,10 +224,15 @@ export function CodeBlock({
             )}
 
             {(queryResults || loading || consoleOutput || executionResult) && (
-                <div className={cn("w-full rounded-lg shadow-sm overflow-hidden transition-all", {
-                    "h-[480px]": queryResults,
-                    "h-[92px]": !queryResults && loading
-                })}>
+                <div
+                    style={{
+                        marginLeft: "-64px",
+                        width: "calc(100% + 64px)"
+                    }}
+                    className={cn("w-full rounded-lg shadow-sm overflow-hidden transition-all", {
+                        "h-[480px]": queryResults,
+                        "h-[92px]": !queryResults && loading
+                    })}>
                     {loading && <CircularProgressCenter/>}
 
                     {queryResults && properties && <EntityCollectionTable
