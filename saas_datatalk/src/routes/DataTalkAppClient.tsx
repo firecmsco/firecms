@@ -6,7 +6,8 @@ import {
     FireCMSPlugin,
     ModeControllerProvider,
     NavigationRoutes,
-    Scaffold, SideDialogs,
+    Scaffold,
+    SideDialogs,
     SnackbarProvider,
     useBrowserTitleAndIcon,
     useBuildLocalConfigurationPersistence,
@@ -302,6 +303,11 @@ function FireCMSAppAuthenticated({
                                 entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
                                 onAnalyticsEvent={onAnalyticsEvent}
                                 plugins={plugins}
+                                components={{
+                                    missingReference: () => <Typography variant={"body2"}>
+                                        References are not implemented
+                                    </Typography>
+                                }}
                             >
                                 {({
                                       context,

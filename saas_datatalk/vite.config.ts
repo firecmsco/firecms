@@ -78,7 +78,7 @@ export default defineConfig(({ command, mode }) => {
                 "@firecms/data_enhancement": build ? path.resolve(__dirname, "../packages/data_enhancement") : path.resolve(__dirname, "../packages/data_enhancement/src"),
                 "@firecms/data_import_export": build ? path.resolve(__dirname, "../packages/data_import_export") : path.resolve(__dirname, "../packages/data_import_export/src"),
                 "@firecms/schema_inference": build ? path.resolve(__dirname, "../packages/schema_inference") : path.resolve(__dirname, "../packages/schema_inference/src"),
-                "@firecms/datatalk": build ? path.resolve(__dirname, "../packages/datatalk") : path.resolve(__dirname, "../packages/datatalk/src")
+                "@firecms/datatalk":  path.resolve(__dirname, "../packages/datatalk/src")
             }
         }
     });

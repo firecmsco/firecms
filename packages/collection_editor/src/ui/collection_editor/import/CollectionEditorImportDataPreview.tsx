@@ -47,6 +47,7 @@ export function CollectionEditorImportDataPreview({
             key: p,
             disabled: false
         }))}
-        properties={properties}/>
+        properties={properties}
+        enablePopupIcon={false}/>
 
 }

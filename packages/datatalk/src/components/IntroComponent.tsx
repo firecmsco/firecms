@@ -13,7 +13,7 @@ export function IntroComponent({ onPromptSuggestionClick }: { onPromptSuggestion
             <Typography paragraph={true} className={"ml-4 my-2 mb-6"}>
                 Here are some examples of things you can ask:
             </Typography>
-            <div className={"flex gap-4"}>
+            <div className={"flex gap-2 md:gap-4"}>
                 <PromptSuggestion onClick={onPromptSuggestionClick}
                                   prompt={"What can you do?"}/>
                 <PromptSuggestion onClick={onPromptSuggestionClick}
@@ -25,6 +25,9 @@ export function IntroComponent({ onPromptSuggestionClick }: { onPromptSuggestion
             </div>
             <Typography variant={"caption"} color={"secondary"} paragraph={true} className={"ml-4 my-2"}>
                 Note that these sample prompts are generic and may not work with your specific data.
+            </Typography>
+            <Typography variant={"caption"} color={"secondary"} paragraph={true} className={"ml-4 my-2"}>
+                You can&apos;t add additional imports or dependencies to the code snippets.
             </Typography>
         </div>
     );

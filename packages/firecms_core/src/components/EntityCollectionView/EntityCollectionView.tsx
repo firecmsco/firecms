@@ -603,6 +603,7 @@ export const EntityCollectionView = React.memo(
                     key={`collection_table_${fullPath}`}
                     additionalFields={additionalFields}
                     tableController={tableController}
+                    enablePopupIcon={true}
                     displayedColumnIds={displayedColumnIds}
                     onSizeChanged={onSizeChanged}
                     onEntityClick={onEntityClick}

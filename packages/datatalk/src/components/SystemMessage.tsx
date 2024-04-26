@@ -39,6 +39,7 @@ export function SystemMessage({
                 return <CodeBlock key={index}
                                   autoRunCode={autoRunCode}
                                   initialCode={element.content}
+                                  onCodeRun={scrollInto}
                                   maxWidth={containerWidth ? containerWidth - 90 : undefined}/>;
             } else {
                 console.error("Unknown element type", element);

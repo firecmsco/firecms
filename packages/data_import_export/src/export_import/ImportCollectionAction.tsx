@@ -403,6 +403,7 @@ export function ImportDataPreview<M extends Record<string, any>>({
             dataLoading: false,
             noMoreToLoad: false
         }}
+        enablePopupIcon={false}
         endAdornment={<div className={"h-12"}/>}
         filterable={false}
         sortable={false}

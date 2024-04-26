@@ -74,7 +74,8 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
      emptyComponent,
      getIdColumnWidth,
      onTextSearchClick,
-     textSearchLoading
+     textSearchLoading,
+     enablePopupIcon
  }: EntityCollectionTableProps<M>) {
 
     const ref = useRef<HTMLDivElement>(null);
@@ -149,6 +150,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
                         height={getRowHeight(size)}
                         entity={entity}
                         disabled={disabled}
+                        enablePopupIcon={enablePopupIcon}
                         path={entity.path}/>
                     : renderSkeletonText()
                 }

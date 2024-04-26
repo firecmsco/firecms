@@ -19,7 +19,6 @@ export function AutoHeightEditor({
     const editorRef = useRef<any>(null);
 
     function handleEditorDidMount(editor: any, monaco: any) {
-        console.log(editor.layout, monaco.layout)
         editorRef.current = editor;
     }
 
@@ -29,7 +28,6 @@ export function AutoHeightEditor({
 
     useEffect(() => {
         if (editorRef.current && maxWidth) {
-            console.log("layout", maxWidth, height)
             editorRef.current.layout({
                 width: maxWidth,
                 height: height
@@ -41,7 +39,7 @@ export function AutoHeightEditor({
     return <Editor
         height={height + "px"}
         theme={mode === "dark" ? "vs-dark" : "light"}
-        className={"rounded-lg overflow-hidden flex-1 border dark:border-gray-800"}
+        className={"rounded-lg flex-1 border dark:border-gray-800"}
         defaultLanguage="javascript"
         value={value}
         onChange={onChange}

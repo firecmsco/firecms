@@ -291,6 +291,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
                         displayedColumnIds={displayedColumnIds}
                         onEntityClick={onEntityClick}
                         tableController={tableController}
+                        enablePopupIcon={false}
                         tableRowActionsBuilder={tableRowActionsBuilder}
                         title={<Typography variant={"subtitle2"}>
                             {collection.singularName ? `Select ${collection.singularName}` : `Select from ${collection.name}`}

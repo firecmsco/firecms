@@ -46,6 +46,7 @@ export interface PropertyTableCellProps<T extends CMSType> {
     entity: Entity<any>;
     path: string;
     disabled: boolean;
+    enablePopupIcon?: boolean;
 }
 
 function isStorageProperty(property: ResolvedProperty) {
@@ -74,7 +75,8 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                                                                      path,
                                                                                      entity,
                                                                                      readonly,
-                                                                                     disabled: disabledProp
+                                                                                     disabled: disabledProp,
+                                                                                     enablePopupIcon = true
                                                                                  }: PropertyTableCellProps<T>) {
 
         const {
@@ -401,7 +403,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
 
         if (!innerComponent) {
             allowScroll = false;
-            showExpandIcon = selected && !innerComponent && !disabled && !readOnlyProperty;
+            showExpandIcon = enablePopupIcon && selected && !innerComponent && !disabled && !readOnlyProperty;
             innerComponent = (
                 <PropertyPreview width={width}
                                  height={height}

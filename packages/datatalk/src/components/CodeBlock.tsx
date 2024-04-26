@@ -16,6 +16,7 @@ import { buildPropertiesOrder } from "@firecms/schema_inference";
 import { AutoHeightEditor } from "./AutoHeightEditor";
 import { getPropertiesFromData } from "@firecms/collection_editor_firebase";
 import { BasicExportAction } from "@firecms/data_import_export";
+import { extractStringLiterals } from "../utils/extract_literals";
 
 // @ts-ignore
 window.firestoreLibrary = firestoreLibrary
@@ -41,11 +42,15 @@ function ExecutionErrorView(props: { executionError: Error }) {
 export function CodeBlock({
                               initialCode,
                               maxWidth,
-                              autoRunCode
+                              sourceLoading,
+                              autoRunCode,
+                              onCodeRun
                           }: {
     initialCode?: string,
+    sourceLoading?: boolean,
     maxWidth?: number,
-    autoRunCode?: boolean
+    autoRunCode?: boolean,
+    onCodeRun?: () => void
 }) {
 
     const textAreaRef = React.useRef<HTMLDivElement>(null);
@@ -63,20 +68,21 @@ export function CodeBlock({
     const mounted = React.useRef(false);
 
     useEffect(() => {
-        if (autoRunCode && !mounted.current && initialCode) {
+        setInputCode(initialCode);
+        if (autoRunCode && !mounted.current && initialCode && !sourceLoading) {
             executeQuery();
         }
         mounted.current = true;
-    }, []);
+    }, [sourceLoading, initialCode, autoRunCode]);
 
     const handleCodeChange = (value?: string) => {
         setInputCode(value);
     };
 
-    async function displayQuerySnapshotData(querySnapshot: firestoreLibrary.QuerySnapshot) {
+    async function displayQuerySnapshotData(querySnapshot: firestoreLibrary.QuerySnapshot, priorityKeys?: string[]) {
         const docs = querySnapshot.docs.map((doc: any) => doc.data());
         const inferredProperties = await getPropertiesFromData(docs);
-        const inferredPropertiesOrder = buildPropertiesOrder(inferredProperties);
+        const inferredPropertiesOrder = buildPropertiesOrder(inferredProperties, priorityKeys);
         const entities = querySnapshot.docs.map((doc) => ({
             id: doc.id,
             path: doc.ref.path,
@@ -93,13 +99,15 @@ export function CodeBlock({
             return;
         }
 
+        console.log("Executing code", inputCode);
+
         setCodeHasBeenRun(true);
 
         setLoading(true);
         setExecutionError(null);
 
         try {
-            channelConsole((...args) => {
+            pipeConsoleLog((...args) => {
                 setConsoleOutput((prev) => prev + Array.from(args).join(" ") + "\n");
             });
             const encodedJs = encodeURIComponent(inputCode);
@@ -126,7 +134,8 @@ export function CodeBlock({
                         }
 
                         if (codeResult instanceof firestoreLibrary.QuerySnapshot) {
-                            return displayQuerySnapshotData(codeResult);
+                            const priorityKeys = extractStringLiterals(inputCode);
+                            return displayQuerySnapshotData(codeResult, priorityKeys);
                         } else if (typeof codeExport === "undefined") {
                             return setExecutionResult("Code executed successfully");
                         } else {
@@ -139,20 +148,15 @@ export function CodeBlock({
                     })
                     .finally(() => {
                         setLoading(false);
-                        setTimeout(() => {
-                            textAreaRef.current?.scrollIntoView({
-                                behavior: "smooth",
-                                block: "start"
-                            })
-                        }, 100);
-                        resetConsole();
+                        onCodeRun?.();
+                        resetConsolePipe();
                     });
             })
                 .catch((error) => {
                     setExecutionError(error);
                     console.error("Error loading module:", error);
                     setLoading(false);
-                    resetConsole();
+                    resetConsolePipe();
                 });
         } catch (error: any) {
             setLoading(false);
@@ -197,7 +201,10 @@ export function CodeBlock({
         }));
 
     return (
-        <div className={"flex flex-col my-4 gap-2 "}>
+        <div className={"flex flex-col my-4 gap-2"}
+             style={{
+                 maxWidth: maxWidth ? maxWidth + "px" : undefined
+             }}>
 
             <div className={"flex flex-row w-full gap-4"}
                  ref={textAreaRef}>
@@ -236,6 +243,7 @@ export function CodeBlock({
                             properties={properties}
                             propertiesOrder={propertiesOrder ?? undefined}
                         />}
+                        enablePopupIcon={false}
                         sortable={false}
                         tableController={{
                             data: queryResults,
@@ -264,16 +272,40 @@ export function CodeBlock({
     );
 }
 
+const originalConsoleDebug = console.debug;
 const originalConsoleLog = console.log;
+const originalConsoleError = console.error;
+const originalConsoleWarn = console.warn;
+const originalConsoleInfo = console.info;
 
-function resetConsole() {
+function resetConsolePipe() {
+    console.debug = originalConsoleDebug;
     console.log = originalConsoleLog;
+    console.error = originalConsoleError;
+    console.warn = originalConsoleWarn;
+    console.info = originalConsoleInfo;
 }
 
-function channelConsole(onConsoleLog: (...message: any) => void) {
+function pipeConsoleLog(onConsoleLog: (...message: any) => void) {
+    console.debug = function (message) {
+        onConsoleLog(message);
+        originalConsoleDebug(message);
+    };
     console.log = function (message) {
         onConsoleLog(message);
         originalConsoleLog(message);
+    };
+    console.error = function (message) {
+        onConsoleLog(message);
+        originalConsoleError(message);
+    };
+    console.warn = function (message) {
+        onConsoleLog(message);
+        originalConsoleWarn(message);
+    };
+    console.info = function (message) {
+        onConsoleLog(message);
+        originalConsoleInfo(message);
     };
 }
 
