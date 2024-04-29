@@ -272,7 +272,7 @@ export function CollectionDetailsForm({
                                 <div className={"col-span-12"}>
                                     <Select
                                         name="customId"
-                                        label="Data IDs generation"
+                                        label="Document IDs generation"
                                         position={"item-aligned"}
                                         disabled={customIdValue === "code_defined"}
                                         onValueChange={(v) => {

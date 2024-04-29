@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigationController } from "@firecms/core";
-import { Button, CloseIcon, Container, Dialog, DialogContent, IconButton, } from "@firecms/ui";
+import { Button, Chip, CloseIcon, Container, Dialog, DialogContent, IconButton, } from "@firecms/ui";
 import { useNavigate } from "react-router-dom";
 import { UpgradeToPlusButton } from "./UpgradeToPlusButton";
 
@@ -79,7 +79,7 @@ export function PlansComparison() {
                 <ul>
                     <li className={"ml-8 list-disc"}>Everything in the free tier</li>
                     <li className={"ml-8 list-disc"}>Local text search</li>
-                    <li className={"ml-8 list-disc"}>Custom fields and custom views</li>
+                    <li className={"ml-8 list-disc"}>Custom form fields and custom views</li>
                     <li className={"ml-8 list-disc"}>Unlimited users and roles</li>
                     <li className={"ml-8 list-disc"}>Unlimited data export</li>
                     <li className={"ml-8 list-disc"}>Theme and logo customization</li>
@@ -89,6 +89,10 @@ export function PlansComparison() {
             </div>
 
             <div className={"flex flex-col gap-4 items-center justify-center mt-8"}>
+
+                <Chip colorScheme={"yellowLight"} className={"font-semibold"}>
+                    ONE MONTH FREE TRIAL
+                </Chip>
                 <UpgradeToPlusButton includePriceSelect={true}
                                      includePriceLabel={false}
                                      largePriceLabel={true}/>
@@ -151,7 +155,7 @@ export function PlansComparison() {
 
             {/*three columns layout*/}
             <div
-                className="flex flex-col items-center lg:grid lg:grid-cols-3 gap-4 mt-8 w-full mx-auto"
+                className="flex flex-col items-center lg:grid lg:grid-cols-3 gap-4 mt-2 w-full mx-auto"
             >
                 {freeTier}
                 {plusTier}

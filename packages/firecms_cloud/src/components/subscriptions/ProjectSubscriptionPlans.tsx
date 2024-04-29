@@ -92,7 +92,7 @@ export function ProjectSubscriptionPlans({ uid }: {
                                 logo customization
                             </li>
                             <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>
-                                Custom fields and custom views
+                                Custom form fields and custom views
                             </li>
                             <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>
                                 Custom user roles

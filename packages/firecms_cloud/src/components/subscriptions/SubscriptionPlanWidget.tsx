@@ -30,7 +30,7 @@ export function SubscriptionPlanWidget({ message, showForPlans, includeCTA = tru
                 onClick={() => setDialogOpen(true)}>
                 More info
             </Button>}>
-            <div>This project is currently in the <PlanChip subscriptionPlan={subscriptionPlan}/></div>
+            <div>This project is currently in the <PlanChip subscriptionPlan={subscriptionPlan}/> Try out all the PLUS features for free!</div>
             <div>{message}</div>
         </Alert>
 

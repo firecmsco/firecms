@@ -2,7 +2,7 @@ import React from "react";
 import {
     AdditionalFieldDelegate,
     CollectionSize,
-    Entity, EntityCollection,
+    Entity,
     EntityTableController,
     FilterValues,
     ResolvedProperties,
@@ -12,12 +12,15 @@ import {
 } from "../../types";
 import { OnCellValueChange, OnColumnResizeParams, UniqueFieldValidator } from "../common/types";
 
-
 /**
  * @group Collection components
  */
 export type EntityCollectionTableProps<M extends Record<string, any>,
     UserType extends User = User> = {
+
+    className?: string;
+
+    style?: React.CSSProperties;
 
     /**
      * Display these entities as selected

@@ -51,7 +51,7 @@ import {
     CloudErrorView,
     FireCMSCloudDrawer,
     FireCMSDataEnhancementSubscriptionMessage,
-    FireCMSLoginView,
+    FireCMSCloudLoginView,
     ProjectSettings,
     SubscriptionPlanWidget
 } from "./components";
@@ -133,7 +133,7 @@ export function FireCMSCloudApp({
         component = <FullLoadingView projectId={projectId} text={"Auth loading"}/>;
     } else if (!fireCMSBackend.user) {
         component = <CenteredView maxWidth={"lg"}>
-            <FireCMSLoginView
+            <FireCMSCloudLoginView
                 fireCMSBackend={fireCMSBackend}
                 includeLogo={true}
                 includeGoogleAdminScopes={false}

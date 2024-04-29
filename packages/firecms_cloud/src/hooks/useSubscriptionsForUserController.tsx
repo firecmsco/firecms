@@ -193,6 +193,8 @@ export function useSubscriptionsForUserController({
             collect_shipping_address: false,
             allow_promotion_codes: true,
             line_items: [subscriptionPricesRequest],
+            trial_from_plan: true,
+            trial_period_days: 28,
             success_url: `${window.location.origin}${window.location.pathname}`,
             cancel_url: `${window.location.origin}${window.location.pathname}`,
             metadata: {

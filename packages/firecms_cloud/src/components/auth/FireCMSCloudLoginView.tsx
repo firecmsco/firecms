@@ -5,7 +5,7 @@ import { ErrorView, FireCMSLogo } from "@firecms/core";
 import { GoogleLoginButton } from "./GoogleLoginButton";
 import { FireCMSBackend } from "../../types";
 
-export interface FireCMSLoginViewProps {
+export interface FireCMSCloudLoginViewProps {
     fireCMSBackend: FireCMSBackend;
     includeGoogleAdminScopes: boolean;
     includeLogo: boolean;
@@ -19,13 +19,13 @@ export interface FireCMSLoginViewProps {
  * @constructor
  * @group Firebase
  */
-export function FireCMSLoginView({
+export function FireCMSCloudLoginView({
                                      fireCMSBackend,
                                      includeGoogleAdminScopes,
                                      includeLogo,
                                      includeGoogleDisclosure,
                                      includeTermsAndNewsLetter
-                                 }: FireCMSLoginViewProps) {
+                                 }: FireCMSCloudLoginViewProps) {
 
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(false);

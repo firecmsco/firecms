@@ -42,6 +42,8 @@ import { SelectableTable } from "../SelectableTable/SelectableTable";
  */
 export const EntityCollectionTable = function EntityCollectionTable<M extends Record<string, any>, UserType extends User>
 ({
+     className,
+     style,
      forceFilter,
      actionsStart,
      actions,
@@ -290,6 +292,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
     return (
 
         <div ref={ref}
+             style={style}
              className="h-full w-full flex flex-col bg-white dark:bg-gray-950">
 
             <CollectionTableToolbar
