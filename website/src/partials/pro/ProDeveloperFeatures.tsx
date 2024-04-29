@@ -75,7 +75,7 @@ export function ProDeveloperFeatures() {
                     </div>
 
                     <SyntaxHighlighter
-                        className={clsx("mt-16 p-4 max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid", defaultBorderMixin)}
+                        className={clsx("mt-16 p-4 overflow-x-auto md:max-w-full overflow-y-hidden border border-solid", defaultBorderMixin)}
                         language={"typescript"}
                         showLineNumbers={false}
                         style={dracula}

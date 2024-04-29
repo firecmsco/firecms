@@ -44,11 +44,15 @@ function ProPage() {
 
                     <ProDeveloperFeatures/>
 
-                    <Panel color={"gray"} includePadding={true}>
+                    <Panel color={"gray"} includePadding={true} innerClassName={"flex flex-col items-center"}>
                         <h2 className={"h2 mb-3 uppercase font-mono text-center mx-auto"}>
                             LEARN MORE ABOUT FIRECMS PRO
                         </h2>
                         <HeroProButtons/>
+                        <div
+                            className={"items-center select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
+                            yarn create firecms-app --pro
+                        </div>
                     </Panel>
 
                 </main>

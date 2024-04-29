@@ -26,7 +26,7 @@ export function FireCMSCloudVersions() {
                     <li className={"list-disc"}>Unlimited projects</li>
                     <li className={"list-disc"}>Unlimited collections</li>
                     <li className={"list-disc"}>All available form fields</li>
-                    <li className={"list-disc"}>Custom fields and custom views</li>
+                    <li className={"list-disc"}>Custom form fields and custom views</li>
                     <li className={"list-disc"}>Access to a 40+ first class components library</li>
                     <li className={"list-disc"}>Schema editor and data inference</li>
                     <li className={"list-disc"}>Advanced data import and export</li>
@@ -61,6 +61,10 @@ export function FireCMSCloudVersions() {
                     <li className={"list-disc"}>Custom user roles</li>
                     <li className={"list-disc"}>GPT-4 content generation</li>
                 </ul>
+            </div>
+
+            <div className={"rounded-lg w-fit h-fit font-regular inline-flex gap-1"}>
+                ONE MONTH FREE TRIAL
             </div>
             <div className={"text-center mt-4 w-full"}>
                 {/*<span className={"text-2xl block font-bold line-through"}>€11.99 user/month</span>*/}

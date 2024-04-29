@@ -66,9 +66,17 @@ export function HeroPro({
                 <h2 className={"h2 mt-0 uppercase font-mono"}>
                     Try FireCMS PRO at the <b>same price</b> as FireCMS Cloud
                 </h2>
-                <div
-                    className={"mt-8 select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
-                    yarn create firecms-app --pro
+                <div className={"flex flex-row gap-4 mt-8"}>
+                    <div
+                        className={" select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
+                        yarn create firecms-app --pro
+                    </div>
+                    <a
+                        className={CTAButtonDarkMixin + " w-full lg:w-auto "}
+                        href={"docs/pro"}
+                    >
+                        See the docs
+                    </a>
                 </div>
             </Panel>
             <div className={"relative"}>
