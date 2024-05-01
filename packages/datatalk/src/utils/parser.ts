@@ -16,7 +16,7 @@ export function parseMarkdown(text: string): MarkdownElement[] {
 
     for (const line of lines) {
         // Check if we encounter the start or end of a code block
-        if (line.startsWith("```javascript") || (line.startsWith("```") && !inCodeBlock)) {
+        if (line.trim().startsWith("```javascript") || (line.startsWith("```") && !inCodeBlock)) {
             // If buffer has content, add it as markdown element
             if (buffer.length) {
                 elements.push({
@@ -29,7 +29,7 @@ export function parseMarkdown(text: string): MarkdownElement[] {
             continue;
         }
         // Check if we encounter the end of a code block
-        else if (line.startsWith("```") && inCodeBlock) {
+        else if (line.trim().startsWith("```") && inCodeBlock) {
             elements.push({
                 type: "code",
                 content: buffer.join("\n")

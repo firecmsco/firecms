@@ -21,11 +21,6 @@ import { extractStringLiterals } from "../utils/extract_literals";
 // @ts-ignore
 window.firestoreLibrary = firestoreLibrary
 
-const sampleQuery = `export default async () => {
-const productsRef = collection(getFirestore(), "products");
-return getDocs(query(productsRef, where("price", ">", 500)));
-}`;
-
 function ExecutionErrorView(props: { executionError: Error }) {
     const message = props.executionError.message;
     const urlRegex = /https?:\/\/[^\s]+/g;
@@ -136,6 +131,12 @@ export function CodeBlock({
                         if (codeResult instanceof firestoreLibrary.QuerySnapshot) {
                             const priorityKeys = extractStringLiterals(inputCode);
                             return displayQuerySnapshotData(codeResult, priorityKeys);
+                        } else if (codeResult instanceof firestoreLibrary.DocumentReference) {
+                            return setExecutionResult("Document added successfully with reference: " + codeResult.path);
+                        } else if (codeResult instanceof firestoreLibrary.DocumentSnapshot) {
+                            const res = JSON.stringify(codeResult.data(), null, 2);
+                            originalConsoleLog("Document data", res);
+                            return setExecutionResult(res);
                         } else if (typeof codeExport === "undefined") {
                             return setExecutionResult("Code executed successfully");
                         } else {
@@ -226,8 +227,8 @@ export function CodeBlock({
             {(queryResults || loading || consoleOutput || executionResult) && (
                 <div
                     style={{
-                        marginLeft: "-64px",
-                        width: "calc(100% + 64px)"
+                        marginLeft: queryResults ? "-64px" : undefined,
+                        width: queryResults ? "calc(100% + 64px)" : undefined
                     }}
                     className={cn("w-full rounded-lg shadow-sm overflow-hidden transition-all", {
                         "h-[480px]": queryResults,
@@ -259,15 +260,13 @@ export function CodeBlock({
                         properties={properties}/>}
 
                     {(consoleOutput || executionResult) && (
-                        <Paper className={"w-full p-4 min-h-[92px] font-mono text-sm overflow-auto"}>
+                        <Paper className={"w-full p-4 min-h-[92px] font-mono text-xs overflow-auto rounded-lg"}>
                             {consoleOutput && <pre className={"text-sm font-mono text-gray-700 dark:text-gray-300"}>
                                 {consoleOutput}
                             </pre>}
-                            {executionResult && (typeof executionResult === "string"
-                                ? executionResult
-                                : <pre className={"text-sm font-mono text-gray-700 dark:text-gray-300"}>
-                                {JSON.stringify(executionResult, null, 2)}
-                            </pre>)}
+                            {executionResult && <pre className={"text-xs font-mono text-gray-700 dark:text-gray-300"}>
+                                    {typeof executionResult === "string" ? executionResult : JSON.stringify(executionResult, null, 2)}
+                            </pre>}
                         </Paper>
                     )}
                 </div>
@@ -317,5 +316,3 @@ function pipeConsoleLog(onConsoleLog: (...message: any) => void) {
 function buildAuxScript() {
     return `${Object.keys(firestoreLibrary).map(key => `const ${key} = window.firestoreLibrary.${key};`).join("\n")}\n`;
 }
-
-console.log(Object.keys(firestoreLibrary))

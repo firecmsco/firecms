@@ -157,15 +157,6 @@ function App() {
             description: "This is an example of an additional view that is defined by the user",
             view: <ExampleCMSView/>
         },
-        {
-            path: "datatalk",
-            name: "DataTalk",
-            group: "Content",
-            view: <DataTalk projectId={firebaseConfig.projectId}
-                            getBackendAuthToken={() => {
-                                return getAuth(firebaseApp).currentUser?.getIdToken() ?? Promise.resolve("");
-                            }}/>
-        },
         // {
         //     path: "board_test",
         //     name: "Board test",

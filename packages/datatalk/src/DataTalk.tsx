@@ -1,84 +1,40 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Button, Checkbox, Label, SendIcon, TextareaAutosize, Tooltip } from "@firecms/ui";
 import { MessageLayout } from "./components/MessageLayout";
 import { streamDataTalkCommand } from "./api";
 import { ChatMessage } from "./types";
 import { IntroComponent } from "./components/IntroComponent";
 
-const sampleSystemMessage = `This is system message.
-
-- This is a list
-- This is another item
-- This is a third item
-
-\`\`\`javascript
-export default async () => {
-    const productsRef = collection(getFirestore(), "products");
-    return getDocs(query(productsRef, where("price", ">", 500)));
-}
-\`\`\``;
-
-const sampleSystemMessage2 = `This is a delete script
-
-\`\`\`javascript
-export default async () => {
-  const booksRef = collection(getFirestore(), "books");
-  const books = await getDocs(booksRef);
-  const batch = writeBatch(getFirestore());
-  books.forEach((doc) => {
-    batch.update(doc.ref, {thumbnail: deleteField()});
-  });
-  return await batch.commit();
-}
-\`\`\``;
-const sampleSystemMessage3 = `Get a user
-
-\`\`\`javascript
-export default async () => {
-  const userRef = doc(getFirestore(), "users", "user_id");
-  const userDoc = await getDoc(userRef);
-  if (userDoc.exists()) {
-    return userDoc.data();
-  } else {
-    // doc.data() will be undefined in this case
-    console.log("No such document!");
-  }
-}
-\`\`\``;
-
 export function DataTalk({
-                             projectId,
-                             getBackendAuthToken
+                             apiEndpoint,
+                             onAnalyticsEvent,
+                             getAuthToken
                          }: {
-    projectId: string,
-    getBackendAuthToken: () => Promise<string>;
+    onAnalyticsEvent?: (event: string, params?: any) => void,
+    apiEndpoint: string,
+    getAuthToken: () => Promise<string>
 }) {
 
     const [textInput, setTextInput] = useState<string>("");
 
-    // const [loadingMessageId, setLoadingMessageId] = useState<string | null>(null);
     const [autoRunCode, setAutoRunCode] = useState<boolean>(false);
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
 
-    const [messages, setMessages] = useState<ChatMessage[]>([
-        // {
-        //     text: "Welcome to **DataTalk**! How can I help you?\n\nTry typing a command like `What collections are available?` or `Show me products cheaper than 50 euros`.",
-        //     user: "SYSTEM",
-        //     date: new Date()
-        // },
-        // {
-        //     text: sampleSystemMessage,
-        //     user: "SYSTEM",
-        //     date: new Date()
-        // },
-        // {
-        //     text: sampleSystemMessage3,
-        //     user: "SYSTEM",
-        //     date: new Date()
-        // }
-    ]);
+    const scrollInto = useCallback((childRef: React.RefObject<HTMLDivElement>) => {
+        setTimeout(() => {
+            childRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }, 150);
+    }, []);
 
     const submit = async (message: string) => {
         if (!message) return;
+
+        if (onAnalyticsEvent) {
+            onAnalyticsEvent("message_sent", { message });
+        }
 
         const updatedMessages: ChatMessage[] = [
             ...messages,
@@ -98,9 +54,9 @@ export function DataTalk({
 
         setTextInput("");
 
-        const firebaseToken = await getBackendAuthToken();
+        const firebaseToken = await getAuthToken();
         let currentMessageResponse = "";
-        streamDataTalkCommand(firebaseToken, message, projectId, messages, (newDelta) => {
+        streamDataTalkCommand(firebaseToken, message, apiEndpoint, messages, (newDelta) => {
             currentMessageResponse += newDelta;
             setMessages([
                 ...updatedMessages,
@@ -111,7 +67,6 @@ export function DataTalk({
                     date: new Date()
                 }
             ]);
-            // console.log("New message", newDelta);
         })
             .then((newMessage) => {
                 setMessages([
@@ -130,7 +85,7 @@ export function DataTalk({
                     ...updatedMessages,
                     {
                         loading: false,
-                        text: "There was an error processing your command. Please try again.",
+                        text: "There was an error processing your command: " + e.message,
                         user: "SYSTEM",
                         date: new Date()
                     }
@@ -145,21 +100,10 @@ export function DataTalk({
         }
     };
 
-    const containerRef = useRef<HTMLDivElement>(null);
-
-    const scrollInto = useCallback((childRef: React.RefObject<HTMLDivElement>) => {
-        setTimeout(() => {
-            childRef.current?.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-        }, 150);
-    }, []);
-
     return (
 
         <div className="h-full w-full flex flex-col bg-slate-100 dark:bg-gray-900">
-            <div className="h-full overflow-auto" ref={containerRef}>
+            <div className="h-full overflow-auto">
                 <div className="container mx-auto px-4 md:px-6 py-8 flex-1 flex flex-col gap-4">
 
                     <Tooltip

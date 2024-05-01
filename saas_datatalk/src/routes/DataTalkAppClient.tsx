@@ -340,8 +340,9 @@ function FireCMSAppAuthenticated({
                                                 Drawer={DataTalkDrawer}
                                                 FireCMSAppBar={FireCMSAppBarComponent}>
                                                 <NavigationRoutes
-                                                    homePage={<DataTalk projectId={projectConfig.projectId}
-                                                                        getBackendAuthToken={fireCMSBackend.getBackendAuthToken}/>}
+                                                    homePage={<DataTalk
+                                                        apiEndpoint={"https://datatalkapi-drplyi3b6q-ey.a.run.app/datatalk/command?projectId=" + projectConfig.projectId}
+                                                        getAuthToken={fireCMSBackend.getBackendAuthToken}/>}
                                                     customRoutes={adminRoutes}/>
                                                 <SideDialogs/>
                                             </Scaffold>

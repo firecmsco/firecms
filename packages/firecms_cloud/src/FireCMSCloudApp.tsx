@@ -50,8 +50,8 @@ import { RESERVED_GROUPS, resolveCollectionConfigPermissions } from "./utils";
 import {
     CloudErrorView,
     FireCMSCloudDrawer,
-    FireCMSDataEnhancementSubscriptionMessage,
     FireCMSCloudLoginView,
+    FireCMSDataEnhancementSubscriptionMessage,
     ProjectSettings,
     SubscriptionPlanWidget
 } from "./components";
@@ -75,6 +75,7 @@ import {
     UserManagementProvider,
     UsersView
 } from "@firecms/user_management";
+import { DataTalk } from "@firecms/datatalk";
 
 const DOCS_LIMIT = 200;
 
@@ -475,7 +476,10 @@ function FireCMSAppAuthenticated({
         throw Error("You can only use FireCMSAppAuthenticated with an authenticated user");
     }
 
-    const adminRoutes = useMemo(() => buildAdminRoutes(userManagement.usersLimit), [userManagement.usersLimit]);
+    const adminRoutes = useMemo(() => buildAdminRoutes(userManagement.usersLimit,
+        true,
+        fireCMSBackend,
+        projectConfig), [userManagement.usersLimit]);
 
     const configPermissions: CollectionEditorPermissionsBuilder<User, PersistedCollection> = useCallback(({
                                                                                                               user,
@@ -650,9 +654,9 @@ function FireCMSAppAuthenticated({
 
 }
 
-function buildAdminRoutes(usersLimit?: number) {
+function buildAdminRoutes(usersLimit: number | undefined, includeDataTalk: boolean, fireCMSBackend: FireCMSBackend, projectConfig: ProjectConfig) {
 
-    return [
+    const views = [
         {
             path: "users",
             name: "CMS Users",
@@ -685,11 +689,26 @@ function buildAdminRoutes(usersLimit?: number) {
             hideFromNavigation: true,
             view: <ProjectSettings/>
         }
-    ].map(({
-               path,
-               name,
-               view
-           }) => <Route
+    ];
+
+    if (includeDataTalk) {
+        views.push({
+            path: "datatalk",
+            name: "DataTalk",
+            group: "Admin",
+            icon: "settings",
+            hideFromNavigation: true,
+            view: <DataTalk
+                apiEndpoint={"https://datatalkapi-drplyi3b6q-ey.a.run.app/datatalk/command?projectId=" + projectConfig.projectId}
+                getAuthToken={fireCMSBackend.getBackendAuthToken}/>
+        });
+
+    }
+    return views.map(({
+                          path,
+                          name,
+                          view
+                      }) => <Route
         key={"navigation_admin_" + path}
         path={path}
         element={view}
