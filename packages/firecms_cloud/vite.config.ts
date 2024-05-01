@@ -36,6 +36,7 @@ export default defineConfig(() => ({
             "@firecms/collection_editor_firebase": path.resolve(__dirname, "../collection_editor_firebase/src"),
             "@firecms/data_enhancement": path.resolve(__dirname, "../data_enhancement/src"),
             "@firecms/data_import_export": path.resolve(__dirname, "../data_import_export/src"),
+            "@firecms/datatalk": path.resolve(__dirname, "../datatalk/src"),
         }
     },
     plugins: [react({})]

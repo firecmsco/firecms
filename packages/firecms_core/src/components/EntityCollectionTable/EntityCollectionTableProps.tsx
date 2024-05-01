@@ -134,7 +134,9 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
     onTextSearchClick?: () => void;
 
     textSearchLoading?: boolean;
-}
+
+    enablePopupIcon: boolean;
+};
 
 export type GetPropertyForProps<M extends Record<string, any>> = {
     propertyKey: string,
@@ -144,5 +146,5 @@ export type GetPropertyForProps<M extends Record<string, any>> = {
 
 export type PropertyColumnConfig = {
     key: string,
-    disabled: boolean,
+    disabled?: boolean,
 };

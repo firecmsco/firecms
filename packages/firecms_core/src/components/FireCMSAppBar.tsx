@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Link as ReactLink } from "react-router-dom";
-import { ErrorBoundary } from "../components";
+import { ErrorBoundary, FireCMSLogo } from "../components";
 import {
     Avatar,
     cn,
@@ -18,7 +18,8 @@ import { useAuthController, useLargeLayout, useModeController, useNavigationCont
 import { User } from "../types";
 
 export type FireCMSAppBarProps<ADDITIONAL_PROPS = object> = {
-    title: string;
+
+    title: React.ReactNode;
     /**
      * A component that gets rendered on the upper side of the main toolbar
      */
@@ -35,6 +36,8 @@ export type FireCMSAppBarProps<ADDITIONAL_PROPS = object> = {
     className?: string;
 
     style?: React.CSSProperties;
+
+    logo?: string;
 
     user?: User;
 } & ADDITIONAL_PROPS;
@@ -57,6 +60,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                                                         includeDrawer,
                                                         className,
                                                         style,
+                                                        logo,
                                                         user: userProp
                                                     }: FireCMSAppBarProps) {
     const navigation = useNavigationController();
@@ -102,7 +106,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                     "w-[calc(100%-64px)]": includeDrawer && !(drawerOpen && largeLayout),
                     "w-[calc(100%-17rem)]": includeDrawer && (drawerOpen && largeLayout),
                     "duration-150": drawerOpen && largeLayout,
-                    fixed: true,
+                    fixed: true
                 },
                 className)}>
 
@@ -110,16 +114,27 @@ export const FireCMSAppBar = function FireCMSAppBar({
 
                 {startAdornment}
 
+
                 {navigation && <div className="mr-8 hidden lg:block">
                     <ReactLink
                         className="visited:text-inherit visited:dark:text-inherit"
                         to={navigation?.basePath ?? "/"}
                     >
-                        <Typography variant="subtitle1"
-                                    noWrap
-                                    className={"ml-2 !font-medium"}>
-                            {title}
-                        </Typography>
+                        <div className={"flex flex-row gap-4"}>
+                            {!includeDrawer && (logo
+                                ? <img src={logo}
+                                       alt="Logo"
+                                       className={cn("w-[32px] h-[32px]")}/>
+                                : <FireCMSLogo width={"32px"} height={"32px"}/>)}
+
+                            {typeof title === "string"
+                                ? <Typography variant="subtitle1"
+                                              noWrap
+                                              className={"ml-2 !font-medium"}>
+                                    {title}
+                                </Typography>
+                                : title}
+                        </div>
                     </ReactLink>
                 </div>}
 

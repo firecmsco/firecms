@@ -59,9 +59,13 @@ export function buildPropertyFromData(data: any[], property: Property, getType: 
     return mergeDeep(generatedProperty, property);
 }
 
-export function buildPropertiesOrder(properties: Properties<any>): string [] {
+export function buildPropertiesOrder(properties: Properties<any>, priorityKeys?: string[]): string [] {
+    const lowerCasePriorityKeys = (priorityKeys ?? []).map((key) => key.toLowerCase());
+
     function propOrder(s: string) {
         const k = s.toLowerCase();
+        if (lowerCasePriorityKeys.includes(k)) return 4;
+        if (k === "title" || k === "name") return 3;
         if (k === "title" || k === "name") return 3;
         if (k.includes("title") || k.includes("name")) return 2;
         if (k.includes("image") || k.includes("picture")) return 1;

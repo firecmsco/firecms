@@ -28,7 +28,7 @@ import {
     Tooltip,
     Typography,
 } from "@firecms/ui";
-import { downloadExport } from "./export";
+import { downloadEntitiesExport } from "./export";
 
 const DOCS_LIMIT = 500;
 
@@ -139,7 +139,7 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
                     ...exportConfig?.additionalFields?.map(column => column.key) ?? [],
                     ...collection.additionalFields?.map(field => field.key) ?? []
                 ];
-                downloadExport(data, additionalData, collection, flattenArrays, additionalHeaders, exportType, dateExportType);
+                downloadEntitiesExport(data, additionalData, collection.properties, collection.propertiesOrder, collection.name, flattenArrays, additionalHeaders, exportType, dateExportType);
                 onAnalyticsEvent?.("export_collection_success", {
                     collection: collection.path
                 });

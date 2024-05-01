@@ -10,6 +10,7 @@
     "../firecms_core/src",
     "../ui/src",
     "../collection_editor/src",
+    "../collection_editor_firebase/src",
     "../data_enhancement/src",
     "../schema_inference/src",
     "../formex/src",

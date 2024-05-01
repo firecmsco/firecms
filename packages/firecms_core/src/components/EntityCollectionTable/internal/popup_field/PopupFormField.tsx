@@ -41,7 +41,7 @@ interface PopupFormFieldProps<M extends Record<string, any>> {
      * Callback when the value of a cell has been edited
      * @param params
      */
-    onCellValueChange?: (params: OnCellValueChangeParams<any, M>) => Promise<void> | void;
+    onCellValueChange?: (params: OnCellValueChangeParams<any, any>) => Promise<void> | void;
 }
 
 export function PopupFormField<M extends Record<string, any>>(props: PopupFormFieldProps<M>) {
@@ -205,12 +205,10 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             return onCellValueChange({
                 value: values[propertyKey as string],
                 propertyKey: propertyKey as string,
-                entity,
+                data: entity,
                 setError: setSavingError,
                 onValueUpdated: () => {
                 },
-                fullPath: path,
-                context: fireCMSContext
             });
         }
         return Promise.resolve();

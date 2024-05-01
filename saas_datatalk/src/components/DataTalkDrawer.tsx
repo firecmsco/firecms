@@ -1,0 +1,157 @@
+import React, { useCallback } from "react";
+import {
+    DrawerNavigationItem,
+    DrawerProps,
+    IconForView,
+    TopNavigationResult,
+    useAuthController,
+    useNavigationController
+} from "@firecms/core";
+import { AddIcon, Button, cn, IconButton, Menu, MenuItem, MoreVertIcon, Tooltip, Typography, } from "@firecms/ui";
+import { useCollectionEditorController } from "@firecms/collection_editor";
+import { useNavigate } from "react-router-dom";
+import { RESERVED_GROUPS } from "@firecms/cloud";
+
+export const ADMIN_VIEWS_CONFIG = [
+    {
+        path: "users",
+        name: "Users",
+        group: "Admin",
+        icon: "face"
+    },
+    // {
+    //     path: "roles",
+    //     name: "Roles",
+    //     group: "Admin",
+    //     icon: "gpp_good"
+    // },
+    // {
+    //     path: "settings",
+    //     name: "Project settings",
+    //     group: "Admin",
+    //     icon: "settings"
+    // }
+] satisfies {
+    path: string;
+    name: string;
+    group: string;
+    icon?: string;
+}[];
+
+/**
+ * @group Core
+ */
+export function DataTalkDrawer({
+                                   hovered,
+                                   drawerOpen,
+                                   closeDrawer
+                               }: DrawerProps) {
+
+    const navigate = useNavigate();
+
+    const navigation = useNavigationController();
+    const collectionEditorController = useCollectionEditorController();
+    const { user } = useAuthController();
+
+    const [adminMenuOpen, setAdminMenuOpen] = React.useState(false);
+
+    const tooltipsOpen = hovered && !drawerOpen && !adminMenuOpen;
+
+    if (!navigation.topLevelNavigation)
+        throw Error("Navigation not ready in Drawer");
+
+    const {
+        navigationEntries,
+        groups
+    }: TopNavigationResult = navigation.topLevelNavigation;
+
+    const buildGroupHeader = useCallback((group?: string) => {
+        if (!drawerOpen) return <div style={{ height: 16 }}/>;
+        const reservedGroup = group && RESERVED_GROUPS.includes(group);
+        const canCreateCollections = collectionEditorController.configPermissions({ user }).createCollections && !reservedGroup;
+        return <div className="flex flex-row items-center pt-8 pl-8 pr-0 pb-2">
+            <Typography variant={"caption"}
+                        color={"secondary"}
+                        className="flex-grow font-medium">
+                {group ? group.toUpperCase() : "Views".toUpperCase()}
+            </Typography>
+            {canCreateCollections && <Tooltip
+                title={group ? `Create new collection in ${group}` : "Create new collection"}>
+                <Button
+                    size={"small"}
+                    variant={"text"}
+                    onClick={() => {
+                        collectionEditorController?.createCollection({
+                            initialValues: {
+                                group,
+                            },
+                            parentCollectionIds: [],
+                            redirect: true,
+                            sourceClick: "drawer_new_collection"
+                        });
+                    }}>
+                    <AddIcon size={"small"}/>
+                </Button>
+            </Tooltip>}
+        </div>;
+    }, [collectionEditorController, drawerOpen]);
+
+    return (
+
+        <>
+            <div className={"flex-grow overflow-scroll no-scrollbar"}>
+
+                {groups.map((group) => (
+                    <React.Fragment
+                        key={`drawer_group_${group}`}>
+                        {buildGroupHeader(group)}
+                        {Object.values(navigationEntries)
+                            .filter(e => e.group === group)
+                            .map((view, index) => <DrawerNavigationItem
+                                key={`navigation_${index}`}
+                                icon={<IconForView collectionOrView={view.collection ?? view.view}/>}
+                                tooltipsOpen={tooltipsOpen}
+                                drawerOpen={drawerOpen}
+                                url={view.url}
+                                name={view.name}/>)}
+                    </React.Fragment>
+                ))}
+
+            </div>
+
+            <Menu
+                open={adminMenuOpen}
+                onOpenChange={setAdminMenuOpen}
+                trigger={
+                    <IconButton
+                        shape={"square"}
+                        className={"m-4 text-gray-900 dark:text-white w-fit"}>
+                        <Tooltip title={"Admin"}
+                                 open={tooltipsOpen}
+                                 side={"right"} sideOffset={28}>
+                            <MoreVertIcon/>
+                        </Tooltip>
+                        {drawerOpen && <div
+                            className={cn(
+                                drawerOpen ? "opacity-100" : "opacity-0 hidden",
+                                "mx-4 font-inherit text-inherit"
+                            )}>
+                            ADMIN
+                        </div>}
+                    </IconButton>}
+            >
+                {ADMIN_VIEWS_CONFIG.map((view, index) =>
+                    <MenuItem
+                        onClick={(event) => {
+                            event.preventDefault();
+                            navigate(view.path);
+                        }}
+                        key={`navigation_${index}`}>
+                        {<IconForView collectionOrView={view}/>}
+                        {view.name}
+                    </MenuItem>)}
+
+            </Menu>
+        </>
+    );
+}

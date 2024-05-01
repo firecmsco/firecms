@@ -3,19 +3,19 @@ export const ADMIN_VIEWS_CONFIG = [
             path: "users",
             name: "CMS Users",
             group: "Admin",
-            icon: "face",
+            icon: "face"
         },
         {
             path: "roles",
             name: "Roles",
             group: "Admin",
-            icon: "gpp_good",
+            icon: "gpp_good"
         },
         {
             path: "settings",
             name: "Project settings",
             group: "Admin",
-            icon: "settings",
+            icon: "settings"
         }
     ] satisfies {
         path: string;
@@ -23,4 +23,3 @@ export const ADMIN_VIEWS_CONFIG = [
         group: string;
         icon?: string;
     }[];
-

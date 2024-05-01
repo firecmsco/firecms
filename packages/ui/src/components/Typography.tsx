@@ -43,6 +43,23 @@ const colorToClasses = {
     error: "text-red-600 dark:text-red-500"
 };
 
+const gutterBottomClasses = {
+    h1: "mb-5",
+    h2: "mb-4",
+    h3: "mb-4",
+    h4: "mb-4",
+    h5: "mb-3",
+    h6: "mb-3",
+    subtitle1: "mb-3",
+    subtitle2: "mb-3",
+    body1: "mb-3",
+    body2: "mb-3",
+    inherit: "mb-3",
+    caption: "mb-2",
+    button: "mb-2",
+    label: "mb-2"
+};
+
 const variantToClasses = {
     h1: "text-6xl font-headers font-light",
     h2: "text-5xl font-headers font-light",
@@ -87,7 +104,7 @@ export function Typography<C extends React.ElementType>(
         variantToClasses[variant],
         color ? colorToClasses[color] : "",
         align !== "inherit" && `text-${align}`,
-        gutterBottom && "mb-2",
+        gutterBottom && gutterBottomClasses[variant],
         noWrap && "truncate",
         paragraph && "mb-3",
         className

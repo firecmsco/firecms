@@ -15,6 +15,7 @@ import { renderSkeletonText } from "../../preview";
 import { propertiesToColumns } from "./column_utils";
 import { ErrorView } from "../ErrorView";
 import { SelectableTable } from "../SelectableTable/SelectableTable";
+import { cn } from "@firecms/ui";
 
 /**
  * This component is in charge of rendering a collection table with a high
@@ -74,7 +75,8 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
      emptyComponent,
      getIdColumnWidth,
      onTextSearchClick,
-     textSearchLoading
+     textSearchLoading,
+     enablePopupIcon
  }: EntityCollectionTableProps<M>) {
 
     const ref = useRef<HTMLDivElement>(null);
@@ -149,6 +151,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
                         height={getRowHeight(size)}
                         entity={entity}
                         disabled={disabled}
+                        enablePopupIcon={enablePopupIcon}
                         path={entity.path}/>
                     : renderSkeletonText()
                 }
@@ -293,7 +296,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
 
         <div ref={ref}
              style={style}
-             className="h-full w-full flex flex-col bg-white dark:bg-gray-950">
+             className={cn("h-full w-full flex flex-col bg-white dark:bg-gray-950", className)}>
 
             <CollectionTableToolbar
                 onTextSearch={textSearchEnabled ? onTextSearch : undefined}

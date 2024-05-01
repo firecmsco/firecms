@@ -58,6 +58,6 @@
     "typescript": "^5.4.3",
     "vite": "^5.2.6",
     "vite-plugin-fonts": "^0.7.0",
-    "vite-plugin-svgr": "^3.3.0"
+    "vite-plugin-svgr": "^4.2.0"
   }
 }

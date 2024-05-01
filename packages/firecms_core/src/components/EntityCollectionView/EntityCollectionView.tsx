@@ -34,7 +34,7 @@ import {
     saveEntityWithCallbacks,
     useAuthController,
     useCustomizationController,
-    useDataSource,
+    useDataSource, useFireCMSContext,
     useLargeLayout,
     useNavigationController,
     useSideEntityController
@@ -94,7 +94,9 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
      * Whether this is a subcollection or not.
      */
     isSubCollection?: boolean;
+
     className?: string;
+
 } & EntityCollection<M>;
 
 /**
@@ -131,6 +133,7 @@ export const EntityCollectionView = React.memo(
                                                                  }: EntityCollectionViewProps<M>
     ) {
 
+        const context = useFireCMSContext();
         const fullPath = fullPathProp ?? collectionProp.path;
         const dataSource = useDataSource(collectionProp);
         const navigation = useNavigationController();
@@ -311,13 +314,11 @@ export const EntityCollectionView = React.memo(
             [fullPath]);
 
         const onValueChange: OnCellValueChange<any, any> = ({
-                                                                fullPath,
-                                                                context,
                                                                 value,
                                                                 propertyKey,
                                                                 onValueUpdated,
                                                                 setError,
-                                                                entity,
+                                                                data: entity,
                                                             }) => {
 
             const updatedValues = setIn({ ...entity.values }, propertyKey, value);
@@ -334,7 +335,6 @@ export const EntityCollectionView = React.memo(
             return saveEntityWithCallbacks({
                 ...saveProps,
                 collection,
-                callbacks: collection.callbacks,
                 dataSource,
                 context,
                 onSaveSuccess: () => {
@@ -603,6 +603,7 @@ export const EntityCollectionView = React.memo(
                     key={`collection_table_${fullPath}`}
                     additionalFields={additionalFields}
                     tableController={tableController}
+                    enablePopupIcon={true}
                     displayedColumnIds={displayedColumnIds}
                     onSizeChanged={onSizeChanged}
                     onEntityClick={onEntityClick}

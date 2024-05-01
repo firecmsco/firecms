@@ -4,7 +4,6 @@ import {
     EntityReference,
     getArrayValuesCount,
     getValueInPath,
-    ResolvedEntityCollection,
     ResolvedProperties,
     ResolvedProperty
 } from "@firecms/core";
@@ -14,37 +13,43 @@ interface Header {
     label: string;
 }
 
-export function downloadExport<M extends Record<string, any>>(data: Entity<M>[],
-                                                              additionalData: Record<string, any>[] | undefined,
-                                                              collection: ResolvedEntityCollection<M>,
-                                                              flattenArrays: boolean,
-                                                              additionalHeaders: string[] | undefined,
-                                                              exportType: "csv" | "json",
-                                                              dateExportType: "timestamp" | "string"
+export function downloadEntitiesExport<M extends Record<string, any>>(data: Entity<M>[],
+                                                                      additionalData: Record<string, any>[] | undefined,
+                                                                      properties: ResolvedProperties<M>,
+                                                                      propertiesOrder: string[] | undefined,
+                                                                      name: string,
+                                                                      flattenArrays: boolean,
+                                                                      additionalHeaders: string[] | undefined,
+                                                                      exportType: "csv" | "json",
+                                                                      dateExportType: "timestamp" | "string"
 ) {
 
-    console.debug("Downloading export", { dataLength: data.length, collection, exportType, dateExportType });
-    const properties = collection.properties;
+    console.debug("Downloading export", {
+        dataLength: data.length,
+        properties,
+        exportType,
+        dateExportType
+    });
 
     if (exportType === "csv") {
         const arrayValuesCount = flattenArrays ? getArrayValuesCount(data.map(d => d.values)) : {};
-        const headers = getExportHeaders(properties, additionalHeaders, arrayValuesCount);
-        const exportableData = getCSVExportableData(data, additionalData, properties, headers, dateExportType);
+        const headers = getExportHeaders(properties, propertiesOrder, additionalHeaders, arrayValuesCount);
+        const exportableData = getEntityCSVExportableData(data, additionalData, properties, headers, dateExportType);
         const headersData = entryToCSVRow(headers.map(h => h.label));
         const csvData = exportableData.map(entry => entryToCSVRow(entry));
-        downloadBlob([headersData, ...csvData], `${collection.name}.csv`, "text/csv");
+        downloadBlob([headersData, ...csvData], `${name}.csv`, "text/csv");
     } else {
-        const exportableData = getJsonExportableData(data, additionalData, properties, dateExportType);
+        const exportableData = getEntityJsonExportableData(data, additionalData, properties, dateExportType);
         const json = JSON.stringify(exportableData, null, 2);
-        downloadBlob([json], `${collection.name}.json`, "application/json");
+        downloadBlob([json], `${name}.json`, "application/json");
     }
 }
 
-export function getCSVExportableData(data: Entity<any>[],
-                                     additionalData: Record<string, any>[] | undefined,
-                                     properties: ResolvedProperties,
-                                     headers: Header[],
-                                     dateExportType: "timestamp" | "string"
+export function getEntityCSVExportableData(data: Entity<any>[],
+                                           additionalData: Record<string, any>[] | undefined,
+                                           properties: ResolvedProperties,
+                                           headers: Header[],
+                                           dateExportType: "timestamp" | "string"
 ) {
 
     const mergedData: any[] = data.map(e => ({
@@ -63,10 +68,10 @@ export function getCSVExportableData(data: Entity<any>[],
     });
 }
 
-export function getJsonExportableData(data: Entity<any>[],
-                                      additionalData: Record<string, any>[] | undefined,
-                                      properties: ResolvedProperties,
-                                      dateExportType: "timestamp" | "string"
+export function getEntityJsonExportableData(data: Entity<any>[],
+                                            additionalData: Record<string, any>[] | undefined,
+                                            properties: ResolvedProperties,
+                                            dateExportType: "timestamp" | "string"
 ) {
 
     const mergedData: any[] = data.map(e => ({
@@ -84,13 +89,18 @@ export function getJsonExportableData(data: Entity<any>[],
 }
 
 function getExportHeaders<M extends Record<string, any>>(properties: ResolvedProperties<M>,
+                                                         propertiesOrder: string[] | undefined,
                                                          additionalHeaders: string[] | undefined,
                                                          arrayValuesCount?: ArrayValuesCount): Header[] {
 
     const headers: Header[] = [
-        { label: "id", key: "id" },
-        ...Object.entries(properties)
-            .flatMap(([childKey, property]) => {
+        {
+            label: "id",
+            key: "id"
+        },
+        ...(propertiesOrder ?? Object.keys(properties))
+            .flatMap((childKey) => {
+                const property = properties[childKey];
                 if (arrayValuesCount && arrayValuesCount[childKey] > 1) {
                     return Array.from({ length: arrayValuesCount[childKey] },
                         (_, i) => getHeaders(property as ResolvedProperty, `${childKey}[${i}]`, ""))
@@ -102,7 +112,10 @@ function getExportHeaders<M extends Record<string, any>>(properties: ResolvedPro
     ];
 
     if (additionalHeaders) {
-        headers.push(...additionalHeaders.map(h => ({ label: h, key: h })));
+        headers.push(...additionalHeaders.map(h => ({
+            label: h,
+            key: h
+        })));
     }
 
     return headers;
@@ -121,7 +134,10 @@ function getHeaders(property: ResolvedProperty, propertyKey: string, prefix = ""
             .map(([childKey, p]) => getHeaders(p, childKey, currentKey))
             .flat();
     } else {
-        return [{ label: currentKey, key: currentKey }];
+        return [{
+            label: currentKey,
+            key: currentKey
+        }];
     }
 }
 

@@ -220,7 +220,7 @@ export function FireCMSFirebaseApp({
                                         }}
                                         autoOpenDrawer={autoOpenDrawer}>
                                         <NavigationRoutes
-                                            HomePage={components?.HomePage}/>
+                                            homePage={components?.HomePage ? <components.HomePage/> : undefined}/>
                                         <SideDialogs/>
                                     </Scaffold>
                                 );

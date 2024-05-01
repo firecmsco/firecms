@@ -1,0 +1,57 @@
+{
+  "include": ["./src/**/*"],
+  "exclude": ["dist", "build", "node_modules"],
+  "compilerOptions": {
+    "declarationMap": false,
+    "outDir": "dist",
+    "alwaysStrict": false,
+    "module": "ESNext",
+    "target": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
+
+    "declaration": true,
+    "esModuleInterop": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "types": [
+      "vite/client",
+      "node",
+      "jest"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@firecms/ui": [
+        "../ui/src"
+      ],
+      "@firecms/core": [
+        "../core/src"
+      ],
+      "@firecms/firebase": [
+        "../firebase_firecms/src"
+      ],
+      "@firecms/formex": [
+        "../formex/src"
+      ],
+      "@firecms/collection_editor_firebase": [
+        "../collection_editor_firebase/src"
+      ],
+      "@firecms/schema_inference": [
+        "../schema_inference/src"
+      ],
+      "@firecms/data_import_export": [
+        "../data_import_export/src"
+      ]
+    }
+  }
+}
+

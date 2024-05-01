@@ -13,7 +13,7 @@ export type NavigationRoutesProps = {
     /**
      * In case you need to override the home page
      */
-    HomePage?: React.ComponentType;
+    homePage?: React.ReactNode;
 
     customRoutes?: React.ReactNode[]
 
@@ -28,10 +28,9 @@ export type NavigationRoutesProps = {
  * @constructor
  * @group Components
  */
-
 export const NavigationRoutes = React.memo<NavigationRoutesProps>(
     function NavigationRoutes({
-                                  HomePage = DefaultHomePage,
+                                  homePage = <DefaultHomePage/>,
                                   customRoutes
                               }: NavigationRoutesProps) {
 
@@ -93,7 +92,7 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
 
         const homeRoute = (
             <Route path={"/"}
-                   element={<HomePage/>}/>
+                   element={homePage}/>
         );
 
         const notFoundRoute = <Route path={"*"}

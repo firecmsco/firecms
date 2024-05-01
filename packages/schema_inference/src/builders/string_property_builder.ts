@@ -3,12 +3,11 @@ import { InferencePropertyBuilderProps, ValuesCountEntry } from "../types";
 import { findCommonInitialStringInPath } from "../strings";
 import { extractEnumFromValues } from "../util";
 
-const IMAGE_EXTENSIONS = [".jpg", ".png", ".webp", ".gif"];
+const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"];
 const AUDIO_EXTENSIONS = [".mp3", ".ogg", ".opus", ".aac"];
 const VIDEO_EXTENSIONS = [".avi", ".mp4"];
 
 const emailRegEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-
 
 export function buildStringProperty({
                                         totalDocsCount,

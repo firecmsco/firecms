@@ -1,11 +1,12 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "version": "3.0.0-beta.6",
+  "version": "3.0.0-canary.45",
   "packages": [
     "packages/firecms",
     "packages/firecms_cloud",
     "packages/firecms_core",
     "packages/ui",
+    "packages/datatalk",
     "packages/collection_editor",
     "packages/data_enhancement",
     "packages/data_import_export",

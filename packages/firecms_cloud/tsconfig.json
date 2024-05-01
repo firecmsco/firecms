@@ -53,6 +53,9 @@
       "@firecms/data_enhancement": [
         "../data_enhancement/src"
       ],
+      "@firecms/datatalk": [
+        "../datatalk/src"
+      ],
       "@firecms/schema_inference": [
         "../schema_inference/src"
       ],

@@ -20,12 +20,12 @@ export interface FireCMSCloudLoginViewProps {
  * @group Firebase
  */
 export function FireCMSCloudLoginView({
-                                     fireCMSBackend,
-                                     includeGoogleAdminScopes,
-                                     includeLogo,
-                                     includeGoogleDisclosure,
-                                     includeTermsAndNewsLetter
-                                 }: FireCMSCloudLoginViewProps) {
+                                          fireCMSBackend,
+                                          includeGoogleAdminScopes,
+                                          includeLogo,
+                                          includeGoogleDisclosure,
+                                          includeTermsAndNewsLetter
+                                      }: FireCMSCloudLoginViewProps) {
 
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(false);
