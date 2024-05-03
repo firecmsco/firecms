@@ -14,6 +14,7 @@
     "../data_enhancement/src",
     "../schema_inference/src",
     "../formex/src",
+    "../datatalk/src",
     "../data_import_export/src"
   ]
 }
