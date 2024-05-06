@@ -1,22 +1,13 @@
 import React, { useEffect, useState } from "react";
 import * as firestoreLibrary from "firebase/firestore";
-import { doc, DocumentReference, getFirestore, setDoc } from "firebase/firestore";
-import { cmsToFirestoreModel, firestoreToCMSModel } from "@firecms/firebase";
-import {
-    CircularProgressCenter,
-    Entity,
-    EntityCollectionTable,
-    OnCellValueChange,
-    Properties,
-    useSelectionController
-} from "@firecms/core";
-import { setIn } from "@firecms/formex";
-import { Button, cn, Paper, Typography } from "@firecms/ui";
+import { firestoreToCMSModel } from "@firecms/firebase";
+import { CircularProgressCenter, EntityCollection } from "@firecms/core";
+import { Button, cn, Paper } from "@firecms/ui";
 import { buildPropertiesOrder } from "@firecms/schema_inference";
 import { AutoHeightEditor } from "./AutoHeightEditor";
 import { getPropertiesFromData } from "@firecms/collection_editor_firebase";
-import { BasicExportAction } from "@firecms/data_import_export";
 import { extractStringLiterals } from "../utils/extract_literals";
+import { TableResults } from "./TableResults";
 
 // @ts-ignore
 window.firestoreLibrary = firestoreLibrary
@@ -39,22 +30,24 @@ export function CodeBlock({
                               maxWidth,
                               sourceLoading,
                               autoRunCode,
-                              onCodeRun
+                              onCodeRun,
+                              collections
                           }: {
     initialCode?: string,
     sourceLoading?: boolean,
     maxWidth?: number,
     autoRunCode?: boolean,
-    onCodeRun?: () => void
+    onCodeRun?: () => void,
+    collections?: EntityCollection[]
 }) {
 
     const textAreaRef = React.useRef<HTMLDivElement>(null);
     const [inputCode, setInputCode] = useState<string | undefined>(initialCode);
 
     const [loading, setLoading] = useState<boolean>(false);
-    const [queryResults, setQueryResults] = useState<Entity<any>[] | null>(null);
-    const [properties, setProperties] = useState<Properties | null>(null);
-    const [propertiesOrder, setPropertiesOrder] = useState<string[] | null>(null);
+    const [querySnapshot, setQuerySnapshot] = useState<firestoreLibrary.QuerySnapshot | null>(null);
+    const [codePriorityKeys, setCodePriorityKeys] = useState<string[] | undefined>();
+
     const [executionResult, setExecutionResult] = useState<any | null>();
     const [codeHasBeenRun, setCodeHasBeenRun] = useState<boolean>(false);
     const [consoleOutput, setConsoleOutput] = useState<string>("");
@@ -75,17 +68,8 @@ export function CodeBlock({
     };
 
     async function displayQuerySnapshotData(querySnapshot: firestoreLibrary.QuerySnapshot, priorityKeys?: string[]) {
-        const docs = querySnapshot.docs.map((doc: any) => doc.data());
-        const inferredProperties = await getPropertiesFromData(docs);
-        const inferredPropertiesOrder = buildPropertiesOrder(inferredProperties, priorityKeys);
-        const entities = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            path: doc.ref.path,
-            values: firestoreToCMSModel(doc.data())
-        }));
-        setQueryResults(entities);
-        setProperties(inferredProperties);
-        setPropertiesOrder(inferredPropertiesOrder)
+        setQuerySnapshot(querySnapshot);
+        setCodePriorityKeys(priorityKeys);
     }
 
     const executeQuery = async () => {
@@ -166,41 +150,6 @@ export function CodeBlock({
         }
     };
 
-    const onValueChange: OnCellValueChange<any, any> = ({
-                                                            value,
-                                                            propertyKey,
-                                                            onValueUpdated,
-                                                            setError,
-                                                            data: entity
-                                                        }) => {
-
-        const updatedValues = setIn({ ...entity.values }, propertyKey, value);
-
-        const firestore = getFirestore();
-        const firebaseValues = cmsToFirestoreModel(updatedValues, firestore);
-        console.log("Saving", firebaseValues, entity);
-        console.log("Firestore", firestore);
-        const documentReference: DocumentReference = doc(firestore, entity.path);
-        console.log("Document reference", documentReference)
-        return setDoc(documentReference, firebaseValues, { merge: true })
-            .then((res) => {
-                console.log("Document updated", res);
-                onValueUpdated();
-            })
-            .catch((error) => {
-                console.error("Error updating document", error);
-                setError(error);
-            });
-
-    };
-
-    const selectionController = useSelectionController();
-    const displayedColumnIds = (propertiesOrder ?? Object.keys(properties ?? {}))
-        .map((key) => ({
-            key,
-            disabled: false
-        }));
-
     return (
         <div className={"flex flex-col my-4 gap-2"}
              style={{
@@ -224,40 +173,21 @@ export function CodeBlock({
                 <ExecutionErrorView executionError={executionError}/>
             )}
 
-            {(queryResults || loading || consoleOutput || executionResult) && (
+            {(querySnapshot || loading || consoleOutput || executionResult) && (
                 <div
                     style={{
-                        marginLeft: queryResults ? "-64px" : undefined,
-                        width: queryResults ? "calc(100% + 64px)" : undefined
+                        marginLeft: querySnapshot ? "-64px" : undefined,
+                        width: querySnapshot ? "calc(100% + 64px)" : undefined
                     }}
                     className={cn("w-full rounded-lg shadow-sm overflow-hidden transition-all", {
-                        "h-[480px]": queryResults,
-                        "h-[92px]": !queryResults && loading
+                        "h-[480px]": querySnapshot,
+                        "h-[92px]": !querySnapshot && loading
                     })}>
                     {loading && <CircularProgressCenter/>}
 
-                    {queryResults && properties && <EntityCollectionTable
-                        inlineEditing={true}
-                        defaultSize={"s"}
-                        selectionController={selectionController}
-                        onValueChange={onValueChange}
-                        filterable={false}
-                        actionsStart={<Typography
-                            variant={"caption"}>{(queryResults ?? []).length} results</Typography>}
-                        actions={<BasicExportAction
-                            data={queryResults}
-                            properties={properties}
-                            propertiesOrder={propertiesOrder ?? undefined}
-                        />}
-                        enablePopupIcon={false}
-                        sortable={false}
-                        tableController={{
-                            data: queryResults,
-                            dataLoading: false,
-                            noMoreToLoad: true
-                        }}
-                        displayedColumnIds={displayedColumnIds}
-                        properties={properties}/>}
+                    {querySnapshot && <TableResults querySnapshot={querySnapshot}
+                                                    priorityKeys={codePriorityKeys}
+                                                    collections={collections}/>}
 
                     {(consoleOutput || executionResult) && (
                         <Paper className={"w-full p-4 min-h-[92px] font-mono text-xs overflow-auto rounded-lg"}>

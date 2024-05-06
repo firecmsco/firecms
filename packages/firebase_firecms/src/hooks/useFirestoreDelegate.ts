@@ -683,13 +683,13 @@ function setDateToMidnight(input?: Timestamp): Timestamp | undefined {
     return Timestamp.fromDate(date);
 }
 
-export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
+export function cmsToFirestoreModel(data: any, firestore: Firestore, inArray = false): any {
     if (data === undefined) {
         return deleteField();
     } else if (data === null) {
         return null;
     } else if (Array.isArray(data)) {
-        return data.filter(v => v !== undefined).map(v => cmsToFirestoreModel(v, firestore));
+        return data.filter(v => v !== undefined).map(v => cmsToFirestoreModel(v, firestore, true));
     } else if (data.isEntityReference && data.isEntityReference()) {
         return doc(firestore, data.path, data.id);
     } else if (data instanceof GeoPoint) {

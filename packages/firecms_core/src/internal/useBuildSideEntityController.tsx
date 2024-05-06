@@ -19,7 +19,12 @@ const NEW_URL_HASH = "new";
 export function getEntityViewWidth(props: EntitySidePanelProps<any>, small: boolean): string {
     if (small) return CONTAINER_FULL_WIDTH;
     const mainViewSelected = !props.selectedSubPath;
-    const resolvedWidth: string | undefined = typeof props.width === "number" ? `${props.width}px` : props.width;
+    let resolvedWidth: string | undefined;
+    if (props.width) {
+        resolvedWidth = typeof props.width === "number" ? `${props.width}px` : props.width;
+    } else if (props.collection?.sideDialogWidth) {
+        resolvedWidth = typeof props.collection.sideDialogWidth === "number" ? `${props.collection.sideDialogWidth}px` : props.collection.sideDialogWidth;
+    }
     return !mainViewSelected ? `calc(${ADDITIONAL_TAB_WIDTH} + ${resolvedWidth ?? FORM_CONTAINER_WIDTH})` : resolvedWidth ?? FORM_CONTAINER_WIDTH
 }
 
@@ -40,12 +45,12 @@ export const useBuildSideEntityController = (navigation: NavigationController,
                 const entityOrCollectionPath = navigation.urlPathToDataPath(location.pathname);
                 const panelsFromUrl = buildSidePanelsFromUrl(entityOrCollectionPath, navigation.collections ?? [], newFlag);
                 for (let i = 0; i < panelsFromUrl.length; i++) {
-                    const panel = panelsFromUrl[i];
+                    const props = panelsFromUrl[i];
                     setTimeout(() => {
                         if (i === 0)
-                            sideDialogsController.replace(propsToSidePanel(panel, navigation.buildUrlCollectionPath, navigation.resolveAliasesFrom, smallLayout));
+                            sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveAliasesFrom, smallLayout));
                         else
-                            sideDialogsController.open(propsToSidePanel(panel, navigation.buildUrlCollectionPath, navigation.resolveAliasesFrom, smallLayout))
+                            sideDialogsController.open(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveAliasesFrom, smallLayout))
                     }, 1);
                 }
             } else {
@@ -119,7 +124,8 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
                 sidePanels.push({
                         path: navigationEntry.path,
                         entityId: navigationEntry.entityId,
-                        copy: false
+                        copy: false,
+                        width: navigationEntry.parentCollection?.sideDialogWidth
                     }
                 );
             } else if (navigationEntry.type === "custom_view") {
@@ -163,7 +169,7 @@ const propsToSidePanel = (props: EntitySidePanelProps<any>,
 
         const resolvedPanelProps: EntitySidePanelProps<any> = {
             ...props,
-            path: resolvedPath
+            path: resolvedPath,
         };
 
         return ({

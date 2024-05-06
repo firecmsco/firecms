@@ -14,7 +14,6 @@
     "@firecms/schema_inference": "^3.0.0-canary.45",
     "@firecms/ui": "^3.0.0-canary.45",
     "@firecms/user_management": "^3.0.0-canary.45",
-    "@tailwindcss/typography": "^0.5.12",
     "firebase": "^10.11.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -49,6 +48,7 @@
     ]
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.12",
     "@types/react": "^18.2.79",
     "@types/react-dom": "18.2.25",
     "@typescript-eslint/eslint-plugin": "^7.7.0",

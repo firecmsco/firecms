@@ -4,15 +4,18 @@ import { MessageLayout } from "./components/MessageLayout";
 import { streamDataTalkCommand } from "./api";
 import { ChatMessage } from "./types";
 import { IntroComponent } from "./components/IntroComponent";
+import { EntityCollection } from "@firecms/core";
 
 export function DataTalk({
                              apiEndpoint,
                              onAnalyticsEvent,
-                             getAuthToken
+                             getAuthToken,
+                             collections
                          }: {
     onAnalyticsEvent?: (event: string, params?: any) => void,
     apiEndpoint: string,
-    getAuthToken: () => Promise<string>
+    getAuthToken: () => Promise<string>,
+    collections?: EntityCollection[]
 }) {
 
     const [textInput, setTextInput] = useState<string>("");
@@ -130,12 +133,11 @@ export function DataTalk({
                                                   newMessages.splice(index, 1);
                                                   setMessages(newMessages);
                                               }}
+                                              collections={collections}
                                               scrollInto={scrollInto}
                                               message={message}
                                               autoRunCode={autoRunCode}/>;
                     })}
-
-                    {/*{loading && <MessageLayout key="loading" loading={true}/>}*/}
 
                 </div>
             </div>

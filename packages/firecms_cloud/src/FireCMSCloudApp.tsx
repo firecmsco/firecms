@@ -287,6 +287,7 @@ export function FireCMSClientWithController({
                                                 customizationLoading,
                                                 ...props
                                             }: FireCMSClientProps & {
+    logo?: string;
     userManagement: UserManagement<FireCMSCloudUserWithRoles>;
     projectConfig: ProjectConfig;
     projectId: string;
@@ -392,7 +393,7 @@ export function FireCMSClientWithController({
         return <Scaffold
             key={"project_scaffold_" + projectConfig.projectId}
             name={projectConfig.projectName ?? ""}
-            logo={projectConfig.logo}
+            logo={projectConfig?.logo ?? props.logo}
             includeDrawer={false}
             FireCMSAppBar={props.FireCMSAppBarComponent}
         >
@@ -461,7 +462,8 @@ function FireCMSAppAuthenticated({
                                      FireCMSAppBarComponent,
                                      onAnalyticsEvent,
                                      basePath,
-                                     baseCollectionPath
+                                     baseCollectionPath,
+                                     logo
                                  }: Omit<FireCMSClientProps, "projectId"> & {
     fireCMSUser: FireCMSCloudUser;
     firebaseApp: FirebaseApp;
@@ -470,6 +472,7 @@ function FireCMSAppAuthenticated({
     fireCMSBackend: FireCMSBackend,
     collectionConfigController: CollectionsConfigController;
     authController: FirebaseAuthController;
+    logo?: string;
 }) {
 
     if (!authController.user) {
@@ -515,7 +518,7 @@ function FireCMSAppAuthenticated({
     /**
      * Update the browser title and icon
      */
-    useBrowserTitleAndIcon(projectConfig.projectName ?? "", projectConfig.logo);
+    useBrowserTitleAndIcon(projectConfig.projectName ?? "", projectConfig.logo ?? logo);
 
     /**
      * Controller for saving some user preferences locally.
@@ -609,6 +612,7 @@ function FireCMSAppAuthenticated({
                                       context,
                                       loading
                                   }) => {
+                                    console.log("logo", logo);
 
                                     let component;
                                     if (loading) {
@@ -616,7 +620,7 @@ function FireCMSAppAuthenticated({
                                             <Scaffold
                                                 key={"project_scaffold_" + projectConfig.projectId}
                                                 name={projectConfig.projectName ?? ""}
-                                                logo={projectConfig.logo}
+                                                logo={projectConfig.logo ?? logo}
                                                 includeDrawer={false}
                                                 FireCMSAppBar={FireCMSAppBarComponent}
                                                 fireCMSAppBarProps={appConfig?.fireCMSAppBarComponentProps}>
@@ -627,7 +631,7 @@ function FireCMSAppAuthenticated({
                                             <Scaffold
                                                 key={"project_scaffold_" + projectConfig.projectId}
                                                 name={projectConfig.projectName ?? ""}
-                                                logo={projectConfig.logo}
+                                                logo={projectConfig.logo ??  logo}
                                                 Drawer={FireCMSCloudDrawer}
                                                 FireCMSAppBar={FireCMSAppBarComponent}
                                                 fireCMSAppBarProps={appConfig?.fireCMSAppBarComponentProps}

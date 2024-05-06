@@ -14,7 +14,6 @@
     "@firecms/user_management": "^3.0.0-canary.45",
     "@fontsource/jetbrains-mono": "^5.0.19",
     "@radix-ui/react-portal": "^1.0.4",
-    "@tailwindcss/typography": "^0.5.12",
     "clsx": "^2.1.0",
     "firebase": "^10.11.0",
     "react": "^18.2.0",
@@ -52,6 +51,7 @@
     ]
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.12",
     "@types/react": "^18.2.79",
     "@types/react-dom": "18.2.25",
     "@typescript-eslint/eslint-plugin": "^7.7.0",

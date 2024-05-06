@@ -294,7 +294,16 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
      * are writing custom code
      */
     ownerId?: string;
+
+    /**
+     * Overrides for the entity view, like the data source or the storage source.
+     */
     overrides?: EntityOverrides;
+
+    /**
+     * Width of the side dialog (in pixels) when opening an entity in this collection.
+     */
+    sideDialogWidth?: number | string;
 }
 
 /**

@@ -2,17 +2,20 @@ import { AutoAwesomeIcon, Avatar, Menu, MenuItem, PersonIcon, Skeleton } from "@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ChatMessage } from "../types";
 import { SystemMessage } from "./SystemMessage";
+import { EntityCollection } from "@firecms/core";
 
 export function MessageLayout({
                                   message,
                                   autoRunCode,
                                   onRemove,
-                                  scrollInto
+                                  scrollInto,
+                                  collections
                               }: {
     message?: ChatMessage,
     autoRunCode?: boolean,
     onRemove?: () => void,
-    scrollInto?: (ref: React.RefObject<HTMLDivElement>) => void
+    scrollInto?: (ref: React.RefObject<HTMLDivElement>) => void,
+    collections?: EntityCollection[]
 }) {
 
     const ref = useRef<HTMLDivElement>(null);
@@ -57,6 +60,7 @@ export function MessageLayout({
                         : <SystemMessage text={message.text}
                                          autoRunCode={autoRunCode}
                                          scrollInto={() => scrollInto?.(ref)}
+                                         collections={collections}
                                          containerWidth={containerWidth ?? undefined}/>)
                     : null}
 

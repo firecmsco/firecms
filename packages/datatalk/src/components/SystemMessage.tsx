@@ -1,17 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { MarkdownElement, parseMarkdown } from "../utils/parser";
 import { CodeBlock } from "./CodeBlock";
+import { EntityCollection } from "@firecms/core";
 
 export function SystemMessage({
                                   text,
                                   containerWidth,
                                   scrollInto,
-                                  autoRunCode
+                                  autoRunCode,
+                                  collections
                               }: {
     text?: string,
     containerWidth?: number,
     scrollInto: () => void,
-    autoRunCode?: boolean
+    autoRunCode?: boolean,
+    collections?: EntityCollection[]
 }) {
 
     const [parsedElements, setParsedElements] = useState<MarkdownElement[] | null>();
@@ -40,6 +43,7 @@ export function SystemMessage({
                                   autoRunCode={autoRunCode}
                                   initialCode={element.content}
                                   onCodeRun={scrollInto}
+                                  collections={collections}
                                   maxWidth={containerWidth ? containerWidth - 90 : undefined}/>;
             } else {
                 console.error("Unknown element type", element);

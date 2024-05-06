@@ -237,6 +237,27 @@ export function CollectionDetailsForm({
                                 </div>
                                 <div className={"col-span-12"}>
                                     <TextField
+                                        error={showErrors && Boolean(errors.sideDialogWidth)}
+                                        name={"sideDialogWidth"}
+                                        type={"number"}
+                                        aria-describedby={"sideDialogWidth-helper"}
+                                        onChange={(e) => {
+                                            setFieldTouched("sideDialogWidth", true);
+                                            const value = e.target.value;
+                                            if (!value) {
+                                                setFieldValue("sideDialogWidth", undefined);
+                                            } else if (!isNaN(Number(value))) {
+                                                setFieldValue("sideDialogWidth", Number(value));
+                                            }
+                                        }}
+                                        value={values.sideDialogWidth ?? ""}
+                                        label={"Side dialog width"}/>
+                                    <FieldCaption error={showErrors && Boolean(errors.singularName)}>
+                                        {showErrors && Boolean(errors.singularName) ? errors.singularName : "Optionally define the width (in pixels) of entities side dialog. Default is 768px"}
+                                    </FieldCaption>
+                                </div>
+                                <div className={"col-span-12"}>
+                                    <TextField
                                         error={showErrors && Boolean(errors.description)}
                                         name="description"
                                         value={values.description ?? ""}

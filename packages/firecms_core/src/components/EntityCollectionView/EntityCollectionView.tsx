@@ -34,7 +34,8 @@ import {
     saveEntityWithCallbacks,
     useAuthController,
     useCustomizationController,
-    useDataSource, useFireCMSContext,
+    useDataSource,
+    useFireCMSContext,
     useLargeLayout,
     useNavigationController,
     useSideEntityController
@@ -748,6 +749,7 @@ function EntitiesCount({
 
     useEffect(() => {
         if (onCountChange) {
+            setError(undefined);
             onCountChange(count ?? 0);
         }
     }, [onCountChange, count]);
