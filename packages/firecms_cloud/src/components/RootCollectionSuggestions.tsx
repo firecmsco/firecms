@@ -17,7 +17,10 @@ export function RootCollectionSuggestions({ introMode }: { introMode?: "new_proj
 
     const [rootPathSuggestions, setRootPathSuggestions] = React.useState<string[] | undefined>(undefined);
     useEffect(() => {
-        collectionEditorController.getPathSuggestions?.("").then(setRootPathSuggestions);
+        collectionEditorController.getPathSuggestions?.("").then((result) => {
+            const existingPaths = (navigationController.collections ?? []).map(c => c.path);
+            setRootPathSuggestions(result.filter((path) => !existingPaths.includes(path)));
+        });
     }, [collectionEditorController.getPathSuggestions]);
 
     if (!collectionEditorController.getPathSuggestions) {
