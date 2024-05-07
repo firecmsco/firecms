@@ -96,7 +96,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
             className={cn("pr-2",
                 {
                     "ml-[17rem]": drawerOpen && largeLayout,
-                    "ml-16": includeDrawer && !(drawerOpen && largeLayout) && !startAdornment,
+                    "ml-16": includeDrawer && !(drawerOpen && largeLayout),
                     "h-16": true,
                     "z-10": largeLayout,
                     "transition-all": true,
@@ -111,9 +111,6 @@ export const FireCMSAppBar = function FireCMSAppBar({
                 className)}>
 
             <div className="flex flex-row gap-2 px-4 h-full items-center">
-
-                {startAdornment}
-
 
                 {navigation && <div className="mr-8 hidden lg:block">
                     <ReactLink
@@ -137,6 +134,8 @@ export const FireCMSAppBar = function FireCMSAppBar({
                         </div>
                     </ReactLink>
                 </div>}
+
+                {startAdornment}
 
                 <div className={"flex-grow"}/>
 

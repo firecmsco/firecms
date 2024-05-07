@@ -4,11 +4,26 @@ import { Entity } from "./entities";
 import { EntityCollection, SelectionController } from "./collections";
 import { User } from "./user";
 import { SideEntityController } from "./side_entity_controller";
-import { EntityOverrides } from "./entity_overrides";
 
+/**
+ * An entity action is a custom action that can be performed on an entity.
+ * They are displayed in the entity view and in the collection view.
+ */
 export type EntityAction<M extends object = any, UserType extends User = User> = {
+    /**
+     * Title of the action
+     */
     name: string;
+
+    /**
+     * Icon of the action
+     */
     icon?: React.ReactElement;
+
+    /**
+     * Callback when the action is clicked
+     * @param props
+     */
     onClick: (props: EntityActionClickProps<M, UserType>) => Promise<void> | void;
 
     /**
@@ -24,8 +39,6 @@ export type EntityAction<M extends object = any, UserType extends User = User> =
     includeInForm?: boolean;
 
 }
-
-
 
 export type EntityActionClickProps<M extends object, UserType extends User = User> = {
     entity: Entity<M>;

@@ -31,7 +31,6 @@ import {
 import { EntityForm } from "../form";
 import { CircularProgress, CloseIcon, cn, defaultBorderMixin, IconButton, Tab, Tabs, Typography } from "@firecms/ui";
 import { EntityFormSaveParams } from "../form/EntityForm";
-import { FORM_CONTAINER_WIDTH } from "../internal/common";
 import { useSideDialogContext } from "./index";
 
 const MAIN_TAB_VALUE = "main_##Q$SC^#S6";
@@ -91,8 +90,7 @@ export function EntityEditView<M extends Record<string, any>, UserType extends U
 
     // const largeLayout = useLargeLayout();
     // const largeLayoutTabSelected = useRef(!largeLayout);
-
-    const resolvedFormWidth: string = typeof formWidth === "number" ? `${formWidth}px` : formWidth ?? FORM_CONTAINER_WIDTH;
+    // const resolvedFormWidth: string = typeof formWidth === "number" ? `${formWidth}px` : formWidth ?? FORM_CONTAINER_WIDTH;
 
     const dataSource = useDataSource(collection);
     const sideDialogContext = useSideDialogContext();

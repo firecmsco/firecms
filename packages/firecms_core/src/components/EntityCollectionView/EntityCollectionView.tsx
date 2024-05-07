@@ -200,7 +200,7 @@ export const EntityCollectionView = React.memo(
 
         const tableController = useDataSourceEntityCollectionTableController<M>({
             fullPath,
-            collection: collectionProp,
+            collection,
             lastDeleteTimestamp
         });
 
@@ -709,6 +709,7 @@ export const EntityCollectionView = React.memo(
             equal(a.initialSort, b.initialSort) &&
             equal(a.textSearchEnabled, b.textSearchEnabled) &&
             equal(a.additionalFields, b.additionalFields) &&
+            equal(a.sideDialogWidth, b.sideDialogWidth) &&
             equal(a.forceFilter, b.forceFilter);
     }) as React.FunctionComponent<EntityCollectionViewProps<any>>
 
