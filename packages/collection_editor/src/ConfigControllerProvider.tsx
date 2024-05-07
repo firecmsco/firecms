@@ -109,12 +109,12 @@ export const ConfigControllerProvider = React.memo(
             deleteCollections: true
         }), []);
 
-        const editCollection = useCallback(({
-                                                id,
-                                                fullPath,
-                                                parentCollectionIds,
-                                                parentCollection
-                                            }: {
+        const editCollection = ({
+                                    id,
+                                    fullPath,
+                                    parentCollectionIds,
+                                    parentCollection
+                                }: {
             id?: string,
             fullPath?: string,
             parentCollectionIds: string[],
@@ -133,16 +133,16 @@ export const ConfigControllerProvider = React.memo(
                 parentCollection,
                 redirect: false
             });
-        }, []);
+        };
 
-        const editProperty = useCallback(({
-                                              propertyKey,
-                                              property,
-                                              editedCollectionId,
-                                              currentPropertiesOrder,
-                                              parentCollectionIds,
-                                              collection
-                                          }: {
+        const editProperty = ({
+                                  propertyKey,
+                                  property,
+                                  editedCollectionId,
+                                  currentPropertiesOrder,
+                                  parentCollectionIds,
+                                  collection
+                              }: {
             propertyKey?: string,
             property?: Property,
             currentPropertiesOrder?: string[],
@@ -171,15 +171,15 @@ export const ConfigControllerProvider = React.memo(
                 parentCollectionIds,
                 collectionEditable: collection?.editable ?? false
             });
-        }, []);
+        };
 
-        const createCollection = React.useCallback(({
-                                                        parentCollectionIds,
-                                                        parentCollection,
-                                                        initialValues,
-                                                        redirect,
-                                                        sourceClick
-                                                    }: {
+        const createCollection = ({
+                                      parentCollectionIds,
+                                      parentCollection,
+                                      initialValues,
+                                      redirect,
+                                      sourceClick
+                                  }: {
             parentCollectionIds: string[],
             parentCollection?: PersistedCollection
             initialValues?: {
@@ -211,7 +211,7 @@ export const ConfigControllerProvider = React.memo(
                 initialValues,
                 redirect
             });
-        }, []);
+        };
 
         return (
             <ConfigControllerContext.Provider value={collectionConfigController}>

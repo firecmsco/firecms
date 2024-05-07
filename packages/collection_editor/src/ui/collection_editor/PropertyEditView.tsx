@@ -228,6 +228,7 @@ export const PropertyForm = React.memo(
         a.includeIdAndName === b.includeIdAndName &&
         a.autoOpenTypeSelect === b.autoOpenTypeSelect &&
         a.autoUpdateId === b.autoUpdateId &&
+        a.existingPropertyKeys === b.existingPropertyKeys &&
         a.existingProperty === b.existingProperty
 );
 
@@ -367,13 +368,13 @@ function PropertyEditFormFields({
                 }
             }
         }
-    }, [deferredValues, includeIdAndTitle, onPropertyChanged, propertyNamespace]);
+    }, [deferredValues, includeIdAndTitle, propertyNamespace]);
 
     useEffect(() => {
         if (values?.id && onError) {
             onError(values?.id, propertyNamespace, errors);
         }
-    }, [errors, onError, propertyNamespace, values?.id]);
+    }, [errors, propertyNamespace, values?.id]);
 
     const onWidgetSelectChanged = (newSelectedWidgetId: PropertyConfigId) => {
         setSelectedFieldConfigId(newSelectedWidgetId);

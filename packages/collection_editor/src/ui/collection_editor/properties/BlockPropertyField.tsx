@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { AddIcon, Button, Paper, Typography } from "@firecms/ui";
 import { getIn, useFormex } from "@firecms/formex";
 import { PropertyFormDialog } from "../PropertyEditView";
@@ -49,7 +49,7 @@ export function BlockPropertyField({
     const selectedPropertyFullId = selectedPropertyKey ? getFullId(selectedPropertyKey, selectedPropertyNamespace) : undefined;
     const selectedProperty = selectedPropertyFullId ? getIn(values.oneOf?.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
 
-    const deleteProperty = useCallback((propertyKey?: string, namespace?: string) => {
+    const deleteProperty = (propertyKey?: string, namespace?: string) => {
         const fullId = propertyKey ? getFullId(propertyKey, namespace) : undefined;
         if (!fullId)
             throw Error("collection editor miss config");
@@ -62,7 +62,7 @@ export function BlockPropertyField({
         setPropertyDialogOpen(false);
         setSelectedPropertyKey(undefined);
         setSelectedPropertyNamespace(undefined);
-    }, [setFieldValue, values]);
+    };
 
     const addChildButton = <Button
         autoFocus
@@ -74,9 +74,9 @@ export function BlockPropertyField({
         Add property to {values.name ?? "this block"}
     </Button>;
 
-    const onPropertyMove = useCallback((propertiesOrder: string[], namespace?: string) => {
+    const onPropertyMove = (propertiesOrder: string[], namespace?: string) => {
         setFieldValue(`oneOf.${namespaceToPropertiesOrderPath(namespace)}`, propertiesOrder, false);
-    }, []);
+    };
 
     return (
         <>

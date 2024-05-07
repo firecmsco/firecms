@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import equal from "react-fast-compare"
 
 import {
@@ -48,7 +48,7 @@ export const PropertyTree = React.memo(
 
         const propertiesOrder = propertiesOrderProp ?? Object.keys(properties);
 
-        const onDragEnd = useCallback((result: any) => {
+        const onDragEnd = (result: any) => {
             // dropped outside the list
             if (!result.destination) {
                 return;
@@ -61,7 +61,7 @@ export const PropertyTree = React.memo(
             newPropertiesOrder.splice(endIndex, 0, removed);
             if (onPropertyMove)
                 onPropertyMove(newPropertiesOrder, namespace);
-        }, [namespace, onPropertyMove, propertiesOrder])
+        }
 
         return (
             <>

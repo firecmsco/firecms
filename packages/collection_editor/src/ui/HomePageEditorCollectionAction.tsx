@@ -6,7 +6,7 @@ import {
 } from "@firecms/core";
 import { DeleteIcon, IconButton, Menu, MenuItem, MoreVertIcon, SettingsIcon, } from "@firecms/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { useCollectionsConfigController } from "../useCollectionsConfigController";
 
 export function HomePageEditorCollectionAction({
@@ -24,13 +24,13 @@ export function HomePageEditorCollectionAction({
         collection
     });
 
-    const onEditCollectionClicked = useCallback(() => {
+    const onEditCollectionClicked = () => {
         collectionEditorController?.editCollection({ id: collection.id, parentCollectionIds: [] });
-    }, [collectionEditorController, path]);
+    };
 
     const [deleteRequested, setDeleteRequested] = useState(false);
 
-    const deleteCollection = useCallback(() => {
+    const deleteCollection = () => {
         configController?.deleteCollection({ id: collection.id }).then(() => {
             setDeleteRequested(false);
             snackbarController.open({
@@ -38,7 +38,7 @@ export function HomePageEditorCollectionAction({
                 type: "success"
             });
         });
-    }, [path, configController]);
+    };
 
     return <>
 

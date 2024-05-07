@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { FieldCaption, MapProperty, Property, PropertyConfig, } from "@firecms/core";
 import { AddIcon, BooleanSwitchWithLabel, Button, Paper, Typography } from "@firecms/ui";
 import { PropertyFormDialog } from "../PropertyEditView";
@@ -42,7 +42,7 @@ export function MapPropertyField({ disabled, getData, allowDataInference, proper
         setPropertyDialogOpen(false);
     };
 
-    const deleteProperty = useCallback((propertyKey?: string, namespace?: string) => {
+    const deleteProperty = (propertyKey?: string, namespace?: string) => {
         const fullId = propertyKey ? getFullId(propertyKey, namespace) : undefined;
         if (!fullId)
             throw Error("collection editor miss config");
@@ -58,16 +58,16 @@ export function MapPropertyField({ disabled, getData, allowDataInference, proper
         setPropertyDialogOpen(false);
         setSelectedPropertyKey(undefined);
         setSelectedPropertyNamespace(undefined);
-    }, [setFieldValue, values]);
+    };
 
     const selectedPropertyFullId = selectedPropertyKey ? getFullId(selectedPropertyKey, selectedPropertyNamespace) : undefined;
     const selectedProperty = selectedPropertyFullId ? getIn(values.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
 
     const empty = !propertiesOrder || propertiesOrder.length < 1;
 
-    const onPropertyMove = useCallback((propertiesOrder: string[], namespace?: string) => {
+    const onPropertyMove = (propertiesOrder: string[], namespace?: string) => {
         setFieldValue(namespaceToPropertiesOrderPath(namespace), propertiesOrder, false);
-    }, []);
+    };
 
     return (
         <>

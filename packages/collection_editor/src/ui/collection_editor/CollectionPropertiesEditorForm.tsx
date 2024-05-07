@@ -158,20 +158,20 @@ export function CollectionPropertiesEditorForm({
         }
         : undefined;
 
-    const getCurrentPropertiesOrder = useCallback((namespace?: string) => {
+    const getCurrentPropertiesOrder = (namespace?: string) => {
         if (!namespace) return currentPropertiesOrderRef.current[""];
         return currentPropertiesOrderRef.current[namespace] ?? getIn(values, namespaceToPropertiesOrderPath(namespace));
-    }, [values]);
+    };
 
-    const updatePropertiesOrder = useCallback((newPropertiesOrder: string[], namespace?: string) => {
+    const updatePropertiesOrder = (newPropertiesOrder: string[], namespace?: string) => {
         const propertiesOrderPath = namespaceToPropertiesOrderPath(namespace);
 
         setFieldValue(propertiesOrderPath, newPropertiesOrder, false);
         currentPropertiesOrderRef.current[namespace ?? ""] = newPropertiesOrder;
 
-    }, [setFieldValue]);
+    };
 
-    const deleteProperty = useCallback((propertyKey?: string, namespace?: string) => {
+    const deleteProperty = (propertyKey?: string, namespace?: string) => {
         const fullId = propertyKey ? getFullId(propertyKey, namespace) : undefined;
         if (!fullId)
             throw Error("collection editor miss config");
@@ -187,7 +187,7 @@ export function CollectionPropertiesEditorForm({
         setSelectedPropertyIndex(undefined);
         setSelectedPropertyKey(undefined);
         setSelectedPropertyNamespace(undefined);
-    }, [getCurrentPropertiesOrder, setFieldValue, updatePropertiesOrder]);
+    };
 
     const onPropertyMove = (propertiesOrder: string[], namespace?: string) => {
         setFieldValue(namespaceToPropertiesOrderPath(namespace), propertiesOrder, false);
@@ -273,7 +273,7 @@ export function CollectionPropertiesEditorForm({
 
     };
 
-    const onPropertyErrorInternal = useCallback((id: string, namespace?: string, error?: Record<string, any>) => {
+    const onPropertyErrorInternal = (id: string, namespace?: string, error?: Record<string, any>) => {
         const propertyPath = id ? getFullId(id, namespace) : undefined;
         console.debug("onPropertyErrorInternal", {
             id,
@@ -286,7 +286,7 @@ export function CollectionPropertiesEditorForm({
             onPropertyError(id, namespace, hasError ? error : undefined);
             setFieldError(idToPropertiesPath(propertyPath), hasError ? "Property error" : undefined);
         }
-    }, [])
+    }
 
     const closePropertyDialog = () => {
         setSelectedPropertyIndex(undefined);
@@ -303,7 +303,7 @@ export function CollectionPropertiesEditorForm({
 
     const owner = useMemo(() => values.ownerId && getUser ? getUser(values.ownerId) : null, [getUser, values.ownerId]);
 
-    const onPropertyClick = useCallback((propertyKey: string, namespace?: string) => {
+    const onPropertyClick = (propertyKey: string, namespace?: string) => {
         console.debug("CollectionEditor: onPropertyClick", {
             propertyKey,
             namespace
@@ -311,7 +311,7 @@ export function CollectionPropertiesEditorForm({
         setSelectedPropertyIndex(usedPropertiesOrder.indexOf(propertyKey));
         setSelectedPropertyKey(propertyKey);
         setSelectedPropertyNamespace(namespace);
-    }, [usedPropertiesOrder]);
+    };
 
     const body = (
         <div className={"grid grid-cols-12 gap-2 h-full bg-gray-50 dark:bg-gray-900"}>

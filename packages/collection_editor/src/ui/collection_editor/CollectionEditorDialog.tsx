@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
     CircularProgressCenter,
     EntityCollection,
@@ -88,13 +88,13 @@ export function CollectionEditorDialog(props: CollectionEditorDialogProps) {
     const [formDirty, setFormDirty] = React.useState<boolean>(false);
     const [unsavedChangesDialogOpen, setUnsavedChangesDialogOpen] = React.useState<boolean>(false);
 
-    const handleCancel = useCallback(() => {
+    const handleCancel = () => {
         if (!formDirty) {
             props.handleClose(undefined);
         } else {
             setUnsavedChangesDialogOpen(true);
         }
-    }, [formDirty, props.handleClose]);
+    };
 
     useEffect(() => {
         if (!open) {
@@ -170,7 +170,7 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
         } catch (e) {
             console.error(e);
         }
-    }, [props.editedCollectionId, props.parentCollectionIds, navigation]);
+    }, [props.editedCollectionId, props.parentCollectionIds, navigation.initialised, navigation.getCollectionFromPaths]);
 
     if (!topLevelNavigation) {
         throw Error("Internal: Navigation not ready in collection editor");
@@ -294,7 +294,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             });
     };
 
-    const setNextMode = useCallback(() => {
+    const setNextMode = () => {
         if (currentView === "details") {
             if (importConfig.inUse) {
                 setCurrentView("import_data_saving");
@@ -315,14 +315,14 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             setCurrentView("details");
         }
 
-    }, [currentView, importConfig.inUse, extraView]);
+    };
 
-    const doCollectionInference = useCallback((collection: PersistedCollection<any>) => {
+    const doCollectionInference = (collection: PersistedCollection<any>) => {
         if (!collectionInference) return undefined;
         return collectionInference?.(collection.path, collection.collectionGroup ?? false, parentCollectionIds ?? []);
-    }, [collectionInference, parentCollectionIds]);
+    };
 
-    const inferCollectionFromData = useCallback(async (newCollection: PersistedCollection<M>) => {
+    const inferCollectionFromData = async (newCollection: PersistedCollection<M>) => {
 
         try {
             if (!doCollectionInference) {
@@ -366,7 +366,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             });
             return newCollection;
         }
-    }, [parentCollectionIds, doCollectionInference]);
+    };
 
     const onSubmit = (newCollectionState: PersistedCollection<M>, formexController: FormexController<PersistedCollection<M>>) => {
         console.log("Submitting collection", newCollectionState);
