@@ -82,7 +82,6 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
     const ref = useRef<HTMLDivElement>(null);
 
     const largeLayout = useLargeLayout();
-    const disabledFilterChange = Boolean(forceFilter);
     const selectedEntities = (selectionController?.selectedEntities?.length > 0 ? selectionController?.selectedEntities : highlightedEntities)?.filter(Boolean);
 
     const context: FireCMSContext<UserType> = useFireCMSContext();
@@ -212,7 +211,6 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
             properties,
             sortable,
             forceFilter,
-            disabledFilter: disabledFilterChange,
             AdditionalHeaderWidget
         });
 

@@ -12,6 +12,7 @@ import {
     User
 } from "../../types";
 import { useDebouncedData } from "./useDebouncedData";
+import equal from "react-fast-compare"
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -31,6 +32,10 @@ export type DataSourceEntityCollectionTableControllerProps<M extends Record<stri
     entitiesDisplayedFirst?: Entity<M>[];
 
     lastDeleteTimestamp?: number;
+
+    /**
+     * Force filter to be applied to the table.
+     */
     forceFilter?: FilterValues<string>;
 }
 
@@ -82,6 +87,12 @@ export function useDataSourceEntityCollectionTableController<M extends Record<st
         }
         return initialSort;
     }, [initialSort, forceFilter]);
+
+    useEffect(() => {
+        if (!equal(forceFilter, filterValues)) {
+            setFilterValues(forceFilter)
+        }
+    }, [forceFilter]);
 
     const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? initialFilter ?? undefined);
     const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>(initialSortInternal);

@@ -1,6 +1,6 @@
 import { ArrowForwardIcon, cardClickableMixin, cardMixin, cn, focusedMixin, Typography, } from "@firecms/ui";
 
-import { Link as ReactLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export type SmallNavigationCardProps = {
     name: string,
@@ -17,7 +17,7 @@ export function SmallNavigationCard({
     return (
         <>
 
-            <ReactLink
+            <Link
                 tabIndex={0}
                 className={cn(cardMixin,
                     cardClickableMixin,
@@ -39,7 +39,7 @@ export function SmallNavigationCard({
                 <div className={"p-4"}>
                     <ArrowForwardIcon color="primary"/>
                 </div>
-            </ReactLink>
+            </Link>
 
         </>);
 }

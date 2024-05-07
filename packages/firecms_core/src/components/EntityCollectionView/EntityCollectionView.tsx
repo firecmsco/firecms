@@ -200,8 +200,7 @@ export const EntityCollectionView = React.memo(
 
         const tableController = useDataSourceEntityCollectionTableController<M>({
             fullPath,
-            collection: collectionRef.current,
-            entitiesDisplayedFirst: [],
+            collection: collectionProp,
             lastDeleteTimestamp
         });
 

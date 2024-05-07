@@ -21,7 +21,6 @@ export interface PropertiesToColumnsParams<M extends Record<string, any>> {
     properties: ResolvedProperties<M>;
     sortable?: boolean;
     forceFilter?: FilterValues<keyof M extends string ? keyof M : never>;
-    disabledFilter?: boolean;
     AdditionalHeaderWidget?: React.ComponentType<{
         property: ResolvedProperty,
         propertyKey: string,
@@ -29,7 +28,8 @@ export interface PropertiesToColumnsParams<M extends Record<string, any>> {
     }>;
 }
 
-export function propertiesToColumns<M extends Record<string, any>>({ properties, sortable, forceFilter, disabledFilter, AdditionalHeaderWidget }: PropertiesToColumnsParams<M>): VirtualTableColumn[] {
+export function propertiesToColumns<M extends Record<string, any>>({ properties, sortable, forceFilter, AdditionalHeaderWidget }: PropertiesToColumnsParams<M>): VirtualTableColumn[] {
+    const disabledFilter = Boolean(forceFilter);
     return Object.entries<ResolvedProperty>(properties)
         .flatMap(([key, property]) => getColumnKeysForProperty(property, key))
         .map(({
@@ -45,7 +45,7 @@ export function propertiesToColumns<M extends Record<string, any>>({ properties,
                 align: getTableCellAlignment(property),
                 icon: getIconForProperty(property, "small"),
                 title: property.name ?? key as string,
-                sortable: sortable && (forceFilter ? Object.keys(forceFilter).includes(key) : true),
+                sortable: sortable,
                 filter: !disabledFilter && filterable,
                 width: getTablePropertyColumnWidth(property),
                 resizable: true,
