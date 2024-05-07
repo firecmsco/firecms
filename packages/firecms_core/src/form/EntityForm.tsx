@@ -135,12 +135,13 @@ export type EntityFormSaveParams<M extends Record<string, any>> = {
  * @constructor
  * @group Components
  */
-export const EntityForm = React.memo<EntityFormProps<any>>(EntityFormInternal,
-    (a: EntityFormProps<any>, b: EntityFormProps<any>) => {
-        return a.status === b.status &&
-            a.path === b.path &&
-            equal(a.entity?.values, b.entity?.values);
-    }) as typeof EntityFormInternal;
+export const EntityForm = EntityFormInternal;
+// export const EntityForm = React.memo<EntityFormProps<any>>(EntityFormInternal,
+//     (a: EntityFormProps<any>, b: EntityFormProps<any>) => {
+//         return a.status === b.status &&
+//             a.path === b.path &&
+//             equal(a.entity?.values, b.entity?.values);
+//     }) as typeof EntityFormInternal;
 
 function getDataSourceEntityValues<M extends object>(initialResolvedCollection: ResolvedEntityCollection,
                                                      status: "new" | "existing" | "copy",
@@ -415,7 +416,8 @@ function EntityFormInternal<M extends Record<string, any>>({
     const pluginActions: React.ReactNode[] = [];
 
     const formContext: FormContext<M> = {
-        setFieldValue: formex.setFieldValue,
+        // @ts-ignore
+        setFieldValue: useCallback(formex.setFieldValue, []),
         values: formex.values,
         collection: resolvedCollection,
         entityId,
@@ -423,12 +425,14 @@ function EntityFormInternal<M extends Record<string, any>>({
         save
     };
 
+    const submittedFormContext = useRef<FormContext<M> | null>(null);
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
-        if (onFormContextChange) {
+        if (onFormContextChange && !formContextsEqual(submittedFormContext.current ?? undefined, formContext)) {
             onFormContextChange(formContext);
+            submittedFormContext.current = formContext;
         }
-    }, [onFormContextChange, formContext]);
+    }, [formContext, onFormContextChange]);
 
     if (plugins && inputCollection) {
         const actionProps: PluginFormActionProps = {
@@ -725,4 +729,11 @@ export function yupToFormErrors(yupError: ValidationError): Record<string, any> 
         }
     }
     return errors;
+}
+
+function formContextsEqual(a: FormContext<any> | undefined, b: FormContext<any> | undefined): boolean {
+    return a?.path === b?.path &&
+        a?.entityId === b?.entityId &&
+        equal(a?.values, b?.values) &&
+        equal(a?.collection, b?.collection);
 }
