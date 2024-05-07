@@ -612,7 +612,6 @@ function FireCMSAppAuthenticated({
                                       context,
                                       loading
                                   }) => {
-                                    console.log("logo", logo);
 
                                     let component;
                                     if (loading) {

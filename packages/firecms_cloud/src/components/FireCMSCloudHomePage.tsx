@@ -2,7 +2,8 @@ import React from "react";
 import {
     DefaultHomePage,
     IconForView,
-    NavigationGroup, SmallNavigationCard,
+    NavigationGroup,
+    SmallNavigationCard,
     useCustomizationController,
     useNavigationController
 } from "@firecms/core";
@@ -27,16 +28,17 @@ export function FireCMSCloudHomePage() {
             <React.Fragment key={plugin.key}>{plugin.homePage?.additionalActions ?? null}</React.Fragment>
         )).filter(Boolean));
     }
+    const showSubscriptionWidget = (navigation.collections ?? []).length > 0;
     return <DefaultHomePage
         additionalActions={<> {pluginActions} </>}
-        additionalChildrenStart={(navigation.collections ?? []).length > 0
+        additionalChildrenStart={showSubscriptionWidget
             ? <SubscriptionPlanWidget showForPlans={["free"]}/>
             : undefined}
         additionalChildrenEnd={
             <NavigationGroup group={"ADMIN"}>
                 <div className={"grid grid-cols-12 gap-2"}>
                     {ADMIN_VIEWS_CONFIG.map((view) => <div className={"col-span-12 sm:col-span-6 lg:col-span-4"}
-                                                          key={`nav_${view.path}`}>
+                                                           key={`nav_${view.path}`}>
                         <SmallNavigationCard
                             name={view.name}
                             url={view.path}
