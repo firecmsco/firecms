@@ -1,7 +1,7 @@
 {
     "name": "@firecms/core",
     "type": "module",
-    "version": "3.0.0-canary.45",
+    "version": "3.0.0-canary.46",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "funding": {
         "url": "https://github.com/sponsors/firecmsco"
@@ -46,8 +46,8 @@
         "./package.json": "./package.json"
     },
     "dependencies": {
-        "@firecms/formex": "^3.0.0-canary.45",
-        "@firecms/ui": "^3.0.0-canary.45",
+        "@firecms/formex": "^3.0.0-canary.46",
+        "@firecms/ui": "^3.0.0-canary.46",
         "@fontsource/jetbrains-mono": "^5.0.19",
         "@hello-pangea/dnd": "^16.6.0",
         "@radix-ui/react-portal": "^1.0.4",
@@ -77,9 +77,9 @@
     },
     "devDependencies": {
         "@jest/globals": "^29.7.0",
-        "@types/jest": "^29.5.12",
         "@testing-library/react": "^14.3.1",
         "@testing-library/user-event": "^14.5.2",
+        "@types/jest": "^29.5.12",
         "@types/node": "^20.12.7",
         "@types/object-hash": "^3.0.6",
         "@types/react": "^18.2.79",
@@ -115,7 +115,6 @@
     "publishConfig": {
         "access": "public"
     },
-
     "eslintConfig": {
         "extends": [
             "react-app",
