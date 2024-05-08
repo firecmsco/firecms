@@ -32,7 +32,7 @@ const ButtonInner = React.forwardRef<
    }: ButtonProps<any>, ref) => {
 
     const baseClasses =
-        "h-fit rounded-md uppercase inline-flex items-center justify-center p-2 px-4 text-sm font-medium focus:outline-none transition ease-in-out duration-150 gap-2";
+        "h-fit rounded-md uppercase whitespace-nowrap inline-flex items-center justify-center p-2 px-4 text-sm font-medium focus:outline-none transition ease-in-out duration-150 gap-2";
 
     const buttonClasses = cn({
         "w-full": fullWidth,
