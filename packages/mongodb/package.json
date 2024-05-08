@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-canary.48",
+  "version": "3.0.0-canary.49",
   "type": "module",
   "name": "@firecms/mongodb",
   "access": "public",
@@ -8,9 +8,9 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "^3.0.0-canary.48",
-    "@firecms/firebase": "^3.0.0-canary.48",
-    "@firecms/ui": "^3.0.0-canary.48",
+    "@firecms/core": "^3.0.0-canary.49",
+    "@firecms/firebase": "^3.0.0-canary.49",
+    "@firecms/ui": "^3.0.0-canary.49",
     "firebase": "^10.11.1"
   },
   "exports": {
@@ -46,5 +46,5 @@
       "react-app/jest"
     ]
   },
-  "gitHead": "9377fc229ffc37c26037d27078310cb262358e49"
+  "gitHead": "271073e231ff9a4946d1a39bf901c891b834f341"
 }
