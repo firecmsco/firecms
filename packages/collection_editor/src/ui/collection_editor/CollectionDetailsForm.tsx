@@ -5,6 +5,7 @@ import {
     AutocompleteItem,
     BooleanSwitchWithLabel,
     Chip,
+    ClearIcon,
     cn,
     Container,
     DebouncedTextField,
@@ -245,11 +246,19 @@ export function CollectionDetailsForm({
                                             setFieldTouched("sideDialogWidth", true);
                                             const value = e.target.value;
                                             if (!value) {
-                                                setFieldValue("sideDialogWidth", undefined);
+                                                setFieldValue("sideDialogWidth", null);
                                             } else if (!isNaN(Number(value))) {
                                                 setFieldValue("sideDialogWidth", Number(value));
                                             }
                                         }}
+                                        endAdornment={<IconButton
+                                            size={"small"}
+                                            onClick={() => {
+                                                setFieldValue("sideDialogWidth", null);
+                                            }}
+                                            disabled={!values.sideDialogWidth}>
+                                            <ClearIcon size={"small"}/>
+                                        </IconButton>}
                                         value={values.sideDialogWidth ?? ""}
                                         label={"Side dialog width"}/>
                                     <FieldCaption error={showErrors && Boolean(errors.singularName)}>
