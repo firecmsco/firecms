@@ -1,125 +1,143 @@
 {
-  "name": "@firecms/core",
-  "type": "module",
-  "version": "3.0.0-canary.45",
-  "description": "Awesome Firebase/Firestore-based headless open-source CMS",
-  "funding": {
-    "url": "https://github.com/sponsors/firecmsco"
-  },
-  "author": "FireCMS",
-  "license": "MIT",
-  "repository": "git@github.com:FireCMSco/firecms.git",
-  "main": "./dist/index.umd.js",
-  "module": "./dist/index.es.js",
-  "types": "./dist/index.d.ts",
-  "source": "src/index.ts",
-  "engines": {
-    "node": ">=14"
-  },
-  "keywords": [
-    "firebase",
-    "cms",
-    "admin",
-    "admin panel",
-    "firebase panel",
-    "firestore",
-    "headless",
-    "headless cms",
-    "content manager"
-  ],
-  "scripts": {
-    "watch": "vite build --watch",
-    "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
-    "prepublishOnly": "run-s build",
-    "createTag": "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags",
-    "test:lint": "eslint \"src/**\" --quiet",
-    "test": "jest",
-    "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
-    "generateIcons": "ts-node --esm src/icons/generateIcons.ts"
-  },
-  "exports": {
-    ".": {
-      "import": "./dist/index.es.js",
-      "require": "./dist/index.umd.js",
-      "types": "./dist/index.d.ts"
+    "name": "@firecms/core",
+    "type": "module",
+    "version": "3.0.0-canary.45",
+    "description": "Awesome Firebase/Firestore-based headless open-source CMS",
+    "funding": {
+        "url": "https://github.com/sponsors/firecmsco"
     },
-    "./package.json": "./package.json"
-  },
-  "dependencies": {
-    "@firecms/formex": "^3.0.0-canary.45",
-    "@firecms/ui": "^3.0.0-canary.45",
-    "@fontsource/jetbrains-mono": "^5.0.19",
-    "@hello-pangea/dnd": "^16.6.0",
-    "@radix-ui/react-portal": "^1.0.4",
-    "clsx": "^2.1.0",
-    "date-fns": "^3.6.0",
-    "history": "^5.3.0",
-    "js-search": "^2.0.1",
-    "markdown-it": "^14.1.0",
-    "notistack": "^3.0.1",
-    "object-hash": "^3.0.0",
-    "react-dropzone": "^14.2.3",
-    "react-fast-compare": "^3.2.2",
-    "react-image-file-resizer": "^0.4.8",
-    "react-markdown-editor-lite": "^1.3.4",
-    "react-transition-group": "^4.4.5",
-    "react-use-measure": "^2.1.1",
-    "react-window": "^1.8.10",
-    "typeface-rubik": "^1.1.13",
-    "yup": "^0.32.11"
-  },
-  "peerDependencies": {
-    "firebase": "^10.5.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router": "^6.22.0",
-    "react-router-dom": "^6.22.0"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "devDependencies": {
-    "@jest/globals": "^29.7.0",
-    "@testing-library/jest-dom": "^6.4.2",
-    "@testing-library/react": "^14.3.1",
-    "@testing-library/user-event": "^14.5.2",
-    "@types/jest": "^29.5.12",
-    "@types/node": "^20.12.7",
-    "@types/object-hash": "^3.0.6",
-    "@types/react": "^18.2.79",
-    "@types/react-dom": "^18.2.25",
-    "@types/react-measure": "^2.0.12",
-    "@typescript-eslint/eslint-plugin": "^7.7.0",
-    "@typescript-eslint/parser": "^7.7.0",
-    "@vitejs/plugin-react": "^4.2.1",
-    "cross-env": "^7.0.3",
-    "eslint": "^8.57.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-n": "^16.6.2",
-    "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-react": "^7.34.1",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "firebase": "^10.11.0",
-    "jest": "^29.7.0",
-    "npm-run-all": "^4.1.5",
-    "react-router": "^6.22.3",
-    "react-router-dom": "^6.22.3",
-    "ts-jest": "^29.1.2",
-    "ts-node": "^10.9.2",
-    "tsd": "^0.31.0",
-    "typescript": "^5.4.5",
-    "vite": "^5.2.9"
-  },
-  "files": [
-    "dist",
-    "src"
-  ],
-  "gitHead": "7f22bfa3bb20479ad23becd9c10f78cac1a3bc32",
-  "publishConfig": {
-    "access": "public"
-  }
+    "author": "FireCMS",
+    "license": "MIT",
+    "repository": "git@github.com:FireCMSco/firecms.git",
+    "main": "./dist/index.umd.js",
+    "module": "./dist/index.es.js",
+    "types": "./dist/index.d.ts",
+    "source": "src/index.ts",
+    "engines": {
+        "node": ">=14"
+    },
+    "keywords": [
+        "firebase",
+        "cms",
+        "admin",
+        "admin panel",
+        "firebase panel",
+        "firestore",
+        "headless",
+        "headless cms",
+        "content manager"
+    ],
+    "scripts": {
+        "watch": "vite build --watch",
+        "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+        "prepublishOnly": "run-s build",
+        "createTag": "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags",
+        "test:lint": "eslint \"src/**\" --quiet",
+        "test": "jest",
+        "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+        "generateIcons": "ts-node --esm src/icons/generateIcons.ts"
+    },
+    "exports": {
+        ".": {
+            "import": "./dist/index.es.js",
+            "require": "./dist/index.umd.js",
+            "types": "./dist/index.d.ts"
+        },
+        "./package.json": "./package.json"
+    },
+    "dependencies": {
+        "@firecms/formex": "^3.0.0-canary.45",
+        "@firecms/ui": "^3.0.0-canary.45",
+        "@fontsource/jetbrains-mono": "^5.0.19",
+        "@hello-pangea/dnd": "^16.6.0",
+        "@radix-ui/react-portal": "^1.0.4",
+        "clsx": "^2.1.0",
+        "date-fns": "^3.6.0",
+        "history": "^5.3.0",
+        "js-search": "^2.0.1",
+        "markdown-it": "^14.1.0",
+        "notistack": "^3.0.1",
+        "object-hash": "^3.0.0",
+        "react-dropzone": "^14.2.3",
+        "react-fast-compare": "^3.2.2",
+        "react-image-file-resizer": "^0.4.8",
+        "react-markdown-editor-lite": "^1.3.4",
+        "react-transition-group": "^4.4.5",
+        "react-use-measure": "^2.1.1",
+        "react-window": "^1.8.10",
+        "typeface-rubik": "^1.1.13",
+        "yup": "^0.32.11"
+    },
+    "peerDependencies": {
+        "firebase": "^10.5.2",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-router": "^6.22.0",
+        "react-router-dom": "^6.22.0"
+    },
+    "devDependencies": {
+        "@jest/globals": "^29.7.0",
+        "@types/jest": "^29.5.12",
+        "@testing-library/react": "^14.3.1",
+        "@testing-library/user-event": "^14.5.2",
+        "@types/node": "^20.12.7",
+        "@types/object-hash": "^3.0.6",
+        "@types/react": "^18.2.79",
+        "@types/react-dom": "^18.2.25",
+        "@types/react-measure": "^2.0.12",
+        "@typescript-eslint/eslint-plugin": "^7.7.0",
+        "@typescript-eslint/parser": "^7.7.0",
+        "@vitejs/plugin-react": "^4.2.1",
+        "cross-env": "^7.0.3",
+        "eslint": "^8.57.0",
+        "eslint-config-standard": "^17.1.0",
+        "eslint-plugin-import": "^2.29.1",
+        "eslint-plugin-n": "^16.6.2",
+        "eslint-plugin-promise": "^6.1.1",
+        "eslint-plugin-react": "^7.34.1",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "firebase": "^10.11.0",
+        "jest": "^29.7.0",
+        "npm-run-all": "^4.1.5",
+        "react-router": "^6.22.3",
+        "react-router-dom": "^6.22.3",
+        "ts-jest": "^29.1.2",
+        "ts-node": "^10.9.2",
+        "tsd": "^0.31.0",
+        "typescript": "^5.4.5",
+        "vite": "^5.2.9"
+    },
+    "files": [
+        "dist",
+        "src"
+    ],
+    "gitHead": "7f22bfa3bb20479ad23becd9c10f78cac1a3bc32",
+    "publishConfig": {
+        "access": "public"
+    },
+
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    },
+    "jest": {
+        "transform": {
+            "^.+\\.tsx?$": "ts-jest"
+        },
+        "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+        "moduleFileExtensions": [
+            "ts",
+            "tsx",
+            "js",
+            "jsx",
+            "json",
+            "node"
+        ],
+        "testEnvironment": "node",
+        "moduleNameMapper": {
+            "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js"
+        }
+    }
 }

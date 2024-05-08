@@ -23,7 +23,6 @@ export function ArrayOfStorageComponentsPreview({
     const property = resolveArrayProperty({
         propertyKey,
         property: inputProperty,
-        propertyValue: value,
         fields: customizationController.propertyConfigs
     });
 

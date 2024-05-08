@@ -1,14 +1,14 @@
 import React from "react";
 
 import { coolIconKeys, debounce, Icon, IconButton, iconKeys, SearchBar, Tooltip } from "@firecms/ui";
-import { icon_synonyms, iconsSearch } from "../util";
+import { iconSynonyms, iconsSearch } from "../util";
 
 const UPDATE_SEARCH_INDEX_WAIT_MS = 220;
 
-if (process.env.NODE_ENV !== "production") {
-    Object.keys(icon_synonyms).forEach((icon: string) => {
+if (iconSynonyms && process.env.NODE_ENV !== "production") {
+    Object.keys(iconSynonyms).forEach((icon: string) => {
         if (!iconKeys.includes(icon)) {
-            console.warn(`The icon ${icon} no longer exists. Remove it from \`icon_synonyms\``);
+            console.warn(`The icon ${icon} no longer exists. Remove it from \`iconSynonyms\``);
         }
     });
 }

@@ -53,7 +53,6 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
     const property = resolveProperty({
         propertyKey,
         propertyOrBuilder: inputProperty,
-        propertyValue: value,
         fields: customizationController.propertyConfigs
     });
 

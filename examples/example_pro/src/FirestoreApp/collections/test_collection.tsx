@@ -105,12 +105,17 @@ export const testCollection = buildCollection({
                             fromTo: "Saturation available range",
                         }
                     },
-                    value: ({ propertyValue, index }) => {
+                    value: (props) => {
+                        const { propertyValue } = props;
+                        // console.log("props", props);
                         if (propertyValue?.type === "oneNum") {
                             return ({
                                 name: "Saturation",
                                 dataType: "number",
-                                validation: { min: 0, max: 100 }
+                                validation: {
+                                    min: 0,
+                                    max: 100
+                                }
                             })
                         } else if (propertyValue?.type === "fromTo") {
                             return ({
@@ -147,6 +152,38 @@ export const testCollection = buildCollection({
                     }
                 }
             },
+        },
+        map: {
+            name: "Map",
+            dataType: "map",
+            properties: {
+                nested_1: {
+                    name: "Nested 1",
+                    dataType: "map",
+                    properties: {
+                        nested_2: {
+                            name: "Nested 2",
+                            dataType: "map",
+                            properties: {
+                                nested_3: {
+                                    name: "Nested 3",
+                                    dataType: "map",
+                                    properties: {
+                                        name: {
+                                            name: "Name",
+                                            dataType: "string"
+                                        },
+                                        num: {
+                                            name: "Num",
+                                            dataType: "number"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         },
         array_enum: {
             name: "Array enum",

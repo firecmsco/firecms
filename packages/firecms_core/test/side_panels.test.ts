@@ -2,10 +2,11 @@ import { afterEach, describe, expect, jest, test } from "@jest/globals";
 import { EntityCollection, EntitySidePanelProps } from "../src/types";
 import { buildSidePanelsFromUrl } from "../src/internal/useBuildSideEntityController";
 
-describe('buildSidePanelsFromUrl', () => {
+describe("buildSidePanelsFromUrl", () => {
 
     const mockCollections: EntityCollection[] = [
         {
+            id: "products",
             name: "Products",
             path: "products",
             properties: {},
@@ -14,12 +15,14 @@ describe('buildSidePanelsFromUrl', () => {
                 name: "Custom view",
             }],
             subcollections: [{
+                id: "locales",
                 name: "Locales",
                 path: "locales",
                 properties: {}
             }]
         },
         {
+            id: "experiences",
             name: "Experiences",
             path: "users/J4WyZHd3DhgcWRdJaBodSkSAVuN2/experiences",
             entityViews: [{
@@ -34,7 +37,7 @@ describe('buildSidePanelsFromUrl', () => {
         jest.clearAllMocks();
     });
 
-    test('should return side panels based on given path', () => {
+    test("should return side panels based on given path", () => {
         const expectedSidePanels: EntitySidePanelProps<any>[] = [
             {
                 path: "products",
@@ -46,7 +49,7 @@ describe('buildSidePanelsFromUrl', () => {
         expect(sidePanels).toEqual(expectedSidePanels);
     });
 
-    test('should return side panels based on given path', () => {
+    test("should return side panels based on given path", () => {
         const expectedSidePanels: EntitySidePanelProps<any>[] = [
             {
                 path: "products",
@@ -59,7 +62,7 @@ describe('buildSidePanelsFromUrl', () => {
         expect(sidePanels).toEqual(expectedSidePanels);
     });
 
-    test('should return side panels based on given path and newFlag', () => {
+    test("should return side panels based on given path and newFlag", () => {
         const expectedSidePanels: EntitySidePanelProps<any>[] = [
             {
                 path: "products",
@@ -70,7 +73,7 @@ describe('buildSidePanelsFromUrl', () => {
         expect(sidePanels).toEqual(expectedSidePanels);
     });
 
-    test('should return side panels based on given path with custom view', () => {
+    test("should return side panels based on given path with custom view", () => {
         const expectedSidePanels: EntitySidePanelProps<any>[] = [
             {
                 path: "products",
@@ -83,18 +86,18 @@ describe('buildSidePanelsFromUrl', () => {
         expect(sidePanels).toEqual(expectedSidePanels);
     });
 
-    test('should return side panels based on complex given path with custom view', () => {
+    test("should return side panels based on complex given path with custom view", () => {
         const expectedSidePanels: EntitySidePanelProps<any>[] = [
             {
                 path: "users/J4WyZHd3DhgcWRdJaBodSkSAVuN2/experiences",
                 entityId: "pUAGjOQALls5wTwKq0sF",
                 copy: false,
-                selectedSubPath: "editor"
+                selectedSubPath: "editor",
+                width: undefined
             }
         ];
         const sidePanels = buildSidePanelsFromUrl("users/J4WyZHd3DhgcWRdJaBodSkSAVuN2/experiences/pUAGjOQALls5wTwKq0sF/editor", mockCollections, false);
         expect(sidePanels).toEqual(expectedSidePanels);
     });
-
 
 });

@@ -1,9 +1,8 @@
-import { it } from "@jest/globals";
-import { buildCollection, resolveCollection } from "../src";
+import { describe, test } from "@jest/globals";
+import { buildCollection, resolveCollection } from "../src/util";
+import * as util from "util";
 
-import util from "util";
-
-export const testCollection = buildCollection({
+const testCollection = buildCollection({
     id: "test_entity",
     path: "test_entity",
     customId: false,
@@ -24,7 +23,11 @@ export const testCollection = buildCollection({
                             fromTo: "Saturation available range",
                         }
                     },
-                    value: ({ propertyValue, values, index }) => {
+                    value: ({
+                                propertyValue,
+                                values,
+                                index
+                            }) => {
                         if (!index) {
                             return null;
                         }
@@ -33,7 +36,10 @@ export const testCollection = buildCollection({
                             return ({
                                 name: "Saturation",
                                 dataType: "number",
-                                validation: { min: 0, max: 100 }
+                                validation: {
+                                    min: 0,
+                                    max: 100
+                                }
                             })
                         } else if (parentValue === "fromTo") {
                             return ({
@@ -74,38 +80,42 @@ export const testCollection = buildCollection({
     }
 });
 
-it("Test path access in object", () => {
+describe("resolutions", () => {
 
-    const values = {
-        mainSaturation: [
-            {
-                type: "oneNum",
-                value: 10
-            },
-            {
-                type: "fromTo",
-                value: {
-                    from: 0,
-                    to: 100
+    test("retrieves value using dot notation", () => {
+
+        const values = {
+            mainSaturation: [
+                {
+                    type: "oneNum",
+                    value: 10
+                },
+                {
+                    type: "fromTo",
+                    value: {
+                        from: 0,
+                        to: 100
+                    }
                 }
-            }
-        ]
-    };
+            ]
+        };
 
-    const resolvedCollection = resolveCollection({
-        collection: testCollection,
-        path: "ignore",
-        values
+        const resolvedCollection = resolveCollection({
+            collection: testCollection,
+            path: "ignore",
+            values
+        });
+
+        console.log("resolvedCollection", util.inspect(resolvedCollection, false, null, true));
+
+        // expect(getValueInPath(obj, "email")).toEqual("jesus.riley@example.com");
+        // expect(getValueInPath(obj, "picture.medium")).toEqual("https://randomuser.me/api/portraits/med/men/17.jpg");
+        // expect(getValueInPath(obj, "location.timezone.offset")).toEqual("+4:00");
+        // expect(getValueInPath(obj, "location.street.number")).toEqual(3570);
+        // expect(getValueInPath(obj, "location.street.nope")).toEqual(undefined);
+        // expect(getValueInPath(obj, "nope")).toEqual(undefined);
+        // expect(getValueInPath(obj, "nope.nope")).toEqual(undefined);
+        // expect(getValueInPath(obj, "nope.nope.nope.nope")).toEqual(undefined);
+
     });
-
-    console.log("resolvedCollection", util.inspect(resolvedCollection, false, null, true));
-
-    // expect(getValueInPath(obj, "email")).toEqual("jesus.riley@example.com");
-    // expect(getValueInPath(obj, "picture.medium")).toEqual("https://randomuser.me/api/portraits/med/men/17.jpg");
-    // expect(getValueInPath(obj, "location.timezone.offset")).toEqual("+4:00");
-    // expect(getValueInPath(obj, "location.street.number")).toEqual(3570);
-    // expect(getValueInPath(obj, "location.street.nope")).toEqual(undefined);
-    // expect(getValueInPath(obj, "nope")).toEqual(undefined);
-    // expect(getValueInPath(obj, "nope.nope")).toEqual(undefined);
-    // expect(getValueInPath(obj, "nope.nope.nope.nope")).toEqual(undefined);
 });

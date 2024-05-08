@@ -80,7 +80,6 @@ export function processValueMapping(value: any, property?: PropertyOrBuilder): a
     if (property === undefined) return value;
     const usedProperty: ResolvedProperty | null = resolveProperty({
         propertyOrBuilder: property,
-        propertyValue: value
     })
     if (usedProperty === null) return value;
     const from = inferTypeFromValue(value);

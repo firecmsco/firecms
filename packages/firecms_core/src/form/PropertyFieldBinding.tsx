@@ -92,7 +92,6 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                 let Component: ComponentType<FieldProps<T>> | undefined;
                 const resolvedProperty: ResolvedProperty<T> | null = resolveProperty({
                     propertyKey,
-                    propertyValue: fieldProps.field.value,
                     propertyOrBuilder: property,
                     values: fieldProps.form.values,
                     path: context.path,
@@ -116,7 +115,6 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                     }
                     const configProperty = resolveProperty({
                         propertyOrBuilder: propertyConfig.property,
-                        propertyValue: fieldProps.field.value,
                         values: fieldProps.form.values,
                         path: context.path,
                         entityId: context.entityId,

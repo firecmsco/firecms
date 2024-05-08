@@ -176,6 +176,8 @@ function EntityFormInternal<M extends Record<string, any>>({
                                                                onIdUpdateError,
                                                            }: EntityFormProps<M>) {
 
+    console.log("inputCollection", inputCollection)
+
     const analyticsController = useAnalyticsController();
 
     const customizationController = useCustomizationController();
@@ -345,6 +347,9 @@ function EntityFormInternal<M extends Record<string, any>>({
         previousValues: formex.initialValues,
         fields: customizationController.propertyConfigs
     });
+
+    console.log("internalValues", internalValues);
+    console.log("resolvedCollection", resolvedCollection);
 
     const titlePropertyKey = getEntityTitlePropertyKey(resolvedCollection, customizationController.propertyConfigs);
     const title = internalValues && titlePropertyKey ? getValueInPath(internalValues, titlePropertyKey) : undefined;

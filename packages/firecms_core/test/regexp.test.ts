@@ -1,5 +1,5 @@
 import { expect, it } from "@jest/globals";
-import { isValidRegExp, serializeRegExp } from "../src/core/util/regexp";
+import { isValidRegExp, serializeRegExp } from "../src";
 
 it("Serialize", () => {
     expect(serializeRegExp(/\d.*/)).toEqual("/\\d.*/");

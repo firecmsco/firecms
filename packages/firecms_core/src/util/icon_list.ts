@@ -1,4 +1,4 @@
-import { icon_synonyms } from "./icon_synonyms";
+import { iconSynonyms } from "./icon_synonyms";
 import { iconKeys } from "@firecms/ui";
 
 // @ts-ignore
@@ -12,6 +12,6 @@ iconsSearch.addDocuments(iconKeys
         return {
             key: importName,
             // @ts-ignore
-            synonyms: icon_synonyms[importName] ?? [],
+            synonyms: iconSynonyms[importName] ?? [],
         }
     }));

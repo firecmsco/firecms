@@ -30,20 +30,6 @@ export function mergeDeep<T extends object>(target: T, source: any): T {
     return output;
 }
 
-// export function getValueInPath(o: object | undefined, path: string): any {
-//     if (!o) return undefined;
-//     if (typeof o === "object") {
-//         if (path in o) {
-//             return (o as any)[path];
-//         }
-//         if (path.includes(".")) {
-//             const pathSegments = path.split(".");
-//             return getValueInPath((o as any)[pathSegments[0]], pathSegments.slice(1).join("."))
-//         }
-//     }
-//     return undefined;
-// }
-
 export function getValueInPath(o: object | undefined, path: string): any {
     if (!o) return undefined;
     if (typeof o === "object") {

@@ -140,7 +140,6 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
 
 export type GetPropertyForProps<M extends Record<string, any>> = {
     propertyKey: string,
-    propertyValue: any,
     entity: Entity<M>
 };
 

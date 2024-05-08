@@ -1,4 +1,4 @@
-export const icon_synonyms = {
+export const iconSynonyms = {
     abc: "alphabet character font letter symbol text type",
     access_alarm: "clock time",
     access_alarms: "clock time",
@@ -84,7 +84,6 @@ export const icon_synonyms = {
     apartment: "accommodation architecture building city company estate flat home house office places real residence residential shelter units workplace",
     api: "developer development enterprise software",
     app_blocking: "Android applications cancel cell device hardware iOS mobile phone stopped tablet",
-    apple: "brand logo",
     app_registration: "apps edit pencil register",
     approval: "apply approvals approve certificate certification disapproval drive file impression ink mark postage stamp",
     apps: "all applications circles collection components dots grid homescreen icons interface squares ui ux",
@@ -527,7 +526,6 @@ export const icon_synonyms = {
     egg_alt: "breakfast brunch food",
     eighteen_mp: "camera digits font image letters megapixels numbers quality resolution symbol text type",
     eight_k: "8000 8K alphabet character digit display font letter number pixels resolution symbol text type video",
-    eight_k_plus: "+ 7000 8K alphabet character digit display font letter number pixels resolution symbol text type video",
     eight_mp: "camera digit font image letters megapixels number quality resolution symbol text type",
     eightteen_mp: "camera digits font image letters megapixels numbers quality resolution symbol text type",
     eject: "arrow disc drive dvd player remove triangle up usb",
@@ -722,7 +720,6 @@ export const icon_synonyms = {
     four_g_mobiledata: "alphabet cellular character digit font letter network number phone signal speed symbol text type wifi",
     four_g_plus_mobiledata: "alphabet cellular character digit font letter network number phone signal speed symbol text type wifi",
     four_k: "4000 4K alphabet character digit display font letter number pixels resolution symbol text type video",
-    four_k_plus: "+ 4000 4K alphabet character digit display font letter number pixels resolution symbol text type video",
     four_mp: "camera digit font image letters megapixels number quality resolution symbol text type",
     fourteen_mp: "camera digits font image letters megapixels numbers quality resolution symbol text type",
     free_breakfast: "beverage cafe coffee cup drink mug tea",

@@ -41,11 +41,9 @@ export function SampleCustomEntityCollection() {
 
     const getPropertyFor = ({
                                 propertyKey,
-                                propertyValue,
                                 entity
                             }: {
         propertyKey: string,
-        propertyValue: any,
         entity: Entity<any>
     }) => {
         let propertyOrBuilder: PropertyOrBuilder | undefined = getPropertyInPath(collection.properties, propertyKey);
@@ -58,7 +56,6 @@ export function SampleCustomEntityCollection() {
             propertyKey,
             propertyOrBuilder,
             path,
-            propertyValue,
             values: entity.values,
             entityId: entity.id
         });
@@ -80,7 +77,6 @@ export function SampleCustomEntityCollection() {
         const propertyKey = column.key;
 
         let disabled = column.custom?.disabled;
-        const propertyValue = entity.values ? getValueInPath(entity.values, propertyKey) : undefined;
 
         if (columnIndex === 0) {
             return <EntityCollectionRowActions entity={entity}
@@ -90,7 +86,6 @@ export function SampleCustomEntityCollection() {
 
         const property = getPropertyFor({
             propertyKey,
-            propertyValue,
             entity
         });
         if (!property?.disabled) {

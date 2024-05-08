@@ -359,7 +359,6 @@ export const EntityCollectionView = React.memo(
 
         const getPropertyFor = useCallback(({
                                                 propertyKey,
-                                                propertyValue,
                                                 entity
                                             }: GetPropertyForProps<M>) => {
             let propertyOrBuilder: PropertyOrBuilder<any, M> | undefined = getPropertyInPath<M>(collection.properties, propertyKey);
@@ -374,7 +373,6 @@ export const EntityCollectionView = React.memo(
                 propertyKey,
                 propertyOrBuilder,
                 path: fullPath,
-                propertyValue,
                 values: entity.values,
                 entityId: entity.id,
                 fields: customizationController.propertyConfigs

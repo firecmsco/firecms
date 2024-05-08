@@ -2960,6 +2960,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@firecms/formex@workspace:packages/formex"
   dependencies:
+    "@jest/globals": ^29.7.0
+    "@types/jest": ^29.5.12
     "@types/node": ^20.12.7
     "@types/react": ^18.2.79
     "@types/react-dom": ^18.2.25
@@ -2971,7 +2973,9 @@ __metadata:
     eslint-plugin-promise: ^6.1.1
     eslint-plugin-react: ^7.34.1
     eslint-plugin-react-hooks: ^4.6.0
+    jest: ^29.7.0
     react-fast-compare: ^3.2.2
+    ts-jest: ^29.1.2
     typescript: ^5.4.5
     vite: ^5.2.9
   peerDependencies:

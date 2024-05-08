@@ -26,7 +26,7 @@ import { getDefaultValuesFor, isPropertyBuilder } from "./entities";
 import { DEFAULT_ONE_OF_TYPE } from "./common";
 import { getIn } from "@firecms/formex";
 import { enumToObjectEntries } from "./enums";
-import { isDefaultFieldConfigId } from "../core";
+import { isDefaultFieldConfigId } from "../core/field_configs";
 
 // import util from "util";
 
@@ -58,14 +58,12 @@ export const resolveCollection = <M extends Record<string, any>, >
 
     const resolvedProperties = Object.entries(collection.properties)
         .map(([key, propertyOrBuilder]) => {
-            const propertyValue = usedValues ? getIn(usedValues, key) : undefined;
             const childResolvedProperty = resolveProperty({
                 propertyKey: key,
                 propertyOrBuilder: propertyOrBuilder as PropertyOrBuilder | ResolvedProperty,
                 values: usedValues,
                 previousValues: usedPreviousValues,
                 path,
-                propertyValue,
                 entityId,
                 fields
             });
@@ -99,13 +97,11 @@ export const resolveCollection = <M extends Record<string, any>, >
  */
 export function resolveProperty<T extends CMSType = CMSType, M extends Record<string, any> = any>({
                                                                                                       propertyOrBuilder,
-                                                                                                      propertyValue,
                                                                                                       fromBuilder = false,
                                                                                                       ...props
                                                                                                   }: {
     propertyKey?: string,
     propertyOrBuilder: PropertyOrBuilder<T, M> | ResolvedProperty<T>,
-    propertyValue?: unknown,
     values?: Partial<M>,
     previousValues?: Partial<M>,
     path?: string,
@@ -128,10 +124,11 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
         if (!path)
             throw Error("Trying to resolve a property builder without specifying the entity path");
 
+        const usedPropertyValue = props.propertyKey ? getIn(props.values, props.propertyKey) : undefined;
         const result: Property<T> | null = propertyOrBuilder({
             ...props,
             path,
-            propertyValue,
+            propertyValue: usedPropertyValue,
             values: props.values ?? {},
             previousValues: props.previousValues ?? props.values ?? {}
         });
@@ -142,7 +139,6 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
 
         resolvedProperty = resolveProperty({
             ...props,
-            propertyValue,
             propertyOrBuilder: result,
             fromBuilder: true
         });
@@ -152,7 +148,6 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
             const properties = resolveProperties({
                 ...props,
                 properties: property.properties,
-                propertyValue
             });
             resolvedProperty = {
                 ...property,
@@ -163,7 +158,6 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
         } else if (property.dataType === "array") {
             resolvedProperty = resolveArrayProperty({
                 property,
-                propertyValue,
                 fromBuilder,
                 ...props
             }) as ResolvedProperty<any>;
@@ -198,7 +192,6 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
             }
             const customFieldProperty = resolveProperty<any>({
                 propertyOrBuilder: configPropertyOrBuilder,
-                propertyValue,
                 ...props
             });
             if (customFieldProperty) {
@@ -219,12 +212,10 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
 export function resolveArrayProperty<T extends any[], M>({
                                                              propertyKey,
                                                              property,
-                                                             propertyValue,
                                                              ...props
                                                          }: {
     propertyKey?: string,
     property: ArrayProperty<T> | ResolvedArrayProperty<T>,
-    propertyValue: any,
     values?: Partial<M>,
     previousValues?: Partial<M>,
     path?: string,
@@ -233,6 +224,7 @@ export function resolveArrayProperty<T extends any[], M>({
     fromBuilder?: boolean;
     fields?: Record<string, PropertyConfig>;
 }): ResolvedArrayProperty {
+    const propertyValue = propertyKey ? getIn(props.values, propertyKey) : undefined;
 
     if (property.of) {
         if (Array.isArray(property.of)) {
@@ -244,7 +236,6 @@ export function resolveArrayProperty<T extends any[], M>({
                     return resolveProperty({
                         propertyKey: `${propertyKey}.${index}`,
                         propertyOrBuilder: p as Property<any>,
-                        propertyValue: Array.isArray(propertyValue) ? propertyValue[index] : undefined,
                         ...props,
                         index
                     });
@@ -256,7 +247,6 @@ export function resolveArrayProperty<T extends any[], M>({
                 ? propertyValue.map((v: any, index: number) => resolveProperty({
                     propertyKey: `${propertyKey}.${index}`,
                     propertyOrBuilder: of,
-                    propertyValue: v,
                     ...props,
                     index
                 })).filter(e => Boolean(e)) as ResolvedProperty[]
@@ -264,7 +254,6 @@ export function resolveArrayProperty<T extends any[], M>({
             const ofProperty = resolveProperty({
                 propertyKey: `${propertyKey}`,
                 propertyOrBuilder: of,
-                propertyValue: undefined,
                 ...props
             });
             if (!ofProperty)
@@ -287,14 +276,12 @@ export function resolveArrayProperty<T extends any[], M>({
                 return resolveProperty({
                     propertyKey: `${propertyKey}.${index}`,
                     propertyOrBuilder: childProperty,
-                    propertyValue,
                     ...props
                 });
             }).filter(e => Boolean(e)) as ResolvedProperty[]
             : [];
         const properties = resolveProperties<any>({
             properties: property.oneOf.properties,
-            propertyValue: undefined,
             ...props
         });
         return {
@@ -326,11 +313,9 @@ export function resolveArrayProperty<T extends any[], M>({
  */
 export function resolveProperties<M extends Record<string, any>>({
                                                                      properties,
-                                                                     propertyValue,
                                                                      ...props
                                                                  }: {
     properties: PropertiesOrBuilders<M>,
-    propertyValue: unknown,
     values?: Partial<M>,
     previousValues?: Partial<M>,
     path?: string,
@@ -341,11 +326,9 @@ export function resolveProperties<M extends Record<string, any>>({
 }): ResolvedProperties<M> {
     return Object.entries<PropertyOrBuilder>(properties as Record<string, PropertyOrBuilder>)
         .map(([key, property]) => {
-            const thisPropertyValue = propertyValue && typeof propertyValue === "object" ? getValueInPath(propertyValue, key) : undefined;
             const childResolvedProperty = resolveProperty({
                 propertyKey: key,
                 propertyOrBuilder: property,
-                propertyValue: thisPropertyValue,
                 ...props
             });
             if (!childResolvedProperty) return {};
