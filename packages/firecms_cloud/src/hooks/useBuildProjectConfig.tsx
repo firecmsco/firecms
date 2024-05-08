@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { doc, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
-import { FirebaseApp } from "firebase/app";
+import { doc, getFirestore, onSnapshot, setDoc } from "@firebase/firestore";
+import { FirebaseApp } from "@firebase/app";
 import { ProjectSubscriptionPlan } from "../types";
 import { UploadFileProps } from "@firecms/core";
-import { FirebaseStorage, getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "firebase/storage";
+import { FirebaseStorage, getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "@firebase/storage";
 import { darkenColor, hexToRgbaWithOpacity } from "../utils";
 
 const DEFAULT_PRIMARY_COLOR = "#0070F4";

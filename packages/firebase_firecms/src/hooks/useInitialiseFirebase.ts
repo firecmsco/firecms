@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { deleteApp, FirebaseApp, getApps, initializeApp } from "firebase/app";
+import { deleteApp, FirebaseApp, getApps, initializeApp } from "@firebase/app";
 
 /**
  * @group Firebase

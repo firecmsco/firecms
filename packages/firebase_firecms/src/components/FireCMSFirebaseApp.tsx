@@ -1,5 +1,5 @@
 import React from "react";
-import { GoogleAuthProvider } from "firebase/auth";
+import { GoogleAuthProvider } from "@firebase/auth";
 
 import {
     CircularProgressCenter,

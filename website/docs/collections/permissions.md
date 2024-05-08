@@ -72,8 +72,7 @@ Quick example of how the `extra.roles` field in the previous example is
 initialised:
 
 ```tsx
-import { User as FirebaseUser } from "firebase/auth";
-import { Authenticator } from "@firecms/cloud";
+import { Authenticator, FirebaseUserWrapper } from "@firecms/cloud";
 
 const myAuthenticator: Authenticator<FirebaseUserWrapper> = async ({
                                                                 user,

@@ -8,8 +8,8 @@ import {
     getFirestore,
     onSnapshot,
     setDoc
-} from "firebase/firestore";
-import { FirebaseApp } from "firebase/app";
+} from "@firebase/firestore";
+import { FirebaseApp } from "@firebase/app";
 import { UserManagement } from "../types";
 import { Authenticator, PermissionsBuilder, Role, User } from "@firecms/core";
 import { resolveUserRolePermissions } from "../utils";

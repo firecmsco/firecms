@@ -3,7 +3,7 @@ import React, { useCallback, useMemo } from "react";
 import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
 
-import { getAnalytics, logEvent } from "firebase/analytics";
+import { getAnalytics, logEvent } from "@firebase/analytics";
 
 import { CenteredView, GitHubIcon, IconButton, Tooltip, } from "@firecms/ui";
 import {
@@ -53,13 +53,13 @@ import { CustomLoginView } from "./CustomLoginView";
 import { cryptoCollection } from "./collections/crypto_collection";
 import CustomColorTextField from "./custom_field/CustomColorTextField";
 import { booksCollection } from "./collections/books_collection";
-import { FirebaseApp } from "firebase/app";
+import { FirebaseApp } from "@firebase/app";
 import { TestEditorView } from "./TestEditorView";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { DataTalk } from "@firecms/datatalk";
-import { ReCaptchaEnterpriseProvider } from "firebase/app-check";
-import { getAuth } from "firebase/auth";
+import { ReCaptchaEnterpriseProvider } from "@firebase/app-check";
+import { getAuth } from "@firebase/auth";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com"];
 
@@ -105,7 +105,7 @@ function App() {
         // getAnalytics(app);
 
         // This is an example of connecting to a local emulator (move import to top)
-        // import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
+        // import { getFirestore, connectFirestoreEmulator } from "@firebase/firestore";
         // connectFirestoreEmulator(getFirestore(app), '127.0.0.1', 8080);
     };
 

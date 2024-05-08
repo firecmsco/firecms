@@ -1,4 +1,4 @@
-import { CustomProvider, ReCaptchaEnterpriseProvider, ReCaptchaV3Provider } from "firebase/app-check";
+import { CustomProvider, ReCaptchaEnterpriseProvider, ReCaptchaV3Provider } from "@firebase/app-check";
 
 /**
  * @group Firebase

@@ -1,4 +1,4 @@
-import { ApplicationVerifier, ConfirmationResult, User as FirebaseUser } from "firebase/auth";
+import { ApplicationVerifier, ConfirmationResult, User as FirebaseUser } from "@firebase/auth";
 
 import { AuthController, Role, User } from "@firecms/core";
 

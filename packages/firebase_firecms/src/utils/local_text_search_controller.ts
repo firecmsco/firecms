@@ -1,8 +1,8 @@
-import { collection, getFirestore, onSnapshot, query } from "firebase/firestore";
+import { collection, getFirestore, onSnapshot, query } from "@firebase/firestore";
 import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "../types";
 // @ts-ignore
 import * as JsSearch from "js-search";
-import { FirebaseApp } from "firebase/app";
+import { FirebaseApp } from "@firebase/app";
 import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
 
 const MAX_SEARCH_RESULTS = 100;

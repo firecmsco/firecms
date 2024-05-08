@@ -1,4 +1,4 @@
-import { deleteField, DocumentSnapshot } from "firebase/firestore";
+import { deleteField, DocumentSnapshot } from "@firebase/firestore";
 import {
     CMSType,
     COLLECTION_PATH_SEPARATOR,

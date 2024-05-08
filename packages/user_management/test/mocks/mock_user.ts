@@ -1,4 +1,4 @@
-import { IdTokenResult } from "firebase/auth";
+import { IdTokenResult } from "@firebase/auth";
 
 export function createMockUser() {
     return {

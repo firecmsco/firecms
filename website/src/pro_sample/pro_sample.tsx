@@ -3,7 +3,7 @@ import React, { useCallback } from "react";
 import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
 
-import { getAnalytics, logEvent } from "firebase/analytics";
+import { getAnalytics, logEvent } from "@firebase/analytics";
 
 import { CenteredView, } from "@firecms/ui";
 import {
@@ -87,8 +87,7 @@ function ProSampleInner() {
     const modeController = useBuildModeController();
 
     const {
-        loading,
-        getAppCheckToken
+        loading
     } = useAppCheck({
         firebaseApp,
     });

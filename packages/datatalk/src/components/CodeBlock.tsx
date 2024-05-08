@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
-import * as firestoreLibrary from "firebase/firestore";
-import { firestoreToCMSModel } from "@firecms/firebase";
+import * as firestoreLibrary from "@firebase/firestore";
 import { CircularProgressCenter, EntityCollection } from "@firecms/core";
 import { Button, cn, Paper } from "@firecms/ui";
-import { buildPropertiesOrder } from "@firecms/schema_inference";
 import { AutoHeightEditor } from "./AutoHeightEditor";
-import { getPropertiesFromData } from "@firecms/collection_editor_firebase";
 import { extractStringLiterals } from "../utils/extract_literals";
 import { TableResults } from "./TableResults";
 

@@ -1,4 +1,4 @@
-import { User as FirebaseUser } from "firebase/auth";
+import { User as FirebaseUser } from "@firebase/auth";
 import { useEffect } from "react";
 import { createMockUser } from "./mock_user";
 

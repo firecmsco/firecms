@@ -1,7 +1,7 @@
 // import { useState } from "react";
 //
-// import { OAuthCredential, User as FirebaseUser } from "firebase/auth";
-// import { FirebaseApp } from "firebase/app";
+// import { OAuthCredential, User as FirebaseUser } from "@firebase/auth";
+// import { FirebaseApp } from "@firebase/app";
 // import { MOCK_PROJECT_ID } from "./constants";
 // import { createMockUser } from "./mock_user";
 // import { FireCMSBackend, FireCMSProject, ProjectsApi } from "@firecms/cloud";

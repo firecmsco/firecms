@@ -393,7 +393,6 @@ export function EntityEditView<M extends Record<string, any>, UserType extends U
             onValuesAreModified(dirty);
     }
 
-    console.log("eeee", collection);
     function buildForm() {
         const plugins = customizationController.plugins;
         let form = <EntityForm

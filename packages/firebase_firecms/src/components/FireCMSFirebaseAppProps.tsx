@@ -11,7 +11,7 @@ import {
     Locale,
     PropertyConfig
 } from "@firecms/core";
-import { FirebaseApp } from "firebase/app";
+import { FirebaseApp } from "@firebase/app";
 import { FirebaseLoginViewProps } from "./FirebaseLoginView";
 import {
     AppCheckOptions,

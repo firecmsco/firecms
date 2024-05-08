@@ -20,8 +20,8 @@ import {
     signOut,
     TwitterAuthProvider,
     User as FirebaseUser
-} from "firebase/auth";
-import { FirebaseApp } from "firebase/app";
+} from "@firebase/auth";
+import { FirebaseApp } from "@firebase/app";
 import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider } from "../types";
 import { Role, User } from "@firecms/core";
 

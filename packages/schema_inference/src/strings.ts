@@ -1,5 +1,5 @@
 import { ValuesCountEntry } from "./types";
-import { DocumentReference } from "firebase/firestore";
+import { DocumentReference } from "@firebase/firestore";
 
 export function findCommonInitialStringInPath(valuesCount?: ValuesCountEntry) {
 

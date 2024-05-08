@@ -1,5 +1,5 @@
-import { OAuthCredential, User as FirebaseUser } from "firebase/auth";
-import { FirebaseApp } from "firebase/app";
+import { OAuthCredential, User as FirebaseUser } from "@firebase/auth";
+import { FirebaseApp } from "@firebase/app";
 import { ProjectsApi } from "../api/projects";
 import { FireCMSProject } from "./projects";
 

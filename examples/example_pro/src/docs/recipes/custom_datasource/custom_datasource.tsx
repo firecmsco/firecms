@@ -8,7 +8,7 @@ import {
     FetchEntityProps,
     SaveEntityProps
 } from "@firecms/core";
-import { FirebaseApp } from "firebase/app";
+import { FirebaseApp } from "@firebase/app";
 import { useFirestoreDelegate } from "@firecms/firebase";
 
 type CustomDataSourceProps = {

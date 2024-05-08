@@ -1,5 +1,5 @@
 import { buildEntityPropertiesFromData, buildPropertiesOrder } from "@firecms/schema_inference";
-import { DocumentReference, Firestore, Timestamp } from "firebase/firestore";
+import { DocumentReference, Firestore, Timestamp } from "@firebase/firestore";
 import { DataType, EntityCollection, GeoPoint, removeInitialAndTrailingSlashes, unslugify } from "@firecms/core";
 import { getDocuments } from "./firestore";
 

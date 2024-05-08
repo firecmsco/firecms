@@ -1,4 +1,4 @@
-import { collection, collectionGroup, DocumentSnapshot, Firestore, getDocs, limit, query } from "firebase/firestore";
+import { collection, collectionGroup, DocumentSnapshot, Firestore, getDocs, limit, query } from "@firebase/firestore";
 
 export async function getDocuments(
     firestore: Firestore,

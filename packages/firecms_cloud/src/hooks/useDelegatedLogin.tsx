@@ -1,6 +1,6 @@
-import { FirebaseApp } from "firebase/app";
+import { FirebaseApp } from "@firebase/app";
 import { useCallback, useEffect, useState } from "react";
-import { getAuth, signInWithCustomToken, User as FirebaseUser } from "firebase/auth";
+import { getAuth, signInWithCustomToken, User as FirebaseUser } from "@firebase/auth";
 import { ProjectsApi } from "../api/projects";
 import { cacheDelegatedLoginToken, getDelegatedLoginTokenFromCache } from "../utils";
 import { ApiError } from "../types";

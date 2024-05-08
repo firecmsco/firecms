@@ -1,4 +1,4 @@
-import { User as FirebaseUser } from "firebase/auth";
+import { User as FirebaseUser } from "@firebase/auth";
 import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "../types";
 import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
 

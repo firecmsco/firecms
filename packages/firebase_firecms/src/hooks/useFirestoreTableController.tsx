@@ -23,9 +23,9 @@ import {
     query,
     QueryConstraint,
     where as whereClause
-} from "firebase/firestore";
+} from "@firebase/firestore";
 import { cmsToFirestoreModel, firestoreToCMSModel } from "./useFirestoreDelegate";
-import { FirebaseApp } from "firebase/app";
+import { FirebaseApp } from "@firebase/app";
 
 const DEFAULT_PAGE_SIZE = 50;
 

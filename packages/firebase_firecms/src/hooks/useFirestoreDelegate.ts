@@ -42,12 +42,12 @@ import {
     startAfter as startAfterClause,
     Timestamp,
     where as whereClause
-} from "firebase/firestore";
-import { FirebaseApp } from "firebase/app";
+} from "@firebase/firestore";
+import { FirebaseApp } from "@firebase/app";
 import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "../types/text_search";
 import { useCallback, useEffect, useRef } from "react";
 import { localSearchControllerBuilder } from "../utils";
-import { getAuth } from "firebase/auth";
+import { getAuth } from "@firebase/auth";
 
 /**
  * @group Firebase

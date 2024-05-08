@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 
-import { AppCheck, getToken, initializeAppCheck } from "firebase/app-check";
-import { FirebaseApp } from "firebase/app";
+import { AppCheck, getToken, initializeAppCheck } from "@firebase/app-check";
+import { FirebaseApp } from "@firebase/app";
 import { AppCheckOptions } from "../types";
 
 /**

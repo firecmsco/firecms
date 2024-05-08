@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from "react";
-import { FirebaseApp } from "firebase/app";
-import { collection, deleteDoc, doc, getFirestore, onSnapshot, runTransaction } from "firebase/firestore";
+import { FirebaseApp } from "@firebase/app";
+import { collection, deleteDoc, doc, getFirestore, onSnapshot, runTransaction } from "@firebase/firestore";
 import {
     CollectionsConfigController,
     DeleteCollectionParams,

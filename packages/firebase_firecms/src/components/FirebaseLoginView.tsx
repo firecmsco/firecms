@@ -1,6 +1,6 @@
 import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
-import { FirebaseApp, FirebaseError } from "firebase/app";
+import { FirebaseApp, FirebaseError } from "@firebase/app";
 import { ErrorView, FireCMSLogo, useModeController, } from "@firecms/core";
 import {
     ArrowBackIcon,
@@ -20,7 +20,7 @@ import {
     PhoneAuthProvider,
     PhoneMultiFactorGenerator,
     RecaptchaVerifier
-} from "firebase/auth";
+} from "@firebase/auth";
 import {
     FirebaseAuthController,
     FirebaseSignInOption,

@@ -1,5 +1,5 @@
-import { User as FirebaseUser } from "firebase/auth";
-import { FirebaseApp } from "firebase/app";
+import { User as FirebaseUser } from "@firebase/auth";
+import { FirebaseApp } from "@firebase/app";
 import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
 
 export type FirestoreTextSearchControllerBuilder = (props: {

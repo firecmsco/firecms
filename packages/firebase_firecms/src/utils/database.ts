@@ -1,4 +1,4 @@
-import { FirebaseApp } from "firebase/app";
+import { FirebaseApp } from "@firebase/app";
 import {
     collection,
     getDocs,
@@ -6,7 +6,7 @@ import {
     limit as limitClause,
     query,
     QueryDocumentSnapshot
-} from "firebase/firestore";
+} from "@firebase/firestore";
 
 export async function getFirestoreDataInPath(firebaseApp: FirebaseApp, path: string, parentPaths: string[], limit: number): Promise<object[]> {
     console.debug("getFirestoreDataInPath", path, limit)

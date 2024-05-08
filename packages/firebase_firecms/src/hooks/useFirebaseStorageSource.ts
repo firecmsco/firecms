@@ -1,5 +1,5 @@
-import { FirebaseApp } from "firebase/app";
-import { getDownloadURL, getMetadata, getStorage, ref, uploadBytes } from "firebase/storage";
+import { FirebaseApp } from "@firebase/app";
+import { getDownloadURL, getMetadata, getStorage, ref, uploadBytes } from "@firebase/storage";
 import { DownloadConfig, DownloadMetadata, StorageSource, UploadFileProps } from "@firecms/core";
 
 /**

@@ -1,6 +1,6 @@
 // import { useState } from "react";
 //
-// import { User as FirebaseUser } from "firebase/auth";
+// import { User as FirebaseUser } from "@firebase/auth";
 // import { createMockUser } from "./mock_user";
 // import { FirebaseAuthController } from "../../src/types";
 // import { Role } from "@firecms/user_management";

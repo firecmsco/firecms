@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { getAuth, RecaptchaVerifier } from "firebase/auth";
+import { getAuth, RecaptchaVerifier } from "@firebase/auth";
 
 declare global {
     interface Window {
