@@ -4,14 +4,10 @@ import { Panel } from "../general/Panel";
 export function IntroText() {
     return (
 
-        <Panel color={"secondary"}>
+        <Panel color={"primary"}>
             <p className="max-w-7xl text-2xl md:text-5xl font-bold tracking-tight uppercase"
                style={{ lineHeight: 1.35 }}>
-                FireCMS is a versatile and user-friendly content management
-                system built on Firebase, empowering users to effectively manage
-                and organize their data with a comprehensive suite of tools,
-                while seamlessly integrating with various web applications and
-                services to enhance their digital experiences.
+                FireCMS, powered by Firebase, offers unbeatable UX and performance for your CMS needs.
             </p>
         </Panel>
     );
