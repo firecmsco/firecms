@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { FirebaseApp, getApps } from "@firebase/app";
-import * as firebaseApp from "@firebase/app";
+import { FirebaseApp } from "@firebase/app";
 import { BrowserRouter, Route } from "react-router-dom";
 
 import {
@@ -264,7 +263,7 @@ function ErrorDelegatingLoginView({
     </CenteredView>;
 }
 
-function NoAccessErrorView(props: { configError: Error, onLogout: () => void }) {
+function NoAccessErrorView(props: { projectId: string, configError: Error, onLogout: () => void }) {
     return <CenteredView maxWidth={"2xl"} className={"flex flex-col gap-4"}>
         <div className={"flex gap-4 items-center"}>
             <ErrorIcon color={"error"}/>
@@ -273,7 +272,8 @@ function NoAccessErrorView(props: { configError: Error, onLogout: () => void }) 
         <Typography>{props.configError.message}</Typography>
         <Typography>
             This error may be caused when trying to access with a user that is not
-            registered in the project. You can ask the project owner to add you to the project.
+            registered in the project <code>{props.projectId}</code>.
+            You can ask the project owner to add you to the project.
         </Typography>
         <Button variant="outlined" onClick={props.onLogout}>Sign out</Button>
     </CenteredView>;
@@ -370,9 +370,11 @@ export function FireCMSClientWithController({
                                                             onLogout={fireCMSBackend.signOut}/>
     } else if (notValidUser) {
         console.warn("No user was found with email " + notValidUser.email);
-        loadingOrErrorComponent = <NoAccessError authController={authController}/>
+        loadingOrErrorComponent = <NoAccessError authController={authController}
+                                                 projectId={projectId}/>
     } else if (projectConfig.configError) {
         loadingOrErrorComponent = <NoAccessErrorView configError={projectConfig.configError}
+                                                     projectId={projectId}
                                                      onLogout={fireCMSBackend.signOut}/>
     } else if (customizationLoading) {
         loadingOrErrorComponent = <CircularProgressCenter text={"Project customization loading"}/>;
@@ -387,7 +389,7 @@ export function FireCMSClientWithController({
     } else if (!authController.user) {
         loadingOrErrorComponent = <CircularProgressCenter text={"Auth loading"}/>;
     } else if (!fireCMSUser) {
-        loadingOrErrorComponent = <NoAccessError authController={authController}/>;
+        loadingOrErrorComponent = <NoAccessError authController={authController} projectId={projectId}/>;
     }
 
     if (loadingOrErrorComponent) {
@@ -415,11 +417,15 @@ export function FireCMSClientWithController({
     />;
 }
 
-function NoAccessError({ authController }: {
-    authController: FirebaseAuthController
+function NoAccessError({
+                           authController,
+                           projectId
+                       }: {
+    authController: FirebaseAuthController,
+    projectId: string
 }) {
     return <CenteredView maxWidth={"md"} className={"gap-4"}>
-        <ErrorView title={"You don't have access to this project"}
+        <ErrorView title={"You don't have access to the project " + projectId}
                    error={"You can request permission to the owner"}/>
         <Button variant="text" onClick={authController.signOut}>Sign out</Button>
     </CenteredView>;
@@ -631,7 +637,7 @@ function FireCMSAppAuthenticated({
                                             <Scaffold
                                                 key={"project_scaffold_" + projectConfig.projectId}
                                                 name={projectConfig.projectName ?? ""}
-                                                logo={projectConfig.logo ??  logo}
+                                                logo={projectConfig.logo ?? logo}
                                                 Drawer={FireCMSCloudDrawer}
                                                 FireCMSAppBar={FireCMSAppBarComponent}
                                                 fireCMSAppBarProps={appConfig?.fireCMSAppBarComponentProps}
