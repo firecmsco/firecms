@@ -101,6 +101,10 @@ function getExportHeaders<M extends Record<string, any>>(properties: ResolvedPro
         ...(propertiesOrder ?? Object.keys(properties))
             .flatMap((childKey) => {
                 const property = properties[childKey];
+                if(!property) {
+                    console.warn("Property not found", childKey, properties);
+                    return [];
+                }
                 if (arrayValuesCount && arrayValuesCount[childKey] > 1) {
                     return Array.from({ length: arrayValuesCount[childKey] },
                         (_, i) => getHeaders(property as ResolvedProperty, `${childKey}[${i}]`, ""))
