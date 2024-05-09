@@ -1,0 +1,948 @@
+[
+  {
+    "product_id": "5",
+    "producer_id": "COMME DES GARÇONS PLAY",
+    "product_name": "P1T010",
+    "description": "Play Striped T-Shirt Men Red Heart",
+    "category1": "UOMO",
+    "category2": "T-SHIRT",
+    "category3": "T-shirts",
+    "product_detail": "  ",
+    "product_Material": " | ",
+    "product_Measure": "",
+    "product_Note": "",
+    "heel": "",
+    "sole": "",
+    "asta": "0",
+    "ponte": "0",
+    "asian_fit": "",
+    "hscode": "",
+    "colors": [
+      {
+        "idcolor": 1245,
+        "color": "NAVY/WHITE RED HEART",
+        "base_color": "Blue",
+        "MadeIn": "Not Selected|",
+        "season": "093",
+        "web": "S",
+        "CarryOver": "1",
+        "publish": false,
+        "size": [
+          {
+            "item_id": 4436,
+            "item_size": "XL",
+            "barcode": "3000692700081",
+            "stock": 2,
+            "last_modified": "07/11/2023 00:00:00",
+            "country_size": "",
+            "EAN": "",
+            "itemtype": "A",
+            "supply_price": "121",
+            "supply_price_no_vat": "99,18",
+            "supply_promo_price": "0",
+            "supply_promo_price_no_vat": "0"
+          }
+        ],
+        "pictures": [
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1607.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1608.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1609.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1610.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1611.jpg"
+        ],
+        "pictures_sellable": [
+          {
+            "Id": 11480,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1607.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 11481,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1608.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 11482,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1609.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 11483,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1610.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 11484,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1611.jpg",
+            "isSellable": false,
+            "web": "S"
+          }
+        ],
+        "language": []
+      }
+    ]
+  },
+  {
+    "product_id": "8",
+    "producer_id": "COMME DES GARÇONS PLAY",
+    "product_name": "P1T188",
+    "description": "Play T-Shirt",
+    "category1": "UOMO",
+    "category2": "T-SHIRT",
+    "category3": "T-shirts",
+    "product_detail": "  ",
+    "product_Material": " | ",
+    "product_Measure": "",
+    "product_Note": "",
+    "heel": "",
+    "sole": "",
+    "asta": "0",
+    "ponte": "0",
+    "asian_fit": "",
+    "hscode": "",
+    "colors": [
+      {
+        "idcolor": 11,
+        "color": "BLACK",
+        "base_color": "Black",
+        "MadeIn": "Not Selected|",
+        "season": "088",
+        "web": "S",
+        "CarryOver": "1",
+        "publish": false,
+        "size": [
+          {
+            "item_id": 41,
+            "item_size": "S",
+            "barcode": "3000693000012",
+            "stock": 2,
+            "last_modified": "15/11/2023 00:00:00",
+            "country_size": "",
+            "EAN": "",
+            "itemtype": "A",
+            "supply_price": "120",
+            "supply_price_no_vat": "98,36",
+            "supply_promo_price": "0",
+            "supply_promo_price_no_vat": "0"
+          }
+        ],
+        "pictures": [
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1562.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1563.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1564.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1565.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1566.jpg"
+        ],
+        "pictures_sellable": [
+          {
+            "Id": 11435,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1562.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 11436,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1563.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 11437,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1564.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 11438,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1565.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 11439,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1566.jpg",
+            "isSellable": false,
+            "web": "S"
+          }
+        ],
+        "language": []
+      }
+    ]
+  },
+  {
+    "product_id": "10",
+    "producer_id": "COMME DES GARÇONS PLAY",
+    "product_name": "P1T216",
+    "description": "Play T-Shirt W Gold Heart",
+    "category1": "UOMO",
+    "category2": "T-SHIRT",
+    "category3": "T-shirts",
+    "product_detail": "  ",
+    "product_Material": " | ",
+    "product_Measure": "",
+    "product_Note": "",
+    "heel": "",
+    "sole": "",
+    "asta": "0",
+    "ponte": "0",
+    "asian_fit": "",
+    "hscode": "",
+    "colors": [
+      {
+        "idcolor": 15,
+        "color": "WHITE GOLD HEART",
+        "base_color": "White",
+        "MadeIn": "Not Selected|",
+        "season": "088",
+        "web": "S",
+        "CarryOver": "1",
+        "publish": true,
+        "size": [
+          {
+            "item_id": 57,
+            "item_size": "S",
+            "barcode": "3000693200095",
+            "stock": 2,
+            "last_modified": "16/01/2024 00:00:00",
+            "country_size": "",
+            "EAN": "",
+            "itemtype": "A",
+            "supply_price": "90",
+            "supply_price_no_vat": "73,77",
+            "supply_promo_price": "0",
+            "supply_promo_price_no_vat": "0"
+          }
+        ],
+        "pictures": [
+          "https://www.net13server7.net/societeanonyme/ObjImg/15_912.jpg"
+        ],
+        "pictures_sellable": [
+          {
+            "Id": 912,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/15_912.jpg",
+            "isSellable": false,
+            "web": "S"
+          }
+        ],
+        "language": []
+      }
+    ]
+  },
+  {
+    "product_id": "17",
+    "producer_id": "COMME DES GARÇONS PLAY",
+    "product_name": "P1T107",
+    "description": "Play T-Shirt W Red Heart",
+    "category1": "DONNA",
+    "category2": "TOPS",
+    "category3": "T-shirt & jersey",
+    "product_detail": "  ",
+    "product_Material": " | ",
+    "product_Measure": "",
+    "product_Note": "",
+    "heel": "",
+    "sole": "",
+    "asta": "0",
+    "ponte": "0",
+    "asian_fit": "",
+    "hscode": "",
+    "colors": [
+      {
+        "idcolor": 6949,
+        "color": "BLACK",
+        "base_color": "Black",
+        "MadeIn": "Not Selected|",
+        "season": "093",
+        "web": "S",
+        "CarryOver": "1",
+        "publish": false,
+        "size": [
+          {
+            "item_id": 22376,
+            "item_size": "S",
+            "barcode": "3000693900077",
+            "stock": 2,
+            "last_modified": "24/04/2024 00:00:00",
+            "country_size": "",
+            "EAN": "",
+            "itemtype": "A",
+            "supply_price": "78",
+            "supply_price_no_vat": "63,93",
+            "supply_promo_price": "0",
+            "supply_promo_price_no_vat": "0"
+          },
+          {
+            "item_id": 22377,
+            "item_size": "M",
+            "barcode": "3000693900082",
+            "stock": 2,
+            "last_modified": "12/04/2024 00:00:00",
+            "country_size": "",
+            "EAN": "",
+            "itemtype": "A",
+            "supply_price": "78",
+            "supply_price_no_vat": "63,93",
+            "supply_promo_price": "0",
+            "supply_promo_price_no_vat": "0"
+          }
+        ],
+        "pictures": [
+          "https://www.net13server7.net/societeanonyme/ObjImg/20042021/20042021_009.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/20042021/20042021_010.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/20042021/20042021_011.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/20042021/20042021_012.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/20042021/20042021_013.jpg"
+        ],
+        "pictures_sellable": [
+          {
+            "Id": 5296,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/20042021/20042021_009.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 5297,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/20042021/20042021_010.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 5298,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/20042021/20042021_011.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 5299,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/20042021/20042021_012.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 5300,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/20042021/20042021_013.jpg",
+            "isSellable": false,
+            "web": "S"
+          }
+        ],
+        "language": []
+      }
+    ]
+  },
+  {
+    "product_id": "380",
+    "producer_id": "COMME DES GARÇONS PLAY CONVERSE",
+    "product_name": "P1K111",
+    "description": "Play Converse Chuck Taylor Low",
+    "category1": "ACCESSORI UNISEX",
+    "category2": "CALZATURE",
+    "category3": "",
+    "product_detail": "  ",
+    "product_Material": " | ",
+    "product_Measure": "",
+    "product_Note": "",
+    "heel": "",
+    "sole": "",
+    "asta": "0",
+    "ponte": "0",
+    "asian_fit": "",
+    "hscode": "",
+    "colors": [
+      {
+        "idcolor": 533,
+        "color": "BLACK",
+        "base_color": "Black",
+        "MadeIn": "Not Selected|",
+        "season": "093",
+        "web": "S",
+        "CarryOver": "1",
+        "publish": true,
+        "size": [
+          {
+            "item_id": 1682,
+            "item_size": "9",
+            "barcode": "3000730300080",
+            "stock": 1,
+            "last_modified": "15/03/2024 00:00:00",
+            "country_size": "",
+            "EAN": "",
+            "itemtype": "A",
+            "supply_price": "150",
+            "supply_price_no_vat": "122,95",
+            "supply_promo_price": "0",
+            "supply_promo_price_no_vat": "0"
+          },
+          {
+            "item_id": 1684,
+            "item_size": "11",
+            "barcode": "3000730300104",
+            "stock": 3,
+            "last_modified": "11/12/2023 00:00:00",
+            "country_size": "",
+            "EAN": "",
+            "itemtype": "A",
+            "supply_price": "150",
+            "supply_price_no_vat": "122,95",
+            "supply_promo_price": "0",
+            "supply_promo_price_no_vat": "0"
+          }
+        ],
+        "pictures": [
+          "https://www.net13server7.net/societeanonyme/ObjImg/533_1007.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/533_1008.jpg"
+        ],
+        "pictures_sellable": [
+          {
+            "Id": 1007,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/533_1007.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 1008,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/533_1008.jpg",
+            "isSellable": false,
+            "web": "S"
+          }
+        ],
+        "language": []
+      },
+      {
+        "idcolor": 534,
+        "color": "WHITE",
+        "base_color": "White",
+        "MadeIn": "Not Selected|",
+        "season": "093",
+        "web": "S",
+        "CarryOver": "1",
+        "publish": true,
+        "size": [
+          {
+            "item_id": 1691,
+            "item_size": "8+",
+            "barcode": "3000730300175",
+            "stock": 1,
+            "last_modified": "17/10/2023 00:00:00",
+            "country_size": "",
+            "EAN": "",
+            "itemtype": "A",
+            "supply_price": "150",
+            "supply_price_no_vat": "122,95",
+            "supply_promo_price": "0",
+            "supply_promo_price_no_vat": "0"
+          },
+          {
+            "item_id": 1692,
+            "item_size": "9",
+            "barcode": "3000730300183",
+            "stock": 1,
+            "last_modified": "03/05/2024 00:00:00",
+            "country_size": "",
+            "EAN": "",
+            "itemtype": "A",
+            "supply_price": "150",
+            "supply_price_no_vat": "122,95",
+            "supply_promo_price": "0",
+            "supply_promo_price_no_vat": "0"
+          }
+        ],
+        "pictures": [
+          "https://www.net13server7.net/societeanonyme/ObjImg/534_1009.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/534_1010.jpg"
+        ],
+        "pictures_sellable": [
+          {
+            "Id": 1009,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/534_1009.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 1010,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/534_1010.jpg",
+            "isSellable": false,
+            "web": "S"
+          }
+        ],
+        "language": []
+      }
+    ]
+  },
+  {
+    "product_id": "381",
+    "producer_id": "COMME DES GARÇONS PLAY CONVERSE",
+    "product_name": "P1K112",
+    "description": "Play Converse Chuck Taylor High",
+    "category1": "ACCESSORI UNISEX",
+    "category2": "CALZATURE",
+    "category3": "",
+    "product_detail": "  ",
+    "product_Material": " | ",
+    "product_Measure": "",
+    "product_Note": "",
+    "heel": "",
+    "sole": "",
+    "asta": "0",
+    "ponte": "0",
+    "asian_fit": "",
+    "hscode": "",
+    "colors": [
+      {
+        "idcolor": 536,
+        "color": "WHITE",
+        "base_color": "White",
+        "MadeIn": "Not Selected|",
+        "season": "093",
+        "web": "S",
+        "CarryOver": "1",
+        "publish": true,
+        "size": [
+          {
+            "item_id": 50119,
+            "item_size": "12",
+            "barcode": "3000730400240",
+            "stock": 1,
+            "last_modified": "02/05/2023 00:00:00",
+            "country_size": "",
+            "EAN": "",
+            "itemtype": "A",
+            "supply_price": "150",
+            "supply_price_no_vat": "122,95",
+            "supply_promo_price": "0",
+            "supply_promo_price_no_vat": "0"
+          },
+          {
+            "item_id": 1714,
+            "item_size": "11",
+            "barcode": "3000730400201",
+            "stock": 4,
+            "last_modified": "04/07/2023 00:00:00",
+            "country_size": "",
+            "EAN": "",
+            "itemtype": "A",
+            "supply_price": "150",
+            "supply_price_no_vat": "122,95",
+            "supply_promo_price": "0",
+            "supply_promo_price_no_vat": "0"
+          }
+        ],
+        "pictures": [
+          "https://www.net13server7.net/societeanonyme/ObjImg/536_618.jpg"
+        ],
+        "pictures_sellable": [
+          {
+            "Id": 618,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/536_618.jpg",
+            "isSellable": false,
+            "web": "S"
+          }
+        ],
+        "language": []
+      },
+      {
+        "idcolor": 535,
+        "color": "BLACK",
+        "base_color": "Black",
+        "MadeIn": "Not Selected|",
+        "season": "093",
+        "web": "S",
+        "CarryOver": "1",
+        "publish": true,
+        "size": [
+          {
+            "item_id": 1701,
+            "item_size": "8+",
+            "barcode": "3000730400076",
+            "stock": 3,
+            "last_modified": "03/01/2024 00:00:00",
+            "country_size": "",
+            "EAN": "",
+            "itemtype": "A",
+            "supply_price": "150",
+            "supply_price_no_vat": "122,95",
+            "supply_promo_price": "0",
+            "supply_promo_price_no_vat": "0"
+          }
+        ],
+        "pictures": [
+          "https://www.net13server7.net/societeanonyme/ObjImg/535_617.jpg"
+        ],
+        "pictures_sellable": [
+          {
+            "Id": 617,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/535_617.jpg",
+            "isSellable": false,
+            "web": "S"
+          }
+        ],
+        "language": []
+      }
+    ]
+  },
+  {
+    "product_id": "773",
+    "producer_id": "COMME DES GARCONS WALLET",
+    "product_name": "SA5100",
+    "description": "CLASSIC LEATHER LINE",
+    "category1": "ACCESSORI UNISEX",
+    "category2": "PORTAFOGLIO",
+    "category3": "",
+    "product_detail": "  ",
+    "product_Material": " | ",
+    "product_Measure": "",
+    "product_Note": "",
+    "heel": "",
+    "sole": "",
+    "asta": "0",
+    "ponte": "0",
+    "asian_fit": "",
+    "hscode": "",
+    "colors": [
+      {
+        "idcolor": 2511,
+        "color": "BROWN",
+        "base_color": "Brown",
+        "MadeIn": "Not Selected|",
+        "season": "087",
+        "web": "S",
+        "CarryOver": "1",
+        "publish": false,
+        "size": [
+          {
+            "item_id": 8384,
+            "item_size": "UNICA",
+            "barcode": "3000771500033",
+            "stock": 1,
+            "last_modified": "28/03/2024 00:00:00",
+            "country_size": "",
+            "EAN": "",
+            "itemtype": "A",
+            "supply_price": "93",
+            "supply_price_no_vat": "76,23",
+            "supply_promo_price": "0",
+            "supply_promo_price_no_vat": "0"
+          }
+        ],
+        "pictures": [
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_3374.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_3375.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_3376.jpg"
+        ],
+        "pictures_sellable": [
+          {
+            "Id": 13246,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_3374.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 13247,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_3375.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 13248,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_3376.jpg",
+            "isSellable": false,
+            "web": "S"
+          }
+        ],
+        "language": []
+      }
+    ]
+  },
+  {
+    "product_id": "774",
+    "producer_id": "COMME DES GARCONS WALLET",
+    "product_name": "SA5100RD",
+    "description": "RUBBER DOT",
+    "category1": "ACCESSORI UNISEX",
+    "category2": "PORTAFOGLIO",
+    "category3": "",
+    "product_detail": "  ",
+    "product_Material": " | ",
+    "product_Measure": "",
+    "product_Note": "",
+    "heel": "",
+    "sole": "",
+    "asta": "0",
+    "ponte": "0",
+    "asian_fit": "",
+    "hscode": "",
+    "colors": [
+      {
+        "idcolor": 1062,
+        "color": "BLACK",
+        "base_color": "Black",
+        "MadeIn": "Not Selected|",
+        "season": "091",
+        "web": "S",
+        "CarryOver": "0",
+        "publish": false,
+        "size": [
+          {
+            "item_id": 3770,
+            "item_size": "UNICA",
+            "barcode": "3000771600018",
+            "stock": 1,
+            "last_modified": "09/02/2023 00:00:00",
+            "country_size": "",
+            "EAN": "",
+            "itemtype": "A",
+            "supply_price": "179",
+            "supply_price_no_vat": "146,72",
+            "supply_promo_price": "0",
+            "supply_promo_price_no_vat": "0"
+          }
+        ],
+        "pictures": [
+          "https://www.net13server7.net/societeanonyme/ObjImg/01102022/01102022_000.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/01102022/01102022_001.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/01102022/01102022_002.jpg"
+        ],
+        "pictures_sellable": [
+          {
+            "Id": 42098,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/01102022/01102022_000.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 42099,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/01102022/01102022_001.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 42100,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/01102022/01102022_002.jpg",
+            "isSellable": false,
+            "web": "S"
+          }
+        ],
+        "language": []
+      }
+    ]
+  },
+  {
+    "product_id": "881",
+    "producer_id": "COMME DES GARÇONS PLAY",
+    "product_name": "P1T063",
+    "description": "Play T-Shirt W Black Heart",
+    "category1": "DONNA",
+    "category2": "TOPS",
+    "category3": "T-shirt & jersey",
+    "product_detail": "  ",
+    "product_Material": " | ",
+    "product_Measure": "",
+    "product_Note": "",
+    "heel": "",
+    "sole": "",
+    "asta": "0",
+    "ponte": "0",
+    "asian_fit": "",
+    "hscode": "",
+    "colors": [
+      {
+        "idcolor": 1231,
+        "color": "BLACK",
+        "base_color": "Black",
+        "MadeIn": "Not Selected|",
+        "season": "093",
+        "web": "S",
+        "CarryOver": "1",
+        "publish": false,
+        "size": [
+          {
+            "item_id": 4391,
+            "item_size": "S",
+            "barcode": "3000782300010",
+            "stock": 5,
+            "last_modified": "26/04/2024 00:00:00",
+            "country_size": "",
+            "EAN": "",
+            "itemtype": "A",
+            "supply_price": "78",
+            "supply_price_no_vat": "63,93",
+            "supply_promo_price": "0",
+            "supply_promo_price_no_vat": "0"
+          },
+          {
+            "item_id": 4392,
+            "item_size": "M",
+            "barcode": "3000782300025",
+            "stock": 3,
+            "last_modified": "17/04/2024 00:00:00",
+            "country_size": "",
+            "EAN": "",
+            "itemtype": "A",
+            "supply_price": "78",
+            "supply_price_no_vat": "63,93",
+            "supply_promo_price": "0",
+            "supply_promo_price_no_vat": "0"
+          }
+        ],
+        "pictures": [
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1904.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1905.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1906.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1907.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1908.jpg"
+        ],
+        "pictures_sellable": [
+          {
+            "Id": 11777,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1904.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 11778,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1905.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 11779,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1906.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 11780,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1907.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 11781,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1908.jpg",
+            "isSellable": false,
+            "web": "S"
+          }
+        ],
+        "language": []
+      }
+    ]
+  },
+  {
+    "product_id": "891",
+    "producer_id": "COMME DES GARÇONS PLAY",
+    "product_name": "P1T064",
+    "description": "Play T-Shirt M Black Heart",
+    "category1": "UOMO",
+    "category2": "T-SHIRT",
+    "category3": "T-shirts",
+    "product_detail": "  ",
+    "product_Material": " | ",
+    "product_Measure": "",
+    "product_Note": "",
+    "heel": "",
+    "sole": "",
+    "asta": "0",
+    "ponte": "0",
+    "asian_fit": "",
+    "hscode": "",
+    "colors": [
+      {
+        "idcolor": 2342,
+        "color": "WHITE",
+        "base_color": "White",
+        "MadeIn": "Not Selected|",
+        "season": "093",
+        "web": "S",
+        "CarryOver": "1",
+        "publish": false,
+        "size": [
+          {
+            "item_id": 7728,
+            "item_size": "M",
+            "barcode": "3000783300140",
+            "stock": 2,
+            "last_modified": "12/04/2024 00:00:00",
+            "country_size": "",
+            "EAN": "",
+            "itemtype": "A",
+            "supply_price": "80",
+            "supply_price_no_vat": "65,57",
+            "supply_promo_price": "0",
+            "supply_promo_price_no_vat": "0"
+          },
+          {
+            "item_id": 7730,
+            "item_size": "XL",
+            "barcode": "3000783300165",
+            "stock": 0,
+            "last_modified": "04/05/2024 00:00:00",
+            "country_size": "",
+            "EAN": "",
+            "itemtype": "A",
+            "supply_price": "80",
+            "supply_price_no_vat": "65,57",
+            "supply_promo_price": "0",
+            "supply_promo_price_no_vat": "0"
+          }
+        ],
+        "pictures": [
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1985.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1986.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1987.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1988.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1989.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1990.jpg",
+          "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1991.jpg"
+        ],
+        "pictures_sellable": [
+          {
+            "Id": 11858,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1985.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 11859,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1986.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 11860,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1987.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 11861,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1988.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 11862,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1989.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 11863,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1990.jpg",
+            "isSellable": false,
+            "web": "S"
+          },
+          {
+            "Id": 11864,
+            "url": "https://www.net13server7.net/societeanonyme/ObjImg/24042021/24042021_1991.jpg",
+            "isSellable": false,
+            "web": "S"
+          }
+        ],
+        "language": []
+      }
+    ]
+  }
+]
