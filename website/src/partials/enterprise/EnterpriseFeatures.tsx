@@ -89,18 +89,13 @@ export function EnterpriseFeatures() {
 
                 <TwoColumns
                     left={<>
-
                         <div className={"flex items-center my-4 "}>
-
                             <div
                                 className="flex items-center justify-center text-white w-10 h-10 gradient-bg rounded-full shadow flex-shrink-0 mr-3">
                                 <AutoModeIcon width={"20px"} height={"20px"}/>
                             </div>
                             <h2 className={"h2 m-0"}>Why Choose FireCMS?</h2>
-
                         </div>
-
-
                         <p className={"text-2xl "}>
                             Every organization has unique content management
                             requirements. We've designed FireCMS with flexibility
