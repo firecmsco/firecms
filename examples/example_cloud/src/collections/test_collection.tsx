@@ -114,10 +114,10 @@ export const testCollection = buildCollection({
     customId: false,
     name: "Test entities",
     properties: {
-        // color: {
-        //     dataType: "string",
-        //     propertyConfig: "color",
-        // },
+        color: {
+            dataType: "string",
+            propertyConfig: "color",
+        },
         createdOn: {
             name: "Created on",
             dataType: "date",

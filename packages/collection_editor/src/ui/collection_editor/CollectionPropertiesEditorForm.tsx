@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { Field, getIn, useFormex } from "@firecms/formex";
 import {
@@ -159,7 +159,7 @@ export function CollectionPropertiesEditorForm({
         : undefined;
 
     const getCurrentPropertiesOrder = (namespace?: string) => {
-        if (!namespace) return currentPropertiesOrderRef.current[""];
+        if (!namespace) return currentPropertiesOrderRef.current[""] ?? getIn(values, namespaceToPropertiesOrderPath());
         return currentPropertiesOrderRef.current[namespace] ?? getIn(values, namespaceToPropertiesOrderPath(namespace));
     };
 
@@ -179,8 +179,10 @@ export function CollectionPropertiesEditorForm({
         setFieldValue(idToPropertiesPath(fullId), undefined, false);
 
         const currentPropertiesOrder = getCurrentPropertiesOrder(namespace);
-        const newPropertiesOrder = currentPropertiesOrder.filter((p) => p !== propertyKey);
-        updatePropertiesOrder(newPropertiesOrder, namespace);
+        if (currentPropertiesOrder) {
+            const newPropertiesOrder = currentPropertiesOrder.filter((p) => p !== propertyKey);
+            updatePropertiesOrder(newPropertiesOrder, namespace);
+        }
 
         setNewPropertyDialogOpen(false);
 
@@ -207,8 +209,8 @@ export function CollectionPropertiesEditorForm({
             ...(values.properties ?? {}),
             [id]: property
         }, false);
-        const newPropertiesOrder = [...(values.propertiesOrder ?? Object.keys(values.properties)), id];
 
+        const newPropertiesOrder = [...(values.propertiesOrder ?? Object.keys(values.properties)), id];
         updatePropertiesOrder(newPropertiesOrder);
 
         setNewPropertyDialogOpen(false);

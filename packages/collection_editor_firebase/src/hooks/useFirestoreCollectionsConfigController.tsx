@@ -265,7 +265,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         });
     }, [configPath, firebaseApp]);
 
-    return useMemo(() => ({
+    return {
         loading: collectionsLoading,
         collections,
         getCollection,
@@ -273,6 +273,6 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         updateCollection,
         deleteCollection,
         saveProperty,
-        deleteProperty,
-    }), [collectionsLoading, collections, getCollection, saveCollection, updateCollection, deleteCollection, saveProperty, deleteProperty])
+        deleteProperty
+    }
 }

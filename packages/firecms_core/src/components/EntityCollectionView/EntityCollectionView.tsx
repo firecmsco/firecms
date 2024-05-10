@@ -799,7 +799,7 @@ function EntityIdHeaderWidget({
                           if (!searchString) return;
                           setOpenPopup(false);
                           return sideEntityController.open({
-                              entityId: searchString,
+                              entityId: searchString.trim(),
                               path,
                               collection,
                               updateUrl: true,
@@ -812,11 +812,13 @@ function EntityIdHeaderWidget({
                             autoFocus={openPopup}
                             placeholder={"Find entity by ID"}
                             // size={"small"}
-                            onChange={(e) => setSearchString(e.target.value)}
+                            onChange={(e) => {
+                                setSearchString(e.target.value);
+                            }}
                             value={searchString}
                             className={"flex-grow bg-transparent outline-none p-1"}/>
                         <Button variant={"outlined"}
-                                disabled={!searchString}
+                                disabled={!(searchString.trim())}
                                 type={"submit"}
                         >Go</Button>
                     </div>

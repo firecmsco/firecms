@@ -49,7 +49,7 @@ export function StorageUploadProgress({
             metadata
         })
             .then(async ({ path }) => {
-                console.debug("Upload successful");
+                console.debug("Upload successful", path);
                 await onFileUploadComplete(path, entry, metadata);
                 if (mounted.current)
                     setLoading(false);

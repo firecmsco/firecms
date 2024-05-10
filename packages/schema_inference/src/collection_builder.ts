@@ -18,7 +18,6 @@ import { buildStringProperty } from "./builders/string_property_builder";
 import { buildValidation } from "./builders/validation_builder";
 import { buildReferenceProperty } from "./builders/reference_property_builder";
 import { extractEnumFromValues } from "./util";
-import * as util from "util";
 
 export type InferenceTypeBuilder = (value: any) => DataType;
 
@@ -38,11 +37,6 @@ export async function buildEntityPropertiesFromData(
             }
         });
     }
-    console.log(util.inspect({ valuesCount }, {
-        showHidden: false,
-        depth: null,
-        colors: true
-    }));
     return buildPropertiesFromCount(data.length, typesCount, valuesCount);
 }
 

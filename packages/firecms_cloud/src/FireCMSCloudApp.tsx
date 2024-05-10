@@ -253,12 +253,13 @@ function ErrorDelegatingLoginView({
         </>;
 
     return <CenteredView maxWidth={"2xl"} className={"flex flex-col gap-4"}>
-        <div className={"flex gap-4 items-center"}>
+        <div className={"flex gap-4"}>
             <ErrorIcon color={"error"}/>
             <Typography variant={"h4"}>Error logging in</Typography>
         </div>
-
-        {errorBody}
+        <div>
+            {errorBody}
+        </div>
         <Button variant="outlined" onClick={onLogout}>Sign out</Button>
     </CenteredView>;
 }
