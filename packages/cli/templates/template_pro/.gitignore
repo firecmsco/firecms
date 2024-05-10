@@ -11,7 +11,7 @@
 
 # testing
 /coverage
-
+.yarn
 
 .DS_Store
 dist

@@ -384,10 +384,6 @@ export function ImportDataPreview<M extends Record<string, any>>({
 
     useEffect(() => {
         const mappedData = importConfig.importData.map(d => convertDataToEntity(d, importConfig.idColumn, importConfig.headersMapping, properties, "TEMP_PATH", importConfig.defaultValues));
-        console.log("Mapped data", {
-            importConfig,
-            mappedData
-        })
         importConfig.setEntities(mappedData);
     }, []);
 

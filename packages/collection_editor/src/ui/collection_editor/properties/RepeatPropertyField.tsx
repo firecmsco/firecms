@@ -39,7 +39,6 @@ export function RepeatPropertyField({
 
     const onPropertyChanged = ({ id, property, namespace }:
                                    { id?: string, property: Property, namespace?: string }) => {
-        console.log("onPropertyChanged", id, property, namespace);
         setFieldValue("of", property);
     };
 
