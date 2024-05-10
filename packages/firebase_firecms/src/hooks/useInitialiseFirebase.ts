@@ -53,6 +53,14 @@ export function useInitialiseFirebase({
     const [configError, setConfigError] = useState<string>();
 
     const initFirebase = useCallback((config: Record<string, unknown>) => {
+
+        if (config.projectId === firebaseApp?.options.projectId) {
+            console.debug("Firebase app already initialised with the same project ID. This should happen only in development mode.");
+            setConfigError(undefined);
+            setFirebaseConfigLoading(false);
+            return;
+        }
+
         try {
             const targetName = name ?? "[DEFAULT]";
             const currentApps = getApps();
