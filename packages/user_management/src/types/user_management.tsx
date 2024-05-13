@@ -23,6 +23,11 @@ export type UserManagement<USER extends User = User> = {
     canEditRoles?: boolean;
 
     /**
+     * Is the logged user Admin?
+     */
+    isAdmin?: boolean;
+
+    /**
      * Include a button to create default roles, in case there are no roles in the system.
      */
     allowDefaultRolesCreation?: boolean;

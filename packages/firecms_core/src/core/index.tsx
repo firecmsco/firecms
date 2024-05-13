@@ -1,10 +1,9 @@
 export * from "./FireCMS";
 
-export type { ScaffoldProps } from "./Scaffold";
-export { Scaffold } from "./Scaffold";
+export * from "./Scaffold";
 
-export type { DrawerProps } from "./Drawer";
-export { Drawer, DrawerNavigationItem } from "./Drawer";
+export * from "./Drawer";
+export * from "./DrawerNavigationItem";
 
 export * from "./field_configs";
 

@@ -101,5 +101,5 @@ export interface StorageSource {
      * @param props
      * @param bucket
      */
-    getFile: (path:string, bucket?: string) => Promise<File | null>;
+    getFile: (path: string, bucket?: string) => Promise<File | null>;
 }

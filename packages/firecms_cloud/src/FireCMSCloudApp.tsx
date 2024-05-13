@@ -75,7 +75,9 @@ import {
     UserManagementProvider,
     UsersView
 } from "@firecms/user_management";
-import { DataTalk } from "@firecms/datatalk";
+import { DataTalkProvider, DataTalkRoutes } from "@firecms/datatalk";
+import { useDataTalkMode } from "./hooks/useDataTalkMode";
+import { FireCMSCloudDataTalkDrawer } from "./components/FireCMSCloudDataTalkDrawer";
 
 const DOCS_LIMIT = 200;
 
@@ -487,10 +489,12 @@ function FireCMSAppAuthenticated({
         throw Error("You can only use FireCMSAppAuthenticated with an authenticated user");
     }
 
+    const includeDataTalk = userManagement.isAdmin ?? false;
+
     const adminRoutes = useMemo(() => buildAdminRoutes(userManagement.usersLimit,
-        true,
+        includeDataTalk,
         fireCMSBackend,
-        projectConfig), [userManagement.usersLimit]);
+        projectConfig), [includeDataTalk, userManagement.usersLimit]);
 
     const configPermissions: CollectionEditorPermissionsBuilder<User, PersistedCollection> = useCallback(({
                                                                                                               user,
@@ -593,6 +597,9 @@ function FireCMSAppAuthenticated({
 
     const plugins: FireCMSPlugin<any, any, any>[] = [saasPlugin, importExportPlugin, collectionEditorPlugin, dataEnhancementPlugin];
 
+    const dataTalkPath = useDataTalkMode();
+    const dataTalkMode = includeDataTalk && dataTalkPath;
+
     return (
         <FireCMSBackEndProvider {...fireCMSBackend}>
             <ProjectConfigProvider config={projectConfig}>
@@ -639,7 +646,9 @@ function FireCMSAppAuthenticated({
                                                 key={"project_scaffold_" + projectConfig.projectId}
                                                 name={projectConfig.projectName ?? ""}
                                                 logo={projectConfig.logo ?? logo}
-                                                Drawer={FireCMSCloudDrawer}
+                                                drawer={dataTalkMode
+                                                    ? <FireCMSCloudDataTalkDrawer/>
+                                                    : <FireCMSCloudDrawer/>}
                                                 FireCMSAppBar={FireCMSAppBarComponent}
                                                 fireCMSAppBarProps={appConfig?.fireCMSAppBarComponentProps}
                                                 autoOpenDrawer={appConfig?.autoOpenDrawer}>
@@ -651,6 +660,14 @@ function FireCMSAppAuthenticated({
                                                 <SideDialogs/>
                                             </Scaffold>
                                         );
+                                    }
+
+                                    if (includeDataTalk) {
+                                        component = <DataTalkProvider
+                                            userSessionsPath={`projects/${projectConfig.projectId}/users/${fireCMSBackend.user?.uid}/datatalk_sessions`}
+                                            firebaseApp={fireCMSBackend.backendFirebaseApp}>
+                                            {component}
+                                        </DataTalkProvider>
                                     }
 
                                     return component;
@@ -704,13 +721,14 @@ function buildAdminRoutes(usersLimit: number | undefined, includeDataTalk: boole
 
     if (includeDataTalk) {
         views.push({
-            path: "datatalk",
+            path: "datatalk/*",
             name: "DataTalk",
             group: "Admin",
             icon: "settings",
             hideFromNavigation: true,
-            view: <DataTalk
-                apiEndpoint={"https://datatalkapi-drplyi3b6q-ey.a.run.app/datatalk/command?projectId=" + projectConfig.projectId}
+            view: <DataTalkRoutes
+                apiEndpoint={"https://api-drplyi3b6q-ey.a.run.app/datatalk/command?projectId=" + projectConfig.projectId}
+                // apiEndpoint={"https://datatalkapi-drplyi3b6q-ey.a.run.app/datatalk/command?projectId=" + projectConfig.projectId}
                 getAuthToken={fireCMSBackend.getBackendAuthToken}/>
         });
 

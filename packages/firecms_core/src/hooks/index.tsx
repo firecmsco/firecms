@@ -10,6 +10,7 @@ export * from "./useResolvedNavigationFrom";
 
 export * from "./useStorageSource";
 export * from "./useAuthController";
+export * from "./useDialogsController";
 export * from "./useSideDialogsController";
 export * from "./useSideEntityController";
 export * from "./useFireCMSContext";

@@ -1,4 +1,4 @@
-import { CollectionSize, FireCMSContext, ResolvedProperty, SelectedCellProps } from "../../types";
+import { CollectionSize, ResolvedProperty, SelectedCellProps } from "../../types";
 
 export type EntityCollectionTableController<M extends Record<string, any>> = {
 

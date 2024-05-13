@@ -168,6 +168,8 @@ export function useBuildCloudUserManagement({
         return mgmtUser?.roles;
     }, [userIds]);
 
+    const isAdmin = loggedInUser?.roles.some(r => r.id === "admin");
+
     return {
         allowDefaultRolesCreation: false,
         includeCollectionConfigPermissions: true,
@@ -180,6 +182,7 @@ export function useBuildCloudUserManagement({
         deleteUser: removeUser,
         deleteRole,
         usersLimit,
+        isAdmin,
         canEditRoles: canEditRoles === undefined ? true : canEditRoles,
         collectionPermissions
     }

@@ -231,7 +231,9 @@ export function useFirestoreUserManagement({
         }
 
         throw Error("Could not find a user with the provided email in the user management system.");
-    }, [loading, users])
+    }, [loading, users]);
+
+    const isAdmin = roles.some(r => r.id === "admin");
 
     return {
         loading,
@@ -244,6 +246,7 @@ export function useFirestoreUserManagement({
         deleteRole,
         usersLimit,
         usersError,
+        isAdmin,
         canEditRoles: canEditRoles === undefined ? true : canEditRoles,
         allowDefaultRolesCreation: allowDefaultRolesCreation === undefined ? true : allowDefaultRolesCreation,
         includeCollectionConfigPermissions: Boolean(includeCollectionConfigPermissions),

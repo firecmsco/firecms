@@ -1,28 +1,28 @@
 import React, { useCallback } from "react";
 import {
     DrawerNavigationItem,
-    DrawerProps,
     IconForView,
     TopNavigationResult,
     useAuthController,
+    useDrawer,
     useNavigationController
 } from "@firecms/core";
-import { AddIcon, Button, cn, IconButton, Menu, MenuItem, MoreVertIcon, Tooltip, Typography, } from "@firecms/ui";
+import { AddIcon, Button, Tooltip, Typography, } from "@firecms/ui";
 import { useCollectionEditorController } from "@firecms/collection_editor";
-import { useNavigate } from "react-router-dom";
-import { ADMIN_VIEWS_CONFIG, RESERVED_GROUPS } from "../utils";
+import { RESERVED_GROUPS } from "../utils";
+import { AdminDrawerMenu } from "./AdminDrawerMenu";
 
 /**
  * Default drawer used in FireCMS Cloud
  * @group Core
  */
-export function FireCMSCloudDrawer({
-                                       hovered,
-                                       drawerOpen,
-                                       closeDrawer
-                                   }: DrawerProps) {
+export function FireCMSCloudDrawer() {
 
-    const navigate = useNavigate();
+    const {
+        hovered,
+        drawerOpen,
+        closeDrawer
+    } = useDrawer();
 
     const navigation = useNavigationController();
     const collectionEditorController = useCollectionEditorController();
@@ -94,39 +94,9 @@ export function FireCMSCloudDrawer({
 
             </div>
 
-            <Menu
-                open={adminMenuOpen}
-                onOpenChange={setAdminMenuOpen}
-                trigger={
-                    <IconButton
-                        shape={"square"}
-                        className={"m-4 text-gray-900 dark:text-white w-fit"}>
-                        <Tooltip title={"Admin"}
-                                 open={tooltipsOpen}
-                                 side={"right"} sideOffset={28}>
-                            <MoreVertIcon/>
-                        </Tooltip>
-                        {drawerOpen && <div
-                            className={cn(
-                                drawerOpen ? "opacity-100" : "opacity-0 hidden",
-                                "mx-4 font-inherit text-inherit"
-                            )}>
-                            ADMIN
-                        </div>}
-                    </IconButton>}
-            >
-                {ADMIN_VIEWS_CONFIG.map((view, index) =>
-                    <MenuItem
-                        onClick={(event) => {
-                            event.preventDefault();
-                            navigate(view.path);
-                        }}
-                        key={`navigation_${index}`}>
-                        {<IconForView collectionOrView={view}/>}
-                        {view.name}
-                    </MenuItem>)}
-
-            </Menu>
+            <AdminDrawerMenu
+                menuOpen={adminMenuOpen}
+                setMenuOpen={setAdminMenuOpen}/>
         </>
     );
 }

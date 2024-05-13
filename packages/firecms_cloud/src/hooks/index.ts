@@ -5,3 +5,4 @@ export * from "./useSubscriptionsForUserController";
 export * from "./useBuildFireCMSBackend";
 export * from "./useFireCMSBackend";
 export * from "./useBuildCloudUserManagement";
+export * from "./useDataTalkMode";

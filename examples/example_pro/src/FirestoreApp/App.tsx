@@ -57,7 +57,7 @@ import { FirebaseApp } from "@firebase/app";
 import { TestEditorView } from "./TestEditorView";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
-import { DataTalk } from "@firecms/datatalk";
+import { DataTalkSession } from "@firecms/datatalk";
 import { ReCaptchaEnterpriseProvider } from "@firebase/app-check";
 import { getAuth } from "@firebase/auth";
 

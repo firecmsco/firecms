@@ -1,4 +1,4 @@
-import { ContentPasteIcon, IconButton, Typography } from "@firecms/ui";
+import { ContentCopyIcon, IconButton, Typography } from "@firecms/ui";
 import { useCallback, useState } from "react";
 
 export function PropertyIdCopyTooltipContent({ propertyId }: { propertyId: string }) {
@@ -12,9 +12,8 @@ export function PropertyIdCopyTooltipContent({ propertyId }: { propertyId: strin
                             color={"disabled"}>{copied ? "Copied" : "Property ID"}</Typography>
                 <Typography variant={"caption"} className={"text-white"}><code>{propertyId}</code></Typography>
             </div>
-            {/*    Copy to clipboard button*/}
             <IconButton size={"small"}>
-                <ContentPasteIcon size={"smallest"}
+                <ContentCopyIcon size={"smallest"}
                                   className={"text-white"}
                                   onClick={useCallback(() => {
                                       navigator.clipboard.writeText(propertyId);

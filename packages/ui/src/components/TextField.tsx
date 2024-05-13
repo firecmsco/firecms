@@ -40,7 +40,7 @@ export type TextFieldProps<T extends string | number> = {
     endAdornment?: React.ReactNode,
     autoFocus?: boolean,
     placeholder?: string,
-    size?: "small" | "medium",
+    size?: "smallest" | "small" | "medium",
     className?: string,
     style?: React.CSSProperties,
     inputClassName?: string,
@@ -128,7 +128,7 @@ export function TextField<T extends string | number>({
                 "rounded-md",
                 invisible ? focusedInvisibleMixin : focusedMixin,
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
-                size === "small" ? "min-h-[48px]" : "min-h-[64px]",
+                size === "smallest" ? "min-h-[32px]" : (size === "small" ? "min-h-[48px]" : "min-h-[64px]"),
                 label ? (size === "medium" ? "pt-[28px] pb-2" : "pt-4 pb-2") : "py-2",
                 focused ? "text-text-primary dark:text-text-primary-dark" : "",
                 endAdornment ? "pr-10" : "pr-3",
@@ -152,6 +152,7 @@ export function TextField<T extends string | number>({
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                 error ? "border border-red-500 dark:border-red-600" : "",
                 {
+                    "min-h-[32px]": !invisible && size === "smallest",
                     "min-h-[48px]": !invisible && size === "small",
                     "min-h-[64px]": !invisible && size === "medium"
                 },
