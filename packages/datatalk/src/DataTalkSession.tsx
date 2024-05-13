@@ -1,27 +1,35 @@
 import React, { useCallback, useState } from "react";
+import { EntityCollection, randomString } from "@firecms/core";
 import { Button, Checkbox, Label, SendIcon, TextareaAutosize, Tooltip } from "@firecms/ui";
 import { MessageLayout } from "./components/MessageLayout";
 import { streamDataTalkCommand } from "./api";
-import { ChatMessage } from "./types";
+import { ChatMessage, FeedbackSlug, Session } from "./types";
 import { IntroComponent } from "./components/IntroComponent";
-import { EntityCollection } from "@firecms/core";
 
-export function DataTalk({
-                             apiEndpoint,
-                             onAnalyticsEvent,
-                             getAuthToken,
-                             collections
-                         }: {
+export function DataTalkSession({
+                                    session,
+                                    apiEndpoint,
+                                    onAnalyticsEvent,
+                                    getAuthToken,
+                                    collections,
+                                    onMessagesChange,
+                                    autoRunCode,
+                                    setAutoRunCode
+                                }: {
+    session: Session,
     onAnalyticsEvent?: (event: string, params?: any) => void,
     apiEndpoint: string,
     getAuthToken: () => Promise<string>,
-    collections?: EntityCollection[]
+    collections?: EntityCollection[],
+    onMessagesChange?: (messages: ChatMessage[]) => void,
+    autoRunCode: boolean,
+    setAutoRunCode: (value: boolean) => void
 }) {
 
     const [textInput, setTextInput] = useState<string>("");
 
-    const [autoRunCode, setAutoRunCode] = useState<boolean>(false);
-    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [messages, setMessages] = useState<ChatMessage[]>(session.messages || []);
+    const [messageLoading, setMessageLoading] = useState<boolean>(false);
 
     const scrollInto = useCallback((childRef: React.RefObject<HTMLDivElement>) => {
         setTimeout(() => {
@@ -32,23 +40,29 @@ export function DataTalk({
         }, 150);
     }, []);
 
-    const submit = async (message: string) => {
-        if (!message) return;
+    const submit = async (messageText: string, baseMessages: ChatMessage[] = messages) => {
+        if (!messageText) return;
 
         if (onAnalyticsEvent) {
-            onAnalyticsEvent("message_sent", { message });
+            onAnalyticsEvent("message_sent", { message: messageText });
         }
 
-        const updatedMessages: ChatMessage[] = [
-            ...messages,
+        const userMessageId = randomString(20);
+        const systemMessageId = randomString(20);
+
+        const newMessages: ChatMessage[] = [
+            ...baseMessages,
             {
-                text: message,
+                id: userMessageId,
+                text: messageText,
                 user: "USER",
                 date: new Date()
             }];
+        onMessagesChange?.(newMessages);
         setMessages([
-            ...updatedMessages,
+            ...newMessages,
             {
+                id: systemMessageId,
                 loading: true,
                 text: "",
                 user: "SYSTEM",
@@ -59,11 +73,19 @@ export function DataTalk({
 
         const firebaseToken = await getAuthToken();
         let currentMessageResponse = "";
-        streamDataTalkCommand(firebaseToken, message, apiEndpoint, messages, (newDelta) => {
+
+        const updatedSession = {
+            ...session,
+            messages: newMessages
+        }
+
+        setMessageLoading(true);
+        streamDataTalkCommand(firebaseToken, messageText, apiEndpoint, updatedSession, (newDelta) => {
             currentMessageResponse += newDelta;
             setMessages([
-                ...updatedMessages,
+                ...newMessages,
                 {
+                    id: systemMessageId,
                     loading: true,
                     text: currentMessageResponse,
                     user: "SYSTEM",
@@ -72,29 +94,38 @@ export function DataTalk({
             ]);
         })
             .then((newMessage) => {
-                setMessages([
-                    ...updatedMessages,
+                const updatedMessages: ChatMessage[] = [
+                    ...newMessages,
                     {
+                        id: systemMessageId,
                         loading: false,
                         text: newMessage,
                         user: "SYSTEM",
                         date: new Date()
                     }
-                ]);
+                ];
+                setMessages(updatedMessages);
+                onMessagesChange?.(updatedMessages);
             })
             .catch((e) => {
                 console.error("Error processing command", e);
-                setMessages([
-                    ...updatedMessages,
+                const updatedMessages: ChatMessage[] = [
+                    ...newMessages,
                     {
+                        id: systemMessageId,
                         loading: false,
                         text: "There was an error processing your command: " + e.message,
                         user: "SYSTEM",
                         date: new Date()
                     }
-                ]);
-            });
-    }
+                ];
+                setMessages(updatedMessages);
+                onMessagesChange?.(updatedMessages);
+            }).finally(() => {
+            setMessageLoading(false);
+        });
+
+    };
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === "Enter" && !event.shiftKey) {
@@ -103,9 +134,45 @@ export function DataTalk({
         }
     };
 
+    const onRegenerate = (message: ChatMessage, index: number) => {
+        if (onAnalyticsEvent) {
+            onAnalyticsEvent("regenerate", { message });
+        }
+
+        const newMessages = [...messages];
+        newMessages.splice(index);
+        const lastUserMessage = newMessages.filter(m => m.user === "USER").pop();
+        newMessages.splice(index - 1);
+
+        // get text from the last user message
+        if (lastUserMessage) {
+            submit(lastUserMessage.text, newMessages);
+        }
+    };
+
+    const saveFeedback = (message: ChatMessage, reason: FeedbackSlug | undefined, feedbackMessage: string | undefined, index: number) => {
+        if (onAnalyticsEvent) {
+            onAnalyticsEvent("bad_response", {
+                reason,
+                feedbackMessage
+            });
+        }
+        // update the message with the feedback
+        const newMessages = [...messages];
+        const messageToUpdate = newMessages[index];
+        if (messageToUpdate) {
+            messageToUpdate.negative_feedback = {
+                reason,
+                message: feedbackMessage
+            };
+            setMessages(newMessages);
+            onMessagesChange?.(newMessages);
+        }
+    };
+
     return (
 
-        <div className="h-full w-full flex flex-col bg-slate-100 dark:bg-gray-900">
+        <div className="h-full w-full flex flex-col bg-gray-50 dark:bg-gray-900">
             <div className="h-full overflow-auto">
                 <div className="container mx-auto px-4 md:px-6 py-8 flex-1 flex flex-col gap-4">
 
@@ -124,7 +191,8 @@ export function DataTalk({
                         </Label>
                     </Tooltip>
 
-                    <IntroComponent onPromptSuggestionClick={(prompt) => submit(prompt)}/>
+                    {(messages ?? []).length === 0 &&
+                        <IntroComponent onPromptSuggestionClick={(prompt) => submit(prompt)}/>}
 
                     {messages.map((message, index) => {
                         return <MessageLayout key={message.date.toISOString() + index}
@@ -133,9 +201,14 @@ export function DataTalk({
                                                   newMessages.splice(index, 1);
                                                   setMessages(newMessages);
                                               }}
+                                              onFeedback={(reason, feedbackMessage) => {
+                                                  saveFeedback(message, reason, feedbackMessage, index);
+                                              }}
                                               collections={collections}
                                               scrollInto={scrollInto}
                                               message={message}
+                                              canRegenerate={index === messages.length - 1 && message.user === "SYSTEM"}
+                                              onRegenerate={() => onRegenerate(message, index)}
                                               autoRunCode={autoRunCode}/>;
                     })}
 
@@ -147,7 +220,8 @@ export function DataTalk({
                     noValidate
                     onSubmit={(e: React.FormEvent) => {
                         e.preventDefault();
-                        submit(textInput);
+                        if (!messageLoading && textInput)
+                            submit(textInput);
                     }}
                     autoComplete="off"
                     className="relative bg-white dark:bg-gray-800 rounded-lg shadow-sm flex items-center gap-2 ">
@@ -156,11 +230,11 @@ export function DataTalk({
                         autoFocus={true}
                         onKeyDown={handleKeyDown}
                         onChange={(e) => setTextInput(e.target.value)}
-                        className="flex-1 resize-none rounded-lg p-4 border-none focus:ring-0 dark:bg-gray-800 dark:text-gray-300 pr-[80px]"
+                        className="flex-1 resize-none rounded-lg p-4 border-none focus:ring-0 dark:bg-gray-800 dark:text-gray-200 pr-[80px]"
                         placeholder="Type your message..."
                     />
                     <Button className={"absolute right-0 top-0 m-1.5"} variant="text" type={"submit"}
-                            disabled={!textInput}>
+                            disabled={!textInput || messageLoading}>
                         <SendIcon color={"primary"}/>
                     </Button>
                 </form>

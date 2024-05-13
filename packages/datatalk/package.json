@@ -37,10 +37,10 @@
     "@firecms/formex": "^3.0.0-canary.50",
     "@firecms/schema_inference": "^3.0.0-canary.50",
     "@firecms/ui": "^3.0.0-canary.50",
-    "@monaco-editor/react": "^4.6.0",
-    "@types/node": "20.12.11"
+    "@monaco-editor/react": "^4.6.0"
   },
   "devDependencies": {
+    "@types/node": "20.12.11",
     "@types/react": "^18.3.1",
     "@types/react-dom": "18.3.0",
     "typescript": "^5.4.5",

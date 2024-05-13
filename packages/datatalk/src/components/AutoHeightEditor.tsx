@@ -8,12 +8,14 @@ export type AutoHeightEditorProps = {
     onChange?: (value?: string) => void;
     onMount?: (editor: any) => void;
     maxWidth?: number;
+    loading?: boolean;
 };
 
 export function AutoHeightEditor({
                                      value,
                                      onChange,
                                      maxWidth,
+                                     loading,
                                      ...props
                                  }: AutoHeightEditorProps): JSX.Element {
     const editorRef = useRef<any>(null);
@@ -47,6 +49,7 @@ export function AutoHeightEditor({
         options={{
             scrollBeyondLastLine: false,
             minimap: { enabled: false },
+            readOnly: loading,
             // automaticLayout: true,
             scrollbar: {
                 vertical: "hidden",

@@ -1,6 +1,6 @@
-import { AutoAwesomeIcon, Avatar, Menu, MenuItem, PersonIcon, Skeleton } from "@firecms/ui";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ChatMessage } from "../types";
+import { AutoAwesomeIcon, Avatar, Menu, MenuItem, PersonIcon } from "@firecms/ui";
+import React, { useEffect, useRef, useState } from "react";
+import { ChatMessage, FeedbackSlug } from "../types";
 import { SystemMessage } from "./SystemMessage";
 import { EntityCollection } from "@firecms/core";
 
@@ -9,13 +9,19 @@ export function MessageLayout({
                                   autoRunCode,
                                   onRemove,
                                   scrollInto,
-                                  collections
+                                  collections,
+                                  onRegenerate,
+                                  canRegenerate,
+                                  onFeedback
                               }: {
     message?: ChatMessage,
     autoRunCode?: boolean,
     onRemove?: () => void,
     scrollInto?: (ref: React.RefObject<HTMLDivElement>) => void,
-    collections?: EntityCollection[]
+    collections?: EntityCollection[],
+    onRegenerate?: () => void,
+    canRegenerate?: boolean,
+    onFeedback?: (reason?: FeedbackSlug, feedbackMessage?: string) => void
 }) {
 
     const ref = useRef<HTMLDivElement>(null);
@@ -44,7 +50,7 @@ export function MessageLayout({
         return () => resizeObserver.disconnect();
     }, [ref]);
 
-    return <div ref={ref} className="flex flex-col gap-2 bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
+    return <div ref={ref} className="flex flex-col gap-2 bg-white dark:bg-gray-800 dark:bg-opacity-20 rounded-lg p-4 shadow-sm">
         <div className="flex items-start gap-3 justify-center">
             <Menu trigger={<Avatar className="w-10 h-10 shrink-0">
                 {message?.user === "USER" ? <PersonIcon/> : <AutoAwesomeIcon/>}
@@ -52,19 +58,22 @@ export function MessageLayout({
                 <MenuItem dense onClick={onRemove}>Remove</MenuItem>
             </Menu>
 
-            <div className="mt-3 flex-1 text-gray-700 dark:text-gray-300">
+            <div className="mt-3 flex-1 text-gray-700 dark:text-gray-200">
 
                 {message
                     ? (message.user === "USER"
                         ? <UserMessage text={message.text}/>
                         : <SystemMessage text={message.text}
+                                         loading={message.loading}
                                          autoRunCode={autoRunCode}
                                          scrollInto={() => scrollInto?.(ref)}
                                          collections={collections}
-                                         containerWidth={containerWidth ?? undefined}/>)
+                                         canRegenerate={canRegenerate}
+                                         containerWidth={containerWidth ?? undefined}
+                                         onRegenerate={onRegenerate}
+                                         onFeedback={onFeedback}/>)
                     : null}
 
-                {message?.loading && <Skeleton className={"max-w-4xl mt-2 mb-4"}/>}
             </div>
         </div>
     </div>;

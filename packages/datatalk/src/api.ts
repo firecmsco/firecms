@@ -1,9 +1,9 @@
-import { ChatMessage } from "./types";
+import { Session } from "./types";
 
 export async function streamDataTalkCommand(firebaseAccessToken: string,
                                             command: string,
                                             apiEndpoint: string,
-                                            history: ChatMessage[],
+                                            session: Session,
                                             onDelta: (delta: string) => void,
 ): Promise<string> {
 
@@ -17,10 +17,17 @@ export async function streamDataTalkCommand(firebaseAccessToken: string,
                     Authorization: `Bearer ${firebaseAccessToken}`
                 },
                 body: JSON.stringify({
+                    sessionId: session.id,
                     command,
-                    history
+                    history: session.messages
                 })
             });
+
+            if (!response.ok) {
+                console.error("Error streaming data talk command", response.status, response.statusText);
+                reject(new Error(`Error streaming data talk command: ${response.status} ${response.statusText}`));
+                return;
+            }
 
             if (response.body) {
                 const reader = response.body.getReader();

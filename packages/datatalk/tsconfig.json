@@ -10,7 +10,6 @@
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "moduleResolution": "node",
     "jsx": "react-jsx",
-
     "declaration": true,
     "esModuleInterop": true,
     "noImplicitReturns": true,
@@ -34,7 +33,7 @@
         "../ui/src"
       ],
       "@firecms/core": [
-        "../core/src"
+        "../firecms_core/src"
       ],
       "@firecms/firebase": [
         "../firebase_firecms/src"

@@ -25,6 +25,7 @@ function ExecutionErrorView(props: { executionError: Error }) {
 export function CodeBlock({
                               initialCode,
                               maxWidth,
+                              loading,
                               sourceLoading,
                               autoRunCode,
                               onCodeRun,
@@ -32,6 +33,7 @@ export function CodeBlock({
                           }: {
     initialCode?: string,
     sourceLoading?: boolean,
+    loading?: boolean,
     maxWidth?: number,
     autoRunCode?: boolean,
     onCodeRun?: () => void,
@@ -41,7 +43,7 @@ export function CodeBlock({
     const textAreaRef = React.useRef<HTMLDivElement>(null);
     const [inputCode, setInputCode] = useState<string | undefined>(initialCode);
 
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loadingQuery, setLoadingQuery] = useState<boolean>(false);
     const [querySnapshot, setQuerySnapshot] = useState<firestoreLibrary.QuerySnapshot | null>(null);
     const [codePriorityKeys, setCodePriorityKeys] = useState<string[] | undefined>();
 
@@ -79,7 +81,7 @@ export function CodeBlock({
 
         setCodeHasBeenRun(true);
 
-        setLoading(true);
+        setLoadingQuery(true);
         setExecutionError(null);
 
         try {
@@ -94,7 +96,7 @@ export function CodeBlock({
                 setConsoleOutput("");
                 if (!module.default) {
                     setExecutionError(new Error("No default export found. Make sure your code is exporting a default function."));
-                    setLoading(false);
+                    setLoadingQuery(false);
                     return;
                 }
                 module.default()
@@ -129,7 +131,7 @@ export function CodeBlock({
                         console.error("Error executing query:", error);
                     })
                     .finally(() => {
-                        setLoading(false);
+                        setLoadingQuery(false);
                         onCodeRun?.();
                         resetConsolePipe();
                     });
@@ -137,11 +139,11 @@ export function CodeBlock({
                 .catch((error) => {
                     setExecutionError(error);
                     console.error("Error loading module:", error);
-                    setLoading(false);
+                    setLoadingQuery(false);
                     resetConsolePipe();
                 });
         } catch (error: any) {
-            setLoading(false);
+            setLoadingQuery(false);
             setExecutionError(error);
             console.error("Error executing query:", error);
         }
@@ -157,6 +159,7 @@ export function CodeBlock({
                  ref={textAreaRef}>
                 <AutoHeightEditor
                     value={inputCode}
+                    loading={loading}
                     maxWidth={maxWidth ? maxWidth - 96 : undefined}
                     onChange={handleCodeChange}
                 />
@@ -170,7 +173,7 @@ export function CodeBlock({
                 <ExecutionErrorView executionError={executionError}/>
             )}
 
-            {(querySnapshot || loading || consoleOutput || executionResult) && (
+            {(querySnapshot || loadingQuery || consoleOutput || executionResult) && (
                 <div
                     style={{
                         marginLeft: querySnapshot ? "-64px" : undefined,
@@ -178,9 +181,9 @@ export function CodeBlock({
                     }}
                     className={cn("w-full rounded-lg shadow-sm overflow-hidden transition-all", {
                         "h-[480px]": querySnapshot,
-                        "h-[92px]": !querySnapshot && loading
+                        "h-[92px]": !querySnapshot && loadingQuery
                     })}>
-                    {loading && <CircularProgressCenter/>}
+                    {loadingQuery && <CircularProgressCenter/>}
 
                     {querySnapshot && <TableResults querySnapshot={querySnapshot}
                                                     priorityKeys={codePriorityKeys}
@@ -188,10 +191,10 @@ export function CodeBlock({
 
                     {(consoleOutput || executionResult) && (
                         <Paper className={"w-full p-4 min-h-[92px] font-mono text-xs overflow-auto rounded-lg"}>
-                            {consoleOutput && <pre className={"text-sm font-mono text-gray-700 dark:text-gray-300"}>
+                            {consoleOutput && <pre className={"text-sm font-mono text-gray-700 dark:text-gray-200"}>
                                 {consoleOutput}
                             </pre>}
-                            {executionResult && <pre className={"text-xs font-mono text-gray-700 dark:text-gray-300"}>
+                            {executionResult && <pre className={"text-xs font-mono text-gray-700 dark:text-gray-200"}>
                                     {typeof executionResult === "string" ? executionResult : JSON.stringify(executionResult, null, 2)}
                             </pre>}
                         </Paper>
