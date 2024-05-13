@@ -28,18 +28,25 @@ const productReferences = buildProperty({
 });
 ```
 
+#### tuple
+
 You can also specify an array of properties to define a tuple:
 ```tsx
 import { buildProperty } from "@firecms/cloud";
 
-const productReferences = buildProperty({
-  name: "Products",
+const tupleDates = buildProperty({
+  name: "Date Range (Start to End)",
   dataType: "array",
-  of: {
-    dataType: "string",
-    path: "products",
-    previewProperties: ["name", "main_image"]
-  }
+  of: [
+    {
+      name: "Start Date",
+      dataType: "date"
+    },
+    {
+      name: "End Date",
+      dataType: "date"
+    }
+  ]
 });
 ```
 
