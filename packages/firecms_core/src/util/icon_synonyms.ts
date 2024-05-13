@@ -144,6 +144,7 @@ export const iconSynonyms = {
     auto_stories: "audiobook flipping pages reading story",
     av_timer: "clock countdown duration minutes seconds stopwatch",
     baby_changing_station: "babies bathroom body children father human infant kids mother newborn people person toddler wc young",
+    back: "arrow_back",
     backpack: "bookbag knapsack storage travel",
     backspace: "arrow cancel clear correct delete erase remove",
     backup: "arrow cloud data drive files folders point storage submit upload",

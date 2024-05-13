@@ -1,10 +1,11 @@
-import { Session } from "./types";
+import { ChatMessage } from "./types";
 
 export async function streamDataTalkCommand(firebaseAccessToken: string,
                                             command: string,
                                             apiEndpoint: string,
-                                            session: Session,
-                                            onDelta: (delta: string) => void,
+                                            sessionId: string,
+                                            messages: ChatMessage[],
+                                            onDelta: (delta: string) => void
 ): Promise<string> {
 
     // eslint-disable-next-line no-async-promise-executor
@@ -17,15 +18,16 @@ export async function streamDataTalkCommand(firebaseAccessToken: string,
                     Authorization: `Bearer ${firebaseAccessToken}`
                 },
                 body: JSON.stringify({
-                    sessionId: session.id,
+                    sessionId,
                     command,
-                    history: session.messages
+                    history: messages
                 })
             });
 
             if (!response.ok) {
-                console.error("Error streaming data talk command", response.status, response.statusText);
-                reject(new Error(`Error streaming data talk command: ${response.status} ${response.statusText}`));
+                const data = await response.json();
+                console.error("Error streaming data talk command", data);
+                reject(new ApiError(data.message, data.code));
                 return;
             }
 
@@ -84,4 +86,14 @@ export async function streamDataTalkCommand(firebaseAccessToken: string,
             reject(error);
         }
     });
+}
+
+export class ApiError extends Error {
+
+    public code?: string;
+
+    constructor(message: string, code?: string) {
+        super(message);
+        this.code = code;
+    }
 }

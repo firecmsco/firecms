@@ -727,7 +727,8 @@ function buildAdminRoutes(usersLimit: number | undefined, includeDataTalk: boole
             icon: "settings",
             hideFromNavigation: true,
             view: <DataTalkRoutes
-                apiEndpoint={"https://api-drplyi3b6q-ey.a.run.app/datatalk/command?projectId=" + projectConfig.projectId}
+                // apiEndpoint={"http://127.0.0.1:5001/firecms-dev-2da42/europe-west3/api/datatalk/command?projectId=" + projectConfig.projectId}
+                apiEndpoint={`https://api-drplyi3b6q-ey.a.run.app/projects/${projectConfig.projectId}/datatalk/command`}
                 // apiEndpoint={"https://datatalkapi-drplyi3b6q-ey.a.run.app/datatalk/command?projectId=" + projectConfig.projectId}
                 getAuthToken={fireCMSBackend.getBackendAuthToken}/>
         });

@@ -74,25 +74,25 @@ export function DataTalkSession({
         const firebaseToken = await getAuthToken();
         let currentMessageResponse = "";
 
-        const updatedSession = {
-            ...session,
-            messages: newMessages
-        }
-
         setMessageLoading(true);
-        streamDataTalkCommand(firebaseToken, messageText, apiEndpoint, updatedSession, (newDelta) => {
-            currentMessageResponse += newDelta;
-            setMessages([
-                ...newMessages,
-                {
-                    id: systemMessageId,
-                    loading: true,
-                    text: currentMessageResponse,
-                    user: "SYSTEM",
-                    date: new Date()
-                }
-            ]);
-        })
+        streamDataTalkCommand(firebaseToken,
+            messageText,
+            apiEndpoint,
+            session.id,
+            baseMessages,
+            (newDelta) => {
+                currentMessageResponse += newDelta;
+                setMessages([
+                    ...newMessages,
+                    {
+                        id: systemMessageId,
+                        loading: true,
+                        text: currentMessageResponse,
+                        user: "SYSTEM",
+                        date: new Date()
+                    }
+                ]);
+            })
             .then((newMessage) => {
                 const updatedMessages: ChatMessage[] = [
                     ...newMessages,

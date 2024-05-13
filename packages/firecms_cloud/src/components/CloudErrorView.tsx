@@ -41,7 +41,7 @@ export function CloudErrorView({
         return <CloudNoPreviousFirebaseProjectsErrorView projectId={projectId}
                                                          onFixed={onFixed}/>;
     } else if (code === "firecms-user-not-found") {
-        return <div className="flex flex-col items-center space-y-2 py-4">
+        return <div className="flex flex-col space-y-2 py-4">
             <Typography>
                 The user trying to log in is not registered in the client project.
             </Typography>
@@ -59,8 +59,8 @@ export function CloudErrorView({
     } else if (code === "service-account-missing-permissions") {
         return <ServiceAccountMissingPermissions missingPermissions={error.data?.missingPermissions}/>;
     }
-    return (<div className="flex flex-col items-center space-y-2 py-4">
-            <Typography className="text-center text-red-300">
+    return (<div className="flex flex-col space-y-2 py-4">
+            <Typography className="text-red-300">
                 {message}
             </Typography>
 
@@ -130,7 +130,7 @@ function CloudMissingServiceAccountErrorView({
         }
     };
     return <div
-        className="flex flex-col items-center space-y-2 py-4">
+        className="flex flex-col space-y-2 py-4">
         <Typography color={"error"}>
             Service account missing
         </Typography>
@@ -155,7 +155,7 @@ function CloudNeedsToAcceptTermsErrorView({
 }) {
 
     return <div
-        className="flex flex-col items-center space-y-2 py-4">
+        className="flex flex-col space-y-2 py-4">
         <Typography color={"error"}>
             You need to accept Google&apos;s terms of service
             before you can use this service.
@@ -190,7 +190,7 @@ function CloudNoPreviousFirebaseProjectsErrorView({
 }) {
 
     return <div
-        className="flex flex-col items-center space-y-2 py-4">
+        className="flex flex-col space-y-2 py-4">
         <Typography color={"error"}>
             You need to accept Firebase&apos;s terms of service
             before you can use this service.
