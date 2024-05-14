@@ -122,7 +122,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
             size={size}/>
 
     }
-    return <div className={cn("text-sm font-medium text-gray-500",
+    return <div className={cn("text-sm font-medium",
         "min-w-80 flex flex-col gap-4",
         "relative transition-colors duration-200 ease-in rounded font-medium",
         disabled ? "bg-opacity-50" : "hover:bg-opacity-75",
