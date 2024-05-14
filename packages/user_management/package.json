@@ -1,7 +1,7 @@
 {
   "name": "@firecms/user_management",
   "type": "module",
-  "version": "3.0.0-canary.50",
+  "version": "3.0.0-canary.51",
   "publishConfig": {
     "access": "public"
   },
@@ -29,9 +29,9 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "^3.0.0-canary.50",
-    "@firecms/formex": "^3.0.0-canary.50",
-    "@firecms/ui": "^3.0.0-canary.50",
+    "@firecms/core": "^3.0.0-canary.51",
+    "@firecms/formex": "^3.0.0-canary.51",
+    "@firecms/ui": "^3.0.0-canary.51",
     "date-fns": "^3.6.0"
   },
   "peerDependencies": {
