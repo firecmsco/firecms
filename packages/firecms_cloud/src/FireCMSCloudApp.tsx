@@ -513,6 +513,8 @@ function FireCMSAppAuthenticated({
         return map;
     }, [appConfig?.propertyConfigs]);
 
+    console.debug("FireCMSAppAuthenticated propertyConfigsMap", propertyConfigsMap);
+
     const importExportPlugin = useImportExportPlugin({
         exportAllowed: useCallback(({ collectionEntitiesCount }: ExportAllowedParams) => {
             return projectConfig.canExport || collectionEntitiesCount <= DOCS_LIMIT;

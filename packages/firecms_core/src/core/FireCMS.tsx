@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 
-import { EntityCollection, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
+import { CustomizationController, EntityCollection, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
 import { AuthControllerContext, ModeControllerContext } from "../contexts";
 import { useBuildSideEntityController } from "../internal/useBuildSideEntityController";
 import { useCustomizationController, useFireCMSContext, useModeController } from "../hooks";
@@ -15,7 +15,6 @@ import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerC
 import { CenteredView, Typography, useLocaleConfig } from "@firecms/ui";
 import { DialogsProvider } from "../contexts/DialogsProvider";
 import { useBuildDataSource } from "../internal/useBuildDataSource";
-import { useBuildCustomizationController } from "../internal/useBuildCustomizationController";
 import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext";
 import { AnalyticsContext } from "../contexts/AnalyticsContext";
 import { useProjectLog } from "../hooks/useProjectLog";
@@ -54,6 +53,7 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
 
     useLocaleConfig(locale);
 
+    console.debug("FireCMS propertyConfigs", propertyConfigs);
     /**
      * Controller in charge of fetching and persisting data
      */
@@ -70,7 +70,7 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
 
     const loading = authController.initialLoading || navigationController.loading || pluginsLoading;
 
-    const customizationController = useBuildCustomizationController({
+    const customizationController: CustomizationController = {
         dateTimeFormat,
         locale,
         entityLinkBuilder,
@@ -78,7 +78,7 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
         entityViews: entityViews ?? [],
         propertyConfigs: propertyConfigs ?? {},
         components
-    });
+    };
 
     const analyticsController = useMemo(() => ({
         onAnalyticsEvent

@@ -179,6 +179,7 @@ function EntityFormInternal<M extends Record<string, any>>({
     const analyticsController = useAnalyticsController();
 
     const customizationController = useCustomizationController();
+    console.log("EntityFormInternal propertyConfigs", customizationController.propertyConfigs);
 
     const context = useFireCMSContext();
     const dataSource = useDataSource(inputCollection);
@@ -189,7 +190,7 @@ function EntityFormInternal<M extends Record<string, any>>({
         path,
         values: entity?.values,
         fields: customizationController.propertyConfigs
-    }), [entity?.values, path]);
+    }), [entity?.values, path, customizationController.propertyConfigs]);
 
     const mustSetCustomId: boolean = (status === "new" || status === "copy") &&
         (Boolean(initialResolvedCollection.customId) && initialResolvedCollection.customId !== "optional");
