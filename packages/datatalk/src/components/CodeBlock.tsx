@@ -100,15 +100,15 @@ export function CodeBlock({
                     return;
                 }
                 module.default()
-                    .then(async (codeExport: any) => {
-                        originalConsoleLog("Code loaded", codeExport, typeof codeExport);
+                    .then(async (codeOutput: any) => {
+                        originalConsoleLog("Code loaded", codeOutput, typeof codeOutput);
                         let codeResult;
-                        if (codeExport instanceof Promise) {
-                            codeResult = await codeExport;
-                        } else if (typeof codeExport === "function") {
-                            codeResult = await codeExport();
+                        if (codeOutput instanceof Promise) {
+                            codeResult = await codeOutput;
+                        } else if (typeof codeOutput === "function") {
+                            codeResult = await codeOutput();
                         } else {
-                            codeResult = codeExport;
+                            codeResult = codeOutput;
                         }
 
                         if (codeResult instanceof firestoreLibrary.QuerySnapshot) {
@@ -120,7 +120,7 @@ export function CodeBlock({
                             const res = JSON.stringify(codeResult.data(), null, 2);
                             originalConsoleLog("Document data", res);
                             return setExecutionResult(res);
-                        } else if (typeof codeExport === "undefined") {
+                        } else if (typeof codeOutput === "undefined") {
                             return setExecutionResult("Code executed successfully");
                         } else {
                             return setExecutionResult(codeResult);
@@ -128,7 +128,7 @@ export function CodeBlock({
                     })
                     .catch((error: any) => {
                         setExecutionError(error);
-                        console.error("Error executing query:", error);
+                        originalConsoleError("Error executing query:", error);
                     })
                     .finally(() => {
                         setLoadingQuery(false);
@@ -138,7 +138,7 @@ export function CodeBlock({
             })
                 .catch((error) => {
                     setExecutionError(error);
-                    console.error("Error loading module:", error);
+                    originalConsoleError("Error loading module:", error);
                     setLoadingQuery(false);
                     resetConsolePipe();
                 });

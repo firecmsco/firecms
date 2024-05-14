@@ -1,4 +1,4 @@
-import { Card, Typography } from "@firecms/ui";
+import { Alert, Card, Typography } from "@firecms/ui";
 
 export function IntroComponent({ onPromptSuggestionClick }: { onPromptSuggestionClick: (prompt: string) => void }) {
     return (
@@ -6,6 +6,9 @@ export function IntroComponent({ onPromptSuggestionClick }: { onPromptSuggestion
             <Typography variant={"h3"} gutterBottom={true} className={"font-mono ml-4 my-2"}>
                 Welcome to DATATALK
             </Typography>
+            <Alert>
+                DATATALK is FREE during the beta period.
+            </Alert>
             <Typography paragraph={true} className={"ml-4 my-2"}>
                 DataTalk is a conversational interface to your data. You can ask questions, run commands and explore
                 your data in a natural way.
