@@ -62,7 +62,6 @@ function DataTalkSessionRoute({
                                   collections
                               }: {
     dataTalkConfig: DataTalkConfig,
-
     onAnalyticsEvent?: (event: string, params?: any) => void,
     apiEndpoint: string,
     getAuthToken: () => Promise<string>,
@@ -73,14 +72,51 @@ function DataTalkSessionRoute({
 
     const { sessionId } = useParams();
     if (!sessionId) throw Error("Session id not found");
+
+    return <DataTalkRouteInner
+        key={sessionId}
+        sessionId={sessionId}
+        dataTalkConfig={dataTalkConfig}
+        apiEndpoint={apiEndpoint}
+        getAuthToken={getAuthToken}
+        onAnalyticsEvent={onAnalyticsEvent}
+        collections={collections}
+        autoRunCode={autoRunCode}
+        setAutoRunCode={setAutoRunCode}/>
+}
+
+interface DataTalkRouteInnerProps {
+    sessionId: any;
+    dataTalkConfig: DataTalkConfig;
+    apiEndpoint: string;
+    getAuthToken: () => Promise<string>;
+    onAnalyticsEvent?: (event: string, params?: any) => void,
+    collections?: EntityCollection[]
+    autoRunCode: any;
+    setAutoRunCode: any;
+}
+
+function DataTalkRouteInner({
+                                sessionId,
+                                dataTalkConfig,
+                                apiEndpoint,
+                                getAuthToken,
+                                onAnalyticsEvent,
+                                collections,
+                                autoRunCode,
+                                setAutoRunCode
+                            }: DataTalkRouteInnerProps) {
+
     const [session, setSession] = React.useState<Session | undefined>(undefined);
     const [loading, setLoading] = React.useState(true);
 
     useEffect(() => {
-        dataTalkConfig.getSession(sessionId).then(session => {
-            setSession(session);
-            setLoading(false);
-        });
+        setLoading(true);
+        dataTalkConfig.getSession(sessionId)
+            .then(session => {
+                setSession(session);
+                setLoading(false);
+            });
     }, [sessionId]);
 
     if (loading) {
@@ -93,13 +129,8 @@ function DataTalkSessionRoute({
         messages: []
     } satisfies Session;
 
-    if (sessionId !== usedSession.id) {
-        return <CircularProgressCenter/>;
-    }
-
     return (
         <DataTalkSession
-            key={sessionId}
             apiEndpoint={apiEndpoint}
             getAuthToken={getAuthToken}
             onAnalyticsEvent={onAnalyticsEvent}

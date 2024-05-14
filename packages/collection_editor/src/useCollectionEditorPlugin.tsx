@@ -125,7 +125,7 @@ export function IntroWidget({}: {}) {
         }).createCollections
         : true;
 
-    if (!navigation.initialised || navigation.collections === undefined || (navigation.collections ?? []).length > 0) {
+    if (!navigation.initialised || (navigation.collections ?? []).length > 0) {
         return null;
     }
 
