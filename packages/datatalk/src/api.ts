@@ -11,7 +11,7 @@ export async function streamDataTalkCommand(firebaseAccessToken: string,
     // eslint-disable-next-line no-async-promise-executor
     return new Promise<string>(async (resolve, reject) => {
         try {
-            const response = await fetch(apiEndpoint, {
+            const response = await fetch(apiEndpoint + "/datatalk/command", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -86,6 +86,31 @@ export async function streamDataTalkCommand(firebaseAccessToken: string,
             reject(error);
         }
     });
+}
+
+export function getDataTalkSamplePrompts(firebaseAccessToken: string,
+                                         apiEndpoint: string,
+                                         messages?: ChatMessage[]
+): Promise<string[]> {
+    return fetch(apiEndpoint + "/datatalk/sample_prompts", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${firebaseAccessToken}`
+        },
+        body: JSON.stringify({
+            history: messages ?? []
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new ApiError(data.message, data.code);
+                });
+            }
+            return response.json();
+        })
+        .then(data => data.data);
 }
 
 export class ApiError extends Error {

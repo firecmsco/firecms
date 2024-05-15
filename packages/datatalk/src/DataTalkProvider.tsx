@@ -12,6 +12,7 @@ import {
 } from "@firebase/firestore";
 import { FirebaseApp } from "@firebase/app";
 import { Session } from "./types";
+import { getDataTalkSamplePrompts } from "./api";
 
 export type DataTalkConfig = {
     loading: boolean;
@@ -19,11 +20,14 @@ export type DataTalkConfig = {
     createSessionId: () => Promise<string>;
     saveSession: (session: Session) => Promise<void>;
     getSession: (sessionId: string) => Promise<Session | undefined>;
+    rootPromptsSuggestions?: string[];
 };
 
 interface DataTalkConfigParams {
     firebaseApp?: FirebaseApp;
     userSessionsPath?: string;
+    getAuthToken: () => Promise<string>;
+    apiEndpoint: string;
 }
 
 const DataTalkConfigContext = React.createContext<DataTalkConfig>({} as any);
@@ -32,11 +36,20 @@ export const useDataTalk = () => useContext(DataTalkConfigContext);
 export function DataTalkProvider({
                                      children,
                                      firebaseApp,
-                                     userSessionsPath
+                                     userSessionsPath,
+                                     getAuthToken,
+                                     apiEndpoint
                                  }: DataTalkConfigParams & { children: React.ReactNode }) {
 
     const [loading, setLoading] = useState<boolean>(true);
     const [sessions, setSessions] = useState<Session[]>([]);
+    const [samplePrompts, setSamplePrompts] = useState<string[]>([]);
+
+    useEffect(() => {
+        getAuthToken().then((firebaseToken) => {
+            getDataTalkSamplePrompts(firebaseToken, apiEndpoint).then(setSamplePrompts);
+        });
+    }, []);
 
     const createSessionId = useCallback(async (): Promise<string> => {
         if (!firebaseApp) throw Error("useBuildDataTalkConfig Firebase not initialised");
@@ -90,14 +103,17 @@ export function DataTalkProvider({
         );
     }, [firebaseApp, userSessionsPath]);
 
-    const config = {
+    const config: DataTalkConfig = {
         loading,
         sessions,
         saveSession,
         getSession,
-        createSessionId
+        createSessionId,
+        rootPromptsSuggestions: samplePrompts
     };
-    return <DataTalkConfigContext.Provider value={config}>{children}</DataTalkConfigContext.Provider>;
+    return <DataTalkConfigContext.Provider value={config}>
+        {children}
+    </DataTalkConfigContext.Provider>;
 }
 
 const timestampToDateConverter = {

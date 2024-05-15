@@ -490,11 +490,15 @@ function FireCMSAppAuthenticated({
     }
 
     const includeDataTalk = userManagement.isAdmin ?? false;
+    const dataTalkPath = useDataTalkMode();
+    const dataTalkMode = includeDataTalk && dataTalkPath;
+    const dataTalkEndpoint = fireCMSBackend.backendApiHost + "/projects/" + projectConfig.projectId;
 
     const adminRoutes = useMemo(() => buildAdminRoutes(userManagement.usersLimit,
         includeDataTalk,
         fireCMSBackend,
         projectConfig,
+        dataTalkEndpoint,
         onAnalyticsEvent), [includeDataTalk, userManagement.usersLimit, onAnalyticsEvent]);
 
     const configPermissions: CollectionEditorPermissionsBuilder<User, PersistedCollection> = useCallback(({
@@ -598,9 +602,6 @@ function FireCMSAppAuthenticated({
 
     const plugins: FireCMSPlugin<any, any, any>[] = [saasPlugin, importExportPlugin, collectionEditorPlugin, dataEnhancementPlugin];
 
-    const dataTalkPath = useDataTalkMode();
-    const dataTalkMode = includeDataTalk && dataTalkPath;
-
     return (
         <FireCMSBackEndProvider {...fireCMSBackend}>
             <ProjectConfigProvider config={projectConfig}>
@@ -665,6 +666,9 @@ function FireCMSAppAuthenticated({
 
                                     if (includeDataTalk) {
                                         component = <DataTalkProvider
+                                            apiEndpoint={dataTalkEndpoint}
+                                            getAuthToken={fireCMSBackend.getBackendAuthToken}
+                                            key={"datatalk_provider_" + projectConfig.projectId}
                                             userSessionsPath={`projects/${projectConfig.projectId}/users/${fireCMSBackend.user?.uid}/datatalk_sessions`}
                                             firebaseApp={fireCMSBackend.backendFirebaseApp}>
                                             {component}
@@ -687,6 +691,7 @@ function buildAdminRoutes(usersLimit: number | undefined,
                           includeDataTalk: boolean,
                           fireCMSBackend: FireCMSBackend,
                           projectConfig: ProjectConfig,
+                          dataTalkEndpoint: string,
                           onAnalyticsEvent?: (event: string, data?: object) => void) {
 
     const views = [
@@ -736,9 +741,7 @@ function buildAdminRoutes(usersLimit: number | undefined,
                     console.log("DataTalk event", event, params);
                     onAnalyticsEvent?.("datatalk:" + event, params);
                 }}
-                // apiEndpoint={"http://127.0.0.1:5001/firecms-dev-2da42/europe-west3/api/datatalk/command?projectId=" + projectConfig.projectId}
-                apiEndpoint={`https://api-drplyi3b6q-ey.a.run.app/projects/${projectConfig.projectId}/datatalk/command`}
-                // apiEndpoint={"https://datatalkapi-drplyi3b6q-ey.a.run.app/datatalk/command?projectId=" + projectConfig.projectId}
+                apiEndpoint={dataTalkEndpoint}
                 getAuthToken={fireCMSBackend.getBackendAuthToken}/>
         });
 

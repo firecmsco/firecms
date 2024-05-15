@@ -38,7 +38,9 @@ export function TableResults({
     const customizationController = useCustomizationController();
 
     async function inferProperties() {
-
+        if (querySnapshot.docs.length === 0) {
+            return;
+        }
         const pathAndId = querySnapshot.docs[0].ref.path;
         const resultsPath = pathAndId.split("/").slice(0, -1).join("/");
         let foundProperties = null;
