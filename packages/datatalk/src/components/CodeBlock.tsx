@@ -67,6 +67,11 @@ export function CodeBlock({
     };
 
     async function displayQuerySnapshotData(querySnapshot: firestoreLibrary.QuerySnapshot, priorityKeys?: string[]) {
+        if (querySnapshot.empty) {
+            setQuerySnapshot(null);
+            setExecutionResult("No documents found");
+            return;
+        }
         setQuerySnapshot(querySnapshot);
         setCodePriorityKeys(priorityKeys);
     }
