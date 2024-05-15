@@ -125,13 +125,6 @@ export function TableResults({
 
     };
 
-    console.log("TableResults", {
-        queryResults,
-        properties,
-        propertiesOrder,
-        resolvedCollection,
-    })
-
     if (!queryResults || !properties) return null;
 
     const getActionsForEntity = ({
