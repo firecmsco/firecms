@@ -77,7 +77,7 @@ export function CodeBlock({
             return;
         }
 
-        console.log("Executing code", inputCode);
+        originalConsoleLog("Executing code", inputCode);
 
         setCodeHasBeenRun(true);
 

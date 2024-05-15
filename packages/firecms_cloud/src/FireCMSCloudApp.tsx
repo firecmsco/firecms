@@ -494,7 +494,8 @@ function FireCMSAppAuthenticated({
     const adminRoutes = useMemo(() => buildAdminRoutes(userManagement.usersLimit,
         includeDataTalk,
         fireCMSBackend,
-        projectConfig), [includeDataTalk, userManagement.usersLimit]);
+        projectConfig,
+        onAnalyticsEvent), [includeDataTalk, userManagement.usersLimit, onAnalyticsEvent]);
 
     const configPermissions: CollectionEditorPermissionsBuilder<User, PersistedCollection> = useCallback(({
                                                                                                               user,
@@ -512,8 +513,6 @@ function FireCMSAppAuthenticated({
         });
         return map;
     }, [appConfig?.propertyConfigs]);
-
-    console.debug("FireCMSAppAuthenticated propertyConfigsMap", propertyConfigsMap);
 
     const importExportPlugin = useImportExportPlugin({
         exportAllowed: useCallback(({ collectionEntitiesCount }: ExportAllowedParams) => {
@@ -684,7 +683,11 @@ function FireCMSAppAuthenticated({
 
 }
 
-function buildAdminRoutes(usersLimit: number | undefined, includeDataTalk: boolean, fireCMSBackend: FireCMSBackend, projectConfig: ProjectConfig) {
+function buildAdminRoutes(usersLimit: number | undefined,
+                          includeDataTalk: boolean,
+                          fireCMSBackend: FireCMSBackend,
+                          projectConfig: ProjectConfig,
+                          onAnalyticsEvent?: (event: string, data?: object) => void) {
 
     const views = [
         {
@@ -729,6 +732,10 @@ function buildAdminRoutes(usersLimit: number | undefined, includeDataTalk: boole
             icon: "settings",
             hideFromNavigation: true,
             view: <DataTalkRoutes
+                onAnalyticsEvent={(event, params) => {
+                    console.log("DataTalk event", event, params);
+                    onAnalyticsEvent?.("datatalk:" + event, params);
+                }}
                 // apiEndpoint={"http://127.0.0.1:5001/firecms-dev-2da42/europe-west3/api/datatalk/command?projectId=" + projectConfig.projectId}
                 apiEndpoint={`https://api-drplyi3b6q-ey.a.run.app/projects/${projectConfig.projectId}/datatalk/command`}
                 // apiEndpoint={"https://datatalkapi-drplyi3b6q-ey.a.run.app/datatalk/command?projectId=" + projectConfig.projectId}

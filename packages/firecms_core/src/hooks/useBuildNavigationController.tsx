@@ -241,7 +241,6 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
 
     const getCollection = useCallback((
         idOrPath: string,
-        entityId?: string,
         includeUserOverride = false
     ): EC | undefined => {
         const collections = collectionsRef.current;

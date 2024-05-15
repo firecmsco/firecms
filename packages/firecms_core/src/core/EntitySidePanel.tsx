@@ -33,7 +33,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
         if (!props) return undefined;
         let usedCollection = props.collection;
 
-        const registryCollection = navigationController.getCollection(props.path, props.entityId);
+        const registryCollection = navigationController.getCollection(props.path);
         if (registryCollection) {
             usedCollection = registryCollection;
         }

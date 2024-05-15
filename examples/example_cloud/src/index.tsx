@@ -7,6 +7,8 @@ import { pricePropertyConfig } from "./property_configs/property_config_builder"
 import { usersCollection } from "./collections/users_collection";
 import { ExampleCMSView } from "./views/ExampleCMSView";
 import { SampleCustomEntityCollection } from "./views/SampleCustomEntityCollection";
+import { homesCollection } from "./collections/homes";
+import { featureConfig } from "./property_configs/feature_property";
 
 const appConfig: FireCMSAppConfig = {
     version: "1",
@@ -34,6 +36,7 @@ const appConfig: FireCMSAppConfig = {
             newTestCollection,
             productsCollection,
             usersCollection,
+            homesCollection
             // pagesCollection
             // showcaseCollection
         ]);
@@ -72,6 +75,11 @@ const appConfig: FireCMSAppConfig = {
     propertyConfigs: [
         colorPropertyConfig,
         pricePropertyConfig,
+        {
+            name: 'Feature',
+            key: 'feature',
+            property: featureConfig.property,
+        },
         {
             name: "Translated string",
             key: "translated_string",

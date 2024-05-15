@@ -53,7 +53,6 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
 
     useLocaleConfig(locale);
 
-    console.debug("FireCMS propertyConfigs", propertyConfigs);
     /**
      * Controller in charge of fetching and persisting data
      */

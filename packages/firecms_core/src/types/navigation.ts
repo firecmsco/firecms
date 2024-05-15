@@ -57,10 +57,9 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
      * The collection is resolved from the given path or alias.
      */
     getCollection: (pathOrId: string,
-                    entityId?: string,
                     includeUserOverride?: boolean) => EC | undefined;
     /**
-     * Get the collection configuration from its parent path segments.
+     * Get the collection configuration from its parent ids.
      */
     getCollectionFromIds: (ids: string[]) => EC | undefined;
 

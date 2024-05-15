@@ -80,7 +80,7 @@ export function resolveNavigationFrom<M extends Record<string, any>, UserType ex
             if (entry.type === "collection") {
                 return Promise.resolve(entry);
             } else if (entry.type === "entity") {
-                const collection = navigation.getCollection(entry.path, entry.entityId);
+                const collection = navigation.getCollection(entry.path);
                 if (!collection) {
                     throw Error(`No collection defined in the navigation for the entity with path ${entry.path}`);
                 }

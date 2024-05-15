@@ -40,7 +40,7 @@ import { ErrorBoundary } from "../components";
 import {
     copyEntityAction,
     deleteEntityAction
-} from "../components/EntityCollectionTable/internal/default_entity_actions";
+} from "../components/common/default_entity_actions";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { ValidationError } from "yup";
 import { PropertyIdCopyTooltipContent } from "../components/PropertyIdCopyTooltipContent";
@@ -179,7 +179,6 @@ function EntityFormInternal<M extends Record<string, any>>({
     const analyticsController = useAnalyticsController();
 
     const customizationController = useCustomizationController();
-    console.log("EntityFormInternal propertyConfigs", customizationController.propertyConfigs);
 
     const context = useFireCMSContext();
     const dataSource = useDataSource(inputCollection);

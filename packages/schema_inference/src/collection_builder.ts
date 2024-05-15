@@ -2,7 +2,7 @@ import {
     DataType,
     EnumValues,
     mergeDeep,
-    Properties,
+    Properties, PropertiesOrBuilders,
     Property,
     resolveEnumValues,
     StringProperty
@@ -72,7 +72,8 @@ export function buildPropertyFromData(
 }
 
 export function buildPropertiesOrder(
-    properties: Properties<any>,
+    properties: PropertiesOrBuilders,
+    propertiesOrder?: string[],
     priorityKeys?: string[]
 ): string[] {
     const lowerCasePriorityKeys = (priorityKeys ?? []).map((key) => key.toLowerCase());
@@ -86,7 +87,7 @@ export function buildPropertiesOrder(
         return 0;
     }
 
-    const keys = Object.keys(properties);
+    const keys = propertiesOrder ?? Object.keys(properties);
     keys.sort(); // alphabetically
     keys.sort((a, b) => {
         return propOrder(b) - propOrder(a);

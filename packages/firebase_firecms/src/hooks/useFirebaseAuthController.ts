@@ -58,7 +58,6 @@ export const useFirebaseAuthController = <ExtraData>({
     const authRef = useRef(firebaseApp ? getAuth(firebaseApp) : null);
 
     const updateUser = useCallback(async (user: FirebaseUser | null, initialize?: boolean) => {
-        console.log("Updating user", user);
         if (loading) return;
         if (defineRolesFor && user) {
             const userRoles = await defineRolesFor(user);

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from "react";
 import {
     EntityCollection,
     EntitySidePanelProps,
-    NavigationController,
+    NavigationController, PropertyConfig,
     ResolvedProperty,
     SideDialogPanelProps,
     SideDialogsController,
@@ -48,7 +48,8 @@ function calculateCollectionDesiredWidth(collection: EntityCollection<any>): str
     }
     const resolvedCollection = resolveCollection({
         collection,
-        path: "__ignored"
+        path: "__ignored",
+        ignoreMissingFields: true
     });
 
     let result = FORM_CONTAINER_WIDTH

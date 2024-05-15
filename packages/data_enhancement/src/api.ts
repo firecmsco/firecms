@@ -120,7 +120,6 @@ export async function fetchEntityPromptSuggestion<M extends object>(props: {
     host?: string
 }): Promise<SamplePromptsResult> {
 
-    console.debug("fetchEntityPromptSuggestion", props);
     return fetch((props.host ?? DEFAULT_SERVER) + "/data/prompt_autocomplete/",
         {
             // mode: "no-cors",
@@ -137,7 +136,6 @@ export async function fetchEntityPromptSuggestion<M extends object>(props: {
         })
         .then(async (res) => {
             const data = await res.json();
-            console.debug("fetchEntityPromptSuggestion data", data);
             if (!res.ok) {
                 console.error("fetchEntityPromptSuggestion", data);
                 throw Error(data.message);

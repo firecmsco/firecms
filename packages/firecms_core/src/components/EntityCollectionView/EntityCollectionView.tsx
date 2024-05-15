@@ -70,7 +70,7 @@ import {
     copyEntityAction,
     deleteEntityAction,
     editEntityAction
-} from "../EntityCollectionTable/internal/default_entity_actions";
+} from "../common/default_entity_actions";
 import { DeleteEntityDialog } from "../DeleteEntityDialog";
 import { useAnalyticsController } from "../../hooks/useAnalyticsController";
 import { useSelectionController } from "./useSelectionController";
@@ -135,7 +135,6 @@ export const EntityCollectionView = React.memo(
     ) {
 
     const context = useFireCMSContext();
-    console.debug("EntityCollectionView context", context.customizationController.propertyConfigs);
     const fullPath = fullPathProp ?? collectionProp.path;
     const dataSource = useDataSource(collectionProp);
     const navigation = useNavigationController();
