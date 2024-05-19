@@ -7,8 +7,16 @@ const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
 
 export function useColumnIds<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean): PropertyColumnConfig[] {
     return useMemo(() => {
-        if (collection.propertiesOrder)
-            return hideAndExpandKeys(collection, collection.propertiesOrder);
+        if (collection.propertiesOrder) {
+            const propertyColumnConfigs = hideAndExpandKeys(collection, collection.propertiesOrder);
+            if (collection.collectionGroup) {
+                propertyColumnConfigs.push({
+                    key: COLLECTION_GROUP_PARENT_ID,
+                    disabled: true
+                });
+            }
+            return propertyColumnConfigs;
+        }
         return getDefaultColumnKeys(collection, includeSubcollections);
     }, [collection, includeSubcollections]);
 }
