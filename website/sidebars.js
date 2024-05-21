@@ -8,13 +8,14 @@ module.exports = {
     "what_is_new_v3",
     {
       "type": "category",
-      "label": "☁️ FireCMS Cloud",
+      "label": "FireCMS Cloud  ☁️",
       "collapsed": false,
       "items": [
-        "cloud_quickstart",
-        "app_config",
-        "deployment",
-        "creating_service_account",
+        "cloud/quickstart",
+        "cloud/app_config",
+        "cloud/deployment",
+        "cloud/app_check",
+        "cloud/creating_service_account",
       ]
     },
     {

@@ -1,0 +1,66 @@
+---
+id: app_check
+title: App check
+---
+
+You can integrate Firebase App Check with your app to protect your backend resources from abuse, such as billing fraud
+or phishing. Firebase App Check works alongside other Firebase services, such as Firebase Authentication,
+to help secure your backend resources.
+
+FireCMS provides a simple way to integrate Firebase App Check with your app. You can enable it by providing the
+`appCheck` prop in your app configuration.
+
+You can define some options:
+- `provider`: The provider you want to use.
+- `isTokenAutoRefreshEnabled`: Whether to automatically refresh the token.
+- `debugToken`: A debug token to use.
+- `forceRefresh`: Whether to force a token refresh.
+
+The `provider` property is required and should be an instance of a Firebase AppCheck provider.
+You can use one of the following providers:
+
+### ReCaptchaEnterpriseProvider
+
+In order to set up the ReCaptchaEnterpriseProvider, you need to create a new reCAPTCHA Enterprise site key.
+Follow the instructions in the [Firebase documentation](https://firebase.google.com/docs/app-check/web/recaptcha-enterprise-provider).
+
+```tsx
+import {FireCMSAppConfig} from "@firecms/cloud";
+import {ReCaptchaEnterpriseProvider} from "@firebase/app-check";
+
+const appConfig: FireCMSAppConfig = {
+
+    version: "1",
+
+    appCheck: {
+        provider: new ReCaptchaEnterpriseProvider("your-site-key")
+    },
+}
+
+export default appConfig;
+```
+
+### ReCaptchaV3Provider
+
+In order to set up the ReCaptchaV3Provider, you need to create a new reCAPTCHA v3 site key.
+Follow the instructions in the [Firebase documentation](https://firebase.google.com/docs/app-check/web/recaptcha-provider).
+
+```tsx
+import {FireCMSAppConfig} from "@firecms/cloud";
+import {ReCaptchaV3Provider} from "@firebase/app-check";
+
+const appConfig: FireCMSAppConfig = {
+
+    version: "1",
+
+    appCheck: {
+        provider: new ReCaptchaV3Provider("your-site-key")
+    },
+}
+
+export default appConfig;
+```
+
+### Custom provider
+
+You can also create a custom provider by implementing the `AppCheckProvider` interface.

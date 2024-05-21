@@ -8,6 +8,13 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "redirects": [
+      {
+        "source": "/docs/cloud_quickstart",
+        "destination": "/docs/cloud/quickstart",
+        "type": 301
+      }
+    ],
     "rewrites": [
       {
         "source": "**",
