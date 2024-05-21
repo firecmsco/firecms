@@ -368,7 +368,7 @@ export function resolvePropertyEnum(property: StringProperty | NumberProperty, f
         return {
             ...property,
             resolved: true,
-            enumValues: enumToObjectEntries(property.enumValues)?.filter((value) => value && value.id && value.label) ?? [],
+            enumValues: enumToObjectEntries(property.enumValues)?.filter((value) => value && (value.id || value.id === 0) && value.label) ?? [],
             fromBuilder: fromBuilder ?? false
         }
     }

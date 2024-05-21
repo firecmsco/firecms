@@ -435,8 +435,6 @@ export const EntityCollectionView = React.memo(
             ];
         }, [collection, fullPath, sideEntityController]);
 
-        console.log("additionalFields", additionalFields);
-
         const updateLastDeleteTimestamp = useCallback(() => {
             setLastDeleteTimestamp(Date.now());
         }, []);

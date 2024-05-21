@@ -90,6 +90,28 @@ export const testCollection = buildCollection({
     name: "Test entities",
     // formAutoSave: true,
     properties: {
+        background: {
+            dataType: "number",
+            name: "Colour",
+            enumValues:
+                [
+                    {
+                        id: 0,
+                        label: " Black ",
+                        color: "grayDarker"
+                    },
+                    {
+                        id: 4281080974,
+                        label: " Blue ",
+                        color: "blueDarker"
+                    },
+                    {
+                        id: 4293947270,
+                        label: " Cyan ",
+                        color: "cyanDarker"
+                    }
+                ]
+        },
         upload: {
             name: "Upload",
             dataType: "string",
@@ -334,23 +356,6 @@ export const testCollection = buildCollection({
         //         }
         //     ]
         // }),
-        // background: {
-        //     dataType: "number", // NB – this was string” above..
-        //     name: "Colour",
-        //     enumValues:
-        //         [
-        //             {
-        //                 id: 4281080974,
-        //                 label: " Blue ",
-        //                 color: "blueDarker"
-        //             },
-        //             {
-        //                 id: 4293947270,
-        //                 label: " Cyan ",
-        //                 color: "cyanDarker"
-        //             }
-        //         ]
-        // },
         // self_ref: {
         //     name: "Self ref",
         //     dataType: "reference",

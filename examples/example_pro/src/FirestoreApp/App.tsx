@@ -58,7 +58,6 @@ import { TestEditorView } from "./TestEditorView";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { ReCaptchaEnterpriseProvider } from "@firebase/app-check";
-import { getAuth } from "@firebase/auth";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com"];
 
@@ -278,6 +277,7 @@ function App() {
                 <FireCMS
                     navigationController={navigationController}
                     authController={authController}
+                    entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}

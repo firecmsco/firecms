@@ -10,7 +10,6 @@ export function generateIconKeys() {
             const lines = text.split("\n");
             const words = lines.map((line) => line.split(" ")[0]);
             const keys = words.filter(Boolean).filter((word) => word !== "addchart");
-            console.log(keys);
             saveIconKeys(keys);
             return keys;
         });

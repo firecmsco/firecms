@@ -231,6 +231,8 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
         context
     };
 
+    console.log("cmsFieldProps", cmsFieldProps, Component)
+
     return (
         <ErrorBoundary>
 

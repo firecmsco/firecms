@@ -15,6 +15,7 @@ export function NumberPropertyPreview({
     if (property.enumValues) {
         const enumKey = value;
         const enumValues = enumToObjectEntries(property.enumValues);
+        console.log("NumberPropertyPreview", enumValues)
         if (!enumValues)
             return <>{value}</>;
         return <EnumValuesChip

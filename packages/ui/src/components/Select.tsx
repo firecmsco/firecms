@@ -27,7 +27,7 @@ export type SelectProps = {
     renderValue?: (value: string, index: number) => React.ReactNode,
     renderValues?: (values: string[]) => React.ReactNode,
     size?: "small" | "medium",
-    label?: React.ReactNode,
+    label?: React.ReactNode | string,
     disabled?: boolean,
     error?: boolean,
     position?: "item-aligned" | "popper",
@@ -95,6 +95,8 @@ export function Select({
         }
     }, [multiple, onChange, value, onMultiValueChange, onValueChange]);
 
+    const hasValue = Array.isArray(value) ? value.length > 0 : value != null;
+    console.log("Select", value, hasValue);
     return (
         <SelectPrimitive.Root
             name={name}
@@ -142,22 +144,22 @@ export function Select({
                         "overflow-visible",
                         size === "small" ? "h-[42px]" : "h-[64px]"
                     )}>
-                    <SelectPrimitive.Value placeholder={placeholder}>
-                        {renderValue &&
-                            (value && Array.isArray(value)
-                                ? value.map((v, i) => (
-                                    <div key={v} className={"flex items-center gap-1 max-w-full"}>
-                                        {renderValue ? renderValue(v, i) : v}
-                                    </div>))
-                                : (typeof value === "string" ? (renderValue ? renderValue(value, 0) : value) : placeholder))}
+                        <SelectPrimitive.Value placeholder={placeholder}>
+                            {renderValue &&
+                                (hasValue && Array.isArray(value)
+                                    ? value.map((v, i) => (
+                                        <div key={v} className={"flex items-center gap-1 max-w-full"}>
+                                            {renderValue ? renderValue(v, i) : v}
+                                        </div>))
+                                    : (typeof value === "string" ? (renderValue ? renderValue(value, 0) : value) : placeholder))}
 
-                        {renderValues && (!value || Array.isArray(value))
-                            ? renderValues(value as string[] ?? [])
-                            : null}
+                            {renderValues && (!hasValue || Array.isArray(value))
+                                ? renderValues(value as string[] ?? [])
+                                : null}
 
-                        {!renderValue && !renderValues && value}
+                            {!renderValue && !renderValues && hasValue}
 
-                    </SelectPrimitive.Value>
+                        </SelectPrimitive.Value>
                     </div>
 
                     <SelectPrimitive.Icon className={cn(
