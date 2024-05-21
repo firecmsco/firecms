@@ -9,13 +9,3 @@ export interface AppCheckOptions {
     debugToken?: string;
     forceRefresh?: boolean;
 }
-
-/**
- * @group Firebase
- */
-export declare interface AppCheckTokenResult {
-    /**
-     * The token string in JWT format.
-     */
-    readonly token: string;
-}

@@ -63,8 +63,6 @@ const signInOptions: FirebaseSignInProvider[] = ["google.com"];
 
 function App() {
 
-    console.debug("Render App");
-
     const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
                                                                                        user,
                                                                                        authController
@@ -122,6 +120,8 @@ function App() {
             provider: new ReCaptchaEnterpriseProvider(import.meta.env.VITE_RECAPTCHA_SITE_KEY as string)
         }
     });
+
+    console.log("appCheckResult", appCheckResult);
 
     const collectionConfigController = useFirestoreCollectionsConfigController({
         firebaseApp
