@@ -96,7 +96,6 @@ export function Select({
     }, [multiple, onChange, value, onMultiValueChange, onValueChange]);
 
     const hasValue = Array.isArray(value) ? value.length > 0 : value != null;
-    console.log("Select", value, hasValue);
     return (
         <SelectPrimitive.Root
             name={name}

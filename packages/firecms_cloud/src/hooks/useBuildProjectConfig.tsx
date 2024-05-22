@@ -158,7 +158,7 @@ export function useBuildProjectConfig({
             {
                 next: (snapshot) => {
 
-                    console.log("Project config snapshot:", snapshot.data());
+                    console.debug("Project config snapshot:", snapshot.data());
                     setClientProjectName(snapshot.get("name"));
                     const plan = snapshot.get("subscription_plan") ?? "free";
                     setSubscriptionPlan(plan); // TODO: remove default value
