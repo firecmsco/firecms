@@ -75,7 +75,7 @@ import {
     UserManagementProvider,
     UsersView
 } from "@firecms/user_management";
-import { DataTalkProvider, DataTalkRoutes } from "@firecms/datatalk";
+import { DataTalkProvider, DataTalkRoutes, useBuildDataTalkConfig } from "@firecms/datatalk";
 import { useDataTalkMode } from "./hooks/useDataTalkMode";
 import { FireCMSCloudDataTalkDrawer } from "./components/FireCMSCloudDataTalkDrawer";
 
@@ -579,11 +579,20 @@ function FireCMSAppAuthenticated({
         // navigationController.collections !== undefined &&
         (navigationController.collections ?? []).length === 0;
 
+    const dataTalkConfig = useBuildDataTalkConfig({
+        enabled: includeDataTalk,
+        firebaseApp,
+        userSessionsPath: `projects/${projectConfig.projectId}/users/${fireCMSBackend.user?.uid}/datatalk_sessions`,
+        getAuthToken: fireCMSBackend.getBackendAuthToken,
+        apiEndpoint: dataTalkEndpoint
+    });
+
     const saasPlugin = useSaasPlugin({
         projectConfig,
         firestoreDelegate,
         collectionConfigController,
         appConfig,
+        dataTalkSuggestions: dataTalkConfig.rootPromptsSuggestions,
         introMode: introMode ? (projectConfig.creationType === "new" ? "new_project" : "existing_project") : undefined
     });
 
@@ -668,11 +677,8 @@ function FireCMSAppAuthenticated({
 
                                     if (includeDataTalk) {
                                         component = <DataTalkProvider
-                                            apiEndpoint={dataTalkEndpoint}
-                                            getAuthToken={fireCMSBackend.getBackendAuthToken}
                                             key={"datatalk_provider_" + projectConfig.projectId}
-                                            userSessionsPath={`projects/${projectConfig.projectId}/users/${fireCMSBackend.user?.uid}/datatalk_sessions`}
-                                            firebaseApp={fireCMSBackend.backendFirebaseApp}>
+                                            config={dataTalkConfig}>
                                             {component}
                                         </DataTalkProvider>
                                     }

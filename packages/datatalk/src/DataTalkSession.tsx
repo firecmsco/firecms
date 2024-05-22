@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { EntityCollection, randomString } from "@firecms/core";
 import { Button, Checkbox, Label, SendIcon, TextareaAutosize, Tooltip } from "@firecms/ui";
 import { MessageLayout } from "./components/MessageLayout";
@@ -8,6 +8,7 @@ import { IntroComponent } from "./components/IntroComponent";
 
 export function DataTalkSession({
                                     session,
+                                    initialPrompt,
                                     apiEndpoint,
                                     onAnalyticsEvent,
                                     getAuthToken,
@@ -17,6 +18,7 @@ export function DataTalkSession({
                                     setAutoRunCode
                                 }: {
     session: Session,
+    initialPrompt?: string,
     onAnalyticsEvent?: (event: string, params?: any) => void,
     apiEndpoint: string,
     getAuthToken: () => Promise<string>,
@@ -30,6 +32,12 @@ export function DataTalkSession({
 
     const [messages, setMessages] = useState<ChatMessage[]>(session.messages || []);
     const [messageLoading, setMessageLoading] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (initialPrompt && messages.length === 0) {
+            submit(initialPrompt);
+        }
+    }, []);
 
     const scrollInto = useCallback((childRef: React.RefObject<HTMLDivElement>) => {
         setTimeout(() => {

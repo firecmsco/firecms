@@ -24,6 +24,7 @@ export type DataTalkConfig = {
 };
 
 interface DataTalkConfigParams {
+    enabled: boolean;
     firebaseApp?: FirebaseApp;
     userSessionsPath?: string;
     getAuthToken: () => Promise<string>;
@@ -31,21 +32,21 @@ interface DataTalkConfigParams {
 }
 
 const DataTalkConfigContext = React.createContext<DataTalkConfig>({} as any);
-export const useDataTalk = () => useContext(DataTalkConfigContext);
 
-export function DataTalkProvider({
-                                     children,
-                                     firebaseApp,
-                                     userSessionsPath,
-                                     getAuthToken,
-                                     apiEndpoint
-                                 }: DataTalkConfigParams & { children: React.ReactNode }) {
+export function useBuildDataTalkConfig({
+                                           enabled,
+                                           firebaseApp,
+                                           userSessionsPath,
+                                           getAuthToken,
+                                           apiEndpoint
+                                       }: DataTalkConfigParams): DataTalkConfig {
 
     const [loading, setLoading] = useState<boolean>(true);
     const [sessions, setSessions] = useState<Session[]>([]);
     const [samplePrompts, setSamplePrompts] = useState<string[]>([]);
 
     useEffect(() => {
+        if (!enabled) return;
         getAuthToken().then((firebaseToken) => {
             getDataTalkSamplePrompts(firebaseToken, apiEndpoint).then(setSamplePrompts);
         });
@@ -75,6 +76,7 @@ export function DataTalkProvider({
     }, [sessions])
 
     useEffect(() => {
+        if (!enabled) return;
         if (!firebaseApp) throw Error("useBuildDataTalkConfig Firebase not initialised");
         const firestore = getFirestore(firebaseApp);
         if (!firestore || !userSessionsPath) return;
@@ -103,7 +105,7 @@ export function DataTalkProvider({
         );
     }, [firebaseApp, userSessionsPath]);
 
-    const config: DataTalkConfig = {
+    return {
         loading,
         sessions,
         saveSession,
@@ -111,6 +113,15 @@ export function DataTalkProvider({
         createSessionId,
         rootPromptsSuggestions: samplePrompts
     };
+}
+
+export const useDataTalk = () => useContext(DataTalkConfigContext);
+
+export function DataTalkProvider({
+                                     config,
+                                     children,
+                                 }: { config: DataTalkConfig, children: React.ReactNode }) {
+
     return <DataTalkConfigContext.Provider value={config}>
         {children}
     </DataTalkConfigContext.Provider>;

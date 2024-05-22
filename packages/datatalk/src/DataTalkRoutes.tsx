@@ -45,9 +45,16 @@ function CreateSessionAdnRedirect({ dataTalkConfig }: { dataTalkConfig: DataTalk
     const location = useLocation();
     const navigate = useNavigate();
 
+    const params = new URLSearchParams(location.search);
+    const initialPrompt = params.get("prompt");
+
     useEffect(() => {
         dataTalkConfig.createSessionId().then(sessionId => {
-            navigate(`${location.pathname}/${sessionId}`);
+            if (initialPrompt) {
+                navigate(`${location.pathname}/${sessionId}?prompt=${initialPrompt}`, { replace: true });
+            } else {
+                navigate(`${location.pathname}/${sessionId}`, { replace: true });
+            }
         })
     }, []);
 
@@ -107,6 +114,11 @@ function DataTalkRouteInner({
                                 setAutoRunCode
                             }: DataTalkRouteInnerProps) {
 
+    const location = useLocation();
+
+    const params = new URLSearchParams(location.search);
+    const initialPrompt = params.get("prompt");
+
     const [session, setSession] = React.useState<Session | undefined>(undefined);
     const [loading, setLoading] = React.useState(true);
 
@@ -138,6 +150,7 @@ function DataTalkRouteInner({
             session={usedSession}
             autoRunCode={autoRunCode}
             setAutoRunCode={setAutoRunCode}
+            initialPrompt={initialPrompt ?? undefined}
             onMessagesChange={(messages) => {
                 const newSession = {
                     ...usedSession,

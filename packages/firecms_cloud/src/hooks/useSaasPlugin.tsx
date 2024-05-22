@@ -6,27 +6,35 @@ import { ProjectConfig } from "./useBuildProjectConfig";
 import { TextSearchInfoDialog } from "../components/subscriptions/TextSearchInfoDialog";
 import { FireCMSAppConfig } from "../types";
 import { RootCollectionSuggestions } from "../components/RootCollectionSuggestions";
+import { DataTalkSuggestions } from "../components/DataTalkSuggestions";
 
 export function useSaasPlugin({
                                   projectConfig,
                                   firestoreDelegate,
                                   collectionConfigController,
                                   appConfig,
+                                  dataTalkSuggestions,
                                   introMode
                               }: {
     projectConfig: ProjectConfig;
     appConfig?: FireCMSAppConfig;
     firestoreDelegate: FirestoreDelegate
     collectionConfigController: CollectionsConfigController;
+    dataTalkSuggestions?: string[];
     introMode?: "new_project" | "existing_project";
 }): FireCMSPlugin {
 
     const hasOwnTextSearchImplementation = Boolean(appConfig?.textSearchControllerBuilder);
 
+    const additionalChildrenStart = <>
+        {introMode ? <IntroWidget introMode={introMode}/> : undefined}
+        {<DataTalkSuggestions suggestions={dataTalkSuggestions}/>}
+    </>;
+
     return {
         key: "saas",
         homePage: {
-            additionalChildrenStart: introMode ? <IntroWidget introMode={introMode}/> : undefined,
+            additionalChildrenStart,
             additionalChildrenEnd: <RootCollectionSuggestions introMode={introMode}/>,
         },
         collectionView: {
