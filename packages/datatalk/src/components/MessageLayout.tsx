@@ -12,7 +12,8 @@ export function MessageLayout({
                                   collections,
                                   onRegenerate,
                                   canRegenerate,
-                                  onFeedback
+                                  onFeedback,
+                                  onUpdatedMessage
                               }: {
     message?: ChatMessage,
     autoRunCode?: boolean,
@@ -21,11 +22,20 @@ export function MessageLayout({
     collections?: EntityCollection[],
     onRegenerate?: () => void,
     canRegenerate?: boolean,
-    onFeedback?: (reason?: FeedbackSlug, feedbackMessage?: string) => void
+    onFeedback?: (reason?: FeedbackSlug, feedbackMessage?: string) => void,
+    onUpdatedMessage?: (message: ChatMessage) => void
 }) {
 
     const ref = useRef<HTMLDivElement>(null);
     const scrolled = useRef(false);
+
+    const onUpdatedMessageInternal = (updatedText: string) => {
+        if (!message) return;
+        if (onUpdatedMessage) onUpdatedMessage({
+            ...message,
+            text: updatedText
+        });
+    }
 
     useEffect(() => {
         if (scrolled.current) return;
@@ -50,7 +60,8 @@ export function MessageLayout({
         return () => resizeObserver.disconnect();
     }, [ref]);
 
-    return <div ref={ref} className="flex flex-col gap-2 bg-white dark:bg-gray-800 dark:bg-opacity-20 rounded-lg p-4 shadow-sm">
+    return <div ref={ref}
+                className="flex flex-col gap-2 bg-white dark:bg-gray-800 dark:bg-opacity-20 rounded-lg p-4 shadow-sm">
         <div className="flex items-start gap-3 justify-center">
             <Menu trigger={<Avatar className="w-10 h-10 shrink-0">
                 {message?.user === "USER" ? <PersonIcon/> : <AutoAwesomeIcon/>}
@@ -71,6 +82,7 @@ export function MessageLayout({
                                          canRegenerate={canRegenerate}
                                          containerWidth={containerWidth ?? undefined}
                                          onRegenerate={onRegenerate}
+                                         onUpdatedMessage={onUpdatedMessageInternal}
                                          onFeedback={onFeedback}/>)
                     : null}
 

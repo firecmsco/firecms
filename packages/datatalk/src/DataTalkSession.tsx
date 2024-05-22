@@ -170,6 +170,13 @@ export function DataTalkSession({
         }
     };
 
+    const updateMessage = (message: ChatMessage, index: number) => {
+        const newMessages = [...messages];
+        newMessages[index] = message;
+        setMessages(newMessages);
+        onMessagesChange?.(newMessages);
+    }
+
     return (
 
         <div className="h-full w-full flex flex-col bg-gray-50 dark:bg-gray-900">
@@ -203,6 +210,9 @@ export function DataTalkSession({
                                               }}
                                               onFeedback={(reason, feedbackMessage) => {
                                                   saveFeedback(message, reason, feedbackMessage, index);
+                                              }}
+                                              onUpdatedMessage={(message) => {
+                                                  updateMessage(message, index);
                                               }}
                                               collections={collections}
                                               scrollInto={scrollInto}

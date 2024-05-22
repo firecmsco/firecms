@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as firestoreLibrary from "@firebase/firestore";
 import { CircularProgressCenter, EntityCollection } from "@firecms/core";
-import { Button, cn, Paper } from "@firecms/ui";
+import { Button, cn, Paper, useDebounceValue } from "@firecms/ui";
 import { AutoHeightEditor } from "./AutoHeightEditor";
 import { extractStringLiterals } from "../utils/extract_literals";
 import { TableResults } from "./TableResults";
@@ -27,6 +27,7 @@ export function CodeBlock({
                               maxWidth,
                               loading,
                               sourceLoading,
+                              onCodeModified,
                               autoRunCode,
                               onCodeRun,
                               collections
@@ -36,12 +37,13 @@ export function CodeBlock({
     loading?: boolean,
     maxWidth?: number,
     autoRunCode?: boolean,
+    onCodeModified?: (code: string) => void,
     onCodeRun?: () => void,
     collections?: EntityCollection[]
 }) {
 
     const textAreaRef = React.useRef<HTMLDivElement>(null);
-    const [inputCode, setInputCode] = useState<string | undefined>(initialCode);
+    const [code, setCode] = useState<string | undefined>(initialCode);
 
     const [loadingQuery, setLoadingQuery] = useState<boolean>(false);
     const [querySnapshot, setQuerySnapshot] = useState<firestoreLibrary.QuerySnapshot | null>(null);
@@ -54,8 +56,15 @@ export function CodeBlock({
     const [executionError, setExecutionError] = useState<Error | null>(null);
     const mounted = React.useRef(false);
 
+    const deferredCode = useDebounceValue(code, 500);
     useEffect(() => {
-        setInputCode(initialCode);
+        if (onCodeModified) {
+            onCodeModified(deferredCode ?? "");
+        }
+    }, [deferredCode]);
+
+    useEffect(() => {
+        setCode(initialCode);
         if (autoRunCode && !mounted.current && initialCode && !sourceLoading) {
             executeQuery();
         }
@@ -63,7 +72,7 @@ export function CodeBlock({
     }, [sourceLoading, initialCode, autoRunCode]);
 
     const handleCodeChange = (value?: string) => {
-        setInputCode(value);
+        setCode(value);
     };
 
     async function displayQuerySnapshotData(querySnapshot: firestoreLibrary.QuerySnapshot, priorityKeys?: string[]) {
@@ -78,11 +87,11 @@ export function CodeBlock({
 
     const executeQuery = async () => {
 
-        if (!inputCode) {
+        if (!code) {
             return;
         }
 
-        originalConsoleLog("Executing code", inputCode);
+        originalConsoleLog("Executing code", code);
 
         setCodeHasBeenRun(true);
 
@@ -93,7 +102,7 @@ export function CodeBlock({
             pipeConsoleLog((...args) => {
                 setConsoleOutput((prev) => prev + Array.from(args).join(" ") + "\n");
             });
-            const encodedJs = encodeURIComponent(inputCode);
+            const encodedJs = encodeURIComponent(code);
             const dataUri = "data:text/javascript;charset=utf-8," + buildAuxScript() + encodedJs;
             const promise = import(/* @vite-ignore */dataUri);
             promise.then((module) => {
@@ -117,7 +126,7 @@ export function CodeBlock({
                         }
 
                         if (codeResult instanceof firestoreLibrary.QuerySnapshot) {
-                            const priorityKeys = extractStringLiterals(inputCode);
+                            const priorityKeys = extractStringLiterals(code);
                             return displayQuerySnapshotData(codeResult, priorityKeys);
                         } else if (codeResult instanceof firestoreLibrary.DocumentReference) {
                             return setExecutionResult("Document added successfully with reference: " + codeResult.path);
@@ -163,7 +172,7 @@ export function CodeBlock({
             <div className={"flex flex-row w-full gap-4"}
                  ref={textAreaRef}>
                 <AutoHeightEditor
-                    value={inputCode}
+                    value={code}
                     loading={loading}
                     maxWidth={maxWidth ? maxWidth - 96 : undefined}
                     onChange={handleCodeChange}
@@ -171,7 +180,7 @@ export function CodeBlock({
                 <Button size="small"
                         variant={codeHasBeenRun ? "outlined" : "filled"}
                         onClick={executeQuery}
-                        disabled={!inputCode}>Run Code</Button>
+                        disabled={!code}>Run Code</Button>
             </div>
 
             {executionError && (

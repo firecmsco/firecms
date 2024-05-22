@@ -20,7 +20,6 @@ import {
 } from "@firecms/ui";
 import { FeedbackSlug } from "../types";
 
-
 export function SystemMessage({
                                   text,
                                   loading,
@@ -30,7 +29,8 @@ export function SystemMessage({
                                   collections,
                                   onRegenerate,
                                   canRegenerate,
-                                  onFeedback
+                                  onFeedback,
+                                  onUpdatedMessage,
                               }: {
     text?: string,
     loading?: boolean,
@@ -40,7 +40,8 @@ export function SystemMessage({
     collections?: EntityCollection[],
     onRegenerate?: () => void,
     canRegenerate?: boolean,
-    onFeedback?: (reason?: FeedbackSlug, feedbackMessage?: string) => void
+    onFeedback?: (reason?: FeedbackSlug, feedbackMessage?: string) => void,
+    onUpdatedMessage?: (message: string) => void,
 }) {
 
     const [parsedElements, setParsedElements] = useState<MarkdownElement[] | null>();
@@ -55,6 +56,18 @@ export function SystemMessage({
             scrolled.current = true;
         }
     }, [scrollInto, text]);
+
+    const onUpdatedElements = (elements: MarkdownElement[]) => {
+        const markdown = elements.map((element) => {
+            if (element.type === "html") {
+                return element.content;
+            } else if (element.type === "code") {
+                return "```javascript\n" + element.content + "\n```";
+            }
+            throw new Error("Unknown element type");
+        }).join("\n");
+        onUpdatedMessage?.(markdown);
+    }
 
     return <>
 
@@ -71,6 +84,15 @@ export function SystemMessage({
                                   initialCode={element.content}
                                   onCodeRun={scrollInto}
                                   collections={collections}
+                                  onCodeModified={(updatedCode) => {
+                                      const updatedElements = [...parsedElements];
+                                      updatedElements[index] = {
+                                          type: "code",
+                                          content: updatedCode
+                                      };
+                                      setParsedElements(updatedElements);
+                                      onUpdatedElements(updatedElements);
+                                  }}
                                   maxWidth={containerWidth ? containerWidth - 90 : undefined}/>;
             } else {
                 console.error("Unknown element type", element);
