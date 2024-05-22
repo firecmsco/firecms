@@ -23,6 +23,7 @@ function ProPage() {
                         color={"dark"}
                     />
 
+                    <ProInfo/>
 
                     <ProFeaturesPanels/>
 
