@@ -22,17 +22,17 @@ module.exports = {
       "type": "category",
       "label": "FireCMS PRO",
       "collapsed": false,
+      className: "pro-sidebar-item",
       "items": [
         {
           type: 'doc',
           id: "pro/pro_quickstart",
-          label: "Pro Quickstart",
+          label: "Quickstart",
           className: "pro-sidebar-item"
         },
         {
           type: 'doc',
           id: "pro/sample_pro",
-          label: "Main concepts",
           className: "pro-sidebar-item"
         },
         "firebase_setup",

@@ -1,0 +1,66 @@
+---
+id: text_field
+title: Text Field
+sidebar_label: Text Field
+---
+
+Text fields allow users to input, edit, and display text. They can be used in forms, feedback, and other input-required fields.
+
+## Usage
+
+To use the `TextField`, import it from your components and pass the `value`, `onChange`, and other props according to the use case.
+
+import CodeSample from "../../src/CodeSample";
+import CodeBlock from "@theme/CodeBlock";
+
+## Basic Text Field
+
+A simple text field with minimal configuration.
+
+import TextFieldBasicDemo from '../../samples/components/text_field/text_field_basic';
+import TextFieldBasicSource from '!!raw-loader!../../samples/components/text_field/text_field_basic';
+
+<CodeSample>
+    <TextFieldBasicDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{TextFieldBasicSource}</CodeBlock>
+
+## Multiline Text Field
+
+A text field that supports multiline, useful for larger text inputs like comments or notes.
+
+import TextFieldMultilineDemo from '../../samples/components/text_field/text_field_multiline';
+import TextFieldMultilineSource from '!!raw-loader!../../samples/components/text_field/text_field_multiline';
+
+<CodeSample>
+    <TextFieldMultilineDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{TextFieldMultilineSource}</CodeBlock>
+
+## Text Field Sizes
+
+Demonstrating different sizes for the text field component.
+
+import TextFieldSizeDemo from '../../samples/components/text_field/text_field_sizes';
+import TextFieldSizeSource from '!!raw-loader!../../samples/components/text_field/text_field_sizes';
+
+<CodeSample>
+    <TextFieldSizeDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{TextFieldSizeSource}</CodeBlock>
+
+## Text Field with Adornment
+
+Text Field with an end adornment, often used for icons, action buttons, or informative text.
+
+import TextFieldAdornmentDemo from '../../samples/components/text_field/text_field_adornment';
+import TextFieldAdornmentSource from '!!raw-loader!../../samples/components/text_field/text_field_adornment';
+
+<CodeSample>
+    <TextFieldAdornmentDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{TextFieldAdornmentSource}</CodeBlock>

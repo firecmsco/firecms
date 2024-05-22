@@ -1,0 +1,53 @@
+---
+id: textarea_autosize
+title: TextareaAutosize
+sidebar_label: TextareaAutosize
+---
+
+The `TextareaAutosize` component automatically adjusts its height to fit the content.
+
+## Usage
+
+To use the `TextareaAutosize` component, import it from your components and pass the necessary props.
+
+import CodeSample from "../../src/CodeSample";
+import CodeBlock from "@theme/CodeBlock";
+
+## Basic TextareaAutosize
+
+A simple `TextareaAutosize` with basic usage.
+
+import TextareaAutosizeBasicDemo from '../../samples/components/textarea_autosize/textarea_autosize_basic';
+import TextareaAutosizeBasicSource from '!!raw-loader!../../samples/components/textarea_autosize/textarea_autosize_basic';
+
+<CodeSample>
+    <TextareaAutosizeBasicDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{TextareaAutosizeBasicSource}</CodeBlock>
+
+## Controlled TextareaAutosize
+
+An example of a controlled `TextareaAutosize` component.
+
+import TextareaAutosizeControlledDemo from '../../samples/components/textarea_autosize/textarea_autosize_controlled';
+import TextareaAutosizeControlledSource from '!!raw-loader!../../samples/components/textarea_autosize/textarea_autosize_controlled';
+
+<CodeSample>
+    <TextareaAutosizeControlledDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{TextareaAutosizeControlledSource}</CodeBlock>
+
+## TextareaAutosize with Max and Min Rows
+
+Demonstrating how to set the minimum and maximum number of rows.
+
+import TextareaAutosizeRowsDemo from '../../samples/components/textarea_autosize/textarea_autosize_rows';
+import TextareaAutosizeRowsSource from '!!raw-loader!../../samples/components/textarea_autosize/textarea_autosize_rows';
+
+<CodeSample>
+    <TextareaAutosizeRowsDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{TextareaAutosizeRowsSource}</CodeBlock>
