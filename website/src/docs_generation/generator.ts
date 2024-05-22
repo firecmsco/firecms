@@ -7,7 +7,7 @@ export async function generateDocsFor(src: string, slug: string) {
     // read system_instructions.txt
     const systemInstructions = fs.readFileSync("./src/docs_generation/system_instructions.txt", "utf-8");
 
-    const model = "gpt-4-turbo-preview";
+    const model = "gpt-4o";
     const openai = new OpenAI({
         apiKey: process.env.OPENAI_API_KEY
     });

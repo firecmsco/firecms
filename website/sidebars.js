@@ -160,6 +160,12 @@ module.exports = {
         "components/radio_group",
         "components/search_bar",
         "components/select",
+        "components/separator",
+        "components/sheet",
+        "components/table",
+        "components/tabs",
+        "components/text_field",
+        "components/textarea_autosize"
       ]
     },
     "migrating_from_v3_beta",

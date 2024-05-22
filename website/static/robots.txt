@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /docs/1.0.0/
+Disallow: /docs/2.0.0/
 
 Sitemap: https://firecms.co/sitemap.xml

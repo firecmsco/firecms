@@ -31,7 +31,6 @@ export * from "./SearchBar";
 export * from "./Select";
 export * from "./Separator";
 export * from "./Sheet";
-export * from "./Spinner";
 export * from "./TextareaAutosize";
 export * from "./TextField";
 export * from "./Tooltip";
