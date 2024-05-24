@@ -581,7 +581,7 @@ function FireCMSAppAuthenticated({
 
     const dataTalkConfig = useBuildDataTalkConfig({
         enabled: includeDataTalk,
-        firebaseApp,
+        firebaseApp: fireCMSBackend.backendFirebaseApp,
         userSessionsPath: `projects/${projectConfig.projectId}/users/${fireCMSBackend.user?.uid}/datatalk_sessions`,
         getAuthToken: fireCMSBackend.getBackendAuthToken,
         apiEndpoint: dataTalkEndpoint
