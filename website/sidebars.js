@@ -22,12 +22,11 @@ module.exports = {
       "type": "category",
       "label": "FireCMS PRO",
       "collapsed": false,
-      className: "pro-sidebar-item",
+      className: "pro-sidebar-category",
       "items": [
         {
           type: 'doc',
           id: "pro/pro_quickstart",
-          label: "Quickstart",
           className: "pro-sidebar-item"
         },
         {
