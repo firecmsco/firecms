@@ -1,4 +1,5 @@
-import { buildCollection, FireCMSAppConfig } from "@firecms/cloud";
+import { buildCollection } from "@firecms/core";
+import { FireCMSAppConfig } from "@firecms/cloud";
 
 type Unit = {
     name: string;
@@ -43,10 +44,10 @@ const appConfig: FireCMSAppConfig = {
     collections: async ({ dataSource }) => {
         const units = await dataSource.fetchCollection<Unit>({
             path: "units",
-            collection: unitsCollection
         });
         const lessonCollections = units.map(unit => buildCollection({
             name: unit.values.name,
+            id: `units/${unit.id}/lessons`,
             path: `units/${unit.id}/lessons`,
             description: unit.values.description,
             group: "Units",

@@ -1,4 +1,4 @@
-import { buildCollection } from "@firecms/cloud";
+import { buildCollection } from "@firecms/core";
 
 export type Unit = {
     name: string;

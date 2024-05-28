@@ -1,4 +1,4 @@
-import { buildCollection, buildProperty } from "@firecms/cloud";
+import { buildCollection, buildProperty } from "@firecms/core";
 import { BlogEntryPreview } from "./BlogEntryPreview";
 import { BlogEntry } from "./types";
 
