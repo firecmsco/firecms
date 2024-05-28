@@ -369,7 +369,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     };
 
     const onSubmit = (newCollectionState: PersistedCollection<M>, formexController: FormexController<PersistedCollection<M>>) => {
-        console.log("Submitting collection", newCollectionState);
+        console.debug("Submitting collection", newCollectionState);
         try {
 
             if (!isNewCollection) {

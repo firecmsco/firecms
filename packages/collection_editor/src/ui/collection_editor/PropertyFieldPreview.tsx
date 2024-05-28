@@ -45,9 +45,6 @@ export function PropertyFieldPreview({
         ? "border-red-500 dark:border-red-500 border-opacity-100 dark:border-opacity-100 ring-0 dark:ring-0"
         : (selected ? "border-primary" : "border-transparent");
 
-    if(hasError)
-    console.log("PropertyFieldPreview", property)
-
     return <ErrorBoundary>
         <div
             onClick={onClick}

@@ -335,7 +335,7 @@ export const FireCMSEditor = ({
                             }
                         }}
                         onUpdate={({ editor }) => {
-                            console.log("editor updated");
+                            console.debug("Editor updated");
                             onEditorUpdate(editor as Editor);
                         }}>
 
