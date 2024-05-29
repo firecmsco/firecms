@@ -13,15 +13,29 @@ interface Header {
     label: string;
 }
 
-export function downloadEntitiesExport<M extends Record<string, any>>(data: Entity<M>[],
-                                                                      additionalData: Record<string, any>[] | undefined,
-                                                                      properties: ResolvedProperties<M>,
-                                                                      propertiesOrder: string[] | undefined,
-                                                                      name: string,
-                                                                      flattenArrays: boolean,
-                                                                      additionalHeaders: string[] | undefined,
-                                                                      exportType: "csv" | "json",
-                                                                      dateExportType: "timestamp" | "string"
+export interface DownloadEntitiesExportParams<M extends Record<string, any>> {
+    data: Entity<M>[];
+    additionalData: Record<string, any>[] | undefined;
+    properties: ResolvedProperties<M>;
+    propertiesOrder: string[] | undefined;
+    name: string;
+    flattenArrays: boolean;
+    additionalHeaders: string[] | undefined;
+    exportType: "csv" | "json";
+    dateExportType: "timestamp" | "string";
+}
+
+export function downloadEntitiesExport<M extends Record<string, any>>({
+                                                                          data,
+                                                                          additionalData,
+                                                                          properties,
+                                                                          propertiesOrder,
+                                                                          name,
+                                                                          flattenArrays,
+                                                                          additionalHeaders,
+                                                                          exportType,
+                                                                          dateExportType
+                                                                      }: DownloadEntitiesExportParams<M>
 ) {
 
     console.debug("Downloading export", {
@@ -101,7 +115,7 @@ function getExportHeaders<M extends Record<string, any>>(properties: ResolvedPro
         ...(propertiesOrder ?? Object.keys(properties))
             .flatMap((childKey) => {
                 const property = properties[childKey];
-                if(!property) {
+                if (!property) {
                     console.warn("Property not found", childKey, properties);
                     return [];
                 }

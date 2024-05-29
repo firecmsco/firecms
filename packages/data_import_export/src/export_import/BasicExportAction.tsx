@@ -12,7 +12,7 @@ import {
     GetAppIcon,
     IconButton,
     Tooltip,
-    Typography,
+    Typography
 } from "@firecms/ui";
 import { downloadEntitiesExport } from "./export";
 
@@ -44,7 +44,17 @@ export function BasicExportAction({
     }, [setOpen]);
 
     const onOkClicked = useCallback(() => {
-        downloadEntitiesExport(data, [], properties, propertiesOrder, "export.csv", flattenArrays, [], exportType, dateExportType);
+        downloadEntitiesExport({
+            data,
+            additionalData: [],
+            properties,
+            propertiesOrder,
+            name: "export.csv",
+            flattenArrays,
+            additionalHeaders: [],
+            exportType,
+            dateExportType
+        });
         handleClose();
     }, []);
 

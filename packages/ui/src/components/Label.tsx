@@ -12,14 +12,16 @@ const Label = React.forwardRef<
     LabelProps
 >(({
        className,
+       border,
+       onClick,
        ...props
    }, ref) => (
     <LabelPrimitive.Root
         ref={ref}
-        onClick={props.onClick}
+        onClick={onClick}
         className={cn("text-sm font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
-            props.border && "border border-gray-300 dark:border-gray-700 rounded-md px-3 py-1.5",
-            props.onClick && "hover:cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800",
+            border && "border border-gray-300 dark:border-gray-700 rounded-md px-3 py-1.5",
+            onClick && "hover:cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800",
             defaultBorderMixin, className)}
         {...props}
     />

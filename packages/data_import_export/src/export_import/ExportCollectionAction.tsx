@@ -5,6 +5,7 @@ import {
     Entity,
     EntityCollection,
     ExportConfig,
+    getDefaultValuesFor,
     resolveCollection,
     ResolvedEntityCollection,
     useCustomizationController,
@@ -26,7 +27,7 @@ import {
     GetAppIcon,
     IconButton,
     Tooltip,
-    Typography,
+    Typography
 } from "@firecms/ui";
 import { downloadEntitiesExport } from "./export";
 
@@ -50,6 +51,8 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
     const exportConfig = typeof inputCollection.exportable === "object" ? inputCollection.exportable : undefined;
 
     const dateRef = React.useRef<Date>(new Date());
+
+    const [includeUndefinedValues, setIncludeUndefinedValues] = React.useState<boolean>(false);
     const [flattenArrays, setFlattenArrays] = React.useState<boolean>(true);
     const [exportType, setExportType] = React.useState<"csv" | "json">("csv");
     const [dateExportType, setDateExportType] = React.useState<"timestamp" | "string">("string");
@@ -139,7 +142,27 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
                     ...exportConfig?.additionalFields?.map(column => column.key) ?? [],
                     ...collection.additionalFields?.map(field => field.key) ?? []
                 ];
-                downloadEntitiesExport(data, additionalData, collection.properties, collection.propertiesOrder, collection.name, flattenArrays, additionalHeaders, exportType, dateExportType);
+
+                const dataWithDefaults = includeUndefinedValues
+                    ? data.map(entity => {
+                        const defaultValues = getDefaultValuesFor(collection.properties);
+                        return {
+                            ...entity,
+                            values: { ...defaultValues, ...entity.values }
+                        };
+                    })
+                    : data;
+                downloadEntitiesExport({
+                    data: dataWithDefaults,
+                    additionalData,
+                    properties: collection.properties,
+                    propertiesOrder: collection.propertiesOrder,
+                    name: collection.name,
+                    flattenArrays,
+                    additionalHeaders,
+                    exportType,
+                    dateExportType
+                });
                 onAnalyticsEvent?.("export_collection_success", {
                     collection: collection.path
                 });
@@ -150,7 +173,7 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
             })
             .finally(() => setDataLoading(false));
 
-    }, [onAnalyticsEvent, dataSource, path, fetchAdditionalFields, flattenArrays, exportType, dateExportType]);
+    }, [onAnalyticsEvent, dataSource, path, fetchAdditionalFields, includeUndefinedValues, flattenArrays, exportType, dateExportType]);
 
     const onOkClicked = useCallback(() => {
         doDownload(collection, exportConfig);
@@ -231,6 +254,12 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
                     value={flattenArrays}
                     onValueChange={setFlattenArrays}
                     label={"Flatten arrays"}/>
+
+                <BooleanSwitchWithLabel
+                    size={"small"}
+                    value={includeUndefinedValues}
+                    onValueChange={setIncludeUndefinedValues}
+                    label={"Include undefined values"}/>
 
                 {!canExport && notAllowedView}
 
