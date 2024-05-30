@@ -14,6 +14,9 @@ import fulei from "@site/static/img/avatars/fulei.avif";
 import muhammad from "@site/static/img/avatars/muhammad.avif";
 
 // @ts-ignore
+import john from "@site/static/img/avatars/john.avif";
+
+// @ts-ignore
 import manuel from "@site/static/img/avatars/manuel.avif";
 
 const quotes = [
@@ -34,6 +37,12 @@ const quotes = [
         author: "Manuel Pinilla",
         avatar: manuel,
         role: "Founder, OikosBrain"
+    },
+    {
+        quote: "So far, this has been the missing piece of the puzzle for running a Firebase back-end. I love how we can just throw some React in there and it all feels so seamless.",
+        author: "John Coppa",
+        avatar: john,
+        role: "CTO at EasyHome"
     },
     {
         quote: "It is a great initiative towards building a scalable and serverless CMS as Firebase is serverless. UI is very nice and working is very smooth.",
