@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { EntityCollection, randomString } from "@firecms/core";
 import { Button, Checkbox, Label, SendIcon, TextareaAutosize, Tooltip } from "@firecms/ui";
 import { MessageLayout } from "./components/MessageLayout";
@@ -34,18 +34,69 @@ export function DataTalkSession({
     const [messageLoading, setMessageLoading] = useState<boolean>(false);
 
     useEffect(() => {
+        scrollToBottom();
+    }, []);
+
+    const [isUserScrolledUp, setIsUserScrolledUp] = useState(false);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const scrollContainerRef = useRef(null);
+
+    const scrollToBottom = () => {
+        setTimeout(() => {
+            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+    };
+
+    const handleScroll = () => {
+        if (!scrollContainerRef.current) return;
+
+        const {
+            scrollTop,
+            scrollHeight,
+            clientHeight
+        } = scrollContainerRef.current;
+        // If user is not at the bottom
+        if (scrollHeight - scrollTop > clientHeight + 50) {
+            setIsUserScrolledUp(true);
+        } else {
+            setIsUserScrolledUp(false);
+        }
+    };
+
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries, observer) => {
+            if (entries[0].isIntersecting && !isUserScrolledUp) {
+                scrollToBottom();
+            }
+        }, {
+            root: scrollContainerRef.current,
+        });
+        if (messagesEndRef.current) {
+            observer.observe(messagesEndRef.current);
+        }
+
+        const resizeObserver = new ResizeObserver(() => {
+            if (!isUserScrolledUp) {
+                scrollToBottom();
+            }
+        });
+
+        if (scrollContainerRef.current) {
+            resizeObserver.observe(scrollContainerRef.current);
+        }
+
+        return () => {
+            observer.disconnect();
+            if (scrollContainerRef.current) {
+                resizeObserver.unobserve(scrollContainerRef.current);
+            }
+        };
+    }, [isUserScrolledUp]);
+
+    useEffect(() => {
         if (initialPrompt && messages.length === 0) {
             submit(initialPrompt);
         }
-    }, []);
-
-    const scrollInto = useCallback((childRef: React.RefObject<HTMLDivElement>) => {
-        setTimeout(() => {
-            childRef.current?.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-        }, 150);
     }, []);
 
     const submit = async (messageText: string, baseMessages: ChatMessage[] = messages) => {
@@ -188,7 +239,9 @@ export function DataTalkSession({
     return (
 
         <div className="h-full w-full flex flex-col bg-gray-50 dark:bg-gray-900">
-            <div className="h-full overflow-auto">
+            <div className="h-full overflow-auto"
+                 onScroll={handleScroll}
+                 ref={scrollContainerRef}>
                 <div className="container mx-auto px-4 md:px-6 py-8 flex-1 flex flex-col gap-4">
 
                     <Tooltip
@@ -223,7 +276,6 @@ export function DataTalkSession({
                                                   updateMessage(message, index);
                                               }}
                                               collections={collections}
-                                              scrollInto={scrollInto}
                                               message={message}
                                               canRegenerate={index === messages.length - 1 && message.user === "SYSTEM"}
                                               onRegenerate={() => onRegenerate(message, index)}
@@ -231,6 +283,7 @@ export function DataTalkSession({
                     })}
 
                 </div>
+                <div ref={messagesEndRef}/>
             </div>
 
             <div className="container sticky bottom-0 right-0 left-0 mx-auto px-4 md:px-6 pb-8 pt-4">

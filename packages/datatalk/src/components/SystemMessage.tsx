@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { EntityCollection } from "@firecms/core";
 import { MarkdownElement, parseMarkdown } from "../utils/parser";
 import { CodeBlock } from "./CodeBlock";
@@ -24,7 +24,6 @@ export function SystemMessage({
                                   text,
                                   loading,
                                   containerWidth,
-                                  scrollInto,
                                   autoRunCode,
                                   collections,
                                   onRegenerate,
@@ -35,7 +34,6 @@ export function SystemMessage({
     text?: string,
     loading?: boolean,
     containerWidth?: number,
-    scrollInto: () => void,
     autoRunCode?: boolean,
     collections?: EntityCollection[],
     onRegenerate?: () => void,
@@ -46,16 +44,12 @@ export function SystemMessage({
 
     const [parsedElements, setParsedElements] = useState<MarkdownElement[] | null>();
 
-    const scrolled = useRef(false);
     useEffect(() => {
-        if (scrolled.current) return;
         if (text) {
             const markdownElements = parseMarkdown(text);
             setParsedElements(markdownElements);
-            scrollInto();
-            scrolled.current = true;
         }
-    }, [scrollInto, text]);
+    }, [text]);
 
     const onUpdatedElements = (elements: MarkdownElement[]) => {
         const markdown = elements.map((element) => {
@@ -82,7 +76,6 @@ export function SystemMessage({
                                   loading={loading}
                                   autoRunCode={autoRunCode}
                                   initialCode={element.content}
-                                  onCodeRun={scrollInto}
                                   collections={collections}
                                   onCodeModified={(updatedCode) => {
                                       const updatedElements = [...parsedElements];

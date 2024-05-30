@@ -8,7 +8,6 @@ export function MessageLayout({
                                   message,
                                   autoRunCode,
                                   onRemove,
-                                  scrollInto,
                                   collections,
                                   onRegenerate,
                                   canRegenerate,
@@ -18,7 +17,6 @@ export function MessageLayout({
     message?: ChatMessage,
     autoRunCode?: boolean,
     onRemove?: () => void,
-    scrollInto?: (ref: React.RefObject<HTMLDivElement>) => void,
     collections?: EntityCollection[],
     onRegenerate?: () => void,
     canRegenerate?: boolean,
@@ -27,8 +25,6 @@ export function MessageLayout({
 }) {
 
     const ref = useRef<HTMLDivElement>(null);
-    const scrolled = useRef(false);
-
     const onUpdatedMessageInternal = (updatedText: string) => {
         if (!message) return;
         if (onUpdatedMessage) onUpdatedMessage({
@@ -36,12 +32,6 @@ export function MessageLayout({
             text: updatedText
         });
     }
-
-    useEffect(() => {
-        if (scrolled.current) return;
-        scrollInto?.(ref);
-        scrolled.current = true;
-    }, [scrollInto]);
 
     const [containerWidth, setContainerWidth] = useState<number | null>(null);
 
@@ -77,7 +67,6 @@ export function MessageLayout({
                         : <SystemMessage text={message.text}
                                          loading={message.loading}
                                          autoRunCode={autoRunCode}
-                                         scrollInto={() => scrollInto?.(ref)}
                                          collections={collections}
                                          canRegenerate={canRegenerate}
                                          containerWidth={containerWidth ?? undefined}
