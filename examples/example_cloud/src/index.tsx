@@ -9,10 +9,17 @@ import { ExampleCMSView } from "./views/ExampleCMSView";
 import { SampleCustomEntityCollection } from "./views/SampleCustomEntityCollection";
 import { homesCollection } from "./collections/homes";
 import { featureConfig } from "./property_configs/feature_property";
+import { ReCaptchaEnterpriseProvider } from "@firebase/app-check";
 
 const appConfig: FireCMSAppConfig = {
     version: "1",
-    collections: async ({ authController, dataSource }) => {
+    appCheck: {
+        provider: new ReCaptchaEnterpriseProvider("6Lc2XsMpAAAAADJhk7R10GmKv-nBRTYymRgRhAiY"),
+    },
+    collections: async ({
+                            authController,
+                            dataSource
+                        }) => {
         const firstProducts = await dataSource.fetchCollection({
             path: "products",
             limit: 5
@@ -76,8 +83,8 @@ const appConfig: FireCMSAppConfig = {
         colorPropertyConfig,
         pricePropertyConfig,
         {
-            name: 'Feature',
-            key: 'feature',
+            name: "Feature",
+            key: "feature",
             property: featureConfig.property,
         },
         {

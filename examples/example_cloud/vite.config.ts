@@ -23,7 +23,18 @@ export default defineConfig(({ command }) => {
                 shared: ["react", "react-dom",
                     ...(build
                         ? [
-                            "@firecms/cloud", "@firecms/core", "@firecms/firebase", "@firecms/ui",
+                            "@firecms/cloud",
+                            "@firecms/core",
+                            "@firecms/firebase",
+                            "@firecms/ui",
+                            "@firebase/firestore",
+                            "@firebase/app",
+                            "@firebase/functions",
+                            "@firebase/auth",
+                            "@firebase/storage",
+                            "@firebase/analytics",
+                            "@firebase/remote-config",
+                            "@firebase/app-check"
                         ]
                         : [])
                 ]
@@ -32,7 +43,7 @@ export default defineConfig(({ command }) => {
         build: {
             modulePreload: false,
             target: "esnext",
-            minify: true,
+            minify: false,
             cssCodeSplit: false,
         },
         resolve: {

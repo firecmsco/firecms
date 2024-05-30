@@ -43,8 +43,8 @@
     "@firecms/formex": "^3.0.0-canary.52",
     "@firecms/schema_inference": "^3.0.0-canary.52",
     "@firecms/user_management": "^3.0.0-canary.52",
-    "react-router": "^6.23.0",
-    "react-router-dom": "^6.23.0"
+    "react-router": "^6.23.1",
+    "react-router-dom": "^6.23.1"
   },
   "peerDependencies": {
     "firebase": "^10.7.1",
@@ -52,19 +52,19 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/node": "^20.12.11",
-    "@types/react": "^18.3.1",
+    "@types/node": "^20.12.13",
+    "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "@typescript-eslint/parser": "^7.8.0",
+    "@typescript-eslint/parser": "^7.11.0",
     "eslint": "^8.57.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^16.6.2",
-    "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-promise": "^6.2.0",
+    "eslint-plugin-react": "^7.34.2",
     "eslint-plugin-react-hooks": "^4.6.2",
     "typescript": "^5.4.5",
-    "vite": "^5.2.11"
+    "vite": "^5.2.12"
   },
   "scripts": {
     "dev": "vite",

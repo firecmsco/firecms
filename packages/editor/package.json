@@ -57,10 +57,10 @@
     "tunnel-rat": "^0.1.2"
   },
   "devDependencies": {
-    "@types/react": "^18.3.1",
+    "@types/react": "^18.3.3",
     "@types/react-dom": "18.3.0",
     "typescript": "^5.4.5",
-    "vite": "^5.2.11"
+    "vite": "^5.2.12"
   },
   "gitHead": "f48ab87b5a5ad7f68ee4093aa1d624b0bddd7589"
 }

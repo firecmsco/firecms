@@ -18,7 +18,7 @@ export const EditorBubble = forwardRef<HTMLDivElement, EditorBubbleProps>(
       instanceRef.current.popperInstance?.update();
     }, [tippyOptions?.placement]);
 
-    const bubbleMenuProps: Omit<BubbleMenuProps, "children"> = useMemo(() => {
+    const bubbleMenuProps: Omit<BubbleMenuProps, "editor" | "children"> = useMemo(() => {
       const shouldShow: BubbleMenuProps["shouldShow"] = ({ editor, state }) => {
         const { selection } = state;
         const { empty } = selection;

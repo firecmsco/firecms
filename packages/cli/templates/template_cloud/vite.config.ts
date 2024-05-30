@@ -16,13 +16,27 @@ export default defineConfig({
                 "./config": "./src/index"
             },
             shared: [
-                "react", "react-dom", "@firecms/cloud", "@firecms/core", "@firecms/firebase", "@firecms/ui",
+                "react",
+                "react-dom",
+                "@firecms/cloud",
+                "@firecms/core",
+                "@firecms/firebase",
+                "@firecms/ui",
+                "@firebase/firestore",
+                "@firebase/app",
+                "@firebase/functions",
+                "@firebase/auth",
+                "@firebase/storage",
+                "@firebase/analytics",
+                "@firebase/remote-config",
+                "@firebase/app-check"
             ]
         })
     ],
     build: {
         modulePreload: false,
+        minify: false,
         target: "esnext",
         cssCodeSplit: false,
     }
-})
+});

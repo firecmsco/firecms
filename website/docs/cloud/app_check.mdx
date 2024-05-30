@@ -3,6 +3,10 @@ id: app_check
 title: App check
 ---
 
+:::note
+This feature is free while in beta. It will require a paid plan once it is out of beta.
+:::
+
 You can integrate Firebase App Check with your app to protect your backend resources from abuse, such as billing fraud
 or phishing. Firebase App Check works alongside other Firebase services, such as Firebase Authentication,
 to help secure your backend resources.
@@ -16,6 +20,18 @@ You can define some options:
 - `debugToken`: A debug token to use.
 - `forceRefresh`: Whether to force a token refresh.
 
+## `vite.config.ts`
+
+FireCMS Cloud can share dependencies with your uploaded app. It is important than your app and FireCMS Cloud use the same version of Firebase App Check.
+In order to do so, make sure, in your `vite.config.ts`, you are using the shared dependency provided by FireCMS.
+You need to have the dependency `@firebase/app-check` in your `vite.config.ts`. Federation plugin `shared` configuration.
+
+```tsx
+```
+
+
+## Providers
+
 The `provider` property is required and should be an instance of a Firebase AppCheck provider.
 You can use one of the following providers:
 
@@ -23,6 +39,10 @@ You can use one of the following providers:
 
 In order to set up the ReCaptchaEnterpriseProvider, you need to create a new reCAPTCHA Enterprise site key.
 Follow the instructions in the [Firebase documentation](https://firebase.google.com/docs/app-check/web/recaptcha-enterprise-provider).
+
+:::important
+Make sure you have added the domain `app.firecms.co` to the list of allowed domains in the reCAPTCHA Enterprise console.
+:::
 
 ```tsx
 import {FireCMSAppConfig} from "@firecms/cloud";

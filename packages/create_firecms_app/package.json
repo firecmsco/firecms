@@ -28,7 +28,7 @@
     "@firecms/cli": "^3.0.0-canary.52"
   },
   "devDependencies": {
-    "@types/node": "^20.12.11",
+    "@types/node": "^20.12.13",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
