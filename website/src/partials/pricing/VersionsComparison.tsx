@@ -93,6 +93,12 @@ const data = [{
         cloudPlus: "Yes",
         cloudPro: "Yes"
     }, {
+        feature: "Firebase App Check",
+        selfHosted: "Yes",
+        cloud: "No",
+        cloudPlus: "Yes",
+        cloudPro: "Yes"
+    },{
         feature: "OpenAI data augmentation",
         selfHosted: "With subscription",
         cloud: "No",
