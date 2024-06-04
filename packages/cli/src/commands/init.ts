@@ -1,7 +1,7 @@
 import arg from "arg";
 import inquirer from "inquirer";
 import chalk from "chalk";
-import path, { dirname } from "path";
+import path from "path";
 import fs from "fs";
 
 import { promisify } from "util";
@@ -20,9 +20,8 @@ import { fileURLToPath } from "url";
 const access = promisify(fs.access);
 const copy = promisify(ncp);
 
-
 // Function to find a specific parent directory by name
-function findSpecificParentDir(currentDir:string, targetDirName:string) {
+function findSpecificParentDir(currentDir: string, targetDirName: string) {
     // Prevent infinite loop in case root is reached without finding target
     const rootDir = path.parse(currentDir).root;
 
@@ -46,7 +45,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const targetDirPath = findSpecificParentDir(__dirname, "cli");
-
 
 export type Template = "cloud" | "v2" | "pro" | "community";
 export type InitOptions = Partial<{
@@ -196,10 +194,11 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
             });
 
         const fireCMSProjects = projects.filter(project => project["fireCMSProject"]);
-        if (!fireCMSProjects.length) {
-            console.log("No FireCMS projects found");
+        if (options.template === "cloud" && !fireCMSProjects.length) {
+            console.log("No FireCMS projects found. Please make sure you have initialised a FireCMS Cloud project first, in https://app.firecms.co");
             process.exit(1);
         }
+
         // console.log({ projects });
         questions.push({
             type: "list",

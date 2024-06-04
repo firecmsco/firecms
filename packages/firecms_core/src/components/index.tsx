@@ -13,6 +13,7 @@ export * from "./common";
 
 export * from "./HomePage";
 export * from "./SelectableTable/SelectableTable";
+export * from "./SelectableTable/SelectableTableContext";
 export * from "./EntityCollectionView/EntityCollectionView";
 export * from "./EntityCollectionView/EntityCollectionViewActions";
 export * from "./EntityCollectionView/useSelectionController";
