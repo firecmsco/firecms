@@ -15,6 +15,7 @@ import { TwoColumns } from "../general/TwoColumns";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
 import { ContainerInnerPaddingMixin, defaultBorderMixin } from "../styles";
+import { LinedSpace } from "../layout/LinedSpace";
 
 export function DeveloperFeatures() {
 
@@ -176,6 +177,7 @@ const productCallbacks = buildEntityCallbacks({
                     </>
                 }/>
 
+                <LinedSpace position={"top"} size={"medium"}/>
 
             </Panel>
         </>

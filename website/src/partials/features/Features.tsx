@@ -136,7 +136,7 @@ function Features() {
                                     maxWidth: 540,
                                     aspectRatio: 508 / 589
                                 }}
-                                className={clsx("rounded-xl border", defaultBorderMixin)}
+                                className={clsx("rounded-2xl border", defaultBorderMixin)}
                                 width="100%" loop autoPlay muted>
                                 <source
                                     src={isDarkTheme ? editingDemoDarkVideo : editingDemoVideo}
@@ -153,7 +153,7 @@ function Features() {
                     right={<div className={ContainerInnerPaddingMixin}>
                         <div className="relative flex flex-col">
                             <video
-                                className={clsx("rounded-xl border", defaultBorderMixin)}
+                                className={clsx("rounded-2xl border", defaultBorderMixin)}
                                 style={{
                                     maxWidth: 540,
                                     aspectRatio: 540 / 515

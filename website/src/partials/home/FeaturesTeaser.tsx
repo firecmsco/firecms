@@ -38,7 +38,7 @@ function FeaturesTeaser() {
                                         {lightningIcon}
                                     </div>
 
-                                    <h3 className="h3 m-0 gradient-text uppercase">
+                                    <h3 className="h3 m-0 uppercase">
                                         Advanced Editing Features
                                     </h3>
 
@@ -87,7 +87,7 @@ function FeaturesTeaser() {
                                     maxWidth: 540,
                                     aspectRatio: 508 / 589
                                 }}
-                                className={clsx("rounded-xl border", defaultBorderMixin)}
+                                className={clsx("rounded-2xl border", defaultBorderMixin)}
                                 width="100%" loop autoPlay muted>
                                 <source
                                     src={isDarkTheme ? editingDemoDarkVideo : editingDemoVideo}
@@ -104,7 +104,7 @@ function FeaturesTeaser() {
                     left={<>
                         <div className={clsx("flex justify-center")}>
                             <video
-                                className={clsx("rounded-xl border", defaultBorderMixin)}
+                                className={clsx("rounded-2xl border", defaultBorderMixin)}
                                 style={{
                                     maxWidth: 540,
                                     aspectRatio: 538 / 513
@@ -126,8 +126,8 @@ function FeaturesTeaser() {
                                     className="flex items-center justify-center text-white w-10 h-10 gradient-bg rounded-full shadow flex-shrink-0 ">
                                     <SettingsIcon/>
                                 </div>
-                                <h3 className="h3 m-0 ml-3 gradient-text uppercase">
-                                    Simple and Flexible Customization
+                                <h3 className="h3 m-0 ml-3 uppercase">
+                                    Flexible Customization
                                 </h3>
 
                             </div>

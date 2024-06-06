@@ -81,7 +81,7 @@ function OpenAITeaser() {
                         className={" flex content-center justify-center"}>
                         <video
                             key={isDarkTheme ? "dark" : "light"}
-                            className={clsx("rounded-xl border", defaultBorderMixin)}
+                            className={clsx("rounded-2xl border", defaultBorderMixin)}
                             width="100%"
                             loop autoPlay muted>
                             <source
