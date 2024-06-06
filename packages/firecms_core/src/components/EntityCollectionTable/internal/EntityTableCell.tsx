@@ -2,10 +2,9 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 import useMeasure from "react-use-measure";
 
-import { VirtualTableSize } from "../../VirtualTable";
-import { getRowHeight } from "../../VirtualTable/common";
 import { cn, RemoveCircleIcon, Tooltip } from "@firecms/ui";
 import { ErrorBoundary } from "../../../components";
+import { getRowHeight, TableSize } from "../../common/table_height";
 
 interface EntityTableCellProps {
     children: React.ReactNode;
@@ -19,7 +18,7 @@ interface EntityTableCellProps {
     error?: Error;
     allowScroll?: boolean;
     align: "right" | "left" | "center";
-    size: VirtualTableSize;
+    size: TableSize;
     disabledTooltip?: string;
     width: number;
     showExpandIcon?: boolean;

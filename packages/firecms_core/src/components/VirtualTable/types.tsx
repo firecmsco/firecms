@@ -5,14 +5,13 @@ import {
     OnVirtualTableColumnResizeParams,
     VirtualTableColumn,
     VirtualTableFilterValues,
-    VirtualTableSize,
     VirtualTableWhereFilterOp
 } from "./VirtualTableProps";
 import { FilterFormFieldProps } from "./VirtualTableHeader";
 
 export type VirtualTableRowProps<T> = {
     style: any,
-    size: VirtualTableSize,
+    rowHeight: number,
     rowData: T;
     rowIndex: number;
     onRowClick?: (props: OnRowClickParams<any>) => void;
@@ -24,7 +23,7 @@ export type VirtualTableRowProps<T> = {
 
 export type VirtualTableContextProps<T extends any> = {
     data?: T[];
-    size?: VirtualTableSize,
+    rowHeight?: number,
     columns: VirtualTableColumn[];
     cellRenderer: React.ComponentType<CellRendererParams<T>>;
     currentSort: "asc" | "desc" | undefined;

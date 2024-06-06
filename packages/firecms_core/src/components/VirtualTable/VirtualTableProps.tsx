@@ -69,7 +69,7 @@ export interface VirtualTableProps<T extends Record<string, any>> {
     /**
      * Size of the table
      */
-    size?: VirtualTableSize,
+    rowHeight?: number,
 
     /**
      * In case this table should have some filters set by default
@@ -232,11 +232,6 @@ export type OnVirtualTableColumnResizeParams = {
     column: VirtualTableColumn
 };
 
-/**
- * @see Table
- * @group Components
- */
-export type VirtualTableSize = "xs" | "s" | "m" | "l" | "xl";
 
 /**
  * @see Table

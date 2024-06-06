@@ -5,7 +5,6 @@ import { ErrorBoundary } from "../ErrorBoundary";
 import { useFireCMSContext, useLargeLayout } from "../../hooks";
 import { CellRendererParams, VirtualTableColumn } from "../VirtualTable";
 import { getValueInPath } from "../../util";
-import { getRowHeight } from "../VirtualTable/common";
 import { EntityCollectionRowActions } from "./EntityCollectionRowActions";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
 import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
@@ -16,6 +15,7 @@ import { propertiesToColumns } from "./column_utils";
 import { ErrorView } from "../ErrorView";
 import { SelectableTable } from "../SelectableTable/SelectableTable";
 import { cn } from "@firecms/ui";
+import { getRowHeight } from "../common/table_height";
 
 /**
  * This component is in charge of rendering a collection table with a high

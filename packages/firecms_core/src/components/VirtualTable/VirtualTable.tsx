@@ -15,7 +15,6 @@ import {
     VirtualTableWhereFilterOp
 } from "./VirtualTableProps";
 
-import { getRowHeight } from "./common";
 import { VirtualTableContextProps } from "./types";
 import { VirtualTableHeaderRow } from "./VirtualTableHeaderRow";
 import { VirtualTableRow } from "./VirtualTableRow";
@@ -92,7 +91,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                                                              data,
                                                              onResetPagination,
                                                              onEndReached,
-                                                             size = "m",
+                                                             rowHeight = 54,
                                                              columns: columnsProp,
                                                              onRowClick,
                                                              onColumnResize,
@@ -187,7 +186,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                 onSortByUpdate(undefined);
         }, [onSortByUpdate]);
 
-        const maxScroll = Math.max((data?.length ?? 0) * getRowHeight(size) - bounds.height, 0);
+        const maxScroll = Math.max((data?.length ?? 0) * rowHeight - bounds.height, 0);
         const onEndReachedInternal = useCallback((scrollOffset: number) => {
             if (onEndReached && (data?.length ?? 0) > 0 && scrollOffset > endReachCallbackThreshold.current + 600) {
                 endReachCallbackThreshold.current = scrollOffset;
@@ -253,7 +252,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
 
         const virtualListController = {
             data,
-            size,
+            rowHeight: rowHeight,
             cellRenderer,
             columns,
             currentSort,
@@ -282,13 +281,13 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
 
                     <MemoizedList
                         outerRef={tableRef}
-                        key={size}
+                        key={rowHeight}
                         width={bounds.width}
                         height={bounds.height}
                         itemCount={(data?.length ?? 0) + (endAdornment ? 1 : 0)}
                         onScroll={onScroll}
                         includeAddColumn={Boolean(AddColumnComponent)}
-                        itemSize={getRowHeight(size)}/>
+                        itemSize={rowHeight}/>
 
                 </VirtualListContext.Provider>
             </div>
@@ -328,7 +327,7 @@ function MemoizedList({
                   onRowClick,
                   data,
                   columns,
-                  size = "m",
+                  rowHeight = 54,
                   cellRenderer,
                   hoverRow,
                   rowClassName,
@@ -361,7 +360,7 @@ function MemoizedList({
                             ...style,
                             top: `calc(${style.top}px + 48px)`
                         }}
-                        size={size}>
+                        rowHeight={rowHeight}>
 
                         {columns.map((column: VirtualTableColumn, columnIndex: number) => {
                             const cellData = rowData && rowData[column.key];
