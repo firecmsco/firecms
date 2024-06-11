@@ -35,12 +35,9 @@ import {
 } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
-import { Alert, Button, cn, DialogActions, IconButton, Tooltip, Typography } from "@firecms/ui";
-import { ErrorBoundary } from "../components";
-import {
-    copyEntityAction,
-    deleteEntityAction
-} from "../components/common/default_entity_actions";
+import { Alert, Button, CircularProgress, cn, DialogActions, IconButton, Tooltip, Typography } from "@firecms/ui";
+import { CircularProgressCenter, ErrorBoundary } from "../components";
+import { copyEntityAction, deleteEntityAction } from "../components/common/default_entity_actions";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { ValidationError } from "yup";
 import { PropertyIdCopyTooltipContent } from "../components/PropertyIdCopyTooltipContent";
@@ -674,10 +671,10 @@ function InnerForm<M extends Record<string, any>>(props: FormexController<M> & {
                         </IconButton>
                     ))}
                 </div>}
-
+                {isSubmitting && <CircularProgress size={"small"}/>}
                 <Button
                     variant="text"
-                    disabled={disabled}
+                    disabled={disabled || isSubmitting}
                     type="reset"
                 >
                     {status === "existing" ? "Discard" : "Clear"}
@@ -687,7 +684,7 @@ function InnerForm<M extends Record<string, any>>(props: FormexController<M> & {
                     variant="text"
                     color="primary"
                     type="submit"
-                    disabled={disabled}
+                    disabled={disabled || isSubmitting}
                     onClick={() => {
                         closeAfterSaveRef.current = false;
                     }}
@@ -701,7 +698,7 @@ function InnerForm<M extends Record<string, any>>(props: FormexController<M> & {
                     variant="filled"
                     color="primary"
                     type="submit"
-                    disabled={disabled}
+                    disabled={disabled || isSubmitting}
                     onClick={() => {
                         closeAfterSaveRef.current = true;
                     }}

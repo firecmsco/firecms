@@ -30,8 +30,6 @@ export function SelectFieldBinding<T extends EnumType>({
                                                            includeDescription
                                                        }: SelectProps<T>) {
 
-    console.log("SelectFieldBinding", propertyKey, value,)
-
     const enumValues = property.enumValues;
 
     useClearRestoreValue({
@@ -72,7 +70,6 @@ export function SelectFieldBinding<T extends EnumType>({
                     return setValue(newValue as T);
                 }}
                 renderValue={(enumKey: any) => {
-                    console.log("renderValue", enumKey)
                     return <EnumValuesChip
                         enumKey={enumKey}
                         enumValues={enumValues}

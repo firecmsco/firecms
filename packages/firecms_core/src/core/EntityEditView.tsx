@@ -193,6 +193,7 @@ export function EntityEditView<M extends Record<string, any>, UserType extends U
             onUpdate({ entity: updatedEntity });
 
         if (closeAfterSave) {
+            console.log("Closing side dialog")
             sideDialogContext.setBlocked(false);
             sideDialogContext.close(true);
             onClose?.();
@@ -236,7 +237,7 @@ export function EntityEditView<M extends Record<string, any>, UserType extends U
         closeAfterSave: boolean,
     }) => {
         setSaving(true);
-        saveEntityWithCallbacks({
+        return saveEntityWithCallbacks({
             path,
             entityId,
             values,
@@ -267,7 +268,7 @@ export function EntityEditView<M extends Record<string, any>, UserType extends U
         if (autoSave) {
             setValuesToBeSaved(values);
         } else {
-            saveEntity({
+            return saveEntity({
                 collection,
                 path,
                 entityId,
