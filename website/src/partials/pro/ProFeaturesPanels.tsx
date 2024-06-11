@@ -5,47 +5,46 @@ import { Panel } from "../general/Panel";
 import { LinedSpace } from "../layout/LinedSpace";
 import clsx from "clsx";
 
-
 function ProFeaturesPanels() {
 
     const features = [
         {
             icon: iconDoor,
-            title: 'Users and Roles Management',
-            description: 'Control app settings based on who\'s logged in. Connect with your existing user management system for a unified experience.'
+            title: "Users and Roles Management",
+            description: "Control app settings based on who's logged in. Connect with your existing user management system for a unified experience."
         },
         {
             icon: gridIcon,
-            title: 'High-quality components',
-            description: 'Design custom views using the full component set that FireCMS uses internally. Save time and effort by reusing them across your application.'
+            title: "High-quality components",
+            description: "Design custom views using the full component set that FireCMS uses internally. Save time and effort by reusing them across your application."
         },
         {
             icon: iconCards,
-            title: 'Self-hosted',
-            description: 'Operate independently without external services. Enjoy full control over your data and infrastructure for enhanced security and compliance.'
+            title: "Self-hosted",
+            description: "Operate independently without external services. Enjoy full control over your data and infrastructure for enhanced security and compliance."
         },
         {
             icon: iconRadar,
-            title: 'Dedicated Support',
-            description: 'Receive dedicated support with a personal account manager. Address questions or issues quickly and stay focused on delivering your best work.'
+            title: "Dedicated Support",
+            description: "Receive dedicated support with a personal account manager. Address questions or issues quickly and stay focused on delivering your best work."
         },
         {
             icon: iconStars,
-            title: 'Data enhancement',
-            description: 'Use large language models (LLMs) to automatically enrich data for you and your clients. Gain valuable insights, context, and added value from your information.'
+            title: "Data enhancement",
+            description: "Use large language models (LLMs) to automatically enrich data for you and your clients. Gain valuable insights, context, and added value from your information."
         }
     ];
 
     return (
         <Panel
-            color={"white"}
+            color={"white-to-slate"}
             includePadding={false}>
 
             <LinedSpace size={"larger"} position={"bottom"}/>
             <div className={ContainerPaddingMixin}>
                 <div
                     data-aos="fade-up"
-                    className={"flex items-center mb-4 "}>
+                    className={"container flex items-center mb-4 "}>
                     <div>
 
                         <h2 className="h2 mb-3 uppercase font-mono">

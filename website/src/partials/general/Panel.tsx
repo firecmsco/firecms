@@ -12,7 +12,7 @@ export function Panel({
                           innerClassName
                       }: {
     children: React.ReactNode,
-    color?: "gray" | "light_gray" | "white" | "primary" | "secondary" | "light" | "lighter" | "transparent",
+    color?: "gray" | "light_gray" | "white" | "white-to-slate"| "primary" | "secondary" | "light" | "lighter" | "transparent",
     centered?: boolean,
     includeMargin?: boolean,
     includePadding?: boolean,
@@ -22,6 +22,7 @@ export function Panel({
 
     const colorClass = color === "transparent" ? "" :
         color === "white" ? "bg-white text-text-primary" :
+        color === "white-to-slate" ? "bg-gradient-to-b from-white to-slate-50 text-text-primary" :
             color === "light" ? "bg-gray-100 text-text-primary" :
                 color === "lighter" ? "bg-gray-50 text-text-primary" :
                     color === "light_gray" ? "bg-gray-700 text-white dark:text-white" :

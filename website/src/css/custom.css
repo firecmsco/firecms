@@ -136,7 +136,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     --ifm-h1-font-size: 4rem;
     /*--ifm-list-left-padding: 0rem;*/
     --ifm-custom-navbar-background-color: rgba(48, 49, 55, 0.33);
-    --ifm-border-color: rgb(24 24 28 / 0.4);
+    --ifm-border-color: rgb(15 23 42 / 0.5);
     --ifm-background-color: white;
 
     --ifm-z-index-fixed: 20;
@@ -145,6 +145,8 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
 
     --ifm-paragraph-margin-bottom: 1.0rem;
     --ifm-leading-desktop: 1;
+
+    --ifm-footer-link-color: white;
     /*--ifm-leading-desktop: 1.25;*/
     /*--ifm-leading: calc(var(--ifm-leading-desktop) * 1rem);*/
     /*--ifm-custom-navbar-background-color: rgba(255, 255, 255, 0.33);*/
@@ -181,13 +183,6 @@ html[data-theme=dark] .DocSearch-Button:hover {
     background: rgba(59, 59, 59);
 }
 
-.footer__link-item {
-    display: flex;
-    gap: 4px;
-    flex-direction: row;
-    align-items: center;
-}
-
 [role="banner"] {
     font-family: "JetBrains Mono";
 }
@@ -196,7 +191,6 @@ html[data-theme='dark'] {
     --ifm-custom-navbar-background-color: rgba(48, 49, 55, 0.33);
     /*--ifm-background-color: #ececec;*/
     --ifm-background-color: #242628;
-    --ifm-border-color: rgba(16, 16, 19, 0.5);
     --ifm-background-surface-color: #232328;
     --ifm-color-emphasis-100: #232328;
     /*--ifm-background-surface-color: #242526;*/
@@ -341,7 +335,17 @@ html[data-theme=dark] .header-github-link:before {
 }
 
 .footer {
+    background: #232328 !important;
+    color: white !important;
     z-index: 0;
+}
+
+.footer__link-item {
+    background: #232328 !important;
+    display: flex;
+    gap: 4px;
+    flex-direction: row;
+    align-items: center;
 }
 
 .theme-doc-sidebar-container {
@@ -436,6 +440,7 @@ html[data-theme="dark"] {
     --docsearch-logo-color: #0070f4;
     /*--docsearch-muted-color: #7f8497;*/
 
+    --ifm-footer-link-color: white;
     --ifm-leading-desktop: 1;
     --docsearch-primary-color: #0070f4;
     --docsearch-modal-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);

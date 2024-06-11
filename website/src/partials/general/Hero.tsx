@@ -7,7 +7,7 @@ export function Hero({
                          subtitle,
                          cta,
                          color,
-                         height = "300px",
+                         height = "180px",
                          subtitleColor = "lighter",
                      }: {
     title: React.ReactNode,

@@ -50,7 +50,7 @@ export const Newsletter = () => {
                 // data-aos-delay="100"
             >
                 <div
-                    className="relative flex flex-col items-center px-6 py-16">
+                    className="relative flex flex-col items-center px-6 py-20">
 
                     {/*<h4 className="h2 mb-4 text-text-primary">*/}
                     {/*    Stay in the loop*/}
