@@ -8,6 +8,7 @@ import {
 } from "@firecms/core";
 import { CustomField } from "../custom_field/SubPropertyField";
 import { usersCollection } from "./users_collection";
+import { JSONField } from "../custom_field/JSONField";
 
 const relaxedStatus: EnumValues = [
     {
@@ -90,6 +91,35 @@ export const testCollection = buildCollection({
     name: "Test entities",
     // formAutoSave: true,
     properties: {
+        body: buildProperty({
+            name: "Body",
+            validation: { required: false },
+            dataType: "map",
+            keyValue: true,
+            customProps: {
+                editable: true
+            },
+            defaultValue: {
+                clientIp: "client.ip",
+                clientDeviceType: "client.deviceType",
+                clientLanguage: "client.language",
+                clientReferral: "client.referral",
+                clientUserAgent: "client.userAgent",
+                clientCountry: "client.country",
+                clientCity: "client.city",
+                clientRegion: "client.region",
+                clientLatitude: "client.latitude",
+                clientLongitude: "client.longitude",
+                infoConversationCreatedAt: "info.createdAt",
+                infoConversationCompleted: "info.conversationCompleted",
+                dataPhone: "data.phone",
+                dataEmail: "data.email",
+                dataName: "data.name",
+                dataAppointmentRequested: "data.appointment_requested"
+            },
+            description: "This field is the body payload of the request",
+            Field: JSONField
+        }),
         background: {
             dataType: "number",
             name: "Colour",
@@ -116,7 +146,7 @@ export const testCollection = buildCollection({
             name: "Upload",
             dataType: "string",
             storage: {
-                storagePath: "test",
+                storagePath: "test"
             }
         },
         mainSaturation: {
@@ -131,7 +161,7 @@ export const testCollection = buildCollection({
                         dataType: "string",
                         enumValues: {
                             oneNum: "Saturation without range",
-                            fromTo: "Saturation available range",
+                            fromTo: "Saturation available range"
                         }
                     },
                     value: (props) => {
@@ -167,7 +197,7 @@ export const testCollection = buildCollection({
                                                 min: 0,
                                                 max: 100
                                             }
-                                        },
+                                        }
                                     }
                                 }
                             )
@@ -180,7 +210,7 @@ export const testCollection = buildCollection({
                         }
                     }
                 }
-            },
+            }
         },
         map: {
             name: "Map",
@@ -234,7 +264,7 @@ export const testCollection = buildCollection({
                     value11: "Another Value 11",
                     value12: "Another Value 12",
                     value13: "Another Value 13",
-                    value14: "Another Value 14",
+                    value14: "Another Value 14"
 
                 },
                 validation: { required: false },
@@ -258,7 +288,7 @@ export const testCollection = buildCollection({
                 value11: "Another Value 11",
                 value12: "Another Value 12",
                 value13: "Another Value 13",
-                value14: "Another Value 14",
+                value14: "Another Value 14"
             },
             validation: { required: false },
             clearable: true
@@ -445,10 +475,10 @@ export const testCollection = buildCollection({
             dataType: "string",
             enumValues: {
                 value1: "Value 1",
-                value2: "Value 2",
+                value2: "Value 2"
             },
             validation: { required: false },
-            clearable: true,
+            clearable: true
         },
         products: buildProperty(({ values }) => ({
             name: "Products",
@@ -459,8 +489,8 @@ export const testCollection = buildCollection({
                 forceFilter: {
                     tags: ["array-contains", "test"]
                 }
-            },
-        })),
+            }
+        }))
         // product: {
         //     name: "Product",
         //     dataType: "reference",

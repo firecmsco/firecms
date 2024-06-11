@@ -121,8 +121,6 @@ function App() {
         }
     });
 
-    console.log("appCheckResult", appCheckResult);
-
     const collectionConfigController = useFirestoreCollectionsConfigController({
         firebaseApp
     });
