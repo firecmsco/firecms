@@ -62,12 +62,12 @@ export function SearchBar({
             onClick={onClick}
             className={cn("relative",
                 large ? "h-14" : "h-[42px]",
-                "bg-slate-50 dark:bg-gray-800 transition duration-150 ease-in-out border",
+                "bg-slate-50 dark:bg-gray-800 border",
                 defaultBorderMixin,
                 "rounded",
                 className)}>
             <div
-                className="absolute p-0 px-4 h-full absolute pointer-events-none flex items-center justify-center top-0">
+                className="absolute p-0 px-4 h-full pointer-events-none flex items-center justify-center top-0">
                 {loading ? <CircularProgress size={"small"}/> : <SearchIcon className={"text-slate-500 dark:text-gray-500"}/>}
             </div>
             <input
