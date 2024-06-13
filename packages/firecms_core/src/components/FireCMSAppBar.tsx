@@ -31,6 +31,8 @@ export type FireCMSAppBarProps<ADDITIONAL_PROPS = object> = {
 
     includeDrawer?: boolean;
 
+    includeModeToggle?: boolean;
+
     drawerOpen: boolean;
 
     className?: string;
@@ -58,6 +60,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                                                         drawerOpen,
                                                         dropDownActions,
                                                         includeDrawer,
+                                                        includeModeToggle = true,
                                                         className,
                                                         style,
                                                         logo,
@@ -144,7 +147,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                         {endAdornment}
                     </ErrorBoundary>}
 
-                <IconButton
+                {includeModeToggle && <IconButton
                     color="inherit"
                     aria-label="Open drawer"
                     onClick={toggleMode}
@@ -152,7 +155,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                     {mode === "dark"
                         ? <DarkModeIcon/>
                         : <LightModeIcon/>}
-                </IconButton>
+                </IconButton>}
 
                 <Menu trigger={avatarComponent}>
                     {user && <div className={"px-4 py-2 mb-2"}>

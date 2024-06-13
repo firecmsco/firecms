@@ -303,7 +303,8 @@ function App() {
                         return <Scaffold
                             name={"My demo app"}
                             fireCMSAppBarProps={{
-                                endAdornment: githubLink
+                                endAdornment: githubLink,
+                                // includeModeToggle: false
                             }}
                             autoOpenDrawer={false}>
                             <NavigationRoutes/>
