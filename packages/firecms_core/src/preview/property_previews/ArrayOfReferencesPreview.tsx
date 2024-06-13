@@ -42,6 +42,8 @@ export function ArrayOfReferencesPreview({
                                 previewProperties={ofProperty.previewProperties}
                                 size={childSize}
                                 reference={reference}
+                                includeId={ofProperty.includeId}
+                                includeEntityLink={ofProperty.includeEntityLink}
                             />
                         </div>;
                     }

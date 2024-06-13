@@ -22,6 +22,8 @@ type TableReferenceFieldProps = {
     title?: string;
     path: string;
     forceFilter?: FilterValues<string>;
+    includeId?: boolean;
+    includeEntityLink?: boolean;
 };
 
 export function TableReferenceField(props: TableReferenceFieldProps) {
@@ -55,7 +57,9 @@ export const TableReferenceFieldSuccess = React.memo(
             title,
             disabled,
             forceFilter,
-            collection
+            collection,
+            includeId,
+            includeEntityLink
         } = props;
 
         const onSingleEntitySelected = useCallback((entity: Entity<any>) => {
@@ -100,6 +104,8 @@ export const TableReferenceFieldSuccess = React.memo(
                     hover={!disabled}
                     disabled={!path}
                     previewProperties={previewProperties}
+                    includeId={includeId}
+                    includeEntityLink={includeEntityLink}
                 />;
             else
                 return <EntityPreviewContainer
@@ -122,6 +128,8 @@ export const TableReferenceFieldSuccess = React.memo(
                                 hover={!disabled}
                                 disabled={!path}
                                 previewProperties={previewProperties}
+                                includeId={includeId}
+                                includeEntityLink={includeEntityLink}
                             />
                         </div>
                     )

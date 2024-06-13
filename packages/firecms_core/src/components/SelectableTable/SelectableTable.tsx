@@ -281,6 +281,7 @@ function createFilterField({
                                      isArray={isArray}
                                      path={baseProperty.path}
                                      title={resolvedProperty?.name}
+                                     includeId={baseProperty.includeId}
                                      previewProperties={baseProperty?.previewProperties}
                                      hidden={hidden}
                                      setHidden={setHidden}/>;

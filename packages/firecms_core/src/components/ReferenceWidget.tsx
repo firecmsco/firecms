@@ -27,6 +27,8 @@ export type ReferenceWidgetProps<M extends Record<string, any>> = {
     forceFilter?: FilterValues<string>;
     size: PreviewSize;
     className?: string;
+    includeId?: boolean;
+    includeEntityLink?: boolean;
 };
 
 /**
@@ -43,7 +45,9 @@ export function ReferenceWidget<M extends Record<string, any>>({
                                                                    previewProperties,
                                                                    forceFilter,
                                                                    size,
-                                                                   className
+                                                                   className,
+                                                                   includeId,
+                                                                   includeEntityLink
                                                                }: ReferenceWidgetProps<M>) {
 
     const navigationController = useNavigationController();
@@ -52,16 +56,15 @@ export function ReferenceWidget<M extends Record<string, any>>({
         return navigationController.getCollection(path);
     }, [path, navigationController.getCollection]);
 
-    // if (!collection) {
-    //     throw Error(`Couldn't find the corresponding collection for the path: ${path}`);
-    // }
-
     const onSingleEntitySelected = useCallback((entity: Entity<M> | null) => {
         if (disabled)
             return;
         if (onReferenceSelected) {
             const reference = entity ? getReferenceFrom(entity) : null;
-            onReferenceSelected?.({ reference, entity });
+            onReferenceSelected?.({
+                reference,
+                entity
+            });
         }
     }, [disabled, onReferenceSelected]);
 
@@ -70,7 +73,10 @@ export function ReferenceWidget<M extends Record<string, any>>({
             return;
         if (onMultipleReferenceSelected) {
             const references = entities ? entities.map(e => getReferenceFrom(e)) : null;
-            onMultipleReferenceSelected({ references, entities });
+            onMultipleReferenceSelected({
+                references,
+                entities
+            });
         }
     }, [disabled, onReferenceSelected]);
 
@@ -110,7 +116,9 @@ export function ReferenceWidget<M extends Record<string, any>>({
                     reference={ref}
                     disabled={disabled}
                     previewProperties={previewProperties}
-                    size={size}/>
+                    size={size}
+                    includeId={includeId}
+                    includeEntityLink={includeEntityLink}/>
             })}
         </div>
     } else if (value?.isEntityReference && value?.isEntityReference()) {
@@ -119,7 +127,9 @@ export function ReferenceWidget<M extends Record<string, any>>({
             onClick={onEntryClick}
             disabled={disabled}
             previewProperties={previewProperties}
-            size={size}/>
+            size={size}
+            includeId={includeId}
+            includeEntityLink={includeEntityLink}/>
 
     }
     return <div className={cn("text-sm font-medium",

@@ -171,8 +171,9 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
                 content = <ReferencePreview
                     disabled={!property.path}
                     previewProperties={property.previewProperties}
+                    includeId={property.includeId}
+                    includeEntityLink={property.includeEntityLink}
                     size={props.size}
-                    // onClick={props.onClick}
                     reference={value as EntityReference}
                 />;
             } else {

@@ -609,6 +609,16 @@ export interface ReferenceProperty extends BaseProperty<EntityReference> {
      */
     previewProperties?: string[];
 
+    /**
+     * Should the reference include the ID of the entity. Defaults to `true`
+     */
+    includeId?: boolean;
+
+    /**
+     * Should the reference include a link to the entity (open the entity details). Defaults to `true`
+     */
+    includeEntityLink?: boolean;
+
 }
 
 /**

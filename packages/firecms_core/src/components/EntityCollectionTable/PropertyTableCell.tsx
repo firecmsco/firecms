@@ -347,6 +347,8 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                              path={property.path}
                                              multiselect={false}
                                              previewProperties={property.previewProperties}
+                                             includeId={property.includeId}
+                                             includeEntityLink={property.includeEntityLink}
                                              title={property.name}
                                              forceFilter={property.forceFilter}
                         />;
@@ -391,6 +393,8 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                     previewProperties={arrayProperty.of.previewProperties}
                                     title={arrayProperty.name}
                                     forceFilter={arrayProperty.of.forceFilter}
+                                    includeId={arrayProperty.of.includeId}
+                                    includeEntityLink={arrayProperty.of.includeEntityLink}
                                 />;
                         }
                         allowScroll = false;

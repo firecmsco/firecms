@@ -88,6 +88,8 @@ export function ArrayOfReferencesFieldBinding({
                     onClick={onEntryClick}
                     hover={!disabled}
                     reference={entryValue}
+                    includeId={ofProperty.includeId}
+                    includeEntityLink={ofProperty.includeEntityLink}
                 />
         );
     }, [ofProperty.path, ofProperty.previewProperties, value]);
