@@ -83,13 +83,32 @@ const validatedCustom = buildProperty({
     Field: CustomField
 });
 
-export const testCollection = buildCollection({
+type TestType = {
+    name: string;
+    body: Record<string, any>;
+    background: number;
+    upload: string;
+    eeee:any;
+    mainSaturation: Array<{
+        type: string;
+        value: {
+            from: number;
+            to: number;
+        } | number;
+    }>;
+    map: Record<string, any>;
+    array_enum: string[];
+    enum: string;
+    test_date: Date;
+    tags: string[];
+}
+
+export const testCollection = buildCollection<TestType>({
     callbacks: testCallbacks,
     id: "test_entity",
     path: "test_entity",
     customId: false,
     name: "Test entities",
-    // formAutoSave: true,
     properties: {
         body: buildProperty({
             name: "Body",
@@ -480,17 +499,17 @@ export const testCollection = buildCollection({
             validation: { required: false },
             clearable: true
         },
-        products: buildProperty(({ values }) => ({
-            name: "Products",
-            dataType: "array",
-            of: {
-                dataType: "reference",
-                path: "products",
-                forceFilter: {
-                    tags: ["array-contains", "test"]
-                }
-            }
-        }))
+        // products: buildProperty(({ values }) => ({
+        //     name: "Products",
+        //     dataType: "array",
+        //     of: {
+        //         dataType: "reference",
+        //         path: "products",
+        //         forceFilter: {
+        //             tags: ["array-contains", "test"]
+        //         }
+        //     }
+        // }))
         // product: {
         //     name: "Product",
         //     dataType: "reference",

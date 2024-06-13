@@ -112,7 +112,7 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
      * `hidden` in the property definition,will be ignored.
      * `propertiesOrder` has precedence over `hidden`.
      */
-    propertiesOrder?: Extract<keyof M, string>[];
+    propertiesOrder?: (Extract<keyof M, string> | `subcollection:${string}`)[];
 
     /**
      * If enabled, content is loaded in batches. If `false` all entities in the
@@ -464,7 +464,10 @@ export interface AdditionalFieldDelegate<M extends Record<string, any> = any,
      * view.
      * @param entity
      */
-    value?: (props: { entity: Entity<M>, context: FireCMSContext<any> }) => string | number | Promise<string | number> | undefined;
+    value?: (props: {
+        entity: Entity<M>,
+        context: FireCMSContext<any>
+    }) => string | number | Promise<string | number> | undefined;
 }
 
 /**
