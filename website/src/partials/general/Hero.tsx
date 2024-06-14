@@ -7,7 +7,7 @@ export function Hero({
                          subtitle,
                          cta,
                          color,
-                         height = "180px",
+                         height = "100px",
                          subtitleColor = "lighter",
                      }: {
     title: React.ReactNode,
@@ -15,7 +15,7 @@ export function Hero({
     cta?: React.ReactNode,
     color: "primary" | "secondary" | "dark" | "transparent",
     height?: number | string,
-    subtitleColor?: "gray" | "light_gray" | "white" | "primary" | "secondary" | "light" | "lighter" | "transparent",
+    subtitleColor?: "gray" | "dark_gray" | "light_gray" | "white" | "primary" | "secondary" | "light" | "lighter" | "transparent",
 }) {
     let bgColor: string;
     if (color === "primary") {

@@ -13,7 +13,7 @@ export const ContainerSmallMixin = "relative max-w-5xl mx-auto p-4";
 export const ContainerPaddingMixin = "py-12 md:py-16 p-4 md:p-8";
 export const ContainerInnerPaddingMixin = "px-8 py-8 md:px-8 md:py-12";
 
-export const defaultBorderMixin = "border-solid border-slate-900 border-opacity-50";
+export const defaultBorderMixin = "border-solid border-slate-500 border-opacity-15 dark:border-slate-500 dark:border-opacity-15";
 
 
 export const CTACaret = () => <svg aria-hidden="true"

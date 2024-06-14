@@ -145,6 +145,10 @@ module.exports = {
                             to: "/features",
                         },
                         {
+                            label: "UI components",
+                            to: "/ui",
+                        },
+                        {
                             label: "OpenAI GPT integration",
                             to: "/openai",
                         },
@@ -177,10 +181,9 @@ module.exports = {
                     position: "left"
                 },
                 {
-                    label: "Pro",
-                    to: "pro",
-                    className: "gradient-text",
-                    position: "left"
+                    type: "html",
+                    position: "left",
+                    value: "<div class='bg-gray-100 rounded-lg'><a class='gradient-text navbar__item navbar__link' href='/pro'>PRO</a></div>"
                 },
                 {
                     type: "html",

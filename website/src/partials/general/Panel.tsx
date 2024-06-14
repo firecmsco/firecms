@@ -12,7 +12,7 @@ export function Panel({
                           innerClassName
                       }: {
     children: React.ReactNode,
-    color?: "gray" | "light_gray" | "white" | "white-to-slate"| "primary" | "secondary" | "light" | "lighter" | "transparent",
+    color?: "gray" | "dark_gray" | "light_gray" | "white" | "white-to-slate" | "primary" | "secondary" | "light" | "lighter" | "transparent",
     centered?: boolean,
     includeMargin?: boolean,
     includePadding?: boolean,
@@ -22,13 +22,14 @@ export function Panel({
 
     const colorClass = color === "transparent" ? "" :
         color === "white" ? "bg-white text-text-primary" :
-        color === "white-to-slate" ? "bg-gradient-to-b from-white to-slate-50 text-text-primary" :
-            color === "light" ? "bg-gray-100 text-text-primary" :
-                color === "lighter" ? "bg-gray-50 text-text-primary" :
-                    color === "light_gray" ? "bg-gray-700 text-white dark:text-white" :
-                        color === "gray" ? "bg-gray-800 text-white dark:text-white" :
-                            color === "primary" ? "bg-primary text-white dark:text-white" :
-                                color === "secondary" ? "bg-secondary text-white dark:text-white" : "";
+            color === "white-to-slate" ? "bg-gradient-to-b from-white to-slate-50 text-text-primary" :
+                color === "light" ? "bg-gray-100 text-text-primary" :
+                    color === "lighter" ? "bg-gray-50 text-text-primary" :
+                        color === "light_gray" ? "bg-gray-700 text-white dark:text-white" :
+                            color === "gray" ? "bg-gray-800 text-white dark:text-white" :
+                                color === "dark_gray" ? "bg-gray-900 text-white dark:text-white" :
+                                    color === "primary" ? "bg-primary text-white dark:text-white" :
+                                        color === "secondary" ? "bg-secondary text-white dark:text-white" : "";
 
     return (
         <section
@@ -44,7 +45,7 @@ export function Panel({
                 (centered ? " flex flex-col items-center" : ""),
                 includePadding ? ContainerPaddingMixin : "",
                 defaultBorderMixin,
-                "border-x border-y-0 border-solid",
+                "border-x border-y-0",
                 innerClassName
             )}>
                 {children}

@@ -161,6 +161,7 @@ module.exports = {
         "components/select",
         "components/separator",
         "components/sheet",
+        "components/skeleton",
         "components/table",
         "components/tabs",
         "components/text_field",

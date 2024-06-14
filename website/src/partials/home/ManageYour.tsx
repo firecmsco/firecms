@@ -44,9 +44,9 @@ export function ManageYour() {
             />
         </div>
 
-        <div className={ContainerInnerPaddingMixin}>
+        <div className={clsx(ContainerInnerPaddingMixin)}>
 
-            <div className={"mt-4 text-xl md:text-2xl"}>
+            <div className={"mt-0 text-xl md:text-2xl"}>
                 <p>
                     FireCMS is a fully extendable app that will become the heart of your project.
                 </p>

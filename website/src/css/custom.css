@@ -59,6 +59,8 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     background-image: linear-gradient(to right, rgb(236, 76, 81), rgb(149, 67, 193), rgb(98 85 250));
 }
 
+
+
 .gradient-bg {
     background-image: linear-gradient(to right, rgb(236, 76, 81), rgb(149, 67, 193), rgb(98 85 250));
 }
@@ -136,7 +138,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     --ifm-h1-font-size: 4rem;
     /*--ifm-list-left-padding: 0rem;*/
     --ifm-custom-navbar-background-color: rgba(48, 49, 55, 0.33);
-    --ifm-border-color: rgb(15 23 42 / 0.5);
+    --ifm-border-color: rgb(100 116 139 / 0.15);
     --ifm-background-color: white;
 
     --ifm-z-index-fixed: 20;
@@ -188,9 +190,11 @@ html[data-theme=dark] .DocSearch-Button:hover {
 }
 
 html[data-theme='dark'] {
+    --ifm-border-color: rgb(100 116 139 / 0.15);
+    --ifm-toc-border-color: var(--ifm-border-color);
     --ifm-custom-navbar-background-color: rgba(48, 49, 55, 0.33);
     /*--ifm-background-color: #ececec;*/
-    --ifm-background-color: #242628;
+    --ifm-background-color: #18181C;
     --ifm-background-surface-color: #232328;
     --ifm-color-emphasis-100: #232328;
     /*--ifm-background-surface-color: #242526;*/
