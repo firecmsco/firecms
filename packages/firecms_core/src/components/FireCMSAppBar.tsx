@@ -19,7 +19,7 @@ import { User } from "../types";
 
 export type FireCMSAppBarProps<ADDITIONAL_PROPS = object> = {
 
-    title: React.ReactNode;
+    title?: React.ReactNode;
     /**
      * A component that gets rendered on the upper side of the main toolbar
      */

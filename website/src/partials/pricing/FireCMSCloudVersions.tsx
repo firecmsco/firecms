@@ -1,7 +1,8 @@
 import React from "react";
 import {
     ContainerMixin,
-    ContainerPaddingMixin, CTAButtonMixin,
+    ContainerPaddingMixin,
+    CTAButtonMixin,
     CTACaret,
     CTAOutlinedButtonMixin,
     defaultBorderMixin
@@ -63,7 +64,12 @@ export function FireCMSCloudVersions() {
                 </ul>
             </div>
 
-            <div className={"rounded-lg w-fit h-fit font-regular inline-flex gap-1"}>
+            <div
+                className={"rounded-lg w-fit h-fit font-regular m-auto gap-1 text-ellipsis px-4 py-1.5 text-sm font-semibold"}
+                style={{
+                    backgroundColor: "rgb(255, 214, 110)",
+                    color: "rgb(59, 37, 1)"
+                }}>
                 ONE MONTH FREE TRIAL
             </div>
             <div className={"text-center mt-4 w-full"}>

@@ -11,7 +11,7 @@ function FeaturesPage() {
     return (
         <Layout
             title={"Pricing - FireCMS"}
-            description="Free self-hosted version and free Cloud tier, adaptive pricing for everyone">
+            description="Self-hosted version and free Cloud tier, adaptive pricing for everyone">
 
             <Hero
                 color={"primary"}
@@ -23,8 +23,12 @@ function FeaturesPage() {
                     <>
                         <p>
                             Experience the power of FireCMS today completely for <b>free</b>.
+                        </p>
+                        <p>
                             Try <b>FireCMS
-                            Cloud</b> for a fully-managed, full-service solution.
+                            Cloud</b> for a fully-managed, full-service solution, or <b>FireCMS PRO</b> for a
+                            self-hosted
+                            version with additional features.
                         </p>
                     </>}
                 // cta={<a

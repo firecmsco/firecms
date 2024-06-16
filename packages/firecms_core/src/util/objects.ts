@@ -12,22 +12,23 @@ export function isObject(item: any) {
     return item && typeof item === "object" && !Array.isArray(item);
 }
 
-export function mergeDeep<T extends object>(target: T, source: any): T {
+export function mergeDeep<T extends Record<any, any>, U extends Record<any, any>>(target: T, source: U): T & U {
     const targetIsObject = isObject(target);
-    const output: T = targetIsObject ? { ...target } : target;
+    const output = targetIsObject ? { ...target } : target;
     if (targetIsObject && isObject(source)) {
         Object.keys(source).forEach(key => {
-            if (isObject(source[key])) {
+            const sourceElement = source[key];
+            if (isObject(sourceElement)) {
                 if (!(key in target))
-                    Object.assign(output, { [key]: source[key] });
+                    Object.assign(output, { [key]: sourceElement });
                 else
-                    (output as any)[key] = mergeDeep((target as any)[key], source[key]);
+                    (output as any)[key] = mergeDeep((target as any)[key], sourceElement);
             } else {
-                Object.assign(output, { [key]: source[key] });
+                Object.assign(output, { [key]: sourceElement });
             }
         });
     }
-    return output;
+    return output as T;
 }
 
 export function getValueInPath(o: object | undefined, path: string): any {

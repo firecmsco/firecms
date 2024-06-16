@@ -31,7 +31,7 @@ export function NewCollectionCard({
                   : undefined}>
 
             <div
-                className="flex flex-col items-start h-full w-full items-center justify-center h-full w-full flex-grow flex-col">
+                className="flex items-center justify-center h-full w-full flex-grow flex-col">
                 <AddIcon color="primary" size={"large"}/>
                 <Typography color="primary"
                             variant={"caption"}

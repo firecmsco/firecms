@@ -33,7 +33,7 @@ export interface ScaffoldProps<ExtraAppbarProps = object> {
     /**
      * Name of the app, displayed as the main title and in the tab title
      */
-    name: React.ReactNode;
+    name?: React.ReactNode;
 
     /**
      * Logo to be displayed in the drawer of the CMS
@@ -57,8 +57,7 @@ export interface ScaffoldProps<ExtraAppbarProps = object> {
     autoOpenDrawer?: boolean;
 
     /**
-     * A component that gets rendered on the upper side of the main toolbar.
-     * `toolbarExtraWidget` has no effect if this is set.
+     * The AppBar component to be used in the scaffold.
      */
     FireCMSAppBar?: React.ComponentType<FireCMSAppBarProps<ExtraAppbarProps>>;
 

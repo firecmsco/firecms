@@ -10,6 +10,7 @@ import {
     Authenticator,
     CircularProgressCenter,
     CMSView,
+    EntityCollection,
     FireCMS,
     ModeControllerProvider,
     NavigationRoutes,
@@ -127,7 +128,7 @@ function App() {
 
     // It is important to memoize the collections and views
     const collections = useCallback(() => {
-        const sourceCollections = [
+        const sourceCollections: EntityCollection[] = [
             productsCollection,
             booksCollection,
             localeCollectionGroup,

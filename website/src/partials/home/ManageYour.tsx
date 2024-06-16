@@ -2,7 +2,7 @@ import useBaseUrl from "@docusaurus/useBaseUrl";
 import React from "react";
 
 import { TypeAnimation } from "react-type-animation";
-import { ContainerInnerPaddingMixin, CTACaret, CTAOutlinedButtonWhiteMixin, defaultBorderMixin } from "../styles";
+import { ContainerInnerPaddingMixin, CTACaret, CTAOutlinedButtonWhiteMixin } from "../styles";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
 
@@ -10,43 +10,40 @@ export function ManageYour() {
 
     return <Panel color={"primary"} includePadding={false}>
         <div
-            className={clsx("h1 relative items-center text-white uppercase border-b border-0",
-                ContainerInnerPaddingMixin,
-                defaultBorderMixin)}>
-            <h4 className="h1 mb-4 text-white uppercase md:inline">
-                Manage your&nbsp;
-            </h4>
-            <TypeAnimation
-                sequence={[
-                    "Products",
-                    1000,
-                    "Blogs",
-                    1000,
-                    "Invoices",
-                    1000,
-                    "Podcasts",
-                    1000,
-                    "Fitness exercises",
-                    1000,
-                    "Recipes",
-                    1000,
-                    "Travel agency",
-                    1000,
-                    "Events",
-                    1000,
-                    "Inventory",
-                    1000,
-                ]}
-                wrapper="div"
-                className={"md:inline text-text-primary"}
-                cursor={true}
-                repeat={Infinity}
-            />
-        </div>
+            className={clsx(ContainerInnerPaddingMixin,)}>
+            <div className={"h1 relative items-center text-white uppercase"}>
+                <h4 className="h1 mb-4 text-white uppercase md:inline">
+                    Manage your&nbsp;
+                </h4>
+                <TypeAnimation
+                    sequence={[
+                        "Products",
+                        1000,
+                        "Blogs",
+                        1000,
+                        "Invoices",
+                        1000,
+                        "Podcasts",
+                        1000,
+                        "Fitness exercises",
+                        1000,
+                        "Recipes",
+                        1000,
+                        "Travel agency",
+                        1000,
+                        "Events",
+                        1000,
+                        "Inventory",
+                        1000,
+                    ]}
+                    wrapper="div"
+                    className={"md:inline text-text-primary"}
+                    cursor={true}
+                    repeat={Infinity}
+                />
+            </div>
 
-        <div className={clsx(ContainerInnerPaddingMixin)}>
-
-            <div className={"mt-0 text-xl md:text-2xl"}>
+            <div className={"mt-8 text-xl md:text-2xl"}>
                 <p>
                     FireCMS is a fully extendable app that will become the heart of your project.
                 </p>
