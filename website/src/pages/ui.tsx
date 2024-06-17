@@ -45,6 +45,10 @@ const UIPage: React.FC = () => {
                     A solid foundation
                 </h2>
                 <p>
+                    FireCMS UI is a UI kit based on <b>React</b>, <b>tailwind</b> and <b>RadixUI</b>, with a focus on <b>accessibility</b> and <b>simplicity</b>.
+                    The defaults look great out of the box, but are easy to customize.
+                </p>
+                <p>
                     You can use any of the <b>components</b> that power FireCMS, in your FireCMS apps or in any project.
                 </p>
                 <p>
@@ -53,6 +57,10 @@ const UIPage: React.FC = () => {
                     Enjoy the best parts of <b>tailwind and RadixUI</b>, with a focus on accessibility and dark mode
                     support,
                     and an API that is easy to use and understand, inspired by Material UI.
+                </p>
+                <p>
+                    FireCMS UI merges the best of both worlds, providing a set of components that are easy to use and
+                    customize, while being <b>accessible</b> and <b>beautiful</b>.
                 </p>
                 <div
                     className="mt-5 sm:mt-8">

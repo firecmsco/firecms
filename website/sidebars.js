@@ -130,8 +130,8 @@ module.exports = {
       "type": "category",
       "label": "UI components",
       "collapsed": false,
+      link: {type: 'doc', id: 'components'},
       "items": [
-        "components",
         "components/alert",
         "components/avatar",
         "components/badge",
@@ -153,6 +153,7 @@ module.exports = {
         "components/loading_button",
         "components/markdown",
         "components/menu",
+        "components/menubar",
         // "components/multi_select",
         "components/paper",
         "components/popover",

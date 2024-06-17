@@ -7,7 +7,7 @@ export function Menubar({
                             className
                         }: { children: React.ReactNode, className?: string }) {
     return (
-        <MenubarPrimitive.Root className={cn("flex bg-white dark:bg-gray-950 p-[3px] rounded-sm shadow-sm", className)}>
+        <MenubarPrimitive.Root className={cn("z-10 flex bg-white dark:bg-gray-950 p-[3px] rounded-sm shadow-sm", className)}>
             {children}
         </MenubarPrimitive.Root>
     )
@@ -87,7 +87,7 @@ export function MenubarItem({
 }) {
     return (
         <MenubarPrimitive.Item
-            className={cn("group text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none outline-none data-[state=open]:bg-gray-100 data-[state=open]:dark:bg-gray-800 data-[state=open]:text-text-primary data-[state=open]:dark:text-text-primary-dark data-[highlighted]:bg-gray-100 data-[highlighted]:dark:bg-gray-800  data-[disabled]:text-text-secondary data-[disabled]:dark:text-text-secondary-dark data-[disabled]:pointer-events-none",
+            className={cn("group text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none outline-none data-[state=open]:bg-gray-100 data-[state=open]:dark:bg-gray-800 data-[state=open]:text-text-primary data-[state=open]:dark:text-text-primary-dark data-[highlighted]:bg-gray-100 data-[highlighted]:dark:bg-gray-800  data-[disabled]:text-disabled data-[disabled]:dark:text-disabled-dark data-[disabled]:pointer-events-none",
                 leftPadding ? "pl-5" : "",
                 className)}
             disabled={disabled}
@@ -141,7 +141,7 @@ export function MenubarSubTrigger({
 }) {
     return (
         <MenubarPrimitive.SubTrigger
-            className={cn("group text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none outline-none data-[state=open]:bg-gray-100 data-[state=open]:dark:bg-gray-800 data-[state=open]:text-text-primary data-[state=open]:dark:text-text-primary-dark data-[highlighted]:bg-gray-100 data-[highlighted]:dark:bg-gray-800  data-[disabled]:text-text-secondary data-[disabled]:dark:text-text-secondary-dark data-[disabled]:pointer-events-none",
+            className={cn("group text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none outline-none data-[state=open]:bg-gray-100 data-[state=open]:dark:bg-gray-800 data-[state=open]:text-text-primary data-[state=open]:dark:text-text-primary-dark data-[highlighted]:bg-gray-100 data-[highlighted]:dark:bg-gray-800  data-[disabled]:text-disabled data-[disabled]:dark:text-disabled-dark data-[disabled]:pointer-events-none",
                 className)}
             {...rest}
         >
@@ -186,7 +186,7 @@ export function MenubarCheckboxItem({
 }) {
     return (
         <MenubarPrimitive.CheckboxItem
-            className={cn("text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none pl-5 outline-none data-[highlighted]:bg-gray-100 data-[highlighted]:dark:bg-gray-800 data-[disabled]:text-text-secondary data-[disabled]:dark:text-text-secondary-dark data-[disabled]:pointer-events-none",
+            className={cn("text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none pl-5 outline-none data-[highlighted]:bg-gray-100 data-[highlighted]:dark:bg-gray-800 data-[disabled]:text-disabled data-[disabled]:dark:text-disabled-dark data-[disabled]:pointer-events-none",
                 className)}
             checked={checked}
             onCheckedChange={onCheckedChange}
@@ -249,7 +249,7 @@ export function MenubarRadioItem({
 }) {
     return (
         <MenubarPrimitive.RadioItem
-            className={cn("text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none pl-5 outline-none data-[highlighted]:bg-gray-100 data-[highlighted]:dark:bg-gray-800 data-[disabled]:text-text-secondary data-[disabled]:dark:text-text-secondary-dark data-[disabled]:pointer-events-none",
+            className={cn("text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none pl-5 outline-none data-[highlighted]:bg-gray-100 data-[highlighted]:dark:bg-gray-800 data-[disabled]:text-disabled data-[disabled]:dark:text-disabled-dark data-[disabled]:pointer-events-none",
                 className)}
             value={value}
             {...rest}>
@@ -268,7 +268,7 @@ export function MenubarShortcut({
 }) {
     return (
         <div
-            className={cn("ml-auto pl-5 group-data-[highlighted]:text-white group-data-[disabled]:text-text-secondary data-[disabled]:dark:text-text-secondary-dark",
+            className={cn("ml-auto pl-5 group-data-[highlighted]:text-white group-data-[disabled]:text-disabled data-[disabled]:dark:text-disabled-dark",
                 className)}>
             {children}
         </div>
