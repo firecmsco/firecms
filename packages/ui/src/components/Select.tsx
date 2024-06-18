@@ -9,7 +9,7 @@ import {
     focusedMixin
 } from "../styles";
 import { CheckIcon, ExpandMoreIcon } from "../icons";
-import { cn } from "../util";
+import { cls } from "../util";
 import { SelectInputLabel } from "./common/SelectInputLabel";
 
 export type SelectProps = {
@@ -113,7 +113,7 @@ export function Select({
             {typeof label === "string" ? <SelectInputLabel error={error}>{label}</SelectInputLabel> : label}
 
             <div
-                className={cn(
+                className={cls(
                     size === "small" ? "min-h-[42px]" : "min-h-[64px]",
                     "select-none rounded-md text-sm",
                     invisible ? fieldBackgroundInvisibleMixin : fieldBackgroundMixin,
@@ -124,7 +124,7 @@ export function Select({
                 <SelectPrimitive.Trigger
                     ref={inputRef}
                     id={id}
-                    className={cn(
+                    className={cls(
                         "w-full h-full",
                         size === "small" ? "h-[42px]" : "h-[64px]",
                         padding ? "px-4 " : "",
@@ -138,7 +138,7 @@ export function Select({
                         inputClassName
                     )}>
 
-                    <div className={cn(
+                    <div className={cls(
                         "flex-grow w-full max-w-full flex flex-row gap-2 items-center",
                         "overflow-visible",
                         size === "small" ? "h-[42px]" : "h-[64px]"
@@ -161,16 +161,16 @@ export function Select({
                         </SelectPrimitive.Value>
                     </div>
 
-                    <SelectPrimitive.Icon className={cn(
+                    <SelectPrimitive.Icon className={cls(
                         "px-2 h-full flex items-center",
                     )}>
                         <ExpandMoreIcon size={"small"}
-                                        className={cn("transition", open ? "rotate-180" : "")}/>
+                                        className={cls("transition", open ? "rotate-180" : "")}/>
                     </SelectPrimitive.Icon>
 
                 </SelectPrimitive.Trigger>
 
-                {endAdornment && <div className={cn("absolute h-full flex items-center",
+                {endAdornment && <div className={cls("absolute h-full flex items-center",
                     size === "small" ? "right-10" : "right-14")}
                                       onClick={(e) => e.stopPropagation()}>
                     {endAdornment}
@@ -215,7 +215,7 @@ export function SelectItem({
             e.preventDefault();
             e.stopPropagation();
         }}
-        className={cn(
+        className={cls(
             "w-full",
             "relative relative flex items-center p-2 rounded-md text-sm text-slate-700 dark:text-slate-300",
             focusedMixin,
@@ -249,7 +249,7 @@ export function SelectGroup({
                             }: SelectGroupProps) {
     return <>
         <SelectPrimitive.Group
-            className={cn(
+            className={cls(
                 "text-xs text-slate-900 dark:text-white uppercase tracking-wider font-bold mt-6 first:mt-2",
                 "px-2 py-2",
                 className

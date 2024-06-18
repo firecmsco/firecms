@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 import { useDrawer, useNavigationController } from "@firecms/core";
 import { useDataTalk } from "../DataTalkProvider";
-import { cn, ManageSearchIcon, Typography } from "@firecms/ui";
+import { cls, ManageSearchIcon, Typography } from "@firecms/ui";
 
 export function DataTalkDrawer() {
 
@@ -36,7 +36,7 @@ export function DataTalkDrawer() {
                                 width: !drawerOpen ? "72px" : "280px",
                                 transition: drawerOpen ? "width 150ms ease-in" : undefined
                             }}
-                            className={({ isActive }: any) => cn("transition-opacity flex flex-col justify-between p-4",
+                            className={({ isActive }: any) => cls("transition-opacity flex flex-col justify-between p-4",
                                 !drawerOpen ? "opacity-0" : "opacity-1",
                                 "rounded-r-lg truncate",
                                 "hover:bg-slate-300 hover:bg-opacity-60 dark:hover:bg-gray-700 dark:hover:bg-opacity-60 text-gray-800 dark:text-gray-200 hover:text-gray-900 hover:dark:text-white",

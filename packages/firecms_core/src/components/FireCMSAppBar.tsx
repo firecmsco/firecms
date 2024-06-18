@@ -4,7 +4,7 @@ import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary, FireCMSLogo } from "../components";
 import {
     Avatar,
-    cn,
+    cls,
     DarkModeIcon,
     IconButton,
     LightModeIcon,
@@ -96,7 +96,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
     return (
         <div
             style={style}
-            className={cn("pr-2",
+            className={cls("pr-2",
                 {
                     "ml-[17rem]": drawerOpen && largeLayout,
                     "ml-16": includeDrawer && !(drawerOpen && largeLayout),
@@ -124,7 +124,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                             {!includeDrawer && (logo
                                 ? <img src={logo}
                                        alt="Logo"
-                                       className={cn("w-[32px] h-[32px]")}/>
+                                       className={cls("w-[32px] h-[32px]")}/>
                                 : <FireCMSLogo width={"32px"} height={"32px"}/>)}
 
                             {typeof title === "string"

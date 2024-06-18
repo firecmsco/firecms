@@ -1,6 +1,6 @@
 import React from "react";
 import { focusedMixin } from "../styles";
-import { cn } from "../util";
+import { cls } from "../util";
 
 export type IconButtonProps<C extends React.ElementType> =
     Omit<(C extends "button" ? React.ButtonHTMLAttributes<HTMLButtonElement> : React.ComponentProps<C>), "onClick">
@@ -49,7 +49,7 @@ const IconButtonInner = <C extends React.ElementType = "button">({
             type="button"
             ref={ref}
             {...props}
-            className={cn(
+            className={cls(
                 focusedMixin,
                 disabled ? "opacity-50 pointer-events-none" : "cursor-pointer",
                 toggled ? "outline outline-2 outline-primary" : "",

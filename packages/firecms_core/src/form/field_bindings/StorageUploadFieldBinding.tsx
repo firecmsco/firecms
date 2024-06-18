@@ -20,7 +20,7 @@ import { StorageFieldItem, useStorageUploadController } from "../../util/useStor
 import { StorageUploadProgress } from "../components/StorageUploadProgress";
 import { StorageItemPreview } from "../components/StorageItemPreview";
 import {
-    cn,
+    cls,
     fieldBackgroundDisabledMixin,
     fieldBackgroundHoverMixin,
     fieldBackgroundMixin,
@@ -203,7 +203,7 @@ function FileDropComponent({
     return (
         <div
             {...getRootProps()}
-            className={cn(
+            className={cls(
                 fieldBackgroundMixin,
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                 dropZoneClasses,
@@ -220,7 +220,7 @@ function FileDropComponent({
             <div
                 {...droppableProvided.droppableProps}
                 ref={droppableProvided.innerRef}
-                className={cn("flex items-center p-1 no-scrollbar",
+                className={cls("flex items-center p-1 no-scrollbar",
                     multipleFilesSupported && internalValue.length ? "overflow-auto" : "",
                     multipleFilesSupported && internalValue.length ? "min-h-[180px]" : "min-h-[250px]"
                 )}
@@ -268,7 +268,7 @@ function FileDropComponent({
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
-                                    className={cn(focusedMixin, "rounded-md")}
+                                    className={cls(focusedMixin, "rounded-md")}
                                     style={{
                                         ...provided.draggableProps.style
                                     }}

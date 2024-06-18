@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 import useMeasure from "react-use-measure";
 
-import { cn, RemoveCircleIcon, Tooltip } from "@firecms/ui";
+import { cls, RemoveCircleIcon, Tooltip } from "@firecms/ui";
 import { ErrorBoundary } from "../../../components";
 import { getRowHeight, TableSize } from "../../common/table_height";
 
@@ -46,7 +46,7 @@ const TableCellInner = ({
                         }: TableCellInnerProps) => {
     return (
         <div
-            className={cn("flex flex-col max-h-full w-full",
+            className={cls("flex flex-col max-h-full w-full",
                 {
                     "items-start": faded || scrollable
                 })}
@@ -185,7 +185,7 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
 
         return (
             <div
-                className={cn(
+                className={cls(
                     "transition-colors duration-100 ease-in-out",
                     `flex relative h-full rounded-md p-${p} border border-4  border-opacity-75`,
                     onHover && !disabled ? "bg-gray-50 dark:bg-gray-900" : "",

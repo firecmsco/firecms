@@ -19,7 +19,7 @@ import {
     AutoAwesomeIcon,
     Button,
     CircularProgress,
-    cn,
+    cls,
     CodeIcon,
     DebouncedTextField,
     defaultBorderMixin,
@@ -317,7 +317,7 @@ export function CollectionPropertiesEditorForm({
 
     const body = (
         <div className={"grid grid-cols-12 gap-2 h-full bg-gray-50 dark:bg-gray-900"}>
-            <div className={cn(
+            <div className={cls(
                 "p-4 md:p-8 pb-20 md:pb-20",
                 "col-span-12 lg:col-span-5 h-full overflow-auto",
                 !asDialog && "border-r " + defaultBorderMixin

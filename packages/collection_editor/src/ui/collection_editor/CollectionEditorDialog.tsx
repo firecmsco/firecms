@@ -25,7 +25,7 @@ import {
 import {
     ArrowBackIcon,
     Button,
-    cn,
+    cls,
     coolIconKeys,
     defaultBorderMixin,
     Dialog,
@@ -526,7 +526,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
             <>
                 {!isNewCollection && <Tabs value={currentView}
-                                           className={cn(defaultBorderMixin, "justify-end bg-gray-50 dark:bg-gray-950 border-b")}
+                                           className={cls(defaultBorderMixin, "justify-end bg-gray-50 dark:bg-gray-950 border-b")}
                                            onValueChange={(v) => setCurrentView(v as EditorView)}>
                     <Tab value={"details"}>
                         Details
@@ -541,7 +541,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
                 <form noValidate
                       onSubmit={formController.handleSubmit}
-                      className={cn(
+                      className={cls(
                           isNewCollection ? "h-full" : "h-[calc(100%-48px)]",
                           "flex-grow flex flex-col relative")}>
 

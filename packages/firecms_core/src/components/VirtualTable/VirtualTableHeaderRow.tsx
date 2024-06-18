@@ -4,7 +4,7 @@ import { VirtualTableColumn, VirtualTableWhereFilterOp } from "./VirtualTablePro
 import { ErrorBoundary } from "../ErrorBoundary";
 import { VirtualTableHeader } from "./VirtualTableHeader";
 import { VirtualTableContextProps } from "./types";
-import { cn, defaultBorderMixin } from "@firecms/ui";
+import { cls, defaultBorderMixin } from "@firecms/ui";
 
 export const VirtualTableHeaderRow = ({
                                           columns,
@@ -100,7 +100,7 @@ export const VirtualTableHeaderRow = ({
 
     return (
         <div
-            className={cn(defaultBorderMixin, "z-20 sticky min-w-full flex w-fit flex-row top-0 left-0 h-12 border-b bg-gray-50 dark:bg-gray-900")}>
+            className={cls(defaultBorderMixin, "z-20 sticky min-w-full flex w-fit flex-row top-0 left-0 h-12 border-b bg-gray-50 dark:bg-gray-900")}>
             {columns.map((c, columnIndex) => {
                 const column = columns[columnIndex];
 

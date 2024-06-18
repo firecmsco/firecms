@@ -34,6 +34,11 @@ module.exports = {
           id: "pro/sample_pro",
           className: "pro-sidebar-item"
         },
+        {
+          type: 'doc',
+          id: "pro/deployment",
+          className: "pro-sidebar-item"
+        },
         "firebase_setup",
       ]
     },

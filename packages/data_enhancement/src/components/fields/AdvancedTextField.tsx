@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 
 import {
-    cn,
+    cls,
     fieldBackgroundDisabledMixin,
     fieldBackgroundHoverMixin,
     fieldBackgroundMixin,
@@ -112,7 +112,7 @@ export function AdvancedTextField<T extends string | number>({
     }
 
     return (
-        <div className={cn(
+        <div className={cls(
             "rounded-md relative max-w-full",
             fieldBackgroundMixin,
             disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
@@ -125,7 +125,7 @@ export function AdvancedTextField<T extends string | number>({
 
             {label && (
                 <InputLabel
-                    className={cn("absolute top-1 pointer-events-none",
+                    className={cls("absolute top-1 pointer-events-none",
                         !error ? (focused ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-red-500 dark:text-red-600",
                         disabled ? "opacity-50" : "")}
                     shrink={hasValue || focused}
@@ -147,7 +147,7 @@ export function AdvancedTextField<T extends string | number>({
             </div>
 
             <TextareaAutosize
-                className={cn(
+                className={cls(
                     focusedMixin,
                     size === "small" ? "min-h-[48px]" : "min-h-[64px]",
                     "rounded-md resize-none w-full outline-none p-[32px] text-base bg-transparent px-3 pt-[28px]",

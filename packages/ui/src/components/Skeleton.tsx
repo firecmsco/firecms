@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "../util";
+import { cls } from "../util";
 
 export type SkeletonProps = {
     width?: number;
@@ -18,7 +18,7 @@ export function Skeleton({
             height: height ? `${height}px` : "12px"
         }}
         className={
-        cn(
+        cls(
             "block",
             "bg-slate-200 dark:bg-slate-800 rounded",
             "animate-pulse",

@@ -8,7 +8,7 @@ import {
     Button,
     CircularProgress,
     ClearIcon,
-    cn,
+    cls,
     defaultBorderMixin,
     IconButton,
     SendIcon,
@@ -134,7 +134,7 @@ export function FormEnhanceAction({
             <div className="absolute flex flex-col items-center w-full font-medium text-sm">
 
                 <form
-                    className={cn(
+                    className={cls(
                         defaultBorderMixin,
                         "border-b",
                         "flex w-full items-center gap-2 pr-4 pl-6",
@@ -225,7 +225,7 @@ export function FormEnhanceAction({
                         onClick={() => enhance(instructions)}
                         size={"large"}
                         color={inputFocused || !instructions ? "primary" : undefined}
-                        className={cn(!instructions ? "!bg-slate-50 dark:!bg-slate-800" : "")}
+                        className={cls(!instructions ? "!bg-slate-50 dark:!bg-slate-800" : "")}
                         disabled={loading}>
                         {loading &&
                             <CircularProgress size={"small"}/>}

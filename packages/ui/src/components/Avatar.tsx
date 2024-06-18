@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "../util";
+import { cls } from "../util";
 import { focusedMixin } from "../styles";
 
 export interface AvatarProps {
@@ -27,14 +27,14 @@ const AvatarInner: React.ForwardRefRenderFunction<HTMLButtonElement, AvatarProps
             ref={ref}
             style={style}
             {...props}
-            className={cn("rounded-full flex items-center justify-center overflow-hidden",
+            className={cls("rounded-full flex items-center justify-center overflow-hidden",
                 focusedMixin,
                 "p-1 hover:bg-slate-200 hover:dark:bg-slate-700 w-12 h-12",
                 outerClassName
             )}>
             {src
                 ? (
-                    <img className={cn(
+                    <img className={cls(
                         "bg-slate-100 dark:bg-slate-800",
                         "w-full h-full object-cover rounded-full",
                         className)}
@@ -43,7 +43,7 @@ const AvatarInner: React.ForwardRefRenderFunction<HTMLButtonElement, AvatarProps
                 )
                 : (
                     <span
-                        className={cn(
+                        className={cls(
                             "bg-slate-100 dark:bg-slate-800",
                             "flex items-center justify-center",
                             "w-full h-full py-1.5 text-lg font-medium text-slate-900 dark:text-white rounded-full",

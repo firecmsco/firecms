@@ -1,60 +1,18 @@
 ---
-id: self_hosted_deployment
+id: deployment
 title: Self-Hosted Deployment
 sidebar_label: Deployment
-description: Deploy your custom features effortlessly with FireCMS Cloud, as it stands out for its capability to host custom user code. FireCMS ensures a seamless integration of your unique needs by leveraging module federation and vite for compiling, allowing the use of any npm package. Simply run `yarn deploy` to serve your CMS directly from FireCMS Cloud without fretting over dependency clashes or CMS version updates. Additionally, FireCMS offers a CLI tool for straightforward cloud deployment management. Deploy outside of FireCMS Cloud with a PRO plan using Firebase Hosting; just configure SPA redirects in your Firebase project and deploy with `yarn run build && firebase deploy --only hosting` to bring your tailored CMS experience to the web.
+description: Deploy your custom features effortlessly with FireCMS PRO, as it stands out for its capability to host custom user code. FireCMS ensures a seamless integration of your unique needs by leveraging module federation and vite for compiling, allowing the use of any npm package. Simply run `yarn deploy` to serve your CMS directly from FireCMS Cloud without fretting over dependency clashes or CMS version updates. Additionally, FireCMS offers a CLI tool for straightforward cloud deployment management. Deploy outside of FireCMS Cloud with a PRO plan using Firebase Hosting; just configure SPA redirects in your Firebase project and deploy with `yarn run build && firebase deploy --only hosting` to bring your tailored CMS experience to the web.
 ---
 
-## Deployment to FireCMS Cloud
+FireCMS works as a **headless CMS** on top of Firebase. It builds as a **single page application** that can be deployed 
+to any static hosting provider. It does not require any server-side code. 
 
-FireCMS is unique among CMSs in that it allows to upload custom code to
-its Cloud version. This is a very advanced feature enables you to tailor
-the CMS according to your requirements.
+We recommend deploying to Firebase Hosting, as it is in the same ecosystem, and FireCMS will even
+pick up the Firebase config from the environment.
 
-The code is bundled and compiled using **module federation** and
-**vite**. This means that you can use any npm package you want to build your CMS.
-The bundle will not include any of the dependencies that are already
-included in FireCMS, so you can use any version of any package you want.
-
-Deploy your code to [FireCMS Cloud,](https://app.firecms.co) with a single command,
-and it will be served from there:
-
-```bash
-yarn deploy
-```
-
-The benefit of this approach is that you can use any npm package you want,
-and you can use the latest version of FireCMS without having to manually
-update your code.
-
-### FireCMS CLI
-
-The FireCMS CLI is a tool that allows you to deploy your CMS to FireCMS Cloud
-with a single command. In your project, you should have `firecms` as a dev
-dependency. This package was previously `@firecms/cli`.
-
-
-The available commands are:
-
-```bash
-firecms login
-```
-
-```bash
-firecms logout
-```
-
-and
-
-```bash
-firecms deploy --project=your-project-id
-```
 
 ## Deployment to Firebase Hosting
-
-:::important
-You can only deploy outside FireCMS Cloud if you have a **PRO plan**.
-:::
 
 If you would like to deploy your CMS to Firebase Hosting, you need to enable
 it first in the Hosting tab of your Firebase project.
@@ -105,4 +63,16 @@ yarn run build && firebase deploy --only hosting
 ```
 
 to deploy.
+
+
+## Deploying to other platforms
+
+If you would like to deploy your CMS to other platforms, you can build it
+with:
+
+```
+yarn run build
+```
+
+and then serve the **dist** folder with your favorite static hosting provider.
 

@@ -1,6 +1,6 @@
 import { useEditor } from "../components";
 import { useEffect, useRef, } from "react";
-import { Button, CheckIcon, cn, DeleteIcon, Popover } from "@firecms/ui";
+import { Button, CheckIcon, cls, DeleteIcon, Popover } from "@firecms/ui";
 
 export function isValidUrl(url: string) {
     try {
@@ -50,7 +50,7 @@ export const LinkSelector = ({
                  trigger={<Button variant="text"
                                   className="gap-2 rounded-none"
                                   color={"text"}>
-                     <p className={cn("underline decoration-stone-400 underline-offset-4", {
+                     <p className={cls("underline decoration-stone-400 underline-offset-4", {
                          "text-blue-500": editor.isActive("link"),
                      })}>
                          Link

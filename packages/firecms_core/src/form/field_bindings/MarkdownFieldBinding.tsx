@@ -8,7 +8,7 @@ import { FieldHelperText, LabelWithIcon } from "../components";
 import { FieldProps } from "../../types";
 import { getIconForProperty } from "../../util";
 import {
-    cn,
+    cls,
     fieldBackgroundDisabledMixin,
     fieldBackgroundHoverMixin,
     fieldBackgroundMixin,
@@ -81,7 +81,7 @@ export function MarkdownFieldBinding({
             </Typography>}
 
             <MdEditor value={internalValue ?? ""}
-                      className={cn(fieldBackgroundMixin,
+                      className={cls(fieldBackgroundMixin,
                           disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                           "text-base")}
                       readOnly={disabled}

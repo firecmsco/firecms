@@ -6,7 +6,7 @@ import { PropertyPreview } from "../../preview";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { ErrorBoundary } from "../../components";
 import { getIconForProperty } from "../../util";
-import { cn, paperMixin } from "@firecms/ui";
+import { cls, paperMixin } from "@firecms/ui";
 
 /**
  *
@@ -47,7 +47,7 @@ export function ReadOnlyFieldBinding({
             }
 
             <div
-                className={cn(paperMixin, "min-h-14 p-4 md:p-6 overflow-x-scroll no-scrollbar")}>
+                className={cls(paperMixin, "min-h-14 p-4 md:p-6 overflow-x-scroll no-scrollbar")}>
 
                 <ErrorBoundary>
                     <PropertyPreview propertyKey={propertyKey}

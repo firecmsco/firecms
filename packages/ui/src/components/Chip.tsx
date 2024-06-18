@@ -1,5 +1,5 @@
 import React from "react";
-import { CHIP_COLORS, cn, getColorSchemeForKey } from "../util";
+import { CHIP_COLORS, cls, getColorSchemeForKey } from "../util";
 
 export type ChipColorScheme = {
     color: string;
@@ -42,7 +42,7 @@ export function Chip({
     const usedColorScheme = typeof colorScheme === "string" ? getColorSchemeForKey(colorScheme) : colorScheme;
     return (
         <div
-            className={cn("rounded-lg w-fit h-fit font-regular inline-flex gap-1",
+            className={cls("rounded-lg w-fit h-fit font-regular inline-flex gap-1",
                 "text-ellipsis",
                 onClick ? "cursor-pointer hover:bg-slate-300 hover:dark:bg-slate-700" : "",
                 sizeClassNames[size],

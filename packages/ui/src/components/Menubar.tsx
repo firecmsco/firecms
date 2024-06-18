@@ -1,5 +1,5 @@
 import * as MenubarPrimitive from "@radix-ui/react-Menubar";
-import { cn } from "../util";
+import { cls } from "../util";
 import { CheckIcon, ChevronRightIcon } from "../icons";
 
 export function Menubar({
@@ -7,7 +7,7 @@ export function Menubar({
                             className
                         }: { children: React.ReactNode, className?: string }) {
     return (
-        <MenubarPrimitive.Root className={cn("z-10 flex bg-white dark:bg-gray-950 p-[3px] rounded-sm shadow-sm", className)}>
+        <MenubarPrimitive.Root className={cls("z-10 flex bg-white dark:bg-gray-950 p-[3px] rounded-sm shadow-sm", className)}>
             {children}
         </MenubarPrimitive.Root>
     )
@@ -29,7 +29,7 @@ export function MenubarTrigger({
                                }: { children: React.ReactNode, className?: string }) {
     return (
         <MenubarPrimitive.Trigger
-            className={cn("py-2 px-3 outline-none select-none font-medium leading-none rounded text-text-primary dark:text-text-primary-dark text-[13px] flex items-center justify-between gap-[2px] data-[highlighted]:bg-gray-100 data-[highlighted]:dark:bg-gray-800 data-[state=open]:bg-gray-100 data-[state=open]:dark:bg-gray-800",
+            className={cls("py-2 px-3 outline-none select-none font-medium leading-none rounded text-text-primary dark:text-text-primary-dark text-[13px] flex items-center justify-between gap-[2px] data-[highlighted]:bg-gray-100 data-[highlighted]:dark:bg-gray-800 data-[state=open]:bg-gray-100 data-[state=open]:dark:bg-gray-800",
                 className)}>
             {children}
         </MenubarPrimitive.Trigger>
@@ -62,7 +62,7 @@ export function MenubarContent({
 }) {
     return (
         <MenubarPrimitive.Content
-            className={cn("min-w-[220px] bg-white dark:bg-gray-950 rounded-md p-[6px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] [animation-duration:_400ms] [animation-timing-function:_cubic-bezier(0.16,_1,_0.3,_1)] will-change-[transform,opacity]", className)}
+            className={cls("min-w-[220px] bg-white dark:bg-gray-950 rounded-md p-[6px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] [animation-duration:_400ms] [animation-timing-function:_cubic-bezier(0.16,_1,_0.3,_1)] will-change-[transform,opacity]", className)}
             align={align ?? "start"}
             sideOffset={sideOffset ?? 5}
             alignOffset={alignOffset ?? -3}
@@ -87,7 +87,7 @@ export function MenubarItem({
 }) {
     return (
         <MenubarPrimitive.Item
-            className={cn("group text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none outline-none data-[state=open]:bg-gray-100 data-[state=open]:dark:bg-gray-800 data-[state=open]:text-text-primary data-[state=open]:dark:text-text-primary-dark data-[highlighted]:bg-gray-100 data-[highlighted]:dark:bg-gray-800  data-[disabled]:text-disabled data-[disabled]:dark:text-disabled-dark data-[disabled]:pointer-events-none",
+            className={cls("group text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none outline-none data-[state=open]:bg-gray-100 data-[state=open]:dark:bg-gray-800 data-[state=open]:text-text-primary data-[state=open]:dark:text-text-primary-dark data-[highlighted]:bg-gray-100 data-[highlighted]:dark:bg-gray-800  data-[disabled]:text-disabled data-[disabled]:dark:text-disabled-dark data-[disabled]:pointer-events-none",
                 leftPadding ? "pl-5" : "",
                 className)}
             disabled={disabled}
@@ -108,7 +108,7 @@ export function MenubarSeparator({
 }) {
     return (
         <MenubarPrimitive.Separator
-            className={cn("h-[1px] bg-gray-100 dark:bg-gray-800 m-[5px]", className)}
+            className={cls("h-[1px] bg-gray-100 dark:bg-gray-800 m-[5px]", className)}
             {...rest}
         >
             {children}
@@ -141,7 +141,7 @@ export function MenubarSubTrigger({
 }) {
     return (
         <MenubarPrimitive.SubTrigger
-            className={cn("group text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none outline-none data-[state=open]:bg-gray-100 data-[state=open]:dark:bg-gray-800 data-[state=open]:text-text-primary data-[state=open]:dark:text-text-primary-dark data-[highlighted]:bg-gray-100 data-[highlighted]:dark:bg-gray-800  data-[disabled]:text-disabled data-[disabled]:dark:text-disabled-dark data-[disabled]:pointer-events-none",
+            className={cls("group text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none outline-none data-[state=open]:bg-gray-100 data-[state=open]:dark:bg-gray-800 data-[state=open]:text-text-primary data-[state=open]:dark:text-text-primary-dark data-[highlighted]:bg-gray-100 data-[highlighted]:dark:bg-gray-800  data-[disabled]:text-disabled data-[disabled]:dark:text-disabled-dark data-[disabled]:pointer-events-none",
                 className)}
             {...rest}
         >
@@ -163,7 +163,7 @@ export function MenubarSubContent({
     return (
         <MenubarPrimitive.SubContent
             alignOffset={alignOffset ?? -5}
-            className={cn("min-w-[220px] bg-white dark:bg-gray-950 rounded-md p-[6px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] [animation-duration:_400ms] [animation-timing-function:_cubic-bezier(0.16,_1,_0.3,_1)] will-change-[transform,opacity]",
+            className={cls("min-w-[220px] bg-white dark:bg-gray-950 rounded-md p-[6px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] [animation-duration:_400ms] [animation-timing-function:_cubic-bezier(0.16,_1,_0.3,_1)] will-change-[transform,opacity]",
                 className)}
             {...rest}
         >
@@ -186,7 +186,7 @@ export function MenubarCheckboxItem({
 }) {
     return (
         <MenubarPrimitive.CheckboxItem
-            className={cn("text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none pl-5 outline-none data-[highlighted]:bg-gray-100 data-[highlighted]:dark:bg-gray-800 data-[disabled]:text-disabled data-[disabled]:dark:text-disabled-dark data-[disabled]:pointer-events-none",
+            className={cls("text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none pl-5 outline-none data-[highlighted]:bg-gray-100 data-[highlighted]:dark:bg-gray-800 data-[disabled]:text-disabled data-[disabled]:dark:text-disabled-dark data-[disabled]:pointer-events-none",
                 className)}
             checked={checked}
             onCheckedChange={onCheckedChange}
@@ -207,7 +207,7 @@ export function MenubarItemIndicator({
 }) {
     return (
         <MenubarPrimitive.ItemIndicator
-            className={cn("absolute left-0 w-4 inline-flex items-center justify-center", className)}
+            className={cls("absolute left-0 w-4 inline-flex items-center justify-center", className)}
             {...rest}>
             {children ?? <CheckIcon size={"smallest"}/>}
         </MenubarPrimitive.ItemIndicator>
@@ -228,7 +228,7 @@ export function MenubarRadioGroup({
 }) {
     return (
         <MenubarPrimitive.RadioGroup
-            className={cn(className)}
+            className={cls(className)}
             value={value}
             onValueChange={onValueChange}
             {...rest}>
@@ -249,7 +249,7 @@ export function MenubarRadioItem({
 }) {
     return (
         <MenubarPrimitive.RadioItem
-            className={cn("text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none pl-5 outline-none data-[highlighted]:bg-gray-100 data-[highlighted]:dark:bg-gray-800 data-[disabled]:text-disabled data-[disabled]:dark:text-disabled-dark data-[disabled]:pointer-events-none",
+            className={cls("text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none pl-5 outline-none data-[highlighted]:bg-gray-100 data-[highlighted]:dark:bg-gray-800 data-[disabled]:text-disabled data-[disabled]:dark:text-disabled-dark data-[disabled]:pointer-events-none",
                 className)}
             value={value}
             {...rest}>
@@ -268,7 +268,7 @@ export function MenubarShortcut({
 }) {
     return (
         <div
-            className={cn("ml-auto pl-5 group-data-[highlighted]:text-white group-data-[disabled]:text-disabled data-[disabled]:dark:text-disabled-dark",
+            className={cls("ml-auto pl-5 group-data-[highlighted]:text-white group-data-[disabled]:text-disabled data-[disabled]:dark:text-disabled-dark",
                 className)}>
             {children}
         </div>

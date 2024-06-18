@@ -2,7 +2,7 @@ import { EditorBubbleItem, useEditor } from "../components";
 import type { SelectorItem } from "./node-selector";
 import {
     Button,
-    cn,
+    cls,
     CodeIcon,
     FormatBoldIcon,
     FormatItalicIcon,
@@ -59,7 +59,7 @@ export const TextButtons = () => {
                             className="gap-2 rounded-none h-full"
                             variant="text">
                         <item.icon
-                            className={cn( {
+                            className={cls( {
                                 "text-inherit": !item.isActive(editor),
                                 "text-blue-500": item.isActive(editor),
                             })}

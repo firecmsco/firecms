@@ -14,7 +14,7 @@ import { renderSkeletonText } from "../../preview";
 import { propertiesToColumns } from "./column_utils";
 import { ErrorView } from "../ErrorView";
 import { SelectableTable } from "../SelectableTable/SelectableTable";
-import { cn } from "@firecms/ui";
+import { cls } from "@firecms/ui";
 import { getRowHeight } from "../common/table_height";
 
 /**
@@ -292,7 +292,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
 
         <div ref={ref}
              style={style}
-             className={cn("h-full w-full flex flex-col bg-white dark:bg-gray-950", className)}>
+             className={cls("h-full w-full flex flex-col bg-white dark:bg-gray-950", className)}>
 
             <CollectionTableToolbar
                 onTextSearch={textSearchEnabled ? onTextSearch : undefined}

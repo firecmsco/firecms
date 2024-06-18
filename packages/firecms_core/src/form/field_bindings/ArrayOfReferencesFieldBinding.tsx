@@ -6,7 +6,7 @@ import { ErrorView } from "../../components";
 import { getIconForProperty, getReferenceFrom } from "../../util";
 
 import { useNavigationController, useReferenceDialog } from "../../hooks";
-import { Button, cn, ExpandablePanel, fieldBackgroundMixin } from "@firecms/ui";
+import { Button, cls, ExpandablePanel, fieldBackgroundMixin } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
@@ -132,7 +132,7 @@ export function ArrayOfReferencesFieldBinding({
             {!tableMode &&
                 <ExpandablePanel
                     titleClassName={fieldBackgroundMixin}
-                    className={cn("px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2", fieldBackgroundMixin)}
+                    className={cls("px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2", fieldBackgroundMixin)}
                     initiallyExpanded={expanded}
                     title={title}>
                     {body}

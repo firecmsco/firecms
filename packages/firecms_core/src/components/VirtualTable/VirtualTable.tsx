@@ -19,7 +19,7 @@ import { VirtualTableContextProps } from "./types";
 import { VirtualTableHeaderRow } from "./VirtualTableHeaderRow";
 import { VirtualTableRow } from "./VirtualTableRow";
 import { VirtualTableCell } from "./VirtualTableCell";
-import { AssignmentIcon, CenteredView, cn, Typography } from "@firecms/ui";
+import { AssignmentIcon, CenteredView, cls, Typography } from "@firecms/ui";
 
 const VirtualListContext = createContext<VirtualTableContextProps<any>>({} as any);
 VirtualListContext.displayName = "VirtualListContext";
@@ -275,7 +275,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         return (
             <div
                 ref={measureRef}
-                className={cn("h-full w-full", className)}>
+                className={cls("h-full w-full", className)}>
                 <VirtualListContext.Provider
                     value={virtualListController}>
 

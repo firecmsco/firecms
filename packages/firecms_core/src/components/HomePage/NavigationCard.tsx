@@ -1,4 +1,4 @@
-import { ArrowForwardIcon, Card, cn, Markdown, Typography, } from "@firecms/ui";
+import { ArrowForwardIcon, Card, cls, Markdown, Typography, } from "@firecms/ui";
 
 export type NavigationCardProps = {
     name: string,
@@ -17,7 +17,7 @@ export function NavigationCard({
                                }: NavigationCardProps) {
 
     return (<Card
-        className={cn("h-full p-4 cursor-pointer min-h-[230px]")}
+        className={cls("h-full p-4 cursor-pointer min-h-[230px]")}
         onClick={() => {
             onClick?.();
         }}>

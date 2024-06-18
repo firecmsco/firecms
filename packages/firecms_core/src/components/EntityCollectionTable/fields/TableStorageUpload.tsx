@@ -9,7 +9,7 @@ import { useSnackbarController, useStorageSource } from "../../../hooks";
 import { getThumbnailMeasure } from "../../../preview/util";
 import { StorageFieldItem, useStorageUploadController } from "../../../util/useStorageUploadController";
 import { StorageUploadProgress } from "../../../form/components/StorageUploadProgress";
-import { cn, EditIcon, IconButton, Typography } from "@firecms/ui";
+import { cls, EditIcon, IconButton, Typography } from "@firecms/ui";
 import { EntityTableCellActions } from "../internal/EntityTableCellActions";
 
 const dropZoneClasses = "max-w-full box-border relative pt-[2px] items-center border border-transparent outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
@@ -207,7 +207,7 @@ function StorageUpload({
              onMouseEnter={() => setOnHover(true)}
              onMouseMove={() => setOnHover(true)}
              onMouseLeave={() => setOnHover(false)}
-             className={cn(dropZoneClasses,
+             className={cls(dropZoneClasses,
                  "relative w-full h-full flex",
                  `justify-${hasValue ? "start" : "center"}`,
                  isDragActive ? activeDropClasses : "",

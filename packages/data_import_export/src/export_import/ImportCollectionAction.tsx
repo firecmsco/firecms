@@ -18,7 +18,7 @@ import {
 } from "@firecms/core";
 import {
     Button,
-    cn,
+    cls,
     defaultBorderMixin,
     Dialog,
     DialogActions,
@@ -342,7 +342,7 @@ export function PropertySelectEntry({
         className="flex flex-row w-full text-start items-center h-full">
 
         {new Array(level).fill(0).map((_, index) =>
-            <div className={cn(defaultBorderMixin, "ml-8 border-l h-12")} key={index}/>)}
+            <div className={cls(defaultBorderMixin, "ml-8 border-l h-12")} key={index}/>)}
 
         <div className={"m-4"}>
             <Tooltip title={widget?.name}>

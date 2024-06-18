@@ -6,7 +6,7 @@ import { PreviewType } from "../../types";
 import { UrlComponentPreview } from "../components/UrlComponentPreview";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
 import { ErrorBoundary } from "../../components";
-import { Chip, cn, getColorSchemeForSeed } from "@firecms/ui";
+import { Chip, cls, getColorSchemeForSeed } from "@firecms/ui";
 
 /**
  * @group Preview components
@@ -45,7 +45,7 @@ export function StringPropertyPreview({
         if (!value) return <></>;
         const lines = value.split("\n");
         return value && value.includes("\n")
-            ? <div className={cn("overflow-x-scroll", size === "tiny" ? "text-sm" : "")}>
+            ? <div className={cls("overflow-x-scroll", size === "tiny" ? "text-sm" : "")}>
                 {lines.map((str, index) =>
                     <React.Fragment key={`string_preview_${index}`}>
                         <span>{str}</span>

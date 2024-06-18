@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "../util";
+import { cls } from "../util";
 
 export type BooleanSwitchProps = {
     value: boolean | null;
@@ -39,7 +39,7 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
                         onValueChange?.(!value);
                     }
                 }}
-            className={cn(
+            className={cls(
                 size === "small" ? "w-[38px] h-[22px] min-w-[38px] min-h-[22px]" : "w-[42px] h-[26px] min-w-[42px] min-h-[26px]",
                 "outline-none rounded-full relative shadow-sm",
                 value ? (disabled
@@ -51,7 +51,7 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
         >
             {allowIndeterminate && (value === null || value === undefined) && <div
                 key={"knob"}
-                className={cn(
+                className={cls(
                     "block rounded-full transition-transform duration-100 transform will-change-auto",
                     disabled ? "bg-slate-400 dark:bg-slate-600" : "bg-slate-400 dark:bg-slate-600",
                     {
@@ -65,7 +65,7 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
 
             {!(allowIndeterminate && (value === null || value === undefined)) && <div
                 key={"knob"}
-                className={cn(
+                className={cls(
                     "block rounded-full transition-transform duration-100 transform will-change-auto",
                     disabled ? "bg-slate-300 dark:bg-slate-700" : (value ? "bg-white" : "bg-slate-600 dark:bg-slate-400"),
                     {

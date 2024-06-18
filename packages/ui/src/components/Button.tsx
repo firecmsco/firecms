@@ -1,7 +1,7 @@
 import React from "react";
 
 import { focusedMixin } from "../styles";
-import { cn } from "../util";
+import { cls } from "../util";
 
 export type ButtonProps<P extends React.ElementType> =
     Omit<(P extends "button" ? React.ButtonHTMLAttributes<HTMLButtonElement> : React.ComponentProps<P>), "onClick">
@@ -34,7 +34,7 @@ const ButtonInner = React.forwardRef<
     const baseClasses =
         "h-fit rounded-md uppercase whitespace-nowrap inline-flex items-center justify-center p-2 px-4 text-sm font-medium focus:outline-none transition ease-in-out duration-150 gap-2";
 
-    const buttonClasses = cn({
+    const buttonClasses = cls({
         "w-full": fullWidth,
         "w-fit": !fullWidth,
         // Filled Variants
@@ -58,7 +58,7 @@ const ButtonInner = React.forwardRef<
         "border border-gray-500 bg-gray-500 opacity-50": variant === "filled" && disabled,
     });
 
-    const sizeClasses = cn(
+    const sizeClasses = cls(
         {
             "py-1 px-2": size === "small",
             "py-2 px-4": size === "medium",
@@ -73,7 +73,7 @@ const ButtonInner = React.forwardRef<
             <Component
                 ref={ref}
                 onClick={props.onClick}
-                className={cn(focusedMixin, startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}
+                className={cls(focusedMixin, startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}
                 {...(props as React.ComponentPropsWithRef<any>)}>
                 {startIcon}
                 {children}
@@ -85,7 +85,7 @@ const ButtonInner = React.forwardRef<
         <button ref={ref as any}
                 type={props.type ?? "button"}
                 onClick={props.onClick}
-                className={cn(focusedMixin, startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}
+                className={cls(focusedMixin, startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}
                 disabled={disabled}
                 {...props as React.ButtonHTMLAttributes<HTMLButtonElement>}>
             {startIcon}

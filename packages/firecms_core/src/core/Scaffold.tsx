@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { Drawer as DefaultDrawer, DrawerProps } from "./Drawer";
 import { useLargeLayout, useNavigationController } from "../hooks";
 import { ErrorBoundary, FireCMSAppBar as DefaultFireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "../components";
-import { ChevronLeftIcon, cn, defaultBorderMixin, IconButton, MenuIcon, Sheet, Tooltip } from "@firecms/ui";
+import { ChevronLeftIcon, cls, defaultBorderMixin, IconButton, MenuIcon, Sheet, Tooltip } from "@firecms/ui";
 
 export const DRAWER_WIDTH = 280;
 
@@ -150,7 +150,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                         className="flex flex-col flex-grow overflow-auto">
                         <DrawerHeader/>
                         <div
-                            className={cn(defaultBorderMixin, "flex-grow overflow-auto lg:m-0 lg:mx-4 lg:mb-4 lg:rounded-lg lg:border lg:border-solid m-0 mt-1")}>
+                            className={cls(defaultBorderMixin, "flex-grow overflow-auto lg:m-0 lg:mx-4 lg:mb-4 lg:rounded-lg lg:border lg:border-solid m-0 mt-1")}>
 
                             <ErrorBoundary>
                                 {children}
@@ -218,7 +218,7 @@ function DrawerWrapper(props: {
                     transition: "padding 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
                     padding: props.open ? "32px 144px 0px 24px" : "72px 16px 0px"
                 }}
-                className={cn("cursor-pointer")}>
+                className={cls("cursor-pointer")}>
 
                 <Tooltip title={"Home"}
                          sideOffset={20}
@@ -228,7 +228,7 @@ function DrawerWrapper(props: {
                         {props.logo
                             ? <img src={props.logo}
                                    alt="Logo"
-                                   className={cn("max-w-full max-h-full",
+                                   className={cls("max-w-full max-h-full",
                                        props.open ?? "w-[112px] h-[112px]")}/>
                             : <FireCMSLogo/>}
 

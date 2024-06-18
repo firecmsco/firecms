@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "../util";
+import { cls } from "../util";
 
 const colorClasses = {
     info: "bg-sky-200 dark:bg-teal-900",
@@ -16,7 +16,7 @@ export function InfoLabel({
 
     return (
         <div
-            className={cn("my-3 py-2 px-4 rounded", colorClasses[mode])}>
+            className={cls("my-3 py-2 px-4 rounded", colorClasses[mode])}>
             {children}
         </div>
     )

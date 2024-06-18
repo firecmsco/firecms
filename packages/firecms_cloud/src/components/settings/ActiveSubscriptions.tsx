@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Button, Chip, cn, defaultBorderMixin, Paper, Typography } from "@firecms/ui";
+import { Button, Chip, cls, defaultBorderMixin, Paper, Typography } from "@firecms/ui";
 import { getPriceString, getStatusText } from "./common";
 import { useFireCMSBackend } from "../../hooks";
 import { Subscription } from "../../types/subscriptions";
@@ -80,7 +80,7 @@ export function ActiveSubscriptions({ activeSubscriptions }: {
     activeSubscriptions: Subscription[],
 }) {
 
-    return <div className={cn("my-8 border-t", defaultBorderMixin)}>
+    return <div className={cls("my-8 border-t", defaultBorderMixin)}>
 
         <Typography className="my-4 mt-8 font-medium">
             {"Active Subscriptions".toUpperCase()}

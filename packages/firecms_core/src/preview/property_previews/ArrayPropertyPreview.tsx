@@ -5,7 +5,7 @@ import { ResolvedProperty } from "../../types";
 import { useCustomizationController } from "../../hooks";
 import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
-import { cn, defaultBorderMixin } from "@firecms/ui";
+import { cls, defaultBorderMixin } from "@firecms/ui";
 import { ErrorBoundary } from "../../components";
 
 /**
@@ -48,7 +48,7 @@ export function ArrayPropertyPreview({
                         return of
                             ? <React.Fragment
                                 key={"preview_array_" + index}>
-                                <div className={cn(defaultBorderMixin, "m-1 border-b last:border-b-0")}>
+                                <div className={cls(defaultBorderMixin, "m-1 border-b last:border-b-0")}>
                                     <ErrorBoundary>
                                         <PropertyPreview
                                             propertyKey={propertyKey}

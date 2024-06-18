@@ -5,7 +5,7 @@ import { useLargeLayout, useNavigationController } from "../hooks";
 import { useNavigate } from "react-router-dom";
 import { CMSAnalyticsEvent, TopNavigationEntry, TopNavigationResult } from "../types";
 import { IconForView } from "../util";
-import { cn, IconButton, Menu, MenuItem, MoreVertIcon, Tooltip, Typography } from "@firecms/ui";
+import { cls, IconButton, Menu, MenuItem, MoreVertIcon, Tooltip, Typography } from "@firecms/ui";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { useDrawer } from "./Scaffold";
 import { DrawerNavigationItem } from "./DrawerNavigationItem";
@@ -114,7 +114,7 @@ export function Drawer() {
                             <MoreVertIcon/>
                         </Tooltip>
                         {drawerOpen && <div
-                            className={cn(
+                            className={cls(
                                 drawerOpen ? "opacity-100" : "opacity-0 hidden",
                                 "mx-4 font-inherit text-inherit"
                             )}>

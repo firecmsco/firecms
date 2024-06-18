@@ -3,7 +3,7 @@ import React, { useCallback } from "react";
 import equal from "react-fast-compare"
 
 import { VirtualTableRowProps } from "./types";
-import { cn } from "@firecms/ui";
+import { cls } from "@firecms/ui";
 
 export const VirtualTableRow = React.memo<VirtualTableRowProps<any>>(
     function VirtualTableRow<T>({
@@ -28,7 +28,7 @@ export const VirtualTableRow = React.memo<VirtualTableRowProps<any>>(
 
         return (
             <div
-                className={cn(
+                className={cls(
                     "flex min-w-full text-sm border-b border-gray-200 dark:border-gray-800 border-opacity-40 dark:border-opacity-40",
                     rowClassName ? rowClassName(rowData) : "",
                     {

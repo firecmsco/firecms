@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { cn } from "../util";
+import { cls } from "../util";
 
 interface SheetProps {
     children: React.ReactNode;
@@ -47,7 +47,7 @@ export const Sheet: React.FC<SheetProps> = ({
                               onOpenChange={onOpenChange}>
             <DialogPrimitive.Portal>
                 <DialogPrimitive.Overlay
-                    className={cn(
+                    className={cls(
                         "fixed inset-0 transition-opacity z-20 ease-in-out duration-200  backdrop-blur-sm",
                         transparent ? "bg-white bg-opacity-80" : "bg-black bg-opacity-50",
                         "dark:bg-black dark:bg-opacity-60",
@@ -59,7 +59,7 @@ export const Sheet: React.FC<SheetProps> = ({
                 />
                 <DialogPrimitive.Content
                     {...props}
-                    className={cn(
+                    className={cls(
                         // "transform-gpu",
                         "will-change-transform",
                         "text-slate-900 dark:text-white",

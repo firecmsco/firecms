@@ -2,7 +2,7 @@ import React from "react";
 
 import { paperMixin } from "../styles";
 import { Collapse } from "./Collapse";
-import { cn } from "../util";
+import { cls } from "../util";
 import { useOutsideAlerter } from "../hooks";
 
 export type AutocompleteProps = {
@@ -50,14 +50,14 @@ export function Autocomplete({
     return <Collapse
         in={open}
         duration={50}
-        className={cn(
+        className={cls(
             "absolute top-full left-0 right-0 overflow-visible",
             open ? "shadow" : "",
             "my-2",
             "z-20",
             "w-full")}>
         <div ref={autocompleteRef}
-             className={cn(
+             className={cls(
                  open ? paperMixin : "",
                  "bg-slate-50 dark:bg-slate-900 py-2"
              )}>

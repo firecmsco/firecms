@@ -3,7 +3,7 @@ import React from "react";
 import { ResolvedMapProperty } from "../../types";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
-import { cn, defaultBorderMixin, Typography } from "@firecms/ui";
+import { cls, defaultBorderMixin, Typography } from "@firecms/ui";
 import { ErrorBoundary } from "../../components";
 import { EmptyValue } from "../components/EmptyValue";
 
@@ -61,7 +61,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                     return (
                         <div
                             key={`map_preview_table_${key}}`}
-                            className={cn(defaultBorderMixin, "last:border-b-0 border-b")}>
+                            className={cls(defaultBorderMixin, "last:border-b-0 border-b")}>
                             <div
                                 className={"flex flex-row pt-0.5 pb-0.5 gap-2"}>
                                 <div
@@ -87,7 +87,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                             </div>
 
                             {(childProperty.dataType === "map" || childProperty === "array") &&
-                                <div className={cn(defaultBorderMixin, "border-l pl-4 ml-2 my-2")}>
+                                <div className={cls(defaultBorderMixin, "border-l pl-4 ml-2 my-2")}>
                                     <PropertyPreview
                                         propertyKey={key}
                                         value={(value)[key]}
@@ -113,7 +113,7 @@ export function KeyValuePreview({ value }: { value: any }) {
             Object.entries(value).map(([key, childValue]) => (
                 <div
                     key={`map_preview_table_${key}}`}
-                    className={cn(defaultBorderMixin, "last:border-b-0 border-b")}>
+                    className={cls(defaultBorderMixin, "last:border-b-0 border-b")}>
                     <div
                         className={"flex flex-row pt-0.5 pb-0.5 gap-2"}>
                         <div
@@ -135,7 +135,7 @@ export function KeyValuePreview({ value }: { value: any }) {
                         </div>
                     </div>
                     {typeof childValue === "object" &&
-                        <div className={cn(defaultBorderMixin, "border-l pl-4")}>
+                        <div className={cls(defaultBorderMixin, "border-l pl-4")}>
                             <KeyValuePreview value={childValue}/>
                         </div>
                     }

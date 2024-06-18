@@ -2,7 +2,7 @@ import React, { CSSProperties, FC } from "react";
 import { DraggableProvided } from "@hello-pangea/dnd";
 import type { ItemViewProps } from "./components/types";
 import { Quote } from "./data";
-import { cn, defaultBorderMixin } from "@firecms/ui";
+import { cls, defaultBorderMixin } from "@firecms/ui";
 
 const getBackgroundColor = (
     isDragging: boolean,
@@ -47,7 +47,7 @@ const QuoteItemView: FC<ItemViewProps<Quote>> = ({
         data-index={index}
         aria-label={`${item.content.author}`}
     >
-        <div className={cn(
+        <div className={cls(
             "p-2 items-start flex border rounded-lg",
             defaultBorderMixin,
             getBorderColor(isDragging),

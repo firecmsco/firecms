@@ -98,9 +98,15 @@ const data = [{
         cloud: "No",
         cloudPlus: "Yes",
         cloudPro: "Yes"
-    },{
+    }, {
         feature: "OpenAI data augmentation",
         selfHosted: "With subscription",
+        cloud: "No",
+        cloudPlus: "Yes",
+        cloudPro: "Yes"
+    }, {
+        feature: "OpenAI data augmentation",
+        selfHosted: "DataTalk",
         cloud: "No",
         cloudPlus: "Yes",
         cloudPro: "Yes"

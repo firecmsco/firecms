@@ -4,7 +4,7 @@ import { Entity, EntityCollection, EntityReference, FilterValues } from "../type
 import { getReferenceFrom } from "../util";
 import { PreviewSize, ReferencePreview } from "../preview";
 import { useNavigationController, useReferenceDialog } from "../hooks";
-import { Button, cn } from "@firecms/ui";
+import { Button, cls } from "@firecms/ui";
 
 export type ReferenceWidgetProps<M extends Record<string, any>> = {
     name?: string,
@@ -132,7 +132,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
             includeEntityLink={includeEntityLink}/>
 
     }
-    return <div className={cn("text-sm font-medium",
+    return <div className={cls("text-sm font-medium",
         "min-w-80 flex flex-col gap-4",
         "relative transition-colors duration-200 ease-in rounded font-medium",
         disabled ? "bg-opacity-50" : "hover:bg-opacity-75",

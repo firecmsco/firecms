@@ -7,7 +7,7 @@ import {
     ArrowUpwardIcon,
     Badge,
     Button,
-    cn,
+    cls,
     defaultBorderMixin,
     FilterListIcon,
     IconButton,
@@ -85,7 +85,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
         return (
             <ErrorBoundary>
                 <div
-                    className={cn("flex py-0 px-3 h-full text-xs uppercase font-semibold relative select-none items-center bg-gray-50 dark:bg-gray-900",
+                    className={cls("flex py-0 px-3 h-full text-xs uppercase font-semibold relative select-none items-center bg-gray-50 dark:bg-gray-900",
                         "text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 ",
                         "hover:bg-gray-100 dark:hover:bg-gray-800 hover:bg-opacity-50 dark:hover:bg-opacity-50",
                         column.frozen ? "sticky left-0 z-10" : "relative z-0"
@@ -179,7 +179,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
 
                     {column.resizable && <div
                         ref={resizeHandleRef}
-                        className={cn(
+                        className={cls(
                             "absolute h-full w-[6px] top-0 right-0 cursor-col-resize",
                             hovered && "bg-gray-300 dark:bg-gray-700"
                         )}
@@ -240,7 +240,7 @@ function FilterForm<M>({
               }}
               className={"text-gray-900 dark:text-white"}>
             <div
-                className={cn(defaultBorderMixin, "py-4 px-6 text-xs font-semibold uppercase border-b")}>
+                className={cls(defaultBorderMixin, "py-4 px-6 text-xs font-semibold uppercase border-b")}>
                 {column.title ?? id}
             </div>
             {filterField && <div className="m-4">

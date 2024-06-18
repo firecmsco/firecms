@@ -35,7 +35,7 @@ import {
 } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
-import { Alert, Button, CircularProgress, cn, DialogActions, IconButton, Tooltip, Typography } from "@firecms/ui";
+import { Alert, Button, CircularProgress, cls, DialogActions, IconButton, Tooltip, Typography } from "@firecms/ui";
 import { CircularProgressCenter, ErrorBoundary } from "../components";
 import { copyEntityAction, deleteEntityAction } from "../components/common/default_entity_actions";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
@@ -453,7 +453,7 @@ function EntityFormInternal<M extends Record<string, any>>({
         <div className="h-full overflow-auto">
 
             {pluginActions.length > 0 && <div
-                className={cn("w-full flex justify-end items-center sticky top-0 right-0 left-0 z-10 bg-opacity-60 bg-slate-200 dark:bg-opacity-60 dark:bg-slate-800 backdrop-blur-md")}>
+                className={cls("w-full flex justify-end items-center sticky top-0 right-0 left-0 z-10 bg-opacity-60 bg-slate-200 dark:bg-opacity-60 dark:bg-slate-800 backdrop-blur-md")}>
                 {pluginActions}
             </div>}
 

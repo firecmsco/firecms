@@ -167,7 +167,6 @@ function BadMessageIcon({
             open={dialogOpen}
             onOpenChange={setDialogOpen}
             onOpenAutoFocus={(e) => {
-                console.log("onOpenAutoFocus", e);
                 e.preventDefault();
             }}>
             <DialogContent className={"flex flex-col gap-4"}>

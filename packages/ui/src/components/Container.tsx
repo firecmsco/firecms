@@ -1,5 +1,5 @@
 import React, { ForwardRefRenderFunction } from "react";
-import { cn } from "../util";
+import { cls } from "../util";
 
 export type ContainerProps = {
     children: React.ReactNode;
@@ -37,7 +37,7 @@ const ContainerInner: ForwardRefRenderFunction<HTMLDivElement, ContainerProps> =
     return (
         <div
             ref={ref}
-            className={cn("mx-auto px-3 md:px-4 lg-px-6",
+            className={cls("mx-auto px-3 md:px-4 lg-px-6",
                 classForMaxWidth,
                 className)}
             style={style}>

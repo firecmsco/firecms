@@ -29,7 +29,7 @@ import {
     useSnackbarController
 } from "../hooks";
 import { EntityForm } from "../form";
-import { CircularProgress, CloseIcon, cn, defaultBorderMixin, IconButton, Tab, Tabs, Typography } from "@firecms/ui";
+import { CircularProgress, CloseIcon, cls, defaultBorderMixin, IconButton, Tab, Tabs, Typography } from "@firecms/ui";
 import { EntityFormSaveParams } from "../form/EntityForm";
 import { useSideDialogContext } from "./index";
 
@@ -297,7 +297,7 @@ export function EntityEditView<M extends Record<string, any>, UserType extends U
                     return null;
                 }
                 return <div
-                    className={cn(defaultBorderMixin,
+                    className={cls(defaultBorderMixin,
                         "relative flex-grow w-full h-full overflow-auto ")}
                     key={`custom_view_${customView.key}`}
                     role="tabpanel">
@@ -481,7 +481,7 @@ export function EntityEditView<M extends Record<string, any>, UserType extends U
                 <>
 
                     <div
-                        className={cn(defaultBorderMixin, "no-scrollbar border-b pl-2 pr-2 pt-1 flex items-end overflow-scroll bg-gray-50 dark:bg-gray-950")}>
+                        className={cls(defaultBorderMixin, "no-scrollbar border-b pl-2 pr-2 pt-1 flex items-end overflow-scroll bg-gray-50 dark:bg-gray-950")}>
 
                         <div
                             className="pb-1 self-center">

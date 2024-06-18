@@ -10,7 +10,7 @@ import {
     getValueInPath,
     resolveCollection
 } from "../util";
-import { cn, defaultBorderMixin, IconButton, KeyboardTabIcon, Skeleton, Tooltip, Typography } from "@firecms/ui";
+import { cls, defaultBorderMixin, IconButton, KeyboardTabIcon, Skeleton, Tooltip, Typography } from "@firecms/ui";
 import { PreviewSize, PropertyPreview, SkeletonPropertyComponent } from "../preview";
 import { useCustomizationController, useNavigationController, useSideEntityController } from "../hooks";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
@@ -77,7 +77,7 @@ export function EntityPreview({
                                    hover={disabled ? undefined : hover}
                                    size={size}>
         {imageProperty && (
-            <div className={cn("w-10 h-10 mr-2 shrink-0 grow-0", size === "tiny" ? "my-0.5" : "m-2 self-start")}>
+            <div className={cls("w-10 h-10 mr-2 shrink-0 grow-0", size === "tiny" ? "my-0.5" : "m-2 self-start")}>
                 <PropertyPreview property={imageProperty}
                                  propertyKey={imagePropertyKey as string}
                                  size={"tiny"}
@@ -197,7 +197,7 @@ const EntityPreviewContainerInner = React.forwardRef<HTMLDivElement, EntityPrevi
             // @ts-ignore
             tabindex: 0
         }}
-        className={cn(
+        className={cls(
             "bg-white dark:bg-gray-900",
             fullwidth ? "w-full" : "",
             "items-center",

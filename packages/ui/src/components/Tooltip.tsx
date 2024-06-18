@@ -1,7 +1,7 @@
 import React from "react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
-import { cn } from "../util";
+import { cls } from "../util";
 import { useInjectStyles } from "../hooks";
 
 export type TooltipProps = {
@@ -47,7 +47,7 @@ export const Tooltip = ({
                 </TooltipPrimitive.Trigger>
                 <TooltipPrimitive.Portal>
                     <TooltipPrimitive.Content
-                        className={cn("TooltipContent",
+                        className={cls("TooltipContent",
                             "max-w-lg leading-relaxed",
                             "z-50 rounded px-3 py-2 text-xs leading-none bg-slate-700 dark:bg-slate-800 bg-opacity-90 font-medium text-slate-50 shadow-2xl select-none duration-400 ease-in transform opacity-100",
                             tooltipClassName)}

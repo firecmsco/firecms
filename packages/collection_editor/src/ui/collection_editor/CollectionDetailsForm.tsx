@@ -6,7 +6,7 @@ import {
     BooleanSwitchWithLabel,
     Chip,
     ClearIcon,
-    cn,
+    cls,
     Container,
     DebouncedTextField,
     Dialog,
@@ -147,7 +147,7 @@ export function CollectionDetailsForm({
                         </FieldCaption>
                     </div>
 
-                    <div className={cn("col-span-12 ", isSubcollection ? "" : "sm:col-span-8")}>
+                    <div className={cls("col-span-12 ", isSubcollection ? "" : "sm:col-span-8")}>
                         <Field name={"path"}
                                as={DebouncedTextField}
                                label={"Path"}

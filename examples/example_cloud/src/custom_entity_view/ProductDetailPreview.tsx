@@ -2,7 +2,7 @@ import {
     AddIcon,
     Button,
     CenteredView,
-    cn,
+    cls,
     defaultBorderMixin,
     Label,
     RadioGroup,
@@ -45,7 +45,7 @@ export function ProductDetailPreview({
                         {product.images?.map((image, index) => (
                             <button
                                 onClick={() => setSelectedImage(image)}
-                                className={cn("border hover:border-gray-900 rounded-lg overflow-hidden transition-colors dark:hover:border-gray-50", defaultBorderMixin)}>
+                                className={cls("border hover:border-gray-900 rounded-lg overflow-hidden transition-colors dark:hover:border-gray-50", defaultBorderMixin)}>
                                 <StorageImage storagePath={image}
                                               className="aspect-[5/6] object-contain bg-white"
                                               style={{

@@ -1,5 +1,5 @@
 import { PropertyConfigBadge, PropertyConfig } from "@firecms/core";
-import { cn, SelectItem, Typography } from "@firecms/ui";
+import { cls, SelectItem, Typography } from "@firecms/ui";
 
 export interface PropertySelectItemProps {
     value: string;
@@ -13,7 +13,7 @@ export function PropertySelectItem({ value, optionDisabled, propertyConfig, exis
                        disabled={optionDisabled}
                        className={"flex flex-row items-center"}>
         <div
-            className={cn(
+            className={cls(
                 "flex flex-row items-center text-base min-h-[52px]",
                 optionDisabled ? "w-full" : "")}>
             <div className={"mr-8"}>

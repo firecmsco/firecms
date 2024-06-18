@@ -8,7 +8,7 @@ import { EnumValuesChip } from "../../preview";
 import { FieldProps, FormContext, PropertyFieldBindingProps, PropertyOrBuilder } from "../../types";
 import { getDefaultValueFor, getIconForProperty, } from "../../util";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../util/common";
-import { cn, ExpandablePanel, paperMixin, Select, SelectItem, Typography } from "@firecms/ui";
+import { cls, ExpandablePanel, paperMixin, Select, SelectItem, Typography } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
 /**
@@ -193,7 +193,7 @@ function BlockEntry({
     };
 
     return (
-        <div className={cn(paperMixin, "bg-transparent p-4 my-4 py-8")}>
+        <div className={cls(paperMixin, "bg-transparent p-4 my-4 py-8")}>
 
             <Field
                 name={typeFieldName}
