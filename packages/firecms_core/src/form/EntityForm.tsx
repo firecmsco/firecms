@@ -132,13 +132,12 @@ export type EntityFormSaveParams<M extends Record<string, any>> = {
  * @constructor
  * @group Components
  */
-export const EntityForm = EntityFormInternal;
-// export const EntityForm = React.memo<EntityFormProps<any>>(EntityFormInternal,
-//     (a: EntityFormProps<any>, b: EntityFormProps<any>) => {
-//         return a.status === b.status &&
-//             a.path === b.path &&
-//             equal(a.entity?.values, b.entity?.values);
-//     }) as typeof EntityFormInternal;
+export const EntityForm = React.memo<EntityFormProps<any>>(EntityFormInternal,
+    (a: EntityFormProps<any>, b: EntityFormProps<any>) => {
+        return a.status === b.status &&
+            a.path === b.path &&
+            equal(a.entity?.values, b.entity?.values);
+    }) as typeof EntityFormInternal;
 
 function getDataSourceEntityValues<M extends object>(initialResolvedCollection: ResolvedEntityCollection,
                                                      status: "new" | "existing" | "copy",

@@ -88,7 +88,7 @@ type TestType = {
     body: Record<string, any>;
     background: number;
     upload: string;
-    eeee:any;
+    eeee: any;
     mainSaturation: Array<{
         type: string;
         value: {
@@ -103,13 +103,21 @@ type TestType = {
     tags: string[];
 }
 
-export const testCollection = buildCollection<TestType>({
+export const testCollection = buildCollection<any>({
     callbacks: testCallbacks,
     id: "test_entity",
     path: "test_entity",
     customId: false,
     name: "Test entities",
     properties: {
+        rerender: () => ({
+            dataType: "map",
+            hideFromCollection: true,
+            Field: () => {
+                console.log("Rerendering");
+                return <div>Test</div>;
+            }
+        }),
         body: buildProperty({
             name: "Body",
             validation: { required: false },
