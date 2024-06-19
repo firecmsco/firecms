@@ -74,6 +74,7 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
         searchString: string,
         path: string
     }) => {
+        console.debug("Searching local index", path, searchString);
         const index = indexes[path];
         if (!index) {
             throw new Error(`Index not found for path ${path}`);

@@ -548,7 +548,7 @@ function FireCMSAppAuthenticated({
         firebaseApp,
         textSearchControllerBuilder: appConfig?.textSearchControllerBuilder,
         firestoreIndexesBuilder: appConfig?.firestoreIndexesBuilder,
-        localTextSearchEnabled: projectConfig.localTextSearchEnabled
+        localTextSearchEnabled: projectConfig.canUseLocalTextSearch && projectConfig.localTextSearchEnabled
     });
 
     /**

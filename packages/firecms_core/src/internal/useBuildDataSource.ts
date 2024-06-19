@@ -9,6 +9,7 @@ import {
     FetchCollectionProps,
     FetchEntityProps,
     FilterValues,
+    FireCMSContext,
     ListenCollectionProps,
     ListenEntityProps,
     NavigationController,
@@ -312,6 +313,17 @@ export function useBuildDataSource({
                 }
             )
         }, [delegate.isFilterCombinationValid]),
+
+        initTextSearch: useCallback(async (props: {
+            context: FireCMSContext,
+            path: string,
+            collection: EntityCollection,
+            parentCollectionIds?: string[]
+        }): Promise<boolean> => {
+            if (!delegate.initTextSearch)
+                return false;
+            return delegate.initTextSearch(props)
+        }, [delegate.initTextSearch]),
 
     };
 

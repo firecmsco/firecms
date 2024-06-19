@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { EntityCollection } from "../../types";
-import { useCustomizationController, useFireCMSContext } from "../../hooks";
+import { useCustomizationController, useDataSource, useFireCMSContext } from "../../hooks";
 
 export interface UseTableSearchHelperParams<M extends Record<string, any>> {
     collection: EntityCollection<M>;
@@ -9,27 +9,47 @@ export interface UseTableSearchHelperParams<M extends Record<string, any>> {
     parentCollectionIds?: string[];
 }
 
-export function useTableSearchHelper<M extends Record<string, any>>({ collection, fullPath, parentCollectionIds }: UseTableSearchHelperParams<M>) {
+export function useTableSearchHelper<M extends Record<string, any>>({
+                                                                        collection,
+                                                                        fullPath,
+                                                                        parentCollectionIds
+                                                                    }: UseTableSearchHelperParams<M>) {
 
     const context = useFireCMSContext();
     const customizationController = useCustomizationController();
+    const dataSource = useDataSource();
 
     const [textSearchLoading, setTextSearchLoading] = useState<boolean>(false);
     const [textSearchInitialised, setTextSearchInitialised] = useState<boolean>(false);
     let onTextSearchClick: (() => void) | undefined;
     let textSearchEnabled = Boolean(collection.textSearchEnabled);
     if (customizationController?.plugins) {
-        const addTextSearchClickListener = customizationController.plugins?.find(p => Boolean(p.collectionView?.onTextSearchClick));
+        const addTextSearchClickListener = dataSource?.initTextSearch || customizationController.plugins?.find(p => Boolean(p.collectionView?.onTextSearchClick));
 
         onTextSearchClick = addTextSearchClickListener
             ? () => {
                 setTextSearchLoading(true);
-                Promise.all(customizationController.plugins?.map(p => {
+                const promises: Promise<boolean>[] = [];
+                if (dataSource?.initTextSearch) {
+                    promises.push(dataSource.initTextSearch({
+                        context,
+                        path: fullPath,
+                        collection,
+                        parentCollectionIds
+                    }));
+                }
+                customizationController.plugins?.forEach(p => {
                     if (p.collectionView?.onTextSearchClick)
-                        return p.collectionView.onTextSearchClick({ context, path: fullPath, collection, parentCollectionIds });
+                        promises.push(p.collectionView.onTextSearchClick({
+                            context,
+                            path: fullPath,
+                            collection,
+                            parentCollectionIds
+                        }));
                     return Promise.resolve(true);
-                }) as Promise<boolean>[])
-                    .then((res) => {
+                })
+                return Promise.all(promises)
+                    .then((res: boolean[]) => {
                         if (res.every(Boolean)) setTextSearchInitialised(true);
                     })
                     .finally(() => setTextSearchLoading(false));
@@ -39,9 +59,19 @@ export function useTableSearchHelper<M extends Record<string, any>>({ collection
         customizationController.plugins?.forEach(p => {
             if (!textSearchEnabled)
                 if (p.collectionView?.showTextSearchBar) {
-                    textSearchEnabled = p.collectionView.showTextSearchBar({ context, path: fullPath, collection, parentCollectionIds });
+                    textSearchEnabled = p.collectionView.showTextSearchBar({
+                        context,
+                        path: fullPath,
+                        collection,
+                        parentCollectionIds
+                    });
                 }
         })
     }
-    return { textSearchLoading, textSearchInitialised, onTextSearchClick, textSearchEnabled };
+    return {
+        textSearchLoading,
+        textSearchInitialised,
+        onTextSearchClick,
+        textSearchEnabled
+    };
 }

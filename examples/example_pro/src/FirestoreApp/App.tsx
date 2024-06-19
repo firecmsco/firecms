@@ -59,6 +59,7 @@ import { TestEditorView } from "./TestEditorView";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { ReCaptchaEnterpriseProvider } from "@firebase/app-check";
+import { algoliaSearchControllerBuilder } from "./text_search";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com"];
 
@@ -217,7 +218,9 @@ function App() {
 
     // Delegate used for fetching and saving data in Firestore
     const firestoreDelegate = useFirestoreDelegate({
-        firebaseApp
+        firebaseApp,
+        localTextSearchEnabled: true
+        // textSearchControllerBuilder: algoliaSearchControllerBuilder
     });
 
     // Controller used for saving and fetching files in storage
