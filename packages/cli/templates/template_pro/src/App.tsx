@@ -3,8 +3,10 @@ import React, { useCallback, useMemo } from "react";
 import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
 import {
+    AppBar,
     CircularProgressCenter,
     CMSView,
+    Drawer,
     FireCMS,
     ModeControllerProvider,
     NavigationRoutes,
@@ -216,9 +218,9 @@ export function App() {
                                 );
                             } else {
                                 component = (
-                                    <Scaffold
-                                        name={name}
-                                        autoOpenDrawer={false}>
+                                    <Scaffold autoOpenDrawer={false}>
+                                        <AppBar title={name}/>
+                                        <Drawer/>
                                         <NavigationRoutes/>
                                         <SideDialogs/>
                                     </Scaffold>

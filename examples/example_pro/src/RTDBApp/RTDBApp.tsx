@@ -4,7 +4,8 @@ import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
 
 import {
-    CircularProgressCenter,
+    AppBar,
+    CircularProgressCenter, Drawer,
     FireCMS,
     ModeControllerProvider,
     NavigationRoutes,
@@ -147,8 +148,10 @@ function RTDBApp() {
                             } else {
                                 component = (
                                     <Scaffold
-                                        name={name}
                                         autoOpenDrawer={false}>
+                                        <AppBar
+                                            title={name}/>
+                                        <Drawer/>
                                         <NavigationRoutes/>
                                         <SideDialogs/>
                                     </Scaffold>

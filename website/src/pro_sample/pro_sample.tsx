@@ -7,7 +7,9 @@ import { getAnalytics, logEvent } from "@firebase/analytics";
 
 import { CenteredView, } from "@firecms/ui";
 import {
+    AppBar,
     CircularProgressCenter,
+    Drawer,
     FireCMS,
     ModeControllerProvider,
     NavigationRoutes,
@@ -21,11 +23,11 @@ import {
 import {
     FirebaseAuthController,
     FirebaseSignInProvider,
+    useAppCheck,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
-    useInitialiseFirebase,
-    useAppCheck
+    useInitialiseFirebase
 } from "@firecms/firebase";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { booksCollection } from "./books_collection";
@@ -154,6 +156,8 @@ function ProSampleInner() {
                         return <Scaffold
                             name={"My demo app"}
                             autoOpenDrawer={false}>
+                            <AppBar/>
+                            <Drawer/>
                             <NavigationRoutes/>
                             <SideDialogs/>
                         </Scaffold>;

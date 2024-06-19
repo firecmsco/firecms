@@ -7,14 +7,15 @@ import { CMSAnalyticsEvent, TopNavigationEntry, TopNavigationResult } from "../t
 import { IconForView } from "../util";
 import { cls, IconButton, Menu, MenuItem, MoreVertIcon, Tooltip, Typography } from "@firecms/ui";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
-import { useDrawer } from "./Scaffold";
+import { useDrawer } from "../app/Scaffold";
 import { DrawerNavigationItem } from "./DrawerNavigationItem";
 
 /**
  * Props used in case you need to override the default drawer
  * @group Core
  */
-export type DrawerProps = {
+export type DrawerState = {
+    hasDrawer: boolean,
     hovered: boolean,
     drawerOpen: boolean,
     openDrawer: () => void,
@@ -26,7 +27,13 @@ export type DrawerProps = {
  * Default drawer used in the CMS
  * @group Core
  */
-export function Drawer() {
+export function DefaultDrawer({
+                                  className,
+                                  style
+                              }: {
+    className?: string
+    style?: React.CSSProperties
+}) {
 
     const {
         hovered,
@@ -77,9 +84,9 @@ export function Drawer() {
     };
 
     return (
-        <>
+        <div className={cls("flex-grow w-full", className)} style={style}>
 
-            <div className={"flex-grow overflow-scroll no-scrollbar"}>
+            <div className={"overflow-scroll no-scrollbar"}>
 
                 {groupsWithoutAdmin.map((group) => (
                     <React.Fragment
@@ -134,6 +141,6 @@ export function Drawer() {
                     </MenuItem>)}
 
             </Menu>}
-        </>
+        </div>
     );
 }

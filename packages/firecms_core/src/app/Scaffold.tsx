@@ -2,14 +2,15 @@ import React, { PropsWithChildren, useCallback } from "react";
 import equal from "react-fast-compare"
 import { Link } from "react-router-dom";
 
-import { Drawer as DefaultDrawer, DrawerProps } from "./Drawer";
+import { DrawerState } from "../core/DefaultDrawer";
 import { useLargeLayout, useNavigationController } from "../hooks";
-import { ErrorBoundary, FireCMSAppBar as DefaultFireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "../components";
+import { ErrorBoundary, FireCMSLogo } from "../components";
 import { ChevronLeftIcon, cls, defaultBorderMixin, IconButton, MenuIcon, Sheet, Tooltip } from "@firecms/ui";
 
 export const DRAWER_WIDTH = 280;
 
-const DrawerContext = React.createContext<DrawerProps>({
+const DrawerContext = React.createContext<DrawerState>({
+    hasDrawer: false,
     hovered: false,
     drawerOpen: false,
     openDrawer: () => {
@@ -28,12 +29,7 @@ export function useDrawer() {
 /**
  * @group Core
  */
-export interface ScaffoldProps<ExtraAppbarProps = object> {
-
-    /**
-     * Name of the app, displayed as the main title and in the tab title
-     */
-    name?: React.ReactNode;
+export interface ScaffoldProps {
 
     /**
      * Logo to be displayed in the drawer of the CMS
@@ -41,31 +37,13 @@ export interface ScaffoldProps<ExtraAppbarProps = object> {
     logo?: string;
 
     /**
-     * Whether to include the drawer in the scaffold
-     */
-    includeDrawer?: boolean;
-
-    /**
-     * You can define a custom drawer to be displayed in the scaffold.
-     * Use the hook `useDrawer` to access the context values.
-     */
-    drawer?: React.ReactNode;
-
-    /**
      * Open the drawer on hover
      */
     autoOpenDrawer?: boolean;
 
-    /**
-     * The AppBar component to be used in the scaffold.
-     */
-    FireCMSAppBar?: React.ComponentType<FireCMSAppBarProps<ExtraAppbarProps>>;
+    className?: string;
 
-    /**
-     * Additional props passed to the custom AppBar
-     */
-    fireCMSAppBarProps?: Partial<FireCMSAppBarProps> & ExtraAppbarProps;
-
+    style?: React.CSSProperties;
 }
 
 /**
@@ -84,15 +62,23 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
 
         const {
             children,
-            name,
             logo,
-            includeDrawer = true,
             autoOpenDrawer,
-            drawer = <DefaultDrawer/>,
-            FireCMSAppBar = DefaultFireCMSAppBar,
-            fireCMSAppBarProps,
+            className,
+            style
         } = props;
 
+        const drawerChildren = React.Children.toArray(children).filter((child: any) => child.type.componentType === "Drawer");
+        if (drawerChildren.length > 1) {
+            throw Error("Only one Drawer component is allowed in Scaffold");
+        }
+        const appBarChildren = React.Children.toArray(children).filter((child: any) => child.type.componentType === "AppBar");
+        if (appBarChildren.length > 1) {
+            throw Error("Only one AppBar component is allowed in Scaffold");
+        }
+        const otherChildren = React.Children.toArray(children)
+            .filter((child: any) => child.type.componentType !== "Drawer" && child.type.componentType !== "AppBar");
+        const includeDrawer = drawerChildren.length > 0;
         const largeLayout = useLargeLayout();
 
         const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -113,6 +99,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
 
         return (
             <DrawerContext.Provider value={{
+                hasDrawer: includeDrawer,
                 hovered: onHover,
                 drawerOpen: computedDrawerOpen,
                 closeDrawer: handleDrawerClose,
@@ -120,20 +107,18 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                 autoOpenDrawer
             }}>
                 <div
-                    className="flex h-screen w-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white overflow-hidden"
+                    className={cls("flex h-screen w-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white overflow-hidden", className)}
                     style={{
                         paddingTop: "env(safe-area-inset-top)",
                         paddingLeft: "env(safe-area-inset-left)",
                         paddingRight: "env(safe-area-inset-right)",
                         paddingBottom: "env(safe-area-inset-bottom)",
-                        height: "100dvh"
+                        height: "100dvh",
+                        ...style
                     }}>
 
-                    <FireCMSAppBar title={name}
-                                   includeDrawer={includeDrawer}
-                                   logo={logo}
-                                   drawerOpen={computedDrawerOpen}
-                                   {...fireCMSAppBarProps}/>
+                    {appBarChildren}
+
                     <DrawerWrapper
                         displayed={includeDrawer}
                         onMouseEnter={setOnHoverTrue}
@@ -143,7 +128,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                         logo={logo}
                         hovered={onHover}
                         setDrawerOpen={setDrawerOpen}>
-                        {includeDrawer && drawer}
+                        {includeDrawer && drawerChildren}
                     </DrawerWrapper>
 
                     <main
@@ -153,7 +138,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                             className={cls(defaultBorderMixin, "flex-grow overflow-auto lg:m-0 lg:mx-4 lg:mb-4 lg:rounded-lg lg:border lg:border-solid m-0 mt-1")}>
 
                             <ErrorBoundary>
-                                {children}
+                                {otherChildren}
                             </ErrorBoundary>
 
                         </div>

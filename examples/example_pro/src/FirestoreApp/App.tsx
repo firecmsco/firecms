@@ -7,9 +7,11 @@ import { getAnalytics, logEvent } from "@firebase/analytics";
 
 import { CenteredView, GitHubIcon, IconButton, Tooltip, } from "@firecms/ui";
 import {
+    AppBar,
     Authenticator,
     CircularProgressCenter,
     CMSView,
+    Drawer,
     EntityCollection,
     FireCMS,
     ModeControllerProvider,
@@ -59,7 +61,6 @@ import { TestEditorView } from "./TestEditorView";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { ReCaptchaEnterpriseProvider } from "@firebase/app-check";
-import { algoliaSearchControllerBuilder } from "./text_search";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com"];
 
@@ -304,13 +305,12 @@ function App() {
                                                     notAllowedError={notAllowedError}/>
                         }
 
-                        return <Scaffold
-                            name={"My demo app"}
-                            fireCMSAppBarProps={{
-                                endAdornment: githubLink,
-                                // includeModeToggle: false
-                            }}
-                            autoOpenDrawer={false}>
+                        return <Scaffold>
+                            <AppBar
+                                title={"My demo app"}
+                                endAdornment={githubLink}/>
+                            <Drawer
+                                className={"bg-red-500"}/>
                             <NavigationRoutes/>
                             <SideDialogs/>
                         </Scaffold>;

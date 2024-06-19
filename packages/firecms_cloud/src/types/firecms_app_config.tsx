@@ -5,7 +5,7 @@ import {
     EntityCollection,
     EntityCollectionsBuilder,
     EntityCustomView,
-    FireCMSAppBarProps,
+    DefaultAppBarProps,
     Locale,
     ModifyCollectionProps,
     PropertyConfig
@@ -72,7 +72,7 @@ export type FireCMSAppConfig = {
     /**
      * Additional props passed to the custom AppBar
      */
-    fireCMSAppBarComponentProps?: Partial<FireCMSAppBarProps>;
+    fireCMSAppBarComponentProps?: Partial<DefaultAppBarProps>;
 
     /**
      * Use this builder to indicate which indexes are available in your

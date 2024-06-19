@@ -16,8 +16,9 @@ import {
 } from "@firecms/ui";
 import { useAuthController, useLargeLayout, useModeController, useNavigationController } from "../hooks";
 import { User } from "../types";
+import { useDrawer } from "../app";
 
-export type FireCMSAppBarProps<ADDITIONAL_PROPS = object> = {
+export type DefaultAppBarProps<ADDITIONAL_PROPS = object> = {
 
     title?: React.ReactNode;
     /**
@@ -29,11 +30,7 @@ export type FireCMSAppBarProps<ADDITIONAL_PROPS = object> = {
 
     dropDownActions?: React.ReactNode;
 
-    includeDrawer?: boolean;
-
     includeModeToggle?: boolean;
-
-    drawerOpen: boolean;
 
     className?: string;
 
@@ -48,24 +45,24 @@ export type FireCMSAppBarProps<ADDITIONAL_PROPS = object> = {
  * This component renders the main app bar of FireCMS.
  * You will likely not need to use this component directly.
  *
- * @param title
- * @param toolbarExtraWidget
- * @param drawerOpen
  * @constructor
  */
-export const FireCMSAppBar = function FireCMSAppBar({
+export const DefaultAppBar = function DefaultAppBar({
                                                         title,
                                                         endAdornment,
                                                         startAdornment,
-                                                        drawerOpen,
                                                         dropDownActions,
-                                                        includeDrawer,
                                                         includeModeToggle = true,
                                                         className,
                                                         style,
                                                         logo,
                                                         user: userProp
-                                                    }: FireCMSAppBarProps) {
+                                                    }: DefaultAppBarProps) {
+
+    const {
+        hasDrawer,
+        drawerOpen
+    } = useDrawer();
     const navigation = useNavigationController();
 
     const authController = useAuthController();
@@ -96,20 +93,15 @@ export const FireCMSAppBar = function FireCMSAppBar({
     return (
         <div
             style={style}
-            className={cls("pr-2",
+            className={cls("pr-2 h-16 transition-all ease-in duration-75 fixed",
                 {
                     "ml-[17rem]": drawerOpen && largeLayout,
-                    "ml-16": includeDrawer && !(drawerOpen && largeLayout),
-                    "h-16": true,
+                    "ml-16": hasDrawer && !(drawerOpen && largeLayout),
                     "z-10": largeLayout,
-                    "transition-all": true,
-                    "ease-in": true,
-                    "duration-75": true,
-                    "w-full": !includeDrawer,
-                    "w-[calc(100%-64px)]": includeDrawer && !(drawerOpen && largeLayout),
-                    "w-[calc(100%-17rem)]": includeDrawer && (drawerOpen && largeLayout),
+                    "w-full": !hasDrawer,
+                    "w-[calc(100%-64px)]": hasDrawer && !(drawerOpen && largeLayout),
+                    "w-[calc(100%-17rem)]": hasDrawer && (drawerOpen && largeLayout),
                     "duration-150": drawerOpen && largeLayout,
-                    fixed: true
                 },
                 className)}>
 
@@ -121,7 +113,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                         to={navigation?.basePath ?? "/"}
                     >
                         <div className={"flex flex-row gap-4"}>
-                            {!includeDrawer && (logo
+                            {!hasDrawer && (logo
                                 ? <img src={logo}
                                        alt="Logo"
                                        className={cls("w-[32px] h-[32px]")}/>

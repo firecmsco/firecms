@@ -29,7 +29,7 @@ export * from "./DeleteConfirmationDialog";
 
 export * from "./FireCMSLogo";
 
-export * from "./FireCMSAppBar";
+export * from "../core/DefaultAppBar";
 
 export * from "./ArrayContainer";
 export * from "./ReferenceWidget";
