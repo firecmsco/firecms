@@ -1,6 +1,6 @@
 {
   "name": "@firecms/datatalk",
-  "version": "3.0.0-beta.7",
+  "version": "3.0.0-canary.59",
   "description": "Talk to your Firestore data",
   "license": "Apache-2.0",
   "type": "module",
@@ -30,13 +30,13 @@
     "react-dom": "^18.0.0"
   },
   "dependencies": {
-    "@firecms/collection_editor_firebase": "^3.0.0-beta.7",
-    "@firecms/core": "^3.0.0-beta.7",
-    "@firecms/data_import_export": "^3.0.0-beta.7",
-    "@firecms/firebase": "^3.0.0-beta.7",
-    "@firecms/formex": "^3.0.0-beta.7",
-    "@firecms/schema_inference": "^3.0.0-beta.7",
-    "@firecms/ui": "^3.0.0-beta.7",
+    "@firecms/collection_editor_firebase": "^3.0.0-canary.59",
+    "@firecms/core": "^3.0.0-canary.59",
+    "@firecms/data_import_export": "^3.0.0-canary.59",
+    "@firecms/firebase": "^3.0.0-canary.59",
+    "@firecms/formex": "^3.0.0-canary.59",
+    "@firecms/schema_inference": "^3.0.0-canary.59",
+    "@firecms/ui": "^3.0.0-canary.59",
     "@monaco-editor/react": "^4.6.0"
   },
   "devDependencies": {
@@ -46,5 +46,5 @@
     "typescript": "^5.4.5",
     "vite": "^5.2.12"
   },
-  "gitHead": "8fb738b6abf384c0cba679f293b049a0ac56a7c2"
+  "gitHead": "b1f5dbd89d66bd75e8d214a4a6c40e07e371a1d1"
 }
