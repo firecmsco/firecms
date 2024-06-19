@@ -91,8 +91,8 @@ module.exports = {
         image: "img/logo_small.png",
         description: "Awesome headless CMS based Firestore/Firebase and React, and completely open-source",
         announcementBar: {
-            id: "beta-6",
-            content: "<b>FireCMS</b> <code>3.0.0-beta.6</code> is out now! 🚀 FireCMS PRO is ready for testing at a discounted price. <a href='/pro'>Learn more</a>",
+            id: "beta-7",
+            content: "<b>FireCMS</b> <code>3.0.0-beta.7</code> is out now! 🚀 FireCMS PRO is ready for testing at a discounted price. <a href='/pro'>Learn more</a>",
             backgroundColor: "#FF5B79",
             textColor: "black",
             isCloseable: true,
