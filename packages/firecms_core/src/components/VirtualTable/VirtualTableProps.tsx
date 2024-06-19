@@ -132,6 +132,11 @@ export interface VirtualTableProps<T extends Record<string, any>> {
     className?: string;
 
     /**
+     * Style applied to the table
+     */
+    style?: React.CSSProperties;
+
+    /**
      * Component rendered at the end of the table, after scroll
      */
     endAdornment?: React.ReactNode;

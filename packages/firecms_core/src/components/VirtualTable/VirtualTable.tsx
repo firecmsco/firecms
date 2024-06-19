@@ -107,6 +107,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                                                              hoverRow,
                                                              createFilterField,
                                                              rowClassName,
+                                                             style,
                                                              className,
                                                              endAdornment,
                                                              AddColumnComponent
@@ -239,7 +240,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         const empty = !loading && (data?.length ?? 0) === 0;
         const customView = error
             ? <CenteredView maxWidth={"2xl"}
-                className="flex flex-col gap-2">
+                            className="flex flex-col gap-2">
 
                 <Typography variant={"h6"}>
                     {"Error fetching data from the data source"}
@@ -275,6 +276,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         return (
             <div
                 ref={measureRef}
+                style={style}
                 className={cls("h-full w-full", className)}>
                 <VirtualListContext.Provider
                     value={virtualListController}>
