@@ -1,7 +1,7 @@
 {
   "name": "@firecms/firebase",
   "type": "module",
-  "version": "3.0.0-canary.62",
+  "version": "3.0.0-canary.63",
   "publishConfig": {
     "access": "public"
   },
@@ -10,12 +10,12 @@
   "types": "./dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/collection_editor": "^3.0.0-canary.62",
-    "@firecms/core": "^3.0.0-canary.62",
-    "@firecms/data_enhancement": "^3.0.0-canary.62",
-    "@firecms/data_import_export": "^3.0.0-canary.62",
-    "@firecms/schema_inference": "^3.0.0-canary.62",
-    "@firecms/ui": "^3.0.0-canary.62",
+    "@firecms/collection_editor": "^3.0.0-canary.63",
+    "@firecms/core": "^3.0.0-canary.63",
+    "@firecms/data_enhancement": "^3.0.0-canary.63",
+    "@firecms/data_import_export": "^3.0.0-canary.63",
+    "@firecms/schema_inference": "^3.0.0-canary.63",
+    "@firecms/ui": "^3.0.0-canary.63",
     "firebase": "^10.12.2",
     "js-search": "^2.0.1",
     "react-router": "^6.23.1",
@@ -64,5 +64,5 @@
       "react-app/jest"
     ]
   },
-  "gitHead": "bd4ff11fc59df78b8967e20c2229afab86e35d81"
+  "gitHead": "75f1049ecbeaf3ee6d73b52a7432ac199c4a9877"
 }
