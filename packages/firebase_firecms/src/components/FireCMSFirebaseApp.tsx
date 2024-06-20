@@ -3,7 +3,8 @@ import { GoogleAuthProvider } from "@firebase/auth";
 
 import {
     AppBar,
-    CircularProgressCenter, Drawer,
+    CircularProgressCenter,
+    Drawer,
     FireCMS,
     ModeControllerProvider,
     NavigationRoutes,
@@ -216,8 +217,8 @@ export function FireCMSFirebaseApp({
                                     <Scaffold
                                         logo={usedLogo}
                                         autoOpenDrawer={autoOpenDrawer}>
-                                        <AppBar title={name}/>
-                                        <Drawer/>
+                                        <AppBar title={name} logo={usedLogo}/>
+                                        <Drawer />
                                         <NavigationRoutes
                                             homePage={components?.HomePage ? <components.HomePage/> : undefined}/>
                                         <SideDialogs/>

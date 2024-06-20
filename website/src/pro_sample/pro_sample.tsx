@@ -154,9 +154,8 @@ function ProSampleInner() {
                         }
 
                         return <Scaffold
-                            name={"My demo app"}
                             autoOpenDrawer={false}>
-                            <AppBar/>
+                            <AppBar title={"My demo app"}/>
                             <Drawer/>
                             <NavigationRoutes/>
                             <SideDialogs/>

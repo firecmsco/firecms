@@ -16,7 +16,7 @@ import {
 } from "@firecms/ui";
 import { useAuthController, useLargeLayout, useModeController, useNavigationController } from "../hooks";
 import { User } from "../types";
-import { useDrawer } from "../app";
+import { useApp } from "../app/useApp";
 
 export type DefaultAppBarProps<ADDITIONAL_PROPS = object> = {
 
@@ -55,14 +55,14 @@ export const DefaultAppBar = function DefaultAppBar({
                                                         includeModeToggle = true,
                                                         className,
                                                         style,
-                                                        logo,
                                                         user: userProp
                                                     }: DefaultAppBarProps) {
 
     const {
         hasDrawer,
-        drawerOpen
-    } = useDrawer();
+        drawerOpen,
+        logo
+    } = useApp();
     const navigation = useNavigationController();
 
     const authController = useAuthController();
@@ -93,14 +93,14 @@ export const DefaultAppBar = function DefaultAppBar({
     return (
         <div
             style={style}
-            className={cls("pr-2 h-16 transition-all ease-in duration-75 fixed",
+            className={cls("pr-2 w-full h-16 transition-all ease-in duration-75 fixed",
                 {
-                    "ml-[17rem]": drawerOpen && largeLayout,
-                    "ml-16": hasDrawer && !(drawerOpen && largeLayout),
+                    "pl-[17rem]": drawerOpen && largeLayout,
+                    "pl-20": hasDrawer && !(drawerOpen && largeLayout),
                     "z-10": largeLayout,
-                    "w-full": !hasDrawer,
-                    "w-[calc(100%-64px)]": hasDrawer && !(drawerOpen && largeLayout),
-                    "w-[calc(100%-17rem)]": hasDrawer && (drawerOpen && largeLayout),
+                    // "w-full": !hasDrawer,
+                    // "w-[calc(100%-64px)]": hasDrawer && !(drawerOpen && largeLayout),
+                    // "w-[calc(100%-17rem)]": hasDrawer && (drawerOpen && largeLayout),
                     "duration-150": drawerOpen && largeLayout,
                 },
                 className)}>

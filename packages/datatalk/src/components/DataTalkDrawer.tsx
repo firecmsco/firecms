@@ -1,18 +1,18 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-import { useDrawer, useNavigationController } from "@firecms/core";
+import { useApp, useNavigationController } from "@firecms/core";
 import { useDataTalk } from "../DataTalkProvider";
 import { cls, ManageSearchIcon, Typography } from "@firecms/ui";
 
 export function DataTalkDrawer() {
 
     const {
-        hovered,
+        drawerHovered,
         drawerOpen,
         openDrawer,
         closeDrawer
-    } = useDrawer();
+    } = useApp();
 
     const navigation = useNavigationController();
 

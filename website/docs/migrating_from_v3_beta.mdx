@@ -4,6 +4,21 @@ title: Migrating from previous beta versions
 sidebar_label: Migrating from previous beta versions
 ---
 
+## FireCMS PRO
+
+If you are migrating from previous beta versions of FireCMS PRO, you will need to make some updates to your project.
+The main components have changed theis composition. Instead of having a single `Scaffold` components with all the configuration,
+you have additionally an `AppBar` and a `Drawer` component.
+
+This is how the new structure looks like:
+
+```tsx
+
+````
+
+
+## FireCMS Cloud
+
 If you are migrating from previous beta versions of FireCMS Cloud, you will need to make some updates to your project.
 
 ### Dependencies
@@ -83,7 +98,20 @@ export default defineConfig({
                 "./config": "./src/index"
             },
             shared: [
-                "react", "react-dom", "@firecms/cloud", "@firecms/core", "@firecms/firebase", "@firecms/ui",
+                "react",
+                "react-dom",
+                "@firecms/cloud",
+                "@firecms/core",
+                "@firecms/firebase",
+                "@firecms/ui",
+                "@firebase/firestore",
+                "@firebase/app",
+                "@firebase/functions",
+                "@firebase/auth",
+                "@firebase/storage",
+                "@firebase/analytics",
+                "@firebase/remote-config",
+                "@firebase/app-check"
             ]
         })
     ],

@@ -5,7 +5,8 @@ import "@fontsource/jetbrains-mono";
 
 import {
     AppBar,
-    CircularProgressCenter, Drawer,
+    CircularProgressCenter,
+    Drawer,
     FireCMS,
     ModeControllerProvider,
     NavigationRoutes,
@@ -26,7 +27,6 @@ import {
     useFirebaseRTDBDelegate,
     useFirebaseStorageSource,
     useInitialiseFirebase,
-    useAppCheck,
 } from "@firecms/firebase";
 
 import { productsCollection } from "./collections/products_collection";

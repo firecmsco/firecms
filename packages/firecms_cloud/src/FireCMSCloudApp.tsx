@@ -5,11 +5,11 @@ import { BrowserRouter, Route } from "react-router-dom";
 import {
     AppBar,
     CircularProgressCenter,
+    DefaultAppBarProps,
     Drawer,
     EntityCollection,
     ErrorView,
     FireCMS,
-    DefaultAppBarProps,
     FireCMSPlugin,
     ModeController,
     ModeControllerProvider,
@@ -183,10 +183,9 @@ function FullLoadingView(props: {
     text?: string
 }) {
     return <Scaffold
-        key={"project_scaffold_" + props.projectId}
-        logo={props.projectConfig?.logo}>
+        key={"project_scaffold_" + props.projectId}>
 
-        <AppBar>
+        <AppBar logo={props.projectConfig?.logo}>
             {props.FireCMSAppBarComponent &&
                 <props.FireCMSAppBarComponent title={props.projectConfig?.projectName ?? ""}/>}
         </AppBar>
@@ -403,10 +402,9 @@ export function FireCMSClientWithController({
 
     if (loadingOrErrorComponent) {
         return <Scaffold
-            key={"project_scaffold_" + projectConfig.projectId}
-            logo={projectConfig?.logo ?? props.logo}
-        >
-            <AppBar>
+            key={"project_scaffold_" + projectConfig.projectId}>
+            <AppBar
+                logo={projectConfig?.logo ?? props.logo}>
                 {props.FireCMSAppBarComponent &&
                     <props.FireCMSAppBarComponent title={projectConfig.projectName ?? ""}
                                                   {...appConfig?.fireCMSAppBarComponentProps}/>}
@@ -651,9 +649,9 @@ function FireCMSAppAuthenticated({
                                     if (loading) {
                                         component =
                                             <Scaffold
-                                                key={"project_scaffold_" + projectConfig.projectId}
-                                                logo={projectConfig.logo ?? logo}>
-                                                <AppBar>
+                                                key={"project_scaffold_" + projectConfig.projectId}>
+                                                <AppBar
+                                                    logo={projectConfig.logo ?? logo}>
                                                     {FireCMSAppBarComponent &&
                                                         <FireCMSAppBarComponent title={projectConfig.projectName ?? ""}
                                                                                 {...appConfig?.fireCMSAppBarComponentProps}/>}
@@ -663,15 +661,15 @@ function FireCMSAppAuthenticated({
                                     } else {
                                         component = (
                                             <Scaffold
-                                                key={"project_scaffold_" + projectConfig.projectId}
                                                 logo={projectConfig.logo ?? logo}
+                                                key={"project_scaffold_" + projectConfig.projectId}
                                                 autoOpenDrawer={appConfig?.autoOpenDrawer}>
                                                 <AppBar>
                                                     {FireCMSAppBarComponent &&
                                                         <FireCMSAppBarComponent title={projectConfig.projectName ?? ""}
                                                                                 {...appConfig?.fireCMSAppBarComponentProps}/>}
                                                 </AppBar>
-                                                <Drawer>
+                                                <Drawer >
                                                     {dataTalkMode
                                                         ? <FireCMSCloudDataTalkDrawer/>
                                                         : <FireCMSCloudDrawer/>}

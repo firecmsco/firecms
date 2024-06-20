@@ -43,7 +43,7 @@ import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection
 
 export function App() {
 
-    const name = "My CMS app";
+    const title = "My CMS app";
 
     const {
         firebaseApp,
@@ -218,8 +218,10 @@ export function App() {
                                 );
                             } else {
                                 component = (
-                                    <Scaffold autoOpenDrawer={false}>
-                                        <AppBar title={name}/>
+                                    <Scaffold
+                                        // logo={...}
+                                        autoOpenDrawer={false}>
+                                        <AppBar title={title}/>
                                         <Drawer/>
                                         <NavigationRoutes/>
                                         <SideDialogs/>

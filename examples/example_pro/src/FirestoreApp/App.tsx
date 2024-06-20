@@ -309,8 +309,7 @@ function App() {
                             <AppBar
                                 title={"My demo app"}
                                 endAdornment={githubLink}/>
-                            <Drawer
-                                className={"bg-red-500"}/>
+                            <Drawer/>
                             <NavigationRoutes/>
                             <SideDialogs/>
                         </Scaffold>;

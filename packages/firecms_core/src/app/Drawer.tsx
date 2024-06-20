@@ -5,12 +5,12 @@ import { DefaultDrawer } from "../core";
  * If you add this component under your {@link Scaffold}, it will be rendered
  * as a drawer, and the open and close functionality will be handled automatically.
  * If you want to customise the drawer, you can create your own component and pass it as a child.
- * For custom drawers, you can use the {@link useDrawer} to open and close the drawer.
+ * For custom drawers, you can use the {@link useApp} to open and close the drawer.
  *
  * @constructor
  */
 export function Drawer({
-                           children = <DefaultDrawer/>,
+                           children,
                            className,
                            style
                        }: {
