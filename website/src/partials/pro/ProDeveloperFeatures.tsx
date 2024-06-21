@@ -199,9 +199,9 @@ const proExampleCode = `function ProSample() {
                                                       signInOptions={signInOptions}/>
                         }
 
-                        return <Scaffold
-                            name={"My demo app"}
-                            autoOpenDrawer={false}>
+                        return <Scaffold autoOpenDrawer={false}>
+                            <AppBar title={"My amazing CMS"}/>
+                            <Drawer/>
                             <NavigationRoutes/>
                             <SideDialogs/>
                         </Scaffold>;

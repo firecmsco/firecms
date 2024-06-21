@@ -266,9 +266,9 @@ the routing, but you are free to replace it with your own routing system.
                                 );
                             } else {
                                 component = (
-                                    <Scaffold
-                                        name={name}
-                                        autoOpenDrawer={false}>
+                                    <Scaffold autoOpenDrawer={false}>
+                                        <AppBar title={"My amazing CMS"}/>
+                                        <Drawer/>
                                         <NavigationRoutes/>
                                         <SideDialogs/>
                                     </Scaffold>
@@ -283,3 +283,6 @@ the routing, but you are free to replace it with your own routing system.
         </SnackbarProvider>
     );
 ```
+
+
+Find more details about the main components in the [Main Components](main_components) section.

@@ -1,78 +1,195 @@
 ---
-id: deployment
-title: Self-Hosted Deployment
-sidebar_label: Deployment
-description: Deploy your custom features effortlessly with FireCMS PRO, as it stands out for its capability to host custom user code. FireCMS ensures a seamless integration of your unique needs by leveraging module federation and vite for compiling, allowing the use of any npm package. Simply run `yarn deploy` to serve your CMS directly from FireCMS Cloud without fretting over dependency clashes or CMS version updates. Additionally, FireCMS offers a CLI tool for straightforward cloud deployment management. Deploy outside of FireCMS Cloud with a PRO plan using Firebase Hosting; just configure SPA redirects in your Firebase project and deploy with `yarn run build && firebase deploy --only hosting` to bring your tailored CMS experience to the web.
+id: main_components
+title: Main Components
+sidebar_label: Main Components
+description: FireCMS provides a set of stylable components that scaffold the CMS interface. These components are designed to be easily customizable and can be extended to fit your needs.
 ---
 
-FireCMS works as a **headless CMS** on top of Firebase. It builds as a **single page application** that can be deployed 
-to any static hosting provider. It does not require any server-side code. 
+## Components
 
-We recommend deploying to Firebase Hosting, as it is in the same ecosystem, and FireCMS will even
-pick up the Firebase config from the environment.
+FireCMS provides a set of stylable components that scaffold the CMS interface.
+These components are designed to be easily customizable and can be extended to fit your needs. The main components are:
 
+### Scaffold
 
-## Deployment to Firebase Hosting
+The `Scaffold` is typically the top level component for logged-in users. It provides the main layout for the CMS,
+including the drawer, the appbar, and the main content area.
 
-If you would like to deploy your CMS to Firebase Hosting, you need to enable
-it first in the Hosting tab of your Firebase project.
+You can customize the `Scaffold` by providing your own components for the drawer, appbar, and content area.
+You can also apply classes to the `Scaffold` to style it according to your needs.
 
-You will need to init Firebase, either with an existing project or a new one:
+#### Props:
 
-```
-firebase init
-```
+- `autoOpenDrawer`: Open the drawer on hover.
+- `logo`: Logo to be displayed in the top bar and drawer.
+  Note that this has no effect if you are using a custom AppBar or Drawer.
+- `className`: Additional classes to apply to the Scaffold.
+- `style`: Additional styles to apply to the Scaffold.
+- `children`: The children of the Scaffold. Typically, these are the AppBar, Drawer, NavigationRoutes, and SideDialogs.
 
-:::note
-You don't need to enable any of the services, besides Firebase Hosting if you
-would like to deploy it there.
-:::
+#### Example:
 
-You can link the Firebase hosting site to the webapp that you have created
-in order to get your Firebase config.
-
-In order to make everything work as expected, you need to setup Firebase Hosting
-redirects to work as a SPA. Your **firebase.json** should
-look similar to this (remember to replace `[YOUR_SITE_HERE]`).
-
-```json5
-{
-  "hosting": {
-    "site": "[YOUR_SITE_HERE]",
-    "public": "dist",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  }
-}
-
+```jsx
+import { Scaffold, AppBar, Drawer, NavigationRoutes, SideDialogs } from "@firecms/core";
+import logo from "./images/logo.png";
+//...
+return <Scaffold
+    logo={logo}
+    autoOpenDrawer>
+    <AppBar title={"My CMS app"}/>
+    <Drawer/>
+    <NavigationRoutes/>
+    <SideDialogs/>
+</Scaffold>
 ```
 
-Then simply run:
+### AppBar
 
+The `AppBar` is the top bar of the CMS. It typically contains the logo, the title, and the user menu.
+The default appbar includes an avatar tied to the logged-user.
+
+#### Props:
+
+- `title`: Title to be displayed in the appbar.
+- `endAdornment`: Component to be displayed on the right side of the appbar.
+- `startAdornment`: Component to be displayed on the left side of the appbar.
+- `dropDownActions`: Component to be displayed as a dropdown in the appbar. The content is displayed as children of
+  a `Menu` component, so you will likely want to use `MenuItem` components.
+- `includeModeToggle`: Whether to include the color mode toggle in the appbar (dark/light mode).
+- `className`: Additional classes to apply to the AppBar.
+- `style`: Additional styles to apply to the AppBar.
+- `children`: Define your own AppBar content. If you define children, the title, endAdornment, and dropDownActions will be
+  ignored.
+
+#### Example:
+
+```tsx
+import { AppBar } from "@firecms/core";
+import { Button, ForumIcon, LogoutIcon, MenuItem, PaymentIcon, Tooltip } from "@firecms/ui";
+//...
+return <AppBar title={title}
+               endAdornment={<>
+                   <Tooltip title={"Your custom action"}>
+                       <Button variant={"outlined"}><ForumIcon size="small"/></Button>
+                   </Tooltip>
+               </>}
+               dropDownActions={
+                   <>
+                       <MenuItem onClick={() => {
+                           console.log("Settings clicked");
+                       }}>
+                           <PaymentIcon size="small"/> Settings
+                       </MenuItem>
+                       <MenuItem onClick={() => {
+                           console.log("Logout clicked");
+                       }}>
+                           <LogoutIcon size="small"/>
+                           Logout
+                       </MenuItem>
+                   </>
+               }/>
 ```
-yarn run build && firebase deploy --only hosting
+
+#### Replace the default AppBar
+
+You can replace the default AppBar by wrapping your custom component with the `AppBar`:
+
+```tsx
+import { AppBar, Scaffold } from "@firecms/core";
+//...
+return <Scaffold>
+    <AppBar>
+        <div>My custom appbar</div>
+    </AppBar>
+    {/* ... */}
+</Scaffold>
 ```
 
-to deploy.
+All the props passed to the `AppBar` will be ignored if you define a custom component.
 
+### Drawer
 
-## Deploying to other platforms
+The `Drawer` is the left-side menu of the CMS. It typically contains the navigation routes and the user menu.
+If you define a `Drawer` component, the `Scaffold` will automatically include a hamburger icon to open and close the
+drawer.
+If you don't include a drawer, the hamburger icon will not be displayed.
 
-If you would like to deploy your CMS to other platforms, you can build it
-with:
+The default drawer includes the navigation routes to your collections, as well as links to the admin views.
 
+#### Props:
+
+- `className`: Additional classes to apply to the Drawer.
+- `style`: Additional styles to apply to the Drawer.
+- `children`: Define your own Drawer content. If you define children, the navigation routes will be ignored.
+
+#### Custom drawer example
+
+You can replace the default Drawer by wrapping your custom component with the `Drawer`.
+Note that the burger icon will be displayed automatically if you define a custom Drawer.
+
+```tsx
+import { Drawer, Scaffold } from "@firecms/core";
+//...
+return <Scaffold>
+    <Drawer>
+        <div>My custom drawer</div>
+    </Drawer>
+    {/* ... */}
+</Scaffold>
 ```
-yarn run build
+
+### NavigationRoutes
+
+The `NavigationRoutes` component defines a `Routes` component (`react-router-dom`) that contains the routes to your
+home page, collections, custom views and admin views.
+
+It picks up all the configuration automatically from the `FireCMS` configuration.
+Note that you can also define your own routes if you need to.
+
+#### Props:
+
+- `homePage`: Component to be displayed in the home page. If not provided, the default home page will be displayed.
+- `children`: Define your own routes. Note that these routes will be appended to the default routes.
+
+#### Example:
+
+```tsx
+import { NavigationRoutes } from "@firecms/core";
+//...
+return <NavigationRoutes homePage={<>My custom home page</>}>
+    {/* Define your custom routes here, using react-router */}
+    <Route
+        key={"navigation_admin_" + path}
+        path={"invoices"}
+        element={<InvoicesPage/>}
+    />
+</NavigationRoutes>
 ```
 
-and then serve the **dist** folder with your favorite static hosting provider.
+Note that you can also define custom views by defining them in `useBuildNavigationController`, with the 
+added benefit that they will be automatically included in the default drawer.
+
+### SideDialogs
+
+The `SideDialogs` component is a container for side dialogs. Side dialogs are typically used to display forms or
+additional information in a side panel.
+
+You can access the `useSideDialogsController` hook to open and close side dialogs programmatically from your 
+custom components.
+
+
+## Utilities
+
+### `useApp()` hook
+
+You can use the `useApp()` hook to access the `AppState` object from the context. This object contains the following properties:
+
+- `hasDrawer`: Whether the drawer is enabled.
+- `drawerHovered`: Whether the drawer is currently hovered.
+- `drawerOpen`: Whether the drawer is currently open.
+- `openDrawer`: Function to open the drawer.
+- `closeDrawer`: Function to close the drawer.
+- `autoOpenDrawer`: Whether the drawer should open on hover.
+- `logo`: Logo to be displayed in the top bar and drawer.
+
 

@@ -36,6 +36,11 @@ module.exports = {
         },
         {
           type: 'doc',
+          id: "pro/main_components",
+          className: "pro-sidebar-item"
+        },
+        {
+          type: 'doc',
           id: "pro/deployment",
           className: "pro-sidebar-item"
         },

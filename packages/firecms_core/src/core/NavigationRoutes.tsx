@@ -15,7 +15,7 @@ export type NavigationRoutesProps = {
      */
     homePage?: React.ReactNode;
 
-    customRoutes?: React.ReactNode[]
+    children?: React.ReactNode | React.ReactNode[]
 
 };
 
@@ -31,7 +31,7 @@ export type NavigationRoutesProps = {
 export const NavigationRoutes = React.memo<NavigationRoutesProps>(
     function NavigationRoutes({
                                   homePage = <DefaultHomePage/>,
-                                  customRoutes
+                                  children
                               }: NavigationRoutesProps) {
 
         const location = useLocation();
@@ -111,7 +111,7 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
 
                 {notFoundRoute}
 
-                {customRoutes}
+                {children}
 
             </Routes>
         );

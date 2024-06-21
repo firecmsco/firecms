@@ -4,7 +4,7 @@ import React from "react";
  * This context represents the state of the app in terms of layout.
  * @group Core
  */
-export type DrawerState = {
+export type AppState = {
     hasDrawer: boolean,
     drawerHovered: boolean,
     drawerOpen: boolean,
@@ -14,7 +14,7 @@ export type DrawerState = {
     logo?: string
 }
 
-export const AppContext = React.createContext<DrawerState>({
+export const AppContext = React.createContext<AppState>({
     hasDrawer: false,
     drawerHovered: false,
     drawerOpen: false,

@@ -669,7 +669,7 @@ function FireCMSAppAuthenticated({
                                                         <FireCMSAppBarComponent title={projectConfig.projectName ?? ""}
                                                                                 {...appConfig?.fireCMSAppBarComponentProps}/>}
                                                 </AppBar>
-                                                <Drawer >
+                                                <Drawer>
                                                     {dataTalkMode
                                                         ? <FireCMSCloudDataTalkDrawer/>
                                                         : <FireCMSCloudDrawer/>}
@@ -678,7 +678,9 @@ function FireCMSAppAuthenticated({
                                                     homePage={appConfig?.HomePage
                                                         ? <appConfig.HomePage/>
                                                         : <FireCMSCloudHomePage/>}
-                                                    customRoutes={adminRoutes}/>
+                                                >
+                                                    {adminRoutes}
+                                                </NavigationRoutes>
                                                 <SideDialogs/>
                                             </Scaffold>
                                         );

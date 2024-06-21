@@ -17,6 +17,10 @@ export interface ScaffoldProps {
      */
     autoOpenDrawer?: boolean;
 
+    /**
+     * Logo to be displayed in the top bar and drawer.
+     * Note that this has no effect if you are using a custom AppBar or Drawer.
+     */
     logo?: string;
 
     className?: string;
@@ -174,7 +178,7 @@ function DrawerWrapper(props: {
         )}
 
         <div
-            className={`absolute right-0 top-4 ${
+            className={`z-20 absolute right-0 top-4 ${
                 props.open ? "opacity-100" : "opacity-0 invisible"
             } transition-opacity duration-200 ease-in-out`}>
             <IconButton

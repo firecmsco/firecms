@@ -3,6 +3,8 @@ import React, { useCallback, useMemo } from "react";
 import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
 
+import logo from "./images/demo_logo.png";
+
 import { getAnalytics, logEvent } from "@firebase/analytics";
 
 import { CenteredView, GitHubIcon, IconButton, Tooltip, } from "@firecms/ui";
@@ -305,7 +307,7 @@ function App() {
                                                     notAllowedError={notAllowedError}/>
                         }
 
-                        return <Scaffold>
+                        return <Scaffold logo={logo}>
                             <AppBar
                                 title={"My demo app"}
                                 endAdornment={githubLink}/>
