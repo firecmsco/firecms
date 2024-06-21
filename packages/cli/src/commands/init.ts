@@ -318,10 +318,11 @@ export async function createProject(options: InitOptions) {
         console.log(chalk.cyan.bold("yarn dev"));
         console.log("");
     } else if (options.template === "pro" || options.template === "community") {
+        console.log("Make sure you have a valid Firebase config in " + chalk.cyan.bold("src/firebase_config.ts"));
         console.log("Run:");
-        console.log(chalk.cyan.bold("cd " + options.dir_name));
-        console.log(chalk.cyan.bold("yarn"));
-        console.log(chalk.cyan.bold("yarn dev"));
+        console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
+        console.log(chalk.bgYellow.black.bold("yarn"));
+        console.log(chalk.bgYellow.black.bold("yarn dev"));
         console.log("");
     } else if (options.template === "cloud") {
         console.log("If you want to run your project locally, run:");
@@ -350,8 +351,13 @@ async function copyTemplateFiles(options: InitOptions, webappConfig?: object) {
         } else {
             if (options.template === "pro" || options.template === "community") {
 
-                const firebaseConfig = await getProjectWebappConfig(options.env, options.firebaseProjectId, options.debug);
-                await copyWebAppConfig(options, firebaseConfig);
+                let firebaseConfig: any;
+                try{
+                    firebaseConfig = await getProjectWebappConfig(options.env, options.firebaseProjectId, options.debug);
+                    await copyWebAppConfig(options, firebaseConfig);
+                } catch (e) {
+                    console.log("Could not fetch webapp config automatically. Please update your config manually in " + chalk.bold("src/firebase_config.ts"));
+                }
 
                 return replaceProjectIdInTemplateFiles(options, [
                     "./src/App.tsx",
@@ -467,6 +473,5 @@ async function getProjectWebappConfig(env: "prod" | "dev", projectId: string, de
         if (onErr) {
             onErr(e);
         }
-        console.error("Error getting projects", e.response?.data);
     }
 }

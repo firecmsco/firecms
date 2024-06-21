@@ -102,9 +102,7 @@ function saveTokens(tokens: object, env: "prod" | "dev") {
 
     const data = JSON.stringify(tokens);
 
-    fs.writeFile(filePath, data, (error) => {
-        if (error) throw error;
-    });
+    fs.writeFileSync(filePath, data);
 
 }
 
@@ -229,7 +227,8 @@ export async function refreshCredentials(env: "dev" | "prod", credentials?: obje
         const response = await axios.post(server + "/cli/refresh_access_token", credentials);
         const newCredentials = response.data.data;
         saveTokens({
-            ...credentials, ...newCredentials,
+            ...credentials,
+            ...newCredentials,
             env
         }, env);
         return newCredentials;
