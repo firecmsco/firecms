@@ -477,8 +477,22 @@ export interface AdditionalFieldDelegate<M extends Record<string, any> = any,
  */
 export type EntityCustomView<M extends Record<string, any> = any> =
     {
+        /**
+         * Key of this custom view.
+         */
         key: string,
+        /**
+         * Name of this custom view.
+         */
         name: string,
+        /**
+         * If set to true, the actions of the entity will be included in the
+         * bottom of the panel (save buttons, delete buttons, etc.)
+         */
+        includeActions?: boolean;
+        /**
+         * Builder for rendering the custom view
+         */
         Builder?: React.ComponentType<EntityCustomViewParams<M>>;
     }
 

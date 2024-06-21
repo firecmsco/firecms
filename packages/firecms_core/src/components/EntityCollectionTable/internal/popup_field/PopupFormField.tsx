@@ -264,7 +264,8 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         values,
         path,
         setFieldValue,
-        save: saveValue
+        save: saveValue,
+        formex
     };
 
     const property: ResolvedProperty<any> | undefined = propertyKey && getPropertyInPath(collection.properties, propertyKey as string);

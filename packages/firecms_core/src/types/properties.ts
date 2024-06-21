@@ -812,7 +812,7 @@ export interface UploadedFileContext {
     /**
      * Entity path. E.g. `products/PID/locales`
      */
-    path: string;
+    path?: string;
 
     /**
      * Values of the current entity

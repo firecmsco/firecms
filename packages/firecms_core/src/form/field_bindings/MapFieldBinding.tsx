@@ -1,5 +1,13 @@
 import React from "react";
-import { FieldProps, Properties, ResolvedProperties } from "../../types";
+import {
+    CMSType,
+    FieldProps,
+    FormContext,
+    MapProperty,
+    Properties,
+    ResolvedProperties,
+    ResolvedProperty
+} from "../../types";
 
 import { ErrorBoundary } from "../../components";
 import { getIconForProperty, isHidden, pick } from "../../util";
@@ -21,7 +29,6 @@ export function MapFieldBinding({
                                     error,
                                     disabled,
                                     property,
-                                    setValue,
                                     partOfBlock,
                                     tableMode,
                                     includeDescription,
@@ -101,7 +108,7 @@ export function MapFieldBinding({
             {(tableMode || partOfBlock) && mapFormView}
 
             <FieldHelperText includeDescription={includeDescription}
-                             showError={showError}
+                             showError={showError ?? false}
                              error={error ? (typeof error === "string" ? error : "A property of this map has an error") : undefined}
                              disabled={disabled}
                              property={property}/>

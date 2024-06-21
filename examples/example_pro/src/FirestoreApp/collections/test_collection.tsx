@@ -9,6 +9,7 @@ import {
 import { CustomField } from "../custom_field/SubPropertyField";
 import { usersCollection } from "./users_collection";
 import { JSONField } from "../custom_field/JSONField";
+import { SecondaryForm } from "../custom_entity_view/SecondaryForm";
 
 const relaxedStatus: EnumValues = [
     {
@@ -107,8 +108,14 @@ export const testCollection = buildCollection<any>({
     callbacks: testCallbacks,
     id: "test_entity",
     path: "test_entity",
-    customId: false,
+    customId: true,
     name: "Test entities",
+    entityViews: [{
+        key: "sec",
+        name: "Sec",
+        includeActions: true,
+        Builder: SecondaryForm
+    }],
     properties: {
         rerender: () => ({
             dataType: "map",

@@ -3,7 +3,6 @@ import React, { useCallback } from "react";
 import {
     ArrayProperty,
     Entity,
-    EntityCollection,
     FieldProps,
     ResolvedArrayProperty,
     ResolvedStringProperty,
@@ -81,7 +80,7 @@ export function StorageUploadFieldBinding({
         propertyKey,
         value,
         storageSource,
-        disabled,
+        disabled: disabled ?? false,
         onChange: setValue
     });
 
@@ -90,12 +89,6 @@ export function StorageUploadFieldBinding({
         value,
         setValue
     });
-
-    const entity: Entity<any> = {
-        id: context.entityId,
-        values: context.values,
-        path: context.path
-    };
 
     return (
 
@@ -109,15 +102,13 @@ export function StorageUploadFieldBinding({
 
             <StorageUpload
                 value={internalValue}
-                collection={context.collection}
                 name={propertyKey}
-                disabled={disabled}
-                autoFocus={autoFocus}
+                disabled={disabled ?? false}
+                autoFocus={autoFocus ?? false}
                 property={property}
                 onChange={setValue}
                 setInternalValue={setInternalValue}
                 onFilesAdded={onFilesAdded}
-                entity={entity}
                 onFileUploadComplete={onFileUploadComplete}
                 storagePathBuilder={storagePathBuilder}
                 storage={storage}
@@ -135,7 +126,6 @@ export function StorageUploadFieldBinding({
 
 function FileDropComponent({
                                storage,
-                               collection,
                                disabled,
                                isDraggingOver,
                                onFilesAdded,
@@ -144,7 +134,6 @@ function FileDropComponent({
                                autoFocus,
                                internalValue,
                                property,
-                               entity,
                                onClear,
                                metadata,
                                storagePathBuilder,
@@ -154,7 +143,6 @@ function FileDropComponent({
                                helpText
                            }: {
     storage: StorageConfig,
-    collection: EntityCollection,
     disabled: boolean,
     isDraggingOver: boolean,
     droppableProvided: any,
@@ -165,7 +153,6 @@ function FileDropComponent({
     property: ResolvedStringProperty,
     onClear: (clearedStoragePathOrDownloadUrl: string) => void,
     metadata: any,
-    entity: Entity<any>;
     storagePathBuilder: (file: File) => string,
     onFileUploadComplete: (uploadedPath: string, entry: StorageFieldItem, fileMetadata?: any) => Promise<void>,
     size: PreviewSize,
@@ -235,11 +222,9 @@ function FileDropComponent({
                     if (entry.storagePathOrDownloadUrl) {
                         child = (
                             <StorageItemPreview
-                                collection={collection}
                                 name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
                                 property={property}
                                 disabled={disabled}
-                                entity={entity}
                                 value={entry.storagePathOrDownloadUrl}
                                 onRemove={onClear}
                                 size={entry.size}/>
@@ -299,7 +284,6 @@ function FileDropComponent({
 
 export interface StorageUploadProps {
     value: StorageFieldItem[];
-    collection: EntityCollection;
     setInternalValue: (v: StorageFieldItem[]) => void;
     name: string;
     property: ResolvedStringProperty | ResolvedArrayProperty<string[]>;
@@ -307,7 +291,6 @@ export interface StorageUploadProps {
     multipleFilesSupported: boolean;
     autoFocus: boolean;
     disabled: boolean;
-    entity: Entity<any>;
     storage: StorageConfig;
     onFilesAdded: (acceptedFiles: File[]) => void;
     storagePathBuilder: (file: File) => string;
@@ -315,7 +298,6 @@ export interface StorageUploadProps {
 }
 
 export function StorageUpload({
-                                  collection,
                                   property,
                                   name,
                                   value,
@@ -327,7 +309,6 @@ export function StorageUpload({
                                   onFilesAdded,
                                   autoFocus,
                                   storage,
-                                  entity,
                                   storagePathBuilder,
                               }: StorageUploadProps) {
 
@@ -408,11 +389,9 @@ export function StorageUpload({
                             className="rounded"
                         >
                             <StorageItemPreview
-                                collection={collection}
                                 name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
                                 property={renderProperty}
                                 disabled={true}
-                                entity={entity}
                                 value={entry.storagePathOrDownloadUrl as string}
                                 onRemove={onClear}
                                 size={entry.size}/>
@@ -422,7 +401,6 @@ export function StorageUpload({
             >
                 {(provided, snapshot) => {
                     return <FileDropComponent storage={storage}
-                                              collection={collection}
                                               disabled={disabled}
                                               isDraggingOver={snapshot.isDraggingOver}
                                               droppableProvided={provided}
@@ -431,7 +409,6 @@ export function StorageUpload({
                                               autoFocus={autoFocus}
                                               internalValue={value}
                                               property={renderProperty}
-                                              entity={entity}
                                               onClear={onClear}
                                               metadata={metadata}
                                               storagePathBuilder={storagePathBuilder}

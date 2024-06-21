@@ -1,6 +1,6 @@
-import { EntityValues } from "./entities";
 import { CMSType, PropertyOrBuilder } from "./properties";
 import { ResolvedEntityCollection, ResolvedProperty } from "./resolved_entities";
+import { FormexController } from "@firecms/formex";
 
 /**
  * When building a custom field you need to create a React component that takes
@@ -22,11 +22,6 @@ export interface FieldProps<T extends CMSType = any, CustomProps = any, M extend
     value: T;
 
     /**
-     * Initial value of this field
-     */
-    // initialValue: T | undefined;
-
-    /**
      * Set value of field directly
      */
     setValue: (value: T | null, shouldValidate?: boolean) => void;
@@ -42,7 +37,7 @@ export interface FieldProps<T extends CMSType = any, CustomProps = any, M extend
     /**
      * Is the form currently submitting
      */
-    isSubmitting: boolean;
+    isSubmitting?: boolean;
 
     /**
      * Should this field show the error indicator.
@@ -50,19 +45,19 @@ export interface FieldProps<T extends CMSType = any, CustomProps = any, M extend
      * filled) but we don't want to show the error until the user has tried
      * saving.
      */
-    showError: boolean;
+    showError?: boolean;
 
     /**
      * Is there an error in this field. The error field has the same shape as
      * the field, replacing values with a string containing the error.
      * It takes the value `null` if there is no error
      */
-    error: any | null;
+    error?: any | null;
 
     /**
      * Has this field been touched
      */
-    touched: boolean;
+    touched?: boolean;
 
     /**
      * Property related to this field
@@ -72,38 +67,38 @@ export interface FieldProps<T extends CMSType = any, CustomProps = any, M extend
     /**
      * Should this field include a description
      */
-    includeDescription: boolean;
+    includeDescription?: boolean;
 
     /**
      * Flag to indicate that the underlying value has been updated in the
      * datasource
      */
-    underlyingValueHasChanged: boolean;
+    underlyingValueHasChanged?: boolean;
 
     /**
      * Is this field part of an array
      */
-    partOfArray: boolean;
+    partOfArray?: boolean;
 
     /**
      * Is this field part of a block (oneOf array)
      */
-    partOfBlock: boolean;
+    partOfBlock?: boolean;
 
     /**
      * Is this field being rendered in the entity table popup
      */
-    tableMode: boolean;
+    tableMode?: boolean;
 
     /**
      * Should this field autofocus on mount
      */
-    autoFocus: boolean;
+    autoFocus?: boolean;
 
     /**
      * Additional properties set by the developer
      */
-    customProps: CustomProps
+    customProps?: CustomProps
 
     /**
      * Additional values related to the state of the form or the entity
@@ -113,7 +108,7 @@ export interface FieldProps<T extends CMSType = any, CustomProps = any, M extend
     /**
      * Flag to indicate if this field should be disabled
      */
-    disabled: boolean;
+    disabled?: boolean;
 
 }
 
@@ -124,24 +119,9 @@ export interface FieldProps<T extends CMSType = any, CustomProps = any, M extend
 export interface FormContext<M extends Record<string, any> = any> {
 
     /**
-     * Collection of the entity being modified
-     */
-    collection: ResolvedEntityCollection<M>;
-
-    /**
      * Current values of the entity
      */
-    values: EntityValues<M>;
-
-    /**
-     * Entity id, it can be null if it's a new entity
-     */
-    entityId?: string;
-
-    /**
-     * Path this entity is located at
-     */
-    path: string;
+    values: M;
 
     /**
      * Update the value of a field
@@ -152,9 +132,29 @@ export interface FormContext<M extends Record<string, any> = any> {
     setFieldValue: (key: string, value: any, shouldValidate?: boolean) => void;
 
     /**
-     * Save the entity
+     * Save the entity.
      */
-    save: (values: EntityValues<M>) => void;
+    save: (values: M) => void;
+
+    /**
+     * Collection of the entity being modified
+     */
+    collection?: ResolvedEntityCollection<M>;
+
+    /**
+     * Entity id, it can be null if it's a new entity
+     */
+    entityId?: string;
+
+    /**
+     * Path this entity is located at
+     */
+    path?: string;
+
+    /**
+     * This is the underlying formex controller that powers the form
+     */
+    formex: FormexController<M>;
 }
 
 /**

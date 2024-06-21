@@ -30,12 +30,6 @@ export function ReadOnlyFieldBinding({
     if (!context.entityId)
         throw new Error("ReadOnlyFieldBinding: Entity id is null");
 
-    const entity: Entity<any> = {
-        id: context.entityId!,
-        values: context.values,
-        path: context.path
-    };
-
     return (
 
         <>
@@ -53,7 +47,6 @@ export function ReadOnlyFieldBinding({
                     <PropertyPreview propertyKey={propertyKey}
                                      value={value}
                                      property={property}
-                        // entity={entity}
                                      size={"medium"}/>
                 </ErrorBoundary>
 

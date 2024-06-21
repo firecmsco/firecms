@@ -52,6 +52,7 @@ export function useDataEnhancementPlugin(props?: DataEnhancementPluginProps): Fi
 
     const fieldBuilderEnabled = useCallback((params: PluginFieldBuilderParams<any>) => {
         if (!getConfigForPath) return true;
+        if (!params.path || !params.collection) return false;
         return getConfigForPath({
             path: params.path,
             collection: params.collection,

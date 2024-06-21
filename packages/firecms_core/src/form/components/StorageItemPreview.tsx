@@ -10,22 +10,18 @@ interface StorageItemPreviewProps {
     name: string;
     property: ResolvedStringProperty;
     value: string,
-    entity: Entity<any>,
     onRemove: (value: string) => void;
     size: PreviewSize;
     disabled: boolean;
-    collection: EntityCollection;
 }
 
 export function StorageItemPreview({
                                        name,
                                        property,
                                        value,
-                                       entity,
                                        onRemove,
                                        disabled,
                                        size,
-                                       collection
                                    }: StorageItemPreviewProps) {
 
     return (

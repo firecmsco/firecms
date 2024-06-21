@@ -110,7 +110,12 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                 } else {
                     const propertyConfig = getFieldConfig(resolvedProperty, customizationController.propertyConfigs);
                     if (!propertyConfig) {
-                        console.log("INTERNAL: Could not find field config for property", { propertyKey, resolvedProperty, fields: customizationController.propertyConfigs, propertyConfig });
+                        console.log("INTERNAL: Could not find field config for property", {
+                            propertyKey,
+                            resolvedProperty,
+                            fields: customizationController.propertyConfigs,
+                            propertyConfig
+                        });
                         throw new Error(`INTERNAL: Could not find field config for property ${propertyKey}`);
                     }
                     const configProperty = resolveProperty({
@@ -194,7 +199,14 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
         (fieldProps.form.submitCount > 0 || property.validation?.unique) &&
         (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);
 
-    const WrappedComponent: ComponentType<FieldProps<T, any, M>> | null = useWrappedComponent(context.path, context.collection, propertyKey, property, Component, plugins);
+    const WrappedComponent: ComponentType<FieldProps<T, any, M>> | null = useWrappedComponent({
+        path: context.path,
+        collection: context.collection,
+        propertyKey: propertyKey,
+        property: property,
+        Component: Component,
+        plugins: plugins
+    });
     const UsedComponent: ComponentType<FieldProps<T>> = WrappedComponent ?? Component;
 
     const isSubmitting = fieldProps.form.isSubmitting;
@@ -264,13 +276,24 @@ const shouldPropertyReRender = (property: PropertyOrBuilder | ResolvedProperty, 
     }
 }
 
-function useWrappedComponent<T extends CMSType = CMSType, M extends Record<string, any> = any>(
-    path: string,
-    collection: EntityCollection<M>,
+interface UseWrappedComponentParams<T extends CMSType = CMSType, M extends Record<string, any> = any> {
+    path?: string,
+    collection?: EntityCollection<M>,
     propertyKey: string,
     property: ResolvedProperty<T>,
     Component: ComponentType<FieldProps<T, any, M>>,
     plugins?: FireCMSPlugin[]
+}
+
+function useWrappedComponent<T extends CMSType = CMSType, M extends Record<string, any> = any>(
+    {
+        path,
+        collection,
+        propertyKey,
+        property,
+        Component,
+        plugins
+    }: UseWrappedComponentParams<T, M>
 ): ComponentType<FieldProps<T, any, M>> | null {
 
     const wrapperRef = useRef<ComponentType<FieldProps<T, any, M>> | null>((() => {

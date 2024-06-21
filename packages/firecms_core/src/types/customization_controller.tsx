@@ -24,7 +24,6 @@ export type CustomizationController = {
      *
      * You can also define an entity view from the UI.
      */
-
     entityViews?: EntityCustomView[];
 
     /**
