@@ -7,11 +7,48 @@ import { CLIInstructions } from "../partials/pricing/CLIInstructions";
 import { FireCMSCloudVersions } from "../partials/pricing/FireCMSCloudVersions";
 
 function FeaturesPage() {
-
+    const schemaMarkup = {
+        "@context": "http://schema.org",
+        "@type": "Product",
+        "name": "FireCMS",
+        "description": "Experience the power of FireCMS today completely for free. Try FireCMS Cloud for a fully-managed, full-service solution, or FireCMS PRO for a self-hosted version with additional features.",
+        "offers": [
+            {
+                "@type": "Offer",
+                "url": "https://firecms.co",
+                "priceCurrency": "USD",
+                "price": "0.00",
+                "priceValidUntil": "2025-12-31",
+                "itemCondition": "http://schema.org/NewCondition",
+                "availability": "http://schema.org/InStock",
+                "seller": {
+                    "@type": "Organization",
+                    "name": "FireCMS"
+                }
+            },
+            {
+                "@type": "Offer",
+                "url": "https://firecms.co/pro",
+                "priceCurrency": "USD",
+                "price": "9.99",
+                "priceValidUntil": "2025-12-31",
+                "itemCondition": "http://schema.org/NewCondition",
+                "availability": "http://schema.org/InStock",
+                "seller": {
+                    "@type": "Organization",
+                    "name": "FireCMS"
+                }
+            }
+        ]
+    };
     return (
         <Layout
             title={"Pricing - FireCMS"}
             description="Self-hosted version and free Cloud tier, adaptive pricing for everyone">
+
+            <script type="application/ld+json">
+                {JSON.stringify(schemaMarkup)}
+            </script>
 
             <Hero
                 color={"primary"}

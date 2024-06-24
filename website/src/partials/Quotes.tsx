@@ -4,6 +4,8 @@ import { defaultBorderMixin } from "./styles";
 import { Panel } from "./general/Panel";
 import { LinedSpace } from "./layout/LinedSpace";
 
+import { softwareApplicationSchema } from "../partials/markup";
+
 // @ts-ignore
 import viktor from "@site/static/img/avatars/viktor.jpeg";
 
@@ -18,6 +20,7 @@ import john from "@site/static/img/avatars/john.avif";
 
 // @ts-ignore
 import manuel from "@site/static/img/avatars/manuel.avif";
+import Head from "@docusaurus/Head";
 
 const quotes = [
     {
@@ -52,12 +55,33 @@ const quotes = [
     },
 ];
 
+const reviewSchema = quotes.map((quote, index) => ({
+    "@context": "http://schema.org",
+    "@type": "Review",
+    "author": {
+        "@type": "Person",
+        "name": quote.author
+    },
+    "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "5",
+        "bestRating": "5"
+    },
+    "reviewBody": quote.quote,
+    "itemReviewed": softwareApplicationSchema
+}));
+
 export const QuotesSection: React.FC = () => {
     return (
         <Panel color={"lighter"} includePadding={false} >
+            <Head>
+                <script type="application/ld+json">
+                    {JSON.stringify(reviewSchema)}
+                </script>
+            </Head>
             <div
                 className="py-16 px-8 flex flex-row gap-4 overflow-auto no-scrollbar">
-                {
+            {
                     quotes.map(({ quote, avatar, author, role }, i) => (
                             <blockquote key={`quote-${i}`}
                                         data-aos="fade-left"
