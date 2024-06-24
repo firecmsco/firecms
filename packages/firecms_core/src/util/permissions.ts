@@ -49,6 +49,7 @@ export function canCreateEntity<M extends Record<string, any>, UserType extends 
     authController: AuthController<UserType>,
     path: string,
     entity: Entity<M> | null): boolean {
+    if (collection.collectionGroup) return false;
     return resolvePermissions(collection, authController, path, entity)?.create ?? DEFAULT_PERMISSIONS.create;
 }
 
