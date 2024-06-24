@@ -10,6 +10,7 @@ import { CustomField } from "../custom_field/SubPropertyField";
 import { usersCollection } from "./users_collection";
 import { JSONField } from "../custom_field/JSONField";
 import { SecondaryForm } from "../custom_entity_view/SecondaryForm";
+import { OptionalMap } from "../custom_field/OptionalMap";
 
 const relaxedStatus: EnumValues = [
     {
@@ -117,6 +118,27 @@ export const testCollection = buildCollection<any>({
         Builder: SecondaryForm
     }],
     properties: {
+        optional: {
+            dataType: "map",
+            name: "Size",
+            properties: {
+                width: {
+                    name: "Width",
+                    dataType: "number",
+                    validation: {
+                        required: true
+                    }
+                },
+                height: {
+                    name: "Height",
+                    dataType: "number",
+                    validation: {
+                        required: true
+                    }
+                }
+            },
+            Field: OptionalMap
+        },
         rerender: () => ({
             dataType: "map",
             hideFromCollection: true,

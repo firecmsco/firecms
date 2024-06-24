@@ -31,8 +31,8 @@ export function AdvancedTextField<T extends string | number>({
     highlight?: string,
     label: React.ReactNode,
     multiline?: boolean,
-    disabled: boolean,
-    error: boolean,
+    disabled?: boolean,
+    error?: boolean,
     size?: "small" | "medium",
     className?: string,
 }) {
