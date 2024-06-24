@@ -118,7 +118,7 @@ export const testCollection = buildCollection<any>({
         Builder: SecondaryForm
     }],
     properties: {
-        optional: {
+        size: {
             dataType: "map",
             name: "Size",
             properties: {

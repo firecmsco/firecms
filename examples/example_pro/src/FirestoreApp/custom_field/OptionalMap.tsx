@@ -2,7 +2,6 @@ import { cls, defaultBorderMixin, focusedMixin, Icon, IconButton, Label, MapFiel
 import { useState } from "react";
 
 export const OptionalMap: typeof MapFieldBinding = (props) => {
-    console.log("OptionalMap", props);
     const [open, setOpen] = useState(!!props.value);
     const [expanded, setExpanded] = useState(!!props.value);
     return (

@@ -152,6 +152,7 @@ export function traverseValuesProperties<M extends Record<string, any>>(
         .map(([key, property]) => {
             const inputValue = inputValues && (inputValues)[key];
             const updatedValue = traverseValueProperty(inputValue, property as Property, operation);
+            if (updatedValue === null) return null;
             if (updatedValue === undefined) return undefined;
             return ({ [key]: updatedValue });
         })

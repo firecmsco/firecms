@@ -1,3 +1,13 @@
+## [3.0.0-beta.8] - 2024-06-
+
+- Fix for excessive re-renders in the form view.
+- You can now use `PropertyFieldBinding` components in your custom entity views, and they will be treated as regular
+  fields.
+- For additional entity views, you can now preserve the bottom actions bar, with the prop `includeActions`.
+- For map properties, if they are not required, the value might me `undefined`, but if a child property is has a value, 
+  validation will be triggered for all children.
+- Fix for datamaps not getting traversed correctly with null value.
+
 ## [3.0.0-beta.7] - 2024-06-18
 
 - Renamed the `cn` utility class to `cls`, while keeping `cn` available with a deprecation warning.
