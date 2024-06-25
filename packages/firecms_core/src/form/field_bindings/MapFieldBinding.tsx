@@ -75,6 +75,7 @@ export function MapFieldBinding({
                             partOfBlock: false,
                             autoFocus: autoFocus && index === 0
                         };
+
                         return (
                             <div key={`map-${propertyKey}-${index}`}>
                                 <ErrorBoundary>

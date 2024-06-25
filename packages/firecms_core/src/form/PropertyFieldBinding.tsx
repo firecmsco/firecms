@@ -85,6 +85,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
 
     return (
         <Field
+            key={propertyKey}
             name={propertyKey}
         >
             {(fieldProps) => {

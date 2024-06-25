@@ -118,264 +118,310 @@ export const testCollection = buildCollection<any>({
         Builder: SecondaryForm
     }],
     properties: {
-        isAdmin: {
-            name: "Admin",
-            dataType: "boolean",
-            defaultValue: false
-        },
-        users: ({ values }) => {
-            if (values.isAdmin)
-                return null;
-            return ({
-                name: "Clients",
-                dataType: "array",
-                of: { dataType: "reference", path: "users", previewProperties: ["name"] }
-            });
-        },
-        size: {
-            dataType: "map",
-            name: "Size",
-            properties: {
-                width: {
-                    name: "Width",
-                    dataType: "number",
-                    validation: {
-                        required: true
-                    }
-                },
-                height: {
-                    name: "Height",
-                    dataType: "number",
-                    validation: {
-                        required: true
-                    }
-                }
-            },
-            Field: OptionalMap
-        },
-        rerender: () => ({
-            dataType: "map",
-            hideFromCollection: true,
-            Field: () => {
-                console.log("Rerendering");
-                return <div>Test</div>;
-            }
-        }),
-        body: buildProperty({
-            name: "Body",
-            validation: { required: false },
-            dataType: "map",
-            keyValue: true,
-            customProps: {
-                editable: true
-            },
-            defaultValue: {
-                clientIp: "client.ip",
-                clientDeviceType: "client.deviceType",
-                clientLanguage: "client.language",
-                clientReferral: "client.referral",
-                clientUserAgent: "client.userAgent",
-                clientCountry: "client.country",
-                clientCity: "client.city",
-                clientRegion: "client.region",
-                clientLatitude: "client.latitude",
-                clientLongitude: "client.longitude",
-                infoConversationCreatedAt: "info.createdAt",
-                infoConversationCompleted: "info.conversationCompleted",
-                dataPhone: "data.phone",
-                dataEmail: "data.email",
-                dataName: "data.name",
-                dataAppointmentRequested: "data.appointment_requested"
-            },
-            description: "This field is the body payload of the request",
-            Field: JSONField
-        }),
-        background: {
-            dataType: "number",
-            name: "Colour",
-            enumValues:
-                [
-                    {
-                        id: 0,
-                        label: " Black ",
-                        color: "grayDarker"
-                    },
-                    {
-                        id: 4281080974,
-                        label: " Blue ",
-                        color: "blueDarker"
-                    },
-                    {
-                        id: 4293947270,
-                        label: " Cyan ",
-                        color: "cyanDarker"
-                    }
-                ]
-        },
-        upload: {
-            name: "Upload",
+        type: {
             dataType: "string",
-            storage: {
-                storagePath: "test"
-            }
-        },
-        mainSaturation: {
-            name: "Main saturation",
-            description: "Saturation applied to all colors when there is no saturation on color applied",
-            dataType: "array",
-            of: {
-                dataType: "map",
-                properties: {
-                    type: {
-                        name: "Type",
-                        dataType: "string",
-                        enumValues: {
-                            oneNum: "Saturation without range",
-                            fromTo: "Saturation available range"
-                        }
-                    },
-                    value: (props) => {
-                        const { propertyValue } = props;
-                        // console.log("props", props);
-                        if (propertyValue?.type === "oneNum") {
-                            return ({
-                                name: "Saturation",
-                                dataType: "number",
-                                validation: {
-                                    min: 0,
-                                    max: 100
-                                }
-                            })
-                        } else if (propertyValue?.type === "fromTo") {
-                            return ({
-                                    name: "Saturation available range",
-                                    dataType: "map",
-                                    properties: {
-                                        from: {
-                                            name: "From",
-                                            dataType: "number",
-                                            validation: {
-                                                min: 0,
-                                                max: 100
-                                            }
-                                        },
-                                        to: {
-                                            name: "To",
-                                            dataType: "number",
-                                            clearable: true,
-                                            validation: {
-                                                min: 0,
-                                                max: 100
-                                            }
-                                        }
-                                    }
-                                }
-                            )
-                        } else {
-                            return {
-                                dataType: "string",
-                                name: "Type",
-                                disabled: { hidden: true }
-                            };
-                        }
-                    }
+            name: "Type",
+            enumValues: [
+                {
+                    id: "seat",
+                    label: "Seat"
+                },
+                {
+                    id: "cabin",
+                    label: "Cabin"
                 }
-            }
+            ]
         },
-        map: {
-            name: "Map",
-            dataType: "map",
-            properties: {
-                nested_1: {
-                    name: "Nested 1",
-                    dataType: "map",
-                    properties: {
-                        nested_2: {
-                            name: "Nested 2",
-                            dataType: "map",
-                            properties: {
-                                nested_3: {
-                                    name: "Nested 3",
-                                    dataType: "map",
-                                    properties: {
-                                        name: {
-                                            name: "Name",
-                                            dataType: "string"
-                                        },
-                                        num: {
-                                            name: "Num",
-                                            dataType: "number"
-                                        }
-                                    }
-                                }
+        config: ({ values }) => {
+            switch (values.type) {
+                case "seat":
+                    return buildProperty({
+                        dataType: "map",
+                        name: "Seat config",
+                        properties: {
+                            category: {
+                                dataType: "string",
+                                name: "Category",
+                                enumValues: [
+                                    { id: "deck", label: "Deck" },
+                                    { id: "lounge", label: "Lounge" },
+                                    { id: "numbered", label: "Numbered" }
+                                ]
                             }
                         }
-                    }
-                }
-            }
-        },
-        array_enum: {
-            name: "Array enum",
-            dataType: "array",
-            of: {
-                name: "My enum",
-                dataType: "string",
-                enumValues: {
-                    value1: "My Value 1",
-                    value2: "Your Value 2",
-                    value3: "Another Value 3",
-                    value4: "Another Value 4",
-                    value5: "Another Value 5",
-                    value6: "Another Value 6",
-                    value7: "Another Value 7",
-                    value8: "Another Value 8",
-                    value9: "Another Value 9",
-                    value10: "Another Value 10",
-                    value11: "Another Value 11",
-                    value12: "Another Value 12",
-                    value13: "Another Value 13",
-                    value14: "Another Value 14"
+                    });
+                case "cabin":
+                    return buildProperty({
+                        dataType: "map",
+                        name: "Cabin config",
+                        properties: {
+                            capacity: { dataType: "number", name: "Cabin capacity" },
+                            specialNeeds: { dataType: "boolean", name: "Special Needs" }
+                        }
+                    });
 
-                },
-                validation: { required: false },
-                clearable: true
+                default:
+                    return null;
             }
         },
-        enum: {
-            name: "My enum",
-            dataType: "string",
-            enumValues: {
-                value1: "My Value 1",
-                value2: "Your Value 2",
-                value3: "Another Value 3",
-                value4: "Another Value 4",
-                value5: "Another Value 5",
-                value6: "Another Value 6",
-                value7: "Another Value 7",
-                value8: "Another Value 8",
-                value9: "Another Value 9",
-                value10: "Another Value 10",
-                value11: "Another Value 11",
-                value12: "Another Value 12",
-                value13: "Another Value 13",
-                value14: "Another Value 14"
-            },
-            validation: { required: false },
-            clearable: true
-        },
-        test_date: {
-            name: "Test date",
-            dataType: "date",
-            mode: "date_time",
-            clearable: true
-        },
-        tags: {
-            name: "Tags",
-            dataType: "array",
-            of: {
-                dataType: "string"
-            }
-        },
+        // isAdmin: {
+        //     name: "Admin",
+        //     dataType: "boolean",
+        //     defaultValue: false
+        // },
+        // users: ({ values }) => {
+        //     if (values.isAdmin)
+        //         return null;
+        //     return ({
+        //         name: "Clients",
+        //         dataType: "array",
+        //         of: { dataType: "reference", path: "users", previewProperties: ["name"] }
+        //     });
+        // },
+        // size: {
+        //     dataType: "map",
+        //     name: "Size",
+        //     properties: {
+        //         width: {
+        //             name: "Width",
+        //             dataType: "number",
+        //             validation: {
+        //                 required: true
+        //             }
+        //         },
+        //         height: {
+        //             name: "Height",
+        //             dataType: "number",
+        //             validation: {
+        //                 required: true
+        //             }
+        //         }
+        //     },
+        //     Field: OptionalMap
+        // },
+        // rerender: () => ({
+        //     dataType: "map",
+        //     hideFromCollection: true,
+        //     Field: () => {
+        //         console.log("Rerendering");
+        //         return <div>Test</div>;
+        //     }
+        // }),
+        // body: buildProperty({
+        //     name: "Body",
+        //     validation: { required: false },
+        //     dataType: "map",
+        //     keyValue: true,
+        //     customProps: {
+        //         editable: true
+        //     },
+        //     defaultValue: {
+        //         clientIp: "client.ip",
+        //         clientDeviceType: "client.deviceType",
+        //         clientLanguage: "client.language",
+        //         clientReferral: "client.referral",
+        //         clientUserAgent: "client.userAgent",
+        //         clientCountry: "client.country",
+        //         clientCity: "client.city",
+        //         clientRegion: "client.region",
+        //         clientLatitude: "client.latitude",
+        //         clientLongitude: "client.longitude",
+        //         infoConversationCreatedAt: "info.createdAt",
+        //         infoConversationCompleted: "info.conversationCompleted",
+        //         dataPhone: "data.phone",
+        //         dataEmail: "data.email",
+        //         dataName: "data.name",
+        //         dataAppointmentRequested: "data.appointment_requested"
+        //     },
+        //     description: "This field is the body payload of the request",
+        //     Field: JSONField
+        // }),
+        // background: {
+        //     dataType: "number",
+        //     name: "Colour",
+        //     enumValues:
+        //         [
+        //             {
+        //                 id: 0,
+        //                 label: " Black ",
+        //                 color: "grayDarker"
+        //             },
+        //             {
+        //                 id: 4281080974,
+        //                 label: " Blue ",
+        //                 color: "blueDarker"
+        //             },
+        //             {
+        //                 id: 4293947270,
+        //                 label: " Cyan ",
+        //                 color: "cyanDarker"
+        //             }
+        //         ]
+        // },
+        // upload: {
+        //     name: "Upload",
+        //     dataType: "string",
+        //     storage: {
+        //         storagePath: "test"
+        //     }
+        // },
+        // mainSaturation: {
+        //     name: "Main saturation",
+        //     description: "Saturation applied to all colors when there is no saturation on color applied",
+        //     dataType: "array",
+        //     of: {
+        //         dataType: "map",
+        //         properties: {
+        //             type: {
+        //                 name: "Type",
+        //                 dataType: "string",
+        //                 enumValues: {
+        //                     oneNum: "Saturation without range",
+        //                     fromTo: "Saturation available range"
+        //                 }
+        //             },
+        //             value: (props) => {
+        //                 const { propertyValue } = props;
+        //                 // console.log("props", props);
+        //                 if (propertyValue?.type === "oneNum") {
+        //                     return ({
+        //                         name: "Saturation",
+        //                         dataType: "number",
+        //                         validation: {
+        //                             min: 0,
+        //                             max: 100
+        //                         }
+        //                     })
+        //                 } else if (propertyValue?.type === "fromTo") {
+        //                     return ({
+        //                             name: "Saturation available range",
+        //                             dataType: "map",
+        //                             properties: {
+        //                                 from: {
+        //                                     name: "From",
+        //                                     dataType: "number",
+        //                                     validation: {
+        //                                         min: 0,
+        //                                         max: 100
+        //                                     }
+        //                                 },
+        //                                 to: {
+        //                                     name: "To",
+        //                                     dataType: "number",
+        //                                     clearable: true,
+        //                                     validation: {
+        //                                         min: 0,
+        //                                         max: 100
+        //                                     }
+        //                                 }
+        //                             }
+        //                         }
+        //                     )
+        //                 } else {
+        //                     return {
+        //                         dataType: "string",
+        //                         name: "Type",
+        //                         disabled: { hidden: true }
+        //                     };
+        //                 }
+        //             }
+        //         }
+        //     }
+        // },
+        // map: {
+        //     name: "Map",
+        //     dataType: "map",
+        //     properties: {
+        //         nested_1: {
+        //             name: "Nested 1",
+        //             dataType: "map",
+        //             properties: {
+        //                 nested_2: {
+        //                     name: "Nested 2",
+        //                     dataType: "map",
+        //                     properties: {
+        //                         nested_3: {
+        //                             name: "Nested 3",
+        //                             dataType: "map",
+        //                             properties: {
+        //                                 name: {
+        //                                     name: "Name",
+        //                                     dataType: "string"
+        //                                 },
+        //                                 num: {
+        //                                     name: "Num",
+        //                                     dataType: "number"
+        //                                 }
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // },
+        // array_enum: {
+        //     name: "Array enum",
+        //     dataType: "array",
+        //     of: {
+        //         name: "My enum",
+        //         dataType: "string",
+        //         enumValues: {
+        //             value1: "My Value 1",
+        //             value2: "Your Value 2",
+        //             value3: "Another Value 3",
+        //             value4: "Another Value 4",
+        //             value5: "Another Value 5",
+        //             value6: "Another Value 6",
+        //             value7: "Another Value 7",
+        //             value8: "Another Value 8",
+        //             value9: "Another Value 9",
+        //             value10: "Another Value 10",
+        //             value11: "Another Value 11",
+        //             value12: "Another Value 12",
+        //             value13: "Another Value 13",
+        //             value14: "Another Value 14"
+        //
+        //         },
+        //         validation: { required: false },
+        //         clearable: true
+        //     }
+        // },
+        // enum: {
+        //     name: "My enum",
+        //     dataType: "string",
+        //     enumValues: {
+        //         value1: "My Value 1",
+        //         value2: "Your Value 2",
+        //         value3: "Another Value 3",
+        //         value4: "Another Value 4",
+        //         value5: "Another Value 5",
+        //         value6: "Another Value 6",
+        //         value7: "Another Value 7",
+        //         value8: "Another Value 8",
+        //         value9: "Another Value 9",
+        //         value10: "Another Value 10",
+        //         value11: "Another Value 11",
+        //         value12: "Another Value 12",
+        //         value13: "Another Value 13",
+        //         value14: "Another Value 14"
+        //     },
+        //     validation: { required: false },
+        //     clearable: true
+        // },
+        // test_date: {
+        //     name: "Test date",
+        //     dataType: "date",
+        //     mode: "date_time",
+        //     clearable: true
+        // },
+        // tags: {
+        //     name: "Tags",
+        //     dataType: "array",
+        //     of: {
+        //         dataType: "string"
+        //     }
+        // },
         // specSheet: ({
         //                 values,
         //                 entityId
@@ -394,11 +440,11 @@ export const testCollection = buildCollection<any>({
         //         }
         //     }
         // }),
-
-        name: {
-            dataType: "string",
-            name: "Name"
-        },
+        //
+        // name: {
+        //     dataType: "string",
+        //     name: "Name"
+        // },
         // key_value: {
         //     dataType: "map",
         //     name: "Key value",
@@ -540,16 +586,6 @@ export const testCollection = buildCollection<any>({
         //         }
         //     })
         // },
-        eeee: {
-            name: "My enum",
-            dataType: "string",
-            enumValues: {
-                value1: "Value 1",
-                value2: "Value 2"
-            },
-            validation: { required: false },
-            clearable: true
-        },
         // products: buildProperty(({ values }) => ({
         //     name: "Products",
         //     dataType: "array",
