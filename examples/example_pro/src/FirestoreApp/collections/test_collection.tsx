@@ -118,6 +118,20 @@ export const testCollection = buildCollection<any>({
         Builder: SecondaryForm
     }],
     properties: {
+        isAdmin: {
+            name: "Admin",
+            dataType: "boolean",
+            defaultValue: false
+        },
+        users: ({ values }) => {
+            if (values.isAdmin)
+                return null;
+            return ({
+                name: "Clients",
+                dataType: "array",
+                of: { dataType: "reference", path: "users", previewProperties: ["name"] }
+            });
+        },
         size: {
             dataType: "map",
             name: "Size",

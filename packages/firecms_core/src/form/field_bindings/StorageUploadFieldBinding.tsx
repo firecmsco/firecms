@@ -1,13 +1,6 @@
 import React, { useCallback } from "react";
 
-import {
-    ArrayProperty,
-    Entity,
-    FieldProps,
-    ResolvedArrayProperty,
-    ResolvedStringProperty,
-    StorageConfig
-} from "../../types";
+import { ArrayProperty, FieldProps, ResolvedArrayProperty, ResolvedStringProperty, StorageConfig } from "../../types";
 import { useDropzone } from "react-dropzone";
 import { PreviewSize } from "../../preview";
 import { FieldHelperText, LabelWithIcon } from "../components";
@@ -30,7 +23,7 @@ import { useClearRestoreValue } from "../useClearRestoreValue";
 
 const dropZoneClasses = "box-border relative pt-[2px] items-center border border-transparent min-h-[254px] outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
 const disabledClasses = "border-dotted-gray"
-const nonActiveDropClasses = "hover:bg-field-hover dark:hover:bg-field-hover-dark"
+const nonActiveDropClasses = fieldBackgroundHoverMixin
 const activeDropClasses = "pt-0 border-2 border-solid"
 const acceptDropClasses = "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-2 border-solid border-green-500"
 const rejectDropClasses = "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-2 border-solid border-red-500"

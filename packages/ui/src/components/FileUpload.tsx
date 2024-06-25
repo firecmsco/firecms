@@ -1,6 +1,6 @@
 import React from "react";
 import { useDropzone } from "react-dropzone";
-import { fieldBackgroundHoverMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
+import { fieldBackgroundMixin, focusedMixin } from "../styles";
 import { cls } from "../util";
 import { Typography } from "./Typography";
 
@@ -65,7 +65,6 @@ export function FileUpload({
         {...getRootProps()}
         className={cls(
             fieldBackgroundMixin,
-            fieldBackgroundHoverMixin,
             focusedMixin,
             "flex gap-2",
             "p-4 box-border relative items-center border-2 border-solid border-transparent outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid",
@@ -73,11 +72,10 @@ export function FileUpload({
                 "h-44": size === "medium",
                 "h-28": size === "small",
                 "cursor-pointer": !disabled,
-                "hover:bg-field-hover dark:hover:bg-field-hover-dark": !isDragActive,
+                fieldBackgroundHoverMixin: !isDragActive,
                 "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-red-500": isDragReject,
                 "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-green-500": isDragAccept,
-            })}
-    >
+            })}>
 
         <Typography variant={"caption"} color={"secondary"} className={"absolute top-2 left-3.5 cursor-inherit"}>
             {title}

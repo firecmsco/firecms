@@ -201,15 +201,15 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const [entityId, setEntityId] = React.useState<string | undefined>(initialEntityId);
 
-    const doOnValuesChanges = (values?: EntityValues<M>) => {
-        const initialValues = formex.initialValues;
-        setInternalValues(values);
-        if (onValuesChanged)
-            onValuesChanged(values);
-        if (autoSave && values && !equal(values, initialValues)) {
-            save(values);
-        }
-    };
+    // const doOnValuesChanges = (values?: EntityValues<M>) => {
+    //     const initialValues = formex.initialValues;
+    //     setInternalValues(values);
+    //     if (onValuesChanged)
+    //         onValuesChanged(values);
+    //     if (autoSave && values && !equal(values, initialValues)) {
+    //         save(values);
+    //     }
+    // };
 
     const [entityIdError, setEntityIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<Error | undefined>();
@@ -230,10 +230,10 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     const mainViewVisible = selectedTabRef.current === MAIN_TAB_VALUE;
 
     // const initialValuesRef = useRef<EntityValues<M>>(entity?.values ?? baseDataSourceValues as EntityValues<M>);
-    const [internalValues, setInternalValues] = useState<EntityValues<M> | undefined>(entity?.values ?? baseDataSourceValuesRef.current as EntityValues<M>);
+    // const [internalValues, setInternalValues] = useState<EntityValues<M> | undefined>(entity?.values ?? baseDataSourceValuesRef.current as EntityValues<M>);
 
-    const modifiedValuesRef = useRef<EntityValues<M> | undefined>(undefined);
-    const modifiedValues = modifiedValuesRef.current;
+    // const modifiedValuesRef = useRef<EntityValues<M> | undefined>(undefined);
+    // const modifiedValues = modifiedValuesRef.current;
 
     const subcollections = (collection.subcollections ?? []).filter(c => !c.hideFromNavigation);
     const subcollectionsCount = subcollections?.length ?? 0;
@@ -443,12 +443,15 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         collection: inputCollection,
         path,
         entityId,
-        values: internalValues,
+        values: formex.values,
         previousValues: formex.initialValues,
         fields: customizationController.propertyConfigs
     });
 
+    const lastSavedValues = useRef<EntityValues<M> | undefined>(entity?.values);
+
     const save = (values: EntityValues<M>): Promise<void> => {
+        lastSavedValues.current = values;
         return onSaveEntityRequest({
             collection: resolvedCollection,
             path,
@@ -510,7 +513,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                         {formContext && <Builder
                             collection={collection}
                             entity={usedEntity}
-                            modifiedValues={modifiedValues ?? usedEntity?.values}
+                            modifiedValues={formex.values ?? usedEntity?.values}
                             formContext={formContext}
                         />}
                     </ErrorBoundary>
@@ -573,9 +576,9 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         });
     };
 
-    const onValuesChanged = useCallback((values?: EntityValues<M>) => {
-        modifiedValuesRef.current = values;
-    }, []);
+    // const onValuesChanged = useCallback((values?: EntityValues<M>) => {
+    //     modifiedValuesRef.current = values;
+    // }, []);
 
     // eslint-disable-next-line n/handle-callback-err
     const onIdUpdateError = useCallback((error: any) => {
@@ -593,11 +596,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             }
             : undefined);
     }, []);
-
-    const onModified = (dirty: boolean) => {
-        if (!autoSave)
-            onValuesAreModified(dirty);
-    }
 
     // useEffect(() => {
     //     baseDataSourceValuesRef.current = getDataSourceEntityValues(initialResolvedCollection, status, entity);
@@ -646,19 +644,19 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     }
 
     const titlePropertyKey = getEntityTitlePropertyKey(resolvedCollection, customizationController.propertyConfigs);
-    const title = internalValues && titlePropertyKey ? getValueInPath(internalValues, titlePropertyKey) : undefined;
+    const title = formex.values && titlePropertyKey ? getValueInPath(formex.values, titlePropertyKey) : undefined;
 
     const onIdUpdate = inputCollection.callbacks?.onIdUpdate;
 
     const doOnIdUpdate = useCallback(async () => {
-        if (onIdUpdate && internalValues && (status === "new" || status === "copy")) {
+        if (onIdUpdate && formex.values && (status === "new" || status === "copy")) {
             setCustomIdLoading(true);
             try {
                 const updatedId = await onIdUpdate({
                     collection: resolvedCollection,
                     path,
                     entityId,
-                    values: internalValues,
+                    values: formex.values,
                     context
                 });
                 setEntityId(updatedId);
@@ -668,7 +666,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             }
             setCustomIdLoading(false);
         }
-    }, [entityId, internalValues, status]);
+    }, [entityId, formex.values, status]);
 
     useEffect(() => {
         doOnIdUpdate();
@@ -712,10 +710,13 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const modified = formex.dirty;
     useEffect(() => {
-        if (onModified)
-            onModified(modified);
-        if (onValuesChanged)
-            onValuesChanged(formex.values);
+        if (!autoSave) {
+            onValuesAreModified(modified);
+        } else {
+            if (formex.values && !equal(formex.values, lastSavedValues.current)) {
+                save(formex.values);
+            }
+        }
     }, [modified, formex.values]);
 
     useEffect(() => {
@@ -915,8 +916,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                             path={path}
                             collection={collection}
                             onDiscard={onDiscard}
-                            onValuesChanged={onValuesChanged}
-                            onModified={onModified}
                             entity={usedEntity}
                             context={context}
                             formContext={formContext}
