@@ -116,7 +116,7 @@ export const DefaultAppBar = function DefaultAppBar({
                             {!hasDrawer && (logo
                                 ? <img src={logo}
                                        alt="Logo"
-                                       className={cls("w-[32px] h-[32px]")}/>
+                                       className={cls("w-[32px] h-[32px] object-contain")}/>
                                 : <FireCMSLogo width={"32px"} height={"32px"}/>)}
 
                             {typeof title === "string"
