@@ -541,9 +541,10 @@ function LoginForm({
                         <CircularProgress className="p-1" size={"small"}/>
                     }
 
-                    {loginState === "email" && <Button variant="outlined" onClick={() => setLoginState("registration")}>
-                        New user
-                    </Button>}
+                    {!disableSignupScreen && loginState === "email" &&
+                        <Button variant="outlined" onClick={() => setLoginState("registration")}>
+                            New user
+                        </Button>}
 
                     <Button type="submit">
                         {loginState === "registration" ? "Create account" : (loginState === "password" ? "Login" : "Login")}
