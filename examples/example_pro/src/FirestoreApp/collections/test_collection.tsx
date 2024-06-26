@@ -161,7 +161,10 @@ export const testCollection = buildCollection<any>({
                     });
 
                 default:
-                    return null;
+                    return {
+                        dataType: "map",
+                        disabled: true
+                    };
             }
         },
         // isAdmin: {

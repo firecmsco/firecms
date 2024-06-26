@@ -988,9 +988,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                             onClick={() => {
                                 onClose?.();
                                 return sideDialogContext.close(false);
-                            }}
-                            size="large">
-                            <CloseIcon/>
+                            }}>
+                            <CloseIcon size={"small"}/>
                         </IconButton>
                     </div>
 
