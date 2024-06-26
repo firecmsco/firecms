@@ -368,12 +368,12 @@ export const EntityCollectionView = React.memo(
             return resolveProperty({
                 propertyKey,
                 propertyOrBuilder,
-                path: fullPath,
+                path: entity.path,
                 values: entity.values,
                 entityId: entity.id,
                 fields: customizationController.propertyConfigs
             });
-        }, [collection.properties, customizationController.propertyConfigs, fullPath, resolvedCollection.properties]);
+        }, [collection.properties, customizationController.propertyConfigs, resolvedCollection.properties]);
 
         const displayedColumnIds = useColumnIds(resolvedCollection, true);
 
