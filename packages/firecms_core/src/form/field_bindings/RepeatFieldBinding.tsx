@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { CMSType, FieldProps, ResolvedProperty } from "../../types";
 import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../components";
 import { ErrorBoundary } from "../../components";
-import { getIconForProperty } from "../../util";
+import { getDefaultValueFor, getIconForProperty } from "../../util";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
@@ -75,7 +75,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
                                                  onInternalIdAdded={setLastAddedId}
                                                  disabled={isSubmitting || Boolean(property.disabled)}
                                                  includeAddButton={!property.disabled}
-                                                 newDefaultEntry={property.of.defaultValue}/>;
+                                                 newDefaultEntry={getDefaultValueFor(property.of)}/>;
 
     const title = (<LabelWithIcon icon={getIconForProperty(property, "small")}
                                   required={property.validation?.required}
