@@ -135,7 +135,7 @@ export function SubcollectionsEditTab({
                         {totalEntityViews === 0 &&
                             <Alert action={<Button variant="text"
                                                    size={"small"}
-                                                   href={"https://firecms.co/docs/customization_quickstart"}
+                                                   href={"https://firecms.co/docs/cloud/quickstart"}
                                                    component={"a"}
                                                    rel="noopener noreferrer"
                                                    target="_blank">More info</Button>}>

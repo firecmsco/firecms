@@ -13,6 +13,26 @@
         "source": "/docs/cloud_quickstart",
         "destination": "/docs/cloud/quickstart",
         "type": 301
+      },
+      {
+        "source": "/docs/customization_quickstart",
+        "destination": "/docs/cloud/quickstart",
+        "type": 301
+      },
+      {
+        "source": "/cloud_quickstart",
+        "destination": "/docs/cloud/quickstart",
+        "type": 301
+      },
+      {
+        "source": "/admin_panel",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/cloud",
+        "destination": "/docs/cloud/quickstart",
+        "type": 301
       }
     ],
     "rewrites": [

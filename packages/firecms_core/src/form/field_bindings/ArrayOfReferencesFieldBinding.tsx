@@ -6,7 +6,7 @@ import { ErrorView } from "../../components";
 import { getIconForProperty, getReferenceFrom } from "../../util";
 
 import { useNavigationController, useReferenceDialog } from "../../hooks";
-import { Button, cls, ExpandablePanel, fieldBackgroundMixin } from "@firecms/ui";
+import { Button, cls, ExpandablePanel, fieldBackgroundMixin, Typography } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
@@ -94,12 +94,13 @@ export function ArrayOfReferencesFieldBinding({
         );
     }, [ofProperty.path, ofProperty.previewProperties, value]);
 
-    const title = (
+    const title = (<>
         <LabelWithIcon icon={getIconForProperty(property, "small")}
                        required={property.validation?.required}
                        title={property.name}
-                       className={"text-text-secondary dark:text-text-secondary-dark"}/>
-    );
+                       className={"flex-grow text-text-secondary dark:text-text-secondary-dark"}/>
+        {Array.isArray(value) && <Typography variant={"caption"} className={"px-4"}>({value.length})</Typography>}
+    </>);
 
     const body = <>
         {!collection && <ErrorView

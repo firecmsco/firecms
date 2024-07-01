@@ -4,7 +4,7 @@ import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../compone
 import { ErrorBoundary } from "../../components";
 import { getDefaultValueFor, getIconForProperty } from "../../util";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
-import { ExpandablePanel } from "@firecms/ui";
+import { ExpandablePanel, Typography } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
 /**
@@ -77,10 +77,13 @@ export function RepeatFieldBinding<T extends Array<any>>({
                                                  includeAddButton={!property.disabled}
                                                  newDefaultEntry={getDefaultValueFor(property.of)}/>;
 
-    const title = (<LabelWithIcon icon={getIconForProperty(property, "small")}
-                                  required={property.validation?.required}
-                                  title={property.name}
-                                  className={"text-text-secondary dark:text-text-secondary-dark"}/>);
+    const title = (<>
+        <LabelWithIcon icon={getIconForProperty(property, "small")}
+                       required={property.validation?.required}
+                       title={property.name}
+                       className={"flex-grow text-text-secondary dark:text-text-secondary-dark"}/>
+        {Array.isArray(value) && <Typography variant={"caption"} className={"px-4"}>({value.length})</Typography>}
+    </>);
 
     return (
 

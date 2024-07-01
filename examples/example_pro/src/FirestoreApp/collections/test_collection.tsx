@@ -450,13 +450,13 @@ export const testCollection = buildCollection<any>({
             //     mode: "date_time",
             //     clearable: true
             // },
-            // tags: {
-            //     name: "Tags",
-            //     dataType: "array",
-            //     of: {
-            //         dataType: "string"
-            //     }
-            // },
+            tags: {
+                name: "Tags",
+                dataType: "array",
+                of: {
+                    dataType: "string"
+                }
+            },
             // specSheet: ({
             //                 values,
             //                 entityId
