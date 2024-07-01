@@ -48,12 +48,12 @@ export function getDefaultValuesFor<M extends Record<string, any>>(properties: P
 
 export function getDefaultValueFor(property: PropertyOrBuilder) {
     if (isPropertyBuilder(property)) return undefined;
-    if (property.dataType === "map" && property.properties) {
+    if (property.defaultValue || property.defaultValue === null) {
+        return property.defaultValue;
+    } else if (property.dataType === "map" && property.properties) {
         const defaultValuesFor = getDefaultValuesFor(property.properties as Properties);
         if (Object.keys(defaultValuesFor).length === 0) return undefined;
         return defaultValuesFor;
-    } else if (property.defaultValue || property.defaultValue === null) {
-        return property.defaultValue;
     } else {
         return getDefaultValueForDataType(property.dataType);
     }

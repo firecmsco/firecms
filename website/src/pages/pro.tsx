@@ -2,6 +2,7 @@ import React from "react";
 import Layout from "@theme/Layout";
 import { Panel } from "../partials/general/Panel";
 import { ProInfo } from "../partials/pro/ProInfo";
+import { ClientUIComponentsTeaser } from "../partials/home/UITeaser";
 import { ProDeveloperFeatures } from "../partials/pro/ProDeveloperFeatures";
 import { HeroPro } from "../partials/pro/HeroPro";
 import { PublicFacingApps } from "../partials/pro/PublicFacingApps";
@@ -24,6 +25,8 @@ function ProPage() {
                     />
 
                     <ProInfo/>
+
+                    <ClientUIComponentsTeaser/>
 
                     <ProFeaturesPanels/>
 

@@ -137,7 +137,7 @@ module.exports = {
             },
             items: [
                 {
-                    label: "Product",
+                    label: "Features",
                     to: "features",
                     items: [
                         {
