@@ -23,11 +23,12 @@ export function DeveloperFeatures() {
     const isDarkTheme = colorMode === "dark";
 
     return (<>
-            <Panel color={"gray"} includeMargin={false} includePadding={false}>
+            <Panel color={"gray"} includeMargin={false} includePadding={false}
+                   header={<p
+                       className={clsx("text-center text-secondary uppercase font-mono font-bold border-0 border-b", ContainerInnerPaddingMixin, defaultBorderMixin)}>
+                       For developers
+                   </p>}>
 
-                <p className={clsx("text-center text-secondary uppercase font-mono font-bold border-0 border-b", ContainerInnerPaddingMixin, defaultBorderMixin)}>
-                    For developers
-                </p>
 
                 <TwoColumns
                     reverseSmall={true}

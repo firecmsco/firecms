@@ -12,7 +12,8 @@ export function PublicFacingApps() {
 
         {/* Two column layout*/}
         <div className="">
-            <div>
+
+            <div className={"max-w-6xl mx-auto"}>
                 <h2 className={"h2 mb-3 uppercase font-mono"}>
                     Public Facing Applications
                 </h2>
@@ -21,11 +22,9 @@ export function PublicFacingApps() {
                     solution for you. Define exactly what each user can do and customize the experience for each role.
                 </p>
                 <p className="text-xl md:text-2xl">
-                    Use all the internal components of FireCMS, including the schema editor, data inference, advanced
-                    data import and export, default roles and more.
-                </p>
-                <p className={"text-xl md:text-2xl"}>
-                    With your FireCMS PRO license, you can build projects with <span className={"gradient-text"}>unlimited users</span>.
+                    Use all the internal components of FireCMS, including the <b>schema editor</b>, <b>data
+                    inference</b>, <b>advanced
+                    data import and export</b>, default roles and more.
                 </p>
             </div>
             <div className={"relative p-16 "}>

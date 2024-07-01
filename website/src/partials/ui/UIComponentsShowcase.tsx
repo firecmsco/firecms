@@ -6,10 +6,10 @@ const LazyClientUIComponentsShowcase = React.lazy(() => import("./ClientUICompon
 export function UIComponentsShowcase() {
 
     return <BrowserOnly
-        fallback={<div/>}>
+        fallback={<div style={{ height: 1600 }}/>}>
         {() => (
 
-            <Suspense fallback={<div/>}>
+            <Suspense fallback={<div style={{ height: 1600 }}/>}>
                 <LazyClientUIComponentsShowcase/>
             </Suspense>
         )}

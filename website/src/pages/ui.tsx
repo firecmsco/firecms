@@ -39,13 +39,14 @@ const UIPage: React.FC = () => {
                 <UIComponentsShowcase/>
             </Panel>
 
-            <Panel color={"light"} className={"dark:bg-gray-800 dark:text-white text-lg"}>
+            <Panel color={"light"} container={true} className={"dark:bg-gray-800 dark:text-white text-lg"}>
 
                 <h2 className={"text-3xl md:text-4xl font-bold my-2"}>
                     A solid foundation
                 </h2>
                 <p>
-                    FireCMS UI is a UI kit based on <b>React</b>, <b>tailwind</b> and <b>RadixUI</b>, with a focus on <b>accessibility</b> and <b>simplicity</b>.
+                    FireCMS UI is a UI kit based on <b>React</b>, <b>tailwind</b> and <b>RadixUI</b>, with a focus
+                    on <b>accessibility</b> and <b>simplicity</b>.
                     The defaults look great out of the box, but are easy to customize.
                 </p>
                 <p>
@@ -75,7 +76,7 @@ const UIPage: React.FC = () => {
                     </a>
                 </div>
             </Panel>
-            <Panel color={"lighter"} className={"dark:bg-gray-800 dark:text-white text-lg"}>
+            <Panel container={true} color={"lighter"} className={"dark:bg-gray-800 dark:text-white text-lg"}>
 
                 <h2 className={"text-3xl md:text-4xl font-bold my-2"}>
                     Do you need icons?

@@ -11,7 +11,7 @@ export function ManageYour() {
     return <Panel color={"primary"} includePadding={false}>
         <div
             className={clsx(ContainerInnerPaddingMixin,)}>
-            <div className={"h1 relative items-center text-white uppercase"}>
+            <div className={"h1 relative items-center text-white uppercase mt-8" }>
                 <h4 className="h1 mb-4 text-white uppercase md:inline">
                     Manage your&nbsp;
                 </h4>

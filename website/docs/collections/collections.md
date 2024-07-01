@@ -41,6 +41,8 @@ can define an enum string property and the values will be merged from both defin
 If you just need to add some code to a collection defined in the UI, you can use the `modifyCollection` function in
 your `FireCMSAppConfig` object.
 
+This applies to FireCMS Cloud only. 
+
 ```tsx
 import { FireCMSAppConfig } from "@firecms/cloud";
 
@@ -195,8 +197,10 @@ const productsCollection = buildCollection<Product>({
 });
 ```
 
-This collection can then be used by including it in the `collections` prop of your main export, a `FireCMSAppConfig`
+In FireCMS Cloud, this collection can then be used by including it in the `collections` prop of your main export, a `FireCMSAppConfig`
 object.
+
+In FireCMS PRO, `collections` are passed directly to the `useBuildNavigationController` hook.
 
 ## Subcollections
 

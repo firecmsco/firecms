@@ -8,9 +8,13 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
-import { ContainerInnerPaddingMixin, CTAButtonMixin, CTACaret, CTAOutlinedButtonMixin, defaultBorderMixin } from "../styles";
-import LightingIcon from "@site/static/img/icons/lighting.svg";
-
+import {
+    ContainerInnerPaddingMixin,
+    CTAButtonMixin,
+    CTACaret,
+    CTAOutlinedButtonMixin,
+    defaultBorderMixin
+} from "../styles";
 
 // developer features:
 // - use all the internal hooks
@@ -22,10 +26,12 @@ export function ProDeveloperFeatures() {
 
     return (<>
 
-            <Panel color={"gray"} includeMargin={false} includePadding={false}>
-                <p className={clsx("text-center text-secondary uppercase font-mono font-bold border-0 border-b", ContainerInnerPaddingMixin, defaultBorderMixin)}>
-                    For developers
-                </p>
+            <Panel color={"gray"} includeMargin={false} includePadding={false}
+                   header={<p
+                       className={clsx("text-center text-secondary uppercase font-mono font-bold border-0 border-b", ContainerInnerPaddingMixin, defaultBorderMixin)}>
+                       For developers
+                   </p>}>
+
 
                 <div
                     className={"max-w-6xl w-full mx-auto md:col-span-9 md:pr-8 flex justify-center flex-col h-full mb-16"}>

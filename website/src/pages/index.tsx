@@ -9,6 +9,7 @@ import FeaturesPanels from "../partials/home/FeaturesPanels";
 import FirebaseTeaser from "../partials/home/OpenSourceDetails";
 import FirebaseIntro from "../partials/home/FirebaseIntro";
 import { Companies } from "../partials/home/Companies";
+import { UITeaser } from "../partials/home/UITeaser";
 import FeaturesTeaser from "../partials/home/FeaturesTeaser";
 import OpenAITeaser from "../partials/home/OpenAITeaser";
 import { SchemaEditorIntro } from "../partials/home/SchemaEditorIntro";
@@ -50,6 +51,8 @@ function Home() {
                 <QuotesSection/>
 
                 <Companies/>
+
+                <UITeaser/>
 
                 <FeaturesTeaser/>
 

@@ -174,3 +174,11 @@ export const appConfig: FireCMSAppConfig = {
     collections: collectionsBuilder
 };
 ```
+
+In the **PRO version** of FireCMS, you can use the `collectionsBuilder` in the `useBuildNavigationController` hook.
+
+```tsx
+const navigationController = useBuildNavigationController({
+    collections: collectionsBuilder
+});
+```

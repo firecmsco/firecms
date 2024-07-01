@@ -17,20 +17,23 @@ import mmDark from "@site/static/img/mm_dark.png";
 import oikosAviationDemo from "@site/static/img/oikos_aviation_demo.png";
 
 export function ProInfo() {
-    return <Panel color={"white"}>
-        <h2 className={"h2 mb-3 uppercase font-mono"}>
-            Build better applications faster
-        </h2>
-        <p className="text-xl md:text-2xl">
-            FireCMS PRO allows you to use all the internal components and features of FireCMS, but also provides
-            additional tools and components to help you build better <strong className={"gradient-text"}>back-office
-            applications</strong> faster.
-        </p>
-        <p className="text-xl md:text-2xl mb-16">
-            <strong className={"gradient-text"}>Customizable, extensible</strong> and with a strong focus on developer
-            experience, <strong>FireCMS PRO</strong> is the perfect
-            solution for your next project.
-        </p>
+    return <Panel color={"white"} container={false}>
+        <div className={"max-w-6xl mx-auto"}>
+            <h2 className={"h2 mb-3 uppercase font-mono"}>
+                Build better applications faster
+            </h2>
+            <p className="text-xl md:text-2xl">
+                FireCMS PRO allows you to use all the internal components and features of FireCMS, but also provides
+                additional tools and components to help you build better <strong className={"gradient-text"}>back-office
+                applications</strong> faster.
+            </p>
+            <p className="text-xl md:text-2xl mb-16">
+                <strong className={"gradient-text"}>Customizable, extensible</strong> and with a strong focus on
+                developer
+                experience, <strong>FireCMS PRO</strong> is the perfect
+                solution for your next project.
+            </p>
+        </div>
         <Marquee className={"rounded-xl"}>
             {[
                 MMApp,

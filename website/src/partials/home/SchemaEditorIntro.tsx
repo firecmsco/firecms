@@ -22,42 +22,44 @@ export const SchemaEditorIntro = () => {
                         "border-x border-y-0 ",
                         " flex flex-col py-20")}>
 
-                    <h2 className="h1 mb-4 uppercase">
-                        The best data schema editor
-                    </h2>
+                    <div className={"relative max-w-6xl mx-auto"}>
+                        <h2 className="h1 mb-4 uppercase">
+                            The best data schema editor
+                        </h2>
 
-                    <div className={"mt-4 mx-auto text-xl"}>
-                        <p>
-                            <b>FireCMS Cloud</b> is a hosted version of FireCMS
-                            that allows you to create your own headless CMS
-                            in minutes. It includes a new content schema
-                            editor that allows you to create your own
-                            content models and collections.
-                        </p>
-                        <p>If you have an <strong>existing Firebase
-                            project</strong>, let FireCMS Cloud
-                            set-up the collections for you based on your
-                            data <strong>automatically</strong>.</p>
-                        <p>FireCMS is great both for existing projects, since it
-                            will adapt
-                            to any database structure you have, as well as for
-                            new ones,
-                            since it sets up a complete Google Cloud Project for
-                            you.</p>
+                        <div className={"mt-4 mx-auto text-xl"}>
+                            <p>
+                                <b>FireCMS Cloud</b> is a hosted version of FireCMS
+                                that allows you to create your own headless CMS
+                                in minutes. It includes a new content schema
+                                editor that allows you to create your own
+                                content models and collections.
+                            </p>
+                            <p>If you have an <strong>existing Firebase
+                                project</strong>, let FireCMS Cloud
+                                set-up the collections for you based on your
+                                data <strong>automatically</strong>.</p>
+                            <p>FireCMS is great both for existing projects, since it
+                                will adapt
+                                to any database structure you have, as well as for
+                                new ones,
+                                since it sets up a complete Google Cloud Project for
+                                you.</p>
 
-                    </div>
+                        </div>
 
 
-                    <div className={"my-8 pb-16"}>
-                        <a
-                            className={CTAOutlinedButtonMixin}
-                            href="http://app.firecms.co"
-                            rel="noopener noreferrer"
-                            target="_blank"
-                        >
-                            Go to FireCMS Cloud
-                            <CTACaret/>
-                        </a>
+                        <div className={"my-8 pb-16"}>
+                            <a
+                                className={CTAOutlinedButtonMixin}
+                                href="http://app.firecms.co"
+                                rel="noopener noreferrer"
+                                target="_blank"
+                            >
+                                Go to FireCMS Cloud
+                                <CTACaret/>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

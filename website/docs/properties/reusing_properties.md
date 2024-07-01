@@ -11,7 +11,7 @@ the collection editor
 FireCMS 3 introduced a new way of defining properties that allows you to reuse
 them across different entities and collections.
 
-In the main App config export you can define a `propertyConfigs` object that
+You can define a `propertyConfigs` object that
 contains all the configurations related to a property. This is an array of
 `PropertyConfig` objects, which are defined as follows:
 
@@ -63,7 +63,7 @@ Note that you can use any of the existing builders or properties as a base for
 your custom property. What you define in your property will be used as a base
 for the resulting property (the user is still able to customize it).
 
-### Example
+### FireCMS Cloud
 
 Let's define a custom property that consists of a translations map object with different string values:
 
@@ -94,6 +94,35 @@ export const appConfig: FireCMSAppConfig = {
         }
     ]
 };
+```
+
+### FireCMS PRO
+
+In FireCMS PRO, you can define the `propertyConfigs` in the `FireCMS` component:
+
+```tsx
+<FireCMS
+    //...
+    propertyConfigs={[
+        {
+            name: "Translated string",
+            key: "translated_string",
+            property: {
+                dataType: "map",
+                properties: {
+                    en: {
+                        dataType: "string",
+                        name: "English"
+                    },
+                    es: {
+                        dataType: "string",
+                        name: "Español"
+                    },
+                },
+            },
+        }
+    ]}
+/>
 ```
 
 

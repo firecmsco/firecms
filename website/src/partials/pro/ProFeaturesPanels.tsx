@@ -38,14 +38,15 @@ function ProFeaturesPanels() {
     return (
         <Panel
             color={"white-to-slate"}
-            includePadding={false}>
+            includePadding={false}
+            header={<LinedSpace size={"large"} position={"bottom"}/>}
+            footer={<LinedSpace size={"larger"} position={"top"}/>}>
 
-            <LinedSpace size={"larger"} position={"bottom"}/>
             <div className={ContainerPaddingMixin}>
                 <div
                     data-aos="fade-up"
                     className={"container flex items-center mb-4 "}>
-                    <div>
+                    <div className={"max-w-6xl mx-auto"}>
 
                         <h2 className="h2 mb-3 uppercase font-mono">
                             Advanced Functionality, Built-In
@@ -69,7 +70,7 @@ function ProFeaturesPanels() {
                 </div>
 
 
-                <div className="mx-auto px-4 md:px-8">
+                <div className="max-w-6xl mx-auto px-4 md:px-8">
                     <table className="w-full text-xl border-none table-auto">
                         <tbody>
                         {features.map((feature, index) => (
@@ -88,7 +89,6 @@ function ProFeaturesPanels() {
 
             </div>
 
-            <LinedSpace size={"larger"} position={"top"}/>
 
         </Panel>
     );

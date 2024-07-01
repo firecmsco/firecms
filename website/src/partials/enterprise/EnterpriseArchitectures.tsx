@@ -16,7 +16,7 @@ export function EnterpriseArchitectures() {
 
             <Panel color={"light"} includePadding={false}>
                 <TwoColumns
-                    left={<div className={"text-2xl p-8"}>
+                    left={<div className={"text-2xl pr-8"}>
 
                         <h2 className={"h2"}>Adaptable to Your Architecture</h2>
                         <p>

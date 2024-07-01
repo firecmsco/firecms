@@ -73,7 +73,7 @@ const reviewSchema = quotes.map((quote, index) => ({
 
 export const QuotesSection: React.FC = () => {
     return (
-        <Panel color={"lighter"} includePadding={false} >
+        <Panel color={"lighter"} includePadding={false} container={false}>
             <Head>
                 <script type="application/ld+json">
                     {JSON.stringify(reviewSchema)}

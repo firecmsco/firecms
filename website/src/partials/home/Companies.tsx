@@ -23,7 +23,7 @@ export function Companies() {
     const { colorMode } = useColorMode();
     const isDarkTheme = colorMode === "dark";
 
-    return <Panel color={"light"}>
+    return <Panel color={"light"} container={false}>
 
         <h2 className={"text-2xl text-center text-gray-600 dark:text-gray-400"}>
             Trusted by

@@ -105,8 +105,8 @@ const data = [{
         cloudPlus: "Yes",
         cloudPro: "Yes"
     }, {
-        feature: "OpenAI data augmentation",
-        selfHosted: "DataTalk",
+        feature: "DataTalk",
+        selfHosted: "No",
         cloud: "No",
         cloudPlus: "Yes",
         cloudPro: "Yes"
@@ -204,20 +204,22 @@ export function VersionsComparison() {
 
     return <>
 
-        <Panel includePadding={false} color={"white"} innerClassName={" flex flex-col items-center justify-center"}>
+        <Panel includePadding={false} color={"white"} innerClassName={" flex flex-col items-center justify-center"}
+               header={<>
+                   <LinedSpace/>
 
-            <LinedSpace/>
+                   <div className={clsx("border-0 border-b w-full", defaultBorderMixin)}>
+                       <h2 className={clsx("text-3xl md:text-4xl font-bold my-8 text-center ")}>
+                           Versions comparison
+                       </h2>
+                   </div>
+               </>}>
 
-            <div className={clsx("border-0 border-b w-full", defaultBorderMixin)}>
-                <h2 className={clsx("text-3xl md:text-4xl font-bold my-8 text-center ")}>
-                    Versions comparison
-                </h2>
-            </div>
 
             <div className={ContainerInnerPaddingMixin}>
 
                 <table
-                    className="font-medium border-separate text-sm text-left my-8 mx-auto">
+                    className="font-medium border-separate text-sm text-left mt-4 mb-8 mx-auto">
 
                     {/*<thead*/}
                     {/*    className="text-xs text-gray-800 uppercase font-mono bg-gray-50  font-bold">*/}

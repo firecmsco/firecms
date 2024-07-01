@@ -3,21 +3,27 @@ import { ContainerMixin, ContainerPaddingMixin, defaultBorderMixin } from "../st
 import clsx from "clsx";
 
 export function Panel({
+                          header,
                           children,
+                          footer,
                           color = "transparent",
                           centered = false,
                           includeMargin = false,
                           includePadding = true,
                           className,
-                          innerClassName
+                          innerClassName,
+                          container = true
                       }: {
+    header?: React.ReactNode,
     children: React.ReactNode,
+    footer?: React.ReactNode,
     color?: "gray" | "dark_gray" | "light_gray" | "white" | "white-to-slate" | "primary" | "secondary" | "light" | "lighter" | "transparent",
     centered?: boolean,
     includeMargin?: boolean,
     includePadding?: boolean,
     className?: string,
     innerClassName?: string,
+    container?: boolean
 }) {
 
     const colorClass = color === "transparent" ? "" :
@@ -48,7 +54,10 @@ export function Panel({
                 "border-x border-y-0",
                 innerClassName
             )}>
-                {children}
+                {header}
+                {container ? <div className={"max-w-6xl mx-auto"}>{children}</div> : null}
+                {!container ? children : null}
+                {footer}
             </div>
         </section>
     );

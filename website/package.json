@@ -18,6 +18,7 @@
     "node": ">=18"
   },
   "dependencies": {
+    "react-responsive-masonry": "^2.2.1",
     "@docsearch/js": "3.5.2",
     "@docusaurus/core": "^3.4.0",
     "@docusaurus/plugin-google-gtag": "^3.4.0",

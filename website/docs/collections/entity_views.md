@@ -11,6 +11,7 @@ enough in certain cases, where you might want to have a full **custom view relat
 to one entity**.
 
 Typical use cases for this are:
+
 - **Preview** of an entity in a specific format.
 - Checking how the data looks in a **web page**.
 - Defining a **dashboard**.
@@ -19,7 +20,6 @@ Typical use cases for this are:
 
 When your entity view is defined you can add directly to the collection
 or include it in the entity view registry.
-
 
 ### Defining an entity custom view
 
@@ -31,9 +31,14 @@ import React from "react";
 import { EntityCustomView, buildCollection } from "@firecms/cloud";
 
 const sampleView: EntityCustomView = {
-    path: "preview",
+    key: "preview",
     name: "Blog entry preview",
-    Builder: ({ collection, entity, modifiedValues, formContext }) => (
+    Builder: ({
+                  collection,
+                  entity,
+                  modifiedValues,
+                  formContext
+              }) => (
         // This is a custom component that you can build as any React component
         <MyBlogPreviewComponent entity={entity}
                                 modifiedValues={modifiedValues}/>
@@ -57,7 +62,11 @@ const blogCollection = buildCollection({
         {
             path: "preview",
             name: "Blog entry preview",
-            Builder: ({ collection, entity, modifiedValues }) => (
+            Builder: ({
+                          collection,
+                          entity,
+                          modifiedValues
+                      }) => (
                 // This is a custom component that you can build as any React component
                 <MyBlogPreviewComponent entity={entity}
                                         modifiedValues={modifiedValues}/>
@@ -73,7 +82,10 @@ const blogCollection = buildCollection({
 ### Add your entity view to the entity view registry
 
 You might have an entity view that you want to reuse in different collections.
-In that case you can add it to the entity view registry in your 
+
+#### FireCMS Cloud
+
+In FireCMS Cloud, you can add it to the entity view registry in your
 main `FireCMSAppConfig` export:
 
 ```tsx
@@ -89,12 +101,40 @@ const appConfig: FireCMSAppConfig = {
     entityViews: [{
         key: "test-view",
         name: "Test",
-        Builder: ({ collection, entity, modifiedValues }) => <div>Your view</div>
+        Builder: ({
+                      collection,
+                      entity,
+                      modifiedValues
+                  }) => <div>Your view</div>
     }]
 }
 
 export default appConfig;
 ```
+
+#### FireCMS PRO
+
+In FireCMS PRO, you can add it to the entity view registry in your main
+`FireCMS` component:
+
+```tsx
+//...
+<FireCMS
+    //...
+    entityViews={[{
+        key: "test-view",
+        name: "Test",
+        Builder: ({
+                      collection,
+                      entity,
+                      modifiedValues
+                  }) => <div>Your view</div>
+    }]}
+    //...
+/>
+```
+
+#### Using registered view
 
 This will make the entity view available in the collection editor UI.
 It is also possible to use the `entityView` prop in the collection

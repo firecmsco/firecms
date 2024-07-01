@@ -72,6 +72,7 @@ function HeroHome({}) {
             <MainHeroBackground/>
             <Panel includeMargin={false}
                    includePadding={false}
+                   container={false}
                    color={"transparent"}
                    className={"border-t-0"}>
                 <div className={"h-20 "}/>

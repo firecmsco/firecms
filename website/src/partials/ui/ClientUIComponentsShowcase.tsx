@@ -283,7 +283,7 @@ export default function ClientUIComponentsShowcase() {
 
                     <DialogContent>
                         <Typography variant={"h6"} className={"mb-2"}>Dialog</Typography>
-                        For all your dialog needs
+                        This UI kit is amazing!
                     </DialogContent>
                     <DialogActions>
                         <Button
