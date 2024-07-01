@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-canary.75",
+  "version": "3.0.0-canary.76",
   "type": "module",
   "name": "@firecms/mongodb",
   "access": "public",
@@ -8,9 +8,9 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "^3.0.0-canary.75",
-    "@firecms/firebase": "^3.0.0-canary.75",
-    "@firecms/ui": "^3.0.0-canary.75",
+    "@firecms/core": "^3.0.0-canary.76",
+    "@firecms/firebase": "^3.0.0-canary.76",
+    "@firecms/ui": "^3.0.0-canary.76",
     "firebase": "^10.12.2"
   },
   "exports": {
@@ -22,9 +22,9 @@
     "./package.json": "./package.json"
   },
   "devDependencies": {
-    "@types/node": "^20.12.13",
-    "typescript": "^5.4.5",
-    "vite": "^5.2.12"
+    "@types/node": "^20.14.9",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.2"
   },
   "peerDependencies": {
     "react": "^18.3.1",
