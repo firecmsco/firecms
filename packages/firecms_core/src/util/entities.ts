@@ -52,7 +52,7 @@ export function getDefaultValueFor(property: PropertyOrBuilder) {
         const defaultValuesFor = getDefaultValuesFor(property.properties as Properties);
         if (Object.keys(defaultValuesFor).length === 0) return undefined;
         return defaultValuesFor;
-    } else if (property.defaultValue) {
+    } else if (property.defaultValue || property.defaultValue === null) {
         return property.defaultValue;
     } else {
         return getDefaultValueForDataType(property.dataType);

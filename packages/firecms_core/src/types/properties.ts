@@ -149,7 +149,7 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
     /**
      * This value will be set by default for new entities.
      */
-    defaultValue?: T;
+    defaultValue?: T | null;
 
     /**
      * Should this property be editable. If set to true, the user will be able to modify the property and
