@@ -1,13 +1,14 @@
 import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
 import { FirebaseApp, FirebaseError } from "@firebase/app";
-import { ErrorView, FireCMSLogo, useModeController, } from "@firecms/core";
+import { ErrorView, FireCMSLogo, useModeController, useSnackbarController, } from "@firecms/core";
 import {
     ArrowBackIcon,
     Button,
     CircularProgress,
     EmailIcon,
     IconButton,
+    LoadingButton,
     PersonOutlineIcon,
     PhoneIcon,
     TextField,
@@ -71,6 +72,12 @@ export interface FirebaseLoginViewProps {
     disableSignupScreen?: boolean;
 
     /**
+     * Prevent users from resetting their password when the `signInOptions` value
+     * is `password`. This does not apply to the rest of login providers.
+     */
+    disableResetPassword?: boolean;
+
+    /**
      * Display this component when no user is found a user tries to log in
      * when the `signInOptions` value is `password`.
      */
@@ -101,6 +108,7 @@ export function FirebaseLoginView({
                                       authController,
                                       noUserComponent,
                                       disableSignupScreen = false,
+                                      disableResetPassword = false,
                                       disabled = false,
                                       additionalComponent,
                                       notAllowedError
@@ -283,6 +291,7 @@ export function FirebaseLoginView({
                     mode={modeState.mode}
                     noUserComponent={noUserComponent}
                     disableSignupScreen={disableSignupScreen}
+                    disableResetPassword={disableResetPassword}
                 />}
 
                 {phoneLoginSelected && <PhoneLoginForm
@@ -418,13 +427,15 @@ function LoginForm({
                        authController,
                        mode,
                        noUserComponent,
-                       disableSignupScreen
+                       disableSignupScreen,
+                       disableResetPassword
                    }: {
     onClose: () => void,
     authController: FirebaseAuthController,
     mode: "light" | "dark",
     noUserComponent?: ReactNode,
-    disableSignupScreen: boolean
+    disableSignupScreen: boolean,
+    disableResetPassword?: boolean
 }) {
 
     const passwordRef = useRef<HTMLInputElement | null>(null);
@@ -433,6 +444,9 @@ function LoginForm({
     const [email, setEmail] = useState<string>();
     const [password, setPassword] = useState<string>();
     const [previouslyUsedMethodsForUser, setPreviouslyUsedMethodsForUser] = useState<string[] | undefined>();
+    const [resettingPassword, setResettingPassword] = useState(false);
+
+    const snackbarController = useSnackbarController();
 
     useEffect(() => {
         if ((loginState === "password" || loginState === "registration") && passwordRef.current) {
@@ -541,8 +555,34 @@ function LoginForm({
                         <CircularProgress className="p-1" size={"small"}/>
                     }
 
+                    {!disableResetPassword && <LoadingButton variant="text"
+                                                             loading={resettingPassword}
+                                                             onClick={email
+                                                                 ? async () => {
+                                                                     setResettingPassword(true);
+                                                                     try {
+                                                                         try {
+                                                                             await authController.sendPasswordResetEmail(email);
+                                                                             snackbarController.open({
+                                                                                 message: "Password reset email sent",
+                                                                                 type: "success"
+                                                                             });
+                                                                         } catch (e: any) {
+                                                                             snackbarController.open({
+                                                                                 message: e.message,
+                                                                                 type: "error"
+                                                                             });
+                                                                         }
+                                                                     } finally {
+                                                                         setResettingPassword(false);
+                                                                     }
+                                                                 }
+                                                                 : undefined}>
+                        Reset password
+                    </LoadingButton>}
+
                     {!disableSignupScreen && loginState === "email" &&
-                        <Button variant="outlined" onClick={() => setLoginState("registration")}>
+                        <Button variant="text" onClick={() => setLoginState("registration")}>
                             New user
                         </Button>}
 

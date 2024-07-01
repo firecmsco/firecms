@@ -64,7 +64,7 @@ import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { ReCaptchaEnterpriseProvider } from "@firebase/app-check";
 
-const signInOptions: FirebaseSignInProvider[] = ["google.com"];
+const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
 
 function App() {
 

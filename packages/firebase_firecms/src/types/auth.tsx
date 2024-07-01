@@ -56,6 +56,8 @@ export type FirebaseAuthController<ExtraData = any> = AuthController<FirebaseUse
 
     createUserWithEmailAndPassword: (email: string, password: string) => void;
 
+    sendPasswordResetEmail: (email: string) => Promise<void>;
+
     phoneLogin: (phone: string, applicationVerifier: ApplicationVerifier) => void;
 
     /**

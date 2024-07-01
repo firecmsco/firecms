@@ -13,6 +13,7 @@ import {
     GoogleAuthProvider,
     OAuthProvider,
     onAuthStateChanged,
+    sendPasswordResetEmail as sendPasswordResetEmailFirebase,
     signInAnonymously,
     signInWithEmailAndPassword,
     signInWithPhoneNumber,
@@ -164,6 +165,12 @@ export const useFirebaseAuthController = <ExtraData>({
             .then(() => setAuthLoading(false));
     }, []);
 
+    const sendPasswordResetEmail = useCallback((email: string) => {
+        const auth = authRef.current;
+        if (!auth) throw Error("No auth");
+        return sendPasswordResetEmailFirebase(auth, email)
+    }, []);
+
     const fetchSignInMethodsForEmail = useCallback((email: string): Promise<string[]> => {
         const auth = authRef.current;
         if (!auth) throw Error("No auth");
@@ -302,6 +309,7 @@ export const useFirebaseAuthController = <ExtraData>({
         loginSkipped,
         emailPasswordLogin,
         createUserWithEmailAndPassword,
+        sendPasswordResetEmail,
         fetchSignInMethodsForEmail,
         anonymousLogin,
         phoneLogin,
