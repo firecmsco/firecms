@@ -13,7 +13,7 @@
     "@firecms/schema_inference": "^3.0.0-canary",
     "@firecms/ui": "^3.0.0-canary",
     "@firecms/user_management": "^3.0.0-canary",
-    "firebase": "^10.9.0",
+    "firebase": "^10.12.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router": "^6.22.3",
@@ -63,7 +63,6 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5.4.3",
     "vite": "^5.2.6",
-    "vite-plugin-fonts": "^0.7.0",
     "vite-plugin-svgr": "^4.2.0"
   }
 }

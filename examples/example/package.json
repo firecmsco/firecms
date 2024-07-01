@@ -72,7 +72,6 @@
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5",
     "vite": "^5.2.12",
-    "vite-plugin-fonts": "^0.7.0",
     "vite-plugin-svgr": "^4.2.0"
   }
 }

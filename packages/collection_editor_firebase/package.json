@@ -34,7 +34,7 @@
     "@firecms/firebase": "^3.0.0-canary.75"
   },
   "peerDependencies": {
-    "firebase": "^10.7.1",
+    "firebase": "^10.12.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
