@@ -1,6 +1,6 @@
 {
   "name": "firecms",
-  "version": "3.0.0-canary.73",
+  "version": "3.0.0-canary.74",
   "description": "A CLI to perform FireCMS operations. This package is just a wrapper around @firecms/cli",
   "bin": "bin/firecms.js",
   "publishConfig": {
@@ -24,7 +24,7 @@
   "author": "firecms.co",
   "license": "MIT",
   "dependencies": {
-    "@firecms/cli": "^3.0.0-canary.73"
+    "@firecms/cli": "^3.0.0-canary.74"
   },
   "devDependencies": {
     "@types/node": "^20.12.13",
@@ -37,5 +37,5 @@
   "exclude": [
     "node_modules"
   ],
-  "gitHead": "cd3ef9e5f2852f4b77218cf10a4e0f71bb4b750e"
+  "gitHead": "3d43eb099c5584b289cb3189c25ac3c7cbb286f1"
 }
