@@ -398,6 +398,13 @@ export function FireCMSClientWithController({
         loadingOrErrorComponent = <CircularProgressCenter text={"Auth loading"}/>;
     } else if (!fireCMSUser) {
         loadingOrErrorComponent = <NoAccessError authController={authController} projectId={projectId}/>;
+    } else if (projectConfig.blocked) {
+        loadingOrErrorComponent = <CenteredView>
+            <Typography variant={"h4"}>Project blocked</Typography>
+            <Typography variant={"body1"}>This project has been blocked by the FireCMS team.</Typography>
+            <Typography variant={"body1"}>Please contact <a href={"mailto:hello@firecms.co"}>hello@firecms.co</a> for
+                more information</Typography>
+        </CenteredView>
     }
 
     if (loadingOrErrorComponent) {
