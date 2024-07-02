@@ -43,6 +43,8 @@ export type ProjectConfig = {
     updatePrimaryColor: (color?: string) => void;
     updateSecondaryColor: (color?: string) => void;
 
+    blocked: boolean;
+
     creationType?: "new" | "existing";
 };
 
@@ -69,6 +71,7 @@ export function useBuildProjectConfig({
     const [serviceAccountMissing, setServiceAccountMissing] = useState<boolean | undefined>();
     const [clientConfigError, setClientConfigError] = useState<Error | undefined>();
     const [localTextSearchEnabled, setLocalTextSearchEnabled] = useState<boolean>(false);
+    const [blocked, setBlocked] = useState<boolean>(false);
 
     const [customizationRevision, setCustomizationRevision] = useState<string | undefined>();
     const [creationType, setCreationType] = useState<"new" | "existing" | undefined>();
@@ -174,6 +177,7 @@ export function useBuildProjectConfig({
                     const currentCustomizationRevision = snapshot.get("current_app_config_revision");
                     setCustomizationRevision(currentCustomizationRevision);
                     setCreationType(snapshot.get("creation_type"));
+                    setBlocked(snapshot.get("blocked"));
 
                     const firebaseConfig = snapshot.get("firebase_config");
 
@@ -252,7 +256,8 @@ export function useBuildProjectConfig({
         primaryColor,
         secondaryColor,
         updatePrimaryColor,
-        updateSecondaryColor
+        updateSecondaryColor,
+        blocked
     }
 }
 
