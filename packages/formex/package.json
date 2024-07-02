@@ -1,7 +1,7 @@
 {
   "name": "@firecms/formex",
   "type": "module",
-  "version": "3.0.0-canary.76",
+  "version": "3.0.0-canary.77",
   "publishConfig": {
     "access": "public"
   },
@@ -86,5 +86,5 @@
       "node"
     ]
   },
-  "gitHead": "0ea6abe4e3b3d017e31062ae6184902ae7a425de"
+  "gitHead": "df54d6590d1c0db76feb6d24be3573477d54e85f"
 }
