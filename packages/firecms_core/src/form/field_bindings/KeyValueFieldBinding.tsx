@@ -21,6 +21,7 @@ import {
 } from "@firecms/ui";
 import { getDefaultValueForDataType, getIconForProperty } from "../../util";
 import { useCustomizationController } from "../../hooks";
+import { getIn } from "@firecms/formex";
 
 type MapEditViewRowState = [number, {
     key: string,
@@ -52,9 +53,13 @@ export function KeyValueFieldBinding({
     if (!property.keyValue) {
         throw Error(`Your property ${propertyKey} needs to have the 'keyValue' prop in order to use this field binding`);
     }
+
+    const initialValues = getIn(context.formex.initialValues, propertyKey);
+
     const mapFormView = <MapEditView value={value}
                                      setValue={setValue}
                                      disabled={disabled}
+                                     initialValue={initialValues}
                                      fieldName={property.name ?? propertyKey}/>;
 
     const title = <LabelWithIcon
@@ -84,6 +89,7 @@ export function KeyValueFieldBinding({
 
 interface MapEditViewParams<T extends Record<string, any>> {
     value?: T;
+    initialValue?: T;
     setValue: (value: (T | null)) => void;
     fieldName?: string,
     disabled?: boolean
@@ -91,14 +97,15 @@ interface MapEditViewParams<T extends Record<string, any>> {
 
 function MapEditView<T extends Record<string, any>>({
                                                         value,
+                                                        initialValue,
                                                         setValue,
                                                         fieldName,
                                                         disabled
                                                     }: MapEditViewParams<T>) {
     const [internalState, setInternalState] = React.useState<MapEditViewRowState[]>(
-        Object.keys(value ?? {}).map((key) => [getRandomId(), {
+        Object.keys(initialValue ?? {}).map((key) => [getRandomId(), {
             key,
-            dataType: getDataType(value?.[key]) ?? "string"
+            dataType: getDataType(initialValue?.[key]) ?? "string"
         }])
     );
 
@@ -120,8 +127,6 @@ function MapEditView<T extends Record<string, any>>({
         });
         setInternalState(newRowIds);
     }, [value]);
-
-    const originalValue = React.useRef<T>(value ?? {} as T);
 
     const updateDataType = (rowId: number, dataType: DataType) => {
         if (!rowId) {
@@ -168,7 +173,7 @@ function MapEditView<T extends Record<string, any>>({
                         }
 
                         const newValue = { ...(value ?? {}) } as T;
-                        if (typeof originalValue.current === "object" && fieldKey in originalValue.current) {
+                        if (typeof initialValue === "object" && fieldKey in initialValue) {
                             // @ts-ignore
                             newValue[fieldKey] = undefined; // set to undefined to remove from the object, the datasource will remove it from the backend
                         } else {
@@ -186,7 +191,7 @@ function MapEditView<T extends Record<string, any>>({
                                            value={value ?? {} as T}
                                            onDeleteClick={() => {
                                                const newValue = { ...(value ?? {}) as T };
-                                               if (originalValue.current && fieldKey in originalValue.current) {
+                                               if (initialValue && fieldKey in initialValue) {
                                                    // @ts-ignore
                                                    newValue[fieldKey] = undefined;
                                                } else {
@@ -305,7 +310,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                                   }}/>;
         } else if (dataType === "boolean") {
             return <BooleanSwitchWithLabel value={entryValue}
-                                           size={"small"}
+                                           size={"medium"}
                                            position={"start"}
                                            disabled={disabled || !fieldKey}
                                            onValueChange={(newValue) => {
@@ -375,7 +380,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
             <Typography key={rowId.toString()}
                         component={"div"}
                         className="font-mono flex flex-row gap-1">
-                <div className="w-[200px] max-w-[25%]">
+                <div className="w-[300px] max-w-[30%]">
                     <TextField
                         value={fieldKey}
                         placeholder={"key"}
@@ -389,32 +394,32 @@ function MapKeyValueRow<T extends Record<string, any>>({
                 <div className="flex-grow">
                     {(dataType !== "map" && dataType !== "array") && buildInput(entryValue, fieldKey, dataType)}
                 </div>
-                <Menu
-                    trigger={<IconButton size={"small"}
-                                         className="h-7 w-7">
-                        <ArrowDropDownIcon/>
-                    </IconButton>}
-                >
-                    <MenuItem dense
-                              onClick={() => doUpdateDataType("string")}>string</MenuItem>
-                    <MenuItem dense
-                              onClick={() => doUpdateDataType("number")}>number</MenuItem>
-                    <MenuItem dense
-                              onClick={() => doUpdateDataType("boolean")}>boolean</MenuItem>
-                    <MenuItem dense
-                              onClick={() => doUpdateDataType("date")}>date</MenuItem>
-                    <MenuItem dense
-                              onClick={() => doUpdateDataType("map")}>map</MenuItem>
-                    <MenuItem dense
-                              onClick={() => doUpdateDataType("array")}>array</MenuItem>
-                </Menu>
+                <div className={"flex flex-col"}>
+                    <Menu
+                        trigger={<IconButton size={"smallest"}>
+                            <ArrowDropDownIcon size={"small"}/>
+                        </IconButton>}
+                    >
+                        <MenuItem dense
+                                  onClick={() => doUpdateDataType("string")}>string</MenuItem>
+                        <MenuItem dense
+                                  onClick={() => doUpdateDataType("number")}>number</MenuItem>
+                        <MenuItem dense
+                                  onClick={() => doUpdateDataType("boolean")}>boolean</MenuItem>
+                        <MenuItem dense
+                                  onClick={() => doUpdateDataType("date")}>date</MenuItem>
+                        <MenuItem dense
+                                  onClick={() => doUpdateDataType("map")}>map</MenuItem>
+                        <MenuItem dense
+                                  onClick={() => doUpdateDataType("array")}>array</MenuItem>
+                    </Menu>
 
-                <IconButton aria-label="delete"
-                            size={"small"}
-                            onClick={onDeleteClick}
-                            className="h-7 w-7">
-                    <RemoveIcon size={"small"}/>
-                </IconButton>
+                    <IconButton aria-label="delete"
+                                size={"smallest"}
+                                onClick={onDeleteClick}>
+                        <RemoveIcon size={"smallest"}/>
+                    </IconButton>
+                </div>
             </Typography>
 
             {(dataType === "map" || dataType === "array") && buildInput(entryValue, fieldKey, dataType)}
@@ -472,7 +477,7 @@ function ArrayKeyValueRow<T>({
                                   }}/>;
         } else if (dataType === "boolean") {
             return <BooleanSwitchWithLabel value={entryValue}
-                                           size={"small"}
+                                           size={"medium"}
                                            position={"start"}
                                            onValueChange={(v) => {
                                                setValue(v as T);

@@ -242,35 +242,22 @@ export const testCollection = buildCollection<any>({
             //         return <div>Test</div>;
             //     }
             // }),
-            // body: buildProperty({
-            //     name: "Body",
-            //     validation: { required: false },
-            //     dataType: "map",
-            //     keyValue: true,
-            //     customProps: {
-            //         editable: true
-            //     },
-            //     defaultValue: {
-            //         clientIp: "client.ip",
-            //         clientDeviceType: "client.deviceType",
-            //         clientLanguage: "client.language",
-            //         clientReferral: "client.referral",
-            //         clientUserAgent: "client.userAgent",
-            //         clientCountry: "client.country",
-            //         clientCity: "client.city",
-            //         clientRegion: "client.region",
-            //         clientLatitude: "client.latitude",
-            //         clientLongitude: "client.longitude",
-            //         infoConversationCreatedAt: "info.createdAt",
-            //         infoConversationCompleted: "info.conversationCompleted",
-            //         dataPhone: "data.phone",
-            //         dataEmail: "data.email",
-            //         dataName: "data.name",
-            //         dataAppointmentRequested: "data.appointment_requested"
-            //     },
-            //     description: "This field is the body payload of the request",
-            //     Field: JSONField
-            // }),
+            body: buildProperty({
+                name: "Body",
+                validation: { required: false },
+                dataType: "map",
+                keyValue: true,
+                customProps: {
+                    editable: true
+                },
+                defaultValue: {
+                    clientIp: "client.ip",
+                    clientDeviceType: "client.deviceType",
+                    clientLanguage: "client.language",
+                    clientReferral: "client.referral",
+                    clientUserAgent: "client.userAgent",
+                },
+            }),
             // background: {
             //     dataType: "number",
             //     name: "Colour",
@@ -1002,10 +989,10 @@ export const testCollection = buildCollection<any>({
             //     dataType: "string",
             //     multiline: true
             // },
-            // search_adjacent: {
-            //     name: "Search adjacent",
-            //     dataType: "boolean"
-            // },
+            search_adjacent: {
+                name: "Search adjacent",
+                dataType: "boolean"
+            },
             // difficulty: {
             //     name: "Difficulty",
             //     dataType: "number"
