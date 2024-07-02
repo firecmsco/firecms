@@ -12,7 +12,7 @@ export function UITeaser() {
                   container={false}
                   header={<LinedSpace size={"large"} position={"bottom"}/>}
                   footer={<LinedSpace size={"medium"} position={"top"}/>}>
-        <h2 className="container max-w-6xl mx-auto h2 uppercase font-mono mb-4 mt-8 px-8">
+        <h2 className="max-w-6xl mx-auto h2 uppercase font-mono mb-4 mt-8 px-10">
             Modern UI components based on tailwindcss
         </h2>
         <BrowserOnly

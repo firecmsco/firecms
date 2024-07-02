@@ -33,6 +33,11 @@
         "source": "/cloud",
         "destination": "/docs/cloud/quickstart",
         "type": 301
+      },
+      {
+        "source": "/blog/cms_comparison_2023",
+        "destination": "/blog/cms_comparison_2024",
+        "type": 301
       }
     ],
     "rewrites": [
