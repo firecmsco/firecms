@@ -25,12 +25,7 @@
     "preview": "vite build && vite preview",
     "deploy": "vite build && firebase deploy --only hosting --project [REPLACE_WITH_PROJECT_ID]"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
+
   "browserslist": {
     "production": [
       ">0.2%",

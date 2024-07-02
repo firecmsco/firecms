@@ -18,7 +18,6 @@
     "node": ">=18"
   },
   "dependencies": {
-    "react-responsive-masonry": "^2.2.1",
     "@docsearch/js": "3.5.2",
     "@docusaurus/core": "^3.4.0",
     "@docusaurus/plugin-google-gtag": "^3.4.0",
@@ -45,6 +44,7 @@
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom",
     "react-fast-marquee": "^1.6.4",
+    "react-responsive-masonry": "^2.2.1",
     "react-syntax-highlighter": "^15.5.0",
     "react-transition-group": "^4.4.5",
     "react-type-animation": "^2.1.2",

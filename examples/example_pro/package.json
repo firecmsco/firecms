@@ -30,12 +30,6 @@
     "preview": "vite build && vite preview",
     "deploy": "vite build && firebase deploy --only hosting:firecms-demo-27150"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",

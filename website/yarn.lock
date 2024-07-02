@@ -5981,6 +5981,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"caniuse-lite@npm:^1.0.30001638":
+  version: 1.0.30001639
+  resolution: "caniuse-lite@npm:1.0.30001639"
+  checksum: 0d9291cc47ffaad5806716bff6fef41eec21f86a448370bc30a72823fcaf24ba5ccb4704841e6a60f078ddf2e9987e3d23f4d3ca0fffc51f6cb0400b7411ad28
+  languageName: node
+  linkType: hard
+
 "ccount@npm:^2.0.0":
   version: 2.0.1
   resolution: "ccount@npm:2.0.1"
@@ -12936,6 +12943,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-responsive-masonry@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "react-responsive-masonry@npm:2.2.1"
+  dependencies:
+    caniuse-lite: ^1.0.30001638
+  checksum: 5455cdcc33a9409e221390b32f1bbcf871acc117d3747da723ededfc6956632fd551e3a2a6f5b876a4d9d25a7eb3ac518e0c192925ca5d2cb46180891be4314e
+  languageName: node
+  linkType: hard
+
 "react-router-config@npm:^5.1.1":
   version: 5.1.1
   resolution: "react-router-config@npm:5.1.1"
@@ -15227,6 +15243,7 @@ __metadata:
     react: "link:../node_modules/react"
     react-dom: "link:../node_modules/react-dom"
     react-fast-marquee: ^1.6.4
+    react-responsive-masonry: ^2.2.1
     react-syntax-highlighter: ^15.5.0
     react-transition-group: ^4.4.5
     react-type-animation: ^2.1.2
