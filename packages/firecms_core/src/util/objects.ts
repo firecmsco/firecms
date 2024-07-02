@@ -141,15 +141,25 @@ export function removePropsIfExisting(source: any, comparison: any) {
 
     const res = isArray(source) ? [...source] : { ...source };
 
-    Object.keys(comparison).forEach(key => {
-        if (key in res) {
-            if (isObject(res[key]) && isObject(comparison[key])) {
-                res[key] = removePropsIfExisting(res[key], comparison[key]);
-            } else if (res[key] === comparison[key]) {
-                isArray(res) ? res.splice(key, 1) : delete res[key];
+    if (isArray(res)) {
+        for (let i = res.length - 1; i >= 0; i--) {
+            if (res[i] === comparison[i]) {
+                res.splice(i, 1);
+            } else if (isObject(res[i]) && isObject(comparison[i])) {
+                res[i] = removePropsIfExisting(res[i], comparison[i]);
             }
         }
-    });
+    } else {
+        Object.keys(comparison).forEach(key => {
+            if (key in res) {
+                if (isObject(res[key]) && isObject(comparison[key])) {
+                    res[key] = removePropsIfExisting(res[key], comparison[key]);
+                } else if (res[key] === comparison[key]) {
+                    delete res[key];
+                }
+            }
+        });
+    }
 
     return res;
 }
