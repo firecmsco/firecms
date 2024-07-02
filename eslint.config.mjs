@@ -1,19 +1,22 @@
 import react from "eslint-plugin-react";
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import globals from "globals";
-import tsParser from "@typescript-eslint/parser";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
 
 const __filename = fileURLToPath(import.meta.url);
 
 export default [
+    eslint.configs.recommended,
+    ...tseslint.configs.recommended,
     {
 
         files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],
         plugins: {
             react,
-            "@typescript-eslint": typescriptEslint,
         },
 
         languageOptions: {
@@ -26,7 +29,6 @@ export default [
                 // ...globals.browser,
             },
 
-            parser: tsParser,
             ecmaVersion: "latest",
             sourceType: "module",
         },
@@ -48,7 +50,7 @@ export default [
             "import/export": 0,
             "no-use-before-define": "off",
             "no-empty-pattern": "off",
-            "no-unused-vars": "warn",
+            "no-unused-vars": "off",
             "no-shadow": "warn",
             "padded-blocks": "off",
             "brace-style": "off",
@@ -79,5 +81,6 @@ export default [
             "@typescript-eslint/no-inferrable-types": "warn",
             "@typescript-eslint/ban-ts-comment": "warn",
             "@typescript-eslint/ban-types": "warn",
+            "@typescript-eslint/no-explicit-any": "off",
         },
     }];
