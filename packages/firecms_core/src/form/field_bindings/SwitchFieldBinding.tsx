@@ -46,7 +46,7 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
                                       title={property.name}/>}
                 disabled={disabled}
                 autoFocus={autoFocus}
-                size={"medium"}
+                size={"large"}
             />
 
             <FieldHelperText includeDescription={includeDescription}

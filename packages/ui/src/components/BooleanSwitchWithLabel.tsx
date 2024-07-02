@@ -57,10 +57,10 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
                 !invisible && fieldBackgroundMixin,
                 !invisible && (disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin),
                 disabled ? "cursor-default" : "cursor-pointer",
-                "rounded-md relative max-w-full justify-between w-full box-border relative inline-flex items-center",
+                "rounded-md max-w-full justify-between w-full box-border relative inline-flex items-center",
                 !invisible && focus && !disabled ? focusedClasses : "",
                 error ? "text-red-500 dark:text-red-600" : (focus && !disabled ? "text-primary" : (!disabled ? "text-text-primary dark:text-text-primary-dark" : "text-text-secondary dark:text-text-secondary-dark")),
-                size === "small" ? "min-h-[40px]" : "min-h-[64px]",
+                size === "small" ? "min-h-[40px]" : (size === "medium" ? "min-h-[48px]" : "min-h-[64px]"),
                 size === "small" ? "pl-2" : "pl-4",
                 size === "small" ? "pr-4" : "pr-6",
                 position === "end" ? "flex-row-reverse" : "flex-row"

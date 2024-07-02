@@ -5,7 +5,7 @@ export type BooleanSwitchProps = {
     value: boolean | null;
     className?: string;
     disabled?: boolean;
-    size?: "small" | "medium";
+    size?: "small" | "medium" | "large";
 } & ({
     allowIndeterminate: true;
     onValueChange?: (newValue: boolean | null) => void;
@@ -55,9 +55,9 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
                     "block rounded-full transition-transform duration-100 transform will-change-auto",
                     disabled ? "bg-slate-400 dark:bg-slate-600" : "bg-slate-400 dark:bg-slate-600",
                     {
-                        "w-[21px] h-[10px]": size === "medium",
+                        "w-[21px] h-[10px]": size === "medium" || size === "large",
                         "w-[19px] h-[8px]": size === "small",
-                        "translate-x-[10px]": size === "medium",
+                        "translate-x-[10px]": size === "medium" || size === "large",
                         "translate-x-[9px]": size === "small"
                     }
                 )}
@@ -69,9 +69,9 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
                     "block rounded-full transition-transform duration-100 transform will-change-auto",
                     disabled ? "bg-slate-300 dark:bg-slate-700" : (value ? "bg-white" : "bg-slate-600 dark:bg-slate-400"),
                     {
-                        "w-[21px] h-[21px]": size === "medium",
+                        "w-[21px] h-[21px]": size === "medium" || size === "large",
                         "w-[19px] h-[19px]": size === "small",
-                        [value ? "translate-x-[19px]" : "translate-x-[3px]"]: size === "medium",
+                        [value ? "translate-x-[19px]" : "translate-x-[3px]"]: size === "medium" || size === "large",
                         [value ? "translate-x-[17px]" : "translate-x-[2px]"]: size === "small"
                     }
                 )}
