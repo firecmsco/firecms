@@ -89,7 +89,7 @@ export function ImagePreview({
                         size={"small"}
                         onClick={(e: any) => e.stopPropagation()}
                     >
-                        <OpenInNewIcon className={"text-gray-700 dark:text-gray-300"}
+                        <OpenInNewIcon className={"text-gray-700 dark:text-gray-300 invisible group-hover:visible"}
                                        size={"small"}/>
                     </IconButton>
                 </Tooltip>

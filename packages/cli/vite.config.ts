@@ -22,7 +22,7 @@ export default defineConfig(() => ({
                 throw new Error("Unexpected format");
             }
         },
-        target: "esnext",
+        target: "ESNEXT",
         sourcemap: true,
         rollupOptions: {
             external: isExternal

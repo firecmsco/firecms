@@ -5,8 +5,8 @@
       "dom",
       "esnext"
     ],
-    "module": "ESNext",
-    "target": "ESNext",
+    "module": "ESNEXT",
+    "target": "ESNEXT",
     "moduleResolution": "node",
     "declaration": true,
     "esModuleInterop": true,

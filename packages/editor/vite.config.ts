@@ -17,7 +17,7 @@ export default defineConfig(() => ({
             name: "FireCMS Editor",
             fileName: (format) => `index.${format}.js`
         },
-        target: "esnext",
+        target: "ESNEXT",
         sourcemap: true,
 
         rollupOptions: {

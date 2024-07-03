@@ -90,7 +90,7 @@ title: Changelog
         ],
         build: {
             modulePreload: false,
-            target: "esnext",
+            target: "ESNEXT",
             cssCodeSplit: false,
         }
     })

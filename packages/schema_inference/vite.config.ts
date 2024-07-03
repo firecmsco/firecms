@@ -16,7 +16,7 @@ export default defineConfig(() => ({
             name: "FireCMS schema inference",
             fileName: (format) => `index.${format}.js`
         },
-        target: "esnext",
+        target: "ESNEXT",
         sourcemap: true,
         rollupOptions: {
             external: isExternal

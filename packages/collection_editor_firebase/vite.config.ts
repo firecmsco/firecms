@@ -11,7 +11,7 @@ export default defineConfig(() => ({
         logOverride: { "this-is-undefined-in-esm": "silent" }
     },
     build: {
-        target: "esnext",
+        target: "ESNEXT",
         modulePreload: false,
         cssCodeSplit: false,
         sourcemap: true,

@@ -16,7 +16,7 @@ export default defineConfig(() => ({
             name: "FireCMS",
             fileName: (format) => `index.${format}.js`
         },
-        target: "esnext",
+        target: "ESNEXT",
         sourcemap: true,
         rollupOptions: {
             external: isExternal

@@ -2,7 +2,7 @@
     "compilerOptions": {
         "outDir": "dist",
         "module": "es2022",
-        "target": "esnext",
+        "target": "ESNEXT",
         "lib": [
             "dom",
             "dom.iterable",

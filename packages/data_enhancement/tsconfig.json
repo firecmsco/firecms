@@ -2,8 +2,8 @@
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
-    "module": "esnext",
-    "target": "esnext",
+    "module": "ESNEXT",
+    "target": "ESNEXT",
     "lib": [
       "dom",
       "dom.iterable",

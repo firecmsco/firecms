@@ -1,6 +1,6 @@
 import React from "react";
 import { useDropzone } from "react-dropzone";
-import { fieldBackgroundMixin, focusedMixin } from "../styles";
+import { fieldBackgroundHoverMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
 import { cls } from "../util";
 import { Typography } from "./Typography";
 
@@ -72,7 +72,7 @@ export function FileUpload({
                 "h-44": size === "medium",
                 "h-28": size === "small",
                 "cursor-pointer": !disabled,
-                fieldBackgroundHoverMixin: !isDragActive,
+                [fieldBackgroundHoverMixin]: !isDragActive,
                 "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-red-500": isDragReject,
                 "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-green-500": isDragAccept,
             })}>

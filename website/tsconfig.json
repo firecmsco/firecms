@@ -1,7 +1,7 @@
 {
   "extends": "@tsconfig/docusaurus/tsconfig.json",
   "compilerOptions": {
-    "target": "esnext",
+    "target": "ESNEXT",
     "lib": [
       "dom",
       "dom.iterable",
@@ -15,7 +15,7 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
+    "module": "ESNEXT",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
