@@ -783,6 +783,11 @@ export type StorageConfig = {
      */
     postProcess?: (pathOrUrl: string) => Promise<string>;
 
+    /**
+     * You can use this prop in order to provide a custom preview URL.
+     * Useful when the file's path is different from the original field value
+     */
+    previewUrl?: (fileName: string) => string;
 }
 
 /**
