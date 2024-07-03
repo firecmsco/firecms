@@ -4,7 +4,9 @@ import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
 
 import {
+    AppBar,
     CircularProgressCenter,
+    Drawer,
     FireCMS,
     ModeControllerProvider,
     NavigationRoutes,
@@ -25,7 +27,6 @@ import {
     useFirebaseRTDBDelegate,
     useFirebaseStorageSource,
     useInitialiseFirebase,
-    useAppCheck,
 } from "@firecms/firebase";
 
 import { productsCollection } from "./collections/products_collection";
@@ -147,8 +148,10 @@ function RTDBApp() {
                             } else {
                                 component = (
                                     <Scaffold
-                                        name={name}
                                         autoOpenDrawer={false}>
+                                        <AppBar
+                                            title={name}/>
+                                        <Drawer/>
                                         <NavigationRoutes/>
                                         <SideDialogs/>
                                     </Scaffold>

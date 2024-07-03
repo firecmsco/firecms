@@ -1,6 +1,6 @@
 {
   "name": "@firecms/cli",
-  "version": "3.0.0-canary.53",
+  "version": "3.0.0-canary.77",
   "description": "A CLI to perform FireCMS operations",
   "main": "./dist/index.cjs",
   "module": "./dist/index.es.js",
@@ -43,15 +43,15 @@
     "nocache": "^4.0.0",
     "open": "^10.1.0",
     "ora": "^8.0.1",
-    "ws": "^8.17.0",
+    "ws": "^8.17.1",
     "zip-folder": "^1.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.12.13",
+    "@types/node": "^20.14.9",
     "npm-run-all": "^4.1.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5",
-    "vite": "^5.2.12"
+    "typescript": "^5.5.3",
+    "vite": "^5.3.2"
   },
   "files": [
     "bin/",
@@ -70,5 +70,5 @@
     "node_modules",
     "template/node_modules"
   ],
-  "gitHead": "5d6f89260a9582eaac7ee9a77c48c8f340bc29d3"
+  "gitHead": "df54d6590d1c0db76feb6d24be3573477d54e85f"
 }

@@ -3,13 +3,18 @@ import React, { useCallback, useMemo } from "react";
 import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
 
+import logo from "./images/demo_logo.png";
+
 import { getAnalytics, logEvent } from "@firebase/analytics";
 
 import { CenteredView, GitHubIcon, IconButton, Tooltip, } from "@firecms/ui";
 import {
+    AppBar,
     Authenticator,
     CircularProgressCenter,
     CMSView,
+    Drawer,
+    EntityCollection,
     FireCMS,
     ModeControllerProvider,
     NavigationRoutes,
@@ -59,7 +64,7 @@ import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { ReCaptchaEnterpriseProvider } from "@firebase/app-check";
 
-const signInOptions: FirebaseSignInProvider[] = ["google.com"];
+const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
 
 function App() {
 
@@ -121,15 +126,13 @@ function App() {
         }
     });
 
-    console.log("appCheckResult", appCheckResult);
-
     const collectionConfigController = useFirestoreCollectionsConfigController({
         firebaseApp
     });
 
     // It is important to memoize the collections and views
     const collections = useCallback(() => {
-        const sourceCollections = [
+        const sourceCollections: EntityCollection[] = [
             productsCollection,
             booksCollection,
             localeCollectionGroup,
@@ -218,7 +221,9 @@ function App() {
 
     // Delegate used for fetching and saving data in Firestore
     const firestoreDelegate = useFirestoreDelegate({
-        firebaseApp
+        firebaseApp,
+        localTextSearchEnabled: true
+        // textSearchControllerBuilder: algoliaSearchControllerBuilder
     });
 
     // Controller used for saving and fetching files in storage
@@ -302,12 +307,11 @@ function App() {
                                                     notAllowedError={notAllowedError}/>
                         }
 
-                        return <Scaffold
-                            name={"My demo app"}
-                            fireCMSAppBarProps={{
-                                endAdornment: githubLink
-                            }}
-                            autoOpenDrawer={false}>
+                        return <Scaffold logo={logo}>
+                            <AppBar
+                                title={"My demo app"}
+                                endAdornment={githubLink}/>
+                            <Drawer/>
                             <NavigationRoutes/>
                             <SideDialogs/>
                         </Scaffold>;

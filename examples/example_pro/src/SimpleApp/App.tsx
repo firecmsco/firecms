@@ -4,8 +4,10 @@ import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
 
 import {
+    AppBar,
     Authenticator,
     CircularProgressCenter,
+    Drawer,
     FireCMS,
     ModeControllerProvider,
     NavigationRoutes,
@@ -200,8 +202,9 @@ function ProSample() {
                         }
 
                         return <Scaffold
-                            name={"My demo app"}
                             autoOpenDrawer={false}>
+                            <AppBar title={"My demo app"}/>
+                            <Drawer/>
                             <NavigationRoutes/>
                             <SideDialogs/>
                         </Scaffold>;

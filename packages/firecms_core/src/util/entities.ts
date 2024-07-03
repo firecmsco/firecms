@@ -48,12 +48,12 @@ export function getDefaultValuesFor<M extends Record<string, any>>(properties: P
 
 export function getDefaultValueFor(property: PropertyOrBuilder) {
     if (isPropertyBuilder(property)) return undefined;
-    if (property.dataType === "map" && property.properties) {
+    if (property.defaultValue || property.defaultValue === null) {
+        return property.defaultValue;
+    } else if (property.dataType === "map" && property.properties) {
         const defaultValuesFor = getDefaultValuesFor(property.properties as Properties);
         if (Object.keys(defaultValuesFor).length === 0) return undefined;
         return defaultValuesFor;
-    } else if (property.defaultValue) {
-        return property.defaultValue;
     } else {
         return getDefaultValueForDataType(property.dataType);
     }
@@ -152,6 +152,7 @@ export function traverseValuesProperties<M extends Record<string, any>>(
         .map(([key, property]) => {
             const inputValue = inputValues && (inputValues)[key];
             const updatedValue = traverseValueProperty(inputValue, property as Property, operation);
+            if (updatedValue === null) return null;
             if (updatedValue === undefined) return undefined;
             return ({ [key]: updatedValue });
         })

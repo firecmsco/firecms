@@ -1,19 +1,16 @@
 ---
 id: components
-title: Components
+title: FireCMS UI
 sidebar_label: Introduction
 ---
 
 :::tip
-All the components in this package are exported in the package `@firecms/ui`,
-but also reexported in `@firecms/cloud`, for convenience.
+All the components are exported from the `@firecms/ui` package. These are the same components used internally in **FireCMS**.
 :::
 
 **FireCMS UI** is a high quality set of components that you can use to build your own custom views. You can
 use these components to build your own FireCMS views, or in any other React application. You just need to install
 `tailwindcss` and the `@firecms/ui` package.
-
-All the components are exported from the `@firecms/ui` package. These are the same components used internally in **FireCMS**.
 
 :::note Why build this UI kit?
 FireCMS was using MUI until version 3.0. MUI provides ready to use components with intuitive APIs, but it also
@@ -33,43 +30,65 @@ reach out to us in our [Discord channel](https://discord.gg/fxy7xsQm3m).
 
 The list of components includes:
 
-- **Alert**: A component to display information alerts
-- **Autocomplete**: A text field with autocomplete functionality
-- **Avatar**: A component to display an avatar image
-- **Badge**: A component to display a small indicator
-- **BooleanSwitch**: A switch component to toggle boolean values
-- **BooleanSwitchWithLabel**: A switch component to toggle boolean values with a label
-- **Button**: A button component
-- **Card**: A component to display a card
-- **CenteredView**: A component to center its children
-- **Checkbox**: A checkbox component
-- **Chip**: A component to display a chip
-- **CircularProgress**: A component to display a circular progress indicator
-- **Collapse**: A component to display collapsible content
-- **Container**: A component that acts as a container, with a max width and centered content
-- **DateTimeField**: A component to that allows to select a date and time
-- **DebouncedTextField**: A text field that debounces the input
-- **Dialog**: A dialog component
-- **DialogActions**: A component to display actions in a dialog
-- **DialogContent**: A component to display content in a dialog
-- **ExpandablePanel**: A component to display an expandable panel
-- **FileUpload**: A component to upload files
-- **IconButton**: A component to display an icon button
-- **InfoLabel**: A component to display an information label
-- **InputLabel**: A component to display an input label
-- **LoadingButton**: A button component with a loading indicator
-- **Markdown**: A component to display markdown content
-- **Menu**: A component to display a menu
-- **MultiSelect**: A component to select multiple values
-- **Paper**: A component to display a paper
-- **Popover**: A component to display a popover
-- **SearchBar**: A component to display a search bar
-- **Select**: A component to select a value
-- **Sheet**: A component to display a sheet
-- **Skeleton**: A component to display a skeleton loader
-- **Table**: A component to display a table
-- **Tabs**: A component to display tabs
-- **TextareaAutosize**: A component to display a textarea that automatically adjusts its height
-- **TextField**: A component to display a text field
-- **Tooltip**: A component to display a tooltip
-- **Typography**: A component to display text
+
+import { UIComponentsShowcase } from "../src/partials/ui/UIComponentsShowcase";
+
+<UIComponentsShowcase/>
+
+and more (check the sidebar for the full list).
+
+
+
+## Installation
+
+If you are using FireCMS, you don't need to install this package, as it is already included, and
+configured for you.
+
+To use the components in your own project, you need to install the `@firecms/ui` package:
+
+```bash
+yarn add @firecms/ui
+```
+or
+```bash
+npm install @firecms/ui
+```
+
+You also need to install `tailwindcss`:
+
+```bash
+yarn add tailwindcss
+```
+
+And add then add the fireCMS preset in your `tailwind.config.js`:
+
+```javascript
+import fireCMSConfig from "@firecms/ui/tailwind.config.js";
+
+export default {
+    presets: [fireCMSConfig],
+    content: [
+        "./index.html",
+        "./src/**/*.{js,ts,jsx,tsx}",
+        "../../packages/**/src/**/*.{js,ts,jsx,tsx}",
+        "../../node_modules/firecms/src/**/*.{js,ts,jsx,tsx}",
+        "../../node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}",
+    ]
+};
+```
+
+Finally, you need to define your primary and secondary colors in your `index.css` file:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --fcms-primary: #0070F4;
+    --fcms-primary-dark: #0061e6;
+    --fcms-primary-bg: #0061e610;
+    --fcms-secondary: #FF5B79;
+}
+```
+

@@ -17,7 +17,7 @@ import {
 } from "@firecms/core";
 import {
     Button,
-    cn,
+    cls,
     DeleteIcon,
     Dialog,
     DialogActions,
@@ -509,7 +509,7 @@ function PropertyEditFormFields({
                                         e.preventDefault();
                                     }
                                 }}
-                                className={cn(
+                                className={cls(
                                     "flex items-center",
                                     optionDisabled ? "w-full pointer-events-none opacity-50" : "")}>
                                 <div className={"mr-8"}>

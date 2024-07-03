@@ -46,7 +46,7 @@ export function useStorageUploadController<M extends object>({
                                                                      entityId: string,
                                                                      entityValues: EntityValues<M>,
                                                                      value: string | string[] | null;
-                                                                     path: string,
+                                                                     path?: string,
                                                                      propertyKey: string,
                                                                      property: ResolvedStringProperty | ResolvedArrayProperty<string[]>,
                                                                      storageSource: StorageSource,
@@ -95,7 +95,16 @@ export function useStorageUploadController<M extends object>({
 
     const fileNameBuilder = useCallback(async (file: File) => {
         if (storage.fileName) {
-            const fileName = await resolveFilenameString(storage.fileName, storage, entityValues, entityId, path, property, file, propertyKey);
+            const fileName = await resolveFilenameString({
+                input: storage.fileName,
+                storage,
+                values: entityValues,
+                entityId,
+                path,
+                property,
+                file,
+                propertyKey
+            });
             if (!fileName || fileName.length === 0) {
                 throw Error("You need to return a valid filename");
             }
@@ -105,7 +114,16 @@ export function useStorageUploadController<M extends object>({
     }, [entityId, entityValues, path, property, propertyKey, storage]);
 
     const storagePathBuilder = useCallback((file: File) => {
-        return resolveStoragePathString(storage.storagePath, storage, entityValues, entityId, path, property, file, propertyKey) ?? "/";
+        return resolveStoragePathString({
+            input: storage.storagePath,
+            storage,
+            values: entityValues,
+            entityId,
+            path,
+            property,
+            file,
+            propertyKey
+        }) ?? "/";
     }, [entityId, entityValues, path, property, propertyKey, storage]);
 
     const onFileUploadComplete = useCallback(async (uploadedPath: string,

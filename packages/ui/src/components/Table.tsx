@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { defaultBorderMixin } from "../styles";
-import { cn } from "../util";
+import { cls } from "../util";
 
 export type TableProps = {
     children: React.ReactNode;
@@ -13,7 +13,7 @@ export const Table = ({
                           className,
                           style
                       }: TableProps) => (
-    <table className={cn("w-full text-left text-gray-800 dark:text-white rounded-md overflow-x-auto",
+    <table className={cls("w-full text-left text-gray-800 dark:text-white rounded-md overflow-x-auto",
         className)}
            style={style}>
         {children}
@@ -29,7 +29,7 @@ export const TableBody = ({
                               className
                           }: TableBodyProps) => (
     <tbody
-        className={cn("bg-white text-sm dark:bg-gray-800 divide-y divide-slate-200 dark:divide-gray-700", className)}>
+        className={cls("bg-white text-sm dark:bg-gray-800 divide-y divide-slate-200 dark:divide-gray-700", className)}>
     {children}
     </tbody>
 );
@@ -44,7 +44,7 @@ export const TableHeader = ({
                                 className
                             }: TableHeaderProps) => (
     <thead>
-    <tr className={cn(
+    <tr className={cls(
         defaultBorderMixin,
         "text-sm font-medium text-gray-700 dark:text-slate-300",
         "bg-slate-50 border-b dark:bg-gray-900", className)}>
@@ -69,7 +69,7 @@ export const TableRow = ({
     <tr
         onClick={onClick}
         style={style}
-        className={cn(
+        className={cls(
             "divide-slate-100 dark:divide-gray-800",
             "bg-white dark:bg-gray-950",
             onClick ? "hover:bg-slate-100 dark:hover:bg-gray-800 cursor-pointer" : "",
@@ -107,7 +107,7 @@ export const TableCell = ({
              colSpan={colspan}
              ref={ref}
              style={style}
-             className={cn("px-4 py-3 text-clip ",
+             className={cls("px-4 py-3 text-clip ",
                  align === "center" ? "text-center" : (align === "right" ? "text-right" : "text-left"),
                  className)}>
             {children}

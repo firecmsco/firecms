@@ -1,7 +1,7 @@
 {
   "name": "@firecms/firebase",
   "type": "module",
-  "version": "3.0.0-canary.53",
+  "version": "3.0.0-canary.77",
   "publishConfig": {
     "access": "public"
   },
@@ -10,21 +10,22 @@
   "types": "./dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/collection_editor": "^3.0.0-canary.53",
-    "@firecms/core": "^3.0.0-canary.53",
-    "@firecms/data_enhancement": "^3.0.0-canary.53",
-    "@firecms/data_import_export": "^3.0.0-canary.53",
-    "@firecms/schema_inference": "^3.0.0-canary.53",
-    "@firecms/ui": "^3.0.0-canary.53",
+    "@firebase/auth": "*",
+    "@firecms/collection_editor": "^3.0.0-canary.77",
+    "@firecms/core": "^3.0.0-canary.77",
+    "@firecms/data_enhancement": "^3.0.0-canary.77",
+    "@firecms/data_import_export": "^3.0.0-canary.77",
+    "@firecms/schema_inference": "^3.0.0-canary.77",
+    "@firecms/ui": "^3.0.0-canary.77",
     "firebase": "^10.12.2",
     "js-search": "^2.0.1",
-    "react-router": "^6.23.1",
-    "react-router-dom": "^6.23.1"
+    "react-router": "^6.24.0",
+    "react-router-dom": "^6.24.0"
   },
   "peerDependencies": {
     "algoliasearch": "^4.14.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "exports": {
     ".": {
@@ -35,19 +36,19 @@
     "./package.json": "./package.json"
   },
   "devDependencies": {
-    "@types/node": "^20.12.13",
+    "@types/node": "^20.14.9",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "algoliasearch": "^4.23.3",
-    "eslint": "^8.57.0",
+    "algoliasearch": "^4.24.0",
+    "eslint": "^9.6.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^16.6.2",
-    "eslint-plugin-promise": "^6.2.0",
-    "eslint-plugin-react": "^7.34.2",
+    "eslint-plugin-promise": "^6.4.0",
+    "eslint-plugin-react": "^7.34.3",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "typescript": "^5.4.5",
-    "vite": "^5.2.12"
+    "typescript": "^5.5.3",
+    "vite": "^5.3.2"
   },
   "scripts": {
     "dev": "vite",
@@ -64,5 +65,5 @@
       "react-app/jest"
     ]
   },
-  "gitHead": "5d6f89260a9582eaac7ee9a77c48c8f340bc29d3"
+  "gitHead": "df54d6590d1c0db76feb6d24be3573477d54e85f"
 }

@@ -24,7 +24,7 @@ import { TextButtons } from "./selectors/text-buttons";
 
 import {
     CheckBoxIcon,
-    cn,
+    cls,
     CodeIcon,
     defaultBorderMixin,
     FormatListBulletedIcon,
@@ -340,7 +340,7 @@ export const FireCMSEditor = ({
                         }}>
 
                         <EditorCommand
-                            className={cn("text-gray-900 dark:text-white z-50 h-auto max-h-[330px] w-72 overflow-y-auto rounded-md border bg-white dark:bg-gray-900 px-1 py-2 shadow transition-all", defaultBorderMixin)}>
+                            className={cls("text-gray-900 dark:text-white z-50 h-auto max-h-[330px] w-72 overflow-y-auto rounded-md border bg-white dark:bg-gray-900 px-1 py-2 shadow transition-all", defaultBorderMixin)}>
                             <EditorCommandEmpty className="px-2 text-gray-700 dark:text-slate-300">
                                 No results
                             </EditorCommandEmpty>
@@ -352,7 +352,7 @@ export const FireCMSEditor = ({
                                     key={item.title}
                                 >
                                     <div
-                                        className={cn("flex h-10 w-10 items-center justify-center rounded-md border bg-white dark:bg-gray-900", defaultBorderMixin)}>
+                                        className={cls("flex h-10 w-10 items-center justify-center rounded-md border bg-white dark:bg-gray-900", defaultBorderMixin)}>
                                         {item.icon}
                                     </div>
                                     <div>
@@ -369,7 +369,7 @@ export const FireCMSEditor = ({
                             tippyOptions={{
                                 placement: "top"
                             }}
-                            className={cn("flex w-fit max-w-[90vw] h-10 overflow-hidden rounded border bg-white dark:bg-gray-900 shadow", defaultBorderMixin)}
+                            className={cls("flex w-fit max-w-[90vw] h-10 overflow-hidden rounded border bg-white dark:bg-gray-900 shadow", defaultBorderMixin)}
                         >
                             {/*<Separator orientation="vertical"/>*/}
                             <NodeSelector open={openNode} onOpenChange={setOpenNode}/>

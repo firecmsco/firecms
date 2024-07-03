@@ -1,9 +1,9 @@
 import React, { useMemo } from "react";
 
 import { CustomizationController, EntityCollection, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
-import { AuthControllerContext, ModeControllerContext } from "../contexts";
+import { AuthControllerContext } from "../contexts";
 import { useBuildSideEntityController } from "../internal/useBuildSideEntityController";
-import { useCustomizationController, useFireCMSContext, useModeController } from "../hooks";
+import { useCustomizationController, useFireCMSContext } from "../hooks";
 import { useBuildSideDialogsController } from "../internal/useBuildSideDialogsController";
 import { ErrorView } from "../components";
 import { StorageSourceContext } from "../contexts/StorageSourceContext";
@@ -33,7 +33,6 @@ import { useProjectLog } from "../hooks/useProjectLog";
  */
 export function FireCMS<UserType extends User, EC extends EntityCollection>(props: FireCMSProps<UserType, EC>) {
 
-    const modeController = useModeController();
     const {
         children,
         entityLinkBuilder,
@@ -122,39 +121,37 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
     }
 
     return (
-        <ModeControllerContext.Provider value={modeController}>
-            <AnalyticsContext.Provider value={analyticsController}>
-                <CustomizationControllerContext.Provider value={customizationController}>
-                    <UserConfigurationPersistenceContext.Provider
-                        value={userConfigPersistence}>
-                        <StorageSourceContext.Provider
-                            value={storageSource}>
-                            <DataSourceContext.Provider
-                                value={dataSource}>
-                                <AuthControllerContext.Provider
-                                    value={authController}>
-                                    <SideDialogsControllerContext.Provider
-                                        value={sideDialogsController}>
-                                        <SideEntityControllerContext.Provider
-                                            value={sideEntityController}>
-                                            <NavigationContext.Provider
-                                                value={navigationController}>
-                                                <DialogsProvider>
-                                                    <FireCMSInternal
-                                                        loading={loading}>
-                                                        {children}
-                                                    </FireCMSInternal>
-                                                </DialogsProvider>
-                                            </NavigationContext.Provider>
-                                        </SideEntityControllerContext.Provider>
-                                    </SideDialogsControllerContext.Provider>
-                                </AuthControllerContext.Provider>
-                            </DataSourceContext.Provider>
-                        </StorageSourceContext.Provider>
-                    </UserConfigurationPersistenceContext.Provider>
-                </CustomizationControllerContext.Provider>
-            </AnalyticsContext.Provider>
-        </ModeControllerContext.Provider>
+        <AnalyticsContext.Provider value={analyticsController}>
+            <CustomizationControllerContext.Provider value={customizationController}>
+                <UserConfigurationPersistenceContext.Provider
+                    value={userConfigPersistence}>
+                    <StorageSourceContext.Provider
+                        value={storageSource}>
+                        <DataSourceContext.Provider
+                            value={dataSource}>
+                            <AuthControllerContext.Provider
+                                value={authController}>
+                                <SideDialogsControllerContext.Provider
+                                    value={sideDialogsController}>
+                                    <SideEntityControllerContext.Provider
+                                        value={sideEntityController}>
+                                        <NavigationContext.Provider
+                                            value={navigationController}>
+                                            <DialogsProvider>
+                                                <FireCMSInternal
+                                                    loading={loading}>
+                                                    {children}
+                                                </FireCMSInternal>
+                                            </DialogsProvider>
+                                        </NavigationContext.Provider>
+                                    </SideEntityControllerContext.Provider>
+                                </SideDialogsControllerContext.Provider>
+                            </AuthControllerContext.Provider>
+                        </DataSourceContext.Provider>
+                    </StorageSourceContext.Provider>
+                </UserConfigurationPersistenceContext.Provider>
+            </CustomizationControllerContext.Provider>
+        </AnalyticsContext.Provider>
     );
 
 }

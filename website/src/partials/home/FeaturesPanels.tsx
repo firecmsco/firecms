@@ -17,6 +17,7 @@ function FeaturesPanels() {
         <Panel
             color={"white"}
             includePadding={false}
+            container={false}
         >
 
             <LinedSpace size={"large"}/>
@@ -25,24 +26,25 @@ function FeaturesPanels() {
                 data-aos="fade-up"
                 className={"flex items-center mb-4"}
             >
-                <div>
+                <div className={"w-full"}>
 
                     <div
-                        className={clsx("flex mb-4 relative items-center uppercase border-b border-0",
+                        className={clsx("w-full mb-4 relative  uppercase border-b border-0 ",
                             ContainerInnerPaddingMixin,
                             defaultBorderMixin)}>
-                        <div
-                            className="flex items-center justify-center text-white w-10 h-10 gradient-bg rounded-full shadow flex-shrink-0 mr-4">
-                            {lightningIcon}
+                        <div className={"max-w-6xl mx-auto flex items-center pl-8"}>
+                            <div
+                                className="flex items-center justify-center text-white w-10 h-10 gradient-bg rounded-full shadow flex-shrink-0 mr-4">
+                                {lightningIcon}
+                            </div>
+
+                            <h2 className="h1 m-0 gradient-text">
+                                Batteries included
+                            </h2>
                         </div>
-
-                        <h2 className="h1 m-0 gradient-text">
-                            Batteries included
-                        </h2>
-
                     </div>
 
-                    <p className={clsx("text-xl md:text-2xl  px-8 py-4 md:px-8")}>
+                    <p className={clsx("max-w-6xl mx-auto text-xl md:text-2xl  px-8 py-4 md:px-8")}>
                         FireCMS provides all the flexibility you
                         need with the best UX.
                         Edit your collections and entities using
@@ -55,8 +57,9 @@ function FeaturesPanels() {
 
 
             <div
-                className="mx-auto grid md:grid-cols-2 lg:grid-cols-3 items-start text-xl gap-4 px-8">
-                <div className={clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
+                className={"max-w-6xl flex flex-col lg:items-center px-8 gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 lg:w-full lg:mx-auto"}>
+                <div
+                    className={clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
                     {iconStars}
                     <h4 className="text-xl font-bold leading-snug tracking-tight  mt-2  mb-0 text-center">
                         Consistent Data Management
@@ -80,7 +83,7 @@ function FeaturesPanels() {
                 </div>
 
                 <div
-                    className={ clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin) }>
+                    className={clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
                     {iconDoor}
                     <h4 className="text-xl font-bold leading-snug tracking-tight  mt-2  mb-0 text-center">
                         Role-Based System
@@ -93,7 +96,7 @@ function FeaturesPanels() {
 
 
                 <div
-                    className={ clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin) }>
+                    className={clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
                     {iconCards}
                     <h4 className="text-xl font-bold leading-snug tracking-tight  mt-2  mb-0 text-center">
                         Flexible Customization
@@ -103,7 +106,7 @@ function FeaturesPanels() {
                     </p>
                 </div>
                 <div
-                    className={ clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin) }>
+                    className={clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
                     {iconArrows}
                     <h4 className="text-xl font-bold leading-snug tracking-tight  mt-2  mb-0 text-center">
                         Subcollection Compatibility
@@ -114,7 +117,7 @@ function FeaturesPanels() {
                 </div>
 
                 <div
-                    className={ clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin) }>
+                    className={clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
 
                     {iconRadar}
 

@@ -48,7 +48,7 @@ export function SearchIconsView({
     return (
         <>
             <SearchBar
-                autoFocus
+                autoFocus={false}
                 innerClassName={"w-full sticky top-0 z-10"}
                 onTextSearch={(value?: string) => setQuery(value ?? "")}
                 placeholder="Search for more icons…"

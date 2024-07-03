@@ -34,6 +34,16 @@ module.exports = {
           id: "pro/sample_pro",
           className: "pro-sidebar-item"
         },
+        {
+          type: 'doc',
+          id: "pro/main_components",
+          className: "pro-sidebar-item"
+        },
+        {
+          type: 'doc',
+          id: "pro/deployment",
+          className: "pro-sidebar-item"
+        },
         "firebase_setup",
       ]
     },
@@ -130,8 +140,8 @@ module.exports = {
       "type": "category",
       "label": "UI components",
       "collapsed": false,
+      link: {type: 'doc', id: 'components'},
       "items": [
-        "components",
         "components/alert",
         "components/avatar",
         "components/badge",
@@ -153,6 +163,7 @@ module.exports = {
         "components/loading_button",
         "components/markdown",
         "components/menu",
+        "components/menubar",
         // "components/multi_select",
         "components/paper",
         "components/popover",
@@ -161,6 +172,7 @@ module.exports = {
         "components/select",
         "components/separator",
         "components/sheet",
+        "components/skeleton",
         "components/table",
         "components/tabs",
         "components/text_field",

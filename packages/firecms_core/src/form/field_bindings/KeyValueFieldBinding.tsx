@@ -8,7 +8,7 @@ import {
     ArrowDropDownIcon,
     BooleanSwitchWithLabel,
     Button,
-    cn,
+    cls,
     DateTimeField,
     defaultBorderMixin,
     ExpandablePanel,
@@ -316,7 +316,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                                            }}/>;
         } else if (dataType === "array") {
             return <div
-                className={cn(defaultBorderMixin, "ml-2 pl-2 border-l border-solid")}>
+                className={cls(defaultBorderMixin, "ml-2 pl-2 border-l border-solid")}>
                 <ArrayContainer value={entryValue}
                                 newDefaultEntry={""}
                                 droppableId={rowId.toString()}
@@ -349,7 +349,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
             </div>;
         } else if (dataType === "map") {
             return <div
-                className={cn(defaultBorderMixin, "ml-2 pl-2 border-l border-solid")}>
+                className={cls(defaultBorderMixin, "ml-2 pl-2 border-l border-solid")}>
                 <MapEditView value={entryValue}
                              fieldName={fieldKey}
                              setValue={(updatedValue) => {
@@ -482,7 +482,7 @@ function ArrayKeyValueRow<T>({
                 Arrays of arrays are not supported.
             </Typography>;
         } else if (dataType === "map") {
-            return <div className={cn(defaultBorderMixin, "ml-2 pl-2 border-l border-solid")}>
+            return <div className={cls(defaultBorderMixin, "ml-2 pl-2 border-l border-solid")}>
                 <MapEditView value={entryValue}
                              setValue={(updatedValue) => {
                                  setValue(updatedValue);

@@ -6,7 +6,7 @@ import { ErrorView } from "../../components";
 import { getIconForProperty, getReferenceFrom } from "../../util";
 
 import { useNavigationController, useReferenceDialog } from "../../hooks";
-import { Button, cn, ExpandablePanel, fieldBackgroundMixin } from "@firecms/ui";
+import { Button, cls, ExpandablePanel, fieldBackgroundMixin, Typography } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
@@ -88,16 +88,19 @@ export function ArrayOfReferencesFieldBinding({
                     onClick={onEntryClick}
                     hover={!disabled}
                     reference={entryValue}
+                    includeId={ofProperty.includeId}
+                    includeEntityLink={ofProperty.includeEntityLink}
                 />
         );
     }, [ofProperty.path, ofProperty.previewProperties, value]);
 
-    const title = (
+    const title = (<>
         <LabelWithIcon icon={getIconForProperty(property, "small")}
                        required={property.validation?.required}
                        title={property.name}
-                       className={"text-text-secondary dark:text-text-secondary-dark"}/>
-    );
+                       className={"flex-grow text-text-secondary dark:text-text-secondary-dark"}/>
+        {Array.isArray(value) && <Typography variant={"caption"} className={"px-4"}>({value.length})</Typography>}
+    </>);
 
     const body = <>
         {!collection && <ErrorView
@@ -130,7 +133,7 @@ export function ArrayOfReferencesFieldBinding({
             {!tableMode &&
                 <ExpandablePanel
                     titleClassName={fieldBackgroundMixin}
-                    className={cn("px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2", fieldBackgroundMixin)}
+                    className={cls("px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2", fieldBackgroundMixin)}
                     initiallyExpanded={expanded}
                     title={title}>
                     {body}

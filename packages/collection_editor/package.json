@@ -1,22 +1,22 @@
 {
   "name": "@firecms/collection_editor",
   "type": "module",
-  "version": "3.0.0-canary.53",
+  "version": "3.0.0-canary.77",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/data_import_export": "^3.0.0-canary.53",
-    "@firecms/formex": "^3.0.0-canary.53",
-    "@firecms/schema_inference": "^3.0.0-canary.53",
-    "@firecms/ui": "^3.0.0-canary.53",
+    "@firecms/data_import_export": "^3.0.0-canary.77",
+    "@firecms/formex": "^3.0.0-canary.77",
+    "@firecms/schema_inference": "^3.0.0-canary.77",
+    "@firecms/ui": "^3.0.0-canary.77",
     "json5": "^2.2.3",
     "prism-react-renderer": "^2.3.1"
   },
   "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-router": "^6.22.0",
     "react-router-dom": "^6.22.0"
   },
@@ -56,23 +56,22 @@
     "@jest/globals": "^29.7.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "@typescript-eslint/eslint-plugin": "^7.11.0",
-    "@typescript-eslint/parser": "^7.11.0",
-    "@vitejs/plugin-react": "^4.3.0",
-    "eslint": "^8.57.0",
+    "@typescript-eslint/eslint-plugin": "^7.15.0",
+    "@typescript-eslint/parser": "^7.15.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "eslint": "^9.6.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^16.6.2",
-    "eslint-plugin-promise": "^6.2.0",
-    "eslint-plugin-react": "^7.34.2",
+    "eslint-plugin-promise": "^6.4.0",
+    "eslint-plugin-react": "^7.34.3",
     "eslint-plugin-react-hooks": "^4.6.2",
     "jest": "^29.7.0",
-    "react-router": "^6.23.1",
-    "react-router-dom": "^6.23.1",
-    "ts-jest": "^29.1.4",
-    "typescript": "^5.4.5",
-    "vite": "^5.2.12",
-    "vite-plugin-fonts": "^0.7.0"
+    "react-router": "^6.24.0",
+    "react-router-dom": "^6.24.0",
+    "ts-jest": "^29.1.5",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.2"
   },
   "files": [
     "dist",
@@ -81,5 +80,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "5d6f89260a9582eaac7ee9a77c48c8f340bc29d3"
+  "gitHead": "df54d6590d1c0db76feb6d24be3573477d54e85f"
 }

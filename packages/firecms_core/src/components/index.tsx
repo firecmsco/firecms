@@ -13,6 +13,7 @@ export * from "./common";
 
 export * from "./HomePage";
 export * from "./SelectableTable/SelectableTable";
+export * from "./SelectableTable/SelectableTableContext";
 export * from "./EntityCollectionView/EntityCollectionView";
 export * from "./EntityCollectionView/EntityCollectionViewActions";
 export * from "./EntityCollectionView/useSelectionController";
@@ -28,7 +29,7 @@ export * from "./DeleteConfirmationDialog";
 
 export * from "./FireCMSLogo";
 
-export * from "./FireCMSAppBar";
+export * from "../core/DefaultAppBar";
 
 export * from "./ArrayContainer";
 export * from "./ReferenceWidget";

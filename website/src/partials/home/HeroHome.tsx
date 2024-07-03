@@ -21,10 +21,11 @@ function HeroHome({}) {
         className={"flex flex-col items-center content-center justify-center -m-px"}>
         <video
             style={{
-                aspectRatio: 1
+                aspectRatio: 1,
+                padding: "1px",
             }}
             key={isDarkTheme ? "dark" : "light"}
-            className={clsx("rounded-2xl border", defaultBorderMixin)}
+            className={clsx("rounded-2xl")}
             width="100%"
             loop autoPlay muted>
             <source src={editingDemoDarkVideo}
@@ -71,6 +72,7 @@ function HeroHome({}) {
             <MainHeroBackground/>
             <Panel includeMargin={false}
                    includePadding={false}
+                   container={false}
                    color={"transparent"}
                    className={"border-t-0"}>
                 <div className={"h-20 "}/>

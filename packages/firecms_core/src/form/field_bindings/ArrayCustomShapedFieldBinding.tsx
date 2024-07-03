@@ -2,7 +2,7 @@ import React from "react";
 import { FieldProps } from "../../types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
-import { ExpandablePanel } from "@firecms/ui";
+import { ExpandablePanel, Typography } from "@firecms/ui";
 import { getIconForProperty } from "../../util";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
@@ -39,10 +39,13 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
         setValue
     });
 
-    const title = <LabelWithIcon icon={getIconForProperty(property, "small")}
-                                 required={property.validation?.required}
-                                 className={"text-text-secondary dark:text-text-secondary-dark"}
-                                 title={property.name}/>;
+    const title = (<>
+        <LabelWithIcon icon={getIconForProperty(property, "small")}
+                       required={property.validation?.required}
+                       title={property.name}
+                       className={"flex-grow text-text-secondary dark:text-text-secondary-dark"}/>
+        {Array.isArray(value) && <Typography variant={"caption"} className={"px-4"}>({value.length})</Typography>}
+    </>);
 
     const body = property.resolvedProperties.map((childProperty, index) => {
         const fieldProps = {

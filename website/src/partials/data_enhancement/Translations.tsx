@@ -40,7 +40,7 @@ export function Translations() {
                         data-aos="fade-up"
                         className={" flex content-center justify-center"}>
                         <img loading="lazy"
-                             className={clsx("rounded-xl border", defaultBorderMixin)}
+                             className={clsx("rounded-2xl border", defaultBorderMixin)}
                              src={isDarkTheme ? translationDark : translationLight}
                              width="500"
                              alt="Element"

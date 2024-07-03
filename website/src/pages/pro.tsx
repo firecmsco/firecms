@@ -4,9 +4,11 @@ import { Panel } from "../partials/general/Panel";
 import { ProInfo } from "../partials/pro/ProInfo";
 import { ProDeveloperFeatures } from "../partials/pro/ProDeveloperFeatures";
 import { HeroPro } from "../partials/pro/HeroPro";
+
 import { PublicFacingApps } from "../partials/pro/PublicFacingApps";
 import ProFeaturesPanels from "../partials/pro/ProFeaturesPanels";
 import HeroProButtons from "../partials/home/HeroProButtons";
+import { UITeaser } from "../partials/home/UITeaser";
 
 function ProPage() {
 
@@ -24,6 +26,8 @@ function ProPage() {
                     />
 
                     <ProInfo/>
+
+                    <UITeaser />
 
                     <ProFeaturesPanels/>
 
@@ -50,9 +54,14 @@ function ProPage() {
                             LEARN MORE ABOUT FIRECMS PRO
                         </h2>
                         <HeroProButtons/>
-                        <div
-                            className={"items-center select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
-                            yarn create firecms-app --pro
+                        <div className="text-sm text-center text-gray-300 mb-4">
+                            Try out FireCMS PRO completely for <b>FREE</b>!
+                        </div>
+                        <div className={"flex flex-col items-center"}>
+                            <div
+                                className={"items-center select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
+                                yarn create firecms-app --pro
+                            </div>
                         </div>
                     </Panel>
 

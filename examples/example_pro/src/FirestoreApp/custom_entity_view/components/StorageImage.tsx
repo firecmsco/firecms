@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useStorageSource } from "@firecms/core";
-import { cn } from "@firecms/ui";
+import { cls } from "@firecms/ui";
 
 export function StorageImage({ storagePath, style, className, alt }: {
     alt?: string,
@@ -23,7 +23,7 @@ export function StorageImage({ storagePath, style, className, alt }: {
 
     return (<img
         alt={alt ?? "Generic"}
-        className={cn("object-contain", className)}
+        className={cls("object-contain", className)}
         style={{
             ...style
         }} src={url}/>);

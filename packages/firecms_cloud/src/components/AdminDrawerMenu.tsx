@@ -1,6 +1,6 @@
 import React from "react";
-import { IconForView, useDrawer } from "@firecms/core";
-import { cn, IconButton, Menu, MenuItem, MoreVertIcon, Tooltip, } from "@firecms/ui";
+import { IconForView, useApp } from "@firecms/core";
+import { cls, IconButton, Menu, MenuItem, MoreVertIcon, Tooltip, } from "@firecms/ui";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_VIEWS_CONFIG } from "../utils";
 
@@ -13,14 +13,14 @@ export function AdminDrawerMenu({
 }) {
 
     const {
-        hovered,
+        drawerHovered,
         drawerOpen,
         closeDrawer
-    } = useDrawer();
+    } = useApp();
 
     const navigate = useNavigate();
 
-    const tooltipsOpen = hovered && !drawerOpen && !menuOpen;
+    const tooltipsOpen = drawerHovered && !drawerOpen && !menuOpen;
 
     return <Menu
         open={menuOpen}
@@ -35,7 +35,7 @@ export function AdminDrawerMenu({
                     <MoreVertIcon/>
                 </Tooltip>
                 {drawerOpen && <div
-                    className={cn(
+                    className={cls(
                         drawerOpen ? "opacity-100" : "opacity-0 hidden",
                         "mx-4 font-inherit text-inherit"
                     )}>

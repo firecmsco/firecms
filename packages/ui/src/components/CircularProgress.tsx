@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "../util";
+import { cls } from "../util";
 
 export type CircularProgressProps = {
     size?: "small" | "medium" | "large",
@@ -31,7 +31,7 @@ export function CircularProgress({
 
     return (
         <div
-            className={cn(
+            className={cls(
                 sizeClasses,
                 borderClasses,
                 "inline-block animate-spin rounded-full border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]",

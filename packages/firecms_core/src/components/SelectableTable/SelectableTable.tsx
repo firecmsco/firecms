@@ -18,6 +18,7 @@ import { BooleanFilterField } from "./filters/BooleanFilterField";
 import { DateTimeFilterField } from "./filters/DateTimeFilterField";
 import { useOutsideAlerter } from "@firecms/ui";
 import { SelectableTableContext } from "./SelectableTableContext";
+import { getRowHeight } from "../common/table_height";
 
 export type SelectableTableProps<M extends Record<string, any>> = {
 
@@ -115,7 +116,7 @@ export const SelectableTable = React.memo<SelectableTableProps<any>>(
          onEntityClick,
          onColumnResize,
          hoverRow = true,
-         size,
+         size = "m",
          inlineEditing = false,
          tableController:
              {
@@ -224,7 +225,7 @@ export const SelectableTable = React.memo<SelectableTableProps<any>>(
                         error={dataLoadingError}
                         paginationEnabled={paginationEnabled}
                         onColumnResize={onColumnResize}
-                        size={size}
+                        rowHeight={getRowHeight(size)}
                         loading={dataLoading}
                         filter={filterValues}
                         onFilterUpdate={setFilterValues ? onFilterUpdate : undefined}
@@ -280,6 +281,7 @@ function createFilterField({
                                      isArray={isArray}
                                      path={baseProperty.path}
                                      title={resolvedProperty?.name}
+                                     includeId={baseProperty.includeId}
                                      previewProperties={baseProperty?.previewProperties}
                                      hidden={hidden}
                                      setHidden={setHidden}/>;

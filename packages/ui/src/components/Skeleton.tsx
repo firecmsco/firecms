@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "../util";
+import { cls } from "../util";
 
 export type SkeletonProps = {
     width?: number;
@@ -12,13 +12,16 @@ export function Skeleton({
                              height,
                              className
                          }: SkeletonProps) {
-    return <span className={
-        cn(
+    return <span
+        style={{
+            width: width ? `${width}px` : "100%",
+            height: height ? `${height}px` : "12px"
+        }}
+        className={
+        cls(
             "block",
             "bg-slate-200 dark:bg-slate-800 rounded",
             "animate-pulse",
-            width ? `w-[${width}px]` : "w-full",
-            height ? `h-[${height}px]` : "h-3",
             "max-w-full max-h-full",
             className)
     }/>;

@@ -9,12 +9,14 @@ import FeaturesPanels from "../partials/home/FeaturesPanels";
 import FirebaseTeaser from "../partials/home/OpenSourceDetails";
 import FirebaseIntro from "../partials/home/FirebaseIntro";
 import { Companies } from "../partials/home/Companies";
+import { UITeaser } from "../partials/home/UITeaser";
 import FeaturesTeaser from "../partials/home/FeaturesTeaser";
 import OpenAITeaser from "../partials/home/OpenAITeaser";
 import { SchemaEditorIntro } from "../partials/home/SchemaEditorIntro";
 import { DeveloperFeatures } from "../partials/features/DeveloperFeatures";
 import { UsageExamples } from "../partials/UsageExamples";
 import { QuotesSection } from "../partials/Quotes";
+import { organizationSchema, softwareApplicationSchema } from "../partials/markup";
 
 function Home() {
 
@@ -28,6 +30,12 @@ function Home() {
                 <meta property="og:description"
                       content="Awesome headless CMS based Firestore/Firebase and React, and completely open-source"/>
                 <meta property="og:image" content="/img/firecms_logo.svg"/>
+                <script type="application/ld+json">
+                    {JSON.stringify(softwareApplicationSchema)}
+                </script>
+                <script type="application/ld+json">
+                    {JSON.stringify(organizationSchema)}
+                </script>
             </Head>
 
             <HeroHome/>
@@ -43,6 +51,8 @@ function Home() {
                 <QuotesSection/>
 
                 <Companies/>
+
+                <UITeaser/>
 
                 <FeaturesTeaser/>
 

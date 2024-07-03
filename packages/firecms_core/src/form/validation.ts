@@ -112,23 +112,7 @@ export function getYupMapObjectSchema({
     if (validation?.required) {
         return shape.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true);
     }
-    return shape.nullable(true);
-    // const object: ObjectSchema<any> = yup.object().shape(objectSchema);
-    // return validation?.required
-    //     ? object.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
-    //     : yup.object().optional().default(undefined).notRequired().nullable(true).test(
-    //         "empty-check",
-    //         "Optional map can be empty",
-    //         (o: any, testContext: any) => {
-    //             try {
-    //                 if (!o || Object.keys(o).length === 0) return true;
-    //                 return object.validateSync(o);
-    //             } catch (e) {
-    //                 testContext.createError(e);
-    //                 console.error(e);
-    //                 return false;
-    //             }
-    //         });
+    return yup.object().shape(shape.fields).default(undefined).notRequired().nullable(true);
 }
 
 function getYupStringSchema({

@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { cardClickableMixin, cardMixin, focusedMixin } from "../styles";
-import { cn } from "../util";
+import { cls } from "../util";
 
 type CardProps = {
     children: React.ReactNode;
@@ -29,7 +29,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(({
             role={onClick ? "button" : undefined}
             tabIndex={onClick ? 0 : undefined}
             onClick={onClick}
-            className={cn(cardMixin, onClick && focusedMixin, onClick && cardClickableMixin, className)}
+            className={cls(cardMixin, onClick && focusedMixin, onClick && cardClickableMixin, className)}
             style={style}
             {...props}>
             {children}

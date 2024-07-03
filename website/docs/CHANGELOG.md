@@ -2,6 +2,38 @@
 id: changelog
 title: Changelog
 ---
+## [3.0.0-beta.8] - 2024-06-
+
+- Fix for excessive re-renders in the form view.
+- You can now use `PropertyFieldBinding` components in your custom entity views, and they will be treated as regular
+  fields.
+- For additional entity views, you can now preserve the bottom actions bar, with the prop `includeActions`.
+- For map properties, if they are not required, the value might me `undefined`, but if a child property is has a value, 
+  validation will be triggered for all children.
+- Fix for datamaps not getting traversed correctly with null value.
+
+## [3.0.0-beta.7] - 2024-06-18
+
+- Renamed the `cn` utility class to `cls`, while keeping `cn` available with a deprecation warning.
+- Added Menubar documentation and missing skeleton docs.
+- Corrected properties order type to allow subcollections.
+- New UI section added to the landing page.
+- Improved saving and closing dialog flow.
+- Allow hiding IDs and entity links in references and previews.
+- Removed some CSS transitions.
+- Allow hiding the color mode toggle.
+- Added JSON view example.
+- Changed virtual table to use size in pixels.
+- Some design updates for better user experience.
+- Added back collection group column with parent IDs.
+- Improved empty results output.
+- Added sample prompts and suggestions for DataTalk.
+- Enhanced side entity view, dynamically calculated based on collection property depth.
+- Fixed mergeDeep types.
+- Fixed issue with exporting non-existing properties defined in `propertiesOrder`.
+- Fixed PRO template issues without Cloud projects.
+- Improved handling for enum values with value 0.
+
 ## [3.0.0-beta.6] - 2024-04-23
 
 - Added AppCheck to every FireCMS variant.

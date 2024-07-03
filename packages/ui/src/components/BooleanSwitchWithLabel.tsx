@@ -6,7 +6,7 @@ import {
     focusedClasses
 } from "../styles";
 import { BooleanSwitch, BooleanSwitchProps } from "./BooleanSwitch";
-import { cn } from "../util";
+import { cls } from "../util";
 
 export type BooleanSwitchWithLabelProps = BooleanSwitchProps & {
     position?: "start" | "end",
@@ -53,7 +53,7 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
             onFocus={onFocus}
             onBlur={onBlur}
             tabIndex={-1}
-            className={cn(
+            className={cls(
                 !invisible && fieldBackgroundMixin,
                 !invisible && (disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin),
                 disabled ? "cursor-default" : "cursor-pointer",
@@ -86,7 +86,7 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
                 {...props}
             />
 
-            <div className={cn(
+            <div className={cls(
                 "flex-grow",
                 position === "end" ? "mr-4" : "ml-4",
                 size === "small" ? "text-sm" : "text-base"

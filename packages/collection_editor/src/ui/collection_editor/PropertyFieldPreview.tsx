@@ -11,7 +11,7 @@ import {
     cardClickableMixin,
     cardMixin,
     cardSelectedMixin,
-    cn,
+    cls,
     FunctionsIcon,
     Paper,
     RemoveCircleIcon,
@@ -53,7 +53,7 @@ export function PropertyFieldPreview({
                 <PropertyConfigBadge propertyConfig={propertyConfig}/>
             </div>
             <Paper
-                className={cn(
+                className={cls(
                     "border",
                     "pl-2 w-full flex flex-row gap-4 items-center",
                     cardMixin,
@@ -136,7 +136,7 @@ export function NonEditablePropertyPreview({
                 <RemoveCircleIcon color={"disabled"} size={"small"} className={"absolute -right-2 -top-2"}/>
             </div>
             <Paper
-                className={cn(
+                className={cls(
                     "pl-2 w-full flex flex-row gap-4 items-center",
                     cardMixin,
                     onClick ? cardClickableMixin : "",

@@ -79,7 +79,6 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
             <ErrorBoundary>
                 <EntityEditView
                     {...props}
-                    formWidth={props.width}
                     collection={collection}
                     parentCollectionIds={parentCollectionIds}
                     onValuesAreModified={onValuesAreModified}

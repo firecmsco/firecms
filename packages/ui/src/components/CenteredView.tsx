@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "./Container";
-import { cn } from "../util";
+import { cls } from "../util";
 
 export type CenteredViewProps = {
     children: React.ReactNode;
@@ -21,9 +21,9 @@ export const CenteredView = React.forwardRef<HTMLDivElement, CenteredViewProps>(
 
     return (
         <div ref={ref}
-             className={cn("flex flex-col flex-grow", fullScreen ? "h-screen" : "h-full", outerClassName)}
+             className={cls("flex flex-col flex-grow", fullScreen ? "h-screen" : "h-full", outerClassName)}
              {...rest}>
-            <Container className={cn("m-auto", className)} maxWidth={maxWidth}>
+            <Container className={cls("m-auto", className)} maxWidth={maxWidth}>
                 {children}
             </Container>
         </div>

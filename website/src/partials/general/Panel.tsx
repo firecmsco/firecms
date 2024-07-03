@@ -3,31 +3,39 @@ import { ContainerMixin, ContainerPaddingMixin, defaultBorderMixin } from "../st
 import clsx from "clsx";
 
 export function Panel({
+                          header,
                           children,
+                          footer,
                           color = "transparent",
                           centered = false,
                           includeMargin = false,
                           includePadding = true,
                           className,
-                          innerClassName
+                          innerClassName,
+                          container = true
                       }: {
+    header?: React.ReactNode,
     children: React.ReactNode,
-    color?: "gray" | "light_gray" | "white" | "primary" | "secondary" | "light" | "lighter" | "transparent",
+    footer?: React.ReactNode,
+    color?: "gray" | "dark_gray" | "light_gray" | "white" | "white-to-slate" | "primary" | "secondary" | "light" | "lighter" | "transparent",
     centered?: boolean,
     includeMargin?: boolean,
     includePadding?: boolean,
     className?: string,
     innerClassName?: string,
+    container?: boolean
 }) {
 
     const colorClass = color === "transparent" ? "" :
         color === "white" ? "bg-white text-text-primary" :
-            color === "light" ? "bg-gray-100 text-text-primary" :
-                color === "lighter" ? "bg-gray-50 text-text-primary" :
-                    color === "light_gray" ? "bg-gray-700 text-white dark:text-white" :
-                        color === "gray" ? "bg-gray-800 text-white dark:text-white" :
-                            color === "primary" ? "bg-primary text-white dark:text-white" :
-                                color === "secondary" ? "bg-secondary text-white dark:text-white" : "";
+            color === "white-to-slate" ? "bg-gradient-to-b from-white to-slate-50 text-text-primary" :
+                color === "light" ? "bg-gray-100 text-text-primary" :
+                    color === "lighter" ? "bg-gray-50 text-text-primary" :
+                        color === "light_gray" ? "bg-gray-700 text-white dark:text-white" :
+                            color === "gray" ? "bg-gray-800 text-white dark:text-white" :
+                                color === "dark_gray" ? "bg-gray-900 text-white dark:text-white" :
+                                    color === "primary" ? "bg-primary text-white dark:text-white" :
+                                        color === "secondary" ? "bg-secondary text-white dark:text-white" : "";
 
     return (
         <section
@@ -43,10 +51,13 @@ export function Panel({
                 (centered ? " flex flex-col items-center" : ""),
                 includePadding ? ContainerPaddingMixin : "",
                 defaultBorderMixin,
-                "border-x border-y-0 border-solid",
+                "border-x border-y-0",
                 innerClassName
             )}>
-                {children}
+                {header}
+                {container ? <div className={"max-w-6xl mx-auto"}>{children}</div> : null}
+                {!container ? children : null}
+                {footer}
             </div>
         </section>
     );

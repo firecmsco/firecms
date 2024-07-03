@@ -1,7 +1,7 @@
 import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { focusedMixin, paperMixin } from "../styles";
-import { cn } from "../util";
+import { cls } from "../util";
 
 export type MenuProps = {
     children: React.ReactNode;
@@ -31,7 +31,7 @@ export function Menu({
                 {trigger}
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal container={portalContainer}>
-                <DropdownMenu.Content className={cn(paperMixin, "shadow py-2 z-30")}>
+                <DropdownMenu.Content className={cls(paperMixin, "shadow py-2 z-30")}>
                     {children}
                 </DropdownMenu.Content>
             </DropdownMenu.Portal>
@@ -51,7 +51,7 @@ export function MenuItem({
                              onClick
                          }: MenuItemProps) {
     // Dynamically adjusting the class based on the "dense" prop
-    const classNames = cn(
+    const classNames = cls(
         focusedMixin,
         onClick && "cursor-pointer",
         "rounded-md text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900 flex items-center gap-4",

@@ -18,13 +18,25 @@ IF before/after saving or deleting entities.
 
 Most callbacks are asynchronous.
 
-:::note 
+:::note
 You can stop the execution of these callbacks by throwing an `Error`
 containing a `string` and an error snackbar will be displayed.
 :::
 
+:::tip
+You can use the `context` object to access the FireCMS context.
+The `context` object contains all the controllers and services available in the app,
+including the `authController`, `dataSource`, `storageSource`, `sideDialogsController`, etc.
+:::
+
 ```tsx
-import { buildCollection, buildEntityCallbacks, EntityOnDeleteProps, EntityOnSaveProps, toSnakeCase } from "@firecms/cloud";
+import {
+    buildCollection,
+    buildEntityCallbacks,
+    EntityOnDeleteProps,
+    EntityOnSaveProps,
+    toSnakeCase
+} from "@firecms/cloud";
 
 type Product = {
     name: string;
@@ -91,7 +103,6 @@ const productCallbacks = buildEntityCallbacks({
     },
 });
 
-
 const productCollection = buildCollection<Product>({
     name: "Product",
     path: "products",
@@ -128,7 +139,6 @@ const productCollection = buildCollection<Product>({
 
 * `context`: FireCMSContext Context of the app status
 
-
 #### EntityOnDeleteProps
 
 * `collection`:  Resolved collection of the entity
@@ -140,7 +150,6 @@ const productCollection = buildCollection<Product>({
 * `entity`: Entity Deleted entity
 
 * `context`: FireCMSContext Context of the app status
-
 
 #### EntityIdUpdateProps
 

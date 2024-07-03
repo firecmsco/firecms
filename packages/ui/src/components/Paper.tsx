@@ -1,7 +1,7 @@
 import React from "react";
 
 import { paperMixin } from "../styles";
-import { cn } from "../util";
+import { cls } from "../util";
 
 export function Paper({
                           children,
@@ -15,7 +15,7 @@ export function Paper({
 }) {
     return (
         <div
-            className={cn(paperMixin, className)}
+            className={cls(paperMixin, className)}
             style={style}>
             {children}
         </div>

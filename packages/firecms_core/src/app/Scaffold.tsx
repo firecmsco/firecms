@@ -1,55 +1,16 @@
 import React, { PropsWithChildren, useCallback } from "react";
+import { ChevronLeftIcon, cls, defaultBorderMixin, IconButton, MenuIcon, Sheet, Tooltip } from "@firecms/ui";
 import equal from "react-fast-compare"
-import { Link } from "react-router-dom";
-
-import { Drawer as DefaultDrawer, DrawerProps } from "./Drawer";
-import { useLargeLayout, useNavigationController } from "../hooks";
-import { ErrorBoundary, FireCMSAppBar as DefaultFireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "../components";
-import { ChevronLeftIcon, cn, defaultBorderMixin, IconButton, MenuIcon, Sheet, Tooltip } from "@firecms/ui";
+import { useLargeLayout } from "../hooks";
+import { ErrorBoundary } from "../components";
+import { AppContext } from "./useApp";
 
 export const DRAWER_WIDTH = 280;
-
-const DrawerContext = React.createContext<DrawerProps>({
-    hovered: false,
-    drawerOpen: false,
-    openDrawer: () => {
-        throw new Error("openDrawer not implemented");
-    },
-    closeDrawer: () => {
-        throw new Error("closeDrawer not implemented");
-    },
-    autoOpenDrawer: false
-});
-
-export function useDrawer() {
-    return React.useContext(DrawerContext);
-}
 
 /**
  * @group Core
  */
-export interface ScaffoldProps<ExtraAppbarProps = object> {
-
-    /**
-     * Name of the app, displayed as the main title and in the tab title
-     */
-    name: React.ReactNode;
-
-    /**
-     * Logo to be displayed in the drawer of the CMS
-     */
-    logo?: string;
-
-    /**
-     * Whether to include the drawer in the scaffold
-     */
-    includeDrawer?: boolean;
-
-    /**
-     * You can define a custom drawer to be displayed in the scaffold.
-     * Use the hook `useDrawer` to access the context values.
-     */
-    drawer?: React.ReactNode;
+export interface ScaffoldProps {
 
     /**
      * Open the drawer on hover
@@ -57,16 +18,14 @@ export interface ScaffoldProps<ExtraAppbarProps = object> {
     autoOpenDrawer?: boolean;
 
     /**
-     * A component that gets rendered on the upper side of the main toolbar.
-     * `toolbarExtraWidget` has no effect if this is set.
+     * Logo to be displayed in the top bar and drawer.
+     * Note that this has no effect if you are using a custom AppBar or Drawer.
      */
-    FireCMSAppBar?: React.ComponentType<FireCMSAppBarProps<ExtraAppbarProps>>;
+    logo?: string;
 
-    /**
-     * Additional props passed to the custom AppBar
-     */
-    fireCMSAppBarProps?: Partial<FireCMSAppBarProps> & ExtraAppbarProps;
+    className?: string;
 
+    style?: React.CSSProperties;
 }
 
 /**
@@ -85,15 +44,23 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
 
         const {
             children,
-            name,
-            logo,
-            includeDrawer = true,
             autoOpenDrawer,
-            drawer = <DefaultDrawer/>,
-            FireCMSAppBar = DefaultFireCMSAppBar,
-            fireCMSAppBarProps,
+            logo,
+            className,
+            style
         } = props;
 
+        const drawerChildren = React.Children.toArray(children).filter((child: any) => child.type.componentType === "Drawer");
+        if (drawerChildren.length > 1) {
+            throw Error("Only one Drawer component is allowed in Scaffold");
+        }
+        const appBarChildren = React.Children.toArray(children).filter((child: any) => child.type.componentType === "AppBar");
+        if (appBarChildren.length > 1) {
+            throw Error("Only one AppBar component is allowed in Scaffold");
+        }
+        const otherChildren = React.Children.toArray(children)
+            .filter((child: any) => child.type.componentType !== "Drawer" && child.type.componentType !== "AppBar");
+        const includeDrawer = drawerChildren.length > 0;
         const largeLayout = useLargeLayout();
 
         const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -113,54 +80,53 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
         const computedDrawerOpen: boolean = drawerOpen || Boolean(largeLayout && autoOpenDrawer && onHover);
 
         return (
-            <DrawerContext.Provider value={{
-                hovered: onHover,
+            <AppContext.Provider value={{
+                logo,
+                hasDrawer: includeDrawer,
+                drawerHovered: onHover,
                 drawerOpen: computedDrawerOpen,
                 closeDrawer: handleDrawerClose,
                 openDrawer: handleDrawerOpen,
                 autoOpenDrawer
             }}>
                 <div
-                    className="flex h-screen w-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white overflow-hidden"
+                    className={cls("flex h-screen w-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white overflow-hidden", className)}
                     style={{
                         paddingTop: "env(safe-area-inset-top)",
                         paddingLeft: "env(safe-area-inset-left)",
                         paddingRight: "env(safe-area-inset-right)",
                         paddingBottom: "env(safe-area-inset-bottom)",
-                        height: "100dvh"
+                        height: "100dvh",
+                        ...style
                     }}>
 
-                    <FireCMSAppBar title={name}
-                                   includeDrawer={includeDrawer}
-                                   logo={logo}
-                                   drawerOpen={computedDrawerOpen}
-                                   {...fireCMSAppBarProps}/>
+                    {appBarChildren}
+
                     <DrawerWrapper
                         displayed={includeDrawer}
                         onMouseEnter={setOnHoverTrue}
                         onMouseMove={setOnHoverTrue}
                         onMouseLeave={setOnHoverFalse}
                         open={computedDrawerOpen}
-                        logo={logo}
                         hovered={onHover}
                         setDrawerOpen={setDrawerOpen}>
-                        {includeDrawer && drawer}
+                        {includeDrawer && drawerChildren}
                     </DrawerWrapper>
 
                     <main
                         className="flex flex-col flex-grow overflow-auto">
                         <DrawerHeader/>
                         <div
-                            className={cn(defaultBorderMixin, "flex-grow overflow-auto lg:m-0 lg:mx-4 lg:mb-4 lg:rounded-lg lg:border lg:border-solid m-0 mt-1")}>
+                            className={cls(defaultBorderMixin, "flex-grow overflow-auto lg:m-0 lg:mx-4 lg:mb-4 lg:rounded-lg lg:border lg:border-solid m-0 mt-1")}>
 
                             <ErrorBoundary>
-                                {children}
+                                {otherChildren}
                             </ErrorBoundary>
 
                         </div>
                     </main>
                 </div>
-            </DrawerContext.Provider>
+            </AppContext.Provider>
         );
     },
     equal
@@ -184,8 +150,6 @@ function DrawerWrapper(props: {
     onMouseLeave: () => void
 }) {
 
-    const navigation = useNavigationController();
-
     const width = !props.displayed ? 0 : (props.open ? DRAWER_WIDTH : 72);
     const innerDrawer = <div
         className={"relative h-full no-scrollbar overflow-y-auto overflow-x-hidden"}
@@ -199,7 +163,7 @@ function DrawerWrapper(props: {
             <Tooltip title="Open menu"
                      side="right"
                      sideOffset={12}
-                     className="fixed top-2 left-3 !bg-gray-50 dark:!bg-gray-900 rounded-full w-fit"
+                     className="fixed top-2 left-3 !bg-gray-50 dark:!bg-gray-900 rounded-full w-fit z-20"
             >
                 <IconButton
                     color="inherit"
@@ -213,30 +177,19 @@ function DrawerWrapper(props: {
             </Tooltip>
         )}
 
+        <div
+            className={`z-20 absolute right-0 top-4 ${
+                props.open ? "opacity-100" : "opacity-0 invisible"
+            } transition-opacity duration-200 ease-in-out`}>
+            <IconButton
+                aria-label="Close drawer"
+                onClick={() => props.setDrawerOpen(false)}
+            >
+                <ChevronLeftIcon/>
+            </IconButton>
+        </div>
+
         <div className={"flex flex-col h-full"}>
-            <div
-                style={{
-                    transition: "padding 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
-                    padding: props.open ? "32px 144px 0px 24px" : "72px 16px 0px"
-                }}
-                className={cn("cursor-pointer")}>
-
-                <Tooltip title={"Home"}
-                         sideOffset={20}
-                         side="right">
-                    <Link
-                        to={navigation.basePath}>
-                        {props.logo
-                            ? <img src={props.logo}
-                                   alt="Logo"
-                                   className={cn("max-w-full max-h-full",
-                                       props.open ?? "w-[112px] h-[112px]")}/>
-                            : <FireCMSLogo/>}
-
-                    </Link>
-                </Tooltip>
-            </div>
-
             {props.children}
         </div>
 
@@ -268,7 +221,7 @@ function DrawerWrapper(props: {
 
     return (
         <div
-            className="relative"
+            className="z-20 relative"
             onMouseEnter={props.onMouseEnter}
             onMouseMove={props.onMouseMove}
             onMouseLeave={props.onMouseLeave}
@@ -279,17 +232,17 @@ function DrawerWrapper(props: {
 
             {innerDrawer}
 
-            <div
-                className={`absolute right-0 top-4 ${
-                    props.open ? "opacity-100" : "opacity-0 invisible"
-                } transition-opacity duration-1000 ease-in-out`}>
-                <IconButton
-                    aria-label="Close drawer"
-                    onClick={() => props.setDrawerOpen(false)}
-                >
-                    <ChevronLeftIcon/>
-                </IconButton>
-            </div>
+            {/*<div*/}
+            {/*    className={`z-20 absolute right-0 top-4 ${*/}
+            {/*        props.open ? "opacity-100" : "opacity-0 invisible"*/}
+            {/*    } transition-opacity duration-1000 ease-in-out`}>*/}
+            {/*    <IconButton*/}
+            {/*        aria-label="Close drawer"*/}
+            {/*        onClick={() => props.setDrawerOpen(false)}*/}
+            {/*    >*/}
+            {/*        <ChevronLeftIcon/>*/}
+            {/*    </IconButton>*/}
+            {/*</div>*/}
 
         </div>
     );

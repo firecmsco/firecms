@@ -1,10 +1,11 @@
 import React, { useCallback } from "react";
 import {
+    DrawerLogo,
     DrawerNavigationItem,
     IconForView,
     TopNavigationResult,
     useAuthController,
-    useDrawer,
+    useApp,
     useNavigationController
 } from "@firecms/core";
 import { AddIcon, Button, Tooltip, Typography, } from "@firecms/ui";
@@ -18,11 +19,13 @@ import { AdminDrawerMenu } from "./AdminDrawerMenu";
  */
 export function FireCMSCloudDrawer() {
 
+    const { logo } = useApp();
+
     const {
-        hovered,
+        drawerHovered,
         drawerOpen,
         closeDrawer
-    } = useDrawer();
+    } = useApp();
 
     const navigation = useNavigationController();
     const collectionEditorController = useCollectionEditorController();
@@ -30,7 +33,7 @@ export function FireCMSCloudDrawer() {
 
     const [adminMenuOpen, setAdminMenuOpen] = React.useState(false);
 
-    const tooltipsOpen = hovered && !drawerOpen && !adminMenuOpen;
+    const tooltipsOpen = drawerHovered && !drawerOpen && !adminMenuOpen;
 
     if (!navigation.topLevelNavigation)
         throw Error("Navigation not ready in Drawer");
@@ -74,6 +77,7 @@ export function FireCMSCloudDrawer() {
     return (
 
         <>
+            <DrawerLogo logo={logo}/>
             <div className={"flex-grow overflow-scroll no-scrollbar"}>
 
                 {groups.map((group) => (

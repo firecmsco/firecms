@@ -6,7 +6,7 @@ import type {
     DroppableStateSnapshot
 } from "@hello-pangea/dnd";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
-import { cn } from "@firecms/ui";
+import { cls } from "@firecms/ui";
 import { ColumnTitle } from "./ColumnTitle";
 import type { Item, ItemViewProps } from "./types";
 
@@ -80,7 +80,7 @@ function InnerList<T extends object>(props: InnerListProps<T>) {
             {title}
 
             <div ref={dropProvided.innerRef}
-                 className={cn("min-h-full pb-4",)}>
+                 className={cls("min-h-full pb-4",)}>
                 <InnerItemListMemo items={items}
                                    ItemComponent={ItemComponent}
                 />
@@ -133,7 +133,7 @@ export default function SortableList(props: SortableListProps): ReactElement {
                     style={style}
                     // isDropDisabled={Boolean(isDropDisabled)}
                     {...dropProvided.droppableProps}
-                    className={cn("flex flex-col p-4 transition-opacity duration-100 transition-bg ease-linear w-64",
+                    className={cls("flex flex-col p-4 transition-opacity duration-100 transition-bg ease-linear w-64",
                         "h-full w-full overflow-y-auto flex-1",
                         "rounded-md",
                         isDropDisabled ? "opacity-50" : "opacity-100",

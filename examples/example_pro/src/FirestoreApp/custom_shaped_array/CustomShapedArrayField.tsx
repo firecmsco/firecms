@@ -19,7 +19,7 @@ export default function CustomShapedArrayField({
                                                }: FieldProps<{ name: string, age: number }[], CustomShapedArrayProps>)
      {
 
-    const properties = customProps.properties;
+    const properties = customProps?.properties ?? [];
 
     return (
         <>

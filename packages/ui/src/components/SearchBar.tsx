@@ -3,7 +3,7 @@ import React, { useCallback, useState } from "react";
 import { defaultBorderMixin, focusedMixin } from "../styles";
 import { CircularProgress, IconButton } from "./index";
 import { ClearIcon, SearchIcon } from "../icons";
-import { cn } from "../util";
+import { cls } from "../util";
 import { useDebounceValue } from "../hooks";
 
 interface SearchBarProps {
@@ -60,14 +60,14 @@ export function SearchBar({
     return (
         <div
             onClick={onClick}
-            className={cn("relative",
+            className={cls("relative",
                 large ? "h-14" : "h-[42px]",
-                "bg-slate-50 dark:bg-gray-800 transition duration-150 ease-in-out border",
+                "bg-slate-50 dark:bg-gray-800 border",
                 defaultBorderMixin,
                 "rounded",
                 className)}>
             <div
-                className="absolute p-0 px-4 h-full absolute pointer-events-none flex items-center justify-center top-0">
+                className="absolute p-0 px-4 h-full pointer-events-none flex items-center justify-center top-0">
                 {loading ? <CircularProgress size={"small"}/> : <SearchIcon className={"text-slate-500 dark:text-gray-500"}/>}
             </div>
             <input
@@ -84,7 +84,7 @@ export function SearchBar({
                 autoFocus={autoFocus}
                 onFocus={() => setActive(true)}
                 onBlur={() => setActive(false)}
-                className={cn(
+                className={cls(
                     (disabled || loading) && "pointer-events-none",
                     "relative flex items-center rounded transition-all bg-transparent outline-none appearance-none border-none",
                     "pl-12 h-full text-current ",

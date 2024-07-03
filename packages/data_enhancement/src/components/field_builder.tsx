@@ -54,7 +54,7 @@ function builder<T extends CMSType = CMSType, M extends Record<string, any> = an
         const loading = loadingSuggestions?.includes(props.propertyKey);
         const suggestedValue = suggestions?.[props.propertyKey];
 
-        const filledCharacters = countStringCharacters(props.context.values, props.context.collection.properties);
+        const filledCharacters = countStringCharacters(props.context.values, props.context.collection?.properties ?? {});
         const enoughData = filledCharacters > 5;
 
         return <FieldInner

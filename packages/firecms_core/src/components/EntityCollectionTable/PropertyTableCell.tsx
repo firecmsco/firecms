@@ -24,14 +24,13 @@ import { getPreviewSizeFrom } from "../../preview/util";
 import { isReadOnly } from "../../util";
 
 import { CustomFieldValidator, mapPropertyToYup } from "../../form/validation";
-import { useFireCMSContext } from "../../hooks";
 
 import { EntityTableCell } from "./internal/EntityTableCell";
 import { EntityTableCellActions } from "./internal/EntityTableCellActions";
 
-import { getRowHeight } from "../VirtualTable/common";
 import { useSelectableTableController } from "../SelectableTable/SelectableTableContext";
 import { useClearRestoreValue } from "../../form/useClearRestoreValue";
+import { getRowHeight } from "../common/table_height";
 
 export interface PropertyTableCellProps<T extends CMSType> {
     propertyKey: string;
@@ -348,6 +347,8 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                              path={property.path}
                                              multiselect={false}
                                              previewProperties={property.previewProperties}
+                                             includeId={property.includeId}
+                                             includeEntityLink={property.includeEntityLink}
                                              title={property.name}
                                              forceFilter={property.forceFilter}
                         />;
@@ -392,6 +393,8 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                     previewProperties={arrayProperty.of.previewProperties}
                                     title={arrayProperty.name}
                                     forceFilter={arrayProperty.of.forceFilter}
+                                    includeId={arrayProperty.of.includeId}
+                                    includeEntityLink={arrayProperty.of.includeEntityLink}
                                 />;
                         }
                         allowScroll = false;

@@ -1,6 +1,6 @@
 import { Plugin, } from "prosemirror-state";
 import { TiptapImage } from "./index";
-import { cn, defaultBorderMixin } from "@firecms/ui";
+import { cls, defaultBorderMixin } from "@firecms/ui";
 import { Decoration, DecorationSet, EditorView } from "@tiptap/pm/view";
 
 export type UploadFn = (image: File) => Promise<string>;
@@ -153,7 +153,7 @@ export const createImageExtension = (uploadFn: UploadFn) => {
     }).configure({
         allowBase64: true,
         HTMLAttributes: {
-            class: cn("rounded-lg border", defaultBorderMixin)
+            class: cls("rounded-lg border", defaultBorderMixin)
         }
     });
 };

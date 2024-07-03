@@ -18,12 +18,13 @@
     "node": ">=18"
   },
   "dependencies": {
+    "react-responsive-masonry": "^2.2.1",
     "@docsearch/js": "3.5.2",
-    "@docusaurus/core": "^3.1.1",
-    "@docusaurus/plugin-google-gtag": "^3.1.1",
-    "@docusaurus/plugin-sitemap": "^3.1.1",
-    "@docusaurus/preset-classic": "^3.1.1",
-    "@docusaurus/theme-search-algolia": "^3.1.1",
+    "@docusaurus/core": "^3.4.0",
+    "@docusaurus/plugin-google-gtag": "^3.4.0",
+    "@docusaurus/plugin-sitemap": "^3.4.0",
+    "@docusaurus/preset-classic": "^3.4.0",
+    "@docusaurus/theme-search-algolia": "^3.4.0",
     "@firecms/collection_editor": "link:../packages/collection_editor",
     "@firecms/core": "link:../packages/firecms_core",
     "@firecms/data_enhancement": "link:../packages/data_enhancement",
@@ -64,8 +65,8 @@
     ]
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.1.1",
-    "@docusaurus/types": "^3.1.1",
+    "@docusaurus/module-type-aliases": "^3.4.0",
+    "@docusaurus/types": "^3.4.0",
     "@firecms/cloud": "link:../packages/firecms_cloud",
     "@tsconfig/docusaurus": "^2.0.2",
     "@types/react": "^18.2.63",

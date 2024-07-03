@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useBrowserTitleAndIcon } from "@firecms/core";
-import { AutoAwesomeIcon, Card, Chip, CircularProgress, cn, Typography, } from "@firecms/ui";
+import { AutoAwesomeIcon, Card, Chip, CircularProgress, cls, Typography, } from "@firecms/ui";
 import { useSubscriptionsForUserController } from "../../hooks/useSubscriptionsForUserController";
 import { ProductView } from "./ProductView";
 import { getPriceString, getStatusText } from "../settings/common";
@@ -46,7 +46,7 @@ export function ProjectSubscriptionPlans({ uid }: {
             {loading &&
                 <div className={"absolute w-full h-full flex items-center justify-center"}><CircularProgress/></div>}
 
-            <div className={cn("grid grid-cols-12 gap-4 items-center", loading ? "collapse" : "")}>
+            <div className={cls("grid grid-cols-12 gap-4 items-center", loading ? "collapse" : "")}>
 
                 <div className={"col-span-12 md:col-span-7 flex flex-col gap-2"}>
 
@@ -71,7 +71,7 @@ export function ProjectSubscriptionPlans({ uid }: {
 
                 </div>
 
-                <div className={cn("col-span-12 md:col-span-5")}>
+                <div className={cls("col-span-12 md:col-span-5")}>
                     <Card
                         className={"p-6 bg-amber-200 dark:bg-amber-700 border-amber-300 dark:border-amber-800 flex flex-col gap-4"}>
 

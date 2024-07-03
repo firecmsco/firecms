@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "../util";
+import { cls } from "../util";
 import { Label } from "./Label";
 
 export type InputLabelProps = {
@@ -21,7 +21,7 @@ export const InputLabel = React.forwardRef<HTMLLabelElement, InputLabelProps>(fu
         ...other
     } = inProps;
 
-    const computedClassName = cn(defaultClasses.root,
+    const computedClassName = cls(defaultClasses.root,
         {
             [defaultClasses.shrink]: shrink,
             [defaultClasses.expanded]: !shrink

@@ -68,7 +68,7 @@ export function DataEnhancementHero() {
                     className={" flex content-center justify-center"}>
                     <video
                         key={isDarkTheme ? "dark" : "light"}
-                        className={clsx("rounded-xl border border-solid", defaultBorderMixin)}
+                        className={clsx("rounded-2xl border border-solid", defaultBorderMixin)}
                         width="100%"
                         loop autoPlay muted>
                         <source

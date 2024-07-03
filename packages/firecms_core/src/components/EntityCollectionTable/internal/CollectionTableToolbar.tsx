@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import {
     Button,
     CircularProgress,
-    cn,
+    cls,
     defaultBorderMixin,
     FilterListOffIcon,
     SearchBar,
@@ -71,7 +71,7 @@ export function CollectionTableToolbar({
 
     return (
         <div
-            className={cn(defaultBorderMixin, "no-scrollbar min-h-[56px] overflow-x-auto px-2 md:px-4 bg-gray-50 dark:bg-gray-900 border-b flex flex-row justify-between items-center w-full")}>
+            className={cls(defaultBorderMixin, "no-scrollbar min-h-[56px] overflow-x-auto px-2 md:px-4 bg-gray-50 dark:bg-gray-900 border-b flex flex-row justify-between items-center w-full")}>
 
             <div className="flex items-center gap-2 md:mr-4 mr-2">
 

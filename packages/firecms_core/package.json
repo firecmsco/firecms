@@ -1,7 +1,7 @@
 {
     "name": "@firecms/core",
     "type": "module",
-    "version": "3.0.0-canary.53",
+    "version": "3.0.0-canary.77",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "funding": {
         "url": "https://github.com/sponsors/firecmsco"
@@ -46,11 +46,11 @@
         "./package.json": "./package.json"
     },
     "dependencies": {
-        "@firecms/formex": "^3.0.0-canary.53",
-        "@firecms/ui": "^3.0.0-canary.53",
+        "@firecms/formex": "^3.0.0-canary.77",
+        "@firecms/ui": "^3.0.0-canary.77",
         "@fontsource/jetbrains-mono": "^5.0.20",
         "@hello-pangea/dnd": "^16.6.0",
-        "@radix-ui/react-portal": "^1.0.4",
+        "@radix-ui/react-portal": "^1.1.1",
         "clsx": "^2.1.1",
         "date-fns": "^3.6.0",
         "history": "^5.3.0",
@@ -70,8 +70,8 @@
     },
     "peerDependencies": {
         "firebase": "^10.5.2",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
         "react-router": "^6.22.0",
         "react-router-dom": "^6.22.0"
     },
@@ -80,38 +80,38 @@
         "@testing-library/react": "^15.0.7",
         "@testing-library/user-event": "^14.5.2",
         "@types/jest": "^29.5.12",
-        "@types/node": "^20.12.13",
+        "@types/node": "^20.14.9",
         "@types/object-hash": "^3.0.6",
         "@types/react": "^18.3.3",
         "@types/react-dom": "^18.3.0",
         "@types/react-measure": "^2.0.12",
-        "@typescript-eslint/eslint-plugin": "^7.11.0",
-        "@typescript-eslint/parser": "^7.11.0",
-        "@vitejs/plugin-react": "^4.3.0",
+        "@typescript-eslint/eslint-plugin": "^7.15.0",
+        "@typescript-eslint/parser": "^7.15.0",
+        "@vitejs/plugin-react": "^4.3.1",
         "cross-env": "^7.0.3",
-        "eslint": "^8.57.0",
+        "eslint": "^9.6.0",
         "eslint-config-standard": "^17.1.0",
         "eslint-plugin-import": "^2.29.1",
         "eslint-plugin-n": "^16.6.2",
-        "eslint-plugin-promise": "^6.2.0",
-        "eslint-plugin-react": "^7.34.2",
+        "eslint-plugin-promise": "^6.4.0",
+        "eslint-plugin-react": "^7.34.3",
         "eslint-plugin-react-hooks": "^4.6.2",
         "firebase": "^10.12.2",
         "jest": "^29.7.0",
         "npm-run-all": "^4.1.5",
-        "react-router": "^6.23.1",
-        "react-router-dom": "^6.23.1",
-        "ts-jest": "^29.1.4",
+        "react-router": "^6.24.0",
+        "react-router-dom": "^6.24.0",
+        "ts-jest": "^29.1.5",
         "ts-node": "^10.9.2",
-        "tsd": "^0.31.0",
-        "typescript": "^5.4.5",
-        "vite": "^5.2.12"
+        "tsd": "^0.31.1",
+        "typescript": "^5.5.3",
+        "vite": "^5.3.2"
     },
     "files": [
         "dist",
         "src"
     ],
-    "gitHead": "5d6f89260a9582eaac7ee9a77c48c8f340bc29d3",
+    "gitHead": "df54d6590d1c0db76feb6d24be3573477d54e85f",
     "publishConfig": {
         "access": "public"
     },

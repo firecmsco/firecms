@@ -6,7 +6,7 @@ import { Command as CommandPrimitive } from "cmdk";
 
 import { ExpandMoreIcon } from "../icons";
 import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
-import { cn } from "../util";
+import { cls } from "../util";
 import { SelectInputLabel } from "./common/SelectInputLabel";
 import { useOutsideAlerter } from "../hooks";
 
@@ -116,10 +116,10 @@ export function MultiSelect({
                                   inputRef.current?.focus();
                                   openDialog()
                               }}
-                              className={cn("relative overflow-visible bg-transparent", containerClassName)}>
+                              className={cls("relative overflow-visible bg-transparent", containerClassName)}>
                 <div
                     ref={containerRef}
-                    className={cn(
+                    className={cls(
                         "flex flex-row",
                         size === "small" ? "min-h-[42px]" : "min-h-[64px]",
                         "select-none rounded-md text-sm",
@@ -132,7 +132,7 @@ export function MultiSelect({
                         includeFocusOutline ? focusedMixin : "",
                         className)}
                 >
-                    <div className={cn("flex-grow flex gap-1.5 flex-wrap items-center")}>
+                    <div className={cls("flex-grow flex gap-1.5 flex-wrap items-center")}>
                         {renderValue && (value ?? []).map((v, i) => renderValue(v, i))}
                         {renderValues && renderValues(value ?? [])}
                         <CommandPrimitive.Input
@@ -146,7 +146,7 @@ export function MultiSelect({
                     </div>
                     <div className={"px-2 h-full flex items-center"}>
                         <ExpandMoreIcon size={"small"}
-                                        className={cn("transition ", openInternal ? "rotate-180" : "")}/>
+                                        className={cls("transition ", openInternal ? "rotate-180" : "")}/>
                     </div>
 
                 </div>
@@ -210,7 +210,7 @@ export function MultiSelectItem({ children, value, className }: MultiSelectItemP
             setInputValue("");
             onValueChangeInternal(value);
         }}
-        className={cn(
+        className={cls(
             (fieldValue ?? []).includes(value) ? "bg-slate-200 dark:bg-slate-950" : "",
             "cursor-pointer",
             "m-1",

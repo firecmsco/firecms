@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { EntityCollection, unslugify, } from "@firecms/core";
-import { Button, Card, Chip, CircularProgress, cn, Container, Icon, Tooltip, Typography, } from "@firecms/ui";
+import { Button, Card, Chip, CircularProgress, cls, Container, Icon, Tooltip, Typography, } from "@firecms/ui";
 
 import { productsCollectionTemplate } from "./templates/products_template";
 import { blogCollectionTemplate } from "./templates/blog_template";
@@ -188,7 +188,7 @@ export function TemplateButton({
         <Tooltip title={subtitle}>
             <Card
                 onClick={onClick}
-                className={cn(
+                className={cls(
                     "my-2 rounded-md border mx-0 p-6 px-4 focus:outline-none transition ease-in-out duration-150 flex flex-row gap-4 items-center",
                     "text-gray-700 dark:text-slate-300",
                     "hover:border-primary-dark hover:text-primary-dark dark:hover:text-primary focus:ring-primary hover:ring-1 hover:ring-primary",

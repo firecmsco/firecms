@@ -4,7 +4,7 @@ import { Draggable } from "@hello-pangea/dnd";
 import SortableList from "./SortableList";
 import { ColumnTitle } from "./ColumnTitle";
 import type { Item } from "./types";
-import { cn, defaultBorderMixin } from "@firecms/ui";
+import { cls, defaultBorderMixin } from "@firecms/ui";
 
 interface ColumnProps {
     title: string;
@@ -30,7 +30,7 @@ export default class Column extends Component<ColumnProps> {
                 {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
                     <div ref={provided.innerRef}
                          {...provided.draggableProps}
-                         className={cn("border h-full w-80 m-2 flex flex-col",
+                         className={cls("border h-full w-80 m-2 flex flex-col",
                              "rounded-md",
                              defaultBorderMixin,
                              snapshot.isDragging ? "ring-2 ring-primary" : "",)}>

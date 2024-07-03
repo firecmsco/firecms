@@ -14,6 +14,7 @@ import { LinedSpace } from "../layout/LinedSpace";
 function FirebaseIntro() {
     return (
         <Panel color={"white"}
+               container={false}
                includePadding={false}
                includeMargin={false}>
 

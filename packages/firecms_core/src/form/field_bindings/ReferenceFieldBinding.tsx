@@ -27,19 +27,19 @@ export function ReferenceFieldBinding<M extends Record<string, any>>(props: Fiel
 
 }
 
-function ReferenceFieldBindingInternal<M extends Record<string, any>>({
-                                                                          value,
-                                                                          setValue,
-                                                                          error,
-                                                                          showError,
-                                                                          isSubmitting,
-                                                                          disabled,
-                                                                          touched,
-                                                                          autoFocus,
-                                                                          property,
-                                                                          includeDescription,
-                                                                          context
-                                                                      }: FieldProps<EntityReference>) {
+function ReferenceFieldBindingInternal({
+                                           value,
+                                           setValue,
+                                           error,
+                                           showError,
+                                           isSubmitting,
+                                           disabled,
+                                           touched,
+                                           autoFocus,
+                                           property,
+                                           includeDescription,
+                                           context
+                                       }: FieldProps<EntityReference>) {
     if (!property.path) {
         throw new Error("Property path is required for ReferenceFieldBinding");
     }
@@ -99,6 +99,8 @@ function ReferenceFieldBindingInternal<M extends Record<string, any>>({
                     size={"medium"}
                     onClick={disabled || isSubmitting ? undefined : onEntryClick}
                     reference={value}
+                    includeEntityLink={property.includeEntityLink}
+                    includeId={property.includeId}
                 />}
 
                 {!value && <div className="justify-center text-left">

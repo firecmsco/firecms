@@ -10,7 +10,7 @@ import {
     focusedMixin
 } from "../styles";
 import { InputLabel } from "./InputLabel";
-import { cn } from "../util";
+import { cls } from "../util";
 
 export type InputType =
     "text"
@@ -111,7 +111,7 @@ export function TextField<T extends string | number>({
             value={value ?? ""}
             onChange={onChange}
             style={inputStyle}
-            className={cn(
+            className={cls(
                 invisible ? focusedInvisibleMixin : focusedMixin,
                 "rounded-md resize-none w-full outline-none p-[32px] text-base bg-transparent min-h-[64px] px-3 pt-[28px]",
                 disabled && "border border-transparent outline-none opacity-50 text-slate-600 dark:text-slate-500"
@@ -123,7 +123,7 @@ export function TextField<T extends string | number>({
             onWheel={type === "number" ? numberInputOnWheelPreventChange : undefined}
             disabled={disabled}
             style={inputStyle}
-            className={cn(
+            className={cls(
                 "w-full outline-none bg-transparent leading-normal px-3",
                 "rounded-md",
                 invisible ? focusedInvisibleMixin : focusedMixin,
@@ -146,7 +146,7 @@ export function TextField<T extends string | number>({
 
     return (
         <div
-            className={cn(
+            className={cls(
                 "rounded-md relative max-w-full",
                 invisible ? fieldBackgroundInvisibleMixin : fieldBackgroundMixin,
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
@@ -161,7 +161,7 @@ export function TextField<T extends string | number>({
 
             {label && (
                 <InputLabel
-                    className={cn(
+                    className={cls(
                         "pointer-events-none absolute",
                         size === "medium" ? "top-1" : "-top-1",
                         !error ? (focused ? "text-primary dark:text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-red-500 dark:text-red-600",

@@ -16,12 +16,13 @@ Collections in FireCMS can be defined in two ways:
 - Using **code**.
 
 If the logged-in user has the required permissions, they will be able to create collections using the UI. Collections
-defined by the UI hae some limitations, such as not being able to define any callbacks.
+defined by the UI have some limitations, such as not being able to define any callbacks. On the 
 
 On the other hand, if you are using code, you can define your collections programmatically, and you can use all the
-features of FireCMS.
+features of FireCMS., including defining custom callbacks, customizing the permissions, and defining custom fields
+and components.
 
-### Defining your collections
+## Defining your collections
 
 You can create your collections **in the UI or using code**. You can also mix both approaches, but keep in mind that
 collections defined in the UI will take precedence. For example, you might have an enum property with 2 values defined
@@ -35,10 +36,12 @@ A deep merge is performed, so you can define some properties in the code, and ov
 can define an enum string property and the values will be merged from both definitions.
 :::
 
-#### Modifying a collection defined in the UI
+### Modifying a collection defined in the UI
 
 If you just need to add some code to a collection defined in the UI, you can use the `modifyCollection` function in
 your `FireCMSAppConfig` object.
+
+This applies to FireCMS Cloud only. 
 
 ```tsx
 import { FireCMSAppConfig } from "@firecms/cloud";
@@ -74,7 +77,7 @@ export default appConfig;
 
 You can use all the props available in the `Collection` interface.
 
-#### Sample collection defined in code
+### Sample collection defined in code
 
 :::note
 FireCMS provides around 20 different fields (such as text fields, selects, and complex ones like reference or
@@ -194,10 +197,12 @@ const productsCollection = buildCollection<Product>({
 });
 ```
 
-This collection can then be used by including it in the `collections` prop of your main export, a `FireCMSAppConfig`
+In FireCMS Cloud, this collection can then be used by including it in the `collections` prop of your main export, a `FireCMSAppConfig`
 object.
 
-### Subcollections
+In FireCMS PRO, `collections` are passed directly to the `useBuildNavigationController` hook.
+
+## Subcollections
 
 Subcollections are collections of entities that are found under another entity. For example, you can have a collection
 named "translations" under the entity "Article". You just need to use the same format as for defining your collection
@@ -205,7 +210,7 @@ using the field `subcollections`.
 
 Subcollections are easily accessible from the side view while editing an entity.
 
-### Filters
+## Filters
 
 :::tip
 If you need to have some filters and sorting applied by default, you can use the `initialFilter`and `initialSort`
@@ -240,7 +245,7 @@ const productsCollection = buildCollection<Product>({
 });
 ```
 
-### Collection configuration
+## Collection configuration
 
 The `name` and `properties` you define for your entity collection will be used to generate the fields in the
 spreadsheet-like collection tables, and the fields in the generated forms.

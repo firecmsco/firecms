@@ -13,6 +13,7 @@ interface ReferenceFilterFieldProps {
     isArray?: boolean;
     path?: string;
     title?: string;
+    includeId?: boolean;
     previewProperties?: string[];
     hidden: boolean;
     setHidden: (hidden: boolean) => void;
@@ -40,6 +41,7 @@ export function ReferenceFilterField({
                                          isArray,
                                          path,
                                          title,
+                                         includeId = true,
                                          previewProperties,
                                          setHidden
                                      }: ReferenceFilterFieldProps) {
@@ -134,7 +136,8 @@ export function ReferenceFilterField({
                 onClick={doOpenDialog}
                 reference={reference}
                 hover={true}
-                allowEntityNavigation={false}
+                includeId={includeId}
+                includeEntityLink={false}
             />
         );
     };

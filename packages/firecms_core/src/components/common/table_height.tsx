@@ -1,6 +1,9 @@
-import { VirtualTableSize } from "./VirtualTableProps";
+/**
+ * @group Components
+ */
+export type TableSize = "xs" | "s" | "m" | "l" | "xl";
 
-export function getRowHeight(size: VirtualTableSize): number {
+export function getRowHeight(size: TableSize): number {
     switch (size) {
         case "xl":
             return 400;

@@ -3,7 +3,7 @@ import React, { useCallback } from "react";
 import { useSnackbarController, useStorageSource } from "../../hooks";
 import { StorageFieldItem } from "../../util/useStorageUploadController";
 import { ErrorView } from "../../components";
-import { cn, paperMixin, Skeleton } from "@firecms/ui";
+import { cls, paperMixin, Skeleton } from "@firecms/ui";
 import { EntityCollection, StorageSource } from "../../types";
 
 export interface StorageUploadItemProps {
@@ -88,7 +88,7 @@ export function StorageUploadProgress({
     }
     return (
 
-        <div className={cn(paperMixin,
+        <div className={cls(paperMixin,
             "relative m-4 border-box flex items-center justify-center",
             `min-w-[${imageSize}px] min-h-[${imageSize}px]`)}>
 

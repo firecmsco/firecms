@@ -4,6 +4,8 @@ import { defaultBorderMixin } from "./styles";
 import { Panel } from "./general/Panel";
 import { LinedSpace } from "./layout/LinedSpace";
 
+import { softwareApplicationSchema } from "../partials/markup";
+
 // @ts-ignore
 import viktor from "@site/static/img/avatars/viktor.jpeg";
 
@@ -14,7 +16,11 @@ import fulei from "@site/static/img/avatars/fulei.avif";
 import muhammad from "@site/static/img/avatars/muhammad.avif";
 
 // @ts-ignore
+import john from "@site/static/img/avatars/john.avif";
+
+// @ts-ignore
 import manuel from "@site/static/img/avatars/manuel.avif";
+import Head from "@docusaurus/Head";
 
 const quotes = [
     {
@@ -36,6 +42,12 @@ const quotes = [
         role: "Founder, OikosBrain"
     },
     {
+        quote: "So far, this has been the missing piece of the puzzle for running a Firebase back-end. I love how we can just throw some React in there and it all feels so seamless.",
+        author: "John Coppa",
+        avatar: john,
+        role: "CTO at EasyHome"
+    },
+    {
         quote: "It is a great initiative towards building a scalable and serverless CMS as Firebase is serverless. UI is very nice and working is very smooth.",
         author: "Muhammad Bilal",
         avatar: muhammad,
@@ -43,12 +55,33 @@ const quotes = [
     },
 ];
 
+const reviewSchema = quotes.map((quote, index) => ({
+    "@context": "http://schema.org",
+    "@type": "Review",
+    "author": {
+        "@type": "Person",
+        "name": quote.author
+    },
+    "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "5",
+        "bestRating": "5"
+    },
+    "reviewBody": quote.quote,
+    "itemReviewed": softwareApplicationSchema
+}));
+
 export const QuotesSection: React.FC = () => {
     return (
-        <Panel color={"lighter"} includePadding={false} >
+        <Panel color={"lighter"} includePadding={false} container={false}>
+            <Head>
+                <script type="application/ld+json">
+                    {JSON.stringify(reviewSchema)}
+                </script>
+            </Head>
             <div
                 className="py-16 px-8 flex flex-row gap-4 overflow-auto no-scrollbar">
-                {
+            {
                     quotes.map(({ quote, avatar, author, role }, i) => (
                             <blockquote key={`quote-${i}`}
                                         data-aos="fade-left"

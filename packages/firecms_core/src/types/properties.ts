@@ -149,7 +149,7 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
     /**
      * This value will be set by default for new entities.
      */
-    defaultValue?: T;
+    defaultValue?: T | null;
 
     /**
      * Should this property be editable. If set to true, the user will be able to modify the property and
@@ -609,6 +609,16 @@ export interface ReferenceProperty extends BaseProperty<EntityReference> {
      */
     previewProperties?: string[];
 
+    /**
+     * Should the reference include the ID of the entity. Defaults to `true`
+     */
+    includeId?: boolean;
+
+    /**
+     * Should the reference include a link to the entity (open the entity details). Defaults to `true`
+     */
+    includeEntityLink?: boolean;
+
 }
 
 /**
@@ -802,7 +812,7 @@ export interface UploadedFileContext {
     /**
      * Entity path. E.g. `products/PID/locales`
      */
-    path: string;
+    path?: string;
 
     /**
      * Values of the current entity

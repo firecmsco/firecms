@@ -331,7 +331,7 @@ export function getFieldConfig(property: Property | ResolvedProperty, propertyCo
     }
     const defaultFieldConfig = DEFAULT_FIELD_CONFIGS[defaultFieldId];
     const customField = fieldId ? propertyConfigs[fieldId] : undefined;
-    return mergeDeep(defaultFieldConfig ?? {}, customField ?? {});
+    return mergeDeep(defaultFieldConfig ?? {}, customField ?? {} as PropertyConfig);
 }
 
 export function getDefaultFieldId(property: Property | ResolvedProperty) {

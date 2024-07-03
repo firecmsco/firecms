@@ -13,7 +13,7 @@ import {
 } from "../styles";
 import { InputLabel } from "./InputLabel";
 import { Typography } from "./Typography";
-import { cn } from "../util";
+import { cls } from "../util";
 import { useInjectStyles } from "../hooks";
 
 interface DateTimeFieldProps {
@@ -68,7 +68,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
         <>
 
             <div
-                className={cn(
+                className={cls(
                     "rounded-md relative max-w-full",
                     !invisible && fieldBackgroundMixin,
                     disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
@@ -81,7 +81,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
 
                 {label && (
                     <InputLabel
-                        className={cn("absolute top-1 pointer-events-none",
+                        className={cls("absolute top-1 pointer-events-none",
                             !error ? (focused ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-red-500 dark:text-red-500",
                             disabled ? "opacity-50" : "")}
                         shrink={hasValue || focused}
@@ -96,7 +96,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                     selected={(invalidValue ? null : value) ?? null}
                     onChange={onChange}
                     disabled={false}
-                    popperClassName={cn(paperMixin, "my-4 shadow")}
+                    popperClassName={cls(paperMixin, "my-4 shadow")}
                     onClick={(e: any) => e.stopPropagation()}
                     onFocus={() => setFocused(true)}
                     onBlur={() => setFocused(false)}
@@ -106,7 +106,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                     timeCaption="time"
                     dateFormat={mode === "date_time" ? "Pp" : "P"}
                     preventOpenOnFocus={true}
-                    className={cn(
+                    className={cls(
                         "w-full outline-none bg-transparent leading-normal text-base px-3",
                         clearable ? "pr-14" : "pr-12",
                         "rounded-md",

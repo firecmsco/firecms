@@ -81,7 +81,7 @@ export type FirestoreIndexesBuilder = (params: {
 
 export type FirestoreDelegate = DataSourceDelegate & {
 
-    initTextSearchController: (props: {
+    initTextSearch: (props: {
         path: string,
         collection?: EntityCollection | ResolvedEntityCollection
     }) => Promise<boolean>,
@@ -269,10 +269,11 @@ export function useFirestoreDelegate({
         },
         currentTime,
 
-        initTextSearchController: useCallback(async (props: {
+        initTextSearch: useCallback(async (props: {
             path: string,
             collection?: EntityCollection | ResolvedEntityCollection
         }) => {
+            console.log("Init text search controller", props.path);
             if (!searchControllerRef.current) return false;
             return searchControllerRef.current.init(props);
         }, []),
@@ -744,7 +745,9 @@ function buildTextSearchControllerWithLocalSearch({
         }) => {
             const b = await textSearchController.init(props);
             if (b) return true;
-            return localSearchController.init(props);
+            if (localTextSearchEnabled)
+                return localSearchController.init(props);
+            return false;
         },
         search: (props: {
             searchString: string,

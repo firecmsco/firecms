@@ -3,7 +3,7 @@ import equal from "react-fast-compare"
 
 // @ts-ignore
 import MarkdownIt from "markdown-it";
-import { cn } from "../util";
+import { cls } from "../util";
 
 export interface MarkdownProps {
     source: string,
@@ -33,7 +33,7 @@ export const Markdown = React.memo<MarkdownProps>(function Markdown({
         }, [source]);
 
         return <div
-            className={cn(proseClasses[size], "dark:prose-invert prose-headings:font-title", className)}
+            className={cls(proseClasses[size], "dark:prose-invert prose-headings:font-title", className)}
             dangerouslySetInnerHTML={{ __html: html }}
         />;
     }

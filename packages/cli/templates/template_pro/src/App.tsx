@@ -3,8 +3,10 @@ import React, { useCallback, useMemo } from "react";
 import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
 import {
+    AppBar,
     CircularProgressCenter,
     CMSView,
+    Drawer,
     FireCMS,
     ModeControllerProvider,
     NavigationRoutes,
@@ -41,7 +43,7 @@ import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection
 
 export function App() {
 
-    const name = "My CMS app";
+    const title = "My CMS app";
 
     const {
         firebaseApp,
@@ -217,8 +219,10 @@ export function App() {
                             } else {
                                 component = (
                                     <Scaffold
-                                        name={name}
+                                        // logo={...}
                                         autoOpenDrawer={false}>
+                                        <AppBar title={title}/>
+                                        <Drawer/>
                                         <NavigationRoutes/>
                                         <SideDialogs/>
                                     </Scaffold>

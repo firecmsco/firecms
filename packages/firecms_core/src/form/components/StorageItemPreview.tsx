@@ -3,33 +3,29 @@ import React from "react";
 import { Entity, EntityCollection, ResolvedStringProperty } from "../../types";
 import { PreviewSize, PropertyPreview } from "../../preview";
 
-import { cn, IconButton, paperMixin, RemoveIcon, Tooltip } from "@firecms/ui";
+import { cls, IconButton, paperMixin, RemoveIcon, Tooltip } from "@firecms/ui";
 import { ErrorBoundary } from "../../components";
 
 interface StorageItemPreviewProps {
     name: string;
     property: ResolvedStringProperty;
     value: string,
-    entity: Entity<any>,
     onRemove: (value: string) => void;
     size: PreviewSize;
     disabled: boolean;
-    collection: EntityCollection;
 }
 
 export function StorageItemPreview({
                                        name,
                                        property,
                                        value,
-                                       entity,
                                        onRemove,
                                        disabled,
                                        size,
-                                       collection
                                    }: StorageItemPreviewProps) {
 
     return (
-        <div className={cn(paperMixin,
+        <div className={cls(paperMixin,
             "relative m-4 border-box flex items-center justify-center",
             size === "medium" ? "min-w-[220px] min-h-[220px] max-w-[220px]" : "min-w-[118px] min-h-[118px] max-w-[118px]")}>
 

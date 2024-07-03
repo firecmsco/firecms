@@ -2,7 +2,7 @@ import React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 
 import { Icon } from "../icons";
-import { cn } from "../util";
+import { cls } from "../util";
 
 export interface CheckboxProps {
     checked: boolean;
@@ -67,7 +67,7 @@ export const Checkbox = ({
             disabled={disabled}
             onCheckedChange={disabled ? undefined : onCheckedChange}>
 
-            <div className={cn(
+            <div className={cls(
                 padding ? paddingClasses[size] : "",
                 outerSizeClasses[size],
                 "inline-flex items-center justify-center text-sm font-medium focus:outline-none transition-colors ease-in-out duration-150",
@@ -75,7 +75,7 @@ export const Checkbox = ({
                 onCheckedChange ? "cursor-pointer" : "cursor-default"
             )}>
                 <div
-                    className={cn(
+                    className={cls(
                         "border-2 relative transition-colors ease-in-out duration-150",
                         sizeClasses[size],
                         disabled

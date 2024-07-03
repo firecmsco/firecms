@@ -194,8 +194,8 @@ export type PluginFieldBuilderParams<T extends CMSType = CMSType, M extends Reco
     property: Property<T> | ResolvedProperty<T>;
     Field: React.ComponentType<FieldProps<T, any, M>>;
     plugin: FireCMSPlugin;
-    path: string;
-    collection: EC;
+    path?: string;
+    collection?: EC;
 };
 
 export interface PluginGenericProps<UserType extends User = User> {

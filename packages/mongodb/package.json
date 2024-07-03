@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-canary.53",
+  "version": "3.0.0-canary.77",
   "type": "module",
   "name": "@firecms/mongodb",
   "access": "public",
@@ -8,9 +8,9 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "^3.0.0-canary.53",
-    "@firecms/firebase": "^3.0.0-canary.53",
-    "@firecms/ui": "^3.0.0-canary.53",
+    "@firecms/core": "^3.0.0-canary.77",
+    "@firecms/firebase": "^3.0.0-canary.77",
+    "@firecms/ui": "^3.0.0-canary.77",
     "firebase": "^10.12.2"
   },
   "exports": {
@@ -22,13 +22,13 @@
     "./package.json": "./package.json"
   },
   "devDependencies": {
-    "@types/node": "^20.12.13",
-    "typescript": "^5.4.5",
-    "vite": "^5.2.12"
+    "@types/node": "^20.14.9",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.2"
   },
   "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "realm-web": "^2.0.0"
   },
   "scripts": {
@@ -46,5 +46,5 @@
       "react-app/jest"
     ]
   },
-  "gitHead": "5d6f89260a9582eaac7ee9a77c48c8f340bc29d3"
+  "gitHead": "df54d6590d1c0db76feb6d24be3573477d54e85f"
 }

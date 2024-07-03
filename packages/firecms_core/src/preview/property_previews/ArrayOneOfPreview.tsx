@@ -4,7 +4,7 @@ import { ResolvedProperty } from "../../types";
 import { useCustomizationController } from "../../hooks";
 import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
-import { cn, defaultBorderMixin } from "@firecms/ui";
+import { cls, defaultBorderMixin } from "@firecms/ui";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../util/common";
 import { ErrorBoundary } from "../../components";
 
@@ -49,7 +49,7 @@ export function ArrayOneOfPreview({
                 values.map((value, index) =>
                     <React.Fragment
                         key={"preview_array_" + value + "_" + index}>
-                        <div className={cn(defaultBorderMixin, "m-1 border-b last:border-b-0")}>
+                        <div className={cls(defaultBorderMixin, "m-1 border-b last:border-b-0")}>
                             <ErrorBoundary>
                                 {value && <PropertyPreview
                                     propertyKey={propertyKey}

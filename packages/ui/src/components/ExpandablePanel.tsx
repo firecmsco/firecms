@@ -3,7 +3,7 @@ import React, { PropsWithChildren, useEffect, useState } from "react";
 import * as Collapsible from "@radix-ui/react-collapsible";
 import { defaultBorderMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
 import { ExpandMoreIcon } from "../icons";
-import { cn } from "../util";
+import { cls } from "../util";
 import { useInjectStyles } from "../hooks";
 
 export function ExpandablePanel({
@@ -76,7 +76,7 @@ export function ExpandablePanel({
 
     return (<>
             <Collapsible.Root
-                className={cn(
+                className={cls(
                     !invisible && defaultBorderMixin + " border",
                     "rounded-md",
                     "w-full"
@@ -88,7 +88,7 @@ export function ExpandablePanel({
                 }}>
 
                 <Collapsible.Trigger
-                    className={cn(focusedMixin,
+                    className={cls(focusedMixin,
                         "rounded flex items-center justify-between w-full min-h-[52px]",
                         "hover:bg-slate-50 dark:hover:bg-gray-800 dark:hover:bg-opacity-10",
                         invisible ? "border-b px-2" : "p-4",
@@ -98,11 +98,11 @@ export function ExpandablePanel({
                     )}
                 >
                     {title}
-                    <ExpandMoreIcon className={cn("transition", open ? "rotate-180" : "")}/>
+                    <ExpandMoreIcon className={cls("transition", open ? "rotate-180" : "")}/>
                 </Collapsible.Trigger>
 
                 <Collapsible.Content
-                    className={cn("CollapsibleContent")}
+                    className={cls("CollapsibleContent")}
                     style={{
                         overflow: allowOverflow ? "visible" : "hidden"
                     }}

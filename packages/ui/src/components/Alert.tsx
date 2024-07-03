@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "../util";
+import { cls } from "../util";
 
 export interface AlertProps {
     children: React.ReactNode;
@@ -52,7 +52,7 @@ export const Alert: React.FC<AlertProps> = ({
     return (
         <div
             style={style}
-            className={cn(
+            className={cls(
                 getSizeClasses(size),
                 "w-full",
                 "font-medium",

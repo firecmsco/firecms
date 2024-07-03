@@ -1,16 +1,10 @@
 import * as React from "react";
 
 import { Entity, EntityCollection, EntityReference } from "../../types";
-import {
-    useCustomizationController,
-    useEntityFetch,
-    useNavigationController,
-    useSideEntityController
-} from "../../hooks";
+import { useCustomizationController, useEntityFetch, useNavigationController } from "../../hooks";
 import { PreviewSize } from "../PropertyPreviewProps";
-import { IconButton, KeyboardTabIcon, Skeleton, Tooltip } from "@firecms/ui";
+import { Skeleton } from "@firecms/ui";
 import { ErrorView } from "../../components";
-import { useAnalyticsController } from "../../hooks/useAnalyticsController";
 import { EntityPreview, EntityPreviewContainer } from "../../components/EntityPreview";
 
 export type ReferencePreviewProps = {
@@ -20,7 +14,8 @@ export type ReferencePreviewProps = {
     previewProperties?: string[];
     onClick?: (e: React.SyntheticEvent) => void;
     hover?: boolean;
-    allowEntityNavigation?: boolean;
+    includeEntityLink?: boolean;
+    includeId?: boolean;
 };
 
 /**
@@ -46,19 +41,20 @@ function areEqual(prevProps: ReferencePreviewProps, nextProps: ReferencePreviewP
         prevProps.hover === nextProps.hover &&
         prevProps.reference?.id === nextProps.reference?.id &&
         prevProps.reference?.path === nextProps.reference?.path &&
-        prevProps.allowEntityNavigation === nextProps.allowEntityNavigation
+        prevProps.includeEntityLink === nextProps.includeEntityLink
         ;
 }
 
-function ReferencePreviewInternal<M extends Record<string, any>>({
-                                                                     disabled,
-                                                                     reference,
-                                                                     previewProperties,
-                                                                     size,
-                                                                     hover,
-                                                                     onClick,
-                                                                     allowEntityNavigation = true
-                                                                 }: ReferencePreviewProps) {
+function ReferencePreviewInternal({
+                                      disabled,
+                                      reference,
+                                      previewProperties,
+                                      size,
+                                      hover,
+                                      onClick,
+                                      includeEntityLink = true,
+                                      includeId = true
+                                  }: ReferencePreviewProps) {
 
     const customizationController = useCustomizationController();
 
@@ -79,7 +75,8 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
         previewProperties={previewProperties}
         size={size}
         disabled={disabled}
-        allowEntityNavigation={allowEntityNavigation}
+        includeEntityLink={includeEntityLink}
+        includeId={includeId}
         onClick={onClick}
         hover={hover}/>
 }
@@ -90,7 +87,8 @@ function ReferencePreviewExisting<M extends Record<string, any> = any>({
                                                                            previewProperties,
                                                                            size,
                                                                            disabled,
-                                                                           allowEntityNavigation,
+                                                                           includeEntityLink,
+                                                                           includeId,
                                                                            onClick,
                                                                            hover
                                                                        }: ReferencePreviewProps & {
@@ -158,7 +156,8 @@ function ReferencePreviewExisting<M extends Record<string, any> = any>({
                           entity={usedEntity}
                           collection={collection}
                           onClick={onClick}
-                          includeEntityNavigation={allowEntityNavigation}
+                          includeEntityLink={includeEntityLink}
+                          includeId={includeId}
                           hover={hover}/>;
 
 }

@@ -27,7 +27,7 @@ export const Badge: React.FC<BadgeProps> = ({
                                                 children
                                             }) => {
     return (
-        <div className="relative inline-block">
+        <div className="relative inline-block w-fit">
             {children}
             <span
                 className={`absolute top-0.5 right-0.5 transform translate-x-1/2 -translate-y-1/2 rounded-full

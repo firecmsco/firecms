@@ -1,6 +1,7 @@
 import { Entity, EntityReference, EntityStatus, EntityValues, GeoPoint } from "./entities";
 import { EntityCollection, FilterValues } from "./collections";
 import { ResolvedEntityCollection } from "./resolved_entities";
+import { FireCMSContext } from "./firecms_context";
 
 /**
  * @group Datasource
@@ -217,6 +218,18 @@ export interface DataSource {
      */
     isFilterCombinationValid?(props: FilterCombinationValidProps): boolean;
 
+    /**
+     * Called when the user clicks on the search bar in a collection view.
+     * Useful for initializing a text search index.
+     * @param props
+     */
+    initTextSearch?: (props: {
+        context: FireCMSContext,
+        path: string,
+        collection: EntityCollection,
+        parentCollectionIds?: string[]
+    }) => Promise<boolean>;
+
 }
 
 export type FilterCombinationValidProps = {
@@ -364,29 +377,20 @@ export interface DataSourceDelegate {
     isFilterCombinationValid?(props: Omit<FilterCombinationValidProps, "collection">): boolean;
 
     /**
-     * Convert a FireCMS reference to a reference that can be used by the datasource
-     * @param reference
-     */
-    // buildReference: (reference: EntityReference) => any,
-
-    /**
-     * Convert a FireCMS GeoPoint to a GeoPoint that can be used by the datasource
-     * @param geoPoint
-     */
-    // buildGeoPoint: (geoPoint: GeoPoint) => any,
-
-    /**
      * Get the object to generate the current time in the datasource
      */
     currentTime(): any;
-
-    // buildDate: (date: Date) => any;
-
-    // buildDeleteFieldValue: () => any;
 
     delegateToCMSModel: (data: any) => any;
 
     cmsToDelegateModel: (data: any) => any;
 
     setDateToMidnight: (input?: any) => any;
+
+    initTextSearch?: (props: {
+        context: FireCMSContext,
+        path: string,
+        collection: EntityCollection,
+        parentCollectionIds?: string[]
+    }) => Promise<boolean>;
 }

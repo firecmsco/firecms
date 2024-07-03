@@ -41,18 +41,6 @@ export function OpenAIInstructionsActions() {
                     <Typography variant={"h5"} gutterBottom>
                         OpenAI data enhancement DEMO
                     </Typography>
-                    {/*<Stepper activeStep={0} alternativeLabel sx={{ p: 4 }}>*/}
-                    {/*    <Step>*/}
-                    {/*        <StepLabel>+ ADD BOOK</StepLabel>*/}
-                    {/*    </Step>*/}
-
-                    {/*    <Step>*/}
-                    {/*        <StepLabel>ENHANCE</StepLabel>*/}
-                    {/*    </Step>*/}
-                    {/*    <Step>*/}
-                    {/*        <StepLabel>Type in any book!</StepLabel>*/}
-                    {/*    </Step>*/}
-                    {/*</Stepper>*/}
                     <Typography gutterBottom>
                         Try it out by clicking on <b>ADD BOOK</b> and
                         then typing the title of your favourite book on the <b>AUTOFILL

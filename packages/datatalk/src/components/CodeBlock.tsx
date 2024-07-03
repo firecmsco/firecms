@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as firestoreLibrary from "@firebase/firestore";
 import { CircularProgressCenter, EntityCollection } from "@firecms/core";
-import { Button, cn, Paper, useDebounceValue } from "@firecms/ui";
+import { Button, cls, Paper, useDebounceValue } from "@firecms/ui";
 import { AutoHeightEditor } from "./AutoHeightEditor";
 import { extractStringLiterals } from "../utils/extract_literals";
 import { TableResults } from "./TableResults";
@@ -193,7 +193,7 @@ export function CodeBlock({
                         marginLeft: querySnapshot ? "-64px" : undefined,
                         width: querySnapshot ? "calc(100% + 64px)" : undefined
                     }}
-                    className={cn("w-full rounded-lg shadow-sm overflow-hidden transition-all", {
+                    className={cls("w-full rounded-lg shadow-sm overflow-hidden transition-all", {
                         "h-[480px]": querySnapshot,
                         "h-[92px]": !querySnapshot && loadingQuery
                     })}>

@@ -4,12 +4,12 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@firecms/core": "^3.0.0-beta",
-    "@firecms/firebase": "^3.0.0-beta",
-    "@firecms/ui": "^3.0.0-beta",
-    "firebase": "^10.9.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "@firecms/core": "^3.0.0-canary",
+    "@firecms/firebase": "^3.0.0-canary",
+    "@firecms/ui": "^3.0.0-canary",
+    "firebase": "^10.12.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-router": "^6.22.3",
     "react-router-dom": "^6.22.3"
   },
@@ -57,7 +57,6 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5.4.3",
     "vite": "^5.2.6",
-    "vite-plugin-fonts": "^0.7.0",
     "vite-plugin-svgr": "^4.2.0"
   }
 }

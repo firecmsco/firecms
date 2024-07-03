@@ -45,7 +45,7 @@ import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import {
     AddIcon,
     Button,
-    cn,
+    cls,
     IconButton,
     KeyboardTabIcon,
     Markdown,
@@ -368,12 +368,12 @@ export const EntityCollectionView = React.memo(
             return resolveProperty({
                 propertyKey,
                 propertyOrBuilder,
-                path: fullPath,
+                path: entity.path,
                 values: entity.values,
                 entityId: entity.id,
                 fields: customizationController.propertyConfigs
             });
-        }, [collection.properties, customizationController.propertyConfigs, fullPath, resolvedCollection.properties]);
+        }, [collection.properties, customizationController.propertyConfigs, resolvedCollection.properties]);
 
         const displayedColumnIds = useColumnIds(resolvedCollection, true);
 
@@ -591,7 +591,7 @@ export const EntityCollectionView = React.memo(
         });
 
         return (
-            <div className={cn("overflow-hidden h-full w-full rounded-md", className)}
+            <div className={cls("overflow-hidden h-full w-full rounded-md", className)}
                  ref={containerRef}>
                 <EntityCollectionTable
                     key={`collection_table_${fullPath}`}

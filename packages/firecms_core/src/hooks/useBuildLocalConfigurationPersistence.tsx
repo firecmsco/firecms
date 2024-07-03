@@ -22,10 +22,9 @@ export function useBuildLocalConfigurationPersistence(): UserConfigurationPersis
     const onCollectionModified = useCallback(<M extends Record<string, any>>(path: string, data: PartialEntityCollection<M>) => {
         const storageKey = `collection_config::${stripCollectionPath(path)}`;
         localStorage.setItem(storageKey, JSON.stringify(data));
-        const currentCache = configCache.current;
-        const cachedConfig = currentCache[storageKey];
+        const cachedConfig = configCache.current[storageKey];
         const newConfig = mergeDeep(cachedConfig ?? getCollectionFromStorage(path), data);
-        configCache.current = mergeDeep(currentCache, newConfig);
+        configCache.current[storageKey] = mergeDeep(configCache.current[storageKey], newConfig);
     }, [getCollectionFromStorage]);
 
     const [recentlyVisitedPaths, _setRecentlyVisitedPaths] = useState<string[]>([]);

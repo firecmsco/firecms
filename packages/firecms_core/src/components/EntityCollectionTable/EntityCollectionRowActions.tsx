@@ -1,7 +1,7 @@
 import React, { MouseEvent, useCallback } from "react";
 
 import { CollectionSize, Entity, EntityAction, EntityCollection, SelectionController } from "../../types";
-import { Checkbox, cn, IconButton, Menu, MenuItem, MoreVertIcon, Skeleton, Tooltip, Typography } from "@firecms/ui";
+import { Checkbox, cls, IconButton, Menu, MenuItem, MoreVertIcon, Skeleton, Tooltip, Typography } from "@firecms/ui";
 import { useFireCMSContext, useLargeLayout } from "../../hooks";
 
 /**
@@ -72,7 +72,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
     return (
         <div
             onClick={onClick}
-            className={cn(
+            className={cls(
                 "h-full flex items-center justify-center flex-col bg-gray-50 dark:bg-gray-900 bg-opacity-90 dark:bg-opacity-90 z-10",
                 frozen ? "sticky left-0" : ""
             )}

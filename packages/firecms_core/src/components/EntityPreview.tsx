@@ -10,7 +10,7 @@ import {
     getValueInPath,
     resolveCollection
 } from "../util";
-import { cn, defaultBorderMixin, IconButton, KeyboardTabIcon, Skeleton, Tooltip, Typography } from "@firecms/ui";
+import { cls, defaultBorderMixin, IconButton, KeyboardTabIcon, Skeleton, Tooltip, Typography } from "@firecms/ui";
 import { PreviewSize, PropertyPreview, SkeletonPropertyComponent } from "../preview";
 import { useCustomizationController, useNavigationController, useSideEntityController } from "../hooks";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
@@ -23,7 +23,8 @@ export type EntityPreviewProps = {
     previewProperties?: string[],
     disabled: undefined | boolean,
     entity: Entity<any>,
-    includeEntityNavigation?: boolean,
+    includeId?: boolean,
+    includeEntityLink?: boolean,
     onClick?: (e: React.SyntheticEvent) => void;
 };
 
@@ -39,7 +40,8 @@ export function EntityPreview({
                                   previewProperties,
                                   onClick,
                                   size,
-                                  includeEntityNavigation,
+                                  includeId = true,
+                                  includeEntityLink = true,
                                   entity
                               }: EntityPreviewProps) {
 
@@ -75,7 +77,7 @@ export function EntityPreview({
                                    hover={disabled ? undefined : hover}
                                    size={size}>
         {imageProperty && (
-            <div className={cn("w-10 h-10 mr-2 shrink-0 grow-0", size === "tiny" ? "my-0.5" : "m-2 self-start")}>
+            <div className={cls("w-10 h-10 mr-2 shrink-0 grow-0", size === "tiny" ? "my-0.5" : "m-2 self-start")}>
                 <PropertyPreview property={imageProperty}
                                  propertyKey={imagePropertyKey as string}
                                  size={"tiny"}
@@ -85,7 +87,7 @@ export function EntityPreview({
 
         <div className={"flex flex-col flex-grow w-full m-1"}>
 
-            {size !== "tiny" && (
+            {size !== "tiny" && includeId && (
                 entity
                     ? <div className={`${
                         size !== "medium"
@@ -140,7 +142,7 @@ export function EntityPreview({
 
         </div>
 
-        {entity && includeEntityNavigation &&
+        {entity && includeEntityLink &&
             <Tooltip title={`See details for ${entity.id}`}
                      className={size !== "tiny" ? "self-start" : ""}>
                 <IconButton
@@ -195,7 +197,7 @@ const EntityPreviewContainerInner = React.forwardRef<HTMLDivElement, EntityPrevi
             // @ts-ignore
             tabindex: 0
         }}
-        className={cn(
+        className={cls(
             "bg-white dark:bg-gray-900",
             fullwidth ? "w-full" : "",
             "items-center",

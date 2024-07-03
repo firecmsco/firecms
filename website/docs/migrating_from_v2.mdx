@@ -1,9 +1,17 @@
 ---
 id: migrating_from_v2
-title: Migrating from FireCMS 2.0
-sidebar_label: Migrating from FireCMS 2.0
+title: Migrating from FireCMS 2.0 to FireCMS Cloud
+sidebar_label: Migrating from FireCMS 2.0 to FireCMS Cloud
 description: Migrate seamlessly to FireCMS 3.0, the latest innovation in headless CMS, by creating a new project on app.firecms.co. Benefit from centralized configuration management and hassle-free integration without having to reveal Firebase credentials. Initiate a fresh project setup with simple CLI commands and adapt your existing collections to the new format with ease. Tailored for developers, FireCMS 3.0 elevates content management to new flexibility and customization heights, while retaining the familiarity of previous versions.
 ---
+
+:::important
+This migration guide applies for migrating from FireCMS 2.0 to FireCMS Cloud.
+There are no docs for migrating to FireCMS PRO. In that case we recommend
+initializing a new project and migrating your collections and views.
+Still, some of the information in this guide might be useful.
+:::
+
 
 FireCMS 3.0 is a major release that introduces a lot of changes. This page
 describes the main changes and how to migrate from FireCMS 2.0.
@@ -72,9 +80,9 @@ For reference, the `package.json` file of a new FireCMS Cloud project looks like
   },
   "dependencies": {
     "@firecms/cloud": "^3.0.0-canary",
-    "firebase": "^10.9.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "firebase": "^10.12.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@originjs/vite-plugin-federation": "^1.3.5",

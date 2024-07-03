@@ -43,7 +43,7 @@ function Features() {
                 </div>
 
                 <div
-                    className={"max-w-5xl md:max-w-5xl md:w-full mx-auto md:col-span-9 md:pr-8 flex justify-center flex-col h-full mb-16"}>
+                    className={"mx-auto md:col-span-9 md:pr-8 flex justify-center flex-col h-full mb-16"}>
                     <div className={"flex items-center mb-4"}>
 
                         <div
@@ -136,7 +136,7 @@ function Features() {
                                     maxWidth: 540,
                                     aspectRatio: 508 / 589
                                 }}
-                                className={clsx("rounded-xl border", defaultBorderMixin)}
+                                className={clsx("rounded-2xl border", defaultBorderMixin)}
                                 width="100%" loop autoPlay muted>
                                 <source
                                     src={isDarkTheme ? editingDemoDarkVideo : editingDemoVideo}
@@ -153,7 +153,7 @@ function Features() {
                     right={<div className={ContainerInnerPaddingMixin}>
                         <div className="relative flex flex-col">
                             <video
-                                className={clsx("rounded-xl border", defaultBorderMixin)}
+                                className={clsx("rounded-2xl border", defaultBorderMixin)}
                                 style={{
                                     maxWidth: 540,
                                     aspectRatio: 540 / 515

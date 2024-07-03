@@ -4,7 +4,7 @@ import { EnumType, FieldProps } from "../../types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { EnumValuesChip } from "../../preview";
 import { getIconForProperty } from "../../util";
-import { ClearIcon, cn, IconButton, Select, SelectItem } from "@firecms/ui";
+import { ClearIcon, cls, IconButton, Select, SelectItem } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
@@ -30,8 +30,6 @@ export function SelectFieldBinding<T extends EnumType>({
                                                            includeDescription
                                                        }: SelectProps<T>) {
 
-    console.log("SelectFieldBinding", propertyKey, value,)
-
     const enumValues = property.enumValues;
 
     useClearRestoreValue({
@@ -53,7 +51,7 @@ export function SelectFieldBinding<T extends EnumType>({
                 value={value !== undefined && value != null ? value.toString() : ""}
                 disabled={disabled}
                 position="item-aligned"
-                inputClassName={cn("w-full")}
+                inputClassName={cls("w-full")}
                 label={<LabelWithIcon icon={getIconForProperty(property, "small")}
                                       required={property.validation?.required}
                                       title={property.name}
@@ -72,7 +70,6 @@ export function SelectFieldBinding<T extends EnumType>({
                     return setValue(newValue as T);
                 }}
                 renderValue={(enumKey: any) => {
-                    console.log("renderValue", enumKey)
                     return <EnumValuesChip
                         enumKey={enumKey}
                         enumValues={enumValues}

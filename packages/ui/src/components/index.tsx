@@ -24,6 +24,7 @@ export * from "./Label";
 export * from "./LoadingButton";
 export * from "./Markdown";
 export * from "./Menu";
+export * from "./Menubar";
 export * from "./MultiSelect";
 export * from "./Paper";
 export * from "./RadioGroup";

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useLayoutEffect } from "react";
 import * as ReactDOM from "react-dom";
-import { cn, debounce } from "../util";
+import { cls, debounce } from "../util";
 
 type State = {
     outerHeightStyle: number;
@@ -276,7 +276,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
             />
             <textarea
                 aria-hidden
-                className={cn(props.className, props.shadowClassName)}
+                className={cls(props.className, props.shadowClassName)}
                 readOnly
                 ref={shadowRef}
                 tabIndex={-1}

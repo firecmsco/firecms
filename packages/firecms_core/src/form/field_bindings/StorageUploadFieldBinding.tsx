@@ -1,14 +1,6 @@
 import React, { useCallback } from "react";
 
-import {
-    ArrayProperty,
-    Entity,
-    EntityCollection,
-    FieldProps,
-    ResolvedArrayProperty,
-    ResolvedStringProperty,
-    StorageConfig
-} from "../../types";
+import { ArrayProperty, FieldProps, ResolvedArrayProperty, ResolvedStringProperty, StorageConfig } from "../../types";
 import { useDropzone } from "react-dropzone";
 import { PreviewSize } from "../../preview";
 import { FieldHelperText, LabelWithIcon } from "../components";
@@ -20,7 +12,7 @@ import { StorageFieldItem, useStorageUploadController } from "../../util/useStor
 import { StorageUploadProgress } from "../components/StorageUploadProgress";
 import { StorageItemPreview } from "../components/StorageItemPreview";
 import {
-    cn,
+    cls,
     fieldBackgroundDisabledMixin,
     fieldBackgroundHoverMixin,
     fieldBackgroundMixin,
@@ -31,7 +23,7 @@ import { useClearRestoreValue } from "../useClearRestoreValue";
 
 const dropZoneClasses = "box-border relative pt-[2px] items-center border border-transparent min-h-[254px] outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
 const disabledClasses = "border-dotted-gray"
-const nonActiveDropClasses = "hover:bg-field-hover dark:hover:bg-field-hover-dark"
+const nonActiveDropClasses = fieldBackgroundHoverMixin
 const activeDropClasses = "pt-0 border-2 border-solid"
 const acceptDropClasses = "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-2 border-solid border-green-500"
 const rejectDropClasses = "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-2 border-solid border-red-500"
@@ -81,7 +73,7 @@ export function StorageUploadFieldBinding({
         propertyKey,
         value,
         storageSource,
-        disabled,
+        disabled: disabled ?? false,
         onChange: setValue
     });
 
@@ -90,12 +82,6 @@ export function StorageUploadFieldBinding({
         value,
         setValue
     });
-
-    const entity: Entity<any> = {
-        id: context.entityId,
-        values: context.values,
-        path: context.path
-    };
 
     return (
 
@@ -109,15 +95,13 @@ export function StorageUploadFieldBinding({
 
             <StorageUpload
                 value={internalValue}
-                collection={context.collection}
                 name={propertyKey}
-                disabled={disabled}
-                autoFocus={autoFocus}
+                disabled={disabled ?? false}
+                autoFocus={autoFocus ?? false}
                 property={property}
                 onChange={setValue}
                 setInternalValue={setInternalValue}
                 onFilesAdded={onFilesAdded}
-                entity={entity}
                 onFileUploadComplete={onFileUploadComplete}
                 storagePathBuilder={storagePathBuilder}
                 storage={storage}
@@ -135,7 +119,6 @@ export function StorageUploadFieldBinding({
 
 function FileDropComponent({
                                storage,
-                               collection,
                                disabled,
                                isDraggingOver,
                                onFilesAdded,
@@ -144,7 +127,6 @@ function FileDropComponent({
                                autoFocus,
                                internalValue,
                                property,
-                               entity,
                                onClear,
                                metadata,
                                storagePathBuilder,
@@ -154,7 +136,6 @@ function FileDropComponent({
                                helpText
                            }: {
     storage: StorageConfig,
-    collection: EntityCollection,
     disabled: boolean,
     isDraggingOver: boolean,
     droppableProvided: any,
@@ -165,7 +146,6 @@ function FileDropComponent({
     property: ResolvedStringProperty,
     onClear: (clearedStoragePathOrDownloadUrl: string) => void,
     metadata: any,
-    entity: Entity<any>;
     storagePathBuilder: (file: File) => string,
     onFileUploadComplete: (uploadedPath: string, entry: StorageFieldItem, fileMetadata?: any) => Promise<void>,
     size: PreviewSize,
@@ -203,7 +183,7 @@ function FileDropComponent({
     return (
         <div
             {...getRootProps()}
-            className={cn(
+            className={cls(
                 fieldBackgroundMixin,
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                 dropZoneClasses,
@@ -220,7 +200,7 @@ function FileDropComponent({
             <div
                 {...droppableProvided.droppableProps}
                 ref={droppableProvided.innerRef}
-                className={cn("flex items-center p-1 no-scrollbar",
+                className={cls("flex items-center p-1 no-scrollbar",
                     multipleFilesSupported && internalValue.length ? "overflow-auto" : "",
                     multipleFilesSupported && internalValue.length ? "min-h-[180px]" : "min-h-[250px]"
                 )}
@@ -235,11 +215,9 @@ function FileDropComponent({
                     if (entry.storagePathOrDownloadUrl) {
                         child = (
                             <StorageItemPreview
-                                collection={collection}
                                 name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
                                 property={property}
                                 disabled={disabled}
-                                entity={entity}
                                 value={entry.storagePathOrDownloadUrl}
                                 onRemove={onClear}
                                 size={entry.size}/>
@@ -268,7 +246,7 @@ function FileDropComponent({
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
-                                    className={cn(focusedMixin, "rounded-md")}
+                                    className={cls(focusedMixin, "rounded-md")}
                                     style={{
                                         ...provided.draggableProps.style
                                     }}
@@ -299,7 +277,6 @@ function FileDropComponent({
 
 export interface StorageUploadProps {
     value: StorageFieldItem[];
-    collection: EntityCollection;
     setInternalValue: (v: StorageFieldItem[]) => void;
     name: string;
     property: ResolvedStringProperty | ResolvedArrayProperty<string[]>;
@@ -307,7 +284,6 @@ export interface StorageUploadProps {
     multipleFilesSupported: boolean;
     autoFocus: boolean;
     disabled: boolean;
-    entity: Entity<any>;
     storage: StorageConfig;
     onFilesAdded: (acceptedFiles: File[]) => void;
     storagePathBuilder: (file: File) => string;
@@ -315,7 +291,6 @@ export interface StorageUploadProps {
 }
 
 export function StorageUpload({
-                                  collection,
                                   property,
                                   name,
                                   value,
@@ -327,7 +302,6 @@ export function StorageUpload({
                                   onFilesAdded,
                                   autoFocus,
                                   storage,
-                                  entity,
                                   storagePathBuilder,
                               }: StorageUploadProps) {
 
@@ -408,11 +382,9 @@ export function StorageUpload({
                             className="rounded"
                         >
                             <StorageItemPreview
-                                collection={collection}
                                 name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
                                 property={renderProperty}
                                 disabled={true}
-                                entity={entity}
                                 value={entry.storagePathOrDownloadUrl as string}
                                 onRemove={onClear}
                                 size={entry.size}/>
@@ -422,7 +394,6 @@ export function StorageUpload({
             >
                 {(provided, snapshot) => {
                     return <FileDropComponent storage={storage}
-                                              collection={collection}
                                               disabled={disabled}
                                               isDraggingOver={snapshot.isDraggingOver}
                                               droppableProvided={provided}
@@ -431,7 +402,6 @@ export function StorageUpload({
                                               autoFocus={autoFocus}
                                               internalValue={value}
                                               property={renderProperty}
-                                              entity={entity}
                                               onClear={onClear}
                                               metadata={metadata}
                                               storagePathBuilder={storagePathBuilder}

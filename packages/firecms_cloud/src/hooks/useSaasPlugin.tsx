@@ -55,7 +55,7 @@ export function useSaasPlugin({
                                     parentCollectionIds
                                 }) => {
                 if (projectConfig.canUseLocalTextSearch && projectConfig.localTextSearchEnabled && collection.textSearchEnabled) {
-                    return firestoreDelegate.initTextSearchController({
+                    return firestoreDelegate.initTextSearch({
                         path,
                         collection
                     });

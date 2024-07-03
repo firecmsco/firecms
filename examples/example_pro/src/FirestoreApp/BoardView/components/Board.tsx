@@ -4,7 +4,7 @@ import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import Column from "./Column";
 import reorder, { reorderItemMap } from "./reorder";
 import { Item, ItemMap, ItemViewProps } from "./types";
-import { cn } from "@firecms/ui";
+import { cls } from "@firecms/ui";
 
 export interface BoardProps<T extends object, COLUMN extends string> {
     data: Item<T>[];
@@ -105,7 +105,7 @@ export const Board = <T extends object, COLUMN extends string>({
             {(provided: DroppableProvided) => (
                 <div ref={provided.innerRef}
                      {...provided.droppableProps}
-                     className={cn("md:p-4 h-full min-w-full inline-flex", className)}>
+                     className={cls("md:p-4 h-full min-w-full inline-flex", className)}>
                     {ordered.map((key: string, index: number) => (
                         <Column key={key}
                                 index={index}

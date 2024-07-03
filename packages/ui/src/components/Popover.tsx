@@ -2,7 +2,7 @@ import React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 
 import { paperMixin } from "../styles";
-import { cn } from "../util";
+import { cls } from "../util";
 import { useInjectStyles } from "../hooks";
 
 export type PopoverSide = "top" | "right" | "bottom" | "left";
@@ -57,7 +57,7 @@ export function Popover({
             {trigger}
         </PopoverPrimitive.Trigger>
         <PopoverPrimitive.Portal>
-            <PopoverPrimitive.Content className={cn(paperMixin,
+            <PopoverPrimitive.Content className={cls(paperMixin,
                 "PopoverContent shadow z-40", className)}
                                       side={side}
                                       sideOffset={sideOffset}

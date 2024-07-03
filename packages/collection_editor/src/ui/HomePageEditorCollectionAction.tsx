@@ -25,7 +25,10 @@ export function HomePageEditorCollectionAction({
     });
 
     const onEditCollectionClicked = () => {
-        collectionEditorController?.editCollection({ id: collection.id, parentCollectionIds: [] });
+        collectionEditorController?.editCollection({
+            id: collection.id,
+            parentCollectionIds: []
+        });
     };
 
     const [deleteRequested, setDeleteRequested] = useState(false);
@@ -49,11 +52,13 @@ export function HomePageEditorCollectionAction({
                         <MoreVertIcon size={"small"}/>
                     </IconButton>}
                 >
-                    <MenuItem onClick={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        setDeleteRequested(true);
-                    }}>
+                    <MenuItem
+                        dense={true}
+                        onClick={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            setDeleteRequested(true);
+                        }}>
                         <DeleteIcon/>
                         Delete
                     </MenuItem>

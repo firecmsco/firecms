@@ -1,5 +1,5 @@
 import { PluginHomePageAdditionalCardsProps, useAuthController } from "@firecms/core";
-import { AddIcon, Card, cn, Typography } from "@firecms/ui";
+import { AddIcon, Card, cls, Typography } from "@firecms/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 
 export function NewCollectionCard({
@@ -20,7 +20,7 @@ export function NewCollectionCard({
         : true;
 
     return (
-        <Card className={cn("h-full p-4 min-h-[124px]")}
+        <Card className={cls("h-full p-4 min-h-[124px]")}
               onClick={collectionEditorController && canCreateCollections
                   ? () => collectionEditorController.createCollection({
                       initialValues: group ? { group } : undefined,
@@ -31,7 +31,7 @@ export function NewCollectionCard({
                   : undefined}>
 
             <div
-                className="flex flex-col items-start h-full w-full items-center justify-center h-full w-full flex-grow flex-col">
+                className="flex items-center justify-center h-full w-full flex-grow flex-col">
                 <AddIcon color="primary" size={"large"}/>
                 <Typography color="primary"
                             variant={"caption"}

@@ -1,12 +1,14 @@
 import React from "react";
 import {
     ContainerMixin,
-    ContainerPaddingMixin, CTAButtonMixin,
+    ContainerPaddingMixin,
+    CTAButtonMixin,
     CTACaret,
     CTAOutlinedButtonMixin,
     defaultBorderMixin
 } from "../styles";
 import clsx from "clsx";
+import { LinedSpace } from "../layout/LinedSpace";
 
 export function FireCMSCloudVersions() {
 
@@ -63,7 +65,12 @@ export function FireCMSCloudVersions() {
                 </ul>
             </div>
 
-            <div className={"rounded-lg w-fit h-fit font-regular inline-flex gap-1"}>
+            <div
+                className={"rounded-lg w-fit h-fit font-regular m-auto gap-1 text-ellipsis px-4 py-1.5 text-sm font-semibold"}
+                style={{
+                    backgroundColor: "rgb(255, 214, 110)",
+                    color: "rgb(59, 37, 1)"
+                }}>
                 ONE MONTH FREE TRIAL
             </div>
             <div className={"text-center mt-4 w-full"}>
@@ -96,9 +103,17 @@ export function FireCMSCloudVersions() {
                     <li className={"list-disc"}>Roadmap prioritization</li>
                 </ul>
             </div>
+            <div
+                className={"mt-8 rounded-lg w-fit h-fit font-regular m-auto gap-1 text-ellipsis px-4 py-1.5 text-sm font-semibold"}
+                style={{
+                    backgroundColor: "rgb(255, 214, 110)",
+                    color: "rgb(59, 37, 1)"
+                }}>
+                TRY OUT FOR FREE
+            </div>
             <div className={"text-center mt-4 text-primary w-full"}>
                 <a
-                    className={CTAOutlinedButtonMixin}
+                    className={clsx(CTAOutlinedButtonMixin, "px-8 py-3 md:px-10")}
                     href="/pro"
                 >
                     More info
@@ -113,11 +128,11 @@ export function FireCMSCloudVersions() {
 
         <div className={clsx(ContainerMixin, ContainerPaddingMixin, "flex flex-col items-center gap-8")}>
 
-            <h2 className={"text-3xl md:text-4xl font-bold text-center"}>
+            <h2 className={"text-3xl md:text-4xl font-bold text-center max-w-6xl mx-auto"}>
                 Full no-code/low-code solution
             </h2>
 
-            <p>
+            <p className={"max-w-6xl mx-auto"}>
                 <strong>FireCMS Cloud</strong> offers a complete, end-to-end
                 solution for businesses that require the highest level of
                 support and security. With dedicated hosting, advanced features, and
@@ -150,6 +165,7 @@ export function FireCMSCloudVersions() {
                 <CTACaret/>
             </a>
         </div>
+        <LinedSpace position={"top"} size={"medium"}/>
     </section>;
 
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "../util";
+import { cls } from "../util";
 
 export function DialogContent({
                                   children,
@@ -17,7 +17,7 @@ export function DialogContent({
         </div>;
 
     return <div
-        className={cn("py-6 px-6 h-full flex-grow", className)}>
+        className={cls("py-6 px-6 h-full flex-grow", className)}>
         {children}
     </div>;
 }
