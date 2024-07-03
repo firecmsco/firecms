@@ -50,7 +50,7 @@ export default [
             "import/export": 0,
             "no-use-before-define": "off",
             "no-empty-pattern": "off",
-            "no-unused-vars": "off",
+            "no-unused-vars": "warn",
             "no-shadow": "warn",
             "padded-blocks": "off",
             "brace-style": "off",
@@ -77,6 +77,7 @@ export default [
 
             // "react-hooks/rules-of-hooks": "error",
             // "react-hooks/exhaustive-deps": "warn",
+            "@typescript-eslint/no-unused-vars": "warn",
             "@typescript-eslint/no-empty-function": "warn",
             "@typescript-eslint/no-inferrable-types": "warn",
             "@typescript-eslint/ban-ts-comment": "warn",

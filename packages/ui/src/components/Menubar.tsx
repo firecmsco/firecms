@@ -1,4 +1,4 @@
-import * as MenubarPrimitive from "@radix-ui/react-Menubar";
+import * as MenubarPrimitive from "@radix-ui/react-menubar";
 import { cls } from "../util";
 import { CheckIcon, ChevronRightIcon } from "../icons";
 
