@@ -182,10 +182,10 @@ export const useFirebaseAuthController = <ExtraData>({
             });
     }, []);
 
-    const onSignOut = useCallback(() => {
+    const onSignOut = useCallback(async () => {
         const auth = authRef.current;
         if (!auth) throw Error("No auth");
-        signOut(auth)
+        await signOut(auth)
             .then(_ => {
                 setLoggedUser(null);
                 setRoles(undefined);

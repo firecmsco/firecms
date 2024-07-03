@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Link as ReactLink } from "react-router-dom";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
 import { ErrorBoundary, FireCMSLogo } from "../components";
 import {
     Avatar,
@@ -70,6 +70,8 @@ export const DefaultAppBar = function DefaultAppBar({
         mode,
         toggleMode
     } = useModeController();
+
+    const navigate = useNavigate();
 
     const largeLayout = useLargeLayout();
 
@@ -161,7 +163,11 @@ export const DefaultAppBar = function DefaultAppBar({
 
                     {dropDownActions}
 
-                    {!dropDownActions && <MenuItem onClick={authController.signOut}>
+                    {!dropDownActions && <MenuItem onClick={async () => {
+                        await authController.signOut();
+                        // replace current route with home
+                        navigate("/");
+                    }}>
                         <LogoutIcon/>
                         Log Out
                     </MenuItem>}

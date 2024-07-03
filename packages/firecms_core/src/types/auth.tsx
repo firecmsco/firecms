@@ -38,7 +38,7 @@ export type AuthController<UserType extends User = any, ExtraData extends any = 
     /**
      * Sign out
      */
-    signOut: () => void;
+    signOut: () => Promise<void>;
 
     /**
      * Error initializing the authentication
