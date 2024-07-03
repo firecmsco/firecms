@@ -86,10 +86,11 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
                                              url={value}
                                              previewType={stringProperty.url}/>;
             } else if (stringProperty.storage) {
+                const filePath = stringProperty.storage.previewUrl ? stringProperty.storage.previewUrl(value) : value;
                 content = <StorageThumbnail
                     storeUrl={property.storage?.storeUrl ?? false}
                     size={props.size}
-                    storagePathOrDownloadUrl={value}/>;
+                    storagePathOrDownloadUrl={filePath}/>;
             } else if (stringProperty.markdown) {
                 content = <Markdown source={value} size={"small"}/>;
             } else {
