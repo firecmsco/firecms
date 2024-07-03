@@ -18,14 +18,14 @@ export const DialogsProvider: React.FC<PropsWithChildren<{}>> = ({ children }) =
         if (dialogEntries.length === 0)
             return;
 
-        const updatedPanels = [...dialogEntries.slice(0, -1)];
+        const updatedPanels = [...dialogEntriesRef.current.slice(0, -1)];
         updateDialogEntries(updatedPanels);
 
     }, [dialogEntries]);
 
     const open = useCallback((dialogEntry: DialogControllerEntryProps) => {
 
-        const updatedPanels = [...dialogEntries, dialogEntry];
+        const updatedPanels = [...dialogEntriesRef.current, dialogEntry];
         updateDialogEntries(updatedPanels);
 
         return {

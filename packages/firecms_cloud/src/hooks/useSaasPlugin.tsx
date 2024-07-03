@@ -38,6 +38,16 @@ export function useSaasPlugin({
             additionalChildrenEnd: <RootCollectionSuggestions introMode={introMode}/>,
         },
         collectionView: {
+
+            blockSearch: ({
+                              context,
+                              path,
+                              collection,
+                              parentCollectionIds
+                          }) => {
+                return !(projectConfig.canUseLocalTextSearch && projectConfig.localTextSearchEnabled && collection.textSearchEnabled);
+            },
+
             showTextSearchBar: ({
                                     context,
                                     path,
@@ -54,12 +64,10 @@ export function useSaasPlugin({
                                     collection,
                                     parentCollectionIds
                                 }) => {
-                if (projectConfig.canUseLocalTextSearch && projectConfig.localTextSearchEnabled && collection.textSearchEnabled) {
-                    return firestoreDelegate.initTextSearch({
-                        path,
-                        collection
-                    });
-                } else {
+
+                console.log("onTextSearchClick", collection);
+                const canSearch = projectConfig.canUseLocalTextSearch && projectConfig.localTextSearchEnabled && collection.textSearchEnabled;
+                if (!canSearch) {
                     if (parentCollectionIds === undefined) {
                         console.warn("Enabling text search: Parent collection ids are undefined")
                     } else {

@@ -21,33 +21,43 @@ export function useTableSearchHelper<M extends Record<string, any>>({
 
     const [textSearchLoading, setTextSearchLoading] = useState<boolean>(false);
     const [textSearchInitialised, setTextSearchInitialised] = useState<boolean>(false);
+
     let onTextSearchClick: (() => void) | undefined;
     let textSearchEnabled = Boolean(collection.textSearchEnabled);
-    if (customizationController?.plugins) {
-        const addTextSearchClickListener = dataSource?.initTextSearch || customizationController.plugins?.find(p => Boolean(p.collectionView?.onTextSearchClick));
+
+    const props = {
+        context,
+        path: fullPath,
+        collection,
+        parentCollectionIds
+    };
+
+    const searchBlocked = customizationController.plugins?.find(p => {
+        return p.collectionView?.blockSearch?.(props);
+    });
+
+    const addTextSearchClickListener = Boolean(dataSource?.initTextSearch) || customizationController.plugins?.find(p => Boolean(p.collectionView?.onTextSearchClick));
+
+    if (addTextSearchClickListener) {
 
         onTextSearchClick = addTextSearchClickListener
             ? () => {
                 setTextSearchLoading(true);
                 const promises: Promise<boolean>[] = [];
-                if (dataSource?.initTextSearch) {
-                    promises.push(dataSource.initTextSearch({
-                        context,
-                        path: fullPath,
-                        collection,
-                        parentCollectionIds
-                    }));
+                if (dataSource?.initTextSearch && !searchBlocked) {
+                    promises.push(dataSource.initTextSearch(props));
                 }
-                customizationController.plugins?.forEach(p => {
-                    if (p.collectionView?.onTextSearchClick)
-                        promises.push(p.collectionView.onTextSearchClick({
-                            context,
-                            path: fullPath,
-                            collection,
-                            parentCollectionIds
-                        }));
-                    return Promise.resolve(true);
-                })
+                if (searchBlocked) {
+                    customizationController.plugins?.forEach(p => {
+                        if (p.collectionView?.onTextSearchClick)
+                            promises.push(p.collectionView.onTextSearchClick({
+                                context,
+                                path: fullPath,
+                                collection,
+                                parentCollectionIds
+                            }));
+                    })
+                }
                 return Promise.all(promises)
                     .then((res: boolean[]) => {
                         if (res.every(Boolean)) setTextSearchInitialised(true);

@@ -98,6 +98,13 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
         CollectionActionsStart?: React.ComponentType<CollectionActionsProps<any, any, EC> & COL_ACTIONS_START__PROPS> | React.ComponentType<CollectionActionsProps<any, any, EC> & COL_ACTIONS_START__PROPS>[];
         collectionActionsStartProps?: COL_ACTIONS_START__PROPS;
 
+        blockSearch?: (props: {
+            context: FireCMSContext,
+            path: string,
+            collection: EC,
+            parentCollectionIds?: string[]
+        }) => boolean;
+
         showTextSearchBar?: (props: {
             context: FireCMSContext,
             path: string,
