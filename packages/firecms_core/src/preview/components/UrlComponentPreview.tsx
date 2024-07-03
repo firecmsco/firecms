@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import { ImagePreview } from "./ImagePreview";
 import { getThumbnailMeasure } from "../util";
 import { PreviewType } from "../../types";
 import { PreviewSize } from "../PropertyPreviewProps";
-import { DescriptionIcon, OpenInNewIcon, Tooltip, Typography } from "@firecms/ui";
+import { cls, DescriptionIcon, OpenInNewIcon, Tooltip, Typography } from "@firecms/ui";
 import { EmptyValue } from "./EmptyValue";
 
 /**
@@ -14,12 +14,15 @@ export function UrlComponentPreview({
                                         url,
                                         previewType,
                                         size,
-                                        hint
+                                        hint,
+                                        interactive = true
                                     }: {
     url: string,
     previewType?: PreviewType,
     size: PreviewSize,
-    hint?: string
+    hint?: string,
+    // for video controls
+    interactive?: boolean
 }): React.ReactElement {
 
     if (!previewType) {
@@ -43,17 +46,13 @@ export function UrlComponentPreview({
                              size={size}/>;
     } else if (previewType === "audio") {
         return <audio controls
+                      className={"max-w-100%"}
                       src={url}>
             Your browser does not support the
             <code>audio</code> element.
         </audio>;
     } else if (previewType === "video") {
-        return <video
-            className={`max-w-${size === "small" ? "sm" : "md"}`}
-            controls
-        >
-            <source src={url}/>
-        </video>;
+        return <VideoPreview size={size} src={url} interactive={interactive}/>;
     } else {
         return (
             <a
@@ -66,7 +65,7 @@ export function UrlComponentPreview({
                     width: getThumbnailMeasure(size),
                     height: getThumbnailMeasure(size)
                 }}>
-                <DescriptionIcon className="flex-grow"/>
+                <DescriptionIcon className="text-gray-700 dark:text-gray-300"/>
                 {hint &&
                     <Tooltip title={hint}>
                         <Typography
@@ -76,4 +75,38 @@ export function UrlComponentPreview({
             </a>
         );
     }
+}
+
+function VideoPreview({
+                          size,
+                          src,
+                          interactive
+                      }: { size: PreviewSize, src: string, interactive: boolean }) {
+
+    const imageSize = useMemo(() => {
+        if (size === "tiny")
+            return "140px";
+        else if (size === "small")
+            return "240px";
+        else if (size === "medium")
+            return "100%";
+        else throw new Error("Invalid size");
+    }, [size]);
+
+    const videoProps = {
+        controls: interactive
+    };
+    return <video
+        style={{
+            position: "relative",
+            objectFit: "cover",
+            width: imageSize,
+            minWidth: "140px",
+            // height: imageSize,
+            maxHeight: "100%"
+        }}
+        {...videoProps}
+        className={cls("max-w-100% rounded", { "pointer-events-none": !interactive })}>
+        <source src={src}/>
+    </video>;
 }

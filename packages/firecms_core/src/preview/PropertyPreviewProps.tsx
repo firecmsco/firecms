@@ -46,4 +46,10 @@ export interface PropertyPreviewProps<T extends CMSType = any, CustomProps = any
      */
     customProps?: CustomProps;
 
+    /**
+     * If the preview should be interactive or not.
+     * This applies only to videos.
+     */
+    interactive?: boolean;
+
 }

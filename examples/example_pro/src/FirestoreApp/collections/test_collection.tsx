@@ -116,6 +116,34 @@ export const testCollection = buildCollection<any>({
             Builder: SecondaryForm
         }],
         properties: {
+            videos: {
+                dataType: "array",
+                name: "Videos",
+                of: {
+                    dataType: "string",
+                    storage: {
+                        storagePath: "videos",
+                        acceptedFiles: ["video/*"],
+                        metadata: {
+                            cacheControl: "max-age=1000000"
+                        }
+                    }
+                }
+            },
+            images: {
+                dataType: "array",
+                name: "Images",
+                of: {
+                    dataType: "string",
+                    storage: {
+                        storagePath: "images",
+                        acceptedFiles: ["image/*"],
+                        metadata: {
+                            cacheControl: "max-age=1000000"
+                        }
+                    }
+                }
+            },
             contactDetails: {
                 hideFromCollection: true,
                 dataType: "array",

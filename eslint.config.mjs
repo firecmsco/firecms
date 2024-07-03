@@ -64,7 +64,7 @@ export default [
             "keyword-spacing": "warn",
             "no-multiple-empty-lines": "warn",
             "object-curly-spacing": ["warn", "always"],
-            "multiline-ternary": "warn",
+            "multiline-ternary": "off",
             "space-before-blocks": "warn",
             "object-property-newline": "warn",
             "eol-last": "warn",

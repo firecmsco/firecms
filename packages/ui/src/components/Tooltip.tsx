@@ -21,7 +21,7 @@ export type TooltipProps = {
 export const Tooltip = ({
                             open,
                             side = "bottom",
-                            delayDuration = 250,
+                            delayDuration = 200,
                             sideOffset,
                             align,
                             onOpenChange,

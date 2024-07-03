@@ -47,7 +47,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
         size,
         height,
         width,
-        // entity
+        interactive
     } = props;
 
     const property = resolveProperty({
@@ -84,9 +84,11 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
                     content =
                         <UrlComponentPreview size={props.size}
                                              url={value}
+                                             interactive={interactive}
                                              previewType={stringProperty.url}/>;
             } else if (stringProperty.storage) {
                 content = <StorageThumbnail
+                    interactive={interactive}
                     storeUrl={property.storage?.storeUrl ?? false}
                     size={props.size}
                     storagePathOrDownloadUrl={value}/>;

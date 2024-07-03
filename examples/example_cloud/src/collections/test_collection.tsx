@@ -1,11 +1,4 @@
-import {
-    buildCollection,
-    buildProperty,
-    EntityCallbacks,
-    EntityOnFetchProps,
-    EnumValues,
-    resolveNavigationFrom
-} from "@firecms/cloud";
+import { buildCollection, buildProperty, EntityCallbacks, EntityOnFetchProps, EnumValues } from "@firecms/cloud";
 import { CustomField } from "../custom_field/SubPropertyField";
 
 const relaxedStatus: EnumValues = [
@@ -156,7 +149,11 @@ export const testCollection = buildCollection({
                             fromTo: "Saturation available range",
                         }
                     },
-                    value: ({ propertyValue, values, index }) => {
+                    value: ({
+                                propertyValue,
+                                values,
+                                index
+                            }) => {
                         if (index === undefined) {
                             return null;
                         }
@@ -165,7 +162,10 @@ export const testCollection = buildCollection({
                             return ({
                                 name: "Saturation",
                                 dataType: "number",
-                                validation: { min: 0, max: 100 }
+                                validation: {
+                                    min: 0,
+                                    max: 100
+                                }
                             })
                         } else if (parentValue === "fromTo") {
                             return ({

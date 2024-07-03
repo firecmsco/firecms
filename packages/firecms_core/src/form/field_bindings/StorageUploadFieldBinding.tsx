@@ -383,6 +383,7 @@ export function StorageUpload({
                         >
                             <StorageItemPreview
                                 name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
+                                placeholder={true}
                                 property={renderProperty}
                                 disabled={true}
                                 value={entry.storagePathOrDownloadUrl as string}

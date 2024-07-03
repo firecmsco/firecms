@@ -20,8 +20,6 @@ export function ImagePreview({
                                  url
                              }: ImagePreviewProps) {
 
-    const [onHover, setOnHover] = useState(false);
-
     const imageSize = useMemo(() => getThumbnailMeasure(size), [size]);
 
     if (size === "tiny") {
@@ -47,25 +45,21 @@ export function ImagePreview({
 
     return (
         <div
-            className="relative flex items-center justify-center max-w-full max-h-full"
+            className="relative flex items-center justify-center max-w-full max-h-full group"
             style={{
                 width: imageSize,
                 height: imageSize
             }}
-            key={"image_preview_" + url}
-            onMouseEnter={() => setOnHover(true)}
-            onMouseMove={() => setOnHover(true)}
-            onMouseLeave={() => setOnHover(false)}>
+            key={"image_preview_" + url}>
 
             <img src={url}
                  className={"rounded-md"}
                  style={imageStyle}/>
 
-            {onHover && <>
 
                 {navigator && <Tooltip title="Copy url to clipboard">
                     <div
-                        className="rounded-full absolute bottom-[-4px] right-8">
+                        className="rounded-full absolute bottom-[-4px] right-8 invisible group-hover:visible">
                         <IconButton
                             variant={"filled"}
                             size={"small"}
@@ -74,7 +68,7 @@ export function ImagePreview({
                                 e.preventDefault();
                                 return navigator.clipboard.writeText(url);
                             }}>
-                            <ContentCopyIcon className={"text-gray-500"}
+                            <ContentCopyIcon className={"text-gray-700 dark:text-gray-300"}
                                              size={"small"}/>
                         </IconButton>
                     </div>
@@ -95,12 +89,10 @@ export function ImagePreview({
                         size={"small"}
                         onClick={(e: any) => e.stopPropagation()}
                     >
-                        <OpenInNewIcon className={"text-gray-500"}
+                        <OpenInNewIcon className={"text-gray-700 dark:text-gray-300"}
                                        size={"small"}/>
                     </IconButton>
                 </Tooltip>
-            </>
-            }
         </div>
     );
 }

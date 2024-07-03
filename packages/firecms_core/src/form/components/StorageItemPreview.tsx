@@ -1,9 +1,9 @@
 import React from "react";
 
-import { Entity, EntityCollection, ResolvedStringProperty } from "../../types";
+import { ResolvedStringProperty } from "../../types";
 import { PreviewSize, PropertyPreview } from "../../preview";
 
-import { cls, IconButton, paperMixin, RemoveIcon, Tooltip } from "@firecms/ui";
+import { cls, DescriptionIcon, IconButton, paperMixin, RemoveIcon, Tooltip } from "@firecms/ui";
 import { ErrorBoundary } from "../../components";
 
 interface StorageItemPreviewProps {
@@ -13,6 +13,8 @@ interface StorageItemPreviewProps {
     onRemove: (value: string) => void;
     size: PreviewSize;
     disabled: boolean;
+    placeholder?: boolean;
+    className?: string;
 }
 
 export function StorageItemPreview({
@@ -22,14 +24,17 @@ export function StorageItemPreview({
                                        onRemove,
                                        disabled,
                                        size,
+                                       placeholder,
+                                       className
                                    }: StorageItemPreviewProps) {
 
     return (
         <div className={cls(paperMixin,
             "relative m-4 border-box flex items-center justify-center",
-            size === "medium" ? "min-w-[220px] min-h-[220px] max-w-[220px]" : "min-w-[118px] min-h-[118px] max-w-[118px]")}>
+            size === "medium" ? "min-w-[220px] min-h-[220px] max-w-[220px]" : "min-w-[118px] min-h-[118px] max-w-[118px]",
+            className)}>
 
-            {!disabled &&
+            {!placeholder && !disabled &&
                 <div
                     className="absolute rounded-full -top-2 -right-2 z-10 bg-white dark:bg-gray-900">
 
@@ -47,14 +52,22 @@ export function StorageItemPreview({
                 </div>
             }
 
-            {value &&
+            {!placeholder && value &&
                 <ErrorBoundary>
                     <PropertyPreview propertyKey={name}
                                      value={value}
                                      property={property}
-                        // entity={entity}
+                                     interactive={false}
                                      size={size}/>
                 </ErrorBoundary>
+            }
+
+            {placeholder &&
+                <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex flex-col items-center justify-center w-full h-full">
+                    <DescriptionIcon className="text-gray-700 dark:text-gray-300"/>
+                </div>
             }
 
 
