@@ -51,12 +51,15 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
                 listeners[path] = onSnapshot(query(col),
                     {
                         next: (snapshot) => {
+                            if (snapshot.metadata.fromCache) {
+                                return;
+                            }
                             const docs = snapshot.docs.map(doc => ({
                                 id: doc.id,
                                 ...doc.data()
                             }));
-                            console.log("Added docs to index", path, docs.length);
                             indexes[path].addDocuments(docs);
+                            console.log("Added docs to index", path, docs.length);
                             resolve(true);
                         },
                         error: (e) => {
@@ -70,7 +73,10 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
         });
     }
 
-    const search = async ({ searchString, path }: {
+    const search = async ({
+                              searchString,
+                              path
+                          }: {
         searchString: string,
         path: string
     }) => {
