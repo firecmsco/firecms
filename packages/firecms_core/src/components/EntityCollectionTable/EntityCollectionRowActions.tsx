@@ -1,7 +1,7 @@
 import React, { MouseEvent, useCallback } from "react";
 
 import { CollectionSize, Entity, EntityAction, EntityCollection, SelectionController } from "../../types";
-import { Checkbox, cls, IconButton, Menu, MenuItem, MoreVertIcon, Skeleton, Tooltip, Typography } from "@firecms/ui";
+import { Checkbox, cls, IconButton, Menu, MenuItem, MoreVertIcon, Skeleton, Tooltip } from "@firecms/ui";
 import { useFireCMSContext, useLargeLayout } from "../../hooks";
 
 /**
@@ -149,16 +149,14 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                 </div>}
 
             {!hideId && size !== "xs" && (
-                <div className="w-[138px] text-center overflow-hidden truncate">
+                <div
+                    className="w-[138px] text-center overflow-hidden truncate font-mono text-xs text-text-secondary dark:text-text-secondary-dark max-w-full text-ellipsis px-2"
+                    onClick={(event) => {
+                        event.stopPropagation();
+                    }}>
 
                     {entity
-                        ? <Typography
-                            onClick={(event) => {
-                                event.stopPropagation();
-                            }}
-                            className={"font-mono select-all"}
-                            variant={"caption"}
-                            color={"secondary"}> {entity.id} </Typography>
+                        ? entity.id
                         : <Skeleton/>
                     }
                 </div>
