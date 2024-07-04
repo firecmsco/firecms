@@ -369,9 +369,11 @@ export function FireCMSClientWithController({
         loadingOrErrorComponent = <CircularProgressCenter text={"Project loading"}/>;
     } else if (appCheckResult.loading) {
         loadingOrErrorComponent = <CircularProgressCenter text={"AppCheck loading"}/>;
-    } else if (appCheckResult.error) {
-        loadingOrErrorComponent = <ErrorView error={appCheckResult.error}/>;
-    } else if (delegatedLoginError) {
+    }
+    // else if (appCheckResult.error) {
+    //     loadingOrErrorComponent = <ErrorView error={appCheckResult.error}/>;
+    // }
+    else if (delegatedLoginError) {
         console.error("Delegated login error", delegatedLoginError)
         loadingOrErrorComponent = <ErrorDelegatingLoginView configError={delegatedLoginError}
                                                             fireCMSBackend={fireCMSBackend}

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 
 import { AppCheck, getToken, initializeAppCheck } from "@firebase/app-check";
 import { FirebaseApp } from "@firebase/app";
@@ -37,7 +37,10 @@ export function useAppCheck({
     const [appCheckVerified, setAppCheckVerified] = React.useState<boolean | undefined>(undefined);
     const [error, setError] = React.useState<any>();
 
+    const initialCheck = useRef<boolean>(false);
+
     const verifyToken = useCallback(async (appCheck: AppCheck) => {
+        console.debug("Verifying App Check token...", appCheck);
         try {
             const token = await getToken(appCheck, options?.forceRefresh);
             console.debug("App Check token:", token);
@@ -49,7 +52,7 @@ export function useAppCheck({
                 console.debug("App Check success.");
             }
         } catch (e: any) {
-            console.error(e);
+            console.error("App Check error:", e);
             setError(e.message);
         }
     }, [options?.forceRefresh]);
@@ -58,6 +61,7 @@ export function useAppCheck({
         if (!options) return;
         if (!firebaseApp) return;
         if (appCheckVerified !== undefined) return;
+        if (initialCheck.current) return;
 
         setAppCheckLoading(true);
 
@@ -74,7 +78,7 @@ export function useAppCheck({
             .then(() => {
                 setAppCheckLoading(false);
             });
-
+        initialCheck.current = true;
     }, [appCheckVerified, firebaseApp, options, verifyToken]);
 
     return {

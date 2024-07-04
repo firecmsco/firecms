@@ -62,7 +62,7 @@ import { FirebaseApp } from "@firebase/app";
 import { TestEditorView } from "./TestEditorView";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
-import { ReCaptchaV3Provider } from "@firebase/app-check";
+import { ReCaptchaEnterpriseProvider } from "@firebase/app-check";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
 
@@ -122,7 +122,7 @@ function App() {
     const appCheckResult = useAppCheck({
         firebaseApp,
         options: {
-            provider: new ReCaptchaV3Provider(import.meta.env.VITE_RECAPTCHA_SITE_KEY as string)
+            provider: new ReCaptchaEnterpriseProvider(import.meta.env.VITE_RECAPTCHA_SITE_KEY as string)
         }
     });
 
@@ -272,9 +272,9 @@ function App() {
         return <CenteredView>{configError}</CenteredView>;
     }
 
-    if (appCheckResult.error) {
-        return <CenteredView>{appCheckResult.error}</CenteredView>;
-    }
+    // if (appCheckResult.error) {
+    //     return <CenteredView>{appCheckResult.error}</CenteredView>;
+    // }
 
     return (
         <SnackbarProvider>

@@ -14,7 +14,7 @@ import { ReCaptchaEnterpriseProvider } from "@firebase/app-check";
 const appConfig: FireCMSAppConfig = {
     version: "1",
     appCheck: {
-        provider: new ReCaptchaEnterpriseProvider("6Ldi_t8kAAAAAAVvN4iqtkTRKMZSG0Uc6oT3XyoE"),
+        provider: new ReCaptchaEnterpriseProvider("6Lc2XsMpAAAAADJhk7R10GmKv-nBRTYymRgRhAiY"),
     },
     collections: async ({
                             authController,
