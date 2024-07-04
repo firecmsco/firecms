@@ -93,8 +93,8 @@ export function ProductView({
                 }
                 if (url) {
                     if (typeof window !== "undefined")
-                        window.open(url, "_blank"); // Open a new tab
-                    // window.location.assign(url);
+                        // window.open(url, "_blank"); // Open a new tab
+                        window.location.assign(url);
                 }
                 setLinkLoading(false);
             },
