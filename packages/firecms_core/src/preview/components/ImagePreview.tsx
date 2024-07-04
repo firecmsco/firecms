@@ -1,4 +1,4 @@
-import React, { CSSProperties, useMemo, useState } from "react";
+import React, { CSSProperties, useMemo } from "react";
 
 import { getThumbnailMeasure } from "../util";
 import { PreviewSize } from "../PropertyPreviewProps";
@@ -57,42 +57,38 @@ export function ImagePreview({
                  style={imageStyle}/>
 
 
-                {navigator && <Tooltip title="Copy url to clipboard">
-                    <div
-                        className="rounded-full absolute bottom-[-4px] right-8 invisible group-hover:visible">
-                        <IconButton
-                            variant={"filled"}
-                            size={"small"}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                e.preventDefault();
-                                return navigator.clipboard.writeText(url);
-                            }}>
-                            <ContentCopyIcon className={"text-gray-700 dark:text-gray-300"}
-                                             size={"small"}/>
-                        </IconButton>
-                    </div>
-                </Tooltip>}
-
-                <Tooltip title="Open image in new tab">
+            <div className={"flex flex-row gap-2 absolute bottom-[-4px] right-[-4px] invisible group-hover:visible"}>
+                {navigator && <Tooltip title="Copy url to clipboard" side={"bottom"}>
                     <IconButton
                         variant={"filled"}
+                        size={"small"}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            return navigator.clipboard.writeText(url);
+                        }}>
+                        <ContentCopyIcon className={"text-gray-700 dark:text-gray-300"}
+                                         size={"small"}/>
+                    </IconButton>
+                </Tooltip>}
+
+                <Tooltip title="Open image in new tab" side={"bottom"}>
+                    <IconButton
+                        className="invisible group-hover:visible"
+                        variant={"filled"}
                         component={"a" as React.ElementType}
-                        style={{
-                            position: "absolute",
-                            bottom: -4,
-                            right: -4
-                        }}
                         href={url}
                         rel="noopener noreferrer"
                         target="_blank"
                         size={"small"}
                         onClick={(e: any) => e.stopPropagation()}
                     >
-                        <OpenInNewIcon className={"text-gray-700 dark:text-gray-300 invisible group-hover:visible"}
+                        <OpenInNewIcon className={"text-gray-700 dark:text-gray-300"}
                                        size={"small"}/>
                     </IconButton>
                 </Tooltip>
+            </div>
+
         </div>
     );
 }
