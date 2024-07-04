@@ -41,7 +41,8 @@ function areEqual(prevProps: ReferencePreviewProps, nextProps: ReferencePreviewP
         prevProps.hover === nextProps.hover &&
         prevProps.reference?.id === nextProps.reference?.id &&
         prevProps.reference?.path === nextProps.reference?.path &&
-        prevProps.includeEntityLink === nextProps.includeEntityLink
+        prevProps.includeEntityLink === nextProps.includeEntityLink &&
+        prevProps.onClick === nextProps.onClick
         ;
 }
 
