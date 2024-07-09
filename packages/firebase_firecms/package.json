@@ -1,7 +1,7 @@
 {
   "name": "@firecms/firebase",
   "type": "module",
-  "version": "3.0.0-canary.79",
+  "version": "3.0.0-canary.80",
   "publishConfig": {
     "access": "public"
   },
@@ -11,12 +11,12 @@
   "source": "src/index.ts",
   "dependencies": {
     "@firebase/auth": "*",
-    "@firecms/collection_editor": "^3.0.0-canary.79",
-    "@firecms/core": "^3.0.0-canary.79",
-    "@firecms/data_enhancement": "^3.0.0-canary.79",
-    "@firecms/data_import_export": "^3.0.0-canary.79",
-    "@firecms/schema_inference": "^3.0.0-canary.79",
-    "@firecms/ui": "^3.0.0-canary.79",
+    "@firecms/collection_editor": "^3.0.0-canary.80",
+    "@firecms/core": "^3.0.0-canary.80",
+    "@firecms/data_enhancement": "^3.0.0-canary.80",
+    "@firecms/data_import_export": "^3.0.0-canary.80",
+    "@firecms/schema_inference": "^3.0.0-canary.80",
+    "@firecms/ui": "^3.0.0-canary.80",
     "firebase": "^10.12.2",
     "js-search": "^2.0.1",
     "react-router": "^6.24.0",
