@@ -45,6 +45,10 @@ export function App() {
 
     const title = "My CMS app";
 
+    if (!firebaseConfig?.projectId) {
+        throw new Error("Firebase config not found. Please check your `firebase_config.ts` file and make sure it is correctly set up.");
+    }
+
     const {
         firebaseApp,
         firebaseConfigLoading,

@@ -45,7 +45,7 @@ export async function login(env: "prod" | "dev", debug: boolean) {
         }
 
         if (req.url.startsWith("/oauth2callback")) {
-            let q = url.parse(req.url, true).query;
+            const q = url.parse(req.url, true).query;
 
             if (q.error) {
                 console.log("Error:" + q.error);
@@ -53,7 +53,7 @@ export async function login(env: "prod" | "dev", debug: boolean) {
                 throw q.error;
             } else {
                 // return the imported html
-                res.writeHead(200);
+                res.writeHead(200, { "Content-Type": "text/html" });
                 res.end(done_html, () => req.socket.end());
                 emitter.emit("tokensReady", q.code);
 
@@ -149,10 +149,10 @@ export async function getTokens(env: "prod" | "dev", debug: boolean): Promise<ob
 
 function revokeToken(accessToken: string, env: "prod" | "dev") {
     // Build the string for the POST request
-    let postData = "token=" + accessToken;
+    const postData = "token=" + accessToken;
 
     // Options for POST request to Google's OAuth 2.0 server to revoke a token
-    let postOptions = {
+    const postOptions = {
         host: "oauth2.googleapis.com",
         port: "443",
         path: "/revoke",
@@ -252,6 +252,5 @@ async function exchangeCodeForToken(code: string, env: "prod" | "dev") {
 
     return response.data.data;
 }
-
 
 
