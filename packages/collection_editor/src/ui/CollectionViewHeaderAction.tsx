@@ -1,4 +1,4 @@
-import { ResolvedProperty } from "@firecms/core";
+import { EntityTableController, ResolvedProperty } from "@firecms/core";
 import { IconButton, SettingsIcon, Tooltip } from "@firecms/ui";
 import React from "react";
 import { useCollectionEditorController } from "../useCollectionEditorController";
@@ -10,7 +10,8 @@ export function CollectionViewHeaderAction({
                                                property,
                                                fullPath,
                                                parentCollectionIds,
-                                               collection
+                                               collection,
+                                               tableController
                                            }: {
     property: ResolvedProperty,
     propertyKey: string,
@@ -18,6 +19,7 @@ export function CollectionViewHeaderAction({
     fullPath: string,
     parentCollectionIds: string[],
     collection: PersistedCollection;
+    tableController: EntityTableController;
 }) {
 
     const collectionEditorController = useCollectionEditorController();
@@ -32,7 +34,8 @@ export function CollectionViewHeaderAction({
                         property,
                         editedCollectionId: collection.id,
                         parentCollectionIds,
-                        collection
+                        collection,
+                        existingEntities: tableController.data ?? []
                     });
                 }}
                 size={"small"}>

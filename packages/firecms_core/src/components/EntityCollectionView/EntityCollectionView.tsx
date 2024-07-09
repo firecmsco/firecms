@@ -7,7 +7,7 @@ import {
     CollectionSize,
     Entity,
     EntityAction,
-    EntityCollection,
+    EntityCollection, EntityTableController,
     FilterValues,
     PartialEntityCollection,
     PropertyOrBuilder,
@@ -266,6 +266,7 @@ export const EntityCollectionView = React.memo(
             fullPath: string,
             parentCollectionIds: string[],
             collection: EntityCollection;
+            tableController: EntityTableController;
         }> | undefined
 
         // we are only using the first plugin that implements this
@@ -564,6 +565,7 @@ export const EntityCollectionView = React.memo(
                             property={property}
                             fullPath={fullPath}
                             collection={collection}
+                            tableController={tableController}
                             parentCollectionIds={parentCollectionIds ?? []}/>;
                     })}
             </>;
@@ -574,7 +576,8 @@ export const EntityCollectionView = React.memo(
                 if (typeof AddColumnComponent === "function")
                     return <AddColumnComponent fullPath={fullPath}
                                                parentCollectionIds={parentCollectionIds ?? []}
-                                               collection={collection}/>;
+                                               collection={collection}
+                                               tableController={tableController}/>;
                 return null;
             }
             : undefined;

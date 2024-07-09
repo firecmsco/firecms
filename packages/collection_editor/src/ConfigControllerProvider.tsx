@@ -3,6 +3,7 @@ import equal from "react-fast-compare"
 
 import { CollectionsConfigController } from "./types/config_controller";
 import {
+    Entity,
     Property,
     useCustomizationController,
     useNavigationController,
@@ -88,7 +89,8 @@ export const ConfigControllerProvider = React.memo(
                 group?: string,
                 name?: string
             },
-            redirect: boolean
+            redirect: boolean,
+            existingEntities?: Entity<any>[]
         }>();
 
         const [currentPropertyDialog, setCurrentPropertyDialog] = React.useState<{
@@ -101,6 +103,7 @@ export const ConfigControllerProvider = React.memo(
             fullPath?: string,
             parentCollectionIds: string[],
             collectionEditable: boolean;
+            existingEntities?: Entity<any>[]
         }>();
 
         const defaultConfigPermissions: CollectionEditorPermissionsBuilder = useCallback(() => ({
@@ -113,12 +116,14 @@ export const ConfigControllerProvider = React.memo(
                                     id,
                                     fullPath,
                                     parentCollectionIds,
-                                    parentCollection
+                                    parentCollection,
+                                    existingEntities
                                 }: {
             id?: string,
             fullPath?: string,
             parentCollectionIds: string[],
-            parentCollection?: PersistedCollection
+            parentCollection?: PersistedCollection,
+            existingEntities?: Entity<any>[]
         }) => {
             console.debug("Edit collection", id, fullPath, parentCollectionIds, parentCollection);
             onAnalyticsEvent?.("edit_collection", {
@@ -131,7 +136,8 @@ export const ConfigControllerProvider = React.memo(
                 parentCollectionIds,
                 isNewCollection: false,
                 parentCollection,
-                redirect: false
+                redirect: false,
+                existingEntities
             });
         };
 
@@ -141,7 +147,8 @@ export const ConfigControllerProvider = React.memo(
                                   editedCollectionId,
                                   currentPropertiesOrder,
                                   parentCollectionIds,
-                                  collection
+                                  collection,
+                                  existingEntities
                               }: {
             propertyKey?: string,
             property?: Property,
@@ -149,6 +156,7 @@ export const ConfigControllerProvider = React.memo(
             editedCollectionId: string,
             parentCollectionIds: string[],
             collection: PersistedCollection,
+            existingEntities?: Entity<any>[]
         }) => {
             console.debug("Edit property", propertyKey, property, editedCollectionId, currentPropertiesOrder, parentCollectionIds, collection);
             onAnalyticsEvent?.("edit_property", {
@@ -169,7 +177,8 @@ export const ConfigControllerProvider = React.memo(
                 currentPropertiesOrder,
                 editedCollectionId,
                 parentCollectionIds,
-                collectionEditable: collection?.editable ?? false
+                collectionEditable: collection?.editable ?? false,
+                existingEntities
             });
         };
 

@@ -71,7 +71,7 @@ export function EnumPropertyField({
                           }}
                           getData={getData
                               ? () => getData()
-                                  .then(res => res.map(d => values.id && getIn(d, values.id)).filter(Boolean))
+                                  .then(res => res.map(entry => values.id && getIn(entry, values.id)).filter(Boolean))
                               : undefined}
                           onValuesChanged={onValuesChanged}/>
             </div>

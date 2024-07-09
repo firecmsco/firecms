@@ -1,5 +1,5 @@
 import { CollectionEditorPermissionsBuilder } from "./config_permissions";
-import { Property } from "@firecms/core";
+import { Entity, Property } from "@firecms/core";
 import { PersistedCollection } from "./persisted_collection";
 
 /**
@@ -12,7 +12,8 @@ export interface CollectionEditorController {
         id?: string,
         fullPath?: string,
         parentCollectionIds: string[],
-        parentCollection?: PersistedCollection
+        parentCollection?: PersistedCollection,
+        existingEntities?: Entity<any>[]
     }) => void;
 
     createCollection: (props: {
@@ -33,7 +34,8 @@ export interface CollectionEditorController {
         currentPropertiesOrder?: string[],
         editedCollectionId: string,
         parentCollectionIds: string[],
-        collection: PersistedCollection
+        collection: PersistedCollection,
+        existingEntities: Entity<any>[]
     }) => void;
 
     configPermissions: CollectionEditorPermissionsBuilder;

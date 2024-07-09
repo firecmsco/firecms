@@ -60,7 +60,7 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
  * @param configPermissions
  * @param reservedGroups
  * @param extraView
- * @param getPathsSuggestions
+ * @param getData
  * @param getUser
  * @param collectionInference
  */

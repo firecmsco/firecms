@@ -2,6 +2,7 @@ import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import {
     CircularProgressCenter,
+    Entity,
     EntityCollection,
     ErrorView,
     isPropertyBuilder,
@@ -79,6 +80,7 @@ export interface CollectionEditorDialogProps {
     getUser?: (uid: string) => User | null;
     getData?: (path: string, parentPaths: string[]) => Promise<object[]>;
     parentCollection?: PersistedCollection;
+    existingEntities?: Entity<any>[];
 }
 
 export function CollectionEditorDialog(props: CollectionEditorDialogProps) {
@@ -244,7 +246,8 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                                                      setCollection,
                                                                      initialValues,
                                                                      propertyConfigs,
-                                                                     groups
+                                                                     groups,
+                                                                     existingEntities
                                                                  }: CollectionEditorDialogProps & {
                                                                      handleCancel: () => void,
                                                                      setFormDirty: (dirty: boolean) => void,
@@ -481,7 +484,14 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
     const parentPaths = !pathError && parentCollectionIds ? navigation.convertIdsToPaths(parentCollectionIds) : undefined;
     const resolvedPath = !pathError ? navigation.resolveAliasesFrom(updatedFullPath) : undefined;
-    const getDataWithPath = resolvedPath && getData ? () => getData(resolvedPath, parentPaths ?? []) : undefined;
+    const getDataWithPath = resolvedPath && getData ? async () => {
+        const data = await getData(resolvedPath, parentPaths ?? []);
+        if (existingEntities) {
+            const existingData = existingEntities.map(e => e.values);
+            data.push(...existingData);
+        }
+        return data;
+    } : undefined;
 
     useEffect(() => {
         setFormDirty(dirty);

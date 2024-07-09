@@ -1,4 +1,4 @@
-import { getDefaultPropertiesOrder, useAuthController } from "@firecms/core";
+import { EntityTableController, getDefaultPropertiesOrder, useAuthController } from "@firecms/core";
 import { AddIcon, Tooltip } from "@firecms/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { PersistedCollection } from "../types/persisted_collection";
@@ -6,11 +6,13 @@ import { PersistedCollection } from "../types/persisted_collection";
 export function PropertyAddColumnComponent({
                                                fullPath,
                                                parentCollectionIds,
-                                               collection
+                                               collection,
+                                               tableController
                                            }: {
     fullPath: string,
     parentCollectionIds: string[],
     collection: PersistedCollection;
+    tableController: EntityTableController;
 }) {
 
     const authController = useAuthController();
@@ -32,7 +34,8 @@ export function PropertyAddColumnComponent({
                         editedCollectionId: collection.id,
                         parentCollectionIds,
                         currentPropertiesOrder: getDefaultPropertiesOrder(collection),
-                        collection
+                        collection,
+                        existingEntities: tableController.data
                     });
                 }}>
                 <AddIcon color={"inherit"}/>

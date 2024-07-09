@@ -1,16 +1,7 @@
-import equal from "react-fast-compare"
-
-import {
-    CollectionActionsProps,
-    mergeDeep,
-    useAuthController,
-    useNavigationController,
-    useSnackbarController
-} from "@firecms/core";
-import { Button, IconButton, SaveIcon, SettingsIcon, Tooltip, UndoIcon, } from "@firecms/ui";
+import { CollectionActionsProps, useAuthController, useNavigationController } from "@firecms/core";
+import { IconButton, SettingsIcon, Tooltip, } from "@firecms/ui";
 
 import { useCollectionEditorController } from "../useCollectionEditorController";
-import { useCollectionsConfigController } from "../useCollectionsConfigController";
 import { PersistedCollection } from "../types/persisted_collection";
 
 export function EditorCollectionAction({
@@ -39,7 +30,13 @@ export function EditorCollectionAction({
             color={"primary"}
             disabled={!canEditCollection}
             onClick={canEditCollection
-                ? () => collectionEditorController?.editCollection({ id: collection.id, fullPath, parentCollectionIds, parentCollection: parentCollection as PersistedCollection })
+                ? () => collectionEditorController?.editCollection({
+                    id: collection.id,
+                    fullPath,
+                    parentCollectionIds,
+                    parentCollection: parentCollection as PersistedCollection,
+                    existingEntities: tableController?.data ?? []
+                })
                 : undefined}>
             <SettingsIcon/>
         </IconButton>

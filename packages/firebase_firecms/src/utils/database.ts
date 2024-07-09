@@ -9,9 +9,8 @@ import {
 } from "@firebase/firestore";
 
 export async function getFirestoreDataInPath(firebaseApp: FirebaseApp, path: string, parentPaths: string[], limit: number): Promise<object[]> {
-    console.debug("getFirestoreDataInPath", path, limit)
     const firestore = getFirestore(firebaseApp);
-    if (!parentPaths) {
+    if (!parentPaths || parentPaths.length === 0) {
         const q = query(collection(firestore, path), limitClause(limit));
         return getDocs(q).then((querySnapshot) => {
             return querySnapshot.docs.map(doc => doc.data());

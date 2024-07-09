@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from "react";
 
 import { FireCMSContext } from "./firecms_context";
-import { CollectionActionsProps, EntityCollection } from "./collections";
+import { CollectionActionsProps, EntityCollection, EntityTableController } from "./collections";
 import { User } from "./user";
 import { FieldProps, FormContext } from "./fields";
 import { CMSType, Property } from "./properties";
@@ -130,6 +130,7 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
             parentCollectionIds: string[],
             onHover: boolean,
             collection: EC;
+            tableController: EntityTableController;
         }>;
 
         /**
@@ -140,6 +141,7 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
             fullPath: string,
             parentCollectionIds: string[],
             collection: EC;
+            tableController: EntityTableController;
         }>;
     }
 
