@@ -12,7 +12,7 @@ import {
     useSideEntityController,
     useSnackbarController
 } from "@firecms/core";
-import { Button, Chip, GitHubIcon, IconButton, Paper, Tooltip, Typography } from "@firecms/ui";
+import { Button, Chip, GitHubIcon, IconButton, Paper, Sheet, Tooltip, Typography } from "@firecms/ui";
 import { Product } from "./types";
 import { usersCollection } from "./collections/users_collection";
 
@@ -27,6 +27,8 @@ export function ExampleCMSView() {
 
     // hook to display custom snackbars
     const snackbarController = useSnackbarController();
+
+    const [isSheetOpen, setOpenSheet] = React.useState(false);
 
     const [sampleSelectedProduct, setSampleSelectedProduct] = React.useState<EntityReference | null>();
 
@@ -97,6 +99,22 @@ export function ExampleCMSView() {
                                 : <>You are not logged in</>}
                         </p>
                     </div>
+
+                    <div>
+                        <Button
+                            variant={"outlined"}
+                            size={"small"}
+                            onClick={() => setOpenSheet(true)}>
+                            Open side sheet
+                        </Button>
+                    </div>
+                    <Sheet open={isSheetOpen}
+                           onOpenChange={setOpenSheet}
+                           side={"bottom"}>
+                        <div className="bg-white font-bold dark:bg-gray-800 p-4 h-[90vh]">
+                            Sheet Content
+                        </div>
+                    </Sheet>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <Paper className={"w-full flex flex-col p-4 items-start"}>
@@ -179,6 +197,8 @@ export function ExampleCMSView() {
 
                 </div>
             </div>
+
+
         </div>
     );
 }
