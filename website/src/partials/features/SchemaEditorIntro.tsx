@@ -23,7 +23,7 @@ export const SchemaEditorIntro = () => {
                         " flex flex-col py-20")}>
 
                     <div className={"relative max-w-6xl mx-auto"}>
-                        <h2 className="h1 mb-4 uppercase">
+                        <h2 className="h2 mb-4 uppercase font-mono">
                             The best data schema editor
                         </h2>
 

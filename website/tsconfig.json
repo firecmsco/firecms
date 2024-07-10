@@ -40,6 +40,12 @@
       "@firecms/collection_editor": [
         "../packages/collection_editor"
       ],
+      "@firecms/data_import": [
+        "../../packages/data_import/src"
+      ],
+      "@firecms/data_export": [
+        "../../packages/data_export/src"
+      ],
       "@firecms/data_import_export": [
         "../packages/data_import_export"
       ],

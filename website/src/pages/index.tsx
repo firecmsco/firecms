@@ -11,12 +11,11 @@ import FirebaseIntro from "../partials/home/FirebaseIntro";
 import { Companies } from "../partials/home/Companies";
 import { UITeaser } from "../partials/home/UITeaser";
 import FeaturesTeaser from "../partials/home/FeaturesTeaser";
-import OpenAITeaser from "../partials/home/OpenAITeaser";
-import { SchemaEditorIntro } from "../partials/home/SchemaEditorIntro";
 import { DeveloperFeatures } from "../partials/features/DeveloperFeatures";
 import { UsageExamples } from "../partials/UsageExamples";
 import { QuotesSection } from "../partials/Quotes";
 import { organizationSchema, softwareApplicationSchema } from "../partials/markup";
+import { ImportDataIntro } from "../partials/home/ImportDataIntro";
 
 function Home() {
 
@@ -62,9 +61,8 @@ function Home() {
 
                 <FeaturesPanels/>
 
-                <SchemaEditorIntro/>
+                <ImportDataIntro/>
 
-                <OpenAITeaser/>
                 <FirebaseTeaser/>
 
             </main>

@@ -27,6 +27,8 @@
     "@firecms/collection_editor": "link:../packages/collection_editor",
     "@firecms/core": "link:../packages/firecms_core",
     "@firecms/data_enhancement": "link:../packages/data_enhancement",
+    "@firecms/data_import": "link:../packages/data_import",
+    "@firecms/data_export": "link:../packages/data_export",
     "@firecms/data_import_export": "link:../packages/data_import_export",
     "@firecms/firebase": "link:../packages/firebase_firecms",
     "@firecms/formex": "link:../packages/formex",

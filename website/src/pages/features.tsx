@@ -10,6 +10,8 @@ import { IntroText } from "../partials/features/IntroText";
 import { FormInfo } from "../partials/features/FormInfo";
 import { EnterpriseFeatures } from "../partials/enterprise/EnterpriseFeatures";
 import { EnterpriseArchitectures } from "../partials/enterprise/EnterpriseArchitectures";
+import { SchemaEditorIntro } from "../partials/features/SchemaEditorIntro";
+import OpenAITeaser from "../partials/features/OpenAITeaser";
 
 function FeaturesPage() {
 
@@ -47,14 +49,19 @@ function FeaturesPage() {
 
                     <FormInfo/>
 
-                    <Panel color={"light"} includePadding={true}>
-                        <HeroButtons/>
-                    </Panel>
+
+                    <SchemaEditorIntro/>
 
                     <EnterpriseFeatures/>
                     <EnterpriseArchitectures/>
+                    <OpenAITeaser/>
 
                     <ProTeaser/>
+
+
+                    <Panel color={"light"} includePadding={true}>
+                        <HeroButtons/>
+                    </Panel>
                 </main>
             </div>
 

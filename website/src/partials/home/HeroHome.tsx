@@ -14,8 +14,6 @@ import { MainHeroBackground } from "../general/MainHeroBackground";
 
 function HeroHome({}) {
 
-    const { colorMode } = useColorMode();
-    const isDarkTheme = colorMode === "dark";
 
     const video = <div
         className={"flex flex-col items-center content-center justify-center -m-px"}>
@@ -24,7 +22,6 @@ function HeroHome({}) {
                 aspectRatio: 1,
                 padding: "1px",
             }}
-            key={isDarkTheme ? "dark" : "light"}
             className={clsx("rounded-2xl")}
             width="100%"
             loop autoPlay muted>
@@ -68,7 +65,7 @@ function HeroHome({}) {
 
     return (
         <div
-            className={clsx("w-full relative border-0 border-b -mt-20 bg-black bg-opacity-80 dark:bg-gray-900 dark:bg-opacity-90", defaultBorderMixin)}>
+            className={clsx("w-full relative border-0 border-b -mt-20 bg-gray-900 dark:bg-gray-900", defaultBorderMixin)}>
             <MainHeroBackground/>
             <Panel includeMargin={false}
                    includePadding={false}

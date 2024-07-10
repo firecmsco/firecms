@@ -9,6 +9,7 @@ import { PublicFacingApps } from "../partials/pro/PublicFacingApps";
 import ProFeaturesPanels from "../partials/pro/ProFeaturesPanels";
 import HeroProButtons from "../partials/home/HeroProButtons";
 import { UITeaser } from "../partials/home/UITeaser";
+import { ImportDataIntro } from "../partials/home/ImportDataIntro";
 
 function ProPage() {
 
@@ -27,7 +28,7 @@ function ProPage() {
 
                     <ProInfo/>
 
-                    <UITeaser />
+                    <UITeaser/>
 
                     <ProFeaturesPanels/>
 
@@ -46,6 +47,7 @@ function ProPage() {
 
                     <PublicFacingApps/>
 
+                    <ImportDataIntro/>
 
                     <ProDeveloperFeatures/>
 
