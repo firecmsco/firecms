@@ -145,11 +145,6 @@ module.exports = {
                     ],
                     position: "left"
                 },
-                // {
-                //     to: "openai",
-                //     label: "ChatGPT",
-                //     position: "left"
-                // },
                 {
                     to: "pricing",
                     label: "Pricing",
@@ -359,6 +354,29 @@ module.exports = {
                     priority: 0.5,
                     filename: "sitemap.xml",
                     ignorePatterns: ["/docs/2.0.0/**", "/docs/1.0.0/**"],
+                    createSitemapItems: async (params) => {
+                        const {
+                            defaultCreateSitemapItems,
+                            ...rest
+                        } = params;
+                        const items = await defaultCreateSitemapItems(rest);
+
+                        const prioritiedItems = items.map(item => {
+                            if (item.url.startsWith("https://firecms.co/blog")) {
+                                item.priority = 0.6;
+                            } else if (item.url.startsWith("https://firecms.co/pricing")) {
+                                item.priority = 0.9;
+                            } else if (item.url.startsWith("https://firecms.co/pro")) {
+                                item.priority = 0.9;
+                            } else if (item.url.startsWith("https://firecms.co/ui")) {
+                                item.priority = 0.8;
+                            } else if (item.url.startsWith("https://firecms.co/docs")) {
+                                item.priority = 0.6;
+                            }
+                            return item;
+                        });
+                        return prioritiedItems;
+                    }
                 },
             }
         ]
