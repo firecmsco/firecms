@@ -36,7 +36,8 @@ import {
     userManagementAdminViews,
     useUserManagementPlugin
 } from "@firecms/user_management";
-import { useImportExportPlugin } from "@firecms/data_import_export";
+import { useImportPlugin } from "@firecms/data_import";
+import { useExportPlugin } from "@firecms/data_export";
 import { ExampleCMSView } from "./views/ExampleCMSView";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
@@ -176,7 +177,8 @@ export function App() {
     /**
      * Allow import and export data plugin
      */
-    const importExportPlugin = useImportExportPlugin();
+    const importPlugin = useImportPlugin();
+    const exportPlugin = useExportPlugin();
 
     const collectionEditorPlugin = useCollectionEditorPlugin({
         collectionConfigController
@@ -200,7 +202,13 @@ export function App() {
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
-                    plugins={[dataEnhancementPlugin, importExportPlugin, userManagementPlugin, collectionEditorPlugin]}
+                    plugins={[
+                        dataEnhancementPlugin,
+                        importPlugin,
+                        exportPlugin,
+                        userManagementPlugin,
+                        collectionEditorPlugin
+                    ]}
                 >
                     {({
                           context,

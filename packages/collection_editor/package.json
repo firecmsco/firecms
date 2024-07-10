@@ -7,6 +7,8 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
+    "@firecms/data_export": "^3.0.0-beta.8",
+    "@firecms/data_import": "^3.0.0-beta.8",
     "@firecms/data_import_export": "^3.0.0-beta.8",
     "@firecms/formex": "^3.0.0-beta.8",
     "@firecms/schema_inference": "^3.0.0-beta.8",

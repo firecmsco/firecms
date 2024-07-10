@@ -9,6 +9,8 @@
     "packages/datatalk",
     "packages/collection_editor",
     "packages/data_enhancement",
+    "packages/data_import",
+    "packages/data_export",
     "packages/data_import_export",
     "packages/firebase_firecms",
     "packages/mongodb",

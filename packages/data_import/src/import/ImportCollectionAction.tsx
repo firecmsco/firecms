@@ -41,7 +41,6 @@ type ImportState = "initial" | "mapping" | "preview" | "import_data_saving";
 export function ImportCollectionAction<M extends Record<string, any>, UserType extends User>({
                                                                                                  collection,
                                                                                                  path,
-                                                                                                 collectionEntitiesCount,
                                                                                                  onAnalyticsEvent
                                                                                              }: CollectionActionsProps<M, UserType> & {
                                                                                                  onAnalyticsEvent?: (event: string, params?: any) => void;

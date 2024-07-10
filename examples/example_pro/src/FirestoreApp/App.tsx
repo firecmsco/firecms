@@ -38,7 +38,6 @@ import {
     useInitialiseFirebase
 } from "@firecms/firebase";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
-import { useImportExportPlugin } from "@firecms/data_import_export";
 import {
     useFirestoreUserManagement,
     userManagementAdminViews,
@@ -63,6 +62,9 @@ import { TestEditorView } from "./TestEditorView";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { ReCaptchaEnterpriseProvider } from "@firebase/app-check";
+import { useExportPlugin } from "@firecms/data_export";
+import { useImportPlugin } from "@firecms/data_import";
+import { DemoImportAction } from "./DemoImportAction";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
 
@@ -237,8 +239,15 @@ function App() {
         collectionConfigController
     });
 
-    const importExportPlugin = useImportExportPlugin();
+    const importPlugin = useImportPlugin();
+    const exportPlugin = useExportPlugin();
 
+    const demoPlugin = useMemo(() => ({
+        key: "demo",
+        collectionView: {
+            CollectionActions: [DemoImportAction],
+        }
+    }), []);
     /**
      * Check if the user is allowed to access the main view
      */
@@ -286,7 +295,7 @@ function App() {
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
-                    plugins={[userManagementPlugin, dataEnhancementPlugin, importExportPlugin,
+                    plugins={[userManagementPlugin, dataEnhancementPlugin, exportPlugin, demoPlugin
                         // collectionEditorPlugin
                     ]}
                     onAnalyticsEvent={onAnalyticsEvent}

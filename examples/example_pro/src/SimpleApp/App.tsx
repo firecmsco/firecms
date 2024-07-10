@@ -30,7 +30,8 @@ import {
     useInitialiseFirebase,
 } from "@firecms/firebase";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
-import { useImportExportPlugin } from "@firecms/data_import_export";
+import { useImportPlugin } from "@firecms/data_import";
+import { useExportPlugin } from "@firecms/data_export";
 import {
     useFirestoreUserManagement,
     userManagementAdminViews,
@@ -162,7 +163,8 @@ function ProSample() {
 
     const userManagementPlugin = useUserManagementPlugin({ userManagement });
 
-    const importExportPlugin = useImportExportPlugin();
+    const importPlugin = useImportPlugin();
+    const exportPlugin = useExportPlugin();
 
     const collectionEditorPlugin = useCollectionEditorPlugin({
         collectionConfigController
@@ -184,7 +186,7 @@ function ProSample() {
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
-                    plugins={[dataEnhancementPlugin, importExportPlugin, userManagementPlugin, collectionEditorPlugin]}
+                    plugins={[dataEnhancementPlugin, importPlugin, exportPlugin, userManagementPlugin, collectionEditorPlugin]}
                 >
                     {({
                           context,

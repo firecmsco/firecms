@@ -17,6 +17,8 @@
     "packages/collection_editor",
     "packages/collection_editor_firebase",
     "packages/user_management",
+    "packages/data_import",
+    "packages/data_export",
     "packages/data_import_export",
     "packages/schema_inference",
     "packages/data_enhancement",

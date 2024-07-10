@@ -32,6 +32,12 @@
     ],
     "baseUrl": ".",
     "paths": {
+      "@firecms/data_import": [
+        "../data_import/src"
+      ],
+      "@firecms/data_export": [
+        "../data_export/src"
+      ],
       "@firecms/core": [
         "../firecms_core/src"
       ],

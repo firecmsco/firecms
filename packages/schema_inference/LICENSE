@@ -8,7 +8,8 @@ Licensed Work:        Firecms CMS packages:
                       collection_editor
                       collection_editor_firebase
                       data_enhancement
-                      data_import_export
+                      data_export
+                      data_export
                       editor
                       firecms_cloud
                       schema_inference

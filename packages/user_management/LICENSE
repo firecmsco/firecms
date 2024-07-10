@@ -3,12 +3,13 @@ Business Source License 1.1
 Parameters
 
 Licensor:             Firecms S.L.
-Licensed Work:        Firecms CMS packages: 
+Licensed Work:        Firecms CMS packages:
                       cli
                       collection_editor
                       collection_editor_firebase
                       data_enhancement
-                      data_import_export
+                      data_export
+                      data_export
                       editor
                       firecms_cloud
                       schema_inference

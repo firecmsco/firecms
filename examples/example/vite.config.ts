@@ -25,6 +25,8 @@ export default defineConfig({
             "@firecms/editor": path.resolve(__dirname, "../../packages/editor/src"),
             "@firecms/firebase": path.resolve(__dirname, "../../packages/firebase_firecms/src"),
             "@firecms/data_enhancement": path.resolve(__dirname, "../../packages/data_enhancement/src"),
+            "@firecms/data_import": path.resolve(__dirname, "../../packages/data_import/src"),
+            "@firecms/data_export": path.resolve(__dirname, "../../packages/data_export/src"),
             "@firecms/data_import_export": path.resolve(__dirname, "../../packages/data_import_export/src"),
             "@firecms/schema_inference": path.resolve(__dirname, "../../packages/schema_inference/src"),
             "@firecms/collection_editor": path.resolve(__dirname, "../../packages/collection_editor/src"),

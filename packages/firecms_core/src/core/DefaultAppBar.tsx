@@ -95,7 +95,7 @@ export const DefaultAppBar = function DefaultAppBar({
     return (
         <div
             style={style}
-            className={cls("pr-2 w-full h-16 transition-all ease-in duration-75 fixed",
+            className={cls("w-full h-16 transition-all ease-in duration-75 fixed",
                 {
                     "pl-[17rem]": drawerOpen && largeLayout,
                     "pl-20": hasDrawer && !(drawerOpen && largeLayout),

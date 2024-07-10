@@ -67,7 +67,8 @@ import {
     useFirestoreDelegate,
     useInitialiseFirebase
 } from "@firecms/firebase";
-import { ExportAllowedParams, useImportExportPlugin } from "@firecms/data_import_export";
+import { ExportAllowedParams, useExportPlugin } from "@firecms/data_export";
+import { useImportPlugin } from "@firecms/data_import";
 import { Button, CenteredView, ErrorIcon, Typography } from "@firecms/ui";
 import { useSaasPlugin } from "./hooks/useSaasPlugin";
 import {
@@ -370,8 +371,8 @@ export function FireCMSClientWithController({
     } else if (appCheckResult.loading) {
         loadingOrErrorComponent = <CircularProgressCenter text={"AppCheck loading"}/>;
     }
-    // else if (appCheckResult.error) {
-    //     loadingOrErrorComponent = <ErrorView error={appCheckResult.error}/>;
+        // else if (appCheckResult.error) {
+        //     loadingOrErrorComponent = <ErrorView error={appCheckResult.error}/>;
     // }
     else if (delegatedLoginError) {
         console.error("Delegated login error", delegatedLoginError)
@@ -533,13 +534,16 @@ function FireCMSAppAuthenticated({
         return map;
     }, [appConfig?.propertyConfigs]);
 
-    const importExportPlugin = useImportExportPlugin({
+    const exportPlugin = useExportPlugin({
         exportAllowed: useCallback(({ collectionEntitiesCount }: ExportAllowedParams) => {
             return projectConfig.canExport || collectionEntitiesCount <= DOCS_LIMIT;
         }, [projectConfig.canExport]),
         onAnalyticsEvent,
         notAllowedView: <SubscriptionPlanWidget showForPlans={["free"]}
                                                 message={`Upgrade to export more than ${DOCS_LIMIT} entities`}/>
+    });
+    const importPlugin = useImportPlugin({
+        onAnalyticsEvent,
     });
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({
@@ -624,7 +628,7 @@ function FireCMSAppAuthenticated({
         onAnalyticsEvent
     });
 
-    const plugins: FireCMSPlugin<any, any, any>[] = [saasPlugin, importExportPlugin, collectionEditorPlugin, dataEnhancementPlugin];
+    const plugins: FireCMSPlugin<any, any, any>[] = [saasPlugin, exportPlugin, importPlugin, collectionEditorPlugin, dataEnhancementPlugin];
 
     return (
         <FireCMSBackEndProvider {...fireCMSBackend}>

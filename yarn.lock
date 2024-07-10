@@ -2661,6 +2661,8 @@ __metadata:
     "@firecms/collection_editor_firebase": ^3.0.0-beta.8
     "@firecms/core": ^3.0.0-beta.8
     "@firecms/data_enhancement": ^3.0.0-beta.8
+    "@firecms/data_export": ^3.0.0-beta.8
+    "@firecms/data_import": ^3.0.0-beta.8
     "@firecms/data_import_export": ^3.0.0-beta.8
     "@firecms/datatalk": ^3.0.0-beta.8
     "@firecms/firebase": ^3.0.0-beta.8
@@ -2687,6 +2689,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@firecms/collection_editor@workspace:packages/collection_editor"
   dependencies:
+    "@firecms/data_export": ^3.0.0-beta.8
+    "@firecms/data_import": ^3.0.0-beta.8
     "@firecms/data_import_export": ^3.0.0-beta.8
     "@firecms/formex": ^3.0.0-beta.8
     "@firecms/schema_inference": ^3.0.0-beta.8
@@ -2809,9 +2813,37 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_import_export@^3.0.0-beta.8, @firecms/data_import_export@workspace:packages/data_import_export":
+"@firecms/data_export@^3.0.0-beta.8, @firecms/data_export@workspace:packages/data_export":
   version: 0.0.0-use.local
-  resolution: "@firecms/data_import_export@workspace:packages/data_import_export"
+  resolution: "@firecms/data_export@workspace:packages/data_export"
+  dependencies:
+    "@firecms/core": ^3.0.0-beta.8
+    "@firecms/formex": ^3.0.0-beta.8
+    "@firecms/schema_inference": ^3.0.0-beta.8
+    "@firecms/ui": ^3.0.0-beta.8
+    "@jest/globals": ^29.7.0
+    "@testing-library/jest-dom": ^6.4.6
+    "@types/jest": ^29.5.12
+    "@types/react": ^18.3.3
+    "@types/react-dom": ^18.3.0
+    "@vitejs/plugin-react": ^4.3.1
+    babel-jest: ^29.7.0
+    jest: ^29.7.0
+    ts-jest: ^29.1.5
+    typescript: ^5.5.3
+    vite: ^5.3.2
+  peerDependencies:
+    firebase: ^10.12.2
+    react: ^18.3.1
+    react-dom: ^18.3.1
+    react-router: ^6.22.0
+    react-router-dom: ^6.22.0
+  languageName: unknown
+  linkType: soft
+
+"@firecms/data_import@^3.0.0-beta.8, @firecms/data_import@workspace:packages/data_import":
+  version: 0.0.0-use.local
+  resolution: "@firecms/data_import@workspace:packages/data_import"
   dependencies:
     "@firecms/core": ^3.0.0-beta.8
     "@firecms/formex": ^3.0.0-beta.8
@@ -2838,12 +2870,41 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@firecms/data_import_export@^3.0.0-beta.8, @firecms/data_import_export@workspace:packages/data_import_export":
+  version: 0.0.0-use.local
+  resolution: "@firecms/data_import_export@workspace:packages/data_import_export"
+  dependencies:
+    "@firecms/core": ^3.0.0-beta.8
+    "@firecms/data_export": ^3.0.0-beta.8
+    "@firecms/data_import": ^3.0.0-beta.8
+    "@jest/globals": ^29.7.0
+    "@testing-library/jest-dom": ^6.4.6
+    "@types/jest": ^29.5.12
+    "@types/react": ^18.3.3
+    "@types/react-dom": ^18.3.0
+    "@vitejs/plugin-react": ^4.3.1
+    babel-jest: ^29.7.0
+    jest: ^29.7.0
+    ts-jest: ^29.1.5
+    typescript: ^5.5.3
+    vite: ^5.3.2
+  peerDependencies:
+    firebase: ^10.12.2
+    react: ^18.3.1
+    react-dom: ^18.3.1
+    react-router: ^6.22.0
+    react-router-dom: ^6.22.0
+  languageName: unknown
+  linkType: soft
+
 "@firecms/datatalk@^3.0.0-beta.8, @firecms/datatalk@workspace:packages/datatalk":
   version: 0.0.0-use.local
   resolution: "@firecms/datatalk@workspace:packages/datatalk"
   dependencies:
     "@firecms/collection_editor_firebase": ^3.0.0-beta.8
     "@firecms/core": ^3.0.0-beta.8
+    "@firecms/data_export": ^3.0.0-beta.8
+    "@firecms/data_import": ^3.0.0-beta.8
     "@firecms/data_import_export": ^3.0.0-beta.8
     "@firecms/firebase": ^3.0.0-beta.8
     "@firecms/formex": ^3.0.0-beta.8
@@ -2908,6 +2969,8 @@ __metadata:
     "@firecms/collection_editor": ^3.0.0-beta.8
     "@firecms/core": ^3.0.0-beta.8
     "@firecms/data_enhancement": ^3.0.0-beta.8
+    "@firecms/data_export": ^3.0.0-beta.8
+    "@firecms/data_import": ^3.0.0-beta.8
     "@firecms/data_import_export": ^3.0.0-beta.8
     "@firecms/schema_inference": ^3.0.0-beta.8
     "@firecms/ui": ^3.0.0-beta.8
@@ -10142,6 +10205,8 @@ __metadata:
     "@firecms/collection_editor_firebase": ^3.0.0-beta.8
     "@firecms/core": ^3.0.0-beta.8
     "@firecms/data_enhancement": ^3.0.0-beta.8
+    "@firecms/data_export": ^3.0.0-beta.8
+    "@firecms/data_import": ^3.0.0-beta.8
     "@firecms/data_import_export": ^3.0.0-beta.8
     "@firecms/datatalk": ^3.0.0-beta.8
     "@firecms/editor": ^3.0.0-beta.8
@@ -10186,6 +10251,8 @@ __metadata:
     "@firecms/collection_editor": ^3.0.0-beta.8
     "@firecms/core": ^3.0.0-beta.8
     "@firecms/data_enhancement": ^3.0.0-beta.8
+    "@firecms/data_export": ^3.0.0-beta.8
+    "@firecms/data_import": ^3.0.0-beta.8
     "@firecms/data_import_export": ^3.0.0-beta.8
     "@firecms/editor": ^3.0.0-beta.8
     "@firecms/schema_inference": ^3.0.0-beta.8

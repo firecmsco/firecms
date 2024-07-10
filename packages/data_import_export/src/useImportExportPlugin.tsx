@@ -1,12 +1,16 @@
 import React, { useMemo } from "react";
 import { EntityCollection, FireCMSPlugin } from "@firecms/core";
-import { ImportCollectionAction } from "./export_import/ImportCollectionAction";
-import { ExportCollectionAction } from "./export_import/ExportCollectionAction";
+import { ImportCollectionAction } from "@firecms/data_import";
+import { ExportCollectionAction } from "@firecms/data_export";
 
 /**
- *
+ * useImportExportPlugin is deprecated.
+ * Please use useImportPlugin and useExportPlugin separately
+ * @deprecated
  */
 export function useImportExportPlugin(props?: ImportExportPluginProps): FireCMSPlugin<any, any, any, ImportExportPluginProps> {
+
+    console.warn("useImportExportPlugin is deprecated. Please use useImportPlugin and useExportPlugin separately");
 
     return useMemo(() => ({
         key: "import_export",
@@ -18,8 +22,8 @@ export function useImportExportPlugin(props?: ImportExportPluginProps): FireCMSP
 }
 
 export type ImportExportPluginProps = {
-    exportAllowed?: (props: ExportAllowedParams) => boolean;
+    exportAllowed?: (props: ImportExportAllowedParams) => boolean;
     notAllowedView?: React.ReactNode;
     onAnalyticsEvent?: (event: string, params?: any) => void;
 }
-export type ExportAllowedParams = { collectionEntitiesCount: number, path: string, collection: EntityCollection };
+export type ImportExportAllowedParams = { collectionEntitiesCount: number, path: string, collection: EntityCollection };
