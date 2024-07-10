@@ -13,7 +13,7 @@ function TermsAndConditions() {
     return (
         <Layout
             title={"Terms and conditions - FireCMS"}
-            description="Awesome headless CMS based Firestore/Firebase and React, and completely open-source">
+            description="Headless CMS based on Firestore/Firebase, React and tailwindcss, and completely open-source">
             <Head>
                 <title>Terms and conditions - FireCMS</title>
             </Head>

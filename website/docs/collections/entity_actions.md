@@ -15,6 +15,12 @@ If you need to add custom actions, you can do so by defining them in the
 The actions will be shown in the menu of the collection view by default
 and in the form view if `includeInForm` is set to true.
 
+You can access all the controllers of FireCMS in the `context`. That is useful for accessing the data source,
+modifying data, accessing storage, opening dialogs, etc.
+
+In the `icon` prop, you can pass a React element to show an icon next to the action name.
+We recommend using any of the [FireCMS icons](/docs/icons), which are available in the `@firecms/ui` package.
+
 
 ```tsx
 
@@ -62,12 +68,64 @@ Function to be called when the action is clicked
 #### EntityActionClickProps
 
 * `entity`: Entity being edited
-* `context`: FireCMSContext
+* `context`: FireCMSContext, used for accessing all the controllers
 * `fullPath`?: string
 * `collection`?: EntityCollection
-* `selectionController`?: SelectionController
+* `selectionController`?: SelectionController, used for accessing the selected entities or modifying the selection
 * `highlightEntity`?: (entity: Entity) => void
 * `unhighlightEntity`?: (entity: Entity) => void
 * `onCollectionChange`?: () => void
 * `sideEntityController`?: SideEntityController
+
+
+## Example
+
+Let's build an example where we add an action to archive a product. 
+When the action is clicked, we will call a Google Cloud Function to that will run some business logic,
+in the backend.
+
+In this example, we will use the `fetch` API to call the function.
+
+```tsx
+export const productsCollection = buildCollection<Product>({
+    id: "products",
+    path: "products",
+    // other properties
+    entityActions: [
+        {
+            icon: <ArchiveIcon/>,
+            name: "Archive",
+            collapsed: false,
+            onClick({
+                        entity,
+                        collection,
+                        context,
+                    }) {
+                const snackbarController = context.snackbarController;
+                return fetch("[YOUR_ENDPOINT]/archiveProduct", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        productId: entity.id
+                    })
+                }).then(() => {
+                    snackbarController.open({
+                        message: "Product archived",
+                        type: "success"
+                    });
+                }).catch((error) => {
+                    snackbarController.open({
+                        message: "Error archiving product",
+                        type: "error"
+                    });
+                });
+            }
+        }
+    ],
+});
+```
+
+
 

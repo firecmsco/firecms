@@ -206,10 +206,10 @@ export function VersionsComparison() {
 
         <Panel includePadding={false} color={"white"} innerClassName={" flex flex-col items-center justify-center"}
                header={<>
-                   <LinedSpace/>
+                   <LinedSpace size={"large"}/>
 
                    <div className={clsx("border-0 border-b w-full", defaultBorderMixin)}>
-                       <h2 className={clsx("text-3xl md:text-4xl font-bold my-8 text-center ")}>
+                       <h2 className={"h2 uppercase font-mono my-8 text-center"}>
                            Versions comparison
                        </h2>
                    </div>

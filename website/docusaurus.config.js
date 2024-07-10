@@ -1,6 +1,7 @@
+import { themes as prismThemes } from "prism-react-renderer";
+
 const fontaine = require("fontaine");
 const path = require("path");
-import { themes as prismThemes } from "prism-react-renderer";
 
 require("dotenv").config();
 
@@ -89,10 +90,10 @@ module.exports = {
     ],
     themeConfig: {
         image: "img/logo_small.png",
-        description: "Awesome headless CMS based Firestore/Firebase and React, and completely open-source",
+        description: "Headless CMS based on Firestore/Firebase, React and tailwindcss, and completely open-source",
         announcementBar: {
-            id: "beta-7",
-            content: "<b>FireCMS</b> <code>3.0.0-beta.7</code> is out now! 🚀 FireCMS PRO is ready for testing at a discounted price. <a href='/pro'>Learn more</a>",
+            id: "beta-8",
+            content: "<b>FireCMS</b> <code>3.0.0-beta.8</code> is out now! 🚀 Get started with self-hosted FireCMS PRO for <b>free</b>. <a href='/pro'>Learn more</a>",
             backgroundColor: "#FF5B79",
             textColor: "black",
             isCloseable: true,
@@ -104,26 +105,9 @@ module.exports = {
             },
             {
                 name: "keywords",
-                content: "firebase, cms, react, react cms, firestore, firebase cms, headless cms, firebase admin, firebase admin sdk, strapi, contentful, rowy, forest admin, ghost cms, keystone, wordpress, payload"
+                content: "firebase, cms, react, react cms, custom cms, firestore, firebase cms, headless cms, firebase admin, firebase admin sdk, strapi, sanity io, contentful, rowy, forest admin, ghost cms, keystone, wordpress, payload"
             },
         ],
-        headTags: [
-            // Declare some json-ld structured data
-            {
-                tagName: "script",
-                attributes: {
-                    type: "application/ld+json",
-                },
-                innerHTML: JSON.stringify({
-                    "@context": "https://schema.org/",
-                    "@type": "Organization",
-                    name: "Meta Open Source",
-                    url: "https://opensource.fb.com/",
-                    logo: "https://opensource.fb.com/img/logos/Meta-Open-Source.svg",
-                }),
-            },
-        ],
-
         colorMode: {
             defaultMode: "light",
             disableSwitch: false,
@@ -372,7 +356,7 @@ module.exports = {
                     changefreq: "weekly",
                     priority: 0.5,
                     filename: "sitemap.xml",
-                    ignorePatterns: ['/docs/2.0.0/**', '/docs/1.0.0/**'],
+                    ignorePatterns: ["/docs/2.0.0/**", "/docs/1.0.0/**"],
                 },
             }
         ]

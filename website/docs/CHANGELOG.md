@@ -2,15 +2,46 @@
 id: changelog
 title: Changelog
 ---
-## [3.0.0-beta.8] - 2024-06-
+## [3.0.0-beta.8] - 2024-07-10
 
 - Fix for excessive re-renders in the form view.
 - You can now use `PropertyFieldBinding` components in your custom entity views, and they will be treated as regular
   fields.
 - For additional entity views, you can now preserve the bottom actions bar, with the prop `includeActions`.
-- For map properties, if they are not required, the value might me `undefined`, but if a child property is has a value, 
+- For map properties, if they are not required, the value might me `undefined`, but if a child property has a value, 
   validation will be triggered for all children.
-- Fix for datamaps not getting traversed correctly with null value.
+- Fix for data maps not getting traversed correctly with null value.
+- CLI pro template now supports creating web app config.
+- Fix for collection editor data inference for enums.
+- Small Sheet styling improvement.
+- Fixed local search loading issue with cached data.
+- Small visual fix for IDs.
+- AppCheck updates.
+- Fixed inconsistent opening of reference preview side dialogs.
+- Fixed icons for image previews.
+- Navigating to home URL when logging out.
+- Added `previewUrl` prop in storage options (#639).
+- Fixed XLSX security issue CVE-2024-22363 (#654).
+- Fix for the removal of keys in KeyValue fields.
+- Added large size for boolean switches.
+- Updated eslint to the latest version and config.
+- Types fix for `removePropsIfExisting`.
+- Fix for video drag bug in array fields.
+- Added option to ask for password reset, in PRO login view
+- Allowing null default values for properties.
+- Added count to array field bindings.
+- Fixed default values in nested maps in arrays.
+- Resolving entity collection path with the one coming from the entity, not the view config.
+- Small fix for logo image.
+- Fixed conditional fields not updating correctly.
+- Hide new user button if `disabledSignupScreen`.
+- Improved docs navigation bar styling.
+- Allowing maps to be completely undefined.
+- Disabled add button in collection groups.
+- Big entity refactor, custom views are now under the formex provider.
+- CLI fix for not logged in users.
+- Fix for datamaps not getting traversed correctly with null values.
+- Scaffold prop updates.
 
 ## [3.0.0-beta.7] - 2024-06-18
 

@@ -5,6 +5,7 @@ import { Hero } from "../partials/general/Hero";
 import { VersionsComparison } from "../partials/pricing/VersionsComparison";
 import { CLIInstructions } from "../partials/pricing/CLIInstructions";
 import { FireCMSCloudVersions } from "../partials/pricing/FireCMSCloudVersions";
+import { PricingQuote } from "../partials/pricing/PricingQuote";
 
 function FeaturesPage() {
     const schemaMarkup = {
@@ -82,7 +83,7 @@ function FeaturesPage() {
             <FireCMSCloudVersions/>
 
             <CLIInstructions/>
-
+<PricingQuote/>
             <VersionsComparison/>
 
 

@@ -13,7 +13,7 @@ function PrivacyPolicy() {
     return (
         <Layout
             title={"Privacy policy - FireCMS"}
-            description="Awesome headless CMS based Firestore/Firebase and React, and completely open-source">
+            description="Headless CMS based on Firestore/Firebase, React and tailwindcss, and completely open-source">
             <Head>
                 <title>Privacy policy - FireCMS</title>
             </Head>
