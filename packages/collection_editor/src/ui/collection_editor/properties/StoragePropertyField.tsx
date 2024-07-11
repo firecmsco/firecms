@@ -44,11 +44,13 @@ export function StoragePropertyField({
 
     const metadata = `${baseStoragePath}.metadata`;
     const fileName = `${baseStoragePath}.fileName`;
+    const maxSize = `${baseStoragePath}.maxSize`;
     const storagePath = `${baseStoragePath}.storagePath`;
     const storeUrl = `${baseStoragePath}.storeUrl`;
 
     const fileNameValue = getIn(values, fileName) ?? "{rand}_{file}";
     const storagePathValue = getIn(values, storagePath) ?? "/";
+    const maxSizeValue = getIn(values, maxSize);
 
     const storedValue = getIn(values, acceptedFiles);
     const fileTypesValue: string[] | undefined = Array.isArray(storedValue) ? storedValue : undefined;
@@ -161,7 +163,10 @@ export function StoragePropertyField({
 
                             <Field name={storeUrl}
                                    type="checkbox">
-                                {({ field, form }: FormexFieldProps) => {
+                                {({
+                                      field,
+                                      form
+                                  }: FormexFieldProps) => {
                                     return <SwitchControl
                                         label={"Save URL instead of storage path"}
                                         disabled={existing || disabled}
@@ -178,6 +183,21 @@ export function StoragePropertyField({
                                 You can only change this prop upon creation.
                             </Typography>
                         </div>
+
+                        <div className={"col-span-12"}>
+                            <DebouncedTextField name={maxSize}
+                                                type={"number"}
+                                                label={"Max size (in bytes)"}
+                                                size={"small"}
+                                                value={maxSizeValue !== undefined && maxSizeValue !== null ? maxSizeValue.toString() : ""}
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+                                                    if (value === "") setFieldValue(maxSize, undefined);
+                                                    else setFieldValue(maxSize, parseInt(value));
+                                                }}
+                            />
+                        </div>
+
                     </div>
                 </ExpandablePanel>
 
