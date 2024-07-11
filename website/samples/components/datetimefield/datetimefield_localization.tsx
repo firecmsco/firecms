@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { DateTimeField } from "@firecms/ui";
 
 export default function DateTimeFieldLocalizationDemo() {
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
 
     return (
         <DateTimeField

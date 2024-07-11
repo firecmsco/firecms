@@ -128,7 +128,6 @@
 //  * @param onDiscard
 //  * @param onModified
 //  * @param onValuesChanged
-//  * @constructor
 //  * @group Components
 //  */
 // export const EntityForm = React.memo<EntityFormProps<any>>(EntityFormInternal,

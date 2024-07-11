@@ -117,7 +117,7 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
  *
  * @param fullPath
  * @param collection
- * @constructor
+
  * @group Components
  */
 export const EntityCollectionView = React.memo(

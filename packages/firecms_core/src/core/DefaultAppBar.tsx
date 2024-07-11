@@ -45,7 +45,7 @@ export type DefaultAppBarProps<ADDITIONAL_PROPS = object> = {
  * This component renders the main app bar of FireCMS.
  * You will likely not need to use this component directly.
  *
- * @constructor
+
  */
 export const DefaultAppBar = function DefaultAppBar({
                                                         title,

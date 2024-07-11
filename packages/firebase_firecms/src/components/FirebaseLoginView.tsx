@@ -97,7 +97,7 @@ export interface FirebaseLoginViewProps {
 /**
  * Use this component to render a login view, that updates
  * the state of the {@link FirebaseAuthController} based on the result
- * @constructor
+
  * @category Firebase
  */
 export function FirebaseLoginView({

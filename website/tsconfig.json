@@ -46,9 +46,6 @@
       "@firecms/data_export": [
         "../../packages/data_export/src"
       ],
-      "@firecms/data_import_export": [
-        "../packages/data_import_export"
-      ],
       "@firecms/schema_inference": [
         "../packages/schema_inference"
       ],
@@ -62,8 +59,9 @@
   },
   "include": [
     "src",
-    "samples",
-    "../packages/firecms_cloud/src/**/*.ts"
+    "samples/components",
+    "samples/samples_v3",
+    "../packages/firecms_core/src/**/*.ts"
   ]
 }
 

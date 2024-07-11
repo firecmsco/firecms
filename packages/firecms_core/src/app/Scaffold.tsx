@@ -36,7 +36,7 @@ export interface ScaffoldProps {
  * This component needs a parent {@link FireCMS}
  *
  * @param props
- * @constructor
+
  * @group Core
  */
 export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(

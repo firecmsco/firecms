@@ -25,7 +25,7 @@ export type NavigationRoutesProps = {
  * or the home route) related to a {@link NavigationController}.
  * This component needs a parent {@link FireCMS}
  *
- * @constructor
+
  * @group Components
  */
 export const NavigationRoutes = React.memo<NavigationRoutesProps>(

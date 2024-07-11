@@ -5,7 +5,7 @@ import { CircularProgress, CircularProgressProps, Typography } from "@firecms/ui
  *
  * @param text
  * @param props
- * @constructor
+
  * @ignore
  */
 export function CircularProgressCenter({ text, ...props }: CircularProgressProps & {

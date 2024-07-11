@@ -21,7 +21,7 @@ import { productsCollection } from "../collections/products";
  * This view showcases some of the features available in FireCMS.
  * It is accessible from the navigation bar.
  *
- * @constructor
+
  */
 export function ExampleCMSView() {
 

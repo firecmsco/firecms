@@ -5,7 +5,7 @@ import { AutoFixHighIcon, Button, Dialog, DialogActions, DialogContent, IconButt
 /**
  * This whole component is a big hack used to point the user to the
  * data enhancement feature.
- * @constructor
+
  */
 export function OpenAIInstructionsActions() {
 

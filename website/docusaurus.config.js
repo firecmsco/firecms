@@ -27,12 +27,12 @@ module.exports = {
     plugins: [
         "docusaurus-tailwindcss-loader",
         "docusaurus-plugin-sass",
-        // generateAPI ? [
-        //     "docusaurus-plugin-typedoc",
-        //     {
-        //         watch: false,
-        //     }
-        // ] : [],
+        generateAPI ? [
+            "docusaurus-plugin-typedoc",
+            {
+                watch: false,
+            }
+        ] : [],
         function () {
 
             return {
@@ -48,7 +48,6 @@ module.exports = {
                                 "@firecms/firebase": path.resolve(__dirname, "../packages/firebase_firecms/src"),
                                 "@firecms/data_import": path.resolve(__dirname, "../data_import/src"),
                                 "@firecms/data_export": path.resolve(__dirname, "../data_export/src"),
-                                "@firecms/data_import_export": path.resolve(__dirname, "../packages/data_import_export/src"),
                                 "@firecms/schema_inference": path.resolve(__dirname, "../packages/schema_inference/src"),
                                 "@firecms/data_enhancement": path.resolve(__dirname, "../packages/data_enhancement/src"),
                                 "@firecms/formex": path.resolve(__dirname, "../packages/formex/src"),
@@ -372,6 +371,10 @@ module.exports = {
                                 item.priority = 0.8;
                             } else if (item.url.startsWith("https://firecms.co/docs")) {
                                 item.priority = 0.6;
+                            }
+
+                            if (item.url.endsWith("/")) {
+                                item.url = item.url.slice(0, -1);
                             }
                             return item;
                         });

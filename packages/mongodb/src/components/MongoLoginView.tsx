@@ -68,7 +68,7 @@ export interface MongoLoginViewProps {
 /**
  * Use this component to render a login view, that updates
  * the state of the {@link MongoAuthController} based on the result
- * @constructor
+
  *
  */
 export function MongoLoginView({

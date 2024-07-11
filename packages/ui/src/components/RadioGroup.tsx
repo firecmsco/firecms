@@ -44,6 +44,7 @@ export interface RadioGroupItemProps {
     checked?: boolean;
     required?: boolean;
     className?: string;
+    disabled?: boolean;
 }
 const RadioGroupItem = React.forwardRef<
     React.ElementRef<typeof RadioGroupPrimitive.Item>,

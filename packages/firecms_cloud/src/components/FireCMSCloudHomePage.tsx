@@ -14,7 +14,7 @@ import { ADMIN_VIEWS_CONFIG } from "../utils";
  * Default entry view for the CMS under the path "/"
  * This component takes navigation as an input and renders cards
  * for each entry, including title and description.
- * @constructor
+
  * @group Components
  */
 export function FireCMSCloudHomePage() {

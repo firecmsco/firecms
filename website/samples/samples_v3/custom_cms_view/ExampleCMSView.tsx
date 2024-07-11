@@ -2,20 +2,15 @@ import React from "react";
 
 import {
     buildCollection,
-    Button,
     Entity,
     EntityCollectionView,
-    GitHubIcon,
-    IconButton,
-    Paper,
-    Tooltip,
-    Typography,
     useAuthController,
     useReferenceDialog,
     useSelectionController,
     useSideEntityController,
     useSnackbarController
 } from "@firecms/core";
+import { Button, GitHubIcon, IconButton, Paper, Tooltip, Typography, } from "@firecms/ui";
 
 const usersCollection = buildCollection({
     path: "users",
@@ -83,7 +78,7 @@ const usersCollection = buildCollection({
 
 /**
  * Sample CMS view not bound to a collection, customizable by the developer
- * @constructor
+
  */
 export function ExampleCMSView() {
 

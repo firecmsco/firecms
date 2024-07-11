@@ -19,7 +19,7 @@ import { SmallNavigationCard } from "./SmallNavigationCard";
  * @param name
  * @param description
  * @param onClick
- * @constructor
+
  */
 export function NavigationCardBinding({
                                           path,

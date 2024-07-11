@@ -144,7 +144,7 @@ export function DefaultDrawer({
  * It expands when the drawer is open.
  *
  * @param logo
- * @constructor
+
  */
 export function DrawerLogo({ logo }: {
     logo?: string;

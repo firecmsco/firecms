@@ -49,7 +49,7 @@ const DEFAULT_SIGN_IN_OPTIONS = [
  * and {@link NavigationRoutes} instead.
  *
  * @param props
- * @constructor
+
  * @category Firebase
  */
 export function FireCMSFirebaseApp({

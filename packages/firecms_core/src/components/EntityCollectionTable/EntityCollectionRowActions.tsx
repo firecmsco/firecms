@@ -14,7 +14,7 @@ import { useFireCMSContext, useLargeLayout } from "../../hooks";
  * @param size
  * @param toggleEntitySelection
  * @param hideId
- * @constructor
+
  *
  * @group Collection components
  */

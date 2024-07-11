@@ -28,7 +28,7 @@ import { useProjectLog } from "../hooks/useProjectLog";
  *
  * You only need to use this component if you are building a custom app.
  *
- * @constructor
+
  * @group Core
  */
 export function FireCMS<UserType extends User, EC extends EntityCollection>(props: FireCMSProps<UserType, EC>) {

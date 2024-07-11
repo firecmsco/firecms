@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import {
     buildCollection,
     buildProperties,
@@ -8,7 +9,6 @@ import {
     useReferenceDialog,
     useSnackbarController
 } from "@firecms/core";
-import { useCallback } from "react";
 import { Button } from "@firecms/ui";
 
 type Product = {

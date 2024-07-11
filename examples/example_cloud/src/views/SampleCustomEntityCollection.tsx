@@ -21,7 +21,7 @@ import { usersCollection } from "../collections/users_collection";
 
 /**
  * Sample CMS view not bound to a collection, customizable by the developer
- * @constructor
+
  */
 export function SampleCustomEntityCollection() {
 

@@ -1,11 +1,11 @@
 {
-    "allReflectionsHaveOwnDocument": true,
     "cleanOutputDir": true,
     "entryPointStrategy": "expand",
     "readme": "docs/api_index.md",
     "name": "FireCMS API",
+    "exclude" :"**/samples/samples_v2/**",
     "categorizeByGroup": true,
-    "entryPoints": ["../packages/firecms_cloud/src/index.ts"],
+    "entryPoints": ["../packages/firecms_core/src/index.ts"],
     "hideGenerator": true,
     "hideParameterTypesInTitle": true,
     "excludeExternals": true,

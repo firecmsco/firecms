@@ -94,7 +94,7 @@ const DOCS_LIMIT = 200;
  * configuration object.
  *
  * @param props
- * @constructor
+
  * @group Firebase
  */
 export function FireCMSCloudApp({

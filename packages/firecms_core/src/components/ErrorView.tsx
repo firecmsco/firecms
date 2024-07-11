@@ -17,7 +17,7 @@ export interface ErrorViewProps {
  * @param title
  * @param error
  * @param tooltip
- * @constructor
+
  * @group Components
  */
 export function ErrorView({
