@@ -179,10 +179,18 @@ function StorageUpload({
             onDropRejected: (fileRejections, event) => {
                 for (const fileRejection of fileRejections) {
                     for (const error of fileRejection.errors) {
-                        snackbarContext.open({
-                            type: "error",
-                            message: `Error uploading file: File is larger than ${storage.maxSize} bytes`
-                        });
+                        console.log("Error uploading file: ", error);
+                        if (error.code === "file-too-large") {
+                            snackbarContext.open({
+                                type: "error",
+                                message: `Error uploading file: File is larger than ${storage.maxSize} bytes`
+                            });
+                        } else if (error.code === "file-invalid-type") {
+                            snackbarContext.open({
+                                type: "error",
+                                message: "Error uploading file: File type is not supported"
+                            });
+                        }
                     }
                 }
             }
