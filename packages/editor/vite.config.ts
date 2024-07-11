@@ -19,7 +19,7 @@ export default defineConfig(() => ({
         },
         target: "ESNEXT",
         sourcemap: true,
-
+        minify: false,
         rollupOptions: {
             // input: {
             //     index: resolve(__dirname, 'src/components/index.ts'),

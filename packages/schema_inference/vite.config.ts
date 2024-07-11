@@ -2,7 +2,6 @@
 import path from "path";
 
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react"
 
 const isExternal = (id: string) => !id.startsWith(".") && !path.isAbsolute(id);
 
@@ -18,6 +17,7 @@ export default defineConfig(() => ({
         },
         target: "ESNEXT",
         sourcemap: true,
+        minify: false,
         rollupOptions: {
             external: isExternal
         }
@@ -27,5 +27,4 @@ export default defineConfig(() => ({
             "@firecms/core": path.resolve(__dirname, "../firecms_core/src")
         }
     },
-    plugins: [react({})]
 }));

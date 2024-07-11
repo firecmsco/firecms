@@ -15,6 +15,7 @@ export default defineConfig(() => ({
         modulePreload: false,
         cssCodeSplit: false,
         sourcemap: true,
+        minify: false,
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
             name: "FireCMS",

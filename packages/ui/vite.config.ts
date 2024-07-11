@@ -17,6 +17,7 @@ export default defineConfig(() => ({
             fileName: (format) => `index.${format}.js`
         },
         target: "ESNEXT",
+        minify: false,
         sourcemap: true,
         rollupOptions: {
             external: isExternal

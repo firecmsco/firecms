@@ -18,6 +18,7 @@ export default defineConfig(() => ({
             name: "FireCMS PRO",
             fileName: (format) => `index.${format}.js`
         },
+        minify: false,
         target: "ESNEXT",
         sourcemap: true,
         rollupOptions: {

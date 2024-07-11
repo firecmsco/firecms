@@ -18,6 +18,7 @@ export default defineConfig(() => ({
         },
         target: "ESNEXT",
         sourcemap: true,
+        minify: false,
         rollupOptions: {
             external: isExternal
         }
