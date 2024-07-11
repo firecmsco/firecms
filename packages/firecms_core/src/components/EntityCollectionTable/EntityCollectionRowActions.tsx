@@ -14,7 +14,6 @@ import { useFireCMSContext, useLargeLayout } from "../../hooks";
  * @param size
  * @param toggleEntitySelection
  * @param hideId
-
  *
  * @group Collection components
  */
@@ -56,12 +55,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
     const context = useFireCMSContext();
 
     const onCheckedChange = useCallback((checked: boolean) => {
-        selectionController?.toggleEntitySelection(entity);
-    }, [entity, selectionController?.toggleEntitySelection]);
-
-    const onClick = useCallback((event: MouseEvent) => {
-        event.stopPropagation();
-        selectionController?.toggleEntitySelection(entity);
+        selectionController?.toggleEntitySelection(entity, checked);
     }, [entity, selectionController?.toggleEntitySelection]);
 
     const hasActions = actions.length > 0;
@@ -71,7 +65,6 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
     const uncollapsedActions = actions.filter(a => a.collapsed === false);
     return (
         <div
-            onClick={onClick}
             className={cls(
                 "h-full flex items-center justify-center flex-col bg-gray-50 dark:bg-gray-900 bg-opacity-90 dark:bg-opacity-90 z-10",
                 frozen ? "sticky left-0" : ""

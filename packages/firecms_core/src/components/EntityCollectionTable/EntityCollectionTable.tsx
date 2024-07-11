@@ -246,7 +246,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
             : collectionColumns) as VirtualTableColumn[]
     ];
 
-    const cellRenderer = (props: CellRendererParams<any>) => {
+    const cellRenderer = useCallback((props: CellRendererParams<any>) => {
         const column = props.column;
         const columns = props.columns;
         const columnKey = column.key;
@@ -286,7 +286,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
                 <ErrorView error={e}/>
             </EntityTableCell>;
         }
-    }
+    }, [tableRowActionsBuilder, additionalCellRenderer, propertyCellRenderer, size]);
 
     return (
 

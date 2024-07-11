@@ -153,7 +153,7 @@ export const EntityCollectionView = React.memo(
         }, [collection]);
 
         const canCreateEntities = canCreateEntity(collection, authController, fullPath, null);
-        const [selectedNavigationEntity, setSelectedNavigationEntity] = useState<Entity<M> | undefined>(undefined);
+        const [highlightedEntity, setHighlightedEntity] = useState<Entity<M> | undefined>(undefined);
         const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
 
         const [lastDeleteTimestamp, setLastDeleteTimestamp] = React.useState<number>(0);
@@ -162,12 +162,12 @@ export const EntityCollectionView = React.memo(
         const [docsCount, setDocsCount] = useState<number>(0);
 
         const unselectNavigatedEntity = useCallback(() => {
-            const currentSelection = selectedNavigationEntity;
+            const currentSelection = highlightedEntity;
             setTimeout(() => {
-                if (currentSelection === selectedNavigationEntity)
-                    setSelectedNavigationEntity(undefined);
+                if (currentSelection === highlightedEntity)
+                    setHighlightedEntity(undefined);
             }, 2400);
-        }, [selectedNavigationEntity]);
+        }, [highlightedEntity]);
 
         const checkInlineEditing = useCallback((entity?: Entity<any>): boolean => {
             const collection = collectionRef.current;
@@ -186,13 +186,12 @@ export const EntityCollectionView = React.memo(
         const usedSelectionController = collection.selectionController ?? selectionController;
         const {
             selectedEntities,
-            isEntitySelected,
             setSelectedEntities
         } = usedSelectionController;
 
-        useEffect(() => {
-            setDeleteEntityClicked(undefined);
-        }, [selectedEntities]);
+        // useEffect(() => {
+        //     setDeleteEntityClicked(undefined);
+        // }, [selectedEntities]);
 
         const tableController = useDataSourceEntityCollectionTableController<M>({
             fullPath,
@@ -210,7 +209,7 @@ export const EntityCollectionView = React.memo(
         const onEntityClick = useCallback((clickedEntity: Entity<M>) => {
             console.log("Entity clicked", clickedEntity)
             const collection = collectionRef.current;
-            setSelectedNavigationEntity(clickedEntity);
+            setHighlightedEntity(clickedEntity);
             analyticsController.onAnalyticsEvent?.("edit_entity_clicked", {
                 path: clickedEntity.path,
                 entityId: clickedEntity.id
@@ -468,7 +467,7 @@ export const EntityCollectionView = React.memo(
             return (largeLayout ? (80 + actionsWidth) : (70 + actionsWidth)) + (collapsedActions.length > 0 ? (largeLayout ? 40 : 30) : 0);
         };
 
-        const tableRowActionsBuilder = ({
+        const tableRowActionsBuilder = useCallback(({
                                             entity,
                                             size,
                                             width,
@@ -480,7 +479,7 @@ export const EntityCollectionView = React.memo(
             frozen?: boolean
         }) => {
 
-            const isSelected = isEntitySelected(entity);
+            const isSelected = usedSelectionController.selectedEntities.map(e => e.id).includes(entity.id);
 
             const actions = getActionsForEntity({
                 entity,
@@ -495,7 +494,7 @@ export const EntityCollectionView = React.memo(
                     isSelected={isSelected}
                     selectionEnabled={selectionEnabled}
                     size={size}
-                    highlightEntity={setSelectedNavigationEntity}
+                    highlightEntity={setHighlightedEntity}
                     unhighlightEntity={unselectNavigatedEntity}
                     collection={collection}
                     fullPath={fullPath}
@@ -506,7 +505,7 @@ export const EntityCollectionView = React.memo(
                 />
             );
 
-        };
+        }, [updateLastDeleteTimestamp, usedSelectionController]);
 
         const title = <Popover
             open={popOverOpen}
@@ -610,7 +609,7 @@ export const EntityCollectionView = React.memo(
                     uniqueFieldValidator={uniqueFieldValidator}
                     title={title}
                     selectionController={usedSelectionController}
-                    highlightedEntities={selectedNavigationEntity ? [selectedNavigationEntity] : []}
+                    highlightedEntities={highlightedEntity ? [highlightedEntity] : []}
                     defaultSize={collection.defaultSize}
                     properties={resolvedCollection.properties}
                     getPropertyFor={getPropertyFor}

@@ -128,8 +128,6 @@ export const SelectableTable = React.memo<SelectableTableProps<any>>(
                  setFilterValues,
                  sortBy,
                  setSortBy,
-                 setSearchString,
-                 clearFilter,
                  itemCount,
                  setItemCount,
                  pageSize = 50,
@@ -248,7 +246,8 @@ export const SelectableTable = React.memo<SelectableTableProps<any>>(
         );
 
     },
-    equal
+    () => false,
+    // equal
 );
 
 function createFilterField({

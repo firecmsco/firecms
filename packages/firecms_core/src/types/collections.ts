@@ -362,14 +362,13 @@ export interface CollectionActionsProps<M extends Record<string, any> = any, Use
 /**
  * Use this controller to retrieve the selected entities or modify them in
  * an {@link EntityCollection}
- * If you want to pass a `SelectionController` to
  * @group Models
  */
 export type SelectionController<M extends Record<string, any> = any> = {
     selectedEntities: Entity<M>[];
     setSelectedEntities: Dispatch<SetStateAction<Entity<M>[]>>;
     isEntitySelected: (entity: Entity<M>) => boolean;
-    toggleEntitySelection: (entity: Entity<M>) => void;
+    toggleEntitySelection: (entity: Entity<M>, newSelectedState?: boolean) => void;
 }
 
 /**

@@ -10,7 +10,7 @@ export type EntityCollectionViewStartActionsProps<M extends Record<string, any>>
     path: string;
     relativePath: string;
     parentCollectionIds: string[];
-    selectionController: SelectionController<M>;
+    selectionController?: SelectionController<M>;
     tableController: EntityTableController<M>;
     collectionEntitiesCount: number;
 }
