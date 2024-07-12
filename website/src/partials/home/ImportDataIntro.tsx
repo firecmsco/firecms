@@ -62,7 +62,7 @@ export const ImportDataIntro = () => {
                 className={ContainerMixin + " px-4 sm:px-6 -translate-y-44"}>
                 <video
                     style={{
-                        // aspectRatio: 2.415
+                        pointerEvents: "none",
                     }}
                     className={"rounded-xl"}
                     width="100%" loop autoPlay muted>

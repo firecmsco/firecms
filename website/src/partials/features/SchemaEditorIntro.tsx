@@ -68,6 +68,7 @@ export const SchemaEditorIntro = () => {
                 className={ContainerMixin + " px-4 sm:px-6 -translate-y-44"}>
                 <video
                     style={{
+                        pointerEvents: "none",
                         aspectRatio: 2.415
                     }}
                     className={"rounded-xl"}

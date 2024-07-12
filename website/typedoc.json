@@ -1,16 +1,5 @@
 {
-    "cleanOutputDir": true,
-    "entryPointStrategy": "expand",
-    "readme": "docs/api_index.md",
-    "name": "FireCMS API",
-    "exclude" :"**/samples/samples_v2/**",
-    "categorizeByGroup": true,
-    "entryPoints": ["../packages/firecms_core/src/index.ts"],
-    "hideGenerator": true,
-    "hideParameterTypesInTitle": true,
-    "excludeExternals": true,
-    "navigation": {
-        "includeGroups": true
-    },
-    "plugin": ["typedoc-plugin-markdown"]
+  "entryPoints": [
+    "../packages/firecms_core/src/index.ts"
+  ]
 }

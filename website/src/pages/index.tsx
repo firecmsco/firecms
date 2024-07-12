@@ -39,7 +39,7 @@ function Home() {
 
             <HeroHome/>
 
-            <main className={"bg-white"}>
+            <main className={"bg-white max-w-[100vw] overflow-x-hidden"}>
 
                 <UsageExamples/>
 

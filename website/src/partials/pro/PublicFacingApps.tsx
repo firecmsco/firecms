@@ -44,6 +44,7 @@ export function PublicFacingApps() {
                 <video
                     className={"absolute z-10 rounded-xl"}
                     style={{
+                        pointerEvents: "none",
                         bottom: 0,
                         right: "5%",
                         maxWidth: "900px",

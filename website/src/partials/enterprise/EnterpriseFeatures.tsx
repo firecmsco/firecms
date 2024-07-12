@@ -38,11 +38,11 @@ export function EnterpriseFeatures() {
                         <div className="md:grid md:grid-cols-12 md:gap-4">
                             <div
                                 className="max-w-7xl md:max-w-none md:w-full mx-auto md:col-span-9 md:pr-4 md:pr-8 flex justify-center flex-col h-full"
-                                data-aos="fade-right"
                             >
                                 <BrowserFrame>
                                     <video
                                         style={{
+                                            pointerEvents: "none",
                                             aspectRatio: 842 / 463,
                                         }}
                                         width="100%" loop autoPlay muted>
@@ -55,11 +55,11 @@ export function EnterpriseFeatures() {
 
                             <div
                                 className="md:w-full mx-auto md:col-span-3 md:order-1 my-16 md:my-0 flex justify-center flex-col h-full"
-                                data-aos="fade-left"
                             >
                                 <PhoneFrame>
                                     <video
                                         style={{
+                                            pointerEvents: "none",
                                             aspectRatio: 272 / 570,
                                             background: "white"
                                         }}

@@ -62,6 +62,7 @@ export function UsageExamples() {
                 }>
                 <video
                     style={{
+                        pointerEvents: "none",
                         aspectRatio: 540 / 515
                     }}
                     width="100%"
@@ -142,6 +143,7 @@ export function UsageExamples() {
                 <PhoneFrame>
                     <video
                         style={{
+                            pointerEvents: "none",
                             aspectRatio: 272 / 570,
                             background: "white"
                         }}
