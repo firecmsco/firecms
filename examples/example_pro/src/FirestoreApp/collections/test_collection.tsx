@@ -308,13 +308,32 @@ export const testCollection = buildCollection<any>({
             //             }
             //         ]
             // },
-            // upload: {
-            //     name: "Upload",
-            //     dataType: "string",
-            //     storage: {
-            //         storagePath: "test"
-            //     }
-            // },
+            upload: {
+                name: "Upload",
+                dataType: "string",
+                storage: {
+                    storagePath: "test",
+                    acceptedFiles: ["application/*"],
+                }
+            },
+            file: {
+                name: "File",
+                description: "The uploaded file of the document.",
+                hideFromCollection: false,
+                dataType: "string",
+                validation: {
+                    required: false,
+                },
+                propertyConfig: "file_upload",
+                storage: {
+                    storeUrl: true,
+                    storagePath: "/documents",
+                    acceptedFiles: [
+                        "application/",
+                        "text/"
+                    ],
+                },
+            },
             // mainSaturation: {
             //     name: "Main saturation",
             //     description: "Saturation applied to all colors when there is no saturation on color applied",

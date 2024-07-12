@@ -2,6 +2,8 @@
     "name": "FireCMS",
     "platforms": [
         "Admin",
+        "CMS",
+        "Firebase",
         "Web"
     ],
     "content": "README.md",
@@ -26,8 +28,12 @@
             "href": "https://www.npmjs.com/package/firecms"
         },
         {
-            "title": "API Reference",
-            "href": "https://firecms.co/docs/api"
+            "title": "Pricing",
+            "href": "https://firecms.co/pricing"
+        },
+        {
+            "title": "Docs",
+            "href": "https://firecms.co/docs"
         }
     ]
 }
