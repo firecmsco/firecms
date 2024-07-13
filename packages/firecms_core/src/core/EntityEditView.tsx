@@ -95,7 +95,7 @@ export interface EntityEditViewProps<M extends Record<string, any>> {
  * side panel. Instead, you might want to use {@link EntityForm} or {@link EntityCollectionView}
  */
 export function EntityEditView<M extends Record<string, any>, UserType extends User>({
-                                                                                         entityId: entityIdProp,
+                                                                                         entityId,
                                                                                          ...props
                                                                                      }: EntityEditViewProps<M>) {
     const {
@@ -105,7 +105,7 @@ export function EntityEditView<M extends Record<string, any>, UserType extends U
         dataLoadingError
     } = useEntityFetch<M, UserType>({
         path: props.path,
-        entityId: entityIdProp,
+        entityId: entityId,
         collection: props.collection,
         useCache: false
     });
@@ -114,8 +114,12 @@ export function EntityEditView<M extends Record<string, any>, UserType extends U
         return <CircularProgressCenter/>
     }
 
+    if (entityId && !entity) {
+        console.error(`Entity with id ${entityId} not found in collection ${props.collection.path}`);
+    }
+
     return <EntityEditViewInner<M> {...props}
-                                   entityId={entityIdProp}
+                                   entityId={entityId}
                                    entity={entity}
                                    dataLoading={dataLoading}/>;
 }
