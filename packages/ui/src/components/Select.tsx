@@ -143,7 +143,7 @@ export function Select({
                         "overflow-visible",
                         size === "small" ? "h-[42px]" : "h-[64px]"
                     )}>
-                        <SelectPrimitive.Value placeholder={placeholder}>
+                        <SelectPrimitive.Value placeholder={placeholder} className={"w-full"}>
                             {renderValue &&
                                 (hasValue && Array.isArray(value)
                                     ? value.map((v, i) => (
@@ -152,11 +152,11 @@ export function Select({
                                         </div>))
                                     : (typeof value === "string" ? (renderValue ? renderValue(value, 0) : value) : placeholder))}
 
-                            {renderValues && (!hasValue || Array.isArray(value))
-                                ? renderValues(value as string[] ?? [])
-                                : null}
+                                {renderValues && (!hasValue || Array.isArray(value))
+                                    ? renderValues(value as string[] ?? [])
+                                    : null}
 
-                            {!renderValue && !renderValues && hasValue}
+                             {!renderValue && !renderValues && hasValue}
 
                         </SelectPrimitive.Value>
                     </div>
@@ -217,7 +217,7 @@ export function SelectItem({
         }}
         className={cls(
             "w-full",
-            "relative relative flex items-center p-2 rounded-md text-sm text-slate-700 dark:text-slate-300",
+            "relative flex items-center p-2 rounded-md text-sm text-slate-700 dark:text-slate-300",
             focusedMixin,
             "focus:z-10",
             "data-[state=checked]:bg-slate-100 data-[state=checked]:dark:bg-slate-900 focus:bg-slate-100 dark:focus:bg-slate-950",
