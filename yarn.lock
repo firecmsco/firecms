@@ -2663,7 +2663,6 @@ __metadata:
     "@firecms/data_enhancement": ^3.0.0-beta.8
     "@firecms/data_export": ^3.0.0-beta.8
     "@firecms/data_import": ^3.0.0-beta.8
-    "@firecms/data_import_export": ^3.0.0-beta.8
     "@firecms/datatalk": ^3.0.0-beta.8
     "@firecms/firebase": ^3.0.0-beta.8
     "@firecms/formex": ^3.0.0-beta.8
@@ -3078,7 +3077,7 @@ __metadata:
     firebase: ^10.12.2
     jest: ^29.7.0
     npm-run-all: ^4.1.5
-    react-datepicker: ^6.9.0
+    react-datepicker: ^7.3.0
     react-dropzone: ^14.2.3
     react-fast-compare: ^3.2.2
     tailwind-merge: ^2.3.0
@@ -10207,7 +10206,6 @@ __metadata:
     "@firecms/data_enhancement": ^3.0.0-beta.8
     "@firecms/data_export": ^3.0.0-beta.8
     "@firecms/data_import": ^3.0.0-beta.8
-    "@firecms/data_import_export": ^3.0.0-beta.8
     "@firecms/datatalk": ^3.0.0-beta.8
     "@firecms/editor": ^3.0.0-beta.8
     "@firecms/schema_inference": ^3.0.0-beta.8
@@ -15689,6 +15687,22 @@ __metadata:
     react: ^16.9.0 || ^17 || ^18
     react-dom: ^16.9.0 || ^17 || ^18
   checksum: ca37d16cb3476da3f68d1bc536550439b9f3f31d3b18c441771e6d16ea6064a582e7b722090b520252fc3794791838b52048007861898d056c87757eb5df5493
+  languageName: node
+  linkType: hard
+
+"react-datepicker@npm:^7.3.0":
+  version: 7.3.0
+  resolution: "react-datepicker@npm:7.3.0"
+  dependencies:
+    "@floating-ui/react": ^0.26.2
+    clsx: ^2.1.0
+    date-fns: ^3.3.1
+    prop-types: ^15.7.2
+    react-onclickoutside: ^6.13.0
+  peerDependencies:
+    react: ^16.9.0 || ^17 || ^18
+    react-dom: ^16.9.0 || ^17 || ^18
+  checksum: 036d94e2963ee15014fb6bf7bd5d2abad226177a6d02844fe7e55e6e7c650d33517aa2f9b673b6a0b96cbcf6a4ab10cd3363a58e69e5fdeb77ac603c8ca39802
   languageName: node
   linkType: hard
 

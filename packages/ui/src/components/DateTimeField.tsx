@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-// @ts-ignore
 import DatePicker from "react-datepicker";
 
 import { CalendarMonthIcon, ClearIcon, ErrorIcon } from "../icons";
@@ -18,7 +17,8 @@ import { useInjectStyles } from "../hooks";
 
 interface DateTimeFieldProps {
     value?: Date;
-    onChange: (date: Date | undefined) => void;
+    onChange?: (date: Date | null) => void;
+
     mode?: "date" | "date_time";
     disabled?: boolean;
     clearable?: boolean;
@@ -29,7 +29,6 @@ interface DateTimeFieldProps {
     style?: React.CSSProperties;
     inputClassName?: string;
     invisible?: boolean;
-    preventOpenOnFocus?: boolean;
     locale?: string;
 }
 
@@ -45,7 +44,6 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                                                                 className,
                                                                 style,
                                                                 inputClassName,
-                                                                preventOpenOnFocus,
                                                                 invisible,
                                                                 locale
                                                             }) => {
@@ -61,7 +59,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
 
     const handleClear = (e: React.MouseEvent) => {
         e.preventDefault();
-        onChange(undefined);
+        onChange?.(null);
     }
 
     return (
@@ -97,7 +95,6 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                     onChange={onChange}
                     disabled={false}
                     popperClassName={cls(paperMixin, "my-4 shadow")}
-                    onClick={(e: any) => e.stopPropagation()}
                     onFocus={() => setFocused(true)}
                     onBlur={() => setFocused(false)}
                     showTimeSelect={mode === "date_time"}
@@ -117,7 +114,6 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                         disabled && "border border-transparent outline-none opacity-50 dark:opacity-50 text-slate-600 dark:text-slate-500"
                     )}
                 />
-
 
                 <IconButton
                     onClick={() => {
@@ -528,7 +524,7 @@ const datePickerCss = `
 .react-datepicker__year-text--in-selecting-range,
 .react-datepicker__year-text--in-range {
   border-radius: 100%;
-  background-color: #5193f6;
+  background-color: #186ef0;
   color: #fff;
 }
 .react-datepicker__day--selected:hover, .react-datepicker__day--in-selecting-range:hover, .react-datepicker__day--in-range:hover,
@@ -541,22 +537,22 @@ const datePickerCss = `
 .react-datepicker__year-text--selected:hover,
 .react-datepicker__year-text--in-selecting-range:hover,
 .react-datepicker__year-text--in-range:hover {
-  background-color: #186ef0;
+  background-color: #5698f9;
 }
-.react-datepicker__day--keyboard-selected,
-.react-datepicker__month-text--keyboard-selected,
-.react-datepicker__quarter-text--keyboard-selected,
-.react-datepicker__year-text--keyboard-selected {
-  border-radius: 100%;
-  background-color: #cee2ff;
-  color: rgb(0, 0, 0);
-}
-.react-datepicker__day--keyboard-selected:hover,
-.react-datepicker__month-text--keyboard-selected:hover,
-.react-datepicker__quarter-text--keyboard-selected:hover,
-.react-datepicker__year-text--keyboard-selected:hover {
-  background-color: #186ef0;
-}
+// .react-datepicker__day--keyboard-selected,
+// .react-datepicker__month-text--keyboard-selected,
+// .react-datepicker__quarter-text--keyboard-selected,
+// .react-datepicker__year-text--keyboard-selected {
+//   border-radius: 100%;
+//   background-color: #5193f6;
+//   color: rgb(0, 0, 0);
+// }
+// .react-datepicker__day--keyboard-selected:hover,
+// .react-datepicker__month-text--keyboard-selected:hover,
+// .react-datepicker__quarter-text--keyboard-selected:hover,
+// .react-datepicker__year-text--keyboard-selected:hover {
+//   background-color: #5193f6;
+// }
 .react-datepicker__day--in-selecting-range:not(.react-datepicker__day--in-range,
 .react-datepicker__month-text--in-range,
 .react-datepicker__quarter-text--in-range,
@@ -839,7 +835,7 @@ const datePickerCss = `
 :is([data-theme="dark"]) .react-datepicker__month-read-view--down-arrow,
 :is([data-theme="dark"]) .react-datepicker__month-year-read-view--down-arrow,
 :is([data-theme="dark"]) .react-datepicker__navigation-icon::before {
-  border-color: #333;
+  border-color: #999;
 }
 
 
@@ -913,7 +909,7 @@ const datePickerCss = `
 :is([data-theme="dark"]) .react-datepicker__year-text--selected:hover,
 :is([data-theme="dark"]) .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item:hover
  {
-  background-color: #1a1a1a;
+  background-color: #262626;
 }
 
 :is([data-theme="dark"]) .react-datepicker__day--selected,
@@ -931,12 +927,12 @@ const datePickerCss = `
   background-color: #0e528f;
 }
 
-:is([data-theme="dark"]) .react-datepicker__day--keyboard-selected,
-:is([data-theme="dark"]) .react-datepicker__month-text--keyboard-selected,
-:is([data-theme="dark"]) .react-datepicker__quarter-text--keyboard-selected,
-:is([data-theme="dark"]) .react-datepicker__year-text--keyboard-selected {
-  background-color: #0e529f;
-}
+// :is([data-theme="dark"]) .react-datepicker__day--keyboard-selected,
+// :is([data-theme="dark"]) .react-datepicker__month-text--keyboard-selected,
+// :is([data-theme="dark"]) .react-datepicker__quarter-text--keyboard-selected,
+// :is([data-theme="dark"]) .react-datepicker__year-text--keyboard-selected {
+//   background-color: #0e529f;
+// }
 
 :is([data-theme="dark"]) .react-datepicker__today-button {
   background-color: #262626;

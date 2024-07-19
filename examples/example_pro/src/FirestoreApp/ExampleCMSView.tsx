@@ -12,7 +12,7 @@ import {
     useSideEntityController,
     useSnackbarController
 } from "@firecms/core";
-import { Button, Chip, GitHubIcon, IconButton, Paper, Sheet, Tooltip, Typography } from "@firecms/ui";
+import { Button, Chip, DateTimeField, GitHubIcon, IconButton, Paper, Sheet, Tooltip, Typography } from "@firecms/ui";
 import { Product } from "./types";
 import { usersCollection } from "./collections/users_collection";
 
@@ -89,6 +89,7 @@ export function ExampleCMSView() {
 
                 <div className="flex flex-col gap-12 items-start">
 
+                    <DateTimeField />
                     <div className="mt-24">
                         <Typography variant="h4">
                             This is an example of an additional view
