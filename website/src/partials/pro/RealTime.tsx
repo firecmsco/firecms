@@ -60,13 +60,13 @@ function RealTime() {
                 you need, FireCMS is your best bet!</p>
 
             <div
-                className="max-w-5xl md:max-w-5xl md:w-full mx-auto md:col-span-9 md:pr-4 md:pr-8 flex justify-center flex-col h-full"
+                className="max-w-5xl md:max-w-5xl md:w-full mx-auto md:col-span-9 md:pr-8 flex justify-center flex-col h-full"
             >
                 <BrowserFrame>
                     <video
-                        // style={{
-                        //     aspectRatio: 842 / 463,
-                        // }}
+                        style={{
+                            pointerEvents: "none",
+                        }}
                         width="100%" loop autoPlay muted>
                         <source src={inlineEditingVideo}
                                 type="video/mp4"/>

@@ -19,6 +19,7 @@ function HeroHome({}) {
         className={"flex flex-col items-center content-center justify-center -m-px"}>
         <video
             style={{
+                pointerEvents: "none",
                 aspectRatio: 1,
                 padding: "1px",
             }}

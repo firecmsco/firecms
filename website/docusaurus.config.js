@@ -20,19 +20,35 @@ module.exports = {
     customFields: {
         env: process.env.NODE_ENV,
         docSearchApiKey: process.env.REACT_APP_DOC_SEARCH_KEY,
-        docSearchAppId: process.env.REACT_APP_DOC_SEARCH_APP_ID,
+        docSearchAppId: process.env.REACT_APP_DOC_SEARCH_APP_ID
     },
     webpack: {},
-
     plugins: [
         "docusaurus-tailwindcss-loader",
         "docusaurus-plugin-sass",
-        generateAPI ? [
-            "docusaurus-plugin-typedoc",
-            {
-                watch: false,
-            }
-        ] : [],
+        // generateAPI ? [
+        //     "docusaurus-plugin-typedoc",
+        //     {
+        //         watch: false,
+        //     }
+        // ] : [],
+        // [
+        //     "docusaurus-plugin-typedoc-api",
+        //     {
+        //         projectRoot: path.join(__dirname, ".."),
+        //         // Monorepo
+        //         packages: ["packages/firecms_core"],
+        //         routeBasePath: "docs/api"
+        //     }
+        // ],
+        // generateAPI ? [
+        //     "docusaurus-plugin-typedoc-api",
+        //     {
+        //         projectRoot: path.join(__dirname, ".."),
+        //         // Monorepo
+        //         packages: ["packages/firecms_core"]
+        //     }
+        // ] : [],
         function () {
 
             return {
@@ -50,14 +66,14 @@ module.exports = {
                                 "@firecms/data_export": path.resolve(__dirname, "../data_export/src"),
                                 "@firecms/schema_inference": path.resolve(__dirname, "../packages/schema_inference/src"),
                                 "@firecms/data_enhancement": path.resolve(__dirname, "../packages/data_enhancement/src"),
-                                "@firecms/formex": path.resolve(__dirname, "../packages/formex/src"),
-                            },
+                                "@firecms/formex": path.resolve(__dirname, "../packages/formex/src")
+                            }
                         },
                         optimization: {
-                            usedExports: true, // <- remove unused function
+                            usedExports: true // <- remove unused function
                         }
                     };
-                },
+                }
             };
         },
         function fontainePlugin(_context, _options) {
@@ -78,16 +94,16 @@ module.exports = {
                                     "Cantarell",
                                     "Open Sans",
                                     "Helvetica Neue",
-                                    "sans-serif",
+                                    "sans-serif"
                                 ],
                                 // You may need to resolve assets like `/fonts/Poppins-Bold.ttf` to a particular directory
-                                resolvePath: (id) => "../fonts/" + id,
-                            }),
-                        ],
+                                resolvePath: (id) => "../fonts/" + id
+                            })
+                        ]
                     };
-                },
+                }
             };
-        },
+        }
     ],
     themeConfig: {
         image: "img/logo_small.png",
@@ -97,7 +113,7 @@ module.exports = {
             content: "<b>FireCMS</b> <code>3.0.0-beta.8</code> is out now! 🚀 Get started with self-hosted FireCMS PRO for <b>free</b>. <a href='/pro'>Learn more</a>",
             backgroundColor: "#FF5B79",
             textColor: "black",
-            isCloseable: true,
+            isCloseable: true
         },
         metadata: [
             {
@@ -107,11 +123,11 @@ module.exports = {
             {
                 name: "keywords",
                 content: "firebase, cms, react, react cms, custom cms, firestore, firebase cms, headless cms, firebase admin, firebase admin sdk, strapi, sanity io, contentful, rowy, forest admin, ghost cms, keystone, wordpress, payload"
-            },
+            }
         ],
         colorMode: {
             defaultMode: "light",
-            disableSwitch: false,
+            disableSwitch: false
             // respectPrefersColorScheme: false,
         },
         navbar: {
@@ -127,20 +143,20 @@ module.exports = {
                     items: [
                         {
                             label: "Features",
-                            to: "/features",
+                            to: "/features"
                         },
                         {
                             label: "UI components",
-                            to: "/ui",
+                            to: "/ui"
                         },
                         {
                             label: "OpenAI GPT integration",
-                            to: "/openai",
+                            to: "/openai"
                         },
                         {
                             label: "The most powerful backend",
-                            to: "/f/backend_extension",
-                        },
+                            to: "/f/backend_extension"
+                        }
                     ],
                     position: "left"
                 },
@@ -186,7 +202,7 @@ module.exports = {
                 {
                     type: "docsVersionDropdown",
                     position: "right",
-                    dropdownActiveClassDisabled: true,
+                    dropdownActiveClassDisabled: true
                 },
                 {
                     href: "https://github.com/FireCMSco/firecms",
@@ -212,7 +228,7 @@ module.exports = {
                     className: "btn mr-3 px-6 py-2 text-white uppercase bg-primary hover:text-white hover:bg-blue-700",
                     "aria-label": "Go to FireCMS Cloud",
                     position: "right"
-                },
+                }
             ]
         },
         footer: {
@@ -237,7 +253,7 @@ module.exports = {
                     items: [
                         {
                             to: "https://app.firecms.co/subscriptions",
-                            label: "Manage subscriptions",
+                            label: "Manage subscriptions"
                         },
                         {
                             label: "Demo",
@@ -245,11 +261,11 @@ module.exports = {
                         },
                         {
                             label: "FireCMS PRO",
-                            to: "pro",
+                            to: "pro"
                         },
                         {
                             label: "Blog",
-                            to: "blog",
+                            to: "blog"
                         },
                         {
                             label: "Privacy policy",
@@ -262,7 +278,7 @@ module.exports = {
                         {
                             label: "Cookies policy",
                             to: "/policy/cookies_policy"
-                        },
+                        }
                     ]
                 },
                 {
@@ -278,8 +294,8 @@ module.exports = {
                         },
                         {
                             html: `<iframe src="https://github.com/sponsors/firecmsco/button" title="Sponsor FireCMS" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
-                                `,
-                        },
+                                `
+                        }
                         // {
                         //     html: `<iframe
                         //                 src="https://ghbtns.com/github-btn.html?user=FireCMSco&repo=FireCMS&type=star&count=true&size=large"
@@ -290,7 +306,7 @@ module.exports = {
                         //                 title="GitHub"/> `
                         // }
                     ]
-                },
+                }
                 // {
                 //     // title: "Community",
                 //     items: [
@@ -312,7 +328,7 @@ module.exports = {
             copyright: `© ${new Date().getFullYear()} - FireCMS S.L.`
         },
         prism: {
-            theme: prismThemes.vsDark,
+            theme: prismThemes.vsDark
         }
     },
     presets: [
@@ -329,20 +345,15 @@ module.exports = {
                             path: "2.0.0",
                             banner: "none"
                         },
-                        "1.0.0": {
-                            label: "1.0.0",
-                            path: "1.0.0",
-                            banner: "unmaintained"
-                        },
                         current: {
-                            label: "3.0.0-beta",
+                            label: "3.0.0-beta"
                         }
-                    },
+                    }
                 },
                 blog: {
                     showReadingTime: true,
                     feedOptions: {
-                        type: "all",
+                        type: "all"
                     }
                 },
                 gtag: {
@@ -361,7 +372,9 @@ module.exports = {
                         const items = await defaultCreateSitemapItems(rest);
 
                         const prioritiedItems = items.map(item => {
-                            if (item.url.startsWith("https://firecms.co/blog")) {
+                            if (item.url === "https://firecms.co/") {
+                                item.priority = 1.0;
+                            } else if (item.url.startsWith("https://firecms.co/blog")) {
                                 item.priority = 0.6;
                             } else if (item.url.startsWith("https://firecms.co/pricing")) {
                                 item.priority = 0.9;
@@ -369,6 +382,8 @@ module.exports = {
                                 item.priority = 0.9;
                             } else if (item.url.startsWith("https://firecms.co/ui")) {
                                 item.priority = 0.8;
+                            } else if (item.url.startsWith("https://firecms.co/docs/api")) {
+                                item.priority = 0.3;
                             } else if (item.url.startsWith("https://firecms.co/docs")) {
                                 item.priority = 0.6;
                             }
@@ -380,7 +395,7 @@ module.exports = {
                         });
                         return prioritiedItems;
                     }
-                },
+                }
             }
         ]
     ]

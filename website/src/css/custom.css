@@ -216,7 +216,13 @@ html[data-theme='dark'] {
 }
 
 article {
-    padding: 32px !important;
+    padding: 0 !important;
+}
+
+@media (min-width: 768px) {
+    article {
+        padding: 32px !important;
+    }
 }
 
 article a {

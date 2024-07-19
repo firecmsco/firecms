@@ -88,7 +88,7 @@ export function MenubarItem({
 }) {
     return (
         <MenubarPrimitive.Item
-            className={cls("group text-[13px] leading-none rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none outline-none data-[state=open]:bg-slate-100 data-[state=open]:dark:bg-gray-800 data-[state=open]:text-text-primary data-[state=open]:dark:text-text-primary-dark data-[highlighted]:bg-slate-100 data-[highlighted]:dark:bg-gray-800  data-[disabled]:text-disabled data-[disabled]:dark:text-disabled-dark data-[disabled]:pointer-events-none",
+            className={cls("group text-[13px] leading-none rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none outline-none data-[state=open]:bg-slate-100 data-[state=open]:dark:bg-gray-800 data-[state=open]:text-text-primary data-[state=open]:dark:text-text-primary-dark data-[highlighted]:bg-slate-100 data-[highlighted]:dark:bg-gray-800  data-[disabled]:text-text-disabled data-[disabled]:dark:text-text-disabled-dark data-[disabled]:pointer-events-none",
                 leftPadding ? "pl-5" : "",
                 disabled ? "pointer-events-none text-text-secondary dark:text-text-secondary-dark" : "text-text-primary dark:text-text-primary-dark",
                 className)}
@@ -143,7 +143,7 @@ export function MenubarSubTrigger({
 }) {
     return (
         <MenubarPrimitive.SubTrigger
-            className={cls("group text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none outline-none data-[state=open]:bg-slate-100 data-[state=open]:dark:bg-gray-800 data-[state=open]:text-text-primary data-[state=open]:dark:text-text-primary-dark data-[highlighted]:bg-slate-100 data-[highlighted]:dark:bg-gray-800  data-[disabled]:text-disabled data-[disabled]:dark:text-disabled-dark data-[disabled]:pointer-events-none",
+            className={cls("group text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none outline-none data-[state=open]:bg-slate-100 data-[state=open]:dark:bg-gray-800 data-[state=open]:text-text-primary data-[state=open]:dark:text-text-primary-dark data-[highlighted]:bg-slate-100 data-[highlighted]:dark:bg-gray-800  data-[disabled]:text-text-disabled data-[disabled]:dark:text-text-disabled-dark data-[disabled]:pointer-events-none",
                 className)}
             {...rest}
         >
@@ -188,7 +188,7 @@ export function MenubarCheckboxItem({
 }) {
     return (
         <MenubarPrimitive.CheckboxItem
-            className={cls("text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none pl-5 outline-none data-[highlighted]:bg-slate-100 data-[highlighted]:dark:bg-gray-800 data-[disabled]:text-disabled data-[disabled]:dark:text-disabled-dark data-[disabled]:pointer-events-none",
+            className={cls("text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none pl-5 outline-none data-[highlighted]:bg-slate-100 data-[highlighted]:dark:bg-gray-800 data-[disabled]:text-text-disabled data-[disabled]:dark:text-text-disabled-dark data-[disabled]:pointer-events-none",
                 className)}
             checked={checked}
             onCheckedChange={onCheckedChange}
@@ -251,7 +251,7 @@ export function MenubarRadioItem({
 }) {
     return (
         <MenubarPrimitive.RadioItem
-            className={cls("text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none pl-5 outline-none data-[highlighted]:bg-slate-100 data-[highlighted]:dark:bg-gray-800 data-[disabled]:text-disabled data-[disabled]:dark:text-disabled-dark data-[disabled]:pointer-events-none",
+            className={cls("text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none pl-5 outline-none data-[highlighted]:bg-slate-100 data-[highlighted]:dark:bg-gray-800 data-[disabled]:text-text-disabled data-[disabled]:dark:text-text-disabled-dark data-[disabled]:pointer-events-none",
                 className)}
             value={value}
             {...rest}>
@@ -270,7 +270,7 @@ export function MenubarShortcut({
 }) {
     return (
         <div
-            className={cls("ml-auto pl-5 group-data-[disabled]:text-disabled data-[disabled]:dark:text-disabled-dark",
+            className={cls("ml-auto pl-5 group-data-[disabled]:text-text-disabled data-[disabled]:dark:text-text-disabled-dark",
                 className)}
             {...rest}>
             {children}

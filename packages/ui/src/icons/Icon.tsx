@@ -17,7 +17,7 @@ const colorClassesMapping: Record<IconColor, string> = {
     success: "text-green-500",
     warning: "text-yellow-500",
     secondary: "text-secondary",
-    disabled: "text-disabled dark:text-disabled-dark",
+    disabled: "text-text-disabled dark:text-text-disabled-dark",
     error: "text-red-500"
 }
 

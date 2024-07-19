@@ -28,7 +28,7 @@ export function AutofillFeature() {
                         className={" flex content-center justify-center items-center"}>
                         <video
                             key={isDarkTheme ? "dark" : "light"}
-                            className={clsx("rounded-2xl border border-solid", defaultBorderMixin)}
+                            className={clsx("pointer-events-none rounded-2xl border border-solid", defaultBorderMixin)}
                             width="100%"
                             loop autoPlay muted>
                             <source

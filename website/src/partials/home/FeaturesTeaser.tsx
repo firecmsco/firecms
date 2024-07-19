@@ -84,6 +84,7 @@ function FeaturesTeaser() {
                             <video
                                 key={`demo_video_${isDarkTheme}`}
                                 style={{
+                                    pointerEvents: "none",
                                     maxWidth: 540,
                                     aspectRatio: 508 / 589
                                 }}
@@ -106,6 +107,7 @@ function FeaturesTeaser() {
                             <video
                                 className={clsx("rounded-2xl border", defaultBorderMixin)}
                                 style={{
+                                    pointerEvents: "none",
                                     maxWidth: 540,
                                     aspectRatio: 538 / 513
                                 }}

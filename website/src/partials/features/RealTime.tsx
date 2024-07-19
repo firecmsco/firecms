@@ -64,9 +64,9 @@ function RealTime() {
             >
                 <BrowserFrame>
                     <video
-                        // style={{
-                        //     aspectRatio: 842 / 463,
-                        // }}
+                        style={{
+                            pointerEvents: "none",
+                        }}
                         width="100%" loop autoPlay muted>
                         <source src={inlineEditingVideo}
                                 type="video/mp4"/>

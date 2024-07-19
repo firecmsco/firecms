@@ -33,12 +33,12 @@ export function DeveloperFeatures() {
                 <TwoColumns
                     reverseSmall={true}
                     animation={false}
-                    className={"p-8"}
+                    className={"p-4 md:p-8"}
                     left={<div
-                        className="relative flex-col font-mono">
+                        className="relative flex-col font-mono overflow-x-hidden">
 
                         <SyntaxHighlighter
-                            className={clsx("p-4 max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid", defaultBorderMixin)}
+                            className={clsx("md:p-4 max-w-md sm:max-w-full overflow-y-hidden border border-solid", defaultBorderMixin)}
                             language={"typescript"}
                             showLineNumbers={false}
                             wrapLines={true}
@@ -68,7 +68,7 @@ export function DeveloperFeatures() {
                         </div>
                     </div>
                     }
-                    right={<div className="p-8">
+                    right={<>
 
                         <div
                             className={"flex items-center mb-3"}>
@@ -105,15 +105,13 @@ export function DeveloperFeatures() {
                             API to create custom views and
                             components.
                         </p>
-
-                    </div>
-                    }/>
+                    </>}/>
             </Panel>
 
             <Panel color={"gray"} includeMargin={false} includePadding={false}>
                 <TwoColumns
                     animation={false}
-                    className={"p-8"}
+                    className={"p-4 md:p-8"}
                     left={
                         <div>
                             <div className={"flex items-center mb-3"}>
@@ -144,9 +142,9 @@ export function DeveloperFeatures() {
                     } right={
                     <>
                         <div
-                            className="relative flex-col font-mono">
+                            className="relative flex-col font-mono overflow-x-hidden">
                             <SyntaxHighlighter
-                                className={clsx("p-4 max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid", defaultBorderMixin)}
+                                className={clsx("md:p-4 max-w-md sm:max-w-full overflow-y-hidden border border-solid", defaultBorderMixin)}
                                 language={"typescript"}
                                 showLineNumbers={false}
                                 style={dracula}
