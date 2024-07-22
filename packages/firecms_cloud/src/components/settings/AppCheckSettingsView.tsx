@@ -68,6 +68,9 @@ export function AppCheckSettingsView() {
             a secret in your Firebase project settings, and a site key in the FireCMS config.
         </Typography>
 
+        <Typography>Remember to add the domain <b>{window.location.origin}</b> to your provider allowed
+            domains</Typography>
+
         <BooleanSwitchWithLabel value={enabled}
                                 position={"start"}
                                 size={"small"}

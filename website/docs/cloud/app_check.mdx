@@ -1,18 +1,27 @@
 ---
 id: app_check
-title: App check
+title: App Check
 ---
-
-:::note
-This feature is free while in beta. It will require a paid plan once it is out of beta.
-:::
 
 You can integrate Firebase App Check with your app to protect your backend resources from abuse, such as billing fraud
 or phishing. Firebase App Check works alongside other Firebase services, such as Firebase Authentication,
 to help secure your backend resources.
 
-FireCMS provides a simple way to integrate Firebase App Check with your app. You can enable it by providing the
-`appCheck` prop in your app configuration.
+FireCMS provides a simple way to integrate Firebase App Check with your app.
+
+:::important
+Remember to add the domain `app.firecms.co` to the list of allowed domains in AppCheck provider configuration.
+:::
+
+:::note
+This feature is requires a Plus or Pro plan.
+:::
+
+You can enable Firebase App Check in your app directly in the **project settings** in the FireCMS Cloud console,
+or by providing the `appCheck` prop in your app configuration.
+
+By implementing it in code, you can have more control over the configuration and the provider you want to use,
+including custom providers.
 
 You can define some options:
 - `provider`: The provider you want to use.
@@ -21,8 +30,7 @@ You can define some options:
 - `forceRefresh`: Whether to force a token refresh.
 
 
-
-## Providers
+# Providers
 
 The `provider` property is required and should be an instance of a Firebase AppCheck provider.
 You can use one of the following providers:

@@ -4,6 +4,7 @@ import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
 
 import { getAnalytics, logEvent } from "@firebase/analytics";
+import { ReCaptchaEnterpriseProvider } from "@firebase/app-check";
 
 import { CenteredView, } from "@firecms/ui";
 import {
@@ -92,6 +93,9 @@ function ProSampleInner() {
         loading
     } = useAppCheck({
         firebaseApp,
+        options: {
+            provider: new ReCaptchaEnterpriseProvider(process.env.VITE_RECAPTCHA_SITE_KEY as string)
+        }
     });
 
     const signInOptions: FirebaseSignInProvider[] = ["google.com"];

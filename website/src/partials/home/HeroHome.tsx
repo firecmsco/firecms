@@ -53,6 +53,17 @@ function HeroHome({}) {
                 className={"text-5xl md:text-7xl"}
                 style={{ color: "#FFA000" }}>Firebase</span>
 
+            <span style={{
+                color: "white",
+                // background: "#00ed64",
+                background: "#00684A",
+                borderRadius: "4px",
+                padding: "4px 8px",
+                fontSize: "large",
+                position: "absolute",
+                transform: "translateX(-78px) translateY(60px) rotate(-13deg)"
+            }}>or MongoDB</span>
+
         </h1>
 
         <HeroButtons/>

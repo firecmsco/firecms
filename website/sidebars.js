@@ -15,7 +15,7 @@ module.exports = {
         "cloud/app_config",
         "cloud/deployment",
         "cloud/app_check",
-        "cloud/creating_service_account",
+        "cloud/creating_service_account"
       ]
     },
     {
@@ -25,26 +25,32 @@ module.exports = {
       className: "pro-sidebar-category",
       "items": [
         {
-          type: 'doc',
+          type: "doc",
           id: "pro/pro_quickstart",
           className: "pro-sidebar-item"
         },
         {
-          type: 'doc',
+          type: "doc",
           id: "pro/sample_pro",
           className: "pro-sidebar-item"
         },
         {
-          type: 'doc',
+          type: "doc",
           id: "pro/main_components",
           className: "pro-sidebar-item"
         },
         {
-          type: 'doc',
+          type: "doc",
           id: "pro/deployment",
           className: "pro-sidebar-item"
         },
-        "firebase_setup",
+        {
+          type: "doc",
+          id: "pro/app_check",
+          className: "pro-sidebar-item"
+        },
+        "pro/user_management",
+        "firebase_setup"
       ]
     },
     {
@@ -140,7 +146,8 @@ module.exports = {
       "type": "category",
       "label": "UI components",
       "collapsed": false,
-      link: {type: 'doc', id: 'components'},
+      link: { type: "doc",
+id: "components" },
       "items": [
         "components/alert",
         "components/avatar",
@@ -181,7 +188,7 @@ module.exports = {
     },
     "migrating_from_v3_beta",
     "migrating_from_v2",
-    "changelog",
+    "changelog"
     // {
     //     "type":"category",
     //     "label":"API reference",

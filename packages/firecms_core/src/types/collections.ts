@@ -82,7 +82,7 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
      * as the title in entity related views and references.
      * If not specified, the first property simple text property will be used.
      */
-    titleProperty?: keyof M,
+    titleProperty?: keyof M;
 
     /**
      * Can this collection be edited by the end user.
