@@ -16,6 +16,7 @@ import {
 import { useFireCMSBackend, useProjectConfig } from "../../hooks";
 import { ProjectSubscriptionPlans, SubscriptionPlanWidget } from "../subscriptions";
 import { SecurityRulesInstructions } from "../SecurityRulesInstructions";
+import { AppCheckSettingsView } from "./AppCheckSettingsView";
 
 export function ProjectSettings() {
 
@@ -57,6 +58,8 @@ export function ProjectSettings() {
             <div className={"flex flex-col gap-2"}>
                 <SecurityRulesInstructions/>
             </div>
+
+            <AppCheckSettingsView/>
 
         </CenteredView>
     );

@@ -62,6 +62,7 @@ export function FireCMSCloudVersions() {
                     <li className={"list-disc"}>Theme and logo customization</li>
                     <li className={"list-disc"}>Custom user roles</li>
                     <li className={"list-disc"}>GPT-4 content generation</li>
+                    <li className={"list-disc"}>AppCheck</li>
                 </ul>
             </div>
 

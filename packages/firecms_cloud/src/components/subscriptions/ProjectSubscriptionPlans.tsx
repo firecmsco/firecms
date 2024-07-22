@@ -103,6 +103,9 @@ export function ProjectSubscriptionPlans({ uid }: {
                             <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>
                                 Unlimited data export
                             </li>
+                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>
+                                AppCheck
+                            </li>
                         </ul>
                     </Card>
 

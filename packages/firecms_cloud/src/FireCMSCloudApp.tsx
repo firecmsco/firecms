@@ -315,7 +315,7 @@ export function FireCMSClientWithController({
 
     const appCheckResult = useAppCheck({
         firebaseApp: clientFirebaseApp,
-        options: appConfig?.appCheck
+        options: appConfig?.appCheck ?? projectConfig.appCheck
     });
 
     const authController: FirebaseAuthController = useFirebaseAuthController({

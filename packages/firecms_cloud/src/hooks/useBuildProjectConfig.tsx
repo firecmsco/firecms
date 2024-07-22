@@ -1,10 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { doc, getFirestore, onSnapshot, setDoc } from "@firebase/firestore";
+import { ReCaptchaEnterpriseProvider, ReCaptchaV3Provider } from "@firebase/app-check";
+
 import { FirebaseApp } from "@firebase/app";
 import { ProjectSubscriptionPlan } from "../types";
 import { UploadFileProps } from "@firecms/core";
 import { FirebaseStorage, getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "@firebase/storage";
 import { darkenColor, hexToRgbaWithOpacity } from "../utils";
+import { AppCheckOptions } from "@firecms/firebase";
 
 const DEFAULT_PRIMARY_COLOR = "#0070F4";
 const DEFAULT_SECONDARY_COLOR = "#FF5B79";
@@ -46,6 +49,10 @@ export type ProjectConfig = {
     blocked: boolean;
 
     creationType?: "new" | "existing";
+
+    appCheck?: AppCheckOptions;
+    serializedAppCheck: SerializedAppCheckOptions | null;
+    updateAppCheck: (appCheck: SerializedAppCheckOptions | null) => Promise<void>;
 };
 
 interface ProjectConfigParams {
@@ -72,6 +79,9 @@ export function useBuildProjectConfig({
     const [clientConfigError, setClientConfigError] = useState<Error | undefined>();
     const [localTextSearchEnabled, setLocalTextSearchEnabled] = useState<boolean>(false);
     const [blocked, setBlocked] = useState<boolean>(false);
+
+    const [appCheck, setAppCheck] = useState<AppCheckOptions | undefined>();
+    const [serializedAppCheck, setSerializedAppCheck] = useState<SerializedAppCheckOptions | null>(null);
 
     const [customizationRevision, setCustomizationRevision] = useState<string | undefined>();
     const [creationType, setCreationType] = useState<"new" | "existing" | undefined>();
@@ -179,6 +189,19 @@ export function useBuildProjectConfig({
                     setCreationType(snapshot.get("creation_type"));
                     setBlocked(snapshot.get("blocked"));
 
+                    const updatedSerializedAppCheck = snapshot.get("app_check");
+                    if (updatedSerializedAppCheck) {
+                        if (plan === "free") {
+                            console.warn("AppCheck is not supported in the free plan. Ignoring configuration. Please upgrade to PLUS in order to use this feature")
+                            setAppCheck(undefined);
+                            setSerializedAppCheck(null);
+                        } else {
+                            const appCheckOptions = updatedSerializedAppCheck ? deserializeAppCheckOptions(updatedSerializedAppCheck) : undefined;
+                            setAppCheck(appCheckOptions);
+                            setSerializedAppCheck(updatedSerializedAppCheck);
+                        }
+                    }
+
                     const firebaseConfig = snapshot.get("firebase_config");
 
                     loadedProjectIdRef.current = projectId;
@@ -231,6 +254,13 @@ export function useBuildProjectConfig({
             setDoc(doc(firestore, configPath), { secondary_color: color }, { merge: true });
     }, [configPath, canModifyTheme]);
 
+    const updateAppCheck = useCallback(async (appCheck: SerializedAppCheckOptions | null): Promise<void> => {
+        if (!backendFirebaseApp) throw Error("useBuildProjectConfig Firebase not initialised");
+        const firestore = getFirestore(backendFirebaseApp);
+        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        setDoc(doc(firestore, configPath), { app_check: appCheck }, { merge: true });
+    }, [configPath]);
+
     return {
 
         projectId,
@@ -257,7 +287,10 @@ export function useBuildProjectConfig({
         secondaryColor,
         updatePrimaryColor,
         updateSecondaryColor,
-        blocked
+        blocked,
+        updateAppCheck,
+        appCheck,
+        serializedAppCheck
     }
 }
 
@@ -271,4 +304,31 @@ const uploadFile = (storage: FirebaseStorage, {
     console.debug("Uploading file", usedFilename, file, path, metadata);
     return uploadBytes(ref(storage, `${path}/${usedFilename}`), file, metadata)
         .then(snapshot => snapshot.ref);
+}
+
+const deserializeAppCheckOptions = (appCheck: SerializedAppCheckOptions): AppCheckOptions => {
+    if (appCheck.provider === "recaptcha_v3") {
+        return {
+            provider: new ReCaptchaV3Provider(appCheck.siteKey),
+            isTokenAutoRefreshEnabled: appCheck.isTokenAutoRefreshEnabled,
+            debugToken: appCheck.debugToken,
+            forceRefresh: appCheck.forceRefresh
+        }
+    } else if (appCheck.provider === "recaptcha_enterprise") {
+        return {
+            provider: new ReCaptchaEnterpriseProvider(appCheck.siteKey),
+            isTokenAutoRefreshEnabled: appCheck.isTokenAutoRefreshEnabled,
+            debugToken: appCheck.debugToken,
+            forceRefresh: appCheck.forceRefresh
+        }
+    }
+    throw Error("Invalid app check type");
+}
+
+export interface SerializedAppCheckOptions {
+    provider: "recaptcha_v3" | "recaptcha_enterprise";
+    siteKey: string;
+    isTokenAutoRefreshEnabled?: boolean;
+    debugToken?: string;
+    forceRefresh?: boolean;
 }

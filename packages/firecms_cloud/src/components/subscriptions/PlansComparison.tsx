@@ -40,7 +40,7 @@ export function PlansComparison() {
         <div
             className="h-full max-w-sm p-6 border border-solid border-gray-200 rounded-lg shadow dark:border-gray-700 flex flex-col">
 
-            <h3 className={"text-2xl md:text-4xl font-bold text-center text-gray-800 dark:text-gray-200 uppercase my-4"}>
+            <h3 className={"text-2xl md:text-4xl font-bold text-center text-gray-800 dark:text-gray-200 uppercase my-3"}>
                 Free
             </h3>
             <div className={"grow"}>
@@ -69,7 +69,7 @@ export function PlansComparison() {
         <div
             className="h-full max-w-sm p-6 rounded-lg flex flex-col outline-none ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent">
 
-            <h3 className={"text-2xl md:text-4xl font-bold text-center dark:text-primary text-primary uppercase my-4"}>
+            <h3 className={"text-2xl md:text-4xl font-bold text-center dark:text-primary text-primary uppercase my-3"}>
                 Plus
             </h3>
             <div className={"grow"}>
@@ -85,6 +85,7 @@ export function PlansComparison() {
                     <li className={"ml-8 list-disc"}>Theme and logo customization</li>
                     <li className={"ml-8 list-disc"}>Custom user roles</li>
                     <li className={"ml-8 list-disc"}>GPT-4 content generation</li>
+                    <li className={"ml-8 list-disc"}>AppCheck</li>
                 </ul>
             </div>
 
@@ -105,7 +106,7 @@ export function PlansComparison() {
         <div
             className="h-full max-w-sm p-6 border border-solid border-gray-200 rounded-lg shadow dark:border-gray-700 flex flex-col">
 
-            <h3 className={"text-2xl md:text-4xl font-bold text-center text-gray-800 dark:text-gray-200 uppercase my-4"}>
+            <h3 className={"text-2xl md:text-4xl font-bold text-center text-gray-800 dark:text-gray-200 uppercase my-3"}>
                 Pro
             </h3>
             <div className={"grow"}>
