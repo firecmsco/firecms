@@ -67,6 +67,7 @@ export const TableReferenceFieldSuccess = React.memo(
         }, [updateValue]);
 
         const onMultipleEntitiesSelected = useCallback((entities: Entity<any>[]) => {
+            console.log("onMultipleEntitiesSelected", entities);
             updateValue(entities.map((e) => getReferenceFrom(e)));
         }, [updateValue]);
 

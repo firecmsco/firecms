@@ -199,6 +199,7 @@ const EntityPreviewContainerInner = React.forwardRef<HTMLDivElement, EntityPrevi
         }}
         className={cls(
             "bg-white dark:bg-gray-900",
+            "min-h-[42px]",
             fullwidth ? "w-full" : "",
             "items-center",
             hover ? "hover:bg-slate-50 dark:hover:bg-gray-800 group-hover:bg-slate-50 dark:group-hover:bg-gray-800" : "",

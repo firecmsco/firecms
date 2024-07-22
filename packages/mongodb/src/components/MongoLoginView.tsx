@@ -1,19 +1,9 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 
-import {
-    ArrowBackIcon,
-    EmailIcon,
-    IconButton,
-    TextField,
-} from "@firecms/ui";
-import {
-    ErrorView,
-    FireCMSLogo,
-    useModeController
-} from "@firecms/core";
+import { ArrowBackIcon, Button, CircularProgress, EmailIcon, IconButton, TextField, Typography, } from "@firecms/ui";
+import { ErrorView, FireCMSLogo, useModeController } from "@firecms/core";
 
 import { MongoAuthController } from "../useMongoAuthController";
-import { Button, CircularProgress, Typography } from "@firecms/ui";
 
 /**
  *
@@ -126,7 +116,7 @@ export function MongoLoginView({
                 </div>
                 {notAllowedMessage &&
                     <div className="p-4">
-                        <ErrorView error={notAllowedMessage} />
+                        <ErrorView error={notAllowedMessage}/>
                     </div>
                 }
                 {buildErrorView()}
@@ -134,7 +124,7 @@ export function MongoLoginView({
                     <LoginButton
                         disabled={disabled}
                         text={"Email/password"}
-                        icon={<EmailIcon size={"large"} />}
+                        icon={<EmailIcon size={"large"}/>}
                         onClick={() => {
                             setRegistrationSelected(false);
                             setPasswordLoginSelected(true);
@@ -145,7 +135,7 @@ export function MongoLoginView({
                     <LoginButton
                         disabled={disabled}
                         text={"Register"}
-                        icon={<EmailIcon size={"large"} />}
+                        icon={<EmailIcon size={"large"}/>}
                         onClick={() => {
                             setRegistrationSelected(true);
                             setPasswordLoginSelected(false);
@@ -178,8 +168,11 @@ export function LoginButton({
                             }: { icon: React.ReactNode, onClick: () => void, text: string, disabled?: boolean }) {
     return (
         <div className="m-2 w-full">
-            <button className={`w-full border-2 border-solid ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
-                    disabled={disabled} onClick={onClick}>
+            <Button
+                variant={"outlined"}
+                disabled={disabled}
+                className={`w-full`}
+                onClick={onClick}>
                 <div className="flex items-center justify-center p-2 w-full h-8">
                     <div className="flex flex-col items-center justify-center w-8">
                         {icon}
@@ -188,7 +181,7 @@ export function LoginButton({
                         {text}
                     </div>
                 </div>
-            </button>
+            </Button>
         </div>
     )
 }
@@ -254,56 +247,56 @@ function LoginForm({
     }
     const label = registrationMode
         ? "Pick an email and password to create a new account"
-        : (loginMode ? "Please enter your password" : "Please enter your email");
+        : "Please enter your email and password";
 
     const button = registrationMode ? "Create account" : (loginMode ? "Login" : "Ok");
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div className="container space-y-2">
-                <div className="w-full">
-                    <IconButton onClick={onBackPressed}>
-                        <ArrowBackIcon/>
-                    </IconButton>
-                </div>
+        <form onSubmit={handleSubmit} className="flex flex-col items-center w-full max-w-[500px] gap-2">
+            <div className="w-full">
+                <IconButton onClick={onBackPressed}>
+                    <ArrowBackIcon/>
+                </IconButton>
+            </div>
 
-                <div
-                    className={`${registrationMode && disableSignupScreen ? "hidden" : "flex justify-center"} w-full py-2`}>
-                    <Typography align={"center"} variant={"subtitle2"}>{label}</Typography>
-                </div>
+            <div
+                className={`${registrationMode && disableSignupScreen ? "hidden" : "flex justify-center"} w-full py-2`}>
+                <Typography align={"center"} variant={"subtitle2"}>{label}</Typography>
+            </div>
 
-                <div className="w-full inherit">
-                    <TextField placeholder="Email"
-                               autoFocus
-                               value={email ?? ""}
-                               disabled={authController.initialLoading}
-                               type="email"
-                               onChange={(event) => setEmail(event.target.value)}/>
-                </div>
+            <div className="w-full inherit">
+                <TextField placeholder="Email"
+                           className={"w-full"}
+                           autoFocus
+                           value={email ?? ""}
+                           disabled={authController.initialLoading}
+                           type="email"
+                           onChange={(event) => setEmail(event.target.value)}/>
+            </div>
 
-                <div className="w-full">
-                    {registrationMode && noUserComponent}
-                </div>
+            <div className="w-full">
+                {registrationMode && noUserComponent}
+            </div>
 
-                <div
-                    className={`${loginMode || (registrationMode && !disableSignupScreen) ? "inherit" : "hidden"} w-full`}>
-                    <TextField placeholder="Password"
-                               value={password ?? ""}
-                               disabled={authController.initialLoading}
-                               inputRef={passwordRef}
-                               type="password"
-                               onChange={(event) => setPassword(event.target.value)}/>
-                </div>
+            <div
+                className={`${loginMode || (registrationMode && !disableSignupScreen) ? "inherit" : "hidden"} w-full`}>
+                <TextField placeholder="Password"
+                           className={"w-full"}
+                           value={password ?? ""}
+                           disabled={authController.initialLoading}
+                           inputRef={passwordRef}
+                           type="password"
+                           onChange={(event) => setPassword(event.target.value)}/>
+            </div>
 
-                <div
-                    className={`${registrationMode && disableSignupScreen ? "hidden" : "flex justify-end items-center"} w-full`}>
-                    {authController.initialLoading && (
-                        <CircularProgress/>
-                    )}
-                    <Button type="submit" variant={"outlined"}>
-                        {button}
-                    </Button>
-                </div>
+            <div
+                className={`${registrationMode && disableSignupScreen ? "hidden" : "flex justify-end items-center"} w-full`}>
+                {authController.initialLoading && (
+                    <CircularProgress/>
+                )}
+                <Button type="submit" variant={"outlined"}>
+                    {button}
+                </Button>
             </div>
         </form>
     );

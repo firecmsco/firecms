@@ -2,7 +2,7 @@ import { useCallback } from "react";
 
 import { App, BSON } from "realm-web";
 import {
-    DataSource,
+    DataSourceDelegate,
     DeleteEntityProps,
     Entity,
     EntityCollection,
@@ -10,23 +10,16 @@ import {
     EntityValues,
     FetchCollectionProps,
     FetchEntityProps,
-    PropertyConfig,
     FilterValues,
     ListenCollectionProps,
     ListenEntityProps,
+    PropertyConfig,
     SaveEntityProps,
     WhereFilterOp
 } from "@firecms/core";
-import {
-    addValueAtIndex,
-    getEntityIndex,
-    removeValueAtIndex,
-    replaceValueAtIndex,
-    updateValueAtIndex
-} from "./utils";
+import { addValueAtIndex, getEntityIndex, removeValueAtIndex, replaceValueAtIndex, updateValueAtIndex } from "./utils";
 
 type ChangeEvent = any;
-
 
 /**
  *
@@ -52,18 +45,16 @@ const firecmsToMongoDB: Record<WhereFilterOp, string> = {
     // "array-contains-any": ??? // There's no MongoDB equivalent
 };
 
-
 /**
  * Use this hook to build a {@link DataSource} based on Firestore
  * @param firebaseApp
  *
  */
-export function useMongoDataSource({
-                                       app,
-                                       cluster,
-                                       database,
-                                   }: UseMongoDataSourceProps): DataSource {
-
+export function useMongoDataSourceDelegate({
+                                               app,
+                                               cluster,
+                                               database,
+                                           }: UseMongoDataSourceProps): DataSourceDelegate {
 
     const buildQuery = useCallback((
         filter: FilterValues<any> | undefined,
@@ -88,17 +79,16 @@ export function useMongoDataSource({
         const options: Realm.Services.MongoDB.FindOptions = {};
         if (orderBy && order) {
             // @ts-ignore
-            options['sort'] = { [orderBy]: (order === 'desc' ? -1 : 1) };
+            options["sort"] = { [orderBy]: (order === "desc" ? -1 : 1) };
         }
 
         if (limit) {
             // @ts-ignore
-            options['limit'] = limit;
+            options["limit"] = limit;
         }
 
         return [queryParams, options];
     }, []);
-
 
     const fetchCollection = useCallback(async <M extends Record<string, any>>({
                                                                                   path,
@@ -170,7 +160,7 @@ export function useMongoDataSource({
         if (!app?.currentUser) throw Error("useMongoDataSource app not initialised");
         const mdb = app.currentUser.mongoClient(cluster);
         const mongoCollection = mdb.db(database).collection(path);
-        const mongoValues = valuesToMongoValues(values);
+        const mongoValues = values;
         if (status === "existing") {
             await mongoCollection
                 .updateOne({
@@ -181,7 +171,7 @@ export function useMongoDataSource({
             return {
                 id: entityId as string,
                 path: path,
-                values: values as M
+                values: convertFromMongoValues(values) as M
             };
         }
         const res = await mongoCollection
@@ -205,10 +195,11 @@ export function useMongoDataSource({
             onError
         }: ListenEntityProps<M>): () => void => {
 
-
-        // TODO
-        fetchEntity({ path, entityId, collection }).then((entity) => {
-            console.log("fetchEntity entity", { path, entityId, collection, entity });
+        fetchEntity({
+            path,
+            entityId,
+            collection
+        }).then((entity) => {
             if (entity)
                 onUpdate(entity);
             if (!entity)
@@ -256,8 +247,7 @@ export function useMongoDataSource({
             searchString,
             orderBy,
             order
-        }).then(updateCurrentEntities)
-            .catch(onError)
+        }).then(updateCurrentEntities).catch(onError)
 
         const onDocDelete = (change: ChangeEvent) => {
             const idx = getEntityIndex(currentEntities, { id: change.documentKey._id });
@@ -318,7 +308,9 @@ export function useMongoDataSource({
                 }
             }
         };
+
         watchCollection();
+
         return () => {
             // @ts-ignore
             stream?.return();
@@ -339,13 +331,12 @@ export function useMongoDataSource({
         const mongoCollection = mdb.db(database).collection(entity.path);
         const res = await mongoCollection
             .deleteOne({
-                _id: entity.id
+                _id: new BSON.ObjectId(entity.id)
             });
         if (res.deletedCount === 0) {
             console.error("No entities were deleted", res);
             throw Error("No entities were deleted");
         }
-        return;
 
     }, [app.currentUser, cluster, database]);
 
@@ -370,6 +361,22 @@ export function useMongoDataSource({
     }, []);
 
     return {
+        cmsToDelegateModel(data: any): any {
+            return valuesToMongoValues(data);
+        },
+        delegateToCMSModel(data: any): any {
+            return convertFromMongoValue(data);
+        },
+        setDateToMidnight(input: any): any {
+            if (!input) return input;
+            if (!(input instanceof Date)) return input;
+            const date = new Date(input);
+            date.setHours(0, 0, 0, 0);
+            return date;
+        },
+        currentTime(): any {
+            return new Date();
+        },
 
         /**
          * Check if the given property is unique in the given collection
@@ -468,25 +475,28 @@ export function useMongoDataSource({
 }
 
 const mongoToEntity = (doc: any, path: string): Entity<any> => {
-    const { _id, ...data } = doc;
+    const {
+        _id,
+        ...data
+    } = doc;
     return {
         id: _id.toString(),
         path: path,
-        values: parseObject(data)
+        values: convertFromMongoValues(data)
     };
 };
 
-const parseObject = (values: object): object => {
+const convertFromMongoValues = (values: object): object => {
     return Object
         .entries(values)
-        .map(([k, v]) => ({ [k]: parseData(v) }))
+        .map(([k, v]) => ({ [k]: convertFromMongoValue(v) }))
         .reduce((a, b) => ({ ...a, ...b }), {});
 }
 
-function parseData(value: unknown): any {
+function convertFromMongoValue(value: unknown): any {
 
     if (typeof value !== "object" || value === null) return value;
-    if (Array.isArray(value)) return value.map(parseData);
+    if (Array.isArray(value)) return value.map(convertFromMongoValue);
 
     if (typeof value === "object") {
         if (value instanceof Date) {
@@ -495,11 +505,10 @@ function parseData(value: unknown): any {
         if ("path" in value && "id" in value && typeof value.path === "string") {
             return new EntityReference((value.id as any).toString(), value.path);
         }
-        return parseObject(value);
+        return convertFromMongoValues(value);
     }
     return value;
 }
-
 
 function valuesToMongoValues(values: EntityValues<any>) {
     return Object.entries(values)
@@ -508,7 +517,7 @@ function valuesToMongoValues(values: EntityValues<any>) {
 }
 
 function valueToMongoValue(value: any): any {
-    if(value === null)
+    if (value === null)
         return null;
     if (value.isEntityReference && value.isEntityReference()) {
         return {
@@ -516,7 +525,7 @@ function valueToMongoValue(value: any): any {
             path: value.path
         };
     }
-    if (typeof value !== "object" || value === null) return value;
+    if (typeof value !== "object") return value;
     if (Array.isArray(value)) return value.map(valueToMongoValue);
     if (typeof value === "object") {
         if (value instanceof Date) {
@@ -526,4 +535,3 @@ function valueToMongoValue(value: any): any {
     }
     return value;
 }
-

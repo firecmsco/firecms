@@ -54,9 +54,10 @@ function HeroHome({}) {
                 style={{ color: "#FFA000" }}>Firebase</span>
 
             <span style={{
-                color: "white",
-                // background: "#00ed64",
-                background: "#00684A",
+                color: "#001E2B",
+                background: "#00ed64",
+                // color: "white",
+                // background: "#00684A",
                 borderRadius: "4px",
                 padding: "4px 8px",
                 fontSize: "large",

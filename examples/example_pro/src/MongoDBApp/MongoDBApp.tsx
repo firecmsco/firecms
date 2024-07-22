@@ -6,6 +6,7 @@ import "@fontsource/jetbrains-mono";
 import {
     AppBar,
     CircularProgressCenter,
+    DataSourceDelegate,
     Drawer,
     FireCMS,
     ModeControllerProvider,
@@ -19,18 +20,17 @@ import {
     useValidateAuthenticator
 } from "@firecms/core";
 
-import {
-    FirebaseAuthController,
-    FirebaseLoginView,
-    FirebaseSignInProvider,
-    useFirebaseAuthController,
-    useFirebaseRTDBDelegate,
-    useFirebaseStorageSource,
-    useInitialiseFirebase,
-} from "@firecms/firebase";
+import { useFirebaseStorageSource, useInitialiseFirebase, } from "@firecms/firebase";
 
 import { productsCollection } from "./collections/products_collection";
 import { CenteredView } from "@firecms/ui";
+import {
+    MongoAuthController,
+    MongoLoginView,
+    useInitRealmMongodb,
+    useMongoAuthController,
+    useMongoDataSourceDelegate
+} from "@firecms/mongodb";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCIZxRC_0uy9zU2sQrEo88MigD4Z9ktYzo",
@@ -42,7 +42,17 @@ const firebaseConfig = {
     appId: "1:380781473867:web:94e8457d48c642b1655dce"
 };
 
-function RTDBApp() {
+const atlasConfig = {
+    "appId": "application-0-pipnj",
+    "appUrl": "https://services.cloud.mongodb.com/groups/63c475b9c324f74b835685c0/apps/64d63e85667be3b511a93f3a",
+    "baseUrl": "https://services.cloud.mongodb.com",
+    "clientApiBaseUrl": "https://europe-west1.gcp.services.cloud.mongodb.com",
+    "dataApiBaseUrl": "https://europe-west1.gcp.data.mongodb-api.com",
+    "dataExplorerLink": "https://cloud.mongodb.com/links/63c475b9c324f74b835685c0/explorer/Cluster0/database/collection/find",
+    "dataSourceName": "mongodb-atlas"
+}
+
+function MongoDBApp() {
 
     const name = "My FireCMS App";
 
@@ -54,27 +64,29 @@ function RTDBApp() {
         firebaseConfig
     });
 
+    const { app } = useInitRealmMongodb(atlasConfig);
+
     /**
      * Controller used to manage the dark or light color mode
      */
     const modeController = useBuildModeController();
-
-    const signInOptions: FirebaseSignInProvider[] = ["google.com"];
-    /**
-     * Controller for managing authentication
-     */
-    const authController: FirebaseAuthController = useFirebaseAuthController({
-        firebaseApp,
-        signInOptions
-    });
 
     /**
      * Controller for saving some user preferences locally.
      */
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
-    const RTDBDelegate = useFirebaseRTDBDelegate({
-        firebaseApp
+    const authController: MongoAuthController = useMongoAuthController({
+        app
+    });
+
+    const cluster = "mongodb-atlas"
+    const database = "todo"
+
+    const mongoDataSourceDelegate = useMongoDataSourceDelegate({
+        app,
+        cluster,
+        database
     });
 
     /**
@@ -94,14 +106,14 @@ function RTDBApp() {
     } = useValidateAuthenticator({
         authController,
         authenticator: () => true,
-        dataSourceDelegate: RTDBDelegate,
+        dataSourceDelegate: mongoDataSourceDelegate,
         storageSource
     });
 
     const navigationController = useBuildNavigationController({
         collections: [productsCollection],
         authController,
-        dataSourceDelegate: RTDBDelegate
+        dataSourceDelegate: mongoDataSourceDelegate
     });
 
     if (firebaseConfigLoading || !firebaseApp) {
@@ -122,7 +134,7 @@ function RTDBApp() {
                     navigationController={navigationController}
                     authController={authController}
                     userConfigPersistence={userConfigPersistence}
-                    dataSourceDelegate={RTDBDelegate}
+                    dataSourceDelegate={mongoDataSourceDelegate}
                     storageSource={storageSource}
 
                 >
@@ -136,13 +148,11 @@ function RTDBApp() {
                             component = <CircularProgressCenter size={"large"}/>;
                         } else {
                             if (!canAccessMainView) {
-                                const LoginViewUsed = FirebaseLoginView;
                                 component = (
-                                    <LoginViewUsed
+                                    <MongoLoginView
                                         allowSkipLogin={false}
-                                        signInOptions={signInOptions}
-                                        firebaseApp={firebaseApp}
                                         authController={authController}
+                                        registrationEnabled={true}
                                         notAllowedError={notAllowedError}/>
                                 );
                             } else {
@@ -167,4 +177,4 @@ function RTDBApp() {
     );
 }
 
-export default RTDBApp;
+export default MongoDBApp;

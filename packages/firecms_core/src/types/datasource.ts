@@ -66,9 +66,8 @@ export interface DeleteEntityProps<M extends Record<string, any> = any> {
 }
 
 /**
- * Implement this interface and pass it to a {@link FireCMS}
- * to connect it to your data source.
- * A Firestore implementation of this interface can be found in {@link useFirestoreDataSource}
+ * Component in charge of communicating with the data source.
+ * Usually you won't need to implement this interface, but a {@link DataSourceDelegate} instead.
  * @group Datasource
  */
 export interface DataSource {

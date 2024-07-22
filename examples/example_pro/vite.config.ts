@@ -24,6 +24,7 @@ export default defineConfig({
             "@firecms/formex": path.resolve(__dirname, "../../packages/formex/src"),
             "@firecms/editor": path.resolve(__dirname, "../../packages/editor/src"),
             "@firecms/datatalk": path.resolve(__dirname, "../../packages/datatalk/src"),
+            "@firecms/mongodb": path.resolve(__dirname, "../../packages/mongodb/src"),
             "@firecms/firebase": path.resolve(__dirname, "../../packages/firebase_firecms/src"),
             "@firecms/data_enhancement": path.resolve(__dirname, "../../packages/data_enhancement/src"),
             "@firecms/data_import": path.resolve(__dirname, "../../packages/data_import/src"),
