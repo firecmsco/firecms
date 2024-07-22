@@ -230,7 +230,7 @@ function DefaultValuesField({
             mode={property.mode ?? "date"}
             size={"small"}
             value={defaultValue ?? undefined}
-            onChange={(dateValue: Date | undefined) => {
+            onChange={(dateValue: Date | null) => {
                 onValueChange(dateValue);
             }}
             clearable={true}

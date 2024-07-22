@@ -95,7 +95,7 @@ export function DateTimeFilterField({
                     size={"medium"}
                     locale={locale}
                     value={internalValue ?? undefined}
-                    onChange={(dateValue: Date | undefined) => {
+                    onChange={(dateValue: Date | null) => {
                         updateFilter(operation, dateValue === null ? undefined : dateValue);
                     }}
                     clearable={true}
