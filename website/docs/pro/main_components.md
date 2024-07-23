@@ -5,8 +5,6 @@ sidebar_label: Main Components
 description: FireCMS provides a set of stylable components that scaffold the CMS interface. These components are designed to be easily customizable and can be extended to fit your needs.
 ---
 
-## Components
-
 FireCMS provides a set of stylable components that scaffold the CMS interface.
 These components are designed to be easily customizable and can be extended to fit your needs. The main components are:
 

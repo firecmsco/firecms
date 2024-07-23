@@ -50,7 +50,7 @@ const firecmsToMongoDB: Record<WhereFilterOp, string> = {
  * @param firebaseApp
  *
  */
-export function useMongoDataSourceDelegate({
+export function useMongoDBDelegate({
                                                app,
                                                cluster,
                                                database,

@@ -16,7 +16,7 @@ export type MongoAuthController = AuthController & {
  * Use this hook to build an {@link AuthController} based on Firebase Auth
  *
  */
-export const useMongoAuthController = ({
+export const useMongoDBAuthController = ({
                                            app
                                        }: MongoAuthControllerProps): MongoAuthController => {
 

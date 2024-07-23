@@ -28,8 +28,8 @@ import {
     MongoAuthController,
     MongoLoginView,
     useInitRealmMongodb,
-    useMongoAuthController,
-    useMongoDataSourceDelegate
+    useMongoDBAuthController,
+    useMongoDBDelegate
 } from "@firecms/mongodb";
 
 const firebaseConfig = {
@@ -76,14 +76,14 @@ function MongoDBApp() {
      */
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
-    const authController: MongoAuthController = useMongoAuthController({
+    const authController: MongoAuthController = useMongoDBAuthController({
         app
     });
 
     const cluster = "mongodb-atlas"
     const database = "todo"
 
-    const mongoDataSourceDelegate = useMongoDataSourceDelegate({
+    const mongoDataSourceDelegate = useMongoDBDelegate({
         app,
         cluster,
         database

@@ -3,7 +3,7 @@ import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { ArrowBackIcon, Button, CircularProgress, EmailIcon, IconButton, TextField, Typography, } from "@firecms/ui";
 import { ErrorView, FireCMSLogo, useModeController } from "@firecms/core";
 
-import { MongoAuthController } from "../useMongoAuthController";
+import { MongoAuthController } from "../useMongoDBAuthController";
 
 /**
  *

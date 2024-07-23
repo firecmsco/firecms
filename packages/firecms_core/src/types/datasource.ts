@@ -1,4 +1,4 @@
-import { Entity, EntityReference, EntityStatus, EntityValues, GeoPoint } from "./entities";
+import { Entity, EntityStatus, EntityValues } from "./entities";
 import { EntityCollection, FilterValues } from "./collections";
 import { ResolvedEntityCollection } from "./resolved_entities";
 import { FireCMSContext } from "./firecms_context";
@@ -331,8 +331,8 @@ export interface DataSourceDelegate {
     /**
      * Save entity to the specified path
      * @param path
-     * @param id
-     * @param collection
+     * @param entityId
+     * @param values
      * @param status
      */
     saveEntity<M extends Record<string, any> = any>({
@@ -378,7 +378,7 @@ export interface DataSourceDelegate {
     /**
      * Get the object to generate the current time in the datasource
      */
-    currentTime(): any;
+    currentTime?: () => any;
 
     delegateToCMSModel: (data: any) => any;
 

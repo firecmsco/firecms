@@ -216,7 +216,7 @@ export function useBuildDataSource({
                         inputValues: firestoreValues,
                         properties,
                         status,
-                        timestampNowValue: delegate.currentTime(),
+                        timestampNowValue: delegate.currentTime?.() ?? new Date(),
                         setDateToMidnight: delegate.setDateToMidnight
                     })
                 : firestoreValues;
@@ -290,7 +290,7 @@ export function useBuildDataSource({
                 filter,
                 orderBy,
                 order,
-                isCollectionGroup: Boolean(collection.collectionGroup) ?? false
+                isCollectionGroup: Boolean(collection.collectionGroup)
             });
         } : undefined,
 

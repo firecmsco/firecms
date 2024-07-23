@@ -4,7 +4,8 @@ title: useReferenceDialog
 sidebar_label: useReferenceDialog
 ---
 
-:::note Please note that in order to use this hook you **must** be in a
+:::note 
+Please note that in order to use this hook you **must** be in a
 component (you can't use them directly from a callback function).
 :::
 
