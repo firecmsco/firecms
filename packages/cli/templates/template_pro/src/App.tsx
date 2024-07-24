@@ -32,7 +32,7 @@ import { firebaseConfig } from "./firebase_config";
 import { productsCollection } from "./collections/products";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import {
-    useFirestoreUserManagement,
+    useBuildUserManagement,
     userManagementAdminViews,
     useUserManagementPlugin
 } from "@firecms/user_management";
@@ -99,23 +99,6 @@ export function App() {
     const modeController = useBuildModeController();
 
     /**
-     * Controller in charge of user management
-     */
-    const userManagement = useFirestoreUserManagement({
-        firebaseApp
-    });
-
-    /**
-     * Controller for managing authentication
-     */
-    const authController: FirebaseAuthController = useFirebaseAuthController({
-        firebaseApp,
-        signInOptions,
-        loading: userManagement.loading,
-        defineRolesFor: userManagement.defineRolesFor
-    });
-
-    /**
      * Controller for saving some user preferences locally.
      */
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
@@ -132,6 +115,23 @@ export function App() {
      */
     const storageSource = useFirebaseStorageSource({
         firebaseApp
+    });
+
+    /**
+     * Controller in charge of user management
+     */
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate
+    });
+
+    /**
+     * Controller for managing authentication
+     */
+    const authController: FirebaseAuthController = useFirebaseAuthController({
+        firebaseApp,
+        signInOptions,
+        loading: userManagement.loading,
+        defineRolesFor: userManagement.defineRolesFor
     });
 
     /**

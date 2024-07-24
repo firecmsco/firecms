@@ -261,6 +261,7 @@ export function useFirestoreDelegate({
     }, [firebaseApp, listenEntity]);
 
     return {
+        key: "firestore",
         setDateToMidnight,
         delegateToCMSModel: firestoreToCMSModel,
         cmsToDelegateModel: (values) => {

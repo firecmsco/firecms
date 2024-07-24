@@ -253,6 +253,12 @@ export type ListenCollectionDelegateProps<M extends Record<string, any> = any> =
 };
 
 export interface DataSourceDelegate {
+
+    /**
+     * Key that identifies this data source delegate
+     */
+    key: string;
+
     /**
      * Fetch data from a collection
      * @param path

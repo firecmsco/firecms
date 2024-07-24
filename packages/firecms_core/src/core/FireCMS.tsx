@@ -82,7 +82,7 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
         onAnalyticsEvent
     }), []);
 
-    const accessResponse = useProjectLog(authController, plugins);
+    const accessResponse = useProjectLog(authController, dataSourceDelegate, plugins);
 
     if (navigationController.navigationLoadingError) {
         return (

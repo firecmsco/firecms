@@ -51,10 +51,10 @@ const firecmsToMongoDB: Record<WhereFilterOp, string> = {
  *
  */
 export function useMongoDBDelegate({
-                                               app,
-                                               cluster,
-                                               database,
-                                           }: UseMongoDataSourceProps): DataSourceDelegate {
+                                       app,
+                                       cluster,
+                                       database,
+                                   }: UseMongoDataSourceProps): DataSourceDelegate {
 
     const buildQuery = useCallback((
         filter: FilterValues<any> | undefined,
@@ -361,6 +361,7 @@ export function useMongoDBDelegate({
     }, []);
 
     return {
+        key: "mongodb",
         cmsToDelegateModel(data: any): any {
             return valuesToMongoValues(data);
         },

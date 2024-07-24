@@ -1,33 +1,23 @@
 import React, { useCallback, useEffect } from "react";
-import {
-    addDoc,
-    collection,
-    deleteDoc,
-    doc,
-    DocumentSnapshot,
-    getFirestore,
-    onSnapshot,
-    setDoc
-} from "@firebase/firestore";
-import { FirebaseApp } from "@firebase/app";
 import { UserManagement } from "../types";
-import { Authenticator, PermissionsBuilder, Role, User } from "@firecms/core";
+import { Authenticator, DataSourceDelegate, Entity, PermissionsBuilder, Role, User } from "@firecms/core";
 import { resolveUserRolePermissions } from "../utils";
 
 type UserWithRoleIds = User & { roles: string[] };
 
 export interface UserManagementParams {
+
     /**
-     * The Firebase app to use for the user management. The config will be saved in the Firestore
-     * collection indicated by `configPath`.
+     * The delegate in charge of persisting the data.
      */
-    firebaseApp?: FirebaseApp;
+    dataSourceDelegate?: DataSourceDelegate;
+
     /**
      * Path where the plugin users configuration is stored.
      * Default: __FIRECMS/config/users
      * You can specify a different path if you want to store the user management configuration in a different place.
      * Please keep in mind that the FireCMS users are not necessarily the same as the Firebase users (but they can be).
-     * The path should be relative to the root of the Firestore database, and should always have an odd number of segments.
+     * The path should be relative to the root of the database, and should always have an odd number of segments.
      */
     usersPath?: string;
 
@@ -62,14 +52,14 @@ export interface UserManagementParams {
 /**
  * This hook is used to build a user management object that can be used to
  * manage users and roles in a Firestore backend.
- * @param backendFirebaseApp
+ * @param dataSourceDelegate
  * @param usersPath
  * @param rolesPath
  * @param usersLimit
  * @param canEditRoles
  */
-export function useFirestoreUserManagement({
-                                               firebaseApp,
+export function useBuildUserManagement({
+                                               dataSourceDelegate,
                                                usersPath = "__FIRECMS/config/users",
                                                rolesPath = "__FIRECMS/config/roles",
                                                usersLimit,
@@ -94,62 +84,61 @@ export function useFirestoreUserManagement({
     const loading = rolesLoading || usersLoading;
 
     useEffect(() => {
-        if (!firebaseApp || !rolesPath) return;
-        const firestore = getFirestore(firebaseApp);
+        if (!dataSourceDelegate || !rolesPath) return;
 
-        return onSnapshot(collection(firestore, rolesPath),
-            {
-                next: (snapshot) => {
-                    setRolesError(undefined);
-                    try {
-                        const newRoles = docsToRoles(snapshot.docs);
-                        setRoles(newRoles);
-                    } catch (e) {
-                        console.error("Error loading roles", e);
-                        setRolesError(e as Error);
-                    }
-                    setRolesLoading(false);
-                },
-                error: (e) => {
+        dataSourceDelegate.listenCollection?.({
+            path: rolesPath,
+            onUpdate(entities: Entity<any>[]): void {
+                setRolesError(undefined);
+                try {
+                    const newRoles = entityToRoles(entities);
+                    setRoles(newRoles);
+                } catch (e) {
                     console.error("Error loading roles", e);
-                    setRolesError(e);
-                    setRolesLoading(false);
+                    setRolesError(e as Error);
                 }
+                setRolesLoading(false);
+            },
+            onError(e: any): void {
+                console.error("Error loading roles", e);
+                setRolesError(e);
+                setRolesLoading(false);
             }
-        );
-    }, [firebaseApp, rolesPath]);
+        });
+
+    }, [dataSourceDelegate, rolesPath]);
 
     useEffect(() => {
-        if (!firebaseApp || !usersPath) return;
-        const firestore = getFirestore(firebaseApp);
+        if (!dataSourceDelegate || !usersPath) return;
 
-        return onSnapshot(collection(firestore, usersPath),
-            {
-                next: (snapshot) => {
-                    setUsersError(undefined);
-                    try {
-                        const newUsers = docsToUsers(snapshot.docs);
-                        setUsersWithRoleIds(newUsers);
-                    } catch (e) {
-                        console.error("Error loading users", e);
-                        setUsersError(e as Error);
-                    }
-                    setUsersLoading(false);
-                },
-                error: (e) => {
+        dataSourceDelegate.listenCollection?.({
+            path: usersPath,
+            onUpdate(entities: Entity<any>[]): void {
+                setUsersError(undefined);
+                try {
+                    const newUsers = entitiesToUsers(entities);
+                    setUsersWithRoleIds(newUsers);
+                } catch (e) {
                     console.error("Error loading users", e);
-                    setUsersError(e);
-                    setUsersLoading(false);
+                    setUsersError(e as Error);
                 }
+                setUsersLoading(false);
+            },
+            onError(e: any): void {
+                console.error("Error loading users", e);
+                setUsersError(e);
+                setUsersLoading(false);
             }
-        );
-    }, [firebaseApp, usersPath]);
+        });
+
+    }, [dataSourceDelegate, usersPath]);
 
     const saveUser = useCallback(async (user: User): Promise<User> => {
-        if (!firebaseApp) throw Error("useFirestoreUserManagement Firebase not initialised");
-        const firestore = getFirestore(firebaseApp);
-        if (!firestore || !usersPath) throw Error("useFirestoreUserManagement Firestore not initialised");
+        if (!dataSourceDelegate) throw Error("useFirestoreUserManagement Firebase not initialised");
+        if (!usersPath) throw Error("useFirestoreUserManagement Firestore not initialised");
+
         console.debug("Persisting user", user);
+
         const roleIds = user.roles?.map(r => r.id);
         const {
             uid,
@@ -160,43 +149,64 @@ export function useFirestoreUserManagement({
             roles: roleIds
         };
         if (uid) {
-            return setDoc(doc(firestore, usersPath, uid), data, { merge: true }).then(() => user);
+            return dataSourceDelegate.saveEntity({
+                status: "existing",
+                path: usersPath,
+                entityId: uid,
+                values: data
+            }).then(() => user);
         } else {
-            return addDoc(collection(firestore, usersPath), data).then(() => user);
+            return dataSourceDelegate.saveEntity({
+                status: "new",
+                path: usersPath,
+                values: data
+            }).then(() => user);
         }
-    }, [usersPath, firebaseApp]);
+    }, [usersPath, dataSourceDelegate]);
 
     const saveRole = useCallback((role: Role): Promise<void> => {
-        if (!firebaseApp) throw Error("useFirestoreUserManagement Firebase not initialised");
-        const firestore = getFirestore(firebaseApp);
-        if (!firestore || !rolesPath) throw Error("useFirestoreUserManagement Firestore not initialised");
+        if (!dataSourceDelegate) throw Error("useFirestoreUserManagement Firebase not initialised");
+        if (!rolesPath) throw Error("useFirestoreUserManagement Firestore not initialised");
         console.debug("Persisting role", role);
         const {
             id,
             ...roleData
         } = role;
-        const ref = doc(firestore, rolesPath, id);
-        return setDoc(ref, roleData, { merge: true });
-    }, [rolesPath, firebaseApp]);
+        return dataSourceDelegate.saveEntity({
+            status: "existing",
+            path: rolesPath,
+            entityId: id,
+            values: roleData
+        }).then(() => {
+            return;
+        });
+    }, [rolesPath, dataSourceDelegate]);
 
     const deleteUser = useCallback(async (user: User): Promise<void> => {
-        if (!firebaseApp) throw Error("useFirestoreUserManagement Firebase not initialised");
-        const firestore = getFirestore(firebaseApp);
-        if (!firestore || !usersPath) throw Error("useFirestoreUserManagement Firestore not initialised");
+        if (!dataSourceDelegate) throw Error("useFirestoreUserManagement Firebase not initialised");
+        if (!usersPath) throw Error("useFirestoreUserManagement Firestore not initialised");
         console.debug("Deleting", user);
         const { uid } = user;
-        return deleteDoc(doc(firestore, usersPath, uid));
-    }, [usersPath, firebaseApp]);
+        const entity: Entity<any> = {
+            path: usersPath,
+            id: uid,
+            values: {}
+        };
+        await dataSourceDelegate.deleteEntity({ entity })
+    }, [usersPath, dataSourceDelegate]);
 
-    const deleteRole = useCallback((role: Role): Promise<void> => {
-        if (!firebaseApp) throw Error("useFirestoreUserManagement Firebase not initialised");
-        const firestore = getFirestore(firebaseApp);
-        if (!firestore || !rolesPath) throw Error("useFirestoreUserManagement Firestore not initialised");
+    const deleteRole = useCallback(async (role: Role): Promise<void> => {
+        if (!dataSourceDelegate) throw Error("useFirestoreUserManagement Firebase not initialised");
+        if (!rolesPath) throw Error("useFirestoreUserManagement Firestore not initialised");
         console.debug("Deleting", role);
         const { id } = role;
-        const ref = doc(firestore, rolesPath, id);
-        return deleteDoc(ref);
-    }, [rolesPath, firebaseApp]);
+        const entity: Entity<any> = {
+            path: usersPath,
+            id: id,
+            values: {}
+        };
+        await dataSourceDelegate.deleteEntity({ entity })
+    }, [rolesPath, dataSourceDelegate]);
 
     const collectionPermissions: PermissionsBuilder = useCallback(({
                                                                        collection,
@@ -256,22 +266,22 @@ export function useFirestoreUserManagement({
     }
 }
 
-const docsToUsers = (docs: DocumentSnapshot[]): (UserWithRoleIds)[] => {
+const entitiesToUsers = (docs: Entity<Omit<UserWithRoleIds, "id">>[]): (UserWithRoleIds)[] => {
     return docs.map((doc) => {
-        const data = doc.data() as any;
+        const data = doc.values as any;
         const newVar = {
             uid: doc.id,
             ...data,
-            created_on: data?.created_on?.toDate(),
-            updated_on: data?.updated_on?.toDate()
+            created_on: data?.created_on,
+            updated_on: data?.updated_on
         };
         return newVar as (UserWithRoleIds);
     });
 }
 
-const docsToRoles = (docs: DocumentSnapshot[]): Role[] => {
-    return docs.map((doc) => ({
+const entityToRoles = (entities: Entity<Omit<Role, "id">>[]): Role[] => {
+    return entities.map((doc) => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.values
     } as Role));
 }

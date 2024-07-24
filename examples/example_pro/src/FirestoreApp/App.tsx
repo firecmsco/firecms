@@ -38,11 +38,7 @@ import {
     useInitialiseFirebase
 } from "@firecms/firebase";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
-import {
-    useFirestoreUserManagement,
-    userManagementAdminViews,
-    useUserManagementPlugin
-} from "@firecms/user_management";
+import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
 
 import { firebaseConfig } from "../firebase_config";
 // import { publicRecaptchaKey } from "../appcheck_config";
@@ -206,18 +202,6 @@ function App() {
     // Controller used to manage the dark or light color mode
     const modeController = useBuildModeController();
 
-    const userManagement = useFirestoreUserManagement({
-        firebaseApp,
-    });
-
-    // Controller for managing authentication
-    const authController: FirebaseAuthController = useFirebaseAuthController({
-        loading: userManagement.loading,
-        firebaseApp,
-        signInOptions,
-        defineRolesFor: userManagement.defineRolesFor
-    });
-
     // Controller for saving some user preferences locally.
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
@@ -231,6 +215,18 @@ function App() {
     // Controller used for saving and fetching files in storage
     const storageSource = useFirebaseStorageSource({
         firebaseApp
+    });
+
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
+    });
+
+    // Controller for managing authentication
+    const authController: FirebaseAuthController = useFirebaseAuthController({
+        loading: userManagement.loading,
+        firebaseApp,
+        signInOptions,
+        defineRolesFor: userManagement.defineRolesFor
     });
 
     const userManagementPlugin = useUserManagementPlugin({ userManagement });

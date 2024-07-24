@@ -32,11 +32,7 @@ import {
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { useImportPlugin } from "@firecms/data_import";
 import { useExportPlugin } from "@firecms/data_export";
-import {
-    useFirestoreUserManagement,
-    userManagementAdminViews,
-    useUserManagementPlugin
-} from "@firecms/user_management";
+import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
 import { booksCollection } from "./books_collection";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
@@ -94,19 +90,6 @@ function ProSample() {
 
     const signInOptions: FirebaseSignInProvider[] = ["google.com"];
 
-    // controller in charge of user management
-    const userManagement = useFirestoreUserManagement({
-        firebaseApp
-    });
-
-    // Controller for managing authentication
-    const authController: FirebaseAuthController = useFirebaseAuthController({
-        firebaseApp,
-        signInOptions,
-        loading: userManagement.loading,
-        defineRolesFor: userManagement.defineRolesFor
-    });
-
     // Controller for saving some user preferences locally.
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
@@ -122,6 +105,19 @@ function ProSample() {
 
     const collectionConfigController = useFirestoreCollectionsConfigController({
         firebaseApp
+    });
+
+    // controller in charge of user management
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
+    });
+
+    // Controller for managing authentication
+    const authController: FirebaseAuthController = useFirebaseAuthController({
+        firebaseApp,
+        signInOptions,
+        loading: userManagement.loading,
+        defineRolesFor: userManagement.defineRolesFor
     });
 
     const {
