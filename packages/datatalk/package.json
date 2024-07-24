@@ -1,6 +1,6 @@
 {
   "name": "@firecms/datatalk",
-  "version": "3.0.0-canary.84",
+  "version": "3.0.0-canary.85",
   "description": "Talk to your Firestore data",
   "license": "Apache-2.0",
   "type": "module",
@@ -30,23 +30,23 @@
     "react-dom": "^18.0.0"
   },
   "dependencies": {
-    "@firecms/collection_editor_firebase": "^3.0.0-canary.84",
-    "@firecms/core": "^3.0.0-canary.84",
-    "@firecms/data_export": "^3.0.0-canary.84",
-    "@firecms/data_import": "^3.0.0-canary.84",
-    "@firecms/data_import_export": "^3.0.0-canary.84",
-    "@firecms/firebase": "^3.0.0-canary.84",
-    "@firecms/formex": "^3.0.0-canary.84",
-    "@firecms/schema_inference": "^3.0.0-canary.84",
-    "@firecms/ui": "^3.0.0-canary.84",
+    "@firecms/collection_editor_firebase": "^3.0.0-canary.85",
+    "@firecms/core": "^3.0.0-canary.85",
+    "@firecms/data_export": "^3.0.0-canary.85",
+    "@firecms/data_import": "^3.0.0-canary.85",
+    "@firecms/data_import_export": "^3.0.0-canary.85",
+    "@firecms/firebase": "^3.0.0-canary.85",
+    "@firecms/formex": "^3.0.0-canary.85",
+    "@firecms/schema_inference": "^3.0.0-canary.85",
+    "@firecms/ui": "^3.0.0-canary.85",
     "@monaco-editor/react": "^4.6.0"
   },
   "devDependencies": {
-    "@types/node": "20.14.9",
+    "@types/node": "20.14.12",
     "@types/react": "^18.3.3",
     "@types/react-dom": "18.3.0",
-    "typescript": "^5.5.3",
-    "vite": "^5.3.2"
+    "typescript": "^5.5.4",
+    "vite": "^5.3.4"
   },
   "gitHead": "f286f012efde63060e83eeac5da67a866f1026e6"
 }
