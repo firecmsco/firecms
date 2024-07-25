@@ -270,6 +270,8 @@ export function useFirestoreDelegate({
         },
         currentTime,
 
+        initialised: !!firebaseApp,
+
         initTextSearch: useCallback(async (props: {
             path: string,
             collection?: EntityCollection | ResolvedEntityCollection

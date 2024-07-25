@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect } from "react";
+import equal from "react-fast-compare"
+
 import { UserManagement } from "../types";
 import { Authenticator, DataSourceDelegate, Entity, PermissionsBuilder, Role, User } from "@firecms/core";
 import { resolveUserRolePermissions } from "../utils";
@@ -57,16 +59,18 @@ export interface UserManagementParams {
  * @param rolesPath
  * @param usersLimit
  * @param canEditRoles
+ * @param allowDefaultRolesCreation
+ * @param includeCollectionConfigPermissions
  */
 export function useBuildUserManagement({
-                                               dataSourceDelegate,
-                                               usersPath = "__FIRECMS/config/users",
-                                               rolesPath = "__FIRECMS/config/roles",
-                                               usersLimit,
-                                               canEditRoles = true,
-                                               allowDefaultRolesCreation,
-                                               includeCollectionConfigPermissions
-                                           }: UserManagementParams): UserManagement {
+                                           dataSourceDelegate,
+                                           usersPath = "__FIRECMS/config/users",
+                                           rolesPath = "__FIRECMS/config/roles",
+                                           usersLimit,
+                                           canEditRoles = true,
+                                           allowDefaultRolesCreation,
+                                           includeCollectionConfigPermissions
+                                       }: UserManagementParams): UserManagement {
 
     const [rolesLoading, setRolesLoading] = React.useState<boolean>(true);
     const [usersLoading, setUsersLoading] = React.useState<boolean>(true);
@@ -85,14 +89,16 @@ export function useBuildUserManagement({
 
     useEffect(() => {
         if (!dataSourceDelegate || !rolesPath) return;
+        if (dataSourceDelegate.initialised !== undefined && !dataSourceDelegate.initialised) return;
 
-        dataSourceDelegate.listenCollection?.({
+        return dataSourceDelegate.listenCollection?.({
             path: rolesPath,
             onUpdate(entities: Entity<any>[]): void {
                 setRolesError(undefined);
                 try {
                     const newRoles = entityToRoles(entities);
-                    setRoles(newRoles);
+                    if (!equal(newRoles, roles))
+                        setRoles(newRoles);
                 } catch (e) {
                     console.error("Error loading roles", e);
                     setRolesError(e as Error);
@@ -110,14 +116,16 @@ export function useBuildUserManagement({
 
     useEffect(() => {
         if (!dataSourceDelegate || !usersPath) return;
+        if (dataSourceDelegate.initialised !== undefined && !dataSourceDelegate.initialised) return;
 
-        dataSourceDelegate.listenCollection?.({
+        return dataSourceDelegate.listenCollection?.({
             path: usersPath,
             onUpdate(entities: Entity<any>[]): void {
                 setUsersError(undefined);
                 try {
                     const newUsers = entitiesToUsers(entities);
-                    setUsersWithRoleIds(newUsers);
+                    if (!equal(newUsers, usersWithRoleIds))
+                        setUsersWithRoleIds(newUsers);
                 } catch (e) {
                     console.error("Error loading users", e);
                     setUsersError(e as Error);
@@ -134,8 +142,8 @@ export function useBuildUserManagement({
     }, [dataSourceDelegate, usersPath]);
 
     const saveUser = useCallback(async (user: User): Promise<User> => {
-        if (!dataSourceDelegate) throw Error("useFirestoreUserManagement Firebase not initialised");
-        if (!usersPath) throw Error("useFirestoreUserManagement Firestore not initialised");
+        if (!dataSourceDelegate) throw Error("useBuildUserManagement Firebase not initialised");
+        if (!usersPath) throw Error("useBuildUserManagement Firestore not initialised");
 
         console.debug("Persisting user", user);
 
@@ -165,8 +173,8 @@ export function useBuildUserManagement({
     }, [usersPath, dataSourceDelegate]);
 
     const saveRole = useCallback((role: Role): Promise<void> => {
-        if (!dataSourceDelegate) throw Error("useFirestoreUserManagement Firebase not initialised");
-        if (!rolesPath) throw Error("useFirestoreUserManagement Firestore not initialised");
+        if (!dataSourceDelegate) throw Error("useBuildUserManagement Firebase not initialised");
+        if (!rolesPath) throw Error("useBuildUserManagement Firestore not initialised");
         console.debug("Persisting role", role);
         const {
             id,
@@ -183,8 +191,8 @@ export function useBuildUserManagement({
     }, [rolesPath, dataSourceDelegate]);
 
     const deleteUser = useCallback(async (user: User): Promise<void> => {
-        if (!dataSourceDelegate) throw Error("useFirestoreUserManagement Firebase not initialised");
-        if (!usersPath) throw Error("useFirestoreUserManagement Firestore not initialised");
+        if (!dataSourceDelegate) throw Error("useBuildUserManagement Firebase not initialised");
+        if (!usersPath) throw Error("useBuildUserManagement Firestore not initialised");
         console.debug("Deleting", user);
         const { uid } = user;
         const entity: Entity<any> = {
@@ -196,8 +204,8 @@ export function useBuildUserManagement({
     }, [usersPath, dataSourceDelegate]);
 
     const deleteRole = useCallback(async (role: Role): Promise<void> => {
-        if (!dataSourceDelegate) throw Error("useFirestoreUserManagement Firebase not initialised");
-        if (!rolesPath) throw Error("useFirestoreUserManagement Firestore not initialised");
+        if (!dataSourceDelegate) throw Error("useBuildUserManagement Firebase not initialised");
+        if (!rolesPath) throw Error("useBuildUserManagement Firestore not initialised");
         console.debug("Deleting", role);
         const { id } = role;
         const entity: Entity<any> = {

@@ -260,6 +260,11 @@ export interface DataSourceDelegate {
     key: string;
 
     /**
+     * If the data source has been initialised
+     */
+    initialised?: boolean;
+
+    /**
      * Fetch data from a collection
      * @param path
      * @param filter

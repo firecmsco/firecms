@@ -8,7 +8,7 @@ import MongoDBApp from "./MongoDBApp/MongoDBApp";
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
         <BrowserRouter basename={"/"}>
-            <MongoDBApp/>
+            <App/>
         </BrowserRouter>
     </React.StrictMode>
 )
