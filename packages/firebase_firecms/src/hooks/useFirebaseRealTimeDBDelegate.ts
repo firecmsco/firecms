@@ -213,6 +213,7 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
     }, []);
 
     return {
+        key: "firebase_rtdb",
         fetchCollection,
         listenCollection,
         fetchEntity,

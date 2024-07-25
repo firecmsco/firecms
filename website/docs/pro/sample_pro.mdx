@@ -127,8 +127,8 @@ We include a controller that stores user roles and permissions in Firestore. You
 management system.
 
 ```jsx
-    const userManagement = useFirestoreUserManagement({
-        firebaseApp
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
     });
 ```
 

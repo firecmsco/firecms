@@ -49,14 +49,14 @@ The main hook to utilize the plugin's functionality is `useFirestoreUserManageme
 
 ```jsx
 
-import {useFirestoreUserManagement} from "@firecms/user_management";
+import {useBuildUserManagement} from "@firecms/user_management";
 
-const userManagement = useFirestoreUserManagement({
-  firebaseApp: myFirebaseApp,
-  usersPath: "__FIRECMS/config/users",
-  rolesPath: "__FIRECMS/config/roles",
-  canEditRoles: true,
-  allowDefaultRolesCreation: true,
+const userManagement = useBuildUserManagement({
+    dataSourceDelegate: firestoreDelegate,
+    usersPath: "__FIRECMS/config/users",
+    rolesPath: "__FIRECMS/config/roles",
+    canEditRoles: true,
+    allowDefaultRolesCreation: true,
 });
 ```
 
@@ -71,7 +71,7 @@ resulting plugin into the FireCMS configuration. You will usually want to do thi
 ```jsx
 import {FireCMS} from "@firecms/core";
 
-import {useFirestoreUserManagement, useUserManagementPlugin, userManagementAdminViews} from "@firecms/user_management";
+import {useBuildUserManagement, useUserManagementPlugin, userManagementAdminViews} from "@firecms/user_management";
 
 function App() {
 
@@ -79,8 +79,8 @@ function App() {
 
     const userManagementPlugin = useUserManagementPlugin({ userManagement });
 
-    const userManagement = useFirestoreUserManagement({
-        firebaseApp: firebaseApp,
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
         usersPath: "__FIRECMS/config/users",
         rolesPath: "__FIRECMS/config/roles",
         usersLimit: 100,
