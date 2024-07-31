@@ -1,13 +1,21 @@
+import * as React from "react";
+
 import * as MenubarPrimitive from "@radix-ui/react-menubar";
 import { cls } from "../util";
 import { CheckIcon, ChevronRightIcon } from "../icons";
 
 export function Menubar({
                             children,
+                            onSelect,
                             className
-                        }: { children: React.ReactNode, className?: string }) {
+                        }: {
+    children: React.ReactNode,
+    onSelect?: (event: React.SyntheticEvent) => void,
+    className?: string
+}) {
     return (
         <MenubarPrimitive.Root
+            onSelect={onSelect}
             className={cls("z-10 flex bg-white dark:bg-gray-950 p-[3px] rounded-sm shadow-sm", className)}>
             {children}
         </MenubarPrimitive.Root>
@@ -26,10 +34,16 @@ export function MenubarMenu({
 
 export function MenubarTrigger({
                                    children,
+                                   onSelect,
                                    className
-                               }: { children: React.ReactNode, className?: string }) {
+                               }: {
+    children: React.ReactNode,
+    onSelect?: (event: React.SyntheticEvent) => void,
+    className?: string
+}) {
     return (
         <MenubarPrimitive.Trigger
+            onSelect={onSelect}
             className={cls("py-2 px-3 outline-none select-none font-medium leading-none rounded text-text-primary dark:text-text-primary-dark text-[13px] flex items-center justify-between gap-[2px] data-[highlighted]:bg-slate-100 data-[highlighted]:dark:bg-gray-800 data-[state=open]:bg-slate-100 data-[state=open]:dark:bg-gray-800 hover:bg-slate-200 hover:bg-opacity-75 dark:hover:bg-gray-700 dark:hover:bg-opacity-50",
                 className)}>
             {children}
@@ -53,16 +67,19 @@ export function MenubarContent({
                                    align,
                                    sideOffset,
                                    alignOffset,
+                                   onSelect,
                                    ...rest
                                }: {
     children: React.ReactNode,
     className?: string,
+    onSelect?: (event: React.SyntheticEvent) => void,
     align?: "start" | "center" | "end",
     sideOffset?: number,
     alignOffset?: number
 }) {
     return (
         <MenubarPrimitive.Content
+            onSelect={onSelect}
             className={cls("min-w-[220px] bg-white dark:bg-gray-950 rounded-md p-[6px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] [animation-duration:_400ms] [animation-timing-function:_cubic-bezier(0.16,_1,_0.3,_1)] will-change-[transform,opacity]", className)}
             align={align ?? "start"}
             sideOffset={sideOffset ?? 5}
@@ -79,15 +96,18 @@ export function MenubarItem({
                                 leftPadding,
                                 className,
                                 disabled,
+                                onSelect,
                                 ...rest
                             }: {
     children: React.ReactNode,
+    onSelect?: (event: Event) => void;
     leftPadding?: boolean,
     className?: string,
     disabled?: boolean
 }) {
     return (
         <MenubarPrimitive.Item
+            onSelect={onSelect}
             className={cls("group text-[13px] leading-none rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none outline-none data-[state=open]:bg-slate-100 data-[state=open]:dark:bg-gray-800 data-[state=open]:text-text-primary data-[state=open]:dark:text-text-primary-dark data-[highlighted]:bg-slate-100 data-[highlighted]:dark:bg-gray-800  data-[disabled]:text-text-disabled data-[disabled]:dark:text-text-disabled-dark data-[disabled]:pointer-events-none",
                 leftPadding ? "pl-5" : "",
                 disabled ? "pointer-events-none text-text-secondary dark:text-text-secondary-dark" : "text-text-primary dark:text-text-primary-dark",
@@ -136,13 +156,16 @@ export function MenubarSub({
 export function MenubarSubTrigger({
                                       children,
                                       className,
+                                      onSelect,
                                       ...rest
                                   }: {
     children?: React.ReactNode,
+    onSelect?: (event: React.SyntheticEvent) => void,
     className?: string,
 }) {
     return (
         <MenubarPrimitive.SubTrigger
+            onSelect={onSelect}
             className={cls("group text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none outline-none data-[state=open]:bg-slate-100 data-[state=open]:dark:bg-gray-800 data-[state=open]:text-text-primary data-[state=open]:dark:text-text-primary-dark data-[highlighted]:bg-slate-100 data-[highlighted]:dark:bg-gray-800  data-[disabled]:text-text-disabled data-[disabled]:dark:text-text-disabled-dark data-[disabled]:pointer-events-none",
                 className)}
             {...rest}
@@ -156,14 +179,17 @@ export function MenubarSubContent({
                                       children,
                                       alignOffset,
                                       className,
+                                      onSelect,
                                       ...rest
                                   }: {
     children?: React.ReactNode,
+    onSelect?: (event: React.SyntheticEvent) => void,
     alignOffset?: number,
     className?: string,
 }) {
     return (
         <MenubarPrimitive.SubContent
+            onSelect={onSelect}
             alignOffset={alignOffset ?? -5}
             className={cls("min-w-[220px] bg-white dark:bg-gray-950 rounded-md p-[6px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] [animation-duration:_400ms] [animation-timing-function:_cubic-bezier(0.16,_1,_0.3,_1)] will-change-[transform,opacity]",
                 className)}
@@ -179,15 +205,18 @@ export function MenubarCheckboxItem({
                                         checked,
                                         onCheckedChange,
                                         className,
+                                        onSelect,
                                         ...rest
                                     }: {
     children?: React.ReactNode,
+    onSelect?: (event: Event) => void;
     checked?: boolean,
     onCheckedChange?: () => void,
     className?: string,
 }) {
     return (
         <MenubarPrimitive.CheckboxItem
+            onSelect={onSelect}
             className={cls("text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none pl-5 outline-none data-[highlighted]:bg-slate-100 data-[highlighted]:dark:bg-gray-800 data-[disabled]:text-text-disabled data-[disabled]:dark:text-text-disabled-dark data-[disabled]:pointer-events-none",
                 className)}
             checked={checked}
@@ -221,9 +250,11 @@ export function MenubarRadioGroup({
                                       className,
                                       value,
                                       onValueChange,
+                                      onSelect,
                                       ...rest
                                   }: {
     children?: React.ReactNode,
+    onSelect?: (event: React.SyntheticEvent) => void,
     value?: string,
     onValueChange?: (value: string) => void,
     className?: string,
@@ -233,6 +264,7 @@ export function MenubarRadioGroup({
             className={cls(className)}
             value={value}
             onValueChange={onValueChange}
+            onSelect={onSelect}
             {...rest}>
             {children ?? <CheckIcon size={"small"}/>}
         </MenubarPrimitive.RadioGroup>
@@ -243,14 +275,17 @@ export function MenubarRadioItem({
                                      children,
                                      className,
                                      value,
+                                     onSelect,
                                      ...rest
                                  }: {
     children?: React.ReactNode,
+    onSelect?: (event: Event) => void;
     value: string,
     className?: string,
 }) {
     return (
         <MenubarPrimitive.RadioItem
+            onSelect={onSelect}
             className={cls("text-[13px] leading-none text-text-primary dark:text-text-primary-dark rounded flex items-center h-[32px] px-[10px] py-[2px] relative select-none pl-5 outline-none data-[highlighted]:bg-slate-100 data-[highlighted]:dark:bg-gray-800 data-[disabled]:text-text-disabled data-[disabled]:dark:text-text-disabled-dark data-[disabled]:pointer-events-none",
                 className)}
             value={value}

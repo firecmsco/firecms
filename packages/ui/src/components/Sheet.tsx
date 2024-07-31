@@ -49,7 +49,7 @@ export const Sheet: React.FC<SheetProps> = ({
                 <DialogPrimitive.Overlay
                     className={cls(
                         "fixed inset-0 transition-opacity z-20 ease-in-out duration-200  backdrop-blur-sm",
-                        "bg-black bg-opacity-50",
+                        "bg-white bg-opacity-80",
                         "dark:bg-gray-900 dark:bg-opacity-60",
                         displayed && open ? "opacity-100" : "opacity-0"
                     )}

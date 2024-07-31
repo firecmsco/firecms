@@ -6,6 +6,7 @@ import { useInjectStyles } from "../hooks";
 
 export type TooltipProps = {
     open?: boolean,
+    defaultOpen?: boolean,
     onOpenChange?: (open: boolean) => void,
     side?: "top" | "bottom" | "left" | "right",
     align?: "start" | "center" | "end",
@@ -14,12 +15,14 @@ export type TooltipProps = {
     delayDuration?: number;
     className?: string,
     tooltipClassName?: string,
+    tooltipStyle?: React.CSSProperties;
     children: React.ReactNode,
     style?: React.CSSProperties;
 };
 
 export const Tooltip = ({
                             open,
+                            defaultOpen,
                             side = "bottom",
                             delayDuration = 200,
                             sideOffset,
@@ -29,6 +32,7 @@ export const Tooltip = ({
                             className,
                             style,
                             tooltipClassName,
+                            tooltipStyle,
                             children
                         }: TooltipProps) => {
 
@@ -39,7 +43,7 @@ export const Tooltip = ({
 
     return (
         <TooltipPrimitive.Provider delayDuration={delayDuration}>
-            <TooltipPrimitive.Root open={open} onOpenChange={onOpenChange}>
+            <TooltipPrimitive.Root open={open} onOpenChange={onOpenChange} defaultOpen={defaultOpen}>
                 <TooltipPrimitive.Trigger asChild>
                     <div className={className} style={style}>
                         {children}
@@ -51,6 +55,7 @@ export const Tooltip = ({
                             "max-w-lg leading-relaxed",
                             "z-50 rounded px-3 py-2 text-xs leading-none bg-slate-700 dark:bg-slate-800 bg-opacity-90 font-medium text-slate-50 shadow-2xl select-none duration-400 ease-in transform opacity-100",
                             tooltipClassName)}
+                        style={tooltipStyle}
                         sideOffset={sideOffset === undefined ? 4 : sideOffset}
                         align={align}
                         side={side}>
