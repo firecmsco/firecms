@@ -2663,7 +2663,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firecms/cli@^3.0.0-canary.88, @firecms/cli@workspace:packages/cli":
+"@firecms/cli@^3.0.0-canary.89, @firecms/cli@workspace:packages/cli":
   version: 0.0.0-use.local
   resolution: "@firecms/cli@workspace:packages/cli"
   dependencies:
@@ -2692,22 +2692,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/cloud@^3.0.0-canary.88, @firecms/cloud@workspace:packages/firecms_cloud":
+"@firecms/cloud@^3.0.0-canary.89, @firecms/cloud@workspace:packages/firecms_cloud":
   version: 0.0.0-use.local
   resolution: "@firecms/cloud@workspace:packages/firecms_cloud"
   dependencies:
-    "@firecms/cli": ^3.0.0-canary.88
-    "@firecms/collection_editor": ^3.0.0-canary.88
-    "@firecms/collection_editor_firebase": ^3.0.0-canary.88
-    "@firecms/core": ^3.0.0-canary.88
-    "@firecms/data_enhancement": ^3.0.0-canary.88
-    "@firecms/data_export": ^3.0.0-canary.88
-    "@firecms/data_import": ^3.0.0-canary.88
-    "@firecms/datatalk": ^3.0.0-canary.88
-    "@firecms/firebase": ^3.0.0-canary.88
-    "@firecms/formex": ^3.0.0-canary.88
-    "@firecms/schema_inference": ^3.0.0-canary.88
-    "@firecms/user_management": ^3.0.0-canary.88
+    "@firecms/cli": ^3.0.0-canary.89
+    "@firecms/collection_editor": ^3.0.0-canary.89
+    "@firecms/collection_editor_firebase": ^3.0.0-canary.89
+    "@firecms/core": ^3.0.0-canary.89
+    "@firecms/data_enhancement": ^3.0.0-canary.89
+    "@firecms/data_export": ^3.0.0-canary.89
+    "@firecms/data_import": ^3.0.0-canary.89
+    "@firecms/datatalk": ^3.0.0-canary.89
+    "@firecms/firebase": ^3.0.0-canary.89
+    "@firecms/formex": ^3.0.0-canary.89
+    "@firecms/schema_inference": ^3.0.0-canary.89
+    "@firecms/user_management": ^3.0.0-canary.89
     "@types/node": ^20.14.12
     "@types/react": ^18.3.3
     "@types/react-dom": ^18.3.0
@@ -2724,16 +2724,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/collection_editor@^3.0.0-canary.88, @firecms/collection_editor@workspace:packages/collection_editor":
+"@firecms/collection_editor@^3.0.0-canary.89, @firecms/collection_editor@workspace:packages/collection_editor":
   version: 0.0.0-use.local
   resolution: "@firecms/collection_editor@workspace:packages/collection_editor"
   dependencies:
-    "@firecms/data_export": ^3.0.0-canary.88
-    "@firecms/data_import": ^3.0.0-canary.88
-    "@firecms/data_import_export": ^3.0.0-canary.88
-    "@firecms/formex": ^3.0.0-canary.88
-    "@firecms/schema_inference": ^3.0.0-canary.88
-    "@firecms/ui": ^3.0.0-canary.88
+    "@firecms/data_export": ^3.0.0-canary.89
+    "@firecms/data_import": ^3.0.0-canary.89
+    "@firecms/data_import_export": ^3.0.0-canary.89
+    "@firecms/formex": ^3.0.0-canary.89
+    "@firecms/schema_inference": ^3.0.0-canary.89
+    "@firecms/ui": ^3.0.0-canary.89
     "@jest/globals": ^29.7.0
     "@types/react": ^18.3.3
     "@types/react-dom": ^18.3.0
@@ -2754,13 +2754,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/collection_editor_firebase@^3.0.0-canary.88, @firecms/collection_editor_firebase@workspace:packages/collection_editor_firebase":
+"@firecms/collection_editor_firebase@^3.0.0-canary.89, @firecms/collection_editor_firebase@workspace:packages/collection_editor_firebase":
   version: 0.0.0-use.local
   resolution: "@firecms/collection_editor_firebase@workspace:packages/collection_editor_firebase"
   dependencies:
-    "@firecms/collection_editor": ^3.0.0-canary.88
-    "@firecms/core": ^3.0.0-canary.88
-    "@firecms/firebase": ^3.0.0-canary.88
+    "@firecms/collection_editor": ^3.0.0-canary.89
+    "@firecms/core": ^3.0.0-canary.89
+    "@firecms/firebase": ^3.0.0-canary.89
     "@types/node": ^20.14.12
     "@types/react": ^18.3.3
     "@types/react-dom": ^18.3.0
@@ -2773,12 +2773,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/core@^3.0.0-canary.88, @firecms/core@workspace:packages/firecms_core":
+"@firecms/core@^3.0.0-canary.89, @firecms/core@workspace:packages/firecms_core":
   version: 0.0.0-use.local
   resolution: "@firecms/core@workspace:packages/firecms_core"
   dependencies:
-    "@firecms/formex": ^3.0.0-canary.88
-    "@firecms/ui": ^3.0.0-canary.88
+    "@firecms/formex": ^3.0.0-canary.89
+    "@firecms/ui": ^3.0.0-canary.89
     "@fontsource/jetbrains-mono": ^5.0.20
     "@hello-pangea/dnd": ^16.6.0
     "@jest/globals": ^29.7.0
@@ -2828,11 +2828,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_enhancement@^3.0.0-canary.88, @firecms/data_enhancement@workspace:packages/data_enhancement":
+"@firecms/data_enhancement@^3.0.0-canary.89, @firecms/data_enhancement@workspace:packages/data_enhancement":
   version: 0.0.0-use.local
   resolution: "@firecms/data_enhancement@workspace:packages/data_enhancement"
   dependencies:
-    "@firecms/core": ^3.0.0-canary.88
+    "@firecms/core": ^3.0.0-canary.89
     "@testing-library/jest-dom": ^6.4.6
     "@types/jest": ^29.5.12
     "@types/react": ^18.3.3
@@ -2852,14 +2852,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_export@^3.0.0-canary.88, @firecms/data_export@workspace:packages/data_export":
+"@firecms/data_export@^3.0.0-canary.89, @firecms/data_export@workspace:packages/data_export":
   version: 0.0.0-use.local
   resolution: "@firecms/data_export@workspace:packages/data_export"
   dependencies:
-    "@firecms/core": ^3.0.0-canary.88
-    "@firecms/formex": ^3.0.0-canary.88
-    "@firecms/schema_inference": ^3.0.0-canary.88
-    "@firecms/ui": ^3.0.0-canary.88
+    "@firecms/core": ^3.0.0-canary.89
+    "@firecms/formex": ^3.0.0-canary.89
+    "@firecms/schema_inference": ^3.0.0-canary.89
+    "@firecms/ui": ^3.0.0-canary.89
     "@jest/globals": ^29.7.0
     "@testing-library/jest-dom": ^6.4.6
     "@types/jest": ^29.5.12
@@ -2880,14 +2880,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_import@^3.0.0-canary.88, @firecms/data_import@workspace:packages/data_import":
+"@firecms/data_import@^3.0.0-canary.89, @firecms/data_import@workspace:packages/data_import":
   version: 0.0.0-use.local
   resolution: "@firecms/data_import@workspace:packages/data_import"
   dependencies:
-    "@firecms/core": ^3.0.0-canary.88
-    "@firecms/formex": ^3.0.0-canary.88
-    "@firecms/schema_inference": ^3.0.0-canary.88
-    "@firecms/ui": ^3.0.0-canary.88
+    "@firecms/core": ^3.0.0-canary.89
+    "@firecms/formex": ^3.0.0-canary.89
+    "@firecms/schema_inference": ^3.0.0-canary.89
+    "@firecms/ui": ^3.0.0-canary.89
     "@jest/globals": ^29.7.0
     "@testing-library/jest-dom": ^6.4.6
     "@types/jest": ^29.5.12
@@ -2909,13 +2909,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_import_export@^3.0.0-canary.88, @firecms/data_import_export@workspace:packages/data_import_export":
+"@firecms/data_import_export@^3.0.0-canary.89, @firecms/data_import_export@workspace:packages/data_import_export":
   version: 0.0.0-use.local
   resolution: "@firecms/data_import_export@workspace:packages/data_import_export"
   dependencies:
-    "@firecms/core": ^3.0.0-canary.88
-    "@firecms/data_export": ^3.0.0-canary.88
-    "@firecms/data_import": ^3.0.0-canary.88
+    "@firecms/core": ^3.0.0-canary.89
+    "@firecms/data_export": ^3.0.0-canary.89
+    "@firecms/data_import": ^3.0.0-canary.89
     "@jest/globals": ^29.7.0
     "@testing-library/jest-dom": ^6.4.6
     "@types/jest": ^29.5.12
@@ -2936,19 +2936,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/datatalk@^3.0.0-canary.88, @firecms/datatalk@workspace:packages/datatalk":
+"@firecms/datatalk@^3.0.0-canary.89, @firecms/datatalk@workspace:packages/datatalk":
   version: 0.0.0-use.local
   resolution: "@firecms/datatalk@workspace:packages/datatalk"
   dependencies:
-    "@firecms/collection_editor_firebase": ^3.0.0-canary.88
-    "@firecms/core": ^3.0.0-canary.88
-    "@firecms/data_export": ^3.0.0-canary.88
-    "@firecms/data_import": ^3.0.0-canary.88
-    "@firecms/data_import_export": ^3.0.0-canary.88
-    "@firecms/firebase": ^3.0.0-canary.88
-    "@firecms/formex": ^3.0.0-canary.88
-    "@firecms/schema_inference": ^3.0.0-canary.88
-    "@firecms/ui": ^3.0.0-canary.88
+    "@firecms/collection_editor_firebase": ^3.0.0-canary.89
+    "@firecms/core": ^3.0.0-canary.89
+    "@firecms/data_export": ^3.0.0-canary.89
+    "@firecms/data_import": ^3.0.0-canary.89
+    "@firecms/data_import_export": ^3.0.0-canary.89
+    "@firecms/firebase": ^3.0.0-canary.89
+    "@firecms/formex": ^3.0.0-canary.89
+    "@firecms/schema_inference": ^3.0.0-canary.89
+    "@firecms/ui": ^3.0.0-canary.89
     "@monaco-editor/react": ^4.6.0
     "@types/node": 20.14.12
     "@types/react": ^18.3.3
@@ -2961,11 +2961,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/editor@^3.0.0-canary.88, @firecms/editor@workspace:packages/editor":
+"@firecms/editor@^3.0.0-canary.89, @firecms/editor@workspace:packages/editor":
   version: 0.0.0-use.local
   resolution: "@firecms/editor@workspace:packages/editor"
   dependencies:
-    "@firecms/ui": ^3.0.0-canary.88
+    "@firecms/ui": ^3.0.0-canary.89
     "@radix-ui/react-slot": ^1.1.0
     "@tiptap/core": ^2.4.0
     "@tiptap/extension-color": ^2.4.0
@@ -3000,19 +3000,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/firebase@^3.0.0-canary.88, @firecms/firebase@workspace:packages/firebase_firecms":
+"@firecms/firebase@^3.0.0-canary.89, @firecms/firebase@workspace:packages/firebase_firecms":
   version: 0.0.0-use.local
   resolution: "@firecms/firebase@workspace:packages/firebase_firecms"
   dependencies:
     "@firebase/auth": "*"
-    "@firecms/collection_editor": ^3.0.0-canary.88
-    "@firecms/core": ^3.0.0-canary.88
-    "@firecms/data_enhancement": ^3.0.0-canary.88
-    "@firecms/data_export": ^3.0.0-canary.88
-    "@firecms/data_import": ^3.0.0-canary.88
-    "@firecms/data_import_export": ^3.0.0-canary.88
-    "@firecms/schema_inference": ^3.0.0-canary.88
-    "@firecms/ui": ^3.0.0-canary.88
+    "@firecms/collection_editor": ^3.0.0-canary.89
+    "@firecms/core": ^3.0.0-canary.89
+    "@firecms/data_enhancement": ^3.0.0-canary.89
+    "@firecms/data_export": ^3.0.0-canary.89
+    "@firecms/data_import": ^3.0.0-canary.89
+    "@firecms/data_import_export": ^3.0.0-canary.89
+    "@firecms/schema_inference": ^3.0.0-canary.89
+    "@firecms/ui": ^3.0.0-canary.89
     "@types/node": ^20.14.12
     "@types/react": ^18.3.3
     "@types/react-dom": ^18.3.0
@@ -3030,7 +3030,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/formex@^3.0.0-canary.88, @firecms/formex@workspace:packages/formex":
+"@firecms/formex@^3.0.0-canary.89, @firecms/formex@workspace:packages/formex":
   version: 0.0.0-use.local
   resolution: "@firecms/formex@workspace:packages/formex"
   dependencies:
@@ -3054,9 +3054,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@firecms/mongodb@workspace:packages/mongodb"
   dependencies:
-    "@firecms/core": ^3.0.0-canary.88
-    "@firecms/firebase": ^3.0.0-canary.88
-    "@firecms/ui": ^3.0.0-canary.88
+    "@firecms/core": ^3.0.0-canary.89
+    "@firecms/firebase": ^3.0.0-canary.89
+    "@firecms/ui": ^3.0.0-canary.89
     "@types/node": ^20.14.12
     firebase: ^10.12.4
     typescript: ^5.5.4
@@ -3068,18 +3068,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/schema_inference@^3.0.0-canary.88, @firecms/schema_inference@workspace:packages/schema_inference":
+"@firecms/schema_inference@^3.0.0-canary.89, @firecms/schema_inference@workspace:packages/schema_inference":
   version: 0.0.0-use.local
   resolution: "@firecms/schema_inference@workspace:packages/schema_inference"
   dependencies:
-    "@firecms/core": ^3.0.0-canary.88
+    "@firecms/core": ^3.0.0-canary.89
     "@types/node": ^20.14.12
     typescript: ^5.5.4
     vite: ^5.3.4
   languageName: unknown
   linkType: soft
 
-"@firecms/ui@^3.0.0-canary.88, @firecms/ui@workspace:packages/ui":
+"@firecms/ui@^3.0.0-canary.89, @firecms/ui@workspace:packages/ui":
   version: 0.0.0-use.local
   resolution: "@firecms/ui@workspace:packages/ui"
   dependencies:
@@ -3132,13 +3132,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/user_management@^3.0.0-canary.88, @firecms/user_management@workspace:packages/user_management":
+"@firecms/user_management@^3.0.0-canary.89, @firecms/user_management@workspace:packages/user_management":
   version: 0.0.0-use.local
   resolution: "@firecms/user_management@workspace:packages/user_management"
   dependencies:
-    "@firecms/core": ^3.0.0-canary.88
-    "@firecms/formex": ^3.0.0-canary.88
-    "@firecms/ui": ^3.0.0-canary.88
+    "@firecms/core": ^3.0.0-canary.89
+    "@firecms/formex": ^3.0.0-canary.89
+    "@firecms/ui": ^3.0.0-canary.89
     "@types/node": ^20.14.12
     "@types/react": ^18.3.3
     "@types/react-dom": ^18.3.0
@@ -8535,7 +8535,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "create-firecms-app@workspace:packages/create_firecms_app"
   dependencies:
-    "@firecms/cli": ^3.0.0-canary.88
+    "@firecms/cli": ^3.0.0-canary.89
     "@types/node": ^20.14.12
     ts-node: ^10.9.2
     typescript: ^5.5.4
@@ -10229,7 +10229,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms-example-cloud@workspace:examples/example_cloud"
   dependencies:
-    "@firecms/cloud": ^3.0.0-canary.88
+    "@firecms/cloud": ^3.0.0-canary.89
     "@originjs/vite-plugin-federation": ^1.3.5
     "@tailwindcss/typography": ^0.5.13
     "@types/react": 18.3.3
@@ -10250,17 +10250,17 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms-example-pro@workspace:examples/example_pro"
   dependencies:
-    "@firecms/collection_editor": ^3.0.0-canary.88
-    "@firecms/collection_editor_firebase": ^3.0.0-canary.88
-    "@firecms/core": ^3.0.0-canary.88
-    "@firecms/data_enhancement": ^3.0.0-canary.88
-    "@firecms/data_export": ^3.0.0-canary.88
-    "@firecms/data_import": ^3.0.0-canary.88
-    "@firecms/datatalk": ^3.0.0-canary.88
-    "@firecms/editor": ^3.0.0-canary.88
-    "@firecms/schema_inference": ^3.0.0-canary.88
-    "@firecms/ui": ^3.0.0-canary.88
-    "@firecms/user_management": ^3.0.0-canary.88
+    "@firecms/collection_editor": ^3.0.0-canary.89
+    "@firecms/collection_editor_firebase": ^3.0.0-canary.89
+    "@firecms/core": ^3.0.0-canary.89
+    "@firecms/data_enhancement": ^3.0.0-canary.89
+    "@firecms/data_export": ^3.0.0-canary.89
+    "@firecms/data_import": ^3.0.0-canary.89
+    "@firecms/datatalk": ^3.0.0-canary.89
+    "@firecms/editor": ^3.0.0-canary.89
+    "@firecms/schema_inference": ^3.0.0-canary.89
+    "@firecms/ui": ^3.0.0-canary.89
+    "@firecms/user_management": ^3.0.0-canary.89
     "@tailwindcss/typography": ^0.5.13
     "@types/react": ^18.3.3
     "@types/react-dom": 18.3.0
@@ -10296,16 +10296,16 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms-example@workspace:examples/example"
   dependencies:
-    "@firecms/collection_editor": ^3.0.0-canary.88
-    "@firecms/core": ^3.0.0-canary.88
-    "@firecms/data_enhancement": ^3.0.0-canary.88
-    "@firecms/data_export": ^3.0.0-canary.88
-    "@firecms/data_import": ^3.0.0-canary.88
-    "@firecms/data_import_export": ^3.0.0-canary.88
-    "@firecms/editor": ^3.0.0-canary.88
-    "@firecms/schema_inference": ^3.0.0-canary.88
-    "@firecms/ui": ^3.0.0-canary.88
-    "@firecms/user_management": ^3.0.0-canary.88
+    "@firecms/collection_editor": ^3.0.0-canary.89
+    "@firecms/core": ^3.0.0-canary.89
+    "@firecms/data_enhancement": ^3.0.0-canary.89
+    "@firecms/data_export": ^3.0.0-canary.89
+    "@firecms/data_import": ^3.0.0-canary.89
+    "@firecms/data_import_export": ^3.0.0-canary.89
+    "@firecms/editor": ^3.0.0-canary.89
+    "@firecms/schema_inference": ^3.0.0-canary.89
+    "@firecms/ui": ^3.0.0-canary.89
+    "@firecms/user_management": ^3.0.0-canary.89
     "@fontsource/jetbrains-mono": ^5.0.20
     "@radix-ui/react-portal": ^1.1.1
     "@tailwindcss/typography": ^0.5.13
@@ -10368,7 +10368,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms@workspace:packages/firecms"
   dependencies:
-    "@firecms/cli": ^3.0.0-canary.88
+    "@firecms/cli": ^3.0.0-canary.89
     "@types/node": ^20.14.12
     ts-node: ^10.9.2
     typescript: ^5.5.4
