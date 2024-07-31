@@ -32,11 +32,6 @@ export interface VirtualTableProps<T extends Record<string, any>> {
     cellRenderer: React.ComponentType<CellRendererParams<T>>;
 
     /**
-     * If enabled, content is loaded in batch
-     */
-    paginationEnabled?: boolean;
-
-    /**
      * Set this callback if you want to support some combinations
      * of filter combinations only.
      * @param filterValues
@@ -49,6 +44,11 @@ export interface VirtualTableProps<T extends Record<string, any>> {
      * A callback function when scrolling the table to near the end
      */
     onEndReached?: () => void;
+
+    /**
+     * Offset in pixels where the onEndReached callback is triggered
+     */
+    endOffset?: number;
 
     /**
      * When the pagination should be reset. E.g. the filters or sorting
@@ -147,9 +147,14 @@ export interface VirtualTableProps<T extends Record<string, any>> {
      */
     AddColumnComponent?: React.ComponentType;
 
+    /**
+     * Debug mode
+     */
+    debug?: boolean;
+
 }
 
-export type CellRendererParams<T extends any = any> = {
+export type CellRendererParams<T = any> = {
     column: VirtualTableColumn;
     columns: VirtualTableColumn[];
     columnIndex: number;
@@ -163,7 +168,7 @@ export type CellRendererParams<T extends any = any> = {
  * @see Table
  * @group Components
  */
-export interface VirtualTableColumn<CustomProps extends any = any> {
+export interface VirtualTableColumn<CustomProps = any> {
 
     /**
      * Data key for the cell value, could be "a.b.c"
@@ -236,7 +241,6 @@ export type OnVirtualTableColumnResizeParams = {
     key: string,
     column: VirtualTableColumn
 };
-
 
 /**
  * @see Table

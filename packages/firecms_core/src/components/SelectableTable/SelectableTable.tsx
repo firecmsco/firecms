@@ -221,7 +221,6 @@ export const SelectableTable = React.memo<SelectableTableProps<any>>(
                         onEndReached={loadNextPage}
                         onResetPagination={resetPagination}
                         error={dataLoadingError}
-                        paginationEnabled={paginationEnabled}
                         onColumnResize={onColumnResize}
                         rowHeight={getRowHeight(size)}
                         loading={dataLoading}

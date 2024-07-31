@@ -91,6 +91,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                                                              data,
                                                              onResetPagination,
                                                              onEndReached,
+                                                             endOffset = 600,
                                                              rowHeight = 54,
                                                              columns: columnsProp,
                                                              onRowClick,
@@ -110,7 +111,8 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                                                              style,
                                                              className,
                                                              endAdornment,
-                                                             AddColumnComponent
+                                                             AddColumnComponent,
+                                                             debug
                                                          }: VirtualTableProps<T>) {
 
         const sortByProperty: string | undefined = sortBy ? sortBy[0] : undefined;
@@ -128,10 +130,14 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         const [measureRef, bounds] = useMeasure();
 
         const onColumnResizeInternal = useCallback((params: OnVirtualTableColumnResizeParams) => {
+            if (debug)
+                console.log("onColumnResizeInternal", params);
             setColumns(columns.map((column) => column.key === params.column.key ? params.column : column));
         }, [columns]);
 
         const onColumnResizeEndInternal = useCallback((params: OnVirtualTableColumnResizeParams) => {
+            if (debug)
+                console.log("onColumnResizeEndInternal", params);
             setColumns(columns.map((column) => column.key === params.column.key ? params.column : column));
             if (onColumnResize) {
                 onColumnResize(params);
@@ -142,10 +148,14 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         const filterRef = useRef<VirtualTableFilterValues<any> | undefined>();
 
         useEffect(() => {
+            if (debug)
+                console.log("Filter updated", filterInput);
             filterRef.current = filterInput;
         }, [filterInput]);
 
         const scrollToTop = useCallback(() => {
+            if (debug)
+                console.log("scrollToTop");
             endReachCallbackThreshold.current = 0;
             if (tableRef.current) {
                 // scrollRef.current = [scrollRef.current[0], 0];
@@ -154,6 +164,9 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         }, []);
 
         const onColumnSort = useCallback((key: string) => {
+
+            if (debug)
+                console.log("onColumnSort", key);
 
             const isDesc = sortByProperty === key && currentSort === "desc";
             const isAsc = sortByProperty === key && currentSort === "asc";
@@ -181,21 +194,21 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             scrollToTop();
         }, [checkFilterCombination, currentSort, onFilterUpdate, onResetPagination, onSortByUpdate, scrollToTop, sortByProperty]);
 
-        const resetSort = useCallback(() => {
-            endReachCallbackThreshold.current = 0;
-            if (onSortByUpdate)
-                onSortByUpdate(undefined);
-        }, [onSortByUpdate]);
-
         const maxScroll = Math.max((data?.length ?? 0) * rowHeight - bounds.height, 0);
+        if (debug)
+            console.log("maxScroll", maxScroll);
+
         const onEndReachedInternal = useCallback((scrollOffset: number) => {
-            if (onEndReached && (data?.length ?? 0) > 0 && scrollOffset > endReachCallbackThreshold.current + 600) {
+            if (debug)
+                console.log("onEndReachedInternal", scrollOffset, endReachCallbackThreshold.current + endOffset);
+            if (onEndReached && (data?.length ?? 0) > 0 && scrollOffset > endReachCallbackThreshold.current + endOffset) {
                 endReachCallbackThreshold.current = scrollOffset;
                 onEndReached();
             }
         }, [data?.length, onEndReached]);
 
         const onScroll = useCallback(({
+                                          scrollDirection,
                                           scrollOffset,
                                           scrollUpdateWasRequested
                                       }: {
@@ -203,11 +216,19 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             scrollOffset: number,
             scrollUpdateWasRequested: boolean;
         }) => {
-            if (!scrollUpdateWasRequested && (scrollOffset >= maxScroll - 600))
+            if(debug)
+                console.log("onScroll", {
+                    scrollDirection,
+                    scrollOffset,
+                    scrollUpdateWasRequested
+                });
+            if (!scrollUpdateWasRequested && (scrollOffset >= maxScroll - endOffset))
                 onEndReachedInternal(scrollOffset);
         }, [maxScroll, onEndReachedInternal]);
 
         const onFilterUpdateInternal = useCallback((column: VirtualTableColumn, filterForProperty?: [VirtualTableWhereFilterOp, any]) => {
+            if(debug)
+                console.log("onFilterUpdateInternal", column, filterForProperty);
 
             endReachCallbackThreshold.current = 0;
             const filter = filterRef.current;
@@ -271,6 +292,9 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             endAdornment,
             AddColumnComponent
         };
+
+        if(debug)
+            console.log("VirtualTable render", virtualListController);
 
         // useTraceUpdate(virtualListController);
         return (
