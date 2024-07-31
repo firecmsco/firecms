@@ -1,6 +1,6 @@
 {
   "name": "create-firecms-app",
-  "version": "3.0.0-canary.91",
+  "version": "3.0.0-canary.92",
   "description": "A CLI to bootstrap FireCMS",
   "type": "commonjs",
   "bin": "bin/create-firecms-app.js",
@@ -25,7 +25,7 @@
   "author": "firecms.co",
   "license": "MIT",
   "dependencies": {
-    "@firecms/cli": "^3.0.0-canary.91"
+    "@firecms/cli": "^3.0.0-canary.92"
   },
   "devDependencies": {
     "@types/node": "^20.14.12",
@@ -38,5 +38,5 @@
   "exclude": [
     "node_modules"
   ],
-  "gitHead": "c6287a23388e15ae5bd3e54c442c8bbb2778b541"
+  "gitHead": "fc773194d8166c27d04bc69fec41b171a5b3e2df"
 }
