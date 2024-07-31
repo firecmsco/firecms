@@ -4,7 +4,12 @@ title: Button
 sidebar_label: Button
 ---
 
-Buttons are used to trigger actions. They are used in forms, dialogs, and toolbars.
+Buttons are interactive UI elements that allow users to trigger specific actions or events within an application.
+They play a crucial role in user interfaces, providing a visual cue for user-initiated actions.
+Buttons can be utilized in various contexts, including forms for submission, dialogs for confirmation,
+and toolbars for quick access to functions and features. By clicking a button, users can submit data,
+open new windows, execute commands, and much more, making buttons an essential component for driving user
+interaction and engagement.
 
 ## Size
 
@@ -89,6 +94,20 @@ import CustomClassNameSource from "!!raw-loader!../../samples/components/button/
 </CodeSample>
 
 <CodeBlock language="tsx">{CustomClassNameSource}</CodeBlock>
+
+## Button Component Props
+
+- `variant`: Defines the style variant of the button. Options are `"filled"`, `"outlined"`, or `"text"`. Defaults to `"filled"`.
+- `disabled`: Disables the button, preventing user interaction. Defaults to `false`.
+- `color`: Sets the color theme of the button. Options are `"primary"`, `"secondary"`, `"text"`, or `"error"`.
+- `size`: Specifies the size of the button. Options are `"small"`, `"medium"`, `"large"`, `"xl"`, or `"2xl"`. Defaults to `"medium"`.
+- `startIcon`: Adds an icon at the start of the button content.
+- `fullWidth`: When `true`, the button will expand to fill its container's width. Defaults to `false`.
+- `className`: Additional classes to apply to the button element.
+- `onClick`: Handler function called when the button is clicked.
+- `children`: Defines the button content, typically text or elements.
+- `component`: Custom component to be used for rendering the button.
+- `type`: The type attribute for the button, typically `"button"`, `"submit"`, or `"reset"`. Defaults to `"button"`.
 
 
 

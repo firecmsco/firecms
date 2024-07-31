@@ -2,23 +2,43 @@
 id: text_field
 title: Text Field
 sidebar_label: Text Field
+description: Learn how to use Text Field components to let users input, edit, and display text in your application. Includes examples of basic, multiline, and adorned text fields, as well as various sizes.
 ---
 
-Text fields allow users to input, edit, and display text. They can be used in forms, feedback, and other input-required fields.
+# Text Field Component
+
+Text fields are versatile UI elements that allow users to input, edit, and display text within an application.
+They play a crucial role in user interaction, providing a straightforward way for users to enter data, provide
+feedback, complete forms, and interact with various interfaces that require text input. Text fields can be used for
+short inputs like usernames or passwords, as well as for longer text entries like comments, messages, or
+detailed descriptions.
+
+In the context of FireCMS UI, the design principles and components are loosely based on Google's Material Design guidelines. This means that
+the text fields in FireCMS benefit from a consistent and user-friendly design language, ensuring a cohesive
+look and feel across different web applications. By leveraging these components, developers can quickly build
+interactive and visually appealing forms and input areas that enhance user experience and maintain design consistency.
 
 ## Usage
 
-To use the `TextField`, import it from your components and pass the `value`, `onChange`, and other props according to the use case.
+To use the `TextField`, import it from your components directory and pass the `value`, `onChange`, and other necessary props to fit your use case.
+
 
 import CodeSample from "../../src/CodeSample";
 import CodeBlock from "@theme/CodeBlock";
+import TextFieldBasicDemo from "../../samples/components/text_field/text_field_basic";
+import TextFieldBasicSource from "!!raw-loader!../../samples/components/text_field/text_field_basic";
+import TextFieldMultilineDemo from "../../samples/components/text_field/text_field_multiline";
+import TextFieldMultilineSource from "!!raw-loader!../../samples/components/text_field/text_field_multiline";
+import TextFieldSizeDemo from "../../samples/components/text_field/text_field_sizes";
+import TextFieldSizeSource from "!!raw-loader!../../samples/components/text_field/text_field_sizes";
+import TextFieldAdornmentDemo from "../../samples/components/text_field/text_field_adornment";
+import TextFieldAdornmentSource from "!!raw-loader!../../samples/components/text_field/text_field_adornment";
 
 ## Basic Text Field
 
-A simple text field with minimal configuration.
+A basic text field with minimal configuration:
 
-import TextFieldBasicDemo from '../../samples/components/text_field/text_field_basic';
-import TextFieldBasicSource from '!!raw-loader!../../samples/components/text_field/text_field_basic';
+
 
 <CodeSample>
     <TextFieldBasicDemo/>
@@ -28,10 +48,9 @@ import TextFieldBasicSource from '!!raw-loader!../../samples/components/text_fie
 
 ## Multiline Text Field
 
-A text field that supports multiline, useful for larger text inputs like comments or notes.
+A text field that supports multiline inputs, suitable for comments or notes:
 
-import TextFieldMultilineDemo from '../../samples/components/text_field/text_field_multiline';
-import TextFieldMultilineSource from '!!raw-loader!../../samples/components/text_field/text_field_multiline';
+
 
 <CodeSample>
     <TextFieldMultilineDemo/>
@@ -41,10 +60,9 @@ import TextFieldMultilineSource from '!!raw-loader!../../samples/components/text
 
 ## Text Field Sizes
 
-Demonstrating different sizes for the text field component.
+Examples of different size options for the text field component:
 
-import TextFieldSizeDemo from '../../samples/components/text_field/text_field_sizes';
-import TextFieldSizeSource from '!!raw-loader!../../samples/components/text_field/text_field_sizes';
+
 
 <CodeSample>
     <TextFieldSizeDemo/>
@@ -54,13 +72,34 @@ import TextFieldSizeSource from '!!raw-loader!../../samples/components/text_fiel
 
 ## Text Field with Adornment
 
-Text Field with an end adornment, often used for icons, action buttons, or informative text.
+A text field featuring an end adornment for icons, action buttons, or informative text:
 
-import TextFieldAdornmentDemo from '../../samples/components/text_field/text_field_adornment';
-import TextFieldAdornmentSource from '!!raw-loader!../../samples/components/text_field/text_field_adornment';
+
 
 <CodeSample>
     <TextFieldAdornmentDemo/>
 </CodeSample>
 
 <CodeBlock language="tsx">{TextFieldAdornmentSource}</CodeBlock>
+
+## Text Field Props
+
+The `TextField` component in FireCMS UI is highly customizable through various props.
+Below is a comprehensive list of props you can use to tailor the `TextField` to your needs:
+
+- `value`: The current value of the text field. Required.
+- `onChange`: Handler function called when the text field value changes. Required.
+- `label`: The label displayed above the text field.
+- `placeholder`: Placeholder text displayed when the text field is empty.
+- `multiline`: If `true`, the text field will allow multiline input. Defaults to `false`.
+- `rows`: Specifies the number of visible text lines for a multiline text field.
+- `variant`: The variant to use for the text field. Options are `'standard'`, `'outlined'`, or `'filled'`. Defaults to `'standard'`.
+- `fullWidth`: If `true`, the input will take up the full width of its container. Defaults to `false`.
+- `size`: The size of the text field. Options are `'small'` or `'medium'`. Defaults to `'medium'`.
+- `color`: The color of the text field. Options are `'default'`, `'primary'`, or `'secondary'`. Defaults to `'default'`.
+- `type`: The type of input element; e.g., `password`, `text`, `email`, etc. Defaults to `'text'`.
+- `disabled`: If `true`, the text field will be disabled. Defaults to `false`.
+- `helperText`: Text that appears below the text field.
+- `error`: If `true`, the text field will have an error state. Defaults to `false`.
+- `startAdornment`: Element to be placed at the start of the text field.
+- `endAdornment`: Element to be placed at the end of the text field.

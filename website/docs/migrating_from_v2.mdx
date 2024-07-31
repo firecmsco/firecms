@@ -6,21 +6,11 @@ description: Migrate seamlessly to FireCMS 3.0, the latest innovation in headles
 ---
 
 :::important
-This migration guide applies for migrating from FireCMS 2.0 to FireCMS Cloud.
-There are no docs for migrating to FireCMS PRO. In that case we recommend
-initializing a new project and migrating your collections and views.
-Still, some of the information in this guide might be useful.
+This migration guide applies for migrating from FireCMS 2.0 to FireCMS Cloud
 :::
-
 
 FireCMS 3.0 is a major release that introduces a lot of changes. This page
 describes the main changes and how to migrate from FireCMS 2.0.
-
-:::important
-Some features are not yet supported in FireCMS 3.0. If you need any of them, please
-reach out to us in our [Discord channel](https://discord.gg/fxy7xsQm3m).
-Consider this before migrating!
-:::
 
 
 ## Create a project in app.firecms.co
@@ -184,13 +174,6 @@ const appConfig: FireCMSAppConfig = {
 - The `views` property has been renamed to `entityViews`, since they are applied to entities.
 - The `path` prop of views has been renamed to `key`, for consistency with the rest of the library.
 
-## No longer supported features:
-
-- `Custom CMS implementations`. It is not currently possible to implement a custom CMS, using the
-internal FireCMS components. You also can't use the new version with custom data sources.
-Highly custom implementations will be supported in the **PRO** version of FireCMS.
-
-Please reach out to us in our [Discord channel](https://discord.gg/fxy7xsQm3m) if you need any of these features.
 
 ## Migrating custom components (MUI)
 

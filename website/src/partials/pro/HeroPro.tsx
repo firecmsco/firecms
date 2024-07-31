@@ -109,7 +109,7 @@ export function HeroPro({
                             The perfect solution for your team or public facing applications, built on top of Firebase.
                         </p>
                     </div>
-                    <div className={"mt-16 flex flex-row flex-wrap gap-4"}>
+                    <div className={"mt-8 flex flex-row flex-wrap gap-4"}>
 
                         <a
                             className={CTAButtonMixin + "  "}
