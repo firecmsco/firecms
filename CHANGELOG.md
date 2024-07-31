@@ -1,3 +1,7 @@
+## [3.0.0-beta.9] - 2024-07-10
+
+- Additional fields are also now displayed in the entity side dialog.
+
 ## [3.0.0-beta.8] - 2024-07-10
 
 - Fix for excessive re-renders in the form view.

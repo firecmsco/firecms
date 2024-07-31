@@ -106,3 +106,16 @@ export function getColumnKeysForProperty(property: ResolvedProperty, key: string
         disabled: disabled || Boolean(property.disabled) || Boolean(property.readOnly)
     }];
 }
+
+export function getFormFieldKeys(collection: EntityCollection): string[] {
+    const propertyKeys = Object.keys(collection.properties);
+    const additionalFields = collection.additionalFields ?? [];
+    const allKeys = [
+        ...propertyKeys,
+        ...additionalFields.map((field) => field.key)
+    ];
+    if (collection.propertiesOrder) {
+        return collection.propertiesOrder.filter(key => allKeys.includes(key));
+    }
+    return allKeys;
+}

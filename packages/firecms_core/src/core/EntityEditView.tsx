@@ -23,6 +23,7 @@ import {
     EntityCollectionView,
     EntityView,
     ErrorBoundary,
+    getFormFieldKeys,
 } from "../components";
 import {
     canCreateEntity,
@@ -59,6 +60,8 @@ import {
     defaultBorderMixin,
     DialogActions,
     IconButton,
+    NotesIcon,
+    paperMixin,
     Tab,
     Tabs,
     Tooltip,
@@ -71,7 +74,7 @@ import { CustomIdField } from "../form/components/CustomIdField";
 import { CustomFieldValidator, getYupEntitySchema } from "../form/validation";
 import { ErrorFocus } from "../form/components/ErrorFocus";
 import { PropertyIdCopyTooltipContent } from "../components/PropertyIdCopyTooltipContent";
-import { PropertyFieldBinding } from "../form";
+import { LabelWithIcon, PropertyFieldBinding } from "../form";
 import { ValidationError } from "yup";
 
 const MAIN_TAB_VALUE = "main_##Q$SC^#S6";
@@ -580,11 +583,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         });
     };
 
-    // const onValuesChanged = useCallback((values?: EntityValues<M>) => {
-    //     modifiedValuesRef.current = values;
-    // }, []);
-
-    // eslint-disable-next-line n/handle-callback-err
     const onIdUpdateError = useCallback((error: any) => {
         snackbarController.open({
             type: "error",
@@ -739,50 +737,81 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const formFields = (
         <>
-            {(resolvedCollection.propertiesOrder ?? Object.keys(resolvedCollection.properties))
+            {(getFormFieldKeys(resolvedCollection))
                 .map((key) => {
 
                     const property = resolvedCollection.properties[key];
-                    if (!property) {
-                        console.warn(`Property ${key} not found in collection ${resolvedCollection.name}`);
-                        return null;
+                    if (property) {
+
+                        const underlyingValueHasChanged: boolean =
+                            !!underlyingChanges &&
+                            Object.keys(underlyingChanges).includes(key) &&
+                            !!formex.touched[key];
+
+                        const disabled = (!autoSave && formex.isSubmitting) || isReadOnly(property) || Boolean(property.disabled);
+                        const hidden = isHidden(property);
+                        if (hidden) return null;
+                        const cmsFormFieldProps: PropertyFieldBindingProps<any, M> = {
+                            propertyKey: key,
+                            disabled,
+                            property,
+                            includeDescription: property.description || property.longDescription,
+                            underlyingValueHasChanged: underlyingValueHasChanged && !autoSave,
+                            context: formContext,
+                            tableMode: false,
+                            partOfArray: false,
+                            partOfBlock: false,
+                            autoFocus: false
+                        };
+
+                        return (
+                            <div id={`form_field_${key}`}
+                                 key={`field_${resolvedCollection.name}_${key}`}>
+                                <ErrorBoundary>
+                                    <Tooltip title={<PropertyIdCopyTooltipContent propertyId={key}/>}
+                                             delayDuration={800}
+                                             side={"left"}
+                                             align={"start"}
+                                             sideOffset={16}>
+                                        <PropertyFieldBinding {...cmsFormFieldProps}/>
+                                    </Tooltip>
+                                </ErrorBoundary>
+                            </div>
+                        );
                     }
 
-                    const underlyingValueHasChanged: boolean =
-                        !!underlyingChanges &&
-                        Object.keys(underlyingChanges).includes(key) &&
-                        !!formex.touched[key];
+                    const additionalField = resolvedCollection.additionalFields?.find(f => f.key === key);
+                    if (additionalField && entity) {
+                        const Builder = additionalField.Builder;
+                        if (!Builder && !additionalField.value) {
+                            throw new Error("When using additional fields you need to provide a Builder or a value");
+                        }
 
-                    const disabled = (!autoSave && formex.isSubmitting) || isReadOnly(property) || Boolean(property.disabled);
-                    const hidden = isHidden(property);
-                    if (hidden) return null;
-                    const cmsFormFieldProps: PropertyFieldBindingProps<any, M> = {
-                        propertyKey: key,
-                        disabled,
-                        property,
-                        includeDescription: property.description || property.longDescription,
-                        underlyingValueHasChanged: underlyingValueHasChanged && !autoSave,
-                        context: formContext,
-                        tableMode: false,
-                        partOfArray: false,
-                        partOfBlock: false,
-                        autoFocus: false
-                    };
+                        const child = Builder
+                            ? <Builder entity={entity} context={context}/>
+                            : <>{additionalField.value?.({
+                                entity,
+                                context
+                            })}</>;
+                        return (
+                            <div>
+                                <LabelWithIcon icon={<NotesIcon size={"small"}/>}
+                                               title={additionalField.name}
+                                               className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
+                                <div
+                                    className={cls(paperMixin, "min-h-14 p-4 md:p-6 overflow-x-scroll no-scrollbar")}>
 
-                    return (
-                        <div id={`form_field_${key}`}
-                             key={`field_${resolvedCollection.name}_${key}`}>
-                            <ErrorBoundary>
-                                <Tooltip title={<PropertyIdCopyTooltipContent propertyId={key}/>}
-                                         delayDuration={800}
-                                         side={"left"}
-                                         align={"start"}
-                                         sideOffset={16}>
-                                    <PropertyFieldBinding {...cmsFormFieldProps}/>
-                                </Tooltip>
-                            </ErrorBoundary>
-                        </div>
-                    );
+                                    <ErrorBoundary>
+                                        {child}
+                                    </ErrorBoundary>
+
+                                </div>
+                            </div>
+                        );
+                    }
+
+                    console.warn(`Property ${key} not found in collection ${resolvedCollection.name} in properties or additional fields. Skipping.`);
+                    return null;
                 })
                 .filter(Boolean)}
 

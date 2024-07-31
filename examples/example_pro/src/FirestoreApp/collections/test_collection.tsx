@@ -3,35 +3,10 @@ import {
     buildProperty,
     EntityCallbacks,
     EntityOnFetchProps,
-    EnumValues,
     resolveNavigationFrom
 } from "@firecms/core";
-import { CustomField } from "../custom_field/SubPropertyField";
 import { usersCollection } from "./users_collection";
 import { SecondaryForm } from "../custom_entity_view/SecondaryForm";
-
-const relaxedStatus: EnumValues = [
-    {
-        id: "-3",
-        label: "Very tense",
-        color: "redDarker"
-    },
-    {
-        id: "-2",
-        label: "Medium tense",
-        color: "redLight"
-    },
-    {
-        id: "-1",
-        label: "Lightly tense",
-        color: "redLighter"
-    },
-    {
-        id: "0",
-        label: "Normal",
-        color: "grayLight"
-    }
-];
 
 export const testCallbacks: EntityCallbacks = {
     onFetch({
@@ -71,38 +46,6 @@ export const testCallbacks: EntityCallbacks = {
     }
 };
 
-const validatedCustom = buildProperty({
-    dataType: "map",
-    name: "Validated custom field",
-    properties: {
-        sample: {
-            name: "Sample",
-            dataType: "string"
-        }
-    },
-    Field: CustomField
-});
-
-type TestType = {
-    name: string;
-    body: Record<string, any>;
-    background: number;
-    upload: string;
-    eeee: any;
-    mainSaturation: Array<{
-        type: string;
-        value: {
-            from: number;
-            to: number;
-        } | number;
-    }>;
-    map: Record<string, any>;
-    array_enum: string[];
-    enum: string;
-    test_date: Date;
-    tags: string[];
-}
-
 export const testCollection = buildCollection<any>({
         callbacks: testCallbacks,
         id: "test_entity",
@@ -115,6 +58,13 @@ export const testCollection = buildCollection<any>({
             includeActions: true,
             Builder: SecondaryForm
         }],
+        // additionalFields: [{
+        //     key: "custom",
+        //     name: "Custom",
+        //     Builder: () => {
+        //         return <div>YO</div>
+        //     }
+        // }],
         properties: {
             videos: {
                 dataType: "array",
@@ -144,6 +94,11 @@ export const testCollection = buildCollection<any>({
                     }
                 }
             },
+            readOnly: {
+                dataType: "string",
+                readOnly: true,
+                name: "Read only"
+            },
             contactDetails: {
                 hideFromCollection: true,
                 dataType: "array",
@@ -165,6 +120,7 @@ export const testCollection = buildCollection<any>({
             },
             type: {
                 dataType: "string",
+                disabled: true,
                 name: "Type",
                 enumValues: [
                     {

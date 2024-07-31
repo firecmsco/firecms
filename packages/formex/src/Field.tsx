@@ -23,10 +23,6 @@ export interface FormexFieldProps<Value = any, FormValues extends object = any> 
     form: FormexController<FormValues>;
 }
 
-export type FieldValidator = (
-    value: any
-) => string | void | Promise<string | void>;
-
 export interface FieldConfig<Value, C extends React.ElementType | undefined = undefined> {
 
     /**
