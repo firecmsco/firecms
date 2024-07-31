@@ -1,6 +1,6 @@
 {
   "name": "@firecms/cli",
-  "version": "3.0.0-canary.89",
+  "version": "3.0.0-canary.90",
   "description": "A CLI to perform FireCMS operations",
   "main": "./dist/index.cjs",
   "module": "./dist/index.es.js",
@@ -70,5 +70,5 @@
     "node_modules",
     "template/node_modules"
   ],
-  "gitHead": "600fb41d788b97e96aefdb680b9a3746e2ab74d4"
+  "gitHead": "399d47454cf1fc5a83969baddac68bfc68ec815e"
 }
