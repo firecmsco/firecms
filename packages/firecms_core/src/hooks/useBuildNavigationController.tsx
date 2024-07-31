@@ -203,6 +203,10 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
                 collectionsRef.current = resolvedCollections;
                 shouldUpdateTopLevelNav = true;
             }
+            if (collectionsRef.current === undefined) {
+                collectionsRef.current = resolvedCollections;
+                shouldUpdateTopLevelNav = true;
+            }
             if (!equal(viewsRef.current, resolvedViews)) {
                 viewsRef.current = resolvedViews;
                 shouldUpdateTopLevelNav = true;

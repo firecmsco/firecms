@@ -147,7 +147,7 @@ export function IntroWidget({}: {}) {
                     : undefined}>
                 <AddIcon/>Create your first collection
             </Button>}
-            <Typography variant={"caption"} color={"secondary"}>
+            <Typography color={"secondary"}>
                 You can also define collections programmatically.
             </Typography>
         </Paper>

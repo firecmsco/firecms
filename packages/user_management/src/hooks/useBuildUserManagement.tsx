@@ -100,19 +100,21 @@ export function useBuildUserManagement({
                     if (!equal(newRoles, roles))
                         setRoles(newRoles);
                 } catch (e) {
+                    setRoles([]);
                     console.error("Error loading roles", e);
                     setRolesError(e as Error);
                 }
                 setRolesLoading(false);
             },
             onError(e: any): void {
+                setRoles([]);
                 console.error("Error loading roles", e);
                 setRolesError(e);
                 setRolesLoading(false);
             }
         });
 
-    }, [dataSourceDelegate, rolesPath]);
+    }, [dataSourceDelegate?.initialised, rolesPath]);
 
     useEffect(() => {
         if (!dataSourceDelegate || !usersPath) return;
@@ -127,19 +129,21 @@ export function useBuildUserManagement({
                     if (!equal(newUsers, usersWithRoleIds))
                         setUsersWithRoleIds(newUsers);
                 } catch (e) {
+                    setUsersWithRoleIds([]);
                     console.error("Error loading users", e);
                     setUsersError(e as Error);
                 }
                 setUsersLoading(false);
             },
             onError(e: any): void {
+                setUsersWithRoleIds([]);
                 console.error("Error loading users", e);
                 setUsersError(e);
                 setUsersLoading(false);
             }
         });
 
-    }, [dataSourceDelegate, usersPath]);
+    }, [dataSourceDelegate?.initialised, usersPath]);
 
     const saveUser = useCallback(async (user: User): Promise<User> => {
         if (!dataSourceDelegate) throw Error("useBuildUserManagement Firebase not initialised");
@@ -170,7 +174,7 @@ export function useBuildUserManagement({
                 values: data
             }).then(() => user);
         }
-    }, [usersPath, dataSourceDelegate]);
+    }, [usersPath, dataSourceDelegate?.initialised]);
 
     const saveRole = useCallback((role: Role): Promise<void> => {
         if (!dataSourceDelegate) throw Error("useBuildUserManagement Firebase not initialised");
@@ -188,7 +192,7 @@ export function useBuildUserManagement({
         }).then(() => {
             return;
         });
-    }, [rolesPath, dataSourceDelegate]);
+    }, [rolesPath, dataSourceDelegate?.initialised]);
 
     const deleteUser = useCallback(async (user: User): Promise<void> => {
         if (!dataSourceDelegate) throw Error("useBuildUserManagement Firebase not initialised");
@@ -201,7 +205,7 @@ export function useBuildUserManagement({
             values: {}
         };
         await dataSourceDelegate.deleteEntity({ entity })
-    }, [usersPath, dataSourceDelegate]);
+    }, [usersPath, dataSourceDelegate?.initialised]);
 
     const deleteRole = useCallback(async (role: Role): Promise<void> => {
         if (!dataSourceDelegate) throw Error("useBuildUserManagement Firebase not initialised");
@@ -214,7 +218,7 @@ export function useBuildUserManagement({
             values: {}
         };
         await dataSourceDelegate.deleteEntity({ entity })
-    }, [rolesPath, dataSourceDelegate]);
+    }, [rolesPath, dataSourceDelegate?.initialised]);
 
     const collectionPermissions: PermissionsBuilder = useCallback(({
                                                                        collection,

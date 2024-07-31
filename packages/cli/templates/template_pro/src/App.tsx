@@ -99,11 +99,6 @@ export function App() {
     const modeController = useBuildModeController();
 
     /**
-     * Controller for saving some user preferences locally.
-     */
-    const userConfigPersistence = useBuildLocalConfigurationPersistence();
-
-    /**
      * Delegate used for fetching and saving data in Firestore
      */
     const firestoreDelegate = useFirestoreDelegate({
@@ -133,6 +128,11 @@ export function App() {
         loading: userManagement.loading,
         defineRolesFor: userManagement.defineRolesFor
     });
+
+    /**
+     * Controller for saving some user preferences locally.
+     */
+    const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
     /**
      * Use the authenticator to control access to the main view
@@ -191,6 +191,7 @@ export function App() {
     if (configError) {
         return <>{configError}</>;
     }
+
 
     return (
         <SnackbarProvider>
