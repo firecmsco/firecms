@@ -17,6 +17,7 @@ export interface ChipProps {
     outlined?: boolean;
     onClick?: () => void;
     icon?: React.ReactNode;
+    style?: React.CSSProperties;
 }
 
 const sizeClassNames = {
@@ -36,7 +37,8 @@ export function Chip({
                          onClick,
                          icon,
                          size = "medium",
-                         className
+                         className,
+                         style
                      }: ChipProps) {
 
     const usedColorScheme = typeof colorScheme === "string" ? getColorSchemeForKey(colorScheme) : colorScheme;
@@ -54,6 +56,7 @@ export function Chip({
                 backgroundColor: error || !usedColorScheme ? undefined : usedColorScheme.color,
                 color: error || !usedColorScheme ? undefined : usedColorScheme.text,
                 overflow: "hidden",
+                ...style
                 // display: "-webkit-box",
                 // WebkitLineClamp: 1,
                 // WebkitBoxOrient: "vertical",
