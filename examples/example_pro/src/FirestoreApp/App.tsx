@@ -64,7 +64,7 @@ import { DemoImportAction } from "./DemoImportAction";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
 
-function App() {
+export function App() {
 
     const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
                                                                                        user,
@@ -327,5 +327,3 @@ function App() {
     );
 
 }
-
-export default App;
