@@ -147,7 +147,11 @@ Let's break down the different fields:
 Collections have suffered minimal changes. If you don't have any custom components defined, it should be
 easy to adapt your collections to the new format.
 
-For `AdditionalFieldDelegate` the prop `id` has been renamed to `key`.
+- You need to define an `id` for each collection, which typically can be the same as the `path`.
+
+- The prop `views` has been renamed to `entityViews`, since they are applied to entities.
+
+- For `AdditionalFieldDelegate` the prop `id` has been renamed to `key`.
 
 To migrate your collections, simply export them in your `index.ts` file:
 

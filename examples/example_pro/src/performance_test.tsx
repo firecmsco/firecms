@@ -2,7 +2,7 @@ import React, { Profiler } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css"
 
-import App from "./FirestoreApp/App";
+import { App } from "./FirestoreApp/App";
 
 const dod = () => {
     // @ts-ignore

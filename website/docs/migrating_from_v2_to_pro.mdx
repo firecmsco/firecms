@@ -30,3 +30,81 @@ npx create-firecms-app --pro
 ```
 
 This will create a new project with the latest version of FireCMS PRO.
+
+## Updating the imports
+
+The main change is that the imports have changed. You need to update the imports in your project.
+Before you would import everything from `firecms` (or even `@camberi/firecms`). Now you need to import from
+different packages.
+- All UI components are now in `@firecms/ui`. Everything including buttons, textfields, layouts, etc.
+- The core of FireCMS is in `@firecms/core`. This includes the `FireCMSApp`, `FireCMSContext`, etc.
+- All Firebase related code is in `@firecms/firebase`, including `useFirebaseAuthController`, `use` etc.
+Most of the imports can be found in `@firecms/core`, so we recommend starting there.
+
+## Collection configuration
+
+Collections have suffered minimal changes. If you don't have any custom components defined, it should be
+easy to adapt your collections to the new format.
+
+- You need to define an `id` for each collection, which typically can be the same as the `path`. Make sure the
+`id` is unique.
+
+- The prop `views` has been renamed to `entityViews`, since they are applied to entities.
+    - Within `entityViews` the prop `path` has been renamed to `key`.
+
+- For `AdditionalFieldDelegate`:
+    - The prop `id` has been renamed to `key`.
+    - The prop `builder` has been renamed to `Builder`.
+
+## Authenticator
+
+- The authenticator now returns a `dataSourceDelegate` instead of a `dataSource`. The difference is that you do
+not pass the `collection` prop anymore.
+
+## Other
+
+- `FieldDescription` has been renamed to `FieldCaption`.
+- `PropertyPreview` no longer need an `entity` prop.
+
+
+## Migrating custom components (MUI)
+
+FireCMS 3.0 is based on `tailwindcss` instead of `mui`.
+
+Mui was great for the initial versions of FireCMS, but it was being a big performance bottleneck
+and it was hard to customize.
+
+The new version of FireCMS has built in almost 50 new components implemented with tailwindcss, that
+mimic in a good way the material-ui components. You are encouraged to migrate your custom components
+to the new format.
+
+You can try replacing imports from `@mui/material` to `@firecms/ui` and will see that many things work out of the box.
+
+### Components that have no equivalent:
+- `Box`: The box component is just a wrapper used by mui to apply styles. You can use a `div` instead, with some
+tailwind classes.
+Tip: ChatGPT is great at converting Box components to div with tailwind classes.
+- `Link`: Use `a` instead.
+- `FormControl`
+
+### Components that change behaviour (from MUI to FireCMS UI)
+- `Menu` and `MenuItem`: Menu items do not have an id anymore. You can add an `onClick` props per menu item.
+- `Select` does not use `labelId` anymore. Just add the label as a component in `label`.
+- `SelectChangeEvent` is now `ChangeEvent<HTMLSelectElement>`
+- `CircularProgress` size is a string instead of a number. You can use `size="small"` or `size="large"`.
+
+### Continue using MUI
+
+However, if you want to keep using mui: you can still use the old components, but you will need to
+install the `mui` package manually.
+
+```
+yarn add @mui/material @emotion/react @emotion/styled
+```
+
+If you need MUI icons, run:
+
+```
+yarn add @mui/icons-material
+```
+

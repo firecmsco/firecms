@@ -1,0 +1,207 @@
+---
+id: custom_storage
+title: Defining Custom Storage in FireCMS
+sidebar_label: Custom Storage Solutions
+---
+
+FireCMS provides flexibility when it comes to integrating custom storage solutions.
+While it comes with built-in support for Firebase Storage, you might want to define your
+own storage solutions to handle file uploads, downloads, and metadata management.
+This guide will help you set up a custom storage solution.
+
+## Creating a Custom Storage Source
+
+A custom storage source in FireCMS is defined by implementing the `StorageSource` interface.
+Here is a template for creating a custom storage source.
+
+Below is a template for creating a custom storage source:
+
+```tsx
+import { StorageSource, UploadFileProps, UploadFileResult, DownloadConfig } from "@firecms/core";
+
+export interface CustomStorageSourceProps {
+  // Define the necessary configuration properties for your storage solution
+  apiKey?: string;
+  apiSecret?: string;
+  region?: string;
+  bucketName?: string;
+  // ... other necessary properties
+}
+
+export function useCustomStorageSource(props: CustomStorageSourceProps): StorageSource {
+
+  // Initialize your storage client based on the props provided
+  // For example, it could be a client for Amazon S3, Google Cloud Storage, etc.
+  const customClient = initializeCustomClient(props);
+
+  return {
+    async uploadFile({ file, fileName, path, metadata, bucket }: UploadFileProps): Promise<UploadFileResult> {
+      const usedFilename = fileName ?? file.name;
+      const destinationPath = `${path}/${usedFilename}`;
+      const targetBucket = bucket ?? props.bucketName;
+
+      // Logic to upload file using your storage client
+      await customClient.uploadFile(targetBucket, destinationPath, file, metadata);
+
+      return { path: destinationPath, bucket: targetBucket };
+    },
+
+    async getFile(path: string, bucket?: string): Promise<File | null> {
+      const targetBucket = bucket ?? props.bucketName;
+
+      try {
+        // Logic to retrieve the file using your storage client
+        const fileData = await customClient.getFile(targetBucket, path);
+
+        if (fileData) {
+          const blob = new Blob([fileData], { type: fileData.type });
+          return new File([blob], path);
+        } else {
+          return null;
+        }
+      } catch (e) {
+        if (e.message === "File not found") {
+          return null; // File not found
+        }
+        throw e;
+      }
+    },
+
+    async getDownloadURL(path: string, bucket?: string): Promise<DownloadConfig> {
+      const targetBucket = bucket ?? props.bucketName;
+
+      try {
+        // Logic to get the download URL using your storage client
+        const url = await customClient.getDownloadURL(targetBucket, path);
+        const metadata = await customClient.getMetadata(targetBucket, path);
+        return { url, metadata };
+      } catch (e) {
+        if (e.message === "File not found") {
+          return { url: null, fileNotFound: true };
+        }
+        throw e;
+      }
+    }
+  };
+}
+
+// Example initialize function
+function initializeCustomClient({ apiKey, apiSecret, region, bucketName }: CustomStorageSourceProps) {
+  // Initialization logic for your storage client
+  return {
+    uploadFile: async (bucket: string, destinationPath: string, file: File, metadata?: any) => {
+      // Implement upload logic
+    },
+    getFile: async (bucket: string, path: string) => {
+      // Implement get file logic
+      return null; // Replace with actual file data
+    },
+    getDownloadURL: async (bucket: string, path: string) => {
+      // Implement get download URL logic
+      return ""; // Replace with actual URL
+    },
+    getMetadata: async (bucket: string, path: string) => {
+      // Implement get metadata logic
+      return {}; // Replace with actual metadata
+    }
+  };
+}
+```
+
+## Using the Custom Storage Source
+
+After creating the custom storage source, you can use it in your FireCMS application by initializing it in your component and passing it to the `FireCMS` component.
+
+### Example Usage
+
+Here is an example of how to use the custom storage source in your FireCMS application:
+
+```tsx
+import React from "react";
+import "typeface-rubik";
+import "@fontsource/jetbrains-mono";
+import {
+  FireCMS,
+  ModeControllerProvider,
+  Scaffold,
+  AppBar,
+  Drawer,
+  NavigationRoutes,
+  SideDialogs,
+  SnackbarProvider,
+  useBuildLocalConfigurationPersistence,
+  useBuildModeController,
+  useBuildNavigationController,
+  useValidateAuthenticator,
+  CenteredView,
+  CircularProgressCenter
+} from "@firecms/core";
+import { productsCollection } from "./collections/products_collection";
+import { useCustomStorageSource, CustomStorageSourceProps } from "./hooks/useCustomStorageSource";
+
+const customStorageConfig: CustomStorageSourceProps = {
+  apiKey: "your-api-key",
+  apiSecret: "your-api-secret",
+  region: "your-region",
+  bucketName: "your-bucket-name"
+  // ... other necessary properties
+};
+
+const CustomStorageApp: React.FC = () => {
+  const name = "My Custom Storage FireCMS App";
+
+  const modeController = useBuildModeController();
+  const userConfigPersistence = useBuildLocalConfigurationPersistence();
+  const storageSource = useCustomStorageSource(customStorageConfig);
+
+  // const authController = useFirebaseAuthController(); // your auth controller
+  // const dataSourceDelegate = {}; // Your data source delegate implementation
+
+  const navigationController = useBuildNavigationController({
+    collections: [productsCollection],
+    // authController,
+    // dataSourceDelegate
+  });
+
+  // if (authLoading) {
+  //   return <CircularProgressCenter />;
+  // }
+
+  return (
+    <SnackbarProvider>
+      <ModeControllerProvider value={modeController}>
+        <FireCMS
+          navigationController={navigationController}
+          userConfigPersistence={userConfigPersistence}
+          storageSource={storageSource}
+          // authController={authController}
+          // dataSourceDelegate={dataSourceDelegate}
+        >
+          {({ context, loading }) => {
+            if (loading || authLoading) {
+              return <CircularProgressCenter size="large" />;
+            }
+
+            if (!canAccessMainView) {
+              return <CenteredView>{notAllowedError}</CenteredView>;
+            }
+
+            return (
+              <Scaffold>
+                <AppBar title={"My app"} />
+                <Drawer />
+                <NavigationRoutes />
+                <SideDialogs />
+              </Scaffold>
+            );
+          }}
+        </FireCMS>
+      </ModeControllerProvider>
+    </SnackbarProvider>
+  );
+};
+
+export default CustomStorageApp;
+```
+
+This documentation provides a clear guide for defining custom storage solutions in FireCMS. Follow the template to integrate other storage services as per your requirements.
