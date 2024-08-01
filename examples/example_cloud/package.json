@@ -12,6 +12,8 @@
     "deploy:staging": "vite build && firecms deploy --project=firecms-demo-27150 --env-dev"
   },
   "dependencies": {
+    "typeface-rubik": "^1.1.13",
+    "@fontsource/jetbrains-mono": "^5.0.20",
     "@firecms/cloud": "^3.0.0-canary.93",
     "firebase": "^10.12.4",
     "react": "^18.3.1",

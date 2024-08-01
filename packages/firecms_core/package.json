@@ -48,7 +48,6 @@
     "dependencies": {
         "@firecms/formex": "^3.0.0-canary.93",
         "@firecms/ui": "^3.0.0-canary.93",
-        "@fontsource/jetbrains-mono": "^5.0.20",
         "@hello-pangea/dnd": "^16.6.0",
         "@radix-ui/react-portal": "^1.1.1",
         "clsx": "^2.1.1",
@@ -65,7 +64,6 @@
         "react-transition-group": "^4.4.5",
         "react-use-measure": "^2.1.1",
         "react-window": "^1.8.10",
-        "typeface-rubik": "^1.1.13",
         "yup": "^0.32.11"
     },
     "peerDependencies": {

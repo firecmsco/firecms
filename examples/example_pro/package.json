@@ -15,6 +15,8 @@
     "@firecms/schema_inference": "^3.0.0-canary.93",
     "@firecms/ui": "^3.0.0-canary.93",
     "@firecms/user_management": "^3.0.0-canary.93",
+    "typeface-rubik": "^1.1.13",
+    "@fontsource/jetbrains-mono": "^5.0.20",
     "firebase": "^10.12.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
