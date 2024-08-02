@@ -255,16 +255,17 @@ export function resolveArrayProperty<T extends any[], M>({
         } else {
             const of = property.of;
             const resolvedProperties: ResolvedProperty[] = Array.isArray(propertyValue)
-                ? propertyValue.map((v: any, index: number) => resolveProperty({
-                    propertyKey: `${propertyKey}.${index}`,
-                    propertyOrBuilder: of,
-                    ignoreMissingFields,
-                    ...props,
-                    index
-                })).filter(e => Boolean(e)) as ResolvedProperty[]
+                ? propertyValue.map((v: any, index: number) => {
+                    return resolveProperty({
+                        propertyKey: `${propertyKey}.${index}`,
+                        propertyOrBuilder: of,
+                        ignoreMissingFields,
+                        ...props,
+                        index
+                    });
+                }).filter(e => Boolean(e)) as ResolvedProperty[]
                 : [];
             const ofProperty = resolveProperty({
-                propertyKey: `${propertyKey}`,
                 propertyOrBuilder: of,
                 ignoreMissingFields,
                 ...props
@@ -295,6 +296,7 @@ export function resolveArrayProperty<T extends any[], M>({
             }).filter(e => Boolean(e)) as ResolvedProperty[]
             : [];
         const properties = resolveProperties<any>({
+            propertyKey,
             properties: property.oneOf.properties,
             ignoreMissingFields,
             ...props
@@ -327,10 +329,12 @@ export function resolveArrayProperty<T extends any[], M>({
  * @param value
  */
 export function resolveProperties<M extends Record<string, any>>({
+                                                                     propertyKey,
                                                                      properties,
                                                                      ignoreMissingFields,
                                                                      ...props
                                                                  }: {
+    propertyKey?: string,
     properties: PropertiesOrBuilders<M>,
     values?: Partial<M>,
     previousValues?: Partial<M>,
@@ -344,7 +348,7 @@ export function resolveProperties<M extends Record<string, any>>({
     return Object.entries<PropertyOrBuilder>(properties as Record<string, PropertyOrBuilder>)
         .map(([key, property]) => {
             const childResolvedProperty = resolveProperty({
-                propertyKey: key,
+                propertyKey: propertyKey ? `${propertyKey}.${key}` : undefined,
                 propertyOrBuilder: property,
                 ignoreMissingFields,
                 ...props

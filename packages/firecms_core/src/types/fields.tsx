@@ -217,4 +217,10 @@ export interface PropertyFieldBindingProps<T extends CMSType, M extends Record<s
      * Should this field be disabled
      */
     disabled?: boolean;
+
+    /**
+     * Index of the field in the array.
+     * Only used when the field is part of an array.
+     */
+    index?: number;
 }

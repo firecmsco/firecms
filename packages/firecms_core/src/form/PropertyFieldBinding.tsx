@@ -51,6 +51,9 @@ export const PropertyFieldBinding = React.memo(PropertyFieldBindingInternal, (a:
     if (a.propertyKey !== b.propertyKey) {
         return false;
     }
+    if (a.index !== b.index) {
+        return false;
+    }
     const aIsBuilder = isPropertyBuilder(a.property) || a.property.fromBuilder;
     const bIsBuilder = isPropertyBuilder(b.property) || b.property.fromBuilder;
 
@@ -79,6 +82,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
      partOfArray,
      partOfBlock,
      autoFocus,
+     index,
  }: PropertyFieldBindingProps<T, M>): ReactElement<PropertyFieldBindingProps<T, M>> {
 
     const customizationController = useCustomizationController();
@@ -97,7 +101,8 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                     values: fieldProps.form.values,
                     path: context.path,
                     entityId: context.entityId,
-                    fields: customizationController.propertyConfigs
+                    fields: customizationController.propertyConfigs,
+                    index
                 });
 
                 if (resolvedProperty === null || isHidden(resolvedProperty)) {
@@ -120,11 +125,13 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                         throw new Error(`INTERNAL: Could not find field config for property ${propertyKey}`);
                     }
                     const configProperty = resolveProperty({
+                        propertyKey,
                         propertyOrBuilder: propertyConfig.property,
                         values: fieldProps.form.values,
                         path: context.path,
                         entityId: context.entityId,
-                        fields: customizationController.propertyConfigs
+                        fields: customizationController.propertyConfigs,
+                        index
                     });
                     Component = configProperty.Field as ComponentType<FieldProps<T>>;
                 }

@@ -277,6 +277,7 @@ export type PropertyBuilder<T extends CMSType = any, M extends Record<string, an
          values,
          previousValues,
          propertyValue,
+         index,
          path,
          entityId
      }: PropertyBuilderProps<M>) => Property<T> | null;

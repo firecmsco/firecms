@@ -746,7 +746,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                         const underlyingValueHasChanged: boolean =
                             !!underlyingChanges &&
                             Object.keys(underlyingChanges).includes(key) &&
-                            !!formex.touched[key];
+                            formex.touched[key];
 
                         const disabled = (!autoSave && formex.isSubmitting) || isReadOnly(property) || Boolean(property.disabled);
                         const hidden = isHidden(property);

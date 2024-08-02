@@ -63,7 +63,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
             autoFocus: internalId === lastAddedId
         };
         return <ErrorBoundary>
-            <PropertyFieldBinding {...fieldProps}/>
+            <PropertyFieldBinding {...fieldProps} index={index}/>
         </ErrorBoundary>;
     };
 
