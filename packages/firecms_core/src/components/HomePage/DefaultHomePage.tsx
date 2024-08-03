@@ -1,24 +1,22 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { useCustomizationController, useFireCMSContext, useNavigationController } from "../../hooks";
-import { CMSAnalyticsEvent, PluginGenericProps, PluginHomePageAdditionalCardsProps } from "../../types";
+import {
+    CMSAnalyticsEvent,
+    PluginGenericProps,
+    PluginHomePageAdditionalCardsProps,
+    TopNavigationEntry
+} from "../../types";
 
 import { toArray } from "../../util/arrays";
 import { NavigationGroup } from "./NavigationGroup";
 import { NavigationCardBinding } from "./NavigationCardBinding";
 
-// @ts-ignore
-import * as JsSearch from "js-search";
+import Fuse from "fuse.js"
 
 import { Container, SearchBar } from "@firecms/ui";
 import { FavouritesView } from "./FavouritesView";
 import { useRestoreScroll } from "../../internal/useRestoreScroll";
-
-const search = new JsSearch.Search("url");
-search.addIndex("name");
-search.addIndex("description");
-search.addIndex("group");
-search.addIndex("path");
 
 /**
  * Default entry view for the CMS. This component renders navigation cards
@@ -49,6 +47,8 @@ export function DefaultHomePage({
     const customizationController = useCustomizationController();
     const navigationController = useNavigationController();
 
+    const fuse = useRef<Fuse<TopNavigationEntry> | null>(null);
+
     if (!navigationController.topLevelNavigation)
         throw Error("Navigation not ready in FireCMSHomePage");
 
@@ -70,7 +70,13 @@ export function DefaultHomePage({
         : navigationEntries;
 
     useEffect(() => {
-        search.addDocuments(navigationEntries);
+        fuse.current = new Fuse(navigationEntries, {
+            keys: ["name",
+                "description",
+                "group",
+                "path"
+            ]
+        });
     }, [navigationEntries]);
 
     const updateSearchResults = useCallback(
@@ -78,8 +84,11 @@ export function DefaultHomePage({
             if (!value || value === "") {
                 setFilteredUrls(null);
             } else {
-                const searchResult = search.search(value);
-                setFilteredUrls(searchResult.map((e: any) => e.url));
+                const searchResult = fuse.current?.search(value);
+                console.log("Search result", searchResult);
+                if (searchResult) {
+                    setFilteredUrls(searchResult.map((e) => e.item.url));
+                }
             }
         }, []);
 

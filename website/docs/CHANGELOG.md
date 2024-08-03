@@ -2,9 +2,11 @@
 id: changelog
 title: Changelog
 ---
+
 ## [3.0.0-beta.9] - 2024-07-10
 
 - Additional fields are also now displayed in the entity side dialog.
+- Replaced `js-search` with `fuse.js` for better performance.
 
 ## [3.0.0-beta.8] - 2024-07-10
 
@@ -12,7 +14,7 @@ title: Changelog
 - You can now use `PropertyFieldBinding` components in your custom entity views, and they will be treated as regular
   fields.
 - For additional entity views, you can now preserve the bottom actions bar, with the prop `includeActions`.
-- For map properties, if they are not required, the value might me `undefined`, but if a child property has a value, 
+- For map properties, if they are not required, the value might me `undefined`, but if a child property has a value,
   validation will be triggered for all children.
 - Fix for data maps not getting traversed correctly with null value.
 - CLI pro template now supports creating web app config.

@@ -31,7 +31,9 @@ export function SearchIconsView({
                 setKeys(null);
             } else {
                 const searchResult = iconsSearch.search(value);
-                setKeys(searchResult.map((e: any) => e.key));
+                const limit = 50;
+                const limited = searchResult.slice(0, limit);
+                setKeys(limited.map((e) => e.item.key));
             }
         }, UPDATE_SEARCH_INDEX_WAIT_MS), []
     );
@@ -44,6 +46,7 @@ export function SearchIconsView({
     }, [query, updateSearchResults]);
 
     const icons = keys === null ? coolIconKeys : keys;
+    console.log("Icons", icons);
 
     return (
         <>

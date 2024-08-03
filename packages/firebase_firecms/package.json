@@ -20,7 +20,6 @@
     "@firecms/schema_inference": "^3.0.0-canary.96",
     "@firecms/ui": "^3.0.0-canary.96",
     "firebase": "^10.12.4",
-    "js-search": "^2.0.1",
     "react-router": "^6.25.1",
     "react-router-dom": "^6.25.1"
   },

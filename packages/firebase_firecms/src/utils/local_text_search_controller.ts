@@ -1,7 +1,7 @@
 import { collection, getFirestore, onSnapshot, query } from "@firebase/firestore";
 import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "../types";
-// @ts-ignore
-import * as JsSearch from "js-search";
+import Fuse from "fuse.js"
+
 import { FirebaseApp } from "@firebase/app";
 import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
 
@@ -15,7 +15,7 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
 }): FirestoreTextSearchController => {
 
     let currentPath: string | undefined;
-    const indexes: Record<string, JsSearch.Search> = {};
+    const indexes: Record<string, Fuse<object>> = {};
     const listeners: Record<string, () => void> = {};
 
     const destroyListener = (path: string) => {
@@ -42,7 +42,6 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
         return new Promise(async (resolve, reject) => {
             if (!indexes[path] && collectionProp) {
                 console.debug("Init local search controller", path);
-                indexes[path] = buildIndex(collectionProp);
                 const firestore = getFirestore(firebaseApp);
                 const col = collection(firestore, path);
                 listeners[path] = onSnapshot(query(col),
@@ -55,7 +54,8 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
                                 id: doc.id,
                                 ...doc.data()
                             }));
-                            indexes[path].addDocuments(docs);
+
+                            indexes[path] = buildIndex(docs, collectionProp);
                             console.log("Added docs to index", path, docs.length);
                             resolve(true);
                         },
@@ -82,8 +82,8 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
         if (!index) {
             throw new Error(`Index not found for path ${path}`);
         }
-        const searchResult = await index.search(searchString);
-        return searchResult.splice(0, MAX_SEARCH_RESULTS).map((e: any) => e.id);
+        const searchResult = index.search(searchString);
+        return searchResult.splice(0, MAX_SEARCH_RESULTS).map((e: any) => e.item.id);
     };
 
     return {
@@ -92,11 +92,26 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
     }
 }
 
-function buildIndex(collection: EntityCollection | ResolvedEntityCollection) {
-    const search = new JsSearch.Search("id");
-    search.addIndex("id");
-    Object.entries(collection.properties).forEach(([key, property]) => {
-        search.addIndex(key);
-    });
-    return search;
+function buildIndex(list: object[], collection: EntityCollection | ResolvedEntityCollection) {
+
+    const keys = Object.keys(collection.properties);
+
+    const fuseOptions = {
+        // isCaseSensitive: false,
+        // includeScore: false,
+        // shouldSort: true,
+        // includeMatches: false,
+        // findAllMatches: false,
+        // minMatchCharLength: 1,
+        // location: 0,
+        // threshold: 0.6,
+        // distance: 100,
+        // useExtendedSearch: false,
+        // ignoreLocation: false,
+        // ignoreFieldNorm: false,
+        // fieldNormWeight: 1,
+        keys: keys
+    };
+
+    return new Fuse(list, fuseOptions);
 }
