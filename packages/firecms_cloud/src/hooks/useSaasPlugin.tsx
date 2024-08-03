@@ -65,7 +65,6 @@ export function useSaasPlugin({
                                     parentCollectionIds
                                 }) => {
 
-                console.log("onTextSearchClick", collection);
                 const canSearch = projectConfig.canUseLocalTextSearch && projectConfig.localTextSearchEnabled && collection.textSearchEnabled;
                 if (!canSearch) {
                     if (parentCollectionIds === undefined) {

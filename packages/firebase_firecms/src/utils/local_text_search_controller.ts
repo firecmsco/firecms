@@ -33,25 +33,22 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
         collection?: EntityCollection | ResolvedEntityCollection
     }): Promise<boolean> => {
 
-        console.debug("Init local search controller", path, collectionProp)
-
         if (currentPath && path !== currentPath) {
             destroyListener(currentPath)
         }
 
         currentPath = path;
 
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             if (!indexes[path] && collectionProp) {
                 console.debug("Init local search controller", path);
                 indexes[path] = buildIndex(collectionProp);
                 const firestore = getFirestore(firebaseApp);
                 const col = collection(firestore, path);
-                console.log("Listening to collection", path, col);
                 listeners[path] = onSnapshot(query(col),
                     {
                         next: (snapshot) => {
-                            if (snapshot.metadata.fromCache) {
+                            if (snapshot.metadata.fromCache && snapshot.metadata.hasPendingWrites) {
                                 return;
                             }
                             const docs = snapshot.docs.map(doc => ({
