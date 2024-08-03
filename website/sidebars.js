@@ -15,7 +15,8 @@ module.exports = {
                 "cloud/app_config",
                 "cloud/deployment",
                 "cloud/app_check",
-                "cloud/creating_service_account"
+                "cloud/creating_service_account",
+                "cloud/migrating_from_v2"
             ]
         },
         {
@@ -23,23 +24,18 @@ module.exports = {
             "label": "FireCMS PRO",
             "collapsed": false,
             className: "pro-sidebar-category",
-            "items": ["pro/pro_quickstart",
+            "items": [
+                "pro/pro_quickstart",
                 "pro/sample_pro",
                 "pro/main_components",
                 "pro/deployment",
                 "pro/app_check",
+                "firebase_setup",
                 "pro/mongodb_integration",
-                "firebase_setup"
-            ]
-        },
-        {
-            "type": "category",
-            "label": "Customising FireCMS PRO",
-            "collapsed": false,
-            className: "pro-sidebar-category",
-            "items": [
                 "pro/user_management",
-                "pro/custom_storage"
+                "pro/custom_storage",
+                "pro/migrating_from_v2_to_pro",
+                "pro/migrating_from_v3_beta",
             ]
         },
         {
@@ -177,8 +173,6 @@ module.exports = {
                 "components/textarea_autosize"
             ]
         },
-        "migrating_from_v3_beta",
-        "migrating_from_v2",
         "changelog"
         // {
         //     "type":"category",

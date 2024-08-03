@@ -50,11 +50,11 @@ easy to adapt your collections to the new format.
 `id` is unique.
 
 - The prop `views` has been renamed to `entityViews`, since they are applied to entities.
-    - Within `entityViews` the prop `path` has been renamed to `key`.
+  - Within `entityViews` the prop `path` has been renamed to `key`.
 
 - For `AdditionalFieldDelegate`:
-    - The prop `id` has been renamed to `key`.
-    - The prop `builder` has been renamed to `Builder`.
+  - The prop `id` has been renamed to `key`.
+  - The prop `builder` has been renamed to `Builder`.
 
 ## Authenticator
 
@@ -63,6 +63,7 @@ not pass the `collection` prop anymore.
 
 ## Other
 
+- `useNavigationContext` has been renamed to `useNavigationController`.
 - `FieldDescription` has been renamed to `FieldCaption`.
 - `PropertyPreview` no longer need an `entity` prop.
 
@@ -79,6 +80,16 @@ mimic in a good way the material-ui components. You are encouraged to migrate yo
 to the new format.
 
 You can try replacing imports from `@mui/material` to `@firecms/ui` and will see that many things work out of the box.
+
+### Icons
+
+Icons in FireCMS are based on the material icons. You can use all the material icons importing them just like in MUI.
+
+```tsx
+import { AddIcon } from "@firecms/ui";
+```
+
+The prop `fontSize` is called `size` in FireCMS (because it just makes more sense, MUI).
 
 ### Components that have no equivalent:
 - `Box`: The box component is just a wrapper used by mui to apply styles. You can use a `div` instead, with some

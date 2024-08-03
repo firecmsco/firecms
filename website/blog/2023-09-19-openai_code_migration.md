@@ -130,24 +130,22 @@ export const openai = new OpenAIApi(new Configuration({
 }));
 
 async function getOpenAiReplacement(input: string) {
-    const completionParams: CreateChatCompletionRequest = {
-        model: "gpt-4",
-        messages: [
-            {
-                role: "system",
-                content: systemInstructions
-            },
-            {
-                role: "user",
-                content: input
-            }
-        ],
-        temperature: 0.7,
-        top_p: 1,
-    };
-
-    const completion = await openai.createChatCompletion(completionParams);
-    return completion.data.choices[0].message?.content;
+  const completion = await openai.chat.completions.create({
+    model: "gpt-4",
+    messages: [
+      {
+        role: "system",
+        content: systemInstructions
+      },
+      {
+        role: "user",
+        content: input
+      }
+    ],
+    temperature: 0.7,
+    top_p: 1,
+  });
+  return completion.choices[0].message?.content;
 }
 ```
 
@@ -168,9 +166,9 @@ import { Configuration, CreateChatCompletionRequest, OpenAIApi } from "openai";
 
 const FOLDER = "../src";
 
-export const openai = new OpenAIApi(new Configuration({
+const openai = new OpenAI({
     apiKey: "YOUR_API_KEY"
-}));
+});
 
 const dryRun = false;
 const sxRegexp = /(sx=\{(?:[^{}]|\{(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\})*\})/g;
