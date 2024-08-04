@@ -2798,7 +2798,6 @@ __metadata:
     fuse.js: ^7.0.0
     history: ^5.3.0
     jest: ^29.7.0
-    js-search: ^2.0.1
     markdown-it: ^14.1.0
     notistack: ^3.0.1
     npm-run-all: ^4.1.5
@@ -3017,7 +3016,6 @@ __metadata:
     "@types/react-dom": ^18.3.0
     algoliasearch: ^4.24.0
     firebase: ^10.12.4
-    js-search: ^2.0.1
     react-router: ^6.25.1
     react-router-dom: ^6.25.1
     typescript: ^5.5.4
@@ -3083,7 +3081,6 @@ __metadata:
   resolution: "@firecms/ui@workspace:packages/ui"
   dependencies:
     "@jest/globals": ^29.7.0
-    "@material-design-icons/font": ^0.14.13
     "@radix-ui/react-checkbox": ^1.1.1
     "@radix-ui/react-collapsible": ^1.1.0
     "@radix-ui/react-dialog": ^1.1.1
@@ -3115,6 +3112,7 @@ __metadata:
     date-fns: ^3.6.0
     firebase: ^10.12.4
     jest: ^29.7.0
+    material-icons: latest
     npm-run-all: ^4.1.5
     react-datepicker: ^7.3.0
     react-dropzone: ^14.2.3
@@ -3671,13 +3669,6 @@ __metadata:
     yargs: 17.7.2
     yargs-parser: 21.1.1
   checksum: ec7aa7fb5d8485ab0ae838a6aa85f33c1c41fc5da5d3ef02cb686b8a376e47f5533a59b1d83bfa4f76c6bc3d23fd9caae47f7a1f314769447eafb7c714ca6650
-  languageName: node
-  linkType: hard
-
-"@material-design-icons/font@npm:^0.14.13":
-  version: 0.14.13
-  resolution: "@material-design-icons/font@npm:0.14.13"
-  checksum: 338a46396aaa91e2f9a01ad8bf411fc81bafe4ebc54994f9b92a4b9f82d3b9418be541abff1830dd16edeacbefdc5c7897b6ec1e615e7952196b6daf4a318cc8
   languageName: node
   linkType: hard
 
@@ -12561,13 +12552,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-search@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "js-search@npm:2.0.1"
-  checksum: 09bd837b83adaa5d29a1fd80d2324b1af4117b4d4d97013e6be6f043ea636b2c5e6f271e634ec68e7d9411b8b76f625b55c4b41ae66fb19d7164a43c47899ca3
-  languageName: node
-  linkType: hard
-
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -13416,6 +13400,13 @@ __metadata:
   bin:
     markdown-it: bin/markdown-it.mjs
   checksum: 07296b45ebd0b13a55611a24d1b1ad002c6729ec54f558f597846994b0b7b1de79d13cd99ff3e7b6e9e027f36b63125cdcf69174da294ecabdd4e6b9fff39e5d
+  languageName: node
+  linkType: hard
+
+"material-icons@npm:latest":
+  version: 1.13.12
+  resolution: "material-icons@npm:1.13.12"
+  checksum: 46f0e03c4c22e8334c633915dd87c3023f0c6345c1d9376170aa8bb8c54e944a5fc40ec128888965b563e2472a8fae83a2f5b75d3f957ede8b5d8476650e4109
   languageName: node
   linkType: hard
 
