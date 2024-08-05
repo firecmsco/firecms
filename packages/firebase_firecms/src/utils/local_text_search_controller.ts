@@ -5,7 +5,7 @@ import Fuse from "fuse.js"
 import { FirebaseApp } from "@firebase/app";
 import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
 
-const MAX_SEARCH_RESULTS = 100;
+const MAX_SEARCH_RESULTS = 80;
 
 export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder = ({
                                                                                        firebaseApp,
@@ -15,7 +15,7 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
 }): FirestoreTextSearchController => {
 
     let currentPath: string | undefined;
-    const indexes: Record<string, Fuse<object>> = {};
+    const indexes: Record<string, Fuse<object & { id: string }>> = {};
     const listeners: Record<string, () => void> = {};
 
     const destroyListener = (path: string) => {
@@ -82,8 +82,24 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
         if (!index) {
             throw new Error(`Index not found for path ${path}`);
         }
-        const searchResult = index.search(searchString);
-        return searchResult.splice(0, MAX_SEARCH_RESULTS).map((e: any) => e.item.id);
+        let searchResult = index.search(searchString);
+        searchResult = searchResult.splice(0, MAX_SEARCH_RESULTS);
+        searchResult = searchResult.sort((a, b) => {
+            // Check if item A is an exact match
+            const aExactMatch = a.item.id === searchString;
+            // Check if item B is an exact match
+            const bExactMatch = b.item.id === searchString;
+
+            if (aExactMatch && !bExactMatch) {
+                return -1;  // Prioritize item A
+            } else if (!aExactMatch && bExactMatch) {
+                return 1;   // Prioritize item B
+            } else {
+                // If both are exact matches or both are not, sort by Fuse's original score
+                return (a.score ?? 0) - (b.score ?? 0);
+            }
+        });
+        return searchResult.map((e: any) => e.item.id);
     };
 
     return {
@@ -92,7 +108,7 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
     }
 }
 
-function buildIndex(list: object[], collection: EntityCollection | ResolvedEntityCollection) {
+function buildIndex(list: (object & { id: string })[], collection: EntityCollection | ResolvedEntityCollection) {
 
     const keys = Object.keys(collection.properties);
 
@@ -104,14 +120,20 @@ function buildIndex(list: object[], collection: EntityCollection | ResolvedEntit
         // findAllMatches: false,
         // minMatchCharLength: 1,
         // location: 0,
-        // threshold: 0.6,
+        threshold: 0.6,
         // distance: 100,
         // useExtendedSearch: false,
         // ignoreLocation: false,
         // ignoreFieldNorm: false,
         // fieldNormWeight: 1,
-        keys: keys
+        includeScore: true,
+        keys: [{
+            name: "title",
+            weight: 1.0
+        }, ...keys.map(key => ({
+            name: key,
+            weight: 0.5
+        }))]
     };
-
-    return new Fuse(list, fuseOptions);
+    return new Fuse<object & { id: string }>(list, fuseOptions);
 }
