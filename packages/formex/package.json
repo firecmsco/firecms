@@ -1,7 +1,7 @@
 {
   "name": "@firecms/formex",
   "type": "module",
-  "version": "3.0.0-canary.97",
+  "version": "3.0.0-canary.98",
   "publishConfig": {
     "access": "public"
   },
@@ -29,8 +29,8 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "peerDependencies": {
-    "react": ">=18.3.1",
-    "react-dom": ">=18.3.1"
+    "react": ">=18 || >=19.0.0-0 <20",
+    "react-dom": ">=18 || >=19.0.0-0 <20"
   },
   "dependencies": {
     "react-fast-compare": "^3.2.2"
@@ -72,5 +72,5 @@
       "node"
     ]
   },
-  "gitHead": "aae97531a2c2fb0be4a324e806af26783f6d2346"
+  "gitHead": "da52ff032616af10d60ee976daf80f18d5ac879b"
 }
