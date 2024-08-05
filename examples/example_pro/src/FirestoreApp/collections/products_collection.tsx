@@ -125,7 +125,6 @@ export const productsCollection = buildCollection<Product>({
         }
     ],
     additionalFields: [productAdditionalField],
-    // propertiesOrder: ["name", "price", "category", "spanish_title", "currency", "locales"],
     properties: {
         name: {
             dataType: "string",
