@@ -1,24 +1,24 @@
 {
   "name": "@firecms/collection_editor",
   "type": "module",
-  "version": "3.0.0-canary.96",
+  "version": "3.0.0-canary.97",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/data_export": "^3.0.0-canary.96",
-    "@firecms/data_import": "^3.0.0-canary.96",
-    "@firecms/data_import_export": "^3.0.0-canary.96",
-    "@firecms/formex": "^3.0.0-canary.96",
-    "@firecms/schema_inference": "^3.0.0-canary.96",
-    "@firecms/ui": "^3.0.0-canary.96",
+    "@firecms/data_export": "^3.0.0-canary.97",
+    "@firecms/data_import": "^3.0.0-canary.97",
+    "@firecms/data_import_export": "^3.0.0-canary.97",
+    "@firecms/formex": "^3.0.0-canary.97",
+    "@firecms/schema_inference": "^3.0.0-canary.97",
+    "@firecms/ui": "^3.0.0-canary.97",
     "json5": "^2.2.3",
     "prism-react-renderer": "^2.3.1"
   },
   "peerDependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": ">=18.3.1",
+    "react-dom": ">=18.3.1",
     "react-router": "^6.25.1",
     "react-router-dom": "^6.25.1"
   },
