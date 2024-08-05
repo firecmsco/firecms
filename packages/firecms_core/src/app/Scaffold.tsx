@@ -213,6 +213,8 @@ function DrawerWrapper(props: {
                    transparent={true}
                    open={props.open}
                    onOpenChange={props.setDrawerOpen}
+                   title={"Navigaion drawer"}
+                   overlayClassName={"bg-white bg-opacity-80"}
             >
                 {innerDrawer}
             </Sheet>

@@ -89,7 +89,6 @@ export function ExampleCMSView() {
 
                 <div className="flex flex-col gap-12 items-start">
 
-                    <DateTimeField />
                     <div className="mt-24">
                         <Typography variant="h4">
                             This is an example of an additional view
@@ -106,7 +105,7 @@ export function ExampleCMSView() {
                             variant={"outlined"}
                             size={"small"}
                             onClick={() => setOpenSheet(true)}>
-                            Open side sheet
+                            Open bottom sheet
                         </Button>
                     </div>
                     <Sheet open={isSheetOpen}

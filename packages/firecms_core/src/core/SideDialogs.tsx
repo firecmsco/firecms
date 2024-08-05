@@ -126,6 +126,7 @@ function SideDialogView({
             <Sheet
                 open={Boolean(panel)}
                 onOpenChange={(open) => !open && onCloseRequest()}
+                title={"Side dialog " + panel?.key}
             >
                 {panel &&
                     <div
