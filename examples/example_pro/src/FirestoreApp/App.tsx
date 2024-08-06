@@ -142,10 +142,11 @@ export function App() {
         if (process.env.NODE_ENV !== "production") {
             sourceCollections.push(testCollection);
         }
-        return mergeCollections(
-            sourceCollections,
-            collectionConfigController.collections ?? []
-        )
+        return sourceCollections;
+        // return mergeCollections(
+        //     sourceCollections,
+        //     collectionConfigController.collections ?? []
+        // )
     }, [collectionConfigController.collections]);
 
     const views: CMSView[] = useMemo(() => ([
