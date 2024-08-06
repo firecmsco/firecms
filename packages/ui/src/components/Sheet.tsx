@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { cls } from "../util";
-import { defaultBorderMixin } from "../styles.ts";
+import { defaultBorderMixin } from "../styles";
 
 interface SheetProps {
     children: React.ReactNode;
