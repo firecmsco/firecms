@@ -1,7 +1,7 @@
 import { AdditionalFieldDelegate, AsyncPreviewComponent, buildCollection, EntityCallbacks } from "@firecms/core";
 
 import PriceTextPreview from "../custom_field_preview/PriceTextPreview";
-import { SampleCollectionActions } from "../collection_actions/SampleCollectionActions";
+import { CustomFiltersActions, SampleCollectionActions } from "../collection_actions/SampleCollectionActions";
 import { Locale, Product } from "../types";
 import { categories, currencies, locales } from "./enums";
 import CustomColorTextField from "../custom_field/CustomColorTextField";
@@ -114,7 +114,7 @@ export const productsCollection = buildCollection<Product>({
         create: true,
         delete: true
     }),
-    Actions: SampleCollectionActions,
+    Actions: [SampleCollectionActions, CustomFiltersActions],
     subcollections: [localeCollection],
     // defaultSelectedView: "sample_custom_view",
     entityViews: [

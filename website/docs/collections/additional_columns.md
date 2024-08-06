@@ -1,7 +1,7 @@
 ---
 id: additional_columns
-title: Additional columns
-sidebar_label: Additional columns
+title: Additional columns/fields
+sidebar_label: Additional columns/fields
 ---
 
 
@@ -12,7 +12,7 @@ receives the corresponding entity.
 
 In the builder you can return any React Component.
 
-:::important
+:::note
 If your additional field depends on the value of another property of the entity
 you can define the `dependencies` prop as an array of property keys so that
 the data is always updated.
@@ -34,7 +34,7 @@ type User = { name: string }
 export const fullNameAdditionalField: AdditionalFieldDelegate<User> = {
     id: "full_name",
     name: "Full Name",
-    builder: ({ entity }) => {
+    Builder: ({ entity }) => {
         let values = entity.values;
         return typeof values.name === "string" ? values.name.toUpperCase() : "No name provided";
     },
@@ -65,7 +65,7 @@ import {
 export const productAdditionalField: AdditionalFieldDelegate<Product> = {
     id: "spanish_title",
     title: "Spanish title",
-    builder: ({ entity, context }) =>
+    Builder: ({ entity, context }) =>
         <AsyncPreviewComponent builder={
             context.dataSource.fetchEntity({
                 path: entity.path,

@@ -1,6 +1,6 @@
 import React from "react";
 import { CollectionActionsProps, useSnackbarController } from "@firecms/core";
-import { Button } from "@firecms/ui";
+import { Button, ClearIcon, IconButton, Select, SelectItem } from "@firecms/ui";
 
 export function SampleCollectionActions({ selectionController }: CollectionActionsProps) {
 
@@ -21,6 +21,38 @@ export function SampleCollectionActions({ selectionController }: CollectionActio
                 variant={"text"}>
             Extra action
         </Button>
+    );
+
+}
+
+export function CustomFiltersActions({
+                                         tableController
+                                     }: CollectionActionsProps) {
+
+    const filterValues = tableController.filterValues;
+    const categoryFilter = filterValues?.category;
+    const categoryFilterValue = categoryFilter?.[1];
+
+    const updateFilter = (value: string | null) => {
+        tableController.setFilterValues({
+            ...filterValues,
+            category: value ? ["==", value] : null
+        });
+    };
+    return (
+        <Select placeholder={"Category filter"}
+                className={"w-44"}
+                endAdornment={categoryFilterValue ?
+                    <IconButton size={"small"} onClick={() => updateFilter(null)}>
+                        <ClearIcon size={"smallest"}/>
+                    </IconButton> : undefined}
+                renderValue={(value) => value}
+                onValueChange={updateFilter}
+                size={"small"}
+                value={categoryFilterValue}>
+            <SelectItem value="cameras">Cameras</SelectItem>
+            <SelectItem value="bath">Bath</SelectItem>
+        </Select>
     );
 
 }
