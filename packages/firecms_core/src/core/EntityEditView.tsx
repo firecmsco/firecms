@@ -95,7 +95,7 @@ export interface EntityEditViewProps<M extends Record<string, any>> {
  * This is the default view that is used as the content of a side panel when
  * an entity is opened.
  * You probably don't want to use this view directly since it is bound to the
- * side panel. Instead, you might want to use {@link EntityForm} or {@link EntityCollectionView}
+ * side panel.
  */
 export function EntityEditView<M extends Record<string, any>, UserType extends User>({
                                                                                          entityId,
@@ -138,7 +138,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                                                                        onUpdate,
                                                                        onClose,
                                                                        entity,
-                                                                       dataLoading,
+                                                                       dataLoading
                                                                    }: EntityEditViewProps<M> & {
     entity?: Entity<M>,
     dataLoading: boolean
@@ -192,8 +192,10 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const initialStatus = copy ? "copy" : (entityIdProp ? "existing" : "new");
     const [status, setStatus] = useState<EntityStatus>(initialStatus);
+
     const mustSetCustomId: boolean = (status === "new" || status === "copy") &&
         (Boolean(initialResolvedCollection.customId) && initialResolvedCollection.customId !== "optional");
+
     const initialEntityId: string | undefined = useMemo((): string | undefined => {
         if (status === "new" || status === "copy") {
             if (mustSetCustomId) {
@@ -232,15 +234,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     );
 
     const selectedTabRef = useRef<string>(defaultSelectedView ?? MAIN_TAB_VALUE);
-    const baseDataSourceValuesRef = useRef<Partial<EntityValues<M>>>(getDataSourceEntityValues(initialResolvedCollection, status, entity));
 
     const mainViewVisible = selectedTabRef.current === MAIN_TAB_VALUE;
-
-    // const initialValuesRef = useRef<EntityValues<M>>(entity?.values ?? baseDataSourceValues as EntityValues<M>);
-    // const [internalValues, setInternalValues] = useState<EntityValues<M> | undefined>(entity?.values ?? baseDataSourceValuesRef.current as EntityValues<M>);
-
-    // const modifiedValuesRef = useRef<EntityValues<M> | undefined>(undefined);
-    // const modifiedValues = modifiedValuesRef.current;
 
     const subcollections = (collection.subcollections ?? []).filter(c => !c.hideFromNavigation);
     const subcollectionsCount = subcollections?.length ?? 0;
@@ -252,6 +247,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const [usedEntity, setUsedEntity] = useState<Entity<M> | undefined>(entity);
     const [readOnly, setReadOnly] = useState<boolean | undefined>(undefined);
+
+    const baseDataSourceValuesRef = useRef<Partial<EntityValues<M>>>(getDataSourceEntityValues(initialResolvedCollection, status, usedEntity));
 
     useEffect(() => {
         if (entity)
