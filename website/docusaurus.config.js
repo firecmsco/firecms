@@ -26,12 +26,16 @@ module.exports = {
     plugins: [
         "docusaurus-tailwindcss-loader",
         "docusaurus-plugin-sass",
-        // generateAPI ? [
-        //     "docusaurus-plugin-typedoc",
-        //     {
-        //         watch: false,
-        //     }
-        // ] : [],
+        generateAPI ?
+            [
+                "docusaurus-plugin-typedoc",
+                {
+                    watch: false,
+                    skipErrorChecking: true,
+                    readme: "docs/api_index.md"
+                }
+            ]
+            : null,
         // [
         //     "docusaurus-plugin-typedoc-api",
         //     {
@@ -104,7 +108,7 @@ module.exports = {
                 }
             };
         }
-    ],
+    ].filter(Boolean),
     themeConfig: {
         image: "img/logo_small.png",
         description: "Headless CMS based on Firestore/Firebase, React and tailwindcss, and completely open-source",

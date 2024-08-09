@@ -3,7 +3,6 @@ import { iconKeys } from "@firecms/ui";
 import Fuse from "fuse.js";
 
 
-console.log("iconKeys", iconKeys);
 const map = iconKeys
     .map((importName) => {
         // @ts-ignore

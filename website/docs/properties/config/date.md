@@ -38,4 +38,4 @@ The widget that gets created is
 - [`DateTimeFieldBinding`](../../api/functions/DateTimeFieldBinding) Field that allows selecting a date
 
 Links:
-- [API](../../api/interfaces/dateproperty)
+- [API](../../api/interfaces/DateProperty)

@@ -734,13 +734,13 @@ export type StorageConfig = {
      * You can use this prop to customize the uploaded filename.
      * You can use a function as a callback or a string where you
      * specify some placeholders that get replaced with the corresponding values.
-     * - {file} - Full file name
-     * - {file.name} - Name of the file without extension
-     * - {file.ext} - Extension of the file
-     * - {rand} - Random value used to avoid name collisions
-     * - {entityId} - ID of the entity
-     * - {propertyKey} - ID of this property
-     * - {path} - Path of this entity
+     * - `{file}` - Full file name
+     * - `{file.name}` - Name of the file without extension
+     * - `{file.ext}` - Extension of the file
+     * - `{rand}` - Random value used to avoid name collisions
+     * - `{entityId}` - ID of the entity
+     * - `{propertyKey}` - ID of this property
+     * - `{path}` - Path of this entity
      *
      * @param context
      */
@@ -751,13 +751,13 @@ export type StorageConfig = {
      *
      * You can use a function as a callback or a string where you
      * specify some placeholders that get replaced with the corresponding values.
-     * - {file} - Full file name
-     * - {file.name} - Name of the file without extension
-     * - {file.ext} - Extension of the file
-     * - {rand} - Random value used to avoid name collisions
-     * - {entityId} - ID of the entity
-     * - {propertyKey} - ID of this property
-     * - {path} - Path of this entity
+     * - `{file}` - Full file name
+     * - `{file.name}` - Name of the file without extension
+     * - `{file.ext}` - Extension of the file
+     * - `{rand}` - Random value used to avoid name collisions
+     * - `{entityId}` - ID of the entity
+     * - `{propertyKey}` - ID of this property
+     * - `{path}` - Path of this entity
      */
     storagePath: string | ((context: UploadedFileContext) => string);
 

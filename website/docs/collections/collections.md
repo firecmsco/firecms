@@ -341,14 +341,14 @@ initialSort: ["price", "asc"]
 - **`textSearchEnabled`**: Flag to indicate if a search bar should be displayed on top of the collection table.
 - **`permissions`**: You can specify an object with boolean permissions with the
   shape `{edit:boolean; create:boolean; delete:boolean}` to indicate the actions the user can perform. You can also pass
-  a [`PermissionsBuilder`](../api/types/permissionsbuilder) to customize the permissions based on the user or entity.
+  a [`PermissionsBuilder`](../api/type-aliases/PermissionsBuilder) to customize the permissions based on the user or entity.
 - **`inlineEditing`**: Can the elements in this collection be edited inline in the collection view? If this flag is set
   to false but `permissions.edit` is `true`, entities can still be edited in the side panel.
 - **`selectionEnabled`**: Are the entities in this collection selectable? Defaults to `true`.
 - **`selectionController`**: Pass your own selection controller if you want to control selected entities
   externally. [See `useSelectionController`](../api/functions/useSelectionController).
 - **`exportable`**: Should the data in this collection view include an export button? You can also set
-  an [`ExportConfig`](../api/interfaces/exportconfig) configuration object to customize the export and add additional
+  an [`ExportConfig`](../api/interfaces/ExportConfig) configuration object to customize the export and add additional
   values. Defaults to `true`.
 - **`hideFromNavigation`**: Should this collection be hidden from the main navigation panel if it is at the root level,
   or in the entity side panel if it's a subcollection? It will still be accessible if you reach the specified path. You

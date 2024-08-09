@@ -74,4 +74,4 @@ The widgets that get created are
   where each option is a colored chip.
 
 Links:
-- [API](../../api/interfaces/numberproperty)
+- [API](../../api/interfaces/NumberProperty)

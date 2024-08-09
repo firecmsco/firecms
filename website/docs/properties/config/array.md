@@ -106,7 +106,6 @@ Based on your configuration the form field widgets that are created are:
 - [`RepeatFieldBinding`](../../api/functions/RepeatFieldBinding) generic array field that allows reordering and renders
   the child property as nodes.
 - [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding) if the `of` property is a `string` with storage configuration.
-- [`ArrayEnumSelectBinding`](../../api/functions/ArrayEnumSelectBinding) if the `of` property is a `string` with an enum configuration.
 - [`ArrayOfReferencesFieldBinding`](../../api/functions/ArrayOfReferencesFieldBinding) if the `of` property is a `reference`
 - [`BlockFieldBinding`](../../api/functions/BlockFieldBinding) if the `oneOf` property is specified
 

@@ -187,7 +187,7 @@
 ## [3.0.0-beta.1] - 2024-02-01
 
 The first beta release of FireCMS v3.0.0.
-Check all the new features and improvements in the [documentation](./docs/what_is_new_v3)
+Check all the new features and improvements in the [documentation](./what_is_new_v3)
 and the [migration guide](./docs/migrating_from_v2).
 
 ## [2.2.0] - 2023-11-09

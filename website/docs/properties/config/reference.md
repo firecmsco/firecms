@@ -65,4 +65,4 @@ The widget that gets created is
 
 Links:
 
-- [API](../../api/interfaces/referenceproperty)
+- [API](../../api/interfaces/ReferenceProperty)

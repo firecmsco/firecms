@@ -25,7 +25,7 @@ Each property in the CMS has its own API, but they all share some **common props
   disabled field. You can also specify a configuration for defining the
   behaviour of disabled properties (including custom messages, clear value on
   disabled or hide the field completely)
-  [PropertyDisabledConfig](../../api/interfaces/propertydisabledconfig)
+  [PropertyDisabledConfig](../../api/interfaces/PropertyDisabledConfig)
 
 * `Field`
   If you need to render a custom field, you can create a component that

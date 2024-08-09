@@ -62,4 +62,4 @@ The widget that gets created is
   property fields
 
 Links:
-- [API](../../api/interfaces/mapproperty)
+- [API](../../api/interfaces/MapProperty)

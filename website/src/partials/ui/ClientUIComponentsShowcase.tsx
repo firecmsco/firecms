@@ -50,7 +50,7 @@ export default function ClientUIComponentsShowcase() {
     const [isSheetOpen, setSheetOpen] = useState(false);
     const [isExpandablePanelOpen, setExpandablePanelOpen] = useState(true);
     const [isCollapseOpen, setCollapseOpen] = useState(true);
-    const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+    const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
     const [checked, setChecked] = useState<boolean | null>(true);
     const [badgeDisplayed, setBadgeDisplayed] = useState(true);
     const [textFieldValue, setTextFieldValue] = useState<string>("");
@@ -418,7 +418,7 @@ export default function ClientUIComponentsShowcase() {
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
                 <Typography variant="subtitle2">DateTime Field</Typography>
-                <DateTimeField value={selectedDate} onChange={setSelectedDate} label="Select a date"
+                <DateTimeField value={selectedDate ?? undefined} onChange={setSelectedDate} label="Select a date"
                                mode="date"/>
                 <DateTimeField value={new Date()} onChange={setSelectedDate}
                                label="Select date and time" mode="date_time"/>

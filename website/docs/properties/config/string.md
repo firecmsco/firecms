@@ -98,7 +98,7 @@ You can use the enum values providing a map of possible exclusive values the
 property can take, mapped to the label that it is displayed in the dropdown. You
 can use a simple object with the format
 `value` => `label`, or with the format `value`
-=> [`EnumValueConfig`](../../api/interfaces/enumvalueconfig) if you need extra
+=> [`EnumValueConfig`](../../api/type-aliases/EnumValueConfig) if you need extra
 customization, (like disabling specific options or assigning colors). If you
 need to ensure the order of the elements, you can pass a `Map` instead of a
 plain object.
@@ -215,4 +215,4 @@ Based on your configuration the form field widgets that are created are:
 
 Links:
 
-- [API](../../api/interfaces/stringproperty)
+- [API](../../api/interfaces/StringProperty)
