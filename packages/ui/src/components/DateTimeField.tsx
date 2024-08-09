@@ -16,7 +16,7 @@ import { cls } from "../util";
 import { useInjectStyles } from "../hooks";
 
 interface DateTimeFieldProps {
-    value?: Date;
+    value?: Date | null;
     onChange?: (date: Date | null) => void;
 
     mode?: "date" | "date_time";
