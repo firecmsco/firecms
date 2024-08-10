@@ -5,10 +5,9 @@ import { useColorMode } from "@docusaurus/theme-common";
 import MMLogo from "@site/static/img/logos/mm_logo.webp";
 // @ts-ignore
 import ProtonLogo from "@site/static/img/logos/proton_logo.webp";
-
-import SomnioLogoLight from "@site/static/img/logos/logo_somnio.svg";
 // @ts-ignore
-import MMLogoDark from "@site/static/img/logos/mm_logo_white.webp";
+import SomnioLogoLight from "@site/static/img/logos/logo_somnio.webp";
+
 import TPALogo from "@site/static/img/logos/the_planet_app_logo.svg";
 import SocialIncomeLogo from "@site/static/img/logos/social_income_logo.svg";
 import MindSwitchLogo from "@site/static/img/logos/mindswitch_logo.svg";
@@ -20,14 +19,12 @@ import Marquee from "react-fast-marquee";
 
 export function Companies() {
 
-    const { colorMode } = useColorMode();
-    const isDarkTheme = colorMode === "dark";
-
     return <Panel color={"light"} container={false}>
 
         <h2 className={"text-2xl text-center text-gray-600 dark:text-gray-400"}>
             Trusted by
         </h2>
+
 
         <Marquee className={"rounded-xl space-x-4"} pauseOnHover={true} gradient={true} gradientColor={"#e7e7eb"}>
 
@@ -54,7 +51,10 @@ export function Companies() {
                 rel="noopener noreferrer"
                 aria-label="Somnio Software"
                 href={"https://www.somniosoftware.com/"}>
-                <SomnioLogoLight className="w-48 m-4"/>
+
+                <img loading="lazy" src={SomnioLogoLight}
+                     alt="Somnio Logo"
+                     className="w-48 m-4"/>
             </a>
             <a
                 target="_blank"
