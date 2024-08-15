@@ -113,8 +113,8 @@ module.exports = {
         image: "img/logo_small.png",
         description: "Headless CMS based on Firestore/Firebase, React and tailwindcss, and completely open-source",
         announcementBar: {
-            id: "beta-8",
-            content: "<b>FireCMS</b> <code>3.0.0-beta.8</code> is out now! 🚀 Get started with self-hosted FireCMS PRO for <b>free</b>. <a href='/pro'>Learn more</a>",
+            id: "dataki-announcement",
+            content: "<code>DATAKI</code> is our new <b>AI analytics tool</b> for SQL databases. Is is amazing! 🚀 <a href='https://dataki.ai?utm_source=firecms_landing'>Check it out!</a>",
             backgroundColor: "#FF5B79",
             textColor: "black",
             isCloseable: true

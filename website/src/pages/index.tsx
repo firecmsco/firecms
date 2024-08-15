@@ -41,9 +41,9 @@ function Home() {
 
             <main className={"bg-white max-w-[100vw] overflow-x-hidden"}>
 
-                <UsageExamples/>
-
                 <FirebaseIntro/>
+
+                <UsageExamples/>
 
                 <ManageYour/>
 

@@ -50,7 +50,7 @@ function FirebaseIntro() {
             <div
                 data-aos="fade-up"
                 className="max-w-5xl mx-auto text-center mb-12 px-8 py-8 md:px-8 md:py-12">
-                <h2 className="h1 mb-4 mt-4 gradient-text uppercase m-auto">
+                <h2 className="h1 mb-4 gradient-text uppercase m-auto">
                     Much more than a CMS
                 </h2>
                 <p className="text-xl md:text-2xl">

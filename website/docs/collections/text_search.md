@@ -13,27 +13,18 @@ Firestore does not support native text search, so we need to rely on external
 solutions. If you specify a `textSearchEnabled` flag to the **collection**, you
 will see a search bar on top of the collection view.
 
-You need to define a `FirestoreTextSearchController` and pass it to your app config.
+You need to define a `FirestoreTextSearchControllerBuilder` and add it to your config.
 Typically, you will want to index your entities in some external
 solution, such as Algolia. For this to work you need to set up an AlgoliaSearch
 account and manage the indexing of your documents.
 
-There is a full backend
-example included in the source code, which indexes documents with Cloud Functions.
-There is also a Firebase extension for the very same purpose.
-
-### Local text search
-
-Since FireCMS v3 we provide a local text search implementation. This is useful
-for small collections or when you want to provide a quick way to search through
-your data.
-
-However, for larger collections, you will want to use an external search
-provider, such as Algolia. This is the recommended approach.
+You can achieve this by implementing a Google Cloud Function that listens to
+Firestore changes and updates the Algolia index.
+There is also a [Firebase extension](https://extensions.dev/extensions/algolia/firestore-algolia-search) 
+for the very same purpose.
 
 
-
-### Using Algolia
+### Using Algolia in FireCMS Cloud
 
 We provide a utility method for performing searches in
 Algolia `performAlgoliaTextSearch`
@@ -89,3 +80,60 @@ export default function App() {
     />;
 }
 ```
+
+### Using Algolia in FireCMS PRO
+
+For FireCMS PRO, you need to define a `FirestoreTextSearchControllerBuilder`.
+
+```tsx
+import algoliasearch, { SearchClient } from "algoliasearch";
+
+import { buildAlgoliaSearchController, performAlgoliaTextSearch } from "@firecms/firebase";
+
+const client: SearchClient | undefined = algoliasearch("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_SEARCH_KEY");
+
+const productsIndex = client && client.initIndex("products");
+
+export const algoliaSearchControllerBuilder = buildAlgoliaSearchController({
+    isPathSupported: (path) => {
+        return ["products"].includes(path);
+    },
+    search: ({
+                 path,
+                 searchString
+             }) => {
+        if (path === "products")
+            return productsIndex && performAlgoliaTextSearch(productsIndex, searchString);
+        return undefined;
+    }
+});
+
+
+export function App() {
+
+    // ...
+    const firestoreDelegate = useFirestoreDelegate({
+        firebaseApp,
+        textSearchControllerBuilder: algoliaSearchControllerBuilder
+    });
+    // ...
+}
+
+```
+
+
+### Local text search
+
+Since FireCMS v3 we provide a local text search implementation. This is useful
+for small collections or when you want to provide a quick way to search through
+your data.
+
+However, for larger collections, you will want to use an external search
+provider, such as Algolia. This is the recommended approach.
+
+You can use local text search in FireCMS Cloud, or in self-hosted versions.
+
+For FireCMS Cloud, you just need to enable it with the UI.
+
+For self-hosted versions, you can enable it by setting the `localTextSearchEnabled` in `useFirestoreDelegate`.
+Then you need to mark each collection with `textSearchEnabled: true`.

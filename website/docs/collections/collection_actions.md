@@ -69,7 +69,7 @@ This is an example of how you can modify the filters in the collection bar:
 ```tsx
 import React from "react";
 import { CollectionActionsProps } from "@firecms/core";
-import { Button, ClearIcon, IconButton, Select, SelectItem } from "@firecms/ui";
+import { ClearIcon, IconButton, Select, SelectItem } from "@firecms/ui";
 
 export function CustomFiltersActions({
                                          tableController
@@ -80,11 +80,17 @@ export function CustomFiltersActions({
     const categoryFilterValue = categoryFilter?.[1];
 
     const updateFilter = (value: string | null) => {
-        tableController.setFilterValues({
-            ...filterValues,
-            category: value ? ["==", value] : null
-        });
+        const newFilter = {
+            ...filterValues
+        };
+        if (value) {
+            newFilter.category = ["==", value];
+        } else {
+            delete newFilter.category;
+        }
+        tableController.setFilterValues?.(newFilter);
     };
+
     return (
         <Select placeholder={"Category filter"}
                 className={"w-44"}
