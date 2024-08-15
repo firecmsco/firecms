@@ -79,6 +79,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
 
         const computedDrawerOpen: boolean = drawerOpen || Boolean(largeLayout && autoOpenDrawer && onHover);
 
+        const hasAppBar = Boolean(appBarChildren.length > 0);
         return (
             <AppContext.Provider value={{
                 logo,
@@ -115,9 +116,11 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
 
                     <main
                         className="flex flex-col flex-grow overflow-auto">
-                        <DrawerHeader/>
+                        {hasAppBar && <DrawerHeader/>}
                         <div
-                            className={cls(defaultBorderMixin, "flex-grow overflow-auto lg:m-0 lg:mx-4 lg:mb-4 lg:rounded-lg lg:border lg:border-solid m-0 mt-1")}>
+                            className={cls(defaultBorderMixin, "flex-grow overflow-auto lg:m-0 lg:mx-4 lg:mb-4 lg:rounded-lg lg:border lg:border-solid m-0 mt-1", {
+                                "lg:mt-4": !hasAppBar
+                            })}>
 
                             <ErrorBoundary>
                                 {otherChildren}
@@ -233,18 +236,6 @@ function DrawerWrapper(props: {
             }}>
 
             {innerDrawer}
-
-            {/*<div*/}
-            {/*    className={`z-20 absolute right-0 top-4 ${*/}
-            {/*        props.open ? "opacity-100" : "opacity-0 invisible"*/}
-            {/*    } transition-opacity duration-1000 ease-in-out`}>*/}
-            {/*    <IconButton*/}
-            {/*        aria-label="Close drawer"*/}
-            {/*        onClick={() => props.setDrawerOpen(false)}*/}
-            {/*    >*/}
-            {/*        <ChevronLeftIcon/>*/}
-            {/*    </IconButton>*/}
-            {/*</div>*/}
 
         </div>
     );

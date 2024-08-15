@@ -5,7 +5,6 @@ export * from "./utils";
 
 export * from "./api/projects";
 
-export * from "./FireCMSApp";
 export * from "./FireCMSCloudApp";
 export type { FireCMSCloudAppProps } from "./FireCMSCloudAppProps";
 

@@ -90,7 +90,7 @@ export function ExpandablePanel({
                 <Collapsible.Trigger
                     className={cls(focusedMixin,
                         "rounded flex items-center justify-between w-full min-h-[52px]",
-                        "hover:bg-slate-50 dark:hover:bg-gray-800 dark:hover:bg-opacity-10",
+                        "hover:bg-slate-50 dark:hover:bg-gray-800 dark:hover:bg-opacity-20",
                         invisible ? "border-b px-2" : "p-4",
                         invisible && defaultBorderMixin,
                         asField && fieldBackgroundMixin,
