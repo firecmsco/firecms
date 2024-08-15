@@ -1,29 +1,27 @@
-import { type ComponentPropsWithoutRef, forwardRef } from "react";
+import { type ComponentPropsWithoutRef, forwardRef, useContext } from "react";
 import { CommandEmpty, CommandItem } from "cmdk";
 import { Editor, type Range } from "@tiptap/core";
 import { useCurrentEditor } from "@tiptap/react";
-import { useAtomValue } from "jotai";
-import { rangeAtom } from "./editor-command";
+import { RangeContext } from "./editor-command"; // Import context to use the range state
 
 interface EditorCommandItemProps {
   onCommand: ({ editor, range }: { editor: Editor; range: Range }) => void;
 }
 
-export const EditorCommandItem = forwardRef<
-  HTMLDivElement,
-  EditorCommandItemProps & ComponentPropsWithoutRef<typeof CommandItem>
->(({ children, onCommand, ...rest }, ref) => {
-  const { editor } = useCurrentEditor();
-  const range = useAtomValue(rangeAtom);
+export const EditorCommandItem = forwardRef<HTMLDivElement, EditorCommandItemProps & ComponentPropsWithoutRef<typeof CommandItem>>(
+    ({ children, onCommand, ...rest }, ref) => {
+      const { editor } = useCurrentEditor();
+      const [range] = useContext(RangeContext);
 
-  if (!editor || !range) return null;
+      if (!editor || !range) return null;
 
-  return (
-    <CommandItem ref={ref} {...rest} onSelect={() => onCommand({ editor, range })}>
-      {children}
-    </CommandItem>
-  );
-});
+      return (
+          <CommandItem ref={ref} {...rest} onSelect={() => onCommand({ editor, range })}>
+            {children}
+          </CommandItem>
+      );
+    }
+);
 
 EditorCommandItem.displayName = "EditorCommandItem";
 

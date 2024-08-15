@@ -322,7 +322,7 @@ export const FireCMSEditor = ({
 
     return (
         <div className="relative w-full p-8">
-            <EditorRoot>
+            {/*<EditorRoot>*/}
                 <div
                     className="relative min-h-[500px] w-full bg-white dark:bg-gray-950 rounded-lg">
                     <EditorProvider
@@ -385,7 +385,7 @@ export const FireCMSEditor = ({
                     </EditorProvider>
                 </div>
 
-            </EditorRoot>
+            {/*</EditorRoot>*/}
         </div>
     );
 };
