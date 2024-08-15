@@ -66,6 +66,24 @@ export const testCollection = buildCollection<any>({
         //     }
         // }],
         properties: {
+            intolerances: {
+                dataType: "array",
+                name: "Intolerances",
+                of: {
+                    dataType: "map",
+                    properties: {
+                        intolerance: {
+                            dataType: "string",
+                            name: "Intolerance",
+                        },
+                        indications: {
+                            dataType: "string",
+                            name: "Indications",
+                            multiline: true
+                        }
+                    }
+                }
+            },
             videos: {
                 dataType: "array",
                 name: "Videos",

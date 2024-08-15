@@ -34,10 +34,15 @@ export function CustomFiltersActions({
     const categoryFilterValue = categoryFilter?.[1];
 
     const updateFilter = (value: string | null) => {
-        tableController.setFilterValues({
-            ...filterValues,
-            category: value ? ["==", value] : null
-        });
+        const newFilter = {
+            ...filterValues
+        };
+        if (value) {
+            newFilter.category = ["==", value];
+        } else {
+            delete newFilter.category;
+        }
+        tableController.setFilterValues?.(newFilter);
     };
     return (
         <Select placeholder={"Category filter"}

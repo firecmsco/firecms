@@ -61,6 +61,7 @@ import { ReCaptchaEnterpriseProvider } from "@firebase/app-check";
 import { useExportPlugin } from "@firecms/data_export";
 import { useImportPlugin } from "@firecms/data_import";
 import { DemoImportAction } from "./DemoImportAction";
+import { algoliaSearchControllerBuilder } from "./text_search";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
 
@@ -209,8 +210,8 @@ export function App() {
     // Delegate used for fetching and saving data in Firestore
     const firestoreDelegate = useFirestoreDelegate({
         firebaseApp,
-        localTextSearchEnabled: true
-        // textSearchControllerBuilder: algoliaSearchControllerBuilder
+        localTextSearchEnabled: false,
+        textSearchControllerBuilder: algoliaSearchControllerBuilder
     });
 
     // Controller used for saving and fetching files in storage
