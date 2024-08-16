@@ -8,14 +8,7 @@ import { Color } from "@tiptap/extension-color";
 import { Markdown } from "tiptap-markdown";
 import Highlight from "@tiptap/extension-highlight";
 
-import {
-    EditorBubble,
-    EditorCommand,
-    EditorCommandEmpty,
-    EditorCommandItem,
-    EditorRoot,
-    type JSONContent
-} from "./components";
+import { EditorBubble, EditorCommand, EditorCommandEmpty, EditorCommandItem, type JSONContent } from "./components";
 import { Command, createSuggestionItems, renderItems } from "./extensions";
 
 import { NodeSelector } from "./selectors/node-selector";
@@ -46,6 +39,7 @@ import { horizontalRule, placeholder, starterKit, taskItem, taskList, tiptapLink
 import { createImageExtension } from "./extensions/Image";
 import { CustomKeymap } from "./extensions/custom-keymap";
 import { DragAndDrop } from "./extensions/drag-and-drop";
+import { EditorCommandProvider } from "./components/editor-command";
 
 export type FireCMSEditorProps = {
     initialContent?: JSONContent | string,
@@ -116,7 +110,10 @@ export const FireCMSEditor = ({
             description: "Just start typing with plain text.",
             searchTerms: ["p", "paragraph"],
             icon: <TextFieldsIcon size={18}/>,
-            command: ({ editor, range }) => {
+            command: ({
+                          editor,
+                          range
+                      }) => {
                 editor
                     .chain()
                     .focus()
@@ -130,7 +127,10 @@ export const FireCMSEditor = ({
             description: "Track tasks with a to-do list.",
             searchTerms: ["todo", "task", "list", "check", "checkbox"],
             icon: <CheckBoxIcon size={18}/>,
-            command: ({ editor, range }) => {
+            command: ({
+                          editor,
+                          range
+                      }) => {
                 editor.chain().focus().deleteRange(range).toggleTaskList().run();
             }
         },
@@ -139,7 +139,10 @@ export const FireCMSEditor = ({
             description: "Big section heading.",
             searchTerms: ["title", "big", "large"],
             icon: <LooksOneIcon size={18}/>,
-            command: ({ editor, range }) => {
+            command: ({
+                          editor,
+                          range
+                      }) => {
                 editor
                     .chain()
                     .focus()
@@ -153,7 +156,10 @@ export const FireCMSEditor = ({
             description: "Medium section heading.",
             searchTerms: ["subtitle", "medium"],
             icon: <LooksTwoIcon size={18}/>,
-            command: ({ editor, range }) => {
+            command: ({
+                          editor,
+                          range
+                      }) => {
                 editor
                     .chain()
                     .focus()
@@ -167,7 +173,10 @@ export const FireCMSEditor = ({
             description: "Small section heading.",
             searchTerms: ["subtitle", "small"],
             icon: <Looks3Icon size={18}/>,
-            command: ({ editor, range }) => {
+            command: ({
+                          editor,
+                          range
+                      }) => {
                 editor
                     .chain()
                     .focus()
@@ -181,7 +190,10 @@ export const FireCMSEditor = ({
             description: "Create a simple bullet list.",
             searchTerms: ["unordered", "point"],
             icon: <FormatListBulletedIcon size={18}/>,
-            command: ({ editor, range }) => {
+            command: ({
+                          editor,
+                          range
+                      }) => {
                 editor.chain().focus().deleteRange(range).toggleBulletList().run();
             }
         },
@@ -190,7 +202,10 @@ export const FireCMSEditor = ({
             description: "Create a list with numbering.",
             searchTerms: ["ordered"],
             icon: <FormatListNumberedIcon size={18}/>,
-            command: ({ editor, range }) => {
+            command: ({
+                          editor,
+                          range
+                      }) => {
                 editor.chain().focus().deleteRange(range).toggleOrderedList().run();
             }
         },
@@ -199,7 +214,10 @@ export const FireCMSEditor = ({
             description: "Capture a quote.",
             searchTerms: ["blockquote"],
             icon: <FormatQuoteIcon size={18}/>,
-            command: ({ editor, range }) =>
+            command: ({
+                          editor,
+                          range
+                      }) =>
                 editor
                     .chain()
                     .focus()
@@ -213,7 +231,10 @@ export const FireCMSEditor = ({
             description: "Capture a code snippet.",
             searchTerms: ["codeblock"],
             icon: <CodeIcon size={18}/>,
-            command: ({ editor, range }) =>
+            command: ({
+                          editor,
+                          range
+                      }) =>
                 editor.chain().focus().deleteRange(range).toggleCodeBlock().run()
         },
         {
@@ -221,7 +242,10 @@ export const FireCMSEditor = ({
             description: "Upload an image from your computer.",
             searchTerms: ["photo", "picture", "media"],
             icon: <ImageIcon size={18}/>,
-            command: ({ editor, range }) => {
+            command: ({
+                          editor,
+                          range
+                      }) => {
                 editor.chain().focus().deleteRange(range).run();
                 // upload image
                 const input = document.createElement("input");
@@ -322,7 +346,7 @@ export const FireCMSEditor = ({
 
     return (
         <div className="relative w-full p-8">
-            {/*<EditorRoot>*/}
+            <EditorCommandProvider>
                 <div
                     className="relative min-h-[500px] w-full bg-white dark:bg-gray-950 rounded-lg">
                     <EditorProvider
@@ -385,7 +409,7 @@ export const FireCMSEditor = ({
                     </EditorProvider>
                 </div>
 
-            {/*</EditorRoot>*/}
+            </EditorCommandProvider>
         </div>
     );
 };
