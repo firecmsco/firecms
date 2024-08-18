@@ -79,6 +79,7 @@ export const starterKit = StarterKit.configure({
             spellcheck: "false",
         },
     },
+    document: false,
     horizontalRule: false,
     dropcursor: {
         color: "#DBEAFE",

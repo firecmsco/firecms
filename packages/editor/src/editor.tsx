@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import TiptapUnderline from "@tiptap/extension-underline";
 import TextStyle from "@tiptap/extension-text-style";
@@ -40,18 +40,23 @@ import { createImageExtension } from "./extensions/Image";
 import { CustomKeymap } from "./extensions/custom-keymap";
 import { DragAndDrop } from "./extensions/drag-and-drop";
 import { EditorCommandProvider } from "./components/editor-command";
+import Document from "@tiptap/extension-document"
 
 export type FireCMSEditorProps = {
-    initialContent?: JSONContent | string,
+    content?: JSONContent | string,
     onMarkdownContentChange?: (content: string) => void,
     onJsonContentChange?: (content: JSONContent | null) => void,
     onHtmlContentChange?: (content: string) => void,
     handleImageUpload: (file: File) => Promise<string>
 };
 
+const CustomDocument = Document.extend({
+    // content: 'heading block*',
+})
+
 export const FireCMSEditor = ({
                                   handleImageUpload,
-                                  initialContent,
+                                  content,
                                   onJsonContentChange,
                                   onHtmlContentChange,
                                   onMarkdownContentChange
@@ -69,7 +74,7 @@ export const FireCMSEditor = ({
                 }
                 return false;
             }
-        },
+        }
         // handlePaste: (view, event) => {
         //     if (event.clipboardData && event.clipboardData.files && event.clipboardData.files[0]) {
         //         event.preventDefault();
@@ -282,21 +287,20 @@ export const FireCMSEditor = ({
         TiptapUnderline,
         TextStyle,
         Color,
+        CustomDocument,
         Highlight.configure({
-            multicolor: true,
+            multicolor: true
         }),
         Markdown.configure({
             html: false,
-            transformCopiedText: true,
+            transformCopiedText: true
         }),
         CustomKeymap,
         DragAndDrop,
         starterKit,
         placeholder,
         tiptapLink,
-        // tiptapImage,
         imageExtension,
-        // updatedImage,
         taskList,
         taskItem,
         horizontalRule,
@@ -310,6 +314,11 @@ export const FireCMSEditor = ({
     const [markdownContent, setMarkdownContent] = useState<string | null>(null);
     const [jsonContent, setJsonContent] = useState<JSONContent | null>(null);
     const [htmlContent, setHtmlContent] = useState<string | null>(null);
+
+    useEffect(() => {
+        console.log("Content changed", content);
+        editorRef.current?.commands.setContent(content ?? "");
+    }, [content]);
 
     const onEditorUpdate = (editor: Editor) => {
         editorRef.current = editor;
@@ -330,87 +339,83 @@ export const FireCMSEditor = ({
             const markdown = editorRef.current.storage.markdown.getMarkdown();
             onMarkdownContentChange?.(addLineBreakAfterImages(markdown));
         }
-    }, false, 500);
+    }, false, 300);
 
     useDebouncedCallback(jsonContent, () => {
         if (jsonContent)
             onJsonContentChange?.(jsonContent);
-    }, false, 500);
+    }, false, 300);
 
     useDebouncedCallback(htmlContent, () => {
         if (htmlContent)
             onHtmlContentChange?.(htmlContent);
-    }, false, 500);
-
-    if (!initialContent) return null;
+    }, false, 300);
 
     return (
-        <div className="relative w-full p-8">
-            <EditorCommandProvider>
-                <div
-                    className="relative min-h-[500px] w-full bg-white dark:bg-gray-950 rounded-lg">
-                    <EditorProvider
-                        content={initialContent}
-                        extensions={extensions}
-                        editorProps={{
-                            ...defaultEditorProps,
-                            attributes: {
-                                class: "prose-lg prose-headings:font-title font-default focus:outline-none max-w-full p-12"
-                            }
+        <EditorCommandProvider>
+            <div
+                className="relative min-h-[300px] w-full bg-white dark:bg-gray-950 rounded-lg">
+                <EditorProvider
+                    content={content ?? ""}
+                    extensions={extensions}
+                    editorProps={{
+                        ...defaultEditorProps,
+                        attributes: {
+                            class: "prose-lg prose-headings:font-title font-default focus:outline-none max-w-full p-12"
+                        }
+                    }}
+                    onUpdate={({ editor }) => {
+                        console.debug("Editor updated");
+                        onEditorUpdate(editor as Editor);
+                    }}>
+
+                    <EditorCommand
+                        className={cls("text-gray-900 dark:text-white z-50 h-auto max-h-[330px] w-72 overflow-y-auto rounded-md border bg-white dark:bg-gray-900 px-1 py-2 shadow transition-all", defaultBorderMixin)}>
+                        <EditorCommandEmpty className="px-2 text-gray-700 dark:text-slate-300">
+                            No results
+                        </EditorCommandEmpty>
+                        {suggestionItems.map((item) => (
+                            <EditorCommandItem
+                                value={item.title}
+                                onCommand={(val) => item?.command?.(val)}
+                                className={"flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm hover:bg-blue-50 hover:dark:bg-gray-700 aria-selected:bg-blue-50 aria-selected:dark:bg-gray-700"}
+                                key={item.title}
+                            >
+                                <div
+                                    className={cls("flex h-10 w-10 items-center justify-center rounded-md border bg-white dark:bg-gray-900", defaultBorderMixin)}>
+                                    {item.icon}
+                                </div>
+                                <div>
+                                    <p className="font-medium">{item.title}</p>
+                                    <p className="text-xs text-gray-700 dark:text-slate-300">
+                                        {item.description}
+                                    </p>
+                                </div>
+                            </EditorCommandItem>
+                        ))}
+                    </EditorCommand>
+
+                    <EditorBubble
+                        tippyOptions={{
+                            placement: "top"
                         }}
-                        onUpdate={({ editor }) => {
-                            console.debug("Editor updated");
-                            onEditorUpdate(editor as Editor);
-                        }}>
+                        className={cls("flex w-fit max-w-[90vw] h-10 overflow-hidden rounded border bg-white dark:bg-gray-900 shadow", defaultBorderMixin)}
+                    >
+                        {/*<Separator orientation="vertical"/>*/}
+                        <NodeSelector open={openNode} onOpenChange={setOpenNode}/>
+                        <Separator orientation="vertical"/>
 
-                        <EditorCommand
-                            className={cls("text-gray-900 dark:text-white z-50 h-auto max-h-[330px] w-72 overflow-y-auto rounded-md border bg-white dark:bg-gray-900 px-1 py-2 shadow transition-all", defaultBorderMixin)}>
-                            <EditorCommandEmpty className="px-2 text-gray-700 dark:text-slate-300">
-                                No results
-                            </EditorCommandEmpty>
-                            {suggestionItems.map((item) => (
-                                <EditorCommandItem
-                                    value={item.title}
-                                    onCommand={(val) => item?.command?.(val)}
-                                    className={"flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm hover:bg-blue-50 hover:dark:bg-gray-700 aria-selected:bg-blue-50 aria-selected:dark:bg-gray-700"}
-                                    key={item.title}
-                                >
-                                    <div
-                                        className={cls("flex h-10 w-10 items-center justify-center rounded-md border bg-white dark:bg-gray-900", defaultBorderMixin)}>
-                                        {item.icon}
-                                    </div>
-                                    <div>
-                                        <p className="font-medium">{item.title}</p>
-                                        <p className="text-xs text-gray-700 dark:text-slate-300">
-                                            {item.description}
-                                        </p>
-                                    </div>
-                                </EditorCommandItem>
-                            ))}
-                        </EditorCommand>
+                        <LinkSelector open={openLink} onOpenChange={setOpenLink}/>
+                        <Separator orientation="vertical"/>
+                        <TextButtons/>
+                        {/*<Separator orientation="vertical"/>*/}
+                        {/*<ColorSelector open={openColor} onOpenChange={setOpenColor}/>*/}
+                    </EditorBubble>
 
-                        <EditorBubble
-                            tippyOptions={{
-                                placement: "top"
-                            }}
-                            className={cls("flex w-fit max-w-[90vw] h-10 overflow-hidden rounded border bg-white dark:bg-gray-900 shadow", defaultBorderMixin)}
-                        >
-                            {/*<Separator orientation="vertical"/>*/}
-                            <NodeSelector open={openNode} onOpenChange={setOpenNode}/>
-                            <Separator orientation="vertical"/>
+                </EditorProvider>
+            </div>
 
-                            <LinkSelector open={openLink} onOpenChange={setOpenLink}/>
-                            <Separator orientation="vertical"/>
-                            <TextButtons/>
-                            {/*<Separator orientation="vertical"/>*/}
-                            {/*<ColorSelector open={openColor} onOpenChange={setOpenColor}/>*/}
-                        </EditorBubble>
-
-                    </EditorProvider>
-                </div>
-
-            </EditorCommandProvider>
-        </div>
+        </EditorCommandProvider>
     );
 };
 
@@ -489,7 +494,7 @@ ul[data-type="taskList"] li > label {
     }
   
     &:active {
-      background-color: rgb(71 85 105);;
+      background-color: rgb(71 85 105);
     }
   }
 }
@@ -567,7 +572,7 @@ ul[data-type="taskList"] li[data-checked="true"] > div > p {
 }
 
 .drag-handle {
-  position: fixed;
+  position: absolute;
   opacity: 1;
   transition: opacity ease-in 0.2s;
   border-radius: 0.25rem;
@@ -578,7 +583,7 @@ ul[data-type="taskList"] li[data-checked="true"] > div > p {
   background-position: center;
   width: 1.2rem;
   height: 1.5rem;
-  z-index: 50;
+  z-index: 100;
   cursor: grab;
 
   &:hover {
