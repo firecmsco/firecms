@@ -30,11 +30,11 @@ You can check all the props [`FieldProps`](../api/interfaces/FieldProps).
 This is an example of a custom TextField that takes the background color as a prop
 
 ```tsx
-
 import React from "react";
-import { TextField } from "@mui/material";
-import { FieldProps } from "@firecms/cloud";
+import { FieldHelperText, FieldProps, useModeController } from "@firecms/core";
+import { TextField } from "@firecms/ui";
 
+// you can define the props that your custom field will receive
 interface CustomColorTextFieldProps {
     color: string
 }
@@ -43,35 +43,36 @@ export default function CustomColorTextField({
                                                  property,
                                                  value,
                                                  setValue,
-                                                 setFieldValue, // use this function to update a different field
+                                                 setFieldValue,
                                                  customProps,
                                                  touched,
+                                                 includeDescription,
+                                                 showError,
                                                  error,
                                                  isSubmitting,
                                                  context, // the rest of the entity values here
                                                  ...props
                                              }: FieldProps<string, CustomColorTextFieldProps>) {
 
+    const { mode } = useModeController();
+    const backgroundColor = customProps?.color ?? (mode === "light" ? "#eef4ff" : "#16325f");
     return (
         <>
-            <TextField required={property.validation?.required}
-                       sx={{
-                           backgroundColor: customProps.color
-                       }}
-                       error={!!error}
-                       disabled={isSubmitting}
-                       label={property.title}
-                       value={value ?? ""}
-                       onChange={(evt: any) => {
-                           setValue(
-                               evt.target.value
-                           );
-                       }}
-                       fullWidth
-                       variant={"filled"}/>
+            <TextField
+                inputStyle={{
+                    backgroundColor
+                }}
+                error={!!error}
+                disabled={isSubmitting}
+                label={error ?? property.name}
+                value={value ?? ""}
+                onChange={(evt: any) => {
+                    setValue(
+                        evt.target.value
+                    );
+                }}/>
 
-
-            <TFormHelperText includeDescription={includeDescription}
+            <FieldHelperText includeDescription={includeDescription}
                              showError={showError}
                              error={error}
                              property={property}/>
@@ -85,6 +86,8 @@ export default function CustomColorTextField({
 ...and how it is used:
 ```tsx
 export const blogCollection = buildCollection({
+    id: "blog",
+    path: "blog",
     name: "Blog entry",
     properties: {
         // ...
@@ -94,7 +97,7 @@ export const blogCollection = buildCollection({
             dataType: "string",
             Field: CustomColorTextField,
             customProps: {
-                color: "gold"
+                color: "gold" // pass the custom prop
             }
         }
     }
