@@ -21,6 +21,11 @@ export type FormexController<T extends object> = {
     isSubmitting: boolean;
     setSubmitting: (isSubmitting: boolean) => void;
     isValidating: boolean;
+    /**
+     * The version of the form. This is incremented every time the form is reset
+     * or the form is submitted.
+     */
+    version: number;
 }
 
 export type FormexResetProps<T extends object> = {

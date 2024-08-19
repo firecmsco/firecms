@@ -15,7 +15,7 @@ export type IconButtonProps<C extends React.ElementType> =
 }
 
 const buttonClasses =
-    "hover:bg-slate-200 hover:bg-opacity-75 dark:hover:bg-gray-700 dark:hover:bg-opacity-50";
+    "hover:bg-slate-200 hover:bg-opacity-75 dark:hover:bg-slate-800";
 const baseClasses =
     "inline-flex items-center justify-center p-2 text-sm font-medium focus:outline-none transition-colors ease-in-out duration-150";
 const colorClasses = "text-slate-600 visited:text-slate-600 dark:text-slate-300 dark:visited:text-gray-300";

@@ -27,7 +27,7 @@ import { useCustomizationController, useFireCMSContext } from "../../../../hooks
 import { OnCellValueChangeParams } from "../../../common";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
-    entity?: Entity<M>;
+    entity: Entity<M>;
     customFieldValidator?: CustomFieldValidator;
     path: string;
     tableKey: string;
@@ -74,7 +74,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         y: number
     }>();
 
-    const entityId = entityProp?.id;
+    const entityId = entityProp.id;
     const [entity, setEntity] = useState<Entity<M> | undefined>(entityProp);
     // useEffect(() => {
     //     if (entityId && inputCollection) {
@@ -279,7 +279,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             context: formContext,
             tableMode: true,
             partOfArray: false,
-            partOfBlock: false,
+            minimalistView: false,
             autoFocus: open
         }
         : undefined;

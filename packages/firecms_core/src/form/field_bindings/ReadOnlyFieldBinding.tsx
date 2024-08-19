@@ -21,7 +21,7 @@ export function ReadOnlyFieldBinding({
                                          value,
                                          error,
                                          showError,
-                                         tableMode,
+                                         minimalistView,
                                          property,
                                          includeDescription,
                                          context
@@ -34,10 +34,10 @@ export function ReadOnlyFieldBinding({
 
         <>
 
-            {!tableMode && <LabelWithIcon icon={getIconForProperty(property, "small")}
-                                          required={property.validation?.required}
-                                          title={property.name}
-                                          className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
+            {!minimalistView && <LabelWithIcon icon={getIconForProperty(property, "small")}
+                                               required={property.validation?.required}
+                                               title={property.name}
+                                               className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
             }
 
             <div

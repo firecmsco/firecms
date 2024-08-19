@@ -54,7 +54,7 @@ export function Tab({
                                       // "data-[state=active]:bg-slate-50 data-[state=active]:dark:bg-slate-800",
                                       className)}>
         <div className={cls("uppercase inline-block p-2 px-4 m-2 rounded",
-            "hover:bg-slate-100 dark:hover:bg-slate-800")}>
+            "hover:bg-slate-200 hover:bg-opacity-75 dark:hover:bg-slate-800")}>
             {children}
         </div>
     </TabsPrimitive.Trigger>;

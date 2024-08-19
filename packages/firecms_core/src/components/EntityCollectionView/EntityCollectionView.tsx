@@ -661,19 +661,19 @@ export const EntityCollectionView = React.memo(
                         collection={collection}/>}
                 />
 
-                <PopupFormField
+                {popupCell && <PopupFormField
                     key={`popup_form_${popupCell?.propertyKey}_${popupCell?.entity?.id}`}
                     open={Boolean(popupCell)}
                     onClose={onPopupClose}
                     cellRect={popupCell?.cellRect}
                     propertyKey={popupCell?.propertyKey}
                     collection={collection}
-                    entity={popupCell?.entity}
+                    entity={popupCell.entity}
                     tableKey={tableKey.current}
                     customFieldValidator={uniqueFieldValidator}
                     path={resolvedFullPath}
                     onCellValueChange={onValueChange}
-                    container={containerRef.current}/>
+                    container={containerRef.current}/>}
 
                 {deleteEntityClicked &&
                     <DeleteEntityDialog

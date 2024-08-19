@@ -25,7 +25,7 @@ export function ArrayOfReferencesFieldBinding({
                                                   showError,
                                                   disabled,
                                                   isSubmitting,
-                                                  tableMode,
+                                                  minimalistView,
                                                   property,
                                                   includeDescription,
                                                   setValue,
@@ -130,7 +130,7 @@ export function ArrayOfReferencesFieldBinding({
     return (
         <>
 
-            {!tableMode &&
+            {!minimalistView &&
                 <ExpandablePanel
                     titleClassName={fieldBackgroundMixin}
                     className={cls("px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2", fieldBackgroundMixin)}
@@ -139,7 +139,7 @@ export function ArrayOfReferencesFieldBinding({
                     {body}
                 </ExpandablePanel>}
 
-            {tableMode && body}
+            {minimalistView && body}
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}

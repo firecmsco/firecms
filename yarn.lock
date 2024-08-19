@@ -1741,7 +1741,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.24.1, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.24.1, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
   version: 7.25.0
   resolution: "@babel/runtime@npm:7.25.0"
   dependencies:
@@ -2747,6 +2747,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@firecms/core@workspace:packages/firecms_core"
   dependencies:
+    "@firecms/editor": ^3.0.0-canary.102
     "@firecms/formex": ^3.0.0-canary.102
     "@firecms/ui": ^3.0.0-canary.102
     "@hello-pangea/dnd": ^16.6.0
@@ -2775,7 +2776,6 @@ __metadata:
     react-dropzone: ^14.2.3
     react-fast-compare: ^3.2.2
     react-image-file-resizer: ^0.4.8
-    react-markdown-editor-lite: ^1.3.4
     react-router: ^6.25.1
     react-router-dom: ^6.25.1
     react-transition-group: ^4.4.5
@@ -2954,7 +2954,6 @@ __metadata:
     "@types/react": ^18.3.3
     "@types/react-dom": 18.3.0
     cmdk: ^0.2.1
-    jotai: ^2.9.1
     react-markdown: ^9.0.1
     react-moveable: ^0.56.0
     tippy.js: ^6.3.7
@@ -8044,13 +8043,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:^2.2.6":
-  version: 2.5.1
-  resolution: "classnames@npm:2.5.1"
-  checksum: da424a8a6f3a96a2e87d01a432ba19315503294ac7e025f9fece656db6b6a0f7b5003bb1fbb51cbb0d9624d964f1b9bb35a51c73af9b2434c7b292c42231c1e5
-  languageName: node
-  linkType: hard
-
 "clean-stack@npm:^2.0.0":
   version: 2.2.0
   resolution: "clean-stack@npm:2.2.0"
@@ -9903,7 +9895,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eventemitter3@npm:^4.0.0, eventemitter3@npm:^4.0.4":
+"eventemitter3@npm:^4.0.4":
   version: 4.0.7
   resolution: "eventemitter3@npm:4.0.7"
   checksum: 1875311c42fcfe9c707b2712c32664a245629b42bb0a5a84439762dd0fd637fc54d078155ea83c2af9e0323c9ac13687e03cfba79b03af9f40c89b4960099374
@@ -12526,21 +12518,6 @@ __metadata:
   bin:
     jiti: bin/jiti.js
   checksum: 9ea4a70a7bb950794824683ed1c632e2ede26949fbd348e2ba5ec8dc5efa54dc42022d85ae229cadaa60d4b95012e80ea07d625797199b688cc22ab0e8891d32
-  languageName: node
-  linkType: hard
-
-"jotai@npm:^2.9.1":
-  version: 2.9.1
-  resolution: "jotai@npm:2.9.1"
-  peerDependencies:
-    "@types/react": ">=17.0.0"
-    react: ">=17.0.0"
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-    react:
-      optional: true
-  checksum: 4ed48d62f7c47aa56f71238b28dfce60e32a8e289a8283c5c26a96bc9f83d69f324e1d464fd61615bb9624f7f097e25d53d2fb19f3a6371869de82286822a93c
   languageName: node
   linkType: hard
 
@@ -15797,20 +15774,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-markdown-editor-lite@npm:^1.3.4":
-  version: 1.3.4
-  resolution: "react-markdown-editor-lite@npm:1.3.4"
-  dependencies:
-    "@babel/runtime": ^7.6.2
-    classnames: ^2.2.6
-    eventemitter3: ^4.0.0
-    uuid: ^8.3.2
-  peerDependencies:
-    react: ^16.9.0 || ^17.0.0 || ^18.0.0
-  checksum: df9ac3a02d99b8ba803656fb9df07008315e6f4ff8f189ef9f29e300778eec83af1687e4b4db8459ce4732a492f9c61f0a200108a48413f7b12a355b5050f384
-  languageName: node
-  linkType: hard
-
 "react-markdown@npm:^9.0.1":
   version: 9.0.1
   resolution: "react-markdown@npm:9.0.1"
@@ -18308,15 +18271,6 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: 4b81611ade2885d2313ddd8dc865d93d8dccc13ddf901745edca8f86d99bc46d7a330d678e7532e7ebf93ce616679fb19b2e3568873ac0c14c999032acb25869
-  languageName: node
-  linkType: hard
-
-"uuid@npm:^8.3.2":
-  version: 8.3.2
-  resolution: "uuid@npm:8.3.2"
-  bin:
-    uuid: dist/bin/uuid
-  checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
   languageName: node
   linkType: hard
 

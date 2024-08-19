@@ -35,6 +35,9 @@
       "@firecms/ui": [
         "../ui/src"
       ],
+      "@firecms/editor": [
+        "../editor/src"
+      ],
       "@firecms/formex": [
         "../formex/src"
       ]

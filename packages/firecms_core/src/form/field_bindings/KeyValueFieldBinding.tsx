@@ -41,7 +41,7 @@ export function KeyValueFieldBinding({
                                          disabled,
                                          property,
                                          setValue,
-                                         tableMode,
+                                         minimalistView,
                                          includeDescription,
                                          underlyingValueHasChanged,
                                          autoFocus,
@@ -71,11 +71,11 @@ export function KeyValueFieldBinding({
     return (
         <>
 
-            {!tableMode && <ExpandablePanel initiallyExpanded={expanded}
-                                            title={title}
-                                            className={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2"}>{mapFormView}</ExpandablePanel>}
+            {!minimalistView && <ExpandablePanel initiallyExpanded={expanded}
+                                                 title={title}
+                                                 className={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2"}>{mapFormView}</ExpandablePanel>}
 
-            {tableMode && mapFormView}
+            {minimalistView && mapFormView}
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}

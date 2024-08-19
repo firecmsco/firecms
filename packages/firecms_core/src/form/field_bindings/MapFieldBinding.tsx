@@ -29,8 +29,7 @@ export function MapFieldBinding({
                                     error,
                                     disabled,
                                     property,
-                                    partOfBlock,
-                                    tableMode,
+                                    minimalistView,
                                     includeDescription,
                                     underlyingValueHasChanged,
                                     autoFocus,
@@ -72,7 +71,7 @@ export function MapFieldBinding({
                             context,
                             tableMode: false,
                             partOfArray: false,
-                            partOfBlock: false,
+                            minimalistView: false,
                             autoFocus: autoFocus && index === 0
                         };
 
@@ -102,11 +101,11 @@ export function MapFieldBinding({
     return (
         <ErrorBoundary>
 
-            {!tableMode && !partOfBlock && <ExpandablePanel initiallyExpanded={expanded}
-                                                            className={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2 bg-slate-50 bg-opacity-50 dark:bg-gray-900"}
-                                                            title={title}>{mapFormView}</ExpandablePanel>}
+            {!minimalistView && !minimalistView && <ExpandablePanel initiallyExpanded={expanded}
+                                                                 className={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2 bg-slate-50 bg-opacity-50 dark:bg-gray-900"}
+                                                                 title={title}>{mapFormView}</ExpandablePanel>}
 
-            {(tableMode || partOfBlock) && mapFormView}
+            {(minimalistView || minimalistView) && mapFormView}
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError ?? false}

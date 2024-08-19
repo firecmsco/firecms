@@ -482,7 +482,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         setFieldValue: useCallback(formex.setFieldValue, []),
         values: formex.values,
         collection: resolvedCollection,
-        entityId,
+        entityId: entityId as string,
         path,
         save,
         formex
@@ -757,7 +757,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                             context: formContext,
                             tableMode: false,
                             partOfArray: false,
-                            partOfBlock: false,
+                            minimalistView: false,
                             autoFocus: false
                         };
 

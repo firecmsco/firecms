@@ -589,7 +589,7 @@
 //                         context: formContext,
 //                         tableMode: false,
 //                         partOfArray: false,
-//                         partOfBlock: false,
+//                         minimalistView: false,
 //                         autoFocus: false
 //                     };
 //

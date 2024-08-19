@@ -9,7 +9,7 @@ export const CustomField = ({
                                 property,
                                 value,
                                 propertyKey,
-                                tableMode,
+                                minimalistView,
                                 error,
                                 showError,
                                 includeDescription,

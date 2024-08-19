@@ -11,20 +11,18 @@ export function TestEditorView() {
     useEffect(() => {
         const content = window.localStorage.getItem("editor-content");
         if (content) {
-            console.log("content", content)
             // const parse = JSON.parse(content);
             setInitialContent(content);
         } else {
-            console.log("no content")
             setInitialContent(defaultEditorContent);
         }
     }, []);
 
     return (
-        <Container>
+        <Container className={"p-8"}>
             {!initialContent && <CircularProgressCenter/>}
             {initialContent && <FireCMSEditor
-                initialContent={initialContent}
+                content={initialContent}
                 // onHtmlContentChange={(content) => {
                 //     console.log(content);
                 // }}

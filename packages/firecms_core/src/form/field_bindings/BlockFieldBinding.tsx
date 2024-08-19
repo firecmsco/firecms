@@ -27,7 +27,7 @@ export function BlockFieldBinding<T extends Array<any>>({
                                                             isSubmitting,
                                                             setValue,
                                                             setFieldValue,
-                                                            tableMode,
+                                                            minimalistView,
                                                             property,
                                                             includeDescription,
                                                             underlyingValueHasChanged,
@@ -84,7 +84,7 @@ export function BlockFieldBinding<T extends Array<any>>({
 
         <>
 
-            {!tableMode &&
+            {!minimalistView &&
                 <ExpandablePanel
                     className={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2"}
                     initiallyExpanded={expanded}
@@ -92,7 +92,7 @@ export function BlockFieldBinding<T extends Array<any>>({
                     {body}
                 </ExpandablePanel>}
 
-            {tableMode && body}
+            {minimalistView && body}
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}
@@ -179,7 +179,7 @@ function BlockEntry({
             context,
             autoFocus,
             partOfArray: false,
-            partOfBlock: true,
+            minimalistView: true,
             tableMode: false
         }
         : undefined;
@@ -193,7 +193,7 @@ function BlockEntry({
     };
 
     return (
-        <div className={cls(paperMixin, "bg-transparent p-4 my-4 py-8")}>
+        <div className={cls(paperMixin, "bg-transparent p-2 mb-4")}>
 
             <Field
                 name={typeFieldName}

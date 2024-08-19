@@ -4,7 +4,14 @@ import equal from "react-fast-compare"
 
 import { FormexController, FormexResetProps } from "./types";
 
-export function useCreateFormex<T extends object>({ initialValues, initialErrors, validation, validateOnChange = false, onSubmit, validateOnInitialRender = false }: {
+export function useCreateFormex<T extends object>({
+                                                      initialValues,
+                                                      initialErrors,
+                                                      validation,
+                                                      validateOnChange = false,
+                                                      onSubmit,
+                                                      validateOnInitialRender = false
+                                                  }: {
     initialValues: T,
     initialErrors?: Record<string, string>,
     validateOnChange?: boolean,
@@ -23,6 +30,7 @@ export function useCreateFormex<T extends object>({ initialValues, initialErrors
     const [submitCount, setSubmitCount] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isValidating, setIsValidating] = useState(false);
+    const [version, setVersion] = useState(0);
 
     useEffect(() => {
         if (validateOnInitialRender) {
@@ -103,6 +111,7 @@ export function useCreateFormex<T extends object>({ initialValues, initialErrors
             await onSubmit?.(valuesRef.current, controllerRef.current);
         }
         setIsSubmitting(false);
+        setVersion(version + 1);
     }
 
     const resetForm = (props?: FormexResetProps<T>) => {
@@ -119,6 +128,7 @@ export function useCreateFormex<T extends object>({ initialValues, initialErrors
         setTouchedState(touchedProp ?? {});
         setDirty(false);
         setSubmitCount(submitCountProp ?? 0);
+        setVersion(version + 1);
     }
 
     const controller: FormexController<T> = {
@@ -141,7 +151,8 @@ export function useCreateFormex<T extends object>({ initialValues, initialErrors
         handleBlur,
         validate,
         isValidating,
-        resetForm
+        resetForm,
+        version
     };
 
     const controllerRef = React.useRef<FormexController<T>>(controller);

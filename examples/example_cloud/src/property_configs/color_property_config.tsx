@@ -6,7 +6,7 @@ export const colorPropertyConfig: PropertyConfig = {
     key: "color",
     property: {
         dataType: "string",
-        Field: ({ value, setValue, tableMode, property }: FieldProps<string>) => {
+        Field: ({ value, setValue, minimalistView, property }: FieldProps<string>) => {
             return <>
                 {!tableMode && <LabelWithIcon icon={getIconForProperty(property, "small")}
                                               required={property.validation?.required}

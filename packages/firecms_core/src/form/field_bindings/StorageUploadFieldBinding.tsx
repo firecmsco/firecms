@@ -44,7 +44,7 @@ export function StorageUploadFieldBinding({
                                               error,
                                               showError,
                                               autoFocus,
-                                              tableMode,
+                                              minimalistView,
                                               property,
                                               includeDescription,
                                               context,
@@ -87,7 +87,7 @@ export function StorageUploadFieldBinding({
 
         <>
 
-            {!tableMode &&
+            {!minimalistView &&
                 <LabelWithIcon icon={getIconForProperty(property, "small")}
                                required={property.validation?.required}
                                title={property.name}

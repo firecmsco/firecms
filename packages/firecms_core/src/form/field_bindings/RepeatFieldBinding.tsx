@@ -23,7 +23,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
                                                              isSubmitting,
                                                              setValue,
                                                              setFieldValue,
-                                                             tableMode,
+                                                             minimalistView,
                                                              property,
                                                              includeDescription,
                                                              underlyingValueHasChanged,
@@ -59,7 +59,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
             context,
             tableMode: false,
             partOfArray: true,
-            partOfBlock: false,
+            minimalistView: false,
             autoFocus: internalId === lastAddedId
         };
         return <ErrorBoundary>
@@ -89,13 +89,13 @@ export function RepeatFieldBinding<T extends Array<any>>({
 
         <>
 
-            {!tableMode && <ExpandablePanel initiallyExpanded={expanded}
-                                            className={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2"}
-                                            title={title}>
+            {!minimalistView && <ExpandablePanel initiallyExpanded={expanded}
+                                                 className={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2"}
+                                                 title={title}>
                 {arrayContainer}
             </ExpandablePanel>}
 
-            {tableMode && arrayContainer}
+            {minimalistView && arrayContainer}
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}

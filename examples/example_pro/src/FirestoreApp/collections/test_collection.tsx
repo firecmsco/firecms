@@ -84,6 +84,11 @@ export const testCollection = buildCollection<any>({
                     }
                 }
             },
+            article_body: {
+                dataType: "string",
+                name: "Article Body",
+                markdown: true,
+            },
             videos: {
                 dataType: "array",
                 name: "Videos",

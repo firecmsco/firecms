@@ -8,7 +8,7 @@ import {
     DateTimeFieldBinding,
     KeyValueFieldBinding,
     MapFieldBinding,
-    MarkdownFieldBinding,
+    MarkdownEditorFieldBinding,
     MultiSelectBinding,
     ReferenceFieldBinding,
     RepeatFieldBinding,
@@ -77,7 +77,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         property: {
             dataType: "string",
             markdown: true,
-            Field: MarkdownFieldBinding
+            Field: MarkdownEditorFieldBinding
         }
     },
     url: {

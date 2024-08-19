@@ -81,14 +81,9 @@ export interface FieldProps<T extends CMSType = any, CustomProps = any, M extend
     partOfArray?: boolean;
 
     /**
-     * Is this field part of a block (oneOf array)
+     * Should this field render with the minimal amount of UI elements
      */
-    partOfBlock?: boolean;
-
-    /**
-     * Is this field being rendered in the entity table popup
-     */
-    tableMode?: boolean;
+    minimalistView?: boolean;
 
     /**
      * Should this field autofocus on mount
@@ -144,7 +139,7 @@ export interface FormContext<M extends Record<string, any> = any> {
     /**
      * Entity id, it can be null if it's a new entity
      */
-    entityId?: string;
+    entityId: string;
 
     /**
      * Path this entity is located at
@@ -205,7 +200,7 @@ export interface PropertyFieldBindingProps<T extends CMSType, M extends Record<s
     /**
      * Is this field part of a block (oneOf array)
      */
-    partOfBlock?: boolean;
+    minimalistView?: boolean;
 
     /**
      * Should the field take focus when rendered. When opening the popup view

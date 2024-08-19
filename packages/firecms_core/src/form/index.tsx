@@ -11,7 +11,7 @@ import { KeyValueFieldBinding } from "./field_bindings/KeyValueFieldBinding";
 import { RepeatFieldBinding } from "./field_bindings/RepeatFieldBinding";
 import { BlockFieldBinding } from "./field_bindings/BlockFieldBinding";
 import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
-import { MarkdownFieldBinding } from "./field_bindings/MarkdownFieldBinding";
+import { MarkdownEditorFieldBinding } from "./field_bindings/MarkdownEditorFieldBinding";
 import { ArrayCustomShapedFieldBinding } from "./field_bindings/ArrayCustomShapedFieldBinding";
 
 export {
@@ -28,7 +28,7 @@ export {
     SelectFieldBinding,
     StorageUploadFieldBinding,
     SwitchFieldBinding,
-    MarkdownFieldBinding,
+    MarkdownEditorFieldBinding,
     TextFieldBinding
 };
 

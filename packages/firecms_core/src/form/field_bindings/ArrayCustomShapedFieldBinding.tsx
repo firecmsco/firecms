@@ -20,7 +20,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
                                                                         showError,
                                                                         isSubmitting,
                                                                         setValue,
-                                                                        tableMode,
+                                                                        minimalistView,
                                                                         property,
                                                                         includeDescription,
                                                                         underlyingValueHasChanged,
@@ -57,7 +57,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
             context,
             tableMode: false,
             partOfArray: true,
-            partOfBlock: false,
+            minimalistView: false,
             autoFocus: false
         };
         return <div key={`custom_shaped_array_${index}`} className="pb-4">
@@ -69,14 +69,14 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
 
         <>
 
-            {!tableMode &&
+            {!minimalistView &&
                 <ExpandablePanel initiallyExpanded={expanded}
                                  title={title}
                                  className={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2"}>
                     {body}
                 </ExpandablePanel>}
 
-            {tableMode && body}
+            {minimalistView && body}
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}
