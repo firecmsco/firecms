@@ -140,8 +140,12 @@ export const FireCMSEditor = ({
 
     useEffect(() => {
         if (version === undefined) return;
-        if (version > 0 && editorRef.current)
-            editorRef.current?.commands.setContent(content ?? "");
+        setTimeout(() => {
+            if (version > 0 && editorRef.current) {
+                editorRef.current?.commands.setContent(content ?? "");
+            }
+        }, 1)
+
     }, [version]);
 
     const onEditorUpdate = (editor: Editor) => {
@@ -158,7 +162,6 @@ export const FireCMSEditor = ({
     }
 
     useDebouncedCallback(markdownContent, () => {
-
         if (editorRef.current) {
             const markdown = editorRef.current.storage.markdown.getMarkdown();
             onMarkdownContentChange?.(addLineBreakAfterImages(markdown));
@@ -188,8 +191,11 @@ export const FireCMSEditor = ({
                         class: "prose-lg prose-headings:font-title font-default focus:outline-none max-w-full p-12"
                     }
                 }}
+                onCreate={({ editor }) => {
+                    // @ts-ignore
+                    editorRef.current = editor;
+                }}
                 onUpdate={({ editor }) => {
-                    console.debug("Editor updated");
                     onEditorUpdate(editor as Editor);
                 }}>
 

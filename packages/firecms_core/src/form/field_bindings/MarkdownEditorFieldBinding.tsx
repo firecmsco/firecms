@@ -8,7 +8,7 @@ import {
 } from "../../index";
 import { Paper } from "@firecms/ui";
 import { FireCMSEditor } from "@firecms/editor";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { resolveFilenameString, resolveStoragePathString } from "../../util/storage";
 
 interface MarkdownEditorFieldProps {
@@ -35,7 +35,8 @@ export function MarkdownEditorFieldBinding({
     const entityId = context.entityId;
     const path = context.path;
 
-    const fieldVersion = useRef(0);
+    // const fieldVersion = useRef(0);
+    const [fieldVersion, setFieldVersion] = useState(0);
     const internalValue = useRef(value);
 
     const onContentChange = useCallback((content: string) => {
@@ -45,7 +46,9 @@ export function MarkdownEditorFieldBinding({
 
     useEffect(() => {
         if (internalValue.current !== value) {
-            fieldVersion.current = fieldVersion.current++;
+            internalValue.current = value;
+            setFieldVersion(fieldVersion + 1);
+            // fieldVersion.current = fieldVersion.current + 1;
         }
     }, [value]);
 
@@ -86,9 +89,8 @@ export function MarkdownEditorFieldBinding({
     const editor = <FireCMSEditor
         content={value}
         onMarkdownContentChange={onContentChange}
-        version={context.formex.version + fieldVersion.current}
+        version={context.formex.version + fieldVersion}
         handleImageUpload={async (file: File) => {
-            console.log("Uploading file", file);
             const storagePath = storagePathBuilder(file);
             const fileName = await fileNameBuilder(file);
             const result = await storageSource.uploadFile({
