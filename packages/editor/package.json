@@ -48,7 +48,6 @@
     "@tiptap/starter-kit": "^2.4.0",
     "@tiptap/suggestion": "^2.4.0",
     "@types/node": "20.14.12",
-    "cmdk": "^0.2.1",
     "react-markdown": "^9.0.1",
     "react-moveable": "^0.56.0",
     "tippy.js": "^6.3.7",

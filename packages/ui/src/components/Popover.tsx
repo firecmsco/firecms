@@ -24,6 +24,7 @@ export interface PopoverProps {
     enabled?: boolean;
     modal?: boolean;
     className?: string;
+    portalContainer?: HTMLElement | null;
 }
 
 export function Popover({
@@ -41,6 +42,7 @@ export function Popover({
                             avoidCollisions,
                             enabled = true,
                             modal = false,
+                            portalContainer,
                             className
                         }: PopoverProps) {
 
@@ -51,22 +53,22 @@ export function Popover({
 
     return <PopoverPrimitive.Root open={open}
                                   onOpenChange={onOpenChange}
-                                  modal={modal}
-    >
+                                  modal={modal}>
         <PopoverPrimitive.Trigger asChild>
             {trigger}
         </PopoverPrimitive.Trigger>
-        <PopoverPrimitive.Portal>
-            <PopoverPrimitive.Content className={cls(paperMixin,
-                "PopoverContent shadow z-40", className)}
-                                      side={side}
-                                      sideOffset={sideOffset}
-                                      align={align}
-                                      alignOffset={alignOffset}
-                                      arrowPadding={arrowPadding}
-                                      sticky={sticky}
-                                      hideWhenDetached={hideWhenDetached}
-                                      avoidCollisions={avoidCollisions}>
+        <PopoverPrimitive.Portal container={portalContainer}>
+            <PopoverPrimitive.Content
+                className={cls(paperMixin,
+                    "PopoverContent shadow z-40", className)}
+                side={side}
+                sideOffset={sideOffset}
+                align={align}
+                alignOffset={alignOffset}
+                arrowPadding={arrowPadding}
+                sticky={sticky}
+                hideWhenDetached={hideWhenDetached}
+                avoidCollisions={avoidCollisions}>
 
                 {children}
                 <PopoverPrimitive.Arrow className="fill-white dark:fill-slate-950"/>

@@ -96,11 +96,13 @@ const items: SelectorItem[] = [
 interface NodeSelectorProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
+    portalContainer: HTMLElement | null;
 }
 
 export const NodeSelector = ({
                                  open,
-                                 onOpenChange
+                                 onOpenChange,
+                                 portalContainer
                              }: NodeSelectorProps) => {
     const { editor } = useEditor();
     if (!editor) return null;
@@ -113,6 +115,7 @@ export const NodeSelector = ({
         <Popover
             sideOffset={5}
             align="start"
+            portalContainer={portalContainer}
             className="w-48 p-1"
             trigger={<Button variant="text"
                              className="gap-2 rounded-none"

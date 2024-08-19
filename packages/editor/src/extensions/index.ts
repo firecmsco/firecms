@@ -50,6 +50,5 @@ export {
   TaskList,
   InputRule,
 };
-export * from "./slash-command";
 
 export { getPrevText } from "../utils/utils";
