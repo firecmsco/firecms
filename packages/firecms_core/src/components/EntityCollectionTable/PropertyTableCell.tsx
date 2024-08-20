@@ -49,6 +49,8 @@ export interface PropertyTableCellProps<T extends CMSType> {
 }
 
 function isStorageProperty(property: ResolvedProperty) {
+    if (property.dataType === "string" && property.markdown)
+        return false;
     if (property.dataType === "string" && (property as ResolvedStringProperty).storage)
         return true;
     if (property.dataType === "array") {
@@ -147,7 +149,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                 onValueUpdated,
                                 data: entity,
                             });
-                        } catch (e:any) {
+                        } catch (e: any) {
                             console.error("onValueChange error", e);
                             setError(e);
                         }
@@ -306,7 +308,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                                          updateValue={updateValue}
                     />;
                     fullHeight = true;
-                } else if (!stringProperty.storage) {
+                } else if (stringProperty.markdown || !stringProperty.storage) {
                     const multiline = Boolean(stringProperty.multiline) || Boolean(stringProperty.markdown);
                     innerComponent = <VirtualTableInput error={validationError ?? error}
                                                         disabled={disabled}

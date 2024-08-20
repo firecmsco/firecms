@@ -15,7 +15,8 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/core": "^3.0.0-canary.102"
+    "@firecms/core": "^3.0.0-canary.102",
+    "@firecms/editor": "^3.0.0-canary.102"
   },
   "peerDependencies": {
     "firebase": "^10.5.2",

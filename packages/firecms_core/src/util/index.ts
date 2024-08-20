@@ -21,3 +21,4 @@ export * from "./make_properties_editable";
 export * from "./join_collections";
 export * from "./builders";
 export * from "./useTraceUpdate";
+export * from "./storage";

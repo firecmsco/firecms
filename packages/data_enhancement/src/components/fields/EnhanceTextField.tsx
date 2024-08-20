@@ -37,9 +37,10 @@ export const EnhanceTextFieldBinding = React.memo(function EnhanceTextFieldBindi
     });
 
     const internalValue: T = value ?? (property.dataType === "string" ? "" : value === 0 ? 0 : "");
+    const isMarkdown = property.dataType === "string" && property.markdown;
 
     return (<>
-            <AdvancedTextField
+            {!isMarkdown && <AdvancedTextField
                 inputType={(property.dataType === "number" ? "number" : "text") as InputType<T>}
                 label={<LabelWithIcon icon={getIconForProperty(property)}
                                       title={(property.name ?? "") + (property.validation?.required ? " *" : "")}
@@ -50,7 +51,7 @@ export const EnhanceTextFieldBinding = React.memo(function EnhanceTextFieldBindi
                 setValue={setValue}
                 disabled={disabled}
                 error={showError}
-            />
+            />}
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}

@@ -179,8 +179,7 @@ function BlockEntry({
             context,
             autoFocus,
             partOfArray: false,
-            minimalistView: true,
-            tableMode: false
+            minimalistView: true
         }
         : undefined;
 

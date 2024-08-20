@@ -9,9 +9,10 @@ import {
 import { Paper } from "@firecms/ui";
 import { FireCMSEditor } from "@firecms/editor";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { resolveFilenameString, resolveStoragePathString } from "../../util/storage";
+import { resolveStorageFilenameString, resolveStoragePathString } from "../../util/storage";
 
 interface MarkdownEditorFieldProps {
+    highlight?: { from: number, to: number };
 }
 
 export function MarkdownEditorFieldBinding({
@@ -24,10 +25,12 @@ export function MarkdownEditorFieldBinding({
                                                error,
                                                minimalistView,
                                                isSubmitting,
-                                               context, // the rest of the entity values here
+                                               context,
+                                               customProps,
                                                ...props
                                            }: FieldProps<string, MarkdownEditorFieldProps>) {
 
+    const highlight = customProps?.highlight;
     const storageSource = useStorageSource();
     const storage = property.storage;
 
@@ -54,7 +57,7 @@ export function MarkdownEditorFieldBinding({
 
     const fileNameBuilder = useCallback(async (file: File) => {
         if (storage?.fileName) {
-            const fileName = await resolveFilenameString({
+            const fileName = await resolveStorageFilenameString({
                 input: storage.fileName,
                 storage,
                 values: entityValues,
@@ -90,6 +93,7 @@ export function MarkdownEditorFieldBinding({
         content={value}
         onMarkdownContentChange={onContentChange}
         version={context.formex.version + fieldVersion}
+        highlight={highlight}
         handleImageUpload={async (file: File) => {
             const storagePath = storagePathBuilder(file);
             const fileName = await fileNameBuilder(file);

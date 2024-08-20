@@ -57,7 +57,6 @@ export function RepeatFieldBinding<T extends Array<any>>({
             includeDescription,
             underlyingValueHasChanged,
             context,
-            tableMode: false,
             partOfArray: true,
             minimalistView: false,
             autoFocus: internalId === lastAddedId

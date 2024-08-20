@@ -55,7 +55,6 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
             includeDescription,
             underlyingValueHasChanged,
             context,
-            tableMode: false,
             partOfArray: true,
             minimalistView: false,
             autoFocus: false

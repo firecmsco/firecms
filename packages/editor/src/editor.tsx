@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 
 import TiptapUnderline from "@tiptap/extension-underline";
 import TextStyle from "@tiptap/extension-text-style";
@@ -15,9 +15,7 @@ import { LinkSelector } from "./selectors/link-selector";
 import { TextButtons } from "./selectors/text-buttons";
 
 import { cls, defaultBorderMixin, Separator, useInjectStyles } from "@firecms/ui";
-// import { startImageUpload } from "./plugins";
-import { Editor, EditorProvider, EditorProviderProps } from "@tiptap/react";
-import { useDebouncedCallback } from "./utils/useDebouncedCallback";
+import { Editor, EditorProvider } from "@tiptap/react";
 import { removeClassesFromJson } from "./utils/remove_classes";
 import { horizontalRule, placeholder, starterKit, taskItem, taskList, tiptapLink } from "./editor_extensions";
 import { createImageExtension } from "./extensions/Image";
@@ -26,18 +24,28 @@ import { DragAndDrop } from "./extensions/drag-and-drop";
 import Document from "@tiptap/extension-document"
 import { SlashCommand, suggestion } from "./extensions/slashCommand";
 
+export type FireCMSEditorTextSize = "sm" | "base" | "lg";
+
 export type FireCMSEditorProps = {
     content?: JSONContent | string,
     onMarkdownContentChange?: (content: string) => void,
     onJsonContentChange?: (content: JSONContent | null) => void,
     onHtmlContentChange?: (content: string) => void,
     handleImageUpload: (file: File) => Promise<string>,
-    version?: number
+    version?: number,
+    textSize?: FireCMSEditorTextSize,
+    highlight?: { from: number, to: number }
 };
 
 const CustomDocument = Document.extend({
     // content: 'heading block*',
-})
+});
+
+const proseClasses = {
+    "sm": "prose-sm",
+    "base": "prose-base",
+    "lg": "prose-lg",
+}
 
 export const FireCMSEditor = ({
                                   handleImageUpload,
@@ -45,58 +53,13 @@ export const FireCMSEditor = ({
                                   onJsonContentChange,
                                   onHtmlContentChange,
                                   onMarkdownContentChange,
-                                  version
+                                  version,
+                                  textSize = "base",
+                                  highlight
                               }: FireCMSEditorProps) => {
 
     const ref = React.useRef<HTMLDivElement | null>(null);
     const editorRef = React.useRef<Editor | null>(null);
-
-    const defaultEditorProps: EditorProviderProps["editorProps"] = {
-        handleDOMEvents: {
-            keydown: (_view, event) => {
-                // prevent default event listeners from firing when slash command is active
-                if (["ArrowUp", "ArrowDown", "Enter"].includes(event.key)) {
-                    const slashCommand = document.querySelector("#slash-command");
-                    if (slashCommand) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
-        // handlePaste: (view, event) => {
-        //     if (event.clipboardData && event.clipboardData.files && event.clipboardData.files[0]) {
-        //         event.preventDefault();
-        //         const file = event.clipboardData.files[0];
-        //         const pos = view.state.selection.from;
-        //
-        //         // startImageUpload({ file, view, pos, handleImageUpload });
-        //         return true;
-        //     }
-        //     return false;
-        // },
-        // handleDrop: (view, event, _slice, moved) => {
-        //     console.log("handleDrop", { event, moved });
-        //     if (!moved && event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0]) {
-        //         console.log("handleDrop!!!", { event, moved });
-        //         event.preventDefault();
-        //         const file = event.dataTransfer.files[0];
-        //         const coordinates = view.posAtCoords({
-        //             left: event.clientX,
-        //             top: event.clientY
-        //         });
-        //         // here we deduct 1 from the pos or else the image will create an extra node
-        //         startImageUpload({
-        //             file,
-        //             view,
-        //             pos: coordinates?.pos || 0 - 1,
-        //             handleImageUpload,
-        //         });
-        //         return true;
-        //     }
-        //     return false;
-        // }
-    };
 
     const imageExtension = useMemo(() => createImageExtension(handleImageUpload), []);
 
@@ -134,49 +97,68 @@ export const FireCMSEditor = ({
 
     useInjectStyles("Editor", cssStyles);
 
-    const [markdownContent, setMarkdownContent] = useState<string | null>(null);
-    const [jsonContent, setJsonContent] = useState<JSONContent | null>(null);
-    const [htmlContent, setHtmlContent] = useState<string | null>(null);
+    const deferredHighlight = useDeferredValue(highlight);
 
     useEffect(() => {
         if (version === undefined) return;
-        setTimeout(() => {
-            if (version > 0 && editorRef.current) {
-                editorRef.current?.commands.setContent(content ?? "");
-            }
-        }, 1)
-
+        if (version > 0 && editorRef.current) {
+            editorRef.current?.commands.setContent(content ?? "");
+        }
     }, [version]);
+
+    const currentHighlight = useRef(deferredHighlight);
+
+    useEffect(() => {
+        if (version === undefined) return;
+        if (editorRef.current && version > 0) {
+            const {
+                from: selectionFrom,
+                to: selectionTo
+            } = editorRef.current.state.selection;
+
+            const chain = editorRef.current.chain();
+            const currentContent = editorRef.current.storage.markdown.getMarkdown();
+            if (currentContent !== content) {
+                chain.setContent(content ?? "");
+            }
+
+            if (deferredHighlight) {
+                if (currentHighlight.current?.from !== deferredHighlight.from || currentHighlight.current?.to !== deferredHighlight.to) {
+                    chain.focus()
+                        .setTextSelection({
+                            from: deferredHighlight?.from,
+                            to: deferredHighlight?.to
+                        })
+                        .toggleHighlight({ color: "#64748B68" });
+                }
+            } else {
+                chain.focus().selectAll().unsetHighlight();
+            }
+            currentHighlight.current = deferredHighlight;
+
+            chain.focus().setTextSelection({
+                from: selectionFrom,
+                to: selectionTo
+            }).run();
+        }
+    }, [editorRef.current, deferredHighlight]);
 
     const onEditorUpdate = (editor: Editor) => {
         editorRef.current = editor;
         if (onMarkdownContentChange) {
-            setMarkdownContent(editor.storage.markdown.getMarkdown());
-        }
-        if (onJsonContentChange) {
-            setJsonContent(removeClassesFromJson(editor.getJSON()));
-        }
-        if (onHtmlContentChange) {
-            setHtmlContent(editor.getHTML());
-        }
-    }
-
-    useDebouncedCallback(markdownContent, () => {
-        if (editorRef.current) {
             const markdown = editorRef.current.storage.markdown.getMarkdown();
             onMarkdownContentChange?.(addLineBreakAfterImages(markdown));
         }
-    }, false, 300);
+        if (onJsonContentChange) {
+            const jsonContent = removeClassesFromJson(editor.getJSON());
+            onJsonContentChange(jsonContent);
+        }
+        if (onHtmlContentChange) {
+            onHtmlContentChange?.(editor.getHTML());
+        }
+    }
 
-    useDebouncedCallback(jsonContent, () => {
-        if (jsonContent)
-            onJsonContentChange?.(jsonContent);
-    }, false, 300);
-
-    useDebouncedCallback(htmlContent, () => {
-        if (htmlContent)
-            onHtmlContentChange?.(htmlContent);
-    }, false, 300);
+    const proseClass = proseClasses[textSize];
 
     return (
         <div
@@ -186,9 +168,8 @@ export const FireCMSEditor = ({
                 content={content ?? ""}
                 extensions={extensions}
                 editorProps={{
-                    ...defaultEditorProps,
                     attributes: {
-                        class: "prose-lg prose-headings:font-title font-default focus:outline-none max-w-full p-12"
+                        class: cls(proseClass, "prose-headings:font-title font-default focus:outline-none max-w-full p-12")
                     }
                 }}
                 onCreate={({ editor }) => {
@@ -253,6 +234,7 @@ const cssStyles = `
 }
 
 .is-empty {
+  cursor: text;
   color: rgb(100 116 139); //500
 }
 

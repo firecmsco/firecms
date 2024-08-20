@@ -18,7 +18,7 @@ interface ResolveFilenameStringParams<M extends object> {
     propertyKey: string;
 }
 
-export async function resolveFilenameString<M extends object>(
+export async function resolveStorageFilenameString<M extends object>(
     {
         input,
         storage,

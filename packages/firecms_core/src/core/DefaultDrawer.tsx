@@ -78,7 +78,7 @@ export function DefaultDrawer({
 
                 <DrawerLogo logo={logo}/>
 
-                <div className={"overflow-scroll no-scrollbar"}>
+                <div className={"flex-grow overflow-scroll no-scrollbar"}>
 
                     {groupsWithoutAdmin.map((group) => (
                         <React.Fragment

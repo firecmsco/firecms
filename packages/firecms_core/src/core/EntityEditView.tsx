@@ -755,7 +755,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                             includeDescription: property.description || property.longDescription,
                             underlyingValueHasChanged: underlyingValueHasChanged && !autoSave,
                             context: formContext,
-                            tableMode: false,
                             partOfArray: false,
                             minimalistView: false,
                             autoFocus: false
