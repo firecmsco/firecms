@@ -68,7 +68,9 @@ export function useBuildDataSource({
                 startAfter,
                 searchString,
                 orderBy,
-                order
+                order,
+                isCollectionGroup: Boolean(collectionProp?.collectionGroup),
+                databaseId: collectionProp?.databaseId
             });
         }, [delegate]),
 
@@ -89,7 +91,6 @@ export function useBuildDataSource({
          * @group Firestore
          */
         listenCollection: delegate.listenCollection
-            // eslint-disable-next-line react-hooks/rules-of-hooks
             ? useCallback(<M extends Record<string, any>>(
                 {
                     path,
@@ -106,7 +107,7 @@ export function useBuildDataSource({
             ): () => void => {
 
                 const collection = collectionProp ?? navigationController.getCollection(path);
-                const isCollectionGroup = Boolean(collection?.collectionGroup) ?? false;
+                const isCollectionGroup = Boolean(collection?.collectionGroup);
                 if (!delegate.listenCollection)
                     throw Error("useBuildDataSource delegate not initialised");
 
@@ -121,7 +122,8 @@ export function useBuildDataSource({
                     onUpdate,
                     onError,
                     isCollectionGroup,
-                    collection
+                    collection,
+                    databaseId: collection?.databaseId
                 });
             }, [delegate, navigationController.getCollection])
             : undefined,
@@ -135,11 +137,13 @@ export function useBuildDataSource({
          */
         fetchEntity: useCallback(<M extends Record<string, any>>({
                                                                      path,
-                                                                     entityId
+                                                                     entityId,
+                                                                     collection
                                                                  }: FetchEntityProps<M>
         ): Promise<Entity<M> | undefined> => delegate.fetchEntity({
             path,
-            entityId
+            entityId,
+            databaseId: collection?.databaseId
         }), [delegate]),
 
         /**
@@ -153,7 +157,6 @@ export function useBuildDataSource({
          * @group Firestore
          */
         listenEntity: delegate.listenEntity
-            // eslint-disable-next-line react-hooks/rules-of-hooks
             ? useCallback(<M extends Record<string, any>>(
                 {
                     path,
@@ -169,7 +172,8 @@ export function useBuildDataSource({
                     path,
                     entityId,
                     onUpdate,
-                    onError
+                    onError,
+                    databaseId: collection?.databaseId
                 })
             }, [delegate.listenEntity]) : undefined,
 
@@ -194,6 +198,15 @@ export function useBuildDataSource({
             }: SaveEntityProps<M>): Promise<Entity<M>> => {
 
             const collection = collectionProp ?? navigationController.getCollection(path);
+
+            console.log("useBuildDatasource save", {
+                path,
+                entityId,
+                values,
+                collectionProp,
+                collection,
+                status
+            });
 
             const resolvedCollection = collection
                 ? resolveCollection<M>({
@@ -223,6 +236,7 @@ export function useBuildDataSource({
 
             return delegate.saveEntity({
                 path,
+                databaseId: collection?.databaseId,
                 entityId,
                 values: updatedFirestoreValues,
                 status
@@ -263,9 +277,10 @@ export function useBuildDataSource({
             path: string,
             name: string,
             value: any,
-            entityId?: string
+            entityId?: string,
+            databaseId?: string
         ): Promise<boolean> => {
-            return delegate.checkUniqueField(path, name, value, entityId);
+            return delegate.checkUniqueField(path, name, value, entityId, databaseId);
         }, [delegate.checkUniqueField]),
 
         generateEntityId: useCallback((path: string): string => {
@@ -290,16 +305,19 @@ export function useBuildDataSource({
                 filter,
                 orderBy,
                 order,
-                isCollectionGroup: Boolean(collection.collectionGroup)
+                isCollectionGroup: Boolean(collection.collectionGroup),
+                databaseId: collection.databaseId
             });
         } : undefined,
 
         isFilterCombinationValid: useCallback(({
                                                    path,
+                                                   databaseId,
                                                    filterValues,
                                                    sortBy
                                                }: {
             path: string,
+            databaseId?: string,
             filterValues: FilterValues<any>,
             sortBy?: [string, "asc" | "desc"]
         }): boolean => {
@@ -308,6 +326,7 @@ export function useBuildDataSource({
             return delegate.isFilterCombinationValid(
                 {
                     path,
+                    databaseId,
                     filterValues,
                     sortBy
                 }
@@ -317,6 +336,7 @@ export function useBuildDataSource({
         initTextSearch: useCallback(async (props: {
             context: FireCMSContext,
             path: string,
+            databaseId?: string,
             collection: EntityCollection,
             parentCollectionIds?: string[]
         }): Promise<boolean> => {

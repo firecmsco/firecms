@@ -52,6 +52,12 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
     path: string;
 
     /**
+     * Optional database id of this collection. If not specified, the default
+     * database id will be used.
+     */
+    databaseId?: string;
+
+    /**
      * If this collection is a top level navigation entry, you can set this
      * property to `true` to indicate that this collection is a collection group.
      */

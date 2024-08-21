@@ -1,3 +1,4 @@
+import React from "react";
 import { CollectionEditorPermissionsBuilder } from "./config_permissions";
 import { Entity, Property } from "@firecms/core";
 import { PersistedCollection } from "./persisted_collection";
@@ -41,5 +42,12 @@ export interface CollectionEditorController {
     configPermissions: CollectionEditorPermissionsBuilder;
 
     getPathSuggestions?: (path: string) => Promise<string[]>;
+
+    components: {
+        /**
+         * Custom component to render the database field
+         */
+        DatabaseField?: React.ComponentType<{ databaseId?: string, onDatabaseIdUpdate: (databaseId: string) => void }>;
+    };
 
 }

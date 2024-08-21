@@ -677,7 +677,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                                                                         name,
                                                                         value,
                                                                         property
-                                                                    }) => dataSource.checkUniqueField(path, name, value, entityId),
+                                                                    }) => dataSource.checkUniqueField(path, name, value, entityId, collection.databaseId),
         [dataSource, path, entityId]);
 
     const validationSchema = useMemo(() => entityId

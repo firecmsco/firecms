@@ -108,7 +108,11 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, Use
         updatedValues = values;
     }
 
-    console.log("Saving entity", entityId, updatedValues);
+    console.log("Saving entity", {
+        entityId,
+        updatedValues,
+        collection
+    });
     return dataSource.saveEntity({
         collection,
         path: resolvedPath,

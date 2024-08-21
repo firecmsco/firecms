@@ -81,6 +81,7 @@ import {
 import { DataTalkProvider, DataTalkRoutes, useBuildDataTalkConfig } from "@firecms/datatalk";
 import { useDataTalkMode } from "./hooks/useDataTalkMode";
 import { FireCMSCloudDataTalkDrawer } from "./components/FireCMSCloudDataTalkDrawer";
+import { PaywallDatabaseIdField } from "./components/PaywallDatabaseIdField";
 
 const DOCS_LIMIT = 200;
 
@@ -632,7 +633,10 @@ function FireCMSAppAuthenticated({
         },
         collectionInference: buildCollectionInference(firebaseApp),
         getData: (path, parentPaths) => getFirestoreDataInPath(firebaseApp, path, parentPaths, 400),
-        onAnalyticsEvent
+        onAnalyticsEvent,
+        components: {
+            DatabaseField: projectConfig.canUseCustomDatabase ? undefined : PaywallDatabaseIdField
+        }
     });
 
     const plugins: FireCMSPlugin<any, any, any>[] = [saasPlugin, exportPlugin, importPlugin, collectionEditorPlugin, dataEnhancementPlugin];

@@ -57,6 +57,13 @@ export interface ConfigControllerProviderProps {
 
     onAnalyticsEvent?: (event: string, params?: object) => void;
 
+    components: {
+        /**
+         * Custom component to render the database field
+         */
+        DatabaseField?: React.ComponentType<{ databaseId?: string, onDatabaseIdUpdate: (databaseId:string) => void }>;
+    };
+
 }
 
 export const ConfigControllerProvider = React.memo(
@@ -70,7 +77,8 @@ export const ConfigControllerProvider = React.memo(
                                           getPathSuggestions,
                                           getUser,
                                           getData,
-                                          onAnalyticsEvent
+                                          onAnalyticsEvent,
+                                          components
                                       }: PropsWithChildren<ConfigControllerProviderProps>) {
 
         const navigation = useNavigationController();
@@ -230,7 +238,8 @@ export const ConfigControllerProvider = React.memo(
                         createCollection,
                         editProperty,
                         configPermissions: configPermissions ?? defaultConfigPermissions,
-                        getPathSuggestions
+                        getPathSuggestions,
+                        components
                     }}>
 
                     {children}

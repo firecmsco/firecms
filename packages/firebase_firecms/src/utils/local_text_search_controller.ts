@@ -27,10 +27,12 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
 
     const init = ({
                       path,
-                      collection: collectionProp
+                      collection: collectionProp,
+                      databaseId
                   }: {
         path: string,
-        collection?: EntityCollection | ResolvedEntityCollection
+        collection?: EntityCollection | ResolvedEntityCollection,
+        databaseId?: string
     }): Promise<boolean> => {
 
         if (currentPath && path !== currentPath) {
@@ -42,7 +44,7 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
         return new Promise(async (resolve, reject) => {
             if (!indexes[path] && collectionProp) {
                 console.debug("Init local search controller", path);
-                const firestore = getFirestore(firebaseApp);
+                const firestore = databaseId ? getFirestore(firebaseApp, databaseId): getFirestore(firebaseApp);
                 const col = collection(firestore, path);
                 listeners[path] = onSnapshot(query(col),
                     {
@@ -75,7 +77,8 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
                               path
                           }: {
         searchString: string,
-        path: string
+        path: string,
+        databaseId?: string
     }) => {
         console.debug("Searching local index", path, searchString);
         const index = indexes[path];
