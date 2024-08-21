@@ -9,6 +9,9 @@ export function getEntityPreviewKeys(targetCollection: EntityCollection<any>,
                                      limit = 3) {
     const allProperties = Object.keys(targetCollection.properties);
     let listProperties = previewProperties?.filter(p => allProperties.includes(p as string));
+    if (!listProperties && targetCollection.previewProperties) {
+        listProperties = targetCollection.previewProperties?.filter(p => allProperties.includes(p as string));
+    }
     if (listProperties && listProperties.length > 0) {
         return listProperties;
     } else {

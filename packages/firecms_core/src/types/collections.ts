@@ -311,6 +311,11 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
      * Width of the side dialog (in pixels) when opening an entity in this collection.
      */
     sideDialogWidth?: number | string;
+
+    /**
+     * Default preview properties displayed when this collection is referenced to.
+     */
+    previewProperties?: string[];
 }
 
 /**
