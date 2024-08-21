@@ -5,7 +5,6 @@ import { Formex, FormexController, getIn, useCreateFormex } from "@firecms/forme
 import {
     DEFAULT_FIELD_CONFIGS,
     DeleteConfirmationDialog,
-    PropertyConfigId,
     getFieldConfig,
     getFieldId,
     isPropertyBuilder,
@@ -14,6 +13,7 @@ import {
     Property,
     PropertyConfig,
     PropertyConfigBadge,
+    PropertyConfigId,
 } from "@firecms/core";
 import {
     Button,
@@ -45,6 +45,7 @@ import { updatePropertyFromWidget } from "./utils/update_property_for_widget";
 import { PropertySelectItem } from "./PropertySelectItem";
 import { UrlPropertyField } from "./properties/UrlPropertyField";
 import { supportedFields } from "./utils/supported_fields";
+import { MarkdownPropertyField } from "./properties/MarkdownPropertyField";
 
 export type PropertyWithId = Property & {
     id?: string
@@ -148,7 +149,10 @@ export const PropertyForm = React.memo(
                 } = newPropertyWithId;
                 doOnPropertyChanged({
                     id,
-                    property: { ...property, editable: property.editable ?? true }
+                    property: {
+                        ...property,
+                        editable: property.editable ?? true
+                    }
                 });
                 if (!existingProperty)
                     controller.resetForm({ values: initialValue });
@@ -388,7 +392,6 @@ function PropertyEditFormFields({
     let childComponent;
     if (selectedFieldConfigId === "text_field" ||
         selectedFieldConfigId === "multiline" ||
-        selectedFieldConfigId === "markdown" ||
         selectedFieldConfigId === "email") {
         childComponent =
             <StringPropertyField widgetId={selectedFieldConfigId}
@@ -398,6 +401,10 @@ function PropertyEditFormFields({
         childComponent =
             <UrlPropertyField disabled={disabled}
                               showErrors={showErrors}/>;
+    } else if (selectedFieldConfigId === "markdown") {
+        childComponent =
+            <MarkdownPropertyField disabled={disabled}
+                                   showErrors={showErrors}/>;
     } else if (selectedFieldConfigId === "select" ||
         selectedFieldConfigId === "number_select") {
         childComponent = <EnumPropertyField

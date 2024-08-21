@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import * as DialogPrimitive from "@radix-ui/react-dialog";
+import React, { useEffect, useState } from "react";
 import { cls } from "../util";
 import { defaultBorderMixin } from "../styles";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 
 interface SheetProps {
     children: React.ReactNode;
@@ -26,8 +26,7 @@ export const Sheet: React.FC<SheetProps> = ({
                                                 overlayClassName,
                                                 ...props
                                             }) => {
-
-    const [displayed, setDisplayed] = React.useState(false);
+    const [displayed, setDisplayed] = useState(false);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -43,15 +42,14 @@ export const Sheet: React.FC<SheetProps> = ({
         right: "translate-x-full"
     };
 
-    const borderClass:Record<string, string> = {
+    const borderClass: Record<string, string> = {
         top: "border-b",
         bottom: "border-t",
         left: "border-r",
         right: "border-l"
-    }
+    };
 
     return (
-
         <DialogPrimitive.Root open={displayed || open}
                               onOpenChange={onOpenChange}>
             <DialogPrimitive.Portal>
@@ -60,18 +58,20 @@ export const Sheet: React.FC<SheetProps> = ({
                 </DialogPrimitive.Title>
                 <DialogPrimitive.Overlay
                     className={cls(
-                        "fixed inset-0 transition-opacity z-20 ease-in-out duration-100  backdrop-blur-sm",
+                        "fixed inset-0 transition-opacity z-20 ease-in-out duration-100 backdrop-blur-sm",
                         "bg-black bg-opacity-50",
                         "dark:bg-gray-900 dark:bg-opacity-60",
                         displayed && open ? "opacity-100" : "opacity-0",
                         overlayClassName
                     )}
                     style={{
-                        pointerEvents: displayed ? "auto" : "none",
+                        pointerEvents: displayed ? "auto" : "none"
                     }}
+                    onClick={() => onOpenChange && onOpenChange(false)}
                 />
                 <DialogPrimitive.Content
                     {...props}
+                    onFocusCapture={(event) => event.preventDefault()}
                     className={cls(
                         borderClass[side],
                         defaultBorderMixin,

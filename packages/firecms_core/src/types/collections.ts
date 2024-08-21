@@ -52,6 +52,12 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
     path: string;
 
     /**
+     * Optional database id of this collection. If not specified, the default
+     * database id will be used.
+     */
+    databaseId?: string;
+
+    /**
      * If this collection is a top level navigation entry, you can set this
      * property to `true` to indicate that this collection is a collection group.
      */
@@ -61,7 +67,8 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
      * Icon key to use in this collection.
      * You can use any of the icons in the Material specs:
      * https://fonts.google.com/icons
-     * e.g. 'account_tree' or 'person'
+     * e.g. 'account_tree' or 'person'.
+     * Find all the icons in https://firecms.co/docs/icons
      */
     icon?: string;
 

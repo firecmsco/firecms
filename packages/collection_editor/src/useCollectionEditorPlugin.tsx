@@ -51,6 +51,13 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
 
     onAnalyticsEvent?: (event: string, params?: object) => void;
 
+    components?: {
+        /**
+         * Custom component to render the database field
+         */
+        DatabaseField?: React.ComponentType<{ databaseId?: string, onDatabaseIdUpdate: (databaseId:string) => void }>;
+    };
+
 }
 
 /**
@@ -74,7 +81,8 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
      getUser,
      collectionInference,
      getData,
-     onAnalyticsEvent
+     onAnalyticsEvent,
+     components
  }: CollectionConfigControllerProps<EC, UserType>): FireCMSPlugin<any, any, PersistedCollection> {
 
     return {
@@ -91,7 +99,8 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
                 getPathSuggestions,
                 getUser,
                 getData,
-                onAnalyticsEvent
+                onAnalyticsEvent,
+                components
             }
         },
         homePage: {

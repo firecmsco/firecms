@@ -22,6 +22,7 @@ import {
 } from "@firecms/ui";
 
 import { Field, getIn, useFormex } from "@firecms/formex";
+import { useCollectionEditorController } from "../../useCollectionEditorController";
 
 export function CollectionDetailsForm({
                                           isNewCollection,
@@ -52,8 +53,14 @@ export function CollectionDetailsForm({
         submitCount
     } = useFormex<EntityCollection>();
 
+    const collectionEditor = useCollectionEditorController();
+
     const [iconDialogOpen, setIconDialogOpen] = useState(false);
     const [advancedPanelExpanded, setAdvancedPanelExpanded] = useState(false);
+
+    const updateDatabaseId = (databaseId: string) => {
+        setFieldValue("databaseId", databaseId ?? undefined);
+    }
 
     const updateName = (name: string) => {
         setFieldValue("name", name);
@@ -80,6 +87,8 @@ export function CollectionDetailsForm({
             setAdvancedPanelExpanded(true);
         }
     }, [errors.id]);
+
+    const DatabaseField = collectionEditor.components?.DatabaseField ?? DefaultDatabaseField;
 
     const collectionIcon = <IconForView collectionOrView={values}/>;
 
@@ -113,10 +122,13 @@ export function CollectionDetailsForm({
 
                 <div>
                     <div
-                        className="flex flex-row py-2 pt-3 items-center">
+                        className="flex flex-row gap-2 py-2 pt-3 items-center">
                         <Typography variant={!isNewCollection ? "h5" : "h4"} className={"flex-grow"}>
                             {isNewCollection ? "New collection" : `${values?.name} collection`}
                         </Typography>
+                        <DatabaseField databaseId={values.databaseId}
+                                       onDatabaseIdUpdate={updateDatabaseId}/>
+
                         <Tooltip title={"Change icon"}>
                             <IconButton
                                 shape={"square"}
@@ -191,7 +203,7 @@ export function CollectionDetailsForm({
                             })}
                         </Autocomplete>
                         <FieldCaption>
-                            {showErrors && Boolean(errors.group) ? errors.group : "Group of the collection"}
+                            {showErrors && Boolean(errors.group) ? errors.group : "Group in the home page"}
                         </FieldCaption>
                     </div>}
 
@@ -392,4 +404,21 @@ export function CollectionDetailsForm({
             </Container>
         </div>
     );
+}
+
+function DefaultDatabaseField({
+                                  databaseId,
+                                  onDatabaseIdUpdate
+                              }: { databaseId?: string, onDatabaseIdUpdate: (databaseId: string) => void }) {
+
+    return <Tooltip title={"Database ID"}
+                    side={"top"}
+                    align={"start"}>
+        <TextField size={"smallest"}
+                   invisible={true}
+                   inputClassName={"text-end"}
+                   value={databaseId ?? ""}
+                   onChange={(e: any) => onDatabaseIdUpdate(e.target.value)}
+                   placeholder={"(default)"}></TextField>
+    </Tooltip>
 }

@@ -36,6 +36,9 @@
       "@firecms/core": [
         "../firecms_core/src"
       ],
+      "@firecms/editor": [
+        "../editor/src"
+      ],
       "@firecms/ui": [
         "../ui/src"
       ]

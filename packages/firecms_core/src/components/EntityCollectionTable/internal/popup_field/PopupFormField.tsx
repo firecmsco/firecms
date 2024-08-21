@@ -217,7 +217,6 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     if (!entity)
         return <></>;
 
-    // enableReinitialize={true}
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const formex = useCreateFormex<M>({
         initialValues: (entity?.values ?? {}) as EntityValues<M>,
@@ -277,7 +276,6 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             includeDescription: false,
             underlyingValueHasChanged: false,
             context: formContext,
-            tableMode: true,
             partOfArray: false,
             minimalistView: false,
             autoFocus: open

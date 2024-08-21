@@ -69,7 +69,6 @@ export function MapFieldBinding({
                             includeDescription,
                             underlyingValueHasChanged,
                             context,
-                            tableMode: false,
                             partOfArray: false,
                             minimalistView: false,
                             autoFocus: autoFocus && index === 0

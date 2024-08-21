@@ -28,6 +28,7 @@ export function useTableSearchHelper<M extends Record<string, any>>({
     const props = {
         context,
         path: fullPath,
+        databaseId: collection.databaseId,
         collection,
         parentCollectionIds
     };

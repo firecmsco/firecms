@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import equal from "react-fast-compare"
 
-import { CMSType, FieldProps, PluginFieldBuilderParams, } from "@firecms/core";
+import { CMSType, FieldProps, MarkdownEditorFieldBinding, PluginFieldBuilderParams, } from "@firecms/core";
 import {
     AutoAwesomeIcon,
     CircularProgress,
+    cls,
     IconButton,
     Menu,
     MenuItem,
@@ -96,17 +97,29 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
     const [propertyInstructions, setPropertyInstructions] = useState<string>();
 
     if (!enabled) {
-        // @ts-ignore
         return <Field {...props} />
     }
 
     const showEnhanceIcon = !props.disabled && (!props.value || (props.property.dataType === "string" && (props.property.multiline || props.property.markdown)));
 
-    const shouldUseAdvancedField = props.property.dataType === "string" && (!props.property.enumValues && !props.property.markdown);
-    const fieldBinding = shouldUseAdvancedField
-        ? <EnhanceTextFieldBinding {...props as FieldProps<any>}
-                                   highlight={suggestedValue as string}/>
-        : <Field {...props} />;
+    const indexOfSuggestion = props.value && typeof props.value === "string" && typeof suggestedValue === "string" && props.value.endsWith(suggestedValue) ?
+        props.value.indexOf(suggestedValue) + 1 : undefined;
+
+    const highlightRange = indexOfSuggestion && typeof suggestedValue === "string" ? {
+        from: indexOfSuggestion,
+        to: suggestedValue.length + indexOfSuggestion
+    } : undefined;
+
+    let fieldBinding: React.ReactElement;
+    if (props.property.dataType === "string" && props.property.markdown) {
+        fieldBinding = <MarkdownEditorFieldBinding {...props as FieldProps<any>}
+                                                   customProps={{ highlight: highlightRange }}/>;
+    } else if (props.property.dataType === "string" && !props.property.enumValues) {
+        fieldBinding = <EnhanceTextFieldBinding {...props as FieldProps<any>}
+                                                highlight={suggestedValue as string}/>;
+    } else {
+        fieldBinding = <Field {...props} />;
+    }
 
     const enhanceData = (instructions?: string) => {
         if (!props.context.entityId) return;
@@ -128,7 +141,8 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
 
         {fieldBinding}
 
-        {showEnhanceIcon && <div className={"dark:bg-gray-700 bg-gray-100 rounded-full absolute right-2 -top-4"}>
+        {showEnhanceIcon && <div className={cls("dark:bg-gray-700 bg-gray-100 rounded-full absolute right-2 ",
+            props.property.dataType === "string" && props.property.markdown ? "top-0" : "-top-4")}>
             <Tooltip
                 open={tooltipOpen}
                 onOpenChange={setTooltipOpen}

@@ -79,7 +79,7 @@ export function PlansComparison() {
                 <ul>
                     <li className={"ml-8 list-disc"}>Everything in the free tier</li>
                     <li className={"ml-8 list-disc"}>Local text search</li>
-                    <li className={"ml-8 list-disc"}>Custom form fields and custom views</li>
+                    <li className={"ml-8 list-disc"}>Secondary databases</li>
                     <li className={"ml-8 list-disc"}>Unlimited users and roles</li>
                     <li className={"ml-8 list-disc"}>Unlimited data export</li>
                     <li className={"ml-8 list-disc"}>Theme and logo customization</li>

@@ -25,6 +25,8 @@ export interface Entity<M extends object> {
      * Current values
      */
     values: EntityValues<M>;
+
+    databaseId?: string;
 }
 
 /**

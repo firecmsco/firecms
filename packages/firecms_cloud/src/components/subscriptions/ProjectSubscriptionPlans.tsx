@@ -95,7 +95,7 @@ export function ProjectSubscriptionPlans({ uid }: {
                                 Custom form fields and custom views
                             </li>
                             <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>
-                                Custom user roles
+                                Secondary databases
                             </li>
                             <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>GPT-4
                                 content generation

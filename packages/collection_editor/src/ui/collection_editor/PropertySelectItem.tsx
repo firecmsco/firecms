@@ -14,7 +14,7 @@ export function PropertySelectItem({ value, optionDisabled, propertyConfig, exis
                        className={"flex flex-row items-center"}>
         <div
             className={cls(
-                "flex flex-row items-center text-base min-h-[52px]",
+                "flex flex-row items-center text-base min-h-[48px]",
                 optionDisabled ? "w-full" : "")}>
             <div className={"mr-8"}>
                 <PropertyConfigBadge propertyConfig={propertyConfig}/>

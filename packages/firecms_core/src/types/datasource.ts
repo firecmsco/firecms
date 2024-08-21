@@ -18,6 +18,7 @@ export interface FetchEntityProps<M extends Record<string, any> = any> {
 export type ListenEntityProps<M extends Record<string, any> = any> =
     FetchEntityProps<M>
     & {
+    databaseId?: string;
     onUpdate: (entity: Entity<M>) => void,
     onError?: (error: Error) => void,
 }
@@ -198,7 +199,8 @@ export interface DataSource {
         path: string,
         name: string,
         value: any,
-        entityId?: string
+        entityId?: string,
+        databaseId?: string
     ): Promise<boolean>;
 
     /**
@@ -238,19 +240,11 @@ export type FilterCombinationValidProps = {
     sortBy?: [string, "asc" | "desc"];
 };
 
-export type SaveEntityDelegateProps<M extends Record<string, any> = any> = Omit<SaveEntityProps<M>, "collection">;
+export type SaveEntityDelegateProps<M extends Record<string, any> = any> = SaveEntityProps<M>;
 
-export type FetchCollectionDelegateProps<M extends Record<string, any> = any> =
-    Omit<FetchCollectionProps<M>, "collection">
-    & {
-    isCollectionGroup?: boolean
-};
+export type FetchCollectionDelegateProps<M extends Record<string, any> = any> = FetchCollectionProps<M>;
 
-export type ListenCollectionDelegateProps<M extends Record<string, any> = any> =
-    ListenCollectionProps<M>
-    & {
-    isCollectionGroup?: boolean;
-};
+export type ListenCollectionDelegateProps<M extends Record<string, any> = any> = ListenCollectionProps<M>;
 
 export interface DataSourceDelegate {
 
@@ -321,7 +315,7 @@ export interface DataSourceDelegate {
     fetchEntity<M extends Record<string, any> = any>({
                                                          path,
                                                          entityId,
-                                                     }: Omit<FetchEntityProps<M>, "collection">): Promise<Entity<M> | undefined>;
+                                                     }: FetchEntityProps<M>): Promise<Entity<M> | undefined>;
 
     /**
      * Get realtime updates on one entity.
@@ -337,7 +331,7 @@ export interface DataSourceDelegate {
                                                            entityId,
                                                            onUpdate,
                                                            onError
-                                                       }: Omit<ListenEntityProps<M>, "collection">): () => void;
+                                                       }: ListenEntityProps<M>): () => void;
 
     /**
      * Save entity to the specified path
@@ -368,7 +362,7 @@ export interface DataSourceDelegate {
      * @param entityId
      * @return `true` if there are no other fields besides the given entity
      */
-    checkUniqueField(path: string, name: string, value: any, entityId?: string): Promise<boolean>;
+    checkUniqueField(path: string, name: string, value: any, entityId?: string, databaseId?: string): Promise<boolean>;
 
     /**
      * Generate an id for a new entity
@@ -384,7 +378,9 @@ export interface DataSourceDelegate {
      * Check if the given filter combination is valid
      * @param props
      */
-    isFilterCombinationValid?(props: Omit<FilterCombinationValidProps, "collection">): boolean;
+    isFilterCombinationValid?(props: Omit<FilterCombinationValidProps, "collection"> & {
+        databaseId?: string
+    }): boolean;
 
     /**
      * Get the object to generate the current time in the datasource
@@ -400,6 +396,7 @@ export interface DataSourceDelegate {
     initTextSearch?: (props: {
         context: FireCMSContext,
         path: string,
+        databaseId?: string,
         collection: EntityCollection,
         parentCollectionIds?: string[]
     }) => Promise<boolean>;

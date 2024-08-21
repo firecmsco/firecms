@@ -93,7 +93,7 @@ export interface FieldProps<T extends CMSType = any, CustomProps = any, M extend
     /**
      * Additional properties set by the developer
      */
-    customProps?: CustomProps
+    customProps: CustomProps
 
     /**
      * Additional values related to the state of the form or the entity
@@ -186,11 +186,6 @@ export interface PropertyFieldBindingProps<T extends CMSType, M extends Record<s
      * field is being edited
      */
     underlyingValueHasChanged?: boolean;
-
-    /**
-     * Is this field being rendered in a table
-     */
-    tableMode?: boolean;
 
     /**
      * Is this field part of an array

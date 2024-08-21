@@ -14,7 +14,7 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { PreviewSize } from "../preview";
 import { randomString } from "./strings";
-import { resolveFilenameString, resolveStoragePathString } from "./storage";
+import { resolveStorageFilenameString, resolveStoragePathString } from "./storage";
 
 /**
  * Internal representation of an item in the storage
@@ -95,7 +95,7 @@ export function useStorageUploadController<M extends object>({
 
     const fileNameBuilder = useCallback(async (file: File) => {
         if (storage.fileName) {
-            const fileName = await resolveFilenameString({
+            const fileName = await resolveStorageFilenameString({
                 input: storage.fileName,
                 storage,
                 values: entityValues,

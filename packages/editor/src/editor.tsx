@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 
 import TiptapUnderline from "@tiptap/extension-underline";
 import TextStyle from "@tiptap/extension-text-style";
@@ -8,278 +8,58 @@ import { Color } from "@tiptap/extension-color";
 import { Markdown } from "tiptap-markdown";
 import Highlight from "@tiptap/extension-highlight";
 
-import { EditorBubble, EditorCommand, EditorCommandEmpty, EditorCommandItem, type JSONContent } from "./components";
-import { Command, createSuggestionItems, renderItems } from "./extensions";
+import { EditorBubble, type JSONContent } from "./components";
 
 import { NodeSelector } from "./selectors/node-selector";
 import { LinkSelector } from "./selectors/link-selector";
 import { TextButtons } from "./selectors/text-buttons";
 
-import {
-    CheckBoxIcon,
-    cls,
-    CodeIcon,
-    defaultBorderMixin,
-    FormatListBulletedIcon,
-    FormatListNumberedIcon,
-    FormatQuoteIcon,
-    ImageIcon,
-    Looks3Icon,
-    LooksOneIcon,
-    LooksTwoIcon,
-    Separator,
-    TextFieldsIcon,
-    useInjectStyles
-} from "@firecms/ui";
-// import { startImageUpload } from "./plugins";
-import { Editor, EditorProvider, EditorProviderProps } from "@tiptap/react";
-import { useDebouncedCallback } from "./utils/useDebouncedCallback";
+import { cls, defaultBorderMixin, Separator, useInjectStyles } from "@firecms/ui";
+import { Editor, EditorProvider } from "@tiptap/react";
 import { removeClassesFromJson } from "./utils/remove_classes";
 import { horizontalRule, placeholder, starterKit, taskItem, taskList, tiptapLink } from "./editor_extensions";
 import { createImageExtension } from "./extensions/Image";
 import { CustomKeymap } from "./extensions/custom-keymap";
 import { DragAndDrop } from "./extensions/drag-and-drop";
-import { EditorCommandProvider } from "./components/editor-command";
 import Document from "@tiptap/extension-document"
+import { SlashCommand, suggestion } from "./extensions/slashCommand";
+
+export type FireCMSEditorTextSize = "sm" | "base" | "lg";
 
 export type FireCMSEditorProps = {
     content?: JSONContent | string,
     onMarkdownContentChange?: (content: string) => void,
     onJsonContentChange?: (content: JSONContent | null) => void,
     onHtmlContentChange?: (content: string) => void,
-    handleImageUpload: (file: File) => Promise<string>
+    handleImageUpload: (file: File) => Promise<string>,
+    version?: number,
+    textSize?: FireCMSEditorTextSize,
+    highlight?: { from: number, to: number }
 };
 
 const CustomDocument = Document.extend({
     // content: 'heading block*',
-})
+});
+
+const proseClasses = {
+    "sm": "prose-sm",
+    "base": "prose-base",
+    "lg": "prose-lg",
+}
 
 export const FireCMSEditor = ({
                                   handleImageUpload,
                                   content,
                                   onJsonContentChange,
                                   onHtmlContentChange,
-                                  onMarkdownContentChange
+                                  onMarkdownContentChange,
+                                  version,
+                                  textSize = "base",
+                                  highlight
                               }: FireCMSEditorProps) => {
 
-    const defaultEditorProps: EditorProviderProps["editorProps"] = {
-        handleDOMEvents: {
-            keydown: (_view, event) => {
-                // prevent default event listeners from firing when slash command is active
-                if (["ArrowUp", "ArrowDown", "Enter"].includes(event.key)) {
-                    const slashCommand = document.querySelector("#slash-command");
-                    if (slashCommand) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
-        // handlePaste: (view, event) => {
-        //     if (event.clipboardData && event.clipboardData.files && event.clipboardData.files[0]) {
-        //         event.preventDefault();
-        //         const file = event.clipboardData.files[0];
-        //         const pos = view.state.selection.from;
-        //
-        //         // startImageUpload({ file, view, pos, handleImageUpload });
-        //         return true;
-        //     }
-        //     return false;
-        // },
-        // handleDrop: (view, event, _slice, moved) => {
-        //     console.log("handleDrop", { event, moved });
-        //     if (!moved && event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0]) {
-        //         console.log("handleDrop!!!", { event, moved });
-        //         event.preventDefault();
-        //         const file = event.dataTransfer.files[0];
-        //         const coordinates = view.posAtCoords({
-        //             left: event.clientX,
-        //             top: event.clientY
-        //         });
-        //         // here we deduct 1 from the pos or else the image will create an extra node
-        //         startImageUpload({
-        //             file,
-        //             view,
-        //             pos: coordinates?.pos || 0 - 1,
-        //             handleImageUpload,
-        //         });
-        //         return true;
-        //     }
-        //     return false;
-        // }
-    };
-
-    const suggestionItems = createSuggestionItems([
-        {
-            title: "Text",
-            description: "Just start typing with plain text.",
-            searchTerms: ["p", "paragraph"],
-            icon: <TextFieldsIcon size={18}/>,
-            command: ({
-                          editor,
-                          range
-                      }) => {
-                editor
-                    .chain()
-                    .focus()
-                    .deleteRange(range)
-                    .toggleNode("paragraph", "paragraph")
-                    .run();
-            }
-        },
-        {
-            title: "To-do List",
-            description: "Track tasks with a to-do list.",
-            searchTerms: ["todo", "task", "list", "check", "checkbox"],
-            icon: <CheckBoxIcon size={18}/>,
-            command: ({
-                          editor,
-                          range
-                      }) => {
-                editor.chain().focus().deleteRange(range).toggleTaskList().run();
-            }
-        },
-        {
-            title: "Heading 1",
-            description: "Big section heading.",
-            searchTerms: ["title", "big", "large"],
-            icon: <LooksOneIcon size={18}/>,
-            command: ({
-                          editor,
-                          range
-                      }) => {
-                editor
-                    .chain()
-                    .focus()
-                    .deleteRange(range)
-                    .setNode("heading", { level: 1 })
-                    .run();
-            }
-        },
-        {
-            title: "Heading 2",
-            description: "Medium section heading.",
-            searchTerms: ["subtitle", "medium"],
-            icon: <LooksTwoIcon size={18}/>,
-            command: ({
-                          editor,
-                          range
-                      }) => {
-                editor
-                    .chain()
-                    .focus()
-                    .deleteRange(range)
-                    .setNode("heading", { level: 2 })
-                    .run();
-            }
-        },
-        {
-            title: "Heading 3",
-            description: "Small section heading.",
-            searchTerms: ["subtitle", "small"],
-            icon: <Looks3Icon size={18}/>,
-            command: ({
-                          editor,
-                          range
-                      }) => {
-                editor
-                    .chain()
-                    .focus()
-                    .deleteRange(range)
-                    .setNode("heading", { level: 3 })
-                    .run();
-            }
-        },
-        {
-            title: "Bullet List",
-            description: "Create a simple bullet list.",
-            searchTerms: ["unordered", "point"],
-            icon: <FormatListBulletedIcon size={18}/>,
-            command: ({
-                          editor,
-                          range
-                      }) => {
-                editor.chain().focus().deleteRange(range).toggleBulletList().run();
-            }
-        },
-        {
-            title: "Numbered List",
-            description: "Create a list with numbering.",
-            searchTerms: ["ordered"],
-            icon: <FormatListNumberedIcon size={18}/>,
-            command: ({
-                          editor,
-                          range
-                      }) => {
-                editor.chain().focus().deleteRange(range).toggleOrderedList().run();
-            }
-        },
-        {
-            title: "Quote",
-            description: "Capture a quote.",
-            searchTerms: ["blockquote"],
-            icon: <FormatQuoteIcon size={18}/>,
-            command: ({
-                          editor,
-                          range
-                      }) =>
-                editor
-                    .chain()
-                    .focus()
-                    .deleteRange(range)
-                    .toggleNode("paragraph", "paragraph")
-                    .toggleBlockquote()
-                    .run()
-        },
-        {
-            title: "Code",
-            description: "Capture a code snippet.",
-            searchTerms: ["codeblock"],
-            icon: <CodeIcon size={18}/>,
-            command: ({
-                          editor,
-                          range
-                      }) =>
-                editor.chain().focus().deleteRange(range).toggleCodeBlock().run()
-        },
-        {
-            title: "Image",
-            description: "Upload an image from your computer.",
-            searchTerms: ["photo", "picture", "media"],
-            icon: <ImageIcon size={18}/>,
-            command: ({
-                          editor,
-                          range
-                      }) => {
-                editor.chain().focus().deleteRange(range).run();
-                // upload image
-                const input = document.createElement("input");
-                input.type = "file";
-                input.accept = "image/*";
-                input.onchange = async () => {
-                    if (input.files?.length) {
-                        const file = input.files[0];
-                        if (!file) return;
-                        const pos = editor.view.state.selection.from;
-                        // startImageUpload({
-                        //     file,
-                        //     view: editor.view,
-                        //     pos,
-                        //     handleImageUpload
-                        // });
-                    }
-                };
-                input.click();
-            }
-        }
-    ]);
-
-    const slashCommand = Command.configure({
-        suggestion: {
-            items: () => suggestionItems,
-            render: renderItems
-        }
-    });
+    const ref = React.useRef<HTMLDivElement | null>(null);
+    const editorRef = React.useRef<Editor | null>(null);
 
     const imageExtension = useMemo(() => createImageExtension(handleImageUpload), []);
 
@@ -304,118 +84,122 @@ export const FireCMSEditor = ({
         taskList,
         taskItem,
         horizontalRule,
-        slashCommand];
+        SlashCommand.configure({
+            HTMLAttributes: {
+                class: "mention",
+            },
+            suggestion: suggestion(ref),
+        })
+    ];
+
     const [openNode, setOpenNode] = useState(false);
     const [openLink, setOpenLink] = useState(false);
 
     useInjectStyles("Editor", cssStyles);
 
-    const editorRef = React.useRef<Editor | null>(null);
-    const [markdownContent, setMarkdownContent] = useState<string | null>(null);
-    const [jsonContent, setJsonContent] = useState<JSONContent | null>(null);
-    const [htmlContent, setHtmlContent] = useState<string | null>(null);
+    const deferredHighlight = useDeferredValue(highlight);
 
     useEffect(() => {
-        console.log("Content changed", content);
-        editorRef.current?.commands.setContent(content ?? "");
-    }, [content]);
+        if (version === undefined) return;
+        if (version > 0 && editorRef.current) {
+            editorRef.current?.commands.setContent(content ?? "");
+        }
+    }, [version]);
+
+    const currentHighlight = useRef(deferredHighlight);
+
+    useEffect(() => {
+        if (version === undefined) return;
+        if (editorRef.current && version > 0) {
+            const {
+                from: selectionFrom,
+                to: selectionTo
+            } = editorRef.current.state.selection;
+
+            const chain = editorRef.current.chain();
+            const currentContent = editorRef.current.storage.markdown.getMarkdown();
+            if (currentContent !== content) {
+                chain.setContent(content ?? "");
+            }
+
+            if (deferredHighlight) {
+                if (currentHighlight.current?.from !== deferredHighlight.from || currentHighlight.current?.to !== deferredHighlight.to) {
+                    chain.focus()
+                        .setTextSelection({
+                            from: deferredHighlight?.from,
+                            to: deferredHighlight?.to
+                        })
+                        .toggleHighlight({ color: "#64748B68" });
+                }
+            } else {
+                chain.focus().selectAll().unsetHighlight();
+            }
+            currentHighlight.current = deferredHighlight;
+
+            chain.focus().setTextSelection({
+                from: selectionFrom,
+                to: selectionTo
+            }).run();
+        }
+    }, [editorRef.current, deferredHighlight]);
 
     const onEditorUpdate = (editor: Editor) => {
         editorRef.current = editor;
         if (onMarkdownContentChange) {
-            setMarkdownContent(editor.storage.markdown.getMarkdown());
-        }
-        if (onJsonContentChange) {
-            setJsonContent(removeClassesFromJson(editor.getJSON()));
-        }
-        if (onHtmlContentChange) {
-            setHtmlContent(editor.getHTML());
-        }
-    }
-
-    useDebouncedCallback(markdownContent, () => {
-
-        if (editorRef.current) {
             const markdown = editorRef.current.storage.markdown.getMarkdown();
             onMarkdownContentChange?.(addLineBreakAfterImages(markdown));
         }
-    }, false, 300);
+        if (onJsonContentChange) {
+            const jsonContent = removeClassesFromJson(editor.getJSON());
+            onJsonContentChange(jsonContent);
+        }
+        if (onHtmlContentChange) {
+            onHtmlContentChange?.(editor.getHTML());
+        }
+    }
 
-    useDebouncedCallback(jsonContent, () => {
-        if (jsonContent)
-            onJsonContentChange?.(jsonContent);
-    }, false, 300);
-
-    useDebouncedCallback(htmlContent, () => {
-        if (htmlContent)
-            onHtmlContentChange?.(htmlContent);
-    }, false, 300);
+    const proseClass = proseClasses[textSize];
 
     return (
-        <EditorCommandProvider>
-            <div
-                className="relative min-h-[300px] w-full bg-white dark:bg-gray-950 rounded-lg">
-                <EditorProvider
-                    content={content ?? ""}
-                    extensions={extensions}
-                    editorProps={{
-                        ...defaultEditorProps,
-                        attributes: {
-                            class: "prose-lg prose-headings:font-title font-default focus:outline-none max-w-full p-12"
-                        }
+        <div
+            ref={ref}
+            className="relative min-h-[300px] w-full bg-white dark:bg-gray-950 rounded-lg">
+            <EditorProvider
+                content={content ?? ""}
+                extensions={extensions}
+                editorProps={{
+                    attributes: {
+                        class: cls(proseClass, "prose-headings:font-title font-default focus:outline-none max-w-full p-12")
+                    }
+                }}
+                onCreate={({ editor }) => {
+                    // @ts-ignore
+                    editorRef.current = editor;
+                }}
+                onUpdate={({ editor }) => {
+                    onEditorUpdate(editor as Editor);
+                }}>
+
+                <EditorBubble
+                    tippyOptions={{
+                        placement: "top"
                     }}
-                    onUpdate={({ editor }) => {
-                        console.debug("Editor updated");
-                        onEditorUpdate(editor as Editor);
-                    }}>
+                    className={cls("flex w-fit max-w-[90vw] h-10 overflow-hidden rounded border bg-white dark:bg-gray-900 shadow", defaultBorderMixin)}
+                >
+                    {/*<Separator orientation="vertical"/>*/}
+                    <NodeSelector portalContainer={ref.current} open={openNode} onOpenChange={setOpenNode}/>
+                    <Separator orientation="vertical"/>
 
-                    <EditorCommand
-                        className={cls("text-gray-900 dark:text-white z-50 h-auto max-h-[330px] w-72 overflow-y-auto rounded-md border bg-white dark:bg-gray-900 px-1 py-2 shadow transition-all", defaultBorderMixin)}>
-                        <EditorCommandEmpty className="px-2 text-gray-700 dark:text-slate-300">
-                            No results
-                        </EditorCommandEmpty>
-                        {suggestionItems.map((item) => (
-                            <EditorCommandItem
-                                value={item.title}
-                                onCommand={(val) => item?.command?.(val)}
-                                className={"flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm hover:bg-blue-50 hover:dark:bg-gray-700 aria-selected:bg-blue-50 aria-selected:dark:bg-gray-700"}
-                                key={item.title}
-                            >
-                                <div
-                                    className={cls("flex h-10 w-10 items-center justify-center rounded-md border bg-white dark:bg-gray-900", defaultBorderMixin)}>
-                                    {item.icon}
-                                </div>
-                                <div>
-                                    <p className="font-medium">{item.title}</p>
-                                    <p className="text-xs text-gray-700 dark:text-slate-300">
-                                        {item.description}
-                                    </p>
-                                </div>
-                            </EditorCommandItem>
-                        ))}
-                    </EditorCommand>
+                    <LinkSelector open={openLink} onOpenChange={setOpenLink}/>
+                    <Separator orientation="vertical"/>
+                    <TextButtons/>
+                    {/*<Separator orientation="vertical"/>*/}
+                    {/*<ColorSelector open={openColor} onOpenChange={setOpenColor}/>*/}
+                </EditorBubble>
 
-                    <EditorBubble
-                        tippyOptions={{
-                            placement: "top"
-                        }}
-                        className={cls("flex w-fit max-w-[90vw] h-10 overflow-hidden rounded border bg-white dark:bg-gray-900 shadow", defaultBorderMixin)}
-                    >
-                        {/*<Separator orientation="vertical"/>*/}
-                        <NodeSelector open={openNode} onOpenChange={setOpenNode}/>
-                        <Separator orientation="vertical"/>
+            </EditorProvider>
+        </div>
 
-                        <LinkSelector open={openLink} onOpenChange={setOpenLink}/>
-                        <Separator orientation="vertical"/>
-                        <TextButtons/>
-                        {/*<Separator orientation="vertical"/>*/}
-                        {/*<ColorSelector open={openColor} onOpenChange={setOpenColor}/>*/}
-                    </EditorBubble>
-
-                </EditorProvider>
-            </div>
-
-        </EditorCommandProvider>
     );
 };
 
@@ -450,6 +234,7 @@ const cssStyles = `
 }
 
 .is-empty {
+  cursor: text;
   color: rgb(100 116 139); //500
 }
 

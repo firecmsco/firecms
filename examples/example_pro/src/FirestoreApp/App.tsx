@@ -55,7 +55,7 @@ import CustomColorTextField from "./custom_field/CustomColorTextField";
 import { booksCollection } from "./collections/books_collection";
 import { FirebaseApp } from "@firebase/app";
 import { TestEditorView } from "./TestEditorView";
-import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
+import { useCollectionEditorPlugin } from "@firecms/collection_editor";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { ReCaptchaEnterpriseProvider } from "@firebase/app-check";
 import { useExportPlugin } from "@firecms/data_export";

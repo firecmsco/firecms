@@ -8,7 +8,7 @@ export const colorPropertyConfig: PropertyConfig = {
         dataType: "string",
         Field: ({ value, setValue, minimalistView, property }: FieldProps<string>) => {
             return <>
-                {!tableMode && <LabelWithIcon icon={getIconForProperty(property, "small")}
+                {!minimalistView && <LabelWithIcon icon={getIconForProperty(property, "small")}
                                               required={property.validation?.required}
                                               title={property.name}/>}
                 <div className={"flex flex-row gap-4"}>

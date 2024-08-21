@@ -38,10 +38,10 @@ const ButtonInner = React.forwardRef<
         "w-full": fullWidth,
         "w-fit": !fullWidth,
         // Filled Variants
-        "border border-transparent bg-primary hover:bg-primary-dark focus:ring-primary shadow hover:ring-1 hover:ring-primary text-white": variant === "filled" && color === "primary" && !disabled,
-        "border border-transparent bg-secondary hover:bg-secondary-dark focus:ring-secondary shadow hover:ring-1 hover:ring-secondary text-white": variant === "filled" && color === "secondary" && !disabled,
-        "border border-transparent bg-red-500 hover:bg-red-500 focus:ring-red-500 shadow hover:ring-1 hover:ring-red-600 text-white": variant === "filled" && color === "error" && !disabled,
-        "border border-transparent bg-slate-200 hover:bg-slate-300 focus:ring-slate-400 shadow hover:ring-1 hover:ring-slate-400 text-text-primary dark:text-text-primary-dark": variant === "filled" && color === "text" && !disabled,
+        "border border-transparent bg-primary hover:bg-primary-dark focus:ring-primary shadow hover:ring-1 hover:ring-primary text-white hover:text-white": variant === "filled" && color === "primary" && !disabled,
+        "border border-transparent bg-secondary hover:bg-secondary-dark focus:ring-secondary shadow hover:ring-1 hover:ring-secondary text-white hover:text-white": variant === "filled" && color === "secondary" && !disabled,
+        "border border-transparent bg-red-500 hover:bg-red-500 focus:ring-red-500 shadow hover:ring-1 hover:ring-red-600 text-white hover:text-white": variant === "filled" && color === "error" && !disabled,
+        "border border-transparent bg-slate-200 hover:bg-slate-300 focus:ring-slate-400 shadow hover:ring-1 hover:ring-slate-400 text-text-primary hover:text-text-primary dark:text-text-primary-dark hover:dark:text-text-primary-dark": variant === "filled" && color === "text" && !disabled,
         // Text Variants
         "border border-transparent text-primary hover:bg-slate-200 dark:hover:bg-gray-900": variant === "text" && color === "primary" && !disabled,
         "border border-transparent text-secondary hover:bg-secondary-bg": variant === "text" && color === "secondary" && !disabled,
