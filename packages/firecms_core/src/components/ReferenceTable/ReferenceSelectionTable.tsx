@@ -16,7 +16,7 @@ import {
 } from "../../hooks";
 import { ErrorView } from "../ErrorView";
 import { AddIcon, Button, DialogActions, Typography } from "@firecms/ui";
-import { canCreateEntity, fullPathToCollectionSegments, resolveCollection } from "../../util";
+import { canCreateEntity, resolveCollection } from "../../util";
 import { useSelectionController } from "../EntityCollectionView/useSelectionController";
 import { useColumnIds, useTableSearchHelper } from "../common";
 import { useSideDialogContext } from "../../core";
@@ -247,7 +247,6 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
             error={"Could not find collection with id " + collection}/>
     }
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const resolvedCollection = useMemo(() => resolveCollection({
         collection: collection,
         path: fullPath,
@@ -255,10 +254,8 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
         fields: customizationController.propertyConfigs
     }), [collection, customizationController.propertyConfigs, fullPath]);
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const displayedColumnIds = useColumnIds(resolvedCollection, false);
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const tableController = useDataSourceEntityCollectionTableController<M>({
         fullPath,
         collection,
@@ -272,7 +269,6 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
         onTextSearchClick,
         textSearchEnabled
     } =
-        // eslint-disable-next-line react-hooks/rules-of-hooks
         useTableSearchHelper({
             collection,
             fullPath,

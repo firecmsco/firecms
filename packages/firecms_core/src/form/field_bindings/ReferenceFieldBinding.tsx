@@ -5,10 +5,11 @@ import { useNavigationController, useReferenceDialog } from "../../hooks";
 import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { ErrorView } from "../../components";
-import { ReferencePreview } from "../../preview";
+import { EmptyValue, ReferencePreview } from "../../preview";
 import { getIconForProperty, getReferenceFrom } from "../../util";
-import { Button } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
+import { EntityPreviewContainer } from "../../components/EntityPreview";
+import { cls } from "@firecms/ui";
 
 /**
  * Field that opens a reference selection dialog.
@@ -34,6 +35,7 @@ function ReferenceFieldBindingInternal({
                                            showError,
                                            isSubmitting,
                                            disabled,
+                                           minimalistView,
                                            touched,
                                            autoFocus,
                                            property,
@@ -82,10 +84,10 @@ function ReferenceFieldBindingInternal({
 
     return (
         <>
-            <LabelWithIcon icon={getIconForProperty(property, "small")}
-                           required={property.validation?.required}
-                           title={property.name}
-                           className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
+            {!minimalistView && <LabelWithIcon icon={getIconForProperty(property, "small")}
+                                               required={property.validation?.required}
+                                               title={property.name}
+                                               className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
 
             {!collection && <ErrorView
                 error={"The specified collection does not exist. Check console"}/>}
@@ -104,12 +106,15 @@ function ReferenceFieldBindingInternal({
                 />}
 
                 {!value && <div className="justify-center text-left">
-                    <Button variant="outlined"
-                            color="primary"
-                            disabled={disabled || isSubmitting}
-                            onClick={onEntryClick}>
-                        Edit {property.name}
-                    </Button>
+                    <EntityPreviewContainer className={cls("p-6 text-sm font-medium flex items-center gap-6",
+                        disabled || isSubmitting
+                            ? "text-slate-500"
+                            : "cursor-pointer text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800 group-hover:bg-slate-50 dark:group-hover:bg-gray-800")}
+                                            onClick={onEntryClick}
+                                            size={"medium"}>
+                        <EmptyValue/>
+                        {`Edit ${property.name}`.toUpperCase()}
+                    </EntityPreviewContainer>
                 </div>}
             </>}
 

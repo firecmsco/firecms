@@ -1,14 +1,14 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import equal from "react-fast-compare"
 
-import { ReferencePreview } from "../../../preview";
+import { EmptyValue, ReferencePreview } from "../../../preview";
 import { CollectionSize, Entity, EntityCollection, EntityReference, FilterValues } from "../../../types";
 
 import { getPreviewSizeFrom } from "../../../preview/util";
 import { getReferenceFrom } from "../../../util";
 import { useCustomizationController, useNavigationController, useReferenceDialog } from "../../../hooks";
 import { ErrorView } from "../../ErrorView";
-import { Button } from "@firecms/ui";
+import { cls } from "@firecms/ui";
 import { EntityPreviewContainer } from "../../EntityPreview";
 
 type TableReferenceFieldProps = {
@@ -151,13 +151,14 @@ export const TableReferenceFieldSuccess = React.memo(
                 {internalValue && multiselect && buildMultipleReferenceField()}
 
                 {valueNotSet &&
-                    <Button
-                        onClick={handleOpen}
-                        size={"small"}
-                        variant="outlined"
-                        color="primary">
+                    <EntityPreviewContainer className={cls("p-4 text-sm font-medium flex items-center gap-4 uppercase",
+                        disabled
+                            ? "text-slate-500"
+                            : "cursor-pointer text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800 group-hover:bg-slate-50 dark:group-hover:bg-gray-800")}
+                                            onClick={handleOpen}
+                                            size={"medium"}>
                         Edit {title}
-                    </Button>}
+                    </EntityPreviewContainer>}
 
             </div>
         );
