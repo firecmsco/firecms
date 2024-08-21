@@ -311,11 +311,12 @@ export function useFirestoreDelegate({
                                                                                searchString,
                                                                                orderBy,
                                                                                order,
-                                                                               isCollectionGroup,
-                                                                               databaseId
+                                                                               collection,
                                                                            }: FetchCollectionDelegateProps<M>
         ): Promise<Entity<M>[]> => {
 
+            const isCollectionGroup = collection?.collectionGroup ?? false;
+            const databaseId = collection?.databaseId;
             console.debug("Fetching collection", {
                 path,
                 limit,
@@ -358,7 +359,6 @@ export function useFirestoreDelegate({
                 order,
                 onUpdate,
                 onError,
-                isCollectionGroup,
                 collection
             }: ListenCollectionDelegateProps<M>
         ): () => void => {
@@ -366,7 +366,6 @@ export function useFirestoreDelegate({
             console.debug("Listening collection", {
                 path,
                 searchString,
-                isCollectionGroup,
                 limit,
                 filter,
                 startAfter,
@@ -379,6 +378,7 @@ export function useFirestoreDelegate({
                 throw Error("useFirestoreDelegate Firebase not initialised");
             }
 
+            const isCollectionGroup = collection?.collectionGroup ?? false;
             const databaseId = collection?.databaseId;
 
             if (searchString) {
@@ -445,12 +445,13 @@ export function useFirestoreDelegate({
                 path,
                 entityId,
                 values,
-                databaseId,
+                collection,
                 status
             }: SaveEntityDelegateProps<M>): Promise<Entity<M>> => {
 
             if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
 
+            const databaseId = collection?.databaseId;
             const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
 
             const collectionReference: CollectionReference = collectionClause(firestore, path);
@@ -544,10 +545,11 @@ export function useFirestoreDelegate({
                                               filter,
                                               order,
                                               orderBy,
-                                              isCollectionGroup,
-                                              databaseId
+                                              collection
                                           }: FetchCollectionDelegateProps): Promise<number> => {
             if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
+            const isCollectionGroup = collection?.collectionGroup ?? false;
+            const databaseId = collection?.databaseId;
             const query = buildQuery(path, filter, orderBy, order, undefined, undefined, isCollectionGroup, databaseId);
             const snapshot = await getCountFromServer(query);
             return snapshot.data().count;

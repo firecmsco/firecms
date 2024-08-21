@@ -57,7 +57,7 @@ export interface ConfigControllerProviderProps {
 
     onAnalyticsEvent?: (event: string, params?: object) => void;
 
-    components: {
+    components?: {
         /**
          * Custom component to render the database field
          */

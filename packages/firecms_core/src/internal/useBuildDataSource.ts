@@ -52,13 +52,13 @@ export function useBuildDataSource({
          */
         fetchCollection: useCallback(<M extends Record<string, any>>({
                                                                          path,
-                                                                         collection: collectionProp,
+                                                                         collection,
                                                                          filter,
                                                                          limit,
                                                                          startAfter,
                                                                          searchString,
                                                                          orderBy,
-                                                                         order
+                                                                         order,
                                                                      }: FetchCollectionProps<M>
         ): Promise<Entity<M>[]> => {
             return delegate.fetchCollection<M>({
@@ -69,8 +69,7 @@ export function useBuildDataSource({
                 searchString,
                 orderBy,
                 order,
-                isCollectionGroup: Boolean(collectionProp?.collectionGroup),
-                databaseId: collectionProp?.databaseId
+                collection
             });
         }, [delegate]),
 
@@ -121,9 +120,7 @@ export function useBuildDataSource({
                     order,
                     onUpdate,
                     onError,
-                    isCollectionGroup,
                     collection,
-                    databaseId: collection?.databaseId
                 });
             }, [delegate, navigationController.getCollection])
             : undefined,
@@ -143,7 +140,7 @@ export function useBuildDataSource({
         ): Promise<Entity<M> | undefined> => delegate.fetchEntity({
             path,
             entityId,
-            databaseId: collection?.databaseId
+            collection
         }), [delegate]),
 
         /**
@@ -173,7 +170,7 @@ export function useBuildDataSource({
                     entityId,
                     onUpdate,
                     onError,
-                    databaseId: collection?.databaseId
+                    collection
                 })
             }, [delegate.listenEntity]) : undefined,
 
@@ -236,7 +233,7 @@ export function useBuildDataSource({
 
             return delegate.saveEntity({
                 path,
-                databaseId: collection?.databaseId,
+                collection,
                 entityId,
                 values: updatedFirestoreValues,
                 status
@@ -305,8 +302,7 @@ export function useBuildDataSource({
                 filter,
                 orderBy,
                 order,
-                isCollectionGroup: Boolean(collection.collectionGroup),
-                databaseId: collection.databaseId
+                collection
             });
         } : undefined,
 
@@ -336,7 +332,6 @@ export function useBuildDataSource({
         initTextSearch: useCallback(async (props: {
             context: FireCMSContext,
             path: string,
-            databaseId?: string,
             collection: EntityCollection,
             parentCollectionIds?: string[]
         }): Promise<boolean> => {

@@ -43,7 +43,7 @@ export interface CollectionEditorController {
 
     getPathSuggestions?: (path: string) => Promise<string[]>;
 
-    components: {
+    components?: {
         /**
          * Custom component to render the database field
          */

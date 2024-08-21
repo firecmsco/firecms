@@ -203,7 +203,7 @@ export function CollectionDetailsForm({
                             })}
                         </Autocomplete>
                         <FieldCaption>
-                            {showErrors && Boolean(errors.group) ? errors.group : "Group of the collection"}
+                            {showErrors && Boolean(errors.group) ? errors.group : "Group in the home page"}
                         </FieldCaption>
                     </div>}
 
@@ -411,7 +411,9 @@ function DefaultDatabaseField({
                                   onDatabaseIdUpdate
                               }: { databaseId?: string, onDatabaseIdUpdate: (databaseId: string) => void }) {
 
-    return <Tooltip title={"Database ID"}>
+    return <Tooltip title={"Database ID"}
+                    side={"top"}
+                    align={"start"}>
         <TextField size={"smallest"}
                    invisible={true}
                    inputClassName={"text-end"}

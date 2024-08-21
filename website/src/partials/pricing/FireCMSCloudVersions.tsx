@@ -57,6 +57,7 @@ export function FireCMSCloudVersions() {
                 <ul>
                     <li className={"list-disc"}>Everything in the free tier</li>
                     <li className={"list-disc"}>Local text search</li>
+                    <li className={"list-disc"}>Secondary databases</li>
                     <li className={"list-disc"}>Unlimited users and roles</li>
                     <li className={"list-disc"}>Unlimited data export</li>
                     <li className={"list-disc"}>Theme and logo customization</li>

@@ -51,7 +51,7 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
 
     onAnalyticsEvent?: (event: string, params?: object) => void;
 
-    components: {
+    components?: {
         /**
          * Custom component to render the database field
          */

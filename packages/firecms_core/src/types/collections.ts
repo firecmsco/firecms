@@ -67,7 +67,8 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
      * Icon key to use in this collection.
      * You can use any of the icons in the Material specs:
      * https://fonts.google.com/icons
-     * e.g. 'account_tree' or 'person'
+     * e.g. 'account_tree' or 'person'.
+     * Find all the icons in https://firecms.co/docs/icons
      */
     icon?: string;
 

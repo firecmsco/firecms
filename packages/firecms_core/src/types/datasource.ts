@@ -227,7 +227,6 @@ export interface DataSource {
     initTextSearch?: (props: {
         context: FireCMSContext,
         path: string,
-        databaseId?: string,
         collection: EntityCollection,
         parentCollectionIds?: string[]
     }) => Promise<boolean>;
@@ -241,23 +240,11 @@ export type FilterCombinationValidProps = {
     sortBy?: [string, "asc" | "desc"];
 };
 
-export type SaveEntityDelegateProps<M extends Record<string, any> = any> = Omit<SaveEntityProps<M>, "collection"> & {
-    databaseId?: string
-};
+export type SaveEntityDelegateProps<M extends Record<string, any> = any> = SaveEntityProps<M>;
 
-export type FetchCollectionDelegateProps<M extends Record<string, any> = any> =
-    Omit<FetchCollectionProps<M>, "collection">
-    & {
-    databaseId?: string;
-    isCollectionGroup?: boolean
-};
+export type FetchCollectionDelegateProps<M extends Record<string, any> = any> = FetchCollectionProps<M>;
 
-export type ListenCollectionDelegateProps<M extends Record<string, any> = any> =
-    ListenCollectionProps<M>
-    & {
-    databaseId?: string;
-    isCollectionGroup?: boolean;
-};
+export type ListenCollectionDelegateProps<M extends Record<string, any> = any> = ListenCollectionProps<M>;
 
 export interface DataSourceDelegate {
 
@@ -328,9 +315,7 @@ export interface DataSourceDelegate {
     fetchEntity<M extends Record<string, any> = any>({
                                                          path,
                                                          entityId,
-                                                     }: Omit<FetchEntityProps<M>, "collection"> & {
-        databaseId?: string
-    }): Promise<Entity<M> | undefined>;
+                                                     }: FetchEntityProps<M>): Promise<Entity<M> | undefined>;
 
     /**
      * Get realtime updates on one entity.
@@ -346,7 +331,7 @@ export interface DataSourceDelegate {
                                                            entityId,
                                                            onUpdate,
                                                            onError
-                                                       }: Omit<ListenEntityProps<M>, "collection">): () => void;
+                                                       }: ListenEntityProps<M>): () => void;
 
     /**
      * Save entity to the specified path
