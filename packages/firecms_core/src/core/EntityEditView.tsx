@@ -64,7 +64,6 @@ import {
     paperMixin,
     Tab,
     Tabs,
-    Tooltip,
     Typography
 } from "@firecms/ui";
 import { useSideDialogContext } from "./index";
@@ -73,8 +72,7 @@ import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { CustomIdField } from "../form/components/CustomIdField";
 import { CustomFieldValidator, getYupEntitySchema } from "../form/validation";
 import { ErrorFocus } from "../form/components/ErrorFocus";
-import { PropertyIdCopyTooltipContent } from "../components/PropertyIdCopyTooltipContent";
-import { LabelWithIcon, PropertyFieldBinding } from "../form";
+import { LabelWithIconAndTooltip, PropertyFieldBinding } from "../form";
 import { ValidationError } from "yup";
 
 const MAIN_TAB_VALUE = "main_##Q$SC^#S6";
@@ -764,13 +762,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                             <div id={`form_field_${key}`}
                                  key={`field_${resolvedCollection.name}_${key}`}>
                                 <ErrorBoundary>
-                                    <Tooltip title={<PropertyIdCopyTooltipContent propertyId={key}/>}
-                                             delayDuration={800}
-                                             side={"left"}
-                                             align={"start"}
-                                             sideOffset={16}>
-                                        <PropertyFieldBinding {...cmsFormFieldProps}/>
-                                    </Tooltip>
+                                    <PropertyFieldBinding {...cmsFormFieldProps}/>
                                 </ErrorBoundary>
                             </div>
                         );
@@ -791,9 +783,11 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                             })}</>;
                         return (
                             <div>
-                                <LabelWithIcon icon={<NotesIcon size={"small"}/>}
-                                               title={additionalField.name}
-                                               className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
+                                <LabelWithIconAndTooltip
+                                    propertyKey={key}
+                                    icon={<NotesIcon size={"small"}/>}
+                                    title={additionalField.name}
+                                    className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
                                 <div
                                     className={cls(paperMixin, "min-h-14 p-4 md:p-6 overflow-x-scroll no-scrollbar")}>
 

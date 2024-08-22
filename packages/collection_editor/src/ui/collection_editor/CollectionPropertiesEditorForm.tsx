@@ -351,7 +351,8 @@ export function CollectionPropertiesEditorForm({
                     </div>}
 
                     <div className="ml-1 mt-2 flex flex-row gap-2">
-                        <Tooltip title={"Get the code for this collection"}>
+                        <Tooltip title={"Get the code for this collection"}
+                                 asChild={true}>
                             <IconButton
                                 variant={"filled"}
                                 disabled={inferringProperties}
@@ -359,7 +360,8 @@ export function CollectionPropertiesEditorForm({
                                 <CodeIcon/>
                             </IconButton>
                         </Tooltip>
-                        {inferPropertiesFromData && <Tooltip title={"Add new properties based on data"}>
+                        {inferPropertiesFromData && <Tooltip title={"Add new properties based on data"}
+                                                             asChild={true}>
                             <IconButton
                                 variant={"filled"}
                                 disabled={inferringProperties}
@@ -367,7 +369,8 @@ export function CollectionPropertiesEditorForm({
                                 {inferringProperties ? <CircularProgress size={"small"}/> : <AutoAwesomeIcon/>}
                             </IconButton>
                         </Tooltip>}
-                        <Tooltip title={"Add new property"}>
+                        <Tooltip title={"Add new property"}
+                                 asChild={true}>
                             <Button
                                 variant={"outlined"}
                                 onClick={() => setNewPropertyDialogOpen(true)}>

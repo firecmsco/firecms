@@ -11,7 +11,7 @@ export interface CheckboxProps {
     indeterminate?: boolean;
     onCheckedChange?: (checked: boolean) => void;
     padding?: boolean;
-    size?: "tiny" | "small" | "medium" | "large";
+    size?: "smallest" | "small" | "medium" | "large";
     color?: "primary" | "secondary";
 }
 
@@ -19,20 +19,20 @@ const sizeClasses = {
     large: "w-6 h-6 rounded flex items-center justify-center",
     medium: "w-5 h-5 rounded flex items-center justify-center",
     small: "w-4 h-4 rounded flex items-center justify-center",
-    tiny: "w-4 h-4 rounded flex items-center justify-center"
+    smallest: "w-4 h-4 rounded flex items-center justify-center"
 };
 
 const outerSizeClasses = {
     medium: "w-10 h-10",
     small: "w-8 h-8",
     large: "w-12 h-12 ",
-    tiny: "w-6 h-6"
+    smallest: "w-6 h-6"
 }
 const paddingClasses = {
     medium: "p-2",
     small: "p-2",
     large: "p-2",
-    tiny: ""
+    smallest: ""
 }
 
 const colorClasses = {
@@ -57,7 +57,7 @@ export const Checkbox = ({
         ? 20
         : size === "small"
             ? 16
-            : size === "tiny"
+            : size === "smallest"
                 ? 14
                 : 24;
     return (

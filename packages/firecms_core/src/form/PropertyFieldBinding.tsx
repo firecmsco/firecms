@@ -54,6 +54,10 @@ export const PropertyFieldBinding = React.memo(PropertyFieldBindingInternal, (a:
     if (a.index !== b.index) {
         return false;
     }
+
+    if (a.size !== b.size) {
+        return false;
+    }
     const aIsBuilder = isPropertyBuilder(a.property) || a.property.fromBuilder;
     const bIsBuilder = isPropertyBuilder(b.property) || b.property.fromBuilder;
 
@@ -82,6 +86,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
      minimalistView,
      autoFocus,
      index,
+     size
  }: PropertyFieldBindingProps<T, M>): ReactElement<PropertyFieldBindingProps<T, M>> {
 
     const customizationController = useCustomizationController();
@@ -151,7 +156,8 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                     disabled,
                     partOfArray,
                     minimalistView,
-                    autoFocus
+                    autoFocus,
+                    size
                 };
 
                 return <FieldInternal
@@ -182,7 +188,8 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
          minimalistView,
          autoFocus,
          context,
-         disabled
+         disabled,
+         size
      },
      fieldProps
  }:
@@ -229,7 +236,6 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
     const cmsFieldProps: FieldProps<T, CustomProps, M> = {
         propertyKey,
         value: value as T,
-        // initialValue,
         setValue,
         setFieldValue,
         error,
@@ -244,7 +250,8 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
         minimalistView: minimalistView ?? false,
         autoFocus: autoFocus ?? false,
         customProps: customFieldProps,
-        context
+        context,
+        size
     };
 
     return (

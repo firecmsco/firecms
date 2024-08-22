@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DataType, FieldProps, GeoPoint } from "../../types";
 
 import { ArrayContainer } from "../../components";
-import { FieldHelperText, LabelWithIcon } from "../components";
+import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import {
     AddIcon,
     ArrowDropDownIcon,
@@ -62,7 +62,8 @@ export function KeyValueFieldBinding({
                                      initialValue={initialValues}
                                      fieldName={property.name ?? propertyKey}/>;
 
-    const title = <LabelWithIcon
+    const title = <LabelWithIconAndTooltip
+        propertyKey={propertyKey}
         icon={getIconForProperty(property, "small")}
         required={property.validation?.required}
         title={property.name}

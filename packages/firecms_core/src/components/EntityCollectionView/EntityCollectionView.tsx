@@ -419,7 +419,7 @@ export const EntityCollectionView = React.memo(
                                         <ReferencePreview
                                             key={reference.path + "/" + reference.id}
                                             reference={reference}
-                                            size={"tiny"}/>
+                                            size={"smallest"}/>
                                     );
                                 })}
                             </div>
@@ -781,7 +781,7 @@ function EntityIdHeaderWidget({
     const [searchString, setSearchString] = React.useState("");
     const sideEntityController = useSideEntityController();
     return (
-        <Tooltip title={!openPopup ? "Find by ID" : undefined}>
+        <Tooltip title={!openPopup ? "Find by ID" : undefined} asChild={false}>
             <Popover
                 open={openPopup}
                 onOpenChange={setOpenPopup}

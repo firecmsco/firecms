@@ -28,7 +28,7 @@ export function ArrayOfReferencesPreview({
     if (property?.dataType !== "array" || !property.of || property.of.dataType !== "reference")
         throw Error("Picked wrong preview component ArrayOfReferencesPreview");
 
-    const childSize: PreviewSize = size === "medium" ? "small" : "tiny";
+    const childSize: PreviewSize = size === "medium" ? "small" : "smallest";
 
     return (
         <div className="flex flex-col w-full">

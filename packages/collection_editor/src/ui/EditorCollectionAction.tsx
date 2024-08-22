@@ -25,6 +25,7 @@ export function EditorCollectionAction({
         : true;
 
     const editorButton = <Tooltip
+        asChild={true}
         title={canEditCollection ? "Edit collection" : "You don't have permissions to edit this collection"}>
         <IconButton
             color={"primary"}

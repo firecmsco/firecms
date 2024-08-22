@@ -147,6 +147,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                 open={tooltipOpen}
                 onOpenChange={setTooltipOpen}
                 side={"left"}
+                asChild={false}
                 title={enoughData
                     ? `Autofill ${props.property.name ?? "this field"}`
                     : `You need to input some data in the form before enhancing ${props.property.name ?? "this field"}`}>

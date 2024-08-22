@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-
+import React, { ChangeEvent, forwardRef, useCallback, useEffect, useState } from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import {
     fieldBackgroundDisabledMixin,
@@ -20,7 +19,7 @@ export type SelectProps = {
     value?: string | string[],
     className?: string,
     inputClassName?: string,
-    onChange?: React.EventHandler<React.ChangeEvent<HTMLSelectElement>>,
+    onChange?: React.EventHandler<ChangeEvent<HTMLSelectElement>>,
     onValueChange?: (updatedValue: string) => void,
     onMultiValueChange?: (updatedValue: string[]) => void,
     placeholder?: React.ReactNode,
@@ -40,41 +39,42 @@ export type SelectProps = {
     children?: React.ReactNode
 };
 
-export function Select({
-                           inputRef,
-                           open,
-                           name,
-                           id,
-                           onOpenChange,
-                           value,
-                           onChange,
-                           onValueChange,
-                           onMultiValueChange,
-                           className,
-                           inputClassName,
-                           placeholder,
-                           renderValue,
-                           renderValues,
-                           label,
-                           size = "medium",
-                           includeFocusOutline = true,
-                           error,
-                           disabled,
-                           padding = true,
-                           position = "item-aligned",
-                           endAdornment,
-                           multiple,
-                           invisible,
-                           children,
-                           ...props
-                       }: SelectProps) {
+export const Select = forwardRef<HTMLDivElement, SelectProps>(({
+                                                                      inputRef,
+                                                                      open,
+                                                                      name,
+                                                                      id,
+                                                                      onOpenChange,
+                                                                      value,
+                                                                      onChange,
+                                                                      onValueChange,
+                                                                      onMultiValueChange,
+                                                                      className,
+                                                                      inputClassName,
+                                                                      placeholder,
+                                                                      renderValue,
+                                                                      renderValues,
+                                                                      label,
+                                                                      size = "medium",
+                                                                      includeFocusOutline = true,
+                                                                      error,
+                                                                      disabled,
+                                                                      padding = true,
+                                                                      position = "item-aligned",
+                                                                      endAdornment,
+                                                                      multiple,
+                                                                      invisible,
+                                                                      children,
+                                                                      ...props
+                                                                  }, ref) => {
 
-    const [openInternal, setOpenInternal] = React.useState(false);
+    const [openInternal, setOpenInternal] = useState(false);
+
     useEffect(() => {
         setOpenInternal(open ?? false);
     }, [open]);
 
-    const onValueChangeInternal = React.useCallback((newValue: string) => {
+    const onValueChangeInternal = useCallback((newValue: string) => {
         if (multiple) {
             if (Array.isArray(value) && value.includes(newValue)) {
                 onMultiValueChange?.(value.filter(v => v !== newValue));
@@ -90,12 +90,13 @@ export function Select({
                     name,
                     value: newValue
                 }
-            } as React.ChangeEvent<HTMLSelectElement>;
+            } as ChangeEvent<HTMLSelectElement>;
             onChange(event);
         }
     }, [multiple, onChange, value, onMultiValueChange, onValueChange]);
 
     const hasValue = Array.isArray(value) ? value.length > 0 : value != null;
+
     return (
         <SelectPrimitive.Root
             name={name}
@@ -108,19 +109,18 @@ export function Select({
                 onOpenChange?.(open);
                 setOpenInternal(open);
             }}
-            {...props}>
-
+            {...props}
+        >
             {typeof label === "string" ? <SelectInputLabel error={error}>{label}</SelectInputLabel> : label}
-
-            <div
-                className={cls(
-                    size === "small" ? "min-h-[42px]" : "min-h-[64px]",
-                    "select-none rounded-md text-sm",
-                    invisible ? fieldBackgroundInvisibleMixin : fieldBackgroundMixin,
-                    disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
-                    "relative flex items-center",
-                    className)}>
-
+            <div className={cls(
+                size === "small" ? "min-h-[42px]" : "min-h-[64px]",
+                "select-none rounded-md text-sm",
+                invisible ? fieldBackgroundInvisibleMixin : fieldBackgroundMixin,
+                disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
+                "relative flex items-center",
+                className
+            )}
+            >
                 <SelectPrimitive.Trigger
                     ref={inputRef}
                     id={id}
@@ -136,63 +136,52 @@ export function Select({
                         "relative flex items-center",
                         includeFocusOutline ? focusedMixin : "",
                         inputClassName
-                    )}>
-
-                    <div className={cls(
-                        "flex-grow w-full max-w-full flex flex-row gap-2 items-center",
-                        "overflow-visible",
-                        size === "small" ? "h-[42px]" : "h-[64px]"
-                    )}>
+                    )}
+                >
+                    <div
+                        ref={ref}
+                        className={cls(
+                            "flex-grow w-full max-w-full flex flex-row gap-2 items-center",
+                            "overflow-visible",
+                            size === "small" ? "h-[42px]" : "h-[64px]"
+                        )}
+                    >
                         <SelectPrimitive.Value placeholder={placeholder} className={"w-full"}>
-                            {renderValue &&
-                                (hasValue && Array.isArray(value)
-                                    ? value.map((v, i) => (
-                                        <div key={v} className={"flex items-center gap-1 max-w-full"}>
-                                            {renderValue ? renderValue(v, i) : v}
-                                        </div>))
-                                    : (typeof value === "string" ? (renderValue ? renderValue(value, 0) : value) : placeholder))}
-
-                                {renderValues && (!hasValue || Array.isArray(value))
-                                    ? renderValues(value as string[] ?? [])
-                                    : null}
-
-                             {!renderValue && !renderValues && hasValue}
-
+                            {renderValue && (hasValue && Array.isArray(value) ? value.map((v, i) => (
+                                <div key={v} className={"flex items-center gap-1 max-w-full"}>
+                                    {renderValue ? renderValue(v, i) : v}
+                                </div>
+                            )) : (typeof value === "string" ? (renderValue ? renderValue(value, 0) : value) : placeholder))}
+                            {renderValues && (!hasValue || Array.isArray(value)) ? renderValues(value as string[] ?? []) : null}
+                            {!renderValue && !renderValues && hasValue}
                         </SelectPrimitive.Value>
                     </div>
-
-                    <SelectPrimitive.Icon className={cls(
-                        "px-2 h-full flex items-center",
-                    )}>
-                        <ExpandMoreIcon size={"small"}
-                                        className={cls("transition", open ? "rotate-180" : "")}/>
+                    <SelectPrimitive.Icon className={cls("px-2 h-full flex items-center")}>
+                        <ExpandMoreIcon size={"small"} className={cls("transition", open ? "rotate-180" : "")}/>
                     </SelectPrimitive.Icon>
-
                 </SelectPrimitive.Trigger>
-
-                {endAdornment && <div className={cls("absolute h-full flex items-center",
-                    size === "small" ? "right-10" : "right-14")}
-                                      onClick={(e) => e.stopPropagation()}>
-                    {endAdornment}
-                </div>}
-
+                {endAdornment && (
+                    <div
+                        className={cls("absolute h-full flex items-center", size === "small" ? "right-10" : "right-14")}
+                        onClick={(e) => e.stopPropagation()}>
+                        {endAdornment}
+                    </div>
+                )}
             </div>
             <SelectPrimitive.Portal>
-                <SelectPrimitive.Content
-                    position={position}
-                    className="z-50 relative overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 p-2 rounded-lg shadow-lg">
-                    <SelectPrimitive.Viewport
-                        className={"p-1"}
-                        style={{
-                            maxHeight: "var(--radix-select-content-available-height)"
-                        }}>
+                <SelectPrimitive.Content position={position}
+                                         className="z-50 relative overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 p-2 rounded-lg shadow-lg">
+                    <SelectPrimitive.Viewport className={"p-1"}
+                                              style={{ maxHeight: "var(--radix-select-content-available-height)" }}>
                         {children}
                     </SelectPrimitive.Viewport>
                 </SelectPrimitive.Content>
             </SelectPrimitive.Portal>
         </SelectPrimitive.Root>
     );
-}
+});
+
+Select.displayName = "Select";
 
 export type SelectItemProps = {
     value: string,

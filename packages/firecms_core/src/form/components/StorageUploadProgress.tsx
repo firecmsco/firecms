@@ -4,7 +4,6 @@ import { useSnackbarController, useStorageSource } from "../../hooks";
 import { StorageFieldItem } from "../../util/useStorageUploadController";
 import { ErrorView } from "../../components";
 import { cls, paperMixin, Skeleton } from "@firecms/ui";
-import { EntityCollection, StorageSource } from "../../types";
 
 export interface StorageUploadItemProps {
     storagePath: string;

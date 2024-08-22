@@ -185,7 +185,8 @@ export function TemplateButton({
 }) {
 
     return (
-        <Tooltip title={subtitle}>
+        <Tooltip title={subtitle}
+                 asChild={true}>
             <Card
                 onClick={onClick}
                 className={cls(

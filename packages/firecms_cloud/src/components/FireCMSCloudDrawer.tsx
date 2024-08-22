@@ -54,6 +54,7 @@ export function FireCMSCloudDrawer() {
                 {group ? group.toUpperCase() : "Views".toUpperCase()}
             </Typography>
             {canCreateCollections && <Tooltip
+                asChild={true}
                 title={group ? `Create new collection in ${group}` : "Create new collection"}>
                 <Button
                     size={"small"}

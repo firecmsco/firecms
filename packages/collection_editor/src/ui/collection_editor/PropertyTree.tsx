@@ -227,7 +227,8 @@ export function PropertyTreeEntry({
                     <AutoAwesomeIcon size="small" className={"p-2"}/>
                 </Tooltip>}
 
-                {onPropertyRemove && <Tooltip title={"Remove"}>
+                {onPropertyRemove && <Tooltip title={"Remove"}
+                                              asChild={true}>
                     <IconButton size="small"
                                 color="inherit"
                                 onClick={() => onPropertyRemove(propertyKey, namespace)}>
@@ -235,7 +236,8 @@ export function PropertyTreeEntry({
                     </IconButton>
                 </Tooltip>}
 
-                {onPropertyMove && <Tooltip title={"Move"}>
+                {onPropertyMove && <Tooltip title={"Move"}
+                                            asChild={true}>
                     <IconButton
                         component={"span"}
                         size="small"

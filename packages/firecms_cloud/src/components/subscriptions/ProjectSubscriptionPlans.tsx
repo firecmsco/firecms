@@ -149,7 +149,7 @@ function CurrentSubscriptionView({
                 <>
                     The subscription is <Chip
                     className={"inline"}
-                    size={"tiny"}
+                    size={"smallest"}
                     colorScheme={statusText === "Active" ? "greenDark" : "orangeDark"}>
                     {statusText} </Chip>.
                 </>
@@ -159,7 +159,7 @@ function CurrentSubscriptionView({
 
                 <>
                     The current price is <Chip
-                    size={"tiny"}>{getPriceString(subscription.price)}
+                    size={"smallest"}>{getPriceString(subscription.price)}
                 </Chip>per active user.
                 </>
 

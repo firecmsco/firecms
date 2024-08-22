@@ -66,6 +66,16 @@ export const testCollection = buildCollection<any>({
         //     }
         // }],
         properties: {
+            product: {
+                name: "Product",
+                dataType: "reference",
+                path: "products",
+            },
+            product_2: {
+                name: "Product",
+                dataType: "reference",
+                path: "products",
+            },
             intolerances: {
                 dataType: "array",
                 name: "Intolerances",
@@ -83,6 +93,10 @@ export const testCollection = buildCollection<any>({
                         }
                     }
                 }
+            },
+            text_field: {
+                name: "Text field",
+                dataType: "string",
             },
             article_body: {
                 dataType: "string",
@@ -645,12 +659,6 @@ export const testCollection = buildCollection<any>({
             //         }
             //     }
             // }))
-            // product: {
-            //     name: "Product",
-            //     dataType: "reference",
-            //     path: "products",
-            //     defaultValue: new EntityReference("B000P0MDMS", "products"),
-            // }
             // movement: buildProperty(({ values }) => {
             //     return {
             //         name: "Locale",

@@ -5,6 +5,7 @@ import { getIconForProperty } from "../../util";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { BooleanSwitchWithLabel } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
+import { PropertyIdCopyTooltip } from "../../components";
 
 type SwitchFieldProps = FieldProps<boolean>;
 
@@ -23,7 +24,7 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
                                                                                    showError,
                                                                                    autoFocus,
                                                                                    disabled,
-                                                                                   touched,
+                                                                                   size = "medium",
                                                                                    property,
                                                                                    includeDescription
                                                                                }: SwitchFieldProps, ref) {
@@ -37,17 +38,20 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
     return (
         <>
 
+            <PropertyIdCopyTooltip propertyKey={propertyKey}>
             <BooleanSwitchWithLabel
                 value={value}
                 onValueChange={(v) => setValue(v)}
                 error={showError}
-                label={<LabelWithIcon icon={getIconForProperty(property, "small")}
-                                      required={property.validation?.required}
-                                      title={property.name}/>}
+                label={<LabelWithIcon
+                    icon={getIconForProperty(property, "small")}
+                    required={property.validation?.required}
+                    title={property.name}/>}
                 disabled={disabled}
                 autoFocus={autoFocus}
-                size={"large"}
+                size={size}
             />
+            </PropertyIdCopyTooltip>
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}

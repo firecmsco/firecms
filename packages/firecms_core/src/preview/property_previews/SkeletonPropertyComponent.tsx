@@ -87,7 +87,7 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
         mapPropertyKeys = (property.previewProperties || Object.keys(property.properties)) as string[];
         if (size === "small")
             mapPropertyKeys = mapPropertyKeys.slice(0, 3);
-        else if (size === "tiny")
+        else if (size === "smallest")
             mapPropertyKeys = mapPropertyKeys.slice(0, 1);
     }
 
@@ -226,7 +226,7 @@ function renderUrlAudioComponent() {
 
 export function renderSkeletonImageThumbnail(size: PreviewSize) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const imageSize = size === "tiny" ? 40 : size === "small" ? 100 : 200;
+    const imageSize = size === "smallest" ? 40 : size === "small" ? 100 : 200;
     return (
         <Skeleton width={imageSize}
                   height={imageSize}/>

@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 
 import { EnumType, FieldProps, ResolvedProperty } from "../../types";
-import { FieldHelperText, LabelWithIcon } from "../components";
+import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { EnumValuesChip } from "../../preview";
 import { enumToObjectEntries, getIconForProperty, getLabelOrConfigFrom } from "../../util";
 import { CloseIcon, MultiSelect, MultiSelectItem } from "@firecms/ui";
@@ -23,6 +23,7 @@ export function MultiSelectBinding({
                                        disabled,
                                        property,
                                        includeDescription,
+                                       size = "medium",
                                        autoFocus
                                    }: FieldProps<EnumType[], any, any>) {
 
@@ -81,12 +82,15 @@ export function MultiSelectBinding({
     return (
         <div className="mt-0.5 ml-0.5  mt-2">
             <MultiSelect
+                size={size === "medium" ? "medium" : "small"}
                 value={validValue ? value.map((v) => v.toString()) : []}
                 disabled={disabled}
-                label={<LabelWithIcon icon={getIconForProperty(property, "small")}
-                                      required={property.validation?.required}
-                                      title={property.name}
-                                      className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
+                label={<LabelWithIconAndTooltip
+                    propertyKey={propertyKey}
+                    icon={getIconForProperty(property, "small")}
+                    required={property.validation?.required}
+                    title={property.name}
+                    className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
                 renderValue={useCallback((v: string) => renderValue(v, false), [renderValue])}
                 onMultiValueChange={(updatedValue: string[]) => {
                     let newValue: EnumType[] | null;

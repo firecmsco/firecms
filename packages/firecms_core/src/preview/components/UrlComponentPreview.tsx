@@ -84,7 +84,7 @@ function VideoPreview({
                       }: { size: PreviewSize, src: string, interactive: boolean }) {
 
     const imageSize = useMemo(() => {
-        if (size === "tiny")
+        if (size === "smallest")
             return "140px";
         else if (size === "small")
             return "240px";

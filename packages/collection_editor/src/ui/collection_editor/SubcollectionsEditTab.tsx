@@ -95,7 +95,8 @@ export function SubcollectionsEditTab({
                                             </TableCell>
                                             <TableCell
                                                 align="right">
-                                                <Tooltip title={"Remove"}>
+                                                <Tooltip title={"Remove"}
+                                                         asChild={true}>
                                                     <IconButton size="small"
                                                                 onClick={(e) => {
                                                                     e.preventDefault();
@@ -157,7 +158,8 @@ export function SubcollectionsEditTab({
                                                 </TableCell>
                                                 <TableCell
                                                     align="right">
-                                                    <Tooltip title={"Remove"}>
+                                                    <Tooltip title={"Remove"}
+                                                             asChild={true}>
                                                         <IconButton size="small"
                                                                     onClick={(e) => {
                                                                         e.preventDefault();

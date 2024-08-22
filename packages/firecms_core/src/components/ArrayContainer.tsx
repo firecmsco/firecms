@@ -7,7 +7,8 @@ import {
     AddIcon,
     Button,
     ContentCopyIcon,
-    fieldBackgroundHoverMixin, HandleIcon,
+    fieldBackgroundHoverMixin,
+    HandleIcon,
     IconButton,
     Menu,
     MenuItem,
@@ -240,7 +241,8 @@ export function ArrayContainerItem({
     >
         <div
             className="flex items-start">
-            <div className="flex-grow w-[calc(100%-48px)] text-text-primary dark:text-text-primary-dark bg-white dark:bg-gray-900 bg-opacity-80 dark:bg-opacity-80">
+            <div
+                className="flex-grow w-[calc(100%-48px)] text-text-primary dark:text-text-primary-dark bg-white dark:bg-gray-900 bg-opacity-80 dark:bg-opacity-80">
                 {buildEntry(index, internalId)}
             </div>
             <ArrayItemOptions direction={size === "small" ? "row" : "column"}
@@ -252,7 +254,6 @@ export function ArrayContainerItem({
         </div>
     </div>;
 }
-
 
 export function ArrayItemOptions({
                                      direction,
@@ -283,11 +284,13 @@ export function ArrayItemOptions({
             open={menuOpen ? false : undefined}
             side={direction === "column" ? "left" : undefined}
             title="Drag to move. Click for more options">
-
             <IconButton
                 size="small"
                 disabled={disabled}
-                onClick={() => setMenuOpen(true)}
+                onClick={(e) => {
+                    e.preventDefault();
+                    setMenuOpen(true);
+                }}
                 onDragStart={(e: any) => {
                     setMenuOpen(false);
                 }}
@@ -298,7 +301,7 @@ export function ArrayItemOptions({
             <Menu
                 portalContainer={iconRef.current}
                 open={menuOpen}
-                trigger={<div/>}>
+                trigger={<div tabIndex={-1}/>}>
 
                 <MenuItem dense onClick={(e) => {
                     setMenuOpen(false);
@@ -316,7 +319,6 @@ export function ArrayItemOptions({
                 </MenuItem>
 
             </Menu>
-
         </Tooltip>
 
     </div>;

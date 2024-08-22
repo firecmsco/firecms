@@ -6,6 +6,7 @@ import { FieldHelperText, LabelWithIcon } from "../components";
 import { getIconForProperty } from "../../util";
 import { PropertyPreview } from "../../preview";
 import { useClearRestoreValue } from "../useClearRestoreValue";
+import { PropertyIdCopyTooltip } from "../../components/PropertyIdCopyTooltip";
 
 interface TextFieldBindingProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean
@@ -28,6 +29,7 @@ export function TextFieldBinding<T extends string | number>({
                                                                 autoFocus,
                                                                 property,
                                                                 includeDescription,
+                                                                size = "medium"
                                                             }: TextFieldBindingProps<T>) {
 
     let multiline: boolean | undefined;
@@ -67,27 +69,29 @@ export function TextFieldBinding<T extends string | number>({
     const isMultiline = Boolean(multiline);
 
     const inputType = property.dataType === "number" ? "number" : undefined;
-    return (
-        <>
-            <TextField
-                value={value}
-                onChange={onChange}
-                autoFocus={autoFocus}
-                label={<LabelWithIcon icon={getIconForProperty(property, "small")}
-                                      required={property.validation?.required}
-                                      title={property.name}/>}
-                type={inputType}
-                multiline={isMultiline}
-                disabled={disabled}
-                endAdornment={
-                    property.clearable && <IconButton
-                        onClick={handleClearClick}>
-                        <ClearIcon/>
-                    </IconButton>
-                }
-                error={showError ? error : undefined}
-                inputClassName={error ? "text-red-500 dark:text-red-600" : ""}/>
-
+    return (<>
+            <PropertyIdCopyTooltip propertyKey={propertyKey}>
+                <TextField
+                    size={size}
+                    value={value}
+                    onChange={onChange}
+                    autoFocus={autoFocus}
+                    label={<LabelWithIcon
+                        icon={getIconForProperty(property, "small")}
+                        required={property.validation?.required}
+                        title={property.name}/>}
+                    type={inputType}
+                    multiline={isMultiline}
+                    disabled={disabled}
+                    endAdornment={
+                        property.clearable && <IconButton
+                            onClick={handleClearClick}>
+                            <ClearIcon/>
+                        </IconButton>
+                    }
+                    error={showError ? error : undefined}
+                    inputClassName={error ? "text-red-500 dark:text-red-600" : ""}/>
+            </PropertyIdCopyTooltip>
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}
                              error={error}
@@ -100,7 +104,7 @@ export function TextFieldBinding<T extends string | number>({
                 <PropertyPreview
                     value={value}
                     property={property}
-                    size={"medium"}/>
+                    size={size}/>
             </Collapse>}
 
         </>

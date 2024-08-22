@@ -33,7 +33,7 @@ export function AdvancedTextField<T extends string | number>({
     multiline?: boolean,
     disabled?: boolean,
     error?: boolean,
-    size?: "small" | "medium",
+    size?: "smallest" | "small" | "medium",
     className?: string,
 }) {
 
@@ -118,6 +118,7 @@ export function AdvancedTextField<T extends string | number>({
             disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
             error ? "border border-red-500 dark:border-red-600" : "",
             {
+                "min-h-[32px]": size === "smallest",
                 "min-h-[48px]": size === "small",
                 "min-h-[64px]": size === "medium"
             },
@@ -125,9 +126,10 @@ export function AdvancedTextField<T extends string | number>({
 
             {label && (
                 <InputLabel
-                    className={cls("absolute top-1 pointer-events-none",
+                    className={cls("absolute pointer-events-none",
                         !error ? (focused ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-red-500 dark:text-red-600",
-                        disabled ? "opacity-50" : "")}
+                        disabled ? "opacity-50" : "",
+                        size === "medium" ? "top-1" : "-top-1",)}
                     shrink={hasValue || focused}
                 >
                     {label}
@@ -135,7 +137,11 @@ export function AdvancedTextField<T extends string | number>({
             )}
 
             <div ref={ref}
-                 className="inset-0 whitespace-pre-wrap min-h-16 overflow-x-auto select-none pt-8 pb-2 px-3">
+                 className={cls("inset-0 whitespace-pre-wrap overflow-x-auto select-none pb-2 px-3",
+                     {
+                         "pt-8": size === "medium",
+                         "pt-4": size === "small" || size === "smallest",
+                     })}>
 
                 {addLineBreaks(originalValue, !endsWithHighlight && multiline)}
 
@@ -148,12 +154,17 @@ export function AdvancedTextField<T extends string | number>({
 
             <TextareaAutosize
                 className={cls(
+                    {
+                        "min-h-[32px]": size === "smallest",
+                        "min-h-[48px]": size === "small",
+                        "min-h-[64px]": size === "medium"
+                    },
                     focusedMixin,
-                    size === "small" ? "min-h-[48px]" : "min-h-[64px]",
-                    "rounded-md resize-none w-full outline-none p-[32px] text-base bg-transparent px-3 pt-[28px]",
+                    "rounded-md resize-none w-full outline-none text-base bg-transparent ",
                     disabled && "border border-transparent outline-none opacity-50 text-gray-600 dark:text-gray-500",
                     "absolute top-0 right-0 left-0 max-w-full bg-transparent text-transparent caret-gray-800 dark:caret-gray-200",
                     "pt-8 pb-2 px-3",
+                    label ? (size === "medium" ? "pt-[28px] pb-2" : "pt-4 pb-2") : "py-2"
                 )}
                 ignoreBoxSizing={true}
                 ref={inputRef}

@@ -182,7 +182,8 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
 
     return <>
 
-        <Tooltip title={"Export"}>
+        <Tooltip title={"Export"}
+                 asChild={true}>
             <IconButton color={"primary"} onClick={handleClickOpen}>
                 <GetAppIcon/>
             </IconButton>

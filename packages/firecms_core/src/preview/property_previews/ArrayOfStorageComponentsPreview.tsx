@@ -33,7 +33,7 @@ export function ArrayOfStorageComponentsPreview({
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "string")
         throw Error("Picked wrong preview component ArrayOfStorageComponentsPreview");
 
-    const childSize: PreviewSize = size === "medium" ? "small" : "tiny";
+    const childSize: PreviewSize = size === "medium" ? "small" : "smallest";
 
     return (
         <div className={"flex flex-wrap gap-2"}>

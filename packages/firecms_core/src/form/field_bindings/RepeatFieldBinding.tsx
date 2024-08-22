@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CMSType, FieldProps, ResolvedProperty } from "../../types";
-import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../components";
+import { FieldHelperText, FormikArrayContainer, LabelWithIconAndTooltip } from "../components";
 import { ErrorBoundary } from "../../components";
 import { getDefaultValueFor, getIconForProperty } from "../../util";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
@@ -77,10 +77,12 @@ export function RepeatFieldBinding<T extends Array<any>>({
                                                  newDefaultEntry={getDefaultValueFor(property.of)}/>;
 
     const title = (<>
-        <LabelWithIcon icon={getIconForProperty(property, "small")}
-                       required={property.validation?.required}
-                       title={property.name}
-                       className={"flex-grow text-text-secondary dark:text-text-secondary-dark"}/>
+        <LabelWithIconAndTooltip
+            propertyKey={propertyKey}
+            icon={getIconForProperty(property, "small")}
+            required={property.validation?.required}
+            title={property.name}
+            className={"flex flex-grow text-text-secondary dark:text-text-secondary-dark"}/>
         {Array.isArray(value) && <Typography variant={"caption"} className={"px-4"}>({value.length})</Typography>}
     </>);
 

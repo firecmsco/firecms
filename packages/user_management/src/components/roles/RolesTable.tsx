@@ -61,7 +61,9 @@ export function RolesTable({
                         >
                             <TableCell style={{ width: "64px" }}>
                                 {!role.isAdmin &&
-                                    <Tooltip title={"Delete this role"}>
+                                    <Tooltip
+                                        asChild={true}
+                                        title={"Delete this role"}>
                                         <IconButton
                                             size={"small"}
                                             disabled={!editable}

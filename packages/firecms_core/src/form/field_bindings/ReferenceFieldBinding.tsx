@@ -3,7 +3,7 @@ import React, { useCallback, useMemo } from "react";
 import { Entity, EntityCollection, EntityReference, FieldProps } from "../../types";
 import { useNavigationController, useReferenceDialog } from "../../hooks";
 import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
-import { FieldHelperText, LabelWithIcon } from "../components";
+import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ErrorView } from "../../components";
 import { EmptyValue, ReferencePreview } from "../../preview";
 import { getIconForProperty, getReferenceFrom } from "../../util";
@@ -29,6 +29,7 @@ export function ReferenceFieldBinding<M extends Record<string, any>>(props: Fiel
 }
 
 function ReferenceFieldBindingInternal({
+                                           propertyKey,
                                            value,
                                            setValue,
                                            error,
@@ -40,7 +41,7 @@ function ReferenceFieldBindingInternal({
                                            autoFocus,
                                            property,
                                            includeDescription,
-                                           context
+                                           size = "medium"
                                        }: FieldProps<EntityReference>) {
     if (!property.path) {
         throw new Error("Property path is required for ReferenceFieldBinding");
@@ -84,10 +85,12 @@ function ReferenceFieldBindingInternal({
 
     return (
         <>
-            {!minimalistView && <LabelWithIcon icon={getIconForProperty(property, "small")}
-                                               required={property.validation?.required}
-                                               title={property.name}
-                                               className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
+            {!minimalistView && <LabelWithIconAndTooltip
+                propertyKey={propertyKey}
+                icon={getIconForProperty(property, "small")}
+                required={property.validation?.required}
+                title={property.name}
+                className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
 
             {!collection && <ErrorView
                 error={"The specified collection does not exist. Check console"}/>}
@@ -98,7 +101,7 @@ function ReferenceFieldBindingInternal({
                     disabled={!property.path}
                     previewProperties={property.previewProperties}
                     hover={!disabled}
-                    size={"medium"}
+                    size={size}
                     onClick={disabled || isSubmitting ? undefined : onEntryClick}
                     reference={value}
                     includeEntityLink={property.includeEntityLink}
@@ -106,7 +109,7 @@ function ReferenceFieldBindingInternal({
                 />}
 
                 {!value && <div className="justify-center text-left">
-                    <EntityPreviewContainer className={cls("p-6 text-sm font-medium flex items-center gap-6",
+                    <EntityPreviewContainer className={cls("px-6 h-16 text-sm font-medium flex items-center gap-6",
                         disabled || isSubmitting
                             ? "text-slate-500"
                             : "cursor-pointer text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800 group-hover:bg-slate-50 dark:group-hover:bg-gray-800")}

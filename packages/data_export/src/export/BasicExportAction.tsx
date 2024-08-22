@@ -60,7 +60,8 @@ export function BasicExportAction({
 
     return <>
 
-        <Tooltip title={"Export"}>
+        <Tooltip title={"Export"}
+                 asChild={true}>
             <IconButton color={"primary"} onClick={handleClickOpen}>
                 <GetAppIcon/>
             </IconButton>

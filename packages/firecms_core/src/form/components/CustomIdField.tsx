@@ -68,7 +68,8 @@ export function CustomIdField<M extends Record<string, any>>({
                 ? (
                     <>
 
-                        <Tooltip title={"Copy"}>
+                        <Tooltip title={"Copy"}
+                                 asChild={true}>
                             <IconButton onClick={(e) => copy(entity.id)}
                                         aria-label="copy-id">
                                 <ContentCopyIcon size={"small"}/>
@@ -76,7 +77,8 @@ export function CustomIdField<M extends Record<string, any>>({
                         </Tooltip>
 
                         {customizationController?.entityLinkBuilder &&
-                            <Tooltip title={"Open in the console"}>
+                            <Tooltip title={"Open in the console"}
+                                     asChild={true}>
                                 <IconButton component={"a"}
                                             href={customizationController.entityLinkBuilder({ entity })}
                                             rel="noopener noreferrer"

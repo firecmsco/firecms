@@ -234,6 +234,7 @@ export function FormEnhanceAction({
                     </IconButton>}
 
                     {!loading && !instructions && <Tooltip
+                        asChild={true}
                         title={!enoughData
                             ? "You need to input some data in the form before enhancing this entity, or use the prompt to give specific instructions"
                             : "Try to fill the missing fields. You can use the prompt to give specific instructions"}>

@@ -77,17 +77,17 @@ export function EntityPreview({
                                    hover={disabled ? undefined : hover}
                                    size={size}>
         {imageProperty && (
-            <div className={cls("w-10 h-10 mr-2 shrink-0 grow-0", size === "tiny" ? "my-0.5" : "m-2 self-start")}>
+            <div className={cls("w-10 h-10 mr-2 shrink-0 grow-0", size === "smallest" ? "my-0.5" : "m-2 self-start")}>
                 <PropertyPreview property={imageProperty}
                                  propertyKey={imagePropertyKey as string}
-                                 size={"tiny"}
+                                 size={"smallest"}
                                  value={getValueInPath(entity.values, imagePropertyKey as string)}/>
             </div>
         )}
 
         <div className={"flex flex-col flex-grow w-full m-1"}>
 
-            {size !== "tiny" && includeId && (
+            {size !== "smallest" && includeId && (
                 entity
                     ? <div className={`${
                         size !== "medium"
@@ -131,10 +131,10 @@ export function EntityPreview({
                                     propertyKey={key as string}
                                     value={getValueInPath(entity.values, key)}
                                     property={childProperty as ResolvedProperty}
-                                    size={"tiny"}/>
+                                    size={"smallest"}/>
                                 : <SkeletonPropertyComponent
                                     property={childProperty as ResolvedProperty}
-                                    size={"tiny"}/>
+                                    size={"smallest"}/>
                         }
                     </div>
                 );
@@ -143,11 +143,11 @@ export function EntityPreview({
         </div>
 
         {entity && includeEntityLink &&
-            <Tooltip title={`See details for ${entity.id}`}
-                     className={size !== "tiny" ? "self-start" : ""}>
+            <Tooltip title={`See details for ${entity.id}`}>
                 <IconButton
                     color={"inherit"}
                     size={"small"}
+                    className={size !== "smallest" ? "self-start" : ""}
                     onClick={(e) => {
                         e.stopPropagation();
                         analyticsController.onAnalyticsEvent?.("entity_click_from_reference", {
@@ -203,7 +203,7 @@ const EntityPreviewContainerInner = React.forwardRef<HTMLDivElement, EntityPrevi
             fullwidth ? "w-full" : "",
             "items-center",
             hover ? "hover:bg-slate-50 dark:hover:bg-gray-800 group-hover:bg-slate-50 dark:group-hover:bg-gray-800" : "",
-            size === "tiny" ? "p-1" : "p-2",
+            size === "smallest" ? "p-1" : "p-2",
             "flex border rounded-lg",
             onClick ? "cursor-pointer" : "",
             defaultBorderMixin,

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import { Field, useFormex } from "@firecms/formex";
 
-import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../components";
+import { FieldHelperText, FormikArrayContainer, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";
 import { FieldProps, FormContext, PropertyFieldBindingProps, PropertyOrBuilder } from "../../types";
@@ -61,10 +61,12 @@ export function BlockFieldBinding<T extends Array<any>>({
     }, [context, lastAddedId, property.oneOf, propertyKey, value]);
 
     const title = (
-        <LabelWithIcon icon={getIconForProperty(property, "small")}
-                       required={property.validation?.required}
-                       title={property.name}
-                       className={"text-text-secondary dark:text-text-secondary-dark"}/>
+        <LabelWithIconAndTooltip
+            propertyKey={propertyKey}
+            icon={getIconForProperty(property, "small")}
+            required={property.validation?.required}
+            title={property.name}
+            className={"text-text-secondary dark:text-text-secondary-dark"}/>
     );
 
     const firstOneOfKey = Object.keys(property.oneOf.properties)[0];

@@ -1,9 +1,9 @@
 import React from "react";
 
-import { Entity, FieldProps } from "../../types";
+import { FieldProps } from "../../types";
 
 import { PropertyPreview } from "../../preview";
-import { FieldHelperText, LabelWithIcon } from "../components";
+import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ErrorBoundary } from "../../components";
 import { getIconForProperty } from "../../util";
 import { cls, paperMixin } from "@firecms/ui";
@@ -34,10 +34,12 @@ export function ReadOnlyFieldBinding({
 
         <>
 
-            {!minimalistView && <LabelWithIcon icon={getIconForProperty(property, "small")}
-                                               required={property.validation?.required}
-                                               title={property.name}
-                                               className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
+            {!minimalistView && <LabelWithIconAndTooltip
+                propertyKey={propertyKey}
+                icon={getIconForProperty(property, "small")}
+                required={property.validation?.required}
+                title={property.name}
+                className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
             }
 
             <div

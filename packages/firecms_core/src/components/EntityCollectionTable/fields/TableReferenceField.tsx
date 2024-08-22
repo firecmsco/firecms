@@ -124,7 +124,7 @@ export const TableReferenceFieldSuccess = React.memo(
                              key={`preview_array_ref_${name}_${index}`}>
                             <ReferencePreview
                                 onClick={disabled ? undefined : handleOpen}
-                                size={"tiny"}
+                                size={"smallest"}
                                 reference={reference}
                                 hover={!disabled}
                                 disabled={!path}

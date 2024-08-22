@@ -88,6 +88,7 @@ export function App() {
 
     const githubLink = (
         <Tooltip
+            asChild={true}
             title="See this project on GitHub. This button is only present in this demo">
             <IconButton
                 href={"https://github.com/firecmsco/firecms"}

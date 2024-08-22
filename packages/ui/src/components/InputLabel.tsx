@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cls } from "../util";
 import { Label } from "./Label";
+import { defaultBorderMixin } from "../styles";
 
 export type InputLabelProps = {
     children?: React.ReactNode;
@@ -28,10 +29,11 @@ export const InputLabel = React.forwardRef<HTMLLabelElement, InputLabelProps>(fu
         }, className);
 
     return (
-        <Label
+        <label
+            className={cls("text-sm font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+                defaultBorderMixin, computedClassName)}
             data-shrink={shrink}
             ref={ref}
-            className={computedClassName}
             {...other}
         />
     );

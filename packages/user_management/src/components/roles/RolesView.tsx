@@ -36,7 +36,9 @@ export const RolesView = React.memo(
                                 component="h4">
                         Roles
                     </Typography>
-                    <Tooltip title={!canEditRoles ? "Update plans to customise roles" : undefined}>
+                    <Tooltip
+                        asChild={true}
+                        title={!canEditRoles ? "Update plans to customise roles" : undefined}>
                         <Button
                             size={"large"}
                             disabled={!canEditRoles}

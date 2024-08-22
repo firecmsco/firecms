@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import { Entity, EntityCollection, EntityReference, FieldProps, ResolvedProperty } from "../../types";
 import { ReferencePreview } from "../../preview";
-import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../components";
+import { FieldHelperText, FormikArrayContainer, LabelWithIconAndTooltip } from "../components";
 import { ErrorView } from "../../components";
 import { getIconForProperty, getReferenceFrom } from "../../util";
 
@@ -80,25 +80,27 @@ export function ArrayOfReferencesFieldBinding({
         if (!entryValue)
             return <div>Internal ERROR</div>;
         return (
-                <ReferencePreview
-                    key={internalId}
-                    disabled={!ofProperty.path}
-                    previewProperties={ofProperty.previewProperties}
-                    size={"medium"}
-                    onClick={onEntryClick}
-                    hover={!disabled}
-                    reference={entryValue}
-                    includeId={ofProperty.includeId}
-                    includeEntityLink={ofProperty.includeEntityLink}
-                />
+            <ReferencePreview
+                key={internalId}
+                disabled={!ofProperty.path}
+                previewProperties={ofProperty.previewProperties}
+                size={"medium"}
+                onClick={onEntryClick}
+                hover={!disabled}
+                reference={entryValue}
+                includeId={ofProperty.includeId}
+                includeEntityLink={ofProperty.includeEntityLink}
+            />
         );
     }, [ofProperty.path, ofProperty.previewProperties, value]);
 
     const title = (<>
-        <LabelWithIcon icon={getIconForProperty(property, "small")}
-                       required={property.validation?.required}
-                       title={property.name}
-                       className={"flex-grow text-text-secondary dark:text-text-secondary-dark"}/>
+        <LabelWithIconAndTooltip
+            propertyKey={propertyKey}
+            icon={getIconForProperty(property, "small")}
+            required={property.validation?.required}
+            title={property.name}
+            className={"flex-grow text-text-secondary dark:text-text-secondary-dark"}/>
         {Array.isArray(value) && <Typography variant={"caption"} className={"px-4"}>({value.length})</Typography>}
     </>);
 

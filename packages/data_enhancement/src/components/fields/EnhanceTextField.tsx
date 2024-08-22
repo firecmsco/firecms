@@ -1,7 +1,14 @@
 import React from "react";
 import equal from "react-fast-compare"
 
-import { FieldHelperText, FieldProps, getIconForProperty, LabelWithIcon, useClearRestoreValue } from "@firecms/core";
+import {
+    FieldHelperText,
+    FieldProps,
+    getIconForProperty,
+    LabelWithIconAndTooltip,
+    PropertyIdCopyTooltip,
+    useClearRestoreValue
+} from "@firecms/core";
 import { AdvancedTextField, InputType } from "./AdvancedTextField";
 
 /**
@@ -11,6 +18,7 @@ import { AdvancedTextField, InputType } from "./AdvancedTextField";
  * @group Form fields
  */
 export const EnhanceTextFieldBinding = React.memo(function EnhanceTextFieldBinding<T extends string | number>({
+                                                                                                                  propertyKey,
                                                                                                                   value,
                                                                                                                   setValue,
                                                                                                                   error,
@@ -18,9 +26,9 @@ export const EnhanceTextFieldBinding = React.memo(function EnhanceTextFieldBindi
                                                                                                                   disabled,
                                                                                                                   autoFocus,
                                                                                                                   property,
-                                                                                                                  propertyKey,
                                                                                                                   includeDescription,
-                                                                                                                  highlight
+                                                                                                                  highlight,
+                                                                                                                  size
                                                                                                               }: FieldProps<T> & {
     highlight?: string
 }) {
@@ -37,28 +45,32 @@ export const EnhanceTextFieldBinding = React.memo(function EnhanceTextFieldBindi
     });
 
     const internalValue: T = value ?? (property.dataType === "string" ? "" : value === 0 ? 0 : "");
-    const isMarkdown = property.dataType === "string" && property.markdown;
 
-    return (<>
-            {!isMarkdown && <AdvancedTextField
-                inputType={(property.dataType === "number" ? "number" : "text") as InputType<T>}
-                label={<LabelWithIcon icon={getIconForProperty(property)}
-                                      title={(property.name ?? "") + (property.validation?.required ? " *" : "")}
-                />}
-                value={internalValue}
-                multiline={multiline}
-                highlight={highlight}
-                setValue={setValue}
-                disabled={disabled}
-                error={showError}
-            />}
+    return (
+        <>
+            <PropertyIdCopyTooltip propertyKey={propertyKey}>
+                <AdvancedTextField
+                    inputType={(property.dataType === "number" ? "number" : "text") as InputType<T>}
+                    label={<LabelWithIconAndTooltip
+                        propertyKey={propertyKey}
+                        icon={getIconForProperty(property)}
+                        title={(property.name ?? "") + (property.validation?.required ? " *" : "")}
+                    />}
+                    value={internalValue}
+                    multiline={multiline}
+                    highlight={highlight}
+                    setValue={setValue}
+                    disabled={disabled}
+                    error={showError}
+                    size={size}
+                />
 
+            </PropertyIdCopyTooltip>
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}
                              error={error}
                              disabled={disabled}
                              property={property}/>
-
         </>
     );
 

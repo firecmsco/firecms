@@ -2,11 +2,11 @@ import {
     FieldHelperText,
     FieldProps,
     getIconForProperty,
-    LabelWithIcon,
+    LabelWithIconAndTooltip,
     randomString,
     useStorageSource
 } from "../../index";
-import { Paper } from "@firecms/ui";
+import { cls, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "@firecms/ui";
 import { FireCMSEditor } from "@firecms/editor";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { resolveStorageFilenameString, resolveStoragePathString } from "../../util/storage";
@@ -115,13 +115,15 @@ export function MarkdownEditorFieldBinding({
 
     return (
         <>
-            <LabelWithIcon icon={getIconForProperty(property, "small")}
-                           required={property.validation?.required}
-                           title={property.name}
-                           className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
-            <Paper>
+            <LabelWithIconAndTooltip
+                propertyKey={propertyKey}
+                icon={getIconForProperty(property, "small")}
+                required={property.validation?.required}
+                title={property.name}
+                className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
+            <div className={cls("rounded-md", fieldBackgroundMixin, fieldBackgroundHoverMixin)}>
                 {editor}
-            </Paper>
+            </div>
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}
                              error={error}

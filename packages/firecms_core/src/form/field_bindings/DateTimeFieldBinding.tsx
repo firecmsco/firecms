@@ -7,6 +7,7 @@ import { useCustomizationController } from "../../hooks";
 import { getIconForProperty } from "../../util";
 import { DateTimeField } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
+import { PropertyIdCopyTooltip } from "../../components";
 
 type DateTimeFieldProps = FieldProps<Date>;
 
@@ -41,20 +42,22 @@ export function DateTimeFieldBinding({
 
     return (
         <>
-            <DateTimeField
-                value={internalValue}
-                onChange={(dateValue) => setValue(dateValue)}
-                size={"medium"}
-                mode={property.mode}
-                clearable={property.clearable}
-                locale={locale}
-                error={showError}
-                label={<LabelWithIcon
-                    icon={getIconForProperty(property, "small")}
-                    required={property.validation?.required}
-                    className={showError ? "text-red-500 dark:text-red-500" : "text-text-secondary dark:text-text-secondary-dark"}
-                    title={property.name}/>}
-            />
+            <PropertyIdCopyTooltip propertyKey={propertyKey}>
+                <DateTimeField
+                    value={internalValue}
+                    onChange={(dateValue) => setValue(dateValue)}
+                    size={"medium"}
+                    mode={property.mode}
+                    clearable={property.clearable}
+                    locale={locale}
+                    error={showError}
+                    label={<LabelWithIcon
+                        icon={getIconForProperty(property, "small")}
+                        required={property.validation?.required}
+                        className={showError ? "text-red-500 dark:text-red-500" : "text-text-secondary dark:text-text-secondary-dark"}
+                        title={property.name}/>}
+                />
+            </PropertyIdCopyTooltip>
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}

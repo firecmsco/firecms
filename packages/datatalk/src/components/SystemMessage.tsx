@@ -96,13 +96,15 @@ export function SystemMessage({
         {loading && <Skeleton className={"max-w-4xl mt-1 mb-4"}/>}
 
         <div className={"mt-2 flex flex-row gap-1"}>
-            {canRegenerate && <Tooltip title={"Regenerate"}>
+            {canRegenerate && <Tooltip title={"Regenerate"}
+                                       asChild={true}>
                 <IconButton size={"smallest"} disabled={loading} onClick={onRegenerate}>
                     <LoopIcon size={"smallest"}/>
                 </IconButton>
             </Tooltip>}
 
-            <Tooltip title={"Copy"}>
+            <Tooltip title={"Copy"}
+                     asChild={true}>
                 <MessageCopyIcon text={text ?? ""} disabled={loading}/>
             </Tooltip>
 
@@ -153,7 +155,8 @@ function BadMessageIcon({
     const [feedbackText, setFeedbackText] = useState<string>("");
     return <>
 
-        <Tooltip title={dialogOpen ? undefined : "Bad response"}>
+        <Tooltip title={dialogOpen ? undefined : "Bad response"}
+                 asChild={true}>
             <IconButton size={"smallest"}
                         disabled={disabled}
                         onClick={() => {

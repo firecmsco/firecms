@@ -31,6 +31,7 @@ export function EditorCollectionActionStart({
         !equal(getObjectOrNull(tableController.sortBy), getObjectOrNull(collection.initialSort))) {
         saveDefaultFilterButton = <>
             <Tooltip
+                asChild={true}
                 title={tableController.sortBy || tableController.filterValues ? "Save default filter and sort" : "Clear default filter and sort"}>
                 <Button
                     color={"primary"}

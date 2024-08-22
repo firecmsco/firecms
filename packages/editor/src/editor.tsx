@@ -163,7 +163,7 @@ export const FireCMSEditor = ({
     return (
         <div
             ref={ref}
-            className="relative min-h-[300px] w-full bg-white dark:bg-gray-950 rounded-lg">
+            className="relative min-h-[300px] w-full">
             <EditorProvider
                 content={content ?? ""}
                 extensions={extensions}

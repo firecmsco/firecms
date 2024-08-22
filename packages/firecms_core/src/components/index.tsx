@@ -19,6 +19,7 @@ export * from "./EntityCollectionView/EntityCollectionViewActions";
 export * from "./EntityCollectionView/useSelectionController";
 
 export * from "./PropertyConfigBadge";
+export * from "./PropertyIdCopyTooltip";
 
 export * from "./EntityCollectionTable";
 export * from "./NotFoundPage";

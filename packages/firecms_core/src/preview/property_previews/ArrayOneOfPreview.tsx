@@ -37,7 +37,7 @@ export function ArrayOneOfPreview({
 
     if (!values) return null;
 
-    const childSize: PreviewSize = size === "medium" ? "small" : "tiny";
+    const childSize: PreviewSize = size === "medium" ? "small" : "smallest";
 
     const typeField = property.oneOf.typeField ?? DEFAULT_ONE_OF_TYPE;
     const valueField = property.oneOf.valueField ?? DEFAULT_ONE_OF_VALUE;

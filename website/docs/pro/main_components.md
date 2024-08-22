@@ -67,7 +67,9 @@ import { Button, ForumIcon, LogoutIcon, MenuItem, PaymentIcon, Tooltip } from "@
 //...
 return <AppBar title={title}
                endAdornment={<>
-                   <Tooltip title={"Your custom action"}>
+                   <Tooltip
+                           asChild={true}
+                           title={"Your custom action"}>
                        <Button variant={"outlined"}><ForumIcon size="small"/></Button>
                    </Tooltip>
                </>}

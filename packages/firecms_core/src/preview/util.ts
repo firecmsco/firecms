@@ -6,7 +6,7 @@ export const SMALL_THUMBNAIL = 100;
 export const REGULAR_THUMBNAIL = 200;
 
 export function getThumbnailMeasure(size: PreviewSize): number {
-    if (size === "tiny")
+    if (size === "smallest")
         return TINY_THUMBNAIL;
     else if (size === "small")
         return SMALL_THUMBNAIL;
@@ -19,7 +19,7 @@ export function getPreviewSizeFrom(size: CollectionSize): PreviewSize {
     switch (size) {
         case "xs":
         case "s":
-            return "tiny";
+            return "smallest";
         case "m":
             return "small";
         case "l":

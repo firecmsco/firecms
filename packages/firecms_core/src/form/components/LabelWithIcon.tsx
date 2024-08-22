@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 
 interface LabelWithIconProps {
     icon: React.ReactNode;
@@ -12,22 +12,30 @@ interface LabelWithIconProps {
  * Render the label of with an icon and the title of a property
  * @group Form custom fields
  */
-export function LabelWithIcon({
-                                  icon,
-                                  title,
-                                  small,
-                                  className,
-                                  required
-                              }: LabelWithIconProps) {
-    return (
-        <span
-            className={`inline-flex items-center my-0.5  ${small ? "gap-1" : "gap-2"} ${className ?? ""}`}>
-
-            {icon}
-
-            <span
-                className={`text-start font-medium text-${small ? "base" : "sm"} origin-top-left transform ${small ? "translate-x-2 scale-75" : ""}`}>{(title ?? "") + (required ? " *" : "")}</span>
-
+export const LabelWithIcon = forwardRef<HTMLDivElement, LabelWithIconProps>(
+    ({
+         icon,
+         title,
+         small,
+         className,
+         required
+     }, ref) => {
+        return (
+            <div
+                ref={ref}
+                className={`inline-flex items-center my-0.5 ${small ? "gap-1" : "gap-2"} ${className ?? ""}`}
+            >
+        {icon}
+                <span
+                    className={`text-start font-medium text-${small ? "base" : "sm"} origin-top-left transform ${
+                        small ? "translate-x-2 scale-75" : ""
+                    }`}
+                >
+          {(title ?? "") + (required ? " *" : "")}
         </span>
-    );
-}
+      </div>
+        );
+    }
+);
+
+LabelWithIcon.displayName = "LabelWithIcon";

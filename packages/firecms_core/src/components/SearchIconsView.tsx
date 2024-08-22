@@ -60,7 +60,8 @@ export function SearchIconsView({
             <div className={"flex max-w-full flex-wrap mt-4"}>
                 {icons.map((icon: string) => {
                     return (
-                        <Tooltip title={icon} key={icon}>
+                        <Tooltip title={icon} key={icon}
+                                 asChild={true}>
                             <IconButton
                                 shape={"square"}
                                 toggled={selectedIcon === icon}

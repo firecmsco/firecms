@@ -105,6 +105,11 @@ export interface FieldProps<T extends CMSType = any, CustomProps = any, M extend
      */
     disabled?: boolean;
 
+    /**
+     * Size of the field
+     */
+    size?: "smallest" | "small" | "medium";
+
 }
 
 /**
@@ -213,4 +218,9 @@ export interface PropertyFieldBindingProps<T extends CMSType, M extends Record<s
      * Only used when the field is part of an array.
      */
     index?: number;
+
+    /**
+     * The size of the field
+     */
+    size?: "smallest" | "small" | "medium",
 }

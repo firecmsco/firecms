@@ -70,7 +70,6 @@ export function TextField<T extends string | number>({
                                                          ...inputProps
                                                      }: TextFieldProps<T>) {
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const inputRef = inputRefProp ?? useRef(null);
 
     // @ts-ignore
@@ -106,8 +105,6 @@ export function TextField<T extends string | number>({
             placeholder={focused || hasValue || !label ? placeholder : undefined}
             autoFocus={autoFocus}
             rows={rows}
-            // onFocus={() => setFocused(true)}
-            // onBlur={() => setFocused(false)}
             value={value ?? ""}
             onChange={onChange}
             style={inputStyle}
@@ -162,7 +159,7 @@ export function TextField<T extends string | number>({
             {label && (
                 <InputLabel
                     className={cls(
-                        "pointer-events-none absolute",
+                        "absolute",
                         size === "medium" ? "top-1" : "-top-1",
                         !error ? (focused ? "text-primary dark:text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-red-500 dark:text-red-600",
                         disabled ? "opacity-50" : "")}

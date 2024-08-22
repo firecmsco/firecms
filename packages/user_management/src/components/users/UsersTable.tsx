@@ -75,7 +75,9 @@ export function UsersTable({ onUserClicked }: {
                                 }}
                             >
                                 <TableCell className={"w-10"}>
-                                    <Tooltip title={"Delete this user"}>
+                                    <Tooltip
+                                        asChild={true}
+                                        title={"Delete this user"}>
                                         <IconButton
                                             size={"small"}
                                             onClick={(event) => {

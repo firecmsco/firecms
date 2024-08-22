@@ -14,30 +14,36 @@ export type MenuProps = {
     portalContainer?: HTMLElement | null;
 }
 
-export function Menu({
-                         children,
-                         trigger,
-                         open,
-                         defaultOpen,
-                         onOpenChange,
-                         portalContainer
-                     }: MenuProps) {
-    return (
-        <DropdownMenu.Root
-            open={open}
-            defaultOpen={defaultOpen}
-            onOpenChange={onOpenChange}>
-            <DropdownMenu.Trigger asChild>
-                {trigger}
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Portal container={portalContainer}>
-                <DropdownMenu.Content className={cls(paperMixin, "shadow py-2 z-30")}>
-                    {children}
-                </DropdownMenu.Content>
-            </DropdownMenu.Portal>
-        </DropdownMenu.Root>
-    );
-}
+const Menu = React.forwardRef<
+    React.ElementRef<typeof DropdownMenu.Trigger>,
+    MenuProps
+>(({
+       children,
+       trigger,
+       open,
+       defaultOpen,
+       onOpenChange,
+       portalContainer
+   }, ref) => (
+    <DropdownMenu.Root
+        open={open}
+        defaultOpen={defaultOpen}
+        onOpenChange={onOpenChange}>
+        <DropdownMenu.Trigger
+            ref={ref}
+            asChild>
+            {trigger}
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Portal container={portalContainer}>
+            <DropdownMenu.Content className={cls(paperMixin, "shadow py-2 z-30")}>
+                {children}
+            </DropdownMenu.Content>
+        </DropdownMenu.Portal>
+    </DropdownMenu.Root>
+))
+Menu.displayName = "Menu"
+
+export { Menu }
 
 export type MenuItemProps = {
     children: React.ReactNode;

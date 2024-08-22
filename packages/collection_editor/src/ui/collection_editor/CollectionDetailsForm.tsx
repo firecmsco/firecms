@@ -129,7 +129,8 @@ export function CollectionDetailsForm({
                         <DatabaseField databaseId={values.databaseId}
                                        onDatabaseIdUpdate={updateDatabaseId}/>
 
-                        <Tooltip title={"Change icon"}>
+                        <Tooltip title={"Change icon"}
+                                 asChild={true}>
                             <IconButton
                                 shape={"square"}
                                 onClick={() => setIconDialogOpen(true)}>

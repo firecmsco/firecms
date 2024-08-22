@@ -80,7 +80,9 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                 <div className="w-34 flex justify-center">
 
                     {uncollapsedActions.map((action, index) => (
-                        <Tooltip key={index} title={action.name}>
+                        <Tooltip key={index}
+                                 title={action.name}
+                                 asChild={true}>
                             <IconButton
                                 onClick={(event: MouseEvent) => {
                                     event.stopPropagation();

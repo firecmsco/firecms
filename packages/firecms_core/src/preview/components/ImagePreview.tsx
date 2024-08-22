@@ -22,7 +22,7 @@ export function ImagePreview({
 
     const imageSize = useMemo(() => getThumbnailMeasure(size), [size]);
 
-    if (size === "tiny") {
+    if (size === "smallest") {
         return (
             <img src={url}
                  className={"rounded-md"}
@@ -58,7 +58,9 @@ export function ImagePreview({
 
 
             <div className={"flex flex-row gap-2 absolute bottom-[-4px] right-[-4px] invisible group-hover:visible"}>
-                {navigator && <Tooltip title="Copy url to clipboard" side={"bottom"}>
+                {navigator && <Tooltip
+                    asChild={true}
+                    title="Copy url to clipboard" side={"bottom"}>
                     <IconButton
                         variant={"filled"}
                         size={"small"}

@@ -69,6 +69,7 @@ export function ExampleCMSView() {
 
     const githubLink = (
         <Tooltip
+            asChild={true}
             title="Get the source code of this example view">
             <IconButton
                 href={"https://github.com/firecmsco/firecms/blob/main/examples/example_cloud/src/views/ExampleCMSView.tsx"}

@@ -3,7 +3,7 @@ import React, { useCallback } from "react";
 import { ArrayProperty, FieldProps, ResolvedArrayProperty, ResolvedStringProperty, StorageConfig } from "../../types";
 import { useDropzone } from "react-dropzone";
 import { PreviewSize } from "../../preview";
-import { FieldHelperText, LabelWithIcon } from "../components";
+import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 
 import { getIconForProperty, isReadOnly } from "../../util";
 import { useSnackbarController, useStorageSource } from "../../hooks";
@@ -88,10 +88,12 @@ export function StorageUploadFieldBinding({
         <>
 
             {!minimalistView &&
-                <LabelWithIcon icon={getIconForProperty(property, "small")}
-                               required={property.validation?.required}
-                               title={property.name}
-                               className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
+                <LabelWithIconAndTooltip
+                    propertyKey={propertyKey}
+                    icon={getIconForProperty(property, "small")}
+                    required={property.validation?.required}
+                    title={property.name}
+                    className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
 
             <StorageUpload
                 value={internalValue}

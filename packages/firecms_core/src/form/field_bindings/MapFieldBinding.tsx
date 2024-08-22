@@ -1,17 +1,9 @@
 import React from "react";
-import {
-    CMSType,
-    FieldProps,
-    FormContext,
-    MapProperty,
-    Properties,
-    ResolvedProperties,
-    ResolvedProperty
-} from "../../types";
+import { FieldProps, Properties, ResolvedProperties } from "../../types";
 
 import { ErrorBoundary } from "../../components";
 import { getIconForProperty, isHidden, pick } from "../../util";
-import { FieldHelperText, LabelWithIcon } from "../components";
+import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel, InputLabel, Select, SelectItem } from "@firecms/ui";
 
@@ -91,18 +83,20 @@ export function MapFieldBinding({
     </>;
 
     const title = (
-        <LabelWithIcon icon={getIconForProperty(property, "small")}
-                       required={property.validation?.required}
-                       title={property.name}
-                       className={"text-text-secondary dark:text-text-secondary-dark"}/>
+        <LabelWithIconAndTooltip
+            propertyKey={propertyKey}
+            icon={getIconForProperty(property, "small")}
+            required={property.validation?.required}
+            title={property.name}
+            className={"text-text-secondary dark:text-text-secondary-dark"}/>
     );
 
     return (
         <ErrorBoundary>
 
             {!minimalistView && !minimalistView && <ExpandablePanel initiallyExpanded={expanded}
-                                                                 className={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2 bg-slate-50 bg-opacity-50 dark:bg-gray-900"}
-                                                                 title={title}>{mapFormView}</ExpandablePanel>}
+                                                                    className={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2 bg-slate-50 bg-opacity-50 dark:bg-gray-900"}
+                                                                    title={title}>{mapFormView}</ExpandablePanel>}
 
             {(minimalistView || minimalistView) && mapFormView}
 

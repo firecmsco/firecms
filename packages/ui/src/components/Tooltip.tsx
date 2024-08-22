@@ -13,10 +13,11 @@ export type TooltipProps = {
     sideOffset?: number,
     title?: string | React.ReactNode,
     delayDuration?: number;
-    className?: string,
+    asChild?: boolean;
     tooltipClassName?: string,
     tooltipStyle?: React.CSSProperties;
     children: React.ReactNode,
+    className?: string,
     style?: React.CSSProperties;
 };
 
@@ -29,11 +30,12 @@ export const Tooltip = ({
                             align,
                             onOpenChange,
                             title,
-                            className,
-                            style,
                             tooltipClassName,
                             tooltipStyle,
-                            children
+                            children,
+                            asChild = false,
+                            className,
+                            style
                         }: TooltipProps) => {
 
     useInjectStyles("Tooltip", styles);
@@ -41,14 +43,20 @@ export const Tooltip = ({
     if (!title)
         return <>{children}</>;
 
+    const trigger = asChild
+        ? <TooltipPrimitive.Trigger asChild={true}>
+            {children}
+        </TooltipPrimitive.Trigger>
+        : <TooltipPrimitive.Trigger asChild={true}>
+            <div style={style} className={className}>
+                {children}
+            </div>
+        </TooltipPrimitive.Trigger>;
+
     return (
         <TooltipPrimitive.Provider delayDuration={delayDuration}>
             <TooltipPrimitive.Root open={open} onOpenChange={onOpenChange} defaultOpen={defaultOpen}>
-                <TooltipPrimitive.Trigger asChild>
-                    <div className={className} style={style}>
-                        {children}
-                    </div>
-                </TooltipPrimitive.Trigger>
+                {trigger}
                 <TooltipPrimitive.Portal>
                     <TooltipPrimitive.Content
                         className={cls("TooltipContent",

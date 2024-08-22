@@ -34,7 +34,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
 
     const mapPropertyKeys: string[] = Object.keys(mapProperty.properties)
 
-    if (size === "tiny")
+    if (size === "smallest")
         return (
             <div className="w-full flex flex-col space-y-1 md:space-y-2">
                 {mapPropertyKeys.map((key, index) => (

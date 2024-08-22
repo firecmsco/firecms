@@ -39,6 +39,7 @@ export function StorageItemPreview({
                     className="absolute rounded-full -top-2 -right-2 z-10 bg-white dark:bg-gray-900">
 
                     <Tooltip
+                        asChild={true}
                         title="Remove">
                         <IconButton
                             size={"small"}

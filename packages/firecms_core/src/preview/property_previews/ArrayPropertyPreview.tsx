@@ -37,7 +37,7 @@ export function ArrayPropertyPreview({
 
     if (!values) return null;
 
-    const childSize: PreviewSize = size === "medium" ? "small" : "tiny";
+    const childSize: PreviewSize = size === "medium" ? "small" : "smallest";
 
     return (
         <div className="flex flex-col gap-2">

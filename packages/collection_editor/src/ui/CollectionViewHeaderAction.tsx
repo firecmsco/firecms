@@ -25,7 +25,9 @@ export function CollectionViewHeaderAction({
     const collectionEditorController = useCollectionEditorController();
 
     return (
-        <Tooltip title={"Edit"}>
+        <Tooltip
+            asChild={true}
+            title={"Edit"}>
             <IconButton
                 className={onHover ? "bg-white dark:bg-gray-950" : "hidden"}
                 onClick={() => {

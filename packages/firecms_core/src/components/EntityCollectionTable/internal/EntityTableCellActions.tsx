@@ -11,7 +11,14 @@ export interface EntityTableCellActionsProps {
     children?: React.ReactNode;
 }
 
-export function EntityTableCellActions({ showError, disabled, showExpandIcon, selected, openPopup, children }: EntityTableCellActionsProps) {
+export function EntityTableCellActions({
+                                           showError,
+                                           disabled,
+                                           showExpandIcon,
+                                           selected,
+                                           openPopup,
+                                           children
+                                       }: EntityTableCellActionsProps) {
 
     const ref = useRef<HTMLDivElement>(null);
     const doOpenPopup = useCallback(() => {
@@ -54,13 +61,18 @@ export function EntityTableCellActions({ showError, disabled, showExpandIcon, se
 
                 {showError && <ErrorTooltip
                     side={"left"}
-                    className={"flex items-center justify-center"}
-                    style={{ width: 32, height: 32 }}
                     title={showError.message}>
-                    <ErrorOutlineIcon
-                        size={"small"}
-                        color={"error"}
-                    />
+                    <div
+                        className={"flex items-center justify-center"}
+                        style={{
+                            width: 32,
+                            height: 32
+                        }}>
+                        <ErrorOutlineIcon
+                            size={"small"}
+                            color={"error"}
+                        />
+                    </div>
                 </ErrorTooltip>
                 }
 

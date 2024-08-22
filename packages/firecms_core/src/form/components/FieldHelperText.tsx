@@ -44,7 +44,7 @@ export function FieldHelperText({
         {property.longDescription &&
             <Tooltip title={property.longDescription}
                      side="bottom"
-            >
+                     asChild={true}>
                 <IconButton
                     size={"small"}
                     className="self-start">
