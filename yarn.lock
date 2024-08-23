@@ -3091,6 +3091,7 @@ __metadata:
     tsd: ^0.31.1
     typescript: ^5.5.4
     vite: ^5.3.4
+    vite-plugin-static-copy: ^1.0.6
   peerDependencies:
     react: ^18.3.1
     react-dom: ^18.3.1
@@ -10004,7 +10005,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:^3.2.9, fast-glob@npm:^3.3.0":
+"fast-glob@npm:^3.2.11, fast-glob@npm:^3.2.9, fast-glob@npm:^3.3.0":
   version: 3.3.2
   resolution: "fast-glob@npm:3.3.2"
   dependencies:
@@ -18317,6 +18318,20 @@ __metadata:
     unist-util-stringify-position: ^4.0.0
     vfile-message: ^4.0.0
   checksum: 2f3f405654aa549f1902dfe0cefa5f0d785f9f65cb90989b9ab543166afabf30f9c5c4bda734d78cf08e169dd7cba08af4cdcae5563f89782caf1d4719c57646
+  languageName: node
+  linkType: hard
+
+"vite-plugin-static-copy@npm:^1.0.6":
+  version: 1.0.6
+  resolution: "vite-plugin-static-copy@npm:1.0.6"
+  dependencies:
+    chokidar: ^3.5.3
+    fast-glob: ^3.2.11
+    fs-extra: ^11.1.0
+    picocolors: ^1.0.0
+  peerDependencies:
+    vite: ^5.0.0
+  checksum: 47b5ce0670556837a7785dfef37a33ac641462ca323f5a79903bb59d4a66885b29496f6c0b96ae99fe99bd7adaf8415b8bd649ba5e988f67385fc4a9149c724d
   languageName: node
   linkType: hard
 

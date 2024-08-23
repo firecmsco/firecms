@@ -124,7 +124,7 @@ export const DefaultAppBar = function DefaultAppBar({
                             {typeof title === "string"
                                 ? <Typography variant="subtitle1"
                                               noWrap
-                                              className={"ml-2 !font-medium"}>
+                                              className={cls("!font-medium", drawerOpen ? "ml-2" : "")}>
                                     {title}
                                 </Typography>
                                 : title}

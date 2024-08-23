@@ -28,7 +28,7 @@ export function useSaasPlugin({
 
     const additionalChildrenStart = <>
         {introMode ? <IntroWidget introMode={introMode}/> : undefined}
-        {<DataTalkSuggestions suggestions={dataTalkSuggestions}/>}
+        {!introMode && <DataTalkSuggestions suggestions={dataTalkSuggestions}/>}
     </>;
 
     return {

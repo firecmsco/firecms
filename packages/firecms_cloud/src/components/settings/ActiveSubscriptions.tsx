@@ -68,7 +68,7 @@ export function CurrentSubscriptionView({
                         href={stripePortalUrl}
                         target="_blank"
                         rel="noreferrer">{
-                    subscription.canceled_at ? "Renew" : "Cancel"
+                    subscription.canceled_at ? "Renew" : "Manage"
                 }</Button>
             </div>
 

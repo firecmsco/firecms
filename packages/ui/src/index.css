@@ -1,0 +1,56 @@
+
+@layer utilities {
+    /* Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+
+    .typography-h1 {
+        @apply text-6xl font-headers font-light;
+    }
+    .typography-h2 {
+        @apply text-5xl font-headers font-light;
+    }
+    .typography-h3 {
+        @apply text-4xl font-headers font-normal;
+    }
+    .typography-h4 {
+        @apply text-3xl font-headers font-normal;
+    }
+    .typography-h5 {
+        @apply text-2xl font-headers font-normal;
+    }
+    .typography-h6 {
+        @apply text-xl font-headers font-medium;
+    }
+    .typography-body1 {
+        /*@apply text-base;*/
+    }
+    .typography-body2 {
+        @apply text-sm;
+    }
+    .typography-caption {
+        @apply text-xs;
+    }
+    .typography-label {
+        @apply text-sm font-medium;
+    }
+    .typography-inherit {
+        @apply text-inherit;
+    }
+    .typography-button {
+        @apply text-sm font-medium;
+    }
+}
+
+a {
+    @apply text-blue-600 dark:text-blue-400 dark:hover:text-blue-600 hover:text-blue-800
+}
+
+body {
+    @apply w-full min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center;
+}

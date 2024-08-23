@@ -135,8 +135,7 @@ function CurrentSubscriptionView({
     useEffect(() => {
         if (!stripePortalUrl) {
             projectsApi.getStripePortalLink(subscription.metadata.projectId)
-                .then(setStripePortalUrl)
-            ;
+                .then(setStripePortalUrl);
         }
     }, []);
 
@@ -171,7 +170,7 @@ function CurrentSubscriptionView({
                     className={" " + subscription.canceled_at ? undefined : "text-text-secondary dark:text-text-secondary-dark"}
                     href={stripePortalUrl}
                     target="_blank" rel="noreferrer">{
-                    subscription.canceled_at ? " Renew subscription" : " Cancel subscription"
+                    subscription.canceled_at ? " Renew subscription" : " Manage subscription"
                 }</a>
             </div>
 

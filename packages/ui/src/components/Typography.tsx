@@ -61,20 +61,20 @@ const gutterBottomClasses = {
 };
 
 const variantToClasses = {
-    h1: "text-6xl font-headers font-light",
-    h2: "text-5xl font-headers font-light",
-    h3: "text-4xl font-headers font-normal",
-    h4: "text-3xl font-headers font-normal",
-    h5: "text-2xl font-headers font-normal",
-    h6: "text-xl font-headers font-medium",
-    subtitle1: "text-lg font-headers font-medium",
-    subtitle2: "text-base font-headers font-medium",
-    body1: "text-base",
-    body2: "text-sm",
-    label: "text-sm font-medium text-slate-500",
-    inherit: "text-inherit",
-    caption: "text-xs",
-    button: "text-sm font-medium"
+    h1: "typography-h1",
+    h2: "typography-h2",
+    h3: "typography-h3",
+    h4: "typography-h4",
+    h5: "typography-h5",
+    h6: "typography-h6",
+    subtitle1: "typography-subtitle1",
+    subtitle2: "typography-subtitle2",
+    body1: "typography-body1",
+    body2: "typography-body2",
+    label: "typography-label",
+    inherit: "typography-inherit",
+    caption: "typography-caption",
+    button: "typography-button"
 };
 
 export function Typography<C extends React.ElementType>(

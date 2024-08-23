@@ -1,109 +1,111 @@
 {
-    "name": "@firecms/ui",
-    "type": "module",
-    "version": "3.0.0-canary.108",
-    "description": "Awesome Firebase/Firestore-based headless open-source CMS",
-    "funding": {
-        "url": "https://github.com/sponsors/firecmsco"
+  "name": "@firecms/ui",
+  "type": "module",
+  "version": "3.0.0-canary.108",
+  "description": "Awesome Firebase/Firestore-based headless open-source CMS",
+  "funding": {
+    "url": "https://github.com/sponsors/firecmsco"
+  },
+  "author": "FireCMS",
+  "license": "MIT",
+  "repository": "git@github.com:FireCMSco/firecms.git",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
+  "source": "src/index.ts",
+  "engines": {
+    "node": ">=14"
+  },
+  "keywords": [
+    "firebase",
+    "cms",
+    "admin",
+    "admin panel",
+    "firebase panel",
+    "firestore",
+    "headless",
+    "headless cms",
+    "content manager"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js",
+      "types": "./dist/index.d.ts"
     },
-    "author": "FireCMS",
-    "license": "MIT",
-    "repository": "git@github.com:FireCMSco/firecms.git",
-    "main": "./dist/index.umd.js",
-    "module": "./dist/index.es.js",
-    "types": "./dist/index.d.ts",
-    "source": "src/index.ts",
-    "engines": {
-        "node": ">=14"
-    },
-    "keywords": [
-        "firebase",
-        "cms",
-        "admin",
-        "admin panel",
-        "firebase panel",
-        "firestore",
-        "headless",
-        "headless cms",
-        "content manager"
-    ],
-    "exports": {
-        ".": {
-            "import": "./dist/index.es.js",
-            "require": "./dist/index.umd.js",
-            "types": "./dist/index.d.ts"
-        },
-        "./package.json": "./package.json",
-        "./tailwind.config.js": "./tailwind.config.js"
-    },
-    "scripts": {
-        "watch": "vite build --watch",
-        "build": "vite build && tsc --emitDeclarationOnly",
-        "prepublishOnly": "run-s build",
-        "createTag": "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags",
-        "test:lint": "eslint \"src/**\" --quiet",
-        "test": "jest",
-        "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
-        "generateIcons": "ts-node --esm src/scripts/generateIcons.ts"
-    },
-    "dependencies": {
-        "@radix-ui/react-checkbox": "^1.1.1",
-        "@radix-ui/react-collapsible": "^1.1.0",
-        "@radix-ui/react-dialog": "^1.1.1",
-        "@radix-ui/react-dropdown-menu": "^2.1.1",
-        "@radix-ui/react-label": "^2.1.0",
-        "@radix-ui/react-menubar": "^1.1.1",
-        "@radix-ui/react-popover": "^1.1.1",
-        "@radix-ui/react-portal": "^1.1.1",
-        "@radix-ui/react-radio-group": "^1.2.0",
-        "@radix-ui/react-scroll-area": "^1.1.0",
-        "@radix-ui/react-select": "^2.1.1",
-        "@radix-ui/react-separator": "^1.1.0",
-        "@radix-ui/react-switch": "^1.1.0",
-        "@radix-ui/react-tabs": "^1.1.0",
-        "@radix-ui/react-tooltip": "^1.1.2",
-        "clsx": "^2.1.1",
-        "cmdk": "^0.2.1",
-        "date-fns": "^3.6.0",
-        "material-icons": "latest",
-        "react-datepicker": "^7.3.0",
-        "react-dropzone": "^14.2.3",
-        "react-fast-compare": "^3.2.2",
-        "tailwind-merge": "^2.4.0"
-    },
-    "peerDependencies": {
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1"
-    },
-    "devDependencies": {
-        "@jest/globals": "^29.7.0",
-        "@testing-library/jest-dom": "^6.4.6",
-        "@testing-library/react": "^15.0.7",
-        "@testing-library/user-event": "^14.5.2",
-        "@types/jest": "^29.5.12",
-        "@types/node": "^20.14.12",
-        "@types/object-hash": "^3.0.6",
-        "@types/react": "^18.3.3",
-        "@types/react-dom": "^18.3.0",
-        "@types/react-measure": "^2.0.12",
-        "@vitejs/plugin-react": "^4.3.1",
-        "cross-env": "^7.0.3",
-        "firebase": "^10.12.4",
-        "jest": "^29.7.0",
-        "npm-run-all": "^4.1.5",
-        "ts-jest": "^29.2.3",
-        "ts-node": "^10.9.2",
-        "tsd": "^0.31.1",
-        "typescript": "^5.5.4",
-        "vite": "^5.3.4"
-    },
-    "files": [
-        "dist",
-        "src",
-        "tailwind.config.js"
-    ],
-    "gitHead": "1e73e3d81ee4168288b90bf29ad8822ce5f20dd1",
-    "publishConfig": {
-        "access": "public"
-    }
+    "./package.json": "./package.json",
+    "./tailwind.config.js": "./tailwind.config.js",
+    "./index.css": "./dist/index.css"
+  },
+  "scripts": {
+    "watch": "vite build --watch",
+    "build": "vite build && tsc --emitDeclarationOnly",
+    "prepublishOnly": "run-s build",
+    "createTag": "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags",
+    "test:lint": "eslint \"src/**\" --quiet",
+    "test": "jest",
+    "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+    "generateIcons": "ts-node --esm src/scripts/generateIcons.ts"
+  },
+  "dependencies": {
+    "@radix-ui/react-checkbox": "^1.1.1",
+    "@radix-ui/react-collapsible": "^1.1.0",
+    "@radix-ui/react-dialog": "^1.1.1",
+    "@radix-ui/react-dropdown-menu": "^2.1.1",
+    "@radix-ui/react-label": "^2.1.0",
+    "@radix-ui/react-menubar": "^1.1.1",
+    "@radix-ui/react-popover": "^1.1.1",
+    "@radix-ui/react-portal": "^1.1.1",
+    "@radix-ui/react-radio-group": "^1.2.0",
+    "@radix-ui/react-scroll-area": "^1.1.0",
+    "@radix-ui/react-select": "^2.1.1",
+    "@radix-ui/react-separator": "^1.1.0",
+    "@radix-ui/react-switch": "^1.1.0",
+    "@radix-ui/react-tabs": "^1.1.0",
+    "@radix-ui/react-tooltip": "^1.1.2",
+    "clsx": "^2.1.1",
+    "cmdk": "^0.2.1",
+    "date-fns": "^3.6.0",
+    "material-icons": "latest",
+    "react-datepicker": "^7.3.0",
+    "react-dropzone": "^14.2.3",
+    "react-fast-compare": "^3.2.2",
+    "tailwind-merge": "^2.4.0"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@testing-library/jest-dom": "^6.4.6",
+    "@testing-library/react": "^15.0.7",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.14.12",
+    "@types/object-hash": "^3.0.6",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/react-measure": "^2.0.12",
+    "@vitejs/plugin-react": "^4.3.1",
+    "cross-env": "^7.0.3",
+    "firebase": "^10.12.4",
+    "jest": "^29.7.0",
+    "npm-run-all": "^4.1.5",
+    "ts-jest": "^29.2.3",
+    "ts-node": "^10.9.2",
+    "tsd": "^0.31.1",
+    "typescript": "^5.5.4",
+    "vite": "^5.3.4",
+    "vite-plugin-static-copy": "^1.0.6"
+  },
+  "files": [
+    "dist",
+    "src",
+    "tailwind.config.js"
+  ],
+  "gitHead": "1e73e3d81ee4168288b90bf29ad8822ce5f20dd1",
+  "publishConfig": {
+    "access": "public"
+  }
 }

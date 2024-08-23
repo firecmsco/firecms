@@ -5,8 +5,9 @@ import { getSubscriptionPlanName } from "../settings/common";
 export function PlanChip({ subscriptionPlan }: { subscriptionPlan: ProjectSubscriptionPlan }) {
 
     const planName = getSubscriptionPlanName(subscriptionPlan);
+    const color = subscriptionPlan === "free" ? "tealDarker" : "blueDark";
     return <Chip className="uppercase font-medium"
-                 colorScheme={"tealDarker"}
+                 colorScheme={color}
                  size={"small"}>
         {planName + " plan"}
     </Chip>
