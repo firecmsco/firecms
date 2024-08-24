@@ -1,13 +1,20 @@
-import { Plugin, } from "prosemirror-state";
 import { TiptapImage } from "./index";
 import { cls, defaultBorderMixin } from "@firecms/ui";
 import { Decoration, DecorationSet, EditorView } from "@tiptap/pm/view";
+import { Plugin, PluginKey } from "@tiptap/pm/state";
 
 export type UploadFn = (image: File) => Promise<string>;
 
-async function onFileRead(plugin: Plugin, view: EditorView, readerEvent: ProgressEvent<FileReader>, pos: number, upload: UploadFn, image: File) {
+export async function onFileRead(view: EditorView, readerEvent: ProgressEvent<FileReader>, pos: number, upload: UploadFn, image: File) {
 
     const { schema } = view.state;
+
+    // @ts-ignore
+    const plugin = view.state.plugins.find((p: Plugin) => p.key === ImagePluginKey.key);
+    if (!plugin) {
+        console.error("Image plugin not found");
+        return;
+    }
     let decorationSet = plugin.getState(view.state);
 
     const placeholder = document.createElement("div");
@@ -22,7 +29,7 @@ async function onFileRead(plugin: Plugin, view: EditorView, readerEvent: Progres
 
     // Image Upload Logic
     const src = await upload(image);
-    console.log("uploaded image", src);
+    console.debug("Uploaded image", src);
 
     // Replace placeholder with actual image
     const imageNode = schema.nodes.image.create({ src });
@@ -34,8 +41,11 @@ async function onFileRead(plugin: Plugin, view: EditorView, readerEvent: Progres
     view.dispatch(tr);
 }
 
-export const dropImagePlugin = (upload: UploadFn) => {
+export const ImagePluginKey = new PluginKey("imagePlugin");
+
+export const createDropImagePlugin = (upload: UploadFn): Plugin => {
     const plugin: Plugin = new Plugin({
+        key: ImagePluginKey,
         state: {
             // Initialize the plugin state with an empty DecorationSet
             init: () => DecorationSet.empty,
@@ -53,7 +63,6 @@ export const dropImagePlugin = (upload: UploadFn) => {
         props: {
             handleDOMEvents: {
                 drop: (view, event) => {
-                    console.log("drop event", event)
                     if (!event.dataTransfer?.files || event.dataTransfer?.files.length === 0) {
                         return false;
                     }
@@ -67,8 +76,6 @@ export const dropImagePlugin = (upload: UploadFn) => {
                         return false;
                     }
 
-                    console.log("images", images);
-
                     images.forEach(image => {
 
                         const position = view.posAtCoords({
@@ -79,8 +86,7 @@ export const dropImagePlugin = (upload: UploadFn) => {
 
                         const reader = new FileReader();
                         reader.onload = async (readerEvent) => {
-                            console.log("readerEvent", readerEvent);
-                            await onFileRead(plugin, view, readerEvent, position.pos, upload, image);
+                            await onFileRead(view, readerEvent, position.pos, upload, image);
                         };
                         reader.readAsDataURL(image);
                     });
@@ -91,12 +97,10 @@ export const dropImagePlugin = (upload: UploadFn) => {
             handlePaste(view, event, slice) {
                 const items = Array.from(event.clipboardData?.items || []);
                 const pos = view.state.selection.from;
-                console.log("pos", pos)
                 let anyImageFound = false;
 
                 items.forEach((item) => {
                     const image = item.getAsFile();
-                    console.log("image", image);
                     if (image) {
                         anyImageFound = true;
                         // if (item.type.indexOf("image") === 0) {
@@ -115,7 +119,7 @@ export const dropImagePlugin = (upload: UploadFn) => {
                         const reader = new FileReader();
 
                         reader.onload = async (readerEvent) => {
-                            await onFileRead(plugin, view, readerEvent, pos, upload, image);
+                            await onFileRead(view, readerEvent, pos, upload, image);
                         };
                         reader.readAsDataURL(image);
                     }
@@ -154,10 +158,10 @@ export const dropImagePlugin = (upload: UploadFn) => {
  */
 const IMAGE_INPUT_REGEX = /!\[(.+|:?)\]\((\S+)(?:(?:\s+)["'](\S+)["'])?\)/;
 
-export const createImageExtension = (uploadFn: UploadFn) => {
+export const createImageExtension = (dropImagePlugin: Plugin) => {
     return TiptapImage.extend({
         addProseMirrorPlugins() {
-            return [dropImagePlugin(uploadFn)];
+            return [dropImagePlugin];
         }
     }).configure({
         allowBase64: true,

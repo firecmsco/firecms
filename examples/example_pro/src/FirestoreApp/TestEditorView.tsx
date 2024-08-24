@@ -19,7 +19,7 @@ export function TestEditorView() {
     }, []);
 
     return (
-        <Container className={"p-8"}>
+        <Container className={"p-8 bg-white dark:bg-gray-950 md:my-4"}>
             {!initialContent && <CircularProgressCenter/>}
             {initialContent && <FireCMSEditor
                 content={initialContent}

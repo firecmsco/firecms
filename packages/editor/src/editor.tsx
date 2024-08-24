@@ -18,7 +18,7 @@ import { cls, defaultBorderMixin, Separator, useInjectStyles } from "@firecms/ui
 import { Editor, EditorProvider } from "@tiptap/react";
 import { removeClassesFromJson } from "./utils/remove_classes";
 import { horizontalRule, placeholder, starterKit, taskItem, taskList, tiptapLink } from "./editor_extensions";
-import { createImageExtension } from "./extensions/Image";
+import { createDropImagePlugin, createImageExtension } from "./extensions/Image";
 import { CustomKeymap } from "./extensions/custom-keymap";
 import { DragAndDrop } from "./extensions/drag-and-drop";
 import Document from "@tiptap/extension-document"
@@ -61,36 +61,8 @@ export const FireCMSEditor = ({
     const ref = React.useRef<HTMLDivElement | null>(null);
     const editorRef = React.useRef<Editor | null>(null);
 
-    const imageExtension = useMemo(() => createImageExtension(handleImageUpload), []);
-
-    const extensions = [
-        TiptapUnderline,
-        TextStyle,
-        Color,
-        CustomDocument,
-        Highlight.configure({
-            multicolor: true
-        }),
-        Markdown.configure({
-            html: false,
-            transformCopiedText: true
-        }),
-        CustomKeymap,
-        DragAndDrop,
-        starterKit,
-        placeholder,
-        tiptapLink,
-        imageExtension,
-        taskList,
-        taskItem,
-        horizontalRule,
-        SlashCommand.configure({
-            HTMLAttributes: {
-                class: "mention",
-            },
-            suggestion: suggestion(ref),
-        })
-    ];
+    const imagePlugin = createDropImagePlugin(handleImageUpload);
+    const imageExtension = useMemo(() => createImageExtension(imagePlugin), []);
 
     const [openNode, setOpenNode] = useState(false);
     const [openLink, setOpenLink] = useState(false);
@@ -160,6 +132,35 @@ export const FireCMSEditor = ({
 
     const proseClass = proseClasses[textSize];
 
+    const extensions = useMemo(() => ([
+        TiptapUnderline,
+        TextStyle,
+        Color,
+        CustomDocument,
+        Highlight.configure({
+            multicolor: true
+        }),
+        Markdown.configure({
+            html: false,
+            transformCopiedText: true
+        }),
+        CustomKeymap,
+        DragAndDrop,
+        starterKit,
+        placeholder,
+        tiptapLink,
+        imageExtension,
+        taskList,
+        taskItem,
+        horizontalRule,
+        SlashCommand.configure({
+            HTMLAttributes: {
+                class: "mention",
+            },
+            suggestion: suggestion(ref, handleImageUpload),
+        })
+    ]), []);
+
     return (
         <div
             ref={ref}
@@ -211,7 +212,9 @@ function addLineBreakAfterImages(markdown: string): string {
 }
 
 const cssStyles = `
-
+.ProseMirror {
+    box-shadow: none !important;
+}
 .ProseMirror .is-editor-empty:first-child::before {
   content: attr(data-placeholder);
   float: left;
@@ -252,6 +255,7 @@ const cssStyles = `
   &.ProseMirror-selectednode {
     outline: 3px solid #5abbf7;
     filter: brightness(90%);
+    box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000) !important;
   }
 }
 

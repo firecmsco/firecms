@@ -19,6 +19,7 @@ import {
     TextFieldsIcon
 } from "@firecms/ui"
 import tippy from "tippy.js"
+import { onFileRead, UploadFn } from "./Image";
 
 // See `addAttributes` below
 export interface CommandNodeAttrs {
@@ -304,10 +305,10 @@ export interface SuggestionItem {
     description: string;
     icon: ReactNode;
     searchTerms?: string[];
-    command?: (props: { editor: Editor; range: Range }) => void;
+    command?: (props: { editor: Editor; range: Range, upload: UploadFn }) => void;
 }
 
-export const suggestion = (ref: React.MutableRefObject<any>): Omit<SuggestionOptions<SuggestionItem, any>, "editor"> =>
+export const suggestion = (ref: React.MutableRefObject<any>, upload: UploadFn): Omit<SuggestionOptions<SuggestionItem, any>, "editor"> =>
     ({
             items: ({ query }) => {
                 return suggestionItems
@@ -322,8 +323,11 @@ export const suggestion = (ref: React.MutableRefObject<any>): Omit<SuggestionOpt
                     onStart: (props) => {
 
                         component = new ReactRenderer(CommandList, {
-                            props,
-                            editor: props.editor
+                            props: {
+                                ...props,
+                                upload
+                            },
+                            editor: props.editor,
                         })
 
                         if (!props.clientRect) {
@@ -371,12 +375,14 @@ export const suggestion = (ref: React.MutableRefObject<any>): Omit<SuggestionOpt
                 }
             }
         }
-    )
+    );
+
 const CommandList = forwardRef((props: {
     items: SuggestionItem[];
     query: string;
     range: Range;
     command: (props: { id: string }) => void;
+    upload: UploadFn;
 }, ref) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -385,7 +391,8 @@ const CommandList = forwardRef((props: {
         if (!editor) return;
         item?.command?.({
             editor,
-            range: props.range
+            range: props.range,
+            upload: props.upload
         })
     };
 
@@ -609,8 +616,10 @@ const suggestionItems: SuggestionItem[] = [
         icon: <ImageIcon size={18}/>,
         command: ({
                       editor,
-                      range
+                      range,
+                      upload
                   }) => {
+
             editor.chain().focus().deleteRange(range).run();
             // upload image
             const input = document.createElement("input");
@@ -621,13 +630,35 @@ const suggestionItems: SuggestionItem[] = [
                     const file = input.files[0];
                     if (!file) return;
                     const pos = editor.view.state.selection.from;
-                    // startImageUpload({
-                    //     file,
-                    //     view: editor.view,
-                    //     pos,
-                    //     handleImageUpload
-                    // });
+
+                    const fileList = input.files;
+                    const files = Array.from(fileList);
+                    const images = files.filter(file => /image/i.test(file.type));
+
+                    if (images.length === 0) {
+                        console.log("No images found in uploaded files");
+                        return false;
+                    }
+
+                    const view = editor.view;
+
+                    images.forEach(image => {
+                        // const position = view.posAtCoords({
+                        //     left: event.clientX,
+                        //     top: event.clientY
+                        // });
+                        // if (!position) return;
+
+                        const reader = new FileReader();
+                        reader.onload = async (readerEvent) => {
+                            await onFileRead(view, readerEvent, pos, upload, image);
+                            // await onFileRead(view, readerEvent, position.pos, upload, image);
+                        };
+                        reader.readAsDataURL(image);
+                    });
+
                 }
+                return true;
             };
             input.click();
         }
