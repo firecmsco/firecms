@@ -1,4 +1,4 @@
-import { ArrowForwardIcon, cardClickableMixin, cardMixin, cls, focusedMixin, Typography, } from "@firecms/ui";
+import { ArrowForwardIcon, cardClickableMixin, cardMixin, cls, Typography, } from "@firecms/ui";
 
 import { Link } from "react-router-dom";
 
@@ -21,7 +21,6 @@ export function SmallNavigationCard({
                 tabIndex={0}
                 className={cls(cardMixin,
                     cardClickableMixin,
-                    focusedMixin,
                     "cursor-pointer flex flex-row items-center px-4 py-2 text-inherit dark:text-inherit visited:text-inherit visited:dark:text-inherit hover:text-inherit hover:dark:text-inherit ")}
                 to={url}
             >

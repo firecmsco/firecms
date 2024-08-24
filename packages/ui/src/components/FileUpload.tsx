@@ -1,6 +1,6 @@
 import React from "react";
 import { useDropzone } from "react-dropzone";
-import { fieldBackgroundHoverMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
+import { fieldBackgroundHoverMixin, fieldBackgroundMixin } from "../styles";
 import { cls } from "../util";
 import { Typography } from "./Typography";
 
@@ -65,7 +65,6 @@ export function FileUpload({
         {...getRootProps()}
         className={cls(
             fieldBackgroundMixin,
-            focusedMixin,
             "flex gap-2",
             "p-4 box-border relative items-center border-2 border-solid border-transparent outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid",
             {

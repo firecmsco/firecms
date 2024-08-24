@@ -1,6 +1,5 @@
 import React from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
-import { focusedMixin } from "../styles";
 import { cls } from "../util";
 
 export type TabsProps = {
@@ -42,7 +41,7 @@ export function Tab({
                     }: TabProps) {
     return <TabsPrimitive.Trigger value={value}
                                   disabled={disabled}
-                                  className={cls(focusedMixin,
+                                  className={cls(
                                       "border-b-2 border-transparent",
                                       "data-[state=active]:border-secondary",
                                       disabled

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from "react";
 import {
     EntityCollection,
     EntitySidePanelProps,
-    NavigationController, PropertyConfig,
+    NavigationController,
     ResolvedProperty,
     SideDialogPanelProps,
     SideDialogsController,
@@ -227,12 +227,14 @@ const propsToSidePanel = (props: EntitySidePanelProps<any>,
             path: resolvedPath,
         };
 
+        const entityViewWidth = getEntityViewWidth(props, smallLayout);
+
         return {
             key: `${props.path}/${props.entityId}`,
             component: <EntitySidePanel {...resolvedPanelProps}/>,
             urlPath: newPath,
             parentUrlPath: buildUrlCollectionPath(collectionPath),
-            width: getEntityViewWidth(props, smallLayout),
+            width: entityViewWidth,
             onClose: props.onClose
         };
     }

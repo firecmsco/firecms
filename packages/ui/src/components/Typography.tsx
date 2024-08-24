@@ -1,5 +1,4 @@
 import React, { ReactEventHandler } from "react";
-import { focusedMixin } from "../styles";
 import { cls } from "../util";
 
 export type TextProps<C extends React.ElementType> = {
@@ -100,7 +99,6 @@ export function Typography<C extends React.ElementType>(
         "span";
 
     const classes = cls(
-        focusedMixin,
         variantToClasses[variant],
         color ? colorToClasses[color] : "",
         align !== "inherit" && `text-${align}`,

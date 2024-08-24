@@ -307,7 +307,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             sideEntityController.replace({
                 path,
                 entityId: updatedEntity.id,
-                selectedSubPath: selectedTabRef.current,
+                selectedSubPath: MAIN_TAB_VALUE === selectedTabRef.current ? undefined : selectedTabRef.current,
                 updateUrl: true,
                 collection,
             });

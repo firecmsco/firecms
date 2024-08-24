@@ -1,6 +1,4 @@
 import React from "react";
-
-import { focusedMixin } from "../styles";
 import { cls } from "../util";
 
 export type ButtonProps<P extends React.ElementType> =
@@ -73,7 +71,7 @@ const ButtonInner = React.forwardRef<
             <Component
                 ref={ref}
                 onClick={props.onClick}
-                className={cls(focusedMixin, startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}
+                className={cls( startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}
                 {...(props as React.ComponentPropsWithRef<any>)}>
                 {startIcon}
                 {children}
@@ -85,7 +83,7 @@ const ButtonInner = React.forwardRef<
         <button ref={ref as any}
                 type={props.type ?? "button"}
                 onClick={props.onClick}
-                className={cls(focusedMixin, startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}
+                className={cls(startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}
                 disabled={disabled}
                 {...props as React.ButtonHTMLAttributes<HTMLButtonElement>}>
             {startIcon}

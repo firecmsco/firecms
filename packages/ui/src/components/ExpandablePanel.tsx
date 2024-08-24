@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useEffect, useState } from "react";
 
 import * as Collapsible from "@radix-ui/react-collapsible";
-import { defaultBorderMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
+import { defaultBorderMixin, fieldBackgroundMixin } from "../styles";
 import { ExpandMoreIcon } from "../icons";
 import { cls } from "../util";
 import { useInjectStyles } from "../hooks";
@@ -88,7 +88,7 @@ export function ExpandablePanel({
                 }}>
 
                 <Collapsible.Trigger
-                    className={cls(focusedMixin,
+                    className={cls(
                         "rounded flex items-center justify-between w-full min-h-[52px]",
                         "hover:bg-slate-50 dark:hover:bg-gray-800 dark:hover:bg-opacity-20",
                         invisible ? "border-b px-2" : "p-4",

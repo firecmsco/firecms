@@ -1,4 +1,3 @@
-export const focusedMixin = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
 export const focusedInvisibleMixin = "focus:bg-opacity-70 focus:bg-slate-100 focus:dark:bg-gray-800 focus:dark:bg-opacity-60";
 export const focusedClasses = "z-30 outline-none ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent ";
 export const fieldBackgroundMixin = "bg-opacity-50 bg-slate-200 dark:bg-gray-800 dark:bg-opacity-60";

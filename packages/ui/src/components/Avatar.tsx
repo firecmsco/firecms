@@ -1,6 +1,5 @@
 import React from "react";
 import { cls } from "../util";
-import { focusedMixin } from "../styles";
 
 export interface AvatarProps {
     src?: string;
@@ -28,7 +27,6 @@ const AvatarInner: React.ForwardRefRenderFunction<HTMLButtonElement, AvatarProps
             style={style}
             {...props}
             className={cls("rounded-full flex items-center justify-center overflow-hidden",
-                focusedMixin,
                 "p-1 hover:bg-slate-200 hover:dark:bg-slate-700 w-12 h-12",
                 outerClassName
             )}>

@@ -7,7 +7,6 @@ import {
     fieldBackgroundInvisibleMixin,
     fieldBackgroundMixin,
     focusedInvisibleMixin,
-    focusedMixin
 } from "../styles";
 import { InputLabel } from "./InputLabel";
 import { cls } from "../util";
@@ -109,7 +108,7 @@ export function TextField<T extends string | number>({
             onChange={onChange}
             style={inputStyle}
             className={cls(
-                invisible ? focusedInvisibleMixin : focusedMixin,
+                invisible ? focusedInvisibleMixin :  "",
                 "rounded-md resize-none w-full outline-none p-[32px] text-base bg-transparent min-h-[64px] px-3 pt-[28px]",
                 disabled && "border border-transparent outline-none opacity-50 text-slate-600 dark:text-slate-500"
             )}
@@ -123,7 +122,7 @@ export function TextField<T extends string | number>({
             className={cls(
                 "w-full outline-none bg-transparent leading-normal px-3",
                 "rounded-md",
-                invisible ? focusedInvisibleMixin : focusedMixin,
+                invisible ? focusedInvisibleMixin : "",
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                 size === "smallest" ? "min-h-[32px]" : (size === "small" ? "min-h-[48px]" : "min-h-[64px]"),
                 label ? (size === "medium" ? "pt-[28px] pb-2" : "pt-4 pb-2") : "py-2",

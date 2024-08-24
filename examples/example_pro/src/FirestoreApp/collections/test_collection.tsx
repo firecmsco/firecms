@@ -71,10 +71,10 @@ export const testCollection = buildCollection<any>({
                 dataType: "reference",
                 path: "products",
             },
-            product_2: {
-                name: "Product",
+            test_entity: {
+                name: "Test ref",
                 dataType: "reference",
-                path: "products",
+                path: "test_entity",
             },
             intolerances: {
                 dataType: "array",

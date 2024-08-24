@@ -4,8 +4,7 @@ import {
     fieldBackgroundDisabledMixin,
     fieldBackgroundHoverMixin,
     fieldBackgroundInvisibleMixin,
-    fieldBackgroundMixin,
-    focusedMixin
+    fieldBackgroundMixin
 } from "../styles";
 import { CheckIcon, ExpandMoreIcon } from "../icons";
 import { cls } from "../util";
@@ -134,7 +133,6 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                         error ? "border border-red-500 dark:border-red-600" : "",
                         disabled ? "text-slate-600 dark:text-slate-400" : "text-slate-800 dark:text-white",
                         "relative flex items-center",
-                        includeFocusOutline ? focusedMixin : "",
                         inputClassName
                     )}
                 >
@@ -207,7 +205,6 @@ export function SelectItem({
         className={cls(
             "w-full",
             "relative flex items-center p-2 rounded-md text-sm text-slate-700 dark:text-slate-300",
-            focusedMixin,
             "focus:z-10",
             "data-[state=checked]:bg-slate-100 data-[state=checked]:dark:bg-slate-900 focus:bg-slate-100 dark:focus:bg-slate-950",
             "data-[state=checked]:focus:bg-slate-200 data-[state=checked]:dark:focus:bg-slate-950",

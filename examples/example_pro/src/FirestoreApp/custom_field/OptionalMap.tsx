@@ -1,4 +1,4 @@
-import { cls, defaultBorderMixin, focusedMixin, Icon, IconButton, Label, MapFieldBinding } from "@firecms/cloud";
+import { cls, defaultBorderMixin, Icon, IconButton, Label, MapFieldBinding } from "@firecms/cloud";
 import { useState } from "react";
 
 export const OptionalMap: typeof MapFieldBinding = (props) => {
@@ -16,7 +16,6 @@ export const OptionalMap: typeof MapFieldBinding = (props) => {
         >
             <div
                 className={cls(
-                    focusedMixin,
                     "rounded flex items-center justify-between w-full min-h-[52px]",
                     "hover:bg-slate-50 dark:hover:bg-gray-800 dark:hover:bg-opacity-10",
                     "p-4"

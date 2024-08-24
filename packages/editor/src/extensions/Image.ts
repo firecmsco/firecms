@@ -12,7 +12,7 @@ async function onFileRead(plugin: Plugin, view: EditorView, readerEvent: Progres
 
     const placeholder = document.createElement("div");
     const imageElement = document.createElement("img");
-    imageElement.setAttribute("class", "opacity-40 rounded-lg border border-stone-200");
+    imageElement.setAttribute("class", "opacity-40 rounded-lg border " + defaultBorderMixin);
     imageElement.src = readerEvent.target?.result as string;
     placeholder.appendChild(imageElement);
 
@@ -62,15 +62,24 @@ export const dropImagePlugin = (upload: UploadFn) => {
                     const files = Array.from(event.dataTransfer.files);
                     const images = files.filter(file => /image/i.test(file.type));
 
-                    if (images.length === 0) return false;
+                    if (images.length === 0) {
+                        console.log("No images found in dropped files");
+                        return false;
+                    }
+
+                    console.log("images", images);
 
                     images.forEach(image => {
 
-                        const position = view.posAtCoords({ left: event.clientX, top: event.clientY });
+                        const position = view.posAtCoords({
+                            left: event.clientX,
+                            top: event.clientY
+                        });
                         if (!position) return;
 
                         const reader = new FileReader();
                         reader.onload = async (readerEvent) => {
+                            console.log("readerEvent", readerEvent);
                             await onFileRead(plugin, view, readerEvent, position.pos, upload, image);
                         };
                         reader.readAsDataURL(image);

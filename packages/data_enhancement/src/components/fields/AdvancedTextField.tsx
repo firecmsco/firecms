@@ -5,7 +5,6 @@ import {
     fieldBackgroundDisabledMixin,
     fieldBackgroundHoverMixin,
     fieldBackgroundMixin,
-    focusedMixin,
     InputLabel,
     TextareaAutosize,
     TextField
@@ -159,7 +158,6 @@ export function AdvancedTextField<T extends string | number>({
                         "min-h-[48px]": size === "small",
                         "min-h-[64px]": size === "medium"
                     },
-                    focusedMixin,
                     "rounded-md resize-none w-full outline-none text-base bg-transparent ",
                     disabled && "border border-transparent outline-none opacity-50 text-gray-600 dark:text-gray-500",
                     "absolute top-0 right-0 left-0 max-w-full bg-transparent text-transparent caret-gray-800 dark:caret-gray-200",

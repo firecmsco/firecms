@@ -44,7 +44,7 @@ export function Chip({
     const usedColorScheme = typeof colorScheme === "string" ? getColorSchemeForKey(colorScheme) : colorScheme;
     return (
         <div
-            className={cls("rounded-lg w-max h-fit font-regular inline-flex gap-1",
+            className={cls("rounded-lg max-w-full w-max h-fit font-regular inline-flex gap-1",
                 "text-ellipsis",
                 onClick ? "cursor-pointer hover:bg-slate-300 hover:dark:bg-slate-700" : "",
                 sizeClassNames[size],

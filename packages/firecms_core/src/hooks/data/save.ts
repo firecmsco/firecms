@@ -121,7 +121,6 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, Use
         previousValues,
         status
     }).then((entity) => {
-        console.log("Entity saved");
         try {
             if (callbacks?.onSaveSuccess) {
                 const resolvedCollection = resolveCollection<M>({

@@ -3,13 +3,7 @@ import DatePicker from "react-datepicker";
 
 import { CalendarMonthIcon, ClearIcon, ErrorIcon } from "../icons";
 import { IconButton } from "./IconButton";
-import {
-    fieldBackgroundDisabledMixin,
-    fieldBackgroundHoverMixin,
-    fieldBackgroundMixin,
-    focusedMixin,
-    paperMixin
-} from "../styles";
+import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin, paperMixin } from "../styles";
 import { InputLabel } from "./InputLabel";
 import { Typography } from "./Typography";
 import { cls } from "../util";
@@ -107,7 +101,6 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                         "w-full outline-none bg-transparent leading-normal text-base px-3",
                         clearable ? "pr-14" : "pr-12",
                         "rounded-md",
-                        !invisible && focusedMixin,
                         size === "small" ? "min-h-[48px]" : "min-h-[64px]",
                         label ? "pt-[28px] pb-2" : "py-2",
                         inputClassName,

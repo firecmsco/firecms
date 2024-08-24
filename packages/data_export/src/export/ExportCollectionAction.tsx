@@ -23,7 +23,6 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    focusedMixin,
     GetAppIcon,
     IconButton,
     Tooltip,
@@ -213,7 +212,7 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
                             <input id="radio-csv" type="radio" value="csv" name="exportType"
                                    checked={exportType === "csv"}
                                    onChange={() => setExportType("csv")}
-                                   className={cls(focusedMixin, "w-4 text-primary-dark bg-gray-100 border-gray-300 dark:bg-gray-700 dark:border-gray-600")}/>
+                                   className={cls("w-4 text-primary-dark bg-gray-100 border-gray-300 dark:bg-gray-700 dark:border-gray-600")}/>
                             <label htmlFor="radio-csv"
                                    className="p-2 text-sm font-medium text-gray-900 dark:text-slate-300">CSV</label>
                         </div>
@@ -221,7 +220,7 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
                             <input id="radio-json" type="radio" value="json" name="exportType"
                                    checked={exportType === "json"}
                                    onChange={() => setExportType("json")}
-                                   className={cls(focusedMixin, "w-4 text-primary-dark bg-gray-100 border-gray-300 dark:bg-gray-700 dark:border-gray-600")}/>
+                                   className={cls("w-4 text-primary-dark bg-gray-100 border-gray-300 dark:bg-gray-700 dark:border-gray-600")}/>
                             <label htmlFor="radio-json"
                                    className="p-2 text-sm font-medium text-gray-900 dark:text-slate-300">JSON</label>
                         </div>
@@ -232,7 +231,7 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
                             <input id="radio-timestamp" type="radio" value="timestamp" name="dateExportType"
                                    checked={dateExportType === "timestamp"}
                                    onChange={() => setDateExportType("timestamp")}
-                                   className={cls(focusedMixin, "w-4 text-primary-dark bg-gray-100 border-gray-300 dark:bg-gray-700 dark:border-gray-600")}/>
+                                   className={cls("w-4 text-primary-dark bg-gray-100 border-gray-300 dark:bg-gray-700 dark:border-gray-600")}/>
                             <label htmlFor="radio-timestamp"
                                    className="p-2 text-sm font-medium text-gray-900 dark:text-slate-300">Dates as
                                 timestamps ({dateRef.current.getTime()})</label>
@@ -241,7 +240,7 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
                             <input id="radio-string" type="radio" value="string" name="dateExportType"
                                    checked={dateExportType === "string"}
                                    onChange={() => setDateExportType("string")}
-                                   className={cls(focusedMixin, "w-4 text-primary-dark bg-gray-100 border-gray-300 dark:bg-gray-700 dark:border-gray-600")}/>
+                                   className={cls("w-4 text-primary-dark bg-gray-100 border-gray-300 dark:bg-gray-700 dark:border-gray-600")}/>
                             <label htmlFor="radio-string"
                                    className="p-2 text-sm font-medium text-gray-900 dark:text-slate-300">Dates as
                                 strings ({dateRef.current.toISOString()})</label>

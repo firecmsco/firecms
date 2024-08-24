@@ -1,6 +1,6 @@
 import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { focusedMixin, paperMixin } from "../styles";
+import { paperMixin } from "../styles";
 import { cls } from "../util";
 
 export type MenuProps = {
@@ -58,7 +58,6 @@ export function MenuItem({
                          }: MenuItemProps) {
     // Dynamically adjusting the class based on the "dense" prop
     const classNames = cls(
-        focusedMixin,
         onClick && "cursor-pointer",
         "rounded-md text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900 flex items-center gap-4",
         dense ? "px-3 py-1.5" : "px-4 py-2"

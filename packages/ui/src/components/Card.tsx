@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { cardClickableMixin, cardMixin, focusedMixin } from "../styles";
+import { cardClickableMixin, cardMixin } from "../styles";
 import { cls } from "../util";
 
 type CardProps = {
@@ -29,7 +29,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(({
             role={onClick ? "button" : undefined}
             tabIndex={onClick ? 0 : undefined}
             onClick={onClick}
-            className={cls(cardMixin, onClick && focusedMixin, onClick && cardClickableMixin, className)}
+            className={cls(cardMixin, onClick && cardClickableMixin, className)}
             style={style}
             {...props}>
             {children}

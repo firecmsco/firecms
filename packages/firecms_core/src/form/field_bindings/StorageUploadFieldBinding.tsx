@@ -16,7 +16,6 @@ import {
     fieldBackgroundDisabledMixin,
     fieldBackgroundHoverMixin,
     fieldBackgroundMixin,
-    focusedMixin,
     Typography
 } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
@@ -198,7 +197,6 @@ function FileDropComponent({
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                 dropZoneClasses,
                 multipleFilesSupported && internalValue.length ? "" : "flex",
-                focusedMixin,
                 {
                     [nonActiveDropClasses]: !isDragActive,
                     [activeDropClasses]: isDragActive,
@@ -256,7 +254,7 @@ function FileDropComponent({
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
-                                    className={cls(focusedMixin, "rounded-md")}
+                                    className={cls("rounded-md")}
                                     style={{
                                         ...provided.draggableProps.style
                                     }}

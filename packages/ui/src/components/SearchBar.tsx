@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 
-import { defaultBorderMixin, focusedMixin } from "../styles";
+import { defaultBorderMixin } from "../styles";
 import { CircularProgress, IconButton } from "./index";
 import { ClearIcon, SearchIcon } from "../icons";
 import { cls } from "../util";
@@ -89,7 +89,6 @@ export function SearchBar({
                     "relative flex items-center rounded transition-all bg-transparent outline-none appearance-none border-none",
                     "pl-12 h-full text-current ",
                     expandable ? (active ? "w-[220px]" : "w-[180px]") : "",
-                    focusedMixin,
                     innerClassName
                 )}
             />
