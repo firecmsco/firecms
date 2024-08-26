@@ -53,7 +53,6 @@ export function TestEditorView() {
                 }}
                 aiController={editorAIController}
                 handleImageUpload={async (file: File) => {
-                    await new Promise(resolve => setTimeout(resolve, 1000));
                     const result = await storageSource.uploadFile({
                         file,
                         path: "editor_test"

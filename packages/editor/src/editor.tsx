@@ -24,6 +24,7 @@ import { DragAndDrop } from "./extensions/drag-and-drop";
 import Document from "@tiptap/extension-document"
 import { SlashCommand, suggestion } from "./extensions/slashCommand";
 import { AIController } from "./types";
+import { AutocompleteExtension } from "./extensions/Autocomplete";
 
 export type FireCMSEditorTextSize = "sm" | "base" | "lg";
 
@@ -136,6 +137,7 @@ export const FireCMSEditor = ({
     const proseClass = proseClasses[textSize];
 
     const extensions = useMemo(() => ([
+        // AutocompleteExtension,
         TiptapUnderline,
         TextStyle,
         Color,

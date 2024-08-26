@@ -553,30 +553,21 @@ const autocompleteSuggestionItem: SuggestionItem = {
 
             if (delta.length !== 0) {
                 buffer += delta;
-                console.log("buffer", buffer);
                 // if (!markdownSymbols.some(symbol => delta.includes(symbol))) {
 
                 if (buffer.includes("\n")) {
                     const split = buffer.split("\n");
-                    console.log("split", split);
                     // update first sentence and leave the rest
-                    const first = split[0];
+                    const update = split[0];
                     buffer = split.length > 1 ? split.slice(1).join("\n") : "";
 
-                    const update = first;
-                    console.log({
-                        update,
-                        buffer
-                    })
                     if (update.length > 0) {
                         editor.chain().focus().insertContent(update, {
                             applyInputRules: true,
                             applyPasteRules: true
                         }).run();
-                        console.log("flush", { update });
                     }
                     editor.chain().focus().enter().run();
-                    console.log("ENTER");
                 }
             }
         });
