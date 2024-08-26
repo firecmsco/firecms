@@ -21,24 +21,7 @@ export default defineConfig(() => ({
         sourcemap: true,
         minify: false,
         rollupOptions: {
-            // input: {
-            //     index: resolve(__dirname, 'src/components/index.ts'),
-            //     extensions: resolve(__dirname, 'src/extensions/index.ts'),
-            //     plugins: resolve(__dirname, 'src/plugins/index.ts'),
-            // },
-            external: isExternal,
-            // output: [
-            //     {
-            //         format: 'cjs',
-            //         dir: 'dist',
-            //         entryFileNames: '[name].cjs.js',
-            //     },
-            //     {
-            //         format: 'esm',
-            //         dir: 'dist',
-            //         entryFileNames: '[name].esm.js',
-            //     },
-            // ],
+            external: isExternal
         },
     },
     resolve: {

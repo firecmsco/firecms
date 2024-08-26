@@ -1,4 +1,4 @@
-import { ApiError, FireCMSCloudUser, FireCMSCloudUserWithRoles } from "../types";
+import { ApiError, FireCMSCloudUserWithRoles } from "../types";
 import { handleApiResponse } from "./common";
 
 export type ProjectsApi = ReturnType<typeof buildProjectsApi>;

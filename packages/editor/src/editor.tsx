@@ -23,6 +23,7 @@ import { CustomKeymap } from "./extensions/custom-keymap";
 import { DragAndDrop } from "./extensions/drag-and-drop";
 import Document from "@tiptap/extension-document"
 import { SlashCommand, suggestion } from "./extensions/slashCommand";
+import { AIController } from "./types";
 
 export type FireCMSEditorTextSize = "sm" | "base" | "lg";
 
@@ -34,7 +35,8 @@ export type FireCMSEditorProps = {
     handleImageUpload: (file: File) => Promise<string>,
     version?: number,
     textSize?: FireCMSEditorTextSize,
-    highlight?: { from: number, to: number }
+    highlight?: { from: number, to: number },
+    aiController?: AIController
 };
 
 const CustomDocument = Document.extend({
@@ -48,14 +50,15 @@ const proseClasses = {
 }
 
 export const FireCMSEditor = ({
-                                  handleImageUpload,
                                   content,
                                   onJsonContentChange,
                                   onHtmlContentChange,
                                   onMarkdownContentChange,
                                   version,
                                   textSize = "base",
-                                  highlight
+                                  highlight,
+                                  handleImageUpload,
+                                  aiController
                               }: FireCMSEditorProps) => {
 
     const ref = React.useRef<HTMLDivElement | null>(null);
@@ -157,7 +160,10 @@ export const FireCMSEditor = ({
             HTMLAttributes: {
                 class: "mention",
             },
-            suggestion: suggestion(ref, handleImageUpload),
+            suggestion: suggestion(ref, {
+                upload: handleImageUpload,
+                aiController
+            }),
         })
     ]), []);
 

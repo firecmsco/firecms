@@ -149,3 +149,54 @@ export async function fetchEntityPromptSuggestion<M extends object>(props: {
         });
 
 }
+
+export async function autocompleteStream(props: {
+    firebaseToken: string,
+    textBefore?: string,
+    textAfter: string,
+    host?: string;
+    onUpdate: (delta: string) => void;
+}) {
+
+    console.debug("autocomplete", {
+        textBefore: props.textBefore,
+        textAfter: props.textAfter
+    });
+
+    let result = "";
+    return fetch((props.host ?? DEFAULT_SERVER) + "/data/autocomplete/",
+        {
+            // mode: "no-cors",
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Basic ${props.firebaseToken}`,
+                // "x-de-version": version
+            },
+            body: JSON.stringify({
+                textBefore: props.textBefore,
+                textAfter: props.textAfter
+            })
+        })
+        .then(async (res) => {
+            if (!res.ok) {
+                console.error("enhanceDataAPIStream error", res)
+                throw await res.json();
+            }
+            const reader = res.body?.getReader();
+            if (!reader) {
+                throw new Error("No reader");
+            }
+
+            for await (const chunk of readChunks(reader)) {
+                const str = new TextDecoder().decode(chunk);
+                result += str;
+                props.onUpdate(str);
+            }
+
+        }).then(() => {
+            console.log("Autocomplete result", result);
+            return result;
+        });
+
+}

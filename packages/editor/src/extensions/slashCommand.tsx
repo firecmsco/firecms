@@ -1,10 +1,11 @@
 import React, { forwardRef, ReactNode, useEffect, useImperativeHandle, useRef, useState } from "react"
-import { Editor, mergeAttributes, Node, Range, ReactRenderer, useCurrentEditor } from "@tiptap/react"
+import { Editor, mergeAttributes, Node, Range, ReactRenderer, useCurrentEditor } from "@tiptap/react";
 import { DOMOutputSpec, Node as ProseMirrorNode } from "@tiptap/pm/model"
 import { PluginKey } from "@tiptap/pm/state"
 import Suggestion, { SuggestionOptions } from "@tiptap/suggestion";
 
 import {
+    AutoAwesomeIcon,
     CheckBoxIcon,
     cls,
     CodeIcon,
@@ -20,6 +21,7 @@ import {
 } from "@firecms/ui"
 import tippy from "tippy.js"
 import { onFileRead, UploadFn } from "./Image";
+import { AIController } from "../types";
 
 // See `addAttributes` below
 export interface CommandNodeAttrs {
@@ -305,14 +307,26 @@ export interface SuggestionItem {
     description: string;
     icon: ReactNode;
     searchTerms?: string[];
-    command?: (props: { editor: Editor; range: Range, upload: UploadFn }) => void;
+    command?: (props: { editor: Editor; range: Range, upload: UploadFn, aiController?: AIController }) => void;
 }
 
-export const suggestion = (ref: React.MutableRefObject<any>, upload: UploadFn): Omit<SuggestionOptions<SuggestionItem, any>, "editor"> =>
+export const suggestion = (ref: React.MutableRefObject<any>, {
+    upload,
+    aiController
+}: { upload: UploadFn, aiController?: AIController }): Omit<SuggestionOptions<SuggestionItem, any>, "editor"> =>
     ({
             items: ({ query }) => {
-                return suggestionItems
-                    .filter(item => item.title.toLowerCase().startsWith(query.toLowerCase()))
+                const availableSuggestionItems = [...suggestionItems];
+                if (aiController) {
+                    availableSuggestionItems.push(autocompleteSuggestionItem)
+                }
+                return availableSuggestionItems
+                    .filter(item => {
+                        const inTitle = item.title.toLowerCase().startsWith(query.toLowerCase());
+                        if (inTitle) return inTitle;
+                        const inSearchTerms = item.searchTerms?.some(term => term.toLowerCase().startsWith(query.toLowerCase()));
+                        return inSearchTerms;
+                    })
             },
 
             render: () => {
@@ -325,7 +339,8 @@ export const suggestion = (ref: React.MutableRefObject<any>, upload: UploadFn): 
                         component = new ReactRenderer(CommandList, {
                             props: {
                                 ...props,
-                                upload
+                                upload,
+                                aiController
                             },
                             editor: props.editor,
                         })
@@ -383,6 +398,7 @@ const CommandList = forwardRef((props: {
     range: Range;
     command: (props: { id: string }) => void;
     upload: UploadFn;
+    aiController: AIController;
 }, ref) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -392,7 +408,8 @@ const CommandList = forwardRef((props: {
         item?.command?.({
             editor,
             range: props.range,
-            upload: props.upload
+            upload: props.upload,
+            aiController: props.aiController
         })
     };
 
@@ -476,6 +493,101 @@ const CommandList = forwardRef((props: {
     );
 });
 
+const markdownSymbols: string[] = [
+    ".",
+    "#",
+    "-",
+    "*",
+    "_",
+    "`",
+    ">",
+    "[",
+    "]",
+    "(",
+    ")",
+    "!",
+    "|",
+    "\\",
+    "~"
+];
+
+const autocompleteSuggestionItem: SuggestionItem = {
+    title: "Autocomplete",
+    description: "Add text based on the context.",
+    searchTerms: ["ai"],
+    icon: <AutoAwesomeIcon size={18}/>,
+    command: async ({
+                        editor,
+                        range,
+                        aiController
+                    }) => {
+        if (!aiController)
+            throw Error("No AiController");
+
+        editor
+            .chain()
+            .focus()
+            .deleteRange(range)
+            .toggleNode("paragraph", "paragraph")
+            .run();
+
+        const { state } = editor;
+        const {
+            from,
+            to
+        } = state.selection;
+
+        // Get text before the cursor (from start to the cursor position)
+        const textBeforeCursor = state.doc.textBetween(0, from, "\n");
+
+        // Get text after the cursor (from the cursor position to the end)
+        const textAfterCursor = state.doc.textBetween(to, state.doc.content.size, "\n");
+
+        let buffer = "";
+
+        const flushIfNecessary = () => {
+
+        }
+
+        const result = await aiController.autocomplete(textBeforeCursor, textAfterCursor, (delta) => {
+
+            if (delta.length !== 0) {
+                buffer += delta;
+                console.log("buffer", buffer);
+                // if (!markdownSymbols.some(symbol => delta.includes(symbol))) {
+
+                if (buffer.includes("\n")) {
+                    const split = buffer.split("\n");
+                    console.log("split", split);
+                    // update first sentence and leave the rest
+                    const first = split[0];
+                    buffer = split.length > 1 ? split.slice(1).join("\n") : "";
+
+                    const update = first;
+                    console.log({
+                        update,
+                        buffer
+                    })
+                    if (update.length > 0) {
+                        editor.chain().focus().insertContent(update, {
+                            applyInputRules: true,
+                            applyPasteRules: true
+                        }).run();
+                        console.log("flush", { update });
+                    }
+                    editor.chain().focus().enter().run();
+                    console.log("ENTER");
+                }
+            }
+        });
+
+        editor.chain().focus().insertContent(buffer, {
+            applyInputRules: true,
+            applyPasteRules: true
+        }).run();
+
+    }
+};
 const suggestionItems: SuggestionItem[] = [
     {
         title: "Text",
@@ -612,7 +724,7 @@ const suggestionItems: SuggestionItem[] = [
     {
         title: "Image",
         description: "Upload an image from your computer.",
-        searchTerms: ["photo", "picture", "media"],
+        searchTerms: ["photo", "picture", "media", "upload", "file"],
         icon: <ImageIcon size={18}/>,
         command: ({
                       editor,

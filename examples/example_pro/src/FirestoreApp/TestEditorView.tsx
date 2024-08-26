@@ -1,12 +1,24 @@
 import { Container } from "@firecms/ui";
 import { FireCMSEditor, type JSONContent } from "@firecms/editor";
 import { useEffect, useState } from "react";
-import { CircularProgressCenter, useStorageSource } from "@firecms/core";
+import { CircularProgressCenter, useAuthController, useStorageSource } from "@firecms/core";
+import { useEditorAIController } from "@firecms/data_enhancement";
 
 export function TestEditorView() {
 
     const [initialContent, setInitialContent] = useState<string | JSONContent | null>(null);
+    console.log("initialContent", initialContent);
+
     const storageSource = useStorageSource();
+    const authController = useAuthController();
+
+    const [firebaseToken, setFirebaseToken] = useState<string | undefined>(undefined);
+
+    useEffect(() => {
+        if (authController.user) {
+            authController.getAuthToken().then(setFirebaseToken);
+        }
+    }, []);
 
     useEffect(() => {
         const content = window.localStorage.getItem("editor-content");
@@ -18,8 +30,10 @@ export function TestEditorView() {
         }
     }, []);
 
+    const editorAIController = useEditorAIController({ firebaseToken });
+
     return (
-        <Container className={"p-8 bg-white dark:bg-gray-950 md:my-4"}>
+        <Container className={"md:p-8 bg-white dark:bg-gray-950 md:my-4"}>
             {!initialContent && <CircularProgressCenter/>}
             {initialContent && <FireCMSEditor
                 content={initialContent}
@@ -35,11 +49,15 @@ export function TestEditorView() {
                 onMarkdownContentChange={(content) => {
                     // console.log("markdown content")
                     // console.log(content);
-                    window.localStorage.setItem("editor-content", content);
+                    // window.localStorage.setItem("editor-content", content);
                 }}
+                aiController={editorAIController}
                 handleImageUpload={async (file: File) => {
                     await new Promise(resolve => setTimeout(resolve, 1000));
-                    const result = await storageSource.uploadFile({ file, path: "editor_test" });
+                    const result = await storageSource.uploadFile({
+                        file,
+                        path: "editor_test"
+                    });
                     const downloadConfig = await storageSource.getDownloadURL(result.path);
                     const url = downloadConfig.url;
                     if (!url) {
