@@ -84,8 +84,10 @@ export function UnsavedChangesDialog({
 
     return (
         <Dialog
+            onEscapeKeyDown={() => {
+                handleCancel();
+            }}
             open={open}
-            onOpenChange={(open) => open ? handleCancel() : handleOk()}
         >
             <DialogContent>
                 <Typography variant={"h6"}>{title}</Typography>

@@ -94,6 +94,7 @@ function SideDialogView({
     const handleDrawerCloseOk = () => {
         setBlocked(false);
         setDrawerCloseRequested(false);
+        console.log("handleDrawerCloseOk");
         sideDialogsController.close();
         panel?.onClose?.();
     };
@@ -103,9 +104,11 @@ function SideDialogView({
     };
 
     const onCloseRequest = (force?: boolean) => {
+        console.log("onCloseRequest", blocked, force);
         if (blocked && !force) {
             setDrawerCloseRequested(true);
         } else {
+            console.log("onCloseRequest closing");
             sideDialogsController.close();
             panel?.onClose?.();
         }
