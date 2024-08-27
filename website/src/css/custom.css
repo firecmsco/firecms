@@ -26,6 +26,10 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     font-weight: 600 !important;
 }
 
+tr {
+    border-top: none;
+}
+
 .theme-doc-sidebar-item-category-level-1, .theme-doc-sidebar-item-link-level-1 {
     padding-top: .55rem;
 }
@@ -138,6 +142,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
 
 /* You can override the default Infima variables here. */
 :root {
+    --ifm-table-stripe-background: none;
     --ifm-menu-link-padding-vertical: 0.325rem;
     --ifm-blockquote-color: inherit;
     --ifm-navbar-link-color: #fff;
@@ -205,6 +210,7 @@ html[data-theme=dark] .DocSearch-Button:hover {
 }
 
 html[data-theme='dark'] {
+    --ifm-table-stripe-background: inherit;
     --ifm-border-color: rgb(100 116 139 / 0.15);
     --ifm-toc-border-color: var(--ifm-border-color);
     --ifm-custom-navbar-background-color: rgba(48, 49, 55, 0.33);
@@ -214,6 +220,16 @@ html[data-theme='dark'] {
     --ifm-color-emphasis-100: #232328;
     /*--ifm-background-surface-color: #242526;*/
 }
+/*table tr:nth-child(2n) {*/
+/*    background-color: unset !important;*/
+/*}*/
+table th, table td {
+    border: unset;
+}
+table thead tr {
+    border-top: unset;
+}
+
 
 article {
     padding: 0 !important;
