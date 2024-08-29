@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-canary.110",
+  "version": "3.0.0-canary.111",
   "type": "module",
   "name": "@firecms/mongodb",
   "access": "public",
@@ -8,9 +8,9 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "^3.0.0-canary.110",
-    "@firecms/firebase": "^3.0.0-canary.110",
-    "@firecms/ui": "^3.0.0-canary.110",
+    "@firecms/core": "^3.0.0-canary.111",
+    "@firecms/firebase": "^3.0.0-canary.111",
+    "@firecms/ui": "^3.0.0-canary.111",
     "firebase": "^10.12.4"
   },
   "exports": {
@@ -40,5 +40,5 @@
     "src",
     "tailwind.config.js"
   ],
-  "gitHead": "ad45014069302bfff4dfc61065f1d193742ac0ca"
+  "gitHead": "24781d95e840c68233d4529ff1f36f6cdc261f95"
 }
