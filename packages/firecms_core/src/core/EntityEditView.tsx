@@ -884,51 +884,54 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     function buildForm() {
 
-        let form = <div className="h-full overflow-auto">
+        let form = <>
 
             {pluginActions.length > 0 && <div
                 className={cls("w-full flex justify-end items-center sticky top-0 right-0 left-0 z-10 bg-opacity-60 bg-slate-200 dark:bg-opacity-60 dark:bg-slate-800 backdrop-blur-md")}>
                 {pluginActions}
             </div>}
 
-            <div className="pt-12 pb-16 pl-8 pr-8 md:pl-10 md:pr-10">
-                <div
-                    className={`w-full py-2 flex flex-col items-start mt-${4 + (pluginActions ? 8 : 0)} lg:mt-${8 + (pluginActions ? 8 : 0)} mb-8`}>
+            <div className="h-full overflow-auto">
 
-                    <Typography
-                        className={"mt-4 flex-grow line-clamp-1 " + inputCollection.hideIdFromForm ? "mb-2" : "mb-0"}
-                        variant={"h4"}>{title ?? inputCollection.singularName ?? inputCollection.name}
-                    </Typography>
-                    <Alert color={"base"} className={"w-full"} size={"small"}>
-                        <code className={"text-xs select-all"}>{path}/{entityId}</code>
-                    </Alert>
-                </div>
+                <div className="pt-12 pb-16 pl-8 pr-8 md:pl-10 md:pr-10">
+                    <div
+                        className={`w-full py-2 flex flex-col items-start mt-${4 + (pluginActions ? 8 : 0)} lg:mt-${8 + (pluginActions ? 8 : 0)} mb-8`}>
 
-                {!collection.hideIdFromForm &&
-                    <CustomIdField customId={inputCollection.customId}
-                                   entityId={entityId}
-                                   status={status}
-                                   onChange={setEntityId}
-                                   error={entityIdError}
-                                   loading={customIdLoading}
-                                   entity={entity}/>}
-
-                {entityId && formContext && <>
-                    <div className="mt-12 flex flex-col gap-8"
-                         ref={formRef}>
-
-                        {formFields}
-
-                        <ErrorFocus containerRef={formRef}/>
-
+                        <Typography
+                            className={"mt-4 flex-grow line-clamp-1 " + inputCollection.hideIdFromForm ? "mb-2" : "mb-0"}
+                            variant={"h4"}>{title ?? inputCollection.singularName ?? inputCollection.name}
+                        </Typography>
+                        <Alert color={"base"} className={"w-full"} size={"small"}>
+                            <code className={"text-xs select-all"}>{path}/{entityId}</code>
+                        </Alert>
                     </div>
 
-                    <div className="h-14"/>
+                    {!collection.hideIdFromForm &&
+                        <CustomIdField customId={inputCollection.customId}
+                                       entityId={entityId}
+                                       status={status}
+                                       onChange={setEntityId}
+                                       error={entityIdError}
+                                       loading={customIdLoading}
+                                       entity={entity}/>}
 
-                </>}
+                    {entityId && formContext && <>
+                        <div className="mt-12 flex flex-col gap-8"
+                             ref={formRef}>
 
+                            {formFields}
+
+                            <ErrorFocus containerRef={formRef}/>
+
+                        </div>
+
+                        <div className="h-14"/>
+
+                    </>}
+
+                </div>
             </div>
-        </div>;
+        </>;
 
         if (plugins) {
             plugins.forEach((plugin: FireCMSPlugin) => {
@@ -1058,7 +1061,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                         role="tabpanel"
                         hidden={!mainViewVisible}
                         id={`form_${path}`}
-                        className={" w-full"}>
+                        className={"relative w-full"}>
 
                         {globalLoading
                             ? <CircularProgressCenter/>

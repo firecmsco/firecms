@@ -1,3 +1,4 @@
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
     FieldHelperText,
     FieldProps,
@@ -7,12 +8,12 @@ import {
     useStorageSource
 } from "../../index";
 import { cls, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "@firecms/ui";
-import { FireCMSEditor } from "@firecms/editor";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { resolveStorageFilenameString, resolveStoragePathString } from "../../util/storage";
+import { FireCMSEditor, FireCMSEditorProps } from "@firecms/editor";
+import { resolveStorageFilenameString, resolveStoragePathString } from "../../util";
 
 interface MarkdownEditorFieldProps {
     highlight?: { from: number, to: number };
+    editorProps?: Partial<FireCMSEditorProps>
 }
 
 export function MarkdownEditorFieldBinding({
@@ -27,10 +28,10 @@ export function MarkdownEditorFieldBinding({
                                                isSubmitting,
                                                context,
                                                customProps,
-                                               ...props
                                            }: FieldProps<string, MarkdownEditorFieldProps>) {
 
     const highlight = customProps?.highlight;
+    const editorProps = customProps?.editorProps;
     const storageSource = useStorageSource();
     const storage = property.storage;
 
@@ -108,7 +109,9 @@ export function MarkdownEditorFieldBinding({
                 throw new Error("Error uploading image");
             }
             return url;
-        }}/>;
+        }}
+        {...editorProps}
+        />;
 
     if (minimalistView)
         return editor;
