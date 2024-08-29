@@ -158,7 +158,7 @@ export function TextField<T extends string | number>({
             {label && (
                 <InputLabel
                     className={cls(
-                        "absolute",
+                        "pointer-events-none absolute",
                         size === "medium" ? "top-1" : "-top-1",
                         !error ? (focused ? "text-primary dark:text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-red-500 dark:text-red-600",
                         disabled ? "opacity-50" : "")}

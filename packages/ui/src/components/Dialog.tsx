@@ -15,6 +15,9 @@ export type DialogProps = {
     maxWidth?: keyof typeof widthClasses;
     modal?: boolean;
     onOpenAutoFocus?: (e: Event) => void;
+    onEscapeKeyDown?: (e: KeyboardEvent) => void;
+    onPointerDownOutside?: (e: Event) => void;
+    onInteractOutside?: (e: Event) => void;
 };
 
 const widthClasses = {
@@ -43,7 +46,10 @@ export const Dialog = ({
                            scrollable = true,
                            maxWidth = "lg",
                            modal = true,
-                           onOpenAutoFocus
+                           onOpenAutoFocus,
+                           onEscapeKeyDown,
+                           onPointerDownOutside,
+                           onInteractOutside
                        }: DialogProps) => {
     const [displayed, setDisplayed] = useState(false);
 
@@ -79,7 +85,10 @@ export const Dialog = ({
                     />
 
                     <DialogPrimitive.Content
+                        onEscapeKeyDown={onEscapeKeyDown}
                         onOpenAutoFocus={onOpenAutoFocus}
+                        onPointerDownOutside={onPointerDownOutside}
+                        onInteractOutside={onInteractOutside}
                         className={cls("h-full outline-none flex justify-center items-center z-40 opacity-100 transition-all duration-200 ease-in-out")}
                     >
                         <div

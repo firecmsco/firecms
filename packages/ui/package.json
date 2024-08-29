@@ -104,7 +104,7 @@
     "src",
     "tailwind.config.js"
   ],
-  "gitHead": "ad45014069302bfff4dfc61065f1d193742ac0ca",
+  "gitHead": "24781d95e840c68233d4529ff1f36f6cdc261f95",
   "publishConfig": {
     "access": "public"
   }
