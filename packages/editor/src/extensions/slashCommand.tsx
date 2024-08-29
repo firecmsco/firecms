@@ -21,7 +21,7 @@ import {
 } from "@firecms/ui"
 import tippy from "tippy.js"
 import { onFileRead, UploadFn } from "./Image";
-import { AIController } from "../types";
+import { EditorAIController } from "../types";
 
 // See `addAttributes` below
 export interface CommandNodeAttrs {
@@ -243,13 +243,6 @@ export const SlashCommand = Node.create<CommandOptions>({
     },
 
     renderText({ node }) {
-        if (this.options.renderLabel !== undefined) {
-            console.warn("renderLabel is deprecated use renderText and renderHTML instead")
-            return this.options.renderLabel({
-                options: this.options,
-                node
-            })
-        }
         return this.options.renderText({
             options: this.options,
             node
@@ -307,19 +300,34 @@ export interface SuggestionItem {
     description: string;
     icon: ReactNode;
     searchTerms?: string[];
-    command?: (props: { editor: Editor; range: Range, upload: UploadFn, aiController?: AIController }) => void;
+    command?: (props: { editor: Editor; range: Range, upload: UploadFn, aiController?: EditorAIController }) => void;
 }
 
 export const suggestion = (ref: React.MutableRefObject<any>, {
     upload,
+    onDisabledAutocompleteClick,
     aiController
-}: { upload: UploadFn, aiController?: AIController }): Omit<SuggestionOptions<SuggestionItem, any>, "editor"> =>
+}: {
+    upload: UploadFn,
+    onDisabledAutocompleteClick?: () => void,
+    aiController?: EditorAIController
+}): Omit<SuggestionOptions<SuggestionItem, any>, "editor"> =>
     ({
             items: ({ query }) => {
                 const availableSuggestionItems = [...suggestionItems];
-                if (aiController) {
+                if (!onDisabledAutocompleteClick && aiController) {
                     availableSuggestionItems.push(autocompleteSuggestionItem)
                 }
+                if (onDisabledAutocompleteClick) {
+                    availableSuggestionItems.push({
+                        title: "Autocomplete",
+                        description: "Add text based on the context.",
+                        searchTerms: ["ai"],
+                        icon: <AutoAwesomeIcon size={18}/>,
+                        command: onDisabledAutocompleteClick
+                    })
+                }
+
                 return availableSuggestionItems
                     .filter(item => {
                         const inTitle = item.title.toLowerCase().startsWith(query.toLowerCase());
@@ -398,7 +406,7 @@ const CommandList = forwardRef((props: {
     range: Range;
     command: (props: { id: string }) => void;
     upload: UploadFn;
-    aiController: AIController;
+    aiController: EditorAIController;
 }, ref) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -493,24 +501,6 @@ const CommandList = forwardRef((props: {
     );
 });
 
-const markdownSymbols: string[] = [
-    ".",
-    "#",
-    "-",
-    "*",
-    "_",
-    "`",
-    ">",
-    "[",
-    "]",
-    "(",
-    ")",
-    "!",
-    "|",
-    "\\",
-    "~"
-];
-
 const autocompleteSuggestionItem: SuggestionItem = {
     title: "Autocomplete",
     description: "Add text based on the context.",
@@ -544,38 +534,25 @@ const autocompleteSuggestionItem: SuggestionItem = {
         const textAfterCursor = state.doc.textBetween(to, state.doc.content.size, "\n");
 
         let buffer = "";
-
-        const flushIfNecessary = () => {
-
-        }
-
         const result = await aiController.autocomplete(textBeforeCursor, textAfterCursor, (delta) => {
 
+            buffer += delta;
             if (delta.length !== 0) {
-                buffer += delta;
-                // if (!markdownSymbols.some(symbol => delta.includes(symbol))) {
-
-                if (buffer.includes("\n")) {
-                    const split = buffer.split("\n");
-                    // update first sentence and leave the rest
-                    const update = split[0];
-                    buffer = split.length > 1 ? split.slice(1).join("\n") : "";
-
-                    if (update.length > 0) {
-                        editor.chain().focus().insertContent(update, {
-                            applyInputRules: true,
-                            applyPasteRules: true
-                        }).run();
-                    }
-                    editor.chain().focus().enter().run();
-                }
+                // @ts-ignore
+                editor.chain().focus().toggleLoadingDecoration(buffer).run()
             }
         });
 
-        editor.chain().focus().insertContent(buffer, {
-            applyInputRules: true,
-            applyPasteRules: true
-        }).run();
+        editor.chain().focus()
+            // @ts-ignore
+            // .removeLoadingDecoration()
+            .insertContent(result, {
+                applyInputRules: false,
+                applyPasteRules: false,
+                parseOptions: {
+                    preserveWhitespace: false
+                }
+            }).run();
 
     }
 };

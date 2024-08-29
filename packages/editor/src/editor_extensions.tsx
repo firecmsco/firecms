@@ -1,6 +1,7 @@
-import { HorizontalRule, Placeholder, StarterKit, TaskItem, TaskList, TiptapImage, TiptapLink, } from "./extensions";
+import { HorizontalRule, Placeholder, StarterKit, TaskItem, TaskList, TiptapLink, } from "./extensions";
 
 import { cls, defaultBorderMixin } from "@firecms/ui";
+import { Markdown } from "tiptap-markdown";
 
 //You can overwrite the placeholder with your own configuration
 export const placeholder = Placeholder;
@@ -39,6 +40,10 @@ export const taskItem = TaskItem.configure({
         class: cls("flex items-start my-4"),
     },
     nested: true,
+});
+
+export const markdownExtension = Markdown.configure({
+    html: true,
 });
 
 export const horizontalRule = HorizontalRule.configure({

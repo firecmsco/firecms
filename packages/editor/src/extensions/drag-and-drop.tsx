@@ -210,4 +210,3 @@ export const DragAndDrop = Extension.create({
         ];
     }
 });
-

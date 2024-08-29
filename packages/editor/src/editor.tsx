@@ -4,8 +4,7 @@ import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from "r
 import TiptapUnderline from "@tiptap/extension-underline";
 import TextStyle from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
-
-import { Markdown } from "tiptap-markdown";
+import BulletList from "@tiptap/extension-bullet-list"
 import Highlight from "@tiptap/extension-highlight";
 
 import { EditorBubble, type JSONContent } from "./components";
@@ -14,17 +13,26 @@ import { NodeSelector } from "./selectors/node-selector";
 import { LinkSelector } from "./selectors/link-selector";
 import { TextButtons } from "./selectors/text-buttons";
 
-import { cls, defaultBorderMixin, Separator, useInjectStyles } from "@firecms/ui";
+import { Button, cls, defaultBorderMixin, Separator, useInjectStyles } from "@firecms/ui";
 import { Editor, EditorProvider } from "@tiptap/react";
 import { removeClassesFromJson } from "./utils/remove_classes";
-import { horizontalRule, placeholder, starterKit, taskItem, taskList, tiptapLink } from "./editor_extensions";
+import {
+    horizontalRule,
+    markdownExtension,
+    placeholder,
+    starterKit,
+    taskItem,
+    taskList,
+    tiptapLink
+} from "./editor_extensions";
 import { createDropImagePlugin, createImageExtension } from "./extensions/Image";
 import { CustomKeymap } from "./extensions/custom-keymap";
 import { DragAndDrop } from "./extensions/drag-and-drop";
 import Document from "@tiptap/extension-document"
 import { SlashCommand, suggestion } from "./extensions/slashCommand";
-import { AIController } from "./types";
-import { AutocompleteExtension } from "./extensions/Autocomplete";
+import { EditorAIController } from "./types";
+import { AiContentExtension } from "./extensions/AiContent";
+import LoadingDecoration from "./LoadingDecorator";
 
 export type FireCMSEditorTextSize = "sm" | "base" | "lg";
 
@@ -37,7 +45,8 @@ export type FireCMSEditorProps = {
     version?: number,
     textSize?: FireCMSEditorTextSize,
     highlight?: { from: number, to: number },
-    aiController?: AIController
+    aiController?: EditorAIController,
+    onDisabledAutocompleteClick?: () => void,
 };
 
 const CustomDocument = Document.extend({
@@ -59,7 +68,8 @@ export const FireCMSEditor = ({
                                   textSize = "base",
                                   highlight,
                                   handleImageUpload,
-                                  aiController
+                                  aiController,
+                                  onDisabledAutocompleteClick
                               }: FireCMSEditorProps) => {
 
     const ref = React.useRef<HTMLDivElement | null>(null);
@@ -138,17 +148,16 @@ export const FireCMSEditor = ({
 
     const extensions = useMemo(() => ([
         // AutocompleteExtension,
+        LoadingDecoration,
         TiptapUnderline,
         TextStyle,
         Color,
+        BulletList,
         CustomDocument,
         Highlight.configure({
             multicolor: true
         }),
-        Markdown.configure({
-            html: false,
-            transformCopiedText: true
-        }),
+
         CustomKeymap,
         DragAndDrop,
         starterKit,
@@ -157,15 +166,20 @@ export const FireCMSEditor = ({
         imageExtension,
         taskList,
         taskItem,
+        markdownExtension,
         horizontalRule,
+        AiContentExtension.configure({
+            aiController
+        }),
         SlashCommand.configure({
             HTMLAttributes: {
-                class: "mention",
+                class: "mention"
             },
             suggestion: suggestion(ref, {
                 upload: handleImageUpload,
-                aiController
-            }),
+                aiController,
+                onDisabledAutocompleteClick
+            })
         })
     ]), []);
 
@@ -216,7 +230,7 @@ function addLineBreakAfterImages(markdown: string): string {
     // Regular expression to match markdown image syntax
     const imageRegex = /!\[.*?\]\(.*?\)/g;
     // Replace image with image followed by a line break
-    return markdown.replace(imageRegex, (match) => `${match}\n`);
+    return markdown.replace(imageRegex, (match) => `${match}`);
 }
 
 const cssStyles = `
