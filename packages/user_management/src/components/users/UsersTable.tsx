@@ -50,7 +50,7 @@ export function UsersTable({ onUserClicked }: {
     return (
         <div className="overflow-auto">
 
-            <Table>
+            <Table className={"w-full"}>
 
                 <TableHeader>
                     <TableCell className="truncate w-16"></TableCell>

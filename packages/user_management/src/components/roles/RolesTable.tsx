@@ -38,7 +38,7 @@ export function RolesTable({
 
     return <div
         className="w-full overflow-auto">
-        <Table>
+        <Table className={"w-full"}>
             <TableHeader>
                 <TableCell header={true} className="w-16"></TableCell>
                 <TableCell header={true}>Role</TableCell>
