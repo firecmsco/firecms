@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-canary.109",
+  "version": "3.0.0-canary.110",
   "type": "module",
   "name": "@firecms/schema_inference",
   "access": "public",
@@ -8,7 +8,7 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "devDependencies": {
-    "@firecms/core": "^3.0.0-canary.109",
+    "@firecms/core": "^3.0.0-canary.110",
     "@types/node": "^20.14.12",
     "typescript": "^5.5.4",
     "vite": "^5.3.4"
