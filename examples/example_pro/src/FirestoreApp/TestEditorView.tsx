@@ -7,18 +7,9 @@ import { useEditorAIController } from "@firecms/data_enhancement";
 export function TestEditorView() {
 
     const [initialContent, setInitialContent] = useState<string | JSONContent | null>(null);
-    console.log("initialContent", initialContent);
 
     const storageSource = useStorageSource();
     const authController = useAuthController();
-
-    const [firebaseToken, setFirebaseToken] = useState<string | undefined>(undefined);
-
-    useEffect(() => {
-        if (authController.user) {
-            authController.getAuthToken().then(setFirebaseToken);
-        }
-    }, []);
 
     useEffect(() => {
         const content = window.localStorage.getItem("editor-content");
@@ -30,13 +21,15 @@ export function TestEditorView() {
         }
     }, []);
 
-    const editorAIController = useEditorAIController({ firebaseToken });
+    const editorAIController = useEditorAIController({ getAuthToken: authController.getAuthToken });
 
     return (
         <Container className={"md:p-8 bg-white dark:bg-gray-950 md:my-4"}>
             {!initialContent && <CircularProgressCenter/>}
             {initialContent && <FireCMSEditor
                 content={initialContent}
+                // onJsonContentChange={(content) => {
+                // }}
                 // onHtmlContentChange={(content) => {
                 //     console.log(content);
                 // }}

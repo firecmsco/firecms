@@ -31,11 +31,7 @@ import {
 import { firebaseConfig } from "./firebase_config";
 import { productsCollection } from "./collections/products";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
-import {
-    useBuildUserManagement,
-    userManagementAdminViews,
-    useUserManagementPlugin
-} from "@firecms/user_management";
+import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
 import { useImportExportPlugin } from "@firecms/data_import_export";
 import { ExampleCMSView } from "./views/ExampleCMSView";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
