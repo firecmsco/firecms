@@ -19,6 +19,7 @@ import { SUPPORTED_FIELDS_ENHANCEMENT } from "../utils/fields";
 import { EnhanceTextFieldBinding } from "./fields/EnhanceTextField";
 import { EnhancedDataResult, EnhanceParams } from "../types/data_enhancement_controller";
 import { countStringCharacters } from "../utils/strings_counter";
+import { EditorAIController } from "@firecms/editor";
 
 export function fieldBuilder<T extends CMSType = CMSType>
 (params: PluginFieldBuilderParams<T>): React.ComponentType<FieldProps<T>> | null {
@@ -49,7 +50,9 @@ function builder<T extends CMSType = CMSType, M extends Record<string, any> = an
             enabled,
             suggestions,
             enhance,
-            loadingSuggestions
+            loadingSuggestions,
+            interceptUsage,
+            editorAIController
         } = useDataEnhancementController();
 
         const loading = loadingSuggestions?.includes(props.propertyKey);
@@ -65,7 +68,9 @@ function builder<T extends CMSType = CMSType, M extends Record<string, any> = an
             enabled={enabled}
             enoughData={enoughData}
             Field={Field as React.ComponentType<FieldProps>}
-            enhance={enhance}/>
+            enhance={enhance}
+            editorAIController={editorAIController}
+            interceptUsage={interceptUsage}/>
 
     };
 }
@@ -78,6 +83,8 @@ interface FieldInnerParams<T extends CMSType = CMSType, M extends Record<string,
     enoughData: boolean;
     Field: React.ComponentType<FieldProps<T, any, M>>;
     enhance: (props: EnhanceParams<M>) => Promise<EnhancedDataResult>;
+    interceptUsage?: () => void;
+    editorAIController?: EditorAIController;
 }
 
 const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M extends Record<string, any> = any>({
@@ -87,7 +94,9 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                                                                                                                         enabled,
                                                                                                                         enoughData,
                                                                                                                         Field,
-                                                                                                                        enhance
+                                                                                                                        enhance,
+                                                                                                                        interceptUsage,
+                                                                                                                        editorAIController
                                                                                                                     }: FieldInnerParams<T, M>) {
 
     const [dataLoading, setDataLoading] = useState(false);
@@ -113,7 +122,13 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
     let fieldBinding: React.ReactElement;
     if (props.property.dataType === "string" && props.property.markdown) {
         fieldBinding = <MarkdownEditorFieldBinding {...props as FieldProps<any>}
-                                                   customProps={{ highlight: highlightRange }}/>;
+                                                   customProps={{
+                                                       highlight: highlightRange,
+                                                       editorProps: {
+                                                           aiController: editorAIController,
+                                                           onDisabledAutocompleteClick: interceptUsage
+                                                       }
+                                                   }}/>;
     } else if (props.property.dataType === "string" && !props.property.enumValues) {
         fieldBinding = <EnhanceTextFieldBinding {...props as FieldProps<any>}
                                                 highlight={suggestedValue as string}/>;
@@ -122,6 +137,10 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
     }
 
     const enhanceData = (instructions?: string) => {
+        if (interceptUsage) {
+            interceptUsage();
+            return;
+        }
         if (!props.context.entityId) return;
         if (!enoughData) return;
         setMenuOpen(false);

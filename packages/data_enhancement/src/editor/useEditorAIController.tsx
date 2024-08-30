@@ -1,14 +1,12 @@
 import { autocompleteStream } from "../api";
+import { EditorAIController } from "@firecms/editor";
 
-type UseEditorAIController = {
-    autocomplete: (textBefore: string, textAfter: string, onUpdate: (delta: string) => void) => Promise<string>;
-}
-
-export function useEditorAIController({ firebaseToken }: { firebaseToken?: string }): UseEditorAIController {
+export function useEditorAIController({ getAuthToken }: { getAuthToken?: () => Promise<string> }): EditorAIController {
     const autocomplete = async (textBefore: string, textAfter: string, onUpdate: (delta: string) => void) => {
-        if (!firebaseToken) {
+        if (!getAuthToken) {
             throw new Error("Firebase token is required");
         }
+        const firebaseToken = await getAuthToken();
         return autocompleteStream({
             firebaseToken,
             textBefore,

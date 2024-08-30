@@ -1,4 +1,5 @@
 import { EntityValues } from "@firecms/core";
+import { EditorAIController } from "@firecms/editor";
 
 export type EnhanceParams<M extends object> = {
     entityId: string;
@@ -20,8 +21,9 @@ export type DataEnhancementController = {
     allowReferenceDataSelection: boolean;
     clearAllSuggestions: () => void;
     getSamplePrompts: (entityName: string, input?: string) => Promise<SamplePromptsResult>;
-    loadingSuggestions: string[]
-
+    loadingSuggestions: string[],
+    interceptUsage?: () => void;
+    editorAIController?: EditorAIController;
 }
 
 export type EnhancedDataResult = {

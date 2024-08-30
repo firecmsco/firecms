@@ -27,6 +27,8 @@ export interface DataEnhancementPluginProps {
         user: User | null
     }) => boolean;
 
+    interceptUsage?: () => void;
+
     /**
      * Component to render when the user has finished their free usage quota.
      */
@@ -69,6 +71,7 @@ export function useDataEnhancementPlugin(props?: DataEnhancementPluginProps): Fi
                 props: {
                     apiKey,
                     getConfigForPath,
+                    interceptUsage: props?.interceptUsage,
                     SubscriptionMessage: props?.SubscriptionMessage,
                     host: props?.host
                 }

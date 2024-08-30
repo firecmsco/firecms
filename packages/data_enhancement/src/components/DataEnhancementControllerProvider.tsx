@@ -16,7 +16,6 @@ import {
     useAuthController,
     useCustomizationController,
     useDataSource,
-    useFireCMSContext,
     useNavigationController,
     useSnackbarController
 } from "@firecms/core";
@@ -26,6 +25,7 @@ import { getAppendableSuggestion } from "../utils/suggestions";
 import { getSimplifiedProperties } from "../utils/properties";
 import { DefaultSubscriptionMessage } from "./DefaultSubscriptionMessage";
 import { SubscriptionMessageProps } from "../types/subscriptions_message_props";
+import { useEditorAIController } from "../editor/useEditorAIController";
 
 export const DataEnhancementControllerContext = React.createContext<DataEnhancementController>({} as any);
 
@@ -37,6 +37,8 @@ export type DataEnhancementControllerProviderProps = {
         path: string,
         collection: EntityCollection
     }) => boolean;
+
+    interceptUsage?: () => void;
 
     SubscriptionMessage?: React.ComponentType<SubscriptionMessageProps>;
 
@@ -68,6 +70,7 @@ export function DataEnhancementControllerProvider({
                                                       path,
                                                       collection,
                                                       formContext,
+                                                      interceptUsage,
                                                       SubscriptionMessage: SubscriptionMessageProp = DefaultSubscriptionMessage
                                                   }: PropsWithChildren<DataEnhancementControllerProviderProps & PluginFormActionProps<any>>) {
 
@@ -75,7 +78,6 @@ export function DataEnhancementControllerProvider({
     const [suggestions, setSuggestions] = useState<Record<string, string | number>>({});
     const [loadingSuggestions, setLoadingSuggestions] = useState<string[]>([]);
 
-    const context = useFireCMSContext();
     const customizationController = useCustomizationController();
     const enhancingInProgress = useRef(false);
 
@@ -216,10 +218,12 @@ export function DataEnhancementControllerProvider({
     function displayNeededSubscriptionSnackbar(projectId: any) {
         snackbarController.open({
             type: "warning",
-            message: <SubscriptionMessageProp projectId={projectId} context={context}/>,
+            message: <SubscriptionMessageProp projectId={projectId}/>,
             autoHideDuration: 4000
         })
     }
+
+    const editorAIController = useEditorAIController({ getAuthToken: authController.getAuthToken });
 
     const enhance = async (props: EnhanceParams<any>): Promise<EnhancedDataResult> => {
 
@@ -329,7 +333,9 @@ export function DataEnhancementControllerProvider({
         allowReferenceDataSelection,
         clearAllSuggestions,
         getSamplePrompts,
-        loadingSuggestions
+        loadingSuggestions,
+        interceptUsage,
+        editorAIController
     };
 
     return (

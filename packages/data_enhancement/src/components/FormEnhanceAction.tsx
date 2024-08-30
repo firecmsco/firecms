@@ -10,6 +10,7 @@ import {
     ClearIcon,
     cls,
     defaultBorderMixin,
+    focusedDisabled,
     IconButton,
     SendIcon,
     TextareaAutosize,
@@ -148,7 +149,7 @@ export function FormEnhanceAction({
 
                     <AutoFixHighIcon/>
                     <TextareaAutosize
-                        className={"flex-grow w-full resize-none w-full outline-none py-5 mx-2 bg-transparent"}
+                        className={cls("flex-grow w-full resize-none w-full outline-none py-5 mx-2 bg-transparent", focusedDisabled)}
                         ref={inputRef}
                         value={instructions}
                         autoFocus={status === "new"}
