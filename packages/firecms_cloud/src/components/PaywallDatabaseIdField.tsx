@@ -22,6 +22,7 @@ export function PaywallDatabaseIdField({
                     component={"a"}
                     rel="noopener noreferrer"
                     target="_blank"
+                    onClick={e => e.preventDefault()}
                     href={`/p/${projectConfig.projectId}/settings`}>
                     Upgrade plan
                 </Button>
@@ -32,5 +33,5 @@ export function PaywallDatabaseIdField({
                        disabled={true}
                        placeholder={"(default)"}></TextField>
         </Tooltip>
-    </>
+    </>;
 }

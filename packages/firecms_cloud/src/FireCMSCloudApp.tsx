@@ -23,7 +23,8 @@ import {
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     useBuildNavigationController,
-    User
+    User,
+    useSnackbarController
 } from "@firecms/core";
 import { buildCollectionInference, useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import {
@@ -431,17 +432,19 @@ export function FireCMSClientWithController({
         </Scaffold>;
     }
 
-    return <FireCMSAppAuthenticated
-        fireCMSUser={fireCMSUser!}
-        fireCMSBackend={fireCMSBackend}
-        appConfig={appConfig}
-        authController={authController}
-        projectConfig={projectConfig}
-        collectionConfigController={configController}
-        firebaseApp={clientFirebaseApp!}
-        userManagement={userManagement}
-        {...props}
-    />;
+    return <SnackbarProvider>
+        <FireCMSAppAuthenticated
+            fireCMSUser={fireCMSUser!}
+            fireCMSBackend={fireCMSBackend}
+            appConfig={appConfig}
+            authController={authController}
+            projectConfig={projectConfig}
+            collectionConfigController={configController}
+            firebaseApp={clientFirebaseApp!}
+            userManagement={userManagement}
+            {...props}
+        />
+    </SnackbarProvider>;
 }
 
 function NoAccessError({
@@ -513,10 +516,14 @@ function FireCMSAppAuthenticated({
         throw Error("You can only use FireCMSAppAuthenticated with an authenticated user");
     }
 
+    const snackbarController = useSnackbarController();
+
     const includeDataTalk = userManagement.isAdmin ?? false;
     const dataTalkPath = useDataTalkMode();
     const dataTalkMode = includeDataTalk && dataTalkPath;
     const dataTalkEndpoint = fireCMSBackend.backendApiHost + "/projects/" + projectConfig.projectId;
+
+    const canUseDataEnhancement = projectConfig.canUseDataEnhancement;
 
     const adminRoutes = useMemo(() => buildAdminRoutes(userManagement.usersLimit,
         includeDataTalk,
@@ -556,7 +563,14 @@ function FireCMSAppAuthenticated({
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({
         SubscriptionMessage: FireCMSDataEnhancementSubscriptionMessage,
-        host: fireCMSBackend.backendApiHost
+        host: fireCMSBackend.backendApiHost,
+        interceptUsage: canUseDataEnhancement ? undefined : () => {
+            snackbarController.open({
+                type: "warning",
+                message: <FireCMSDataEnhancementSubscriptionMessage projectId={projectConfig.projectId}/>,
+                autoHideDuration: 4000
+            })
+        }
     });
 
     /**
@@ -645,84 +659,82 @@ function FireCMSAppAuthenticated({
         <FireCMSBackEndProvider {...fireCMSBackend}>
             <ProjectConfigProvider config={projectConfig}>
                 <UserManagementProvider userManagement={userManagement}>
-                    <SnackbarProvider>
-                        <ModeControllerProvider value={modeController}>
-                            <FireCMS
-                                navigationController={navigationController}
-                                dateTimeFormat={appConfig?.dateTimeFormat}
-                                entityViews={appConfig?.entityViews}
-                                locale={appConfig?.locale}
-                                propertyConfigs={propertyConfigsMap}
-                                authController={authController}
-                                userConfigPersistence={userConfigPersistence}
-                                dataSourceDelegate={firestoreDelegate}
-                                storageSource={storageSource}
-                                entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
-                                onAnalyticsEvent={onAnalyticsEvent}
-                                plugins={plugins}
-                                components={{
-                                    missingReference: MissingReferenceWidget
-                                }}
-                            >
-                                {({
-                                      context,
-                                      loading
-                                  }) => {
+                    <ModeControllerProvider value={modeController}>
+                        <FireCMS
+                            navigationController={navigationController}
+                            dateTimeFormat={appConfig?.dateTimeFormat}
+                            entityViews={appConfig?.entityViews}
+                            locale={appConfig?.locale}
+                            propertyConfigs={propertyConfigsMap}
+                            authController={authController}
+                            userConfigPersistence={userConfigPersistence}
+                            dataSourceDelegate={firestoreDelegate}
+                            storageSource={storageSource}
+                            entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
+                            onAnalyticsEvent={onAnalyticsEvent}
+                            plugins={plugins}
+                            components={{
+                                missingReference: MissingReferenceWidget
+                            }}
+                        >
+                            {({
+                                  context,
+                                  loading
+                              }) => {
 
-                                    let component;
-                                    if (loading) {
-                                        component =
-                                            <Scaffold
-                                                key={"project_scaffold_" + projectConfig.projectId}>
-                                                <AppBar
-                                                    logo={projectConfig.logo ?? logo}>
-                                                    {FireCMSAppBarComponent &&
-                                                        <FireCMSAppBarComponent title={projectConfig.projectName ?? ""}
-                                                                                {...appConfig?.fireCMSAppBarComponentProps}/>}
-                                                </AppBar>
-                                                <CircularProgressCenter text={"Almost there"}/>
-                                            </Scaffold>;
-                                    } else {
-                                        component = (
-                                            <Scaffold
-                                                logo={projectConfig.logo ?? logo}
-                                                key={"project_scaffold_" + projectConfig.projectId}
-                                                autoOpenDrawer={appConfig?.autoOpenDrawer}>
-                                                <AppBar>
-                                                    {FireCMSAppBarComponent &&
-                                                        <FireCMSAppBarComponent title={projectConfig.projectName ?? ""}
-                                                                                {...appConfig?.fireCMSAppBarComponentProps}/>}
-                                                </AppBar>
-                                                <Drawer>
-                                                    {dataTalkMode
-                                                        ? <FireCMSCloudDataTalkDrawer/>
-                                                        : <FireCMSCloudDrawer/>}
-                                                </Drawer>
-                                                <NavigationRoutes
-                                                    homePage={appConfig?.HomePage
-                                                        ? <appConfig.HomePage/>
-                                                        : <FireCMSCloudHomePage/>}
-                                                >
-                                                    {adminRoutes}
-                                                </NavigationRoutes>
-                                                <SideDialogs/>
-                                            </Scaffold>
-                                        );
-                                    }
+                                let component;
+                                if (loading) {
+                                    component =
+                                        <Scaffold
+                                            key={"project_scaffold_" + projectConfig.projectId}>
+                                            <AppBar
+                                                logo={projectConfig.logo ?? logo}>
+                                                {FireCMSAppBarComponent &&
+                                                    <FireCMSAppBarComponent title={projectConfig.projectName ?? ""}
+                                                                            {...appConfig?.fireCMSAppBarComponentProps}/>}
+                                            </AppBar>
+                                            <CircularProgressCenter text={"Almost there"}/>
+                                        </Scaffold>;
+                                } else {
+                                    component = (
+                                        <Scaffold
+                                            logo={projectConfig.logo ?? logo}
+                                            key={"project_scaffold_" + projectConfig.projectId}
+                                            autoOpenDrawer={appConfig?.autoOpenDrawer}>
+                                            <AppBar>
+                                                {FireCMSAppBarComponent &&
+                                                    <FireCMSAppBarComponent title={projectConfig.projectName ?? ""}
+                                                                            {...appConfig?.fireCMSAppBarComponentProps}/>}
+                                            </AppBar>
+                                            <Drawer>
+                                                {dataTalkMode
+                                                    ? <FireCMSCloudDataTalkDrawer/>
+                                                    : <FireCMSCloudDrawer/>}
+                                            </Drawer>
+                                            <NavigationRoutes
+                                                homePage={appConfig?.HomePage
+                                                    ? <appConfig.HomePage/>
+                                                    : <FireCMSCloudHomePage/>}
+                                            >
+                                                {adminRoutes}
+                                            </NavigationRoutes>
+                                            <SideDialogs/>
+                                        </Scaffold>
+                                    );
+                                }
 
-                                    if (includeDataTalk) {
-                                        component = <DataTalkProvider
-                                            key={"datatalk_provider_" + projectConfig.projectId}
-                                            config={dataTalkConfig}>
-                                            {component}
-                                        </DataTalkProvider>
-                                    }
+                                if (includeDataTalk) {
+                                    component = <DataTalkProvider
+                                        key={"datatalk_provider_" + projectConfig.projectId}
+                                        config={dataTalkConfig}>
+                                        {component}
+                                    </DataTalkProvider>
+                                }
 
-                                    return component;
-                                }}
-                            </FireCMS>
-                        </ModeControllerProvider>
-                    </SnackbarProvider>
+                                return component;
+                            }}
+                        </FireCMS>
+                    </ModeControllerProvider>
                 </UserManagementProvider>
             </ProjectConfigProvider>
         </FireCMSBackEndProvider>

@@ -38,6 +38,7 @@ export type ProjectConfig = {
     canExport: boolean;
     canUseLocalTextSearch: boolean;
     canUseCustomDatabase: boolean;
+    canUseDataEnhancement: boolean;
 
     localTextSearchEnabled: boolean;
     updateLocalTextSearchEnabled: (allow: boolean) => Promise<void>;
@@ -237,6 +238,7 @@ export function useBuildProjectConfig({
     const canExport = subscriptionPlan !== "free";
     const canUseLocalTextSearch = subscriptionPlan !== "free";
     const canUseCustomDatabase = subscriptionPlan !== "free";
+    const canUseDataEnhancement = subscriptionPlan !== "free";
 
     const updatePrimaryColor = useCallback(async (color?: string): Promise<void> => {
         if (!backendFirebaseApp) throw Error("useBuildProjectConfig Firebase not initialised");
@@ -284,6 +286,7 @@ export function useBuildProjectConfig({
         canExport,
         canUseLocalTextSearch,
         canUseCustomDatabase,
+        canUseDataEnhancement,
         localTextSearchEnabled,
         updateLocalTextSearchEnabled,
         primaryColor,
