@@ -1,0 +1,145 @@
+---
+id: nextjs
+title: Using FireCMS with Next.js
+sidebar_label: Using with Next.js
+---
+
+You can use FireCMS with Next.js. FireCMS is a React library, so you can use it with any React
+framework.
+
+In the case of Next.js, you are restricted to running FireCMS on the client side,
+as Next.js does not support server side rendering of some of the React components used by FireCMS.
+
+Let's build an app using FireCMS and Next.js, with the app router configured to delegate
+all the routes starting with `/cms` to FireCMS.
+
+### Create a Next.js project
+
+Start by creating your Next.js project:
+
+```bash
+npx create-next-app@latest
+```
+
+Select:
+- `TypeScript` as the language
+- `ESLint` as the linter
+- `Tailwind CSS` as the CSS framework
+- `src` as the root directory
+- Yes to the app router prompt
+- Yes to customize the default import alias (optional)
+
+### Install FireCMS
+
+Then we are going to install FireCMS PRO. Note that we will not be adding all the plugins like the collection
+editor or data enhancement, but you can add them as needed.
+
+Then install FireCMS and its dependencies:
+
+```bash
+yarn add firebase@^10 @firecms/core@^3.0.0-beta @firecms/firebase@^3.0.0-beta @firecms/editor@^3.0.0-beta react-router@^6 react-router-dom@^6 @tailwindcss/typography typeface-rubik @fontsource/jetbrains-mono
+```
+
+Now let's import the tailwind config of FireCMS. Add the FireCMS preset `tailwind.config.js`, as well as the
+content paths to FireCMS source code, so the right tailwind classes are picked.
+
+```js
+import fireCMSConfig from "@firecms/ui/tailwind.config.js";
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  presets: [fireCMSConfig],
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/cms/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@firecms/**/*.{js,ts,jsx,tsx}"
+  ]
+};
+export default config;
+
+```
+
+### Disable yarn pnp (optional)
+
+We prefer disabling yarn pnp for this project. You can do this by creating the file `.yarnrc` in the root of your project
+with the following content:
+
+```bash
+nodeLinker: node-modules
+```
+
+
+
+### Configuring the App router
+
+Next.js uses a file based router. In this guide, we will be creating the FireCMS
+app in the `/cms` route, but you can customize this to your needs.
+
+FireCMS uses react-router, so we need to configure Next.js to delegate
+all the routes starting with `/cms` to FireCMS.
+
+In our `app` folder, we create a folder called `cms` and inside it another one called
+`[[...path]]`. This will match any route starting with `/cms`.
+
+Then create the file `cms/[[...path]]/page.tsx` with the following content:
+:::important
+If you are not running FireCMS in the root path of you app, you need to set the `basePath` prop to the path where you
+are running it. In this case, we are running it in `/cms`.
+:::
+
+```tsx
+"use client";
+import { FireCMSApp } from "@/cms/FireCMSApp";
+import { BrowserRouter } from "react-router-dom";
+
+export default function CMS() {
+    return <BrowserRouter basename={"/cms"}>
+        <FireCMSApp/>
+    </BrowserRouter>;
+}
+
+```
+
+### Creating the CMS
+
+Now let's create the FireCMS components. Create the file `./src/cms/FireCMSApp.tsx` with the following content.
+Remember to replace the `firebaseConfig` with your own Firebase configuration.
+
+
+import CodeBlock from "@theme/CodeBlock";
+import MyComponentSource from "!!raw-loader!../../samples/samples_v3/nextjs.tsx";
+
+<CodeBlock language="tsx">{MyComponentSource}</CodeBlock>
+
+
+### Import the default FireCMS styles
+Create a file called `index.css` in the `./src/cms` folder with the following content:
+
+```css
+@import "@firecms/ui/index.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --fcms-primary: #0070F4;
+    --fcms-primary-dark: #0061e6;
+    --fcms-primary-bg: #0061e610;
+    --fcms-secondary: #FF5B79;
+}
+
+a {
+    @apply text-blue-600 dark:text-blue-400 dark:hover:text-blue-600 hover:text-blue-800
+}
+```
+
+## Run
+
+Then simply run:
+
+```
+yarn dev
+```
+
