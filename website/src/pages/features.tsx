@@ -33,8 +33,7 @@ function FeaturesPage() {
                         subtitle={
                             <>
                                 <p>
-                                    Empowering Your Content Management: Easily
-                                    Create, Edit, and Publish with a CMS that
+                                    Easily Create, Edit, and Publish with a CMS that
                                     both <b>content managers and developers will
                                     love</b>.
 

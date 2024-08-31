@@ -41,7 +41,17 @@ tr {
     font-weight: 500;
 }
 .menu__link {
+    font-size: 14px;
     font-weight: 400;
+}
+.menu__caret:before {
+    transform: scale(0.75) rotate(180deg);
+}
+.menu__link--sublist-caret:after {
+    transform: scale(0.75);
+}
+.menu__list-item--collapsed .menu__link--sublist:after, .menu__list-item--collapsed .menu__caret:before {
+    transform: scale(0.75) rotateZ(90deg);
 }
 
 .pro-sidebar-category > div:before{
@@ -351,7 +361,7 @@ a.btn {
 }
 
 h1, h2, h3 {
-    font-weight: 600 !important;
+    font-weight: 500;
 }
 
 h2 {
