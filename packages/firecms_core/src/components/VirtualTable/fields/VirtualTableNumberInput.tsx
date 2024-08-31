@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDebouncedCallback } from "../../../util";
+import { cls, focusedDisabled } from "@firecms/ui";
 
 export function VirtualTableNumberInput(props: {
     error: Error | undefined;
@@ -65,7 +66,7 @@ export function VirtualTableNumberInput(props: {
     return (
         <input
             ref={ref}
-            className="w-full text-right p-0 m-0 bg-transparent border-none resize-none outline-none font-normal leading-normal text-unset"
+            className={cls("w-full text-right p-0 m-0 bg-transparent border-none resize-none outline-none font-normal leading-normal text-unset", focusedDisabled)}
             style={{
                 textAlign: align
             }}

@@ -104,11 +104,9 @@ function SideDialogView({
     };
 
     const onCloseRequest = (force?: boolean) => {
-        console.log("onCloseRequest", blocked, force);
         if (blocked && !force) {
             setDrawerCloseRequested(true);
         } else {
-            console.log("onCloseRequest closing");
             sideDialogsController.close();
             panel?.onClose?.();
         }

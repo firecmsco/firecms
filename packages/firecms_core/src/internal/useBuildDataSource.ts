@@ -61,7 +61,8 @@ export function useBuildDataSource({
                                                                          order,
                                                                      }: FetchCollectionProps<M>
         ): Promise<Entity<M>[]> => {
-            return delegate.fetchCollection<M>({
+            const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
+            return usedDelegate.fetchCollection<M>({
                 path,
                 filter,
                 limit,
@@ -106,11 +107,12 @@ export function useBuildDataSource({
             ): () => void => {
 
                 const collection = collectionProp ?? navigationController.getCollection(path);
-                const isCollectionGroup = Boolean(collection?.collectionGroup);
-                if (!delegate.listenCollection)
+                const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
+
+                if (!usedDelegate.listenCollection)
                     throw Error("useBuildDataSource delegate not initialised");
 
-                return delegate.listenCollection<M>({
+                return usedDelegate.listenCollection<M>({
                     path,
                     filter,
                     limit,
@@ -137,11 +139,14 @@ export function useBuildDataSource({
                                                                      entityId,
                                                                      collection
                                                                  }: FetchEntityProps<M>
-        ): Promise<Entity<M> | undefined> => delegate.fetchEntity({
-            path,
-            entityId,
-            collection
-        }), [delegate]),
+        ): Promise<Entity<M> | undefined> => {
+            const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
+            return usedDelegate.fetchEntity({
+                path,
+                entityId,
+                collection
+            });
+        }, [delegate.fetchEntity]),
 
         /**
          *
@@ -162,10 +167,12 @@ export function useBuildDataSource({
                     onUpdate,
                     onError
                 }: ListenEntityProps<M>): () => void => {
-                if (!delegate.listenEntity)
+                const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
+
+                if (!usedDelegate.listenEntity)
                     throw Error("useBuildDataSource delegate not initialised");
 
-                return delegate.listenEntity<M>({
+                return usedDelegate.listenEntity<M>({
                     path,
                     entityId,
                     onUpdate,
@@ -195,6 +202,7 @@ export function useBuildDataSource({
             }: SaveEntityProps<M>): Promise<Entity<M>> => {
 
             const collection = collectionProp ?? navigationController.getCollection(path);
+            const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
 
             console.log("useBuildDatasource save", {
                 path,
@@ -216,7 +224,7 @@ export function useBuildDataSource({
 
             const properties: ResolvedProperties<M> | undefined = resolvedCollection?.properties;
 
-            const firestoreValues = delegate.cmsToDelegateModel(
+            const firestoreValues = usedDelegate.cmsToDelegateModel(
                 values,
             );
 
@@ -226,12 +234,12 @@ export function useBuildDataSource({
                         inputValues: firestoreValues,
                         properties,
                         status,
-                        timestampNowValue: delegate.currentTime?.() ?? new Date(),
-                        setDateToMidnight: delegate.setDateToMidnight
+                        timestampNowValue: usedDelegate.currentTime?.() ?? new Date(),
+                        setDateToMidnight: usedDelegate.setDateToMidnight
                     })
                 : firestoreValues;
 
-            return delegate.saveEntity({
+            return usedDelegate.saveEntity({
                 path,
                 collection,
                 entityId,
@@ -241,7 +249,7 @@ export function useBuildDataSource({
                 return {
                     id: res.id,
                     path: res.path,
-                    values: delegate.delegateToCMSModel(updatedValues)
+                    values: usedDelegate.delegateToCMSModel(updatedValues)
                 } as Entity<M>;
             });
         }, [delegate.saveEntity, navigationController.getCollection]),
@@ -254,10 +262,12 @@ export function useBuildDataSource({
          */
         deleteEntity: useCallback(<M extends Record<string, any>>(
             {
-                entity
+                entity,
+                collection
             }: DeleteEntityProps<M>
         ): Promise<void> => {
-            return delegate.deleteEntity({ entity });
+            const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
+            return usedDelegate.deleteEntity({ entity, collection });
         }, [delegate.deleteEntity]),
 
         /**
@@ -275,13 +285,15 @@ export function useBuildDataSource({
             name: string,
             value: any,
             entityId?: string,
-            databaseId?: string
+            collection?: EntityCollection
         ): Promise<boolean> => {
-            return delegate.checkUniqueField(path, name, value, entityId, databaseId);
+            const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
+            return usedDelegate.checkUniqueField(path, name, value, entityId, collection);
         }, [delegate.checkUniqueField]),
 
-        generateEntityId: useCallback((path: string): string => {
-            return delegate.generateEntityId(path,);
+        generateEntityId: useCallback((path: string, collection: EntityCollection): string => {
+            const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
+            return usedDelegate.generateEntityId(path, collection);
         }, [delegate.generateEntityId]),
 
         countEntities: delegate.countEntities ? async ({
@@ -297,7 +309,8 @@ export function useBuildDataSource({
             orderBy?: string,
             order?: "desc" | "asc",
         }): Promise<number> => {
-            return delegate.countEntities!({
+            const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
+            return usedDelegate.countEntities!({
                 path,
                 filter,
                 orderBy,
@@ -335,9 +348,10 @@ export function useBuildDataSource({
             collection: EntityCollection,
             parentCollectionIds?: string[]
         }): Promise<boolean> => {
-            if (!delegate.initTextSearch)
+            const usedDelegate = props.collection?.overrides?.dataSourceDelegate ?? delegate;
+            if (!usedDelegate.initTextSearch)
                 return false;
-            return delegate.initTextSearch(props)
+            return usedDelegate.initTextSearch(props)
         }, [delegate.initTextSearch]),
 
     };

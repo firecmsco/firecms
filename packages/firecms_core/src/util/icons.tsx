@@ -22,7 +22,13 @@ export type IconViewProps = {
 }
 
 export const IconForView = React.memo(
-    function IconForView({ collectionOrView, className }: { collectionOrView?: IconViewProps, className?: string }): React.ReactElement {
+    function IconForView({
+                             collectionOrView,
+                             className,
+                             size = "medium"
+                         }: {
+        collectionOrView?: IconViewProps, className?: string, size?: "smallest" | "small" | "medium" | "large" | number,
+    }): React.ReactElement {
         if (!collectionOrView) return <></>;
         const icon = getIcon(collectionOrView.icon, className);
         if (collectionOrView?.icon && icon)
@@ -45,7 +51,7 @@ export const IconForView = React.memo(
         if (!key)
             key = coolIconKeys[hashString(collectionOrView.path) % iconsCount];
 
-        return <Icon iconKey={key} size={"medium"} className={className}/>;
+        return <Icon iconKey={key} size={size} className={className}/>;
     }, (prevProps, nextProps) => {
         return equal(prevProps.collectionOrView?.icon, nextProps.collectionOrView?.icon);
     });

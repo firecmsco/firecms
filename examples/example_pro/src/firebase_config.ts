@@ -17,3 +17,13 @@ export const firebaseConfig = {
     appId: "1:837544933711:web:75822ffc0840e3ae01ad3a",
     measurementId: "G-8HRE8MVXZJ"
 };
+
+export const secondaryFirebaseConfig = {
+    apiKey: "AIzaSyDAns486OwbjsVoMsZiYIzkxpy4XFvDrxE",
+    authDomain: "fire-cms-devrel-demo.firebaseapp.com",
+    projectId: "fire-cms-devrel-demo",
+    storageBucket: "fire-cms-devrel-demo.appspot.com",
+    messagingSenderId: "513464601173",
+    appId: "1:513464601173:web:712baeda990027350de2dc"
+};
+

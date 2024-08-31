@@ -37,6 +37,7 @@ module.exports = {
                 "pro/mongodb_integration",
                 "pro/user_management",
                 "pro/custom_storage",
+                "pro/nextjs",
                 "pro/migrating_from_v2_to_pro",
                 "pro/migrating_from_v3_beta",
             ]

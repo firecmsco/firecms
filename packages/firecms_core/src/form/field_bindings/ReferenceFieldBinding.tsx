@@ -6,7 +6,7 @@ import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ErrorView } from "../../components";
 import { EmptyValue, ReferencePreview } from "../../preview";
-import { getIconForProperty, getReferenceFrom } from "../../util";
+import { getIconForProperty, getReferenceFrom, IconForView } from "../../util";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { EntityPreviewContainer } from "../../components/EntityPreview";
 import { cls } from "@firecms/ui";
@@ -115,7 +115,8 @@ function ReferenceFieldBindingInternal({
                             : "cursor-pointer text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800 group-hover:bg-slate-50 dark:group-hover:bg-gray-800")}
                                             onClick={onEntryClick}
                                             size={"medium"}>
-                        <EmptyValue/>
+                        <IconForView collectionOrView={collection}
+                                     className={"text-gray-300 dark:text-gray-600"}/>
                         {`Edit ${property.name}`.toUpperCase()}
                     </EntityPreviewContainer>
                 </div>}

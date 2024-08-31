@@ -14,7 +14,7 @@ export function GetCodeDialog({
     const snackbarController = useSnackbarController();
 
     const code = collection
-        ? "import { EntityCollection } from \"firecms\";\n\nconst " + (collection?.name ? camelCase(collection.name) : "my") + "Collection:EntityCollection = " + JSON5.stringify(collectionToCode(collection), null, "\t")
+        ? "import { EntityCollection } from \"@firecms/core\";\n\nconst " + (collection?.name ? camelCase(collection.name) : "my") + "Collection:EntityCollection = " + JSON5.stringify(collectionToCode(collection), null, "\t")
         : "No collection selected";
     return <Dialog open={open}
                    onOpenChange={onOpenChange}

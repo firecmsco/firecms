@@ -66,6 +66,11 @@ export const testCollection = buildCollection<any>({
         //     }
         // }],
         properties: {
+            car: {
+                name: "Cars",
+                dataType: "reference",
+                path: "cars",
+            },
             product: {
                 name: "Product",
                 dataType: "reference",

@@ -1,190 +1,259 @@
 "use client";
+import React, { useCallback } from "react";
 
-import React from "react";
-import { buildCollection, buildProperty, EntityReference } from "@firecms/core";
-
+import "./index.css";
 import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
-import { FireCMSCloudApp } from "@firecms/cloud";
 
-const projectId = "YOUR_PROJECT_ID";
+import {
+    AppBar,
+    buildCollection,
+    CircularProgressCenter,
+    Drawer,
+    FireCMS,
+    ModeControllerProvider,
+    NavigationRoutes,
+    Scaffold,
+    SideDialogs,
+    SnackbarProvider,
+    useBuildLocalConfigurationPersistence,
+    useBuildModeController,
+    useBuildNavigationController,
+    useValidateAuthenticator
+} from "@firecms/core";
+import {
+    FirebaseAuthController,
+    FirebaseLoginView,
+    FirebaseSignInProvider,
+    useFirebaseAuthController,
+    useFirebaseStorageSource,
+    useFirestoreDelegate,
+    useInitialiseFirebase,
+} from "@firecms/firebase";
+import { useImportPlugin } from "@firecms/data_import";
+import { useExportPlugin } from "@firecms/data_export";
+import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
+import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
+import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
 
-const locales = {
-    "en-US": "English (United States)",
-    "es-ES": "Spanish (Spain)",
-    "de-DE": "German"
+//TODO: replace with your own Firebase config
+export const firebaseConfig = {
+    //...
 };
 
-type Product = {
-    name: string;
-    price: number;
-    status: string;
-    published: boolean;
-    related_products: EntityReference[];
-    main_image: string;
-    tags: string[];
-    description: string;
-    categories: string[];
-    publisher: {
-        name: string;
-        external_id: string;
-    },
-    expires_on: Date
-}
+const categories = {
+    fiction: "Fiction",
+    drama: "Drama",
+    "fantasy-fiction": "Fantasy fiction",
+    history: "History",
+    religion: "Religion",
+    "self-help": "Self-Help",
+    "comics-graphic-novels": "Comics & Graphic Novels",
+    "juvenile-fiction": "Juvenile Fiction",
+    philosophy: "Philosophy",
+    fantasy: "Fantasy",
+    education: "Education",
+    science: "Science",
+    medical: "Medical",
+    cooking: "Cooking",
+    travel: "Travel"
+};
 
-const localeCollection = buildCollection({
-    id: "locale",
-    path: "locale",
-    customId: locales,
-    name: "Locales",
-    singularName: "Locales",
+const booksCollection = buildCollection({
+    name: "Books",
+    singularName: "Book",
+    id: "books",
+    path: "books",
+    icon: "MenuBook",
+    group: "Content",
+    textSearchEnabled: true,
+    description: "Example of a books collection that allows data enhancement through the use of the **OpenAI plugin**",
     properties: {
-        name: {
+        title: {
             name: "Title",
             validation: { required: true },
             dataType: "string"
         },
-        selectable: {
-            name: "Selectable",
-            description: "Is this locale selectable",
-            dataType: "boolean"
-        }
-    }
-});
-
-const productsCollection = buildCollection<Product>({
-    name: "Products",
-    singularName: "Product",
-    id: "products",
-    path: "products",
-    permissions: ({ authController }) => ({
-        edit: true,
-        create: true,
-        // we have created the roles object in the navigation builder
-        delete: false
-    }),
-    subcollections: [
-        localeCollection
-    ],
-    properties: {
-        name: {
-            name: "Name",
-            validation: { required: true },
+        authors: {
+            name: "Authors",
             dataType: "string"
         },
-        price: {
-            name: "Price",
-            validation: {
-                required: true,
-                requiredMessage: "You must set a price between 0 and 1000",
-                min: 0,
-                max: 1000
-            },
-            description: "Price with range validation",
-            dataType: "number"
-        },
-        status: {
-            name: "Status",
-            validation: { required: true },
+        description: {
+            name: "Description",
             dataType: "string",
-            description: "Should this product be visible in the website",
-            longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
-            enumValues: {
-                private: "Private",
-                public: "Public"
-            }
+            multiline: true
         },
-        published: ({ values }) => buildProperty({
-            name: "Published",
-            dataType: "boolean",
-            columnWidth: 100,
-            disabled: (
-                values.status === "public"
-                    ? false
-                    : {
-                        clearOnDisabled: true,
-                        disabledMessage: "Status must be public in order to enable this the published flag"
-                    }
-            )
-        }),
-        related_products: {
-            dataType: "array",
-            name: "Related products",
-            description: "Reference to self",
-            of: {
-                dataType: "reference",
-                path: "products"
-            }
-        },
-        main_image: buildProperty({ // The `buildProperty` method is a utility function used for type checking
-            name: "Image",
+        spanish_description: {
+            name: "Spanish description",
             dataType: "string",
-            storage: {
-                storagePath: "images",
-                acceptedFiles: ["image/*"]
-            }
-        }),
+            multiline: true
+        },
+        thumbnail: {
+            name: "Thumbnail",
+            dataType: "string",
+            url: "image"
+        },
+        category: {
+            name: "Category",
+            dataType: "string",
+            enumValues: categories
+        },
         tags: {
             name: "Tags",
-            description: "Example of generic array",
-            validation: { required: true },
             dataType: "array",
             of: {
                 dataType: "string"
             }
         },
-        description: {
-            name: "Description",
-            description: "This is the description of the product",
-            longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
-            dataType: "string",
-            columnWidth: 300
-        },
-        categories: {
-            name: "Categories",
-            validation: { required: true },
-            dataType: "array",
-            of: {
-                dataType: "string",
-                enumValues: {
-                    electronics: "Electronics",
-                    books: "Books",
-                    furniture: "Furniture",
-                    clothing: "Clothing",
-                    food: "Food"
-                }
+        published_year: {
+            name: "Published Year",
+            dataType: "number",
+            validation: {
+                integer: true,
+                min: 0
             }
         },
-        publisher: {
-            name: "Publisher",
-            description: "This is an example of a map property",
-            dataType: "map",
-            properties: {
-                name: {
-                    name: "Name",
-                    dataType: "string"
-                },
-                external_id: {
-                    name: "External id",
-                    dataType: "string"
-                }
-            }
+        num_pages: {
+            name: "Num pages",
+            dataType: "number"
         },
-        expires_on: {
-            name: "Expires on",
-            dataType: "date"
+        created_at: {
+            name: "Created at",
+            dataType: "date",
+            autoValue: "on_create"
         }
     }
 });
 
-export default function CMS() {
+export function FireCMSApp() {
 
-    return <FireCMSCloudApp
-        projectId={projectId}
-        basePath={"/cms"}
-        appConfig={{
-            version: "1",
-            collections: [productsCollection]
-        }}
-    />;
+    const {
+        firebaseApp,
+        firebaseConfigLoading,
+        configError
+    } = useInitialiseFirebase({
+        firebaseConfig
+    });
+
+    // Controller used to manage the dark or light color mode
+    const modeController = useBuildModeController();
+
+    const signInOptions: FirebaseSignInProvider[] = ["google.com"];
+
+    // Controller for saving some user preferences locally.
+    const userConfigPersistence = useBuildLocalConfigurationPersistence();
+
+    // Delegate used for fetching and saving data in Firestore
+    const firestoreDelegate = useFirestoreDelegate({
+        firebaseApp
+    });
+
+    // Controller used for saving and fetching files in storage
+    const storageSource = useFirebaseStorageSource({
+        firebaseApp
+    });
+
+    const collectionConfigController = useFirestoreCollectionsConfigController({
+        firebaseApp
+    });
+
+    // controller in charge of user management
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
+    });
+
+    // Controller for managing authentication
+    const authController: FirebaseAuthController = useFirebaseAuthController({
+        firebaseApp,
+        signInOptions,
+        loading: userManagement.loading,
+        defineRolesFor: userManagement.defineRolesFor
+    });
+
+    const {
+        authLoading,
+        canAccessMainView,
+        notAllowedError
+    } = useValidateAuthenticator({
+        disabled: userManagement.loading,
+        authenticator: userManagement.authenticator,
+        authController,
+        // authenticator: myAuthenticator,
+        dataSourceDelegate: firestoreDelegate,
+        storageSource
+    });
+
+    const collectionsBuilder = useCallback(() => {
+        const collections = [
+            booksCollection,
+            // Your collections here
+        ];
+        return mergeCollections(collections, collectionConfigController.collections ?? []);
+    }, [collectionConfigController.collections]);
+
+    const navigationController = useBuildNavigationController({
+        basePath: "/",
+        collections: collectionsBuilder,
+        collectionPermissions: userManagement.collectionPermissions,
+        adminViews: userManagementAdminViews,
+        authController,
+        dataSourceDelegate: firestoreDelegate
+    });
+
+    const userManagementPlugin = useUserManagementPlugin({ userManagement });
+
+    const importPlugin = useImportPlugin();
+    const exportPlugin = useExportPlugin();
+
+    const collectionEditorPlugin = useCollectionEditorPlugin({
+        collectionConfigController
+    });
+
+    if (firebaseConfigLoading || !firebaseApp) {
+        return <><CircularProgressCenter/></>;
+    }
+
+    if (configError) {
+        return <>{configError}</>;
+    }
+    return (
+        <SnackbarProvider>
+            <ModeControllerProvider value={modeController}>
+                <FireCMS
+                    navigationController={navigationController}
+                    authController={authController}
+                    userConfigPersistence={userConfigPersistence}
+                    dataSourceDelegate={firestoreDelegate}
+                    storageSource={storageSource}
+                    plugins={[importPlugin, exportPlugin, userManagementPlugin, collectionEditorPlugin]}
+                >
+                    {({
+                          context,
+                          loading
+                      }) => {
+
+                        if (loading || authLoading) {
+                            return <CircularProgressCenter size={"large"}/>;
+                        }
+                        if (!canAccessMainView) {
+                            return <FirebaseLoginView authController={authController}
+                                                      firebaseApp={firebaseApp}
+                                                      signInOptions={signInOptions}
+                                                      notAllowedError={notAllowedError}/>;
+                        }
+
+                        return <Scaffold
+                            autoOpenDrawer={false}>
+                            <AppBar title={"My demo app"}/>
+                            <Drawer/>
+                            <NavigationRoutes/>
+                            <SideDialogs/>
+                        </Scaffold>;
+                    }}
+                </FireCMS>
+            </ModeControllerProvider>
+        </SnackbarProvider>
+    );
+
 }
+

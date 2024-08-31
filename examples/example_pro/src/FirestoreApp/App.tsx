@@ -40,7 +40,7 @@ import {
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
 
-import { firebaseConfig } from "../firebase_config";
+import { firebaseConfig, secondaryFirebaseConfig } from "../firebase_config";
 // import { publicRecaptchaKey } from "../appcheck_config";
 import { ExampleCMSView } from "./ExampleCMSView";
 import { testCollection } from "./collections/test_collection";
@@ -62,6 +62,7 @@ import { useExportPlugin } from "@firecms/data_export";
 import { useImportPlugin } from "@firecms/data_import";
 import { DemoImportAction } from "./DemoImportAction";
 import { algoliaSearchControllerBuilder } from "./text_search";
+import { carsCollection } from "./collections/cars_collection";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
 
@@ -130,48 +131,6 @@ export function App() {
         firebaseApp
     });
 
-    // It is important to memoize the collections and views
-    const collections = useCallback(() => {
-        const sourceCollections: EntityCollection[] = [
-            productsCollection,
-            booksCollection,
-            localeCollectionGroup,
-            usersCollection,
-            blogCollection,
-            showcaseCollection,
-            cryptoCollection
-        ];
-        if (process.env.NODE_ENV !== "production") {
-            sourceCollections.push(testCollection);
-        }
-        return sourceCollections;
-        // return mergeCollections(
-        //     sourceCollections,
-        //     collectionConfigController.collections ?? []
-        // )
-    }, [collectionConfigController.collections]);
-
-    const views: CMSView[] = useMemo(() => ([
-        {
-            path: "additional",
-            name: "Additional",
-            group: "Content",
-            description: "This is an example of an additional view that is defined by the user",
-            view: <ExampleCMSView/>
-        },
-        // {
-        //     path: "board_test",
-        //     name: "Board test",
-        //     group: "Content",
-        //     view: <TestBoardView/>
-        // },
-        {
-            path: "editor_test",
-            name: "Editor test",
-            group: "Content",
-            view: <TestEditorView/>
-        }
-    ]), []);
 
     // Example of adding a custom field
     const propertyConfigs: Record<string, PropertyConfig> = {
@@ -214,6 +173,65 @@ export function App() {
         localTextSearchEnabled: false,
         textSearchControllerBuilder: algoliaSearchControllerBuilder
     });
+
+    const {
+        firebaseApp: secondaryFirebaseApp,
+        firebaseConfigLoading: secondaryFirebaseConfigLoading,
+    } = useInitialiseFirebase({
+        firebaseConfig: secondaryFirebaseConfig,
+        name: "secondary",
+        onFirebaseInit
+    });
+
+    // Delegate used for fetching and saving data in Firestore
+    const secondaryFirestoreDelegate = useFirestoreDelegate({
+        firebaseApp:secondaryFirebaseApp,
+    });
+
+
+    // It is important to memoize the collections and views
+    const collections = useCallback(() => {
+        const sourceCollections: EntityCollection[] = [
+            productsCollection,
+            booksCollection,
+            localeCollectionGroup,
+            usersCollection,
+            blogCollection,
+            showcaseCollection,
+            cryptoCollection,
+            carsCollection(secondaryFirestoreDelegate)
+        ];
+        if (process.env.NODE_ENV !== "production") {
+            sourceCollections.push(testCollection);
+        }
+        return sourceCollections;
+        // return mergeCollections(
+        //     sourceCollections,
+        //     collectionConfigController.collections ?? []
+        // )
+    }, [collectionConfigController.collections, secondaryFirestoreDelegate]);
+
+    const views: CMSView[] = useMemo(() => ([
+        {
+            path: "additional",
+            name: "Additional",
+            group: "Content",
+            description: "This is an example of an additional view that is defined by the user",
+            view: <ExampleCMSView/>
+        },
+        // {
+        //     path: "board_test",
+        //     name: "Board test",
+        //     group: "Content",
+        //     view: <TestBoardView/>
+        // },
+        {
+            path: "editor_test",
+            name: "Editor test",
+            group: "Content",
+            view: <TestEditorView/>
+        }
+    ]), []);
 
     // Controller used for saving and fetching files in storage
     const storageSource = useFirebaseStorageSource({
@@ -272,7 +290,7 @@ export function App() {
         dataSourceDelegate: firestoreDelegate
     });
 
-    if (firebaseConfigLoading || !firebaseApp) {
+    if (firebaseConfigLoading || secondaryFirebaseConfigLoading || !firebaseApp) {
         return <CircularProgressCenter/>;
     }
 

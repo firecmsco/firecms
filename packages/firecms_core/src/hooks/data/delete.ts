@@ -81,7 +81,8 @@ export async function deleteEntityWithCallbacks<M extends Record<string, any>, U
         }
     }
     return dataSource.deleteEntity({
-        entity
+        entity,
+        collection
     }).then(() => {
         onDeleteSuccess && onDeleteSuccess(entity);
         try {

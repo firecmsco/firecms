@@ -513,14 +513,15 @@ export function useFirestoreDelegate({
          */
         checkUniqueField: useCallback(async (
             path: string,
-            databaseId: string,
             name: string,
             value: any,
-            entityId?: string
+            entityId?: string,
+            collection?: EntityCollection<any>
         ): Promise<boolean> => {
 
             if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
 
+            const databaseId = collection?.databaseId;
             const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
 
             console.debug("Check unique field entity", path, name, value, entityId);

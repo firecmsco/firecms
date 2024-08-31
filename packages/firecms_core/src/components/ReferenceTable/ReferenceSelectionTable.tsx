@@ -16,7 +16,7 @@ import {
 } from "../../hooks";
 import { ErrorView } from "../ErrorView";
 import { AddIcon, Button, DialogActions, Typography } from "@firecms/ui";
-import { canCreateEntity, resolveCollection } from "../../util";
+import { canCreateEntity, IconForView, resolveCollection } from "../../util";
 import { useSelectionController } from "../EntityCollectionView/useSelectionController";
 import { useColumnIds, useTableSearchHelper } from "../common";
 import { useSideDialogContext } from "../../core";
@@ -109,6 +109,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
 
     const fullPath = navigation.resolveAliasesFrom(pathInput);
 
+    console.trace("Opening reference dialog for path " + fullPath);
     const dataSource = useDataSource(collection);
 
     const [entitiesDisplayedFirst, setEntitiesDisplayedFirst] = useState<Entity<any>[]>([]);
@@ -289,7 +290,11 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
                         tableController={tableController}
                         enablePopupIcon={false}
                         tableRowActionsBuilder={tableRowActionsBuilder}
-                        title={<Typography variant={"subtitle2"}>
+                        title={<Typography variant={"subtitle2"} className={"flex flex-row gap-2"}>
+                            <IconForView
+                                size={"small"}
+                                collectionOrView={collection}
+                                className={"text-gray-300 dark:text-gray-600"}/>
                             {collection.singularName ? `Select ${collection.singularName}` : `Select from ${collection.name}`}
                         </Typography>}
                         defaultSize={collection.defaultSize}

@@ -135,11 +135,25 @@ a {
 }
 ```
 
-## Run
+### Run
 
 Then simply run:
 
 ```
 yarn dev
+```
+and navigate to `http://localhost:3000/cms` to see your FireCMS app running.
+
+
+### Some considerations
+
+- Images are loaded differently in Next.js.
+You get a `StaticImageData` instead of the image URL (as in vite).
+You can use it in FireCMS components that expect a URL like, using the `src` property:
+```tsx
+import logo from "./logo.png";
+
+<FirebaseLoginView
+    logo={logo.src}/>
 ```
 

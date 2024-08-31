@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { useDebouncedCallback } from "../../../util";
-import { TextareaAutosize } from "@firecms/ui";
+import { focusedDisabled, TextareaAutosize } from "@firecms/ui";
 
 export function VirtualTableInput(props: {
     error: Error | undefined;
@@ -58,6 +58,7 @@ export function VirtualTableInput(props: {
 
     return (
         <TextareaAutosize
+            className={focusedDisabled}
             ref={ref}
             style={{
                 padding: 0,

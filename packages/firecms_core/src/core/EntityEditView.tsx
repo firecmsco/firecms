@@ -199,7 +199,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             if (mustSetCustomId) {
                 return undefined;
             } else {
-                return dataSource.generateEntityId(path);
+                return dataSource.generateEntityId(path, collection);
             }
         } else {
             return entityIdProp;
@@ -675,7 +675,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                                                                         name,
                                                                         value,
                                                                         property
-                                                                    }) => dataSource.checkUniqueField(path, name, value, entityId, collection.databaseId),
+                                                                    }) => dataSource.checkUniqueField(path, name, value, entityId, collection),
         [dataSource, path, entityId]);
 
     const validationSchema = useMemo(() => entityId

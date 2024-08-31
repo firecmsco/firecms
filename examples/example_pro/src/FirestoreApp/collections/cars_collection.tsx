@@ -1,235 +1,401 @@
-import { buildCollection, buildProperty } from "@firecms/core";
+import { DataSourceDelegate, EntityCollection } from "@firecms/core";
 
-export const showcaseCollection = buildCollection({
-    id: "showcase",
-    path: "showcase",
-    description: "Collection to showcase different field types",
-    customId: false,
-    icon: "bento",
-    name: "Showcase",
-    properties: {
-        name: buildProperty({
-            dataType: "string",
-            name: "Name",
-            validation: {
-                // ...
-            }
-        }),
-        age: buildProperty({
-            dataType: "number",
-            name: "Age",
-            validation: {
-                // ...
-            }
-        }),
-        description: buildProperty({
-            dataType: "string",
-            name: "Description",
-            multiline: true,
-            validation: {
-                // ...
-            }
-        }),
-        text: buildProperty({
-            dataType: "string",
-            name: "Blog text",
-            markdown: true,
-            validation: {
-                // ...
-            }
-        }),
-        amazon_link: buildProperty({
-            dataType: "string",
-            name: "Amazon link",
-            url: true,
-            validation: {
-                // ...
-            }
-        }),
-
-        count: buildProperty({
-            dataType: "number",
-            name: "Count"
-        }),
-
-        // build a dynamic property based on the `count` value
-        dynamic: buildProperty(({ values }) =>
-            ({
-                dataType: "map",
-                name: "Dynamic",
-                description: "Modify the count to update this field",
-                properties: Array(values.count ?? 0)
-                    .fill(0)
-                    .map((_, index) => {
-                        return buildProperty({
-                            dataType: "string",
-                            name: "Dynamic " + index,
-                        });
-                    })
-                    .reduce((acc, property, currentIndex) => {
-                        return {
-                            ...acc,
-                            ["dynamic_" + currentIndex]: property // keep in mind your key can't be just a number
-                        }
-                    }, {})
-            })),
-        user_email: buildProperty({
-            dataType: "string",
-            name: "User email",
-            email: true,
-            validation: {
-                // ...
-            }
-        }),
-        category: buildProperty({
-            dataType: "string",
-            name: "Category",
-            enumValues: {
-                art_design_books: "Art and design books",
-                backpacks: "Backpacks and bags",
-                bath: "Bath",
-                bicycle: "Bicycle",
-                books: "Books"
-            }
-        }),
-        locale: buildProperty({
-            name: "Available locales",
-            dataType: "array",
-            of: {
-                dataType: "string",
-                enumValues: {
-                    es: "Spanish",
-                    en: "English",
-                    fr: {
-                        id: "fr",
-                        label: "French",
-                        disabled: true
-                    }
-                }
-            },
-            defaultValue: ["es"]
-        }),
-        expiry: buildProperty({
-            dataType: "date",
-            name: "Expiry date",
-            mode: "date"
-        }),
-        arrival_time: buildProperty({
-            dataType: "date",
-            name: "Arrival time",
-            mode: "date_time"
-        }),
-        created_at: buildProperty({
-            dataType: "date",
-            name: "Created at",
-            autoValue: "on_create"
-        }),
-        updated_on: buildProperty({
-            dataType: "date",
-            name: "Updated at",
-            autoValue: "on_update"
-        }),
-        main_image: buildProperty({
-            dataType: "string",
-            name: "Main image",
-            storage: {
-                storagePath: "images",
-                acceptedFiles: ["image/*"],
-                maxSize: 1024 * 1024,
-                metadata: {
-                    cacheControl: "max-age=1000000"
+export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCollection => ({
+        id: "cars",
+        name: "Cars",
+        path: "cars",
+        editable: true,
+        icon: "broken_image",
+        overrides: {
+            dataSourceDelegate
+        },
+        properties: {
+            brand_name: {
+                validation: {
+                    required: true
                 },
-                fileName: (context) => {
-                    return context.file.name;
-                }
-            }
-        }),
-        images: buildProperty({
-            dataType: "array",
-            name: "Images",
-            of: {
                 dataType: "string",
-                storage: {
-                    storagePath: "images",
-                    acceptedFiles: ["image/*"],
-                    metadata: {
-                        cacheControl: "max-age=1000000"
+                enumValues: [
+                    {
+                        label: "Alfa Romero",
+                        id: "alfa-romero"
+                    },
+                    {
+                        id: "audi",
+                        label: "Audi"
+                    },
+                    {
+                        id: "bmw",
+                        label: "Bmw"
+                    },
+                    {
+                        label: "Chevrolet",
+                        id: "chevrolet"
+                    },
+                    {
+                        id: "dodge",
+                        label: "Dodge"
+                    },
+                    {
+                        label: "Honda",
+                        id: "honda"
+                    },
+                    {
+                        label: "Isuzu",
+                        id: "isuzu"
+                    },
+                    {
+                        id: "jaguar",
+                        label: "Jaguar"
+                    },
+                    {
+                        id: "mazda",
+                        label: "Mazda"
+                    },
+                    {
+                        label: "Mercedes Benz",
+                        id: "mercedes-benz"
+                    },
+                    {
+                        id: "mercury",
+                        label: "Mercury"
+                    },
+                    {
+                        id: "mitsubishi",
+                        label: "Mitsubishi"
+                    },
+                    {
+                        label: "Nissan",
+                        id: "nissan"
+                    },
+                    {
+                        label: "Peugot",
+                        id: "peugot"
+                    },
+                    {
+                        id: "plymouth",
+                        label: "Plymouth"
+                    },
+                    {
+                        label: "Porsche",
+                        id: "porsche"
+                    },
+                    {
+                        label: "Saab",
+                        id: "saab"
+                    },
+                    {
+                        id: "subaru",
+                        label: "Subaru"
+                    },
+                    {
+                        label: "Toyota",
+                        id: "toyota"
+                    },
+                    {
+                        id: "volkswagen",
+                        label: "Volkswagen"
+                    },
+                    {
+                        id: "volvo",
+                        label: "Volvo"
                     }
+                ],
+                name: "Brand Name"
+            },
+            aspiration: {
+                enumValues: [
+                    {
+                        id: "Aspired",
+                        label: "Aspired"
+                    },
+                    {
+                        id: "std",
+                        label: "Std"
+                    },
+                    {
+                        id: "turbo",
+                        label: "Turbo"
+                    }
+                ],
+                name: "Aspiration",
+                dataType: "string",
+                validation: {
+                    required: true
                 }
             },
-            description: "This fields allows uploading multiple images at once"
-        }),
-        address: buildProperty({
-            name: "Address",
-            dataType: "map",
-            properties: {
-                street: {
-                    name: "Street",
-                    dataType: "string"
+            bore: {
+                validation: {
+                    required: true
                 },
-                postal_code: {
-                    name: "Postal code",
-                    dataType: "number"
+                name: "Bore",
+                dataType: "number"
+            },
+            city_mileage: {
+                name: "City Mileage",
+                dataType: "number",
+                validation: {
+                    required: true
                 }
             },
-            expanded: true
-        }),
-        client: buildProperty({
-            dataType: "reference",
-            path: "users",
-            name: "Related client"
-        }),
-        related_products: buildProperty({
-            dataType: "array",
-            name: "Related products",
-            of: {
-                dataType: "reference",
-                path: "products"
-            }
-        }),
-        tags: buildProperty({
-            dataType: "array",
-            name: "Tags",
-            of: {
+            compression_ratio: {
+                name: "Compression Ratio",
+                validation: {
+                    required: true
+                },
+                dataType: "number"
+            },
+            cylinder_count: {
+                name: "Cylinder Count",
                 dataType: "string",
-                previewAsTag: true
-            },
-            expanded: true
-        }),
-        selectable: buildProperty({
-            name: "Selectable",
-            dataType: "boolean"
-        }),
-        content: buildProperty({
-            name: "Content",
-            dataType: "array",
-            oneOf: {
-                typeField: "type",
-                valueField: "value",
-                properties: {
-                    images: {
-                        dataType: "string",
-                        name: "Image",
-                        storage: {
-                            storagePath: "images",
-                            acceptedFiles: ["image/*"]
-                        }
+                enumValues: [
+                    {
+                        id: "eight",
+                        label: "Eight"
                     },
-                    text: {
-                        dataType: "string",
-                        name: "Text",
-                        markdown: true
+                    {
+                        label: "Five",
+                        id: "five"
                     },
-                    products: {
-                        name: "Products",
-                        dataType: "array",
-                        of: {
-                            dataType: "reference",
-                            path: "products"
-                        }
+                    {
+                        id: "four",
+                        label: "Four"
+                    },
+                    {
+                        label: "Six",
+                        id: "six"
+                    },
+                    {
+                        label: "Twelve",
+                        id: "twelve"
+                    },
+                    {
+                        id: "two",
+                        label: "Two"
                     }
+                ],
+                validation: {
+                    required: true
                 }
+            },
+            design: {
+                validation: {
+                    required: true
+                },
+                enumValues: [
+                    {
+                        label: "Convertible",
+                        id: "convertible"
+                    },
+                    {
+                        id: "hardtop",
+                        label: "Hardtop"
+                    },
+                    {
+                        id: "hatchback",
+                        label: "Hatchback"
+                    },
+                    {
+                        id: "sedan",
+                        label: "Sedan"
+                    },
+                    {
+                        id: "wagon",
+                        label: "Wagon"
+                    }
+                ],
+                dataType: "string",
+                name: "Design"
+            },
+            door_panel: {
+                dataType: "string",
+                validation: {
+                    required: true
+                },
+                enumValues: [
+                    {
+                        id: "four",
+                        label: "Four"
+                    },
+                    {
+                        id: "two",
+                        label: "Two"
+                    }
+                ],
+                name: "Door Panel"
+            },
+            engine_location: {
+                validation: {
+                    required: true
+                },
+                enumValues: [
+                    {
+                        label: "Front",
+                        id: "front"
+                    },
+                    {
+                        id: "rear",
+                        label: "Rear"
+                    }
+                ],
+                dataType: "string",
+                name: "Engine Location"
+            },
+            engine_size: {
+                dataType: "number",
+                validation: {
+                    required: true
+                },
+                name: "Engine Size"
+            },
+            engine_type: {
+                name: "Engine Type",
+                dataType: "string",
+                enumValues: [
+                    {
+                        label: "Dohc",
+                        id: "dohc"
+                    },
+                    {
+                        label: "Dohcv",
+                        id: "dohcv"
+                    },
+                    {
+                        label: "L",
+                        id: "l"
+                    },
+                    {
+                        label: "Ohc",
+                        id: "ohc"
+                    },
+                    {
+                        id: "ohcf",
+                        label: "Ohcf"
+                    },
+                    {
+                        id: "ohcv",
+                        label: "Ohcv"
+                    },
+                    {
+                        label: "Rotor",
+                        id: "rotor"
+                    }
+                ],
+                validation: {
+                    required: true
+                }
+            },
+            fuel_system: {
+                enumValues: [
+                    {
+                        id: "1bbl",
+                        label: "1bbl"
+                    },
+                    {
+                        id: "2bbl",
+                        label: "2bbl"
+                    },
+                    {
+                        id: "4bbl",
+                        label: "4bbl"
+                    },
+                    {
+                        id: "idi",
+                        label: "Idi"
+                    },
+                    {
+                        label: "Mpfi",
+                        id: "mpfi"
+                    },
+                    {
+                        label: "Spdi",
+                        id: "spdi"
+                    },
+                    {
+                        id: "spfi",
+                        label: "Spfi"
+                    }
+                ],
+                dataType: "string",
+                validation: {
+                    required: true
+                },
+                name: "Fuel System"
+            },
+            fuel_type: {
+                name: "Fuel Type",
+                enumValues: [
+                    {
+                        id: "diesel",
+                        label: "Diesel"
+                    },
+                    {
+                        id: "gas",
+                        label: "Gas"
+                    }
+                ],
+                dataType: "string",
+                validation: {
+                    required: true
+                }
+            },
+            highway_mileage: {
+                dataType: "number",
+                name: "Highway Mileage",
+                validation: {
+                    required: true
+                }
+            },
+            horse_power: {
+                name: "Horse Power",
+                dataType: "number",
+                validation: {
+                    required: true
+                }
+            },
+            price_in_dollars: {
+                name: "Price In Dollars",
+                validation: {
+                    required: true
+                },
+                dataType: "number"
+            },
+            stroke: {
+                dataType: "number",
+                name: "Stroke",
+                validation: {
+                    required: true
+                }
+            },
+            top_rpm: {
+                dataType: "number",
+                validation: {
+                    required: true
+                },
+                name: "Top Rpm"
+            },
+            wheel_drive: {
+                name: "Wheel Drive",
+                validation: {
+                    required: true
+                },
+                enumValues: [
+                    {
+                        id: "4wd",
+                        label: "4wd"
+                    },
+                    {
+                        label: "Fwd",
+                        id: "fwd"
+                    },
+                    {
+                        label: "Rwd",
+                        id: "rwd"
+                    }
+                ],
+                dataType: "string"
             }
-        }),
+        },
+        subcollections: []
     }
-});
+)

@@ -7,8 +7,16 @@ import { DataSourceContext } from "../../contexts/DataSourceContext";
  * @group Hooks and utilities
  */
 export const useDataSource = (collection?: EntityCollection<any, any>): DataSource => {
+    // const customizationController = useCustomizationController();
+    // const navigationController = useNavigationController();
     const defaultDataSource = useContext(DataSourceContext);
-    if (collection?.overrides?.dataSource)
-        return collection?.overrides.dataSource;
+    // if (collection?.overrides?.dataSourceDelegate) {
+    //     console.trace("Using custom data source for collection " + collection.id);
+    //     return useBuildDataSource({
+    //         delegate: collection.overrides.dataSourceDelegate,
+    //         propertyConfigs: customizationController?.propertyConfigs,
+    //         navigationController: navigationController
+    //     });
+    // }
     return defaultDataSource;
 };

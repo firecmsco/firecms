@@ -1,5 +1,5 @@
 import React from "react";
-import { DateTimeField } from "@firecms/ui";
+import { cls, DateTimeField, focusedDisabled } from "@firecms/ui";
 import { useCustomizationController } from "../../../hooks";
 
 export function VirtualTableDateField(props: {
@@ -28,8 +28,8 @@ export function VirtualTableDateField(props: {
             onChange={(dateValue) => updateValue(dateValue ?? null)}
             size={"medium"}
             invisible={true}
-            className={"w-full h-full"}
-            inputClassName={"w-full h-full"}
+            inputClassName={cls("w-full h-full", focusedDisabled)}
+            className={cls("w-full h-full", focusedDisabled)}
             mode={mode}
             locale={locale}
         />

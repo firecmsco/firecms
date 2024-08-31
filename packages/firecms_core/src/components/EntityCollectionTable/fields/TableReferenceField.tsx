@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
 import equal from "react-fast-compare"
 
-import { EmptyValue, ReferencePreview } from "../../../preview";
+import { ReferencePreview } from "../../../preview";
 import { CollectionSize, Entity, EntityCollection, EntityReference, FilterValues } from "../../../types";
 
 import { getPreviewSizeFrom } from "../../../preview/util";
-import { getReferenceFrom } from "../../../util";
+import { getReferenceFrom, IconForView } from "../../../util";
 import { useCustomizationController, useNavigationController, useReferenceDialog } from "../../../hooks";
 import { ErrorView } from "../../ErrorView";
 import { cls } from "@firecms/ui";
@@ -157,6 +157,10 @@ export const TableReferenceFieldSuccess = React.memo(
                             : "cursor-pointer text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800 group-hover:bg-slate-50 dark:group-hover:bg-gray-800")}
                                             onClick={handleOpen}
                                             size={"medium"}>
+                        <IconForView
+                            size={"small"}
+                            collectionOrView={collection}
+                            className={"text-gray-300 dark:text-gray-600"}/>
                         Edit {title}
                     </EntityPreviewContainer>}
 

@@ -12,6 +12,28 @@ you have additionally an `AppBar` and a `Drawer` component.
 
 More information about the main components can be found in the [Main Components](/docs/pro/main_components) section.
 
+You also will need to import the default FireCMS styles in your project. You can do this by adding the following import to your `index.css` file:
+
+```css
+@import "@firecms/ui/index.css";
+```
+
+Your `index.css` file should look like this:
+
+```css
+@import "@firecms/ui/index.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --fcms-primary: #0070F4;
+    --fcms-primary-dark: #0061e6;
+    --fcms-primary-bg: #0061e610;
+    --fcms-secondary: #FF5B79;
+}
+```
+
 
 ## FireCMS Cloud
 

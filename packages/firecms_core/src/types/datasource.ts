@@ -64,6 +64,7 @@ export interface SaveEntityProps<M extends Record<string, any> = any> {
  */
 export interface DeleteEntityProps<M extends Record<string, any> = any> {
     entity: Entity<M>;
+    collection?: EntityCollection<M> | ResolvedEntityCollection<M>;
 }
 
 /**
@@ -182,7 +183,8 @@ export interface DataSource {
      */
     deleteEntity<M extends Record<string, any> = any>(
         {
-            entity
+            entity,
+            collection
         }: DeleteEntityProps<M>
     ): Promise<void>;
 
@@ -191,7 +193,7 @@ export interface DataSource {
      * @param path Collection path
      * @param name of the property
      * @param value
-     * @param property
+     * @param collection
      * @param entityId
      * @return `true` if there are no other fields besides the given entity
      */
@@ -200,13 +202,13 @@ export interface DataSource {
         name: string,
         value: any,
         entityId?: string,
-        databaseId?: string
+        collection?: EntityCollection
     ): Promise<boolean>;
 
     /**
      * Generate an id for a new entity
      */
-    generateEntityId(path: string): string;
+    generateEntityId(path: string, collection: EntityCollection): string;
 
     /**
      * Count the number of entities in a collection
@@ -360,14 +362,15 @@ export interface DataSourceDelegate {
      * @param name of the property
      * @param value
      * @param entityId
+     * @param collection
      * @return `true` if there are no other fields besides the given entity
      */
-    checkUniqueField(path: string, name: string, value: any, entityId?: string, databaseId?: string): Promise<boolean>;
+    checkUniqueField(path: string, name: string, value: any, entityId?: string, collection?: EntityCollection): Promise<boolean>;
 
     /**
      * Generate an id for a new entity
      */
-    generateEntityId(path: string): string;
+    generateEntityId(path: string, collection?: EntityCollection): string;
 
     /**
      * Count the number of entities in a collection
