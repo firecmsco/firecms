@@ -5,7 +5,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { Command as CommandPrimitive } from "cmdk";
 
 import { ExpandMoreIcon } from "../icons";
-import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "../styles";
+import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin, focusedDisabled } from "../styles";
 import { cls } from "../util";
 import { SelectInputLabel } from "./common/SelectInputLabel";
 import { useOutsideAlerter } from "../hooks";
@@ -140,7 +140,7 @@ export function MultiSelect({
                             onValueChange={setInputValue}
                             // onBlur={() => setOpenInternal(false)}
                             onFocus={openDialog}
-                            className="ml-2 bg-transparent outline-none flex-1 h-full w-full "
+                            className={cls("ml-2 bg-transparent outline-none flex-1 h-full w-full ", focusedDisabled)}
                         />
                     </div>
                     <div className={"px-2 h-full flex items-center"}>
