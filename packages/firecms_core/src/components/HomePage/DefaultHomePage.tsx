@@ -64,18 +64,15 @@ export function DefaultHomePage({
     } = navigationController.topLevelNavigation;
 
     const [filteredUrls, setFilteredUrls] = useState<string[] | null>(null);
+    const performingSearch = Boolean(filteredUrls);
 
     const filteredNavigationEntries = filteredUrls
-        ? navigationEntries.filter((entry) => filteredUrls.includes(entry.url))
+        ? filteredUrls.map(url => navigationEntries.find(e => e.url === url)).filter(Boolean) as TopNavigationEntry[]
         : navigationEntries;
 
     useEffect(() => {
         fuse.current = new Fuse(navigationEntries, {
-            keys: ["name",
-                "description",
-                "group",
-                "path"
-            ]
+            keys: ["name", "description", "group", "path"]
         });
     }, [navigationEntries]);
 
@@ -92,7 +89,8 @@ export function DefaultHomePage({
             }
         }, []);
 
-    const allGroups: Array<string | undefined> = [...groups];
+    const filteredGroups = filteredUrls ? filteredNavigationEntries.map(entry => entry.group) : [];
+    const allGroups: Array<string | undefined> = filteredUrls ? filteredGroups.filter((group, index) => filteredGroups.indexOf(group) === index) : [...groups];
     if (filteredNavigationEntries.filter(e => !e.group).length > 0 || filteredNavigationEntries.length === 0) {
         allGroups.push(undefined);
     }
@@ -148,7 +146,7 @@ export function DefaultHomePage({
                     {additionalActions}
                 </div>
 
-                <FavouritesView hidden={Boolean(filteredUrls)}/>
+                <FavouritesView hidden={performingSearch}/>
 
                 {additionalChildrenStart}
 
@@ -172,7 +170,7 @@ export function DefaultHomePage({
 
                     const thisGroupCollections = filteredNavigationEntries
                         .filter((entry) => entry.group === group || (!entry.group && group === undefined));
-                    if (thisGroupCollections.length === 0 && AdditionalCards.length === 0)
+                    if (thisGroupCollections.length === 0 && (AdditionalCards.length === 0 || performingSearch))
                         return null;
                     return (
                         <NavigationGroup
