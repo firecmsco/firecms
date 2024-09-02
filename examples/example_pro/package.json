@@ -16,6 +16,7 @@
     "@firecms/ui": "^3.0.0-canary.113",
     "@firecms/user_management": "^3.0.0-canary.113",
     "@fontsource/jetbrains-mono": "^5.0.20",
+    "@supabase/supabase-js": "^2.45.3",
     "firebase": "^10.12.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
