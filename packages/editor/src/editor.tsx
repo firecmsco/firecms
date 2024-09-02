@@ -110,6 +110,7 @@ export const FireCMSEditor = ({
 
             if (deferredHighlight) {
                 if (currentHighlight.current?.from !== deferredHighlight.from || currentHighlight.current?.to !== deferredHighlight.to) {
+                    console.log("Highlighting", { deferredHighlight, current: currentHighlight.current });
                     chain.focus()
                         .setTextSelection({
                             from: deferredHighlight?.from,
@@ -120,14 +121,15 @@ export const FireCMSEditor = ({
             } else {
                 chain.focus().selectAll().unsetHighlight();
             }
-            currentHighlight.current = deferredHighlight;
 
             chain.focus().setTextSelection({
                 from: selectionFrom,
                 to: selectionTo
             }).run();
+            currentHighlight.current = deferredHighlight;
+
         }
-    }, [editorRef.current, deferredHighlight]);
+    }, [deferredHighlight?.from, deferredHighlight?.to]);
 
     const onEditorUpdate = (editor: Editor) => {
         editorRef.current = editor;

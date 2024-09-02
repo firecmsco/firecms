@@ -10,6 +10,7 @@ import { SampleCustomEntityCollection } from "./views/SampleCustomEntityCollecti
 import { homesCollection } from "./collections/homes";
 import { featureConfig } from "./property_configs/feature_property";
 import { ReCaptchaEnterpriseProvider } from "@firebase/app-check";
+import { blogCollection } from "./collections/blog_collection";
 
 const appConfig: FireCMSAppConfig = {
     version: "1",
@@ -42,6 +43,7 @@ const appConfig: FireCMSAppConfig = {
         return ([
             newTestCollection,
             productsCollection,
+            blogCollection,
             usersCollection,
             homesCollection
             // pagesCollection

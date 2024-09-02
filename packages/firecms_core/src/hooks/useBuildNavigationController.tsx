@@ -201,7 +201,6 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
 
             let shouldUpdateTopLevelNav = false;
             if (!areCollectionListsEqual(collectionsRef.current ?? [], resolvedCollections)) {
-                console.log("Collections need to be updated");
                 collectionsRef.current = resolvedCollections;
                 shouldUpdateTopLevelNav = true;
             }
@@ -210,12 +209,10 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
                 shouldUpdateTopLevelNav = true;
             }
             if (!equal(viewsRef.current, resolvedViews)) {
-                console.log("Views need to be updated");
                 viewsRef.current = resolvedViews;
                 shouldUpdateTopLevelNav = true;
             }
             if (!equal(adminViewsRef.current, resolvedAdminViews)) {
-                console.log("Admin views need to be updated");
                 adminViewsRef.current = resolvedAdminViews;
                 shouldUpdateTopLevelNav = true;
             }
