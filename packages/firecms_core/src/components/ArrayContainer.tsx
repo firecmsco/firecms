@@ -242,7 +242,7 @@ export function ArrayContainerItem({
         <div
             className="flex items-start">
             <div
-                className="flex-grow w-[calc(100%-48px)] text-text-primary dark:text-text-primary-dark bg-white dark:bg-gray-900 bg-opacity-80 dark:bg-opacity-80">
+                className="flex-grow w-[calc(100%-48px)] text-text-primary dark:text-text-primary-dark">
                 {buildEntry(index, internalId)}
             </div>
             <ArrayItemOptions direction={size === "small" ? "row" : "column"}

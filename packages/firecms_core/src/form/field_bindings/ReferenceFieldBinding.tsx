@@ -78,10 +78,10 @@ function ReferenceFieldBindingInternal({
         }
     );
 
-    const onEntryClick = useCallback((e: React.SyntheticEvent) => {
+    const onEntryClick = (e: React.SyntheticEvent) => {
         e.preventDefault();
         referenceDialogController.open();
-    }, [referenceDialogController]);
+    };
 
     return (
         <>

@@ -70,10 +70,10 @@ export function ArrayOfReferencesFieldBinding({
         }
     );
 
-    const onEntryClick = useCallback((e: React.SyntheticEvent) => {
+    const onEntryClick = (e: React.SyntheticEvent) => {
         e.preventDefault();
         referenceDialogController.open();
-    }, [referenceDialogController]);
+    };
 
     const buildEntry = useCallback((index: number, internalId: number) => {
         const entryValue = value && value.length > index ? value[index] : undefined;
@@ -100,7 +100,7 @@ export function ArrayOfReferencesFieldBinding({
             icon={getIconForProperty(property, "small")}
             required={property.validation?.required}
             title={property.name}
-            className={"flex-grow text-text-secondary dark:text-text-secondary-dark"}/>
+            className={"flex flex-grow text-text-secondary dark:text-text-secondary-dark"}/>
         {Array.isArray(value) && <Typography variant={"caption"} className={"px-4"}>({value.length})</Typography>}
     </>);
 
@@ -120,7 +120,7 @@ export function ArrayOfReferencesFieldBinding({
 
             <Button
                 className="my-4 justify-center text-left"
-                variant="outlined"
+                variant="text"
                 color="primary"
                 disabled={isSubmitting}
                 onClick={onEntryClick}>

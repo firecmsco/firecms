@@ -21,7 +21,7 @@ export type ReferencePreviewProps = {
 /**
  * @group Preview components
  */
-export const ReferencePreview = React.memo<ReferencePreviewProps>(function ReferencePreview(props: ReferencePreviewProps) {
+export const ReferencePreview = function ReferencePreview(props: ReferencePreviewProps) {
     const reference = props.reference;
     if (!(typeof reference === "object" && "isEntityReference" in reference && reference.isEntityReference())) {
         console.warn("Reference preview received value of type", typeof reference);
@@ -33,18 +33,7 @@ export const ReferencePreview = React.memo<ReferencePreviewProps>(function Refer
         </EntityPreviewContainer>;
     }
     return <ReferencePreviewInternal {...props} />;
-}, areEqual) as React.FunctionComponent<ReferencePreviewProps>;
-
-function areEqual(prevProps: ReferencePreviewProps, nextProps: ReferencePreviewProps) {
-    return prevProps.disabled === nextProps.disabled &&
-        prevProps.size === nextProps.size &&
-        prevProps.hover === nextProps.hover &&
-        prevProps.reference?.id === nextProps.reference?.id &&
-        prevProps.reference?.path === nextProps.reference?.path &&
-        prevProps.includeEntityLink === nextProps.includeEntityLink &&
-        prevProps.onClick === nextProps.onClick
-        ;
-}
+};
 
 function ReferencePreviewInternal({
                                       disabled,

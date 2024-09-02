@@ -8,6 +8,7 @@ import {
     getEntityPreviewKeys,
     getEntityTitlePropertyKey,
     getValueInPath,
+    IconForView,
     resolveCollection
 } from "../util";
 import { cls, defaultBorderMixin, IconButton, KeyboardTabIcon, Skeleton, Tooltip, Typography } from "@firecms/ui";
@@ -76,14 +77,14 @@ export function EntityPreview({
     return <EntityPreviewContainer onClick={disabled ? undefined : onClick}
                                    hover={disabled ? undefined : hover}
                                    size={size}>
-        {imageProperty && (
-            <div className={cls("w-10 h-10 mr-2 shrink-0 grow-0", size === "smallest" ? "my-0.5" : "m-2 self-start")}>
-                <PropertyPreview property={imageProperty}
-                                 propertyKey={imagePropertyKey as string}
-                                 size={"smallest"}
-                                 value={getValueInPath(entity.values, imagePropertyKey as string)}/>
-            </div>
-        )}
+        <div className={cls("w-10 h-10 mr-2 shrink-0 grow-0", size === "smallest" ? "my-0.5" : "m-2 self-start")}>
+            {imageProperty && <PropertyPreview property={imageProperty}
+                                               propertyKey={imagePropertyKey as string}
+                                               size={"smallest"}
+                                               value={getValueInPath(entity.values, imagePropertyKey as string)}/>}
+            {!imageProperty && <IconForView collectionOrView={collection} size={size} className={"mr-2"}/>}
+        </div>
+
 
         <div className={"flex flex-col flex-grow w-full m-1"}>
 
@@ -180,16 +181,17 @@ export type EntityPreviewContainerProps = {
     onClick?: (e: React.SyntheticEvent) => void;
 };
 
-const EntityPreviewContainerInner = React.forwardRef<HTMLDivElement, EntityPreviewContainerProps>(({
-                                                                                                       children,
-                                                                                                       hover,
-                                                                                                       onClick,
-                                                                                                       size,
-                                                                                                       style,
-                                                                                                       className,
-                                                                                                       fullwidth = true,
-                                                                                                       ...props
-                                                                                                   }, ref) => {
+
+export const EntityPreviewContainer = React.forwardRef<HTMLDivElement, EntityPreviewContainerProps>(({
+                                                                                                         children,
+                                                                                                         hover,
+                                                                                                         onClick,
+                                                                                                         size,
+                                                                                                         style,
+                                                                                                         className,
+                                                                                                         fullwidth = true,
+                                                                                                         ...props
+                                                                                                     }, ref) => {
     return <div
         ref={ref}
         style={{
@@ -218,7 +220,3 @@ const EntityPreviewContainerInner = React.forwardRef<HTMLDivElement, EntityPrevi
         {children}
     </div>;
 });
-
-EntityPreviewContainerInner.displayName = "EntityPreviewContainer";
-
-export const EntityPreviewContainer = React.memo(EntityPreviewContainerInner) as React.FC<EntityPreviewContainerProps>;

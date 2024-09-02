@@ -39,11 +39,11 @@ export function TableReferenceField(props: TableReferenceFieldProps) {
             throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
         }
     }
-    return <TableReferenceFieldSuccess {...props} collection={collection}/>;
+    return <TableReferenceFieldInternal {...props} collection={collection}/>;
 }
 
-export const TableReferenceFieldSuccess = React.memo(
-    function TableReferenceFieldSuccess(props: TableReferenceFieldProps & {
+export const TableReferenceFieldInternal = React.memo(
+    function TableReferenceFieldInternal(props: TableReferenceFieldProps & {
         collection: EntityCollection;
     }) {
         const {
@@ -88,11 +88,11 @@ export const TableReferenceFieldSuccess = React.memo(
             }
         );
 
-        const handleOpen = useCallback(() => {
+        const handleOpen = () => {
             if (disabled)
                 return;
             referenceDialogController.open();
-        }, [disabled, referenceDialogController]);
+        };
 
         const valueNotSet = !internalValue || (Array.isArray(internalValue) && internalValue.length === 0);
 
@@ -151,7 +151,8 @@ export const TableReferenceFieldSuccess = React.memo(
                 {internalValue && multiselect && buildMultipleReferenceField()}
 
                 {valueNotSet &&
-                    <EntityPreviewContainer className={cls("p-4 text-sm font-medium flex items-center gap-4 uppercase",
+                    <EntityPreviewContainer className={cls("p-4 text-sm font-medium flex items-center uppercase",
+                        multiselect ? "gap-4" : "gap-6",
                         disabled
                             ? "text-slate-500"
                             : "cursor-pointer text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800 group-hover:bg-slate-50 dark:group-hover:bg-gray-800")}
