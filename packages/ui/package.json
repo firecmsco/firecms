@@ -35,7 +35,8 @@
     },
     "./package.json": "./package.json",
     "./tailwind.config.js": "./tailwind.config.js",
-    "./index.css": "./dist/index.css"
+    "./index.css": "./dist/index.css",
+    "./dist/index.css": "./dist/index.css"
   },
   "scripts": {
     "watch": "vite build --watch",
