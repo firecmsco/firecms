@@ -535,17 +535,13 @@ const autocompleteSuggestionItem: SuggestionItem = {
 
         let buffer = "";
         const result = await aiController.autocomplete(textBeforeCursor, textAfterCursor, (delta) => {
-
             buffer += delta;
             if (delta.length !== 0) {
-                // @ts-ignore
                 editor.chain().focus().toggleLoadingDecoration(buffer).run()
             }
         });
 
         editor.chain().focus()
-            // @ts-ignore
-            // .removeLoadingDecoration()
             .insertContent(result, {
                 applyInputRules: false,
                 applyPasteRules: false,

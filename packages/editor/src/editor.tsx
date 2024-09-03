@@ -13,7 +13,7 @@ import { NodeSelector } from "./selectors/node-selector";
 import { LinkSelector } from "./selectors/link-selector";
 import { TextButtons } from "./selectors/text-buttons";
 
-import { Button, cls, defaultBorderMixin, Separator, useInjectStyles } from "@firecms/ui";
+import { cls, defaultBorderMixin, Separator, useInjectStyles } from "@firecms/ui";
 import { Editor, EditorProvider } from "@tiptap/react";
 import { removeClassesFromJson } from "./utils/remove_classes";
 import {
@@ -31,8 +31,8 @@ import { DragAndDrop } from "./extensions/drag-and-drop";
 import Document from "@tiptap/extension-document"
 import { SlashCommand, suggestion } from "./extensions/slashCommand";
 import { EditorAIController } from "./types";
-import { AiContentExtension } from "./extensions/AiContent";
-import LoadingDecoration from "./LoadingDecorator";
+import TextLoadingDecorationExtension from "./extensions/TextLoadingDecorationExtension";
+import { HighlightDecorationExtension } from "./extensions/HighlightDecorationExtension";
 
 export type FireCMSEditorTextSize = "sm" | "base" | "lg";
 
@@ -97,35 +97,17 @@ export const FireCMSEditor = ({
     useEffect(() => {
         if (version === undefined) return;
         if (editorRef.current && version > 0) {
-            const {
-                from: selectionFrom,
-                to: selectionTo
-            } = editorRef.current.state.selection;
 
             const chain = editorRef.current.chain();
-            const currentContent = editorRef.current.storage.markdown.getMarkdown();
-            if (currentContent !== content) {
-                chain.setContent(content ?? "");
-            }
 
             if (deferredHighlight) {
                 if (currentHighlight.current?.from !== deferredHighlight.from || currentHighlight.current?.to !== deferredHighlight.to) {
-                    console.log("Highlighting", { deferredHighlight, current: currentHighlight.current });
-                    chain.focus()
-                        .setTextSelection({
-                            from: deferredHighlight?.from,
-                            to: deferredHighlight?.to
-                        })
-                        .toggleHighlight({ color: "#64748B68" });
+                    chain.focus().toggleAutocompleteHighlight(deferredHighlight).run();
                 }
             } else {
-                chain.focus().selectAll().unsetHighlight();
+                chain.focus().removeAutocompleteHighlight().run();
             }
 
-            chain.focus().setTextSelection({
-                from: selectionFrom,
-                to: selectionTo
-            }).run();
             currentHighlight.current = deferredHighlight;
 
         }
@@ -149,8 +131,12 @@ export const FireCMSEditor = ({
     const proseClass = proseClasses[textSize];
 
     const extensions = useMemo(() => ([
-        // AutocompleteExtension,
-        LoadingDecoration,
+        HighlightDecorationExtension,
+        TextLoadingDecorationExtension,
+        // AiContentExtension.configure({
+        //     aiController
+        // }),
+
         TiptapUnderline,
         TextStyle,
         Color,
@@ -170,9 +156,6 @@ export const FireCMSEditor = ({
         taskItem,
         markdownExtension,
         horizontalRule,
-        AiContentExtension.configure({
-            aiController
-        }),
         SlashCommand.configure({
             HTMLAttributes: {
                 class: "mention"

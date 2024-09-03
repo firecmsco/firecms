@@ -2,6 +2,15 @@ import { Plugin, PluginKey } from "prosemirror-state";
 import { Decoration, DecorationSet } from "prosemirror-view";
 import { Command, Extension } from "@tiptap/core";
 
+declare module "@tiptap/core" {
+    interface Commands<ReturnType> {
+        textLoadingDecoration: {
+            toggleLoadingDecoration: (loadingHtml?: string) => ReturnType;
+            removeLoadingDecoration: () => ReturnType;
+        };
+    }
+}
+
 // Define and export the plugin key
 export const loadingDecorationKey = new PluginKey<LoadingDecorationState>("loadingDecoration");
 
@@ -9,8 +18,9 @@ interface LoadingDecorationState {
     decorationSet: DecorationSet;
     hasDecoration: boolean;
 }
+
  // this decoration is used to display streaming content from an LLM, called withing the slash command
-const LoadingDecoration = Extension.create({
+const TextLoadingDecorationExtension = Extension.create({
     name: "loadingDecoration",
 
     addOptions() {
@@ -95,8 +105,6 @@ const LoadingDecoration = Extension.create({
                 if (!dispatch) return false;
 
                 const pluginKey = this.options.pluginKey;
-                const pluginState = pluginKey.get(state);
-                const decorationExists = pluginState?.getState(state)?.hasDecoration ?? false;
 
                 const tr = state.tr.setMeta(pluginKey, {
                     pos,
@@ -126,4 +134,4 @@ const LoadingDecoration = Extension.create({
     }
 });
 
-export default LoadingDecoration;
+export default TextLoadingDecorationExtension;
