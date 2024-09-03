@@ -231,9 +231,9 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         }
     );
 
-    const selectedTabRef = useRef<string>(defaultSelectedView ?? MAIN_TAB_VALUE);
+    const [selectedTab, setSelectedTab] = useState<string>(defaultSelectedView ?? MAIN_TAB_VALUE);
 
-    const mainViewVisible = selectedTabRef.current === MAIN_TAB_VALUE;
+    const mainViewVisible = selectedTab === MAIN_TAB_VALUE;
 
     const subcollections = (collection.subcollections ?? []).filter(c => !c.hideFromNavigation);
     const subcollectionsCount = subcollections?.length ?? 0;
@@ -307,7 +307,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             sideEntityController.replace({
                 path,
                 entityId: updatedEntity.id,
-                selectedSubPath: MAIN_TAB_VALUE === selectedTabRef.current ? undefined : selectedTabRef.current,
+                selectedSubPath: MAIN_TAB_VALUE === selectedTab ? undefined : selectedTab,
                 updateUrl: true,
                 collection,
             });
@@ -491,15 +491,15 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             .filter(Boolean) as EntityCustomView[]
         : [];
 
-    const selectedEntityView = resolvedEntityViews.find(e => e.key === selectedTabRef.current);
-    const shouldShowEntityActions = !autoSave && (selectedTabRef.current === MAIN_TAB_VALUE || selectedEntityView?.includeActions);
+    const selectedEntityView = resolvedEntityViews.find(e => e.key === selectedTab);
+    const shouldShowEntityActions = !autoSave && (selectedTab === MAIN_TAB_VALUE || selectedEntityView?.includeActions);
 
     const customViewsView: React.ReactNode[] | undefined = customViews && resolvedEntityViews
         .map(
             (customView, colIndex) => {
                 if (!customView)
                     return null;
-                if (selectedTabRef.current !== customView.key)
+                if (selectedTab !== customView.key)
                     return null;
                 const Builder = customView.Builder;
                 if (!Builder) {
@@ -532,7 +532,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         (subcollection, colIndex) => {
             const subcollectionId = subcollection.id ?? subcollection.path;
             const fullPath = usedEntity ? `${path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollectionId)}` : undefined;
-            if (selectedTabRef.current !== subcollectionId)
+            if (selectedTab !== subcollectionId)
                 return null;
             return (
                 <div
@@ -568,14 +568,16 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     }, []);
 
     const onSideTabClick = (value: string) => {
-        selectedTabRef.current = value;
-        sideEntityController.replace({
-            path,
-            entityId,
-            selectedSubPath: value === MAIN_TAB_VALUE ? undefined : value,
-            updateUrl: true,
-            collection,
-        });
+        setSelectedTab(value);
+        if (status === "existing") {
+            sideEntityController.replace({
+                path,
+                entityId,
+                selectedSubPath: value === MAIN_TAB_VALUE ? undefined : value,
+                updateUrl: true,
+                collection,
+            });
+        }
     };
 
     const onIdUpdateError = useCallback((error: any) => {
@@ -1027,7 +1029,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                     </div>}
 
                     <Tabs
-                        value={selectedTabRef.current}
+                        value={selectedTab}
                         onValueChange={(value) => {
                             onSideTabClick(value);
                         }}
