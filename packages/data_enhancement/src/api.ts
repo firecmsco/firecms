@@ -83,9 +83,9 @@ export async function enhanceDataAPIStream<M extends object>(props: {
                             const data = JSON.parse(s.trim());
                             if (data.type === "suggestion_delta")
                                 props.onUpdateDelta(data.data.propertyKey, data.data.partialValue);
-                            if (data.type === "suggestion")
+                            else if (data.type === "suggestion")
                                 props.onUpdate(data.data);
-                            if (data.type === "result")
+                            else if (data.type === "result")
                                 props.onEnd(data.data);
                         }
                     });

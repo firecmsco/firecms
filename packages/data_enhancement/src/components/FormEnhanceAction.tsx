@@ -129,23 +129,23 @@ export function FormEnhanceAction({
 
     const noIdSet = !formContext?.entityId;
 
+    function submit() {
+        setAutoCompleteOpen(false);
+        enhance(instructions);
+    }
+
     return (
         <div className={"relative w-full"}
              style={{ height }}>
             <div className="absolute flex flex-col items-center w-full font-medium text-sm">
 
-                <form
+                <div
                     className={cls(
                         defaultBorderMixin,
                         "border-b",
                         "flex w-full items-center gap-2 pr-4 pl-6",
                         inputFocused ? "text-primary" : "text-gray-700 dark:text-gray-200"
-                    )}
-                    onSubmit={(e) => {
-                        setAutoCompleteOpen(false);
-                        e.preventDefault();
-                        enhance(instructions);
-                    }}>
+                    )}>
 
                     <AutoFixHighIcon/>
                     <TextareaAutosize
@@ -167,7 +167,7 @@ export function FormEnhanceAction({
                         onKeyDown={(e) => {
                             if (e.key === "Enter" && !e.shiftKey) {
                                 e.preventDefault();
-                                enhance(instructions);
+                                submit();
                             }
                             if (e.key === "Escape" && autoCompleteOpen) {
                                 setAutoCompleteOpen(false);
@@ -248,7 +248,7 @@ export function FormEnhanceAction({
                         </Button>
                     </Tooltip>}
 
-                </form>
+                </div>
 
                 {/*{samplePrompts &&*/}
                 {/*    <Collapse*/}

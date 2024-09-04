@@ -1,7 +1,7 @@
 "use client";
 import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 
-import TiptapUnderline from "@tiptap/extension-underline";
+import { Underline } from "@tiptap/extension-underline";
 import TextStyle from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
 import BulletList from "@tiptap/extension-bullet-list"
@@ -87,12 +87,10 @@ export const FireCMSEditor = ({
 
     useEffect(() => {
         if (version === undefined) return;
-        if (version > 0 && editorRef.current) {
+        if (version > -1 && editorRef.current) {
             editorRef.current?.commands.setContent(content ?? "");
         }
     }, [version]);
-
-    const currentHighlight = useRef(deferredHighlight);
 
     useEffect(() => {
         if (version === undefined) return;
@@ -101,14 +99,10 @@ export const FireCMSEditor = ({
             const chain = editorRef.current.chain();
 
             if (deferredHighlight) {
-                if (currentHighlight.current?.from !== deferredHighlight.from || currentHighlight.current?.to !== deferredHighlight.to) {
                     chain.focus().toggleAutocompleteHighlight(deferredHighlight).run();
-                }
             } else {
                 chain.focus().removeAutocompleteHighlight().run();
             }
-
-            currentHighlight.current = deferredHighlight;
 
         }
     }, [deferredHighlight?.from, deferredHighlight?.to]);
@@ -131,24 +125,19 @@ export const FireCMSEditor = ({
     const proseClass = proseClasses[textSize];
 
     const extensions = useMemo(() => ([
-        HighlightDecorationExtension,
+        starterKit,
+        CustomDocument,
+        HighlightDecorationExtension(highlight),
         TextLoadingDecorationExtension,
-        // AiContentExtension.configure({
-        //     aiController
-        // }),
-
-        TiptapUnderline,
+        Underline,
         TextStyle,
         Color,
         BulletList,
-        CustomDocument,
         Highlight.configure({
             multicolor: true
         }),
-
         CustomKeymap,
         DragAndDrop,
-        starterKit,
         placeholder,
         tiptapLink,
         imageExtension,

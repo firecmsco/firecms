@@ -1,4 +1,5 @@
 import { Command, Extension } from "@tiptap/core"
+import { Node } from "@tiptap/pm/model"
 import { Plugin, PluginKey } from "@tiptap/pm/state"
 import { Decoration, DecorationSet } from "@tiptap/pm/view"
 
@@ -18,7 +19,6 @@ export interface HighlightRange {
 
 interface AutocompleteHighlightState {
     highlight?: HighlightRange
-    hasHighlight: boolean;
     decorationSet?: DecorationSet
 }
 
@@ -27,17 +27,30 @@ export interface HighlightDecorationOptions {
     highlight?: { from: number, to: number }
 }
 
-const highlightPluginKey = new PluginKey<AutocompleteHighlightState>("highlightPlugin");
+function buildDecorationSet(highlight: any, doc: Node) {
+    const decorations: [any?] = [];
+
+    if (highlight) {
+        decorations.push(
+            Decoration.inline(highlight.from, highlight.to, {
+                class: "dark:bg-slate-700 bg-slate-300"
+            })
+        );
+    }
+    const decorationSet = DecorationSet.create(doc, decorations);
+    return decorationSet;
+}
 
 /**
  * This plugin is used to highlight the current autocomplete suggestion.
  * It allows to set a range and remove it.
  */
-export const HighlightDecorationExtension = Extension.create<HighlightDecorationOptions>({
+export const HighlightDecorationExtension = (initialHighlight?: HighlightRange) => Extension.create<HighlightDecorationOptions>({
     name: "highlightDecoration",
     addOptions() {
         return {
-            pluginKey: highlightPluginKey
+            pluginKey: new PluginKey<AutocompleteHighlightState>("highlightDecoration"),
+            highlight: initialHighlight
         };
     },
     addProseMirrorPlugins() {
@@ -45,39 +58,32 @@ export const HighlightDecorationExtension = Extension.create<HighlightDecoration
         const pluginKey = this.options.pluginKey;
         return [
             new Plugin<AutocompleteHighlightState>({
-                key: highlightPluginKey,
+                key: pluginKey,
                 state: {
-                    init(_, { doc }) {
+                    init: (_, { doc }) => {
+                        const highlight = this.options.highlight;
+                        const decorationSet = highlight && doc ? buildDecorationSet(highlight, doc) : DecorationSet.empty;
                         return {
-                            hasHighlight: false
-                        }
+                            decorationSet,
+                            highlight
+                        };
                     },
                     apply(transaction, oldState) {
                         const action = transaction.getMeta(pluginKey);
                         const highlight = action?.range;
                         if (action?.type === "highlightDecoration") {
 
+                            const doc = transaction.doc;
                             const { remove } = action;
 
                             if (remove) {
                                 return {
-                                    decorationSet: DecorationSet.empty,
-                                    hasHighlight: false
+                                    decorationSet: DecorationSet.empty
                                 };
                             }
-
-                            const decorations: [any?] = []
-
-                            if (highlight) {
-                                decorations.push(
-                                    Decoration.inline(highlight.from, highlight.to, {
-                                        class: "dark:bg-slate-700 bg-slate-300"
-                                    })
-                                );
-                            }
+                            const decorationSet = buildDecorationSet(highlight, doc);
                             return {
-                                decorationSet: DecorationSet.create(transaction.doc, decorations),
-                                hasHighlight: !!highlight,
+                                decorationSet: decorationSet,
                                 highlight
                             }
                         } else {
@@ -99,7 +105,6 @@ export const HighlightDecorationExtension = Extension.create<HighlightDecoration
         ]
     },
 
-    // @ts-ignore
     addCommands() {
         return {
             toggleAutocompleteHighlight: (range?: { from: number, to: number }): Command => ({
@@ -113,7 +118,6 @@ export const HighlightDecorationExtension = Extension.create<HighlightDecoration
                 if (!dispatch) return false;
 
                 const pluginKey = this.options.pluginKey;
-                const pluginState = pluginKey.get(state);
 
                 const tr = state.tr.setMeta(pluginKey, {
                     pos,
@@ -130,6 +134,7 @@ export const HighlightDecorationExtension = Extension.create<HighlightDecoration
                                                              state,
                                                              dispatch
                                                          }) => {
+
                 if (!dispatch) return false;
 
                 const pluginKey = this.options.pluginKey;

@@ -1,6 +1,6 @@
 import { useEditor } from "../components";
 import { useEffect, useRef, } from "react";
-import { Button, CheckIcon, cls, DeleteIcon, Popover } from "@firecms/ui";
+import { Button, CheckIcon, cls, DeleteIcon, focusedDisabled, Popover } from "@firecms/ui";
 
 export function isValidUrl(url: string) {
     try {
@@ -71,7 +71,7 @@ export const LinkSelector = ({
                     autoFocus={open}
                     placeholder="Paste a link"
                     defaultValue={editor.getAttributes("link").href || ""}
-                    className={"text-gray-900 dark:text-white flex-grow bg-transparent p-1 text-sm outline-none"}/>
+                    className={cls("text-gray-900 dark:text-white flex-grow bg-transparent p-1 text-sm outline-none", focusedDisabled)}/>
 
                 {editor.getAttributes("link").href ? (
                     <Button

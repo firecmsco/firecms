@@ -12,6 +12,7 @@ interface ArrayContainerProps<T> {
     includeAddButton?: boolean;
     newDefaultEntry?: T | null;
     setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void;
+    className?: string;
 }
 
 /**
@@ -27,7 +28,8 @@ export function FormikArrayContainer<T>({
                                             onInternalIdAdded,
                                             includeAddButton,
                                             newDefaultEntry = null,
-                                            setFieldValue
+                                            setFieldValue,
+                                            className
                                         }: ArrayContainerProps<T>) {
 
     return <ArrayContainer droppableId={name}
@@ -39,6 +41,7 @@ export function FormikArrayContainer<T>({
                            onInternalIdAdded={onInternalIdAdded}
                            includeAddButton={includeAddButton}
                            newDefaultEntry={newDefaultEntry}
+                           className={className}
                            onValueChange={(value) => setFieldValue(name, value)}
     />;
 }

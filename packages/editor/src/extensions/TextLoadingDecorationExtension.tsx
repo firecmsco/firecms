@@ -95,7 +95,6 @@ const TextLoadingDecorationExtension = Extension.create({
         ];
     },
 
-    // @ts-ignore
     addCommands() {
         return {
             toggleLoadingDecoration: (loadingHtml?: string): Command => ({ state, dispatch }) => {

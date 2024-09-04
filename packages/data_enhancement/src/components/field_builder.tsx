@@ -33,42 +33,41 @@ export function fieldBuilder<T extends CMSType = CMSType>
         return null;
     }
 
+    const wrappedComponent = React.useMemo(() => function FieldWrapper(props: FieldProps<T, any, any>) {
+
+        const {
+            enabled,
+            suggestions,
+            enhance,
+            loadingSuggestions,
+            interceptUsage,
+            editorAIController
+        } = useDataEnhancementController();
+
+        const loading = loadingSuggestions?.includes(props.propertyKey);
+        const suggestedValue = suggestions?.[props.propertyKey];
+
+        const filledCharacters = countStringCharacters(props.context.values, props.context.collection?.properties ?? {});
+        const enoughData = filledCharacters > 5;
+
+        return <FieldInner
+            loading={loading}
+            props={props as FieldProps}
+            suggestedValue={suggestedValue}
+            enabled={enabled}
+            enoughData={enoughData}
+            Field={params.Field as React.ComponentType<FieldProps>}
+            enhance={enhance}
+            editorAIController={editorAIController}
+            interceptUsage={interceptUsage}/>
+
+    }, []);
+
     if (SUPPORTED_FIELDS_ENHANCEMENT.includes(fieldConfigId)) {
-        return React.useMemo(() => function FieldWrapper(props: FieldProps<T, any, any>) {
-
-            const {
-                enabled,
-                suggestions,
-                enhance,
-                loadingSuggestions,
-                interceptUsage,
-                editorAIController
-            } = useDataEnhancementController();
-
-            const loading = loadingSuggestions?.includes(props.propertyKey);
-            const suggestedValue = suggestions?.[props.propertyKey];
-
-            const filledCharacters = countStringCharacters(props.context.values, props.context.collection?.properties ?? {});
-            const enoughData = filledCharacters > 5;
-
-            return <FieldInner
-                loading={loading}
-                props={props as FieldProps}
-                suggestedValue={suggestedValue}
-                enabled={enabled}
-                enoughData={enoughData}
-                Field={params.Field as React.ComponentType<FieldProps>}
-                enhance={enhance}
-                editorAIController={editorAIController}
-                interceptUsage={interceptUsage}/>
-
-        }, []);
-
+        return wrappedComponent;
     }
     return null;
 }
-
-
 
 interface FieldInnerParams<T extends CMSType = CMSType, M extends Record<string, any> = any> {
     loading: boolean;

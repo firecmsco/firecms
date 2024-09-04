@@ -27,7 +27,8 @@ interface ArrayContainerProps<T> {
     onInternalIdAdded?: (id: number) => void;
     includeAddButton?: boolean;
     newDefaultEntry: T;
-    onValueChange: (value: T[]) => void
+    onValueChange: (value: T[]) => void,
+    className?: string;
 }
 
 const buildIdsMap = (value: any[]) =>
@@ -53,7 +54,8 @@ export function ArrayContainer<T>({
                                       onInternalIdAdded,
                                       includeAddButton,
                                       newDefaultEntry,
-                                      onValueChange
+                                      onValueChange,
+                                      className
                                   }: ArrayContainerProps<T>) {
 
     const hasValue = value && Array.isArray(value) && value.length > 0;
@@ -154,6 +156,7 @@ export function ArrayContainer<T>({
             >
                 {(droppableProvided, droppableSnapshot) => (
                     <div
+                        className={className}
                         {...droppableProvided.droppableProps}
                         ref={droppableProvided.innerRef}>
                         {hasValue && internalIds.map((internalId: number, index: number) => {
@@ -236,7 +239,7 @@ export function ArrayContainerItem({
         {...provided.draggableProps}
         style={provided.draggableProps.style}
         className={`${
-            (isDragging || onHover) ? fieldBackgroundHoverMixin : ""
+            (isDragging || onHover) ? "hover:bg-slate-50 dark:hover:bg-gray-800 dark:hover:bg-opacity-20" : ""
         } mb-1 rounded-md opacity-100`}
     >
         <div

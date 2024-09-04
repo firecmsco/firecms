@@ -71,6 +71,7 @@ export function BlockFieldBinding<T extends Array<any>>({
 
     const firstOneOfKey = Object.keys(property.oneOf.properties)[0];
     const body = <FormikArrayContainer value={value}
+                                       className={"flex flex-col gap-3"}
                                        name={propertyKey}
                                        addLabel={property.name ? "Add entry to " + property.name : "Add entry"}
                                        buildEntry={buildEntry}
@@ -194,7 +195,7 @@ function BlockEntry({
     };
 
     return (
-        <div className={cls(paperMixin, "bg-transparent p-2 mb-4")}>
+        <div className={cls(paperMixin, "bg-transparent p-2")}>
 
             <Field
                 name={typeFieldName}
