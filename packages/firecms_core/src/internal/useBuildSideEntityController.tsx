@@ -115,6 +115,16 @@ export const useBuildSideEntityController = (navigation: NavigationController,
         }
     }, [location, navigation.loading, navigation.isUrlCollectionPath, navigation.buildUrlCollectionPath, navigation.resolveAliasesFrom, sideDialogsController, smallLayout, navigation]);
 
+    useEffect(() => {
+        const updatedSidePanels = sideDialogsController.sidePanels.map(sidePanelProps => {
+            if (sidePanelProps.additional) {
+                return propsToSidePanel(sidePanelProps.additional, navigation.buildUrlCollectionPath, navigation.resolveAliasesFrom, smallLayout);
+            }
+            return sidePanelProps;
+        });
+        sideDialogsController.setSidePanels(updatedSidePanels);
+    }, [smallLayout]);
+
     const close = useCallback(() => {
         sideDialogsController.close();
     }, [sideDialogsController]);
@@ -210,7 +220,7 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
     return sidePanels;
 }
 
-const propsToSidePanel = (props: EntitySidePanelProps<any>,
+const propsToSidePanel = (props: EntitySidePanelProps,
                           buildUrlCollectionPath: (path: string) => string,
                           resolveAliasesFrom: (pathWithAliases: string) => string,
                           smallLayout: boolean): SideDialogPanelProps => {
@@ -235,7 +245,8 @@ const propsToSidePanel = (props: EntitySidePanelProps<any>,
             urlPath: newPath,
             parentUrlPath: buildUrlCollectionPath(collectionPath),
             width: entityViewWidth,
-            onClose: props.onClose
+            onClose: props.onClose,
+            additional: props
         };
     }
 ;

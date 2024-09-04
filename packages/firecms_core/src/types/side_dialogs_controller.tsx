@@ -1,3 +1,5 @@
+import React from "react";
+
 /**
  * Controller to open the side dialog
  * @group Hooks and utilities
@@ -13,6 +15,12 @@ export interface SideDialogsController {
      * List of side panels currently open
      */
     sidePanels: SideDialogPanelProps[];
+
+    /**
+     * Override the current side panels
+     * @param panels
+     */
+    setSidePanels: (panels: SideDialogPanelProps[]) => void;
 
     /**
      * Open one or multiple side panels
@@ -65,4 +73,9 @@ export interface SideDialogPanelProps {
      * Callback when the panel is closed
      */
     onClose?: () => void;
+
+    /**
+     * Use this prop to store additional data in the panel
+     */
+    additional?: any;
 }

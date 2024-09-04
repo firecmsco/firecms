@@ -118,6 +118,7 @@ export function useBuildSideDialogsController(): SideDialogsController {
 
     return {
         sidePanels,
+        setSidePanels: updateSidePanels,
         close,
         open,
         replace
