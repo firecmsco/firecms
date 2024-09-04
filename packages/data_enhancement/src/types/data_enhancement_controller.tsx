@@ -16,7 +16,7 @@ export type DataEnhancementController = {
      */
     enabled: boolean;
     suggestions: Record<string, string | number>;
-    enhance: <M extends object>(props: EnhanceParams<M>) => Promise<EnhancedDataResult>;
+    enhance: <M extends object>(props: EnhanceParams<M>) => Promise<EnhancedDataResult | null>;
     clearSuggestion: (key: string, suggestion: string | number) => void;
     allowReferenceDataSelection: boolean;
     clearAllSuggestions: () => void;

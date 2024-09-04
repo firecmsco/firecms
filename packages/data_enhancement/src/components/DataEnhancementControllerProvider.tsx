@@ -225,7 +225,11 @@ export function DataEnhancementControllerProvider({
 
     const editorAIController = useEditorAIController({ getAuthToken: authController.getAuthToken });
 
-    const enhance = async (props: EnhanceParams<any>): Promise<EnhancedDataResult> => {
+    const enhance = async (props: EnhanceParams<any>): Promise<EnhancedDataResult | null> => {
+        if (interceptUsage) {
+            interceptUsage();
+            return null;
+        }
 
         if (!authController.user) {
             snackbarController.open({

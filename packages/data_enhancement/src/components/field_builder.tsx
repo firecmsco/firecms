@@ -76,7 +76,7 @@ interface FieldInnerParams<T extends CMSType = CMSType, M extends Record<string,
     enabled: boolean;
     enoughData: boolean;
     Field: React.ComponentType<FieldProps<T, any, M>>;
-    enhance: (props: EnhanceParams<M>) => Promise<EnhancedDataResult>;
+    enhance: (props: EnhanceParams<M>) => Promise<EnhancedDataResult | null>;
     interceptUsage?: () => void;
     editorAIController?: EditorAIController;
 }
