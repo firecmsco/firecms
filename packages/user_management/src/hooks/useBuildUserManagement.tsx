@@ -152,28 +152,18 @@ export function useBuildUserManagement({
         console.debug("Persisting user", user);
 
         const roleIds = user.roles?.map(r => r.id);
-        const {
-            uid,
-            ...userData
-        } = user;
+        const email = user.email?.toLowerCase().trim();
+        if (!email) throw Error("Email is required");
         const data = {
-            ...userData,
+            ...user,
             roles: roleIds
         };
-        if (uid) {
-            return dataSourceDelegate.saveEntity({
-                status: "existing",
-                path: usersPath,
-                entityId: uid,
-                values: data
-            }).then(() => user);
-        } else {
-            return dataSourceDelegate.saveEntity({
-                status: "new",
-                path: usersPath,
-                values: data
-            }).then(() => user);
-        }
+        return dataSourceDelegate.saveEntity({
+            status: "existing",
+            path: usersPath,
+            entityId: email,
+            values: data
+        }).then(() => user);
     }, [usersPath, dataSourceDelegate?.initialised]);
 
     const saveRole = useCallback((role: Role): Promise<void> => {
