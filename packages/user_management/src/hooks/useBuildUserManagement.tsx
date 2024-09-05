@@ -272,16 +272,6 @@ export function useBuildUserManagement({
 
     const isAdmin = roles.some(r => r.id === "admin");
 
-    console.log({
-        loading,
-        roles,
-        users,
-        rolesError,
-        usersLimit,
-        usersError,
-        isAdmin,
-    })
-
     return {
         loading,
         roles,

@@ -89,6 +89,7 @@ export function FireCMSCloudDrawer() {
                             .filter(e => e.group === group)
                             .map((view, index) => <DrawerNavigationItem
                                 key={`navigation_${index}`}
+                                adminMenuOpen={adminMenuOpen}
                                 icon={<IconForView collectionOrView={view.collection ?? view.view}/>}
                                 tooltipsOpen={tooltipsOpen}
                                 drawerOpen={drawerOpen}
