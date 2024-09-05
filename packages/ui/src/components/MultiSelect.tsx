@@ -28,10 +28,7 @@ export type MultiSelectProps = {
     disabled?: boolean,
     error?: boolean,
     position?: "item-aligned" | "popper",
-    endAdornment?: React.ReactNode,
     inputRef?: React.RefObject<HTMLButtonElement>,
-    padding?: boolean,
-    includeFocusOutline?: boolean,
     children?: React.ReactNode,
 };
 
@@ -52,7 +49,6 @@ export function MultiSelect({
                                 disabled,
                                 renderValue,
                                 renderValues,
-                                includeFocusOutline = true,
                                 containerClassName,
                                 className,
                                 children,
@@ -151,7 +147,7 @@ export function MultiSelect({
                 </div>
 
                 <Dialog.Root open={openInternal}
-                             modal={false}
+                             modal={true}
                              onOpenChange={setOpenInternal}>
                     <Dialog.Portal>
                         <MultiSelectContext.Provider

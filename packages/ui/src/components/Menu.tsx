@@ -1,6 +1,6 @@
 import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { paperMixin } from "../styles";
+import { focusedDisabled, paperMixin } from "../styles";
 import { cls } from "../util";
 
 export type MenuProps = {
@@ -12,6 +12,8 @@ export type MenuProps = {
     onOpenChange?(open: boolean): void;
 
     portalContainer?: HTMLElement | null;
+    side?: "top" | "right" | "bottom" | "left";
+    align?: "start" | "center" | "end";
 }
 
 const Menu = React.forwardRef<
@@ -22,6 +24,8 @@ const Menu = React.forwardRef<
        trigger,
        open,
        defaultOpen,
+       side,
+       align,
        onOpenChange,
        portalContainer
    }, ref) => (
@@ -35,7 +39,10 @@ const Menu = React.forwardRef<
             {trigger}
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal container={portalContainer}>
-            <DropdownMenu.Content className={cls(paperMixin, "shadow py-2 z-30")}>
+            <DropdownMenu.Content
+                side={side}
+                align={align}
+                className={cls(paperMixin, focusedDisabled, "shadow py-2 z-30")}>
                 {children}
             </DropdownMenu.Content>
         </DropdownMenu.Portal>

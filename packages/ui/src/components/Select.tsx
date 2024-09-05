@@ -1,6 +1,7 @@
 import React, { ChangeEvent, forwardRef, useCallback, useEffect, useState } from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import {
+    defaultBorderMixin,
     fieldBackgroundDisabledMixin,
     fieldBackgroundHoverMixin,
     fieldBackgroundInvisibleMixin,
@@ -168,7 +169,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
             </div>
             <SelectPrimitive.Portal>
                 <SelectPrimitive.Content position={position}
-                                         className="z-50 relative overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 p-2 rounded-lg shadow-lg">
+                                         className={cls("z-50 relative overflow-hidden border bg-white dark:bg-gray-900 p-2 rounded-lg", defaultBorderMixin)}>
                     <SelectPrimitive.Viewport className={"p-1"}
                                               style={{ maxHeight: "var(--radix-select-content-available-height)" }}>
                         {children}
@@ -206,8 +207,8 @@ export function SelectItem({
             "w-full",
             "relative flex items-center p-2 rounded-md text-sm text-slate-700 dark:text-slate-300",
             "focus:z-10",
-            "data-[state=checked]:bg-slate-100 data-[state=checked]:dark:bg-slate-900 focus:bg-slate-100 dark:focus:bg-slate-950",
-            "data-[state=checked]:focus:bg-slate-200 data-[state=checked]:dark:focus:bg-slate-950",
+            "data-[state=checked]:bg-slate-100 data-[state=checked]:dark:bg-slate-800 focus:bg-slate-100 dark:focus:bg-gray-950",
+            "data-[state=checked]:focus:bg-slate-200 data-[state=checked]:dark:focus:bg-gray-950",
             disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
             "[&>*]:w-full",
             "overflow-visible",
