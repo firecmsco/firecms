@@ -18,7 +18,7 @@ export type DataType<T extends CMSType = CMSType> =
                         T extends Vector ? "vector" :
                             T extends EntityReference ? "reference" :
                                 T extends Array<CMSType> ? "array" :
-                                    T extends Record<string, any> ? "map" : never;
+                                    T extends Record<string, CMSType> ? "map" : never;
 
 /**
  * @group Entity properties

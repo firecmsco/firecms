@@ -4,7 +4,7 @@ import * as PopoverPrimitive from "@radix-ui/react-popover";
 import * as React from "react";
 import { Command as CommandPrimitive } from "cmdk";
 import { cls } from "../util";
-import { CheckIcon, CloseIcon, ExpandMoreIcon } from "../icons";
+import { CloseIcon, ExpandMoreIcon } from "../icons";
 import { Separator } from "./Separator";
 import { Checkbox } from "./Checkbox";
 import { Chip } from "./Chip";
@@ -13,8 +13,9 @@ import {
     fieldBackgroundDisabledMixin,
     fieldBackgroundHoverMixin,
     fieldBackgroundInvisibleMixin,
-    fieldBackgroundMixin, focusedDisabled
-} from "../styles.ts";
+    fieldBackgroundMixin,
+    focusedDisabled
+} from "../styles";
 
 /**
  * Props for MultiSelect component
