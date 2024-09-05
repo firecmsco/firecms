@@ -2,10 +2,18 @@ import React, { useCallback, useEffect } from "react";
 import equal from "react-fast-compare"
 
 import { UserManagement } from "../types";
-import { Authenticator, DataSourceDelegate, Entity, PermissionsBuilder, Role, User } from "@firecms/core";
+import {
+    Authenticator,
+    DataSourceDelegate,
+    Entity,
+    PermissionsBuilder,
+    removeUndefined,
+    Role,
+    User
+} from "@firecms/core";
 import { resolveUserRolePermissions } from "../utils";
 
-type UserWithRoleIds = User & { roles: string[] };
+type UserWithRoleIds = Omit<User, "roles"> & { roles: string[] };
 
 export interface UserManagementParams {
 
@@ -90,7 +98,12 @@ export function useBuildUserManagement({
     useEffect(() => {
         if (!dataSourceDelegate || !rolesPath) return;
         if (dataSourceDelegate.initialised !== undefined && !dataSourceDelegate.initialised) return;
+        if (dataSourceDelegate.authenticated !== undefined && !dataSourceDelegate.authenticated) {
+            setRolesLoading(false);
+            return;
+        }
 
+        setRolesLoading(true);
         return dataSourceDelegate.listenCollection?.({
             path: rolesPath,
             onUpdate(entities: Entity<any>[]): void {
@@ -114,12 +127,17 @@ export function useBuildUserManagement({
             }
         });
 
-    }, [dataSourceDelegate?.initialised, rolesPath]);
+    }, [dataSourceDelegate?.initialised, dataSourceDelegate?.authenticated, rolesPath]);
 
     useEffect(() => {
         if (!dataSourceDelegate || !usersPath) return;
         if (dataSourceDelegate.initialised !== undefined && !dataSourceDelegate.initialised) return;
+        if (dataSourceDelegate.authenticated !== undefined && !dataSourceDelegate.authenticated) {
+            setUsersLoading(false);
+            return;
+        }
 
+        setUsersLoading(true);
         return dataSourceDelegate.listenCollection?.({
             path: usersPath,
             onUpdate(entities: Entity<any>[]): void {
@@ -143,7 +161,7 @@ export function useBuildUserManagement({
             }
         });
 
-    }, [dataSourceDelegate?.initialised, usersPath]);
+    }, [dataSourceDelegate?.initialised, dataSourceDelegate?.authenticated, usersPath]);
 
     const saveUser = useCallback(async (user: User): Promise<User> => {
         if (!dataSourceDelegate) throw Error("useBuildUserManagement Firebase not initialised");
@@ -154,15 +172,22 @@ export function useBuildUserManagement({
         const roleIds = user.roles?.map(r => r.id);
         const email = user.email?.toLowerCase().trim();
         if (!email) throw Error("Email is required");
+
+        const userExists = users.find(u => u.email?.toLowerCase() === email);
         const data = {
             ...user,
-            roles: roleIds
+            roles: roleIds ?? []
         };
+        if (!userExists) {
+            // @ts-ignore
+            data.created_on = new Date();
+        }
+
         return dataSourceDelegate.saveEntity({
             status: "existing",
             path: usersPath,
             entityId: email,
-            values: data
+            values: removeUndefined(data)
         }).then(() => user);
     }, [usersPath, dataSourceDelegate?.initialised]);
 
@@ -178,7 +203,7 @@ export function useBuildUserManagement({
             status: "existing",
             path: rolesPath,
             entityId: id,
-            values: roleData
+            values: removeUndefined(roleData)
         }).then(() => {
             return;
         });
@@ -203,7 +228,7 @@ export function useBuildUserManagement({
         console.debug("Deleting", role);
         const { id } = role;
         const entity: Entity<any> = {
-            path: usersPath,
+            path: rolesPath,
             id: id,
             values: {}
         };
@@ -243,9 +268,19 @@ export function useBuildUserManagement({
         }
 
         throw Error("Could not find a user with the provided email in the user management system.");
-    }, [loading, users]);
+    }, [loading, users, usersError, rolesError]);
 
     const isAdmin = roles.some(r => r.id === "admin");
+
+    console.log({
+        loading,
+        roles,
+        users,
+        rolesError,
+        usersLimit,
+        usersError,
+        isAdmin,
+    })
 
     return {
         loading,

@@ -49,7 +49,7 @@ export function ArrayOneOfPreview({
                 values.map((value, index) =>
                     <React.Fragment
                         key={"preview_array_" + value + "_" + index}>
-                        <div className={cls(defaultBorderMixin, "m-1 border-b last:border-b-0")}>
+                        <div className={cls(defaultBorderMixin, "m-1 border-b last:border-b-0 py-2")}>
                             <ErrorBoundary>
                                 {value && <PropertyPreview
                                     propertyKey={propertyKey}

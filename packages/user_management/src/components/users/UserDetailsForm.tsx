@@ -125,6 +125,7 @@ export function UserDetailsForm({
 
     return (
         <Dialog
+            modal={false}
             open={open}
             onOpenChange={(open) => !open ? handleClose() : undefined}
             maxWidth={"4xl"}

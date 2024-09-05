@@ -54,7 +54,7 @@ export function ArrayOfMapsPreview({
                     values.map((v, index) => {
                         return (
                             <div key={`table_${v}_${index}`}
-                                 className="border-b last:border-b-0">
+                                 className="border-b last:border-b-0 py-2">
                                 {mapProperties && mapProperties.map(
                                     (key) => (
                                         <div

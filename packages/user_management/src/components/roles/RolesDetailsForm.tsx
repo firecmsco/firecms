@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import * as Yup from "yup";
 
-import { EntityCollection, FieldCaption, Role, toSnakeCase, } from "@firecms/core";
+import { EntityCollection, FieldCaption, Role, toSnakeCase, useAuthController, User, } from "@firecms/core";
 import {
     Button,
     Checkbox,
@@ -30,6 +30,15 @@ export const RoleYupSchema = Yup.object().shape({
     name: Yup.string().required("Required")
 });
 
+function canRoleBeEdited(loggedUser: User) {
+    const loggedUserIsAdmin = loggedUser.roles?.map(r => r.id).includes("admin");
+    if (!loggedUserIsAdmin) {
+        throw new Error("Only admins can edit roles");
+    }
+
+    return true;
+}
+
 export function RolesDetailsForm({
                                      open,
                                      role,
@@ -46,27 +55,39 @@ export function RolesDetailsForm({
 
     const { saveRole } = useUserManagement();
     const isNewRole = !role;
+    const {
+        user: loggedInUser
+    } = useAuthController();
 
     const [savingError, setSavingError] = useState<Error | undefined>();
 
     const onRoleUpdated = useCallback((role: Role) => {
         setSavingError(undefined);
+        if (!loggedInUser) throw new Error("User not found");
+        canRoleBeEdited(loggedInUser);
         return saveRole(role);
-    }, [saveRole]);
+    }, [saveRole, loggedInUser]);
 
     const formex = useCreateFormex({
         initialValues: role ?? {
             name: ""
         } as Role,
         onSubmit: (role: Role, formexController) => {
-            return onRoleUpdated(role)
-                .then(() => {
-                    formexController.resetForm({
-                        values: role
+            try {
+                return onRoleUpdated(role)
+                    .then(() => {
+                        formexController.resetForm({
+                            values: role
+                        });
+                        handleClose();
+                    })
+                    .catch(e => {
+                        setSavingError(e);
                     });
-                    handleClose();
-                })
-                .catch(e => setSavingError(e));
+            } catch (e: any) {
+                setSavingError(e);
+                return Promise.resolve();
+            }
         },
         validation: (values) => {
             return RoleYupSchema.validate(values, { abortEarly: false })
@@ -168,11 +189,9 @@ export function RolesDetailsForm({
                             </div>
 
                             <div className={"col-span-12"}>
-                                <Paper
-
-                                    className="bg-inherit">
-                                    <Table>
-                                        <TableHeader>
+                                <Paper className="bg-inherit overflow-hidden">
+                                    <Table className={"w-full rounded-md"}>
+                                        <TableHeader className={"rounded-md"}>
                                             <TableCell></TableCell>
                                             <TableCell
                                                 align="center">Create
@@ -189,6 +208,9 @@ export function RolesDetailsForm({
                                             <TableCell
                                                 align="center">Delete
                                                 entities
+                                            </TableCell>
+                                            <TableCell
+                                                align="center">
                                             </TableCell>
                                         </TableHeader>
 
@@ -245,6 +267,9 @@ export function RolesDetailsForm({
 
                                                     </Tooltip>
                                                 </TableCell>
+                                                <TableCell
+                                                    align="center">
+                                                </TableCell>
                                             </TableRow>
                                             {collections && collections.map((col) => (
                                                 <TableRow key={col.name}>
@@ -256,29 +281,49 @@ export function RolesDetailsForm({
                                                         align="center">
                                                         <Checkbox
                                                             disabled={isAdmin || defaultCreate || !editable}
-                                                            checked={(isAdmin || defaultCreate || getIn(values, `collectionPermissions.${col.path}.create`)) ?? false}
-                                                            onCheckedChange={(checked) => setFieldValue(`collectionPermissions.${col.path}.create`, checked)}/>
+                                                            checked={(isAdmin || defaultCreate || getIn(values, `collectionPermissions.${col.id}.create`)) ?? false}
+                                                            onCheckedChange={(checked) => setFieldValue(`collectionPermissions.${col.id}.create`, checked)}/>
                                                     </TableCell>
                                                     <TableCell
                                                         align="center">
                                                         <Checkbox
                                                             disabled={isAdmin || defaultRead || !editable}
-                                                            checked={(isAdmin || defaultRead || getIn(values, `collectionPermissions.${col.path}.read`)) ?? false}
-                                                            onCheckedChange={(checked) => setFieldValue(`collectionPermissions.${col.path}.read`, checked)}/>
+                                                            checked={(isAdmin || defaultRead || getIn(values, `collectionPermissions.${col.id}.read`)) ?? false}
+                                                            onCheckedChange={(checked) => setFieldValue(`collectionPermissions.${col.id}.read`, checked)}/>
                                                     </TableCell>
                                                     <TableCell
                                                         align="center">
                                                         <Checkbox
                                                             disabled={isAdmin || defaultEdit || !editable}
-                                                            checked={(isAdmin || defaultEdit || getIn(values, `collectionPermissions.${col.path}.edit`)) ?? false}
-                                                            onCheckedChange={(checked) => setFieldValue(`collectionPermissions.${col.path}.edit`, checked)}/>
+                                                            checked={(isAdmin || defaultEdit || getIn(values, `collectionPermissions.${col.id}.edit`)) ?? false}
+                                                            onCheckedChange={(checked) => setFieldValue(`collectionPermissions.${col.id}.edit`, checked)}/>
                                                     </TableCell>
                                                     <TableCell
                                                         align="center">
                                                         <Checkbox
                                                             disabled={isAdmin || defaultDelete || !editable}
-                                                            checked={(isAdmin || defaultDelete || getIn(values, `collectionPermissions.${col.path}.delete`)) ?? false}
-                                                            onCheckedChange={(checked) => setFieldValue(`collectionPermissions.${col.path}.delete`, checked)}/>
+                                                            checked={(isAdmin || defaultDelete || getIn(values, `collectionPermissions.${col.id}.delete`)) ?? false}
+                                                            onCheckedChange={(checked) => setFieldValue(`collectionPermissions.${col.id}.delete`, checked)}/>
+                                                    </TableCell>
+
+                                                    <TableCell
+                                                        align="center">
+                                                        <Tooltip
+                                                            title="Allow all permissions in this collections">
+                                                            <Button
+                                                                className={"color-inherit"}
+                                                                onClick={() => {
+                                                                    setFieldValue(`collectionPermissions.${col.id}.create`, true);
+                                                                    setFieldValue(`collectionPermissions.${col.id}.read`, true);
+                                                                    setFieldValue(`collectionPermissions.${col.id}.edit`, true);
+                                                                    setFieldValue(`collectionPermissions.${col.id}.delete`, true);
+                                                                }}
+                                                                disabled={isAdmin || !editable}
+                                                                variant={"text"}>
+                                                                All
+                                                            </Button>
+
+                                                        </Tooltip>
                                                     </TableCell>
                                                 </TableRow>
                                             ))}
@@ -373,8 +418,8 @@ export function RolesDetailsForm({
                     </DialogContent>
 
                     <DialogActions position={"sticky"}>
-                        {savingError && <Typography className={"text-red-500"}>
-                            There was an error saving this role
+                        {savingError && <Typography className={"text-red-500 dark:text-red-500"}>
+                            {savingError.message ?? "There was an error saving this role"}
                         </Typography>}
                         <Button variant={"text"}
                                 onClick={() => {

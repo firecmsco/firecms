@@ -50,8 +50,9 @@ function resolveCollectionRole(role: Role, id: string): Permissions {
         edit: role.isAdmin || role.defaultPermissions?.edit,
         delete: role.isAdmin || role.defaultPermissions?.delete
     };
-    if (role.collectionPermissions && role.collectionPermissions[id]) {
-        return mergePermissions(role.collectionPermissions[id], basePermissions);
+    const thisCollectionPermissions = role.collectionPermissions?.[id];
+    if (thisCollectionPermissions) {
+        return mergePermissions(thisCollectionPermissions, basePermissions);
     } else if (role.defaultPermissions) {
         return mergePermissions(role.defaultPermissions, basePermissions);
     } else {

@@ -261,6 +261,11 @@ export interface DataSourceDelegate {
     initialised?: boolean;
 
     /**
+     * If the user is authenticated to use the data source
+     */
+    authenticated?: boolean;
+
+    /**
      * Fetch data from a collection
      * @param path
      * @param filter

@@ -150,7 +150,9 @@ export function MultiSelect({
 
                 </div>
 
-                <Dialog.Root open={openInternal} onOpenChange={setOpenInternal}>
+                <Dialog.Root open={openInternal}
+                             modal={false}
+                             onOpenChange={setOpenInternal}>
                     <Dialog.Portal>
                         <MultiSelectContext.Provider
                             value={{
