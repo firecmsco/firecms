@@ -7,6 +7,7 @@ export function DrawerNavigationItem({
                                          name,
                                          icon,
                                          drawerOpen,
+                                         adminMenuOpen,
                                          tooltipsOpen,
                                          url,
                                          onClick
@@ -15,6 +16,7 @@ export function DrawerNavigationItem({
     name: string,
     tooltipsOpen: boolean,
     drawerOpen: boolean,
+    adminMenuOpen?: boolean,
     url: string,
     onClick?: () => void,
 }) {
@@ -56,7 +58,7 @@ export function DrawerNavigationItem({
     </div>;
 
     return <Tooltip
-        open={drawerOpen ? false : tooltipsOpen}
+        open={drawerOpen || adminMenuOpen ? false : tooltipsOpen}
         side="right"
         title={name}>
         {listItem}

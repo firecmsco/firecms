@@ -30,14 +30,14 @@ export function DefaultDrawer({
         logo
     } = useApp();
 
+    const [adminMenuOpen, setAdminMenuOpen] = React.useState(false);
+
     const analyticsController = useAnalyticsController();
     const navigation = useNavigationController();
 
-    const tooltipsOpen = drawerHovered && !drawerOpen;
+    const tooltipsOpen = drawerHovered && !drawerOpen && !adminMenuOpen;
     const largeLayout = useLargeLayout();
     const navigate = useNavigate();
-
-    const [adminMenuOpen, setAdminMenuOpen] = React.useState(false);
 
     if (!navigation.topLevelNavigation)
         throw Error("Navigation not ready in Drawer");
@@ -91,6 +91,7 @@ export function DefaultDrawer({
                                         key={`navigation_${index}`}
                                         icon={<IconForView collectionOrView={view.collection ?? view.view}/>}
                                         tooltipsOpen={tooltipsOpen}
+                                        adminMenuOpen={adminMenuOpen}
                                         drawerOpen={drawerOpen}
                                         onClick={() => onClick(view)}
                                         url={view.url}
@@ -101,6 +102,7 @@ export function DefaultDrawer({
                 </div>
 
                 {adminViews.length > 0 && <Menu
+                    side={"right"}
                     open={adminMenuOpen}
                     onOpenChange={setAdminMenuOpen}
                     trigger={
