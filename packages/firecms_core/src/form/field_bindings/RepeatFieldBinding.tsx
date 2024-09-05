@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { CMSType, FieldProps, ResolvedProperty } from "../../types";
 import { FieldHelperText, FormikArrayContainer, LabelWithIconAndTooltip } from "../components";
 import { ErrorBoundary } from "../../components";
-import { getDefaultValueFor, getIconForProperty } from "../../util";
+import { getArrayResolvedProperties, getDefaultValueFor, getIconForProperty } from "../../util";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel, Typography } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
@@ -34,8 +34,17 @@ export function RepeatFieldBinding<T extends Array<any>>({
     if (!property.of)
         throw Error("RepeatFieldBinding misconfiguration. Property `of` not set");
 
-    if (!property.resolvedProperties || !Array.isArray(property.resolvedProperties))
-        throw Error("RepeatFieldBinding - Internal error: Expected array in 'property.resolvedProperties'");
+    let resolvedProperties = property.resolvedProperties;
+    if (!resolvedProperties) {
+        resolvedProperties = getArrayResolvedProperties({
+            propertyValue: value,
+            propertyKey,
+            property,
+            ignoreMissingFields: false
+        })
+    }
+    // if (!resolvedProperties || !Array.isArray(resolvedProperties))
+    //     throw Error("RepeatFieldBinding - Internal error: Expected array in 'property.resolvedProperties'");
 
     const expanded = property.expanded === undefined ? true : property.expanded;
     const ofProperty: ResolvedProperty<CMSType[]> = property.of as ResolvedProperty<CMSType[]>;
@@ -49,7 +58,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
     });
 
     const buildEntry = (index: number, internalId: number) => {
-        const childProperty = property.resolvedProperties[index] ?? ofProperty;
+        const childProperty = resolvedProperties[index] ?? ofProperty;
         const fieldProps = {
             propertyKey: `${propertyKey}.${index}`,
             disabled,

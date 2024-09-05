@@ -54,7 +54,7 @@ export function MapFieldBinding({
             {Object.entries(mapProperties)
                 .filter(([_, property]) => !isHidden(property))
                 .map(([entryKey, childProperty], index) => {
-                        const fieldProps = {
+                        const fieldBindingProps = {
                             propertyKey: `${propertyKey}.${entryKey}`,
                             disabled,
                             property: childProperty,
@@ -70,7 +70,7 @@ export function MapFieldBinding({
                             <div key={`map-${propertyKey}-${index}`}>
                                 <ErrorBoundary>
                                     <PropertyFieldBinding
-                                        {...fieldProps}/>
+                                        {...fieldBindingProps}/>
                                 </ErrorBoundary>
                             </div>
                         );

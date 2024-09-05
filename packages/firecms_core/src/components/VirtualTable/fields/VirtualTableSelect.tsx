@@ -82,8 +82,6 @@ export function VirtualTableSelect(props: {
                 className="w-full h-full p-0 bg-transparent"
                 position={"item-aligned"}
                 disabled={disabled}
-                padding={false}
-                includeFocusOutline={false}
                 value={validValue
                     ? ((internalValue as any[]).map(v => v.toString()))
                     : ([])}

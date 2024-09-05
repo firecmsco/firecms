@@ -19,7 +19,6 @@ interface TextFieldBindingProps<T extends string | number> extends FieldProps<T>
  * @group Form fields
  */
 export function TextFieldBinding<T extends string | number>({
-                                                                context,
                                                                 propertyKey,
                                                                 value,
                                                                 setValue,

@@ -217,6 +217,38 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
         : null;
 }
 
+export function getArrayResolvedProperties<M>({
+                                           propertyKey,
+                                           propertyValue,
+                                           property,
+                                           ...props
+                                       }: {
+    propertyValue: any,
+    propertyKey?: string,
+    property: ArrayProperty<any> | ResolvedArrayProperty<any>,
+    ignoreMissingFields: boolean,
+    values?: Partial<M>;
+    previousValues?: Partial<M>;
+    path?: string;
+    entityId?: string;
+    index?: number;
+    fromBuilder?: boolean;
+    fields?: Record<string, PropertyConfig>
+}) {
+
+    const of = property.of;
+    return Array.isArray(propertyValue)
+        ? propertyValue.map((v: any, index: number) => {
+            return resolveProperty({
+                propertyKey: `${propertyKey}.${index}`,
+                propertyOrBuilder: of,
+                ...props,
+                index
+            });
+        }).filter(e => Boolean(e)) as ResolvedProperty[]
+        : [];
+}
+
 export function resolveArrayProperty<T extends any[], M>({
                                                              propertyKey,
                                                              property,
@@ -254,17 +286,13 @@ export function resolveArrayProperty<T extends any[], M>({
             } as ResolvedArrayProperty;
         } else {
             const of = property.of;
-            const resolvedProperties: ResolvedProperty[] = Array.isArray(propertyValue)
-                ? propertyValue.map((v: any, index: number) => {
-                    return resolveProperty({
-                        propertyKey: `${propertyKey}.${index}`,
-                        propertyOrBuilder: of,
-                        ignoreMissingFields,
-                        ...props,
-                        index
-                    });
-                }).filter(e => Boolean(e)) as ResolvedProperty[]
-                : [];
+            const resolvedProperties = getArrayResolvedProperties({
+                propertyValue,
+                propertyKey,
+                property,
+                ignoreMissingFields,
+                ...props
+            });
             const ofProperty = resolveProperty({
                 propertyOrBuilder: of,
                 ignoreMissingFields,

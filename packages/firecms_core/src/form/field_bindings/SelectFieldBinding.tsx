@@ -49,50 +49,51 @@ export function SelectFieldBinding<T extends EnumType>({
     return (
         <>
 
-            <PropertyIdCopyTooltip propertyKey={propertyKey}>
-                <Select
-                    size={size === "medium" ? "medium" : "small"}
-                    value={value !== undefined && value != null ? value.toString() : ""}
-                    disabled={disabled}
-                    position="item-aligned"
-                    inputClassName={cls("w-full")}
-                    label={<LabelWithIcon
-                        icon={getIconForProperty(property, "small")}
-                        required={property.validation?.required}
-                        title={property.name}
-                        className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}
-                    />}
-                    endAdornment={
-                        property.clearable && <IconButton
-                            onClick={handleClearClick}>
-                            <ClearIcon/>
-                        </IconButton>
-                    }
-                    onValueChange={(updatedValue: string) => {
-                        const newValue = updatedValue
-                            ? (property.dataType === "number" ? parseFloat(updatedValue) : updatedValue)
-                            : null;
-                        return setValue(newValue as T);
-                    }}
-                    renderValue={(enumKey: any) => {
-                        return <EnumValuesChip
-                            enumKey={enumKey}
+            <Select
+                size={size === "medium" ? "medium" : "small"}
+                value={value !== undefined && value != null ? value.toString() : ""}
+                disabled={disabled}
+                position="item-aligned"
+                inputClassName={cls("w-full")}
+                label={
+                    <PropertyIdCopyTooltip propertyKey={propertyKey}>
+                        <LabelWithIcon
+                            icon={getIconForProperty(property, "small")}
+                            required={property.validation?.required}
+                            title={property.name}
+                            className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}
+                        />
+                    </PropertyIdCopyTooltip>}
+                endAdornment={
+                    property.clearable && <IconButton
+                        onClick={handleClearClick}>
+                        <ClearIcon/>
+                    </IconButton>
+                }
+                onValueChange={(updatedValue: string) => {
+                    const newValue = updatedValue
+                        ? (property.dataType === "number" ? parseFloat(updatedValue) : updatedValue)
+                        : null;
+                    return setValue(newValue as T);
+                }}
+                renderValue={(enumKey: any) => {
+                    return <EnumValuesChip
+                        enumKey={enumKey}
+                        enumValues={enumValues}
+                        size={size}/>;
+                }}
+            >
+                {enumValues && enumValues.map((option) => {
+                    return <SelectItem
+                        key={option.id}
+                        value={String(option.id)}>
+                        <EnumValuesChip
+                            enumKey={String(option.id)}
                             enumValues={enumValues}
-                            size={size}/>;
-                    }}
-                >
-                    {enumValues && enumValues.map((option) => {
-                        return <SelectItem
-                            key={option.id}
-                            value={String(option.id)}>
-                            <EnumValuesChip
-                                enumKey={String(option.id)}
-                                enumValues={enumValues}
-                                size={size}/>
-                        </SelectItem>
-                    })}
-                </Select>
-            </PropertyIdCopyTooltip>
+                            size={size}/>
+                    </SelectItem>
+                })}
+            </Select>
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}

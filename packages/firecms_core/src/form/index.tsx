@@ -34,10 +34,5 @@ export {
 
 export * from "./components";
 
-// export type { EntityFormProps } from "./EntityForm";
-// export {
-//     EntityForm
-// } from "./EntityForm";
-
 export { PropertyFieldBinding } from "./PropertyFieldBinding";
 export * from "./useClearRestoreValue";

@@ -429,7 +429,7 @@ function filterOutNotAllowedCollections(resolvedCollections: EntityCollection[],
         .filter((c) => {
             if (!c.permissions) return true;
             const resolvedPermissions = resolvePermissions(c, authController, c.path, null)
-            return resolvedPermissions?.read;
+            return resolvedPermissions?.read !== false;
         })
         .map((c) => {
             if (!c.subcollections) return c;
