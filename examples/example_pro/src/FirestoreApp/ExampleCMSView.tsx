@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
     buildCollection,
@@ -12,7 +12,7 @@ import {
     useSideEntityController,
     useSnackbarController
 } from "@firecms/core";
-import { Button, Chip, DateTimeField, GitHubIcon, IconButton, Paper, Sheet, Tooltip, Typography } from "@firecms/ui";
+import { Button, Chip, GitHubIcon, IconButton, NewMultiSelect, Paper, Sheet, Tooltip, Typography } from "@firecms/ui";
 import { Product } from "./types";
 import { usersCollection } from "./collections/users_collection";
 
@@ -83,6 +83,31 @@ export function ExampleCMSView() {
         </Tooltip>
     );
 
+    const frameworksList = [
+        {
+            value: "react",
+            label: "React",
+        },
+        {
+            value: "angular",
+            label: "Angular",
+        },
+        {
+            value: "vue",
+            label: "Vue",
+        },
+        {
+            value: "svelte",
+            label: "Svelte",
+        },
+        {
+            value: "ember",
+            label: "Ember",
+        },
+    ];
+
+    const [selectedFrameworks, setSelectedFrameworks] = useState<string[]>(["react", "angular"]);
+
     return (
         <div className="flex h-full">
             <div className="m-auto flex flex-col items-center max-w-4xl">
@@ -98,6 +123,27 @@ export function ExampleCMSView() {
                                 ? <>Logged in as <Chip>{authController.user.displayName}</Chip></>
                                 : <>You are not logged in</>}
                         </p>
+                    </div>
+
+                    <div className="p-4 max-w-xl">
+                        <h1 className="text-2xl font-bold mb-4">Multi-Select Component</h1>
+                        <NewMultiSelect
+                            options={frameworksList}
+                            onValueChange={setSelectedFrameworks}
+                            defaultValue={selectedFrameworks}
+                            placeholder="Select frameworks"
+                            // variant="inverted"
+                            animation={2}
+                            maxCount={3}
+                        />
+                        <div className="mt-4">
+                            <h2 className="text-xl font-semibold">Selected Frameworks:</h2>
+                            <ul className="list-disc list-inside">
+                                {selectedFrameworks.map((framework) => (
+                                    <li key={framework}>{framework}</li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
 
                     <div>

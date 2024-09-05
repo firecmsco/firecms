@@ -7,6 +7,7 @@ import {
 } from "@firecms/core";
 import { usersCollection } from "./users_collection";
 import { SecondaryForm } from "../custom_entity_view/SecondaryForm";
+import { UnionField } from "../custom_field/UnionField";
 
 export const testCallbacks: EntityCallbacks = {
     onFetch({
@@ -66,61 +67,11 @@ export const testCollection = buildCollection<any>({
         //     }
         // }],
         properties: {
-            car: {
-                name: "Cars",
-                dataType: "reference",
-                path: "cars",
-            },
-            product: {
-                name: "Product",
-                dataType: "reference",
-                path: "products",
-            },
-            test_entity: {
-                name: "Test ref",
-                dataType: "reference",
-                path: "test_entity",
-            },
-            intolerances: {
-                dataType: "array",
-                name: "Intolerances",
-                of: {
-                    dataType: "map",
-                    properties: {
-                        intolerance: {
-                            dataType: "string",
-                            name: "Intolerance",
-                        },
-                        indications: {
-                            dataType: "string",
-                            name: "Indications",
-                            multiline: true
-                        }
-                    }
-                }
-            },
-            text_field: {
-                name: "Text field",
+            value: {
+                name: "Value",
                 dataType: "string",
-            },
-            article_body: {
-                dataType: "string",
-                name: "Article Body",
-                markdown: true,
-            },
-            videos: {
-                dataType: "array",
-                name: "Videos",
-                of: {
-                    dataType: "string",
-                    storage: {
-                        storagePath: "videos",
-                        acceptedFiles: ["video/*"],
-                        metadata: {
-                            cacheControl: "max-age=1000000"
-                        }
-                    }
-                }
+                // @ts-ignore
+                Field: UnionField
             },
             images: {
                 dataType: "array",
@@ -268,22 +219,22 @@ export const testCollection = buildCollection<any>({
             //         return <div>Test</div>;
             //     }
             // }),
-            body: buildProperty({
-                name: "Body",
-                validation: { required: false },
-                dataType: "map",
-                keyValue: true,
-                customProps: {
-                    editable: true
-                },
-                defaultValue: {
-                    clientIp: "client.ip",
-                    clientDeviceType: "client.deviceType",
-                    clientLanguage: "client.language",
-                    clientReferral: "client.referral",
-                    clientUserAgent: "client.userAgent",
-                },
-            }),
+            // body: buildProperty({
+            //     name: "Body",
+            //     validation: { required: false },
+            //     dataType: "map",
+            //     keyValue: true,
+            //     customProps: {
+            //         editable: true
+            //     },
+            //     defaultValue: {
+            //         clientIp: "client.ip",
+            //         clientDeviceType: "client.deviceType",
+            //         clientLanguage: "client.language",
+            //         clientReferral: "client.referral",
+            //         clientUserAgent: "client.userAgent",
+            //     },
+            // }),
             // background: {
             //     dataType: "number",
             //     name: "Colour",
@@ -1028,10 +979,10 @@ export const testCollection = buildCollection<any>({
             //     dataType: "string",
             //     multiline: true
             // },
-            search_adjacent: {
-                name: "Search adjacent",
-                dataType: "boolean"
-            },
+            // search_adjacent: {
+            //     name: "Search adjacent",
+            //     dataType: "boolean"
+            // },
             // difficulty: {
             //     name: "Difficulty",
             //     dataType: "number"
@@ -1058,21 +1009,21 @@ export const testCollection = buildCollection<any>({
             //     }
             // }),
         },
-        additionalFields:
-            [
-                {
-                    key: "full_name",
-                    name: "Full Name",
-                    Builder: ({ entity }) => {
-                        const values = entity.values;
-                        return typeof values.name === "string" ? values.name.toUpperCase() : "Nope";
-                    },
-                    dependencies: ["name"]
-                }
-            ],
-        subcollections:
-            [
-                usersCollection
-            ]
+        // additionalFields:
+        //     [
+        //         {
+        //             key: "full_name",
+        //             name: "Full Name",
+        //             Builder: ({ entity }) => {
+        //                 const values = entity.values;
+        //                 return typeof values.name === "string" ? values.name.toUpperCase() : "Nope";
+        //             },
+        //             dependencies: ["name"]
+        //         }
+        //     ],
+        // subcollections:
+        //     [
+        //         usersCollection
+        //     ]
     })
 ;

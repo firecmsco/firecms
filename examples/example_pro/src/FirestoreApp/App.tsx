@@ -15,6 +15,7 @@ import {
     CMSView,
     Drawer,
     EntityCollection,
+    ErrorView,
     FireCMS,
     ModeControllerProvider,
     NavigationRoutes,
@@ -131,7 +132,6 @@ export function App() {
         firebaseApp
     });
 
-
     // Example of adding a custom field
     const propertyConfigs: Record<string, PropertyConfig> = {
         test_custom_field: {
@@ -185,9 +185,8 @@ export function App() {
 
     // Delegate used for fetching and saving data in Firestore
     const secondaryFirestoreDelegate = useFirestoreDelegate({
-        firebaseApp:secondaryFirebaseApp,
+        firebaseApp: secondaryFirebaseApp,
     });
-
 
     // It is important to memoize the collections and views
     const collections = useCallback(() => {
@@ -331,6 +330,10 @@ export function App() {
                                                     firebaseApp={firebaseApp}
                                                     signInOptions={signInOptions}
                                                     notAllowedError={notAllowedError}/>
+                        }
+
+                        if (userManagement.usersError) {
+                            return <CenteredView><ErrorView error={userManagement.usersError}/></CenteredView>;
                         }
 
                         return <Scaffold logo={logo}>
