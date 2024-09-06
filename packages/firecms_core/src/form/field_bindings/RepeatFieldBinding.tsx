@@ -34,7 +34,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
     if (!property.of)
         throw Error("RepeatFieldBinding misconfiguration. Property `of` not set");
 
-    let resolvedProperties = property.resolvedProperties;
+    let resolvedProperties = "resolvedProperties" in property ? property.resolvedProperties : undefined;
     if (!resolvedProperties) {
         resolvedProperties = getArrayResolvedProperties({
             propertyValue: value,

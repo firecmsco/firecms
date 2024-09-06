@@ -3,7 +3,7 @@ import React, { useCallback } from "react";
 import { EnumType, FieldProps } from "../../types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { EnumValuesChip } from "../../preview";
-import { getIconForProperty } from "../../util";
+import { getIconForProperty, resolveEnumValues } from "../../util";
 import { ClearIcon, cls, IconButton, Select, SelectItem } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { PropertyIdCopyTooltip } from "../../components";
@@ -32,7 +32,7 @@ export function SelectFieldBinding<T extends EnumType>({
                                                            size = "medium"
                                                        }: SelectProps<T>) {
 
-    const enumValues = property.enumValues;
+    const enumValues = resolveEnumValues(property.enumValues ?? []);
 
     useClearRestoreValue({
         property,

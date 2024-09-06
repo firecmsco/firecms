@@ -3,11 +3,11 @@ import {
     buildProperty,
     EntityCallbacks,
     EntityOnFetchProps,
+    MapProperty,
     resolveNavigationFrom
 } from "@firecms/core";
-import { usersCollection } from "./users_collection";
 import { SecondaryForm } from "../custom_entity_view/SecondaryForm";
-import { UnionField } from "../custom_field/UnionField";
+import { conditionProperty } from "../custom_field/RecursiveField";
 
 export const testCallbacks: EntityCallbacks = {
     onFetch({
@@ -47,6 +47,7 @@ export const testCallbacks: EntityCallbacks = {
     }
 };
 
+
 export const testCollection = buildCollection<any>({
         callbacks: testCallbacks,
         id: "test_entity",
@@ -67,12 +68,9 @@ export const testCollection = buildCollection<any>({
         //     }
         // }],
         properties: {
-            value: {
-                name: "Value",
-                dataType: "string",
-                // @ts-ignore
-                Field: UnionField
-            },
+            entryCondition: conditionProperty("Entry condition"),
+            fulfillmentCondition: conditionProperty("Fulfillment condition"),
+            //...
             images: {
                 dataType: "array",
                 name: "Images",

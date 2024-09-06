@@ -1,11 +1,18 @@
 import React, { useCallback } from "react";
 
-import { ArrayProperty, FieldProps, ResolvedArrayProperty, ResolvedStringProperty, StorageConfig } from "../../types";
+import {
+    ArrayProperty,
+    FieldProps,
+    PropertyOrBuilder,
+    ResolvedArrayProperty,
+    ResolvedStringProperty,
+    StorageConfig
+} from "../../types";
 import { useDropzone } from "react-dropzone";
 import { PreviewSize } from "../../preview";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 
-import { getIconForProperty, isReadOnly } from "../../util";
+import { getIconForProperty, isReadOnly, resolveProperty } from "../../util";
 import { useSnackbarController, useStorageSource } from "../../hooks";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { StorageFieldItem, useStorageUploadController } from "../../util/useStorageUploadController";
@@ -82,6 +89,10 @@ export function StorageUploadFieldBinding({
         setValue
     });
 
+    const resolvedProperty = resolveProperty({
+        propertyOrBuilder: property as PropertyOrBuilder,
+    }) as ResolvedStringProperty | ResolvedArrayProperty<string[]>;
+
     return (
 
         <>
@@ -99,7 +110,7 @@ export function StorageUploadFieldBinding({
                 name={propertyKey}
                 disabled={disabled ?? false}
                 autoFocus={autoFocus ?? false}
-                property={property}
+                property={resolvedProperty}
                 onChange={setValue}
                 setInternalValue={setInternalValue}
                 onFilesAdded={onFilesAdded}

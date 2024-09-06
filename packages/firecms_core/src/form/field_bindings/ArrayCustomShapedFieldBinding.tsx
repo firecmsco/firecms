@@ -3,7 +3,7 @@ import { FieldProps } from "../../types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel, Typography } from "@firecms/ui";
-import { getIconForProperty } from "../../util";
+import { getArrayResolvedProperties, getIconForProperty } from "../../util";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
 /**
@@ -28,8 +28,15 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
                                                                         disabled
                                                                     }: FieldProps<T, any, any>) {
 
-    if (!Array.isArray(property.resolvedProperties))
-        throw Error("ArrayCustomShapedFieldBinding misconfiguration. Property `of` not set");
+    let resolvedProperties = "resolvedProperties" in property ? property.resolvedProperties : undefined;
+    if (!resolvedProperties) {
+        resolvedProperties = getArrayResolvedProperties({
+            propertyValue: value,
+            propertyKey,
+            property,
+            ignoreMissingFields: false
+        })
+    }
 
     const expanded = property.expanded === undefined ? true : property.expanded;
 
@@ -49,7 +56,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
         {Array.isArray(value) && <Typography variant={"caption"} className={"px-4"}>({value.length})</Typography>}
     </>);
 
-    const body = property.resolvedProperties.map((childProperty, index) => {
+    const body = resolvedProperties.map((childProperty, index) => {
         const fieldProps = {
             propertyKey: `${propertyKey}[${index}]`,
             disabled,

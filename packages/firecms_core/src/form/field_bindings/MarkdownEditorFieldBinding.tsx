@@ -3,13 +3,15 @@ import {
     FieldHelperText,
     FieldProps,
     getIconForProperty,
-    LabelWithIconAndTooltip,
+    LabelWithIconAndTooltip, PropertyOrBuilder,
     randomString,
+    ResolvedArrayProperty,
+    ResolvedStringProperty,
     useStorageSource
 } from "../../index";
 import { cls, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "@firecms/ui";
 import { FireCMSEditor, FireCMSEditorProps } from "@firecms/editor";
-import { resolveStorageFilenameString, resolveStoragePathString } from "../../util";
+import { resolveProperty, resolveStorageFilenameString, resolveStoragePathString } from "../../util";
 
 interface MarkdownEditorFieldProps {
     highlight?: { from: number, to: number };
@@ -56,6 +58,12 @@ export function MarkdownEditorFieldBinding({
         }
     }, [value]);
 
+
+    const resolvedProperty = resolveProperty({
+        propertyOrBuilder: property as PropertyOrBuilder,
+        values: entityValues
+    }) as ResolvedStringProperty | ResolvedArrayProperty<string[]>;
+
     const fileNameBuilder = useCallback(async (file: File) => {
         if (storage?.fileName) {
             const fileName = await resolveStorageFilenameString({
@@ -64,7 +72,7 @@ export function MarkdownEditorFieldBinding({
                 values: entityValues,
                 entityId,
                 path,
-                property,
+                property: resolvedProperty,
                 file,
                 propertyKey
             });
@@ -74,17 +82,21 @@ export function MarkdownEditorFieldBinding({
             return fileName;
         }
         return randomString() + "_" + file.name;
-    }, [entityId, entityValues, path, property, propertyKey, storage]);
+    }, [entityId, entityValues, path, resolvedProperty, propertyKey, storage]);
 
     const storagePathBuilder = useCallback((file: File) => {
         if (!storage) return "/";
+        const resolvedProperty = resolveProperty({
+            propertyOrBuilder: property,
+            values: entityValues
+        }) as ResolvedStringProperty | ResolvedArrayProperty<string[]>;
         return resolveStoragePathString({
             input: storage.storagePath,
             storage,
             values: entityValues,
             entityId,
             path,
-            property,
+            property: resolvedProperty,
             file,
             propertyKey
         }) ?? "/";
@@ -111,7 +123,7 @@ export function MarkdownEditorFieldBinding({
             return url;
         }}
         {...editorProps}
-        />;
+    />;
 
     if (minimalistView)
         return editor;

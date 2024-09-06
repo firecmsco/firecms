@@ -15,7 +15,7 @@ import {
 } from "../types";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "./common";
 
-export function isReadOnly(property: Property | ResolvedProperty): boolean {
+export function isReadOnly(property: Property<any> | ResolvedProperty<any>): boolean {
     if (property.readOnly)
         return true;
     if (property.dataType === "date") {

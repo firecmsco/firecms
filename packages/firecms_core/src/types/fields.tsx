@@ -1,4 +1,4 @@
-import { CMSType, PropertyOrBuilder } from "./properties";
+import { CMSType, Property, PropertyOrBuilder } from "./properties";
 import { ResolvedEntityCollection, ResolvedProperty } from "./resolved_entities";
 import { FormexController } from "@firecms/formex";
 
@@ -62,7 +62,7 @@ export interface FieldProps<T extends CMSType = any, CustomProps = any, M extend
     /**
      * Property related to this field
      */
-    property: ResolvedProperty<T>;
+    property: Property<T> | ResolvedProperty<T>;
 
     /**
      * Should this field include a description

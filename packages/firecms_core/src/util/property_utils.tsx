@@ -35,7 +35,7 @@ export function getIconForWidget(widget: PropertyConfig | undefined,
 }
 
 export function getIconForProperty(
-    property: PropertyOrBuilder | ResolvedProperty,
+    property: PropertyOrBuilder<any> | ResolvedProperty<any>,
     size: "small" | "medium" | "large" = "small",
     fields: Record<string, PropertyConfig> = {}
 ): React.ReactNode {

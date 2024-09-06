@@ -67,7 +67,7 @@ export function UnionField({
 
     return (<>
             <LabelWithIcon
-                icon={getIconForProperty(property, "small")}
+                icon={getIconForProperty(property as ResolvedProperty, "small")}
                 required={property.validation?.required}
                 title={property.name}
                 className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}

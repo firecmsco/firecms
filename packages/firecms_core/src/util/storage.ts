@@ -1,8 +1,11 @@
 import {
+    ArrayProperty,
     EntityValues,
+    PropertyOrBuilder,
     ResolvedArrayProperty,
     ResolvedStringProperty,
     StorageConfig,
+    StringProperty,
     UploadedFileContext
 } from "../types";
 import { randomString } from "./strings";
@@ -13,7 +16,7 @@ interface ResolveFilenameStringParams<M extends object> {
     values: EntityValues<M>;
     entityId: string;
     path?: string;
-    property: ResolvedStringProperty | ResolvedArrayProperty<string[]>;
+    property: ResolvedStringProperty | ResolvedArrayProperty<string[]>,
     file: File;
     propertyKey: string;
 }
@@ -30,6 +33,7 @@ export async function resolveStorageFilenameString<M extends object>(
         propertyKey
     }: ResolveFilenameStringParams<M>): Promise<string> {
     let result;
+
     if (typeof input === "function") {
         result = await input({
             path,

@@ -17,8 +17,8 @@ export type DataType<T extends CMSType = CMSType> =
                     T extends GeoPoint ? "geopoint" :
                         T extends Vector ? "vector" :
                             T extends EntityReference ? "reference" :
-                                T extends Array<CMSType> ? "array" :
-                                    T extends Record<string, CMSType> ? "map" : never;
+                                T extends Array<any> ? "array" :
+                                    T extends Record<string, any> ? "map" : never;
 
 /**
  * @group Entity properties
@@ -49,7 +49,7 @@ export type AnyProperty =
 /**
  * @group Entity properties
  */
-export type Property<T extends CMSType = CMSType> =
+export type Property<T extends CMSType = any> =
     T extends string ? StringProperty :
         T extends number ? NumberProperty :
             T extends boolean ? BooleanProperty :
@@ -405,7 +405,7 @@ export interface StringProperty extends BaseProperty<string> {
 /**
  * @group Entity properties
  */
-export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = CMSType> extends BaseProperty<T> {
+export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = any> extends BaseProperty<T> {
 
     dataType: "array";
 

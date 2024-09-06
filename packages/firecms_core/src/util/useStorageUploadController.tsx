@@ -2,9 +2,11 @@ import Resizer from "react-image-file-resizer";
 import equal from "react-fast-compare";
 
 import {
+    ArrayProperty,
     EntityValues,
     ImageCompression,
     Property,
+    PropertyOrBuilder,
     ResolvedArrayProperty,
     ResolvedStringProperty,
     StorageConfig,
@@ -15,6 +17,7 @@ import { useCallback, useEffect, useState } from "react";
 import { PreviewSize } from "../preview";
 import { randomString } from "./strings";
 import { resolveStorageFilenameString, resolveStoragePathString } from "./storage";
+import { resolveProperty } from "./resolutions";
 
 /**
  * Internal representation of an item in the storage
@@ -48,7 +51,7 @@ export function useStorageUploadController<M extends object>({
                                                                      value: string | string[] | null;
                                                                      path?: string,
                                                                      propertyKey: string,
-                                                                     property: ResolvedStringProperty | ResolvedArrayProperty<string[]>,
+                                                                     property: StringProperty | ArrayProperty<string[]> | ResolvedStringProperty | ResolvedArrayProperty<string[]>,
                                                                      storageSource: StorageSource,
                                                                      disabled: boolean,
                                                                      onChange: (value: string | string[] | null) => void
@@ -93,6 +96,11 @@ export function useStorageUploadController<M extends object>({
         }
     }, [internalInitialValue, value, initialValue]);
 
+    const resolvedProperty = resolveProperty({
+        propertyOrBuilder: property as PropertyOrBuilder,
+        values: entityValues
+    }) as ResolvedStringProperty | ResolvedArrayProperty<string[]>;
+
     const fileNameBuilder = useCallback(async (file: File) => {
         if (storage.fileName) {
             const fileName = await resolveStorageFilenameString({
@@ -101,7 +109,7 @@ export function useStorageUploadController<M extends object>({
                 values: entityValues,
                 entityId,
                 path,
-                property,
+                property: resolvedProperty,
                 file,
                 propertyKey
             });
@@ -111,7 +119,7 @@ export function useStorageUploadController<M extends object>({
             return fileName;
         }
         return randomString() + "_" + file.name;
-    }, [entityId, entityValues, path, property, propertyKey, storage]);
+    }, [entityId, entityValues, path, resolvedProperty, propertyKey, storage]);
 
     const storagePathBuilder = useCallback((file: File) => {
         return resolveStoragePathString({
@@ -120,11 +128,11 @@ export function useStorageUploadController<M extends object>({
             values: entityValues,
             entityId,
             path,
-            property,
+            property: resolvedProperty,
             file,
             propertyKey
         }) ?? "/";
-    }, [entityId, entityValues, path, property, propertyKey, storage]);
+    }, [entityId, entityValues, path, resolvedProperty, propertyKey, storage]);
 
     const onFileUploadComplete = useCallback(async (uploadedPath: string,
                                                     entry: StorageFieldItem,
