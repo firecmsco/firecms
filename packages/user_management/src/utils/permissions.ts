@@ -45,10 +45,10 @@ export function resolveUserRolePermissions<UserType extends User>
 function resolveCollectionRole(role: Role, id: string): Permissions {
 
     const basePermissions = {
-        read: role.isAdmin || role.defaultPermissions?.read,
-        create: role.isAdmin || role.defaultPermissions?.create,
-        edit: role.isAdmin || role.defaultPermissions?.edit,
-        delete: role.isAdmin || role.defaultPermissions?.delete
+        read: (role.isAdmin || role.defaultPermissions?.read) ?? false,
+        create: (role.isAdmin || role.defaultPermissions?.create) ?? false,
+        edit: (role.isAdmin || role.defaultPermissions?.edit) ?? false,
+        delete: (role.isAdmin || role.defaultPermissions?.delete) ?? false
     };
     const thisCollectionPermissions = role.collectionPermissions?.[id];
     if (thisCollectionPermissions) {
