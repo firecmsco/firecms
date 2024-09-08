@@ -1,5 +1,5 @@
 import { SelectFieldBinding } from "./field_bindings/SelectFieldBinding";
-import { MultiSelectBinding } from "./field_bindings/MultiSelectBinding";
+import { MultiSelectFieldBinding } from "./field_bindings/MultiSelectFieldBinding";
 import { ArrayOfReferencesFieldBinding } from "./field_bindings/ArrayOfReferencesFieldBinding";
 import { StorageUploadFieldBinding } from "./field_bindings/StorageUploadFieldBinding";
 import { TextFieldBinding } from "./field_bindings/TextFieldBinding";
@@ -17,7 +17,7 @@ import { ArrayCustomShapedFieldBinding } from "./field_bindings/ArrayCustomShape
 export {
     ArrayCustomShapedFieldBinding,
     RepeatFieldBinding,
-    MultiSelectBinding,
+    MultiSelectFieldBinding,
     ArrayOfReferencesFieldBinding,
     BlockFieldBinding,
     DateTimeFieldBinding,

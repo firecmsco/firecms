@@ -9,7 +9,7 @@ import {
     KeyValueFieldBinding,
     MapFieldBinding,
     MarkdownEditorFieldBinding,
-    MultiSelectBinding,
+    MultiSelectFieldBinding,
     ReferenceFieldBinding,
     RepeatFieldBinding,
     SelectFieldBinding,
@@ -139,7 +139,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
                 dataType: "string",
                 enumValues: [],
             },
-            Field: MultiSelectBinding
+            Field: MultiSelectFieldBinding
         }
     },
     number_input: {
@@ -177,7 +177,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
                 dataType: "number",
                 enumValues: [],
             },
-            Field: MultiSelectBinding
+            Field: MultiSelectFieldBinding
         }
     },
     file_upload: {

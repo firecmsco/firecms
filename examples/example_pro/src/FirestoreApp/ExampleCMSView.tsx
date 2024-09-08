@@ -12,7 +12,18 @@ import {
     useSideEntityController,
     useSnackbarController
 } from "@firecms/core";
-import { Button, Chip, GitHubIcon, IconButton, NewMultiSelect, Paper, Sheet, Tooltip, Typography } from "@firecms/ui";
+import {
+    Button,
+    Chip,
+    GitHubIcon,
+    IconButton,
+    NewMultiSelect,
+    NewMultiSelectItem,
+    Paper,
+    Sheet,
+    Tooltip,
+    Typography
+} from "@firecms/ui";
 import { Product } from "./types";
 import { usersCollection } from "./collections/users_collection";
 
@@ -125,17 +136,20 @@ export function ExampleCMSView() {
                         </p>
                     </div>
 
-                    <div className="p-4 max-w-xl">
-                        <h1 className="text-2xl font-bold mb-4">Multi-Select Component</h1>
+                    <div className="w-full">
                         <NewMultiSelect
-                            options={frameworksList}
+                            className={"w-full"}
+                            value={selectedFrameworks}
                             onValueChange={setSelectedFrameworks}
-                            defaultValue={selectedFrameworks}
                             placeholder="Select frameworks"
-                            // variant="inverted"
-                            animation={2}
                             maxCount={3}
-                        />
+                        >
+                            {frameworksList.map((framework) => (
+                                <NewMultiSelectItem value={framework.value}>
+                                    {framework.label}
+                                </NewMultiSelectItem>
+                            ))}
+                        </NewMultiSelect>
                         <div className="mt-4">
                             <h2 className="text-xl font-semibold">Selected Frameworks:</h2>
                             <ul className="list-disc list-inside">

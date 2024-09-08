@@ -6,7 +6,7 @@ import {
     ExpandablePanel,
     FileUploadIcon,
     MultiSelect,
-    MultiSelectItem,
+    MultiSelectItem, NewMultiSelect, NewMultiSelectItem,
     Typography
 } from "@firecms/ui";
 
@@ -58,10 +58,10 @@ export function StoragePropertyField({
 
     const handleTypesChange = (value: string[]) => {
         if (!value) setFieldValue(acceptedFiles, undefined);
-        else if (value.includes("all")) setFieldValue(acceptedFiles, undefined);
-        else if (value.length >= Object.keys(fileTypes).length) setFieldValue(acceptedFiles, undefined);
-        else if (allFileTypesSelected)
-            setFieldValue(acceptedFiles, Object.keys(fileTypes).filter((v) => !value.includes(v)));
+        // else if (value.includes("all")) setFieldValue(acceptedFiles, undefined);
+        // else if (value.length >= Object.keys(fileTypes).length) setFieldValue(acceptedFiles, undefined);
+        // else if (allFileTypesSelected)
+        //     setFieldValue(acceptedFiles, Object.keys(fileTypes).filter((v) => !value.includes(v)));
         else setFieldValue(acceptedFiles, value);
     };
 
@@ -88,11 +88,13 @@ export function StoragePropertyField({
 
                         <div className={"col-span-12"}>
 
-                            <MultiSelect
+                            <NewMultiSelect
+                                className={"w-full"}
+                                placeholder={"All file types allowed"}
                                 disabled={disabled}
                                 name={acceptedFiles}
                                 value={fileTypesValue ?? []}
-                                onMultiValueChange={handleTypesChange}
+                                onValueChange={handleTypesChange}
                                 label={allFileTypesSelected ? undefined : "Allowed file types"}
                                 renderValues={(selected) => {
                                     if (!selected || selected.length === 0) return "All file types allowed";
@@ -101,21 +103,15 @@ export function StoragePropertyField({
                                         .join(", ");
                                 }}>
 
-                                <MultiSelectItem key={"all"} value={"all"} className={"flex items-center gap-2"}>
-                                    <Checkbox
-                                        checked={!fileTypesValue}/>
-                                    All
-                                </MultiSelectItem>
-
                                 {Object.entries(fileTypes).map(([value, label]) => (
-                                    <MultiSelectItem key={value} value={value} className={"flex items-center gap-2"}>
-                                        <Checkbox
-                                            checked={allFileTypesSelected || fileTypesValue.indexOf(value) > -1}/>
+                                    <NewMultiSelectItem key={value} value={value} className={"flex items-center gap-2"}>
+                                        {/*<Checkbox*/}
+                                        {/*    checked={allFileTypesSelected || fileTypesValue.indexOf(value) > -1}/>*/}
                                         <div className={"flex-grow"}>
                                             {label}
                                         </div>
                                         <Button size={"small"}
-                                                variant={"outlined"}
+                                                variant={"text"}
                                                 onClick={(e) => {
                                                     e.preventDefault();
                                                     e.stopPropagation();
@@ -123,10 +119,10 @@ export function StoragePropertyField({
                                                 }}>
                                             Only
                                         </Button>
-                                    </MultiSelectItem>
+                                    </NewMultiSelectItem>
                                 ))}
 
-                            </MultiSelect>
+                            </NewMultiSelect>
                         </div>
 
                         <div className={"col-span-12"}>

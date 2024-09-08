@@ -16,75 +16,59 @@ export type SelectProps = {
     name?: string,
     id?: string,
     onOpenChange?: (open: boolean) => void,
-    value?: string | string[],
+    value?: string,
     className?: string,
     inputClassName?: string,
     onChange?: React.EventHandler<ChangeEvent<HTMLSelectElement>>,
     onValueChange?: (updatedValue: string) => void,
-    onMultiValueChange?: (updatedValue: string[]) => void,
     placeholder?: React.ReactNode,
     renderValue?: (value: string, index: number) => React.ReactNode,
-    renderValues?: (values: string[]) => React.ReactNode,
     size?: "small" | "medium",
     label?: React.ReactNode | string,
     disabled?: boolean,
     error?: boolean,
     position?: "item-aligned" | "popper",
     endAdornment?: React.ReactNode,
-    multiple?: boolean,
     inputRef?: React.RefObject<HTMLButtonElement>,
     padding?: boolean,
-    includeFocusOutline?: boolean,
     invisible?: boolean,
-    children?: React.ReactNode
+    children?: React.ReactNode;
 };
 
 export const Select = forwardRef<HTMLDivElement, SelectProps>(({
-                                                                      inputRef,
-                                                                      open,
-                                                                      name,
-                                                                      id,
-                                                                      onOpenChange,
-                                                                      value,
-                                                                      onChange,
-                                                                      onValueChange,
-                                                                      onMultiValueChange,
-                                                                      className,
-                                                                      inputClassName,
-                                                                      placeholder,
-                                                                      renderValue,
-                                                                      renderValues,
-                                                                      label,
-                                                                      size = "medium",
-                                                                      includeFocusOutline = true,
-                                                                      error,
-                                                                      disabled,
-                                                                      padding = true,
-                                                                      position = "item-aligned",
-                                                                      endAdornment,
-                                                                      multiple,
-                                                                      invisible,
-                                                                      children,
-                                                                      ...props
-                                                                  }, ref) => {
+                                                                   inputRef,
+                                                                   open,
+                                                                   name,
+                                                                   id,
+                                                                   onOpenChange,
+                                                                   value,
+                                                                   onChange,
+                                                                   onValueChange,
+                                                                   className,
+                                                                   inputClassName,
+                                                                   placeholder,
+                                                                   renderValue,
+                                                                   label,
+                                                                   size = "medium",
+                                                                   error,
+                                                                   disabled,
+                                                                   padding = true,
+                                                                   position = "item-aligned",
+                                                                   endAdornment,
+                                                                   invisible,
+                                                                   children,
+                                                                   ...props
+                                                               }, ref) => {
 
-    const [openInternal, setOpenInternal] = useState(false);
+    const [openInternal, setOpenInternal] = useState(open ?? false);
 
     useEffect(() => {
         setOpenInternal(open ?? false);
     }, [open]);
 
     const onValueChangeInternal = useCallback((newValue: string) => {
-        if (multiple) {
-            if (Array.isArray(value) && value.includes(newValue)) {
-                onMultiValueChange?.(value.filter(v => v !== newValue));
-            } else {
-                onMultiValueChange?.([...(value as string[] ?? []), newValue]);
-            }
-        } else {
-            onValueChange?.(newValue);
-        }
-        if (!multiple && onChange) {
+        onValueChange?.(newValue);
+        if (onChange) {
             const event = {
                 target: {
                     name,
@@ -93,15 +77,14 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
             } as ChangeEvent<HTMLSelectElement>;
             onChange(event);
         }
-    }, [multiple, onChange, value, onMultiValueChange, onValueChange]);
+    }, [onChange, value, onValueChange]);
 
     const hasValue = Array.isArray(value) ? value.length > 0 : value != null;
 
     return (
         <SelectPrimitive.Root
             name={name}
-            value={Array.isArray(value) ? undefined : value}
-            defaultOpen={open}
+            value={value}
             open={openInternal}
             disabled={disabled}
             onValueChange={onValueChangeInternal}
@@ -136,6 +119,11 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                         "relative flex items-center",
                         inputClassName
                     )}
+
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }}
                 >
                     <div
                         ref={ref}
@@ -145,14 +133,18 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                             size === "small" ? "h-[42px]" : "h-[64px]"
                         )}
                     >
-                        <SelectPrimitive.Value placeholder={placeholder} className={"w-full"}>
+                        <SelectPrimitive.Value
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                            }}
+                            placeholder={placeholder} className={"w-full"}>
                             {renderValue && (hasValue && Array.isArray(value) ? value.map((v, i) => (
                                 <div key={v} className={"flex items-center gap-1 max-w-full"}>
                                     {renderValue ? renderValue(v, i) : v}
                                 </div>
                             )) : (typeof value === "string" ? (renderValue ? renderValue(value, 0) : value) : placeholder))}
-                            {renderValues && (!hasValue || Array.isArray(value)) ? renderValues(value as string[] ?? []) : null}
-                            {!renderValue && !renderValues && hasValue}
+                            {!renderValue && hasValue && value}
                         </SelectPrimitive.Value>
                     </div>
                     <SelectPrimitive.Icon className={cls("px-2 h-full flex items-center")}>
@@ -162,7 +154,10 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                 {endAdornment && (
                     <div
                         className={cls("absolute h-full flex items-center", size === "small" ? "right-10" : "right-14")}
-                        onClick={(e) => e.stopPropagation()}>
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }}>
                         {endAdornment}
                     </div>
                 )}

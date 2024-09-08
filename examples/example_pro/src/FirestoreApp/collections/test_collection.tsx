@@ -8,6 +8,7 @@ import {
 } from "@firecms/core";
 import { SecondaryForm } from "../custom_entity_view/SecondaryForm";
 import { conditionProperty } from "../custom_field/RecursiveField";
+import { locales } from "./enums";
 
 export const testCallbacks: EntityCallbacks = {
     onFetch({
@@ -68,6 +69,19 @@ export const testCollection = buildCollection<any>({
         //     }
         // }],
         properties: {
+            locale: {
+                name: "Locales",
+                dataType: "string",
+                enumValues: locales
+            },
+            available_locales: {
+                name: "Available locales",
+                dataType: "array",
+                of: {
+                    dataType: "string",
+                    enumValues: locales
+                }
+            },
             entryCondition: conditionProperty("Entry condition"),
             fulfillmentCondition: conditionProperty("Fulfillment condition"),
             //...
@@ -739,14 +753,7 @@ export const testCollection = buildCollection<any>({
             //         },
             //     },
             // },
-            // available_locales: {
-            //     name: "Available locales",
-            //     dataType: "array",
-            //     of: {
-            //         dataType: "string",
-            //         enumValues: locales
-            //     }
-            // },
+
             // title: ({ values, entityId }) => {
             //     if (values?.available_locales && Array.isArray(values.available_locales)) {
             //         if (values.available_locales.includes("de"))

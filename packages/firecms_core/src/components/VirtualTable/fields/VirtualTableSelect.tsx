@@ -1,7 +1,7 @@
 import { EnumValueConfig } from "../../../types";
-import { ArrayEnumPreview, EnumValuesChip } from "../../../preview";
+import { EnumValuesChip } from "../../../preview";
 import React, { useCallback, useEffect } from "react";
-import { MultiSelect, MultiSelectItem, Select, SelectItem } from "@firecms/ui";
+import { NewMultiSelect, NewMultiSelectItem, Select, SelectItem } from "@firecms/ui";
 
 export function VirtualTableSelect(props: {
     name: string;
@@ -18,9 +18,7 @@ export function VirtualTableSelect(props: {
 }) {
 
     const {
-        name,
         enumValues,
-        error,
         internalValue,
         disabled,
         small,
@@ -41,6 +39,7 @@ export function VirtualTableSelect(props: {
     }, [focused, ref]);
 
     const onChange = useCallback((updatedValue: string | string[]) => {
+        console.trace("onChange");
         if (valueType === "number") {
             if (multiple) {
                 const newValue = (updatedValue as string[]).map((v) => parseFloat(v));
@@ -59,58 +58,47 @@ export function VirtualTableSelect(props: {
     }, [multiple, updateValue, valueType]);
 
     const renderValue = (enumKey: string | number, index: number) => {
-        if (multiple && Array.isArray(enumKey)) {
-            return <ArrayEnumPreview
-                key={`${enumKey}-${index}`}
-                value={enumKey}
-                name={name}
-                enumValues={enumValues}
-                size={small ? "small" : "medium"}/>;
-        } else {
-            return <EnumValuesChip
-                key={`${enumKey}-${index}`}
-                enumKey={enumKey}
-                enumValues={enumValues}
-                size={small ? "small" : "medium"}/>;
-        }
+        return <EnumValuesChip
+            key={`${enumKey}-${index}`}
+            enumKey={enumKey}
+            enumValues={enumValues}
+            size={small ? "small" : "medium"}/>;
     };
+
     return (
         multiple
-            ? <MultiSelect
+            ? <NewMultiSelect
                 inputRef={ref}
-                containerClassName="w-full h-full"
                 className="w-full h-full p-0 bg-transparent"
                 position={"item-aligned"}
                 disabled={disabled}
+                includeClear={false}
+                useChips={false}
                 value={validValue
                     ? ((internalValue as any[]).map(v => v.toString()))
                     : ([])}
-                onMultiValueChange={onChange}
-                renderValue={renderValue}>
+                onValueChange={onChange}>
                 {enumValues?.map((enumConfig) => (
-                    <MultiSelectItem
+                    <NewMultiSelectItem
                         key={enumConfig.id}
                         value={String(enumConfig.id)}>
                         <EnumValuesChip
                             enumKey={enumConfig.id}
                             enumValues={enumValues}
                             size={small ? "small" : "medium"}/>
-                    </MultiSelectItem>
+                    </NewMultiSelectItem>
                 ))}
-            </MultiSelect>
+            </NewMultiSelect>
             : <Select
                 inputRef={ref}
                 className="w-full h-full p-0 bg-transparent"
                 position={"item-aligned"}
                 disabled={disabled}
-                multiple={multiple}
                 padding={false}
-                includeFocusOutline={false}
                 value={validValue
-                    ? (multiple ? (internalValue as any[]).map(v => v.toString()) : internalValue?.toString())
-                    : (multiple ? [] : "")}
+                    ? internalValue?.toString()
+                    : ""}
                 onValueChange={onChange}
-                onMultiValueChange={onChange}
                 renderValue={renderValue}>
                 {enumValues?.map((enumConfig) => (
                     <SelectItem

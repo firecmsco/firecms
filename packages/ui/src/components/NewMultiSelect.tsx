@@ -1,13 +1,13 @@
-// src/components/multi-select.tsx
+import equal from "react-fast-compare";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
-
 import * as React from "react";
+import { ChangeEvent, Children, useEffect } from "react";
 import { Command as CommandPrimitive } from "cmdk";
 import { cls } from "../util";
-import { CloseIcon, ExpandMoreIcon } from "../icons";
+import { CloseIcon, ExpandMoreIcon, Icon } from "../icons";
 import { Separator } from "./Separator";
-import { Checkbox } from "./Checkbox";
 import { Chip } from "./Chip";
+import { SelectInputLabel } from "./common/SelectInputLabel";
 import {
     defaultBorderMixin,
     fieldBackgroundDisabledMixin,
@@ -16,49 +16,19 @@ import {
     fieldBackgroundMixin,
     focusedDisabled
 } from "../styles";
+import { useInjectStyles } from "../hooks";
+
+interface MultiSelectContextProps {
+    fieldValue?: string[];
+    onItemClick: (v: string) => void;
+}
+
+export const MultiSelectContext = React.createContext<MultiSelectContextProps>({} as any);
 
 /**
  * Props for MultiSelect component
  */
-interface MultiSelectProps
-    extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    /**
-     * An array of option objects to be displayed in the multi-select component.
-     * Each option object has a label, value, and an optional icon.
-     */
-    options: {
-        /** The text to display for the option. */
-        label: string;
-        /** The unique value associated with the option. */
-        value: string;
-    }[];
-
-    /**
-     * Callback function triggered when the selected values change.
-     * Receives an array of the new selected values.
-     */
-    onValueChange: (value: string[]) => void;
-
-    /** The default selected values when the component mounts. */
-    defaultValue: string[];
-
-    /**
-     * Placeholder text to be displayed when no values are selected.
-     * Optional, defaults to "Select options".
-     */
-    placeholder?: string;
-
-    /**
-     * Animation duration in seconds for the visual effects (e.g., bouncing badges).
-     * Optional, defaults to 0 (no animation).
-     */
-    animation?: number;
-
-    /**
-     * Maximum number of items to display. Extra selected items will be summarized.
-     * Optional, defaults to 3.
-     */
-    maxCount?: number;
+interface MultiSelectProps {
 
     /**
      * The modality of the popover. When set to true, interaction with outside elements
@@ -68,23 +38,34 @@ interface MultiSelectProps
     modalPopover?: boolean;
 
     /**
-     * If true, renders the multi-select component as a child of another component.
-     * Optional, defaults to false.
-     */
-    asChild?: boolean;
-
-    /**
      * Additional class names to apply custom styles to the multi-select component.
      * Optional, can be used to add custom styles.
      */
     className?: string;
 
+    open?: boolean,
+    name?: string,
+    id?: string,
+    onOpenChange?: (open: boolean) => void,
+    value?: string[],
+    inputClassName?: string,
+    onChange?: React.EventHandler<ChangeEvent<HTMLSelectElement>>,
+    onValueChange?: (updatedValue: string[]) => void,
+    placeholder?: React.ReactNode,
     size?: "small" | "medium",
-
-    invisible?: boolean;
-    disabled?: boolean;
-
-    variant?: "default" | "secondary" | "destructive";
+    useChips?: boolean,
+    label?: React.ReactNode | string,
+    disabled?: boolean,
+    error?: boolean,
+    position?: "item-aligned" | "popper",
+    endAdornment?: React.ReactNode,
+    multiple?: boolean,
+    includeClear?: boolean,
+    inputRef?: React.RefObject<HTMLButtonElement>,
+    padding?: boolean,
+    invisible?: boolean,
+    children: React.ReactNode;
+    renderValues?: (values: string[]) => React.ReactNode;
 }
 
 export const NewMultiSelect = React.forwardRef<
@@ -93,42 +74,84 @@ export const NewMultiSelect = React.forwardRef<
 >(
     (
         {
+            value,
             size,
-            options,
+            label,
+            error,
             onValueChange,
             invisible,
             disabled,
-            variant,
-            defaultValue = [],
-            placeholder = "Select options",
-            animation = 0,
-            maxCount = 3,
+            placeholder,
             modalPopover = false,
-            asChild = false,
+            includeClear = true,
+            useChips = true,
             className,
-            ...props
+            children,
+            renderValues,
+            open,
+            onOpenChange,
         },
         ref
     ) => {
-        const [selectedValues, setSelectedValues] =
-            React.useState<string[]>(defaultValue);
-        const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
-        // const [isAnimating, setIsAnimating] = React.useState(false);
+        const [isPopoverOpen, setIsPopoverOpen] = React.useState(open ?? false);
+        const [selectedValues, setSelectedValues] = React.useState<string[]>(value ?? []);
+
+        const onPopoverOpenChange = (open: boolean) => {
+            setIsPopoverOpen(open);
+            onOpenChange?.(open);
+        }
+
+        useEffect(() => {
+            setIsPopoverOpen(open ?? false);
+        }, [open]);
+
+        const allValues = children
+            ?
+            // @ts-ignore
+            Children.map(children, (child) => {
+                if (React.isValidElement(child)) {
+                    return child.props.value;
+                }
+                return null;
+            }).filter(Boolean) as string[]
+            : [];
 
         React.useEffect(() => {
-            setSelectedValues(defaultValue);
-        }, [defaultValue]);
+            setSelectedValues(value ?? []);
+        }, [value]);
+
+        function onItemClick(newValue: string) {
+            let newSelectedValues: string[];
+            if (selectedValues.includes(newValue)) {
+                newSelectedValues = selectedValues.filter((v) => v !== newValue);
+            } else {
+                newSelectedValues = [...selectedValues, newValue];
+            }
+            if (!equal(newSelectedValues, selectedValues)) {
+
+                console.log("selectedValues", {
+                    newSelectedValues,
+                    selectedValues
+                });
+                updateValues(newSelectedValues);
+            }
+        }
+
+        function updateValues(values: string[]) {
+            console.trace("updateValues", values);
+            setSelectedValues(values);
+            onValueChange?.(values);
+        }
 
         const handleInputKeyDown = (
             event: React.KeyboardEvent<HTMLInputElement>
         ) => {
             if (event.key === "Enter") {
-                setIsPopoverOpen(true);
+                onPopoverOpenChange(true);
             } else if (event.key === "Backspace" && !event.currentTarget.value) {
                 const newSelectedValues = [...selectedValues];
                 newSelectedValues.pop();
-                setSelectedValues(newSelectedValues);
-                onValueChange(newSelectedValues);
+                updateValues(newSelectedValues);
             }
         };
 
@@ -136,235 +159,245 @@ export const NewMultiSelect = React.forwardRef<
             const newSelectedValues = selectedValues.includes(value)
                 ? selectedValues.filter((v) => v !== value)
                 : [...selectedValues, value];
-            setSelectedValues(newSelectedValues);
-            onValueChange(newSelectedValues);
+            updateValues(newSelectedValues);
         };
 
         const handleClear = () => {
-            setSelectedValues([]);
-            onValueChange([]);
+            updateValues([]);
         };
 
         const handleTogglePopover = () => {
-            setIsPopoverOpen((prev) => !prev);
-        };
-
-        const clearExtraOptions = () => {
-            const newSelectedValues = selectedValues.slice(0, maxCount);
-            setSelectedValues(newSelectedValues);
-            onValueChange(newSelectedValues);
+            onPopoverOpenChange(!isPopoverOpen);
         };
 
         const toggleAll = () => {
-            if (selectedValues.length === options.length) {
+            if (selectedValues.length === allValues.length) {
                 handleClear();
             } else {
-                const allValues = options.map((option) => option.value);
-                setSelectedValues(allValues);
-                onValueChange(allValues);
+                updateValues(allValues);
             }
         };
 
-        return (
-            <PopoverPrimitive.Root
-                open={isPopoverOpen}
-                onOpenChange={setIsPopoverOpen}
-                modal={modalPopover}
-            >
-                <PopoverPrimitive.Trigger asChild>
-                    <button
-                        ref={ref}
-                        {...props}
-                        onClick={handleTogglePopover}
-                        className={cls(
-                            size === "small" ? "min-h-[42px]" : "min-h-[64px]",
-                            "select-none rounded-md text-sm",
-                            invisible ? fieldBackgroundInvisibleMixin : fieldBackgroundMixin,
-                            disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
-                            "relative flex items-center",
-                            className
-                        )}
-                    >
-                        {selectedValues.length > 0 ? (
-                            <div className="flex justify-between items-center w-full">
-                                <div className="flex flex-wrap items-center">
-                                    {selectedValues.slice(0, maxCount).map((value) => {
-                                        const option = options.find((o) => o.value === value);
-                                        return (
-                                            <Chip
-                                                key={value}
-                                                className={cls(
-                                                    "m-1 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300",
-                                                    {
-                                                        "border-foreground/10 text-foreground bg-card hover:bg-card/80": variant === "default",
-                                                        "border-foreground/10 bg-secondary text-secondary-foreground hover:bg-secondary/80": variant === "secondary",
-                                                        "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80": variant === "destructive",
-                                                    }
-                                                )}
-                                                style={{ animationDuration: `${animation}s` }}
-                                            >
-                                                {option?.label}
-                                                <CloseIcon
-                                                    size={"smallest"}
-                                                    onClick={(event) => {
-                                                        event.stopPropagation();
-                                                        toggleOption(value);
-                                                    }}
-                                                />
-                                            </Chip>
-                                        );
-                                    })}
-                                    {selectedValues.length > maxCount && (
-                                        <Chip
-                                            className={cls(
-                                                "bg-transparent text-foreground border-foreground/1 hover:bg-transparent",
-                                                "m-1 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300",
-                                                {
-                                                    "border-foreground/10 text-foreground bg-card hover:bg-card/80": variant === "default",
-                                                    "border-foreground/10 bg-secondary text-secondary-foreground hover:bg-secondary/80": variant === "secondary",
-                                                    "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80": variant === "destructive",
-                                                }
-                                            )}
-                                            style={{ animationDuration: `${animation}s` }}
-                                        >
-                                            {`+ ${selectedValues.length - maxCount} more`}
-                                            <CloseIcon
-                                                size={"smallest"}
-                                                onClick={(event) => {
-                                                    event.stopPropagation();
-                                                    clearExtraOptions();
-                                                }}
-                                            />
-                                        </Chip>
-                                    )}
-                                </div>
-                                <div className="flex items-center justify-between">
-                                    <CloseIcon
-                                        size={"small"}
-                                        onClick={(event) => {
-                                            event.stopPropagation();
-                                            handleClear();
-                                        }}
-                                    />
-                                    <Separator
-                                        orientation="vertical"
-                                    />
+        useInjectStyles("MultiSelect", `
+[cmdk-group] {
+  max-height: 45vh;
+  overflow-y: auto;
+  // width: 400px;
+} `)
 
+        return (
+            <MultiSelectContext.Provider
+                value={{
+                    fieldValue: selectedValues,
+                    onItemClick
+                }}>
+
+                {typeof label === "string" ? <SelectInputLabel error={error}>{label}</SelectInputLabel> : label}
+
+                <PopoverPrimitive.Root
+                    open={isPopoverOpen}
+                    onOpenChange={onPopoverOpenChange}
+                    modal={modalPopover}
+                >
+                    <PopoverPrimitive.Trigger asChild>
+                        <button
+                            ref={ref}
+                            onClick={handleTogglePopover}
+                            className={cls(
+                                size === "small" ? "min-h-[42px]" : "min-h-[64px]",
+                                "px-4",
+                                "select-none rounded-md text-sm",
+                                invisible ? fieldBackgroundInvisibleMixin : fieldBackgroundMixin,
+                                disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
+                                "relative flex items-center",
+                                className
+                            )}
+                        >
+                            {selectedValues.length > 0 ? (
+                                <div className="flex justify-between items-center w-full">
+                                    <div className="flex flex-wrap items-center gap-1.5 text-start">
+                                        {renderValues && renderValues(selectedValues)}
+                                        {!renderValues && selectedValues.map((value) => {
+
+                                            // @ts-ignore
+                                            const childrenProps: MultiSelectItemProps[] = Children.map(children, (child) => {
+                                                if (React.isValidElement(child)) {
+                                                    return child.props;
+                                                }
+                                            }).filter(Boolean);
+
+                                            const option = childrenProps.find((o) => o.value === value);
+                                            if (!useChips) {
+                                                return option?.children;
+                                            }
+                                            return (
+                                                <Chip
+                                                    size={"small"}
+                                                    key={value}
+                                                    className={cls("flex flex-row items-center p-1")}
+                                                >
+                                                    {option?.children}
+                                                    <CloseIcon
+                                                        size={"smallest"}
+                                                        onClick={(event) => {
+                                                            event.stopPropagation();
+                                                            toggleOption(value);
+                                                        }}
+                                                    />
+                                                </Chip>
+                                            );
+                                        })}
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        {includeClear && <CloseIcon
+                                            className={"ml-4"}
+                                            size={"small"}
+                                            onClick={(event) => {
+                                                event.stopPropagation();
+                                                handleClear();
+                                            }}
+                                        />}
+                                        <div className={cls("px-2 h-full flex items-center")}>
+                                            <ExpandMoreIcon size={"small"}
+                                                            className={cls("transition", isPopoverOpen ? "rotate-180" : "")}/>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="flex items-center justify-between w-full mx-auto">
+                                    <span className="text-sm">
+                                      {placeholder}
+                                    </span>
                                     <div className={cls("px-2 h-full flex items-center")}>
                                         <ExpandMoreIcon size={"small"}
                                                         className={cls("transition", isPopoverOpen ? "rotate-180" : "")}/>
                                     </div>
                                 </div>
+                            )}
+                        </button>
+                    </PopoverPrimitive.Trigger>
+                    <PopoverPrimitive.Content
+                        className={cls("z-50 relative overflow-hidden border bg-white dark:bg-gray-900 rounded-lg w-[400px]", defaultBorderMixin)}
+                        align="start"
+                        sideOffset={8}
+                        onEscapeKeyDown={() => onPopoverOpenChange(false)}
+                    >
+                        <CommandPrimitive>
+                            <div className={"flex flex-row items-center"}>
+                                <CommandPrimitive.Input
+                                    className={cls(focusedDisabled, "bg-transparent outline-none flex-1 h-full w-full m-4 flex-grow")}
+                                    placeholder="Search..."
+                                    onKeyDown={handleInputKeyDown}
+                                />
+                                {selectedValues.length > 0 && (
+                                    <div
+                                        onClick={handleClear}
+                                        className="text-sm justify-center cursor-pointer py-3 px-4 text-text-secondary dark:text-text-secondary-dark">
+                                        Clear
+                                    </div>
+                                )}
                             </div>
-                        ) : (
-                            <div className="flex items-center justify-between w-full mx-auto">
-                                <span className="text-sm text-muted-foreground mx-3">
-                                  {placeholder}
-                                </span>
-                                <div className={cls("px-2 h-full flex items-center")}>
-                                    <ExpandMoreIcon size={"small"}
-                                                    className={cls("transition", isPopoverOpen ? "rotate-180" : "")}/>
-                                </div>
-                            </div>
-                        )}
-                    </button>
-                </PopoverPrimitive.Trigger>
-                <PopoverPrimitive.Content
-                    className={cls("z-50 relative overflow-hidden border bg-white dark:bg-gray-900 p-2 rounded-lg", defaultBorderMixin)}
-                    align="start"
-                    onEscapeKeyDown={() => setIsPopoverOpen(false)}
-                >
-                    <CommandPrimitive>
-                        <CommandPrimitive.Input
-                            className={cls(focusedDisabled, "bg-transparent outline-none flex-1 h-full w-full m-4")}
-                            placeholder="Search..."
-                            onKeyDown={handleInputKeyDown}
-                        />
-                        <CommandPrimitive.List>
-                            <CommandPrimitive.Empty>No results found.</CommandPrimitive.Empty>
-                            <CommandPrimitive.Group>
-                                <CommandPrimitive.Item
-                                    key="all"
-                                    onSelect={toggleAll}
-                                    className={
-                                        cls(
-                                            // (fieldValue ?? []).includes(value) ? "bg-slate-200 dark:bg-slate-950" : "",
-                                            "cursor-pointer",
-                                            "flex flex-row items-center gap-2",
-                                            "ring-offset-transparent",
-                                            "p-1 rounded aria-[selected=true]:outline-none aria-[selected=true]:ring-2 aria-[selected=true]:ring-primary aria-[selected=true]:ring-opacity-75 aria-[selected=true]:ring-offset-2",
-                                            "aria-[selected=true]:bg-slate-100 aria-[selected=true]:dark:bg-slate-900",
-                                            "cursor-pointer p-1 rounded aria-[selected=true]:bg-slate-100 aria-[selected=true]:dark:bg-slate-900",
-                                            className
-                                        )
-                                    }
-                                >
-                                    <Checkbox checked={selectedValues.length === options.length} size={"small"}/>
-                                    <span>(Select All)</span>
-                                </CommandPrimitive.Item>
-                                {options.map((option) => {
-                                    const isSelected = selectedValues.includes(option.value);
-                                    return (
-                                        <CommandPrimitive.Item
-                                            key={option.value}
-                                            onSelect={() => toggleOption(option.value)}
-                                            className={cls(
-                                                // (fieldValue ?? []).includes(value) ? "bg-slate-200 dark:bg-slate-950" : "",
+                            <Separator orientation={"horizontal"} className={"my-0"}/>
+                            <CommandPrimitive.List>
+                                <CommandPrimitive.Empty className={"px-4 py-2"}>
+                                    No results found.
+                                </CommandPrimitive.Empty>
+                                <CommandPrimitive.Group>
+                                    <CommandPrimitive.Item
+                                        key="all"
+                                        onSelect={toggleAll}
+                                        className={
+                                            cls(
+                                                "flex flex-row items-center gap-1.5",
                                                 "cursor-pointer",
-                                                "flex flex-row items-center gap-2",
+                                                "m-1",
                                                 "ring-offset-transparent",
                                                 "p-1 rounded aria-[selected=true]:outline-none aria-[selected=true]:ring-2 aria-[selected=true]:ring-primary aria-[selected=true]:ring-opacity-75 aria-[selected=true]:ring-offset-2",
                                                 "aria-[selected=true]:bg-slate-100 aria-[selected=true]:dark:bg-slate-900",
-                                                "cursor-pointer p-1 rounded aria-[selected=true]:bg-slate-100 aria-[selected=true]:dark:bg-slate-900",
-                                                className
-                                            )}
-                                        >
-
-                                            <Checkbox checked={isSelected} size={"small"}/>
-                                            <span>{option.label}</span>
-                                        </CommandPrimitive.Item>
-                                    );
-                                })}
-                            </CommandPrimitive.Group>
-                            <CommandPrimitive.Separator/>
-                            <CommandPrimitive.Group>
-                                <div className="flex items-center justify-between">
-                                    {selectedValues.length > 0 && (
-                                        <>
-                                            <CommandPrimitive.Item
-                                                onSelect={handleClear}
-                                                className="flex-1 justify-center cursor-pointer"
-                                            >
-                                                Clear
-                                            </CommandPrimitive.Item>
-                                            <Separator
-                                                orientation="vertical"
-                                            />
-                                        </>
-                                    )}
-                                    <CommandPrimitive.Item
-                                        onSelect={() => setIsPopoverOpen(false)}
-                                        className="flex-1 justify-center cursor-pointer max-w-full"
+                                                "cursor-pointer p-2 rounded aria-[selected=true]:bg-slate-100 aria-[selected=true]:dark:bg-slate-900"
+                                            )
+                                        }
                                     >
-                                        Close
+                                        <InnerCheckBox checked={selectedValues.length === allValues.length}/>
+                                        <span className={"text-sm text-text-secondary dark:text-text-secondary-dark"}>(Select All)</span>
                                     </CommandPrimitive.Item>
-                                </div>
-                            </CommandPrimitive.Group>
-                        </CommandPrimitive.List>
-                    </CommandPrimitive>
-                </PopoverPrimitive.Content>
-                {/*{animation > 0 && selectedValues.length > 0 && (*/}
-                {/*    <WandSparkles*/}
-                {/*        className={cls(*/}
-                {/*            "cursor-pointer my-2 text-foreground bg-background w-3 h-3",*/}
-                {/*            isAnimating ? "" : "text-muted-foreground"*/}
-                {/*        )}*/}
-                {/*        onClick={() => setIsAnimating(!isAnimating)}*/}
-                {/*    />*/}
-                {/*)}*/}
-            </PopoverPrimitive.Root>
+                                    {children}
+                                </CommandPrimitive.Group>
+
+                            </CommandPrimitive.List>
+                        </CommandPrimitive>
+                    </PopoverPrimitive.Content>
+                </PopoverPrimitive.Root>
+            </MultiSelectContext.Provider>
         );
     }
 );
 
 NewMultiSelect.displayName = "MultiSelect";
+
+export interface MultiSelectItemProps {
+    value: string;
+    children?: React.ReactNode,
+    className?: string;
+}
+
+export function NewMultiSelectItem({
+                                       children,
+                                       value,
+                                       className
+                                   }: MultiSelectItemProps) {
+
+    const context = React.useContext(MultiSelectContext);
+    if (!context) throw new Error("MultiSelectItem must be used inside a MultiSelect");
+    const {
+        fieldValue,
+        onItemClick
+    } = context;
+
+    const isSelected = (fieldValue ?? []).includes(value);
+    return <CommandPrimitive.Item
+        // value={value}
+        onMouseDown={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        }}
+        onSelect={(_) => {
+            onItemClick(value);
+        }}
+        className={cls(
+            "flex flex-row items-center gap-1.5",
+            isSelected ? "bg-slate-200 dark:bg-slate-950" : "",
+            "cursor-pointer",
+            "m-1",
+            "ring-offset-transparent",
+            "p-1 rounded aria-[selected=true]:outline-none aria-[selected=true]:ring-2 aria-[selected=true]:ring-primary aria-[selected=true]:ring-opacity-75 aria-[selected=true]:ring-offset-2",
+            "aria-[selected=true]:bg-slate-100 aria-[selected=true]:dark:bg-slate-900",
+            "cursor-pointer p-2 rounded aria-[selected=true]:bg-slate-100 aria-[selected=true]:dark:bg-slate-900",
+            className
+        )}
+    >
+        <InnerCheckBox checked={isSelected}/>
+        {children}
+    </CommandPrimitive.Item>;
+
+}
+
+function InnerCheckBox({ checked }: { checked: boolean }) {
+    return <div className={cls(
+        "p-2",
+        "w-8 h-8",
+        "inline-flex items-center justify-center text-sm font-medium focus:outline-none transition-colors ease-in-out duration-150",
+    )}>
+        <div
+            className={cls(
+                "border-2 relative transition-colors ease-in-out duration-150",
+                "w-4 h-4 rounded flex items-center justify-center",
+                (checked ? "bg-primary" : "bg-white dark:bg-slate-900"),
+                (checked) ? "text-slate-100 dark:text-slate-900" : "",
+                (checked ? "border-transparent" : "border-slate-800 dark:border-slate-200")
+            )}>
+            {checked && <Icon iconKey={"check"} size={16} className={"absolute"}/>}
+        </div>
+    </div>
+}
+

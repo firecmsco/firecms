@@ -45,22 +45,21 @@ const TableCellInner = ({
                             children
                         }: TableCellInnerProps) => {
     return (
-        <div
-            className={cls("flex flex-col max-h-full w-full",
-                {
-                    "items-start": faded || scrollable
-                })}
-            style={{
-                justifyContent,
-                height: fullHeight ? "100%" : undefined,
-                overflow: scrollable ? "auto" : undefined,
-                WebkitMaskImage: faded
-                    ? "linear-gradient(to bottom, black 60%, transparent 100%)"
-                    : undefined,
-                maskImage: faded
-                    ? "linear-gradient(to bottom, black 60%, transparent 100%)"
-                    : undefined
-            }}
+        <div className={cls("flex flex-col max-h-full w-full",
+            {
+                "items-start": faded || scrollable
+            })}
+             style={{
+                 justifyContent,
+                 height: fullHeight ? "100%" : undefined,
+                 overflow: scrollable ? "auto" : undefined,
+                 WebkitMaskImage: faded
+                     ? "linear-gradient(to bottom, black 60%, transparent 100%)"
+                     : undefined,
+                 maskImage: faded
+                     ? "linear-gradient(to bottom, black 60%, transparent 100%)"
+                     : undefined
+             }}
         >
             {children}
         </div>
@@ -156,8 +155,9 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
         }, [ref, onSelect, selected, disabled]);
 
         const onFocus = useCallback((event: React.SyntheticEvent<HTMLDivElement>) => {
-            onSelectCallback();
             event.stopPropagation();
+            event.preventDefault();
+            onSelectCallback();
         }, [onSelectCallback]);
 
         const isOverflowing = useMemo(() => {
@@ -203,11 +203,9 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
                 }}
                 tabIndex={selected || disabled ? undefined : 0}
                 onFocus={onFocus}
-                // onClick={onClick}
                 onMouseEnter={setOnHoverTrue}
                 onMouseMove={setOnHoverTrue}
                 onMouseLeave={setOnHoverFalse}
-                // contain={scrollable ? "content" : "size"}
             >
 
                 <ErrorBoundary>
@@ -237,7 +235,7 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
 
                 {disabled && onHover && disabledTooltip &&
                     <div className="absolute top-1 right-1 text-xs">
-                        <Tooltip title={disabledTooltip} >
+                        <Tooltip title={disabledTooltip}>
                             <RemoveCircleIcon size={"smallest"} color={"disabled"} className={"text-gray-500"}/>
                         </Tooltip>
                     </div>}

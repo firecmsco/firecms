@@ -204,15 +204,6 @@ export function useBuildDataSource({
             const collection = collectionProp ?? navigationController.getCollection(path);
             const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
 
-            console.log("useBuildDatasource save", {
-                path,
-                entityId,
-                values,
-                collectionProp,
-                collection,
-                status
-            });
-
             const resolvedCollection = collection
                 ? resolveCollection<M>({
                     collection,
@@ -267,7 +258,10 @@ export function useBuildDataSource({
             }: DeleteEntityProps<M>
         ): Promise<void> => {
             const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
-            return usedDelegate.deleteEntity({ entity, collection });
+            return usedDelegate.deleteEntity({
+                entity,
+                collection
+            });
         }, [delegate.deleteEntity]),
 
         /**

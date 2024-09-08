@@ -163,7 +163,6 @@ export function MultiSelect({
                                     pointerEvents: openInternal ? "auto" : "none",
                                     top: (usedBoundingRect?.top ?? 0) + (usedBoundingRect?.height ?? 0),
                                     left: usedBoundingRect?.left,
-                                    // right: boundingRect?.right,
                                     width: usedBoundingRect?.width,
                                     maxHeight: maxHeight,
 

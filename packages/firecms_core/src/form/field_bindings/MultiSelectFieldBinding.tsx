@@ -4,7 +4,7 @@ import { EnumType, FieldProps, ResolvedProperty } from "../../types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { EnumValuesChip } from "../../preview";
 import { enumToObjectEntries, getIconForProperty, getLabelOrConfigFrom } from "../../util";
-import { CloseIcon, MultiSelect, MultiSelectItem } from "@firecms/ui";
+import { CloseIcon, NewMultiSelect, NewMultiSelectItem } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
 /**
@@ -14,18 +14,18 @@ import { useClearRestoreValue } from "../useClearRestoreValue";
  * and tables to the specified properties.
  * @group Form fields
  */
-export function MultiSelectBinding({
-                                       propertyKey,
-                                       value,
-                                       setValue,
-                                       error,
-                                       showError,
-                                       disabled,
-                                       property,
-                                       includeDescription,
-                                       size = "medium",
-                                       autoFocus
-                                   }: FieldProps<EnumType[], any, any>) {
+export function MultiSelectFieldBinding({
+                                            propertyKey,
+                                            value,
+                                            setValue,
+                                            error,
+                                            showError,
+                                            disabled,
+                                            property,
+                                            includeDescription,
+                                            size = "medium",
+                                            autoFocus
+                                        }: FieldProps<EnumType[], any, any>) {
 
     const of: ResolvedProperty<any> | ResolvedProperty<any>[] = property.of;
     if (!of) {
@@ -80,19 +80,20 @@ export function MultiSelectBinding({
     }, [enumValues, setValue, value]);
 
     return (
-        <div className="mt-0.5 ml-0.5  mt-2">
-            <MultiSelect
+        <>
+            <NewMultiSelect
+                className={"w-full mt-2"}
                 size={size === "medium" ? "medium" : "small"}
                 value={validValue ? value.map((v) => v.toString()) : []}
                 disabled={disabled}
+                modalPopover={true}
                 label={<LabelWithIconAndTooltip
                     propertyKey={propertyKey}
                     icon={getIconForProperty(property, "small")}
                     required={property.validation?.required}
                     title={property.name}
                     className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
-                renderValue={useCallback((v: string) => renderValue(v, false), [renderValue])}
-                onMultiValueChange={(updatedValue: string[]) => {
+                onValueChange={(updatedValue: string[]) => {
                     let newValue: EnumType[] | null;
                     if (of && (of as ResolvedProperty)?.dataType === "number") {
                         newValue = updatedValue ? (updatedValue as string[]).map((e) => parseFloat(e)) : [];
@@ -102,10 +103,10 @@ export function MultiSelectBinding({
                     return setValue(newValue);
                 }}>
                 {enumValues.map((enumValue) => String(enumValue.id)).map((enumKey) => (
-                    <MultiSelectItem key={enumKey} value={enumKey}>
+                    <NewMultiSelectItem key={enumKey} value={enumKey}>
                         {renderValue(enumKey, true)}
-                    </MultiSelectItem>))}
-            </MultiSelect>
+                    </NewMultiSelectItem>))}
+            </NewMultiSelect>
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}
@@ -113,6 +114,6 @@ export function MultiSelectBinding({
                              disabled={disabled}
                              property={property}/>
 
-        </div>
+        </>
     );
 }

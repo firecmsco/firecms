@@ -1,20 +1,26 @@
 import * as SeparatorPrimitive from "@radix-ui/react-separator";
+import { cls } from "../util";
 
-export function Separator({ orientation, decorative }: {
+export function Separator({
+                              orientation,
+                              decorative,
+                              className
+                          }: {
     orientation: "horizontal" | "vertical",
-    decorative?: boolean
+    decorative?: boolean,
+    className?: string
 }) {
     if (orientation === "horizontal")
         return (
             <SeparatorPrimitive.Root
                 decorative={decorative}
                 orientation="horizontal"
-                className="dark:bg-opacity-50 bg-opacity-50 dark:bg-gray-600 bg-gray-300 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px my-[8px]"/>
+                className={cls("dark:bg-opacity-80 dark:bg-gray-800 bg-gray-100 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px my-4", className)}/>
         );
     else
         return (
             <SeparatorPrimitive.Root
-                className="dark:bg-opacity-50 bg-opacity-50 dark:bg-gray-600 bg-gray-300 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mx-[8px]"
+                className={cls("dark:bg-opacity-80 dark:bg-gray-800 bg-gray-100 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mx-4", className)}
                 decorative={decorative}
                 orientation="vertical"
             />

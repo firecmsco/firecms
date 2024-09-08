@@ -30,14 +30,6 @@ export const VirtualTableCell = React.memo<VirtualTableCellProps<any>>(
                 width: props.column.width
             } as CellRendererParams<T>
         );
-        // return props.rowData && <props.cellRenderer
-        //     rowData={props.rowData}
-        //     rowIndex={props.rowIndex}
-        //     isScrolling={false}
-        //     column={props.column}
-        //     columns={props.columns}
-        //     columnIndex={props.columnIndex}
-        //     width={props.column.width}/>
     },
     (a, b) => {
         return equal(a.rowData, b.rowData) &&

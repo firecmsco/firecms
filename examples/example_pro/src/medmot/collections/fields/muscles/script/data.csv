@@ -1,0 +1,823 @@
+id;name;code;level;supergroup;supergroup_id;deepest level?
+3;Muscular system;Musc[];1;;;0
+4;Muscles of head and neck;Musc[1];2;Muscular system;3;0
+5;Muscles of head;Musc[1-1];3;Muscles of head and neck;4;0
+6;Muscles of facial expression;Musc[1-1-1];4;Muscles of head;5;0
+7;Occipitofrontalis;Musc[1-1-1-1];5;Muscles of facial expression;6;0
+8;Frontalis;Musc[1-1-1-1-1];6;Occipitofrontalis;7;0
+9;Left frontalis;Musc[1-1-1-1-1-1];7;Frontalis;8;1
+10;Right frontalis;Musc[1-1-1-1-1-2];7;Frontalis;8;1
+11;Epicranial aponeurosis;Musc[1-1-1-1-2];6;Occipitofrontalis;7;1
+12;Occipitalis;Musc[1-1-1-1-3];6;Occipitofrontalis;7;0
+13;Left occipitalis;Musc[1-1-1-1-3-1];7;Occipitalis;12;1
+14;Right occipitalis;Musc[1-1-1-1-3-2];7;Occipitalis;12;1
+15;Temporoparietalis;Musc[1-1-1-2];5;Muscles of facial expression;6;0
+16;Right temporoparietalis;Musc[1-1-1-2-1];6;Temporoparietalis;15;1
+17;Left temporoparietalis;Musc[1-1-1-2-2];6;Temporoparietalis;15;1
+18;Orbicularis oculi muscles;Musc[1-1-1-3];5;Muscles of facial expression;6;0
+19;Right orbicularis oculi muscles;Musc[1-1-1-3-1];6;Orbicularis oculi muscles;18;0
+20;Right depressor supercilii;Musc[1-1-1-3-1-1];7;Right orbicularis oculi muscles;19;1
+21;Right orbicularis oculi;Musc[1-1-1-3-1-2];7;Right orbicularis oculi muscles;19;1
+22;Left orbicularis oculi muscles;Musc[1-1-1-3-2];6;Orbicularis oculi muscles;18;0
+23;Left depressor supercilii;Musc[1-1-1-3-2-1];7;Left orbicularis oculi muscles;22;1
+24;Left orbicularis oculi;Musc[1-1-1-3-2-2];7;Left orbicularis oculi muscles;22;1
+25;Corrugator supercilii;Musc[1-1-1-4];5;Muscles of facial expression;6;0
+26;Right corrugator supercilii;Musc[1-1-1-4-1];6;Corrugator supercilii;25;1
+27;Left corrugator supercilii;Musc[1-1-1-4-2];6;Corrugator supercilii;25;1
+28;Levator labii superioris alaeque nasi;Musc[1-1-1-5];5;Muscles of facial expression;6;0
+29;Right levator labii superioris alaeque nasi;Musc[1-1-1-5-1];6;Levator labii superioris alaeque nasi;28;1
+30;Left levator labii superioris alaeque nasi;Musc[1-1-1-5-2];6;Levator labii superioris alaeque nasi;28;1
+31;Procerus;Musc[1-1-1-6];5;Muscles of facial expression;6;0
+32;Right procerus;Musc[1-1-1-6-1];6;Procerus;31;1
+33;Left procerus;Musc[1-1-1-6-2];6;Procerus;31;1
+34;Nasalis;Musc[1-1-1-7];5;Muscles of facial expression;6;0
+35;Right nasalis;Musc[1-1-1-7-1];6;Nasalis;34;1
+36;Left nasalis;Musc[1-1-1-7-2];6;Nasalis;34;1
+37;Depressor septi nasi;Musc[1-1-1-8];5;Muscles of facial expression;6;0
+38;Right depressor septi nasi;Musc[1-1-1-8-1];6;Depressor septi nasi;37;1
+39;Left depressor septi nasi;Musc[1-1-1-8-2];6;Depressor septi nasi;37;1
+40;Levator labii superioris;Musc[1-1-1-9];5;Muscles of facial expression;6;0
+41;Right levator labii superioris;Musc[1-1-1-9-1];6;Levator labii superioris;40;1
+42;Left levator labii superioris;Musc[1-1-1-9-2];6;Levator labii superioris;40;1
+43;Levator anguli oris;Musc[1-1-1-10];5;Muscles of facial expression;6;0
+44;Right levator anguli oris;Musc[1-1-1-10-1];6;Levator anguli oris;43;1
+45;Left levator anguli oris;Musc[1-1-1-10-2];6;Levator anguli oris;43;1
+46;Zygomaticus muscles;Musc[1-1-1-11];5;Muscles of facial expression;6;0
+47;Zygomaticus major;Musc[1-1-1-11-1];6;Zygomaticus muscles;46;0
+48;Right zygomaticus major;Musc[1-1-1-11-1-1];7;Zygomaticus major;47;1
+49;Left zygomaticus major;Musc[1-1-1-11-1-2];7;Zygomaticus major;47;1
+50;Zygomaticus minor;Musc[1-1-1-11-2];6;Zygomaticus muscles;46;0
+51;Right zygomaticus minor;Musc[1-1-1-11-2-1];7;Zygomaticus minor;50;1
+52;Left zygomaticus minor;Musc[1-1-1-11-2-2];7;Zygomaticus minor;50;1
+53;Buccal fat pad;Musc[1-1-1-12];5;Muscles of facial expression;6;0
+54;Right buccal fat pad;Musc[1-1-1-12-1];6;Buccal fat pad;53;1
+55;Left buccal fat pad;Musc[1-1-1-12-2];6;Buccal fat pad;53;1
+56;Orbicularis oris;Musc[1-1-1-13];5;Muscles of facial expression;6;1
+57;Risorius;Musc[1-1-1-14];5;Muscles of facial expression;6;0
+58;Right risorius;Musc[1-1-1-14-1];6;Risorius;57;1
+59;Left risorius;Musc[1-1-1-14-2];6;Risorius;57;1
+60;Depressor anguli oris;Musc[1-1-1-15];5;Muscles of facial expression;6;0
+61;Right depressor anguli oris;Musc[1-1-1-15-1];6;Depressor anguli oris;60;1
+62;Left depressor anguli oris;Musc[1-1-1-15-2];6;Depressor anguli oris;60;1
+63;Depressor labii inferioris;Musc[1-1-1-16];5;Muscles of facial expression;6;0
+64;Right depressor labii inferioris;Musc[1-1-1-16-1];6;Depressor labii inferioris;63;1
+65;Left depressor labii inferioris;Musc[1-1-1-16-2];6;Depressor labii inferioris;63;1
+66;Mentalis;Musc[1-1-1-17];5;Muscles of facial expression;6;0
+67;Right mentalis;Musc[1-1-1-17-1];6;Mentalis;66;1
+68;Left mentalis;Musc[1-1-1-17-2];6;Mentalis;66;1
+69;Buccinator;Musc[1-1-1-18];5;Muscles of facial expression;6;0
+70;Right buccinator;Musc[1-1-1-18-1];6;Buccinator;69;1
+71;Left buccinator;Musc[1-1-1-18-2];6;Buccinator;69;1
+72;Auricular muscles;Musc[1-1-1-19];5;Muscles of facial expression;6;0
+73;Auricularis superior;Musc[1-1-1-19-1];6;Auricular muscles;72;0
+74;Right auricularis superior;Musc[1-1-1-19-1-1];7;Auricularis superior;73;1
+75;Left auricularis superior;Musc[1-1-1-19-1-2];7;Auricularis superior;73;1
+76;Auricularis anterior;Musc[1-1-1-19-2];6;Auricular muscles;72;0
+77;Right auricularis anterior;Musc[1-1-1-19-2-1];7;Auricularis anterior;76;1
+78;Left auricularis anterior;Musc[1-1-1-19-2-2];7;Auricularis anterior;76;1
+79;Oblique muscle of auricle;Musc[1-1-1-19-3];6;Auricular muscles;72;0
+80;Right oblique muscle of auricle;Musc[1-1-1-19-3-1];7;Oblique muscle of auricle;79;1
+81;Left oblique muscle of auricle;Musc[1-1-1-19-3-2];7;Oblique muscle of auricle;79;1
+82;Helicis major;Musc[1-1-1-19-4];6;Auricular muscles;72;0
+83;Right helicis major;Musc[1-1-1-19-4-1];7;Helicis major;82;1
+84;Left helicis major;Musc[1-1-1-19-4-2];7;Helicis major;82;1
+85;Helicis minor;Musc[1-1-1-19-5];6;Auricular muscles;72;0
+86;Right helicis minor;Musc[1-1-1-19-5-1];7;Helicis minor;85;1
+87;Left helicis minor;Musc[1-1-1-19-5-2];7;Helicis minor;85;1
+88;Antitragus;Musc[1-1-1-19-6];6;Auricular muscles;72;0
+89;Right antitragus;Musc[1-1-1-19-6-1];7;Antitragus;88;1
+90;Left antitragus;Musc[1-1-1-19-6-2];7;Antitragus;88;1
+91;Tragus;Musc[1-1-1-19-7];6;Auricular muscles;72;0
+92;Right tragus;Musc[1-1-1-19-7-1];7;Tragus;91;1
+93;Left tragus;Musc[1-1-1-19-7-2];7;Tragus;91;1
+94;Auricularis posterior;Musc[1-1-1-19-8];6;Auricular muscles;72;0
+95;Right auricularis posterior;Musc[1-1-1-19-8-1];7;Auricularis posterior;94;1
+96;Left auricularis posterior;Musc[1-1-1-19-8-2];7;Auricularis posterior;94;1
+97;Transverse muscle of auricle;Musc[1-1-1-19-9];6;Auricular muscles;72;0
+98;Right transverse muscle of auricle;Musc[1-1-1-19-9-1];7;Transverse muscle of auricle;97;1
+99;Left transverse muscle of auricle;Musc[1-1-1-19-9-2];7;Transverse muscle of auricle;97;1
+100;Platysma;Musc[1-1-1-20];5;Muscles of facial expression;6;0
+101;Right platysma;Musc[1-1-1-20-1];6;Platysma;100;1
+102;Left platysma;Musc[1-1-1-20-2];6;Platysma;100;1
+103;Extraocular muscles of eye;Musc[1-1-2];4;Muscles of head;5;0
+104;Extraocular muscles of right eye;Musc[1-1-2-1];5;Extraocular muscles of eye;103;0
+105;Right levator palpebrae superioris;Musc[1-1-2-1-1];6;Extraocular muscles of right eye;104;1
+106;Right superior oblique;Musc[1-1-2-1-2];6;Extraocular muscles of right eye;104;1
+107;Right inferior oblique;Musc[1-1-2-1-3];6;Extraocular muscles of right eye;104;1
+108;Right lateral rectus;Musc[1-1-2-1-4];6;Extraocular muscles of right eye;104;1
+109;Right medial rectus;Musc[1-1-2-1-5];6;Extraocular muscles of right eye;104;1
+110;Right inferior rectus;Musc[1-1-2-1-6];6;Extraocular muscles of right eye;104;1
+111;Right superior rectus;Musc[1-1-2-1-7];6;Extraocular muscles of right eye;104;1
+112;Right superior tarsal;Musc[1-1-2-1-8];6;Extraocular muscles of right eye;104;1
+113;Right inferior tarsal;Musc[1-1-2-1-9];6;Extraocular muscles of right eye;104;1
+114;Extraocular muscles of left eye;Musc[1-1-2-2];5;Extraocular muscles of eye;103;0
+115;Left levator palpebrae superioris;Musc[1-1-2-2-1];6;Extraocular muscles of left eye;114;1
+116;Left superior oblique;Musc[1-1-2-2-2];6;Extraocular muscles of left eye;114;1
+117;Left inferior oblique;Musc[1-1-2-2-3];6;Extraocular muscles of left eye;114;1
+118;Left lateral rectus;Musc[1-1-2-2-4];6;Extraocular muscles of left eye;114;1
+119;Left medial rectus;Musc[1-1-2-2-5];6;Extraocular muscles of left eye;114;1
+120;Left inferior rectus;Musc[1-1-2-2-6];6;Extraocular muscles of left eye;114;1
+121;Left superior rectus;Musc[1-1-2-2-7];6;Extraocular muscles of left eye;114;1
+122;Left superior tarsal;Musc[1-1-2-2-8];6;Extraocular muscles of left eye;114;1
+123;Left inferior tarsal;Musc[1-1-2-2-9];6;Extraocular muscles of left eye;114;1
+124;Tensor tympani;Musc[1-1-3];4;Muscles of head;5;0
+125;Left tensor tympani;Musc[1-1-3-1];5;Tensor tympani;124;1
+126;Right tensor tympani;Musc[1-1-3-2];5;Tensor tympani;124;1
+127;Muscles of mastication;Musc[1-1-4];4;Muscles of head;5;0
+128;Lateral pterygoid;Musc[1-1-4-1];5;Muscles of mastication;127;0
+129;Right lateral pterygoid;Musc[1-1-4-1-1];6;Lateral pterygoid;128;0
+130;Right inferior lateral pterygoid;Musc[1-1-4-1-1-1];7;Right lateral pterygoid;129;1
+131;Right superior lateral pterygoid;Musc[1-1-4-1-1-2];7;Right lateral pterygoid;129;1
+132;Left lateral pterygoid;Musc[1-1-4-1-2];6;Lateral pterygoid;128;0
+133;Left inferior lateral pterygoid;Musc[1-1-4-1-2-1];7;Left lateral pterygoid;132;1
+134;Left superior lateral pterygoid;Musc[1-1-4-1-2-2];7;Left lateral pterygoid;132;1
+135;Medial pterygoid;Musc[1-1-4-2];5;Muscles of mastication;127;0
+136;Right medial pterygoid;Musc[1-1-4-2-1];6;Medial pterygoid;135;0
+137;Right deep head medial pterygoid;Musc[1-1-4-2-1-1];7;Right medial pterygoid;136;1
+138;Right superficial head medial pterygoid;Musc[1-1-4-2-1-2];7;Right medial pterygoid;136;1
+139;Left medial pterygoid;Musc[1-1-4-2-2];6;Medial pterygoid;135;0
+140;Left deep head medial pterygoid;Musc[1-1-4-2-2-1];7;Left medial pterygoid;139;1
+141;Left superficial head medial pterygoid;Musc[1-1-4-2-2-2];7;Left medial pterygoid;139;1
+142;Pterygomandibular raphe;Musc[1-1-4-3];5;Muscles of mastication;127;0
+143;Right pterygomandibular raphe;Musc[1-1-4-3-1];6;Pterygomandibular raphe;142;1
+144;Left pterygomandibular raphe;Musc[1-1-4-3-2];6;Pterygomandibular raphe;142;1
+145;Temporalis;Musc[1-1-4-4];5;Muscles of mastication;127;0
+146;Right temporalis;Musc[1-1-4-4-1];6;Temporalis;145;1
+147;Left temporalis;Musc[1-1-4-4-2];6;Temporalis;145;1
+148;Masseter;Musc[1-1-4-5];5;Muscles of mastication;127;0
+149;Right masseter;Musc[1-1-4-5-1];6;Masseter;148;1
+150;Left masseter;Musc[1-1-4-5-2];6;Masseter;148;1
+151;Extrinsic muscles of tongue;Musc[1-1-5];4;Muscles of head;5;0
+152;Hyglossus;Musc[1-1-5-1];5;Extrinsic muscles of tongue;151;0
+153;Left hyoglossus;Musc[1-1-5-1-1];6;Hyglossus;152;1
+154;Right hyoglossus;Musc[1-1-5-1-2];6;Hyglossus;152;1
+155;Genioglossus;Musc[1-1-5-2];5;Extrinsic muscles of tongue;151;0
+156;Left genioglossus;Musc[1-1-5-2-1];6;Genioglossus;155;1
+157;Right genioglossus;Musc[1-1-5-2-2];6;Genioglossus;155;1
+158;Styloglossus;Musc[1-1-5-3];5;Extrinsic muscles of tongue;151;0
+159;Right styloglossus;Musc[1-1-5-3-1];6;Styloglossus;158;1
+160;Left styloglossus;Musc[1-1-5-3-2];6;Styloglossus;158;1
+161;Muscles of neck;Musc[1-2];3;Muscles of head and neck;4;0
+162;Suboccipital muscles;Musc[1-2-1];4;Muscles of neck;161;0
+163;Rectus capitis posterior minor;Musc[1-2-1-1];5;Suboccipital muscles;162;0
+164;Right rectus capitis posterior minor;Musc[1-2-1-1-1];6;Rectus capitis posterior minor;163;1
+165;Left rectus capitis posterior minor;Musc[1-2-1-1-2];6;Rectus capitis posterior minor;163;1
+166;Rectus capitis posterior major;Musc[1-2-1-2];5;Suboccipital muscles;162;0
+167;Right rectus capitis posterior major;Musc[1-2-1-2-1];6;Rectus capitis posterior major;166;1
+168;Left rectus capitis posterior major;Musc[1-2-1-2-2];6;Rectus capitis posterior major;166;1
+169;Rectus capitis anterior;Musc[1-2-1-3];5;Suboccipital muscles;162;0
+170;Right rectus capitis anterior;Musc[1-2-1-3-1];6;Rectus capitis anterior;169;1
+171;Left rectus capitis anterior;Musc[1-2-1-3-2];6;Rectus capitis anterior;169;1
+172;Rectus capitis lateralis;Musc[1-2-1-4];5;Suboccipital muscles;162;0
+173;Right rectus capitis lateralis;Musc[1-2-1-4-1];6;Rectus capitis lateralis;172;1
+174;Left rectus capitis lateralis;Musc[1-2-1-4-2];6;Rectus capitis lateralis;172;1
+175;Obliquus capitis superior;Musc[1-2-1-5];5;Suboccipital muscles;162;0
+176;Left obliquus capitis superior;Musc[1-2-1-5-1];6;Obliquus capitis superior;175;1
+177;Right obliquus capitis superior;Musc[1-2-1-5-2];6;Obliquus capitis superior;175;1
+178;Obliquus capitis inferior;Musc[1-2-1-6];5;Suboccipital muscles;162;0
+179;Left obliquus capitis inferior;Musc[1-2-1-6-1];6;Obliquus capitis inferior;178;1
+180;Right obliquus capitis inferior;Musc[1-2-1-6-2];6;Obliquus capitis inferior;178;1
+181;Suprahyoid muscles;Musc[1-2-2];4;Muscles of neck;161;0
+182;Stylohyoid;Musc[1-2-2-1];5;Suprahyoid muscles;181;0
+183;Right stylohyoid;Musc[1-2-2-1-1];6;Stylohyoid;182;1
+184;Left stylohyoid;Musc[1-2-2-1-2];6;Stylohyoid;182;1
+185;Digastric;Musc[1-2-2-2];5;Suprahyoid muscles;181;0
+186;Right digastric;Musc[1-2-2-2-1];6;Digastric;185;0
+187;Right posterior belly of digastric muscle;Musc[1-2-2-2-1-1];7;Right digastric;186;1
+188;Right fibrous loop for intermediate digastric tendon;Musc[1-2-2-2-1-2];7;Right digastric;186;1
+189;Right anterior belly of digastric muscle;Musc[1-2-2-2-1-3];7;Right digastric;186;1
+190;Left digastric;Musc[1-2-2-2-2];6;Digastric;185;0
+191;Left posterior belly of digastric muscle;Musc[1-2-2-2-2-1];7;Left digastric;190;1
+192;Left fibrous loop for intermediate digastric tendon;Musc[1-2-2-2-2-2];7;Left digastric;190;1
+193;Left anterior belly of digastric muscle;Musc[1-2-2-2-2-3];7;Left digastric;190;1
+194;Geniohyoid;Musc[1-2-2-3];5;Suprahyoid muscles;181;0
+195;Left geniohyoid;Musc[1-2-2-3-1];6;Geniohyoid;194;1
+196;Right geniohyoid;Musc[1-2-2-3-2];6;Geniohyoid;194;1
+197;Mylohyoid;Musc[1-2-2-4];5;Suprahyoid muscles;181;0
+198;Right mylohyoid;Musc[1-2-2-4-1];6;Mylohyoid;197;1
+199;Left mylohyoid;Musc[1-2-2-4-2];6;Mylohyoid;197;1
+200;Infrahyoid muscles;Musc[1-2-3];4;Muscles of neck;161;0
+201;Omohyoid;Musc[1-2-3-1];5;Infrahyoid muscles;200;0
+202;Superior belly of omohyoid;Musc[1-2-3-1-1];6;Omohyoid;201;0
+203;Right superior belly of omohyoid;Musc[1-2-3-1-1-1];7;Superior belly of omohyoid;202;1
+204;Left superior belly of omohyoid;Musc[1-2-3-1-1-2];7;Superior belly of omohyoid;202;1
+205;Inferior belly of omohyoid;Musc[1-2-3-1-2];6;Omohyoid;201;0
+206;Left inferior belly of omohyoid;Musc[1-2-3-1-2-1];7;Inferior belly of omohyoid;205;1
+207;Right inferior belly of omohyoid;Musc[1-2-3-1-2-2];7;Inferior belly of omohyoid;205;1
+208;Sternohyoid;Musc[1-2-3-2];5;Infrahyoid muscles;200;0
+209;Right sternohyoid;Musc[1-2-3-2-1];6;Sternohyoid;208;1
+210;Left sternohyoid;Musc[1-2-3-2-2];6;Sternohyoid;208;1
+211;Sternothyroid;Musc[1-2-3-3];5;Infrahyoid muscles;200;0
+212;Right sternothyroid;Musc[1-2-3-3-1];6;Sternothyroid;211;1
+213;Left sternothyroid;Musc[1-2-3-3-2];6;Sternothyroid;211;1
+214;Thyrohyoid;Musc[1-2-3-4];5;Infrahyoid muscles;200;0
+215;Right thyrohyoid;Musc[1-2-3-4-1];6;Thyrohyoid;214;1
+216;Left thyrohyoid;Musc[1-2-3-4-2];6;Thyrohyoid;214;1
+217;Laryngeal muscles;Musc[1-2-4];4;Muscles of neck;161;0
+218;Cricothyroid;Musc[1-2-4-1];5;Laryngeal muscles;217;0
+219;Left cricothyroid;Musc[1-2-4-1-1];6;Cricothyroid;218;0
+220;Left oblique part of cricothyroid;Musc[1-2-4-1-1-1];7;Left cricothyroid;219;1
+221;Left vertical part of cricothyroid;Musc[1-2-4-1-1-2];7;Left cricothyroid;219;1
+222;Right cricothyroid;Musc[1-2-4-1-2];6;Cricothyroid;218;0
+223;Right oblique part of cricothyroid;Musc[1-2-4-1-2-1];7;Right cricothyroid;222;1
+224;Right vertical part of cricothyroid;Musc[1-2-4-1-2-2];7;Right cricothyroid;222;1
+225;Oblique arytenoid;Musc[1-2-4-2];5;Laryngeal muscles;217;0
+226;Right oblique arytenoid;Musc[1-2-4-2-1];6;Oblique arytenoid;225;1
+227;Left oblique arytenoid;Musc[1-2-4-2-2];6;Oblique arytenoid;225;1
+228;Transverse arytenoid;Musc[1-2-4-3];5;Laryngeal muscles;217;1
+229;Aryepiglotticus;Musc[1-2-4-4];5;Laryngeal muscles;217;0
+230;Right aryepiglotticus;Musc[1-2-4-4-1];6;Aryepiglotticus;229;1
+231;Left aryepiglotticus;Musc[1-2-4-4-2];6;Aryepiglotticus;229;1
+232;Posterior cricoarytenoid;Musc[1-2-4-5];5;Laryngeal muscles;217;0
+233;Left posterior cricoarytenoid;Musc[1-2-4-5-1];6;Posterior cricoarytenoid;232;1
+234;Right posterior cricoarytenoid;Musc[1-2-4-5-2];6;Posterior cricoarytenoid;232;1
+235;Lateral cricoarytenoid;Musc[1-2-4-6];5;Laryngeal muscles;217;0
+236;Right lateral cricoarytenoid;Musc[1-2-4-6-1];6;Lateral cricoarytenoid;235;1
+237;Left lateral cricoarytenoid;Musc[1-2-4-6-2];6;Lateral cricoarytenoid;235;1
+238;Vocalis;Musc[1-2-4-7];5;Laryngeal muscles;217;0
+239;Right vocalis;Musc[1-2-4-7-1];6;Vocalis;238;1
+240;Left vocalis;Musc[1-2-4-7-2];6;Vocalis;238;1
+241;Thyroepiglotticus;Musc[1-2-4-8];5;Laryngeal muscles;217;0
+242;Right thyroepiglotticus;Musc[1-2-4-8-1];6;Thyroepiglotticus;241;1
+243;Left thyroepiglotticus;Musc[1-2-4-8-2];6;Thyroepiglotticus;241;1
+244;Thyroarytenoid;Musc[1-2-4-9];5;Laryngeal muscles;217;0
+245;Right thyroarytenoid;Musc[1-2-4-9-1];6;Thyroarytenoid;244;1
+246;Left thyroarytenoid;Musc[1-2-4-9-2];6;Thyroarytenoid;244;1
+247;Muscles of soft palate and fauces;Musc[1-2-5];4;Muscles of neck;161;0
+248;Levator veli palatini;Musc[1-2-5-1];5;Muscles of soft palate and fauces;247;0
+249;Right levator veli palatini;Musc[1-2-5-1-1];6;Levator veli palatini;248;1
+250;Left levator veli palatini;Musc[1-2-5-1-2];6;Levator veli palatini;248;1
+251;Tensor veli palatini;Musc[1-2-5-2];5;Muscles of soft palate and fauces;247;0
+252;Left tensor veli palatini;Musc[1-2-5-2-1];6;Tensor veli palatini;251;1
+253;Right tensor veli palatini;Musc[1-2-5-2-2];6;Tensor veli palatini;251;1
+254;Palatopharyngeus;Musc[1-2-5-3];5;Muscles of soft palate and fauces;247;0
+255;Right palatopharyngeus;Musc[1-2-5-3-1];6;Palatopharyngeus;254;1
+256;Left palatopharyngeus;Musc[1-2-5-3-2];6;Palatopharyngeus;254;1
+257;Palatoglossus;Musc[1-2-5-4];5;Muscles of soft palate and fauces;247;0
+258;Right palatoglossus;Musc[1-2-5-4-1];6;Palatoglossus;257;1
+259;Left palatoglossus;Musc[1-2-5-4-2];6;Palatoglossus;257;1
+260;Musculus uvulae;Musc[1-2-5-5];5;Muscles of soft palate and fauces;247;0
+261;Right musculus uvulae;Musc[1-2-5-5-1];6;Musculus uvulae;260;1
+262;Left musculus uvulae;Musc[1-2-5-5-2];6;Musculus uvulae;260;1
+263;Pharyngeal muscles;Musc[1-2-6];4;Muscles of neck;161;0
+264;Superior pharyngeal constrictors;Musc[1-2-6-1];5;Pharyngeal muscles;263;0
+265;Superior pharyngeal constrictor;Musc[1-2-6-1-1];6;Superior pharyngeal constrictors;264;0
+266;Left superior pharyngeal constrictor;Musc[1-2-6-1-1-1];7;Superior pharyngeal constrictor;265;1
+267;Right superior pharyngeal constrictor;Musc[1-2-6-1-1-2];7;Superior pharyngeal constrictor;265;1
+268;Glossopharyngeal part of superior pharyngeal constrictor;Musc[1-2-6-1-2];6;Superior pharyngeal constrictors;264;0
+269;Left glossopharyngeal part of superior pharyngeal constrictor;Musc[1-2-6-1-2-1];7;Glossopharyngeal part of superior pharyngeal constrictor;268;1
+270;Right glossopharyngeal part of superior pharyngeal constrictor;Musc[1-2-6-1-2-2];7;Glossopharyngeal part of superior pharyngeal constrictor;268;1
+271;Middle pharyngeal constrictor;Musc[1-2-6-2];5;Pharyngeal muscles;263;0
+272;Right middle pharyngeal constrictor;Musc[1-2-6-2-1];6;Middle pharyngeal constrictor;271;1
+273;Left middle pharyngeal constrictor;Musc[1-2-6-2-2];6;Middle pharyngeal constrictor;271;1
+274;Inferior pharyngeal constrictor;Musc[1-2-6-3];5;Pharyngeal muscles;263;0
+275;Left inferior pharyngeal constrictor;Musc[1-2-6-3-1];6;Inferior pharyngeal constrictor;274;1
+276;Right inferior pharyngeal constrictor;Musc[1-2-6-3-2];6;Inferior pharyngeal constrictor;274;1
+277;Lower part of cricopharyngeus;Musc[1-2-6-4];5;Pharyngeal muscles;263;0
+278;Right lower part of cricopharyngeus;Musc[1-2-6-4-1];6;Lower part of cricopharyngeus;277;1
+279;Left lower part of cricopharyngeus;Musc[1-2-6-4-2];6;Lower part of cricopharyngeus;277;1
+280;Pharyngeal raphe;Musc[1-2-6-5];5;Pharyngeal muscles;263;0
+281;Left pharyngeal raphe;Musc[1-2-6-5-1];6;Pharyngeal raphe;280;1
+282;Right pharyngeal raphe;Musc[1-2-6-5-2];6;Pharyngeal raphe;280;1
+283;Salpingopharyngeus;Musc[1-2-6-6];5;Pharyngeal muscles;263;0
+284;Right salpingopharyngeus;Musc[1-2-6-6-1];6;Salpingopharyngeus;283;1
+285;Left salpingopharyngeus;Musc[1-2-6-6-2];6;Salpingopharyngeus;283;1
+286;Proper muscles of neck;Musc[1-2-7];4;Muscles of neck;161;0
+287;Longus capitis;Musc[1-2-7-1];5;Proper muscles of neck;286;0
+288;Right longus capitis;Musc[1-2-7-1-1];6;Longus capitis;287;1
+289;Left longus capitis;Musc[1-2-7-1-2];6;Longus capitis;287;1
+290;Longus colli;Musc[1-2-7-2];5;Proper muscles of neck;286;0
+291;Superior oblique part of longus colli;Musc[1-2-7-2-1];6;Longus colli;290;0
+292;Superior oblique part of right longus colli;Musc[1-2-7-2-1-1];7;Superior oblique part of longus colli;291;1
+293;Superior oblique part of left longus colli;Musc[1-2-7-2-1-2];7;Superior oblique part of longus colli;291;1
+294;Vertical intermediate part of longus colli;Musc[1-2-7-2-2];6;Longus colli;290;0
+295;Vertical intermediate part of right longus colli;Musc[1-2-7-2-2-1];7;Vertical intermediate part of longus colli;294;1
+296;Vertical intermediate part of left longus colli;Musc[1-2-7-2-2-2];7;Vertical intermediate part of longus colli;294;1
+297;Inferior oblique part of longus colli;Musc[1-2-7-2-3];6;Longus colli;290;0
+298;Inferior oblique part of right longus colli;Musc[1-2-7-2-3-1];7;Inferior oblique part of longus colli;297;1
+299;Inferior oblique part of left longus colli;Musc[1-2-7-2-3-2];7;Inferior oblique part of longus colli;297;1
+300;Anterior scalene;Musc[1-2-7-3];5;Proper muscles of neck;286;0
+301;Right anterior scalene;Musc[1-2-7-3-1];6;Anterior scalene;300;1
+302;Left anterior scalene;Musc[1-2-7-3-2];6;Anterior scalene;300;1
+303;Middle scalene;Musc[1-2-7-4];5;Proper muscles of neck;286;0
+304;Right middle scalene;Musc[1-2-7-4-1];6;Middle scalene;303;1
+305;Left middle scalene;Musc[1-2-7-4-2];6;Middle scalene;303;1
+306;Posterior scalene;Musc[1-2-7-5];5;Proper muscles of neck;286;0
+307;Right posterior scalene;Musc[1-2-7-5-1];6;Posterior scalene;306;1
+308;Left posterior scalene;Musc[1-2-7-5-2];6;Posterior scalene;306;1
+309;Sternocleidomastoid;Musc[1-2-7-6];5;Proper muscles of neck;286;0
+310;Right sternocleidomastoid;Musc[1-2-7-6-1];6;Sternocleidomastoid;309;1
+311;Left sternocleidomastoid;Musc[1-2-7-6-2];6;Sternocleidomastoid;309;1
+312;Muscles of back;Musc[2];2;Muscular system;3;0
+313;Extrinsic muscles of back;Musc[2-1];3;Muscles of back;312;0
+314;Intertransversarii lumborum;Musc[2-1-1];4;Extrinsic muscles of back;313;0
+315;Intertransversarii laterales lumborum;Musc[2-1-1-1];5;Intertransversarii lumborum;314;0
+316;Right intertransversarii laterales lumborum;Musc[2-1-1-1-1];6;Intertransversarii laterales lumborum;315;1
+317;Left intertransversarii laterales lumborum;Musc[2-1-1-1-2];6;Intertransversarii laterales lumborum;315;1
+318;Intertransversarii mediales lumborum;Musc[2-1-1-2];5;Intertransversarii lumborum;314;0
+319;Left intertransversarii mediales lumborum;Musc[2-1-1-2-1];6;Intertransversarii mediales lumborum;318;1
+320;Right intertransversarii mediales lumborum;Musc[2-1-1-2-2];6;Intertransversarii mediales lumborum;318;1
+321;Serratus posterior superior;Musc[2-1-2];4;Extrinsic muscles of back;313;0
+322;Right serratus posterior superior;Musc[2-1-2-1];5;Serratus posterior superior;321;1
+323;Left serratus posterior superior;Musc[2-1-2-2];5;Serratus posterior superior;321;1
+324;Serratus posterior inferior;Musc[2-1-3];4;Extrinsic muscles of back;313;0
+325;Right serratus posterior inferior;Musc[2-1-3-1];5;Serratus posterior inferior;324;1
+326;Left serratus posterior inferior;Musc[2-1-3-2];5;Serratus posterior inferior;324;1
+327;Transversus nuchae;Musc[2-1-4];4;Extrinsic muscles of back;313;0
+328;Right transversus nuchae;Musc[2-1-4-1];5;Transversus nuchae;327;1
+329;Left transversus nuchae;Musc[2-1-4-2];5;Transversus nuchae;327;1
+330;Intrinsic muscles of back;Musc[2-2];3;Muscles of back;312;0
+331;Erector spinae;Musc[2-2-1];4;Intrinsic muscles of back;330;0
+332;Iliocostalis;Musc[2-2-1-1];5;Erector spinae;331;0
+333;Right iliocostalis;Musc[2-2-1-1-1];6;Iliocostalis;332;0
+334;Right iliocostalis cervicis;Musc[2-2-1-1-1-1];7;Right iliocostalis;333;1
+335;Right iliocostalis thoracis;Musc[2-2-1-1-1-2];7;Right iliocostalis;333;1
+336;Right iliocostalis lumborum;Musc[2-2-1-1-1-3];7;Right iliocostalis;333;1
+337;Left iliocostalis;Musc[2-2-1-1-2];6;Iliocostalis;332;0
+338;Left iliocostalis cervicis;Musc[2-2-1-1-2-1];7;Left iliocostalis;337;1
+339;Left iliocostalis thoracis;Musc[2-2-1-1-2-2];7;Left iliocostalis;337;1
+340;Left iliocostalis lumborum;Musc[2-2-1-1-2-3];7;Left iliocostalis;337;1
+341;Longissimus;Musc[2-2-1-2];5;Erector spinae;331;0
+342;Right longissimus;Musc[2-2-1-2-1];6;Longissimus;341;0
+343;Right longissimus capitis;Musc[2-2-1-2-1-1];7;Right longissimus;342;1
+344;Right longissimus cervicis;Musc[2-2-1-2-1-2];7;Right longissimus;342;1
+345;Right longissimus thoracis;Musc[2-2-1-2-1-3];7;Right longissimus;342;1
+346;Left longissimus;Musc[2-2-1-2-2];6;Longissimus;341;0
+347;Left longissimus capitis;Musc[2-2-1-2-2-1];7;Left longissimus;346;1
+348;Left longissimus cervicis;Musc[2-2-1-2-2-2];7;Left longissimus;346;1
+349;Left longissimus thoracis;Musc[2-2-1-2-2-3];7;Left longissimus;346;1
+350;Spinalis;Musc[2-2-1-3];5;Erector spinae;331;0
+351;Right spinalis;Musc[2-2-1-3-1];6;Spinalis;350;0
+352;Right spinalis cervicis;Musc[2-2-1-3-1-1];7;Right spinalis;351;1
+353;Right spinalis thoracis;Musc[2-2-1-3-1-2];7;Right spinalis;351;1
+354;Left spinalis;Musc[2-2-1-3-2];6;Spinalis;350;0
+355;Left spinalis cervicis;Musc[2-2-1-3-2-1];7;Left spinalis;354;1
+356;Left spinalis thoracis;Musc[2-2-1-3-2-2];7;Left spinalis;354;1
+357;Splenius;Musc[2-2-2];4;Intrinsic muscles of back;330;0
+358;Splenius capitis;Musc[2-2-2-1];5;Splenius;357;0
+359;Right splenius capitis;Musc[2-2-2-1-1];6;Splenius capitis;358;1
+360;Left splenius capitis;Musc[2-2-2-1-2];6;Splenius capitis;358;1
+361;Splenius cervicis;Musc[2-2-2-2];5;Splenius;357;0
+362;Right splenius cervicis;Musc[2-2-2-2-1];6;Splenius cervicis;361;1
+363;Left splenius cervicis;Musc[2-2-2-2-2];6;Splenius cervicis;361;1
+364;Transversospinales;Musc[2-2-3];4;Intrinsic muscles of back;330;0
+365;Semispinalis;Musc[2-2-3-1];5;Transversospinales;364;0
+366;Right semispinalis;Musc[2-2-3-1-1];6;Semispinalis;365;0
+367;Right semispinalis capitis;Musc[2-2-3-1-1-1];7;Right semispinalis;366;1
+368;Right semispinalis cervicis;Musc[2-2-3-1-1-2];7;Right semispinalis;366;1
+369;Right semispinalis thoracis;Musc[2-2-3-1-1-3];7;Right semispinalis;366;1
+370;Left semispinalis;Musc[2-2-3-1-2];6;Semispinalis;365;0
+371;Left semispinalis capitis;Musc[2-2-3-1-2-1];7;Left semispinalis;370;1
+372;Left semispinalis cervicis;Musc[2-2-3-1-2-2];7;Left semispinalis;370;1
+373;Left semispinalis thoracis;Musc[2-2-3-1-2-3];7;Left semispinalis;370;1
+374;Multifidus;Musc[2-2-3-2];5;Transversospinales;364;0
+375;Right multifidus;Musc[2-2-3-2-1];6;Multifidus;374;1
+376;Left multifidus;Musc[2-2-3-2-2];6;Multifidus;374;1
+377;Rotatores;Musc[2-2-3-3];5;Transversospinales;364;0
+378;Right rotatores;Musc[2-2-3-3-1];6;Rotatores;377;0
+379;Right rotatores cervicis;Musc[2-2-3-3-1-1];7;Right rotatores;378;1
+380;Right rotatores thoracis;Musc[2-2-3-3-1-2];7;Right rotatores;378;1
+381;Right rotatores lumborum;Musc[2-2-3-3-1-3];7;Right rotatores;378;1
+382;Left rotatores;Musc[2-2-3-3-2];6;Rotatores;377;0
+383;Left rotatores cervicis;Musc[2-2-3-3-2-1];7;Left rotatores;382;1
+384;Left rotatores thoracis;Musc[2-2-3-3-2-2];7;Left rotatores;382;1
+385;Left rotatores lumborum;Musc[2-2-3-3-2-3];7;Left rotatores;382;1
+386;Intertransversarii;Musc[2-2-4];4;Intrinsic muscles of back;330;0
+387;Anterior cervical intertransversarii;Musc[2-2-4-1];5;Intertransversarii;386;0
+388;Right anterior cervical intertransversarii;Musc[2-2-4-1-1];6;Anterior cervical intertransversarii;387;1
+389;Left anterior cervical intertransversarii;Musc[2-2-4-1-2];6;Anterior cervical intertransversarii;387;1
+390;Lateral posterior cervical intertransversarii;Musc[2-2-4-2];5;Intertransversarii;386;0
+391;Right lateral posterior cervical intertransversarii;Musc[2-2-4-2-1];6;Lateral posterior cervical intertransversarii;390;1
+392;Left lateral posterior cervical intertransversarii;Musc[2-2-4-2-2];6;Lateral posterior cervical intertransversarii;390;1
+393;Thoracic intertransversarii;Musc[2-2-4-3];5;Intertransversarii;386;0
+394;Right thoracic intertransversarii;Musc[2-2-4-3-1];6;Thoracic intertransversarii;393;1
+395;Left thoracic intertransversarii;Musc[2-2-4-3-2];6;Thoracic intertransversarii;393;1
+396;Lumbar intertransversarii;Musc[2-2-4-4];5;Intertransversarii;386;0
+397;Right lumbar intertransversarii;Musc[2-2-4-4-1];6;Lumbar intertransversarii;396;1
+398;Left lumbar intertransversarii;Musc[2-2-4-4-2];6;Lumbar intertransversarii;396;1
+399;Interspinales;Musc[2-2-5];4;Intrinsic muscles of back;330;0
+400;Right interspinales;Musc[2-2-5-1];5;Interspinales;399;1
+401;Left interspinales;Musc[2-2-5-2];5;Interspinales;399;1
+402;Muscles of upper limb;Musc[3];2;Muscular system;3;0
+403;Muscles of right upper limb;Musc[3-1];3;Muscles of upper limb;402;0
+404;Muscles of right pectoral girdle;Musc[3-1-1];4;Muscles of right upper limb;403;0
+405;Right subclavius;Musc[3-1-1-1];5;Muscles of right pectoral girdle;404;1
+406;Right pectoralis major;Musc[3-1-1-2];5;Muscles of right pectoral girdle;404;1
+407;Right pectoralis minor;Musc[3-1-1-3];5;Muscles of right pectoral girdle;404;1
+408;Muscles of right shoulder;Musc[3-1-2];4;Muscles of right upper limb;403;0
+409;Superficial muscles of right shoulder;Musc[3-1-2-1];5;Muscles of right shoulder;408;0
+410;Right trapezius;Musc[3-1-2-1-1];6;Superficial muscles of right shoulder;409;1
+411;Right deltoid;Musc[3-1-2-1-2];6;Superficial muscles of right shoulder;409;1
+412;Right latissimus dorsi;Musc[3-1-2-1-3];6;Superficial muscles of right shoulder;409;1
+413;Muscles of right rotator cuff;Musc[3-1-2-2];5;Muscles of right shoulder;408;0
+414;Right infraspinatus;Musc[3-1-2-2-1];6;Muscles of right rotator cuff;413;1
+415;Right teres minor;Musc[3-1-2-2-2];6;Muscles of right rotator cuff;413;1
+416;Right supraspinatus;Musc[3-1-2-2-3];6;Muscles of right rotator cuff;413;1
+417;Right subscapularis;Musc[3-1-2-2-4];6;Muscles of right rotator cuff;413;1
+418;Deep muscles of right shoulder;Musc[3-1-2-3];5;Muscles of right shoulder;408;0
+419;Right levator scapulae;Musc[3-1-2-3-1];6;Deep muscles of right shoulder;418;1
+420;Right rhomboid minor;Musc[3-1-2-3-2];6;Deep muscles of right shoulder;418;1
+421;Right rhomboid major;Musc[3-1-2-3-3];6;Deep muscles of right shoulder;418;1
+422;Right serratus anterior;Musc[3-1-2-3-4];6;Deep muscles of right shoulder;418;1
+423;Right teres major;Musc[3-1-2-3-5];6;Deep muscles of right shoulder;418;1
+424;Muscles of right upper arm;Musc[3-1-3];4;Muscles of right upper limb;403;0
+425;Right biceps brachii;Musc[3-1-3-1];5;Muscles of right upper arm;424;1
+426;Right bicipital aponeurosis;Musc[3-1-3-2];5;Muscles of right upper arm;424;1
+427;Right brachialis;Musc[3-1-3-3];5;Muscles of right upper arm;424;1
+428;Right coracobrachialis;Musc[3-1-3-4];5;Muscles of right upper arm;424;1
+429;Right triceps brachii;Musc[3-1-3-5];5;Muscles of right upper arm;424;1
+430;Muscles of right forearm;Musc[3-1-4];4;Muscles of right upper limb;403;0
+431;Flexor muscles of right forearm;Musc[3-1-4-1];5;Muscles of right forearm;430;0
+432;Right flexor carpi radialis;Musc[3-1-4-1-1];6;Flexor muscles of right forearm;431;1
+433;Right palmaris longus;Musc[3-1-4-1-2];6;Flexor muscles of right forearm;431;1
+434;Right pronator teres;Musc[3-1-4-1-3];6;Flexor muscles of right forearm;431;1
+435;Right flexor digitorum superficialis;Musc[3-1-4-1-4];6;Flexor muscles of right forearm;431;1
+436;Right flexor pollicis longus;Musc[3-1-4-1-5];6;Flexor muscles of right forearm;431;1
+437;Right flexor digitorum profundus;Musc[3-1-4-1-6];6;Flexor muscles of right forearm;431;1
+438;Right pronator quadratus;Musc[3-1-4-1-7];6;Flexor muscles of right forearm;431;1
+439;Right flexor carpi ulnaris;Musc[3-1-4-1-8];6;Flexor muscles of right forearm;431;1
+440;Extensor muscles of right forearm;Musc[3-1-4-2];5;Muscles of right forearm;430;0
+441;Right brachioradialis;Musc[3-1-4-2-1];6;Extensor muscles of right forearm;440;1
+442;Right extensor carpi radialis longus;Musc[3-1-4-2-2];6;Extensor muscles of right forearm;440;1
+443;Right extensor carpi radialis brevis;Musc[3-1-4-2-3];6;Extensor muscles of right forearm;440;1
+444;Right extensor carpi ulnaris;Musc[3-1-4-2-4];6;Extensor muscles of right forearm;440;1
+445;Right anconeus;Musc[3-1-4-2-5];6;Extensor muscles of right forearm;440;1
+446;Right abductor pollicis longus;Musc[3-1-4-2-6];6;Extensor muscles of right forearm;440;1
+447;Right extensor pollicis longus;Musc[3-1-4-2-7];6;Extensor muscles of right forearm;440;1
+448;Right extensor pollicis brevis;Musc[3-1-4-2-8];6;Extensor muscles of right forearm;440;1
+449;Right extensor indicis;Musc[3-1-4-2-9];6;Extensor muscles of right forearm;440;1
+450;Right extensor digiti minimi;Musc[3-1-4-2-10];6;Extensor muscles of right forearm;440;1
+451;Right extensor digitorum;Musc[3-1-4-2-11];6;Extensor muscles of right forearm;440;1
+452;Right supinator;Musc[3-1-4-2-12];6;Extensor muscles of right forearm;440;1
+453;Muscles of right hand;Musc[3-1-5];4;Muscles of right upper limb;403;0
+454;Palmar muscles of right hand;Musc[3-1-5-1];5;Muscles of right hand;453;0
+455;Thenar muscles of right hand;Musc[3-1-5-1-1];6;Palmar muscles of right hand;454;0
+456;Right abductor pollicis brevis;Musc[3-1-5-1-1-1];7;Thenar muscles of right hand;455;1
+457;Right flexor pollicis brevis;Musc[3-1-5-1-1-2];7;Thenar muscles of right hand;455;1
+458;Right adductor pollicis;Musc[3-1-5-1-1-3];7;Thenar muscles of right hand;455;1
+459;Right opponens pollicis;Musc[3-1-5-1-1-4];7;Thenar muscles of right hand;455;1
+460;Hypothenar muscles of right hand;Musc[3-1-5-1-2];6;Palmar muscles of right hand;454;0
+461;Right flexor digiti minimi brevis of hand;Musc[3-1-5-1-2-1];7;Hypothenar muscles of right hand;460;1
+462;Right opponens digiti minimi;Musc[3-1-5-1-2-2];7;Hypothenar muscles of right hand;460;1
+463;Right abductor digiti minimi;Musc[3-1-5-1-2-3];7;Hypothenar muscles of right hand;460;1
+464;Right palmaris brevis;Musc[3-1-5-1-2-4];7;Hypothenar muscles of right hand;460;1
+465;Palmar interosseous muscles of right hand;Musc[3-1-5-1-3];6;Palmar muscles of right hand;454;0
+466;First palmar interosseous muscle of right hand;Musc[3-1-5-1-3-1];7;Palmar interosseous muscles of right hand;465;1
+467;Second palmar interosseous muscle of right hand;Musc[3-1-5-1-3-2];7;Palmar interosseous muscles of right hand;465;1
+468;Third palmar interosseous muscle of right hand;Musc[3-1-5-1-3-3];7;Palmar interosseous muscles of right hand;465;1
+469;Lumbrical muscles of right hand;Musc[3-1-5-1-4];6;Palmar muscles of right hand;454;0
+470;First lumbrical muscle of right hand;Musc[3-1-5-1-4-1];7;Lumbrical muscles of right hand;469;1
+471;Second lumbrical muscle of right hand;Musc[3-1-5-1-4-2];7;Lumbrical muscles of right hand;469;1
+472;Third lumbrical muscle of right hand;Musc[3-1-5-1-4-3];7;Lumbrical muscles of right hand;469;1
+473;Fourth lumbrical muscle of right hand;Musc[3-1-5-1-4-4];7;Lumbrical muscles of right hand;469;1
+474;Dorsal interosseous muscles of right hand;Musc[3-1-5-2];5;Muscles of right hand;453;0
+475;First dorsal interosseous muscle of right hand;Musc[3-1-5-2-1];6;Dorsal interosseous muscles of right hand;474;1
+476;Second dorsal interosseous muscle of right hand;Musc[3-1-5-2-2];6;Dorsal interosseous muscles of right hand;474;1
+477;Third dorsal interosseous muscle of right hand;Musc[3-1-5-2-3];6;Dorsal interosseous muscles of right hand;474;1
+478;Fourth dorsal interosseous muscle of right hand;Musc[3-1-5-2-4];6;Dorsal interosseous muscles of right hand;474;1
+479;Muscles of left upper limb;Musc[3-2];3;Muscles of upper limb;402;0
+480;Muscles of left pectoral girdle;Musc[3-2-1];4;Muscles of left upper limb;479;0
+481;Left subclavius;Musc[3-2-1-1];5;Muscles of left pectoral girdle;480;1
+482;Left pectoralis minor;Musc[3-2-1-2];5;Muscles of left pectoral girdle;480;1
+483;Left pectoralis major;Musc[3-2-1-3];5;Muscles of left pectoral girdle;480;1
+484;Muscles of left shoulder;Musc[3-2-2];4;Muscles of left upper limb;479;0
+485;Superficial muscles of left shoulder;Musc[3-2-2-1];5;Muscles of left shoulder;484;0
+486;Left trapezius;Musc[3-2-2-1-1];6;Superficial muscles of left shoulder;485;1
+487;Left deltoid;Musc[3-2-2-1-2];6;Superficial muscles of left shoulder;485;1
+488;Left latissimus dorsi;Musc[3-2-2-1-3];6;Superficial muscles of left shoulder;485;1
+489;Muscles of left rotator cuff;Musc[3-2-2-2];5;Muscles of left shoulder;484;0
+490;Left infraspinatus;Musc[3-2-2-2-1];6;Muscles of left rotator cuff;489;1
+491;Left teres minor;Musc[3-2-2-2-2];6;Muscles of left rotator cuff;489;1
+492;Left supraspinatus;Musc[3-2-2-2-3];6;Muscles of left rotator cuff;489;1
+493;Left subscapularis;Musc[3-2-2-2-4];6;Muscles of left rotator cuff;489;1
+494;Deep muscles of left shoulder;Musc[3-2-2-3];5;Muscles of left shoulder;484;0
+495;Left levator scapulae;Musc[3-2-2-3-1];6;Deep muscles of left shoulder;494;1
+496;Left rhomboid minor;Musc[3-2-2-3-2];6;Deep muscles of left shoulder;494;1
+497;Left rhomboid major;Musc[3-2-2-3-3];6;Deep muscles of left shoulder;494;1
+498;Left serratus anterior;Musc[3-2-2-3-4];6;Deep muscles of left shoulder;494;1
+499;Left teres major;Musc[3-2-2-3-5];6;Deep muscles of left shoulder;494;1
+500;Muscles of left upper arm;Musc[3-2-3];4;Muscles of left upper limb;479;0
+501;Left biceps brachii;Musc[3-2-3-1];5;Muscles of left upper arm;500;1
+502;Left bicipital aponeurosis;Musc[3-2-3-2];5;Muscles of left upper arm;500;1
+503;Left brachialis;Musc[3-2-3-3];5;Muscles of left upper arm;500;1
+504;Left coracobrachialis;Musc[3-2-3-4];5;Muscles of left upper arm;500;1
+505;Left triceps brachii;Musc[3-2-3-5];5;Muscles of left upper arm;500;1
+506;Muscles of left forearm;Musc[3-2-4];4;Muscles of left upper limb;479;0
+507;Flexor muscles of left forearm;Musc[3-2-4-1];5;Muscles of left forearm;506;0
+508;Left flexor carpi radialis;Musc[3-2-4-1-1];6;Flexor muscles of left forearm;507;1
+509;Left palmaris longus;Musc[3-2-4-1-2];6;Flexor muscles of left forearm;507;1
+510;Left pronator teres;Musc[3-2-4-1-3];6;Flexor muscles of left forearm;507;1
+511;Left flexor digitorum superficialis;Musc[3-2-4-1-4];6;Flexor muscles of left forearm;507;1
+512;Left flexor pollicis longus;Musc[3-2-4-1-5];6;Flexor muscles of left forearm;507;1
+513;Left flexor digitorum profundus;Musc[3-2-4-1-6];6;Flexor muscles of left forearm;507;1
+514;Left pronator quadratus;Musc[3-2-4-1-7];6;Flexor muscles of left forearm;507;1
+515;Left flexor carpi ulnaris;Musc[3-2-4-1-8];6;Flexor muscles of left forearm;507;1
+516;Extensor muscles of left forearm;Musc[3-2-4-2];5;Muscles of left forearm;506;0
+517;Left brachioradialis;Musc[3-2-4-2-1];6;Extensor muscles of left forearm;516;1
+518;Left extensor carpi radialis longus;Musc[3-2-4-2-2];6;Extensor muscles of left forearm;516;1
+519;Left extensor carpi radialis brevis;Musc[3-2-4-2-3];6;Extensor muscles of left forearm;516;1
+520;Left extensor carpi ulnaris;Musc[3-2-4-2-4];6;Extensor muscles of left forearm;516;1
+521;Left anconeus;Musc[3-2-4-2-5];6;Extensor muscles of left forearm;516;1
+522;Left abductor pollicis longus;Musc[3-2-4-2-6];6;Extensor muscles of left forearm;516;1
+523;Left extensor pollicis longus;Musc[3-2-4-2-7];6;Extensor muscles of left forearm;516;1
+524;Left extensor pollicis brevis;Musc[3-2-4-2-8];6;Extensor muscles of left forearm;516;1
+525;Left extensor indicis;Musc[3-2-4-2-9];6;Extensor muscles of left forearm;516;1
+526;Left extensor digiti minimi;Musc[3-2-4-2-10];6;Extensor muscles of left forearm;516;1
+527;Left extensor digitorum;Musc[3-2-4-2-11];6;Extensor muscles of left forearm;516;1
+528;Left supinator;Musc[3-2-4-2-12];6;Extensor muscles of left forearm;516;1
+529;Muscles of left hand;Musc[3-2-5];4;Muscles of left upper limb;479;0
+530;Palmar muscles of left hand;Musc[3-2-5-1];5;Muscles of left hand;529;0
+531;Thenar muscles of left hand;Musc[3-2-5-1-1];6;Palmar muscles of left hand;530;0
+532;Left abductor pollicis brevis;Musc[3-2-5-1-1-1];7;Thenar muscles of left hand;531;1
+533;Left flexor pollicis brevis;Musc[3-2-5-1-1-2];7;Thenar muscles of left hand;531;1
+534;Left adductor pollicis;Musc[3-2-5-1-1-3];7;Thenar muscles of left hand;531;1
+535;Left opponens pollicis;Musc[3-2-5-1-1-4];7;Thenar muscles of left hand;531;1
+536;Hypothenar muscles of left hand;Musc[3-2-5-1-2];6;Palmar muscles of left hand;530;0
+537;Left flexor digiti minimi brevis of hand;Musc[3-2-5-1-2-1];7;Hypothenar muscles of left hand;536;1
+538;Left opponens digiti minimi;Musc[3-2-5-1-2-2];7;Hypothenar muscles of left hand;536;1
+539;Left abductor digiti minimi;Musc[3-2-5-1-2-3];7;Hypothenar muscles of left hand;536;1
+540;Left palmaris brevis;Musc[3-2-5-1-2-4];7;Hypothenar muscles of left hand;536;1
+541;Palmar interosseous muscles of left hand;Musc[3-2-5-1-3];6;Palmar muscles of left hand;530;0
+542;First palmar interosseous muscle of left hand;Musc[3-2-5-1-3-1];7;Palmar interosseous muscles of left hand;541;1
+543;Second palmar interosseous muscle of left hand;Musc[3-2-5-1-3-2];7;Palmar interosseous muscles of left hand;541;1
+544;Third palmar interosseous muscle of left hand;Musc[3-2-5-1-3-3];7;Palmar interosseous muscles of left hand;541;1
+545;Lumbrical muscles of left hand;Musc[3-2-5-1-4];6;Palmar muscles of left hand;530;0
+546;First lumbrical muscle of left hand;Musc[3-2-5-1-4-1];7;Lumbrical muscles of left hand;545;1
+547;Second lumbrical muscle of left hand;Musc[3-2-5-1-4-2];7;Lumbrical muscles of left hand;545;1
+548;Third lumbrical muscle of left hand;Musc[3-2-5-1-4-3];7;Lumbrical muscles of left hand;545;1
+549;Fourth lumbrical muscle of left hand;Musc[3-2-5-1-4-4];7;Lumbrical muscles of left hand;545;1
+550;Dorsal interosseous muscles of left hand;Musc[3-2-5-2];5;Muscles of left hand;529;0
+551;First dorsal interosseous muscle of left hand;Musc[3-2-5-2-1];6;Dorsal interosseous muscles of left hand;550;1
+552;Second dorsal interosseous muscle of left hand;Musc[3-2-5-2-2];6;Dorsal interosseous muscles of left hand;550;1
+553;Third dorsal interosseous muscle of left hand;Musc[3-2-5-2-3];6;Dorsal interosseous muscles of left hand;550;1
+554;Fourth dorsal interosseous muscle of left hand;Musc[3-2-5-2-4];6;Dorsal interosseous muscles of left hand;550;1
+555;Muscles of thorax;Musc[4];2;Muscular system;3;0
+556;Diaphragm;Musc[4-1];3;Muscles of thorax;555;1
+557;Levatores costarum;Musc[4-2];3;Muscles of thorax;555;0
+558;Right levatores costarum;Musc[4-2-1];4;Levatores costarum;557;1
+559;Left levatores costarum;Musc[4-2-2];4;Levatores costarum;557;1
+560;Subcostales;Musc[4-3];3;Muscles of thorax;555;0
+561;Right subcostales;Musc[4-3-1];4;Subcostales;560;1
+562;Left subcostales;Musc[4-3-2];4;Subcostales;560;1
+563;Transversus thoracis;Musc[4-4];3;Muscles of thorax;555;0
+564;Left transversus thoracis;Musc[4-4-1];4;Transversus thoracis;563;1
+565;Right transversus thoracis;Musc[4-4-2];4;Transversus thoracis;563;1
+566;Intercostals;Musc[4-5];3;Muscles of thorax;555;0
+567;External intercostals;Musc[4-5-1];4;Intercostals;566;0
+568;Right external intercostals;Musc[4-5-1-1];5;External intercostals;567;1
+569;Left external intercostals;Musc[4-5-1-2];5;External intercostals;567;1
+570;Internal intercostals;Musc[4-5-2];4;Intercostals;566;0
+571;Left internal intercostals;Musc[4-5-2-1];5;Internal intercostals;570;1
+572;Right internal intercostals;Musc[4-5-2-2];5;Internal intercostals;570;1
+573;Innermost intercostals;Musc[4-5-3];4;Intercostals;566;0
+574;Right innermost intercostals;Musc[4-5-3-1];5;Innermost intercostals;573;1
+575;Left innermost intercostals;Musc[4-5-3-2];5;Innermost intercostals;573;1
+576;Muscles of abdomen;Musc[5];2;Muscular system;3;0
+577;External oblique;Musc[5-1];3;Muscles of abdomen;576;0
+578;Right external oblique;Musc[5-1-1];4;External oblique;577;1
+579;Left external oblique;Musc[5-1-2];4;External oblique;577;1
+580;Internal oblique;Musc[5-2];3;Muscles of abdomen;576;0
+581;Right internal oblique;Musc[5-2-1];4;Internal oblique;580;1
+582;Left internal oblique;Musc[5-2-2];4;Internal oblique;580;1
+583;Cremaster;Musc[5-3];3;Muscles of abdomen;576;0
+584;Right cremaster;Musc[5-3-1];4;Cremaster;583;1
+585;Left cremaster;Musc[5-3-2];4;Cremaster;583;1
+586;Transverse abdominis;Musc[5-4];3;Muscles of abdomen;576;0
+587;Right transverse abdominis;Musc[5-4-1];4;Transverse abdominis;586;1
+588;Left transverse abdominis;Musc[5-4-2];4;Transverse abdominis;586;1
+589;Inguinal falx;Musc[5-5];3;Muscles of abdomen;576;0
+590;Right inguinal falx;Musc[5-5-1];4;Inguinal falx;589;1
+591;Left inguinal falx;Musc[5-5-2];4;Inguinal falx;589;1
+592;Rectus abdominis;Musc[5-6];3;Muscles of abdomen;576;0
+593;Right rectus abdominis;Musc[5-6-1];4;Rectus abdominis;592;1
+594;Left rectus abdominis;Musc[5-6-2];4;Rectus abdominis;592;1
+595;Pyramidalis;Musc[5-7];3;Muscles of abdomen;576;0
+596;Right pyramidalis;Musc[5-7-1];4;Pyramidalis;595;1
+597;Left pyramidalis;Musc[5-7-2];4;Pyramidalis;595;1
+598;Quadratus lumborum;Musc[5-8];3;Muscles of abdomen;576;0
+599;Right quadratus lumborum;Musc[5-8-1];4;Quadratus lumborum;598;1
+600;Left quadratus lumborum;Musc[5-8-2];4;Quadratus lumborum;598;1
+601;Muscles of pelvic floor and perineum;Musc[6];2;Muscular system;3;0
+602;Muscles of pelvic floor;Musc[6-1];3;Muscles of pelvic floor and perineum;601;0
+603;Coccygeus;Musc[6-1-1];4;Muscles of pelvic floor;602;0
+604;Right coccygeus;Musc[6-1-1-1];5;Coccygeus;603;1
+605;Left coccygeus;Musc[6-1-1-2];5;Coccygeus;603;1
+606;Levator ani;Musc[6-1-2];4;Muscles of pelvic floor;602;0
+607;Iliococcygeus;Musc[6-1-2-1];5;Levator ani;606;0
+608;Left iliococcygeus;Musc[6-1-2-1-1];6;Iliococcygeus;607;1
+609;Right iliococcygeus;Musc[6-1-2-1-2];6;Iliococcygeus;607;1
+610;Pubococcygeus;Musc[6-1-2-2];5;Levator ani;606;0
+611;Right pubococcygeus;Musc[6-1-2-2-1];6;Pubococcygeus;610;1
+612;Left pubococcygeus;Musc[6-1-2-2-2];6;Pubococcygeus;610;1
+613;Puborectalis;Musc[6-1-2-3];5;Levator ani;606;0
+614;Right puborectalis;Musc[6-1-2-3-1];6;Puborectalis;613;1
+615;Left puborectalis;Musc[6-1-2-3-2];6;Puborectalis;613;1
+616;Tendinous arch of levator ani;Musc[6-1-2-4];5;Levator ani;606;0
+617;Right tendinous arch of levator ani;Musc[6-1-2-4-1];6;Tendinous arch of levator ani;616;1
+618;Left tendinous arch of levator ani;Musc[6-1-2-4-2];6;Tendinous arch of levator ani;616;1
+619;Muscles of perineum;Musc[6-2];3;Muscles of pelvic floor and perineum;601;0
+620;Superficial transverse perineal muscle;Musc[6-2-1];4;Muscles of perineum;619;0
+621;Right superficial transverse perineal muscle;Musc[6-2-1-1];5;Superficial transverse perineal muscle;620;1
+622;Left superficial transverse perineal muscle;Musc[6-2-1-2];5;Superficial transverse perineal muscle;620;1
+623;Deep transverse perineal muscle;Musc[6-2-2];4;Muscles of perineum;619;0
+624;Left deep transverse perineal muscle;Musc[6-2-2-1];5;Deep transverse perineal muscle;623;1
+625;Right deep transverse perineal muscle;Musc[6-2-2-2];5;Deep transverse perineal muscle;623;1
+626;External urethral sphincter;Musc[6-2-3];4;Muscles of perineum;619;1
+627;Ischiocavernosus;Musc[6-2-4];4;Muscles of perineum;619;0
+628;Right ischiocavernosus;Musc[6-2-4-1];5;Ischiocavernosus;627;1
+629;Left ischiocavernosus;Musc[6-2-4-2];5;Ischiocavernosus;627;1
+630;Bulbospongiosus muscle;Musc[6-2-5];4;Muscles of perineum;619;0
+631;Left bulbospongiosus muscle;Musc[6-2-5-1];5;Bulbospongiosus muscle;630;1
+632;Right bulbospongiosus muscle;Musc[6-2-5-2];5;Bulbospongiosus muscle;630;1
+633;Muscles of anal sphincter;Musc[6-3];3;Muscles of pelvic floor and perineum;601;0
+634;Corrugator cutis ani;Musc[6-3-1];4;Muscles of anal sphincter;633;1
+635;External anal sphincter;Musc[6-3-2];4;Muscles of anal sphincter;633;1
+636;Conjoined longitudinal anal sphincter;Musc[6-3-3];4;Muscles of anal sphincter;633;1
+637;Internal anal sphincter;Musc[6-3-4];4;Muscles of anal sphincter;633;1
+638;Muscles of lower limb;Musc[7];2;Muscular system;3;0
+639;Muscles of right lower limb;Musc[7-1];3;Muscles of lower limb;638;0
+640;Right iliopsoas;Musc[7-1-1];4;Muscles of right lower limb;639;0
+641;Right iliacus;Musc[7-1-1-1];5;Right iliopsoas;640;1
+642;Right psoas major;Musc[7-1-1-2];5;Right iliopsoas;640;1
+643;Right psoas minor;Musc[7-1-1-3];5;Right iliopsoas;640;1
+644;Right gluteal muscles;Musc[7-1-2];4;Muscles of right lower limb;639;0
+645;Right tensor fasciae latae;Musc[7-1-2-1];5;Right gluteal muscles;644;1
+646;Right iliotibial tract;Musc[7-1-2-2];5;Right gluteal muscles;644;1
+647;Right gluteus maximus;Musc[7-1-2-3];5;Right gluteal muscles;644;1
+648;Right gluteus medius;Musc[7-1-2-4];5;Right gluteal muscles;644;1
+649;Right gluteus minimus;Musc[7-1-2-5];5;Right gluteal muscles;644;1
+650;Lateral rotator muscles of right hip;Musc[7-1-3];4;Muscles of right lower limb;639;0
+651;Right superior gemellus;Musc[7-1-3-1];5;Lateral rotator muscles of right hip;650;1
+652;Right inferior gemellus;Musc[7-1-3-2];5;Lateral rotator muscles of right hip;650;1
+653;Right quadratus femoris;Musc[7-1-3-3];5;Lateral rotator muscles of right hip;650;1
+654;Right obturator externus;Musc[7-1-3-4];5;Lateral rotator muscles of right hip;650;1
+655;Right obturator internus;Musc[7-1-3-5];5;Lateral rotator muscles of right hip;650;1
+656;Right piriformis;Musc[7-1-3-6];5;Lateral rotator muscles of right hip;650;1
+657;Muscles of right thigh;Musc[7-1-4];4;Muscles of right lower limb;639;0
+658;Anterior compartment muscles of right thigh;Musc[7-1-4-1];5;Muscles of right thigh;657;0
+659;Right sartorius;Musc[7-1-4-1-1];6;Anterior compartment muscles of right thigh;658;1
+660;Right articularis genus;Musc[7-1-4-1-2];6;Anterior compartment muscles of right thigh;658;1
+661;Right quadriceps femoris;Musc[7-1-4-1-3];6;Anterior compartment muscles of right thigh;658;0
+662;Right vastus medialis;Musc[7-1-4-1-3-1];7;Right quadriceps femoris;661;1
+663;Right vastus lateralis;Musc[7-1-4-1-3-2];7;Right quadriceps femoris;661;1
+664;Right vastus intermedius;Musc[7-1-4-1-3-3];7;Right quadriceps femoris;661;1
+665;Right rectus femoris;Musc[7-1-4-1-3-4];7;Right quadriceps femoris;661;1
+666;Right quadriceps femoris tendon;Musc[7-1-4-1-3-5];7;Right quadriceps femoris;661;1
+667;Posterior compartment muscles of right thigh;Musc[7-1-4-2];5;Muscles of right thigh;657;0
+668;Right semimembranosus;Musc[7-1-4-2-1];6;Posterior compartment muscles of right thigh;667;1
+669;Right semitendinosus;Musc[7-1-4-2-2];6;Posterior compartment muscles of right thigh;667;1
+670;Right biceps femoris;Musc[7-1-4-2-3];6;Posterior compartment muscles of right thigh;667;1
+671;Medial compartment muscles of right thigh;Musc[7-1-4-3];5;Muscles of right thigh;657;0
+672;Right gracilis;Musc[7-1-4-3-1];6;Medial compartment muscles of right thigh;671;1
+673;Right adductor longus;Musc[7-1-4-3-2];6;Medial compartment muscles of right thigh;671;1
+674;Right adductor brevis;Musc[7-1-4-3-3];6;Medial compartment muscles of right thigh;671;1
+675;Right pectineus;Musc[7-1-4-3-4];6;Medial compartment muscles of right thigh;671;1
+676;Right adductor magnus;Musc[7-1-4-3-5];6;Medial compartment muscles of right thigh;671;1
+677;Right adductor minimus;Musc[7-1-4-3-6];6;Medial compartment muscles of right thigh;671;1
+678;Muscles of right lower leg;Musc[7-1-5];4;Muscles of right lower limb;639;0
+679;Anterior compartment muscles of right lower leg;Musc[7-1-5-1];5;Muscles of right lower leg;678;0
+680;Right tibialis anterior;Musc[7-1-5-1-1];6;Anterior compartment muscles of right lower leg;679;1
+681;Right extensor hallucis longus;Musc[7-1-5-1-2];6;Anterior compartment muscles of right lower leg;679;1
+682;Right extensor digitorum longus;Musc[7-1-5-1-3];6;Anterior compartment muscles of right lower leg;679;1
+683;Right fibularis tertius;Musc[7-1-5-1-4];6;Anterior compartment muscles of right lower leg;679;1
+684;Posterior compartment muscles of right lower leg;Musc[7-1-5-2];5;Muscles of right lower leg;678;0
+685;Right gastrocnemius;Musc[7-1-5-2-1];6;Posterior compartment muscles of right lower leg;684;0
+686;Lateral head of right gastrocnemius;Musc[7-1-5-2-1-1];7;Right gastrocnemius;685;1
+687;Medial head of right gastrocnemius;Musc[7-1-5-2-1-2];7;Right gastrocnemius;685;1
+688;Right plantaris;Musc[7-1-5-2-2];6;Posterior compartment muscles of right lower leg;684;1
+689;Right soleus;Musc[7-1-5-2-3];6;Posterior compartment muscles of right lower leg;684;1
+690;Right calcaneal tendon;Musc[7-1-5-2-4];6;Posterior compartment muscles of right lower leg;684;1
+691;Right popliteus;Musc[7-1-5-2-5];6;Posterior compartment muscles of right lower leg;684;1
+692;Right tibialis posterior;Musc[7-1-5-2-6];6;Posterior compartment muscles of right lower leg;684;1
+693;Right flexor hallucis longus;Musc[7-1-5-2-7];6;Posterior compartment muscles of right lower leg;684;1
+694;Right flexor digitorum longus;Musc[7-1-5-2-8];6;Posterior compartment muscles of right lower leg;684;1
+695;Lateral compartment muscles of right lower leg;Musc[7-1-5-3];5;Muscles of right lower leg;678;0
+696;Right fibularis longus;Musc[7-1-5-3-1];6;Lateral compartment muscles of right lower leg;695;1
+697;Right fibularis brevis;Musc[7-1-5-3-2];6;Lateral compartment muscles of right lower leg;695;1
+698;Muscles of right foot;Musc[7-1-6];4;Muscles of right lower limb;639;0
+699;Plantar muscles of right foot;Musc[7-1-6-1];5;Muscles of right foot;698;0
+700;Superficial plantar muscles of right foot;Musc[7-1-6-1-1];6;Plantar muscles of right foot;699;0
+701;Right abductor hallucis;Musc[7-1-6-1-1-1];7;Superficial plantar muscles of right foot;700;1
+702;Right flexor digitorum brevis;Musc[7-1-6-1-1-2];7;Superficial plantar muscles of right foot;700;1
+703;Abductor digiti minimi of right foot;Musc[7-1-6-1-1-3];7;Superficial plantar muscles of right foot;700;1
+704;Middle plantar muscles of right foot;Musc[7-1-6-1-2];6;Plantar muscles of right foot;699;0
+705;Lumbrical muscles of right foot;Musc[7-1-6-1-2-1];7;Middle plantar muscles of right foot;704;0
+706;First lumbrical muscle of right foot;Musc[7-1-6-1-2-1-1];8;Lumbrical muscles of right foot;705;1
+707;Second lumbrical muscle of right foot;Musc[7-1-6-1-2-1-2];8;Lumbrical muscles of right foot;705;1
+708;Third lumbrical muscle of right foot;Musc[7-1-6-1-2-1-3];8;Lumbrical muscles of right foot;705;1
+709;Fourth lumbrical muscle of right foot;Musc[7-1-6-1-2-1-4];8;Lumbrical muscles of right foot;705;1
+710;Right quadratus plantae;Musc[7-1-6-1-2-2];7;Middle plantar muscles of right foot;704;1
+711;Deep plantar muscles of right foot;Musc[7-1-6-1-3];6;Plantar muscles of right foot;699;0
+712;Right flexor hallucis brevis;Musc[7-1-6-1-3-1];7;Deep plantar muscles of right foot;711;0
+713;Medial head of right flexor hallucis brevis;Musc[7-1-6-1-3-1-1];8;Right flexor hallucis brevis;712;1
+714;Lateral head of right flexor hallucis brevis;Musc[7-1-6-1-3-1-2];8;Right flexor hallucis brevis;712;1
+715;Right adductor hallucis;Musc[7-1-6-1-3-2];7;Deep plantar muscles of right foot;711;0
+716;Right adductor hallucis oblique head;Musc[7-1-6-1-3-2-1];8;Right adductor hallucis;715;1
+717;Right adductor hallucis transverse head;Musc[7-1-6-1-3-2-2];8;Right adductor hallucis;715;1
+718;Plantar interosseous muscles of right foot;Musc[7-1-6-1-3-3];7;Deep plantar muscles of right foot;711;0
+719;First plantar interosseous muscle of right foot;Musc[7-1-6-1-3-3-1];8;Plantar interosseous muscles of right foot;718;1
+720;Second plantar interosseous muscle of right foot;Musc[7-1-6-1-3-3-2];8;Plantar interosseous muscles of right foot;718;1
+721;Third plantar interosseous muscle of right foot;Musc[7-1-6-1-3-3-3];8;Plantar interosseous muscles of right foot;718;1
+722;Right flexor digiti minimi brevis of foot;Musc[7-1-6-1-3-4];7;Deep plantar muscles of right foot;711;1
+723;Dorsal muscles of right foot;Musc[7-1-6-2];5;Muscles of right foot;698;0
+724;Superficial dorsal muscles of right foot;Musc[7-1-6-2-1];6;Dorsal muscles of right foot;723;0
+725;Right extensor hallucis brevis;Musc[7-1-6-2-1-1];7;Superficial dorsal muscles of right foot;724;1
+726;Right extensor digitorum brevis;Musc[7-1-6-2-1-2];7;Superficial dorsal muscles of right foot;724;1
+727;Dorsal interosseous muscles of right foot;Musc[7-1-6-2-2];6;Dorsal muscles of right foot;723;0
+728;First dorsal interosseus muscle of right foot;Musc[7-1-6-2-2-1];7;Dorsal interosseous muscles of right foot;727;1
+729;Second dorsal interosseus muscle of right foot;Musc[7-1-6-2-2-2];7;Dorsal interosseous muscles of right foot;727;1
+730;Third dorsal interosseus muscle of right foot;Musc[7-1-6-2-2-3];7;Dorsal interosseous muscles of right foot;727;1
+731;Fourth dorsal interosseus muscle of right foot;Musc[7-1-6-2-2-4];7;Dorsal interosseous muscles of right foot;727;1
+732;Muscles of left lower limb;Musc[7-2];3;Muscles of lower limb;638;0
+733;Left iliopsoas;Musc[7-2-1];4;Muscles of left lower limb;732;0
+734;Left iliacus;Musc[7-2-1-1];5;Left iliopsoas;733;1
+735;Left psoas minor;Musc[7-2-1-2];5;Left iliopsoas;733;1
+736;Left psoas major;Musc[7-2-1-3];5;Left iliopsoas;733;1
+737;Left gluteal muscles;Musc[7-2-2];4;Muscles of left lower limb;732;0
+738;Left tensor fasciae latae;Musc[7-2-2-1];5;Left gluteal muscles;737;1
+739;Left iliotibial tract;Musc[7-2-2-2];5;Left gluteal muscles;737;1
+740;Left gluteus maximus;Musc[7-2-2-3];5;Left gluteal muscles;737;1
+741;Left gluteus medius;Musc[7-2-2-4];5;Left gluteal muscles;737;1
+742;Left gluteus minimus;Musc[7-2-2-5];5;Left gluteal muscles;737;1
+743;Lateral rotator muscles of left hip;Musc[7-2-3];4;Muscles of left lower limb;732;0
+744;Left superior gemellus;Musc[7-2-3-1];5;Lateral rotator muscles of left hip;743;1
+745;Left inferior gemellus;Musc[7-2-3-2];5;Lateral rotator muscles of left hip;743;1
+746;Left quadratus femoris;Musc[7-2-3-3];5;Lateral rotator muscles of left hip;743;1
+747;Left obturator externus;Musc[7-2-3-4];5;Lateral rotator muscles of left hip;743;1
+748;Left obturator internus;Musc[7-2-3-5];5;Lateral rotator muscles of left hip;743;1
+749;Left piriformis;Musc[7-2-3-6];5;Lateral rotator muscles of left hip;743;1
+750;Muscles of left thigh;Musc[7-2-4];4;Muscles of left lower limb;732;0
+751;Anterior compartment muscles of left thigh;Musc[7-2-4-1];5;Muscles of left thigh;750;0
+752;Left sartorius;Musc[7-2-4-1-1];6;Anterior compartment muscles of left thigh;751;1
+753;Left articularis genus;Musc[7-2-4-1-2];6;Anterior compartment muscles of left thigh;751;1
+754;Left quadriceps femoris;Musc[7-2-4-1-3];6;Anterior compartment muscles of left thigh;751;0
+755;Left vastus medialis;Musc[7-2-4-1-3-1];7;Left quadriceps femoris;754;1
+756;Left vastus lateralis;Musc[7-2-4-1-3-2];7;Left quadriceps femoris;754;1
+757;Left vastus intermedius;Musc[7-2-4-1-3-3];7;Left quadriceps femoris;754;1
+758;Left rectus femoris;Musc[7-2-4-1-3-4];7;Left quadriceps femoris;754;1
+759;Left quadriceps femoris tendon;Musc[7-2-4-1-3-5];7;Left quadriceps femoris;754;1
+760;Posterior compartment muscles of left thigh;Musc[7-2-4-2];5;Muscles of left thigh;750;0
+761;Left semimembranosus;Musc[7-2-4-2-1];6;Posterior compartment muscles of left thigh;760;1
+762;Left semitendinosus;Musc[7-2-4-2-2];6;Posterior compartment muscles of left thigh;760;1
+763;Left biceps femoris;Musc[7-2-4-2-3];6;Posterior compartment muscles of left thigh;760;1
+764;Medial compartment muscles of left thigh;Musc[7-2-4-3];5;Muscles of left thigh;750;0
+765;Left gracilis;Musc[7-2-4-3-1];6;Medial compartment muscles of left thigh;764;1
+766;Left adductor longus;Musc[7-2-4-3-2];6;Medial compartment muscles of left thigh;764;1
+767;Left adductor brevis;Musc[7-2-4-3-3];6;Medial compartment muscles of left thigh;764;1
+768;Left pectineus;Musc[7-2-4-3-4];6;Medial compartment muscles of left thigh;764;1
+769;Left adductor magnus;Musc[7-2-4-3-5];6;Medial compartment muscles of left thigh;764;1
+770;Left adductor minimus;Musc[7-2-4-3-6];6;Medial compartment muscles of left thigh;764;1
+771;Muscles of left lower leg;Musc[7-2-5];4;Muscles of left lower limb;732;0
+772;Anterior compartment muscles of left lower leg;Musc[7-2-5-1];5;Muscles of left lower leg;771;0
+773;Left tibialis anterior;Musc[7-2-5-1-1];6;Anterior compartment muscles of left lower leg;772;1
+774;Left extensor hallucis longus;Musc[7-2-5-1-2];6;Anterior compartment muscles of left lower leg;772;1
+775;Left extensor digitorum longus;Musc[7-2-5-1-3];6;Anterior compartment muscles of left lower leg;772;1
+776;Left fibularis tertius;Musc[7-2-5-1-4];6;Anterior compartment muscles of left lower leg;772;1
+777;Posterior compartment muscles of left lower leg;Musc[7-2-5-2];5;Muscles of left lower leg;771;0
+778;Left gastrocnemius;Musc[7-2-5-2-1];6;Posterior compartment muscles of left lower leg;777;0
+779;Lateral head of left gastrocnemius;Musc[7-2-5-2-1-1];7;Left gastrocnemius;778;1
+780;Medial head of left gastrocnemius;Musc[7-2-5-2-1-2];7;Left gastrocnemius;778;1
+781;Left plantaris;Musc[7-2-5-2-2];6;Posterior compartment muscles of left lower leg;777;1
+782;Left soleus;Musc[7-2-5-2-3];6;Posterior compartment muscles of left lower leg;777;1
+783;Left calcaneal tendon;Musc[7-2-5-2-4];6;Posterior compartment muscles of left lower leg;777;1
+784;Left popliteus;Musc[7-2-5-2-5];6;Posterior compartment muscles of left lower leg;777;1
+785;Left tibialis posterior;Musc[7-2-5-2-6];6;Posterior compartment muscles of left lower leg;777;1
+786;Left flexor hallucis longus;Musc[7-2-5-2-7];6;Posterior compartment muscles of left lower leg;777;1
+787;Left flexor digitorum longus;Musc[7-2-5-2-8];6;Posterior compartment muscles of left lower leg;777;1
+788;Lateral compartment muscles of left lower leg;Musc[7-2-5-3];5;Muscles of left lower leg;771;0
+789;Left fibularis longus;Musc[7-2-5-3-1];6;Lateral compartment muscles of left lower leg;788;1
+790;Left fibularis brevis;Musc[7-2-5-3-2];6;Lateral compartment muscles of left lower leg;788;1
+791;Muscles of left foot;Musc[7-2-6];4;Muscles of left lower limb;732;0
+792;Plantar muscles of left foot;Musc[7-2-6-1];5;Muscles of left foot;791;0
+793;Superficial plantar muscles of left foot;Musc[7-2-6-1-1];6;Plantar muscles of left foot;792;0
+794;Left abductor hallucis;Musc[7-2-6-1-1-1];7;Superficial plantar muscles of left foot;793;1
+795;Left flexor digitorum brevis;Musc[7-2-6-1-1-2];7;Superficial plantar muscles of left foot;793;1
+796;Abductor digiti minimi of left foot;Musc[7-2-6-1-1-3];7;Superficial plantar muscles of left foot;793;1
+797;Middle plantar muscles of left foot;Musc[7-2-6-1-2];6;Plantar muscles of left foot;792;0
+798;Lumbrical muscles of left foot;Musc[7-2-6-1-2-1];7;Middle plantar muscles of left foot;797;0
+799;First lumbrical muscle of left foot;Musc[7-2-6-1-2-1-1];8;Lumbrical muscles of left foot;798;1
+800;Second lumbrical muscle of left foot;Musc[7-2-6-1-2-1-2];8;Lumbrical muscles of left foot;798;1
+801;Third lumbrical muscle of left foot;Musc[7-2-6-1-2-1-3];8;Lumbrical muscles of left foot;798;1
+802;Fourth lumbrical muscle of left foot;Musc[7-2-6-1-2-1-4];8;Lumbrical muscles of left foot;798;1
+803;Left quadratus plantae;Musc[7-2-6-1-2-2];7;Middle plantar muscles of left foot;797;1
+804;Deep plantar muscles of left foot;Musc[7-2-6-1-3];6;Plantar muscles of left foot;792;0
+805;Left flexor hallucis brevis;Musc[7-2-6-1-3-1];7;Deep plantar muscles of left foot;804;0
+806;Medial head of left flexor hallucis brevis;Musc[7-2-6-1-3-1-1];8;Left flexor hallucis brevis;805;1
+807;Lateral head of left flexor hallucis brevis;Musc[7-2-6-1-3-1-2];8;Left flexor hallucis brevis;805;1
+808;Left adductor hallucis;Musc[7-2-6-1-3-2];7;Deep plantar muscles of left foot;804;0
+809;Left adductor hallucis oblique head;Musc[7-2-6-1-3-2-1];8;Left adductor hallucis;808;1
+810;Left adductor hallucis transverse head;Musc[7-2-6-1-3-2-2];8;Left adductor hallucis;808;1
+811;Plantar interosseous muscles of left foot;Musc[7-2-6-1-3-3];7;Deep plantar muscles of left foot;804;0
+812;First plantar interosseous muscle of left foot;Musc[7-2-6-1-3-3-1];8;Plantar interosseous muscles of left foot;811;1
+813;Second plantar interosseous muscle of left foot;Musc[7-2-6-1-3-3-2];8;Plantar interosseous muscles of left foot;811;1
+814;Third plantar interosseous muscle of left foot;Musc[7-2-6-1-3-3-3];8;Plantar interosseous muscles of left foot;811;1
+815;Left flexor digiti minimi brevis of foot;Musc[7-2-6-1-3-4];7;Deep plantar muscles of left foot;804;1
+816;Dorsal muscles of left foot;Musc[7-2-6-2];5;Muscles of left foot;791;0
+817;Superficial dorsal muscles of left foot;Musc[7-2-6-2-1];6;Dorsal muscles of left foot;816;0
+818;Left extensor hallucis brevis;Musc[7-2-6-2-1-1];7;Superficial dorsal muscles of left foot;817;1
+819;Left extensor digitorum brevis;Musc[7-2-6-2-1-2];7;Superficial dorsal muscles of left foot;817;1
+820;Dorsal interosseous muscles of left foot;Musc[7-2-6-2-2];6;Dorsal muscles of left foot;816;0
+821;First dorsal interosseus muscle of left foot;Musc[7-2-6-2-2-1];7;Dorsal interosseous muscles of left foot;820;1
+822;Second dorsal interosseus muscle of left foot;Musc[7-2-6-2-2-2];7;Dorsal interosseous muscles of left foot;820;1
+823;Third dorsal interosseus muscle of left foot;Musc[7-2-6-2-2-3];7;Dorsal interosseous muscles of left foot;820;1
+824;Fourth dorsal interosseus muscle of left foot;Musc[7-2-6-2-2-4];7;Dorsal interosseous muscles of left foot;820;1
