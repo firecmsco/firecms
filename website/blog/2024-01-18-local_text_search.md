@@ -4,7 +4,7 @@ title: Building in browser text search for Firebase with a Lean mindset
 image: /img/avatars/marian_avatar.jpeg
 author_name: Marian Moldovan
 author_url: https://www.linkedin.com/in/marianmoldovan/
-author_image_url: https://media.licdn.com/dms/image/C4E03AQFCD4YD1c8Uuw/profile-displayphoto-shrink_800_800/0/1655896232142?e=1710979200&v=beta&t=EckecOc3z-7s_6AaWW7rehbAOzrs4KTgOn73IivyLOA
+author_image_url: https://avatars.githubusercontent.com/u/1479084?v=4
 ---
 
 Nowadays, search is a basic feature in a public online tool. It’s a commodity, a feature that you expect to be there.
