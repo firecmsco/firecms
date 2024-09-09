@@ -1,7 +1,7 @@
 import { EnumValueConfig } from "../../../types";
 import { EnumValuesChip } from "../../../preview";
 import React, { useCallback, useEffect } from "react";
-import { NewMultiSelect, NewMultiSelectItem, Select, SelectItem } from "@firecms/ui";
+import { MultiSelect, MultiSelectItem, Select, SelectItem } from "@firecms/ui";
 
 export function VirtualTableSelect(props: {
     name: string;
@@ -67,7 +67,7 @@ export function VirtualTableSelect(props: {
 
     return (
         multiple
-            ? <NewMultiSelect
+            ? <MultiSelect
                 inputRef={ref}
                 className="w-full h-full p-0 bg-transparent"
                 position={"item-aligned"}
@@ -79,16 +79,16 @@ export function VirtualTableSelect(props: {
                     : ([])}
                 onValueChange={onChange}>
                 {enumValues?.map((enumConfig) => (
-                    <NewMultiSelectItem
+                    <MultiSelectItem
                         key={enumConfig.id}
                         value={String(enumConfig.id)}>
                         <EnumValuesChip
                             enumKey={enumConfig.id}
                             enumValues={enumValues}
                             size={small ? "small" : "medium"}/>
-                    </NewMultiSelectItem>
+                    </MultiSelectItem>
                 ))}
-            </NewMultiSelect>
+            </MultiSelect>
             : <Select
                 inputRef={ref}
                 className="w-full h-full p-0 bg-transparent"

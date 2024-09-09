@@ -70,7 +70,8 @@ export function useBuildProjectConfig({
     const [primaryColor, setPrimaryColor] = useState<string | undefined>(DEFAULT_PRIMARY_COLOR);
     const [secondaryColor, setSecondaryColor] = useState<string | undefined>(DEFAULT_SECONDARY_COLOR);
 
-    const configPath = projectId ? `projects/${projectId}` : undefined;
+    const projectPath = `projects/${projectId}`;
+    const configPath = projectId ? projectPath : undefined;
 
     const [clientProjectName, setClientProjectName] = useState<string | undefined>();
     const [subscriptionPlan, setSubscriptionPlan] = useState<ProjectSubscriptionPlan>();
@@ -169,11 +170,12 @@ export function useBuildProjectConfig({
         }
 
         const firestore = getFirestore(backendFirebaseApp);
-        return onSnapshot(doc(firestore, "projects", projectId),
+        return onSnapshot(doc(firestore, projectPath),
             {
                 next: (snapshot) => {
-
-                    console.debug("Project config snapshot:", snapshot.data());
+                    console.debug("Project config snapshot:", {
+                        data: snapshot.data()
+                    });
                     setClientProjectName(snapshot.get("name"));
                     const plan = snapshot.get("subscription_plan") ?? "free";
                     setSubscriptionPlan(plan); // TODO: remove default value

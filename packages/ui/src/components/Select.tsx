@@ -22,7 +22,7 @@ export type SelectProps = {
     onChange?: React.EventHandler<ChangeEvent<HTMLSelectElement>>,
     onValueChange?: (updatedValue: string) => void,
     placeholder?: React.ReactNode,
-    renderValue?: (value: string, index: number) => React.ReactNode,
+    renderValue?: (value?: string) => React.ReactNode,
     size?: "small" | "medium",
     label?: React.ReactNode | string,
     disabled?: boolean,
@@ -138,13 +138,11 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                                 e.preventDefault();
                                 e.stopPropagation();
                             }}
-                            placeholder={placeholder} className={"w-full"}>
-                            {renderValue && (hasValue && Array.isArray(value) ? value.map((v, i) => (
-                                <div key={v} className={"flex items-center gap-1 max-w-full"}>
-                                    {renderValue ? renderValue(v, i) : v}
-                                </div>
-                            )) : (typeof value === "string" ? (renderValue ? renderValue(value, 0) : value) : placeholder))}
-                            {!renderValue && hasValue && value}
+                            placeholder={placeholder}
+                            className={"w-full"}>
+                            {!hasValue && placeholder}
+                            {hasValue && renderValue ? renderValue(value) : placeholder}
+                            {hasValue && !renderValue && value}
                         </SelectPrimitive.Value>
                     </div>
                     <SelectPrimitive.Icon className={cls("px-2 h-full flex items-center")}>

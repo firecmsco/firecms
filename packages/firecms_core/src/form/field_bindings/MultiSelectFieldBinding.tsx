@@ -4,7 +4,7 @@ import { EnumType, FieldProps, ResolvedProperty } from "../../types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { EnumValuesChip } from "../../preview";
 import { enumToObjectEntries, getIconForProperty, getLabelOrConfigFrom } from "../../util";
-import { CloseIcon, NewMultiSelect, NewMultiSelectItem } from "@firecms/ui";
+import { CloseIcon, MultiSelect, MultiSelectItem } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
 /**
@@ -81,7 +81,7 @@ export function MultiSelectFieldBinding({
 
     return (
         <>
-            <NewMultiSelect
+            <MultiSelect
                 className={"w-full mt-2"}
                 size={size === "medium" ? "medium" : "small"}
                 value={validValue ? value.map((v) => v.toString()) : []}
@@ -103,10 +103,10 @@ export function MultiSelectFieldBinding({
                     return setValue(newValue);
                 }}>
                 {enumValues.map((enumValue) => String(enumValue.id)).map((enumKey) => (
-                    <NewMultiSelectItem key={enumKey} value={enumKey}>
+                    <MultiSelectItem key={enumKey} value={enumKey}>
                         {renderValue(enumKey, true)}
-                    </NewMultiSelectItem>))}
-            </NewMultiSelect>
+                    </MultiSelectItem>))}
+            </MultiSelect>
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}

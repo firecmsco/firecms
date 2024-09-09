@@ -17,8 +17,8 @@ import {
     Chip,
     GitHubIcon,
     IconButton,
-    NewMultiSelect,
-    NewMultiSelectItem,
+    MultiSelect,
+    MultiSelectItem,
     Paper,
     Sheet,
     Tooltip,
@@ -137,19 +137,18 @@ export function ExampleCMSView() {
                     </div>
 
                     <div className="w-full">
-                        <NewMultiSelect
+                        <MultiSelect
                             className={"w-full"}
                             value={selectedFrameworks}
                             onValueChange={setSelectedFrameworks}
                             placeholder="Select frameworks"
-                            maxCount={3}
                         >
                             {frameworksList.map((framework) => (
-                                <NewMultiSelectItem value={framework.value}>
+                                <MultiSelectItem value={framework.value}>
                                     {framework.label}
-                                </NewMultiSelectItem>
+                                </MultiSelectItem>
                             ))}
-                        </NewMultiSelect>
+                        </MultiSelect>
                         <div className="mt-4">
                             <h2 className="text-xl font-semibold">Selected Frameworks:</h2>
                             <ul className="list-disc list-inside">

@@ -1,12 +1,11 @@
 import React from "react";
 import {
     Button,
-    Checkbox,
     DebouncedTextField,
     ExpandablePanel,
     FileUploadIcon,
     MultiSelect,
-    MultiSelectItem, NewMultiSelect, NewMultiSelectItem,
+    MultiSelectItem,
     Typography
 } from "@firecms/ui";
 
@@ -88,7 +87,7 @@ export function StoragePropertyField({
 
                         <div className={"col-span-12"}>
 
-                            <NewMultiSelect
+                            <MultiSelect
                                 className={"w-full"}
                                 placeholder={"All file types allowed"}
                                 disabled={disabled}
@@ -104,7 +103,7 @@ export function StoragePropertyField({
                                 }}>
 
                                 {Object.entries(fileTypes).map(([value, label]) => (
-                                    <NewMultiSelectItem key={value} value={value} className={"flex items-center gap-2"}>
+                                    <MultiSelectItem key={value} value={value} className={"flex items-center gap-2"}>
                                         {/*<Checkbox*/}
                                         {/*    checked={allFileTypesSelected || fileTypesValue.indexOf(value) > -1}/>*/}
                                         <div className={"flex-grow"}>
@@ -119,10 +118,10 @@ export function StoragePropertyField({
                                                 }}>
                                             Only
                                         </Button>
-                                    </NewMultiSelectItem>
+                                    </MultiSelectItem>
                                 ))}
 
-                            </NewMultiSelect>
+                            </MultiSelect>
                         </div>
 
                         <div className={"col-span-12"}>

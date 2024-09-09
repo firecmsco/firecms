@@ -26,7 +26,6 @@ export * from "./Markdown";
 export * from "./Menu";
 export * from "./Menubar";
 export * from "./MultiSelect";
-export * from "./NewMultiSelect";
 export * from "./Paper";
 export * from "./RadioGroup";
 export * from "./SearchBar";

@@ -120,11 +120,14 @@ export function FireCMSCloudApp({
         fromUrl: backendApiHost + "/config"
     });
 
+    console.log("backendFirebaseApp", backendFirebaseApp);
     const fireCMSBackend = useBuildFireCMSBackend({
         backendApiHost,
         backendFirebaseApp
     });
 
+
+    console.log("fireCMSBackend", fireCMSBackend);
     let component;
 
     if (backendConfigLoading || !backendFirebaseApp) {

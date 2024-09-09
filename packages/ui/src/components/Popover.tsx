@@ -60,7 +60,7 @@ export function Popover({
         <PopoverPrimitive.Portal container={portalContainer}>
             <PopoverPrimitive.Content
                 className={cls(paperMixin,
-                    "PopoverContent shadow z-40", className)}
+                    "PopoverContent z-40", className)}
                 side={side}
                 sideOffset={sideOffset}
                 align={align}

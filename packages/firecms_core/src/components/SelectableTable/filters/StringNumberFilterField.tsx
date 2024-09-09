@@ -1,7 +1,17 @@
 import React, { useState } from "react";
 import { EnumValuesChip } from "../../../preview";
 import { VirtualTableWhereFilterOp } from "../../VirtualTable";
-import { Checkbox, ClearIcon, IconButton, Label, Select, SelectItem, TextField } from "@firecms/ui";
+import {
+    Checkbox,
+    ClearIcon,
+    IconButton,
+    Label,
+    MultiSelect,
+    MultiSelectItem,
+    Select,
+    SelectItem,
+    TextField
+} from "@firecms/ui";
 import { EnumValueConfig } from "../../../types";
 
 interface StringNumberFilterFieldProps {
@@ -82,6 +92,8 @@ export function StringNumberFilterField({
     }
 
     const multiple = multipleSelectOperations.includes(operation);
+
+    console.log("internalValue", { internalValue });
     return (
 
         <div className="flex w-[440px]">
@@ -117,17 +129,14 @@ export function StringNumberFilterField({
                     </IconButton>}
                 />}
 
-                {enumValues &&
+                {enumValues && !multiple &&
                     <Select
                         position={"item-aligned"}
-                        value={internalValue !== undefined
-                            ? (Array.isArray(internalValue) ? internalValue.map(e => String(e)) : String(internalValue))
-                            : isArray ? [] : ""}
+                        value={typeof internalValue === "string" ? internalValue : ""}
                         onValueChange={(value) => {
                             if (value !== "")
                                 updateFilter(operation, dataType === "number" ? parseInt(value as string) : value as string)
                         }}
-                        multiple={multiple}
                         endAdornment={internalValue && <IconButton
                             className="absolute right-2 top-3"
                             onClick={(e) => updateFilter(operation, undefined)}>
@@ -136,6 +145,8 @@ export function StringNumberFilterField({
                         renderValue={(enumKey) => {
                             if (enumKey === null)
                                 return "Filter for null values";
+                            if (enumKey === undefined)
+                                return null;
 
                             return <EnumValuesChip
                                 key={`select_value_${name}_${enumKey}`}
@@ -144,7 +155,7 @@ export function StringNumberFilterField({
                                 size={"small"}/>;
                         }}>
                         {enumValues.map((enumConfig) => (
-                            <SelectItem key={`select_value_${name}_${enumConfig.id}`}
+                            <SelectItem key={`select_item_${name}_${enumConfig.id}`}
                                         value={String(enumConfig.id)}>
                                 <EnumValuesChip
                                     enumKey={String(enumConfig.id)}
@@ -153,6 +164,43 @@ export function StringNumberFilterField({
                             </SelectItem>
                         ))}
                     </Select>
+                }
+
+                {enumValues && multiple &&
+                    <MultiSelect
+                        position={"item-aligned"}
+                        value={Array.isArray(internalValue) ? internalValue.map(e => String(e)) : []}
+                        onValueChange={(value) => {
+                            updateFilter(operation, dataType === "number" ? value.map(v => parseInt(v)) : value)
+                        }}
+                        multiple={multiple}
+                        endAdornment={internalValue && <IconButton
+                            className="absolute right-2 top-3"
+                            onClick={(e) => updateFilter(operation, undefined)}>
+                            <ClearIcon/>
+                        </IconButton>}
+                        // renderValues={(enumKeys) => {
+                        //     console.log("renderValues", enumKeys);
+                        //     if (enumKeys === null)
+                        //         return "Filter for null values";
+                        //
+                        //     return enumKeys.map(key => <EnumValuesChip
+                        //         key={`select_value_${name}_${enumKeys}`}
+                        //         enumKey={key}
+                        //         enumValues={enumValues}
+                        //         size={"small"}/>);
+                        // }}
+                    >
+                        {enumValues.map((enumConfig) => (
+                            <MultiSelectItem key={`select_value_${name}_${enumConfig.id}`}
+                                             value={String(enumConfig.id)}>
+                                <EnumValuesChip
+                                    enumKey={String(enumConfig.id)}
+                                    enumValues={enumValues}
+                                    size={"small"}/>
+                            </MultiSelectItem>
+                        ))}
+                    </MultiSelect>
                 }
 
                 {!isArray && <Label

@@ -181,17 +181,19 @@ export function UserDetailsForm({
                             </div>
                             <div className={"col-span-12"}>
                                 <MultiSelect
+                                    className={"w-full"}
                                     label="Roles"
                                     value={values.roles?.map(r => r.id) ?? []}
-                                    onMultiValueChange={(value: string[]) => setFieldValue("roles", value.map(id => roles.find(r => r.id === id) as Role))}
-                                    renderValue={(value: string) => {
-                                        const userRole = roles
-                                            .find((role) => role.id === value);
-                                        if (!userRole) return null;
-                                        return <div className="flex flex-wrap space-x-2 space-y-2">
-                                            <RoleChip key={userRole?.id} role={userRole}/>
-                                        </div>;
-                                    }}>
+                                    onValueChange={(value: string[]) => setFieldValue("roles", value.map(id => roles.find(r => r.id === id) as Role))}
+                                    // renderValue={(value: string) => {
+                                    //     const userRole = roles
+                                    //         .find((role) => role.id === value);
+                                    //     if (!userRole) return null;
+                                    //     return <div className="flex flex-wrap space-x-2 space-y-2">
+                                    //         <RoleChip key={userRole?.id} role={userRole}/>
+                                    //     </div>;
+                                    // }}
+                                >
                                     {roles.map(userRole => <MultiSelectItem key={userRole.id}
                                                                             value={userRole.id}>
                                         <RoleChip key={userRole?.id} role={userRole}/>

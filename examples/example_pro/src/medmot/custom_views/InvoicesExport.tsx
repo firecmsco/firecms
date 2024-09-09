@@ -5,7 +5,7 @@ import {
     Checkbox,
     CircularProgress,
     DateTimeField,
-    Label,
+    Label, MultiSelect, MultiSelectItem,
     Paper,
     RadioGroup, RadioGroupItem,
     Select,
@@ -95,7 +95,7 @@ export function InvoicesExport() {
             if (!company || !companyTokenBatches) return [];
             return await loadInvoicesForCompany(company, companyTokenBatches);
         })).then((subscriptionsWithUsers: SubscriptionWithUser[][]) => {
-            let res = subscriptionsWithUsers.flat();
+            const res = subscriptionsWithUsers.flat();
             setSubscriptions(res);
         }).finally(() => {
             setLoading(false);
@@ -122,7 +122,7 @@ export function InvoicesExport() {
     };
 
     const doDownload = () => {
-        let csv = getCSV(subscriptions, selectedSubscriptions, format, includeExcelStringFormat);
+        const csv = getCSV(subscriptions, selectedSubscriptions, format, includeExcelStringFormat);
         console.log({ csv });
         downloadBlob(csv, "invoices.csv", "text/csv;charset=utf-8");
     };
@@ -464,26 +464,26 @@ function CompaniesTokenBatchSelect({
 
     return (
         <>
-            <Select
+            <MultiSelect
                 multiple={true}
                 disabled={loading || companyTokenBatches.length === 0}
                 label="Company batch"
                 name="company_token_batch"
                 value={(selectedTokenBatches ?? []).map(tb => tb.id)}
-                onMultiValueChange={(value) => {
+                onValueChange={(value) => {
                     const tokenBatches = value.map((id) => companyTokenBatches.find((company) => company.id === id)).filter(Boolean) as CompanyTokenBatch[];
                     setSelectedTokenBatches(tokenBatches);
                 }}
             >
                 {companyTokenBatches && companyTokenBatches.map((c) => (
-                    <SelectItem
+                    <MultiSelectItem
                         key={`select-${c.id}`}
                         value={c.id}
                     >
                         {c.name}
-                    </SelectItem>
+                    </MultiSelectItem>
                 ))}
-            </Select>
+            </MultiSelect>
             <Button size={"small"} variant={"outlined"} disabled={loading || !selectedCompany} onClick={() => {
                 setSelectedTokenBatches(companyTokenBatches ?? []);
             }}>Select all batches</Button>
@@ -592,7 +592,7 @@ function entryToCSVRow(entry: any[]) {
         .map((v: string | undefined) => {
             if (v === null || v === undefined) return "";
             const isString = typeof v === "string";
-            let parsed: string = String(v);
+            const  parsed: string = String(v);
             return "\"" + parsed.replaceAll("\"", "\"\"") + "\"";
         })
         .join(";") + "\r\n";
@@ -746,7 +746,7 @@ const headCells = [
 ];
 
 function getCSV(data: SubscriptionWithUser[], selectedSubscriptions: number[], format: "140A" | "standard", includeExcelStringFormat: boolean) {
-    let selectedData = data.filter(invoiceWithUser => selectedSubscriptions.includes(parseInt(invoiceWithUser.subscription_id)));
+    const selectedData = data.filter(invoiceWithUser => selectedSubscriptions.includes(parseInt(invoiceWithUser.subscription_id)));
     const BOM = "\uFEFF";
     if (format === "140A") {
         const downloadData = selectedData.flatMap((invoiceWithUser) => create140AEntriesFrom(invoiceWithUser));
