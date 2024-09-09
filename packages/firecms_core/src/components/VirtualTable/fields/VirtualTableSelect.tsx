@@ -57,10 +57,10 @@ export function VirtualTableSelect(props: {
         }
     }, [multiple, updateValue, valueType]);
 
-    const renderValue = (enumKey: string | number, index: number) => {
+    const renderValue = (enumKey?: string | number) => {
         return <EnumValuesChip
-            key={`${enumKey}-${index}`}
-            enumKey={enumKey}
+            key={`${enumKey}`}
+            enumKey={String(enumKey)}
             enumValues={enumValues}
             size={small ? "small" : "medium"}/>;
     };

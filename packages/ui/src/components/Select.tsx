@@ -22,7 +22,7 @@ export type SelectProps = {
     onChange?: React.EventHandler<ChangeEvent<HTMLSelectElement>>,
     onValueChange?: (updatedValue: string) => void,
     placeholder?: React.ReactNode,
-    renderValue?: (value?: string) => React.ReactNode,
+    renderValue?: (value: string) => React.ReactNode,
     size?: "small" | "medium",
     label?: React.ReactNode | string,
     disabled?: boolean,
@@ -141,7 +141,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                             placeholder={placeholder}
                             className={"w-full"}>
                             {!hasValue && placeholder}
-                            {hasValue && renderValue ? renderValue(value) : placeholder}
+                            {hasValue && value && renderValue ? renderValue(value) : placeholder}
                             {hasValue && !renderValue && value}
                         </SelectPrimitive.Value>
                     </div>
