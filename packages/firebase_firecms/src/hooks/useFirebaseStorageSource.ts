@@ -1,6 +1,6 @@
 import { FirebaseApp } from "@firebase/app";
-import { getDownloadURL, getMetadata, getStorage, ref, uploadBytes } from "@firebase/storage";
-import { DownloadConfig, DownloadMetadata, StorageSource, UploadFileProps } from "@firecms/core";
+import { getDownloadURL, getMetadata, getStorage, list, ref, uploadBytes, deleteObject } from "@firebase/storage";
+import { DownloadConfig, DownloadMetadata, StorageListResult, StorageSource, UploadFileProps } from "@firecms/core";
 
 /**
  * @group Firebase
@@ -14,10 +14,19 @@ export interface FirebaseStorageSourceProps {
  * Use this hook to build an {@link StorageSource} based on Firebase storage
  * @group Firebase
  */
-export function useFirebaseStorageSource({ firebaseApp, bucketUrl }: FirebaseStorageSourceProps): StorageSource {
+export function useFirebaseStorageSource({
+                                             firebaseApp,
+                                             bucketUrl
+                                         }: FirebaseStorageSourceProps): StorageSource {
     const urlsCache: Record<string, DownloadConfig> = {};
     return {
-        uploadFile({ file, fileName, path, metadata, bucket }: UploadFileProps)
+        uploadFile({
+                       file,
+                       fileName,
+                       path,
+                       metadata,
+                       bucket
+                   }: UploadFileProps)
             : Promise<any> {
             if (!firebaseApp) throw Error("useFirebaseStorageSource Firebase not initialised");
             const storageBucketUrl = bucket ?? bucketUrl;
@@ -64,9 +73,37 @@ export function useFirebaseStorageSource({ firebaseApp, bucketUrl }: FirebaseSto
                 urlsCache[storagePathOrUrl] = result;
                 return result;
             } catch (e: any) {
-                if (e?.code === "storage/object-not-found") return { url: null, fileNotFound: true };
+                if (e?.code === "storage/object-not-found") return {
+                    url: null,
+                    fileNotFound: true
+                };
                 throw e;
             }
+        },
+
+        async list(path: string, options?: {
+            bucket?: string,
+            maxResults?: number,
+            pageToken?: string
+        }): Promise<StorageListResult> {
+            if (!firebaseApp) throw Error("useFirebaseStorageSource Firebase not initialised");
+            const storageBucketUrl = options?.bucket ?? bucketUrl;
+            const storage = getStorage(firebaseApp, storageBucketUrl);
+            if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
+            const folderRef = ref(storage, path);
+            return await list(folderRef, {
+                maxResults: options?.maxResults,
+                pageToken: options?.pageToken
+            });
+        },
+
+        async deleteFile(path: string, bucket?: string): Promise<void> {
+            if (!firebaseApp) throw Error("useFirebaseStorageSource Firebase not initialised");
+            const storageBucketUrl = bucket ?? bucketUrl;
+            const storage = getStorage(firebaseApp, storageBucketUrl);
+            if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
+            const fileRef = ref(storage, path);
+            return deleteObject(fileRef);
         }
     };
 }
