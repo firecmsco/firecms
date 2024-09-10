@@ -51,9 +51,9 @@ export function DefaultDrawer({
     const groupsWithoutAdmin = groups.filter(g => g !== "Admin");
 
     const buildGroupHeader = useCallback((group?: string) => {
-        if (!drawerOpen) return <div className="h-12 w-full"/>;
+        if (!drawerOpen) return <div className="w-full"/>;
         return <div
-            className="pt-8 pl-6 pr-8 pb-2 flex flex-row items-center">
+            className="pl-6 pr-8 py-4 flex flex-row items-center">
             <Typography variant={"caption"}
                         color={"secondary"}
                         className="font-medium flex-grow line-clamp-1">
@@ -78,10 +78,14 @@ export function DefaultDrawer({
 
                 <DrawerLogo logo={logo}/>
 
-                <div className={"flex-grow overflow-scroll no-scrollbar"}>
+                <div className={"mt-4 flex-grow overflow-scroll no-scrollbar"}
+                style={{
+                    maskImage: "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)",
+                }}>
 
                     {groupsWithoutAdmin.map((group) => (
-                        <React.Fragment
+                        <div
+                            className={"bg-gray-50 dark:bg-gray-800 dark:bg-opacity-30 my-4 rounded-lg ml-4"}
                             key={`drawer_group_${group}`}>
                             {buildGroupHeader(group)}
                             {Object.values(navigationEntries)
@@ -96,7 +100,7 @@ export function DefaultDrawer({
                                         onClick={() => onClick(view)}
                                         url={view.url}
                                         name={view.name}/>)}
-                        </React.Fragment>
+                        </div>
                     ))}
 
                 </div>

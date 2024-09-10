@@ -278,6 +278,10 @@ function ErrorDelegatingLoginView({
         <div>
             {errorBody}
         </div>
+        <div>
+            Some login errors may be caused by the user not being registered in the client project.
+            Make sure a user exists in the client project with the same email as the one trying to log in.
+        </div>
         <Button variant="outlined" onClick={onLogout}>Sign out</Button>
     </CenteredView>;
 }

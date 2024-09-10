@@ -152,7 +152,7 @@ export const TableReferenceFieldInternal = React.memo(
 
                 {valueNotSet &&
                     <EntityPreviewContainer
-                        className={cls("px-4 py-1 text-sm font-medium flex items-center uppercase",
+                        className={cls("px-4 py-2 text-sm font-medium flex items-center uppercase",
                             multiselect ? "gap-4" : "gap-6",
                             disabled
                                 ? "text-slate-500"

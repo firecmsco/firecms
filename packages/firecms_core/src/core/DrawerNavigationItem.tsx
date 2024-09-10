@@ -30,17 +30,17 @@ export function DrawerNavigationItem({
         <NavLink
             onClick={onClick}
             style={{
-                width: !drawerOpen ? "72px" : "280px",
+                width: "100%",
                 transition: drawerOpen ? "width 150ms ease-in" : undefined
             }}
-            className={({ isActive }: any) => cls("rounded-r-lg truncate",
+            className={({ isActive }: any) => cls("rounded-lg truncate",
                 "hover:bg-slate-300 hover:bg-opacity-75 dark:hover:bg-gray-700 dark:hover:bg-opacity-75 text-gray-800 dark:text-gray-200 hover:text-gray-900 hover:dark:text-white",
                 "flex flex-row items-center mr-8",
                 // "transition-all ease-in-out delay-100 duration-300",
                 // drawerOpen ? "w-full" : "w-18",
-                drawerOpen ? "pl-8 h-12" : "pl-6 h-11",
+                drawerOpen ? "pl-4 h-12" : "pl-4 h-11",
                 "font-medium text-sm",
-                isActive ? "bg-slate-200 bg-opacity-60 dark:bg-gray-800 dark:bg-opacity-30" : ""
+                isActive ? "bg-slate-200 bg-opacity-60 dark:bg-gray-800 dark:bg-opacity-50" : ""
             )}
             to={url}
         >
