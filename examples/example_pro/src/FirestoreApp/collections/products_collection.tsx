@@ -241,7 +241,10 @@ export const productsCollection = buildCollection<Product>({
             description: "Reference to self",
             of: {
                 dataType: "reference",
-                path: "products"
+                path: "products",
+                forceFilter: {
+                    "selectable": ["==", true]
+                },
             }
         },
         publisher: {

@@ -77,12 +77,12 @@ export function EntityPreview({
     return <EntityPreviewContainer onClick={disabled ? undefined : onClick}
                                    hover={disabled ? undefined : hover}
                                    size={size}>
-        <div className={cls("w-10 h-10 mr-2 shrink-0 grow-0", size === "smallest" ? "my-0.5" : "m-2 self-start")}>
+        <div className={cls("flex w-10 h-10 mr-2 shrink-0 grow-0", size === "smallest" ? "my-0.5" : "m-2 self-start")}>
             {imageProperty && <PropertyPreview property={imageProperty}
                                                propertyKey={imagePropertyKey as string}
                                                size={"smallest"}
                                                value={getValueInPath(entity.values, imagePropertyKey as string)}/>}
-            {!imageProperty && <IconForView collectionOrView={collection} size={size} className={"mr-2"}/>}
+            {!imageProperty && <IconForView collectionOrView={collection} size={size} className={"m-auto"}/>}
         </div>
 
 

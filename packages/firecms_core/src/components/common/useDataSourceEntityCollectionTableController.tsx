@@ -80,6 +80,18 @@ export function useDataSourceEntityCollectionTableController<M extends Record<st
     const [searchString, setSearchString] = React.useState<string | undefined>();
     const [itemCount, setItemCount] = React.useState<number | undefined>(paginationEnabled ? pageSize : undefined);
 
+    const checkFilterCombination = useCallback((filterValues: FilterValues<any>,
+                                                sortBy?: [string, "asc" | "desc"]) => {
+        if (!dataSource.isFilterCombinationValid)
+            return true;
+        return dataSource.isFilterCombinationValid({
+            path: resolvedPath,
+            collection,
+            filterValues,
+            sortBy
+        })
+    }, []);
+
     const initialSortInternal = useMemo(() => {
         if (initialSort && forceFilter && !checkFilterCombination(forceFilter, initialSort)) {
             console.warn("Initial sort is not compatible with the force filter. Ignoring initial sort");
@@ -107,18 +119,6 @@ export function useDataSourceEntityCollectionTableController<M extends Record<st
     const [dataLoading, setDataLoading] = useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = useState<Error | undefined>();
     const [noMoreToLoad, setNoMoreToLoad] = useState<boolean>(false);
-
-    const checkFilterCombination = useCallback((filterValues: FilterValues<any>,
-                                                sortBy?: [string, "asc" | "desc"]) => {
-        if (!dataSource.isFilterCombinationValid)
-            return true;
-        return dataSource.isFilterCombinationValid({
-            path: resolvedPath,
-            collection,
-            filterValues,
-            sortBy
-        })
-    }, []);
 
     const clearFilter = useCallback(() => setFilterValues(forceFilter ?? undefined), [forceFilter]);
 
