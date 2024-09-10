@@ -6,6 +6,7 @@ import {
     ArrowBackIcon,
     Button,
     CircularProgress,
+    cls,
     EmailIcon,
     IconButton,
     LoadingButton,
@@ -92,6 +93,8 @@ export interface FirebaseLoginViewProps {
 
     notAllowedError?: any;
 
+    className?: string;
+
 }
 
 /**
@@ -111,7 +114,8 @@ export function FirebaseLoginView({
                                       disableResetPassword = false,
                                       disabled = false,
                                       additionalComponent,
-                                      notAllowedError
+                                      notAllowedError,
+                                      className
                                   }: FirebaseLoginViewProps) {
 
     const modeState = useModeController();
@@ -231,7 +235,7 @@ export function FirebaseLoginView({
     return (
 
         <div
-            className="flex flex-col items-center justify-center min-h-screen min-w-full p-4">
+            className={cls("flex flex-col items-center justify-center min-w-full p-4", className)}>
             <div id="recaptcha"></div>
             <div
                 className="flex flex-col items-center w-full max-w-[500px]">
@@ -318,7 +322,7 @@ export function LoginButton({
     disabled?: boolean
 }) {
     return (
-        <div className="m-1 w-full">
+        <div className="my-1 w-full">
             <Button
                 className="w-full"
                 variant="outlined"

@@ -12,6 +12,8 @@ you have additionally an `AppBar` and a `Drawer` component.
 
 More information about the main components can be found in the [Main Components](/docs/pro/main_components) section.
 
+### Styling
+
 You also will need to import the default FireCMS styles in your project. You can do this by adding the following import to your `index.css` file:
 
 ```css
@@ -33,6 +35,16 @@ Your `index.css` file should look like this:
     --fcms-secondary: #FF5B79;
 }
 ```
+
+### Dependencies
+
+The default fonts are now imported in the clients project (so they can be replaced if needed).
+You need to add these imports:
+```
+    "typeface-rubik": "^1.1.13",
+    "@fontsource/jetbrains-mono": "^5.0.20",
+```
+
 
 
 ## FireCMS Cloud
