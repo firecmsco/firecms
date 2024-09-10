@@ -140,7 +140,6 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                             }}
                             placeholder={placeholder}
                             className={"w-full"}>
-                            {!hasValue && placeholder}
                             {hasValue && value && renderValue ? renderValue(value) : placeholder}
                             {hasValue && !renderValue && value}
                         </SelectPrimitive.Value>

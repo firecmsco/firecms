@@ -151,13 +151,14 @@ export const TableReferenceFieldInternal = React.memo(
                 {internalValue && multiselect && buildMultipleReferenceField()}
 
                 {valueNotSet &&
-                    <EntityPreviewContainer className={cls("p-4 text-sm font-medium flex items-center uppercase",
-                        multiselect ? "gap-4" : "gap-6",
-                        disabled
-                            ? "text-slate-500"
-                            : "cursor-pointer text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800 group-hover:bg-slate-50 dark:group-hover:bg-gray-800")}
-                                            onClick={handleOpen}
-                                            size={"medium"}>
+                    <EntityPreviewContainer
+                        className={cls("px-4 py-1 text-sm font-medium flex items-center uppercase",
+                            multiselect ? "gap-4" : "gap-6",
+                            disabled
+                                ? "text-slate-500"
+                                : "cursor-pointer text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800 group-hover:bg-slate-50 dark:group-hover:bg-gray-800")}
+                        onClick={handleOpen}
+                        size={"medium"}>
                         <IconForView
                             size={"small"}
                             collectionOrView={collection}
