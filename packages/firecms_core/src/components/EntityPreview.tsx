@@ -205,7 +205,7 @@ export const EntityPreviewContainer = React.forwardRef<HTMLDivElement, EntityPre
             fullwidth ? "w-full" : "",
             "items-center",
             hover ? "hover:bg-slate-50 dark:hover:bg-gray-800 group-hover:bg-slate-50 dark:group-hover:bg-gray-800" : "",
-            size === "smallest" ? "p-1" : "p-2",
+            size === "smallest" ? "p-1" : "px-2 py-1",
             "flex border rounded-lg",
             onClick ? "cursor-pointer" : "",
             defaultBorderMixin,

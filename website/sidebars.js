@@ -34,7 +34,7 @@ module.exports = {
                 "pro/deployment",
                 "pro/app_check",
                 "firebase_setup",
-                "pro/mongodb_integration",
+                "pro/mongodb",
                 "pro/user_management",
                 "pro/custom_storage",
                 "pro/nextjs",

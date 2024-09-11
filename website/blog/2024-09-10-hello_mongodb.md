@@ -7,13 +7,16 @@ author_url: https://www.linkedin.com/in/marianmoldovan/
 author_image_url: https://avatars.githubusercontent.com/u/1479084?v=4
 ---
 
+![Dark mode](../static/img/mongo_header.png)
+
+
 ## Say Hi to MongoDB!
 
 For FireCMS users, connecting to MongoDB just got a lot easier. While **FireCMS** has always offered the **flexibility** to integrate with various databases, we're thrilled to announce a dedicated package for seamless MongoDB integration.
 
-How easy? **npm** easy `npm install @firecms/mongodb`.
+How easy? **npm** easy `npm install @firecms/mongodb`, or **yarn** easy `yarn add @firecms/mongodb`.
 
-This is part of our efforts to bring all the power of FireCMS with the [Pro](https://firecms.co/pro) version. The most advanced and flexible version of FireCMS.
+This is part of our efforts to bring all the power of FireCMS with the [PRO](https://firecms.co/pro) version. The most advanced and flexible version of FireCMS.
 
 ### Why MongoDB?
 
@@ -71,6 +74,7 @@ const mongoDataSourceDelegate = useMongoDBDelegate({
 ``` 
 
 And that's it. The rest of the job it's identical to any other FireCMS project.
+Check the complete instruction in the [FireCMS MongoDB Documentation](https://firecms.co/docs/pro/mongodb).
 
 
 ### What are you going to build?
