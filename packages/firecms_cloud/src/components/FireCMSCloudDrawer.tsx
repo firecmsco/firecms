@@ -4,8 +4,8 @@ import {
     DrawerNavigationItem,
     IconForView,
     TopNavigationResult,
-    useAuthController,
     useApp,
+    useAuthController,
     useNavigationController
 } from "@firecms/core";
 import { AddIcon, Button, Tooltip, Typography, } from "@firecms/ui";
@@ -44,10 +44,10 @@ export function FireCMSCloudDrawer() {
     }: TopNavigationResult = navigation.topLevelNavigation;
 
     const buildGroupHeader = useCallback((group?: string) => {
-        if (!drawerOpen) return <div style={{ height: 16 }}/>;
+        if (!drawerOpen) return <div className="w-full"/>;
         const reservedGroup = group && RESERVED_GROUPS.includes(group);
         const canCreateCollections = collectionEditorController.configPermissions({ user }).createCollections && !reservedGroup;
-        return <div className="flex flex-row items-center pt-8 pl-8 pr-0 pb-2">
+        return <div className="pl-6 pr-4 pt-4 pb-2 flex flex-row items-center">
             <Typography variant={"caption"}
                         color={"secondary"}
                         className="flex-grow font-medium">
@@ -79,11 +79,15 @@ export function FireCMSCloudDrawer() {
 
         <>
             <DrawerLogo logo={logo}/>
-            <div className={"flex-grow overflow-scroll no-scrollbar"}>
+
+            <div className={"mt-4 flex-grow overflow-scroll no-scrollbar"}
+                 style={{
+                     maskImage: "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)",
+                 }}>
 
                 {groups.map((group) => (
-                    <React.Fragment
-                        key={`drawer_group_${group}`}>
+                    <div
+                        className={"bg-gray-50 dark:bg-gray-800 dark:bg-opacity-30 my-4 rounded-lg ml-4"}>
                         {buildGroupHeader(group)}
                         {Object.values(navigationEntries)
                             .filter(e => e.group === group)
@@ -95,7 +99,7 @@ export function FireCMSCloudDrawer() {
                                 drawerOpen={drawerOpen}
                                 url={view.url}
                                 name={view.name}/>)}
-                    </React.Fragment>
+                    </div>
                 ))}
 
             </div>
