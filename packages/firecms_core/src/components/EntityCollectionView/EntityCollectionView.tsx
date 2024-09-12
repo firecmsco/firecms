@@ -45,7 +45,7 @@ import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import {
     AddIcon,
     Button,
-    cls,
+    cls, focusedDisabled,
     IconButton,
     KeyboardTabIcon,
     Markdown,
@@ -785,6 +785,9 @@ function EntityIdHeaderWidget({
             <Popover
                 open={openPopup}
                 onOpenChange={setOpenPopup}
+                sideOffset={0}
+                align={"start"}
+                alignOffset={-117}
                 trigger={
                     <IconButton size={"small"}>
                         <SearchIcon size={"small"}/>
@@ -814,7 +817,7 @@ function EntityIdHeaderWidget({
                                 setSearchString(e.target.value);
                             }}
                             value={searchString}
-                            className={"flex-grow bg-transparent outline-none p-1"}/>
+                            className={"flex-grow bg-transparent outline-none p-1 " + focusedDisabled}/>
                         <Button variant={"outlined"}
                                 disabled={!(searchString.trim())}
                                 type={"submit"}

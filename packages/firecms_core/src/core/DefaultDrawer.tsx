@@ -161,9 +161,9 @@ export function DrawerLogo({ logo }: {
     return <div
         style={{
             transition: "padding 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
-            padding: drawerOpen ? "32px 144px 0px 24px" : "72px 16px 0px"
+            padding: drawerOpen ? "32px 144px 0px 24px" : "72px 12px 0px 12px"
         }}
-        className={cls("cursor-pointer")}>
+        className={cls("cursor-pointer ml-4")}>
 
         <Tooltip title={"Home"}
                  sideOffset={20}

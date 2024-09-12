@@ -3,7 +3,6 @@ import {
     CMSType,
     COLLECTION_PATH_SEPARATOR,
     makePropertiesEditable,
-    PermissionsBuilder,
     Properties,
     PropertiesOrBuilders,
     Property,
@@ -24,6 +23,8 @@ export function buildCollectionId(idOrPath: string, parentCollectionIds?: string
 export function setUndefinedToDelete(data: any): any {
     if (Array.isArray(data)) {
         return data.map(v => setUndefinedToDelete(v));
+    } else if (data == null) {
+        return null;
     } else if (typeof data === "object") {
         return Object.entries(data)
             .map(([key, value]) => ({ [key]: setUndefinedToDelete(value) }))
@@ -77,7 +78,10 @@ export function prepareCollectionForPersistence<M extends {
     [Key: string]: CMSType
 }>(collection: Partial<PersistedCollection<M>>, propertyConfigs: Record<string, PropertyConfig>) {
 
-    const { properties: inputProperties, ...rest } = collection;
+    const {
+        properties: inputProperties,
+        ...rest
+    } = collection;
     const cleanedProperties = inputProperties ? cleanPropertyConfigs(inputProperties, propertyConfigs) : undefined;
     const properties = cleanedProperties ? setUndefinedToDelete(removeFunctions(cleanedProperties)) : undefined;
     let newCollection: Partial<PersistedCollection> = {};

@@ -166,10 +166,9 @@ function DrawerWrapper(props: {
             <Tooltip title="Open menu"
                      side="right"
                      sideOffset={12}
-                     asChild={true}
-            >
+                     asChild={true}>
                 <div
-                    className="fixed top-2 left-3 !bg-gray-50 dark:!bg-gray-900 rounded-full w-fit z-20">
+                    className="ml-2 fixed top-2 left-3 !bg-gray-50 dark:!bg-gray-900 rounded-full w-fit z-20">
                     <IconButton
                         color="inherit"
                         aria-label="Open menu"
@@ -211,7 +210,7 @@ function DrawerWrapper(props: {
                 aria-label="Open drawer"
                 onClick={() => props.setDrawerOpen(true)}
                 size="large"
-                className="absolute top-2 left-6"
+                className="absolute top-2 left-5"
             >
                 <MenuIcon/>
             </IconButton>

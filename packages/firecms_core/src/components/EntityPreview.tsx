@@ -77,7 +77,7 @@ export function EntityPreview({
     return <EntityPreviewContainer onClick={disabled ? undefined : onClick}
                                    hover={disabled ? undefined : hover}
                                    size={size}>
-        <div className={cls("flex w-10 h-10 mr-2 shrink-0 grow-0", size === "smallest" ? "my-0.5" : "m-2 self-start")}>
+        <div className={cls("flex w-10 h-10 mr-2 shrink-0", size === "smallest" ? "my-0.5" : "m-2 self-start")}>
             {imageProperty && <PropertyPreview property={imageProperty}
                                                propertyKey={imagePropertyKey as string}
                                                size={"smallest"}
@@ -86,7 +86,7 @@ export function EntityPreview({
         </div>
 
 
-        <div className={"flex flex-col flex-grow w-full m-1"}>
+        <div className={"flex flex-col grow-1 w-full max-w-full m-1"}>
 
             {size !== "smallest" && includeId && (
                 entity

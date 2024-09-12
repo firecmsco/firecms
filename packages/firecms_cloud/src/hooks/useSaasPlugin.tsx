@@ -28,14 +28,18 @@ export function useSaasPlugin({
 
     const additionalChildrenStart = <>
         {introMode ? <IntroWidget introMode={introMode}/> : undefined}
+    </>;
+
+    const additionalChildrenEnd = <>
         {!introMode && <DataTalkSuggestions suggestions={dataTalkSuggestions}/>}
+        <RootCollectionSuggestions introMode={introMode}/>
     </>;
 
     return {
         key: "saas",
         homePage: {
             additionalChildrenStart,
-            additionalChildrenEnd: <RootCollectionSuggestions introMode={introMode}/>,
+            additionalChildrenEnd,
         },
         collectionView: {
 

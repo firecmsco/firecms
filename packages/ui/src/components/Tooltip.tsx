@@ -18,6 +18,7 @@ export type TooltipProps = {
     tooltipStyle?: React.CSSProperties;
     children: React.ReactNode,
     className?: string,
+    container?: HTMLElement,
     style?: React.CSSProperties;
 };
 
@@ -34,6 +35,7 @@ export const Tooltip = ({
                             tooltipStyle,
                             children,
                             asChild = false,
+                            container,
                             className,
                             style
                         }: TooltipProps) => {
@@ -57,7 +59,7 @@ export const Tooltip = ({
         <TooltipPrimitive.Provider delayDuration={delayDuration}>
             <TooltipPrimitive.Root open={open} onOpenChange={onOpenChange} defaultOpen={defaultOpen}>
                 {trigger}
-                <TooltipPrimitive.Portal>
+                <TooltipPrimitive.Portal container={container}>
                     <TooltipPrimitive.Content
                         className={cls("TooltipContent",
                             "max-w-lg leading-relaxed",

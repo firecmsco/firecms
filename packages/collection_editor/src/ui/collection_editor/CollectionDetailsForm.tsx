@@ -156,7 +156,7 @@ export function CollectionDetailsForm({
                             required
                             error={showErrors && Boolean(errors.name)}/>
                         <FieldCaption error={touched.name && Boolean(errors.name)}>
-                            {touched.name && Boolean(errors.name) ? errors.name : "Name of in this collection, usually a plural name (e.g. Products)"}
+                            {touched.name && Boolean(errors.name) ? errors.name : "Name of this collection, usually a plural name (e.g. Products)"}
                         </FieldCaption>
                     </div>
 

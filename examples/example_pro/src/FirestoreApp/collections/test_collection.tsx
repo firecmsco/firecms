@@ -3,7 +3,6 @@ import {
     buildProperty,
     EntityCallbacks,
     EntityOnFetchProps,
-    MapProperty,
     resolveNavigationFrom
 } from "@firecms/core";
 import { SecondaryForm } from "../custom_entity_view/SecondaryForm";
@@ -48,7 +47,6 @@ export const testCallbacks: EntityCallbacks = {
     }
 };
 
-
 export const testCollection = buildCollection<any>({
         callbacks: testCallbacks,
         id: "test_entity",
@@ -69,6 +67,11 @@ export const testCollection = buildCollection<any>({
         //     }
         // }],
         properties: {
+            date: {
+                name: "on create",
+                dataType: "date",
+                // autoValue: "on_create"
+            },
             locale: {
                 name: "Locales",
                 dataType: "string",

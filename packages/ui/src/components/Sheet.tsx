@@ -53,7 +53,7 @@ export const Sheet: React.FC<SheetProps> = ({
         <DialogPrimitive.Root open={displayed || open}
                               onOpenChange={onOpenChange}>
             <DialogPrimitive.Portal>
-                <DialogPrimitive.Title>
+                <DialogPrimitive.Title autoFocus tabIndex={0}>
                     {title ?? "Sheet"}
                 </DialogPrimitive.Title>
                 <DialogPrimitive.Overlay

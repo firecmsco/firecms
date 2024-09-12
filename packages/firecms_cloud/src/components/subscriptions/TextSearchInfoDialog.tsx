@@ -66,12 +66,12 @@ export function TextSearchInfoDialog({
 
             {!hasOwnTextSearchImplementation && <>
 
-                <div className={"flex flex-col gap-2 my-2"}>
+                <div className={"flex flex-col gap-2 mb-2"}>
                     <Alert color={"warning"}>
                         Local text search is not recommended for large collections.
                     </Alert>
 
-                    <Typography variant={"caption"}>
+                    <Typography variant={"caption"} className={"mt-4"}>
                         Note that enabling local text search will need to fetch all documents
                         from your collection and store them in the browser. This can be inefficient
                         for large collections. It can also incur in additional costs.

@@ -178,11 +178,6 @@ export const pagesCollectionTemplate: EntityCollection = {
             name: "Is Published",
             columnWidth: 100,
             description: "Should this page be live on the site?"
-        },
-        author_uid: {
-            dataType: "reference",
-            name: "Author",
-            path: "users"
         }
     }
 };
