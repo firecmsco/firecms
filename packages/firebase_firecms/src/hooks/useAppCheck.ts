@@ -69,6 +69,9 @@ export function useAppCheck({
             provider,
             isTokenAutoRefreshEnabled
         } = options;
+
+        removeCurrentAppCheckDiv();
+
         const appCheck = initializeAppCheck(firebaseApp, {
             provider,
             isTokenAutoRefreshEnabled
@@ -87,3 +90,12 @@ export function useAppCheck({
         error
     };
 }
+
+
+function removeCurrentAppCheckDiv() {
+    const div = document.getElementById("fire_app_check_[DEFAULT]");
+    if (div) {
+        div.remove();
+    }
+}
+

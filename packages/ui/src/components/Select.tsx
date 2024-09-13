@@ -5,7 +5,8 @@ import {
     fieldBackgroundDisabledMixin,
     fieldBackgroundHoverMixin,
     fieldBackgroundInvisibleMixin,
-    fieldBackgroundMixin
+    fieldBackgroundMixin,
+    focusedDisabled
 } from "../styles";
 import { CheckIcon, ExpandMoreIcon } from "../icons";
 import { cls } from "../util";
@@ -161,7 +162,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
             </div>
             <SelectPrimitive.Portal>
                 <SelectPrimitive.Content position={position}
-                                         className={cls("z-50 relative overflow-hidden border bg-white dark:bg-gray-900 p-2 rounded-lg", defaultBorderMixin)}>
+                                         className={cls(focusedDisabled, "z-50 relative overflow-hidden border bg-white dark:bg-gray-900 p-2 rounded-lg", defaultBorderMixin)}>
                     <SelectPrimitive.Viewport className={"p-1"}
                                               style={{ maxHeight: "var(--radix-select-content-available-height)" }}>
                         {children}
@@ -205,8 +206,7 @@ export function SelectItem({
             "[&>*]:w-full",
             "overflow-visible",
             className
-        )}
-    >
+        )}>
         <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
         <div
             className="absolute left-1 data-[state=checked]:block hidden">

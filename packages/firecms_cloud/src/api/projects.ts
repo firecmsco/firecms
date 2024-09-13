@@ -212,6 +212,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         doDelegatedLogin,
         getStripePortalLink,
 
+        host,
         getRemoteConfigUrl
     }
 }
