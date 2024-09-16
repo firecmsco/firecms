@@ -1,7 +1,7 @@
 {
     "name": "@firecms/core",
     "type": "module",
-    "version": "3.0.0-canary.126",
+    "version": "3.0.0-beta.9",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "funding": {
         "url": "https://github.com/sponsors/firecmsco"
@@ -46,9 +46,9 @@
         "./package.json": "./package.json"
     },
     "dependencies": {
-        "@firecms/editor": "^3.0.0-canary.126",
-        "@firecms/formex": "^3.0.0-canary.126",
-        "@firecms/ui": "^3.0.0-canary.126",
+        "@firecms/editor": "^3.0.0-beta.9",
+        "@firecms/formex": "^3.0.0-beta.9",
+        "@firecms/ui": "^3.0.0-beta.9",
         "@hello-pangea/dnd": "^16.6.0",
         "@radix-ui/react-portal": "^1.1.1",
         "clsx": "^2.1.1",
