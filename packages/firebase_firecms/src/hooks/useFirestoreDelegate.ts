@@ -1,5 +1,4 @@
 import {
-    DataSource,
     DataSourceDelegate,
     DeleteEntityProps,
     Entity,
