@@ -46,7 +46,6 @@ export function SearchIconsView({
     }, [query, updateSearchResults]);
 
     const icons = keys === null ? coolIconKeys : keys;
-    console.log("Icons", icons);
 
     return (
         <>

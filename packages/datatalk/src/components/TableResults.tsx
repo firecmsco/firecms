@@ -111,13 +111,9 @@ export function TableResults({
 
         const firestore = getFirestore();
         const firebaseValues = cmsToFirestoreModel(updatedValues, firestore);
-        console.log("Saving", firebaseValues, entity);
-        console.log("Firestore", firestore);
         const documentReference: DocumentReference = doc(firestore, entity.path);
-        console.log("Document reference", documentReference)
         return setDoc(documentReference, firebaseValues, { merge: true })
             .then((res) => {
-                console.log("Document updated", res);
                 onValueUpdated();
             })
             .catch((error) => {

@@ -299,7 +299,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             onUpdate({ entity: updatedEntity });
 
         if (closeAfterSave) {
-            console.log("Closing side dialog")
             sideDialogContext.setBlocked(false);
             sideDialogContext.close(true);
             onClose?.();

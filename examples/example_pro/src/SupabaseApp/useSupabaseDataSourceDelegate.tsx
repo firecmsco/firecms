@@ -86,7 +86,7 @@ export function useSupabaseDelegate({ supabase }: SupabaseDataSourceProps): Supa
         if (error) {
             throw error;
         }
-        return createEntityFromDocument(data, databaseId);
+        return createEntityFromDocument(data, path, databaseId);
     }, [supabase]);
 
     // const listenEntity = useCallback((
@@ -124,12 +124,11 @@ export function useSupabaseDelegate({ supabase }: SupabaseDataSourceProps): Supa
             data,
             error
         } = await query;
-        console.log("new data", { props }, data);
 
         if (error) {
             throw error;
         }
-        return data.map((doc: any) => createEntityFromDocument(doc));
+        return data.map((doc: any) => createEntityFromDocument(doc, path, props.collection?.databaseId));
     }, [buildQuery]);
 
     // const listenCollection = useCallback(<M extends Record<string, any>>(
@@ -317,11 +316,7 @@ export function useSupabaseDelegate({ supabase }: SupabaseDataSourceProps): Supa
         generateEntityId,
         countEntities,
         isFilterCombinationValid,
-        initTextSearch: async ({
-                                   path,
-                                   databaseId,
-                                   collection
-                               }): Promise<boolean> => {
+        initTextSearch: async (): Promise<boolean> => {
             return true;
         }
     };
@@ -329,11 +324,12 @@ export function useSupabaseDelegate({ supabase }: SupabaseDataSourceProps): Supa
 
 const createEntityFromDocument = <M extends Record<string, any>>(
     data: any,
+    path: string,
     databaseId?: string
 ): Entity<M> => {
     return {
         id: data.id,
-        path: data.path,
+        path: path,
         values: data,
         databaseId
     };

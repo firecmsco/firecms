@@ -12,7 +12,7 @@
     "logout": "firecms logout"
   },
   "dependencies": {
-    "@firecms/cloud": "^3.0.0-canary",
+    "@firecms/cloud": "^3.0.0-beta",
     "firebase": "^10.12.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

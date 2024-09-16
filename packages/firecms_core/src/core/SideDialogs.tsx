@@ -94,7 +94,6 @@ function SideDialogView({
     const handleDrawerCloseOk = () => {
         setBlocked(false);
         setDrawerCloseRequested(false);
-        console.log("handleDrawerCloseOk");
         sideDialogsController.close();
         panel?.onClose?.();
     };

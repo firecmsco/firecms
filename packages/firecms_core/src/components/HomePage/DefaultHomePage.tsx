@@ -82,7 +82,6 @@ export function DefaultHomePage({
                 setFilteredUrls(null);
             } else {
                 const searchResult = fuse.current?.search(value);
-                console.log("Search result", searchResult);
                 if (searchResult) {
                     setFilteredUrls(searchResult.map((e) => e.item.url));
                 }

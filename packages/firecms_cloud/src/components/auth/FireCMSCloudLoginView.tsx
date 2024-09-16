@@ -97,7 +97,6 @@ export function FireCMSCloudLoginView({
             <GoogleLoginButton
                 disabled={!termsAccepted && includeTermsAndNewsLetter}
                 onClick={() => {
-                    console.log("Google login");
                     fireCMSBackend.googleLogin(includeGoogleAdminScopes).then((user) => {
                         if (subscribeToNewsletter && user?.email) {
                             subscribeNewsletter(user.email);
@@ -139,6 +138,5 @@ const subscribeNewsletter = (email: string) => {
             source: "saas"
         })
     }).then((res) => {
-        console.log("newsletter response", res);
     });
 }

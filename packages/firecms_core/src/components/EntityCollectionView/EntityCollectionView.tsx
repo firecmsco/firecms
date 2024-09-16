@@ -207,7 +207,6 @@ export const EntityCollectionView = React.memo(
         }, [tableController.setPopupCell]);
 
         const onEntityClick = useCallback((clickedEntity: Entity<M>) => {
-            console.log("Entity clicked", clickedEntity)
             const collection = collectionRef.current;
             setHighlightedEntity(clickedEntity);
             analyticsController.onAnalyticsEvent?.("edit_entity_clicked", {

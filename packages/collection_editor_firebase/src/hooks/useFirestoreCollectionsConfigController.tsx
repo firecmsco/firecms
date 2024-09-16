@@ -216,7 +216,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
             if (newPropertiesOrder) {
                 data.propertiesOrder = newPropertiesOrder;
             }
-            console.log("Saving property", {
+            console.debug("Saving property", {
                 path,
                 propertyKey,
                 property,
@@ -254,7 +254,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
             if (newPropertiesOrder) {
                 data.propertiesOrder = newPropertiesOrder;
             }
-            console.log("Deleting property", {
+            console.debug("Deleting property", {
                 path,
                 propertyKey,
                 collectionPath,

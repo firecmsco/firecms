@@ -93,7 +93,6 @@ export function StringNumberFilterField({
 
     const multiple = multipleSelectOperations.includes(operation);
 
-    console.log("internalValue", { internalValue });
     return (
 
         <div className="flex w-[440px]">

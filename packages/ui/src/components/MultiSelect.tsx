@@ -94,7 +94,6 @@ export const MultiSelect = React.forwardRef<
     ) => {
         const [isPopoverOpen, setIsPopoverOpen] = React.useState(open ?? false);
         const [selectedValues, setSelectedValues] = React.useState<string[]>(value ?? []);
-        console.log("selectedValues", selectedValues);
 
         const onPopoverOpenChange = (open: boolean) => {
             setIsPopoverOpen(open);

@@ -195,7 +195,6 @@ export async function autocompleteStream(props: {
             }
 
         }).then(() => {
-            console.log("Autocomplete result", result);
             return result;
         });
 

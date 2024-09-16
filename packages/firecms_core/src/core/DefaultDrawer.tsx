@@ -93,7 +93,7 @@ export function DefaultDrawer({
                                 .map((view, index) =>
                                     <DrawerNavigationItem
                                         key={`navigation_${index}`}
-                                        icon={<IconForView collectionOrView={view.collection ?? view.view}/>}
+                                        icon={<IconForView collectionOrView={view.collection ?? view.view} size={"small"}/>}
                                         tooltipsOpen={tooltipsOpen}
                                         adminMenuOpen={adminMenuOpen}
                                         drawerOpen={drawerOpen}

@@ -140,7 +140,6 @@ export const AutocompleteExtension = Node.create<
 
                             // Find the suggestion decoration
                             const decoration = pluginState.find(cursorPos)?.[0];
-                            console.log(decoration);
                             // @ts-ignore
                             if (decoration && decoration.type?.spec?.suggestionText) {
                                 // @ts-ignore

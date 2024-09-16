@@ -120,14 +120,11 @@ export function FireCMSCloudApp({
         fromUrl: backendApiHost + "/config"
     });
 
-    console.log("backendFirebaseApp", backendFirebaseApp);
     const fireCMSBackend = useBuildFireCMSBackend({
         backendApiHost,
         backendFirebaseApp
     });
 
-
-    console.log("fireCMSBackend", fireCMSBackend);
     let component;
 
     if (backendConfigLoading || !backendFirebaseApp) {
@@ -800,7 +797,6 @@ function buildAdminRoutes(usersLimit: number | undefined,
             hideFromNavigation: true,
             view: <DataTalkRoutes
                 onAnalyticsEvent={(event, params) => {
-                    console.log("DataTalk event", event, params);
                     onAnalyticsEvent?.("datatalk:" + event, params);
                 }}
                 apiEndpoint={dataTalkEndpoint}

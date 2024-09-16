@@ -182,7 +182,7 @@ function FileDropComponent({
             onDropRejected: (fileRejections, event) => {
                 for (const fileRejection of fileRejections) {
                     for (const error of fileRejection.errors) {
-                        console.log("Error uploading file: ", error);
+                        console.error("Error uploading file: ", error);
                         if (error.code === "file-too-large") {
                             snackbarContext.open({
                                 type: "error",

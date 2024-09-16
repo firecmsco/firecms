@@ -38,7 +38,7 @@ export async function streamDataTalkCommand(firebaseAccessToken: string,
                 let result = "";
                 const processChunk = (chunk: ReadableStreamReadResult<Uint8Array>): void | Promise<void> => {
                     if (chunk.done) {
-                        console.log("Stream completed", { result });
+                        console.debug("Stream completed", { result });
                         resolve(result);
                         return;
                     }
@@ -62,11 +62,10 @@ export async function streamDataTalkCommand(firebaseAccessToken: string,
                         try {
                             const message = JSON.parse(part);
                             if (message.type === "delta") {
-                                console.log("Delta received:", message.data.delta);
                                 result += message.data.delta;
                                 onDelta(message.data.delta);
                             } else if (message.type === "result") {
-                                console.log("Result received:", message.data);
+                                console.debug("Result received:", message.data);
                                 resolve(message.data.text);
                             }
                         } catch (error) {
