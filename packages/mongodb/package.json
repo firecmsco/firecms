@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-canary.125",
+  "version": "3.0.0-canary.126",
   "type": "module",
   "name": "@firecms/mongodb",
   "access": "public",
@@ -8,9 +8,9 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "^3.0.0-canary.125",
-    "@firecms/firebase": "^3.0.0-canary.125",
-    "@firecms/ui": "^3.0.0-canary.125",
+    "@firecms/core": "^3.0.0-canary.126",
+    "@firecms/firebase": "^3.0.0-canary.126",
+    "@firecms/ui": "^3.0.0-canary.126",
     "firebase": "^10.12.4"
   },
   "exports": {
