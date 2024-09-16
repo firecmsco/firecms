@@ -4,7 +4,37 @@ title: Changelog
 ---
 ## [3.0.0-beta.9] - 2024-07-10
 
+- **NEW MARKDOWN EDITOR**: The markdown editor has been completely revamped. It now supports a live preview, and a much
+  improved editing experience. It now includes a slash menu you can access by typing `/` in the editor. Also a new
+  toolbar with buttons for common markdown operations. The new editor also includes an AI auto-complete feature, that
+  suggests markdown elements as you type, and displays the generated markdown in real time, and highlighted.
 - Additional fields are also now displayed in the entity side dialog.
+- Import/export is now broken into 2 separate plugins.
+- Packages now are not minified, leaving that responsibility to the client bundler.
+- Added max size field in the collection editor for files.
+- Improved error handling of wrong file uploads.
+- Improving error when opening a non accessible entity in the side view.
+- Select component tweaks and removed `multiple` prop.
+- New `MultiSelect` component with a much improved UX.
+- Introduced AppCheck directly in FireCMS Cloud.
+- Added MongoDB support for FireCMS PRO.
+- Multiple fixes in the user management plugin for PRO projects.
+- Updated react-router dependencies.
+- Improved customization, you can now define the styles for each typography entry, including font size, typography...
+- Improved home page search, now using fuse.js
+- Fix for missing index and wrong keys in array of maps with property builder.
+- Fix for drag handle position in editor.
+- Renamed `partOfBlock` to `minimalistView` in field props.
+- It is now possible to define preview properties at the collection level.
+- Updated references styling.
+- Tooltips have been revamped to use less divs.
+- Fix for data enhancement plugin position.
+- Fix for how you can override the data source for specific collections.
+- You can now also define a different database other than `(default)` in the data source.
+- User Management plugin now saves users with the email as key, instead of a random value.
+- Fix for side panels adjusting to the right size when window changes size.
+- Some drawer styling updates.
+- `RepeatFieldBinding` can now use unresolved array properties.
 
 ## [3.0.0-beta.8] - 2024-07-10
 
@@ -12,7 +42,7 @@ title: Changelog
 - You can now use `PropertyFieldBinding` components in your custom entity views, and they will be treated as regular
   fields.
 - For additional entity views, you can now preserve the bottom actions bar, with the prop `includeActions`.
-- For map properties, if they are not required, the value might me `undefined`, but if a child property has a value, 
+- For map properties, if they are not required, the value might me `undefined`, but if a child property has a value,
   validation will be triggered for all children.
 - Fix for data maps not getting traversed correctly with null value.
 - CLI pro template now supports creating web app config.
