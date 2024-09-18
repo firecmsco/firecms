@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from "fs";
 
 interface Product {
     id: string;
@@ -22,8 +22,8 @@ interface Product {
 }
 
 function extractProductIds(array: string[]): string[] {
-    if(!array) return [];
-    return array.map(item => item.split('/').pop());
+    if (!array) return [];
+    return array.map(item => item.split("/").pop() as string);
 }
 
 function escapeString(value: string): string {
@@ -31,19 +31,19 @@ function escapeString(value: string): string {
 }
 
 function formatArray(array: string[]): string {
-    return array.length > 0 ? `ARRAY[${array.map(item => `'${escapeString(item)}'`).join(', ')}]` : 'ARRAY[]::TEXT[]';
+    return array.length > 0 ? `ARRAY[${array.map(item => `'${escapeString(item)}'`).join(", ")}]` : "ARRAY[]::TEXT[]";
 }
 
 function formatValue(value: any): string {
     if (value === null || value === undefined) {
-        return 'NULL';
-    } else if (typeof value === 'boolean') {
-        return value ? 'TRUE' : 'FALSE';
-    } else if (typeof value === 'number') {
+        return "NULL";
+    } else if (typeof value === "boolean") {
+        return value ? "TRUE" : "FALSE";
+    } else if (typeof value === "number") {
         return value.toString();
     } else if (Array.isArray(value)) {
         return formatArray(value);
-    } else if (typeof value === 'string') {
+    } else if (typeof value === "string") {
         return `'${escapeString(value)}'`;
     } else {
         return `'${escapeString(value.toString())}'`;
@@ -75,21 +75,20 @@ function generateInsertStatements(products: Product[]): string {
             extractProductIds(product.related_products) // Extract only the IDs for related_products
         ];
 
-        const formattedValues = values.map(formatValue).join(', ');
+        const formattedValues = values.map(formatValue).join(", ");
         const insertStatement = `INSERT INTO products (id, public, category, available, min_known_price, name, added_on, main_image, uppercase_name, feed_excluded, price, brand, available_locales, amazon_link, liked_by_count, currency, description) VALUES (${formattedValues});`;
 
         insertStatements.push(insertStatement);
     });
 
-    return insertStatements.join('\n');
+    return insertStatements.join("\n");
 }
 
 // Replace 'your_products.json' with the actual path to your JSON file
-const productsData = JSON.parse(fs.readFileSync('./src/gen/Products.json', 'utf8'));
+const productsData = JSON.parse(fs.readFileSync("./src/gen/Products.json", "utf8"));
 const insertStatements = generateInsertStatements(productsData);
-const res =  "DELETE * FROM products;\n" + insertStatements;
+const res = "DELETE * FROM products;\n" + insertStatements;
 console.log(res);
 
-
 // save output to a file
-fs.writeFileSync('./src/gen/inserts.sql', res);
+fs.writeFileSync("./src/gen/inserts.sql", res);

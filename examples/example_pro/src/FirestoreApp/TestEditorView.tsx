@@ -65,8 +65,6 @@ const defaultEditorContent = `![](https://firebasestorage.googleapis.com/v0/b/fi
 # Introducing the FireCMS editor
 
 > The [FireCMS editor](https://firecms.co/) is a Notion-style WYSIWYG editor built with [Tiptap](https://tiptap.dev/).
->
-> It is currently under development, but stable enough to try out 
 
 ## Features
 
@@ -74,7 +72,7 @@ const defaultEditorContent = `![](https://firebasestorage.googleapis.com/v0/b/fi
 2. Bubble menu (try selecting some code)
 3. Image uploads (drag & drop / copy & paste)
 4. Bullet and numbered lists
-5. AI autocompletion (WIP)
+5. AI autocompletion
 6. JSON, HTML or Markdown output
 
 \`\`\`

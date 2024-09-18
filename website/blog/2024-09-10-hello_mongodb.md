@@ -40,10 +40,10 @@ While this announcement focuses on MongoDB, it's crucial to remember that FireCM
 We recommend you take a look ath the documentation regarding [FireCMS Controller](https://firecms.co/docs/pro/Controllers). We also dropped an example in our Github: [FireCMS MongoDB Example](https://github.com/firecmsco/firecms/blob/main/examples/example_pro/src/MongoDBApp/MongoDBApp.tsx).
 
 But here are the steps if you want to jump on it:
- - Install the package `npm install @firecms/mongodb`
+ - Install the package `yarn add @firecms/mongodb` or `npm install @firecms/mongodb`
  - Add the atlas config, example:
 ```typescript
-const atlasConfig: = {
+const atlasConfig = {
     "appId": "your_app_id",
     "appUrl": "your_app_url",
     "baseUrl": "your_base_url",
