@@ -119,11 +119,11 @@ export function useSupabaseDelegate({ supabase }: SupabaseDataSourceProps): Supa
             order,
             startAfter
         } = props;
-        const query = await buildQuery(path, filter, orderBy, order, startAfter, limit, false);
+
         const {
             data,
             error
-        } = await query;
+        } = await buildQuery(path, filter, orderBy, order, startAfter, limit, false);
 
         if (error) {
             throw error;
@@ -193,37 +193,59 @@ export function useSupabaseDelegate({ supabase }: SupabaseDataSourceProps): Supa
             status
         } = props;
         if (entityId) {
-            return Promise.resolve(supabase
-                .from(path)
-                .update(values)
-                .eq("id", entityId)
-                .then(() => {
-                    return {
-                        id: entityId,
-                        path,
-                        values: values as M
-                    } as Entity<M>
-                }));
+            return new Promise<Entity<M>>((resolve, reject) => {
+                supabase
+                    .from(path)
+                    .update(values)
+                    .eq("id", entityId)
+                    .then(({
+                               data,
+                               error
+                           }) => {
+                        if (error) {
+                            reject(error);
+                        }
+                        console.log("Supabase: Entity saved", data);
+                        return resolve({
+                            id: entityId,
+                            path,
+                            values: values as M
+                        } as Entity<M>)
+                    }, (error) => {
+                        console.error("Supabase: Error saving entity", error);
+                        reject(error);
+                    });
+            });
         } else {
             const newId = crypto.randomUUID();
-            return Promise.resolve(supabase
-                .from(path)
-                .insert({
-                    id: newId,
-                    ...values
-                })
-                .single()
-                .then(({ data }) => {
-                    if (!data) {
-                        throw new Error("No data returned");
-                    }
-                    return {
-                        // gen new uuid
+
+            return new Promise<Entity<M>>((resolve, reject) => {
+                supabase
+                    .from(path)
+                    .insert({
                         id: newId,
-                        path,
-                        values: values as M
-                    }
-                }));
+                        ...values
+                    })
+                    .single()
+                    .then(({ data, error }) => {
+                        if (error) {
+                            reject(error);
+                        }
+                        if (!data) {
+                            throw new Error("No data returned");
+                        }
+                        console.log("Supabase: Entity saved", data);
+                        return resolve({
+                            // gen new uuid
+                            id: newId,
+                            path,
+                            values: values as M
+                        })
+                    }, (error) => {
+                        console.error("Supabase: Error saving entity", error);
+                        reject(error);
+                    });
+            });
         }
     }, [supabase]);
 

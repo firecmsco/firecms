@@ -1,8 +1,20 @@
-import { buildCollection } from "@firecms/core";
+import { buildCollection, EnumValues } from "@firecms/core";
+
+export const locales: EnumValues = {
+    es: "Spanish",
+    de: "German",
+    en: "English",
+    it: "Italian",
+    fr: {
+        id: "fr",
+        label: "French",
+        disabled: true
+    }
+};
 
 export const productsCollection = buildCollection<any>({
     id: "products",
-    path: "Products",
+    path: "products",
     name: "Products",
     singularName: "Product",
     group: "E-commerce",
@@ -35,6 +47,15 @@ export const productsCollection = buildCollection<any>({
                 cameras: "Cameras",
                 clothing_man: "Clothing man",
                 clothing_woman: "Clothing woman",
+            }
+        },
+
+        available_locales: {
+            name: "Available locales",
+            dataType: "array",
+            of: {
+                dataType: "string",
+                enumValues: locales
             }
         },
         related_products: {

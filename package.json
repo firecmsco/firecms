@@ -41,7 +41,7 @@
     "deploy:prod": "lerna run build && cd saas && run-s deploy:prod && cd .. && run-s create-prod-release-tag",
     "create-prod-release-tag": "git tag -a \"release_$(date +'%Y%m%d-%H%M')\" -m \"Prod release on $(date +'%Y-%m-%d %H:%M')\"",
     "deploy:canary": "lerna run build && cd saas && run-s build && run-s deploy:canary",
-    "web": "cd websiqte && run-s dev",
+    "web": "cd website && run-s dev",
     "deploy:web": "cd website && run-s deploy",
     "build": "lerna run build",
     "build:stream": "lerna run build --stream --loglevel=info",

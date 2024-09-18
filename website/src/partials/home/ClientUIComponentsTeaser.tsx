@@ -5,6 +5,7 @@ import {
     BooleanSwitch,
     Button,
     Checkbox,
+    ChildFriendlyIcon,
     Chip,
     CreditCardIcon,
     DateTimeField,
@@ -15,6 +16,11 @@ import {
     FileUpload,
     IconButton,
     KeyboardTabIcon,
+    MultiSelect,
+    MultiSelectItem,
+    Person2Icon,
+    Person4Icon,
+    PersonIcon,
     SearchBar,
     Select,
     SelectItem,
@@ -28,6 +34,7 @@ import {
 } from "@firecms/ui";
 import { CTAButtonDarkMixin } from "../styles";
 
+// @ts-ignore
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 export default function ClientUIComponentsTeaser() {
@@ -37,6 +44,7 @@ export default function ClientUIComponentsTeaser() {
     const [checked, setChecked] = useState(true);
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
     const [selectedValue, setSelectedValue] = useState<string>();
+    const [multiSelectedValue, setMultiSelectedValue] = useState<string[]>();
 
     return (
         <div className="max-w-6xl mx-auto px-8 my-8">
@@ -66,6 +74,32 @@ export default function ClientUIComponentsTeaser() {
                         <FileUpload accept={{ "image/*": [] }} title="Click or drop your image" onFilesAdded={() => {
                             console.log("Files added");
                         }}/>
+                    </div>
+
+                    <div className="w-full relative p-2 flex flex-row gap-2 break-inside-avoid">
+                        <Select
+                            className={"w-full"}
+                            value={selectedValue}
+                            onValueChange={setSelectedValue}
+                            placeholder={<i>Select a Simpsons character</i>}
+                            renderValue={(value) => {
+                                if (value === "homer") {
+                                    return "Homer";
+                                } else if (value === "marge") {
+                                    return "Marge";
+                                } else if (value === "bart") {
+                                    return "Bart";
+                                } else if (value === "lisa") {
+                                    return "Lisa";
+                                }
+                                throw new Error("Invalid value");
+                            }}
+                        >
+                            <SelectItem value="homer">Homer</SelectItem>
+                            <SelectItem value="marge">Marge</SelectItem>
+                            <SelectItem value="bart">Bart</SelectItem>
+                            <SelectItem value="lisa">Lisa</SelectItem>
+                        </Select>
                     </div>
 
                     <div className="relative p-2 flex flex-col gap-2 break-inside-avoid">
@@ -98,53 +132,6 @@ export default function ClientUIComponentsTeaser() {
                         </Sheet>
                     </div>
 
-                    <div className="w-full relative p-2 flex flex-row gap-2 break-inside-avoid">
-                        <Select
-                            className={"w-full"}
-                            value={selectedValue}
-                            onValueChange={setSelectedValue}
-                            placeholder={<i>Select a character</i>}
-                            renderValue={(value) => {
-                                if (value === "homer") {
-                                    return "Homer";
-                                } else if (value === "marge") {
-                                    return "Marge";
-                                } else if (value === "bart") {
-                                    return "Bart";
-                                } else if (value === "lisa") {
-                                    return "Lisa";
-                                }
-                                throw new Error("Invalid value");
-                            }}
-                        >
-                            <SelectItem value="homer">Homer</SelectItem>
-                            <SelectItem value="marge">Marge</SelectItem>
-                            <SelectItem value="bart">Bart</SelectItem>
-                            <SelectItem value="lisa">Lisa</SelectItem>
-                        </Select>
-                    </div>
-
-                    <div className="relative  flex flex-row gap-2 break-inside-avoid items-center">
-                        <Checkbox checked={checked} onCheckedChange={() => setChecked(!checked)} size="medium"/>
-                        <BooleanSwitch size="small" value={checked} onValueChange={() => setChecked(!checked)}/>
-                    </div>
-
-                    <div className="relative p-2 flex flex-col gap-2 break-inside-avoid">
-                        <DateTimeField value={selectedDate}
-                                       onChange={setSelectedDate}
-                                       label="Select a date"
-                                       mode="date"/>
-                    </div>
-
-                    <div className="relative p-2 flex flex-col gap-2 break-inside-avoid">
-                        <Chip colorScheme={"yellowLight"}><FaceIcon size={"small"}/>John Peterson</Chip>
-                    </div>
-
-                    <div className="relative p-2 flex flex-col gap-2 break-inside-avoid">
-                        <Skeleton width={180} height={20}/>
-                        <Skeleton width={2000} height={16}/>
-                        <Skeleton width={120} height={16}/>
-                    </div>
 
                     <div className="relative p-2 flex flex-row gap-2 break-inside-avoid items-center">
                         <Tooltip title={"Small button"}>
@@ -172,6 +159,42 @@ export default function ClientUIComponentsTeaser() {
                                 <CreditCardIcon/>
                             </IconButton>
                         </Tooltip>
+                    </div>
+
+                    <div className="relative p-2 flex flex-col gap-2 break-inside-avoid">
+                        <DateTimeField value={selectedDate}
+                                       onChange={setSelectedDate}
+                                       label="Select a date"
+                                       mode="date"/>
+                    </div>
+
+                    <div className="relative  flex flex-row gap-2 break-inside-avoid items-center">
+                        <Checkbox checked={checked} onCheckedChange={() => setChecked(!checked)} size="medium"/>
+                        <BooleanSwitch size="small" value={checked} onValueChange={() => setChecked(!checked)}/>
+                    </div>
+
+                    <div className="w-full relative p-2 flex flex-row gap-2 break-inside-avoid ">
+                        <MultiSelect
+                            className={"w-full"}
+                            value={multiSelectedValue}
+                            onValueChange={setMultiSelectedValue}
+                            placeholder={<i>Multi select</i>}
+                        >
+                            <MultiSelectItem value="mother"><Person2Icon/>Mother</MultiSelectItem>
+                            <MultiSelectItem value="father"><PersonIcon/>Father</MultiSelectItem>
+                            <MultiSelectItem value="kid"><Person4Icon/>Kid</MultiSelectItem>
+                            <MultiSelectItem value="baby"><ChildFriendlyIcon/>Baby</MultiSelectItem>
+                        </MultiSelect>
+                    </div>
+
+                    <div className="relative p-2 flex flex-col gap-2 break-inside-avoid">
+                        <Skeleton width={180} height={20}/>
+                        <Skeleton width={2000} height={16}/>
+                        <Skeleton width={120} height={16}/>
+                    </div>
+
+                    <div className="relative p-2 flex flex-col gap-2 break-inside-avoid">
+                        <Chip colorScheme={"yellowLight"}><FaceIcon size={"small"}/>John Peterson</Chip>
                     </div>
 
                 </Masonry>
