@@ -61,7 +61,7 @@ export function SubcollectionsEditTab({
         setFieldValue,
     } = useFormex<EntityCollection>();
 
-    const subcollections = collection.subcollections ?? [];
+    const [subcollections, setSubcollections] = React.useState<EntityCollection[]>(collection.subcollections ?? []);
     const resolvedEntityViews = values.entityViews?.filter(e => typeof e === "string")
         .map(e => resolveEntityView(e, contextEntityViews))
         .filter(Boolean) as EntityCustomView[] ?? [];
@@ -218,8 +218,10 @@ export function SubcollectionsEditTab({
                                                   parentCollectionIds: [...(parentCollectionIds ?? []), collection.id]
                                               };
                                               console.debug("Deleting subcollection", props)
-                                              configController.deleteCollection(props);
-                                              setSubcollectionToDelete(undefined);
+                                              configController.deleteCollection(props).then(() => {
+                                                  setSubcollectionToDelete(undefined);
+                                                  setSubcollections(subcollections?.filter(e => e.id !== subcollectionToDelete))
+                                              });
                                           }}
                                           onCancel={() => setSubcollectionToDelete(undefined)}
                                           title={<>Delete this subcollection?</>}
@@ -247,7 +249,10 @@ export function SubcollectionsEditTab({
                 isNewCollection={false}
                 {...currentDialog}
                 getUser={getUser}
-                handleClose={() => {
+                handleClose={(updatedCollection) => {
+                    if (updatedCollection && !subcollections.map(e => e.id).includes(updatedCollection.id)) {
+                        setSubcollections([...subcollections, updatedCollection]);
+                    }
                     setCurrentDialog(undefined);
                 }}/>
 

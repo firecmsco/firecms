@@ -8,9 +8,17 @@ export async function getDocuments(
     limitCount = 100
 ): Promise<DocumentSnapshot[]> {
 
+    console.debug("Getting documents", {
+        collectionPath,
+        isCollectionGroup,
+        parentPathSegments,
+        limitCount
+    });
+
     if (parentPathSegments && (parentPathSegments ?? [])?.length > 0) {
         const [thisSubPath, ...restSubpaths] = parentPathSegments;
         const childDocs = await getDocs(query(collection(firestore, thisSubPath), limit(5)));
+        console.debug("Got child documents", thisSubPath, childDocs.docs);
         return Promise.all(childDocs.docs
             .map((doc) => getDocuments(
                 firestore,

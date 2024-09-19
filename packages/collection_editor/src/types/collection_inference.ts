@@ -1,3 +1,3 @@
 import { EntityCollection } from "@firecms/core";
 
-export type CollectionInference = (path: string, collectionGroup: boolean, parentCollectionIds: string[]) => Promise<Partial<EntityCollection> | null>;
+export type CollectionInference = (path: string, collectionGroup: boolean, parentCollectionPaths: string[]) => Promise<Partial<EntityCollection> | null>;

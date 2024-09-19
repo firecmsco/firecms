@@ -360,10 +360,8 @@ export function FireCMSClientWithController({
     });
 
     const permissions: PermissionsBuilder<PersistedCollection, FireCMSCloudUserWithRoles> = useCallback(({
-                                                                                                             pathSegments,
                                                                                                              collection,
                                                                                                              user,
-                                                                                                             entity
                                                                                                          }) => {
         return resolveUserRolePermissions<FireCMSCloudUserWithRoles>({
             collection,
