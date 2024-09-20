@@ -49,6 +49,7 @@ export type Subscription = {
     interval: string;
     interval_count: number;
     product: Product;
+    stripeLink: string;
     status: "active" | "canceled" | "incomplete" | "incomplete_expired" | "past_due" | "trialing" | "unpaid";
     metadata: {
         projectId: string;

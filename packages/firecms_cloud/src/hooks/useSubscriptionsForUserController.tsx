@@ -24,7 +24,6 @@ export const CHECKOUT_SESSION_COLLECTION = "checkout_sessions";
  * @group Firebase
  */
 export interface SubscriptionsForUserControllerProps {
-    firebaseApp?: FirebaseApp;
 }
 
 export interface SubscriptionsController {
@@ -42,10 +41,9 @@ export interface SubscriptionsController {
     productsLoadingError?: Error;
 }
 
-export function useSubscriptionsForUserController({
-                                                      firebaseApp
-                                                  }: SubscriptionsForUserControllerProps): SubscriptionsController {
+export function useSubscriptionsForUserController(): SubscriptionsController {
 
+    const { backendFirebaseApp: firebaseApp } = useFireCMSBackend();
     const { backendUid: userId } = useFireCMSBackend();
 
     const firestoreRef = useRef<Firestore>();

@@ -3,7 +3,7 @@ import { doc, getFirestore, onSnapshot, setDoc } from "@firebase/firestore";
 import { ReCaptchaEnterpriseProvider, ReCaptchaV3Provider } from "@firebase/app-check";
 
 import { FirebaseApp } from "@firebase/app";
-import { ProjectSubscriptionPlan } from "../types";
+import { ProjectSubscriptionData, ProjectSubscriptionPlan } from "../types";
 import { UploadFileProps } from "@firecms/core";
 import { FirebaseStorage, getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "@firebase/storage";
 import { darkenColor, hexToRgbaWithOpacity } from "../utils";
@@ -30,6 +30,8 @@ export type ProjectConfig = {
     serviceAccountMissing?: boolean;
 
     subscriptionPlan?: ProjectSubscriptionPlan;
+    subscriptionData?: ProjectSubscriptionData;
+    subscriptionStatus?: Object;
     customizationRevision?: string;
     usersLimit?: number;
 
@@ -75,6 +77,8 @@ export function useBuildProjectConfig({
 
     const [clientProjectName, setClientProjectName] = useState<string | undefined>();
     const [subscriptionPlan, setSubscriptionPlan] = useState<ProjectSubscriptionPlan>();
+    const [subscriptionData, setSubscriptionData] = useState<ProjectSubscriptionData | undefined>();
+
     const [clientConfigLoading, setClientConfigLoading] = useState<boolean>(false);
     const [clientFirebaseConfig, setClientFirebaseConfig] = useState<Record<string, unknown> | undefined>();
     const [clientFirebaseMissing, setClientFirebaseMissing] = useState<boolean | undefined>();
@@ -179,6 +183,7 @@ export function useBuildProjectConfig({
                     setClientProjectName(snapshot.get("name"));
                     const plan = snapshot.get("subscription_plan") ?? "free";
                     setSubscriptionPlan(plan); // TODO: remove default value
+                    setSubscriptionData(snapshot.get("subscription_data"));
                     setLocalTextSearchEnabled(snapshot.get("local_text_search_enabled") ?? false);
                     if (plan === "free") {
                         setPrimaryColor(DEFAULT_PRIMARY_COLOR);
@@ -276,6 +281,7 @@ export function useBuildProjectConfig({
 
         projectName: clientProjectName,
         subscriptionPlan: loadedProjectIdRef.current !== projectId ? undefined : subscriptionPlan,
+        subscriptionData: loadedProjectIdRef.current !== projectId ? undefined : subscriptionData,
         customizationRevision: loadedProjectIdRef.current !== projectId ? undefined : customizationRevision,
         configLoading: loadedProjectIdRef.current !== projectId || clientConfigLoading,
         configError: loadedProjectIdRef.current !== projectId ? undefined : clientConfigError,

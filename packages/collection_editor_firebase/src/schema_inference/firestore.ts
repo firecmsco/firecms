@@ -5,27 +5,20 @@ export async function getDocuments(
     collectionPath: string,
     isCollectionGroup: boolean = false,
     parentPathSegments?: string[],
-    limitCount = 100
+    limitCount = 200
 ): Promise<DocumentSnapshot[]> {
-
-    console.debug("Getting documents", {
-        collectionPath,
-        isCollectionGroup,
-        parentPathSegments,
-        limitCount
-    });
 
     if (parentPathSegments && (parentPathSegments ?? [])?.length > 0) {
         const [thisSubPath, ...restSubpaths] = parentPathSegments;
-        const childDocs = await getDocs(query(collection(firestore, thisSubPath), limit(5)));
-        console.debug("Got child documents", thisSubPath, childDocs.docs);
+        const childLimit = 5;
+        const childDocs = await getDocs(query(collection(firestore, thisSubPath), limit(limitCount)));
         return Promise.all(childDocs.docs
             .map((doc) => getDocuments(
                 firestore,
                 doc.ref.path + "/" + collectionPath,
                 isCollectionGroup,
                 restSubpaths,
-                Math.max(Math.ceil(limitCount / 5), 5)
+                Math.max(Math.ceil(limitCount / 5), childLimit)
             )))
             .then((res) => res.flat());
     }

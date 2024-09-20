@@ -13,7 +13,6 @@ export function ProjectSubscriptionPlans({ uid }: {
     uid: string
 }) {
 
-    const { backendFirebaseApp } = useFireCMSBackend();
     const {
         subscriptionPlan,
         projectId
@@ -27,9 +26,7 @@ export function ProjectSubscriptionPlans({ uid }: {
         products,
         subscribe,
         getSubscriptionsForProject
-    } = useSubscriptionsForUserController({
-        firebaseApp: backendFirebaseApp,
-    });
+    } = useSubscriptionsForUserController();
 
     const projectSubscriptions = getSubscriptionsForProject(projectId);
 

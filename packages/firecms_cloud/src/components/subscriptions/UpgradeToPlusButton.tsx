@@ -12,7 +12,6 @@ export function UpgradeToPlusButton({
     includePriceLabel: boolean,
     largePriceLabel: boolean
 }) {
-    const { backendFirebaseApp } = useFireCMSBackend();
     const {
         subscriptionPlan,
         projectId
@@ -23,9 +22,7 @@ export function UpgradeToPlusButton({
         products,
         subscribe,
         getSubscriptionsForProject
-    } = useSubscriptionsForUserController({
-        firebaseApp: backendFirebaseApp,
-    });
+    } = useSubscriptionsForUserController();
 
     const plusProduct = products?.find(p => p.metadata?.type === "cloud_plus");
 

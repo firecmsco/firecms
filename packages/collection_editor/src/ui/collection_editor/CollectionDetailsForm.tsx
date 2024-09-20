@@ -153,6 +153,7 @@ export function CollectionDetailsForm({
                             value={values.name ?? ""}
                             onChange={(e: any) => updateName(e.target.value)}
                             label={"Name"}
+                            autoFocus={true}
                             required
                             error={showErrors && Boolean(errors.name)}/>
                         <FieldCaption error={touched.name && Boolean(errors.name)}>
