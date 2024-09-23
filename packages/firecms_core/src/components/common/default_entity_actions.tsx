@@ -1,6 +1,7 @@
 import { ArchiveIcon, DeleteIcon, FileCopyIcon, KeyboardTabIcon, OpenInNewIcon } from "@firecms/ui";
 import { EntityAction } from "../../types";
 import { DeleteEntityDialog } from "../DeleteEntityDialog";
+import { addRecentId } from "../EntityCollectionView/utils";
 
 export const editEntityAction: EntityAction = {
     icon: <KeyboardTabIcon/>,
@@ -19,6 +20,9 @@ export const editEntityAction: EntityAction = {
             path: entity.path,
             entityId: entity.id
         });
+        if (collection) {
+            addRecentId(collection.id, entity.id);
+        }
         const path = collection?.collectionGroup ? entity.path : (fullPath ?? entity.path);
         context.sideEntityController.open({
             entityId: entity.id,

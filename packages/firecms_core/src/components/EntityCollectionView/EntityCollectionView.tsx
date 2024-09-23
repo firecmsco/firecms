@@ -7,7 +7,9 @@ import {
     CollectionSize,
     Entity,
     EntityAction,
-    EntityCollection, EntityTableController,
+    EntityCollection,
+    EntityReference,
+    EntityTableController,
     FilterValues,
     PartialEntityCollection,
     PropertyOrBuilder,
@@ -45,7 +47,8 @@ import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import {
     AddIcon,
     Button,
-    cls, focusedDisabled,
+    cls,
+    focusedDisabled,
     IconButton,
     KeyboardTabIcon,
     Markdown,
@@ -71,6 +74,7 @@ import { DeleteEntityDialog } from "../DeleteEntityDialog";
 import { useAnalyticsController } from "../../hooks/useAnalyticsController";
 import { useSelectionController } from "./useSelectionController";
 import { EntityCollectionViewStartActions } from "./EntityCollectionViewStartActions";
+import { addRecentId, getRecentIds } from "./utils";
 
 const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
 
@@ -467,11 +471,11 @@ export const EntityCollectionView = React.memo(
         };
 
         const tableRowActionsBuilder = useCallback(({
-                                            entity,
-                                            size,
-                                            width,
-                                            frozen
-                                        }: {
+                                                        entity,
+                                                        size,
+                                                        width,
+                                                        frozen
+                                                    }: {
             entity: Entity<any>,
             size: CollectionSize,
             width: number,
@@ -778,7 +782,10 @@ function EntityIdHeaderWidget({
 }) {
     const [openPopup, setOpenPopup] = React.useState(false);
     const [searchString, setSearchString] = React.useState("");
+    const [recentIds, setRecentIds] = React.useState<string[]>(getRecentIds(collection.id));
     const sideEntityController = useSideEntityController();
+
+
     return (
         <Tooltip title={!openPopup ? "Find by ID" : undefined} asChild={false}>
             <Popover
@@ -791,38 +798,58 @@ function EntityIdHeaderWidget({
                     <IconButton size={"small"}>
                         <SearchIcon size={"small"}/>
                     </IconButton>
-                }
-            >
-                <form noValidate={true}
-                      onSubmit={(e) => {
-                          e.preventDefault();
-                          if (!searchString) return;
-                          setOpenPopup(false);
-                          return sideEntityController.open({
-                              entityId: searchString.trim(),
-                              path,
-                              collection,
-                              updateUrl: true,
-                          });
-                      }}
-                      className={"text-gray-900 dark:text-white w-96 max-w-full"}>
+                }>
+                <div className={cls("my-2 rounded-lg bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white")}>
+                    <form noValidate={true}
+                          onSubmit={(e) => {
+                              e.preventDefault();
+                              if (!searchString) return;
+                              setOpenPopup(false);
+                              setRecentIds(addRecentId(collection.id, searchString.trim()));
+                              return sideEntityController.open({
+                                  entityId: searchString.trim(),
+                                  path,
+                                  collection,
+                                  updateUrl: true
+                              });
+                          }}
+                          className={"w-96 max-w-full"}>
 
-                    <div className="flex p-2 w-full gap-4">
-                        <input
-                            autoFocus={openPopup}
-                            placeholder={"Find entity by ID"}
-                            // size={"small"}
-                            onChange={(e) => {
-                                setSearchString(e.target.value);
-                            }}
-                            value={searchString}
-                            className={"flex-grow bg-transparent outline-none p-1 " + focusedDisabled}/>
-                        <Button variant={"outlined"}
-                                disabled={!(searchString.trim())}
-                                type={"submit"}
-                        >Go</Button>
-                    </div>
-                </form>
+                        <div className="flex p-2 w-full gap-2">
+                            <input
+                                autoFocus={openPopup}
+                                placeholder={"Find entity by ID"}
+                                // size={"small"}
+                                onChange={(e) => {
+                                    setSearchString(e.target.value);
+                                }}
+                                value={searchString}
+                                className={"rounded-lg bg-white dark:bg-gray-800 flex-grow bg-transparent outline-none p-2 " + focusedDisabled}/>
+                            <Button variant={"text"}
+                                    disabled={!(searchString.trim())}
+                                    type={"submit"}
+                            ><KeyboardTabIcon/></Button>
+                        </div>
+                    </form>
+                    {recentIds && recentIds.length > 0 && <div className="flex flex-col gap-2 p-2">
+                        {recentIds.map(id => (
+                            <ReferencePreview reference={new EntityReference(id, path)}
+                                              key={id}
+                                              hover={true}
+                                              onClick={() => {
+                                                  setOpenPopup(false);
+                                                  sideEntityController.open({
+                                                      entityId: id,
+                                                      path,
+                                                      collection,
+                                                      updateUrl: true
+                                                  });
+                                              }}
+                                              includeEntityLink={false}
+                                              size={"small"}/>
+                        ))}
+                    </div>}
+                </div>
             </Popover>
 
         </Tooltip>

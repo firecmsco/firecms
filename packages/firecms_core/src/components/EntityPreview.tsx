@@ -22,7 +22,7 @@ export type EntityPreviewProps = {
     collection?: EntityCollection,
     hover?: boolean;
     previewProperties?: string[],
-    disabled: undefined | boolean,
+    disabled?: boolean,
     entity: Entity<any>,
     includeId?: boolean,
     includeEntityLink?: boolean,
