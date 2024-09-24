@@ -19,7 +19,7 @@ export const pagesCollectionTemplate: EntityCollection = {
             validation: {
                 required: true,
                 unique: true,
-                matches: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+                matches: "^[a-z0-9]+(?:-[a-z0-9]+)*$",
                 matchesMessage: "Must be lowercase, alphanumeric, and hyphenated"
             }
         },
