@@ -34,7 +34,7 @@ export function getSubscriptionPlanName(subscriptionPlan: ProjectSubscriptionPla
             return "Free";
         case "cloud_plus":
             return "Plus";
-        case "cloud_pro":
+        case "pro":
             return "Pro";
     }
 }

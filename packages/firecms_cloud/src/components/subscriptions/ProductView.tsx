@@ -32,7 +32,7 @@ export function ProductView({
         }
     }, [productPrices]);
 
-    if (product.metadata.type !== "cloud_pro" && product.metadata.type !== "cloud_plus") {
+    if (product.metadata.type !== "pro" && product.metadata.type !== "cloud_plus") {
         throw new Error("Error: Unmapped product type in ProductView");
     }
 

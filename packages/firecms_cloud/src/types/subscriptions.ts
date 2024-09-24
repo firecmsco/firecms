@@ -40,7 +40,7 @@ export type ProductPrice = {
 
 }
 
-export type SubscriptionType = "openai" | "cloud_plus" | "cloud_pro";
+export type SubscriptionType = "openai" | "cloud_plus" | "pro";
 
 export type Subscription = {
     id: string;

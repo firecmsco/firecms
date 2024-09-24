@@ -32,7 +32,7 @@ export function ProjectSubscriptionPlans({ uid }: {
 
     const loading = projectSubscriptions === undefined || products === undefined;
 
-    const cloudProducts = (products ?? []).filter(p => p.metadata?.type === "cloud_plus" || p.metadata?.type === "cloud_pro");
+    const cloudProducts = (products ?? []).filter(p => p.metadata?.type === "cloud_plus" || p.metadata?.type === "pro");
 
     const plusProduct = cloudProducts.find(p => p.metadata?.type === "cloud_plus");
     const plusSubscription = projectSubscriptions.find(s => s.product.metadata?.type === "cloud_plus");

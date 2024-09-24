@@ -1,4 +1,4 @@
-export type ProjectSubscriptionPlan = "free" | "cloud_plus" | "cloud_pro";
+export type ProjectSubscriptionPlan = "free" | "cloud_plus" | "pro";
 
 export type ProjectSubscriptionData = {
     subscription_plan: ProjectSubscriptionPlan,
