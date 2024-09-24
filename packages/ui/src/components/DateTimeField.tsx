@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import DatePicker from "react-datepicker";
+import * as RDP from "react-datepicker"
 
 import { CalendarMonthIcon, ClearIcon, ErrorIcon } from "../icons";
 import { IconButton } from "./IconButton";
@@ -9,7 +9,12 @@ import { Typography } from "./Typography";
 import { cls } from "../util";
 import { useInjectStyles } from "../hooks";
 
-interface DateTimeFieldProps {
+// this fixes the issue with the default export, affecting Next.js
+const DatePicker = (((RDP.default as any).default as any) ||
+    (RDP.default as any) ||
+    (RDP as any)) as typeof RDP.default
+
+export type DateTimeFieldProps = {
     value?: Date | null;
     onChange?: (date: Date | null) => void;
 
