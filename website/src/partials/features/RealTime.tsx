@@ -20,7 +20,7 @@ function RealTime() {
             <div className={"flex items-center mb-3 "}>
 
                 <div
-                    className="flex items-center justify-center text-white w-10 h-10 gradient-bg rounded-full shadow flex-shrink-0 mr-3">
+                    className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-3">
                     <LightingIcon height={12} width={12}/>
                 </div>
 
@@ -30,7 +30,7 @@ function RealTime() {
 
             </div>
 
-            <p>FireCMS uses Firestore as a backend, which is a <strong>real-time
+            <p>FireCMS uses Firestore as a data source, which is a <strong>real-time
                 database</strong>. This means
                 that any change in the database is reflected in the CMS in real
                 time.

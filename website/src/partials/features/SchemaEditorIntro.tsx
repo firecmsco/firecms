@@ -35,9 +35,9 @@ export const SchemaEditorIntro = () => {
                                 editor that allows you to create your own
                                 content models and collections.
                             </p>
-                            <p>If you have an <strong>existing Firebase
-                                project</strong>, let FireCMS Cloud
-                                set-up the collections for you based on your
+                            <p>If you have an <strong>existing
+                                project</strong>, let FireCMS
+                                set-up the collections for you, based on your
                                 data <strong>automatically</strong>.</p>
                             <p>FireCMS is great both for existing projects, since it
                                 will adapt

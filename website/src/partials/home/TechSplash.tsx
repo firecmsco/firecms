@@ -15,7 +15,7 @@ export function TechSplash() {
                 Tailwind CSS
             </h2>
             <h2 className="h1 my-1 text-white uppercase font-mono">
-                Firebase
+                Firebase/MongoDB
             </h2>
             <h2 className="h1 my-1 text-white uppercase font-mono">
                 ️ Open-source

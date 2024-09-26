@@ -36,7 +36,7 @@ import {
     EntityOnDeleteProps,
     EntityOnSaveProps,
     toSnakeCase
-} from "@firecms/cloud";
+} from "@firecms/core";
 
 type Product = {
     name: string;

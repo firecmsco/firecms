@@ -5,28 +5,15 @@ import clsx from "clsx";
 import { CTAButtonDarkMixin, CTAButtonMixin, CTACaret } from "../styles";
 
 export function HeroPro({
-                            color,
                             height = "300px",
                         }: {
-    color: "primary" | "secondary" | "dark",
     height?: number | string,
 }) {
 
-    let bgColor: string;
-    if (color === "primary") {
-        bgColor = "bg-blue-600";
-    } else if (color === "secondary") {
-        bgColor = "bg-rose-500";
-    } else if (color === "dark") {
-        bgColor = "bg-gray-900";
-    } else {
-        bgColor = "bg-transparent";
-    }
-
     return (
-        <div className={"w-full relative -mt-20 " + bgColor}>
+        <div className={"w-full relative -mt-20 bg-gray-900"}>
 
-            <PagesHeroBackground color={color}/>
+            <PagesHeroBackground/>
 
             <div>
                 <Panel includeMargin={false}
@@ -106,7 +93,8 @@ export function HeroPro({
                            style={{
                                lineHeight: 1.35,
                            }}>
-                            The perfect solution for your team or public facing applications, built on top of Firebase.
+                            The perfect solution for your team or public facing applications, built on top of Firebase,
+                            MongoDB or any other backend.
                         </p>
                     </div>
                     <div className={"mt-8 flex flex-row flex-wrap gap-4"}>

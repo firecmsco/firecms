@@ -55,7 +55,7 @@ export const testCollection = buildCollection<any>({
         name: "Test entities",
         entityViews: [{
             key: "sec",
-            name: "Sec",
+            name: "Secondary form",
             includeActions: true,
             Builder: SecondaryForm
         }],

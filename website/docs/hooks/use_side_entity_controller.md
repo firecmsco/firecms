@@ -18,12 +18,6 @@ view.
 Using this controller you can open a form in a side dialog, also if the path and
 entity schema are not included in the main navigation defined in `FireCMS`.
 
-:::tip
-If you want to override the entity schema of some entity or path, at the app
-level, you can pass a `SchemaOverrideHandler` to your `FireCMS` instance to set
-an override.
-:::
-
 The props provided by this hook are:
 
 * `close()` Close the last panel
@@ -33,15 +27,14 @@ The props provided by this hook are:
   view is fetched from the collections you have specified in the navigation. At
   least you need to pass the path of the entity you would like to
   edit. You can set an entityId if you would like to edit and existing one
-  (or a new one with that id). If you wish, you can also override
-  the `SchemaConfig` (such as schema or subcollections) and choose to
-  override the `FireCMS` level `SchemaOverrideHandler`.
+  (or a new one with that id).
 
 Example:
 
 ```tsx
 import React from "react";
-import { useSideEntityController } from "@firecms/cloud";
+import { useSideEntityController } from "@firecms/core";
+import { Button } from "@firecms/ui";
 
 export function ExampleCMSView() {
 
@@ -49,7 +42,7 @@ export function ExampleCMSView() {
 
     // You don't need to provide a schema if the collection path is mapped in
     // the main navigation
-    const customproductCollection = buildCollection({
+    const customProductCollection = buildCollection({
         name: "Product",
         properties: {
             name: {
@@ -65,7 +58,7 @@ export function ExampleCMSView() {
             onClick={() => sideEntityController.open({
                 entityId: "B003WT1622",
                 path: "/products",
-                collection: customproductCollection
+                collection: customProductCollection // optional
             })}
             color="primary">
             Open entity with custom schema
@@ -74,48 +67,3 @@ export function ExampleCMSView() {
 }
 ```
 
-
-### Schema override handler
-
-You may want to override the schema definition for particular entities in. In
-that case you can define a schema resolver in the FireCMS level.
-
-In order to do that, you can specify a `SchemaOverrideHandler` that is in charge of
-resolving the `path` and `entityId` and returning a `SchemaConfig`, where you
-can specify a custom `schema` (including callbacks and custom views),
-`permissions` and `subcollections`
-
-```tsx
-import { buildCollection, SchemaOverrideHandler } from "@firecms/cloud";
-
-const customSchemaOverrideHandler: SchemaOverrideHandler = ({
-                                                  entityId,
-                                                  path
-                                              }: {
-    entityId?: string;
-    path: string;
-}) => {
-
-    if (entityId === "B0017TNJWY" && path === "products") {
-        const customproductCollection = buildCollection({
-            name: "Custom product",
-            properties: {
-                name: {
-                    name: "Name",
-                    description: "This entity is using a schema overridden by a schema resolver",
-                    validation: { required: true },
-                    dataType: "string"
-                }
-            }
-        });
-
-        return {
-            collection: customproductCollection,
-            // permissions: ...,
-            // subcollections: ...,
-        };
-    }
-};
-```
-
-Then you can pass your `SchemaOverrideHandler` to your `FireCMSApp` or `FireCMS`

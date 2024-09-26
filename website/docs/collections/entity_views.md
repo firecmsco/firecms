@@ -2,8 +2,10 @@
 id: entity_views
 title: Entity views
 sidebar_label: Entity views
-description: FireCMS introduces Entity Views, a feature providing unparalleled flexibility for your custom content management needs. Whether you're creating previews, web page visualizations, dashboards, form alterations, or any distinctive view, FireCMS's Entity Custom Views cater to your unique requirements. Simply define your custom React component and integrate it within your entity collection schema as an 'EntityCustomView'. For broader applications, register the view in the entity view registry through `FireCMSAppConfig` to make it accessible across different collections. These custom entity views are fundamental elements, offering a granule layer of customization and enhancing your CMS's extensibility for diverse implementations.
+description: FireCMS allows you to add custom view per entity. Whether you're creating previews, web page visualizations, dashboards, form alterations, or any distinctive view, FireCMS's Entity Custom Views cater to your unique requirements. Simply define your custom React component and integrate it within your entity collection schema as an 'EntityCustomView'. For broader applications, register the view in the entity view registry through `FireCMSAppConfig` to make it accessible across different collections. These custom entity views are fundamental elements, offering a granule layer of customization and enhancing your CMS's extensibility for diverse implementations.
 ---
+
+![Custom entity view](/img/entity_view.png)
 
 FireCMS offers default form and table fields for common use cases and also allows
 overriding fields if you need a custom implementation, but that might be not
@@ -28,7 +30,7 @@ to your schema. Like in this example:
 
 ```tsx
 import React from "react";
-import { EntityCustomView, buildCollection } from "@firecms/cloud";
+import { EntityCustomView, buildCollection } from "@firecms/core";
 
 const sampleView: EntityCustomView = {
     key: "preview",
@@ -46,19 +48,86 @@ const sampleView: EntityCustomView = {
 };
 ```
 
+### Building a secondary form
+
+![Custom entity view](/img/entity_view_secondary_form.png)
+
+In your custom views, you can also add fields that are mapped directly to the entity.
+This is useful if you want to add a secondary form to your entity view.
+
+You can add any field, by using the `PropertyFieldBinding` component. This component
+will bind the value to the entity, and it will be saved when the entity is saved.
+
+In this example we creating a secondary form with a map field, including name and age:
+
+```tsx
+import { EntityCustomViewParams, PropertyFieldBinding } from "@firecms/core";
+import { Container } from "@firecms/ui";
+
+export function SecondaryForm({
+                                  formContext
+                              }: EntityCustomViewParams) {
+
+    return (
+        <Container className={"my-16"}>
+            <PropertyFieldBinding context={formContext}
+                                  propertyKey={"myTestMap"}
+                                  property={{
+                                      dataType: "map",
+                                      name: "My test map",
+                                      properties: {
+                                          name: {
+                                              name: "Name",
+                                              dataType: "string",
+                                              validation: { required: true }
+                                          },
+                                          age: {
+                                              name: "Age",
+                                              dataType: "number",
+                                          }
+                                      }
+                                  }}/>
+        </Container>
+    );
+}
+```
+
+Then just add your custom view to the collection:
+
+```tsx
+export const testCollection = buildCollection<any>({
+    id: "users",
+    path: "users",
+    name: "Users",
+    properties: {
+        // ... your blog properties here
+    },
+    entityViews: [{
+        key: "user_details",
+        name: "Details",
+        includeActions: true, // this prop allows you to include the default actions in the bottom bar
+        Builder: SecondaryForm
+    }]
+});
+```
+
+Note that you can use the `includeActions` prop to include the default actions in the bottom bar, of the view,
+so the user doesn't need to go back to the main form view to perform actions like saving or deleting the entity.
+
+
 ### Add your entity view directly to the collection
 
 If you are editing a collection in code you can add your custom view
 directly to the collection:
 
 ```tsx
-import { buildCollection } from "@firecms/cloud";
+import { buildCollection } from "@firecms/core";
 
 const blogCollection = buildCollection({
     id: "blog",
     path: "blog",
     name: "Blog",
-    views: [
+    entityViews: [
         {
             path: "preview",
             name: "Blog entry preview",
@@ -141,17 +210,16 @@ It is also possible to use the `entityView` prop in the collection
 with the key of the entity view you want to use:
 
 ```tsx
-import { buildCollection } from "@firecms/cloud";
+import { buildCollection } from "@firecms/core";
 
 const blogCollection = buildCollection({
     id: "blog",
     path: "blog",
     name: "Blog",
-    views: ["test-view"],
+    entityViews: ["test-view"],
     properties: {
         // ... your blog properties here
     }
 });
-
 ```
 

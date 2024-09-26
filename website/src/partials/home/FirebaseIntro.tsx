@@ -18,9 +18,9 @@ function FirebaseIntro() {
                includePadding={false}
                includeMargin={false}>
 
-            <LinedSpace size={"large"}/>
+            <LinedSpace size={"larger"}/>
 
-            <div className={clsx("relative flex justify-center mb-12 border-b border-0", defaultBorderMixin)}
+            <div className={clsx("relative flex justify-center mb-8 border-b border-0", defaultBorderMixin)}
                  data-aos="fade-up">
                 <div
                     className="flex flex-row gap-8 md:gap-12 justify-center items-center p-4">
@@ -48,8 +48,7 @@ function FirebaseIntro() {
             </div>
 
             <div
-                data-aos="fade-up"
-                className="max-w-5xl mx-auto text-center mb-12 px-8 py-8 md:px-8 md:py-12">
+                className="max-w-5xl mx-auto text-center mb-12 px-8 py-8 md:px-8">
                 <h2 className="h1 mb-4 gradient-text uppercase m-auto">
                     Much more than a CMS
                 </h2>
@@ -57,7 +56,7 @@ function FirebaseIntro() {
                     <b>FireCMS</b> is an open source headless admin panel built by <b>developers
                     for developers</b>.
                     <br/>
-                    Get a back-office app/dashboard for your Firebase project in
+                    Get a back-office app/dashboard for your Firebase or MongoDB project in
                     <b> no time</b>.
                 </p>
             </div>

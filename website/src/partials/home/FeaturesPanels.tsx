@@ -34,7 +34,7 @@ function FeaturesPanels() {
                             defaultBorderMixin)}>
                         <div className={"max-w-6xl mx-auto flex items-center pl-8"}>
                             <div
-                                className="flex items-center justify-center text-white w-10 h-10 gradient-bg rounded-full shadow flex-shrink-0 mr-4">
+                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-4">
                                 {lightningIcon}
                             </div>
 

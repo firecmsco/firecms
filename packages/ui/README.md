@@ -9,7 +9,7 @@
 </p>
 
 <h1 align="center">FireCMS</h1>
-<h3 align="center">Awesome Firebase/Firestore-based headless CMS</h3>
+<h3 align="center">Awesome Firebase/MongoDB-based headless CMS</h3>
 <p align="center"><a href="https://demo.firecms.co">Live demo</a></p>
 
 <br />

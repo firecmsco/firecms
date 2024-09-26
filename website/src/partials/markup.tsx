@@ -52,7 +52,7 @@ export const softwareApplicationSchema = {
     "image": "https://firecms.co/img/firecms_logo.svg",
     "logo": "https://firecms.co/img/firecms_logo.svg",
     "applicationCategory": "WebApplication",
-    "description": "FireCMS is a powerful content management system, based on Firebase, React and tailwind",
+    "description": "FireCMS is a powerful content management system, based on Firebase/MongoDB, React and tailwind",
     "softwareVersion": "3.0",
     "aggregateRating": {
         "@type": "AggregateRating",
@@ -66,6 +66,6 @@ export const softwareApplicationSchema = {
 export const product = {
     "@type": "Product",
     "name": "FireCMS",
-    "description": "FireCMS is a powerful content management system, based on Firebase, React and tailwind",
+    "description": "FireCMS is a powerful content management system, based on Firebase/MongoDB, React and tailwind",
     offers: offers
 };

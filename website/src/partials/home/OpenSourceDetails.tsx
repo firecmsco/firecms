@@ -12,13 +12,15 @@ function OpenSourceDetails() {
                 className="max-w-4xl mx-auto text-center pb-8">
                 <h2 className="h2 mb-4 font-mono mx-auto uppercase"
                     data-aos="zoom-y-out">
-                    All the power of <span style={{ color: "#FF9100" }}>Firebase</span> and open source
+                    All the power of <span style={{ color: "#FF9100" }}>Firebase</span>/<span
+                    style={{ color: "#00684A" }}>MongoDB</span><br/>
+                    and open source
                 </h2>
                 <p className="text-xl md:text-2xl"
                    data-aos="zoom-y-out">
                     Extend the functionality of your admin panel and
                     your complete project with all the capabilities of
-                    Firebase and Google Cloud.
+                    Firebase and Google Cloud, or MongoDB Atlas.
                 </p>
                 <HeroButtons/>
             </div>

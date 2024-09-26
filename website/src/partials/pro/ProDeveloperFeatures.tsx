@@ -5,6 +5,7 @@ import pricePreview from "@site/static/img/price.png";
 
 // @ts-ignore
 import SyntaxHighlighter from "react-syntax-highlighter";
+// @ts-ignore
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
@@ -40,7 +41,7 @@ export function ProDeveloperFeatures() {
                     <div className={"flex items-center mb-4 mt-16"}>
 
                         {/*<div*/}
-                        {/*    className="flex items-center justify-center text-white w-10 h-10 gradient-bg rounded-full shadow flex-shrink-0 mr-3">*/}
+                        {/*    className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-3">*/}
                         {/*    <LightingIcon height={12} width={12}/>*/}
                         {/*</div>*/}
 

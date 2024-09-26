@@ -24,7 +24,6 @@ function FeaturesPage() {
 
                 <main className="flex-grow">
                     <Hero
-                        color={"secondary"}
                         title={
                             <>
                                 <span

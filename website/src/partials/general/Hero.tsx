@@ -6,35 +6,22 @@ export function Hero({
                          title,
                          subtitle,
                          cta,
-                         color,
                          height = "100px",
                          subtitleColor = "lighter",
                      }: {
     title: React.ReactNode,
     subtitle?: React.ReactNode,
     cta?: React.ReactNode,
-    color: "primary" | "secondary" | "dark" | "transparent",
     height?: number | string,
     subtitleColor?: "gray" | "dark_gray" | "light_gray" | "white" | "primary" | "secondary" | "light" | "lighter" | "transparent",
 }) {
-    let bgColor: string;
-    if (color === "primary") {
-        bgColor = "bg-blue-600";
-    } else if (color === "secondary") {
-        bgColor = "bg-rose-500";
-    } else if (color === "dark") {
-        bgColor = "bg-gray-900";
-    } else {
-        bgColor = "bg-transparent";
-    }
 
-    const textColor = color === "transparent" ? undefined : "text-white";
 
     return (
         <>
-            <div className={"w-full relative -mt-20 " + bgColor}>
+            <div className={"w-full relative -mt-20 bg-gray-950"}>
 
-                <PagesHeroBackground color={color}/>
+                <PagesHeroBackground/>
 
                 <Panel includeMargin={false}
                        includePadding={false}
@@ -44,7 +31,7 @@ export function Hero({
                     <div className={"h-20"}/>
                     <div style={{ height }}/>
                     <div
-                        className={"mt-10 " + textColor}>
+                        className={"mt-10 text-white"}>
                         <div className="lg:text-left">
                             <h1 className="tracking-tight font-extrabold text-6xl uppercase">
                                 {title}

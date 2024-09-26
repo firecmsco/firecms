@@ -38,7 +38,6 @@ import {
     performAlgoliaTextSearch,
     FirestoreTextSearchController,
     buildCollection,
-    buildCollection,
     FireCMSCloudApp,
     EntityCollectionsBuilder
 } from "@firecms/cloud";

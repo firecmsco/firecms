@@ -142,11 +142,11 @@ module.exports = {
             },
             items: [
                 {
-                    label: "Features",
+                    label: "Why FireCMS",
                     to: "features",
                     items: [
                         {
-                            label: "Features",
+                            label: "Why FireCMS",
                             to: "/features"
                         },
                         {
@@ -255,10 +255,10 @@ module.exports = {
                     // Label of the section of these links
                     title: "Links",
                     items: [
-                        {
-                            to: "https://app.firecms.co/subscriptions",
-                            label: "Manage subscriptions"
-                        },
+                        // {
+                        //     to: "https://app.firecms.co/subscriptions",
+                        //     label: "Manage subscriptions"
+                        // },
                         {
                             label: "Demo",
                             to: "https://demo.firecms.co"

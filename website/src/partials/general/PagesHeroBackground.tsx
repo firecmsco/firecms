@@ -1,18 +1,18 @@
 import React, { Suspense } from "react";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 
-const LazyHeroNeatGradient = React.lazy(() => import("../../shape/HeroNeatGradient"));
+const LazyHomeHeroNeatGradient = React.lazy(() => import("../../shape/HomeHeroNeatGradient"));
 
-export function PagesHeroBackground({ color }: {
-    color: "primary" | "secondary" | "dark" | "transparent",
-}) {
+// const LazyHomeHeroNeatGradient = React.lazy(() => import("../../shape/HeroNeatGradient"));
+
+export function PagesHeroBackground() {
 
     return <>
         <BrowserOnly
             fallback={<div className={"absolute"}/>}>
             {() => (
                 <Suspense fallback={<div/>}>
-                    <LazyHeroNeatGradient color={color}/>
+                    <LazyHomeHeroNeatGradient/>
                 </Suspense>
             )}
         </BrowserOnly>

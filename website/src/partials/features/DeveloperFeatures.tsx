@@ -7,6 +7,7 @@ import { useColorMode } from "@docusaurus/theme-common";
 
 // @ts-ignore
 import SyntaxHighlighter from "react-syntax-highlighter";
+// @ts-ignore
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { arrowIcon } from "../icons";
 
@@ -74,7 +75,7 @@ export function DeveloperFeatures() {
                             className={"flex items-center mb-3"}>
 
                             <div
-                                className="flex items-center justify-center text-white w-10 h-10 gradient-bg rounded-full shadow flex-shrink-0 ">
+                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 ">
                                 {arrowIcon}
                             </div>
                             <h3 className="h3 m-0 ml-3 ">
@@ -95,16 +96,6 @@ export function DeveloperFeatures() {
                             collections, markdown or file uploads
                         </p>
 
-                        <p className="text-xl ">
-                            FireCMS provides a powerful schema
-                            definition API that allows you to
-                            customise your forms and views.
-                        </p>
-                        <p className="text-xl ">
-                            You can also use the schema definition
-                            API to create custom views and
-                            components.
-                        </p>
                     </>}/>
             </Panel>
 
@@ -117,7 +108,7 @@ export function DeveloperFeatures() {
                             <div className={"flex items-center mb-3"}>
 
                                 <div
-                                    className="flex items-center justify-center text-white w-10 h-10 gradient-bg rounded-full shadow flex-shrink-0 mr-3">
+                                    className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-3">
                                     <TickIcon/>
                                 </div>
 
@@ -128,8 +119,7 @@ export function DeveloperFeatures() {
                             </div>
                             <p className="text-xl md:text-2xl ">
                                 FireCMS is a headless CMS built to work
-                                with every existing Firebase/Firestore
-                                project. It does not
+                                with every existing project. It does not
                                 enforce any data structure.
                             </p>
                             <p className="text-xl md:text-2xl ">

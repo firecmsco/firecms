@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
-import { ContainerPaddingMixin, easeInOut } from "./styles";
+import { easeInOut } from "./styles";
 
 // @ts-ignore
 import inlineEditing from "@site/static/img/inline_table_editing.mp4";
@@ -41,24 +41,25 @@ export function UsageExamples() {
 
     const offsetHeight = ref.current?.offsetHeight ?? 0;
     const currentTop = ref.current?.getBoundingClientRect().top ?? 0;
-    const parallaxOffset = easeInOut(Math.max(0, Math.min(1, (300 + currentTop) / offsetHeight))) * 2 - 1;
+    const parallaxOffset = easeInOut(Math.max(0, Math.min(1, (400 + currentTop / 2) / offsetHeight))) * 2 - 1;
+    console.log(parallaxOffset);
 
     return <div ref={ref}
-                className={clsx("overflow-hidden flex flex-col items-center justify-center mt-16 bg-gradient-to-b from-white to-slate-50")}>
+                className={clsx("flex flex-col items-center justify-center mt-16 bg-gradient-to-b from-white to-slate-50")}>
 
         <LinedSpace position={"bottom"} size={"large"}/>
 
         <div className={"relative max-w-full w-[84rem] mx-auto"}
-             style={{ height: 800 }}>
+             style={{ height: 900 }}>
 
             {/* MM CMS */}
             <BrowserFrame
                 style={{
-                    left: -50 * parallaxOffset,
-                    top: 50 * parallaxOffset,
+                    left: -50 - 50 * parallaxOffset,
+                    top: 120 - 20 * parallaxOffset,
                 }}
                 className={
-                    "absolute z-10 w-96 md:w-[540px] bg-gray-900"
+                    "absolute z-20 w-[360px] md:w-[540px] bg-gray-900 max-w-[80vw]"
                 }>
                 <video
                     style={{
@@ -73,7 +74,7 @@ export function UsageExamples() {
                 </video>
             </BrowserFrame>
 
-            {/* EDITOR */}
+            {/* Overlay */}
             <BrowserFrame
                 style={{
                     right: -30 + 20 * parallaxOffset,
@@ -91,8 +92,8 @@ export function UsageExamples() {
             {/* MM APP */}
             <div className="absolute z-20"
                  style={{
-                     left: 500,
-                     top: 140 + 40 * parallaxOffset,
+                     right: 500,
+                     top: 180 + 40 * parallaxOffset,
                  }}>
                 <PhoneFrame>
                     <img loading="lazy"
@@ -109,11 +110,11 @@ export function UsageExamples() {
             <BrowserFrame
                 mode={"light"}
                 style={{
-                    top: 700 + 150 * (parallaxOffset),
+                    top: 750 + 150 * (parallaxOffset),
                     left: 100
                 }}
                 className={
-                    "absolute  z-30 w-96 md:w-[720px] bg-gray-100"
+                    "absolute z-30 w-96 md:w-[720px] bg-gray-100"
                 }>
 
                 <img loading="lazy" src={editorWhite}
@@ -138,6 +139,7 @@ export function UsageExamples() {
             {/* TPA APP */}
             <div className="absolute top-64 z-30"
                  style={{
+                     top: 400,
                      right: 100 - 100 * parallaxOffset,
                  }}>
                 <PhoneFrame>

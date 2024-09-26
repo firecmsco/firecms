@@ -2,12 +2,13 @@ import { EntityCustomViewParams, PropertyFieldBinding } from "@firecms/core";
 import { Container } from "@firecms/ui";
 
 export function SecondaryForm({
-                                  formContext,
+                                  formContext
                               }: EntityCustomViewParams) {
 
     return (
         <Container className={"my-16"}>
             <PropertyFieldBinding context={formContext}
+                                  propertyKey={"myTestMap"}
                                   property={{
                                       dataType: "map",
                                       name: "My test map",
@@ -20,11 +21,9 @@ export function SecondaryForm({
                                           age: {
                                               name: "Age",
                                               dataType: "number",
-                                              validation: { required: true }
                                           }
                                       }
-                                  }}
-                                  propertyKey={"myTestMap"}/>
+                                  }}/>
         </Container>
     );
 }

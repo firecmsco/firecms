@@ -18,7 +18,7 @@ export function PublicFacingApps() {
                     Public Facing Applications
                 </h2>
                 <p className="text-xl md:text-2xl">
-                    If you are building a CRUD public facing application based on Firebase, FireCMS PRO is the perfect
+                    If you are building a CRUD public facing application based on Firebase or MongoDB, FireCMS PRO is the perfect
                     solution for you. Define exactly what each user can do and customize the experience for each role.
                 </p>
                 <p className="text-xl md:text-2xl">

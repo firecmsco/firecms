@@ -23,7 +23,6 @@ function ProPage() {
                 <main className="flex-grow">
                     <HeroPro
                         height={"300px"}
-                        color={"dark"}
                     />
 
                     <ProInfo/>

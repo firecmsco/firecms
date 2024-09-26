@@ -20,7 +20,7 @@ function RealTime() {
             <div className={"flex items-center mb-3 "}>
 
                 <div
-                    className="flex items-center justify-center text-white w-10 h-10 gradient-bg rounded-full shadow flex-shrink-0 mr-3">
+                    className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-3">
                     <LightingIcon height={12} width={12}/>
                 </div>
 
@@ -30,13 +30,12 @@ function RealTime() {
 
             </div>
 
-            <p>FireCMS uses Firestore as a backend, which is a <strong>real-time
-                database</strong>. This means
+            <p>FireCMS uses Firestore or MongoDB as a backend, both <strong>real-time
+                databases</strong>. This means
                 that any change in the database is reflected in the CMS in real
                 time.
                 This is a very powerful feature that allows you to have a CMS
-                that is always
-                up-to-date with the data in the database.</p>
+                that is always up-to-date.</p>
 
             <p>These updates will be reflected both in the table and in the edit
                 form (as long
@@ -44,24 +43,23 @@ function RealTime() {
                 updated).</p>
 
             <p>This allows you to move some of your logic to backend functions,
-                or have
-                completely dynamic data, and still have a CMS that is always
+                or have completely dynamic data, and still have a CMS that is always
                 up-to-date.</p>
 
-            <p>There is a big benefit to using Firebase/Firestore as a backend
-                for your CMS:
-                you can leverage all the advanced features that Google Cloud
-                Platform offers,
-                such as <strong>Cloud Functions</strong>, <strong>Cloud
-                    Storage</strong>, <strong>BigQuery</strong>, etc.</p>
+            <p>
+                By using a built-in backend like Firebase or MongoDB Atlas, you can leverage all the advanced features
+                that these services provide, such as <strong>serverless backend functions</strong>, <strong>user
+                authentication</strong>,
+                <strong>file storage</strong>,
+                and more.
+            </p>
 
             <p>There are very <strong>few CMSs</strong> that show always
                 up-to-date data, so if this a feature
                 you need, FireCMS is your best bet!</p>
 
             <div
-                className="max-w-5xl md:max-w-5xl md:w-full mx-auto md:col-span-9 md:pr-8 flex justify-center flex-col h-full"
-            >
+                className="max-w-5xl md:max-w-5xl md:w-full mx-auto md:col-span-9 md:pr-8 flex justify-center flex-col h-full">
                 <BrowserFrame>
                     <video
                         style={{

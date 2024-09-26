@@ -18,7 +18,7 @@ If you need to add additional fields in your export file, you can create
 them by setting an `ExportConfig` in your `exportable` prop:
 
 ```tsx
-import { ExportMappingFunction, buildCollection } from "@firecms/cloud";
+import { ExportMappingFunction, buildCollection } from "@firecms/core";
 
 export const sampleAdditionalExportColumn: ExportMappingFunction = {
     key: "extra",

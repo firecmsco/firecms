@@ -49,15 +49,15 @@ module.exports = {
             "items": [
                 "collections/collections",
                 "collections/callbacks",
-                "collections/entity_actions",
+                "collections/entity_views",
                 "collections/permissions",
                 "collections/exporting_data",
                 "collections/additional_columns",
                 "collections/text_search",
                 "collections/dynamic_collections",
-                "collections/entity_views",
                 "collections/collection_actions",
                 "collections/collection_groups",
+                "collections/entity_actions",
                 "collections/eject_collections"
             ]
         },

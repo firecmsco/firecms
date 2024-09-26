@@ -88,11 +88,6 @@ tr {
 }
 
 
-
-.gradient-bg {
-    background-image: linear-gradient(to right, rgb(236, 76, 81), rgb(149, 67, 193), rgb(98 85 250));
-}
-
 /* latin-ext */
 @font-face {
     font-family: 'JetBrains Mono';

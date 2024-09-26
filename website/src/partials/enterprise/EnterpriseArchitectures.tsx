@@ -25,16 +25,14 @@ export function EnterpriseArchitectures() {
                             various architectures.
                         </p>
                         <p>
-                            Firebase and FireCMS can be integrated into your
+                            FireCMS can be integrated into your
                             existing architecture, or we can help you develop a new
                             one.
-
                         </p>
                         <p>
                             Your data and services will be hosted in your own
-                            Firebase project, allowing you to implement your own
+                            own backend (Firebase, MongoDB Atlas or any other), allowing you to implement your own
                             authentication and authorization system.
-
                         </p>
 
                         <p>
