@@ -15,10 +15,6 @@ export function EnterpriseFeatures() {
             <Panel color={"white"}>
                 <div className={"flex items-center my-4 "}>
 
-                    <div
-                        className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-3">
-                        <SettingsIcon width={"20px"} height={"20px"}/>
-                    </div>
                     <h2 className={"h2 m-0"}>Not just a CMS</h2>
 
                 </div>
@@ -90,12 +86,8 @@ export function EnterpriseFeatures() {
                 <TwoColumns
                     left={<>
 
-                        <div className={"flex items-center my-4 "}>
+                        <div className={"flex items-center my-4 mb-3 "}>
 
-                            <div
-                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-3">
-                                <AutoModeIcon width={"20px"} height={"20px"}/>
-                            </div>
                             <h2 className={"h2 m-0"}>Why Choose FireCMS?</h2>
 
                         </div>

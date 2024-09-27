@@ -45,14 +45,9 @@ function Features() {
 
                 <div
                     className={"mx-auto md:col-span-9 md:pr-8 flex justify-center flex-col h-full mb-16"}>
-                    <div className={"flex items-center mb-4"}>
+                    <div className={"flex items-center mb-3"}>
 
-                        <div
-                            className="flex items-center justify-center text-white w-10 h-10 bg-gray-700 rounded-full shadow flex-shrink-0 mr-3">
-                            <LightingIcon height={12} width={12}/>
-                        </div>
-
-                        <h3 className="h3 m-0 gradient-text uppercase">
+                        <h3 className="h2 m-0 gradient-text uppercase">
                             Inline editing
                         </h3>
 
@@ -94,12 +89,7 @@ function Features() {
 
                             <div className={"flex items-center mb-3 "}>
 
-                                <div
-                                    className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-3">
-                                    <DashboardIcon height={24} width={24}/>
-                                </div>
-
-                                <h3 className="h3 m-0 gradient-text uppercase">
+                                <h3 className="h2 m-0 gradient-text uppercase">
                                     Dedicated form view
                                 </h3>
 
@@ -172,11 +162,7 @@ function Features() {
                             <div
                                 className={"flex items-center mb-3"}>
 
-                                <div
-                                    className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 ">
-                                    <SettingsIcon/>
-                                </div>
-                                <h3 className="h3 m-0 ml-3 gradient-text uppercase">
+                                <h3 className="h2 m-0 gradient-text uppercase">
                                     Easy to customise
                                 </h3>
 

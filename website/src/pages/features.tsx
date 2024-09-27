@@ -54,12 +54,11 @@ function FeaturesPage() {
                     <EnterpriseArchitectures/>
                     <OpenAITeaser/>
 
-                    <ProTeaser/>
-
-
                     <Panel color={"light"} includePadding={true}>
                         <HeroButtons/>
                     </Panel>
+
+                    <ProTeaser/>
                 </main>
             </div>
 

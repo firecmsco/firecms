@@ -34,7 +34,8 @@ export function DeveloperFeatures() {
                 <TwoColumns
                     reverseSmall={true}
                     animation={false}
-                    className={"p-4 md:p-8"}
+                    className={"py-16"}
+                    // className={"p-4 md:p-8"}
                     left={<div
                         className="relative flex-col font-mono overflow-x-hidden">
 
@@ -73,12 +74,7 @@ export function DeveloperFeatures() {
 
                         <div
                             className={"flex items-center mb-3"}>
-
-                            <div
-                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 ">
-                                {arrowIcon}
-                            </div>
-                            <h3 className="h3 m-0 ml-3 ">
+                            <h3 className="h2 m-0">
                                 Easy schema definition
                             </h3>
 
@@ -99,20 +95,16 @@ export function DeveloperFeatures() {
                     </>}/>
             </Panel>
 
-            <Panel color={"gray"} includeMargin={false} includePadding={false}>
+            <Panel color={"gray"} includeMargin={false} includePadding={false} >
                 <TwoColumns
                     animation={false}
-                    className={"p-4 md:p-8"}
+                    className={"py-16"}
+                    // className={"p-4 md:p-8"}
                     left={
                         <div>
                             <div className={"flex items-center mb-3"}>
 
-                                <div
-                                    className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-3">
-                                    <TickIcon/>
-                                </div>
-
-                                <h3 className="h3 m-0">
+                                <h3 className="h2 m-0">
                                     Built for every project
                                 </h3>
 
@@ -166,7 +158,6 @@ const productCallbacks = buildEntityCallbacks({
                     </>
                 }/>
 
-                <LinedSpace position={"top"} size={"medium"}/>
 
             </Panel>
         </>

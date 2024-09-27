@@ -24,7 +24,7 @@ function RealTime() {
                     <LightingIcon height={12} width={12}/>
                 </div>
 
-                <h3 className="h3 m-0">
+                <h3 className="h2 m-0">
                     Real-time updates
                 </h3>
 

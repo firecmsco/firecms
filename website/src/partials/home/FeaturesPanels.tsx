@@ -32,19 +32,14 @@ function FeaturesPanels() {
                         className={clsx("w-full mb-4 relative  uppercase border-b border-0 ",
                             ContainerInnerPaddingMixin,
                             defaultBorderMixin)}>
-                        <div className={"max-w-6xl mx-auto flex items-center pl-8"}>
-                            <div
-                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-4">
-                                {lightningIcon}
-                            </div>
-
+                        <div className={"max-w-6xl mx-auto flex items-center"}>
                             <h2 className="h1 m-0 gradient-text">
                                 Batteries included
                             </h2>
                         </div>
                     </div>
 
-                    <p className={clsx("max-w-6xl mx-auto text-xl md:text-2xl  px-8 py-4 md:px-8")}>
+                    <p className={clsx("max-w-6xl mx-auto text-xl md:text-2xl py-4 ")}>
                         FireCMS provides all the flexibility you
                         need with the best UX.
                         Edit your collections and entities using
@@ -57,7 +52,7 @@ function FeaturesPanels() {
 
 
             <div
-                className={"max-w-6xl flex flex-col lg:items-center px-8 gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 lg:w-full lg:mx-auto"}>
+                className={"max-w-6xl flex flex-col lg:items-center gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 lg:w-full lg:mx-auto"}>
                 <div
                     className={clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
                     {iconStars}
