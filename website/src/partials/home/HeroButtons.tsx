@@ -42,7 +42,7 @@ function HeroButtons() {
                 rel="noopener noreferrer"
                 target="_blank"
             >
-                Get started
+                Try FireCMS Cloud
                 <CTACaret/>
             </a>
         </div>

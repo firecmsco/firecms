@@ -2,8 +2,8 @@ import React from "react";
 
 export const CTAOutlinedButtonMixin = "btn px-10 py-4 md:px-12 border-1 border-solid border-gray-900 border-opacity-70 dark:border-gray-950 dark:border-opacity-80 uppercase rounded border-solid text-inherit dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-900 h dark:hover:border-gray-800 text-center";
 export const CTAOutlinedButtonWhiteMixin = "btn px-10 py-4 md:px-12  border-1 border-white  uppercase rounded border-solid text-white dark:text-white hover:bg-gray-200 hover:border-gray-200 text-center";
-export const CTAButtonMixin = "btn px-10 py-4 md:px-12 text-white bg-primary hover:text-white hover:bg-blue-700  hover:text-white uppercase border-solid rounded text-center";
-export const CTAButtonDarkMixin = "btn px-10 py-4 md:px-12 border-1 border-gray-700 uppercase rounded border-solid text-white bg-gray-950 bg-opacity-75 hover:bg-opacity-100 hover:text-gray-100 hover:border-gray-800 text-center";
+export const CTAButtonMixin = "btn py-4 px-8 text-white bg-primary hover:text-white hover:bg-blue-700  hover:text-white uppercase border-solid rounded text-center";
+export const CTAButtonDarkMixin = "btn px-8 py-4 border-1 border-gray-700 uppercase rounded border-solid text-white bg-gray-950 bg-opacity-75 hover:bg-opacity-100 hover:text-gray-100 hover:border-gray-800 text-center";
 
 export const CTAButtonMixinLight = "btn px-10 py-4 md:px-12 text-text-primary bg-primary hover:text-white hover:bg-blue-700  hover:text-white uppercase border-solid rounded text-center";
 

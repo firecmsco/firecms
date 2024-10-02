@@ -222,7 +222,7 @@ module.exports = {
                 {
                     to: "https://demo.firecms.co",
                     label: "Demo",
-                    className: "border-1 border-slate-600 dark:border-slate-700 uppercase rounded border-solid dark:text-white text-white hover:text-slate-100 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-900 dark:hover:border-slate-800 text-center btn mr-3 px-6 py-2",
+                    className: "border-1 border-slate-600 border-slate-700 uppercase rounded border-solid text-white hover:text-slate-100 hover:bg-slate-100 text-center btn mr-3 px-6 py-2",
                     "aria-label": "Open the demo project",
                     position: "right"
                 },

@@ -73,7 +73,7 @@ export function ProDeveloperFeatures() {
 
                         <a
                             className={CTAButtonMixin + "  "}
-                            href={"https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0INW8ihjQ90S4gkdo8_rbL_Zx7gagZShLIpHyW43zDXkQDPole6a1coo1sT2O6Gl05X8lxFDlp?gv=true"}
+                            href={"https://calendar.app.google/tsbW6gSKVZDefgMf9"}
                             rel="noopener noreferrer"
                             target="_blank"
                         >
