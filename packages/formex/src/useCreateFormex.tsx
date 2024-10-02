@@ -86,7 +86,14 @@ export function useCreateFormex<T extends object>({
 
     const handleChange = (event: React.SyntheticEvent) => {
         const target = event.target as HTMLInputElement;
-        const value = target.type === "checkbox" ? target.checked : target.value;
+        let value;
+        if (target.type === "checkbox") {
+            value = target.checked;
+        } else if (target.type === "number") {
+            value = target.valueAsNumber;
+        } else {
+            value = target.value;
+        }
         const name = target.name;
         setFieldValue(name, value, validateOnChange);
         setFieldTouched(name, true);
