@@ -17,7 +17,7 @@ export function getPriceString(price: ProductPrice) {
 }
 
 
-export function getStatusText(subscription: Subscription) {
+export function getSubscriptionStatusText(subscription: Subscription) {
     if (subscription.status === "active") return "Active";
     if (subscription.status === "trialing") return "Trialing";
     if (subscription.status === "past_due") return "Past due";

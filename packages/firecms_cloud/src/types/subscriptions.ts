@@ -42,6 +42,15 @@ export type ProductPrice = {
 
 export type SubscriptionType = "openai" | "cloud_plus" | "pro";
 
+export type SubscriptionStatus =
+    "active"
+    | "canceled"
+    | "incomplete"
+    | "incomplete_expired"
+    | "past_due"
+    | "trialing"
+    | "unpaid";
+
 export type Subscription = {
     id: string;
     price: ProductPrice;
@@ -50,7 +59,7 @@ export type Subscription = {
     interval_count: number;
     product: Product;
     stripeLink: string;
-    status: "active" | "canceled" | "incomplete" | "incomplete_expired" | "past_due" | "trialing" | "unpaid";
+    status: SubscriptionStatus;
     metadata: {
         projectId: string;
         type: SubscriptionType

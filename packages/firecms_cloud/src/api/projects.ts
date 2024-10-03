@@ -13,7 +13,11 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         return fetch(host + "/projects",
             {
                 method: "POST",
-                headers: buildHeaders({ firebaseAccessToken, googleAccessToken, serviceAccount }),
+                headers: buildHeaders({
+                    firebaseAccessToken,
+                    googleAccessToken,
+                    serviceAccount
+                }),
                 body: JSON.stringify({
                     projectId,
                     creationType,
@@ -47,7 +51,11 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         return fetch(host + `/projects/${projectId}/firestore_security_rules`,
             {
                 method: "PATCH",
-                headers: buildHeaders({ firebaseAccessToken, googleAccessToken, serviceAccount }),
+                headers: buildHeaders({
+                    firebaseAccessToken,
+                    googleAccessToken,
+                    serviceAccount
+                }),
             })
             .then(async (res) => {
                 return handleApiResponse(res, projectId).then((_) => true);
@@ -122,13 +130,17 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
             // wait 2 seconds
             await new Promise(resolve => setTimeout(resolve, 5000));
             console.debug("Retrying getRootCollections", retries);
-            return getRootCollections(projectId, googleAccessToken, serviceAccount,retries - 1);
+            return getRootCollections(projectId, googleAccessToken, serviceAccount, retries - 1);
         }
 
         return fetch(host + "/projects/" + projectId + "/firestore_root_collections",
             {
                 method: "GET",
-                headers: buildHeaders({ firebaseAccessToken, googleAccessToken, serviceAccount }),
+                headers: buildHeaders({
+                    firebaseAccessToken,
+                    googleAccessToken,
+                    serviceAccount
+                }),
             })
             .then(async (res) => {
                 if (res.status >= 300) {
@@ -153,7 +165,10 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         return fetch(host + "/projects/" + projectId + "/service_accounts",
             {
                 method: "POST",
-                headers: buildHeaders({ firebaseAccessToken, googleAccessToken }),
+                headers: buildHeaders({
+                    firebaseAccessToken,
+                    googleAccessToken
+                }),
             })
             .then(async (res) => {
                 if (res.status === 409) // already exists
@@ -182,9 +197,48 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
             });
     }
 
-    async function getStripePortalLink(projectId: string): Promise<string> {
+    async function getStripePortalLink(): Promise<string> {
         const firebaseAccessToken = await getBackendAuthToken();
-        return fetch(`${host}/customer/stripe_portal_link?return_url=${encodeURIComponent(window.location.href)}&project_id=${projectId}`,
+        return fetch(`${host}/customer/stripe_portal_link?return_url=${encodeURIComponent(window.location.href)}`,
+            {
+                method: "GET",
+                headers: buildHeaders({ firebaseAccessToken }),
+            })
+            .then(async (res) => {
+                const data = await res.json();
+                return data.url as string;
+            });
+    }
+
+    async function getStripeCancelLinkForSubscription(subscriptionId: string): Promise<string> {
+        const firebaseAccessToken = await getBackendAuthToken();
+        return fetch(`${host}/customer/stripe_portal_link/cancel_subscription?return_url=${encodeURIComponent(window.location.href)}&subscription_id=${subscriptionId}`,
+            {
+                method: "GET",
+                headers: buildHeaders({ firebaseAccessToken }),
+            })
+            .then(async (res) => {
+                const data = await res.json();
+                return data.url as string;
+            });
+    }
+
+    async function getStripeUpdateLinkForSubscription(subscriptionId: string): Promise<string> {
+        const firebaseAccessToken = await getBackendAuthToken();
+        return fetch(`${host}/customer/stripe_portal_link/update_subscription?return_url=${encodeURIComponent(window.location.href)}&subscription_id=${subscriptionId}`,
+            {
+                method: "GET",
+                headers: buildHeaders({ firebaseAccessToken }),
+            })
+            .then(async (res) => {
+                const data = await res.json();
+                return data.url as string;
+            });
+    }
+
+    async function getStripeUpdateLinkForPaymentMethod(subscriptionId: string): Promise<string> {
+        const firebaseAccessToken = await getBackendAuthToken();
+        return fetch(`${host}/customer/stripe_portal_link/update_payment_method?return_url=${encodeURIComponent(window.location.href)}&subscription_id=${subscriptionId}`,
             {
                 method: "GET",
                 headers: buildHeaders({ firebaseAccessToken }),
@@ -211,7 +265,9 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         getRootCollections,
         doDelegatedLogin,
         getStripePortalLink,
-
+        getStripeUpdateLinkForSubscription,
+        getStripeCancelLinkForSubscription,
+        getStripeUpdateLinkForPaymentMethod,
         host,
         getRemoteConfigUrl
     }

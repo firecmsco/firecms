@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { Button, Chip, cls, defaultBorderMixin, Paper, Typography } from "@firecms/ui";
-import { getPriceString, getStatusText } from "./common";
+import { getPriceString, getSubscriptionStatusText } from "./common";
 import { useFireCMSBackend } from "../../hooks";
 import { Subscription } from "../../types/subscriptions";
 
@@ -14,12 +14,12 @@ export function CurrentSubscriptionView({
                                         }: CurrentSubscriptionViewProps) {
     const { projectsApi } = useFireCMSBackend();
 
-    const statusText = getStatusText(subscription);
+    const statusText = getSubscriptionStatusText(subscription);
     const [stripePortalUrl, setStripePortalUrl] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         if (!stripePortalUrl) {
-            projectsApi.getStripePortalLink(subscription.metadata.projectId)
+            projectsApi.getStripeCancelLinkForSubscription(subscription.id)
                 .then(setStripePortalUrl)
             ;
         }
@@ -82,8 +82,8 @@ export function ActiveSubscriptions({ activeSubscriptions }: {
 
     return <div className={cls("my-8 border-t", defaultBorderMixin)}>
 
-        <Typography className="my-4 mt-8 font-medium">
-            {"Active Subscriptions".toUpperCase()}
+        <Typography className="my-4 mt-8 font-medium uppercase">
+            Active Subscriptions
         </Typography>
 
         {activeSubscriptions.map(subscription => {

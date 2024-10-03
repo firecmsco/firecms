@@ -1,5 +1,5 @@
-import { ProductView } from "./ProductView";
-import { useFireCMSBackend, useProjectConfig, useSubscriptionsForUserController } from "../../hooks";
+import { ProductUpgradeSmallView } from "./ProductUpgradeSmallView";
+import { useProjectConfig, useSubscriptionsForUserController } from "../../hooks";
 import { LoadingButton, RocketLaunchIcon } from "@firecms/ui";
 import { ProductPrice } from "../../types";
 
@@ -16,12 +16,13 @@ export function UpgradeToPlusButton({
         subscriptionPlan,
         projectId
     } = useProjectConfig();
+
     if (!subscriptionPlan)
         throw new Error("No subscription plan");
+
     const {
         products,
-        subscribe,
-        getSubscriptionsForProject
+        subscribe
     } = useSubscriptionsForUserController();
 
     const plusProduct = products?.find(p => p.metadata?.type === "cloud_plus");
@@ -35,7 +36,7 @@ export function UpgradeToPlusButton({
         </LoadingButton>
     }
 
-    return <ProductView
+    return <ProductUpgradeSmallView
         includePriceSelect={includePriceSelect}
         includePriceLabel={includePriceLabel}
         largePriceLabel={largePriceLabel}

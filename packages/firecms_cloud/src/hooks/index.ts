@@ -6,3 +6,4 @@ export * from "./useBuildFireCMSBackend";
 export * from "./useFireCMSBackend";
 export * from "./useBuildCloudUserManagement";
 export * from "./useDataTalkMode";
+export * from "./useLicensesForUserController";

@@ -1,40 +1,27 @@
-import { FirebaseApp } from "@firebase/app";
-import {
-    addDoc,
-    collection,
-    DocumentReference,
-    Firestore,
-    getDoc,
-    getDocs,
-    getFirestore,
-    onSnapshot,
-    query,
-    where
-} from "@firebase/firestore";
+import { addDoc, collection, Firestore, getDocs, getFirestore, onSnapshot, query, where } from "@firebase/firestore";
 import { useEffect, useRef, useState } from "react";
-import { Product, ProductPrice, ProductWithPrices, Subscription, SubscriptionType } from "../types/subscriptions";
+import { ProductPrice, ProductWithPrices, Subscription, SubscriptionType } from "../types/subscriptions";
 import { useFireCMSBackend } from "./useFireCMSBackend";
+import { convertDocToSubscription } from "../api/firestore";
 
 export const SUBSCRIPTIONS_COLLECTION = "subscriptions";
 export const PRODUCTS_COLLECTION = "products";
 export const CUSTOMERS_COLLECTION = "customers";
 export const CHECKOUT_SESSION_COLLECTION = "checkout_sessions";
 
-/**
- * @group Firebase
- */
-export interface SubscriptionsForUserControllerProps {
-}
-
 export interface SubscriptionsController {
     activeSubscriptions?: Subscription[];
     activeSubscriptionsLoading: boolean;
     activeSubscriptionsLoadingError?: Error;
     getSubscriptionsForProject: (projectId: string) => Subscription[];
-    subscribe: (projectId: string,
-                productPrice: ProductPrice,
-                onCheckoutSessionReady: (url: string, error: Error) => void,
-                type: SubscriptionType
+    subscribe: (params: {
+                    projectId?: string,
+                    quantity?: number,
+                    licenseId?: string,
+                    productPrice: ProductPrice,
+                    onCheckoutSessionReady: (url: string, error: Error) => void,
+                    type: SubscriptionType
+                }
     ) => Promise<() => void>;
     products?: ProductWithPrices[];
     productsLoading: boolean;
@@ -89,6 +76,7 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
                                 } as ProductWithPrices;
                             })
                     }));
+
                     setProductsLoadingError(undefined);
                     setProducts(updatedProducts);
                     setProductsLoading(false);
@@ -99,32 +87,6 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
         });
 
     }, [firestoreRef]);
-
-    function fetchPrice(ref: DocumentReference): Promise<ProductPrice | undefined> {
-        return getDoc(ref)
-            .then((priceDoc) => {
-                if (!priceDoc.exists()) {
-                    return undefined;
-                }
-                return {
-                    id: priceDoc.id,
-                    ...(priceDoc.data() ?? {})
-                } as ProductPrice;
-            });
-    }
-
-    function fetchProduct(ref: DocumentReference): Promise<Product | undefined> {
-        return getDoc(ref)
-            .then((priceDoc) => {
-                if (!priceDoc.exists()) {
-                    return undefined;
-                }
-                return {
-                    id: priceDoc.id,
-                    ...(priceDoc.data() ?? {})
-                } as Product;
-            });
-    }
 
     /**
      * Keep active subscriptions in sync
@@ -138,21 +100,7 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
             {
                 next:
                     async (snapshot) => {
-                        const updatedSubscriptions = (
-                            await Promise.all(snapshot.docs.map(async (doc) => {
-                                const [price, product] = await Promise.all([fetchPrice(doc.data().price), fetchProduct(doc.data().product)]);
-                                if (!price) {
-                                    console.warn("Price not found for subscription", doc.id);
-                                    return undefined;
-                                }
-                                return ({
-                                    id: doc.id,
-                                    ...doc.data(),
-                                    price,
-                                    product
-                                } as Subscription);
-                            }))
-                        )
+                        const updatedSubscriptions = (await Promise.all(snapshot.docs.map(convertDocToSubscription)))
                             .filter(Boolean) as Subscription[];
 
                         setActiveSubscriptionsLoading(false);
@@ -165,11 +113,24 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
             });
     }, [firestoreRef, userId]);
 
-    const subscribe = async (projectId: string,
-                             productPrice: ProductPrice,
-                             onCheckoutSessionReady: (url: string, error: Error) => void,
-                             type: SubscriptionType
+    const subscribe = async ({
+                                 projectId,
+                                 licenseId,
+                                 productPrice,
+                                 quantity,
+                                 onCheckoutSessionReady,
+                                 type
+
+                             }: {
+                                 projectId?: string,
+                                 licenseId?: string,
+                                 quantity?: number,
+                                 productPrice: ProductPrice,
+                                 onCheckoutSessionReady: (url: string, error: Error) => void,
+                                 type: SubscriptionType
+                             }
     ): Promise<() => void> => {
+        console.log("Subscribing to product", productPrice.id);
 
         const firestore = firestoreRef.current;
         if (!firestore) throw new Error("Firestore not initialized");
@@ -183,7 +144,17 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
         // For prices with metered billing we need to omit the quantity parameter.
         // For all other prices we set quantity to 1.
         if (productPrice.recurring?.usage_type !== "metered")
-            subscriptionPricesRequest.quantity = 1;
+            subscriptionPricesRequest.quantity = quantity ?? 1;
+
+        const metadata: Record<string, string> = {
+            type
+        };
+        if (projectId) {
+            metadata.projectId = projectId;
+        }
+        if (licenseId) {
+            metadata.licenseId = licenseId;
+        }
 
         const checkoutSession: any = {
             automatic_tax: true,
@@ -195,10 +166,7 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
             trial_period_days: 28,
             success_url: `${window.location.origin}${window.location.pathname}`,
             cancel_url: `${window.location.origin}${window.location.pathname}`,
-            metadata: {
-                projectId,
-                type
-            }
+            metadata
         };
 
         // For one time payments set mode to payment.
@@ -210,15 +178,28 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
         // Save checkout session to Firestore
         const checkoutSessionRef = collection(firestore, CUSTOMERS_COLLECTION, userId, CHECKOUT_SESSION_COLLECTION);
 
+        console.log(checkoutSessionRef);
         const docRef = await addDoc(checkoutSessionRef, checkoutSession);
 
-        return onSnapshot(docRef, (snap) => {
-            const {
-                error,
-                url
-            } = snap.data();
-            onCheckoutSessionReady(url, error);
-        })
+        return new Promise((resolve, reject) => {
+            const unsubscribe = onSnapshot(docRef, (snap) => {
+                const {
+                    error,
+                    url
+                } = snap.data();
+
+                console.log("Checkout session updated", snap.data());
+                onCheckoutSessionReady(url, error);
+
+                if (url) {
+                    unsubscribe();
+                    resolve(url);
+                } else if (error) {
+                    unsubscribe();
+                    reject(error);
+                }
+            });
+        });
     }
 
     const getSubscriptionsForProject = (projectId: string): Subscription[] => {

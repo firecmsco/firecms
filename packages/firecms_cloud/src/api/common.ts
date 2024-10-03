@@ -1,5 +1,6 @@
 import { ApiError } from "../types/errors";
 
+
 export async function handleApiResponse<T>(res: Response, projectId: string): Promise<T> {
     const jsonResponse = await res.json();
     if (res.ok) {

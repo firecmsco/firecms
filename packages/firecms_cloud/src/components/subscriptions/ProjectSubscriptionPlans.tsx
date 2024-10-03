@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useBrowserTitleAndIcon } from "@firecms/core";
 import { AutoAwesomeIcon, Card, Chip, CircularProgress, cls, Typography, } from "@firecms/ui";
 import { useSubscriptionsForUserController } from "../../hooks/useSubscriptionsForUserController";
-import { ProductView } from "./ProductView";
-import { getPriceString, getStatusText } from "../settings/common";
+import { ProductUpgradeSmallView } from "./ProductUpgradeSmallView";
+import { getPriceString, getSubscriptionStatusText } from "../settings/common";
 import { Subscription } from "../../types";
 import { StripeDisclaimer } from "./StripeDisclaimer";
 import { useFireCMSBackend, useProjectConfig } from "../../hooks";
@@ -25,6 +25,7 @@ export function ProjectSubscriptionPlans({ uid }: {
     const {
         products,
         subscribe,
+        activeSubscriptions,
         getSubscriptionsForProject
     } = useSubscriptionsForUserController();
 
@@ -36,6 +37,9 @@ export function ProjectSubscriptionPlans({ uid }: {
 
     const plusProduct = cloudProducts.find(p => p.metadata?.type === "cloud_plus");
     const plusSubscription = projectSubscriptions.find(s => s.product.metadata?.type === "cloud_plus");
+    console.log("projectSubscriptions", projectSubscriptions);
+    console.log("plusSubscription", plusSubscription);
+    console.log("activeSubscriptions", activeSubscriptions);
 
     return (
         <div className={"relative"}>
@@ -56,7 +60,7 @@ export function ProjectSubscriptionPlans({ uid }: {
 
                     </Typography>
 
-                    {subscriptionPlan !== "cloud_plus" && plusProduct && <ProductView
+                    {subscriptionPlan !== "cloud_plus" && plusProduct && <ProductUpgradeSmallView
                         product={plusProduct}
                         projectId={projectId}
                         subscribe={subscribe}/>}
@@ -126,12 +130,12 @@ function CurrentSubscriptionView({
         projectsApi
     } = useFireCMSBackend();
 
-    const statusText = getStatusText(subscription);
+    const statusText = getSubscriptionStatusText(subscription);
     const [stripePortalUrl, setStripePortalUrl] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         if (!stripePortalUrl) {
-            projectsApi.getStripePortalLink(subscription.metadata.projectId)
+            projectsApi.getStripeCancelLinkForSubscription(subscription.id)
                 .then(setStripePortalUrl);
         }
     }, []);

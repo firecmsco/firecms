@@ -3,23 +3,25 @@ import { Alert, Chip, LoadingButton, RocketLaunchIcon, Select, SelectItem } from
 import { ProductPrice, ProductWithPrices, SubscriptionType } from "../../types";
 import { getPriceString, getSubscriptionPlanName } from "../settings/common";
 
-export function ProductView({
-                                product,
-                                includePriceSelect = true,
-                                includePriceLabel = true,
-                                largePriceLabel = false,
-                                subscribe,
-                                projectId
-                            }: {
+export function ProductUpgradeSmallView({
+                                            product,
+                                            includePriceSelect = true,
+                                            includePriceLabel = true,
+                                            largePriceLabel = false,
+                                            subscribe,
+                                            projectId
+                                        }: {
     product: ProductWithPrices,
     projectId?: string,
     includePriceSelect?: boolean,
     includePriceLabel?: boolean,
     largePriceLabel?: boolean,
-    subscribe: (projectId: string,
-                productPrice: ProductPrice,
-                onCheckoutSessionReady: (url: string, error: Error) => void,
-                type: SubscriptionType) => Promise<() => void>
+    subscribe: (params: {
+        projectId: string,
+        productPrice: ProductPrice,
+        onCheckoutSessionReady: (url: string, error: Error) => void,
+        type: SubscriptionType
+    }) => Promise<() => void>
 }) {
 
     const [error, setError] = useState<Error>();
@@ -82,10 +84,10 @@ export function ProductView({
     const doSubscribe = () => {
         if (!projectId || selectedPrice === undefined) return;
         setLinkLoading(true);
-        return subscribe(
+        return subscribe({
             projectId,
-            selectedPrice,
-            (url, error) => {
+            productPrice: selectedPrice,
+            onCheckoutSessionReady: (url, error) => {
                 if (!url && !error)
                     return;
                 if (error) {
@@ -98,7 +100,8 @@ export function ProductView({
                 }
                 setLinkLoading(false);
             },
-            product.metadata.type);
+            type: product.metadata.type
+        });
     }
 
     return <>

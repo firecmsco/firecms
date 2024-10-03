@@ -1,13 +1,43 @@
-import React from "react";
-import { Alert, Button } from "@firecms/ui";
+import React, { useEffect } from "react";
+import { Alert, Button, CircularProgress } from "@firecms/ui";
 import { PlansComparisonDialog } from "./PlansComparison";
 import { PlanChip } from "./PlanChip";
-import { useProjectConfig, useSubscriptionsForUserController } from "../../hooks";
+import { useFireCMSBackend, useProjectConfig, useSubscriptionsForUserController } from "../../hooks";
+import { Subscription } from "../../types";
 
 export type SubscriptionPlanWidgetProps = {
     message?: React.ReactNode,
     showForPlans?: string[],
     includeCTA?: boolean
+}
+
+function PastDueAlert({ subscription }: { subscription: Subscription }) {
+
+    const projectsApi = useFireCMSBackend().projectsApi;
+
+    const [url, setUrl] = React.useState<string | null>(null);
+    useEffect(() => {
+        projectsApi.getStripeUpdateLinkForPaymentMethod(subscription.id)
+            .then(setUrl)
+            .catch(console.error);
+    }, []);
+
+    return <Alert
+        color={"error"}
+        className={"my-4"}
+        action={url
+            ? <Button
+                component={"a"}
+                href={url}
+                target={"_blank"}
+                rel="noopener noreferrer"
+                className={"dark:!text-white dark:border-white dark:hover:bg-white dark:hover:!text-primary min-w-content"}
+                variant={"outlined"}>
+                Update
+            </Button>
+            : <CircularProgress size={"small"}/>}>
+        <div>Your subscription is past due. Please update your payment method to avoid service disruption</div>
+    </Alert>;
 }
 
 export function SubscriptionPlanWidget({
@@ -28,21 +58,7 @@ export function SubscriptionPlanWidget({
         const pastDueSubscriptions = (subscriptionsController.activeSubscriptions ?? []).filter(s => s.status === "past_due" && s.metadata.projectId === projectId);
         if (pastDueSubscriptions.length === 0) return null;
 
-        return <Alert
-            color={"error"}
-            className={"my-4"}
-            action={includeCTA && <Button
-                component={"a"}
-                href={pastDueSubscriptions[0].stripeLink}
-                target={"_blank"}
-                rel="noopener noreferrer"
-                className={"dark:!text-white dark:border-white dark:hover:bg-white dark:hover:!text-primary min-w-content"}
-                variant={"outlined"}>
-                Update
-            </Button>}>
-            <div>Your subscription is past due. Please update your payment method to avoid service disruption</div>
-            <div>{message}</div>
-        </Alert>;
+        return <PastDueAlert subscription={pastDueSubscriptions[0]}/>;
     }
 
     if (!subscriptionPlan) return null;
@@ -60,7 +76,8 @@ export function SubscriptionPlanWidget({
                 More info
             </Button>}>
             <div>This project is currently in the <PlanChip
-                subscriptionPlan={subscriptionPlan}/> {!message && "Try out all the PLUS features for free!"}</div>
+                subscriptionPlan={subscriptionPlan}/> <span
+                className={"ml-2"}>{!message && "Try out all the PLUS features for free!"}</span></div>
             <div>{message}</div>
         </Alert>
 
