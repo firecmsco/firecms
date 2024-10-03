@@ -26,6 +26,7 @@ export type ProductPrice = {
     metadata: {
         product: string;
     }
+    tiers: ProductPriceTier[];
     default: boolean;
     tax_behavior: string;
     type: "recurring" | "one_time";
@@ -38,6 +39,14 @@ export type ProductPrice = {
         usage_type: "metered"
     }
 
+}
+
+export type ProductPriceTier = {
+    flat_amount: number | null;
+    unit_amount: number;
+    up_to: number;
+    unit_amount_decimal: string;
+    flat_amount_decimal: number | null;
 }
 
 export type SubscriptionType = "openai" | "cloud_plus" | "pro";
@@ -61,7 +70,8 @@ export type Subscription = {
     stripeLink: string;
     status: SubscriptionStatus;
     metadata: {
-        projectId: string;
+        projectId?: string;
+        licenseId?: string;
         type: SubscriptionType
     },
     cancel_at_period_end: boolean;

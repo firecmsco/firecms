@@ -44,13 +44,16 @@ export function CurrentSubscriptionView({
             <div className="flex mt-2 items-center">
                 <div
                     className="flex-grow flex flex-col items-start gap-2">
-                    <Typography>
+                    {subscription.metadata.projectId && <Typography>
                         Project: <b>{subscription.metadata.projectId}</b>
-                    </Typography>
-                    <Chip
+                    </Typography>}
+                    {subscription.metadata.licenseId && <Typography>
+                        License: <b>{subscription.metadata.licenseId}</b>
+                    </Typography>}
+                    {subscription.price && <Chip
                         size={"small"}>
-                        {getPriceString(subscription.price) + " per active user"}
-                    </Chip>
+                        {getPriceString(subscription.price)}
+                    </Chip>}
                     {subscription.cancel_at &&
                         <Typography variant={"caption"}
                                     className="text-secondary">
@@ -80,7 +83,7 @@ export function ActiveSubscriptions({ activeSubscriptions }: {
     activeSubscriptions: Subscription[],
 }) {
 
-    return <div className={cls("my-8 border-t", defaultBorderMixin)}>
+    return <div className={cls("my-8")}>
 
         <Typography className="my-4 mt-8 font-medium uppercase">
             Active Subscriptions

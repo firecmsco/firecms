@@ -160,7 +160,7 @@ function CurrentSubscriptionView({
                 <>
                     The current price is <Chip
                     size={"smallest"}>{getPriceString(subscription.price)}
-                </Chip>per active user.
+                </Chip>per user.
                 </>
 
                 {subscription.cancel_at && <> This subscription was <b>cancelled</b> and

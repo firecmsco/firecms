@@ -16,9 +16,9 @@ import { useFireCMSBackend } from "./useFireCMSBackend";
 import { ProLicense, Subscription } from "../types";
 import { convertDocToSubscription } from "../api/firestore";
 
-export const CUSTOMERS_COLLECTION = "customers";
-export const LICENSES_COLLECTION = "licenses";
-export const SUBSCRIPTIONS_COLLECTION = "subscriptions";
+const CUSTOMERS_COLLECTION = "customers";
+const LICENSES_COLLECTION = "licenses";
+const SUBSCRIPTIONS_COLLECTION = "subscriptions";
 
 export interface LicensesController {
     licenses?: ProLicense[];

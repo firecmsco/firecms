@@ -4,25 +4,26 @@ import { ProductPrice, ProductWithPrices, Subscription, SubscriptionType } from 
 import { useFireCMSBackend } from "./useFireCMSBackend";
 import { convertDocToSubscription } from "../api/firestore";
 
-export const SUBSCRIPTIONS_COLLECTION = "subscriptions";
-export const PRODUCTS_COLLECTION = "products";
-export const CUSTOMERS_COLLECTION = "customers";
-export const CHECKOUT_SESSION_COLLECTION = "checkout_sessions";
+const SUBSCRIPTIONS_COLLECTION = "subscriptions";
+const PRODUCTS_COLLECTION = "products";
+const CUSTOMERS_COLLECTION = "customers";
+const CHECKOUT_SESSION_COLLECTION = "checkout_sessions";
+
+export type SubscribeParams = {
+    projectId?: string,
+    quantity?: number,
+    licenseId?: string,
+    productPrice: ProductPrice,
+    onCheckoutSessionReady: (url: string, error: Error) => void,
+    type: SubscriptionType
+};
 
 export interface SubscriptionsController {
     activeSubscriptions?: Subscription[];
     activeSubscriptionsLoading: boolean;
     activeSubscriptionsLoadingError?: Error;
     getSubscriptionsForProject: (projectId: string) => Subscription[];
-    subscribe: (params: {
-                    projectId?: string,
-                    quantity?: number,
-                    licenseId?: string,
-                    productPrice: ProductPrice,
-                    onCheckoutSessionReady: (url: string, error: Error) => void,
-                    type: SubscriptionType
-                }
-    ) => Promise<() => void>;
+    subscribe: (params: SubscribeParams) => Promise<() => void>;
     products?: ProductWithPrices[];
     productsLoading: boolean;
     productsLoadingError?: Error;

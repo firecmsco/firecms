@@ -3,19 +3,27 @@ import { ProjectSubscriptionPlan } from "../../types/projects";
 
 export function getPriceString(price: ProductPrice) {
 
-    if(price.currency === "usd") {
+    if (price.billing_scheme === "tiered") {
+        return "Tiered pricing"
+    }
+
+    return formatPrice(price.unit_amount, price.currency) + " user/" + price.interval + " per user";
+
+}
+
+export function formatPrice(price: number, currency: string) {
+    if (currency === "usd") {
         return new Intl.NumberFormat("en-US", {
             style: "currency",
-            currency: price.currency
-        }).format(price.unit_amount / 100) + " user/" + price.interval;
+            currency: currency
+        }).format(price / 100);
     }
 
     return new Intl.NumberFormat("es-ES", {
         style: "currency",
-        currency: price.currency
-    }).format(price.unit_amount / 100) + " user/" + price.interval;
+        currency: currency
+    }).format(price / 100);
 }
-
 
 export function getSubscriptionStatusText(subscription: Subscription) {
     if (subscription.status === "active") return "Active";
