@@ -4,3 +4,4 @@ export * from "./ProductUpgradeSmallView";
 export * from "./ProjectSubscriptionPlans";
 export * from "./StripeDisclaimer";
 export * from "./SubscriptionPlanWidget";
+export * from "./SubscriptionPriceSelect";

@@ -279,7 +279,7 @@ export function ArrayItemOptions({
     const iconRef = React.useRef<HTMLDivElement>(null);
     useOutsideAlerter(iconRef, () => setMenuOpen(false));
 
-    return <div className={`pl-2 pt-1 pb-4 flex ${direction === "row" ? "flex-row-reverse" : "flex-col"} items-center`}
+    return <div className={`pl-2 pt-1 pb-1 flex ${direction === "row" ? "flex-row-reverse" : "flex-col"} items-center`}
                 ref={iconRef}
                 {...provided.dragHandleProps}>
         <Tooltip

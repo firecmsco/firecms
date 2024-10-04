@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Alert, Chip, LoadingButton, RocketLaunchIcon, Select, SelectItem } from "@firecms/ui";
+import { Alert, LoadingButton, RocketLaunchIcon } from "@firecms/ui";
 import { ProductPrice, ProductWithPrices, SubscriptionType } from "../../types";
-import { getPriceString, getSubscriptionPlanName } from "../settings/common";
+import { getSubscriptionPlanName } from "../settings";
+import { SubscriptionPriceSelect } from "./SubscriptionPriceSelect";
 
 export function ProductUpgradeSmallView({
                                             product,
@@ -40,44 +41,11 @@ export function ProductUpgradeSmallView({
 
     const planName = getSubscriptionPlanName(product.metadata.type);
 
-    const priceSelect = productPrices?.length > 1
-        ? <>
-            <Select
-                size={"small"}
-                invisible={true}
-                padding={false}
-                onChange={(e) => {
-                    setSelectedPrice(productPrices.find(price => price.id === e.target.value));
-                }}
-                position={"item-aligned"}
-                // label={"Choose pricing plan"}
-                renderValue={(value) => {
-                    const price = productPrices.find(price => price.id === value);
-                    if (!price) return null;
-                    if (largePriceLabel) {
-                        return <span
-                            className={"ml-4 mb-4 text-2xl font-bold text-primary text-center my-8"}>{getPriceString(price)}</span>
-                    }
-                    return <Chip>
-                        {price ? getPriceString(price) : ""}
-                    </Chip>;
-                }}
-                value={selectedPrice?.id ?? ""}>
-                {productPrices && productPrices.map(price =>
-                    <SelectItem key={price.id} value={price.id}>
-                        {getPriceString(price)}
-                    </SelectItem>
-                )}
-            </Select>
-        </>
-        : productPrices ?
-            (largePriceLabel ? <span
-                    className={"ml-4 mb-4 text-2xl font-bold text-primary text-center my-8"}>{getPriceString(productPrices[0])}</span>
-                : <Chip
-                    size={"small"}>
-                    {getPriceString(productPrices[0])}
-                </Chip>)
-            : null;
+    const priceSelect = <SubscriptionPriceSelect
+        productPrices={productPrices}
+        selectedPrice={selectedPrice}
+        setSelectedPrice={setSelectedPrice}
+        largePriceLabel={largePriceLabel}/>;
 
     const [linkLoading, setLinkLoading] = useState<boolean>(false);
 

@@ -47,7 +47,7 @@ export function FireCMSCloudDrawer() {
         if (!drawerOpen) return <div className="w-full"/>;
         const reservedGroup = group && RESERVED_GROUPS.includes(group);
         const canCreateCollections = collectionEditorController.configPermissions({ user }).createCollections && !reservedGroup;
-        return <div className="pl-6 pr-4 pt-4 pb-2 flex flex-row items-center">
+        return <div className="pl-6 pr-4 pt-2 pb-2 flex flex-row items-center">
             <Typography variant={"caption"}
                         color={"secondary"}
                         className="flex-grow font-medium">

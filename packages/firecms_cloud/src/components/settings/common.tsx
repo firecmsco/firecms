@@ -1,4 +1,4 @@
-import { ProductPrice, Subscription } from "../../types/subscriptions";
+import { ProductPrice, Subscription, SubscriptionStatus } from "../../types/subscriptions";
 import { ProjectSubscriptionPlan } from "../../types/projects";
 
 export function getPriceString(price: ProductPrice) {
@@ -7,7 +7,7 @@ export function getPriceString(price: ProductPrice) {
         return "Tiered pricing"
     }
 
-    return formatPrice(price.unit_amount, price.currency) + " user/" + price.interval + " per user";
+    return formatPrice(price.unit_amount, price.currency) + " user/" + price.interval;
 
 }
 
@@ -25,14 +25,14 @@ export function formatPrice(price: number, currency: string) {
     }).format(price / 100);
 }
 
-export function getSubscriptionStatusText(subscription: Subscription) {
-    if (subscription.status === "active") return "Active";
-    if (subscription.status === "trialing") return "Trialing";
-    if (subscription.status === "past_due") return "Past due";
-    if (subscription.status === "canceled") return "Canceled";
-    if (subscription.status === "unpaid") return "Unpaid";
-    if (subscription.status === "incomplete") return "Incomplete";
-    if (subscription.status === "incomplete_expired") return "Incomplete expired";
+export function getSubscriptionStatusText(status: SubscriptionStatus) {
+    if (status === "active") return "Active";
+    if (status === "trialing") return "Trialing";
+    if (status === "past_due") return "Past due";
+    if (status === "canceled") return "Canceled";
+    if (status === "unpaid") return "Unpaid";
+    if (status === "incomplete") return "Incomplete";
+    if (status === "incomplete_expired") return "Incomplete expired";
     return "Unknown";
 }
 

@@ -37,9 +37,6 @@ export function ProjectSubscriptionPlans({ uid }: {
 
     const plusProduct = cloudProducts.find(p => p.metadata?.type === "cloud_plus");
     const plusSubscription = projectSubscriptions.find(s => s.product.metadata?.type === "cloud_plus");
-    console.log("projectSubscriptions", projectSubscriptions);
-    console.log("plusSubscription", plusSubscription);
-    console.log("activeSubscriptions", activeSubscriptions);
 
     return (
         <div className={"relative"}>
@@ -130,7 +127,7 @@ function CurrentSubscriptionView({
         projectsApi
     } = useFireCMSBackend();
 
-    const statusText = getSubscriptionStatusText(subscription);
+    const statusText = getSubscriptionStatusText(subscription.status);
     const [stripePortalUrl, setStripePortalUrl] = useState<string | undefined>(undefined);
 
     useEffect(() => {

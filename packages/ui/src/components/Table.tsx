@@ -34,7 +34,7 @@ export const TableBody = ({
                               ...rest
                           }: TableBodyProps) => (
     <tbody
-        className={cls("bg-white dark:bg-gray-950 text-sm divide-y divide-slate-200 dark:divide-gray-700", className)}
+        className={cls("bg-white dark:bg-gray-950 text-sm divide-y divide-gray-100 dark:divide-gray-800 dark:divide-opacity-80", className)}
         {...rest}
     >
     {children}
@@ -83,7 +83,6 @@ export const TableRow = ({
         onClick={onClick}
         style={style}
         className={cls(
-            "divide-slate-100 dark:divide-gray-800",
             "bg-white dark:bg-gray-950",
             onClick ? "hover:bg-slate-100 dark:hover:bg-gray-800 cursor-pointer" : "",
             className

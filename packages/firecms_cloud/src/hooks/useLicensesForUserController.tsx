@@ -11,7 +11,7 @@ import {
     updateDoc,
     where
 } from "@firebase/firestore";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useFireCMSBackend } from "./useFireCMSBackend";
 import { ProLicense, Subscription } from "../types";
 import { convertDocToSubscription } from "../api/firestore";
@@ -105,9 +105,9 @@ export function useLicensesForUserController(): LicensesController {
         });
     }
 
-    const listenSubscriptionsForLicense = (licenseId: string,
-                                           onSubscriptionsUpdate: (subs: Subscription[]) => void,
-                                           onError: (error: Error) => void
+    const listenSubscriptionsForLicense = useCallback((licenseId: string,
+                                                       onSubscriptionsUpdate: (subs: Subscription[]) => void,
+                                                       onError: (error: Error) => void
     ): () => void => {
         const firestore = firestoreRef.current;
         if (!firestore || !userId)
@@ -127,7 +127,7 @@ export function useLicensesForUserController(): LicensesController {
                     onError(error);
                 }
             });
-    }
+    }, []);
 
     return {
         licenses,
