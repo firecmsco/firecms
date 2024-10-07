@@ -305,6 +305,7 @@ export function App() {
         <SnackbarProvider>
             <ModeControllerProvider value={modeController}>
                 <FireCMS
+                    apiKey={import.meta.env.VITE_FIRECMS_API_KEY as string}
                     navigationController={navigationController}
                     authController={authController}
                     entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}

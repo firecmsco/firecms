@@ -4,7 +4,7 @@ import equal from "react-fast-compare"
 import { Formex, FormexController, getIn, useCreateFormex } from "@firecms/formex";
 import {
     DEFAULT_FIELD_CONFIGS,
-    DeleteConfirmationDialog,
+    ConfirmationDialog,
     getFieldConfig,
     getFieldId,
     isPropertyBuilder,
@@ -583,11 +583,11 @@ function PropertyEditFormFields({
             </div>
 
             {onDelete &&
-                <DeleteConfirmationDialog open={deleteDialogOpen}
-                                          onAccept={() => onDelete(values?.id, propertyNamespace)}
-                                          onCancel={() => setDeleteDialogOpen(false)}
-                                          title={<div>Delete this property?</div>}
-                                          body={
+                <ConfirmationDialog open={deleteDialogOpen}
+                                    onAccept={() => onDelete(values?.id, propertyNamespace)}
+                                    onCancel={() => setDeleteDialogOpen(false)}
+                                    title={<div>Delete this property?</div>}
+                                    body={
                                               <div> This will <b>not delete any
                                                   data</b>, only modify the
                                                   collection.</div>

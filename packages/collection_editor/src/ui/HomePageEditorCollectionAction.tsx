@@ -1,5 +1,5 @@
 import {
-    DeleteConfirmationDialog,
+    ConfirmationDialog,
     PluginHomePageActionsProps,
     useAuthController,
     useSnackbarController
@@ -76,7 +76,7 @@ export function HomePageEditorCollectionAction({
                 </IconButton>}
         </div>
 
-        <DeleteConfirmationDialog
+        <ConfirmationDialog
             open={deleteRequested}
             onAccept={deleteCollection}
             onCancel={() => setDeleteRequested(false)}

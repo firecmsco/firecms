@@ -1,6 +1,6 @@
 import React from "react";
 import {
-    DeleteConfirmationDialog,
+    ConfirmationDialog,
     EntityCollection,
     EntityCustomView,
     resolveEntityView,
@@ -211,8 +211,8 @@ export function SubcollectionsEditTab({
             <div style={{ height: "52px" }}/>
 
             {subcollectionToDelete &&
-                <DeleteConfirmationDialog open={Boolean(subcollectionToDelete)}
-                                          onAccept={() => {
+                <ConfirmationDialog open={Boolean(subcollectionToDelete)}
+                                    onAccept={() => {
                                               const props = {
                                                   id: subcollectionToDelete,
                                                   parentCollectionIds: [...(parentCollectionIds ?? []), collection.id]
@@ -223,20 +223,20 @@ export function SubcollectionsEditTab({
                                                   setSubcollections(subcollections?.filter(e => e.id !== subcollectionToDelete))
                                               });
                                           }}
-                                          onCancel={() => setSubcollectionToDelete(undefined)}
-                                          title={<>Delete this subcollection?</>}
-                                          body={<> This will <b>not
+                                    onCancel={() => setSubcollectionToDelete(undefined)}
+                                    title={<>Delete this subcollection?</>}
+                                    body={<> This will <b>not
                                               delete any data</b>, only
                                               the collection in the CMS</>}/>}
             {viewToDelete &&
-                <DeleteConfirmationDialog open={Boolean(viewToDelete)}
-                                          onAccept={() => {
+                <ConfirmationDialog open={Boolean(viewToDelete)}
+                                    onAccept={() => {
                                               setFieldValue("entityViews", values.entityViews?.filter(e => e !== viewToDelete));
                                               setViewToDelete(undefined);
                                           }}
-                                          onCancel={() => setViewToDelete(undefined)}
-                                          title={<>Remove this view?</>}
-                                          body={<>This will <b>not
+                                    onCancel={() => setViewToDelete(undefined)}
+                                    title={<>Remove this view?</>}
+                                    body={<>This will <b>not
                                               delete any data</b>, only
                                               the view in the CMS</>}/>}
 

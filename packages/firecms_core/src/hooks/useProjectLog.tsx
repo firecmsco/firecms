@@ -9,7 +9,7 @@ export type AccessResponse = {
     message?: string;
 }
 
-async function makeRequest(authController: AuthController, dataSourceKey: string, pluginKeys: string[] | undefined) {
+async function makeRequest(authController: AuthController, dataSourceKey: string, pluginKeys: string[] | undefined, apiKey?: string): Promise<AccessResponse> {
     let idToken: string | null;
     try {
         idToken = await authController.getAuthToken();
@@ -25,6 +25,7 @@ async function makeRequest(authController: AuthController, dataSourceKey: string
                 Authorization: `Basic ${idToken}`
             },
             body: JSON.stringify({
+                apiKey,
                 email: authController.user?.email ?? null,
                 datasource: dataSourceKey,
                 plugins: pluginKeys
@@ -35,16 +36,26 @@ async function makeRequest(authController: AuthController, dataSourceKey: string
         });
 }
 
-export function useProjectLog(authController: AuthController,
-                              dataSourceDelegate: DataSourceDelegate,
-                              plugins?: FireCMSPlugin<any, any, any>[]): AccessResponse | null {
+export interface UseProjectLogParams {
+    apiKey?: string;
+    authController: AuthController;
+    dataSourceDelegate: DataSourceDelegate;
+    plugins?: FireCMSPlugin<any, any, any>[];
+}
+
+export function useProjectLog({
+                                  authController,
+                                  dataSourceDelegate,
+                                  plugins,
+                                  apiKey
+                              }: UseProjectLogParams): AccessResponse | null {
     const [accessResponse, setAccessResponse] = useState<AccessResponse | null>(null);
     const accessedUserRef = useRef<string | null>(null);
     const dataSourceKey = dataSourceDelegate.key;
     const pluginKeys = plugins?.map(plugin => plugin.key);
     useEffect(() => {
         if (authController.user && authController.user.uid !== accessedUserRef.current && !authController.initialLoading) {
-            makeRequest(authController, dataSourceKey, pluginKeys).then(setAccessResponse);
+            makeRequest(authController, dataSourceKey, pluginKeys, apiKey).then(setAccessResponse);
             accessedUserRef.current = authController.user.uid;
         }
     }, [authController, dataSourceKey, pluginKeys]);

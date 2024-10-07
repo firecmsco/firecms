@@ -26,7 +26,7 @@ export * from "./NotFoundPage";
 
 export * from "./VirtualTable";
 export * from "./ErrorBoundary";
-export * from "./DeleteConfirmationDialog";
+export * from "./ConfirmationDialog";
 
 export * from "./FireCMSLogo";
 

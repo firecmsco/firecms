@@ -64,7 +64,7 @@ export function useLicensesForUserController(): LicensesController {
         if (!firestore || !userId) return;
         const licensesRef = collection(firestore, LICENSES_COLLECTION);
 
-        return onSnapshot(query(licensesRef, where("created_by", "==", userId)),
+        return onSnapshot(query(licensesRef, where("created_by", "==", userId), where("archived", "==", false)),
             {
                 next:
                     async (snapshot) => {

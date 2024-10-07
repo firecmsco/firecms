@@ -5,7 +5,7 @@ import * as locales from "date-fns/locale";
 
 import {
     defaultDateFormat,
-    DeleteConfirmationDialog, Role,
+    ConfirmationDialog, Role,
     useAuthController,
     useCustomizationController, User,
     useSnackbarController
@@ -149,7 +149,7 @@ export function UsersTable({ onUserClicked }: {
                 </TableBody>
             </Table>
 
-            <DeleteConfirmationDialog
+            <ConfirmationDialog
                 open={Boolean(userToBeDeleted)}
                 loading={deleteInProgress}
                 onAccept={() => {

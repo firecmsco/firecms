@@ -1,10 +1,14 @@
-import { ProductPrice, Subscription, SubscriptionStatus } from "../../types/subscriptions";
+import { ProductPrice, SubscriptionStatus } from "../../types/subscriptions";
 import { ProjectSubscriptionPlan } from "../../types/projects";
 
 export function getPriceString(price: ProductPrice) {
 
     if (price.billing_scheme === "tiered") {
-        return "Tiered pricing"
+        const firstFlatPrice = price.tiers.find(p => p.flat_amount);
+        if (firstFlatPrice)
+            return "Starting at " + formatPrice(firstFlatPrice.flat_amount as number, price.currency);
+        else
+            return "Billing in " + price.currency;
     }
 
     return formatPrice(price.unit_amount, price.currency) + " user/" + price.interval;

@@ -13,7 +13,7 @@ import {
     Tooltip,
     Typography
 } from "@firecms/ui";
-import { DeleteConfirmationDialog, Role } from "@firecms/core";
+import { ConfirmationDialog, Role } from "@firecms/core";
 import { useUserManagement } from "../../hooks";
 import { RoleChip } from "./RoleChip";
 import { DEFAULT_ROLES } from "./default_roles";
@@ -115,7 +115,7 @@ export function RolesTable({
 
         </Table>
 
-        <DeleteConfirmationDialog
+        <ConfirmationDialog
             open={Boolean(roleToBeDeleted)}
             loading={deleteInProgress}
             onAccept={() => {

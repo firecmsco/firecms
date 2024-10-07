@@ -14,7 +14,7 @@ export function PlansComparisonDialog({
 
     const navigationController = useNavigationController();
     const navigate = useNavigate();
-    const goToSettings = () => {
+    const goToSubscriptions = () => {
         onClose();
         navigate(navigationController.basePath + "/settings");
     }

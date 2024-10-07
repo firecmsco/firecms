@@ -2,6 +2,7 @@ import { SubscriptionStatus } from "../index";
 
 export type ProLicense = {
     id: string;
+    archived: boolean;
     status: SubscriptionStatus;
     licensed_users: number;
     firebase_project_ids: string[];

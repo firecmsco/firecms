@@ -48,6 +48,7 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
         entityViews,
         components,
         navigationController,
+        apiKey
     } = props;
 
     useLocaleConfig(locale);
@@ -82,7 +83,15 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
         onAnalyticsEvent
     }), []);
 
-    const accessResponse = useProjectLog(authController, dataSourceDelegate, plugins);
+    const accessResponse = useProjectLog({
+        apiKey,
+        authController,
+        dataSourceDelegate,
+        plugins
+    });
+    if (accessResponse?.message) {
+        console.warn(accessResponse.message);
+    }
 
     if (navigationController.navigationLoadingError) {
         return (
@@ -106,16 +115,16 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
 
     if (accessResponse?.blocked) {
         return (
-            <CenteredView maxWidth={"md"} fullScreen={true}>
-                <Typography variant={"h4"}>
-                    Access blocked
+            <CenteredView maxWidth={"md"} fullScreen={true} className={"flex flex-col gap-2"}>
+                <Typography variant={"h4"} gutterBottom>
+                    License needed
                 </Typography>
                 <Typography>
-                    This app has been blocked. Please reach out at <a
+                    You need a valid license to use FireCMS PRO. Please reach out at <a
                     href={"mailto:hello@firecms.co"}>hello@firecms.co</a> for more information.
                 </Typography>
                 {accessResponse?.message &&
-                    <Typography>Response from the server: {accessResponse?.message}</Typography>}
+                    <Typography>{accessResponse?.message}</Typography>}
             </CenteredView>
         );
     }

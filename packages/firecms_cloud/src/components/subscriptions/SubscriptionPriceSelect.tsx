@@ -7,14 +7,17 @@ export interface SubscriptionPriceSelectParams {
     selectedPrice?: ProductPrice;
     setSelectedPrice: (price?: ProductPrice) => void;
     largePriceLabel: boolean;
+    fullWidth?: boolean;
 }
 
 export function SubscriptionPriceSelect({
                                             productPrices,
                                             setSelectedPrice,
                                             largePriceLabel,
-                                            selectedPrice
+                                            selectedPrice,
+                                            fullWidth = true
                                         }: SubscriptionPriceSelectParams) {
+
 
     return (productPrices ?? [])?.length > 1
         ? <>
@@ -25,7 +28,7 @@ export function SubscriptionPriceSelect({
                 onChange={(e) => {
                     setSelectedPrice((productPrices ?? []).find(price => price.id === e.target.value));
                 }}
-                className={"w-full"}
+                className={fullWidth ? "w-full" : "w-fit"}
                 position={"item-aligned"}
                 // label={"Choose pricing plan"}
                 renderValue={(value) => {
