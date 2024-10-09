@@ -49,16 +49,21 @@ export const showcaseCollection = buildCollection({
 
         count: buildProperty({
             dataType: "number",
-            name: "Count"
+            name: "Count",
+            validation: {
+                min: 0,
+                max: 10
+            }
         }),
 
         // build a dynamic property based on the `count` value
-        dynamic: buildProperty(({ values }) =>
-            ({
+        dynamic: buildProperty(({ values }) => {
+            const newVar = Math.max(0, Math.min(values.count ?? 0, 10));
+            return {
                 dataType: "map",
                 name: "Dynamic",
                 description: "Modify the count to update this field",
-                properties: Array(values.count ?? 0)
+                properties: Array(newVar)
                     .fill(0)
                     .map((_, index) => {
                         return buildProperty({
@@ -72,7 +77,8 @@ export const showcaseCollection = buildCollection({
                             ["dynamic_" + currentIndex]: property // keep in mind your key can't be just a number
                         }
                     }, {})
-            })),
+            };
+        }),
         user_email: buildProperty({
             dataType: "string",
             name: "User email",

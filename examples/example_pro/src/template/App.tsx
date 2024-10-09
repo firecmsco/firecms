@@ -32,10 +32,11 @@ import { firebaseConfig } from "./firebase_config";
 import { productsCollection } from "./collections/products";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
-import { useImportExportPlugin } from "@firecms/data_import_export";
 import { ExampleCMSView } from "./views/ExampleCMSView";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
+import { useImportPlugin } from "@firecms/data_import";
+import { useExportPlugin } from "@firecms/data_export";
 
 export function App() {
 
@@ -172,7 +173,8 @@ export function App() {
     /**
      * Allow import and export data plugin
      */
-    const importExportPlugin = useImportExportPlugin();
+    const importPlugin = useImportPlugin();
+    const exportPlugin = useExportPlugin();
 
     const collectionEditorPlugin = useCollectionEditorPlugin({
         collectionConfigController
@@ -191,12 +193,13 @@ export function App() {
             <ModeControllerProvider value={modeController}>
 
                 <FireCMS
+                    apiKey={import.meta.env.VITE_FIRECMS_API_KEY as string}
                     navigationController={navigationController}
                     authController={authController}
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
-                    plugins={[dataEnhancementPlugin, importExportPlugin, userManagementPlugin, collectionEditorPlugin]}
+                    plugins={[dataEnhancementPlugin, importPlugin, exportPlugin, userManagementPlugin, collectionEditorPlugin]}
                 >
                     {({
                           context,

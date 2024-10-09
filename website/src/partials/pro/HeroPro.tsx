@@ -93,7 +93,7 @@ export function HeroPro({
                            style={{
                                lineHeight: 1.35,
                            }}>
-                            The perfect solution for your team or public facing applications, built on top of Firebase,
+                            The perfect solution for your team or clients, built on top of Firebase,
                             MongoDB or any other backend.
                         </p>
                     </div>

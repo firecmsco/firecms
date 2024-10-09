@@ -111,17 +111,22 @@ export function PlansComparison() {
             </h3>
             <div className={"grow"}>
                 <p className={"text-lg mb-4 text-center font-semibold"}>
-                    Perfect for agencies and larger organizations
+                    Perfect for startups, companies or agencies.
                 </p>
                 <ul>
                     <li className={"ml-8 list-disc"}>Everything in PLUS</li>
                     <li className={"ml-8 list-disc"}>Self-hosted</li>
+                    <li className={"ml-8 list-disc"}>Custom authentication and access control</li>
+                    <li className={"ml-8 list-disc"}>Access to all the plugins</li>
                     <li className={"ml-8 list-disc"}>SAML SSO</li>
                     <li className={"ml-8 list-disc"}>Custom domain</li>
                     <li className={"ml-8 list-disc"}>Full CMS components customization</li>
                     <li className={"ml-8 list-disc"}>Priority support</li>
                     <li className={"ml-8 list-disc"}>Roadmap prioritization</li>
                 </ul>
+            </div>
+            <div className={"text-center mt-4 text-gray-600 dark:text-gray-400 w-full"}>
+                <span className={"text-2xl font-bold "}>Starting at €29.99</span>
             </div>
             <div className={"text-center mt-4 text-primary w-full"}>
                 <Button

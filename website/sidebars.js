@@ -29,6 +29,7 @@ module.exports = {
             className: "pro-sidebar-category",
             "items": [
                 "pro/pro_quickstart",
+                "pro/firestore_rules",
                 "pro/sample_pro",
                 "pro/main_components",
                 "pro/deployment",
@@ -39,7 +40,7 @@ module.exports = {
                 "pro/custom_storage",
                 "pro/nextjs",
                 "pro/migrating_from_v2_to_pro",
-                "pro/migrating_from_v3_beta",
+                "pro/migrating_from_v3_beta"
             ]
         },
         {

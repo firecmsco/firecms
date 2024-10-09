@@ -343,7 +343,11 @@ export async function createProject(options: InitOptions) {
         console.log(chalk.cyan.bold("yarn dev"));
         console.log("");
     } else if (options.template === "pro" || options.template === "community") {
-        console.log("Make sure you have a valid Firebase config in " + chalk.cyan.bold("src/firebase_config.ts"));
+        console.log("Make sure you have a valid Firebase config in ");
+        console.log(chalk.cyan.bold("src/firebase_config.ts"));
+        console.log("");
+        console.log(`Also, make sure the user that is logging in has read/write access to the path ${chalk.cyan.bold("__FIRECMS")} in your database `);
+        console.log("");
         console.log("Run:");
         console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
         console.log(chalk.bgYellow.black.bold("yarn"));

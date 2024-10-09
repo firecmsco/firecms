@@ -33,3 +33,11 @@ project name. Then run:
 yarn build
 ```
 
+### Deploying the project
+
+You can deploy the project to Firebase hosting by following [these instructions](https://firecms.co/docs/pro/deployment).
+In order to deploy the project, you need to have a valid FireCMS PRO license.
+You can create one in the [FireCMS subscriptions](https://app.firecms.co/subscriptions).
+When you get your API key, you can set it in the `.env` file.
+
+

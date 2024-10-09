@@ -23,13 +23,27 @@ To use the plugin, you need to have FireCMS and Firebase set up in your project.
 yarn add @firecms/user_management
 ```
 
+
 ## Configuration
 
-The plugin requires several configurations, including paths for storing user and role data,
-and optional settings such as user limits and permissions.
+The plugin requires several configurations, including paths for storing user and role data.
 
 The default config of the plugin will be saved to your Firestore database under the path `__FIRECMS/config`,
 but you can customize this path as needed.
+
+Make sure to set up the Firestore rules to allow the plugin to read and write to the specified paths.
+We suggest adding these rules to your Firestore security rules, which will allow users with the correct roles to access the user management data.
+
+```
+match /{document=**} {
+  allow read: if isFireCMSUser();
+  allow write: if isFireCMSUser();
+}
+
+function isFireCMSUser(){
+  return exists(/databases/$(database)/documents/__FIRECMS/config/users/$(request.auth.token.email));
+}
+```
 
 
 ### User Management Parameters
