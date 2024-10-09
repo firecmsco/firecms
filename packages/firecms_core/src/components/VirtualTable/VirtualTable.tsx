@@ -63,10 +63,10 @@ const innerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
 
                             {customView && <div style={{
                                 position: "sticky",
-                                top: "56px",
+                                top: "48px",
                                 flexGrow: 1,
-                                height: "calc(100% - 56px)",
-                                marginTop: "calc(56px - 100vh)",
+                                height: "calc(100% - 48px)",
+                                marginTop: "calc(48px - 100vh)",
                                 left: 0
                             }}>{customView}</div>}
 
@@ -216,7 +216,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             scrollOffset: number,
             scrollUpdateWasRequested: boolean;
         }) => {
-            if(debug)
+            if (debug)
                 console.log("onScroll", {
                     scrollDirection,
                     scrollOffset,
@@ -227,7 +227,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         }, [maxScroll, onEndReachedInternal]);
 
         const onFilterUpdateInternal = useCallback((column: VirtualTableColumn, filterForProperty?: [VirtualTableWhereFilterOp, any]) => {
-            if(debug)
+            if (debug)
                 console.log("onFilterUpdateInternal", column, filterForProperty);
 
             endReachCallbackThreshold.current = 0;
@@ -248,29 +248,27 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             if (onFilterUpdate) onFilterUpdate(newFilterValue);
         }, [checkFilterCombination, currentSort, onFilterUpdate, sortByProperty]);
 
-        const buildEmptyView = useCallback(() => {
-            if (loading)
-                return <CircularProgressCenter/>;
-            return <div
-                className="flex flex-col overflow-auto items-center justify-center p-2 gap-2 h-full">
-                <AssignmentIcon/>
-                {emptyComponent}
-            </div>;
-        }, [emptyComponent, loading]);
-
         const empty = !loading && (data?.length ?? 0) === 0;
         const customView = error
             ? <CenteredView maxWidth={"2xl"}
                             className="flex flex-col gap-2">
 
                 <Typography variant={"h6"}>
-                    {"Error fetching data from the data source"}
+                    {"Error"}
                 </Typography>
 
                 {error?.message && <SafeLinkRenderer text={error.message}/>}
 
             </CenteredView>
-            : (empty ? buildEmptyView() : undefined);
+            : (empty
+                ? (loading
+                    ? <CircularProgressCenter/>
+                    : <div
+                        className="flex flex-col overflow-auto items-center justify-center p-2 gap-2 h-full">
+                        <AssignmentIcon/>
+                        {emptyComponent}
+                    </div>)
+                : undefined);
 
         const virtualListController = {
             data,
@@ -293,7 +291,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             AddColumnComponent
         };
 
-        if(debug)
+        if (debug)
             console.log("VirtualTable render", virtualListController);
 
         // useTraceUpdate(virtualListController);
