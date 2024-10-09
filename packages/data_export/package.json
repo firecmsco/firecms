@@ -49,16 +49,16 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
-    "@testing-library/jest-dom": "^6.4.6",
-    "@types/jest": "^29.5.12",
-    "@types/react": "^18.3.3",
+    "@testing-library/jest-dom": "^6.5.0",
+    "@types/jest": "^29.5.13",
+    "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.1",
+    "@vitejs/plugin-react": "^4.3.2",
     "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
-    "ts-jest": "^29.2.3",
-    "typescript": "^5.5.4",
-    "vite": "^5.3.4"
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.8"
   },
   "jest": {
     "transform": {

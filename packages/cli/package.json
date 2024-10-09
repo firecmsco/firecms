@@ -35,23 +35,23 @@
     "chalk": "^4.1.2",
     "execa": "^4.1.0",
     "form-data": "^4.0.0",
-    "googleapis": "^140.0.1",
+    "googleapis": "^144.0.0",
     "inquirer": "^7.3.3",
     "json5": "^2.2.3",
     "listr": "^0.14.3",
     "ncp": "^2.0.0",
     "nocache": "^4.0.0",
     "open": "^10.1.0",
-    "ora": "^8.0.1",
+    "ora": "^8.1.0",
     "ws": "^8.18.0",
     "zip-folder": "^1.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.14.12",
+    "@types/node": "^20.16.11",
     "npm-run-all": "^4.1.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.4",
-    "vite": "^5.3.4"
+    "typescript": "^5.6.3",
+    "vite": "^5.4.8"
   },
   "files": [
     "bin/",

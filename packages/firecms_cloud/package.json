@@ -44,8 +44,8 @@
     "@firecms/formex": "^3.0.0-canary.131",
     "@firecms/schema_inference": "^3.0.0-canary.131",
     "@firecms/user_management": "^3.0.0-canary.131",
-    "react-router": "^6.25.1",
-    "react-router-dom": "^6.25.1"
+    "react-router": "^6.26.2",
+    "react-router-dom": "^6.26.2"
   },
   "peerDependencies": {
     "firebase": "^10.12.2",
@@ -53,11 +53,11 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@types/node": "^20.14.12",
-    "@types/react": "^18.3.3",
+    "@types/node": "^20.16.11",
+    "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",
-    "typescript": "^5.5.4",
-    "vite": "^5.3.4"
+    "typescript": "^5.6.3",
+    "vite": "^5.4.8"
   },
   "scripts": {
     "dev": "vite",
