@@ -1,7 +1,7 @@
 {
   "name": "@firecms/ui",
   "type": "module",
-  "version": "3.0.0-canary.132",
+  "version": "3.0.0-canary.133",
   "description": "Awesome Firebase/Firestore-based headless open-source CMS",
   "funding": {
     "url": "https://github.com/sponsors/firecmsco"
@@ -67,6 +67,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^0.2.1",
     "date-fns": "^3.6.0",
+    "markdown-it": "^14.1.0",
     "material-icons": "^1.13.12",
     "react-datepicker": "^7.4.0",
     "react-dropzone": "^14.2.9",
