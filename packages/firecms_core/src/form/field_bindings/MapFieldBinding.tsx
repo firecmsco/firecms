@@ -95,7 +95,7 @@ export function MapFieldBinding({
         <ErrorBoundary>
 
             {!minimalistView && !minimalistView && <ExpandablePanel initiallyExpanded={expanded}
-                                                                    className={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2 bg-slate-50 bg-opacity-50 dark:bg-gray-900"}
+                                                                    innerClassName={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2 bg-white dark:bg-gray-900"}
                                                                     title={title}>{mapFormView}</ExpandablePanel>}
 
             {(minimalistView || minimalistView) && mapFormView}

@@ -1,11 +1,11 @@
 import React from "react";
-import { Popover } from "@firecms/ui";
+import { Button, Popover } from "@firecms/ui";
 
 export default function PopoverAlignDemo() {
     return (
         <div>
             <Popover
-                trigger={<button className="btn">Open Left</button>}
+                trigger={<Button>Open Left</Button>}
                 side="left"
             >
                 <div className="p-4">
@@ -13,7 +13,7 @@ export default function PopoverAlignDemo() {
                 </div>
             </Popover>
             <Popover
-                trigger={<button className="btn ml-2">Open Bottom</button>}
+                trigger={<Button>Open Bottom</Button>}
                 side="bottom"
             >
                 <div className="p-4">

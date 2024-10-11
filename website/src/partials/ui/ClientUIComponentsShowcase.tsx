@@ -303,7 +303,7 @@ export default function ClientUIComponentsShowcase() {
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
                 <Typography variant="subtitle2">Popover</Typography>
-                <Popover trigger={<button className="btn">Open Popover</button>}>
+                <Popover trigger={<Button>Open Popover</Button>}>
                     <div className="flow-root p-4">This is a basic Popover.</div>
                 </Popover>
             </Card>
@@ -402,7 +402,8 @@ export default function ClientUIComponentsShowcase() {
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
                 <Typography variant="subtitle2">Expandable Panel</Typography>
-                <ExpandablePanel title={"Click to expand"} expanded={isExpandablePanelOpen}
+                <ExpandablePanel title={"Click to expand"}
+                                 expanded={isExpandablePanelOpen}
                                  onExpandedChange={setExpandablePanelOpen}>
                     <div className="flow-root p-4">Here is some content that was hidden but now is
                         visible!

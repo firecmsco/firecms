@@ -15,7 +15,8 @@ export function ExpandablePanel({
                                     initiallyExpanded = true,
                                     titleClassName,
                                     asField,
-                                    className
+                                    className,
+                                    innerClassName
                                 }: PropsWithChildren<{
     title: React.ReactNode,
     invisible?: boolean,
@@ -24,7 +25,8 @@ export function ExpandablePanel({
     onExpandedChange?: (expanded: boolean) => void,
     titleClassName?: string,
     asField?: boolean,
-    className?: string
+    className?: string,
+    innerClassName?: string
 }>) {
 
     useInjectStyles("ExpandablePanel", `
@@ -79,7 +81,8 @@ export function ExpandablePanel({
                 className={cls(
                     !invisible && defaultBorderMixin + " border",
                     "rounded-md",
-                    "w-full"
+                    "w-full",
+                    className
                 )}
                 open={open}
                 onOpenChange={(updatedOpen: boolean) => {
@@ -89,8 +92,8 @@ export function ExpandablePanel({
 
                 <Collapsible.Trigger
                     className={cls(
-                        "rounded flex items-center justify-between w-full min-h-[52px]",
-                        "hover:bg-slate-50 dark:hover:bg-gray-800 dark:hover:bg-opacity-20",
+                        "rounded-t flex items-center justify-between w-full min-h-[52px]",
+                        "hover:bg-slate-200 hover:bg-opacity-20 dark:hover:bg-gray-800 dark:hover:bg-opacity-20",
                         invisible ? "border-b px-2" : "p-4",
                         invisible && defaultBorderMixin,
                         asField && fieldBackgroundMixin,
@@ -107,7 +110,7 @@ export function ExpandablePanel({
                         overflow: allowOverflow ? "visible" : "hidden"
                     }}
                 >
-                    <div className={className}>
+                    <div className={innerClassName}>
                         {children}
                     </div>
                 </Collapsible.Content>

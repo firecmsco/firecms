@@ -124,10 +124,10 @@ function DragHandle(options: DragHandleOptions) {
             dragHandleElement.dataset.dragHandle = "";
             dragHandleElement.classList.add("drag-handle");
             dragHandleElement.addEventListener("dragstart", (e) => {
-                handleDragStart(e, view);
+                handleDragStart(e, view as any);
             });
             dragHandleElement.addEventListener("click", (e) => {
-                handleClick(e, view);
+                handleClick(e, view as any);
             });
 
             hideDragHandle();

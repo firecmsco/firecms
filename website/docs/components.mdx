@@ -57,7 +57,13 @@ npm install @firecms/ui
 You also need to install `tailwindcss`:
 
 ```bash
-yarn add tailwindcss
+yarn add tailwindcss @tailwindcss/typography
+```
+
+And initialize it in your project:
+
+```bash
+npx tailwindcss init
 ```
 
 And add then add the fireCMS preset in your `tailwind.config.js`:
@@ -70,12 +76,12 @@ export default {
     content: [
         "./index.html",
         "./src/**/*.{js,ts,jsx,tsx}",
-        "../../packages/**/src/**/*.{js,ts,jsx,tsx}",
-        "../../node_modules/firecms/src/**/*.{js,ts,jsx,tsx}",
-        "../../node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}",
+        "./node_modules/firecms/src/**/*.{js,ts,jsx,tsx}",
+        "./node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}"
     ]
 };
 ```
+(You might need to adjust the paths in the `content` array to match your project structure)
 
 Finally, you need to define your primary and secondary colors in your `index.css` file:
 

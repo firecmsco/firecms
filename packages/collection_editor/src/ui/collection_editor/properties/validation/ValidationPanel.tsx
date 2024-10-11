@@ -10,7 +10,7 @@ export function ValidationPanel({
         <ExpandablePanel
             initiallyExpanded={false}
             asField={true}
-            className="p-4"
+            innerClassName="p-4"
             title={
                 <div className="flex flex-row text-gray-500">
                     <RuleIcon/>

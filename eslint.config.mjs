@@ -81,7 +81,6 @@ export default [
             "@typescript-eslint/no-empty-function": "warn",
             "@typescript-eslint/no-inferrable-types": "warn",
             "@typescript-eslint/ban-ts-comment": "warn",
-            "@typescript-eslint/ban-types": "warn",
             "@typescript-eslint/no-explicit-any": "off",
         },
     }];

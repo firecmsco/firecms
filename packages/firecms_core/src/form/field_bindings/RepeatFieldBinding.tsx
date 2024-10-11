@@ -100,7 +100,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
         <>
 
             {!minimalistView && <ExpandablePanel initiallyExpanded={expanded}
-                                                 className={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2"}
+                                                 innerClassName={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2"}
                                                  title={title}>
                 {arrayContainer}
             </ExpandablePanel>}

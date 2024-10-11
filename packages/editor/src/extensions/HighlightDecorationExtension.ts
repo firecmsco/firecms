@@ -1,5 +1,4 @@
 import { Command, Extension } from "@tiptap/core"
-import { Node } from "@tiptap/pm/model"
 import { Plugin, PluginKey } from "@tiptap/pm/state"
 import { Decoration, DecorationSet } from "@tiptap/pm/view"
 
@@ -27,7 +26,7 @@ export interface HighlightDecorationOptions {
     highlight?: { from: number, to: number }
 }
 
-function buildDecorationSet(highlight: any, doc: Node) {
+function buildDecorationSet(highlight: any, doc: any) {
     const decorations: [any?] = [];
 
     if (highlight) {

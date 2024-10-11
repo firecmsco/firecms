@@ -7,6 +7,7 @@ interface SheetProps {
     children: React.ReactNode;
     open: boolean;
     title?: string;
+    modal?: boolean;
     side?: "top" | "bottom" | "left" | "right";
     darkBackground?: boolean;
     transparent?: boolean;
@@ -19,6 +20,7 @@ export const Sheet: React.FC<SheetProps> = ({
                                                 children,
                                                 side = "right",
                                                 title,
+                                                modal = true,
                                                 open,
                                                 onOpenChange,
                                                 transparent,
@@ -51,12 +53,13 @@ export const Sheet: React.FC<SheetProps> = ({
 
     return (
         <DialogPrimitive.Root open={displayed || open}
+                              modal={modal}
                               onOpenChange={onOpenChange}>
             <DialogPrimitive.Portal>
                 <DialogPrimitive.Title autoFocus tabIndex={0}>
                     {title ?? "Sheet"}
                 </DialogPrimitive.Title>
-                <DialogPrimitive.Overlay
+                {modal && <DialogPrimitive.Overlay
                     className={cls(
                         "fixed inset-0 transition-opacity z-20 ease-in-out duration-100 backdrop-blur-sm",
                         "bg-black bg-opacity-50",
@@ -68,7 +71,7 @@ export const Sheet: React.FC<SheetProps> = ({
                         pointerEvents: displayed ? "auto" : "none"
                     }}
                     onClick={() => onOpenChange && onOpenChange(false)}
-                />
+                />}
                 <DialogPrimitive.Content
                     {...props}
                     onFocusCapture={(event) => event.preventDefault()}

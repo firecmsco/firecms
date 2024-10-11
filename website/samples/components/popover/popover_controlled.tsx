@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Popover } from "@firecms/ui";
+import { Button, Popover } from "@firecms/ui";
 
 export default function PopoverControlledDemo() {
     const [open, setOpen] = useState(false);
-    
+
     return (
         <Popover
-            trigger={<button className="btn" onClick={() => setOpen(!open)}>Toggle Popover</button>}
+            trigger={<Button onClick={() => setOpen(!open)}>Toggle Popover</Button>}
             open={open}
             onOpenChange={setOpen}
         >

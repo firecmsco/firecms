@@ -7,10 +7,16 @@ export default function MultiSelectDisabledDemo() {
             disabled
             label="Disabled MultiSelect"
             value={["option1"]}
-            renderValue={(value) => (
-                <span style={{ marginRight: 8, background: "#eee", padding: 4 }}>
+            renderValues={(values) => (values.map((value) =>
+                    <span
+                        key={value}
+                        style={{
+                        marginRight: 8,
+                        background: "#eee",
+                        padding: 4
+                    }}>
                     {value}
-                </span>
+                </span>)
             )}>
             <MultiSelectItem value="option1">Option 1</MultiSelectItem>
             <MultiSelectItem value="option2">Option 2 is disabled</MultiSelectItem>

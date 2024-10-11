@@ -7,7 +7,6 @@ import { DefaultDrawer } from "../core";
  * If you want to customise the drawer, you can create your own component and pass it as a child.
  * For custom drawers, you can use the {@link useApp} to open and close the drawer.
  *
-
  */
 export function Drawer({
                            children,

@@ -11,7 +11,7 @@ export interface FileUploadError {
 
 export type OnFileUploadRejected = (fileRejections: {
     file: File;
-    errors: FileUploadError[];
+    errors: readonly FileUploadError[];
 }[], event: object) => void;
 
 export type OnFilesUploadAdded = (files: File[]) => void;

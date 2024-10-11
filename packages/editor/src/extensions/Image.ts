@@ -86,7 +86,7 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
 
                         const reader = new FileReader();
                         reader.onload = async (readerEvent) => {
-                            await onFileRead(view, readerEvent, position.pos, upload, image);
+                            await onFileRead(view as any, readerEvent, position.pos, upload, image);
                         };
                         reader.readAsDataURL(image);
                     });
@@ -119,7 +119,7 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
                         const reader = new FileReader();
 
                         reader.onload = async (readerEvent) => {
-                            await onFileRead(view, readerEvent, pos, upload, image);
+                            await onFileRead(view as any, readerEvent, pos, upload, image);
                         };
                         reader.readAsDataURL(image);
                     }

@@ -1,10 +1,10 @@
 import React from "react";
-import { Popover } from "@firecms/ui";
+import { Button, Popover } from "@firecms/ui";
 
 export default function PopoverStyledDemo() {
     return (
         <Popover
-            trigger={<button className="btn">Open Custom Styled Popover</button>}
+            trigger={<Button>Open Custom Styled Popover</Button>}
             className="bg-purple-500 text-white p-3 rounded-lg shadow-lg"
         >
             <div>
