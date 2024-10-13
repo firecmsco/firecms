@@ -311,7 +311,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                                   }}/>;
         } else if (dataType === "boolean") {
             return <BooleanSwitchWithLabel value={entryValue}
-                                           size={"medium"}
+                                           size={"small"}
                                            position={"start"}
                                            disabled={disabled || !fieldKey}
                                            onValueChange={(newValue) => {
@@ -478,7 +478,7 @@ function ArrayKeyValueRow<T>({
                                   }}/>;
         } else if (dataType === "boolean") {
             return <BooleanSwitchWithLabel value={entryValue}
-                                           size={"medium"}
+                                           size={"small"}
                                            position={"start"}
                                            onValueChange={(v) => {
                                                setValue(v as T);

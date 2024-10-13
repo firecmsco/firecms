@@ -1,7 +1,8 @@
 import React, { ReactEventHandler } from "react";
 import { cls } from "../util";
 
-export type TextProps<C extends React.ElementType> = {
+export type TypographyVariant = keyof typeof typographyVariants;
+export type TypographyProps<C extends React.ElementType = "span"> = {
     align?: "center" | "inherit" | "justify" | "left" | "right";
     children?: React.ReactNode;
     className?: string;
@@ -9,14 +10,14 @@ export type TextProps<C extends React.ElementType> = {
     gutterBottom?: boolean;
     noWrap?: boolean;
     paragraph?: boolean;
-    variant?: keyof typeof defaultVariantMapping;
+    variant?: TypographyVariant;
     variantMapping?: { [key: string]: string };
     color?: "inherit" | "initial" | "primary" | "secondary" | "disabled" | "error";
     onClick?: ReactEventHandler<HTMLElement>;
     style?: React.CSSProperties;
 } & React.ComponentPropsWithoutRef<C>;
 
-const defaultVariantMapping = {
+const typographyVariants = {
     h1: "h1",
     h2: "h2",
     h3: "h3",
@@ -76,7 +77,7 @@ const variantToClasses = {
     button: "typography-button"
 };
 
-export function Typography<C extends React.ElementType>(
+export function Typography<C extends React.ElementType = "span">(
     {
         align = "inherit",
         color = "primary",
@@ -87,15 +88,15 @@ export function Typography<C extends React.ElementType>(
         noWrap = false,
         paragraph = false,
         variant = "body1",
-        variantMapping = defaultVariantMapping,
+        variantMapping = typographyVariants,
         style,
         onClick,
         ...other
-    }: TextProps<C>
+    }: TypographyProps<C>
 ) {
     const Component =
         component ||
-        (paragraph ? "p" : variantMapping[variant] || defaultVariantMapping[variant]) ||
+        (paragraph ? "p" : variantMapping[variant] || typographyVariants[variant]) ||
         "span";
 
     const classes = cls(

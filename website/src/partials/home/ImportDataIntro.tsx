@@ -32,7 +32,7 @@ export const ImportDataIntro = () => {
                             <p>
                                 FireCMS offers a streamlined data import feature designed to make your life easier.
                                 Whether you're working with extensive <b>CSV, JSON or Excel</b> files,
-                                our intuitive tools enable you to seamlessly transfer and integrate your datasets
+                                our intuitive tools enable you to transfer and integrate your datasets
                                 into
                                 FireCMS. No more tedious manual data entry or convoluted import processes—just
                                 quick,

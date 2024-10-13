@@ -14,11 +14,6 @@ function ProFeaturesPanels() {
             description: "Control app settings based on who's logged in. Connect with your existing user management system for a unified experience."
         },
         {
-            icon: gridIcon,
-            title: "High-quality components",
-            description: "Design custom views using the full component set that FireCMS uses internally. Save time and effort by reusing them across your application."
-        },
-        {
             icon: iconCards,
             title: "Self-hosted",
             description: "Operate independently without external services. Enjoy full control over your data and infrastructure for enhanced security and compliance."
@@ -53,17 +48,14 @@ function ProFeaturesPanels() {
                         </h2>
 
                         <p className={clsx("text-xl md:text-2xl py-4")}>
-                            <b>FireCMS PRO</b> allows you to use all the internal components and features of FireCMS,
-                            while allowing total styling and customization. It also provides additional tools and
-                            components
-                            to help you build better back-office applications faster.
-
-                            FireCMS PRO elevates your control and efficiency, offering an unmatched user
-                            experience designed for professionals. Seamlessly manage your data with
-                            enhanced tools, including an intuitive <strong className={"gradient-text"}>spreadsheet
-                            view</strong> and <strong className={"gradient-text"}>dynamic,
-                            feature-rich forms</strong>. It's the professional edge
-                            your projects demand.
+                            <b>FireCMS PRO</b> gives you full access to all the features and components of FireCMS, with
+                            the freedom to style and customize as you like. Plus, it offers extra tools and elements to
+                            help you create superior back-office applications more efficiently. With FireCMS PRO, you
+                            gain greater control and efficiency, enjoying a user experience tailored for professionals.
+                            Take charge of your data with advanced tools, including an easy-to-use <strong
+                            className={"gradient-text"}>spreadsheet view</strong> and <strong
+                            className={"gradient-text"}>dynamic, feature-rich forms</strong>. It's the professional
+                            advantage your projects need.
                         </p>
                     </div>
 

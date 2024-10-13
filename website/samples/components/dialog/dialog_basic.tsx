@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, Typography } from "@firecms/ui";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@firecms/ui";
 
 export default function DialogBasicDemo() {
     const [open, setOpen] = useState(false);
@@ -11,9 +11,9 @@ export default function DialogBasicDemo() {
                 open={open}
                 onOpenChange={setOpen}>
                 <DialogContent className="p-8 flex flex-col space-y-2">
-                    <Typography variant={"h5"} gutterBottom>
+                    <DialogTitle variant={"h5"} gutterBottom>
                         Your dialog
-                    </Typography>
+                    </DialogTitle>
                     <Typography gutterBottom>
                         Basic Dialog Content
                     </Typography>

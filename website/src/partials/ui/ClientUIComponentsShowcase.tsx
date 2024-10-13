@@ -35,6 +35,7 @@ import {
     SettingsIcon,
     Sheet,
     Skeleton,
+    Slider,
     Tab,
     Tabs,
     TextField,
@@ -54,11 +55,29 @@ export default function ClientUIComponentsShowcase() {
     const [checked, setChecked] = useState<boolean | null>(true);
     const [badgeDisplayed, setBadgeDisplayed] = useState(true);
     const [textFieldValue, setTextFieldValue] = useState<string>("");
+    const [sliderValue, setSliderValue] = useState<number[]>([4]);
     const cardClasses = "relative p-4 mb-6 flex flex-col gap-2 break-inside-avoid dark:bg-gray-900 dark:bg-opacity-50";
 
     return <div className={"max-w-6xl mx-auto "}>
         <MenubarDemo/>
         <div className="md:columns-2 lg:columns-3 gap-4">
+
+
+            <Card className={cardClasses}>
+                <IconButton className="absolute top-2 right-2 hover:no-underline"
+                            component={"a"}
+                            href={"/docs/components/slider"}
+                            size="smallest">
+                    <ArrowForwardIcon size="smallest"/>
+                </IconButton>
+                <Typography variant="subtitle2">Slider</Typography>
+                <Slider step={1}
+                        min={0}
+                        max={10}
+                        value={[sliderValue]}
+                        onValueChange={setSliderValue}/>
+            </Card>
+
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
@@ -185,12 +204,21 @@ export default function ClientUIComponentsShowcase() {
                 </IconButton>
                 <Typography variant="subtitle2">Boolean Switch</Typography>
                 <div className={"flex flex-row items-center gap-2"}>
-                    <BooleanSwitch value={checked} onValueChange={() => {
-                        setChecked(!checked)
-                    }}/>
-                    <BooleanSwitch value={checked} onValueChange={() => {
-                        setChecked(!checked)
-                    }} size="small"/>
+                    <BooleanSwitch value={checked}
+                                   size="medium"
+                                   onValueChange={() => {
+                                       setChecked(!checked)
+                                   }}/>
+                    <BooleanSwitch value={checked}
+                                   onValueChange={() => {
+                                       setChecked(!checked)
+                                   }}
+                                   size="small"/>
+                    <BooleanSwitch value={checked}
+                                   onValueChange={() => {
+                                       setChecked(!checked)
+                                   }}
+                                   size="smallest"/>
                 </div>
             </Card>
 

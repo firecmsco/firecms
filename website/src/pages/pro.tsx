@@ -41,7 +41,6 @@ function ProPage() {
                                 could be easily customized to fit different needs.
                             </p>
                         </div>
-                        <HeroProButtons/>
                     </Panel>
 
                     <PublicFacingApps/>

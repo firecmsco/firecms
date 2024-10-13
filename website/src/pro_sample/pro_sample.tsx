@@ -130,9 +130,7 @@ function ProSampleInner() {
     });
 
     if (firebaseConfigLoading || !firebaseApp || loading) {
-        return <>
-            <CircularProgressCenter/>
-        </>;
+        return <CircularProgressCenter/>;
     }
 
     if (configError) {

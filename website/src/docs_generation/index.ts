@@ -49,4 +49,4 @@ function camelToSlug(input: string): string {
     return slug.charAt(0) === "_" ? slug.slice(1) : slug;
 }
 
-generateDocsForFile("../packages/ui/src/components/Menubar.tsx")
+generateDocsForFile("../packages/ui/src/components/Slider.tsx")

@@ -15,7 +15,13 @@ import inlineEditingVideo from "@site/static/img/inline_table_editing.mp4";
 
 import { useColorMode } from "@docusaurus/theme-common";
 import { TwoColumns } from "../general/TwoColumns";
-import { ContainerInnerPaddingMixin, CTACaret, CTAOutlinedButtonMixin, defaultBorderMixin } from "../styles";
+import {
+    ContainerInnerPaddingMixin,
+    CTACaret,
+    CTAOutlinedButtonMixin,
+    CTAOutlinedButtonWhiteMixin,
+    defaultBorderMixin
+} from "../styles";
 import { BrowserFrame } from "../BrowserFrame";
 import clsx from "clsx";
 import { Panel } from "../general/Panel";
@@ -70,7 +76,7 @@ function Features() {
                     </p>
 
                     <a
-                        className={CTAOutlinedButtonMixin + " w-fit"}
+                        className={CTAOutlinedButtonWhiteMixin + " w-fit"}
                         href="https://demo.firecms.co"
                         rel="noopener noreferrer"
                         target="_blank"

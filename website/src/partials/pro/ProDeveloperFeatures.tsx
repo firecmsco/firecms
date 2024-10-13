@@ -13,7 +13,7 @@ import {
     ContainerInnerPaddingMixin,
     CTAButtonMixin,
     CTACaret,
-    CTAOutlinedButtonMixin,
+    CTAOutlinedButtonMixin, CTAOutlinedButtonWhiteMixin,
     defaultBorderMixin
 } from "../styles";
 
@@ -62,7 +62,7 @@ export function ProDeveloperFeatures() {
 
                     <div className={"space-y-4 space-x-4"}>
                         <a
-                            className={CTAOutlinedButtonMixin + " w-fit"}
+                            className={CTAOutlinedButtonWhiteMixin + " w-fit"}
                             href="https://demo.firecms.co"
                             rel="noopener noreferrer"
                             target="_blank"
@@ -173,9 +173,7 @@ const proExampleCode = `function ProSample() {
     const importExportPlugin = useImportExportPlugin();
 
     if (firebaseConfigLoading || !firebaseApp) {
-        return <>
-            <CircularProgressCenter/>
-        </>;
+        return <CircularProgressCenter/>;
     }
 
     if (configError) {

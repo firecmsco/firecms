@@ -11,7 +11,6 @@ const UIPage: React.FC = () => {
         <Layout title="FireCMS UI, batteries included">
 
             <Hero
-                color={"secondary"}
                 title={
                     <>
                         <span className="block lg:inline">FireCMS UI</span>
@@ -19,7 +18,7 @@ const UIPage: React.FC = () => {
                 subtitle={
                     <>
                         <p>
-                            FireCMS includes a set of components based on <b>tailwind</b> and <b>RadixUI</b> that can be
+                            A battle-tested set of components based on <b>tailwind</b> and <b>RadixUI</b> that can be
                             used in any React project.
                         </p>
                     </>}
