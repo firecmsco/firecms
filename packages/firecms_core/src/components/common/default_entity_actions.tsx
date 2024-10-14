@@ -1,10 +1,10 @@
-import { ArchiveIcon, DeleteIcon, FileCopyIcon, KeyboardTabIcon, OpenInNewIcon } from "@firecms/ui";
+import { ArchiveIcon, DeleteIcon, EditIcon, FileCopyIcon, OpenInNewIcon } from "@firecms/ui";
 import { EntityAction } from "../../types";
 import { DeleteEntityDialog } from "../DeleteEntityDialog";
 import { addRecentId } from "../EntityCollectionView/utils";
 
 export const editEntityAction: EntityAction = {
-    icon: <KeyboardTabIcon/>,
+    icon: <EditIcon/>,
     name: "Edit",
     collapsed: false,
     onClick({
