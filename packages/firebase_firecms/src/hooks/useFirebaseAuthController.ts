@@ -96,7 +96,7 @@ export const useFirebaseAuthController = <ExtraData>({
             return onAuthStateChanged(
                 auth,
                 async (user) => {
-                    console.log("User state changed", user);
+                    console.debug("User state changed", user);
                     await updateUser(user, true);
                 },
                 error => setAuthProviderError(error)

@@ -285,7 +285,7 @@ export function useFirestoreDelegate({
             databaseId?: string,
             collection?: EntityCollection | ResolvedEntityCollection
         }) => {
-            console.log("Init text search controller", props.path);
+            console.debug("Init text search controller", props.path);
             if (!searchControllerRef.current) return false;
             return searchControllerRef.current.init(props);
         }, []),

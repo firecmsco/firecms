@@ -131,7 +131,7 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
                                  type: SubscriptionType
                              }
     ): Promise<() => void> => {
-        console.log("Subscribing to product", productPrice.id);
+        console.debug("Subscribing to product", productPrice.id);
 
         const firestore = firestoreRef.current;
         if (!firestore) throw new Error("Firestore not initialized");
@@ -178,8 +178,6 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
 
         // Save checkout session to Firestore
         const checkoutSessionRef = collection(firestore, CUSTOMERS_COLLECTION, userId, CHECKOUT_SESSION_COLLECTION);
-
-        console.log(checkoutSessionRef);
         const docRef = await addDoc(checkoutSessionRef, checkoutSession);
 
         return new Promise((resolve, reject) => {
@@ -189,7 +187,7 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
                     url
                 } = snap.data();
 
-                console.log("Checkout session updated", snap.data());
+                console.debug("Checkout session updated", snap.data());
                 onCheckoutSessionReady(url, error);
 
                 if (url) {

@@ -53,7 +53,7 @@ export function useDelegatedLogin({
                 const auth = getAuth(firebaseApp);
                 signInWithCustomToken(auth, delegatedToken)
                     .then(async (userCredential) => {
-                        console.log("Delegated user signed in", userCredential);
+                        console.debug("Delegated user signed in", userCredential);
                         onUserChanged?.(userCredential.user);
                         setLoginSuccessful(true);
                         try {

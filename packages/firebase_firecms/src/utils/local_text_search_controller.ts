@@ -58,7 +58,7 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
                             }));
 
                             indexes[path] = buildIndex(docs, collectionProp);
-                            console.log("Added docs to index", path, docs.length);
+                            console.debug("Added docs to index", path, docs.length);
                             resolve(true);
                         },
                         error: (e) => {

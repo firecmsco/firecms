@@ -109,7 +109,6 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
 
     const fullPath = navigation.resolveAliasesFrom(pathInput);
 
-    console.trace("Opening reference dialog for path " + fullPath);
     const dataSource = useDataSource(collection);
 
     const [entitiesDisplayedFirst, setEntitiesDisplayedFirst] = useState<Entity<any>[]>([]);

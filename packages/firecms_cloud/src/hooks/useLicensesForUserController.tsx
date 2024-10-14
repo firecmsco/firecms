@@ -118,7 +118,6 @@ export function useLicensesForUserController(): LicensesController {
             {
                 next:
                     async (snapshot) => {
-                        console.log("Subscriptions snapshot", snapshot.docs.length);
                         const updatedSubscriptions = (await Promise.all(snapshot.docs.map(convertDocToSubscription))).filter(Boolean) as Subscription[];
                         onSubscriptionsUpdate(updatedSubscriptions);
                     },
