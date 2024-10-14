@@ -60,7 +60,7 @@
 }
 
 .typography-button {
-    @apply text-sm font-medium;
+    @apply text-sm font-semibold uppercase;
 }
 
 

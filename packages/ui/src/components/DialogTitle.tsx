@@ -1,7 +1,7 @@
 import React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
-import { Typography, TypographyProps, TypographyVariant } from "./Typography.tsx";
+import { Typography, TypographyProps, TypographyVariant } from "./Typography";
 
 export type DialogContentProps = TypographyProps & {
     children: React.ReactNode,
