@@ -174,6 +174,7 @@ module.exports = {
                 "components/separator",
                 "components/sheet",
                 "components/skeleton",
+                "components/slider",
                 "components/table",
                 "components/tabs",
                 "components/text_field",

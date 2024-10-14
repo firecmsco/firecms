@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Slider } from "@firecms/ui";
 
 export default function SliderBasicDemo() {
-    const [value, setValue] = useState([50]);
+    const [value, setValue] = useState([60]);
 
     return (
         <Slider

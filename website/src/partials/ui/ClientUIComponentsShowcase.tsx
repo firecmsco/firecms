@@ -19,12 +19,29 @@ import {
     DialogContent,
     ExpandablePanel,
     FaceIcon,
+    FiberManualRecordIcon,
     FileUpload,
     IconButton,
     Label,
     LoadingButton,
     Markdown,
     Menu,
+    Menubar,
+    MenubarCheckboxItem,
+    MenubarContent,
+    MenubarItem,
+    MenubarItemIndicator,
+    MenubarMenu,
+    MenubarPortal,
+    MenubarRadioGroup,
+    MenubarRadioItem,
+    MenubarSeparator,
+    MenubarShortcut,
+    MenubarSub,
+    MenubarSubContent,
+    MenubarSubTrigger,
+    MenubarSubTriggerIndicator,
+    MenubarTrigger,
     MenuItem,
     Popover,
     RadioGroup,
@@ -42,10 +59,12 @@ import {
     Tooltip,
     Typography
 } from "@firecms/ui";
-import { useState } from "react";
-import MenubarDemo from "../../../samples/components/menubar/menubar_demo";
+import React, { useState } from "react";
 
-export default function ClientUIComponentsShowcase() {
+export default function ClientUIComponentsShowcase({
+                                                       docsUrl,
+                                                       linksInNewTab
+                                                   }: { docsUrl?: string, linksInNewTab?: boolean }) {
 
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [isSheetOpen, setSheetOpen] = useState(false);
@@ -66,7 +85,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/slider"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/slider"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -81,7 +101,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/button"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/button"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -98,7 +119,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/tabs"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/tabs"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -114,7 +136,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/file_upload"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/file_upload"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -130,7 +153,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/search_bar"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/search_bar"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -142,7 +166,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/alert"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/alert"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -156,7 +181,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/markdown"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/markdown"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -167,7 +193,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/skeleton"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/skeleton"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -180,7 +207,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/chip"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/chip"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -198,7 +226,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/boolean_switch"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/boolean_switch"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -225,7 +254,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/checkbox"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/checkbox"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -263,7 +293,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/icon_button"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/icon_button"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -301,7 +332,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/dialog"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/dialog"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -326,7 +358,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/popover"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/popover"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -339,7 +372,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/text_field"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/text_field"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -362,7 +396,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/radio_group"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/radio_group"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -395,7 +430,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/circular_progress"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/circular_progress"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -410,7 +446,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/menu"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/menu"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -425,7 +462,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/expandable_panel"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/expandable_panel"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -442,7 +480,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/datetimefield"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/datetimefield"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -456,7 +495,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/avatar"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/avatar"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -474,7 +514,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/select"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/select"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -512,7 +553,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/sheet"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/sheet"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -528,7 +570,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/loading_button"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/loading_button"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -540,7 +583,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/badge"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/badge"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -563,7 +607,8 @@ export default function ClientUIComponentsShowcase() {
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
                             component={"a"}
-                            href={"/docs/components/collapse"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/collapse"}
                             size="smallest">
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
@@ -582,3 +627,209 @@ export default function ClientUIComponentsShowcase() {
         </div>
     </div>;
 }
+
+const RADIO_ITEMS = ["Andy", "Benoît", "Luis"];
+const CHECK_ITEMS = ["Always Show Bookmarks Bar", "Always Show Full URLs"];
+
+function MenubarDemo() {
+    const [checkedSelection, setCheckedSelection] = React.useState([CHECK_ITEMS[1]]);
+    const [radioSelection, setRadioSelection] = React.useState(RADIO_ITEMS[2]);
+
+    return (
+        <Menubar className={"rounded-lg mb-8"}>
+            <MenubarMenu>
+                <MenubarTrigger>
+                    File
+                </MenubarTrigger>
+                <MenubarPortal>
+                    <MenubarContent>
+                        <MenubarItem>
+                            New Tab{" "}
+                            <MenubarShortcut>
+                                ⌘ T
+                            </MenubarShortcut>
+                        </MenubarItem>
+                        <MenubarItem>
+                            New Window{" "}
+                            <MenubarShortcut>
+                                ⌘ N
+                            </MenubarShortcut>
+                        </MenubarItem>
+                        <MenubarItem disabled
+                        >
+                            New Incognito Window
+                        </MenubarItem>
+                        <MenubarSeparator/>
+                        <MenubarSub>
+                            <MenubarSubTrigger>
+                                Share
+                                <MenubarSubTriggerIndicator/>
+                            </MenubarSubTrigger>
+                            <MenubarPortal>
+                                <MenubarSubContent>
+                                    <MenubarItem>
+                                        Email Link
+                                    </MenubarItem>
+                                    <MenubarItem>
+                                        Messages
+                                    </MenubarItem>
+                                    <MenubarItem>
+                                        Notes
+                                    </MenubarItem>
+                                </MenubarSubContent>
+                            </MenubarPortal>
+                        </MenubarSub>
+                        <MenubarSeparator/>
+                        <MenubarItem>
+                            Print…{" "}
+                            <MenubarShortcut>
+                                ⌘ P
+                            </MenubarShortcut>
+                        </MenubarItem>
+                    </MenubarContent>
+                </MenubarPortal>
+            </MenubarMenu>
+
+            <MenubarMenu>
+                <MenubarTrigger>
+                    Edit
+                </MenubarTrigger>
+                <MenubarPortal>
+                    <MenubarContent>
+                        <MenubarItem>
+                            Undo{" "}
+                            <MenubarShortcut
+                            >
+                                ⌘ Z
+                            </MenubarShortcut>
+                        </MenubarItem>
+                        <MenubarItem>
+                            Redo{" "}
+                            <MenubarShortcut
+                            >
+                                ⇧ ⌘ Z
+                            </MenubarShortcut>
+                        </MenubarItem>
+                        <MenubarSeparator/>
+                        <MenubarSub>
+                            <MenubarSubTrigger>
+                                Find
+                            </MenubarSubTrigger>
+
+                            <MenubarPortal>
+                                <MenubarSubContent>
+                                    <MenubarItem>
+                                        Search the web…
+                                    </MenubarItem>
+                                    <MenubarSeparator/>
+                                    <MenubarItem>
+                                        Find…
+                                    </MenubarItem>
+                                    <MenubarItem>
+                                        Find Next
+                                    </MenubarItem>
+                                    <MenubarItem>
+                                        Find Previous
+                                    </MenubarItem>
+                                </MenubarSubContent>
+                            </MenubarPortal>
+                        </MenubarSub>
+                        <MenubarSeparator/>
+                        <MenubarItem>
+                            Cut
+                        </MenubarItem>
+                        <MenubarItem>
+                            Copy
+                        </MenubarItem>
+                        <MenubarItem>
+                            Paste
+                        </MenubarItem>
+                    </MenubarContent>
+                </MenubarPortal>
+            </MenubarMenu>
+
+            <MenubarMenu>
+                <MenubarTrigger>
+                    View
+                </MenubarTrigger>
+                <MenubarPortal>
+                    <MenubarContent>
+                        {CHECK_ITEMS.map((item) => (
+                            <MenubarCheckboxItem
+
+                                key={item}
+                                checked={checkedSelection.includes(item)}
+                                onCheckedChange={() =>
+                                    setCheckedSelection((current) =>
+                                        current.includes(item)
+                                            ? current.filter((el) => el !== item)
+                                            : current.concat(item)
+                                    )
+                                }
+                            >
+                                <MenubarItemIndicator/>
+                                {item}
+                            </MenubarCheckboxItem>
+                        ))}
+                        <MenubarSeparator/>
+                        <MenubarItem leftPadding={true}>
+                            Reload{" "}
+                            <MenubarShortcut>
+                                ⌘ R
+                            </MenubarShortcut>
+                        </MenubarItem>
+                        <MenubarItem
+                            leftPadding
+                            disabled>
+                            Force Reload{" "}
+                            <MenubarShortcut>
+                                ⇧ ⌘ R
+                            </MenubarShortcut>
+                        </MenubarItem>
+                        <MenubarSeparator/>
+                        <MenubarItem
+                            leftPadding>
+                            Toggle Fullscreen
+                        </MenubarItem>
+                        <MenubarSeparator/>
+                        <MenubarItem
+                            leftPadding>
+                            Hide Sidebar
+                        </MenubarItem>
+                    </MenubarContent>
+                </MenubarPortal>
+            </MenubarMenu>
+
+            <MenubarMenu>
+                <MenubarTrigger>
+                    Profiles
+                </MenubarTrigger>
+                <MenubarPortal>
+                    <MenubarContent>
+                        <MenubarRadioGroup value={radioSelection} onValueChange={setRadioSelection}>
+                            {RADIO_ITEMS.map((item) => (
+                                <MenubarRadioItem
+                                    key={item}
+                                    value={item}>
+                                    <MenubarItemIndicator>
+                                        <FiberManualRecordIcon size={"smallest"}/>
+                                    </MenubarItemIndicator>
+                                    {item}
+                                </MenubarRadioItem>
+                            ))}
+                            <MenubarSeparator/>
+                            <MenubarItem leftPadding>
+                                Edit…
+                            </MenubarItem>
+                            <MenubarSeparator/>
+                            <MenubarItem leftPadding>
+                                Add Profile…
+                            </MenubarItem>
+                        </MenubarRadioGroup>
+                    </MenubarContent>
+                </MenubarPortal>
+            </MenubarMenu>
+        </Menubar>
+    );
+};
+
