@@ -24,8 +24,8 @@ import {
     Tooltip,
     Typography
 } from "@firecms/ui";
-import { Product } from "./types";
-import { usersCollection } from "./collections/users_collection";
+import { Product } from "../types";
+import { usersCollection } from "../collections/users_collection";
 
 /**
  * Sample CMS view not bound to a collection, customizable by the developer.

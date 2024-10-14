@@ -5,7 +5,6 @@ import { BrowserRouter } from "react-router-dom"
 import { App } from "./FirestoreApp/App";
 import MongoDBApp from "./MongoDBApp/MongoDBApp";
 import SupabaseApp from "./SupabaseApp/SupabaseApp";
-import { MedMotApp } from "./medmot/App";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>

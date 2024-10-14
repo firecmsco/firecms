@@ -43,7 +43,7 @@ import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlug
 
 import { firebaseConfig, secondaryFirebaseConfig } from "../firebase_config";
 // import { publicRecaptchaKey } from "../appcheck_config";
-import { ExampleCMSView } from "./ExampleCMSView";
+import { ExampleCMSView } from "./views/ExampleCMSView";
 import { testCollection } from "./collections/test_collection";
 import { usersCollection } from "./collections/users_collection";
 import { localeCollectionGroup, productsCollection } from "./collections/products_collection";
@@ -55,7 +55,7 @@ import { cryptoCollection } from "./collections/crypto_collection";
 import CustomColorTextField from "./custom_field/CustomColorTextField";
 import { booksCollection } from "./collections/books_collection";
 import { FirebaseApp } from "@firebase/app";
-import { TestEditorView } from "./TestEditorView";
+import { TestEditorView } from "./views/TestEditorView";
 import { useCollectionEditorPlugin } from "@firecms/collection_editor";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { ReCaptchaEnterpriseProvider } from "@firebase/app-check";
@@ -64,6 +64,7 @@ import { useImportPlugin } from "@firecms/data_import";
 import { DemoImportAction } from "./DemoImportAction";
 import { algoliaSearchControllerBuilder } from "./text_search";
 import { carsCollection } from "./collections/cars_collection";
+import ClientUIComponentsShowcase from "./views/ClientUIComponentsShowcase";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
 
@@ -214,7 +215,7 @@ export function App() {
         {
             path: "additional",
             name: "Additional",
-            group: "Content",
+            group: "Custom views",
             description: "This is an example of an additional view that is defined by the user",
             view: <ExampleCMSView/>
         },
@@ -227,8 +228,16 @@ export function App() {
         {
             path: "editor_test",
             name: "Editor test",
-            group: "Content",
+            description: "This view showcases a custom advanced editor",
+            group: "Custom views",
             view: <TestEditorView/>
+        },
+        {
+            path: "ui_components",
+            description: "This view showcases some of the UI components available in FireCMS",
+            name: "UI components showcase",
+            group: "Custom views",
+            view: <ClientUIComponentsShowcase docsUrl={"https://firecms.co"} linksInNewTab={true}/>
         }
     ]), []);
 
