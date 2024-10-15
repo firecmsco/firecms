@@ -9,8 +9,7 @@ export function DataTalkSuggestions({ suggestions }: {
     const navigation = useNavigationController();
 
     return <Collapse in={(suggestions ?? []).length > 0}>
-        <div className={"flex flex-row gap-2"}>
-            {/*<Typography className={"font-mono"} variant={"subtitle2"}>DATATALK </Typography>*/}
+        <div className={"flex flex-row gap-2 my-4"}>
             {suggestions && suggestions.map((suggestion, index) => {
                 return <Label
                     className={"flex-1"}

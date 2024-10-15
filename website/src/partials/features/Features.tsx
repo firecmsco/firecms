@@ -76,7 +76,7 @@ function Features() {
                     </p>
 
                     <a
-                        className={CTAOutlinedButtonWhiteMixin + " w-fit"}
+                        className={CTAOutlinedButtonMixin + " w-fit"}
                         href="https://demo.firecms.co"
                         rel="noopener noreferrer"
                         target="_blank"

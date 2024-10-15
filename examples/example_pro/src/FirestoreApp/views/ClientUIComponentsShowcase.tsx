@@ -94,7 +94,7 @@ export default function ClientUIComponentsShowcase({
                 <Slider step={1}
                         min={0}
                         max={10}
-                        value={[sliderValue]}
+                        value={sliderValue}
                         onValueChange={setSliderValue}/>
             </Card>
 

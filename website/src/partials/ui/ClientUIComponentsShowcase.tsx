@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
     AddIcon,
     Alert,
@@ -59,7 +60,6 @@ import {
     Tooltip,
     Typography
 } from "@firecms/ui";
-import React, { useState } from "react";
 
 export default function ClientUIComponentsShowcase({
                                                        docsUrl,
@@ -94,7 +94,7 @@ export default function ClientUIComponentsShowcase({
                 <Slider step={1}
                         min={0}
                         max={10}
-                        value={[sliderValue]}
+                        value={sliderValue}
                         onValueChange={setSliderValue}/>
             </Card>
 
