@@ -93,8 +93,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                 onOpenChange?.(open);
                 setOpenInternal(open);
             }}
-            {...props}
-        >
+            {...props}>
             {typeof label === "string" ? <SelectInputLabel error={error}>{label}</SelectInputLabel> : label}
             <div className={cls(
                 size === "small" ? "min-h-[42px]" : "min-h-[64px]",
@@ -103,8 +102,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                 "relative flex items-center",
                 className
-            )}
-            >
+            )}>
                 <SelectPrimitive.Trigger
                     ref={inputRef}
                     id={id}
@@ -119,32 +117,27 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                         disabled ? "text-slate-600 dark:text-slate-400" : "text-slate-800 dark:text-white",
                         "relative flex items-center",
                         inputClassName
-                    )}
-
-                    onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                    }}
-                >
-                    <div
-                        ref={ref}
-                        className={cls(
-                            "flex-grow w-full max-w-full flex flex-row gap-2 items-center",
-                            "overflow-visible",
-                            size === "small" ? "h-[42px]" : "h-[64px]"
-                        )}
-                    >
-                        <SelectPrimitive.Value
-                            onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                            }}
-                            placeholder={placeholder}
-                            className={"w-full"}>
+                    )}>
+                    <SelectPrimitive.Value
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }}
+                        placeholder={placeholder}
+                        asChild
+                        className={"w-full"}>
+                        <div
+                            ref={ref}
+                            className={cls(
+                                "flex-grow w-full max-w-full flex flex-row gap-2 items-center",
+                                "overflow-visible",
+                                size === "small" ? "h-[42px]" : "h-[64px]"
+                            )}
+                        >
                             {hasValue && value && renderValue ? renderValue(value) : placeholder}
                             {hasValue && !renderValue && value}
-                        </SelectPrimitive.Value>
-                    </div>
+                        </div>
+                    </SelectPrimitive.Value>
                     <SelectPrimitive.Icon className={cls("px-2 h-full flex items-center")}>
                         <ExpandMoreIcon size={"small"} className={cls("transition", open ? "rotate-180" : "")}/>
                     </SelectPrimitive.Icon>
@@ -192,10 +185,6 @@ export function SelectItem({
         key={value}
         value={value}
         disabled={disabled}
-        onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-        }}
         className={cls(
             "w-full",
             "relative flex items-center p-2 rounded-md text-sm text-slate-700 dark:text-slate-300",
