@@ -137,7 +137,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
 
 const DrawerHeader = () => {
     return (
-        <div className="flex flex-col min-h-[68px]"></div>
+        <div className="flex flex-col min-h-14 sm:min-h-16"></div>
     );
 };
 
@@ -168,11 +168,10 @@ function DrawerWrapper(props: {
                      sideOffset={12}
                      asChild={true}>
                 <div
-                    className="ml-2 fixed top-2 left-3 !bg-gray-50 dark:!bg-gray-900 rounded-full w-fit z-20">
+                    className="ml-2 fixed top-1 left-2 sm:top-2 sm:left-3 !bg-gray-50 dark:!bg-gray-900 rounded-full w-fit z-20">
                     <IconButton
                         color="inherit"
                         aria-label="Open menu"
-                        className="sticky top-2 left-3 "
                         onClick={() => props.setDrawerOpen(true)}
                         size="large"
                     >
@@ -210,7 +209,7 @@ function DrawerWrapper(props: {
                 aria-label="Open drawer"
                 onClick={() => props.setDrawerOpen(true)}
                 size="large"
-                className="absolute top-2 left-5"
+                className="absolute sm:top-2 sm:left-5 top-1 left-2"
             >
                 <MenuIcon/>
             </IconButton>

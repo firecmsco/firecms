@@ -95,19 +95,16 @@ export const DefaultAppBar = function DefaultAppBar({
     return (
         <div
             style={style}
-            className={cls("w-full h-16 transition-all ease-in duration-75 fixed",
+            className={cls("w-full h-14 sm:h-16 transition-all ease-in duration-75 absolute top-0 max-w-full overflow-x-auto no-scrollbar",
+                "flex flex-row gap-2 px-4 items-center",
                 {
-                    "pl-[17rem]": drawerOpen && largeLayout,
-                    "pl-20": hasDrawer && !(drawerOpen && largeLayout),
+                    "pl-[19rem]": drawerOpen && largeLayout,
+                    "pl-24": hasDrawer && !(drawerOpen && largeLayout),
                     "z-10": largeLayout,
-                    // "w-full": !hasDrawer,
-                    // "w-[calc(100%-64px)]": hasDrawer && !(drawerOpen && largeLayout),
-                    // "w-[calc(100%-17rem)]": hasDrawer && (drawerOpen && largeLayout),
-                    "duration-150": drawerOpen && largeLayout,
+                    "duration-100": drawerOpen && largeLayout,
                 },
                 className)}>
 
-            <div className="flex flex-row gap-2 px-4 h-full items-center">
 
                 {navigation && <div className="mr-8 hidden lg:block">
                     <ReactLink
@@ -174,7 +171,6 @@ export const DefaultAppBar = function DefaultAppBar({
 
                 </Menu>
 
-            </div>
         </div>
     );
 }

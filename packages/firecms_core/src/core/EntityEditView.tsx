@@ -659,7 +659,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 });
                 setEntityId(updatedId);
             } catch (e) {
-                onIdUpdateError && onIdUpdateError(e);
+                onIdUpdateError?.(e);
                 console.error(e);
             }
             setCustomIdLoading(false);
@@ -894,7 +894,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
             <div className="h-full overflow-auto">
 
-                <div className="pt-12 pb-16 pl-8 pr-8 md:pl-10 md:pr-10">
+                <div className="pt-12 pb-16 pl-4 sm:px-8 md:px-10">
                     <div
                         className={`w-full py-2 flex flex-col items-start mt-${4 + (pluginActions ? 8 : 0)} lg:mt-${8 + (pluginActions ? 8 : 0)} mb-8`}>
 

@@ -27,7 +27,7 @@ const AvatarInner: React.ForwardRefRenderFunction<HTMLButtonElement, AvatarProps
             style={style}
             {...props}
             className={cls("rounded-full flex items-center justify-center overflow-hidden",
-                "p-1 hover:bg-slate-200 hover:dark:bg-slate-700 w-12 h-12",
+                "p-1 hover:bg-slate-200 hover:dark:bg-slate-700 w-12 h-12 min-w-12 min-h-12",
                 outerClassName
             )}>
             {src
