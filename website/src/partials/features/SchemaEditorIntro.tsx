@@ -11,7 +11,7 @@ export const SchemaEditorIntro = () => {
         <section
             className="relative">
             <div
-                className={clsx("px-4 sm:px-6 mb-16 bg-light bg-gray-800 text-white dark:text-white",
+                className={clsx("px-4 sm:px-6 mb-16 bg-gray-700 text-white dark:text-white",
                     "border-0 border-y",
                     defaultBorderMixin,)}>
                 <div

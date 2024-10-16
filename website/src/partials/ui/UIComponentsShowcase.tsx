@@ -1,5 +1,7 @@
+import "@firecms/ui/index.css";
 import React, { Suspense } from "react";
 import BrowserOnly from "@docusaurus/BrowserOnly";
+
 
 const LazyClientUIComponentsShowcase = React.lazy(() => import("./ClientUIComponentsShowcase"));
 
