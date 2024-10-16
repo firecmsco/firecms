@@ -17,7 +17,7 @@ export function Panel({
     header?: React.ReactNode,
     children: React.ReactNode,
     footer?: React.ReactNode,
-    color?: "gray" | "dark_gray" | "light_gray" | "white" | "white-to-slate" | "primary" | "secondary" | "light" | "lighter" | "transparent",
+    color?: "gray" | "dark_gray" | "light_gray" | "white" | "white-to-slate" | "primary" | "secondary" | "light" |"light-to-white" | "lighter" | "transparent",
     centered?: boolean,
     includeMargin?: boolean,
     includePadding?: boolean,
@@ -30,6 +30,7 @@ export function Panel({
         color === "white" ? "bg-white text-text-primary" :
             color === "white-to-slate" ? "bg-gradient-to-b from-white to-slate-50 text-text-primary" :
                 color === "light" ? "bg-gray-100 text-text-primary" :
+                color === "light-to-white" ? "bg-gradient-to-b from-gray-100 to-white text-text-primary" :
                     color === "lighter" ? "bg-gray-50 text-text-primary" :
                         color === "light_gray" ? "bg-gray-700 text-white dark:text-white" :
                             color === "gray" ? "bg-gray-800 text-white dark:text-white" :

@@ -87,6 +87,7 @@ export const QuotesSection: React.FC = () => {
                                         data-aos="fade-left"
                                         data-aos-delay={i * 50}
                                         className={clsx(
+                                            "bg-white",
                                             "flex flex-col",
                                             "not-italic w-96 min-w-[380px] bg-gray-50 relative flex flex-col items-center justify-center px-8 py-6 rounded-2xl border", defaultBorderMixin)}>
 

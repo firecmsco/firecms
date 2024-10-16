@@ -1,8 +1,8 @@
 import React from "react"
 
 // @ts-ignore
-import collectionEditorVideo from "@site/static/img/collection_editor_preview.mp4";
-import { ContainerMixin, ContainerPaddingMixin, CTACaret, CTAOutlinedButtonMixin, defaultBorderMixin } from "../styles";
+import collectionEditorVideo from "@site/static/img/colection_editor.webm";
+import { ContainerMixin, ContainerPaddingMixin, defaultBorderMixin } from "../styles";
 import clsx from "clsx";
 
 export const SchemaEditorIntro = () => {
@@ -54,7 +54,7 @@ export const SchemaEditorIntro = () => {
                 <video
                     style={{
                         pointerEvents: "none",
-                        aspectRatio: 2.415
+                        aspectRatio: 1296 / 699
                     }}
                     className={"rounded-xl"}
                     width="100%" loop autoPlay muted>
