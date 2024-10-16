@@ -474,6 +474,7 @@ export function CollectionPropertiesEditorForm({
                 getData={getData}
                 propertyConfigs={propertyConfigs}
                 collectionEditable={collectionEditable}
+                onCancel={closePropertyDialog}
                 onOkClicked={asDialog
                     ? closePropertyDialog
                     : undefined

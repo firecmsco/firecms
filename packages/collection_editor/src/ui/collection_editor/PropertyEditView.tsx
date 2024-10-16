@@ -74,6 +74,7 @@ export type PropertyFormProps = {
     property?: Property;
     onPropertyChanged?: (params: OnPropertyChangedParams) => void;
     onPropertyChangedImmediate?: boolean;
+    onDismiss?: () => void;
     onDelete?: (id?: string, namespace?: string) => void;
     onError?: (id: string, namespace?: string, error?: Record<string, any>) => void;
     initialErrors?: Record<string, any>;
@@ -101,6 +102,7 @@ export const PropertyForm = React.memo(
             property,
             onPropertyChanged,
             onPropertyChangedImmediate = true,
+            onDismiss,
             onDelete,
             onError,
             initialErrors,
@@ -218,6 +220,7 @@ export const PropertyForm = React.memo(
                 includeIdAndTitle={includeIdAndName}
                 propertyNamespace={propertyNamespace}
                 onError={onError}
+                onDismiss={onDismiss}
                 showErrors={forceShowErrors || formexController.submitCount > 0}
                 existing={existingProperty}
                 autoUpdateId={autoUpdateId}
@@ -273,6 +276,7 @@ export function PropertyFormDialog({
               }}>
             <DialogContent>
                 <PropertyForm {...formProps}
+                              onDismiss={onCancel}
                               onPropertyChanged={(params) => {
                                   onPropertyChanged?.(params);
                                   onOkClicked?.();
@@ -317,6 +321,7 @@ function PropertyEditFormFields({
                                     onPropertyChanged,
                                     onDelete,
                                     propertyNamespace,
+                                    onDismiss,
                                     onError,
                                     showErrors,
                                     disabled,
@@ -331,6 +336,7 @@ function PropertyEditFormFields({
     autoUpdateId?: boolean;
     autoOpenTypeSelect: boolean;
     propertyNamespace?: string;
+    onDismiss?: () => void;
     onPropertyChanged?: (params: OnPropertyChangedParams) => void;
     onDelete?: (id?: string, namespace?: string) => void;
     onError?: (id: string, namespace?: string, error?: Record<string, any>) => void;
@@ -493,7 +499,12 @@ function PropertyEditFormFields({
                         value={selectedFieldConfigId as PropertyConfigId}
                         onValueChange={(value) => onWidgetSelectChanged(value as PropertyConfigId)}
                         open={selectOpen}
-                        onOpenChange={setSelectOpen}
+                        onOpenChange={(open, hasValue) => {
+                            if (!hasValue) {
+                                onDismiss?.();
+                            }
+                            setSelectOpen(open);
+                        }}
                         disabled={disabled}
                         showError={Boolean(selectedWidgetError)}
                         existing={existing}
@@ -576,7 +587,7 @@ function validateName(value: string) {
     return error;
 }
 
-const WIDGET_TYPE_MAP = {
+const WIDGET_TYPE_MAP: Record<PropertyConfigId, string> = {
     text_field: "Text",
     multiline: "Text",
     markdown: "Text",
@@ -594,10 +605,10 @@ const WIDGET_TYPE_MAP = {
     multi_references: "Reference",
     date_time: "Date",
     group: "Group",
-    key_value: "Key-Value",
-    repeat: "Repeat",
+    key_value: "Group",
+    repeat: "Array",
     custom_array: "Array",
-    block: "Block"
+    block: "Group"
 };
 
 function WidgetSelectView({
@@ -616,8 +627,8 @@ function WidgetSelectView({
     value?: PropertyConfigId,
     onValueChange: (value: string) => void,
     showError: boolean,
-    open: any,
-    onOpenChange: any,
+    open: boolean,
+    onOpenChange: (open: boolean, hasValue: boolean) => void,
     disabled: boolean,
     existing: boolean,
     propertyConfigs: Record<string, PropertyConfig>,
@@ -626,9 +637,18 @@ function WidgetSelectView({
 
     const allSupportedFields = Object.entries(supportedFields).concat(Object.entries(propertyConfigs));
 
-    const displayedWidgets = inArray
+    const displayedWidgets = (inArray
         ? allSupportedFields.filter(([_, propertyConfig]) => !isPropertyBuilder(propertyConfig.property) && propertyConfig.property?.dataType !== "array")
-        : allSupportedFields;
+        : allSupportedFields)
+        .map(([key, propertyConfig]) => ({
+            [key]: propertyConfig
+        }))
+        .reduce((a, b) => {
+            return {
+                ...a,
+                ...b
+            }
+        }, {});
 
     const key = value;
     const propertyConfig = key ? (DEFAULT_FIELD_CONFIGS[key] ?? propertyConfigs[key]) : undefined;
@@ -636,11 +656,19 @@ function WidgetSelectView({
     const baseFieldConfig = baseProperty && !isPropertyBuilder(baseProperty) ? getFieldConfig(baseProperty, propertyConfigs) : undefined;
     const computedFieldConfig = baseFieldConfig && propertyConfig ? mergeDeep(baseFieldConfig, propertyConfig) : propertyConfig;
 
+    const groups: string[] = [...new Set(Object.keys(displayedWidgets).map(key => {
+        const group = WIDGET_TYPE_MAP[key as PropertyConfigId];
+        if (group) {
+            return group;
+        }
+        return "Custom/Other"
+    }))];
+
     return <>
         <div
             onClick={() => {
                 if (!disabled) {
-                    onOpenChange(!open);
+                    onOpenChange(!open, Boolean(value));
                 }
             }}
             className={cls(
@@ -666,24 +694,46 @@ function WidgetSelectView({
             </div>}
         </div>
         <Dialog open={open}
-                onOpenChange={onOpenChange}
+                onOpenChange={(open) => onOpenChange(open, Boolean(value))}
                 maxWidth={"4xl"}>
             <DialogTitle>
                 Select a property widget
             </DialogTitle>
             <DialogContent>
-                <div className={"grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4"}>
-                    {displayedWidgets.map(([key, propertyConfig]) => {
-                        return <WidgetSelectViewItem
-                            key={key}
-                            initialProperty={initialProperty}
-                            onClick={() => {
-                                onValueChange(key);
-                                onOpenChange(false);
-                            }}
-                            propertyConfig={propertyConfig}
-                            existing={existing}/>;
+                <div>
+                    {groups.map(group => {
+                        return <div key={group} className={"mt-4"}>
+                            <Typography variant={"label"}>{group}</Typography>
+                            <div className={"grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4"}>
+                                {Object.entries(displayedWidgets).map(([key, propertyConfig]) => {
+                                    const groupKey = WIDGET_TYPE_MAP[key as PropertyConfigId];
+                                    if (groupKey === group) {
+                                        return <WidgetSelectViewItem
+                                            key={key}
+                                            initialProperty={initialProperty}
+                                            onClick={() => {
+                                                onValueChange(key);
+                                                onOpenChange(false, true);
+                                            }}
+                                            propertyConfig={propertyConfig}
+                                            existing={existing}/>;
+                                    }
+                                    return null;
+                                })}
+                            </div>
+                        </div>;
                     })}
+                    {/*{displayedWidgets.map(([key, propertyConfig]) => {*/}
+                    {/*    return <WidgetSelectViewItem*/}
+                    {/*        key={key}*/}
+                    {/*        initialProperty={initialProperty}*/}
+                    {/*        onClick={() => {*/}
+                    {/*            onValueChange(key);*/}
+                    {/*            onOpenChange(false);*/}
+                    {/*        }}*/}
+                    {/*        propertyConfig={propertyConfig}*/}
+                    {/*        existing={existing}/>;*/}
+                    {/*})}*/}
                 </div>
             </DialogContent>
         </Dialog>
@@ -709,15 +759,13 @@ export function WidgetSelectViewItem({
 
     return <Card
         onClick={onClick}
-        // disabled={optionDisabled}
         className={"flex flex-row items-center px-4 py-2"}>
         <div
             className={cls(
                 "flex flex-row items-center text-base min-h-[48px]",
-                // optionDisabled ? "w-full" : ""
             )}>
             <div className={"mr-8"}>
-                <PropertyConfigBadge propertyConfig={propertyConfig} disabled={!shouldWarnChangingDataType}/>
+                <PropertyConfigBadge propertyConfig={propertyConfig} disabled={shouldWarnChangingDataType}/>
             </div>
             <div>
                 <div className={"flex flex-row gap-2 items-center"}>
@@ -728,12 +776,11 @@ export function WidgetSelectViewItem({
                     <Typography
                         color={shouldWarnChangingDataType ? "secondary" : undefined}>{propertyConfig.name}</Typography>
                 </div>
+
                 <Typography variant={"caption"}
                             color={"secondary"}
                             className={"max-w-sm"}>
                     {propertyConfig.description}
-
-                    {/*{existing && optionDisabled ? "You can only switch to widgets that use the same data type" : propertyConfig.description}*/}
                 </Typography>
 
             </div>
