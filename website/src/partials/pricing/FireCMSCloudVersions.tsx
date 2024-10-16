@@ -7,7 +7,7 @@ export function FireCMSCloudVersions() {
 
     const freeTier = (
         <div
-            className={clsx("w-full max-w-xl lg:max-w-none h-full mx-4 p-6 border rounded-lg dark:border-gray-700 flex flex-col", defaultBorderMixin)}>
+            className={clsx("w-full max-w-xl lg:max-w-none h-full p-6 border rounded-lg dark:border-gray-700 flex flex-col", defaultBorderMixin)}>
 
             <h3 className={"text-3xl md:text-4xl font-bold  text-center text-gray-700 uppercase my-2"}>
                 Free
@@ -38,7 +38,7 @@ export function FireCMSCloudVersions() {
 
     const plusTier = (
         <div
-            className={clsx("w-full max-w-xl lg:max-w-none h-full mx-4 p-6 rounded-lg flex flex-col outline-none ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent")}>
+            className={clsx("w-full max-w-xl lg:max-w-none h-full p-6 rounded-lg flex flex-col outline-none ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent")}>
 
             <h3 className={"text-3xl md:text-4xl font-bold text-center text-primary uppercase my-2"}>
                 Plus
@@ -78,7 +78,7 @@ export function FireCMSCloudVersions() {
 
     const proTier = (
         <div
-            className={clsx("w-full max-w-xl lg:max-w-none h-full mx-4 p-6 border rounded-lg  flex flex-col", defaultBorderMixin)}>
+            className={clsx("w-full max-w-xl lg:max-w-none h-full p-6 border rounded-lg  flex flex-col", defaultBorderMixin)}>
 
             <h3 className={"text-3xl md:text-4xl font-bold text-center text-gray-700 uppercase my-2"}>
                 Pro
@@ -99,7 +99,7 @@ export function FireCMSCloudVersions() {
                     <li className={"list-disc"}>Roadmap prioritization</li>
                 </ul>
             </div>
-            <div className={"w-fit m-auto mt-4 flex flex-row gap-2 items-center"}>
+            <div className={"w-fit m-auto mt-8 flex flex-row gap-2 items-center"}>
                 <div
                     className={"rounded-lg w-fit h-fit font-regular m-auto gap-1 text-ellipsis px-4 py-1.5 text-sm font-semibold"}
                     style={{
@@ -107,14 +107,13 @@ export function FireCMSCloudVersions() {
                         color: "rgb(59, 37, 1)"
                     }}>
                     TRY OUT FOR FREE
-
                 </div>
-                <a className={clsx("btn px-4 py-2  uppercase rounded border-solid text-inherit dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-900 dark:hover:border-gray-800 text-center")}
+                <a className={clsx("btn px-4 py-2  uppercase rounded border-solid text-base dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-900 dark:hover:border-gray-800 text-center")}
                    href="/pro">
                     More info
                 </a>
             </div>
-            <div className={"text-center mt-4 text-gray-600 w-full"}>
+            <div className={"text-center text-gray-600 w-full"}>
                 <span className={"text-2xl font-bold "}>Starting at €29.99</span>
             </div>
         </div>

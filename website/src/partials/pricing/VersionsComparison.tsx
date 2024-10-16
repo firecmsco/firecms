@@ -1,6 +1,6 @@
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import React from "react";
-import { ContainerInnerPaddingMixin, CTAButtonMixin, defaultBorderMixin } from "../styles";
+import { ContainerInnerPaddingMixin, CTAButtonMixin, CTAOutlinedButtonMixin, defaultBorderMixin } from "../styles";
 import CheckIcon from "@site/static/img/icons/check.svg";
 import RemoveIcon from "@site/static/img/icons/remove.svg";
 import ScheduleIcon from "@site/static/img/icons/schedule.svg";
@@ -265,7 +265,7 @@ export function VersionsComparison() {
                         (
                             <tr className="border-b ">
                                 <td scope="row"
-                                    className="bg-gray-50 mx-2 border-none rounded-lg px-6 py-2 text-gray-800 font-bold">
+                                    className="bg-gray-50 mx-2 border-none rounded-lg px-6 py-2 text-gray-800 font-bold md:min-w-[360px]">
                                     {row.feature}
                                 </td>
                                 <td className={"bg-gray-50 mx-2  border-none rounded-lg px-4 py-2 text-gray-800  text-center " + getEntryClass(row.cloud)}>
@@ -293,13 +293,24 @@ export function VersionsComparison() {
                         </th>
                         <th
                             className={" table-cell p-0 border-none"}
-                            colSpan={3}
+                            colSpan={2}
                         >
                             <a className={CTAButtonMixin + " w-full"}
                                rel="noopener noreferrer"
                                target="_blank"
                                href={"https://app.firecms.co"}>
-                                Get started
+                                Go to FireCMS Cloud
+                            </a>
+                        </th>
+                        <th
+                            className={" table-cell p-0 border-none"}
+                            colSpan={1}
+                        >
+                            <a className={CTAOutlinedButtonMixin + " w-full"}
+                               rel="noopener noreferrer"
+                               target="_blank"
+                               href={"/pro"}>
+                                More info
                             </a>
                         </th>
                         {/*<a*/}

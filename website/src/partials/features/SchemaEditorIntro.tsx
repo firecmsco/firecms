@@ -27,13 +27,10 @@ export const SchemaEditorIntro = () => {
                             The best data schema editor
                         </h2>
 
-                        <div className={"mt-4 mx-auto text-xl"}>
+                        <div className={"mt-4 mx-auto text-xl pb-20"}>
                             <p>
-                                <b>FireCMS Cloud</b> is a hosted version of FireCMS
-                                that allows you to create your own headless CMS
-                                in minutes. It includes a new content schema
-                                editor that allows you to create your own
-                                content models and collections.
+                                Edit your data schema with a powerful and intuitive
+                                interface.
                             </p>
                             <p>If you have an <strong>existing
                                 project</strong>, let FireCMS
@@ -48,18 +45,6 @@ export const SchemaEditorIntro = () => {
 
                         </div>
 
-
-                        <div className={"my-8 pb-16"}>
-                            <a
-                                className={CTAOutlinedButtonMixin}
-                                href="http://app.firecms.co"
-                                rel="noopener noreferrer"
-                                target="_blank"
-                            >
-                                Go to FireCMS Cloud
-                                <CTACaret/>
-                            </a>
-                        </div>
                     </div>
                 </div>
             </div>
