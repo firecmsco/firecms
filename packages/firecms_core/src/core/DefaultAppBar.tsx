@@ -95,7 +95,7 @@ export const DefaultAppBar = function DefaultAppBar({
     return (
         <div
             style={style}
-            className={cls("w-full h-14 sm:h-16 transition-all ease-in duration-75 absolute top-0 max-w-full overflow-x-auto no-scrollbar",
+            className={cls("w-full h-16 transition-all ease-in duration-75 absolute top-0 max-w-full overflow-x-auto no-scrollbar",
                 "flex flex-row gap-2 px-4 items-center",
                 {
                     "pl-[19rem]": drawerOpen && largeLayout,
@@ -106,70 +106,70 @@ export const DefaultAppBar = function DefaultAppBar({
                 className)}>
 
 
-                {navigation && <div className="mr-8 hidden lg:block">
-                    <ReactLink
-                        className="visited:text-inherit visited:dark:text-inherit"
-                        to={navigation?.basePath ?? "/"}
-                    >
-                        <div className={"flex flex-row gap-4"}>
-                            {!hasDrawer && (logo
-                                ? <img src={logo}
-                                       alt="Logo"
-                                       className={cls("w-[32px] h-[32px] object-contain")}/>
-                                : <FireCMSLogo width={"32px"} height={"32px"}/>)}
+            {navigation && <div className="mr-8 hidden lg:block">
+                <ReactLink
+                    className="visited:text-inherit visited:dark:text-inherit"
+                    to={navigation?.basePath ?? "/"}
+                >
+                    <div className={"flex flex-row gap-4"}>
+                        {!hasDrawer && (logo
+                            ? <img src={logo}
+                                   alt="Logo"
+                                   className={cls("w-[32px] h-[32px] object-contain")}/>
+                            : <FireCMSLogo width={"32px"} height={"32px"}/>)}
 
-                            {typeof title === "string"
-                                ? <Typography variant="subtitle1"
-                                              noWrap
-                                              className={cls("transition-all", drawerOpen ? "ml-2" : "")}>
-                                    {title}
-                                </Typography>
-                                : title}
-                        </div>
-                    </ReactLink>
+                        {typeof title === "string"
+                            ? <Typography variant="subtitle1"
+                                          noWrap
+                                          className={cls("transition-all", drawerOpen ? "ml-2" : "")}>
+                                {title}
+                            </Typography>
+                            : title}
+                    </div>
+                </ReactLink>
+            </div>}
+
+            {startAdornment}
+
+            <div className={"flex-grow"}/>
+
+            {endAdornment &&
+                <ErrorBoundary>
+                    {endAdornment}
+                </ErrorBoundary>}
+
+            {includeModeToggle && <IconButton
+                color="inherit"
+                aria-label="Open drawer"
+                onClick={toggleMode}
+                size="large">
+                {mode === "dark"
+                    ? <DarkModeIcon/>
+                    : <LightModeIcon/>}
+            </IconButton>}
+
+            <Menu trigger={avatarComponent}>
+                {user && <div className={"px-4 py-2 mb-2"}>
+                    {user.displayName && <Typography variant={"body1"} color={"secondary"}>
+                        {user.displayName}
+                    </Typography>}
+                    {user.email && <Typography variant={"body2"} color={"secondary"}>
+                        {user.email}
+                    </Typography>}
                 </div>}
 
-                {startAdornment}
+                {dropDownActions}
 
-                <div className={"flex-grow"}/>
+                {!dropDownActions && <MenuItem onClick={async () => {
+                    await authController.signOut();
+                    // replace current route with home
+                    navigate("/");
+                }}>
+                    <LogoutIcon/>
+                    Log Out
+                </MenuItem>}
 
-                {endAdornment &&
-                    <ErrorBoundary>
-                        {endAdornment}
-                    </ErrorBoundary>}
-
-                {includeModeToggle && <IconButton
-                    color="inherit"
-                    aria-label="Open drawer"
-                    onClick={toggleMode}
-                    size="large">
-                    {mode === "dark"
-                        ? <DarkModeIcon/>
-                        : <LightModeIcon/>}
-                </IconButton>}
-
-                <Menu trigger={avatarComponent}>
-                    {user && <div className={"px-4 py-2 mb-2"}>
-                        {user.displayName && <Typography variant={"body1"} color={"secondary"}>
-                            {user.displayName}
-                        </Typography>}
-                        {user.email && <Typography variant={"body2"} color={"secondary"}>
-                            {user.email}
-                        </Typography>}
-                    </div>}
-
-                    {dropDownActions}
-
-                    {!dropDownActions && <MenuItem onClick={async () => {
-                        await authController.signOut();
-                        // replace current route with home
-                        navigate("/");
-                    }}>
-                        <LogoutIcon/>
-                        Log Out
-                    </MenuItem>}
-
-                </Menu>
+            </Menu>
 
         </div>
     );

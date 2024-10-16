@@ -80,7 +80,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
         }
     }, [onChange, value, onValueChange]);
 
-    const hasValue = Array.isArray(value) ? value.length > 0 : value != null;
+    const hasValue = Array.isArray(value) ? value.length > 0 : (value != null && value !== "" && value !== undefined);
 
     return (
         <SelectPrimitive.Root
@@ -119,43 +119,49 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                         inputClassName
                     )}>
 
+                    <div
+                        ref={ref}
+                        className={cls(
+                            "flex-grow w-full max-w-full flex flex-row gap-2 items-center",
+                            "overflow-visible",
+                            size === "small" ? "h-[42px]" : "h-[64px]"
+                        )}
+                    >
                         <SelectPrimitive.Value
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
                             }}
-                            ref={ref}
-                            className={cls(
-                                "flex-grow w-full max-w-full flex flex-row gap-2 items-center",
-                                "overflow-visible",
-                                size === "small" ? "h-[42px]" : "h-[64px]"
-                            )}
-                            placeholder={placeholder}>
+                            placeholder={placeholder}
+                            className={"w-full"}>
                             {hasValue && value && renderValue ? renderValue(value) : placeholder}
                             {hasValue && !renderValue && value}
                         </SelectPrimitive.Value>
+                    </div>
 
+                    {endAdornment && (
+                        <div
+                            className={cls("h-full flex items-center")}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                            }}>
+                            {endAdornment}
+                        </div>
+                    )}
                     <SelectPrimitive.Icon asChild>
-                        <ExpandMoreIcon size={"small"} className={cls("absolute right-2 px-2 top-5 transition", open ? "rotate-180" : "")}/>
+                        <ExpandMoreIcon size={"small"}
+                                        className={cls("px-2 transition", open ? "rotate-180" : "")}/>
                     </SelectPrimitive.Icon>
                 </SelectPrimitive.Trigger>
-                {endAdornment && (
-                    <div
-                        className={cls("absolute h-full flex items-center", size === "small" ? "right-10" : "right-14")}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                        }}>
-                        {endAdornment}
-                    </div>
-                )}
+
             </div>
             <SelectPrimitive.Portal>
                 <SelectPrimitive.Content position={position}
                                          className={cls(focusedDisabled, "z-50 relative overflow-hidden border bg-white dark:bg-gray-900 p-2 rounded-lg", defaultBorderMixin)}>
                     <SelectPrimitive.Viewport className={"p-1"}
                                               style={{ maxHeight: "var(--radix-select-content-available-height)" }}>
-                    {children}
+                        {children}
                     </SelectPrimitive.Viewport>
                 </SelectPrimitive.Content>
             </SelectPrimitive.Portal>
