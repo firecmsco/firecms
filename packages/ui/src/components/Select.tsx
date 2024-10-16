@@ -115,31 +115,28 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                         error ? "text-red-500 dark:text-red-600" : "focus:text-text-primary dark:focus:text-text-primary-dark",
                         error ? "border border-red-500 dark:border-red-600" : "",
                         disabled ? "text-slate-600 dark:text-slate-400" : "text-slate-800 dark:text-white",
-                        "relative flex items-center",
+                        "relative flex flex-row items-center",
                         inputClassName
                     )}>
-                    <SelectPrimitive.Value
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                        }}
-                        placeholder={placeholder}
-                        asChild
-                        className={"w-full"}>
-                        <div
+
+                        <SelectPrimitive.Value
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                            }}
                             ref={ref}
                             className={cls(
                                 "flex-grow w-full max-w-full flex flex-row gap-2 items-center",
                                 "overflow-visible",
                                 size === "small" ? "h-[42px]" : "h-[64px]"
                             )}
-                        >
+                            placeholder={placeholder}>
                             {hasValue && value && renderValue ? renderValue(value) : placeholder}
                             {hasValue && !renderValue && value}
-                        </div>
-                    </SelectPrimitive.Value>
-                    <SelectPrimitive.Icon className={cls("px-2 h-full flex items-center")}>
-                        <ExpandMoreIcon size={"small"} className={cls("transition", open ? "rotate-180" : "")}/>
+                        </SelectPrimitive.Value>
+
+                    <SelectPrimitive.Icon asChild>
+                        <ExpandMoreIcon size={"small"} className={cls("absolute right-2 px-2 top-5 transition", open ? "rotate-180" : "")}/>
                     </SelectPrimitive.Icon>
                 </SelectPrimitive.Trigger>
                 {endAdornment && (
@@ -158,7 +155,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                                          className={cls(focusedDisabled, "z-50 relative overflow-hidden border bg-white dark:bg-gray-900 p-2 rounded-lg", defaultBorderMixin)}>
                     <SelectPrimitive.Viewport className={"p-1"}
                                               style={{ maxHeight: "var(--radix-select-content-available-height)" }}>
-                        {children}
+                    {children}
                     </SelectPrimitive.Viewport>
                 </SelectPrimitive.Content>
             </SelectPrimitive.Portal>
