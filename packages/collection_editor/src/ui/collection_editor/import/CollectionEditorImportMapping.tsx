@@ -7,13 +7,12 @@ import {
 import { getIn, useFormex } from "@firecms/formex";
 
 import { getFieldConfig, getFieldId, Properties, Property, PropertyConfig, PropertyConfigBadge, } from "@firecms/core";
-import { Container, Select, Tooltip, Typography } from "@firecms/ui";
+import { cls, Container, Select, SelectItem, Tooltip, Typography } from "@firecms/ui";
 import React, { useState } from "react";
 import { OnPropertyChangedParams, PropertyFormDialog, PropertyWithId } from "../PropertyEditView";
 import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath } from "../util";
 import { PersistedCollection } from "../../../types/persisted_collection";
 import { updatePropertyFromWidget } from "../utils/update_property_for_widget";
-import { PropertySelectItem } from "../PropertySelectItem";
 import { supportedFields } from "../utils/supported_fields";
 import { buildPropertyFromData } from "@firecms/schema_inference";
 
@@ -267,4 +266,34 @@ function PropertySelect({
             }
         </Select>
     </Tooltip>;
+}
+
+export interface PropertySelectItemProps {
+    value: string;
+    optionDisabled: boolean;
+    propertyConfig: PropertyConfig;
+    existing: boolean;
+}
+
+export function PropertySelectItem({ value, optionDisabled, propertyConfig, existing }: PropertySelectItemProps) {
+    return <SelectItem value={value}
+                       disabled={optionDisabled}
+                       className={"flex flex-row items-center"}>
+        <div
+            className={cls(
+                "flex flex-row items-center text-base min-h-[48px]",
+                optionDisabled ? "w-full" : "")}>
+            <div className={"mr-8"}>
+                <PropertyConfigBadge propertyConfig={propertyConfig}/>
+            </div>
+            <div>
+                <div>{propertyConfig.name}</div>
+                <Typography variant={"caption"}
+                            color={"disabled"}
+                            className={"max-w-sm"}>
+                    {existing && optionDisabled ? "You can only switch to widgets that use the same data type" : propertyConfig.description}
+                </Typography>
+            </div>
+        </div>
+    </SelectItem>
 }

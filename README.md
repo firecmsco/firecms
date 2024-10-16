@@ -93,7 +93,7 @@ navigating through **subcollections** and accessing custom views (such as custom
 forms or blog previews). This functionality can also be accessed
 programmatically using the `useSideEntityController` hook.
 
-FireCMS includes **over 15 built-in fields** with numerous customization and
+FireCMS includes **over 20 built-in fields** with numerous customization and
 validation options. The components have been carefully designed for an
 outstanding user experience, including advanced features like **references** to
 other collections, **markdown**, and **array reordering**.

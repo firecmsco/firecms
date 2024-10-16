@@ -3,8 +3,8 @@ import equal from "react-fast-compare"
 
 import { Formex, FormexController, getIn, useCreateFormex } from "@firecms/formex";
 import {
-    DEFAULT_FIELD_CONFIGS,
     ConfirmationDialog,
+    DEFAULT_FIELD_CONFIGS,
     getFieldConfig,
     getFieldId,
     isPropertyBuilder,
@@ -17,15 +17,21 @@ import {
 } from "@firecms/core";
 import {
     Button,
+    Card,
     cls,
     DeleteIcon,
     Dialog,
     DialogActions,
     DialogContent,
+    DialogTitle,
+    fieldBackgroundDisabledMixin,
+    fieldBackgroundHoverMixin,
+    fieldBackgroundMixin,
     IconButton,
     InfoLabel,
-    Select,
-    Typography
+    Tooltip,
+    Typography,
+    WarningOffIcon
 } from "@firecms/ui";
 import { EnumPropertyField } from "./properties/EnumPropertyField";
 import { StoragePropertyField } from "./properties/StoragePropertyField";
@@ -42,7 +48,6 @@ import { AdvancedPropertyValidation } from "./properties/advanced/AdvancedProper
 import { editableProperty } from "../../utils/entities";
 import { KeyValuePropertyField } from "./properties/KeyValuePropertyField";
 import { updatePropertyFromWidget } from "./utils/update_property_for_widget";
-import { PropertySelectItem } from "./PropertySelectItem";
 import { UrlPropertyField } from "./properties/UrlPropertyField";
 import { supportedFields } from "./utils/supported_fields";
 import { MarkdownPropertyField } from "./properties/MarkdownPropertyField";
@@ -342,12 +347,6 @@ function PropertyEditFormFields({
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedFieldConfigId, setSelectedFieldConfigId] = useState<string | undefined>(values?.dataType ? getFieldId(values) : undefined);
 
-    const allSupportedFields = Object.entries(supportedFields).concat(Object.entries(propertyConfigs));
-
-    const displayedWidgets = inArray
-        ? allSupportedFields.filter(([_, propertyConfig]) => !isPropertyBuilder(propertyConfig.property) && propertyConfig.property?.dataType !== "array")
-        : allSupportedFields;
-
     const deferredValues = useDeferredValue(values);
     const nameFieldRef = useRef<HTMLInputElement>(null);
 
@@ -489,62 +488,17 @@ function PropertyEditFormFields({
 
             <div className="flex mt-2 justify-between">
                 <div className={"w-full flex flex-col gap-2"}>
-                    <Select
-                        // className={"w-full"}
-                        error={Boolean(selectedWidgetError)}
-                        value={selectedFieldConfigId ?? ""}
-                        placeholder={"Select a property widget"}
+                    <WidgetSelectView
+                        initialProperty={values}
+                        value={selectedFieldConfigId as PropertyConfigId}
+                        onValueChange={(value) => onWidgetSelectChanged(value as PropertyConfigId)}
                         open={selectOpen}
                         onOpenChange={setSelectOpen}
-                        position={"item-aligned"}
                         disabled={disabled}
-                        renderValue={(value) => {
-                            if (!value) {
-                                return <em>Select a property
-                                    widget</em>;
-                            }
-                            const key = value as PropertyConfigId;
-                            const propertyConfig = DEFAULT_FIELD_CONFIGS[key] ?? propertyConfigs[key];
-                            const baseProperty = propertyConfig.property;
-                            const baseFieldConfig = baseProperty && !isPropertyBuilder(baseProperty) ? getFieldConfig(baseProperty, propertyConfigs) : undefined;
-                            const optionDisabled = isPropertyBuilder(baseProperty) || (existing && baseProperty.dataType !== values?.dataType);
-                            const computedFieldConfig = baseFieldConfig ? mergeDeep(baseFieldConfig, propertyConfig) : propertyConfig;
-                            return <div
-                                onClick={(e) => {
-                                    if (optionDisabled) {
-                                        e.stopPropagation();
-                                        e.preventDefault();
-                                    }
-                                }}
-                                className={cls(
-                                    "flex items-center",
-                                    optionDisabled ? "w-full pointer-events-none opacity-50" : "")}>
-                                <div className={"mr-8"}>
-                                    <PropertyConfigBadge propertyConfig={computedFieldConfig}/>
-                                </div>
-                                <div className={"flex flex-col items-start text-base text-left"}>
-                                    <div>{computedFieldConfig.name}</div>
-                                    <Typography variant={"caption"}
-                                                color={"disabled"}>
-                                        {optionDisabled ? "You can only switch to widgets that use the same data type" : computedFieldConfig.description}
-                                    </Typography>
-                                </div>
-                            </div>
-                        }}
-                        onValueChange={(value) => {
-                            onWidgetSelectChanged(value as PropertyConfigId);
-                        }}>
-                        {displayedWidgets.map(([key, propertyConfig]) => {
-                            const baseProperty = propertyConfig.property;
-                            const optionDisabled = existing && !isPropertyBuilder(baseProperty) && baseProperty.dataType !== values?.dataType;
-                            return <PropertySelectItem
-                                key={key}
-                                value={key}
-                                optionDisabled={optionDisabled}
-                                propertyConfig={propertyConfig}
-                                existing={existing}/>;
-                        })}
-                    </Select>
+                        showError={Boolean(selectedWidgetError)}
+                        existing={existing}
+                        propertyConfigs={propertyConfigs}
+                        inArray={inArray}/>
 
                     {selectedWidgetError &&
                         <Typography variant="caption"
@@ -588,10 +542,10 @@ function PropertyEditFormFields({
                                     onCancel={() => setDeleteDialogOpen(false)}
                                     title={<div>Delete this property?</div>}
                                     body={
-                                              <div> This will <b>not delete any
-                                                  data</b>, only modify the
-                                                  collection.</div>
-                                          }/>}
+                                        <div> This will <b>not delete any
+                                            data</b>, only modify the
+                                            collection.</div>
+                                    }/>}
 
         </>
     );
@@ -620,4 +574,169 @@ function validateName(value: string) {
         error = "You must specify a title for the field";
     }
     return error;
+}
+
+const WIDGET_TYPE_MAP = {
+    text_field: "Text",
+    multiline: "Text",
+    markdown: "Text",
+    url: "Text",
+    email: "Text",
+    switch: "Boolean",
+    select: "Select",
+    multi_select: "Select",
+    number_input: "Number",
+    number_select: "Select",
+    multi_number_select: "Select",
+    file_upload: "File",
+    multi_file_upload: "File",
+    reference: "Reference",
+    multi_references: "Reference",
+    date_time: "Date",
+    group: "Group",
+    key_value: "Key-Value",
+    repeat: "Repeat",
+    custom_array: "Array",
+    block: "Block"
+};
+
+function WidgetSelectView({
+                              initialProperty,
+                              value,
+                              onValueChange,
+                              open,
+                              onOpenChange,
+                              disabled,
+                              showError,
+                              existing,
+                              propertyConfigs,
+                              inArray
+                          }: {
+    initialProperty?: PropertyWithId,
+    value?: PropertyConfigId,
+    onValueChange: (value: string) => void,
+    showError: boolean,
+    open: any,
+    onOpenChange: any,
+    disabled: boolean,
+    existing: boolean,
+    propertyConfigs: Record<string, PropertyConfig>,
+    inArray?: boolean
+}) {
+
+    const allSupportedFields = Object.entries(supportedFields).concat(Object.entries(propertyConfigs));
+
+    const displayedWidgets = inArray
+        ? allSupportedFields.filter(([_, propertyConfig]) => !isPropertyBuilder(propertyConfig.property) && propertyConfig.property?.dataType !== "array")
+        : allSupportedFields;
+
+    const key = value;
+    const propertyConfig = key ? (DEFAULT_FIELD_CONFIGS[key] ?? propertyConfigs[key]) : undefined;
+    const baseProperty = propertyConfig?.property;
+    const baseFieldConfig = baseProperty && !isPropertyBuilder(baseProperty) ? getFieldConfig(baseProperty, propertyConfigs) : undefined;
+    const computedFieldConfig = baseFieldConfig && propertyConfig ? mergeDeep(baseFieldConfig, propertyConfig) : propertyConfig;
+
+    return <>
+        <div
+            onClick={() => {
+                if (!disabled) {
+                    onOpenChange(!open);
+                }
+            }}
+            className={cls(
+                "select-none rounded-md text-sm p-4",
+                fieldBackgroundMixin,
+                disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
+                "relative flex items-center",
+            )}>
+            {!value && <em>Select a property widget</em>}
+            {value && computedFieldConfig && <div
+                className={cls(
+                    "flex items-center")}>
+                <div className={"mr-8"}>
+                    <PropertyConfigBadge propertyConfig={computedFieldConfig}/>
+                </div>
+                <div className={"flex flex-col items-start text-base text-left"}>
+                    <div>{computedFieldConfig.name}</div>
+                    <Typography variant={"caption"}
+                                color={"secondary"}>
+                        {computedFieldConfig.description}
+                    </Typography>
+                </div>
+            </div>}
+        </div>
+        <Dialog open={open}
+                onOpenChange={onOpenChange}
+                maxWidth={"4xl"}>
+            <DialogTitle>
+                Select a property widget
+            </DialogTitle>
+            <DialogContent>
+                <div className={"grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4"}>
+                    {displayedWidgets.map(([key, propertyConfig]) => {
+                        return <WidgetSelectViewItem
+                            key={key}
+                            initialProperty={initialProperty}
+                            onClick={() => {
+                                onValueChange(key);
+                                onOpenChange(false);
+                            }}
+                            propertyConfig={propertyConfig}
+                            existing={existing}/>;
+                    })}
+                </div>
+            </DialogContent>
+        </Dialog>
+    </>;
+}
+
+export interface PropertySelectItemProps {
+    onClick?: () => void;
+    initialProperty?: PropertyWithId;
+    propertyConfig: PropertyConfig;
+    existing: boolean;
+}
+
+export function WidgetSelectViewItem({
+                                         onClick,
+                                         initialProperty,
+                                         // optionDisabled,
+                                         propertyConfig,
+                                         existing
+                                     }: PropertySelectItemProps) {
+    const baseProperty = propertyConfig.property;
+    const shouldWarnChangingDataType = existing && !isPropertyBuilder(baseProperty) && baseProperty.dataType !== initialProperty?.dataType;
+
+    return <Card
+        onClick={onClick}
+        // disabled={optionDisabled}
+        className={"flex flex-row items-center px-4 py-2"}>
+        <div
+            className={cls(
+                "flex flex-row items-center text-base min-h-[48px]",
+                // optionDisabled ? "w-full" : ""
+            )}>
+            <div className={"mr-8"}>
+                <PropertyConfigBadge propertyConfig={propertyConfig} disabled={!shouldWarnChangingDataType}/>
+            </div>
+            <div>
+                <div className={"flex flex-row gap-2 items-center"}>
+                    {shouldWarnChangingDataType && <Tooltip
+                        title={"This widget uses a different data type than the initially selected widget. This can cause errors with existing data."}>
+                        <WarningOffIcon size="smallest" className={"w-4"}/>
+                    </Tooltip>}
+                    <Typography
+                        color={shouldWarnChangingDataType ? "secondary" : undefined}>{propertyConfig.name}</Typography>
+                </div>
+                <Typography variant={"caption"}
+                            color={"secondary"}
+                            className={"max-w-sm"}>
+                    {propertyConfig.description}
+
+                    {/*{existing && optionDisabled ? "You can only switch to widgets that use the same data type" : propertyConfig.description}*/}
+                </Typography>
+
+            </div>
+        </div>
+    </Card>
 }

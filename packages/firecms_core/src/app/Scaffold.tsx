@@ -137,7 +137,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
 
 const DrawerHeader = () => {
     return (
-        <div className="flex flex-col min-h-14 sm:min-h-16"></div>
+        <div className="flex flex-col min-h-16"></div>
     );
 };
 
