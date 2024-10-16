@@ -2,6 +2,7 @@ import React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { Typography, TypographyProps, TypographyVariant } from "./Typography";
+import { cls } from "../util";
 
 export type DialogContentProps = TypographyProps & {
     children: React.ReactNode,
@@ -14,13 +15,13 @@ export function DialogTitle({
                                 children,
                                 hidden,
                                 className,
-                                variant = "h4",
+                                variant = "subtitle2",
                                 ...props
                             }: DialogContentProps) {
 
     const title = <DialogPrimitive.Title asChild>
         <Typography variant={variant}
-                    className={className}
+                    className={cls("mt-8 mb-6 mx-6", className)}
                     {...props}>
             {children}
         </Typography>

@@ -17,7 +17,7 @@ export function DialogContent({
         </div>;
 
     return <div
-        className={cls("py-6 px-6 h-full flex-grow", className)}>
+        className={cls("my-6 mx-6 h-full flex-grow", className)}>
         {children}
     </div>;
 }
