@@ -3,6 +3,7 @@ import {
     CloseIcon,
     Dialog,
     DialogContent,
+    DialogTitle,
     IconButton,
     LoadingButton,
     SearchIcon,
@@ -52,12 +53,12 @@ export function TextSearchInfoDialog({
         open={open}
         onOpenChange={(open: boolean) => !open ? closeDialog() : undefined}
     >
-        <DialogContent className={"flex flex-col gap-4"}>
 
-            <Typography variant={"h5"} className={"flex flex-row gap-4 items-center"}>
-                <SearchIcon/>
-                Enable text search
-            </Typography>
+        <DialogTitle variant={"h5"} className={"flex flex-row gap-4 items-center"}>
+            <SearchIcon/>
+            Enable text search
+        </DialogTitle>
+        <DialogContent className={"flex flex-col gap-4"}>
 
             <SubscriptionPlanWidget
                 includeCTA={false}
