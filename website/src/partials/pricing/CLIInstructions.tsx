@@ -28,7 +28,7 @@ export function CLIInstructions() {
             This way you can create a CMS tailored to your needs.
         </p>
 
-        <p className={"font-mono uppercase font-bold mb-2 mt-6"}>FireCMS Plus</p>
+        <p className={"font-mono uppercase font-bold mb-2 mt-6"}>FireCMS Cloud</p>
         <div className={"flex gap-4 items-center flex-col md:flex-row"}>
 
             <div
