@@ -1,5 +1,5 @@
 "use client";
-import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import React, { useDeferredValue, useEffect, useMemo, useState } from "react";
 
 import { Underline } from "@tiptap/extension-underline";
 import TextStyle from "@tiptap/extension-text-style";
@@ -7,14 +7,19 @@ import { Color } from "@tiptap/extension-color";
 import BulletList from "@tiptap/extension-bullet-list"
 import Highlight from "@tiptap/extension-highlight";
 
+import Table from "@tiptap/extension-table"
+import TableCell from "@tiptap/extension-table-cell"
+import TableHeader from "@tiptap/extension-table-header"
+import TableRow from "@tiptap/extension-table-row"
+
 import { EditorBubble, type JSONContent } from "./components";
 
 import { NodeSelector } from "./selectors/node-selector";
 import { LinkSelector } from "./selectors/link-selector";
 import { TextButtons } from "./selectors/text-buttons";
 
-import { cls, defaultBorderMixin, Separator, useInjectStyles } from "@firecms/ui";
-import { Editor, EditorProvider } from "@tiptap/react";
+import { Button, cls, defaultBorderMixin, Separator, useInjectStyles } from "@firecms/ui";
+import { Editor, EditorProvider, Extensions } from "@tiptap/react";
 import { removeClassesFromJson } from "./utils/remove_classes";
 import {
     horizontalRule,
@@ -99,7 +104,7 @@ export const FireCMSEditor = ({
             const chain = editorRef.current.chain();
 
             if (deferredHighlight) {
-                    chain.focus().toggleAutocompleteHighlight(deferredHighlight).run();
+                chain.focus().toggleAutocompleteHighlight(deferredHighlight).run();
             } else {
                 chain.focus().removeAutocompleteHighlight().run();
             }
@@ -124,7 +129,7 @@ export const FireCMSEditor = ({
 
     const proseClass = proseClasses[textSize];
 
-    const extensions = useMemo(() => ([
+    const extensions:Extensions = useMemo(() => ([
         starterKit,
         CustomDocument,
         HighlightDecorationExtension(highlight),
@@ -154,13 +159,67 @@ export const FireCMSEditor = ({
                 aiController,
                 onDisabledAutocompleteClick
             })
-        })
+        }),
+        Table.configure({
+            resizable: false,
+        }),
+        TableRow,
+        TableHeader,
+        TableCell,
     ]), []);
 
     return (
         <div
             ref={ref}
             className="relative min-h-[300px] w-full">
+            {/*<Button onClick={() => {*/}
+            {/*    // add content at the end*/}
+            {/*    editorRef.current?.commands.setContent(content + "\n" +*/}
+            {/*        " <table border=\"1\">\n" +*/}
+            {/*        "  <thead>\n" +*/}
+            {/*        "    <tr>\n" +*/}
+            {/*        "      <th>Rank</th>\n" +*/}
+            {/*        "      <th>Company Name</th>\n" +*/}
+            {/*        "      <th>Revenue (in millions)</th>\n" +*/}
+            {/*        "      <th>Profit (in millions)</th>\n" +*/}
+            {/*        "    </tr>\n" +*/}
+            {/*        "  </thead>\n" +*/}
+            {/*        "  <tbody>\n" +*/}
+            {/*        "    <tr>\n" +*/}
+            {/*        "      <td>1</td>\n" +*/}
+            {/*        "      <td>Walmart</td>\n" +*/}
+            {/*        "      <td>$524,000</td>\n" +*/}
+            {/*        "      <td>$15,000</td>\n" +*/}
+            {/*        "    </tr>\n" +*/}
+            {/*        "    <tr>\n" +*/}
+            {/*        "      <td>2</td>\n" +*/}
+            {/*        "      <td>Amazon</td>\n" +*/}
+            {/*        "      <td>$280,522</td>\n" +*/}
+            {/*        "      <td>$11,588</td>\n" +*/}
+            {/*        "    </tr>\n" +*/}
+            {/*        "    <tr>\n" +*/}
+            {/*        "      <td>3</td>\n" +*/}
+            {/*        "      <td>Apple</td>\n" +*/}
+            {/*        "      <td>$260,174</td>\n" +*/}
+            {/*        "      <td>$55,256</td>\n" +*/}
+            {/*        "    </tr>\n" +*/}
+            {/*        "    <tr>\n" +*/}
+            {/*        "      <td>4</td>\n" +*/}
+            {/*        "      <td>CVS Health</td>\n" +*/}
+            {/*        "      <td>$256,776</td>\n" +*/}
+            {/*        "      <td>$6,634</td>\n" +*/}
+            {/*        "    </tr>\n" +*/}
+            {/*        "    <tr>\n" +*/}
+            {/*        "      <td>5</td>\n" +*/}
+            {/*        "      <td>UnitedHealth Group</td>\n" +*/}
+            {/*        "      <td>$242,155</td>\n" +*/}
+            {/*        "      <td>$13,839</td>\n" +*/}
+            {/*        "    </tr>\n" +*/}
+            {/*        "  </tbody>\n" +*/}
+            {/*        "</table>");*/}
+            {/*}}>*/}
+            {/*    Add table*/}
+            {/*</Button>*/}
             <EditorProvider
                 content={content ?? ""}
                 extensions={extensions}
@@ -354,6 +413,10 @@ ul[data-type="taskList"] li[data-checked="true"] > div > p {
 
 [data-theme="dark"] .ProseMirror:not(.dragging) .ProseMirror-selectednode {
   background-color:  rgb(51 65 85); // 700
+}
+
+.prose-base table p {
+    margin: 0;
 }
 
 .drag-handle {

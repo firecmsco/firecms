@@ -158,11 +158,6 @@ export async function autocompleteStream(props: {
     onUpdate: (delta: string) => void;
 }) {
 
-    console.debug("autocomplete", {
-        textBefore: props.textBefore,
-        textAfter: props.textAfter
-    });
-
     let result = "";
     return fetch((props.host ?? DEFAULT_SERVER) + "/data/autocomplete/",
         {
@@ -191,10 +186,12 @@ export async function autocompleteStream(props: {
             for await (const chunk of readChunks(reader)) {
                 const str = new TextDecoder().decode(chunk);
                 result += str;
+                console.debug("Autocomplete update:", str);
                 props.onUpdate(str);
             }
 
         }).then(() => {
+            console.debug("Autocomplete result:", result);
             return result;
         });
 

@@ -34,7 +34,7 @@ const PlaceholderExtension = Placeholder.configure({
         }
         return "Press '/' for commands";
     },
-    includeChildren: true,
+    includeChildren: true
 });
 
 const Horizontal = HorizontalRule.extend({
@@ -56,10 +56,10 @@ const Horizontal = HorizontalRule.extend({
                         tr.mapping.map(start),
                         tr.mapping.map(end)
                     );
-                },
-            }),
+                }
+            })
         ];
-    },
+    }
 });
 
 export {
@@ -70,7 +70,7 @@ export {
     TiptapImage,
     TaskItem,
     TaskList,
-    InputRule,
+    InputRule
 };
 
 export { getPrevText } from "../utils/utils";

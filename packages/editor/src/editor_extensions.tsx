@@ -1,34 +1,19 @@
-import { HorizontalRule, Placeholder, StarterKit, TaskItem, TaskList, TiptapLink, } from "./extensions";
+import StarterKit from "@tiptap/starter-kit";
+
+import { HorizontalRule, Placeholder, TaskItem, TaskList, TiptapLink, } from "./extensions";
 
 import { cls, defaultBorderMixin } from "@firecms/ui";
 import { Markdown } from "tiptap-markdown";
 
-//You can overwrite the placeholder with your own configuration
 export const placeholder = Placeholder;
+
 export const tiptapLink = TiptapLink.configure({
     HTMLAttributes: {
         class: cls(
-            "text-gray-600 dark:text-slate-300 underline underline-offset-[3px] hover:text-primary transition-colors cursor-pointer",
+            "text-gray-700 dark:text-slate-200 underline underline-offset-[3px] hover:text-primary transition-colors cursor-pointer",
         ),
     },
 });
-
-// export const tiptapImage = TiptapImage.extend({
-//     addProseMirrorPlugins() {
-//         return [UploadImagesPlugin()];
-//     },
-// }).configure({
-//     allowBase64: true,
-//     HTMLAttributes: {
-//         class: cn("rounded-lg border", defaultBorderMixin),
-//     },
-// });
-
-// const updatedImage = UpdatedImage.configure({
-//     HTMLAttributes: {
-//         class: cn("rounded-lg border", defaultBorderMixin),
-//     },
-// });
 
 export const taskList = TaskList.configure({
     HTMLAttributes: {

@@ -61,7 +61,8 @@ export function TestEditorView() {
     )
 }
 
-const defaultEditorContent = `![](https://firebasestorage.googleapis.com/v0/b/firecms-demo-27150.appspot.com/o/editor_test%2Fimage.png?alt=media&token=c5cae8f7-e13d-4b95-aee2-55962b5fbc57)
+const defaultEditorContent = `
+![](https://firebasestorage.googleapis.com/v0/b/firecms-demo-27150.appspot.com/o/editor_test%2Flogo_192.png?alt=media&token=8e1f2d8f-2fd3-406c-942d-3b9a848e2cff)
 # Introducing the FireCMS editor
 
 > The [FireCMS editor](https://firecms.co/) is a Notion-style WYSIWYG editor built with [Tiptap](https://tiptap.dev/).
@@ -81,7 +82,6 @@ code blocks
 
 > I like to look at one or two random quotes each morning.
 
-![](https://firebasestorage.googleapis.com/v0/b/firecms-demo-27150.appspot.com/o/editor_test%2Flogo_192.png?alt=media&token=8e1f2d8f-2fd3-406c-942d-3b9a848e2cff)
 ## Learn more
 
 This editor is in development and your **feedback** is very **valuable**. The content of this editor is only stored locally in this demo.
