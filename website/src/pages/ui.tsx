@@ -5,7 +5,6 @@ import { Panel } from "../partials/general/Panel";
 import { CTACaret, CTAOutlinedButtonMixin, CTAOutlinedButtonWhiteMixin } from "../partials/styles";
 import { DocsIconsView } from "../partials/DocsIconsView";
 import { UIComponentsShowcase } from "../partials/ui/UIComponentsShowcase";
-import "@firecms/ui/index.css";
 
 const UIPage: React.FC = () => {
     return (
