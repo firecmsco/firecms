@@ -70,7 +70,7 @@ export function ImagePreview({
                             return navigator.clipboard.writeText(url);
                         }}>
                         <ContentCopyIcon className={"text-gray-700 dark:text-gray-300"}
-                                         size={"small"}/>
+                                         size={"smallest"}/>
                     </IconButton>
                 </Tooltip>}
 
@@ -86,7 +86,7 @@ export function ImagePreview({
                         onClick={(e: any) => e.stopPropagation()}
                     >
                         <OpenInNewIcon className={"text-gray-700 dark:text-gray-300"}
-                                       size={"small"}/>
+                                       size={"smallest"}/>
                     </IconButton>
                 </Tooltip>
             </div>
