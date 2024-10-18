@@ -1,0 +1,79 @@
+---
+id: slider
+title: Slider
+sidebar_label: Slider
+---
+
+Sliders allow users to input a value by sliding a handle along a track. This component is highly customizable with various options for orientation, step, range, and more.
+
+## Usage
+
+To use the `Slider`, import it from your components library and configure it using props such as `min`, `max`, `step`, `value`, and others.
+
+
+
+import CodeSample from "../../src/CodeSample";
+import CodeBlock from "@theme/CodeBlock";
+import SliderBasicDemo from "../../samples/components/slider/slider_basic";
+import SliderBasicSource from "!!raw-loader!../../samples/components/slider/slider_basic";
+import SliderRangeDemo from "../../samples/components/slider/slider_range";
+import SliderRangeSource from "!!raw-loader!../../samples/components/slider/slider_range";
+import SliderSmallDemo from "../../samples/components/slider/slider_small";
+import SliderSmallSource from "!!raw-loader!../../samples/components/slider/slider_small";
+import SliderDisabledDemo from "../../samples/components/slider/slider_disabled";
+import SliderDisabledSource from "!!raw-loader!../../samples/components/slider/slider_disabled";
+import SliderInvertedDemo from "../../samples/components/slider/slider_inverted";
+import SliderInvertedSource from "!!raw-loader!../../samples/components/slider/slider_inverted";
+
+## Basic Slider
+
+A basic example of the Slider component with default settings.
+
+
+<CodeSample>
+    <SliderBasicDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{SliderBasicSource}</CodeBlock>
+
+## Range Slider
+
+An example of a range slider with two handles that allow users to select a range of values.
+
+<CodeSample>
+    <SliderRangeDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{SliderRangeSource}</CodeBlock>
+
+## Small Slider
+
+A smaller version of the Slider component with a reduced size.
+
+<CodeSample>
+    <SliderSmallDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{SliderSmallSource}</CodeBlock>
+
+
+## Disabled Slider
+
+Illustrating how to use the `disabled` prop to create a non-interactive Slider.
+
+
+<CodeSample>
+    <SliderDisabledDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{SliderDisabledSource}</CodeBlock>
+
+## Inverted Slider
+
+An example of an inverted slider where the value decreases from left to right.
+
+<CodeSample>
+    <SliderInvertedDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{SliderInvertedSource}</CodeBlock>

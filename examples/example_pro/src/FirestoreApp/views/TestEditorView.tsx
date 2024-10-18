@@ -86,6 +86,6 @@ code blocks
 
 This editor is in development and your **feedback** is very **valuable**. The content of this editor is only stored locally in this demo.
 
-- [x] Star us on [GitH](https://github.com/steven-tey/novel)[ub](https://github.com/firecmsco/firecms)
+- [x] Star us on [GitHub](https://github.com/firecmsco/firecms)
 
 - [x] Leave us your comments on [Discord](https://discord.gg/fxy7xsQm3m)`
