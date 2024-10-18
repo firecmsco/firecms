@@ -2,7 +2,6 @@
   "name": "@firecms/editor",
   "version": "3.0.0-canary.136",
   "description": "Notion-style WYSIWYG editor for FireCMS",
-  "license": "Apache-2.0",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",

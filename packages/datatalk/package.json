@@ -2,7 +2,6 @@
   "name": "@firecms/datatalk",
   "version": "3.0.0-canary.136",
   "description": "Talk to your Firestore data",
-  "license": "Apache-2.0",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
