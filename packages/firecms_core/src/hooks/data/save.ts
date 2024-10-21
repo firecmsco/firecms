@@ -86,7 +86,7 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, Use
                 path,
                 values: previousValues as EntityValues<M>,
                 entityId,
-                fields: customizationController.propertyConfigs
+                propertyConfigs: customizationController.propertyConfigs
             });
             updatedValues = await callbacks.onPreSave({
                 collection: resolvedCollection,
@@ -128,7 +128,7 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, Use
                     path,
                     values: updatedValues as EntityValues<M>,
                     entityId,
-                    fields: customizationController.propertyConfigs
+                    propertyConfigs: customizationController.propertyConfigs
                 });
                 callbacks.onSaveSuccess({
                     collection: resolvedCollection,
@@ -157,7 +157,7 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, Use
                     path,
                     values: updatedValues as EntityValues<M>,
                     entityId,
-                    fields: customizationController.propertyConfigs
+                    propertyConfigs: customizationController.propertyConfigs
                 });
                 callbacks.onSaveFailure({
                     collection: resolvedCollection,

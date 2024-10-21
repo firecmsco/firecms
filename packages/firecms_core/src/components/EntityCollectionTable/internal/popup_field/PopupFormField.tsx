@@ -101,7 +101,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             path,
             values: internalValue,
             entityId,
-            fields: customizationController.propertyConfigs
+            propertyConfigs: customizationController.propertyConfigs
         })
         : undefined;
 

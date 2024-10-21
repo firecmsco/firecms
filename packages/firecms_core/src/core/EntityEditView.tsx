@@ -185,7 +185,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         collection: inputCollection,
         path,
         values: entity?.values,
-        fields: customizationController.propertyConfigs
+        propertyConfigs: customizationController.propertyConfigs
     }), [entity?.values, path, customizationController.propertyConfigs]);
 
     const initialStatus = copy ? "copy" : (entityIdProp ? "existing" : "new");
@@ -446,7 +446,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         entityId,
         values: formex.values,
         previousValues: formex.initialValues,
-        fields: customizationController.propertyConfigs
+        propertyConfigs: customizationController.propertyConfigs
     });
 
     const lastSavedValues = useRef<EntityValues<M> | undefined>(entity?.values);

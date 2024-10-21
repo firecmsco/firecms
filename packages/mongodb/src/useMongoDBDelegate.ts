@@ -28,7 +28,7 @@ export interface UseMongoDataSourceProps {
     app: App,
     cluster: string,
     database: string,
-    fields?: Record<string, PropertyConfig>;
+    propertyConfigs?: Record<string, PropertyConfig>;
 }
 
 const firecmsToMongoDB: Record<WhereFilterOp, string> = {

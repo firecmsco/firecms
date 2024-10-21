@@ -11,7 +11,7 @@ export function isReferenceProperty(propertyOrBuilder: PropertyOrBuilder,
     const resolvedProperty = resolveProperty({
         propertyKey: "ignore", // TODO
         propertyOrBuilder,
-        fields
+        propertyConfigs: fields
     });
     if (!resolvedProperty) return null;
     if (resolvedProperty.dataType === "reference") {

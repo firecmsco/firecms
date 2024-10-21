@@ -45,12 +45,12 @@ export const booksCollection = buildCollection({
         description: {
             name: "Description",
             dataType: "string",
-            multiline: true
+            markdown: true
         },
         spanish_description: {
             name: "Spanish description",
             dataType: "string",
-            multiline: true
+            markdown: true
         },
         thumbnail: {
             name: "Thumbnail",

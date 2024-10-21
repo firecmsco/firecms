@@ -251,7 +251,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
         collection: collection,
         path: fullPath,
         values: {},
-        fields: customizationController.propertyConfigs
+        propertyConfigs: customizationController.propertyConfigs
     }), [collection, customizationController.propertyConfigs, fullPath]);
 
     const displayedColumnIds = useColumnIds(resolvedCollection, false);

@@ -23,7 +23,7 @@ export function ArrayPropertyPreview({
     const property = resolveArrayProperty({
         propertyKey,
         property: inputProperty,
-        fields: customizationController.propertyConfigs
+        propertyConfigs: customizationController.propertyConfigs
     });
 
     if (!property.of) {

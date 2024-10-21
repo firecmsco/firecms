@@ -30,7 +30,7 @@ export function EntityView<M extends Record<string, any>>(
         path,
         entityId: entity.id,
         values: entity.values,
-        fields: customizationController.propertyConfigs
+        propertyConfigs: customizationController.propertyConfigs
     }), [collection, path, entity, customizationController.propertyConfigs]);
 
     const properties: ResolvedProperties = resolvedCollection.properties;

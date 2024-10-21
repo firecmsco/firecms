@@ -353,7 +353,7 @@ export const EntityCollectionView = React.memo(
         const resolvedCollection = useMemo(() => resolveCollection<M>({
             collection,
             path: fullPath,
-            fields: customizationController.propertyConfigs
+            propertyConfigs: customizationController.propertyConfigs
         }), [collection, fullPath]);
 
         const getPropertyFor = useCallback(({
@@ -374,7 +374,7 @@ export const EntityCollectionView = React.memo(
                 path: entity.path,
                 values: entity.values,
                 entityId: entity.id,
-                fields: customizationController.propertyConfigs
+                propertyConfigs: customizationController.propertyConfigs
             });
         }, [collection.properties, customizationController.propertyConfigs, resolvedCollection.properties]);
 

@@ -87,7 +87,7 @@ export function TableResults({
         return collection && path ? resolveCollection<any>({
                 collection,
                 path,
-                fields: customizationController.propertyConfigs
+                propertyConfigs: customizationController.propertyConfigs
             })
             : undefined;
     }, [collection, path]);

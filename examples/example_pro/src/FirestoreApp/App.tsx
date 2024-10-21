@@ -135,6 +135,14 @@ export function App() {
 
     // Example of adding a custom field
     const propertyConfigs: Record<string, PropertyConfig> = {
+        markdown: {
+            key: "markdown",
+            name: "Custom markdown field",
+            property: {
+                dataType: "string",
+                Field: CustomColorTextField
+            }
+        },
         test_custom_field: {
             key: "test_custom_field",
             name: "Test custom field",

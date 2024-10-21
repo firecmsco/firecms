@@ -101,7 +101,7 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
     const resolvedCollection = resolveCollection({
         collection,
         path,
-        fields: customizationController.propertyConfigs
+        propertyConfigs: customizationController.propertyConfigs
     });
 
     const properties = getPropertiesWithPropertiesOrder<M>(resolvedCollection.properties, resolvedCollection.propertiesOrder as Extract<keyof M, string>[]) as ResolvedProperties<M>;

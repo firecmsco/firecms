@@ -209,7 +209,7 @@ export function useBuildDataSource({
                     collection,
                     path,
                     entityId,
-                    fields: propertyConfigs
+                    propertyConfigs: propertyConfigs
                 })
                 : undefined;
 

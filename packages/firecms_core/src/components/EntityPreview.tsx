@@ -62,7 +62,7 @@ export function EntityPreview({
         collection,
         path: entity.path,
         values: entity.values,
-        fields: customizationController.propertyConfigs
+        propertyConfigs: customizationController.propertyConfigs
     }), [collection]);
 
     const listProperties = useMemo(() => getEntityPreviewKeys(resolvedCollection, customizationController.propertyConfigs, previewProperties, size === "small" || size === "medium" ? 3 : 1),

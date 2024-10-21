@@ -105,7 +105,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                     values: fieldProps.form.values,
                     path: context.path,
                     entityId: context.entityId,
-                    fields: customizationController.propertyConfigs,
+                    propertyConfigs: customizationController.propertyConfigs,
                     index
                 });
 
@@ -134,7 +134,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                         values: fieldProps.form.values,
                         path: context.path,
                         entityId: context.entityId,
-                        fields: customizationController.propertyConfigs,
+                        propertyConfigs: customizationController.propertyConfigs,
                         index
                     });
                     Component = configProperty.Field as ComponentType<FieldProps<T>>;

@@ -38,7 +38,7 @@ export const resolveCollection = <M extends Record<string, any>, >
      values,
      previousValues,
      userConfigPersistence,
-     fields,
+     propertyConfigs,
      ignoreMissingFields = false
  }: {
     collection: EntityCollection<M> | ResolvedEntityCollection<M>;
@@ -47,7 +47,7 @@ export const resolveCollection = <M extends Record<string, any>, >
     values?: Partial<EntityValues<M>>,
     previousValues?: Partial<EntityValues<M>>,
     userConfigPersistence?: UserConfigurationPersistence;
-    fields?: Record<string, PropertyConfig>;
+    propertyConfigs?: Record<string, PropertyConfig>;
     ignoreMissingFields?: boolean;
 }): ResolvedEntityCollection<M> => {
 
@@ -67,7 +67,7 @@ export const resolveCollection = <M extends Record<string, any>, >
                 previousValues: usedPreviousValues,
                 path,
                 entityId,
-                fields,
+                propertyConfigs: propertyConfigs,
                 ignoreMissingFields
             });
             if (!childResolvedProperty) return {};
@@ -111,7 +111,7 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
     entityId?: string,
     index?: number,
     fromBuilder?: boolean;
-    fields?: Record<string, PropertyConfig<any>>;
+    propertyConfigs?: Record<string, PropertyConfig<any>>;
     ignoreMissingFields?: boolean;
 }): ResolvedProperty<T> | null {
 
@@ -182,7 +182,7 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
     }
 
     if (resolvedProperty.propertyConfig && !isDefaultFieldConfigId(resolvedProperty.propertyConfig)) {
-        const cmsFields = props.fields;
+        const cmsFields = props.propertyConfigs;
         if (!cmsFields && !ignoreMissingFields) {
             throw Error(`Trying to resolve a property with key '${resolvedProperty.propertyConfig}' that inherits from a custom property config but no custom property configs were provided. Use the property 'propertyConfigs' in your app config to provide them`);
         }
@@ -233,7 +233,7 @@ export function getArrayResolvedProperties<M>({
     entityId?: string;
     index?: number;
     fromBuilder?: boolean;
-    fields?: Record<string, PropertyConfig>
+    propertyConfigs?: Record<string, PropertyConfig>
 }) {
 
     const of = property.of;
@@ -263,7 +263,7 @@ export function resolveArrayProperty<T extends any[], M>({
     entityId?: string,
     index?: number,
     fromBuilder?: boolean;
-    fields?: Record<string, PropertyConfig>;
+    propertyConfigs?: Record<string, PropertyConfig>;
     ignoreMissingFields?: boolean;
 }): ResolvedArrayProperty {
     const propertyValue = propertyKey ? getIn(props.values, propertyKey) : undefined;
@@ -370,7 +370,7 @@ export function resolveProperties<M extends Record<string, any>>({
     entityId?: string,
     index?: number,
     fromBuilder?: boolean;
-    fields?: Record<string, PropertyConfig>;
+    propertyConfigs?: Record<string, PropertyConfig>;
     ignoreMissingFields?: boolean;
 }): ResolvedProperties<M> {
     return Object.entries<PropertyOrBuilder>(properties as Record<string, PropertyOrBuilder>)

@@ -21,7 +21,7 @@ export function ArrayOfStringsPreview({
     const property = resolveArrayProperty({
         propertyKey,
         property: inputProperty,
-        fields: customizationController.propertyConfigs
+        propertyConfigs: customizationController.propertyConfigs
     });
 
     if (Array.isArray(property.of)) {

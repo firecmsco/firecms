@@ -13,12 +13,12 @@ const appConfig: FireCMSAppConfig = {
         property: {
             dataType: "string",
             name: "Main color",
-            Preview: ({value}) => {
+            Preview: ({ value }) => {
                 return <div style={{
                     width: 20,
-                        height: 20,
-                        backgroundColor: value,
-                        borderRadius: "4px",
+                    height: 20,
+                    backgroundColor: value,
+                    borderRadius: "4px",
                 }}/>;
             },
         },
