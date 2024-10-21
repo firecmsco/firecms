@@ -109,7 +109,7 @@ export function TextField<T extends string | number>({
             style={inputStyle}
             className={cls(
                 invisible ? focusedInvisibleMixin :  "",
-                "rounded-md resize-none w-full outline-none p-[32px] text-base bg-transparent min-h-[64px] px-3 pt-[28px]",
+                "rounded-md resize-none w-full outline-none p-[32px] text-base bg-transparent min-h-[64px] px-3 pt-8",
                 disabled && "border border-transparent outline-none opacity-50 text-slate-600 dark:text-slate-500"
             )}
         />
@@ -125,7 +125,7 @@ export function TextField<T extends string | number>({
                 invisible ? focusedInvisibleMixin : "",
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                 size === "smallest" ? "min-h-[32px]" : (size === "small" ? "min-h-[48px]" : "min-h-[64px]"),
-                label ? (size === "medium" ? "pt-[28px] pb-2" : "pt-4 pb-2") : "py-2",
+                label ? (size === "medium" ? "pt-8 pb-2" : "pt-4 pb-2") : "py-2",
                 focused ? "text-text-primary dark:text-text-primary-dark" : "",
                 endAdornment ? "pr-10" : "pr-3",
                 disabled && "border border-transparent outline-none opacity-50 dark:opacity-50 text-slate-800 dark:text-white",

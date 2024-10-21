@@ -162,7 +162,7 @@ export function AdvancedTextField<T extends string | number>({
                     disabled && "border border-transparent outline-none opacity-50 text-gray-600 dark:text-gray-500",
                     "absolute top-0 right-0 left-0 max-w-full bg-transparent text-transparent caret-gray-800 dark:caret-gray-200",
                     "pt-8 pb-2 px-3",
-                    label ? (size === "medium" ? "pt-[28px] pb-2" : "pt-4 pb-2") : "py-2"
+                    label ? (size === "medium" ? "pt-8 pb-2" : "pt-4 pb-2") : "py-2"
                 )}
                 ignoreBoxSizing={true}
                 ref={inputRef}

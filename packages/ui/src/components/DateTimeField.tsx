@@ -107,7 +107,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                         clearable ? "pr-14" : "pr-12",
                         "rounded-md",
                         size === "small" ? "min-h-[48px]" : "min-h-[64px]",
-                        label ? "pt-[28px] pb-2" : "py-2",
+                        label ? "pt-8 pb-2" : "py-2",
                         inputClassName,
                         disabled && "border border-transparent outline-none opacity-50 dark:opacity-50 text-slate-600 dark:text-slate-500"
                     )}
