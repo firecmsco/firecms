@@ -1,3 +1,4 @@
+"use client";
 import React, { useCallback } from "react";
 import { cardClickableMixin, cardMixin } from "../styles";
 import { cls } from "../util";

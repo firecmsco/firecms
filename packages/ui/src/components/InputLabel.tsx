@@ -1,6 +1,5 @@
 import * as React from "react";
 import { cls } from "../util";
-import { Label } from "./Label";
 import { defaultBorderMixin } from "../styles";
 
 export type InputLabelProps = {

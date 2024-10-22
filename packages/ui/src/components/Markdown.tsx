@@ -1,3 +1,4 @@
+"use client";
 import React, { useMemo } from "react";
 import equal from "react-fast-compare"
 

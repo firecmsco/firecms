@@ -72,6 +72,13 @@ export const testCollection = buildCollection<any>({
                 dataType: "date",
                 // autoValue: "on_create"
             },
+
+            test_date: {
+                name: "Test date",
+                dataType: "date",
+                mode: "date_time",
+                clearable: true
+            },
             locale: {
                 name: "Locales",
                 dataType: "string",
@@ -442,12 +449,6 @@ export const testCollection = buildCollection<any>({
             //     validation: { required: false },
             //     clearable: true
             // },
-            test_date: {
-                name: "Test date",
-                dataType: "date",
-                mode: "date_time",
-                clearable: true
-            },
             tags: {
                 name: "Tags",
                 dataType: "array",

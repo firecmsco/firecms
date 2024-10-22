@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { cls } from "../util";
 import { defaultBorderMixin } from "../styles";

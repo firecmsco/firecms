@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-
+import { CenteredView, Typography } from "@firecms/ui";
 import { CustomizationController, EntityCollection, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
 import { AuthControllerContext } from "../contexts";
 import { useBuildSideEntityController } from "../internal/useBuildSideEntityController";
@@ -12,7 +12,6 @@ import { DataSourceContext } from "../contexts/DataSourceContext";
 import { SideEntityControllerContext } from "../contexts/SideEntityControllerContext";
 import { NavigationContext } from "../contexts/NavigationContext";
 import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerContext";
-import { CenteredView, Typography, useLocaleConfig } from "@firecms/ui";
 import { DialogsProvider } from "../contexts/DialogsProvider";
 import { useBuildDataSource } from "../internal/useBuildDataSource";
 import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext";
@@ -50,8 +49,6 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
         navigationController,
         apiKey
     } = props;
-
-    useLocaleConfig(locale);
 
     /**
      * Controller in charge of fetching and persisting data

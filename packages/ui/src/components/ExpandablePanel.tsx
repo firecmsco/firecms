@@ -1,3 +1,4 @@
+"use client";
 import React, { PropsWithChildren, useEffect, useState } from "react";
 
 import * as Collapsible from "@radix-ui/react-collapsible";
