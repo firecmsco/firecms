@@ -79,7 +79,7 @@ export function TextField<T extends string | number>({
     useEffect(() => {
         if (type !== "number") return;
         const handleWheel = (event: any) => {
-            event.preventDefault(); // Prevent scrolling the number input
+            if (event.target instanceof HTMLElement) event.target.blur()
         };
 
         // Current input element
@@ -109,7 +109,7 @@ export function TextField<T extends string | number>({
             onChange={onChange}
             style={inputStyle}
             className={cls(
-                invisible ? focusedInvisibleMixin :  "",
+                invisible ? focusedInvisibleMixin : "",
                 "rounded-md resize-none w-full outline-none p-[32px] text-base bg-transparent min-h-[64px] px-3 pt-8",
                 disabled && "border border-transparent outline-none opacity-50 text-slate-600 dark:text-slate-500"
             )}
