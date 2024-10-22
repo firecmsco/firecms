@@ -5,11 +5,22 @@ import { Panel } from "../partials/general/Panel";
 import { CTACaret, CTAOutlinedButtonMixin, CTAOutlinedButtonWhiteMixin } from "../partials/styles";
 import { DocsIconsView } from "../partials/DocsIconsView";
 import { UIComponentsShowcase } from "../partials/ui/UIComponentsShowcase";
+import { clarityScript } from "../partials/clarity_head";
+import Head from "@docusaurus/Head";
 
 const UIPage: React.FC = () => {
     return (
-        <Layout title="FireCMS UI, batteries included">
-
+        <Layout title="FireCMS UI, batteries included"
+                description={"A complete UI kit to develop apps in no time"}>
+            <Head>
+                <meta property="og:title" content="FireCMS UI, batteries included"/>
+                <meta property="og:description"
+                      content="A complete UI kit to develop apps in no time"/>
+                <meta property="og:image" content="/img/firecms_logo.svg"/>
+                <script type="text/javascript">
+                    {clarityScript}
+                </script>
+            </Head>
             <Hero
                 title={
                     <>

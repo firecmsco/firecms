@@ -10,6 +10,8 @@ import ProFeaturesPanels from "../partials/pro/ProFeaturesPanels";
 import HeroProButtons from "../partials/home/HeroProButtons";
 import { UITeaser } from "../partials/home/UITeaser";
 import { ImportDataIntro } from "../partials/home/ImportDataIntro";
+import Head from "@docusaurus/Head";
+import { clarityScript } from "../partials/clarity_head";
 
 function ProPage() {
 
@@ -17,7 +19,15 @@ function ProPage() {
         <Layout
             title={"PRO - FireCMS"}
             description="FireCMS PRO is the CMS aimed at companies and agencies that need a high degree of customization and support.">
-
+            <Head>
+                <meta property="og:title" content="PRO - FireCMS"/>
+                <meta property="og:description"
+                      content="FireCMS PRO is the CMS aimed at companies and agencies that need a high degree of customization and support."/>
+                <meta property="og:image" content="/img/firecms_logo.svg"/>
+                <script type="text/javascript">
+                    {clarityScript}
+                </script>
+            </Head>
             <div className="flex flex-col min-h-screen">
 
                 <main className="flex-grow">

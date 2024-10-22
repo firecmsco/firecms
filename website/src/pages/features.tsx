@@ -12,6 +12,8 @@ import { EnterpriseFeatures } from "../partials/enterprise/EnterpriseFeatures";
 import { EnterpriseArchitectures } from "../partials/enterprise/EnterpriseArchitectures";
 import { SchemaEditorIntro } from "../partials/features/SchemaEditorIntro";
 import OpenAITeaser from "../partials/features/OpenAITeaser";
+import Head from "@docusaurus/Head";
+import { clarityScript } from "../partials/clarity_head";
 
 function FeaturesPage() {
 
@@ -19,6 +21,15 @@ function FeaturesPage() {
         <Layout
             title={"Features - FireCMS"}
             description="FireCMS includes all the features you need to kickstart your project and all the customization options you may need.">
+            <Head>
+                <meta property="og:title" content="FireCMS - Firestore/Firebase headless CMS"/>
+                <meta property="og:description"
+                      content="FireCMS includes all the features you need to kickstart your project and all the customization options you may need."/>
+                <meta property="og:image" content="/img/firecms_logo.svg"/>
+                <script type="text/javascript">
+                    {clarityScript}
+                </script>
+            </Head>
 
             <div className="flex flex-col min-h-screen">
 

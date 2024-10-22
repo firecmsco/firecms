@@ -16,6 +16,7 @@ import { UsageExamples } from "../partials/UsageExamples";
 import { QuotesSection } from "../partials/Quotes";
 import { organizationSchema, softwareApplicationSchema } from "../partials/markup";
 import { ImportDataIntro } from "../partials/home/ImportDataIntro";
+import { clarityScript } from "../partials/clarity_head";
 
 function Home() {
 
@@ -34,6 +35,9 @@ function Home() {
                 </script>
                 <script type="application/ld+json">
                     {JSON.stringify(organizationSchema)}
+                </script>
+                <script type="text/javascript">
+                    {clarityScript}
                 </script>
             </Head>
 
