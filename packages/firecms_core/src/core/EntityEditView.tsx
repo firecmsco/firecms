@@ -892,45 +892,42 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 {pluginActions}
             </div>}
 
-            <div className="h-full overflow-auto">
+            <div className="pt-12 pb-16 pl-4 sm:px-8 md:px-10">
+                <div
+                    className={`w-full py-2 flex flex-col items-start mt-${4 + (pluginActions ? 8 : 0)} lg:mt-${8 + (pluginActions ? 8 : 0)} mb-8`}>
 
-                <div className="pt-12 pb-16 pl-4 sm:px-8 md:px-10">
-                    <div
-                        className={`w-full py-2 flex flex-col items-start mt-${4 + (pluginActions ? 8 : 0)} lg:mt-${8 + (pluginActions ? 8 : 0)} mb-8`}>
+                    <Typography
+                        className={"mt-4 flex-grow line-clamp-1 " + inputCollection.hideIdFromForm ? "mb-2" : "mb-0"}
+                        variant={"h4"}>{title ?? inputCollection.singularName ?? inputCollection.name}
+                    </Typography>
+                    <Alert color={"base"} className={"w-full"} size={"small"}>
+                        <code className={"text-xs select-all"}>{path}/{entityId}</code>
+                    </Alert>
+                </div>
 
-                        <Typography
-                            className={"mt-4 flex-grow line-clamp-1 " + inputCollection.hideIdFromForm ? "mb-2" : "mb-0"}
-                            variant={"h4"}>{title ?? inputCollection.singularName ?? inputCollection.name}
-                        </Typography>
-                        <Alert color={"base"} className={"w-full"} size={"small"}>
-                            <code className={"text-xs select-all"}>{path}/{entityId}</code>
-                        </Alert>
+                {!collection.hideIdFromForm &&
+                    <CustomIdField customId={inputCollection.customId}
+                                   entityId={entityId}
+                                   status={status}
+                                   onChange={setEntityId}
+                                   error={entityIdError}
+                                   loading={customIdLoading}
+                                   entity={entity}/>}
+
+                {entityId && formContext && <>
+                    <div className="mt-12 flex flex-col gap-8"
+                         ref={formRef}>
+
+                        {formFields}
+
+                        <ErrorFocus containerRef={formRef}/>
+
                     </div>
 
-                    {!collection.hideIdFromForm &&
-                        <CustomIdField customId={inputCollection.customId}
-                                       entityId={entityId}
-                                       status={status}
-                                       onChange={setEntityId}
-                                       error={entityIdError}
-                                       loading={customIdLoading}
-                                       entity={entity}/>}
+                    <div className="h-14"/>
 
-                    {entityId && formContext && <>
-                        <div className="mt-12 flex flex-col gap-8"
-                             ref={formRef}>
+                </>}
 
-                            {formFields}
-
-                            <ErrorFocus containerRef={formRef}/>
-
-                        </div>
-
-                        <div className="h-14"/>
-
-                    </>}
-
-                </div>
             </div>
         </>;
 
@@ -1004,10 +1001,10 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     return (
         <Formex value={formex}>
 
-            <div className="flex flex-col h-full w-full transition-width duration-250 ease-in-out">
+            <div className="flex flex-col h-full w-full">
 
                 <div
-                    className={cls(defaultBorderMixin, "no-scrollbar border-b pl-2 pr-2 pt-1 flex items-end overflow-scroll bg-gray-50 dark:bg-gray-950")}>
+                    className={cls(defaultBorderMixin, "no-scrollbar h-16 border-b pl-2 pr-2 pt-1 flex items-end overflow-scroll bg-gray-50 dark:bg-gray-950")}>
 
                     <div
                         className="pb-1 self-center">
