@@ -1,7 +1,7 @@
-import algoliasearch, { SearchClient } from "algoliasearch";
+import { algoliasearch, SearchClient } from "algoliasearch";
 
 import {
-    buildAlgoliaSearchController,
+    buildExternalSearchController,
     buildPineconeSearchController,
     performAlgoliaTextSearch,
     performPineconeTextSearch
@@ -24,27 +24,22 @@ else if (import.meta.env) {
     console.error("Text search not enabled");
 }
 
-const productsIndex = client && client.initIndex("products");
-const usersIndex = client && client.initIndex("users");
-const blogIndex = client && client.initIndex("blog");
-const booksIndex = client && client.initIndex("books");
-
-export const algoliaSearchControllerBuilder = buildAlgoliaSearchController({
+export const algoliaSearchControllerBuilder = buildExternalSearchController({
     isPathSupported: (path) => {
         return ["products", "users", "blog", "books"].includes(path);
     },
-    search: ({
+    search: async ({
                  path,
                  searchString
              }) => {
         if (path === "products")
-            return productsIndex && performAlgoliaTextSearch(productsIndex, searchString);
+            return performAlgoliaTextSearch(client, "products", searchString);
         if (path === "users")
-            return usersIndex && performAlgoliaTextSearch(usersIndex, searchString);
+            return performAlgoliaTextSearch(client, "users", searchString);
         if (path === "blog")
-            return blogIndex && performAlgoliaTextSearch(blogIndex, searchString);
+            return performAlgoliaTextSearch(client, "blog", searchString);
         if (path === "books")
-            return booksIndex && performAlgoliaTextSearch(booksIndex, searchString);
+            return performAlgoliaTextSearch(client, "books", searchString);
         return undefined;
     }
 });

@@ -36,6 +36,6 @@ export type FirestoreTextSearchController = {
         path: string,
         currentUser: FirebaseUser,
         databaseId?: string
-    }) => (Promise<readonly string[]> | undefined),
+    }) => (Promise<readonly string[] | undefined>),
 
 };

@@ -231,14 +231,14 @@ export function useFirestoreDelegate({
         }
 
         search.then((ids) => {
-            if (ids.length === 0) {
+            if (!ids || ids.length === 0) {
                 subscriptions = [];
                 onUpdate([]);
             }
 
             const entities: Entity<M>[] = [];
             const addedEntitiesSet = new Set<string>();
-            subscriptions = ids
+            subscriptions = (ids ?? [])
                 .map((entityId) => {
                         return listenEntity({
                             path,
@@ -285,9 +285,17 @@ export function useFirestoreDelegate({
             databaseId?: string,
             collection?: EntityCollection | ResolvedEntityCollection
         }) => {
-            console.debug("Init text search controller", props.path);
-            if (!searchControllerRef.current) return false;
-            return searchControllerRef.current.init(props);
+            console.debug("Init text search controller", searchControllerRef.current, props.path);
+            if (!searchControllerRef.current) {
+                console.warn("You are trying to use text search, but have not provided a text search controller in `useFirestoreDelegate`. You can also set the flag `localTextSearchEnabled` to use local search in `useFirestoreDelegate`. Local text search can incur in performance issues and higher costs for large datasets.");
+                return false;
+            }
+            try {
+                return searchControllerRef.current.init(props);
+            } catch (e) {
+                console.error("Error initializing text search controller", e);
+                return false;
+            }
         }, []),
 
         /**
@@ -734,12 +742,14 @@ function buildTextSearchControllerWithLocalSearch({
     firebaseApp: FirebaseApp,
     localTextSearchEnabled: boolean
 }): FirestoreTextSearchController | undefined {
-    if (!textSearchControllerBuilder && localTextSearchEnabled)
+    if (!textSearchControllerBuilder && localTextSearchEnabled) {
+        console.debug("Using local search only");
         return localSearchControllerBuilder({ firebaseApp });
-
-    if (!localTextSearchEnabled && textSearchControllerBuilder)
+    }
+    if (!localTextSearchEnabled && textSearchControllerBuilder) {
+        console.debug("Using external text search only");
         return textSearchControllerBuilder({ firebaseApp });
-
+    }
     if (!textSearchControllerBuilder && !localTextSearchEnabled) {
         return undefined;
     }
@@ -753,18 +763,22 @@ function buildTextSearchControllerWithLocalSearch({
             collection?: EntityCollection | ResolvedEntityCollection
         }) => {
             const b = await textSearchController.init(props);
-            if (b) return true;
+            if (b) {
+                console.debug("External Text search controller supports path", props.path);
+                return true;
+            }
             if (localTextSearchEnabled)
                 return localSearchController.init(props);
             return false;
         },
-        search: (props: {
+        search: async (props: {
             searchString: string,
             path: string,
             currentUser: any,
             databaseId?: string
         }) => {
-            return textSearchController.search(props) ?? localSearchController.search(props);
+            const search = await textSearchController.search(props);
+            return search ?? await localSearchController.search(props);
         }
     }
 }

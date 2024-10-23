@@ -24,7 +24,6 @@
     "react-router-dom": "^6.26.2"
   },
   "peerDependencies": {
-    "algoliasearch": "^4.14.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -40,7 +39,6 @@
     "@types/node": "^20.16.11",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",
-    "algoliasearch": "^4.24.0",
     "typescript": "^5.6.3",
     "vite": "^5.4.8"
   },
