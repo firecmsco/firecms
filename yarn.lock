@@ -2906,10 +2906,6 @@ __metadata:
     "@tiptap/extension-link": 2.8.0
     "@tiptap/extension-list-item": 2.8.0
     "@tiptap/extension-placeholder": 2.8.0
-    "@tiptap/extension-table": 2.8.0
-    "@tiptap/extension-table-cell": 2.8.0
-    "@tiptap/extension-table-header": 2.8.0
-    "@tiptap/extension-table-row": 2.8.0
     "@tiptap/extension-task-item": 2.8.0
     "@tiptap/extension-task-list": 2.8.0
     "@tiptap/extension-text-style": 2.8.0
@@ -6122,43 +6118,6 @@ __metadata:
   peerDependencies:
     "@tiptap/core": ^2.7.0
   checksum: f5ce6b500ec5e8b8749b6e66f0d775491e84d80092edcddbff98fbc603ab98412b74c5186b8c1de0c53a55405939645d9568f033bbd38a6d0748cb645b596715
-  languageName: node
-  linkType: hard
-
-"@tiptap/extension-table-cell@npm:2.8.0":
-  version: 2.8.0
-  resolution: "@tiptap/extension-table-cell@npm:2.8.0"
-  peerDependencies:
-    "@tiptap/core": ^2.7.0
-  checksum: cdb92da1ff901323dc669a9e8b7b152109f317b1d29443571898b523e9744308372a1551359b504251a58b684264bc77683f0bf4f4934b6072db1decc95195bf
-  languageName: node
-  linkType: hard
-
-"@tiptap/extension-table-header@npm:2.8.0":
-  version: 2.8.0
-  resolution: "@tiptap/extension-table-header@npm:2.8.0"
-  peerDependencies:
-    "@tiptap/core": ^2.7.0
-  checksum: 6ae4757f6a6ea005d33c5dfc6d072a27bd993c8d7aae48dd4fd0bf0f60cbec14aaa95e416949714e48f0d91befeeaef19a393dc44320451e763dfbe5c840efe2
-  languageName: node
-  linkType: hard
-
-"@tiptap/extension-table-row@npm:2.8.0":
-  version: 2.8.0
-  resolution: "@tiptap/extension-table-row@npm:2.8.0"
-  peerDependencies:
-    "@tiptap/core": ^2.7.0
-  checksum: 994a3fc24834667462a38164b98d72b19cb7c1d82fc41d935f57776227c3067b2648073514be3cd7443881de3323fd3270eb05bcfb683f81bf05d51020b9a33b
-  languageName: node
-  linkType: hard
-
-"@tiptap/extension-table@npm:2.8.0":
-  version: 2.8.0
-  resolution: "@tiptap/extension-table@npm:2.8.0"
-  peerDependencies:
-    "@tiptap/core": ^2.7.0
-    "@tiptap/pm": ^2.7.0
-  checksum: ef0c703b3c8715d53982897d77ed4c085a820027ab74b4f9633d1ffd5d6dc87ba247a041ebccc2bd07fbd089f7e84ba1f51eb3ce3531e44881b9538bdab8bf21
   languageName: node
   linkType: hard
 

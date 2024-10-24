@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import { Field, useFormex } from "@firecms/formex";
 
-import { FieldHelperText, FormikArrayContainer, LabelWithIconAndTooltip } from "../components";
+import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";
 import { FieldProps, FormContext, PropertyFieldBindingProps, PropertyOrBuilder } from "../../types";
@@ -10,6 +10,7 @@ import { getDefaultValueFor, getIconForProperty, } from "../../util";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../util/common";
 import { cls, ExpandablePanel, paperMixin, Select, SelectItem, Typography } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
+import { ArrayContainer } from "../../components";
 
 /**
  * If the `oneOf` property is specified, this fields render each array entry as
@@ -47,9 +48,9 @@ export function BlockFieldBinding<T extends Array<any>>({
 
     const [lastAddedId, setLastAddedId] = useState<number | undefined>();
 
-    const buildEntry = useCallback((index: number, internalId: number) => {
+    const buildEntry = useCallback((index: number, internalId: number, isDragging:boolean) => {
         return <BlockEntry
-            key={`array_one_of_${index}`}
+            key={`array_one_of_${internalId}`}
             name={`${propertyKey}.${index}`}
             index={index}
             value={value[index]}
@@ -70,19 +71,19 @@ export function BlockFieldBinding<T extends Array<any>>({
     );
 
     const firstOneOfKey = Object.keys(property.oneOf.properties)[0];
-    const body = <FormikArrayContainer value={value}
-                                       className={"flex flex-col gap-3"}
-                                       name={propertyKey}
-                                       addLabel={property.name ? "Add entry to " + property.name : "Add entry"}
-                                       buildEntry={buildEntry}
-                                       onInternalIdAdded={setLastAddedId}
-                                       disabled={isSubmitting || Boolean(property.disabled)}
-                                       includeAddButton={!property.disabled}
-                                       setFieldValue={setFieldValue}
-                                       newDefaultEntry={{
-                                           [property.oneOf!.typeField ?? DEFAULT_ONE_OF_TYPE]: firstOneOfKey,
-                                           [property.oneOf!.valueField ?? DEFAULT_ONE_OF_VALUE]: getDefaultValueFor(property.oneOf.properties[firstOneOfKey])
-                                       }}/>;
+    const body = <ArrayContainer value={value}
+                                 className={"flex flex-col gap-3"}
+                                 droppableId={propertyKey}
+                                 addLabel={property.name ? "Add entry to " + property.name : "Add entry"}
+                                 buildEntry={buildEntry}
+                                 onInternalIdAdded={setLastAddedId}
+                                 disabled={isSubmitting || Boolean(property.disabled)}
+                                 includeAddButton={!property.disabled}
+                                 onValueChange={(value) => setFieldValue(propertyKey, value)}
+                                 newDefaultEntry={{
+                                     [property.oneOf!.typeField ?? DEFAULT_ONE_OF_TYPE]: firstOneOfKey,
+                                     [property.oneOf!.valueField ?? DEFAULT_ONE_OF_VALUE]: getDefaultValueFor(property.oneOf.properties[firstOneOfKey])
+                                 }}/>;
     return (
 
         <>

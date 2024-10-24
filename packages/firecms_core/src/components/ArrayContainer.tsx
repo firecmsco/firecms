@@ -7,7 +7,6 @@ import {
     AddIcon,
     Button,
     ContentCopyIcon,
-    fieldBackgroundHoverMixin,
     HandleIcon,
     IconButton,
     Menu,
@@ -17,11 +16,11 @@ import {
     useOutsideAlerter
 } from "@firecms/ui";
 
-interface ArrayContainerProps<T> {
+export interface ArrayContainerProps<T> {
     droppableId: string;
     value: T[];
     addLabel: string;
-    buildEntry: (index: number, internalId: number) => React.ReactNode;
+    buildEntry: (index: number, internalId: number, isDragging:boolean) => React.ReactNode;
     disabled?: boolean;
     size?: "small" | "medium";
     onInternalIdAdded?: (id: number) => void;
@@ -209,7 +208,7 @@ type ArrayContainerItemProps = {
     internalId: number,
     size?: "small" | "medium",
     disabled: boolean,
-    buildEntry: (index: number, internalId: number) => React.ReactNode,
+    buildEntry: (index: number, internalId: number, isDragging: boolean) => React.ReactNode,
     remove: (index: number) => void,
     copy: (index: number) => void,
     isDragging: boolean,
@@ -246,7 +245,7 @@ export function ArrayContainerItem({
             className="flex items-start">
             <div
                 className="flex-grow w-[calc(100%-48px)] text-text-primary dark:text-text-primary-dark">
-                {buildEntry(index, internalId)}
+                {buildEntry(index, internalId, isDragging)}
             </div>
             <ArrayItemOptions direction={size === "small" ? "row" : "column"}
                               disabled={disabled}
