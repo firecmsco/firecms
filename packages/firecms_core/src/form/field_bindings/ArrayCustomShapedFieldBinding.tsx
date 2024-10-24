@@ -3,7 +3,7 @@ import { FieldProps } from "../../types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel, Typography } from "@firecms/ui";
-import { getArrayResolvedProperties, getIconForProperty } from "../../util";
+import { getArrayResolvedProperties, getIconForProperty, isReadOnly } from "../../util";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
 /**
@@ -57,9 +57,10 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
     </>);
 
     const body = resolvedProperties.map((childProperty, index) => {
+        const thisDisabled = isReadOnly(childProperty) || Boolean(childProperty.disabled);
         const fieldProps = {
             propertyKey: `${propertyKey}[${index}]`,
-            disabled,
+            disabled: disabled || thisDisabled,
             property: childProperty,
             includeDescription,
             underlyingValueHasChanged,

@@ -81,7 +81,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
      context,
      includeDescription,
      underlyingValueHasChanged,
-     disabled,
+     disabled: disabledProp,
      partOfArray,
      minimalistView,
      autoFocus,
@@ -108,6 +108,8 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                     propertyConfigs: customizationController.propertyConfigs,
                     index
                 });
+
+                const disabled = disabledProp || isReadOnly(resolvedProperty) || Boolean(resolvedProperty?.disabled);
 
                 if (resolvedProperty === null || isHidden(resolvedProperty)) {
                     return <></>;

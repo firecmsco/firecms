@@ -2,7 +2,7 @@ import React from "react";
 import { FieldProps, Properties, ResolvedProperties } from "../../types";
 
 import { ErrorBoundary } from "../../components";
-import { getIconForProperty, isHidden, pick } from "../../util";
+import { getIconForProperty, isHidden, isReadOnly, pick } from "../../util";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel, InputLabel, Select, SelectItem } from "@firecms/ui";
@@ -54,9 +54,10 @@ export function MapFieldBinding({
             {Object.entries(mapProperties)
                 .filter(([_, property]) => !isHidden(property))
                 .map(([entryKey, childProperty], index) => {
-                        const fieldBindingProps = {
+                    const thisDisabled = isReadOnly(childProperty) || Boolean(childProperty.disabled);
+                    const fieldBindingProps = {
                             propertyKey: `${propertyKey}.${entryKey}`,
-                            disabled,
+                            disabled: disabled || thisDisabled,
                             property: childProperty,
                             includeDescription,
                             underlyingValueHasChanged,
