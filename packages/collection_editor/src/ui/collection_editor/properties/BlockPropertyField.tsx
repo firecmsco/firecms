@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import { AddIcon, Button, Paper, Typography } from "@firecms/ui";
 import { getIn, useFormex } from "@firecms/formex";
-import { PropertyFormDialog } from "../PropertyEditView";
-import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath, namespaceToPropertiesPath } from "../util";
+import { OnPropertyChangedParams, PropertyFormDialog } from "../PropertyEditView";
+import {
+    getFullId,
+    getFullIdPath,
+    idToPropertiesPath,
+    namespaceToPropertiesOrderPath,
+    namespaceToPropertiesPath
+} from "../util";
 import { PropertyTree } from "../PropertyTree";
-import { ArrayProperty, Property, PropertyConfig } from "@firecms/core";
+import { ArrayProperty, PropertyConfig } from "@firecms/core";
 
 export function BlockPropertyField({
                                        disabled,
@@ -31,18 +37,17 @@ export function BlockPropertyField({
 
     const onPropertyChanged = ({
                                    id,
+                                   namespace,
                                    property
-                               }: { id?: string, property: Property }) => {
+                               }: OnPropertyChangedParams) => {
         if (!id)
             throw Error();
 
-        setFieldValue("oneOf.properties", {
-            ...(values.oneOf?.properties ?? {}),
-            [id]: property
-        }, false);
+        setFieldValue("oneOf." + getFullIdPath(id, namespace), property, false);
+
         const currentPropertiesOrder = values.oneOf?.propertiesOrder ?? Object.keys(values.oneOf?.properties ?? {});
         const newPropertiesOrder = currentPropertiesOrder.includes(id) ? currentPropertiesOrder : [...currentPropertiesOrder, id];
-        setFieldValue("oneOf.propertiesOrder", newPropertiesOrder, false);
+        setFieldValue("oneOf." + namespaceToPropertiesOrderPath(namespace), newPropertiesOrder, false);
         setPropertyDialogOpen(false);
     };
 
@@ -82,8 +87,9 @@ export function BlockPropertyField({
         <>
             <div className={"col-span-12"}>
                 <div className={"flex justify-between items-end mt-8 mb-4"}>
-                    <Typography variant={"subtitle2"}>Properties in this
-                        block</Typography>
+                    <Typography variant={"subtitle2"}>
+                        Properties in this block
+                    </Typography>
                     {addChildButton}
                 </div>
                 <Paper className="p-2 pl-8">
