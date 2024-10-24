@@ -163,7 +163,7 @@ tr {
     --ifm-h1-font-size: 4rem;
     /*--ifm-list-left-padding: 0rem;*/
     --ifm-custom-navbar-background-color: rgba(48, 49, 55, 0.33);
-    --ifm-border-color: rgb(100 116 139 / 0.15);
+    --ifm-border-color: rgba(100, 116, 139, 0.4);
     --ifm-background-color: white;
 
     --ifm-z-index-fixed: 20;
@@ -216,7 +216,7 @@ html[data-theme=dark] .DocSearch-Button:hover {
 
 html[data-theme='dark'] {
     --ifm-table-stripe-background: inherit;
-    --ifm-border-color: rgb(100 116 139 / 0.15);
+    --ifm-border-color: rgba(100, 116, 139, 0.4);
     --ifm-toc-border-color: var(--ifm-border-color);
     --ifm-custom-navbar-background-color: rgba(48, 49, 55, 0.33);
     /*--ifm-background-color: #ececec;*/
