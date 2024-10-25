@@ -54,8 +54,8 @@ export function MapFieldBinding({
             {Object.entries(mapProperties)
                 .filter(([_, property]) => !isHidden(property))
                 .map(([entryKey, childProperty], index) => {
-                    const thisDisabled = isReadOnly(childProperty) || Boolean(childProperty.disabled);
-                    const fieldBindingProps = {
+                        const thisDisabled = isReadOnly(childProperty) || Boolean(childProperty.disabled);
+                        const fieldBindingProps = {
                             propertyKey: `${propertyKey}.${entryKey}`,
                             disabled: disabled || thisDisabled,
                             property: childProperty,
@@ -95,11 +95,11 @@ export function MapFieldBinding({
     return (
         <ErrorBoundary>
 
-            {!minimalistView && !minimalistView && <ExpandablePanel initiallyExpanded={expanded}
-                                                                    innerClassName={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2 bg-white dark:bg-gray-900"}
-                                                                    title={title}>{mapFormView}</ExpandablePanel>}
+            {!minimalistView && <ExpandablePanel initiallyExpanded={expanded}
+                                                 innerClassName={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2 bg-white dark:bg-gray-900"}
+                                                 title={title}>{mapFormView}</ExpandablePanel>}
 
-            {(minimalistView || minimalistView) && mapFormView}
+            {minimalistView && mapFormView}
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError ?? false}

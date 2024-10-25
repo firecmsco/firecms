@@ -95,6 +95,8 @@ export function RepeatFieldBinding<T extends Array<any>>({
         {Array.isArray(value) && <Typography variant={"caption"} className={"px-4"}>({value.length})</Typography>}
     </>);
 
+    console.log("value", value);
+
     return (
 
         <>
@@ -109,7 +111,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}
-                             error={error}
+                             error={error ? (typeof error === "string" ? error : "A property of this array/repeat has an error") : undefined}
                              disabled={disabled}
                              property={property}/>
 
