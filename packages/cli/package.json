@@ -34,7 +34,7 @@
     "axios": "^0.28.1",
     "chalk": "^4.1.2",
     "execa": "^4.1.0",
-    "form-data": "^4.0.0",
+    "form-data": "^4.0.1",
     "googleapis": "^144.0.0",
     "inquirer": "^7.3.3",
     "json5": "^2.2.3",
@@ -51,7 +51,7 @@
     "npm-run-all": "^4.1.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3",
-    "vite": "^5.4.8"
+    "vite": "^5.4.10"
   },
   "files": [
     "bin/",

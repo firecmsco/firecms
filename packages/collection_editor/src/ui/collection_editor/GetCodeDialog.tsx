@@ -103,6 +103,8 @@ function collectionToCode(collection: EntityCollection): object {
         delete value.fromBuilder;
         delete value.resolved;
         delete value.propertiesOrder;
+        delete value.propertyConfig;
+        delete value.resolvedProperties;
         delete value.editable;
 
         return value;

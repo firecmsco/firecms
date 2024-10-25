@@ -11,7 +11,7 @@
     "@firecms/core": "^3.0.0-canary.140",
     "@firecms/firebase": "^3.0.0-canary.140",
     "@firecms/ui": "^3.0.0-canary.140",
-    "firebase": "^10.14.0"
+    "firebase": "^10.14.1"
   },
   "exports": {
     ".": {
@@ -24,7 +24,7 @@
   "devDependencies": {
     "@types/node": "^20.16.11",
     "typescript": "^5.6.3",
-    "vite": "^5.4.8"
+    "vite": "^5.4.10"
   },
   "peerDependencies": {
     "react": "^18.3.1",
