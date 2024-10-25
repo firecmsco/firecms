@@ -6,7 +6,7 @@ import {
     ConfirmationDialog,
     DEFAULT_FIELD_CONFIGS,
     getFieldConfig,
-    getFieldId,
+    getFieldId, isEmptyObject,
     isPropertyBuilder,
     isValidRegExp,
     mergeDeep,
@@ -380,7 +380,7 @@ function PropertyEditFormFields({
     }, [deferredValues, includeIdAndTitle, propertyNamespace]);
 
     useEffect(() => {
-        if (values?.id && onError) {
+        if (values?.id && onError && !isEmptyObject(errors)) {
             onError(values?.id, propertyNamespace, errors);
         }
     }, [errors, propertyNamespace, values?.id]);

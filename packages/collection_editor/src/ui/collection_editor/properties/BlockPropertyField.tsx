@@ -110,7 +110,7 @@ export function BlockPropertyField({
                             ? undefined
                             : onPropertyMove}/>
 
-                    {!disabled && !values.oneOf?.propertiesOrder?.length &&
+                    {!disabled && (values.oneOf?.propertiesOrder?.length === 0)&&
                         <div className="h-full flex items-center justify-center p-4">
                             Add the first property to this block
                         </div>}

@@ -125,6 +125,26 @@ export function removeUndefined(value: any, removeEmptyStrings?: boolean): any {
     return value;
 }
 
+export function removeNulls(value: any): any {
+    if (typeof value === "function") {
+        return value;
+    }
+    if (Array.isArray(value)) {
+        return value.map((v: any) => removeNulls(v));
+    }
+    if (typeof value === "object") {
+        const res: object = {};
+        if (value === null)
+            return value;
+        Object.keys(value).forEach((key) => {
+            if (value[key] !== null)
+                (res as any)[key] = removeNulls(value[key]);
+        });
+        return res;
+    }
+    return value;
+}
+
 export function isEmptyObject(obj: object) {
     return obj &&
         Object.getPrototypeOf(obj) === Object.prototype &&

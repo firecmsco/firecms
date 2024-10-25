@@ -1,4 +1,4 @@
-import { EntityCollection, useSnackbarController } from "@firecms/core";
+import { EntityCollection, isEmptyObject, useSnackbarController } from "@firecms/core";
 import { Button, ContentCopyIcon, Dialog, DialogActions, DialogContent, Typography, } from "@firecms/ui";
 import React from "react";
 import JSON5 from "json5";
@@ -78,24 +78,34 @@ export function GetCodeDialog({
 
 function collectionToCode(collection: EntityCollection): object {
 
-    const propertyCleanup = (property: any) => {
-
-        const updatedProperty = {
-            ...property
-        };
-
-        delete updatedProperty.fromBuilder;
-        delete updatedProperty.resolved;
-        delete updatedProperty.propertiesOrder;
-        delete updatedProperty.editable;
-
-        if (updatedProperty.type === "map") {
-            return {
-                ...updatedProperty,
-                properties: updatedProperty.properties.map(propertyCleanup)
-            }
+    const propertyCleanup = (value: any): any => {
+        if (typeof value === "function") {
+            return value;
         }
-        return updatedProperty;
+        if (Array.isArray(value)) {
+            return value.map((v: any) => propertyCleanup(v));
+        }
+        if (typeof value === "object") {
+            if (value === null)
+                return value;
+            Object.keys(value).forEach((key) => {
+                if (!isEmptyObject(value)) {
+                    const childRes = propertyCleanup(value[key]);
+                    if (childRes !== null && childRes !== undefined && childRes !== false && !isEmptyObject(childRes)) {
+                        value[key] = childRes;
+                    } else {
+                        delete value[key];
+                    }
+                }
+            });
+        }
+
+        delete value.fromBuilder;
+        delete value.resolved;
+        delete value.propertiesOrder;
+        delete value.editable;
+
+        return value;
     }
 
     return {
@@ -111,7 +121,9 @@ function collectionToCode(collection: EntityCollection): object {
         customId: collection.customId,
         initialFilter: collection.initialFilter,
         initialSort: collection.initialSort,
-        properties: Object.entries(collection.properties ?? {})
+        properties: Object.entries({
+            ...(collection.properties ?? {})
+        })
             .map(([key, value]) => ({
                 [key]: propertyCleanup(value)
             }))

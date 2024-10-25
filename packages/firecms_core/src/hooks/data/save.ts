@@ -1,7 +1,6 @@
 import {
     DataSource,
     Entity,
-    EntityCallbacks,
     EntityCollection,
     EntityValues,
     FireCMSContext,
@@ -108,7 +107,7 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, Use
         updatedValues = values;
     }
 
-    console.log("Saving entity", {
+    console.debug("Saving entity", {
         entityId,
         updatedValues,
         collection
