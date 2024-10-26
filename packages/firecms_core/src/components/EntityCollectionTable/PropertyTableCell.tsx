@@ -89,8 +89,8 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
         } = useSelectableTableController();
 
         const selected = selectedCell?.propertyKey === propertyKey &&
-            selectedCell?.entity.path === entity.path &&
-            selectedCell?.entity.id === entity.id;
+            selectedCell?.entityPath === entity.path &&
+            selectedCell?.entityId === entity.id;
 
         const [internalValue, setInternalValue] = useState<any | null>(value);
         const internalValueRef = useRef(value);
@@ -193,7 +193,8 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 select({
                     width,
                     height,
-                    entity,
+                    entityPath: entity.path,
+                    entityId: entity.id,
                     cellRect,
                     propertyKey: propertyKey as Extract<keyof M, string>
                 });
@@ -209,7 +210,8 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 setPopupCell({
                     width,
                     height,
-                    entity,
+                    entityPath: entity.path,
+                    entityId: entity.id,
                     cellRect,
                     propertyKey: propertyKey as Extract<keyof M, string>
                 });

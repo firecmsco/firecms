@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
-import equal from "react-fast-compare"
 
 import * as Portal from "@radix-ui/react-portal";
 
@@ -19,20 +18,19 @@ import { useDraggable } from "./useDraggable";
 import { CustomFieldValidator, getYupEntitySchema } from "../../../../form/validation";
 import { useWindowSize } from "./useWindowSize";
 import { ElementResizeListener } from "./ElementResizeListener";
-import { ErrorView } from "../../../ErrorView";
 import { getPropertyInPath, isReadOnly, resolveCollection } from "../../../../util";
 import { Button, ClearIcon, DialogActions, IconButton, Typography } from "@firecms/ui";
 import { PropertyFieldBinding } from "../../../../form";
-import { useCustomizationController, useFireCMSContext } from "../../../../hooks";
+import { useCustomizationController, useDataSource, useFireCMSContext } from "../../../../hooks";
 import { OnCellValueChangeParams } from "../../../common";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
-    entity: Entity<M>;
     customFieldValidator?: CustomFieldValidator;
     path: string;
+    entityId: string;
     tableKey: string;
     propertyKey?: Extract<keyof M, string>;
-    collection?: EntityCollection<M>;
+    collection?: EntityCollection<any>;
     cellRect?: DOMRect;
     open: boolean;
     onClose: () => void;
@@ -46,13 +44,54 @@ interface PopupFormFieldProps<M extends Record<string, any>> {
 
 export function PopupFormField<M extends Record<string, any>>(props: PopupFormFieldProps<M>) {
     if (!props.open) return null;
-    return <PopupFormFieldInternal {...props} />;
+    return <PopupFormFieldLoading {...props} />;
 
+}
+
+export function PopupFormFieldLoading<M extends Record<string, any>>({
+                                                                         tableKey,
+                                                                         entityId,
+                                                                         customFieldValidator,
+                                                                         propertyKey,
+                                                                         collection: inputCollection,
+                                                                         path,
+                                                                         cellRect,
+                                                                         open,
+                                                                         onClose,
+                                                                         onCellValueChange,
+                                                                         container
+                                                                     }: PopupFormFieldProps<M>) {
+    const dataSource = useDataSource();
+    const [entity, setEntity] = useState<Entity<M> | undefined>(undefined);
+    useEffect(() => {
+        if (entityId && inputCollection) {
+            dataSource.fetchEntity({
+                path,
+                entityId,
+                collection: inputCollection
+            }).then(setEntity);
+        }
+    }, [entityId, inputCollection]);
+
+    if (!entity) return null;
+    return <PopupFormFieldInternal {...{
+        tableKey,
+        entityId,
+        customFieldValidator,
+        propertyKey,
+        collection: inputCollection,
+        path,
+        cellRect,
+        open,
+        onClose,
+        onCellValueChange,
+        container
+    }} entity={entity}/>;
 }
 
 export function PopupFormFieldInternal<M extends Record<string, any>>({
                                                                           tableKey,
-                                                                          entity: entityProp,
+                                                                          entityId,
                                                                           customFieldValidator,
                                                                           propertyKey,
                                                                           collection: inputCollection,
@@ -61,10 +100,14 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                                                                           open,
                                                                           onClose,
                                                                           onCellValueChange,
-                                                                          container
-                                                                      }: PopupFormFieldProps<M>) {
+                                                                          container,
+                                                                          entity
+                                                                      }: PopupFormFieldProps<M> & {
+    entity?: Entity<M>
+}) {
 
-    // const dataSource = useDataSource();
+    console.log("values", entity?.values);
+
     const fireCMSContext = useFireCMSContext();
     const customizationController = useCustomizationController();
 
@@ -74,32 +117,11 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         y: number
     }>();
 
-    const entityId = entityProp.id;
-    const [entity, setEntity] = useState<Entity<M> | undefined>(entityProp);
-    // useEffect(() => {
-    //     if (entityId && inputCollection) {
-    //         return dataSource.listenEntity?.({
-    //             path,
-    //             entityId,
-    //             collection: inputCollection,
-    //             onUpdate: (e) => {
-    //                 setEntity(e);
-    //                 setInternalValue(e?.values);
-    //             }
-    //         });
-    //     } else {
-    //         return () => {
-    //         };
-    //     }
-    // }, [dataSource, entityId, inputCollection, path, open]);
-
-    const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(entity?.values);
-
     const collection: ResolvedEntityCollection<M> | undefined = inputCollection
         ? resolveCollection<M>({
             collection: inputCollection,
             path,
-            values: internalValue,
+            values: entity?.values,
             entityId,
             propertyConfigs: customizationController.propertyConfigs
         })
@@ -214,10 +236,6 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         return Promise.resolve();
     };
 
-    if (!entity)
-        return <></>;
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const formex = useCreateFormex<M>({
         initialValues: (entity?.values ?? {}) as EntityValues<M>,
         validation: (values) => {
@@ -234,26 +252,22 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         validateOnInitialRender: true,
         onSubmit: (values, actions) => {
             saveValue(values)
-                .then(() => onClose())
+                .then(() => {
+                    formex.resetForm({
+                        values: values
+                    })
+                    onClose();
+                })
                 .finally(() => actions.setSubmitting(false));
         }
     });
 
-    const { values, isSubmitting, setFieldValue, handleSubmit } = formex;
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-        if (!equal(values, internalValue)) {
-            setInternalValue(values);
-        }
-    }, [values]);
-
-    if (!entity)
-        return <ErrorView
-            error={"PopupFormField misconfiguration"}/>;
-
-    if (!collection)
-        return <></>;
+    const {
+        values,
+        isSubmitting,
+        setFieldValue,
+        handleSubmit
+    } = formex;
 
     const disabled = isSubmitting;
 
@@ -267,7 +281,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         formex
     };
 
-    const property: ResolvedProperty<any> | undefined = propertyKey && getPropertyInPath(collection.properties, propertyKey as string);
+    const property: ResolvedProperty<any> | undefined = propertyKey && getPropertyInPath(collection?.properties ?? {} as ResolvedProperties, propertyKey as string);
     const fieldProps: PropertyFieldBindingProps<any, M> | undefined = propertyKey && property
         ? {
             propertyKey: propertyKey as string,
@@ -285,7 +299,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     let internalForm = <>
         <div
             key={`popup_form_${tableKey}_${entityId}_${propertyKey}`}
-            className="w-[560px] max-w-full max-h-[85vh]">
+            className="w-[700px] max-w-full max-h-[85vh]">
             <form
                 onSubmit={handleSubmit}
                 noValidate>
@@ -320,10 +334,6 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
     const plugins = customizationController.plugins;
     if (plugins) {
-        // const formController: FormContext<M> = {
-        //     values,
-        //     setFieldValue
-        // }
         plugins.forEach((plugin: FireCMSPlugin) => {
             if (plugin.form?.provider) {
                 internalForm = (

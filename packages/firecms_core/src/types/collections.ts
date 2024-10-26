@@ -585,5 +585,6 @@ export type SelectedCellProps<M extends Record<string, any>> = {
     cellRect: DOMRect;
     width: number;
     height: number;
-    entity: Entity<M>;
+    entityPath: string;
+    entityId: string;
 };

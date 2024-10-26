@@ -665,13 +665,13 @@ export const EntityCollectionView = React.memo(
                 />
 
                 {popupCell && <PopupFormField
-                    key={`popup_form_${popupCell?.propertyKey}_${popupCell?.entity?.id}`}
+                    key={`popup_form_${popupCell?.propertyKey}_${popupCell?.entityId}`}
                     open={Boolean(popupCell)}
                     onClose={onPopupClose}
                     cellRect={popupCell?.cellRect}
                     propertyKey={popupCell?.propertyKey}
                     collection={collection}
-                    entity={popupCell.entity}
+                    entityId={popupCell.entityId}
                     tableKey={tableKey.current}
                     customFieldValidator={uniqueFieldValidator}
                     path={resolvedFullPath}
@@ -784,7 +784,6 @@ function EntityIdHeaderWidget({
     const [searchString, setSearchString] = React.useState("");
     const [recentIds, setRecentIds] = React.useState<string[]>(getRecentIds(collection.id));
     const sideEntityController = useSideEntityController();
-
 
     return (
         <Tooltip title={!openPopup ? "Find by ID" : undefined} asChild={false}>

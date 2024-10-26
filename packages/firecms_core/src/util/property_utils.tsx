@@ -1,6 +1,13 @@
 import React from "react";
 
-import { EntityCollection, PropertiesOrBuilders, PropertyConfig, PropertyOrBuilder, ResolvedProperty } from "../types";
+import {
+    EntityCollection,
+    PropertiesOrBuilders,
+    PropertyConfig,
+    PropertyOrBuilder,
+    ResolvedProperties,
+    ResolvedProperty
+} from "../types";
 import { isPropertyBuilder } from "./entities";
 import { resolveProperty } from "./resolutions";
 import { CircleIcon, FunctionsIcon } from "@firecms/ui";
@@ -63,7 +70,7 @@ export function getColorForProperty(property: PropertyOrBuilder, fields: Record<
  * @param properties
  * @param path
  */
-export function getPropertyInPath<M extends Record<string, any>>(properties: PropertiesOrBuilders<M>, path: string): PropertyOrBuilder<any, M> | undefined {
+export function getPropertyInPath<M extends Record<string, any>>(properties: PropertiesOrBuilders<M> | ResolvedProperties, path: string): PropertyOrBuilder<any, M> | undefined {
     if (typeof properties === "object") {
         if (path in properties) {
             return properties[path];

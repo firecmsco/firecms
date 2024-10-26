@@ -113,7 +113,8 @@ export function MapPropertyField({ disabled, getData, allowDataInference, proper
                     value={values.spreadChildren ?? false}
                 />
                 <FieldCaption>
-                    Set this flag to true if you want to display the children of this group as individual columns.
+                    Set this flag to true if you want to display the children of this group as individual columns. This
+                    will only work for top level groups.
                 </FieldCaption>
             </div>
 
