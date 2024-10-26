@@ -37,7 +37,6 @@ function ProPage() {
 
                     <ProInfo/>
 
-                    <UITeaser/>
 
                     <ProFeaturesPanels/>
 
@@ -56,6 +55,8 @@ function ProPage() {
                     <PublicFacingApps/>
 
                     <ImportDataIntro/>
+
+                    <UITeaser/>
 
                     <ProDeveloperFeatures/>
 

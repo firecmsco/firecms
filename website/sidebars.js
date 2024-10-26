@@ -126,6 +126,7 @@ module.exports = {
             "collapsed": false,
             "items": [
                 "recipes/building_a_blog",
+                "recipes/autoupdate_slug",
                 "recipes/data_type_adapter",
                 "recipes/copy_entity",
                 "recipes/documents_as_subcollections",

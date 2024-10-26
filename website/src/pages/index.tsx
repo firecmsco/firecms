@@ -45,11 +45,8 @@ function Home() {
 
             <main className={"bg-white max-w-[100vw] overflow-x-hidden"}>
 
-                <FirebaseIntro/>
-
-                <UsageExamples/>
-
                 <ManageYour/>
+                <FirebaseIntro/>
 
                 <QuotesSection/>
 
@@ -59,6 +56,7 @@ function Home() {
 
                 <FeaturesTeaser/>
 
+
                 <DeveloperFeatures/>
 
                 <TechSplash/>
@@ -66,6 +64,8 @@ function Home() {
                 <FeaturesPanels/>
 
                 <ImportDataIntro/>
+
+                <UsageExamples/>
 
                 <FirebaseTeaser/>
 

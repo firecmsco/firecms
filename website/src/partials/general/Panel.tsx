@@ -38,6 +38,8 @@ export function Panel({
                                     color === "primary" ? "bg-primary text-white dark:text-white" :
                                         color === "secondary" ? "bg-secondary text-white dark:text-white" : "";
 
+    const borderClass = color === "primary" ? "border-solid border-white border-opacity-20 dark:border-opacity-20" : defaultBorderMixin;
+
     return (
         <section
             className={clsx("max-w-full relative flex flex-col items ",
@@ -51,7 +53,7 @@ export function Panel({
                 ContainerMixin,
                 (centered ? " flex flex-col items-center" : ""),
                 includePadding ? ContainerPaddingMixin : "",
-                defaultBorderMixin,
+                borderClass,
                 "border-x border-y-0",
                 innerClassName
             )}>

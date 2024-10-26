@@ -60,7 +60,7 @@ export function ManageYour() {
                 </p>
             </div>
 
-            <div className={"mt-4 mb-8"}>
+            <div className={"mt-6 mb-8"}>
                 <a
                     className={CTAOutlinedButtonWhiteMixin}
                     href={useBaseUrl("features/")}

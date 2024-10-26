@@ -16,17 +16,19 @@ function getAlphaFrom(scroll: number) {
 
 function getSaturateFrom(scroll: number) {
     const min = -10;
-    const max = -4;
+    const max = -6;
     return Math.min(max, Math.max(min, min + scroll / 50));
 }
 
 function getAmplitude(scroll: number) {
-    const min = 4;
+    const min = 10;
     const max = 40;
     return Math.min(max, Math.max(min, min + scroll / 50));
 }
-function getResolution(scroll: number) {
-    return 1 / 2;
+
+function getResolution(width: number) {
+    return Math.log(width) / 15;
+    // return 1 / 2;
     // const min = 1 / 3.33335;
     // const max = 1 / 2;
     // return Math.min(max, Math.max(min, min + scroll / 1000));
@@ -38,21 +40,38 @@ export default function HomeHeroNeatGradient() {
     const gradientRef = useRef<NeatGradient | null>(null);
     const scrollRef = useRef<number>(0);
 
-    function onScrollUpdate(scroll: number) {
+    function onScrollUpdate(scroll: number, width: number = 0) {
         scrollRef.current = scroll;
         if (gradientRef.current) {
             gradientRef.current.colorBrightness = getBrightnessFrom(scroll);
             gradientRef.current.colorSaturation = getSaturateFrom(scroll);
             gradientRef.current.waveAmplitude = getAmplitude(scroll);
+
             gradientRef.current.backgroundAlpha = getAlphaFrom(scroll);
-            gradientRef.current.resolution = getResolution(scroll);
+            gradientRef.current.resolution = getResolution(width);
+            console.log("resolution", getResolution(width));
         }
     }
 
     useEffect(() => {
         const listener = () => {
             if (typeof window !== "undefined") {
-                onScrollUpdate(window?.scrollY ?? 0)
+                onScrollUpdate(window?.scrollY ?? 0, window?.innerWidth ?? 0);
+            }
+        };
+        listener();
+        if (typeof window !== "undefined")
+            window.addEventListener("resize", listener);
+        return () => {
+            if (typeof window !== "undefined")
+                window.removeEventListener("resize", listener);
+        };
+    }, [window]);
+
+    useEffect(() => {
+        const listener = () => {
+            if (typeof window !== "undefined") {
+                onScrollUpdate(window?.scrollY ?? 0, window?.innerWidth ?? 0);
 
             }
         };
@@ -68,9 +87,12 @@ export default function HomeHeroNeatGradient() {
     useEffect(() => {
 
         if (!canvasRef.current)
-            return;
+            return () => {
+            };
 
         const backgroundColor = "rgb(17,48,157)";
+
+        const width = window?.innerWidth ?? 1400;
 
         const alphaFrom = getAlphaFrom(scrollRef.current);
         gradientRef.current = new NeatGradient({
@@ -89,11 +111,11 @@ export default function HomeHeroNeatGradient() {
                     "enabled": true
                 }
             ],
-            "speed": 2,
+            "speed": 1.5,
             "horizontalPressure": 5,
             "verticalPressure": 10,
             "waveFrequencyX": 2,
-            "waveFrequencyY": 3,
+            "waveFrequencyY": 1.5,
             "waveAmplitude": getAmplitude(scrollRef.current),
             "shadows": 0,
             "highlights": 0,
@@ -104,7 +126,7 @@ export default function HomeHeroNeatGradient() {
             "backgroundColor": backgroundColor,
             // "backgroundColor": "#201f22",
             "backgroundAlpha": alphaFrom,
-            resolution: getResolution(scrollRef.current)
+            resolution: getResolution(width)
         });
 
         return gradientRef.current.destroy;
