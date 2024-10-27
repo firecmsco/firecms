@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import equal from "react-fast-compare"
 
-import { ArrayContainer, EnumValueConfig, EnumValues, FieldCaption, } from "@firecms/core";
+import { ArrayContainer, ArrayEntryParams, EnumValueConfig, EnumValues, FieldCaption, } from "@firecms/core";
 import {
     AutoAwesomeIcon,
     Badge,
@@ -121,7 +121,10 @@ function EnumFormFields({
     const inferredValuesRef = React.useRef(new Set());
     const inferredValues = inferredValuesRef.current;
 
-    const buildEntry = (index: number, internalId: number) => {
+    const buildEntry = ({
+                            index,
+                            internalId
+                        }:ArrayEntryParams) => {
         const justAdded = lastInternalIdAdded === internalId;
         const entryError = errors?.enumValues && errors?.enumValues[index];
         return <EnumEntry index={index}

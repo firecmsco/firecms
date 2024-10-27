@@ -106,8 +106,6 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     entity?: Entity<M>
 }) {
 
-    console.log("values", entity?.values);
-
     const fireCMSContext = useFireCMSContext();
     const customizationController = useCustomizationController();
 

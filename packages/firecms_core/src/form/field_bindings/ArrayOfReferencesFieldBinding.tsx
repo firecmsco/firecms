@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo } from "react";
 import { Entity, EntityCollection, EntityReference, FieldProps, ResolvedProperty } from "../../types";
 import { ReferencePreview } from "../../preview";
-import { FieldHelperText, FormikArrayContainer, LabelWithIconAndTooltip } from "../components";
-import { ErrorView } from "../../components";
+import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
+import { ArrayContainer, ArrayEntryParams, ErrorView } from "../../components";
 import { getIconForProperty, getReferenceFrom } from "../../util";
 
 import { useNavigationController, useReferenceDialog } from "../../hooks";
@@ -74,7 +74,12 @@ export function ArrayOfReferencesFieldBinding({
         referenceDialogController.open();
     };
 
-    const buildEntry = useCallback((index: number, internalId: number) => {
+    const buildEntry = useCallback(({
+                                        index,
+                                        internalId,
+                                        storedProps,
+                                        storeProps
+                                    }: ArrayEntryParams) => {
         const entryValue = value && value.length > index ? value[index] : undefined;
         if (!entryValue)
             return <div>Internal ERROR</div>;
@@ -109,13 +114,14 @@ export function ArrayOfReferencesFieldBinding({
 
         {collection && <div className={"group"}>
 
-            <FormikArrayContainer value={value}
-                                  addLabel={property.name ? "Add reference to " + property.name : "Add reference"}
-                                  name={propertyKey}
-                                  buildEntry={buildEntry}
-                                  disabled={isSubmitting}
-                                  setFieldValue={setFieldValue}
-                                  newDefaultEntry={property.of.defaultValue}/>
+            <ArrayContainer droppableId={propertyKey}
+                            value={value}
+                            disabled={isSubmitting}
+                            buildEntry={buildEntry}
+                            addLabel={property.name ? "Add reference to " + property.name : "Add reference"}
+                            newDefaultEntry={property.of.defaultValue}
+                            onValueChange={(value) => setFieldValue(propertyKey, value)}
+            />
 
             <Button
                 className="my-4 justify-center text-left"

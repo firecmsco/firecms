@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { CMSType, FieldProps, ResolvedProperty } from "../../types";
-import { FieldHelperText, FormikArrayContainer, LabelWithIconAndTooltip } from "../components";
-import { ErrorBoundary } from "../../components";
-import { getArrayResolvedProperties, getDefaultValueFor, getIconForProperty } from "../../util";
+import { CMSType, FieldProps, PropertyFieldBindingProps, ResolvedProperty } from "../../types";
+import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
+import { ArrayContainer, ArrayEntryParams, ErrorBoundary } from "../../components";
+import { getArrayResolvedProperties, getDefaultValueFor, getIconForProperty, mergeDeep } from "../../util";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel, Typography } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
@@ -43,8 +43,6 @@ export function RepeatFieldBinding<T extends Array<any>>({
             ignoreMissingFields: false
         })
     }
-    // if (!resolvedProperties || !Array.isArray(resolvedProperties))
-    //     throw Error("RepeatFieldBinding - Internal error: Expected array in 'property.resolvedProperties'");
 
     const expanded = property.expanded === undefined ? true : property.expanded;
     const ofProperty: ResolvedProperty<CMSType[]> = property.of as ResolvedProperty<CMSType[]>;
@@ -57,33 +55,40 @@ export function RepeatFieldBinding<T extends Array<any>>({
         setValue
     });
 
-    const buildEntry = (index: number, internalId: number) => {
+    const buildEntry = ({
+                            index,
+                            internalId,
+                            storedProps,
+                            storeProps
+                        }: ArrayEntryParams) => {
         const childProperty = resolvedProperties[index] ?? ofProperty;
-        const fieldProps = {
+        const fieldProps: PropertyFieldBindingProps<any, any> = {
             propertyKey: `${propertyKey}.${index}`,
             disabled,
-            property: childProperty,
+            property: storedProps ? mergeDeep(childProperty, storedProps) : childProperty,
+            onPropertyChange: storeProps,
             includeDescription,
             underlyingValueHasChanged,
             context,
             partOfArray: true,
             minimalistView: false,
-            autoFocus: internalId === lastAddedId
+            autoFocus: internalId === lastAddedId,
         };
         return <ErrorBoundary>
             <PropertyFieldBinding {...fieldProps} index={index}/>
         </ErrorBoundary>;
     };
 
-    const arrayContainer = <FormikArrayContainer value={value}
-                                                 addLabel={property.name ? "Add entry to " + property.name : "Add entry"}
-                                                 name={propertyKey}
-                                                 setFieldValue={setFieldValue}
-                                                 buildEntry={buildEntry}
-                                                 onInternalIdAdded={setLastAddedId}
-                                                 disabled={isSubmitting || Boolean(property.disabled)}
-                                                 includeAddButton={!property.disabled}
-                                                 newDefaultEntry={getDefaultValueFor(property.of)}/>;
+    const arrayContainer = <ArrayContainer droppableId={propertyKey}
+                                           addLabel={property.name ? "Add entry to " + property.name : "Add entry"}
+                                           value={value}
+                                           buildEntry={buildEntry}
+                                           onInternalIdAdded={setLastAddedId}
+                                           disabled={isSubmitting || Boolean(property.disabled)}
+                                           includeAddButton={!property.disabled}
+                                           newDefaultEntry={getDefaultValueFor(property.of)}
+                                           onValueChange={(value) => setFieldValue(propertyKey, value)}
+    />;
 
     const title = (<>
         <LabelWithIconAndTooltip
@@ -94,8 +99,6 @@ export function RepeatFieldBinding<T extends Array<any>>({
             className={"flex flex-grow text-text-secondary dark:text-text-secondary-dark"}/>
         {Array.isArray(value) && <Typography variant={"caption"} className={"px-4"}>({value.length})</Typography>}
     </>);
-
-    console.log("value", value);
 
     return (
 

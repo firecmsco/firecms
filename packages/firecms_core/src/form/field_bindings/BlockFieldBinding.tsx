@@ -6,11 +6,11 @@ import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";
 import { FieldProps, FormContext, PropertyFieldBindingProps, PropertyOrBuilder } from "../../types";
-import { getDefaultValueFor, getIconForProperty, } from "../../util";
+import { getDefaultValueFor, getIconForProperty, mergeDeep, } from "../../util";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../util/common";
 import { cls, ExpandablePanel, paperMixin, Select, SelectItem, Typography } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
-import { ArrayContainer } from "../../components";
+import { ArrayContainer, ArrayEntryParams } from "../../components";
 
 /**
  * If the `oneOf` property is specified, this fields render each array entry as
@@ -48,7 +48,13 @@ export function BlockFieldBinding<T extends Array<any>>({
 
     const [lastAddedId, setLastAddedId] = useState<number | undefined>();
 
-    const buildEntry = useCallback((index: number, internalId: number, isDragging:boolean) => {
+    const buildEntry = ({
+                            index,
+                            internalId,
+                            storedProps,
+                            storeProps
+                        }: ArrayEntryParams) => {
+
         return <BlockEntry
             key={`array_one_of_${internalId}`}
             name={`${propertyKey}.${index}`}
@@ -58,8 +64,10 @@ export function BlockFieldBinding<T extends Array<any>>({
             valueField={property.oneOf!.valueField ?? DEFAULT_ONE_OF_VALUE}
             properties={property.oneOf!.properties}
             autoFocus={internalId === lastAddedId}
-            context={context}/>;
-    }, [context, lastAddedId, property.oneOf, propertyKey, value]);
+            context={context}
+            storeProps={storeProps}
+            storedProps={storedProps}/>;
+    };
 
     const title = (
         <LabelWithIconAndTooltip
@@ -135,6 +143,9 @@ interface BlockEntryProps {
      */
     context: FormContext<any>;
 
+    storedProps?: object,
+    storeProps: (props: object) => void
+
 }
 
 function BlockEntry({
@@ -145,7 +156,9 @@ function BlockEntry({
                         valueField,
                         properties,
                         autoFocus,
-                        context
+                        context,
+                        storedProps,
+                        storeProps
                     }: BlockEntryProps) {
 
     const type = value && value[typeField];
@@ -165,7 +178,9 @@ function BlockEntry({
         }
     }, [type]);
 
-    const property = typeInternal ? properties[typeInternal] : undefined;
+    const propertyInternal = typeInternal ? properties[typeInternal] : undefined;
+
+    const property = storedProps && typeof propertyInternal === "object" ? mergeDeep(propertyInternal, storedProps) : propertyInternal;
 
     const enumValuesConfigs = Object.entries(properties)
         .map(([key, property]) => ({
@@ -183,7 +198,8 @@ function BlockEntry({
             context,
             autoFocus,
             partOfArray: false,
-            minimalistView: true
+            minimalistView: true,
+            onPropertyChange: storeProps,
         }
         : undefined;
 

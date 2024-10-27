@@ -86,7 +86,8 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
      minimalistView,
      autoFocus,
      index,
-     size
+     size,
+     onPropertyChange
  }: PropertyFieldBindingProps<T, M>): ReactElement<PropertyFieldBindingProps<T, M>> {
 
     const customizationController = useCustomizationController();
@@ -124,6 +125,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                     if (!propertyConfig) {
                         console.log("INTERNAL: Could not find field config for property", {
                             propertyKey,
+                            property,
                             resolvedProperty,
                             fields: customizationController.propertyConfigs,
                             propertyConfig
@@ -159,13 +161,14 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                     partOfArray,
                     minimalistView,
                     autoFocus,
-                    size
+                    size,
+                    onPropertyChange
                 };
 
                 return <FieldInternal
                     Component={Component as ComponentType<FieldProps>}
                     componentProps={componentProps}
-                    fieldProps={fieldProps}/>;
+                    formexFieldProps={fieldProps}/>;
             }}
         </Field>
     );
@@ -191,26 +194,27 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
          autoFocus,
          context,
          disabled,
-         size
+         size,
+         onPropertyChange
      },
-     fieldProps
+     formexFieldProps
  }:
      {
          Component: ComponentType<FieldProps<T, any, M>>,
          componentProps: ResolvedPropertyFieldBindingProps<T, M>,
-         fieldProps: FormexFieldProps<T, any>
+         formexFieldProps: FormexFieldProps<T, any>
      }) {
 
     const { plugins } = useCustomizationController();
 
     const customFieldProps: any = property.customProps;
-    const value = fieldProps.field.value;
-    // const initialValue = fieldProps.meta.initialValue;
-    const error = getIn(fieldProps.form.errors, propertyKey);
-    const touched = getIn(fieldProps.form.touched, propertyKey);
+    const value = formexFieldProps.field.value;
+    // const initialValue = formexFieldProps.meta.initialValue;
+    const error = getIn(formexFieldProps.form.errors, propertyKey);
+    const touched = getIn(formexFieldProps.form.touched, propertyKey);
 
     const showError: boolean = error &&
-        (fieldProps.form.submitCount > 0 || property.validation?.unique) &&
+        (formexFieldProps.form.submitCount > 0 || property.validation?.unique) &&
         (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);
 
     const WrappedComponent: ComponentType<FieldProps<T, any, M>> | null = useWrappedComponent({
@@ -223,16 +227,16 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
     });
     const UsedComponent: ComponentType<FieldProps<T>> = WrappedComponent ?? Component;
 
-    const isSubmitting = fieldProps.form.isSubmitting;
+    const isSubmitting = formexFieldProps.form.isSubmitting;
 
     const setValue = useCallback((value: T | null, shouldValidate?: boolean) => {
-        fieldProps.form.setFieldTouched(propertyKey, true, false);
-        fieldProps.form.setFieldValue(propertyKey, value, shouldValidate);
+        formexFieldProps.form.setFieldTouched(propertyKey, true, false);
+        formexFieldProps.form.setFieldValue(propertyKey, value, shouldValidate);
     }, []);
 
     const setFieldValue = useCallback((otherPropertyKey: string, value: CMSType | null, shouldValidate?: boolean) => {
-        fieldProps.form.setFieldTouched(propertyKey, true, false);
-        fieldProps.form.setFieldValue(otherPropertyKey, value, shouldValidate);
+        formexFieldProps.form.setFieldTouched(propertyKey, true, false);
+        formexFieldProps.form.setFieldValue(otherPropertyKey, value, shouldValidate);
     }, []);
 
     const cmsFieldProps: FieldProps<T, CustomProps, M> = {
@@ -253,7 +257,8 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
         autoFocus: autoFocus ?? false,
         customProps: customFieldProps,
         context,
-        size
+        size,
+        onPropertyChange
     };
 
     return (

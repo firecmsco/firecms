@@ -1,5 +1,5 @@
 import React from "react";
-import { FieldProps, Properties, ResolvedProperties } from "../../types";
+import { FieldProps, MapProperty, Properties, PropertyFieldBindingProps, ResolvedProperties } from "../../types";
 
 import { ErrorBoundary } from "../../components";
 import { getIconForProperty, isHidden, isReadOnly, pick } from "../../util";
@@ -25,11 +25,12 @@ export function MapFieldBinding({
                                     includeDescription,
                                     underlyingValueHasChanged,
                                     autoFocus,
-                                    context
+                                    context,
+                                    onPropertyChange
                                 }: FieldProps<Record<string, any>>) {
 
     const pickOnlySomeKeys = property.pickOnlySomeKeys || false;
-    const expanded = (property.expanded === undefined ? true : property.expanded) || autoFocus;
+    const expanded = property.expanded === undefined ? true : property.expanded;
 
     if (!property.properties) {
         throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${propertyKey}`);
@@ -50,38 +51,48 @@ export function MapFieldBinding({
     }
 
     const mapFormView = <>
-        <div className="py-1 flex flex-col space-y-2">
-            {Object.entries(mapProperties)
-                .filter(([_, property]) => !isHidden(property))
-                .map(([entryKey, childProperty], index) => {
-                        const thisDisabled = isReadOnly(childProperty) || Boolean(childProperty.disabled);
-                        const fieldBindingProps = {
-                            propertyKey: `${propertyKey}.${entryKey}`,
-                            disabled: disabled || thisDisabled,
-                            property: childProperty,
-                            includeDescription,
-                            underlyingValueHasChanged,
-                            context,
-                            partOfArray: false,
-                            minimalistView: false,
-                            autoFocus: autoFocus && index === 0
-                        };
+            <div className="py-1 flex flex-col space-y-2">
+                {Object.entries(mapProperties)
+                    .filter(([_, property]) => !isHidden(property))
+                    .map(([entryKey, childProperty], index) => {
+                            const thisDisabled = isReadOnly(childProperty) || Boolean(childProperty.disabled);
+                            const fieldBindingProps: PropertyFieldBindingProps<any> = {
+                                propertyKey: `${propertyKey}.${entryKey}`,
+                                disabled: disabled || thisDisabled,
+                                property: childProperty,
+                                includeDescription,
+                                underlyingValueHasChanged,
+                                context,
+                                partOfArray: false,
+                                minimalistView: false,
+                                autoFocus: autoFocus && index === 0,
+                                onPropertyChange: function (updatedProperty) {
+                                    onPropertyChange?.({
+                                        properties: {
+                                            [entryKey]: updatedProperty
+                                        }
+                                    } as Partial<MapProperty>);
+                                }
+                            };
 
-                        return (
-                            <div key={`map-${propertyKey}-${index}`}>
-                                <ErrorBoundary>
-                                    <PropertyFieldBinding
-                                        {...fieldBindingProps}/>
-                                </ErrorBoundary>
-                            </div>
-                        );
-                    }
-                )}
-        </div>
+                            return (
+                                <div key={`map-${propertyKey}-${index}`}>
+                                    <ErrorBoundary>
+                                        <PropertyFieldBinding
+                                            {...fieldBindingProps}/>
+                                    </ErrorBoundary>
+                                </div>
+                            )
+                                ;
+                        }
+                    )
+                }
+            </div>
 
-        {/*{pickOnlySomeKeys && buildPickKeysSelect(disabled, property.properties, setValue, value)}*/}
+            {/*{pickOnlySomeKeys && buildPickKeysSelect(disabled, property.properties, setValue, value)}*/}
 
-    </>;
+        </>
+    ;
 
     const title = (
         <LabelWithIconAndTooltip
@@ -96,6 +107,11 @@ export function MapFieldBinding({
         <ErrorBoundary>
 
             {!minimalistView && <ExpandablePanel initiallyExpanded={expanded}
+                                                 onExpandedChange={(expanded) => {
+                                                     onPropertyChange?.({
+                                                         expanded
+                                                     });
+                                                 }}
                                                  innerClassName={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2 bg-white dark:bg-gray-900"}
                                                  title={title}>{mapFormView}</ExpandablePanel>}
 

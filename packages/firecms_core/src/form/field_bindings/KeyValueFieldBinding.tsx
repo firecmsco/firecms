@@ -336,7 +336,10 @@ function MapKeyValueRow<T extends Record<string, any>>({
                                         [fieldKey]: newValue
                                     });
                                 }}
-                                buildEntry={(index, internalId) => {
+                                buildEntry={({
+                                                 index,
+                                                 internalId
+                                             }) => {
                                     return <ArrayKeyValueRow
                                         index={index}
                                         id={internalId}

@@ -110,6 +110,15 @@ export interface FieldProps<T extends CMSType = any, CustomProps = any, M extend
      */
     size?: "smallest" | "small" | "medium";
 
+    /**
+     * Some properties might change internal state (like expanding a panel).
+     * This function should be called when the internal state changes.
+     * This is used to preserve state in array containers.
+     *
+     * @param property
+     */
+    onPropertyChange?: (property: Partial<Property<any>>) => void;
+
 }
 
 /**
@@ -223,4 +232,13 @@ export interface PropertyFieldBindingProps<T extends CMSType, M extends Record<s
      * The size of the field
      */
     size?: "smallest" | "small" | "medium",
+
+    /**
+     * Some properties might change internal state (like expanding a panel).
+     * This function should be called when the internal state changes.
+     * This is used to preserve state in array containers.
+     *
+     * @param property
+     */
+    onPropertyChange?: (property: Partial<Property<any>>) => void;
 }

@@ -16,11 +16,21 @@ import {
     useOutsideAlerter
 } from "@firecms/ui";
 
+export type ArrayEntryParams = {
+    index: number,
+    internalId: number,
+    isDragging: boolean,
+    storedProps?: object,
+    storeProps: (props: object) => void
+};
+
+export type ArrayEntryBuilder = (params: ArrayEntryParams) => React.ReactNode;
+
 export interface ArrayContainerProps<T> {
     droppableId: string;
     value: T[];
     addLabel: string;
-    buildEntry: (index: number, internalId: number, isDragging:boolean) => React.ReactNode;
+    buildEntry: ArrayEntryBuilder;
     disabled?: boolean;
     size?: "small" | "medium";
     onInternalIdAdded?: (id: number) => void;
@@ -66,6 +76,12 @@ export function ArrayContainer<T>({
         hasValue
             ? Object.values(internalIdsRef.current)
             : []);
+
+    const itemCustomPropsRef = useRef<Record<number, object>>({});
+
+    const updateItemCustomProps = useCallback((internalId: number, customProps: object) => {
+        itemCustomPropsRef.current[internalId] = customProps;
+    }, []);
 
     useEffect(() => {
         if (hasValue && value && value.length !== internalIds.length) {
@@ -149,6 +165,8 @@ export function ArrayContainer<T>({
                                    remove={remove}
                                    copy={copy}
                                    isDragging={snapshot.isDragging}
+                                   storedProps={itemCustomPropsRef.current[internalId]}
+                                   updateItemCustomProps={updateItemCustomProps}
                                />
                            );
                        }}
@@ -176,6 +194,8 @@ export function ArrayContainer<T>({
                                             remove={remove}
                                             copy={copy}
                                             isDragging={snapshot.isDragging}
+                                            storedProps={itemCustomPropsRef.current[internalId]}
+                                            updateItemCustomProps={updateItemCustomProps}
                                         />
                                     )}
                                 </Draggable>
@@ -208,10 +228,12 @@ type ArrayContainerItemProps = {
     internalId: number,
     size?: "small" | "medium",
     disabled: boolean,
-    buildEntry: (index: number, internalId: number, isDragging: boolean) => React.ReactNode,
+    buildEntry: ArrayEntryBuilder,
     remove: (index: number) => void,
     copy: (index: number) => void,
     isDragging: boolean,
+    storedProps?: object,
+    updateItemCustomProps: (internalId: number, props: object) => void
 };
 
 export function ArrayContainerItem({
@@ -223,29 +245,30 @@ export function ArrayContainerItem({
                                        buildEntry,
                                        remove,
                                        copy,
-                                       isDragging
+                                       isDragging,
+                                       storedProps,
+                                       updateItemCustomProps
                                    }: ArrayContainerItemProps) {
 
-    const [onHover, setOnHover] = React.useState(false);
-    const setOnHoverTrue = useCallback(() => setOnHover(true), []);
-    const setOnHoverFalse = useCallback(() => setOnHover(false), []);
-
     return <div
-        onMouseEnter={setOnHoverTrue}
-        onMouseMove={setOnHoverTrue}
-        onMouseLeave={setOnHoverFalse}
         ref={provided.innerRef}
         {...provided.draggableProps}
         style={provided.draggableProps.style}
         className={`${
-            (isDragging || onHover) ? "hover:bg-slate-50 dark:hover:bg-gray-800 dark:hover:bg-opacity-20" : ""
-        } mb-1 rounded-md opacity-100`}
+            !isDragging ? "hover:bg-slate-50 dark:hover:bg-gray-800 dark:hover:bg-opacity-20" : ""
+        } rounded-md opacity-100`}
     >
         <div
             className="flex items-start">
             <div
                 className="flex-grow w-[calc(100%-48px)] text-text-primary dark:text-text-primary-dark">
-                {buildEntry(index, internalId, isDragging)}
+                {buildEntry({
+                    index,
+                    internalId,
+                    isDragging,
+                    storedProps,
+                    storeProps: (props: object) => updateItemCustomProps(internalId, props)
+                })}
             </div>
             <ArrayItemOptions direction={size === "small" ? "row" : "column"}
                               disabled={disabled}
