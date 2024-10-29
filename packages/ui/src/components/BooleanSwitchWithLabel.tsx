@@ -15,6 +15,9 @@ export type BooleanSwitchWithLabelProps = BooleanSwitchProps & {
     label?: React.ReactNode,
     error?: boolean,
     autoFocus?: boolean,
+    fullWidth?: boolean,
+    className?: string,
+    inputClassName?: string,
 };
 
 /**
@@ -31,6 +34,9 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
                                                                           autoFocus,
                                                                           disabled,
                                                                           size,
+                                                                          className,
+                                                                          fullWidth = true,
+                                                                          inputClassName,
                                                                           ...props
                                                                       }: BooleanSwitchWithLabelProps) {
 
@@ -58,19 +64,21 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
                 !invisible && fieldBackgroundMixin,
                 !invisible && (disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin),
                 disabled ? "cursor-default" : "cursor-pointer",
-                "rounded-md max-w-full justify-between w-full box-border relative inline-flex items-center",
+                "rounded-md max-w-full justify-between box-border relative inline-flex items-center",
                 !invisible && focus && !disabled ? focusedClasses : "",
                 error ? "text-red-500 dark:text-red-600" : (focus && !disabled ? "text-primary" : (!disabled ? "text-text-primary dark:text-text-primary-dark" : "text-text-secondary dark:text-text-secondary-dark")),
                 size === "smallest" ? "min-h-[40px]" : (size === "small" ? "min-h-[48px]" : "min-h-[64px]"),
                 size === "smallest" ? "pl-2" : "pl-4",
                 size === "smallest" ? "pr-4" : "pr-6",
-                position === "end" ? "flex-row-reverse" : "flex-row"
+                position === "end" ? "flex-row-reverse" : "flex-row",
+                fullWidth ? "w-full" : "",
+                className
             )}
             onClick={disabled ? undefined : (e) => {
                 if (props.allowIndeterminate) {
                     if (value === null || value === undefined) onValueChange?.(true)
                     else if (value) onValueChange?.(false)
-                    else onValueChange?.(null as any); // TODO: fix this
+                    else onValueChange?.(null as any);
                 } else {
                     onValueChange?.(!value);
                 }
@@ -82,7 +90,7 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
                 value={value}
                 ref={refInput}
                 size={size}
-                className={invisible && focus ? focusedClasses : ""}
+                className={cls(invisible && focus ? focusedClasses : "", inputClassName)}
                 disabled={disabled}
                 {...props}
             />
