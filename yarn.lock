@@ -2639,7 +2639,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firecms/cli@^3.0.0-canary.141, @firecms/cli@workspace:packages/cli":
+"@firecms/cli@^3.0.0-canary.142, @firecms/cli@workspace:packages/cli":
   version: 0.0.0-use.local
   resolution: "@firecms/cli@workspace:packages/cli"
   dependencies:
@@ -2668,22 +2668,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/cloud@^3.0.0-canary.141, @firecms/cloud@workspace:packages/firecms_cloud":
+"@firecms/cloud@^3.0.0-canary.142, @firecms/cloud@workspace:packages/firecms_cloud":
   version: 0.0.0-use.local
   resolution: "@firecms/cloud@workspace:packages/firecms_cloud"
   dependencies:
-    "@firecms/cli": ^3.0.0-canary.141
-    "@firecms/collection_editor": ^3.0.0-canary.141
-    "@firecms/collection_editor_firebase": ^3.0.0-canary.141
-    "@firecms/core": ^3.0.0-canary.141
-    "@firecms/data_enhancement": ^3.0.0-canary.141
-    "@firecms/data_export": ^3.0.0-canary.141
-    "@firecms/data_import": ^3.0.0-canary.141
-    "@firecms/datatalk": ^3.0.0-canary.141
-    "@firecms/firebase": ^3.0.0-canary.141
-    "@firecms/formex": ^3.0.0-canary.141
-    "@firecms/schema_inference": ^3.0.0-canary.141
-    "@firecms/user_management": ^3.0.0-canary.141
+    "@firecms/cli": ^3.0.0-canary.142
+    "@firecms/collection_editor": ^3.0.0-canary.142
+    "@firecms/collection_editor_firebase": ^3.0.0-canary.142
+    "@firecms/core": ^3.0.0-canary.142
+    "@firecms/data_enhancement": ^3.0.0-canary.142
+    "@firecms/data_export": ^3.0.0-canary.142
+    "@firecms/data_import": ^3.0.0-canary.142
+    "@firecms/datatalk": ^3.0.0-canary.142
+    "@firecms/firebase": ^3.0.0-canary.142
+    "@firecms/formex": ^3.0.0-canary.142
+    "@firecms/schema_inference": ^3.0.0-canary.142
+    "@firecms/user_management": ^3.0.0-canary.142
     "@types/node": ^20.16.11
     "@types/react": ^18.3.12
     "@types/react-dom": ^18.3.1
@@ -2700,16 +2700,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/collection_editor@^3.0.0-canary.141, @firecms/collection_editor@workspace:packages/collection_editor":
+"@firecms/collection_editor@^3.0.0-canary.142, @firecms/collection_editor@workspace:packages/collection_editor":
   version: 0.0.0-use.local
   resolution: "@firecms/collection_editor@workspace:packages/collection_editor"
   dependencies:
-    "@firecms/data_export": ^3.0.0-canary.141
-    "@firecms/data_import": ^3.0.0-canary.141
-    "@firecms/data_import_export": ^3.0.0-canary.141
-    "@firecms/formex": ^3.0.0-canary.141
-    "@firecms/schema_inference": ^3.0.0-canary.141
-    "@firecms/ui": ^3.0.0-canary.141
+    "@firecms/data_export": ^3.0.0-canary.142
+    "@firecms/data_import": ^3.0.0-canary.142
+    "@firecms/data_import_export": ^3.0.0-canary.142
+    "@firecms/formex": ^3.0.0-canary.142
+    "@firecms/schema_inference": ^3.0.0-canary.142
+    "@firecms/ui": ^3.0.0-canary.142
     "@jest/globals": ^29.7.0
     "@types/react": ^18.3.12
     "@types/react-dom": ^18.3.1
@@ -2730,13 +2730,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/collection_editor_firebase@^3.0.0-canary.141, @firecms/collection_editor_firebase@workspace:packages/collection_editor_firebase":
+"@firecms/collection_editor_firebase@^3.0.0-canary.142, @firecms/collection_editor_firebase@workspace:packages/collection_editor_firebase":
   version: 0.0.0-use.local
   resolution: "@firecms/collection_editor_firebase@workspace:packages/collection_editor_firebase"
   dependencies:
-    "@firecms/collection_editor": ^3.0.0-canary.141
-    "@firecms/core": ^3.0.0-canary.141
-    "@firecms/firebase": ^3.0.0-canary.141
+    "@firecms/collection_editor": ^3.0.0-canary.142
+    "@firecms/core": ^3.0.0-canary.142
+    "@firecms/firebase": ^3.0.0-canary.142
     "@types/node": ^20.16.11
     "@types/react": ^18.3.12
     "@types/react-dom": ^18.3.1
@@ -2749,13 +2749,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/core@^3.0.0-canary.141, @firecms/core@workspace:packages/firecms_core":
+"@firecms/core@^3.0.0-canary.142, @firecms/core@workspace:packages/firecms_core":
   version: 0.0.0-use.local
   resolution: "@firecms/core@workspace:packages/firecms_core"
   dependencies:
-    "@firecms/editor": ^3.0.0-canary.141
-    "@firecms/formex": ^3.0.0-canary.141
-    "@firecms/ui": ^3.0.0-canary.141
+    "@firecms/editor": ^3.0.0-canary.142
+    "@firecms/formex": ^3.0.0-canary.142
+    "@firecms/ui": ^3.0.0-canary.142
     "@hello-pangea/dnd": ^17.0.0
     "@jest/globals": ^29.7.0
     "@radix-ui/react-portal": ^1.1.2
@@ -2802,12 +2802,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_enhancement@^3.0.0-canary.141, @firecms/data_enhancement@workspace:packages/data_enhancement":
+"@firecms/data_enhancement@^3.0.0-canary.142, @firecms/data_enhancement@workspace:packages/data_enhancement":
   version: 0.0.0-use.local
   resolution: "@firecms/data_enhancement@workspace:packages/data_enhancement"
   dependencies:
-    "@firecms/core": ^3.0.0-canary.141
-    "@firecms/editor": ^3.0.0-canary.141
+    "@firecms/core": ^3.0.0-canary.142
+    "@firecms/editor": ^3.0.0-canary.142
     "@testing-library/jest-dom": ^6.5.0
     "@types/jest": ^29.5.14
     "@types/react": ^18.3.12
@@ -2827,14 +2827,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_export@^3.0.0-canary.141, @firecms/data_export@workspace:packages/data_export":
+"@firecms/data_export@^3.0.0-canary.142, @firecms/data_export@workspace:packages/data_export":
   version: 0.0.0-use.local
   resolution: "@firecms/data_export@workspace:packages/data_export"
   dependencies:
-    "@firecms/core": ^3.0.0-canary.141
-    "@firecms/formex": ^3.0.0-canary.141
-    "@firecms/schema_inference": ^3.0.0-canary.141
-    "@firecms/ui": ^3.0.0-canary.141
+    "@firecms/core": ^3.0.0-canary.142
+    "@firecms/formex": ^3.0.0-canary.142
+    "@firecms/schema_inference": ^3.0.0-canary.142
+    "@firecms/ui": ^3.0.0-canary.142
     "@jest/globals": ^29.7.0
     "@testing-library/jest-dom": ^6.5.0
     "@types/jest": ^29.5.14
@@ -2855,14 +2855,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_import@^3.0.0-canary.141, @firecms/data_import@workspace:packages/data_import":
+"@firecms/data_import@^3.0.0-canary.142, @firecms/data_import@workspace:packages/data_import":
   version: 0.0.0-use.local
   resolution: "@firecms/data_import@workspace:packages/data_import"
   dependencies:
-    "@firecms/core": ^3.0.0-canary.141
-    "@firecms/formex": ^3.0.0-canary.141
-    "@firecms/schema_inference": ^3.0.0-canary.141
-    "@firecms/ui": ^3.0.0-canary.141
+    "@firecms/core": ^3.0.0-canary.142
+    "@firecms/formex": ^3.0.0-canary.142
+    "@firecms/schema_inference": ^3.0.0-canary.142
+    "@firecms/ui": ^3.0.0-canary.142
     "@jest/globals": ^29.7.0
     "@testing-library/jest-dom": ^6.5.0
     "@types/jest": ^29.5.14
@@ -2884,13 +2884,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_import_export@^3.0.0-canary.141, @firecms/data_import_export@workspace:packages/data_import_export":
+"@firecms/data_import_export@^3.0.0-canary.142, @firecms/data_import_export@workspace:packages/data_import_export":
   version: 0.0.0-use.local
   resolution: "@firecms/data_import_export@workspace:packages/data_import_export"
   dependencies:
-    "@firecms/core": ^3.0.0-canary.141
-    "@firecms/data_export": ^3.0.0-canary.141
-    "@firecms/data_import": ^3.0.0-canary.141
+    "@firecms/core": ^3.0.0-canary.142
+    "@firecms/data_export": ^3.0.0-canary.142
+    "@firecms/data_import": ^3.0.0-canary.142
     "@jest/globals": ^29.7.0
     "@testing-library/jest-dom": ^6.5.0
     "@types/jest": ^29.5.14
@@ -2911,19 +2911,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/datatalk@^3.0.0-canary.141, @firecms/datatalk@workspace:packages/datatalk":
+"@firecms/datatalk@^3.0.0-canary.142, @firecms/datatalk@workspace:packages/datatalk":
   version: 0.0.0-use.local
   resolution: "@firecms/datatalk@workspace:packages/datatalk"
   dependencies:
-    "@firecms/collection_editor_firebase": ^3.0.0-canary.141
-    "@firecms/core": ^3.0.0-canary.141
-    "@firecms/data_export": ^3.0.0-canary.141
-    "@firecms/data_import": ^3.0.0-canary.141
-    "@firecms/data_import_export": ^3.0.0-canary.141
-    "@firecms/firebase": ^3.0.0-canary.141
-    "@firecms/formex": ^3.0.0-canary.141
-    "@firecms/schema_inference": ^3.0.0-canary.141
-    "@firecms/ui": ^3.0.0-canary.141
+    "@firecms/collection_editor_firebase": ^3.0.0-canary.142
+    "@firecms/core": ^3.0.0-canary.142
+    "@firecms/data_export": ^3.0.0-canary.142
+    "@firecms/data_import": ^3.0.0-canary.142
+    "@firecms/data_import_export": ^3.0.0-canary.142
+    "@firecms/firebase": ^3.0.0-canary.142
+    "@firecms/formex": ^3.0.0-canary.142
+    "@firecms/schema_inference": ^3.0.0-canary.142
+    "@firecms/ui": ^3.0.0-canary.142
     "@monaco-editor/react": ^4.6.0
     "@types/node": 20.16.11
     "@types/react": ^18.3.12
@@ -2936,11 +2936,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/editor@^3.0.0-canary.141, @firecms/editor@workspace:packages/editor":
+"@firecms/editor@^3.0.0-canary.142, @firecms/editor@workspace:packages/editor":
   version: 0.0.0-use.local
   resolution: "@firecms/editor@workspace:packages/editor"
   dependencies:
-    "@firecms/ui": ^3.0.0-canary.141
+    "@firecms/ui": ^3.0.0-canary.142
     "@radix-ui/react-slot": ^1.1.0
     "@tiptap/core": 2.9.1
     "@tiptap/extension-bold": 2.9.1
@@ -2976,19 +2976,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/firebase@^3.0.0-canary.141, @firecms/firebase@workspace:packages/firebase_firecms":
+"@firecms/firebase@^3.0.0-canary.142, @firecms/firebase@workspace:packages/firebase_firecms":
   version: 0.0.0-use.local
   resolution: "@firecms/firebase@workspace:packages/firebase_firecms"
   dependencies:
     "@firebase/auth": "*"
-    "@firecms/collection_editor": ^3.0.0-canary.141
-    "@firecms/core": ^3.0.0-canary.141
-    "@firecms/data_enhancement": ^3.0.0-canary.141
-    "@firecms/data_export": ^3.0.0-canary.141
-    "@firecms/data_import": ^3.0.0-canary.141
-    "@firecms/data_import_export": ^3.0.0-canary.141
-    "@firecms/schema_inference": ^3.0.0-canary.141
-    "@firecms/ui": ^3.0.0-canary.141
+    "@firecms/collection_editor": ^3.0.0-canary.142
+    "@firecms/core": ^3.0.0-canary.142
+    "@firecms/data_enhancement": ^3.0.0-canary.142
+    "@firecms/data_export": ^3.0.0-canary.142
+    "@firecms/data_import": ^3.0.0-canary.142
+    "@firecms/data_import_export": ^3.0.0-canary.142
+    "@firecms/schema_inference": ^3.0.0-canary.142
+    "@firecms/ui": ^3.0.0-canary.142
     "@types/node": ^20.16.11
     "@types/react": ^18.3.12
     "@types/react-dom": ^18.3.1
@@ -3003,7 +3003,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/formex@^3.0.0-canary.141, @firecms/formex@workspace:packages/formex":
+"@firecms/formex@^3.0.0-canary.142, @firecms/formex@workspace:packages/formex":
   version: 0.0.0-use.local
   resolution: "@firecms/formex@workspace:packages/formex"
   dependencies:
@@ -3027,9 +3027,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@firecms/mongodb@workspace:packages/mongodb"
   dependencies:
-    "@firecms/core": ^3.0.0-canary.141
-    "@firecms/firebase": ^3.0.0-canary.141
-    "@firecms/ui": ^3.0.0-canary.141
+    "@firecms/core": ^3.0.0-canary.142
+    "@firecms/firebase": ^3.0.0-canary.142
+    "@firecms/ui": ^3.0.0-canary.142
     "@types/node": ^20.16.11
     firebase: ^10.14.1
     typescript: ^5.6.3
@@ -3041,18 +3041,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/schema_inference@^3.0.0-canary.141, @firecms/schema_inference@workspace:packages/schema_inference":
+"@firecms/schema_inference@^3.0.0-canary.142, @firecms/schema_inference@workspace:packages/schema_inference":
   version: 0.0.0-use.local
   resolution: "@firecms/schema_inference@workspace:packages/schema_inference"
   dependencies:
-    "@firecms/core": ^3.0.0-canary.141
+    "@firecms/core": ^3.0.0-canary.142
     "@types/node": ^20.16.11
     typescript: ^5.6.3
     vite: ^5.4.10
   languageName: unknown
   linkType: soft
 
-"@firecms/ui@^3.0.0-canary.141, @firecms/ui@workspace:packages/ui":
+"@firecms/ui@^3.0.0-canary.142, @firecms/ui@workspace:packages/ui":
   version: 0.0.0-use.local
   resolution: "@firecms/ui@workspace:packages/ui"
   dependencies:
@@ -3108,13 +3108,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/user_management@^3.0.0-canary.141, @firecms/user_management@workspace:packages/user_management":
+"@firecms/user_management@^3.0.0-canary.142, @firecms/user_management@workspace:packages/user_management":
   version: 0.0.0-use.local
   resolution: "@firecms/user_management@workspace:packages/user_management"
   dependencies:
-    "@firecms/core": ^3.0.0-canary.141
-    "@firecms/formex": ^3.0.0-canary.141
-    "@firecms/ui": ^3.0.0-canary.141
+    "@firecms/core": ^3.0.0-canary.142
+    "@firecms/formex": ^3.0.0-canary.142
+    "@firecms/ui": ^3.0.0-canary.142
     "@types/node": ^20.16.11
     "@types/react": ^18.3.12
     "@types/react-dom": ^18.3.1
@@ -6776,15 +6776,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:8.11.0, @typescript-eslint/eslint-plugin@npm:^8.11.0":
-  version: 8.11.0
-  resolution: "@typescript-eslint/eslint-plugin@npm:8.11.0"
+"@typescript-eslint/eslint-plugin@npm:8.12.1, @typescript-eslint/eslint-plugin@npm:^8.8.1":
+  version: 8.12.1
+  resolution: "@typescript-eslint/eslint-plugin@npm:8.12.1"
   dependencies:
     "@eslint-community/regexpp": ^4.10.0
-    "@typescript-eslint/scope-manager": 8.11.0
-    "@typescript-eslint/type-utils": 8.11.0
-    "@typescript-eslint/utils": 8.11.0
-    "@typescript-eslint/visitor-keys": 8.11.0
+    "@typescript-eslint/scope-manager": 8.12.1
+    "@typescript-eslint/type-utils": 8.12.1
+    "@typescript-eslint/utils": 8.12.1
+    "@typescript-eslint/visitor-keys": 8.12.1
     graphemer: ^1.4.0
     ignore: ^5.3.1
     natural-compare: ^1.4.0
@@ -6795,7 +6795,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 5cfc337a957b1c1a868f0f05ed278d4b631aab3aad037c1ca52f458973dee53c2f79db5cb3ac0278d3a4d2846560335212e347c4b978efd84811d6c910e93975
+  checksum: 5fe13ed43b1c44a4122eac9fb3429524d69bb579d862fd5ace39bf49a9c15d98e695e7ca8dd3136a7eb9e3b2525712a97fd447f6061672806ff76bc62347029f
   languageName: node
   linkType: hard
 
@@ -6823,6 +6823,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@typescript-eslint/eslint-plugin@npm:^8.11.0":
+  version: 8.11.0
+  resolution: "@typescript-eslint/eslint-plugin@npm:8.11.0"
+  dependencies:
+    "@eslint-community/regexpp": ^4.10.0
+    "@typescript-eslint/scope-manager": 8.11.0
+    "@typescript-eslint/type-utils": 8.11.0
+    "@typescript-eslint/utils": 8.11.0
+    "@typescript-eslint/visitor-keys": 8.11.0
+    graphemer: ^1.4.0
+    ignore: ^5.3.1
+    natural-compare: ^1.4.0
+    ts-api-utils: ^1.3.0
+  peerDependencies:
+    "@typescript-eslint/parser": ^8.0.0 || ^8.0.0-alpha.0
+    eslint: ^8.57.0 || ^9.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 5cfc337a957b1c1a868f0f05ed278d4b631aab3aad037c1ca52f458973dee53c2f79db5cb3ac0278d3a4d2846560335212e347c4b978efd84811d6c910e93975
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/experimental-utils@npm:^5.0.0":
   version: 5.62.0
   resolution: "@typescript-eslint/experimental-utils@npm:5.62.0"
@@ -6834,21 +6857,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:8.11.0, @typescript-eslint/parser@npm:^8.11.0":
-  version: 8.11.0
-  resolution: "@typescript-eslint/parser@npm:8.11.0"
+"@typescript-eslint/parser@npm:8.12.1":
+  version: 8.12.1
+  resolution: "@typescript-eslint/parser@npm:8.12.1"
   dependencies:
-    "@typescript-eslint/scope-manager": 8.11.0
-    "@typescript-eslint/types": 8.11.0
-    "@typescript-eslint/typescript-estree": 8.11.0
-    "@typescript-eslint/visitor-keys": 8.11.0
+    "@typescript-eslint/scope-manager": 8.12.1
+    "@typescript-eslint/types": 8.12.1
+    "@typescript-eslint/typescript-estree": 8.12.1
+    "@typescript-eslint/visitor-keys": 8.12.1
     debug: ^4.3.4
   peerDependencies:
     eslint: ^8.57.0 || ^9.0.0
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: b7664933df72e150289889e16f10f042d427d8334786ce33fa2e0d2fd2fbf31a52c6e88f9b6b9a864f4e78c7b60cd52c034886eb1fa82893d69434bcd4f7e173
+  checksum: 447d980c81b70e8447502cbed0d9212e2347967c4af6fb5251f1a975ac9404cacb0a28c06336260cb816df206f39379ac9f29340f7e0784d18e1fc6cd88ec71d
   languageName: node
   linkType: hard
 
@@ -6869,6 +6892,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@typescript-eslint/parser@npm:^8.11.0":
+  version: 8.11.0
+  resolution: "@typescript-eslint/parser@npm:8.11.0"
+  dependencies:
+    "@typescript-eslint/scope-manager": 8.11.0
+    "@typescript-eslint/types": 8.11.0
+    "@typescript-eslint/typescript-estree": 8.11.0
+    "@typescript-eslint/visitor-keys": 8.11.0
+    debug: ^4.3.4
+  peerDependencies:
+    eslint: ^8.57.0 || ^9.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: b7664933df72e150289889e16f10f042d427d8334786ce33fa2e0d2fd2fbf31a52c6e88f9b6b9a864f4e78c7b60cd52c034886eb1fa82893d69434bcd4f7e173
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/scope-manager@npm:5.62.0":
   version: 5.62.0
   resolution: "@typescript-eslint/scope-manager@npm:5.62.0"
@@ -6886,6 +6927,16 @@ __metadata:
     "@typescript-eslint/types": 8.11.0
     "@typescript-eslint/visitor-keys": 8.11.0
   checksum: f36212ac1df6a2ed0953beda6bf66e57fd56fcc1c4b4d21149f3451ae621f63aa7ccb92aa1281615250264fdd22e56a163a5d11c5c772c857741ac0e25533325
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/scope-manager@npm:8.12.1":
+  version: 8.12.1
+  resolution: "@typescript-eslint/scope-manager@npm:8.12.1"
+  dependencies:
+    "@typescript-eslint/types": 8.12.1
+    "@typescript-eslint/visitor-keys": 8.12.1
+  checksum: d9938df5887a7a2fd4929a2bd7111e33172932281081b8314daf2f5d4f758ecd9a04365910ce7c6c065f7465767ff384cc3b3de5eb2f0c37279edc458710adb7
   languageName: node
   linkType: hard
 
@@ -6921,6 +6972,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@typescript-eslint/type-utils@npm:8.12.1":
+  version: 8.12.1
+  resolution: "@typescript-eslint/type-utils@npm:8.12.1"
+  dependencies:
+    "@typescript-eslint/typescript-estree": 8.12.1
+    "@typescript-eslint/utils": 8.12.1
+    debug: ^4.3.4
+    ts-api-utils: ^1.3.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 6f87aab4f4b64e630cffd8e59350dc7f7161767c204d950261b72867b200f8842f1de9dcac0317db78ec8d5d31168fefe2230e6fa485dd4370b7dd5fdf3c161d
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/types@npm:5.62.0":
   version: 5.62.0
   resolution: "@typescript-eslint/types@npm:5.62.0"
@@ -6932,6 +6998,13 @@ __metadata:
   version: 8.11.0
   resolution: "@typescript-eslint/types@npm:8.11.0"
   checksum: 2958f3b5b30d3a876aad79df15662e6c23fe3d0c7750c473f27adc725b2a20f303e914db785c64200bc4092c3489648407792e2bd89eccf3f7aaa4495be81681
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/types@npm:8.12.1":
+  version: 8.12.1
+  resolution: "@typescript-eslint/types@npm:8.12.1"
+  checksum: 9c3245ee4045027a4751b5a082768d840c5dce7256c94eeabb7ef779359a2781a69e4a9c97673f7ff6aef2341a555b49c5d713d10860b055bc9edcc2dba55f09
   languageName: node
   linkType: hard
 
@@ -6972,6 +7045,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@typescript-eslint/typescript-estree@npm:8.12.1":
+  version: 8.12.1
+  resolution: "@typescript-eslint/typescript-estree@npm:8.12.1"
+  dependencies:
+    "@typescript-eslint/types": 8.12.1
+    "@typescript-eslint/visitor-keys": 8.12.1
+    debug: ^4.3.4
+    fast-glob: ^3.3.2
+    is-glob: ^4.0.3
+    minimatch: ^9.0.4
+    semver: ^7.6.0
+    ts-api-utils: ^1.3.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 4a8281d87363ee0e8d76a6c6fb305fe67347c662ab6e63385e968d74889dcd3ec627f2c397ae12f1890598c40a1be147cbd67a941c2d6ce4657879978566f840
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/utils@npm:5.62.0, @typescript-eslint/utils@npm:^5.58.0":
   version: 5.62.0
   resolution: "@typescript-eslint/utils@npm:5.62.0"
@@ -7004,6 +7096,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@typescript-eslint/utils@npm:8.12.1":
+  version: 8.12.1
+  resolution: "@typescript-eslint/utils@npm:8.12.1"
+  dependencies:
+    "@eslint-community/eslint-utils": ^4.4.0
+    "@typescript-eslint/scope-manager": 8.12.1
+    "@typescript-eslint/types": 8.12.1
+    "@typescript-eslint/typescript-estree": 8.12.1
+  peerDependencies:
+    eslint: ^8.57.0 || ^9.0.0
+  checksum: 2b172e9ef01c48e942e41141010091a2a9d22e9d9832f889ceb8ee2a53e6115c43e8ae6d0f34bac22a24d354de81f8a8de667a0d4eb8e9efd97f36f519e6f843
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/visitor-keys@npm:5.62.0":
   version: 5.62.0
   resolution: "@typescript-eslint/visitor-keys@npm:5.62.0"
@@ -7021,6 +7127,16 @@ __metadata:
     "@typescript-eslint/types": 8.11.0
     eslint-visitor-keys: ^3.4.3
   checksum: 29057642bf63994646bd8c5b4baa704ae8b1ff094daa6254a6a92e9fbd252086e219b2b7e8050a131da58cd16cc4dee20bb9fc142bc0d3f22f92af2b59b5444e
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/visitor-keys@npm:8.12.1":
+  version: 8.12.1
+  resolution: "@typescript-eslint/visitor-keys@npm:8.12.1"
+  dependencies:
+    "@typescript-eslint/types": 8.12.1
+    eslint-visitor-keys: ^3.4.3
+  checksum: a30bac94f99ac70a31c1e10cc29e12ffcbd198e03cbfee7fcfde78805762827f3ecb8861672b5f6d09f06c4ce8619f8e7c153f17f9d6e8346dc12a896ea29d3e
   languageName: node
   linkType: hard
 
@@ -8637,7 +8753,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "create-firecms-app@workspace:packages/create_firecms_app"
   dependencies:
-    "@firecms/cli": ^3.0.0-canary.141
+    "@firecms/cli": ^3.0.0-canary.142
     "@types/node": ^20.16.11
     ts-node: ^10.9.2
     typescript: ^5.6.3
@@ -9839,7 +9955,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^9.13.0":
+"eslint@npm:^9.12.0, eslint@npm:^9.13.0":
   version: 9.13.0
   resolution: "eslint@npm:9.13.0"
   dependencies:
@@ -10269,7 +10385,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms-example-cloud@workspace:examples/example_cloud"
   dependencies:
-    "@firecms/cloud": ^3.0.0-canary.141
+    "@firecms/cloud": ^3.0.0-canary.142
     "@fontsource/jetbrains-mono": ^5.1.1
     "@originjs/vite-plugin-federation": ^1.3.6
     "@tailwindcss/typography": ^0.5.15
@@ -10292,17 +10408,17 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms-example-pro@workspace:examples/example_pro"
   dependencies:
-    "@firecms/collection_editor": ^3.0.0-canary.141
-    "@firecms/collection_editor_firebase": ^3.0.0-canary.141
-    "@firecms/core": ^3.0.0-canary.141
-    "@firecms/data_enhancement": ^3.0.0-canary.141
-    "@firecms/data_export": ^3.0.0-canary.141
-    "@firecms/data_import": ^3.0.0-canary.141
-    "@firecms/datatalk": ^3.0.0-canary.141
-    "@firecms/editor": ^3.0.0-canary.141
-    "@firecms/schema_inference": ^3.0.0-canary.141
-    "@firecms/ui": ^3.0.0-canary.141
-    "@firecms/user_management": ^3.0.0-canary.141
+    "@firecms/collection_editor": ^3.0.0-canary.142
+    "@firecms/collection_editor_firebase": ^3.0.0-canary.142
+    "@firecms/core": ^3.0.0-canary.142
+    "@firecms/data_enhancement": ^3.0.0-canary.142
+    "@firecms/data_export": ^3.0.0-canary.142
+    "@firecms/data_import": ^3.0.0-canary.142
+    "@firecms/datatalk": ^3.0.0-canary.142
+    "@firecms/editor": ^3.0.0-canary.142
+    "@firecms/schema_inference": ^3.0.0-canary.142
+    "@firecms/ui": ^3.0.0-canary.142
+    "@firecms/user_management": ^3.0.0-canary.142
     "@fontsource/jetbrains-mono": ^5.1.1
     "@supabase/supabase-js": ^2.45.4
     "@tailwindcss/typography": ^0.5.15
@@ -10342,16 +10458,16 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms-example@workspace:examples/example"
   dependencies:
-    "@firecms/collection_editor": ^3.0.0-canary.141
-    "@firecms/core": ^3.0.0-canary.141
-    "@firecms/data_enhancement": ^3.0.0-canary.141
-    "@firecms/data_export": ^3.0.0-canary.141
-    "@firecms/data_import": ^3.0.0-canary.141
-    "@firecms/data_import_export": ^3.0.0-canary.141
-    "@firecms/editor": ^3.0.0-canary.141
-    "@firecms/schema_inference": ^3.0.0-canary.141
-    "@firecms/ui": ^3.0.0-canary.141
-    "@firecms/user_management": ^3.0.0-canary.141
+    "@firecms/collection_editor": ^3.0.0-canary.142
+    "@firecms/core": ^3.0.0-canary.142
+    "@firecms/data_enhancement": ^3.0.0-canary.142
+    "@firecms/data_export": ^3.0.0-canary.142
+    "@firecms/data_import": ^3.0.0-canary.142
+    "@firecms/data_import_export": ^3.0.0-canary.142
+    "@firecms/editor": ^3.0.0-canary.142
+    "@firecms/schema_inference": ^3.0.0-canary.142
+    "@firecms/ui": ^3.0.0-canary.142
+    "@firecms/user_management": ^3.0.0-canary.142
     "@fontsource/jetbrains-mono": ^5.1.1
     "@radix-ui/react-portal": ^1.1.2
     "@tailwindcss/typography": ^0.5.15
@@ -10394,8 +10510,8 @@ __metadata:
   dependencies:
     "@eslint/js": ^9.12.0
     "@types/eslint__js": ^8.42.3
-    "@typescript-eslint/eslint-plugin": ^8.11.0
-    eslint: ^9.13.0
+    "@typescript-eslint/eslint-plugin": ^8.8.1
+    eslint: ^9.12.0
     eslint-config-standard: ^17.1.0
     eslint-plugin-import: ^2.31.0
     eslint-plugin-n: ^17.11.1
@@ -10406,7 +10522,7 @@ __metadata:
     npm-run-all: ^4.1.5
     path-browserify: ^1.0.1
     typescript: ^5.6.3
-    typescript-eslint: ^8.11.0
+    typescript-eslint: ^8.8.1
   languageName: unknown
   linkType: soft
 
@@ -10414,7 +10530,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms@workspace:packages/firecms"
   dependencies:
-    "@firecms/cli": ^3.0.0-canary.141
+    "@firecms/cli": ^3.0.0-canary.142
     "@types/node": ^20.16.11
     ts-node: ^10.9.2
     typescript: ^5.6.3
@@ -17880,17 +17996,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript-eslint@npm:^8.11.0":
-  version: 8.11.0
-  resolution: "typescript-eslint@npm:8.11.0"
+"typescript-eslint@npm:^8.8.1":
+  version: 8.12.1
+  resolution: "typescript-eslint@npm:8.12.1"
   dependencies:
-    "@typescript-eslint/eslint-plugin": 8.11.0
-    "@typescript-eslint/parser": 8.11.0
-    "@typescript-eslint/utils": 8.11.0
+    "@typescript-eslint/eslint-plugin": 8.12.1
+    "@typescript-eslint/parser": 8.12.1
+    "@typescript-eslint/utils": 8.12.1
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 0dfe0445fecb86436fc285523b1d81529f31d465c3e98b48858761e4f3b1de4be106d9fb9bbf7833d63927b21cf8ddc2fc524768280145ae53b84514b05829cf
+  checksum: 6beaa39f4f64d43b27318068aeabac77baa61a46686b8026f1ec2059cead55c8b6dc08a5456e73f836bb0ae800f2991c16953d32c7f3d2c977ba7e942f21fb0c
   languageName: node
   linkType: hard
 
