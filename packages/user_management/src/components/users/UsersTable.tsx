@@ -54,7 +54,6 @@ export function UsersTable({ onUserClicked }: {
 
                 <TableHeader>
                     <TableCell className="truncate w-16"></TableCell>
-                    <TableCell>ID</TableCell>
                     <TableCell>Email</TableCell>
                     <TableCell>Name</TableCell>
                     <TableCell>Roles</TableCell>
@@ -88,7 +87,6 @@ export function UsersTable({ onUserClicked }: {
                                         </IconButton>
                                     </Tooltip>
                                 </TableCell>
-                                <TableCell>{user.uid}</TableCell>
                                 <TableCell>{user.email}</TableCell>
                                 <TableCell className={"font-medium align-left"}>{user.displayName}</TableCell>
                                 <TableCell className="align-left">

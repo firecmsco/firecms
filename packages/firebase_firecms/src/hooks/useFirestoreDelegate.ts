@@ -278,8 +278,6 @@ export function useFirestoreDelegate({
 
         initialised: Boolean(firebaseApp),
 
-        authenticated: Boolean(firebaseApp) && getAuth(firebaseApp).currentUser !== null,
-
         initTextSearch: useCallback(async (props: {
             path: string,
             databaseId?: string,

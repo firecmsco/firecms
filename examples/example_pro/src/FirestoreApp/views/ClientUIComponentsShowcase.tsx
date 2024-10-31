@@ -43,7 +43,6 @@ import {
     MenubarSubTriggerIndicator,
     MenubarTrigger,
     MenuItem,
-    MultiSelect, MultiSelectItem,
     Popover,
     RadioGroup,
     RadioGroupItem,
@@ -564,16 +563,6 @@ export default function ClientUIComponentsShowcase({
                 <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
                     <div className="bg-white dark:bg-gray-800 p-4 h-full">
                         This is a sample sheet
-
-                        <MultiSelect
-                            className={"w-full"}
-                            value={[]} label="Custom Render MultiSelect" onValueChange={() => {
-                        }}>
-                            <MultiSelectItem value="red">Red</MultiSelectItem>
-                            <MultiSelectItem value="green">Green</MultiSelectItem>
-                            <MultiSelectItem value="blue">Blue</MultiSelectItem>
-                        </MultiSelect>
-
                     </div>
                 </Sheet>
             </Card>

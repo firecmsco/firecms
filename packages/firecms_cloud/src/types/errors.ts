@@ -1,5 +1,6 @@
 type ApiErrorAdditional = {
     missingPermissions?: string[];
+    errorDetails?: object;
 };
 
 export class ApiError extends Error {

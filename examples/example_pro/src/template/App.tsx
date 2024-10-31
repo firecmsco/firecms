@@ -109,21 +109,22 @@ export function App() {
     });
 
     /**
+     * Controller for managing authentication
+     */
+    const baseAuthController: FirebaseAuthController = useFirebaseAuthController({
+        firebaseApp,
+        signInOptions
+    });
+
+    /**
      * Controller in charge of user management
      */
     const userManagement = useBuildUserManagement({
         dataSourceDelegate: firestoreDelegate,
+        authController: baseAuthController
     });
 
-    /**
-     * Controller for managing authentication
-     */
-    const authController: FirebaseAuthController = useFirebaseAuthController({
-        firebaseApp,
-        signInOptions,
-        loading: userManagement.loading,
-        defineRolesFor: userManagement.defineRolesFor
-    });
+    const authController = userManagement.authController;
 
     /**
      * Controller for saving some user preferences locally.

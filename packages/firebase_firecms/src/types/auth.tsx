@@ -32,7 +32,9 @@ export type FirebaseUserWrapper = User & FirebaseUser & {
 /**
  * @group Firebase
  */
-export type FirebaseAuthController<ExtraData = any> = AuthController<FirebaseUserWrapper, ExtraData> & {
+export type FirebaseAuthController<UserType extends User = FirebaseUserWrapper, ExtraData = any> =
+    AuthController<UserType, ExtraData>
+    & {
 
     confirmationResult?: ConfirmationResult;
 
@@ -67,6 +69,6 @@ export type FirebaseAuthController<ExtraData = any> = AuthController<FirebaseUse
 
     setUser: (user: FirebaseUser | null) => void;
 
-    setRoles: (roles: Role[]) => void;
+    setUserRoles: (roles: Role[]) => void;
 
 };

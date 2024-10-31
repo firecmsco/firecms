@@ -327,7 +327,6 @@ export function useSupabaseDelegate({ supabase }: SupabaseDataSourceProps): Supa
         cmsToDelegateModel: (data) => data,
         currentTime: () => new Date(),
         initialised: true,
-        authenticated: true,
         fetchCollection,
         // listenCollection,
         fetchEntity,

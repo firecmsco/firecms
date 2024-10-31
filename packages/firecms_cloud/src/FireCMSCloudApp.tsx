@@ -345,6 +345,8 @@ export function FireCMSClientWithController({
         },
         [authController.authLoading, authController.user, userManagement.loading, userManagement.users]);
 
+    console.log("fireCMSUser", fireCMSUser);
+
     const {
         delegatedLoginLoading,
         delegatedLoginError
@@ -354,7 +356,7 @@ export function FireCMSClientWithController({
         projectId,
         onUserChanged: (user) => {
             authController.setUser(user ?? null);
-            authController.setRoles(fireCMSUser?.roles ?? []);
+            authController.setUserRoles(fireCMSUser?.roles ?? []);
         },
         onAnalyticsEvent: props.onAnalyticsEvent
     });

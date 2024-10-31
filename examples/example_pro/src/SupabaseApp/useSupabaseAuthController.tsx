@@ -177,7 +177,7 @@ export const useSupabaseAuthController = ({
 
     return {
         user: supabaseUserWrapper,
-        roles,
+        userRoles: roles,
         setUser: updateUser,
         setRoles,
         getAuthToken,

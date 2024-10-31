@@ -3,6 +3,7 @@ import equal from "react-fast-compare"
 
 import { UserManagement } from "../types";
 import {
+    AuthController,
     Authenticator,
     DataSourceDelegate,
     Entity,
@@ -15,7 +16,9 @@ import { resolveUserRolePermissions } from "../utils";
 
 type UserWithRoleIds = Omit<User, "roles"> & { roles: string[] };
 
-export interface UserManagementParams {
+export interface UserManagementParams<AUTH_CONTROLLER extends AuthController = any> {
+
+    authController: AUTH_CONTROLLER;
 
     /**
      * The delegate in charge of persisting the data.
@@ -62,6 +65,7 @@ export interface UserManagementParams {
 /**
  * This hook is used to build a user management object that can be used to
  * manage users and roles in a Firestore backend.
+ * @param authController
  * @param dataSourceDelegate
  * @param usersPath
  * @param rolesPath
@@ -70,15 +74,19 @@ export interface UserManagementParams {
  * @param allowDefaultRolesCreation
  * @param includeCollectionConfigPermissions
  */
-export function useBuildUserManagement({
-                                           dataSourceDelegate,
-                                           usersPath = "__FIRECMS/config/users",
-                                           rolesPath = "__FIRECMS/config/roles",
-                                           usersLimit,
-                                           canEditRoles = true,
-                                           allowDefaultRolesCreation,
-                                           includeCollectionConfigPermissions
-                                       }: UserManagementParams): UserManagement {
+export function useBuildUserManagement<UserType extends User = User, CONTROLLER extends AuthController<UserType> = AuthController<UserType>>
+({
+     authController,
+     dataSourceDelegate,
+     usersPath = "__FIRECMS/config/users",
+     rolesPath = "__FIRECMS/config/roles",
+     usersLimit,
+     canEditRoles = true,
+     allowDefaultRolesCreation,
+     includeCollectionConfigPermissions
+ }: UserManagementParams<CONTROLLER>): UserManagement<User> & {
+    authController: CONTROLLER;
+} {
 
     const [rolesLoading, setRolesLoading] = React.useState<boolean>(true);
     const [usersLoading, setUsersLoading] = React.useState<boolean>(true);
@@ -93,15 +101,19 @@ export function useBuildUserManagement({
     const [rolesError, setRolesError] = React.useState<Error | undefined>();
     const [usersError, setUsersError] = React.useState<Error | undefined>();
 
-    const loading = rolesLoading || usersLoading;
+    const _usersLoading = usersLoading;
+    const _rolesLoading = rolesLoading;
+
+    const loading = _rolesLoading || _usersLoading;
 
     useEffect(() => {
         if (!dataSourceDelegate || !rolesPath) return;
         if (dataSourceDelegate.initialised !== undefined && !dataSourceDelegate.initialised) return;
-        if (dataSourceDelegate.authenticated !== undefined && !dataSourceDelegate.authenticated) {
-            setRolesLoading(false);
-            return;
-        }
+        if (authController?.initialLoading) return;
+        // if (authController.user === null) {
+        //     setRolesLoading(false);
+        //     return;
+        // }
 
         setRolesLoading(true);
         return dataSourceDelegate.listenCollection?.({
@@ -110,8 +122,9 @@ export function useBuildUserManagement({
                 setRolesError(undefined);
                 try {
                     const newRoles = entityToRoles(entities);
-                    if (!equal(newRoles, roles))
+                    if (!equal(newRoles, roles)) {
                         setRoles(newRoles);
+                    }
                 } catch (e) {
                     setRoles([]);
                     console.error("Error loading roles", e);
@@ -127,25 +140,31 @@ export function useBuildUserManagement({
             }
         });
 
-    }, [dataSourceDelegate?.initialised, dataSourceDelegate?.authenticated, rolesPath]);
+    }, [dataSourceDelegate?.initialised, authController?.initialLoading, authController?.user?.uid, rolesPath]);
 
     useEffect(() => {
         if (!dataSourceDelegate || !usersPath) return;
-        if (dataSourceDelegate.initialised !== undefined && !dataSourceDelegate.initialised) return;
-        if (dataSourceDelegate.authenticated !== undefined && !dataSourceDelegate.authenticated) {
-            setUsersLoading(false);
+        if (dataSourceDelegate.initialised !== undefined && !dataSourceDelegate.initialised) {
             return;
         }
+        if (authController?.initialLoading) {
+            return;
+        }
+        // if (authController.user === null) {
+        //     setUsersLoading(false);
+        //     return;
+        // }
 
         setUsersLoading(true);
         return dataSourceDelegate.listenCollection?.({
             path: usersPath,
             onUpdate(entities: Entity<any>[]): void {
+                console.debug("Updating users", entities);
                 setUsersError(undefined);
                 try {
                     const newUsers = entitiesToUsers(entities);
-                    if (!equal(newUsers, usersWithRoleIds))
-                        setUsersWithRoleIds(newUsers);
+                    // if (!equal(newUsers, usersWithRoleIds))
+                    setUsersWithRoleIds(newUsers);
                 } catch (e) {
                     setUsersWithRoleIds([]);
                     console.error("Error loading users", e);
@@ -154,14 +173,14 @@ export function useBuildUserManagement({
                 setUsersLoading(false);
             },
             onError(e: any): void {
-                setUsersWithRoleIds([]);
                 console.error("Error loading users", e);
+                setUsersWithRoleIds([]);
                 setUsersError(e);
                 setUsersLoading(false);
             }
         });
 
-    }, [dataSourceDelegate?.initialised, dataSourceDelegate?.authenticated, usersPath]);
+    }, [dataSourceDelegate?.initialised, authController?.initialLoading, authController?.user?.uid, usersPath]);
 
     const saveUser = useCallback(async (user: User): Promise<User> => {
         if (!dataSourceDelegate) throw Error("useBuildUserManagement Firebase not initialised");
@@ -238,39 +257,62 @@ export function useBuildUserManagement({
     const collectionPermissions: PermissionsBuilder = useCallback(({
                                                                        collection,
                                                                        user
-                                                                   }) => resolveUserRolePermissions({
-        collection,
-        user
-    }), []);
+                                                                   }) =>
+        resolveUserRolePermissions({
+            collection,
+            user
+        }), []);
 
     const defineRolesFor: ((user: User) => Role[] | undefined) = useCallback((user) => {
-        if (!users) throw Error("Users not loaded");
+        if (!usersWithRoleIds) throw Error("Users not loaded");
+        const users = usersWithRoleIds.map(u => ({
+            ...u,
+            roles: roles.filter(r => u.roles?.includes(r.id))
+        }) as User);
         const mgmtUser = users.find(u => u.email?.toLowerCase() === user?.email?.toLowerCase());
         return mgmtUser?.roles;
-    }, [users]);
+    }, [roles, usersWithRoleIds]);
+
+    console.debug({
+        loading,
+        users,
+        usersError
+    });
 
     const authenticator: Authenticator = useCallback(({ user }) => {
-        console.debug("Authenticating user", user);
+        console.debug("Authenticating user", { user, users });
 
+        console.log({
+            usersLoading,
+            rolesLoading
+        })
         if (loading) {
             console.warn("User management is still loading");
             return false;
         }
 
-        // This is an example of how you can link the access system to the user management plugin
         if (users.length === 0) {
+            console.warn("No users created yet");
             return true; // If there are no users created yet, we allow access to every user
         }
 
         const mgmtUser = users.find(u => u.email?.toLowerCase() === user?.email?.toLowerCase());
         if (mgmtUser) {
+            console.debug("User found in user management system", mgmtUser);
             return true;
         }
 
         throw Error("Could not find a user with the provided email in the user management system.");
-    }, [loading, users, usersError, rolesError]);
+    }, [loading, users]);
 
-    const isAdmin = roles.some(r => r.id === "admin");
+    const userRoles = authController.user ? defineRolesFor(authController.user) : undefined;
+    const isAdmin = (userRoles ?? []).some(r => r.id === "admin");
+
+    console.log("Setting roles", { user:authController.user, userRoles });
+    // useEffect(() => {
+    //     console.debug("Setting roles", { authController, userRoles });
+    //     authController.setUserRoles?.(userRoles ?? []);
+    // }, [userRoles?.map(r => r.id)]);
 
     return {
         loading,
@@ -289,7 +331,16 @@ export function useBuildUserManagement({
         includeCollectionConfigPermissions: Boolean(includeCollectionConfigPermissions),
         collectionPermissions,
         defineRolesFor,
-        authenticator
+        authenticator,
+        authController: {
+            ...authController,
+            initialLoading: authController.initialLoading || loading,
+            userRoles: userRoles,
+            user: authController.user ? {
+                ...authController.user,
+                roles: userRoles
+            } : null
+        }
     }
 }
 

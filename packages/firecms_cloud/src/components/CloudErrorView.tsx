@@ -8,8 +8,9 @@ export type CloudError = {
     code?: string,
     message: string,
     projectId?: string,
-    data?:{
-        missingPermissions?: string[]
+    data?: {
+        missingPermissions?: string[],
+        errorDetails?: object
     }
 };
 
@@ -59,10 +60,15 @@ export function CloudErrorView({
     } else if (code === "service-account-missing-permissions") {
         return <ServiceAccountMissingPermissions missingPermissions={error.data?.missingPermissions}/>;
     }
+
     return (<div className="flex flex-col space-y-2 py-4">
             <Typography className="text-red-300">
                 {message}
             </Typography>
+
+            {error.data && <pre className="text-xs text-gray-500 p-4">
+                {JSON.stringify(error.data, null, 2)}
+            </pre>}
 
             {onRetry && <Button
                 variant="outlined"

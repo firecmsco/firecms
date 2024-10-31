@@ -254,17 +254,18 @@ export function App() {
         firebaseApp
     });
 
-    const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate,
-    });
-
     // Controller for managing authentication
-    const authController: FirebaseAuthController = useFirebaseAuthController({
-        loading: userManagement.loading,
+    const baseAuthController: FirebaseAuthController = useFirebaseAuthController({
         firebaseApp,
         signInOptions,
-        defineRolesFor: userManagement.defineRolesFor
     });
+
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
+        authController: baseAuthController
+    });
+
+    const authController = userManagement.authController;
 
     const userManagementPlugin = useUserManagementPlugin({ userManagement });
 
@@ -291,15 +292,15 @@ export function App() {
     } = useValidateAuthenticator({
         disabled: userManagement.loading,
         authController,
-        authenticator: myAuthenticator,
-        // authenticator: userManagement.authenticator,
+        // authenticator: myAuthenticator,
+        authenticator: userManagement.authenticator,
         dataSourceDelegate: firestoreDelegate,
         storageSource
     });
 
     const navigationController = useBuildNavigationController({
         collections,
-        // collectionPermissions: userManagement.collectionPermissions,
+        collectionPermissions: userManagement.collectionPermissions,
         views,
         adminViews: userManagementAdminViews,
         authController,

@@ -1,0 +1,57 @@
+.svg-container {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 5px;
+}
+
+.bodyparts {
+  margin: 0 auto;
+  height: 100%;
+  /*padding: 15px 0;*/
+  background-color: transparent;
+  user-select: none;
+  cursor: default;
+}
+
+.bodyparts .body {
+  display: block;
+}
+
+.bodyparts .body path {
+  fill-opacity: 0;
+  stroke: #6f6f6f;
+  stroke-opacity: 0.4;
+  cursor: pointer;
+  transition: 0.3s ease all;
+}
+
+.bodyparts .body path.body__clickable {
+  stroke: #03238d;
+  stroke-opacity: 0.6;
+  stroke-width: 2px;
+}
+
+.bodyparts .body path.body__clickable.active {
+  fill: #f00;
+  fill-opacity: 0.5;
+}
+
+.bodyparts .body path.body__clickable.blue-dark {
+  fill: #03238d;
+  fill-opacity: 0.9;
+}
+
+.bodyparts .body path.body__clickable.blue {
+  fill: #03238d;
+  fill-opacity: 0.55;
+}
+
+.bodyparts .body path.body__clickable.blue-light {
+  fill: #03238d;
+  fill-opacity: 0.35;
+}

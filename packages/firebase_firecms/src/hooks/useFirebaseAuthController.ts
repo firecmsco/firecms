@@ -23,7 +23,7 @@ import {
     User as FirebaseUser
 } from "@firebase/auth";
 import { FirebaseApp } from "@firebase/app";
-import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider } from "../types";
+import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider, FirebaseUserWrapper } from "../types";
 import { Role, User } from "@firecms/core";
 
 export interface FirebaseAuthControllerProps {
@@ -38,13 +38,13 @@ export interface FirebaseAuthControllerProps {
  * Use this hook to build an {@link AuthController} based on Firebase Auth
  * @group Firebase
  */
-export const useFirebaseAuthController = <ExtraData>({
-                                                         loading,
-                                                         firebaseApp,
-                                                         signInOptions,
-                                                         onSignOut: onSignOutProp,
-                                                         defineRolesFor
-                                                     }: FirebaseAuthControllerProps): FirebaseAuthController<ExtraData> => {
+export const useFirebaseAuthController = <UserType extends FirebaseUserWrapper = FirebaseUserWrapper, ExtraData = any>({
+                                                                                                                           loading,
+                                                                                                                           firebaseApp,
+                                                                                                                           signInOptions,
+                                                                                                                           onSignOut: onSignOutProp,
+                                                                                                                           defineRolesFor
+                                                                                                                       }: FirebaseAuthControllerProps): FirebaseAuthController<UserType, ExtraData> => {
 
     const [loggedUser, setLoggedUser] = useState<FirebaseUser | null | undefined>(undefined); // logged user, anonymous or logged out
     const [authError, setAuthError] = useState<any>();
@@ -53,7 +53,7 @@ export const useFirebaseAuthController = <ExtraData>({
     const [authLoading, setAuthLoading] = useState(true);
     const [loginSkipped, setLoginSkipped] = useState<boolean>(false);
     const [confirmationResult, setConfirmationResult] = useState<undefined | ConfirmationResult>();
-    const [roles, setRoles] = useState<Role[] | undefined>();
+    const [userRoles, setUserRoles] = useState<Role[] | undefined>();
     const [extra, setExtra] = useState<any>();
 
     const authRef = useRef(firebaseApp ? getAuth(firebaseApp) : null);
@@ -61,8 +61,7 @@ export const useFirebaseAuthController = <ExtraData>({
     const updateUser = useCallback(async (user: FirebaseUser | null, initialize?: boolean) => {
         if (loading) return;
         if (defineRolesFor && user) {
-            const userRoles = await defineRolesFor(user);
-            setRoles(userRoles);
+            setUserRoles(await defineRolesFor(user));
         }
         setLoggedUser(user);
         setAuthLoading(false);
@@ -71,14 +70,14 @@ export const useFirebaseAuthController = <ExtraData>({
         }
     }, [loading]);
 
-    const updateRoles = useCallback(async (user: FirebaseUser | null) => {
+    const updateRoles = useCallback(async (user: User | null) => {
         if (defineRolesFor && user) {
             const userRoles = await defineRolesFor(user);
-            if (!equal(userRoles, roles)) {
-                setRoles(userRoles);
+            if (!equal(userRoles, userRoles)) {
+                setUserRoles(userRoles);
             }
         }
-    }, [defineRolesFor, roles]);
+    }, [defineRolesFor, userRoles]);
 
     useEffect(() => {
         if (updateRoles && loggedUser) {
@@ -122,7 +121,7 @@ export const useFirebaseAuthController = <ExtraData>({
                 return option as FirebaseSignInOption;
             return undefined;
         }) as FirebaseSignInOption | undefined;
-    }, [signInOptions]);
+    }, []);
 
     const googleLogin = useCallback(() => {
         const provider = new GoogleAuthProvider();
@@ -144,7 +143,10 @@ export const useFirebaseAuthController = <ExtraData>({
     const getAuthToken = useCallback(async (): Promise<string> => {
         if (!loggedUser)
             throw Error("No client user is logged in");
-        return loggedUser.getIdToken();
+        if (!loggedUser.getIdToken) {
+            throw Error("No getIdToken method available");
+        }
+        return loggedUser.getIdToken?.();
     }, [loggedUser]);
 
     const emailPasswordLogin = useCallback((email: string, password: string) => {
@@ -188,9 +190,9 @@ export const useFirebaseAuthController = <ExtraData>({
         await signOut(auth)
             .then(_ => {
                 setLoggedUser(null);
-                setRoles(undefined);
+                setUserRoles(undefined);
                 setAuthProviderError(null);
-                onSignOutProp && onSignOutProp();
+                onSignOutProp?.();
             });
         setLoginSkipped(false);
     }, [onSignOutProp]);
@@ -283,22 +285,22 @@ export const useFirebaseAuthController = <ExtraData>({
     const skipLogin = useCallback(() => {
         setLoginSkipped(true);
         setLoggedUser(null);
-        setRoles(undefined);
+        setUserRoles(undefined);
     }, []);
 
-    const firebaseUserWrapper = loggedUser
+    const firebaseUserWrapper: FirebaseUserWrapper | null = loggedUser
         ? {
             ...loggedUser,
-            roles,
+            roles: userRoles,
             firebaseUser: loggedUser
         }
         : null;
 
     return {
-        user: firebaseUserWrapper,
-        roles,
+        user: firebaseUserWrapper as UserType,
         setUser: updateUser,
-        setRoles,
+        userRoles,
+        setUserRoles,
         authProviderError,
         authLoading,
         initialLoading: loading || initialLoading,

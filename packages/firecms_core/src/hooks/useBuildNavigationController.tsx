@@ -188,6 +188,7 @@ export function useBuildNavigationController<EC extends EntityCollection, UserTy
         if (authController.initialLoading)
             return;
 
+        console.log("refresh", authController)
         console.debug("Refreshing navigation");
 
         try {
@@ -428,7 +429,7 @@ function filterOutNotAllowedCollections(resolvedCollections: EntityCollection[],
     return resolvedCollections
         .filter((c) => {
             if (!c.permissions) return true;
-            const resolvedPermissions = resolvePermissions(c, authController, c.path, null)
+            const resolvedPermissions = resolvePermissions(c, authController, c.path, null);
             return resolvedPermissions?.read !== false;
         })
         .map((c) => {
@@ -461,9 +462,9 @@ async function resolveCollections(collections: undefined | EntityCollection[] | 
     }
 
     resolvedCollections = applyPermissionsFunctionIfEmpty(resolvedCollections, collectionPermissions);
-
+    console.log("resolvedCollections 2", resolvedCollections, collectionPermissions);
     resolvedCollections = filterOutNotAllowedCollections(resolvedCollections, authController);
-
+    console.log("resolvedCollections 3", resolvedCollections, authController);
     return resolvedCollections;
 }
 

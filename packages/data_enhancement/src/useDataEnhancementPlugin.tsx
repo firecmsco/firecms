@@ -60,7 +60,7 @@ export function useDataEnhancementPlugin(props?: DataEnhancementPluginProps): Fi
             collection: params.collection,
             user: authController.user
         })
-    }, [getConfigForPath, authController.user]);
+    }, [getConfigForPath, authController.user?.uid]);
 
     return {
         key: "data_enhancement",

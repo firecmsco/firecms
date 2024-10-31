@@ -1,5 +1,3 @@
-import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "../types";
-import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
 import { buildExternalSearchController } from "./text_search_controller";
 
 /**
