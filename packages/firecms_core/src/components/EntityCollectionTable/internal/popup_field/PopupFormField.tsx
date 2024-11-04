@@ -23,6 +23,7 @@ import { Button, ClearIcon, DialogActions, IconButton, Typography } from "@firec
 import { PropertyFieldBinding } from "../../../../form";
 import { useCustomizationController, useDataSource, useFireCMSContext } from "../../../../hooks";
 import { OnCellValueChangeParams } from "../../../common";
+import { yupToFormErrors } from "../../../../core/EntityEditView";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     customFieldValidator?: CustomFieldValidator;
@@ -240,11 +241,12 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             return validationSchema?.validate(values, { abortEarly: false })
                 .then(() => ({}))
                 .catch((e) => {
-                    const errors: Record<string, string> = {};
-                    e.inner.forEach((error: any) => {
-                        errors[error.path] = error.message;
-                    });
-                    return errors;
+                    // const errors: Record<string, string> = {};
+                    // e.inner.forEach((error: any) => {
+                    //     errors[error.path] = error.message;
+                    // });
+                    // return errors;
+                    return yupToFormErrors(e);
                 });
         },
         validateOnInitialRender: true,

@@ -431,10 +431,10 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                     return {};
                 })
                 .catch((e: any) => {
-                    const errors: Record<string, string> = {};
-                    e.inner.forEach((error: any) => {
-                        errors[error.path] = error.message;
-                    });
+                    // const errors: Record<string, string> = {};
+                    // e.inner.forEach((error: any) => {
+                    //     errors[error.path] = error.message;
+                    // });
                     return yupToFormErrors(e);
                 });
         }
