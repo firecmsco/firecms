@@ -6,6 +6,7 @@ import { getHashValue } from "../util";
 import {
     AddIcon,
     Button,
+    cls,
     ContentCopyIcon,
     HandleIcon,
     IconButton,
@@ -173,7 +174,7 @@ export function ArrayContainer<T>({
             >
                 {(droppableProvided, droppableSnapshot) => (
                     <div
-                        className={className}
+                        className={cls("space-y-1", className)}
                         {...droppableProvided.droppableProps}
                         ref={droppableProvided.innerRef}>
                         {hasValue && internalIds.map((internalId: number, index: number) => {

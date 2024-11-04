@@ -77,19 +77,21 @@ export const DefaultAppBar = function DefaultAppBar({
 
     const user = userProp ?? authController.user;
 
-    let avatarComponent: JSX.Element;
-    if (user && user.photoURL) {
-        avatarComponent = <Avatar
-            src={user.photoURL}/>;
+    let avatarComponent: JSX.Element | null;
+
+    if (user) {
+        const initial = user?.displayName
+            ? user.displayName[0].toUpperCase()
+            : (user?.email ? user.email[0].toUpperCase() : "A");
+        avatarComponent = <Avatar src={user.photoURL ?? undefined}>
+            {initial}
+        </Avatar>;
     } else if (user === undefined || authController.initialLoading) {
         avatarComponent = <div className={"p-1 flex justify-center"}>
             <Skeleton className={"w-10 h-10 rounded-full"}/>
         </div>;
     } else {
-        const initial = user?.displayName
-            ? user.displayName[0].toUpperCase()
-            : (user?.email ? user.email[0].toUpperCase() : "A");
-        avatarComponent = <Avatar>{initial}</Avatar>;
+        avatarComponent = null;
     }
 
     return (

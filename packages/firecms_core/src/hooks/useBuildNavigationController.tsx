@@ -462,9 +462,7 @@ async function resolveCollections(collections: undefined | EntityCollection[] | 
 
     resolvedCollections = applyPermissionsFunctionIfEmpty(resolvedCollections, collectionPermissions);
 
-    console.log("Resolved collections 2", resolvedCollections, collectionPermissions, authController);
     resolvedCollections = filterOutNotAllowedCollections(resolvedCollections, authController);
-    console.log("Resolved collections 3", resolvedCollections);
 
     return resolvedCollections;
 }

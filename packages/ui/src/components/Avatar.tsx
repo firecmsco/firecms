@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { cls } from "../util";
 
 export interface AvatarProps {
@@ -19,36 +19,49 @@ const AvatarInner: React.ForwardRefRenderFunction<HTMLButtonElement, AvatarProps
         style,
         outerClassName,
         ...props
-    }, ref) => {
+    },
+    ref
+) => {
+    const [isImageError, setIsImageError] = useState(false);
+
+    const handleImageError = () => {
+        setIsImageError(true);
+    };
 
     return (
         <button
             ref={ref}
             style={style}
             {...props}
-            className={cls("rounded-full flex items-center justify-center overflow-hidden",
+            className={cls(
+                "rounded-full flex items-center justify-center overflow-hidden",
                 "p-1 hover:bg-slate-200 hover:dark:bg-slate-700 w-12 h-12 min-w-12 min-h-12",
                 outerClassName
-            )}>
-            {src
-                ? (
-                    <img className={cls(
+            )}
+        >
+            {src && !isImageError ? (
+                <img
+                    className={cls(
                         "bg-slate-100 dark:bg-slate-800",
                         "w-full h-full object-cover rounded-full",
-                        className)}
-                         src={src}
-                         alt={alt}/>
-                )
-                : (
-                    <span
-                        className={cls(
-                            "bg-slate-100 dark:bg-slate-800",
-                            "flex items-center justify-center",
-                            "w-full h-full py-1.5 text-lg font-medium text-slate-900 dark:text-white rounded-full",
-                            className)}>
-                        {children}
-                    </span>
-                )}
+                        className
+                    )}
+                    src={src}
+                    alt={alt}
+                    onError={handleImageError}
+                />
+            ) : (
+                <span
+                    className={cls(
+                        "bg-slate-100 dark:bg-slate-800",
+                        "flex items-center justify-center",
+                        "w-full h-full py-1.5 text-lg font-medium text-slate-900 dark:text-white rounded-full",
+                        className
+                    )}
+                >
+          {children}
+        </span>
+            )}
         </button>
     );
 };
