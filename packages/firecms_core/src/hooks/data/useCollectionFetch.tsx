@@ -60,7 +60,7 @@ export interface CollectionFetchResult<M extends Record<string, any>> {
  * @param searchString
  * @group Hooks and utilities
  */
-export function useCollectionFetch<M extends Record<string, any>, UserType extends User>(
+export function useCollectionFetch<M extends Record<string, any>, USER extends User>(
     {
         path: inputPath,
         collection,
@@ -78,7 +78,7 @@ export function useCollectionFetch<M extends Record<string, any>, UserType exten
     const sortByProperty = sortBy ? sortBy[0] : undefined;
     const currentSort = sortBy ? sortBy[1] : undefined;
 
-    const context: FireCMSContext<UserType> = useFireCMSContext();
+    const context: FireCMSContext<USER> = useFireCMSContext();
 
     const [data, setData] = useState<Entity<M>[]>([]);
 

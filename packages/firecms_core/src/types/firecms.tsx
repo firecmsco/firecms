@@ -47,7 +47,7 @@ export type CMSViewsBuilder = (params: {
 /**
  * @group Models
  */
-export type FireCMSProps<UserType extends User, EC extends EntityCollection> = {
+export type FireCMSProps<USER extends User, EC extends EntityCollection> = {
 
     /**
      * Use this function to return the components you want to render under
@@ -119,7 +119,7 @@ export type FireCMSProps<UserType extends User, EC extends EntityCollection> = {
     /**
      * Delegate for implementing your auth operations.
      */
-    authController: AuthController<UserType>;
+    authController: AuthController<USER>;
 
     /**
      * Use this controller to access the configuration that is stored locally,

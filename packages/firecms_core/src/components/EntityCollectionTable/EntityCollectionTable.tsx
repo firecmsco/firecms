@@ -41,7 +41,7 @@ import { getRowHeight } from "../common/table_height";
  * @see VirtualTable
  * @group Components
  */
-export const EntityCollectionTable = function EntityCollectionTable<M extends Record<string, any>, UserType extends User>
+export const EntityCollectionTable = function EntityCollectionTable<M extends Record<string, any>, USER extends User>
 ({
      className,
      style,
@@ -84,7 +84,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
     const largeLayout = useLargeLayout();
     const selectedEntities = (selectionController?.selectedEntities?.length > 0 ? selectionController?.selectedEntities : highlightedEntities)?.filter(Boolean);
 
-    const context: FireCMSContext<UserType> = useFireCMSContext();
+    const context: FireCMSContext<USER> = useFireCMSContext();
 
     const [size, setSize] = React.useState<CollectionSize>(defaultSize ?? "m");
 
@@ -98,12 +98,12 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
 
     const onTextSearch = useCallback((newSearchString?: string) => tableController.setSearchString?.(newSearchString), []);
 
-    const additionalFieldsMap: Record<string, AdditionalFieldDelegate<M, UserType>> = useMemo(() => {
+    const additionalFieldsMap: Record<string, AdditionalFieldDelegate<M, USER>> = useMemo(() => {
         return (additionalFields
             ? additionalFields
                 .map((aC) => ({ [aC.key]: aC as AdditionalFieldDelegate<M, any> }))
                 .reduce((a, b) => ({ ...a, ...b }), {})
-            : {}) as Record<string, AdditionalFieldDelegate<M, UserType>>;
+            : {}) as Record<string, AdditionalFieldDelegate<M, USER>>;
     }, [additionalFields]);
 
     const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator;

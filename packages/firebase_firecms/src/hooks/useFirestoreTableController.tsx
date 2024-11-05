@@ -58,7 +58,7 @@ export type FirestoreTableControllerProps<M extends Record<string, any> = any> =
  * @param forceFilterFromProps
  * @param firebaseApp
  */
-export function useFirestoreTableController<M extends Record<string, any> = any, UserType extends User = User>(
+export function useFirestoreTableController<M extends Record<string, any> = any, USER extends User = User>(
     {
         fullPath,
         collection,
@@ -99,7 +99,7 @@ export function useFirestoreTableController<M extends Record<string, any> = any,
     const sortByProperty = sortBy ? sortBy[0] : undefined;
     const currentSort = sortBy ? sortBy[1] : undefined;
 
-    const context: FireCMSContext<UserType> = useFireCMSContext();
+    const context: FireCMSContext<USER> = useFireCMSContext();
 
     const [rawData, setRawData] = useState<Entity<M>[]>([]);
 

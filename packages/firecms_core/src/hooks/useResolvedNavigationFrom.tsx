@@ -55,12 +55,12 @@ interface ResolvedNavigationEntityCustom<M extends Record<string, any>> {
  * @param context
  * @group Hooks and utilities
  */
-export function resolveNavigationFrom<M extends Record<string, any>, UserType extends User>({
+export function resolveNavigationFrom<M extends Record<string, any>, USER extends User>({
                                                                                                 path,
                                                                                                 context
                                                                                             }: {
     path: string,
-    context: FireCMSContext<UserType>
+    context: FireCMSContext<USER>
 }): Promise<ResolvedNavigationEntry<M>[]> {
 
     const dataSource = context.dataSource;
@@ -126,12 +126,12 @@ export interface NavigationFrom<M extends Record<string, any>> {
  * in any React component that lives under `FireCMS`
  * @group Hooks and utilities
  */
-export function useResolvedNavigationFrom<M extends Record<string, any>, UserType extends User>(
+export function useResolvedNavigationFrom<M extends Record<string, any>, USER extends User>(
     {
         path
     }: NavigationFromProps): NavigationFrom<M> {
 
-    const context: FireCMSContext<UserType> = useFireCMSContext();
+    const context: FireCMSContext<USER> = useFireCMSContext();
 
     const [data, setData] = useState<ResolvedNavigationEntry<M>[] | undefined>();
     const [dataLoading, setDataLoading] = useState<boolean>(false);
@@ -142,7 +142,7 @@ export function useResolvedNavigationFrom<M extends Record<string, any>, UserTyp
         if (navigation) {
             setDataLoading(true);
             setDataLoadingError(undefined);
-            resolveNavigationFrom<M, UserType>({ path, context })
+            resolveNavigationFrom<M, USER>({ path, context })
                 .then((res) => {
                     setData(res);
                 })

@@ -1,6 +1,6 @@
 import { EntityCollection } from "@firecms/core";
 
-export type CollectionEditorPermissionsBuilder<UserType = any, EC extends EntityCollection = EntityCollection> = (params: { user: UserType | null, collection?: EC }) => CollectionEditorPermissions;
+export type CollectionEditorPermissionsBuilder<USER = any, EC extends EntityCollection = EntityCollection> = (params: { user: USER | null, collection?: EC }) => CollectionEditorPermissions;
 
 export type CollectionEditorPermissions = {
     /**

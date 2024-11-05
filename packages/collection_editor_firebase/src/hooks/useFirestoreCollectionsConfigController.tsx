@@ -28,7 +28,7 @@ import {
 /**
  * @group Firebase
  */
-export interface CollectionConfigControllerProps<EC extends PersistedCollection, UserType extends User = User> {
+export interface CollectionConfigControllerProps<EC extends PersistedCollection, USER extends User = User> {
 
     firebaseApp?: FirebaseApp;
 
@@ -41,7 +41,7 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection,
     /**
      * Define what actions can be performed on data.
      */
-    permissions?: PermissionsBuilder<EC, UserType>;
+    permissions?: PermissionsBuilder<EC, USER>;
 
     /**
      * If you are defining custom properties, you can pass them here.
@@ -57,12 +57,12 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection,
  * @param collections
  * @param configPath
  */
-export function useFirestoreCollectionsConfigController<EC extends PersistedCollection, UserType extends User = User>({
+export function useFirestoreCollectionsConfigController<EC extends PersistedCollection, USER extends User = User>({
                                                                                                                           firebaseApp,
                                                                                                                           configPath = "__FIRECMS/config/collections",
                                                                                                                           permissions,
                                                                                                                           propertyConfigs
-                                                                                                                      }: CollectionConfigControllerProps<EC, UserType>): CollectionsConfigController {
+                                                                                                                      }: CollectionConfigControllerProps<EC, USER>): CollectionsConfigController {
 
     const propertyConfigsMap = useMemo(() => {
         const map: Record<string, any> = {};

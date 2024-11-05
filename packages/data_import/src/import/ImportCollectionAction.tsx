@@ -38,11 +38,11 @@ import { ImportConfig } from "../types";
 
 type ImportState = "initial" | "mapping" | "preview" | "import_data_saving";
 
-export function ImportCollectionAction<M extends Record<string, any>, UserType extends User>({
+export function ImportCollectionAction<M extends Record<string, any>, USER extends User>({
                                                                                                  collection,
                                                                                                  path,
                                                                                                  onAnalyticsEvent
-                                                                                             }: CollectionActionsProps<M, UserType> & {
+                                                                                             }: CollectionActionsProps<M, USER> & {
                                                                                                  onAnalyticsEvent?: (event: string, params?: any) => void;
                                                                                              }
 ) {

@@ -100,7 +100,7 @@ function ProSample() {
     });
 
     // Controller for managing authentication
-    const baseAuthController: FirebaseAuthController = useFirebaseAuthController({
+    const firebaseAuthController: FirebaseAuthController = useFirebaseAuthController({
         firebaseApp,
         signInOptions
     });
@@ -108,10 +108,10 @@ function ProSample() {
     // controller in charge of user management
     const userManagement = useBuildUserManagement({
         dataSourceDelegate: firestoreDelegate,
-        authController: baseAuthController
+        authController: firebaseAuthController
     });
 
-    const authController = userManagement.authController;
+    const authController = userManagement;
 
     const {
         authLoading,

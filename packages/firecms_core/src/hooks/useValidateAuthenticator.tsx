@@ -11,7 +11,7 @@ import { AuthController, Authenticator, DataSourceDelegate, StorageSource, User 
  * @param storageSource
  * @param dataSourceDelegate
  */
-export function useValidateAuthenticator<UserType extends User = User, Controller extends AuthController<UserType> = AuthController<UserType>>
+export function useValidateAuthenticator<USER extends User = any>
 ({
      disabled,
      authController,
@@ -21,8 +21,8 @@ export function useValidateAuthenticator<UserType extends User = User, Controlle
  }:
      {
          disabled?: boolean,
-         authController: Controller,
-         authenticator?: boolean | Authenticator<UserType, Controller>,
+         authController: AuthController<USER>,
+         authenticator?: boolean | Authenticator<USER>,
          dataSourceDelegate: DataSourceDelegate;
          storageSource: StorageSource;
      }): {

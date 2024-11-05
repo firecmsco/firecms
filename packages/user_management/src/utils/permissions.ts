@@ -9,13 +9,13 @@ const DEFAULT_PERMISSIONS = {
     delete: false
 };
 
-export function resolveUserRolePermissions<UserType extends User>
+export function resolveUserRolePermissions<USER extends User>
 ({
      collection,
      user
  }: {
     collection: EntityCollection<any>,
-    user: UserType | null
+    user: USER | null
 }): Permissions {
 
     const roles = user?.roles;

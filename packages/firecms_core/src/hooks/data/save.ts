@@ -48,7 +48,7 @@ export type SaveEntityWithCallbacksProps<M extends Record<string, any>> =
  * @see useDataSource
  * @group Hooks and utilities
  */
-export async function saveEntityWithCallbacks<M extends Record<string, any>, UserType extends User>({
+export async function saveEntityWithCallbacks<M extends Record<string, any>, USER extends User>({
                                                                                                         collection,
                                                                                                         path,
                                                                                                         entityId,
@@ -62,9 +62,9 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, Use
                                                                                                         onPreSaveHookError,
                                                                                                         onSaveSuccessHookError
                                                                                                     }: SaveEntityWithCallbacksProps<M> & {
-                                                                                                        collection: EntityCollection<M, UserType>,
+                                                                                                        collection: EntityCollection<M, USER>,
                                                                                                         dataSource: DataSource,
-                                                                                                        context: FireCMSContext<UserType>,
+                                                                                                        context: FireCMSContext<USER>,
                                                                                                     }
 ): Promise<void> {
 

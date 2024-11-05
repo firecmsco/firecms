@@ -15,7 +15,7 @@ import { useCollectionEditorController } from "./useCollectionEditorController";
 import { EditorCollectionActionStart } from "./ui/EditorCollectionActionStart";
 import { NewCollectionCard } from "./ui/NewCollectionCard";
 
-export interface CollectionConfigControllerProps<EC extends PersistedCollection = PersistedCollection, UserType extends User = User> {
+export interface CollectionConfigControllerProps<EC extends PersistedCollection = PersistedCollection, USER extends User = User> {
 
     /**
      * Firebase app where the configuration is saved.
@@ -25,7 +25,7 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
     /**
      * Define what actions can be performed on the configuration.
      */
-    configPermissions?: CollectionEditorPermissionsBuilder<UserType, EC>;
+    configPermissions?: CollectionEditorPermissionsBuilder<USER, EC>;
 
     /**
      * The words you define here will not be allowed to be used as group
@@ -47,7 +47,7 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
 
     getData?: (path: string, parentPaths: string[]) => Promise<object[]>;
 
-    getUser?: (uid: string) => UserType | null;
+    getUser?: (uid: string) => USER | null;
 
     onAnalyticsEvent?: (event: string, params?: object) => void;
 
@@ -71,7 +71,7 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
  * @param getUser
  * @param collectionInference
  */
-export function useCollectionEditorPlugin<EC extends PersistedCollection = PersistedCollection, UserType extends User = User>
+export function useCollectionEditorPlugin<EC extends PersistedCollection = PersistedCollection, USER extends User = User>
 ({
      collectionConfigController,
      configPermissions,
@@ -83,7 +83,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
      getData,
      onAnalyticsEvent,
      components
- }: CollectionConfigControllerProps<EC, UserType>): FireCMSPlugin<any, any, PersistedCollection> {
+ }: CollectionConfigControllerProps<EC, USER>): FireCMSPlugin<any, any, PersistedCollection> {
 
     return {
         key: "collection_editor",

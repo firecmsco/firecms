@@ -30,10 +30,10 @@ import { getParentReferencesFromPath } from "../util/parent_references_from_path
 const DEFAULT_BASE_PATH = "/";
 const DEFAULT_COLLECTION_PATH = "/c";
 
-export type BuildNavigationContextProps<EC extends EntityCollection, UserType extends User> = {
+export type BuildNavigationContextProps<EC extends EntityCollection, USER extends User> = {
     basePath?: string,
     baseCollectionPath?: string,
-    authController: AuthController<UserType>;
+    authController: AuthController<USER>;
     collections?: EC[] | EntityCollectionsBuilder<EC>;
     collectionPermissions?: PermissionsBuilder;
     views?: CMSView[] | CMSViewsBuilder;
@@ -51,7 +51,7 @@ export type BuildNavigationContextProps<EC extends EntityCollection, UserType ex
     injectCollections?: (collections: EntityCollection[]) => EntityCollection[];
 };
 
-export function useBuildNavigationController<EC extends EntityCollection, UserType extends User>(props: BuildNavigationContextProps<EC, UserType>): NavigationController {
+export function useBuildNavigationController<EC extends EntityCollection, USER extends User>(props: BuildNavigationContextProps<EC, USER>): NavigationController {
     const {
         basePath = DEFAULT_BASE_PATH,
         baseCollectionPath = DEFAULT_COLLECTION_PATH,

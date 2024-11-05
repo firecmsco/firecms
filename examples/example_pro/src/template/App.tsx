@@ -31,12 +31,16 @@ import {
 import { firebaseConfig } from "./firebase_config";
 import { productsCollection } from "./collections/products";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
-import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
+import {
+    useBuildUserManagement,
+    userManagementAdminViews,
+    useUserManagementPlugin
+} from "@firecms/user_management";
+import { useImportPlugin } from "@firecms/data_import";
+import { useExportPlugin } from "@firecms/data_export";
 import { ExampleCMSView } from "./views/ExampleCMSView";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
-import { useImportPlugin } from "@firecms/data_import";
-import { useExportPlugin } from "@firecms/data_export";
 
 export function App() {
 
@@ -108,23 +112,22 @@ export function App() {
         firebaseApp
     });
 
+
     /**
      * Controller for managing authentication
      */
-    const baseAuthController: FirebaseAuthController = useFirebaseAuthController({
+    const firebaseAuthController: FirebaseAuthController = useFirebaseAuthController({
         firebaseApp,
-        signInOptions
+        signInOptions,
     });
 
     /**
      * Controller in charge of user management
      */
-    const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate,
-        authController: baseAuthController
+    const userManagementController = useBuildUserManagement({
+        authController: firebaseAuthController,
+        dataSourceDelegate: firestoreDelegate
     });
-
-    const authController = userManagement.authController;
 
     /**
      * Controller for saving some user preferences locally.
@@ -139,19 +142,19 @@ export function App() {
         canAccessMainView,
         notAllowedError
     } = useValidateAuthenticator({
-        authController,
-        disabled: userManagement.loading,
-        authenticator: userManagement.authenticator, // you can define your own authenticator here
+        authController: userManagementController,
+        disabled: userManagementController.loading,
+        authenticator: userManagementController.authenticator, // you can define your own authenticator here
         dataSourceDelegate: firestoreDelegate,
         storageSource
     });
 
     const navigationController = useBuildNavigationController({
         collections: collectionsBuilder,
-        collectionPermissions: userManagement.collectionPermissions,
+        collectionPermissions: userManagementController.collectionPermissions,
         views,
         adminViews: userManagementAdminViews,
-        authController,
+        authController: userManagementController,
         dataSourceDelegate: firestoreDelegate
     });
 
@@ -169,7 +172,7 @@ export function App() {
     /**
      * User management plugin
      */
-    const userManagementPlugin = useUserManagementPlugin({ userManagement });
+    const userManagementPlugin = useUserManagementPlugin({ userManagement: userManagementController });
 
     /**
      * Allow import and export data plugin
@@ -189,18 +192,25 @@ export function App() {
         return <>{configError}</>;
     }
 
+
     return (
         <SnackbarProvider>
             <ModeControllerProvider value={modeController}>
 
                 <FireCMS
-                    apiKey={import.meta.env.VITE_FIRECMS_API_KEY as string}
+                    apiKey={import.meta.env.VITE_FIRECMS_API_KEY}
                     navigationController={navigationController}
-                    authController={authController}
+                    authController={userManagementController}
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
-                    plugins={[dataEnhancementPlugin, importPlugin, exportPlugin, userManagementPlugin, collectionEditorPlugin]}
+                    plugins={[
+                        dataEnhancementPlugin,
+                        importPlugin,
+                        exportPlugin,
+                        userManagementPlugin,
+                        collectionEditorPlugin
+                    ]}
                 >
                     {({
                           context,
@@ -217,7 +227,7 @@ export function App() {
                                         allowSkipLogin={false}
                                         signInOptions={signInOptions}
                                         firebaseApp={firebaseApp}
-                                        authController={authController}
+                                        authController={userManagementController}
                                         notAllowedError={notAllowedError}/>
                                 );
                             } else {

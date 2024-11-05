@@ -21,9 +21,9 @@ import React, { useEffect } from "react";
  * @see FireCMSContext
  * @group Hooks and utilities
  */
-export const useFireCMSContext = <UserType extends User = User, AuthControllerType extends AuthController<UserType> = AuthController<UserType>>(): FireCMSContext<UserType, AuthControllerType> => {
+export const useFireCMSContext = <USER extends User = User, AuthControllerType extends AuthController<USER> = AuthController<USER>>(): FireCMSContext<USER, AuthControllerType> => {
 
-    const authController = useAuthController<UserType, AuthControllerType>();
+    const authController = useAuthController<USER, AuthControllerType>();
     const sideDialogsController = useSideDialogsController();
     const sideEntityController = useSideEntityController();
     const navigation = useNavigationController();
@@ -35,7 +35,7 @@ export const useFireCMSContext = <UserType extends User = User, AuthControllerTy
     const customizationController = useCustomizationController();
     const analyticsController = useAnalyticsController();
 
-    const fireCMSContextRef = React.useRef<FireCMSContext<UserType, AuthControllerType>>({
+    const fireCMSContextRef = React.useRef<FireCMSContext<USER, AuthControllerType>>({
         authController,
         sideDialogsController,
         sideEntityController,
@@ -68,9 +68,9 @@ export const useFireCMSContext = <UserType extends User = User, AuthControllerTy
     return fireCMSContextRef.current;
 }
 
-// export const useFireCMSContext = <UserType extends User = User, AuthControllerType extends AuthController<UserType> = AuthController<UserType>>(): FireCMSContext<UserType, AuthControllerType> => {
+// export const useFireCMSContext = <USER extends User = User, AuthControllerType extends AuthController<USER> = AuthController<USER>>(): FireCMSContext<USER, AuthControllerType> => {
 //
-//     const authController = useAuthController<UserType, AuthControllerType>();
+//     const authController = useAuthController<USER, AuthControllerType>();
 //     const sideDialogsController = useSideDialogsController();
 //     const sideEntityController = useSideEntityController();
 //     const navigation = useNavigationController();

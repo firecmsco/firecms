@@ -32,14 +32,14 @@ import { downloadEntitiesExport } from "./export";
 
 const DOCS_LIMIT = 500;
 
-export function ExportCollectionAction<M extends Record<string, any>, UserType extends User>({
+export function ExportCollectionAction<M extends Record<string, any>, USER extends User>({
                                                                                                  collection: inputCollection,
                                                                                                  path: inputPath,
                                                                                                  collectionEntitiesCount,
                                                                                                  onAnalyticsEvent,
                                                                                                  exportAllowed,
                                                                                                  notAllowedView
-                                                                                             }: CollectionActionsProps<M, UserType, EntityCollection<M, any>> & {
+                                                                                             }: CollectionActionsProps<M, USER, EntityCollection<M, any>> & {
     exportAllowed?: (props: { collectionEntitiesCount: number, path: string, collection: EntityCollection }) => boolean;
     notAllowedView?: React.ReactNode;
     onAnalyticsEvent?: (event: string, params?: any) => void;
@@ -56,7 +56,7 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
     const [exportType, setExportType] = React.useState<"csv" | "json">("csv");
     const [dateExportType, setDateExportType] = React.useState<"timestamp" | "string">("string");
 
-    const context = useFireCMSContext<UserType>();
+    const context = useFireCMSContext<USER>();
     const dataSource = useDataSource();
     const navigationController = useNavigationController();
 

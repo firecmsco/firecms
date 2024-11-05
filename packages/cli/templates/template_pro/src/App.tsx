@@ -112,21 +112,21 @@ export function App() {
         firebaseApp
     });
 
-    /**
-     * Controller in charge of user management
-     */
-    const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate
-    });
 
     /**
      * Controller for managing authentication
      */
-    const authController: FirebaseAuthController = useFirebaseAuthController({
+    const firebaseAuthController: FirebaseAuthController = useFirebaseAuthController({
         firebaseApp,
         signInOptions,
-        loading: userManagement.loading,
-        defineRolesFor: userManagement.defineRolesFor
+    });
+
+    /**
+     * Controller in charge of user management
+     */
+    const userManagementController = useBuildUserManagement({
+        authController: firebaseAuthController,
+        dataSourceDelegate: firestoreDelegate
     });
 
     /**
@@ -142,19 +142,19 @@ export function App() {
         canAccessMainView,
         notAllowedError
     } = useValidateAuthenticator({
-        authController,
-        disabled: userManagement.loading,
-        authenticator: userManagement.authenticator, // you can define your own authenticator here
+        authController: userManagementController,
+        disabled: userManagementController.loading,
+        authenticator: userManagementController.authenticator, // you can define your own authenticator here
         dataSourceDelegate: firestoreDelegate,
         storageSource
     });
 
     const navigationController = useBuildNavigationController({
         collections: collectionsBuilder,
-        collectionPermissions: userManagement.collectionPermissions,
+        collectionPermissions: userManagementController.collectionPermissions,
         views,
         adminViews: userManagementAdminViews,
-        authController,
+        authController: userManagementController,
         dataSourceDelegate: firestoreDelegate
     });
 
@@ -172,7 +172,7 @@ export function App() {
     /**
      * User management plugin
      */
-    const userManagementPlugin = useUserManagementPlugin({ userManagement });
+    const userManagementPlugin = useUserManagementPlugin({ userManagement: userManagementController });
 
     /**
      * Allow import and export data plugin
@@ -200,7 +200,7 @@ export function App() {
                 <FireCMS
                     apiKey={import.meta.env.VITE_FIRECMS_API_KEY}
                     navigationController={navigationController}
-                    authController={authController}
+                    authController={userManagementController}
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
@@ -227,7 +227,7 @@ export function App() {
                                         allowSkipLogin={false}
                                         signInOptions={signInOptions}
                                         firebaseApp={firebaseApp}
-                                        authController={authController}
+                                        authController={userManagementController}
                                         notAllowedError={notAllowedError}/>
                                 );
                             } else {

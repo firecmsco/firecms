@@ -17,7 +17,7 @@ import { EntityOverrides } from "./entity_overrides";
  *
  * @group Models
  */
-export interface EntityCollection<M extends Record<string, any> = any, UserType extends User = any> {
+export interface EntityCollection<M extends Record<string, any> = any, USER extends User = any> {
 
     /**
      * You can set an alias that will be used internally instead of the `path`.
@@ -139,7 +139,7 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
      * Permissions the logged-in user can perform on this collection.
      * If not specified everything defaults to `true`.
      */
-    permissions?: Permissions | PermissionsBuilder<EntityCollection, UserType, M>;
+    permissions?: Permissions | PermissionsBuilder<EntityCollection, USER, M>;
 
     /**
      * Are the entities in this collection selectable. Defaults to `true`
@@ -158,7 +158,7 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
      * is being created, updated or deleted.
      * Useful for adding your own logic or blocking the execution of the operation.
      */
-    callbacks?: EntityCallbacks<M, UserType>;
+    callbacks?: EntityCallbacks<M, USER>;
 
     /**
      * Builder for rendering additional components such as buttons in the
@@ -189,7 +189,7 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
      * }
      * ```
      */
-    entityActions?: EntityAction<M, UserType>[];
+    entityActions?: EntityAction<M, USER>[];
 
     /**
      * Pass your own selection controller if you want to control selected
@@ -241,7 +241,7 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
      * You can add additional fields to the collection view by implementing
      * an additional field delegate.
      */
-    additionalFields?: AdditionalFieldDelegate<M, UserType>[];
+    additionalFields?: AdditionalFieldDelegate<M, USER>[];
 
     /**
      * Default size of the rendered collection
@@ -294,7 +294,7 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
     /**
      *
      */
-    exportable?: boolean | ExportConfig<UserType>;
+    exportable?: boolean | ExportConfig<USER>;
 
     /**
      * User id of the owner of this collection. This is used only by plugins, or if you
@@ -325,7 +325,7 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
  *
  * @group Models
  */
-export interface CollectionActionsProps<M extends Record<string, any> = any, UserType extends User = User, EC extends EntityCollection<M> = EntityCollection<M>> {
+export interface CollectionActionsProps<M extends Record<string, any> = any, USER extends User = User, EC extends EntityCollection<M> = EntityCollection<M>> {
     /**
      * Full collection path of this entity. This is the full path, like
      * `users/1234/addresses`
@@ -362,7 +362,7 @@ export interface CollectionActionsProps<M extends Record<string, any> = any, Use
     /**
      * Context of the app status
      */
-    context: FireCMSContext<UserType>;
+    context: FireCMSContext<USER>;
 
     /**
      * Count of the entities in this collection
@@ -424,9 +424,9 @@ export type FilterCombination<Key extends string> = Partial<Record<Key, "asc" | 
  */
 export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
 
-export type AdditionalFieldDelegateProps<M extends Record<string, any> = any, UserType extends User = User> = {
+export type AdditionalFieldDelegateProps<M extends Record<string, any> = any, USER extends User = User> = {
     entity: Entity<M>,
-    context: FireCMSContext<UserType>
+    context: FireCMSContext<USER>
 };
 
 /**
@@ -435,7 +435,7 @@ export type AdditionalFieldDelegateProps<M extends Record<string, any> = any, Us
  * @group Models
  */
 export interface AdditionalFieldDelegate<M extends Record<string, any> = any,
-    UserType extends User = User> {
+    USER extends User = User> {
 
     /**
      * ID of this column. You can use this id in the `properties` field of the
@@ -456,7 +456,7 @@ export interface AdditionalFieldDelegate<M extends Record<string, any> = any,
     /**
      * Builder for the content of the cell for this column
      */
-    Builder?: React.ComponentType<AdditionalFieldDelegateProps<M, UserType>>;
+    Builder?: React.ComponentType<AdditionalFieldDelegateProps<M, USER>>;
 
     /**
      * If this column needs to update dynamically based on other properties,

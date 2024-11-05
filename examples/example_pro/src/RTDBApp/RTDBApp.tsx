@@ -60,10 +60,11 @@ function RTDBApp() {
     const modeController = useBuildModeController();
 
     const signInOptions: FirebaseSignInProvider[] = ["google.com"];
+
     /**
      * Controller for managing authentication
      */
-    const authController: FirebaseAuthController = useFirebaseAuthController({
+    const firebaseAuthController: FirebaseAuthController = useFirebaseAuthController({
         firebaseApp,
         signInOptions
     });
@@ -92,7 +93,7 @@ function RTDBApp() {
         canAccessMainView,
         notAllowedError
     } = useValidateAuthenticator({
-        authController,
+        authController: firebaseAuthController,
         authenticator: () => true,
         dataSourceDelegate: RTDBDelegate,
         storageSource
@@ -100,7 +101,7 @@ function RTDBApp() {
 
     const navigationController = useBuildNavigationController({
         collections: [productsCollection],
-        authController,
+        authController: firebaseAuthController,
         dataSourceDelegate: RTDBDelegate
     });
 
@@ -120,7 +121,7 @@ function RTDBApp() {
 
                 <FireCMS
                     navigationController={navigationController}
-                    authController={authController}
+                    authController={firebaseAuthController}
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={RTDBDelegate}
                     storageSource={storageSource}
@@ -142,7 +143,7 @@ function RTDBApp() {
                                         allowSkipLogin={false}
                                         signInOptions={signInOptions}
                                         firebaseApp={firebaseApp}
-                                        authController={authController}
+                                        authController={firebaseAuthController}
                                         notAllowedError={notAllowedError}/>
                                 );
                             } else {

@@ -38,13 +38,13 @@ export interface FirebaseAuthControllerProps {
  * Use this hook to build an {@link AuthController} based on Firebase Auth
  * @group Firebase
  */
-export const useFirebaseAuthController = <UserType extends FirebaseUserWrapper = FirebaseUserWrapper, ExtraData = any>({
-                                                                                                                           loading,
-                                                                                                                           firebaseApp,
-                                                                                                                           signInOptions,
-                                                                                                                           onSignOut: onSignOutProp,
-                                                                                                                           defineRolesFor
-                                                                                                                       }: FirebaseAuthControllerProps): FirebaseAuthController<UserType, ExtraData> => {
+export const useFirebaseAuthController = <USER extends FirebaseUserWrapper = any, ExtraData = any>({
+                                                                                                           loading,
+                                                                                                           firebaseApp,
+                                                                                                           signInOptions,
+                                                                                                           onSignOut: onSignOutProp,
+                                                                                                           defineRolesFor
+                                                                                                       }: FirebaseAuthControllerProps): FirebaseAuthController<USER, ExtraData> => {
 
     const [loggedUser, setLoggedUser] = useState<FirebaseUser | null | undefined>(undefined); // logged user, anonymous or logged out
     const [authError, setAuthError] = useState<any>();
@@ -297,7 +297,7 @@ export const useFirebaseAuthController = <UserType extends FirebaseUserWrapper =
         : null;
 
     return {
-        user: firebaseUserWrapper as UserType,
+        user: firebaseUserWrapper as USER,
         setUser: updateUser,
         userRoles,
         setUserRoles,

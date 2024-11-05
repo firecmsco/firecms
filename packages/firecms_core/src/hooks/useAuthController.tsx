@@ -11,4 +11,4 @@ import { AuthControllerContext } from "../contexts/AuthControllerContext";
  * @see AuthController
  * @group Hooks and utilities
  */
-export const useAuthController = <UserType extends User = User, AuthControllerType extends AuthController<UserType> = AuthController<UserType>>(): AuthControllerType => useContext(AuthControllerContext) as AuthControllerType;
+export const useAuthController = <USER extends User = User, AuthControllerType extends AuthController<USER> = AuthController<USER>>(): AuthControllerType => useContext(AuthControllerContext) as AuthControllerType;

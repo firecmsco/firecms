@@ -16,7 +16,7 @@ import { OnCellValueChange, OnColumnResizeParams, UniqueFieldValidator } from ".
  * @group Collection components
  */
 export type EntityCollectionTableProps<M extends Record<string, any>,
-    UserType extends User = User> = {
+    USER extends User = User> = {
 
     className?: string;
 
@@ -103,7 +103,7 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
 
     inlineEditing?: boolean;
 
-    additionalFields?: AdditionalFieldDelegate<M, UserType>[];
+    additionalFields?: AdditionalFieldDelegate<M, USER>[];
 
     defaultSize?: CollectionSize;
 

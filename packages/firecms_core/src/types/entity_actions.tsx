@@ -9,7 +9,7 @@ import { SideEntityController } from "./side_entity_controller";
  * An entity action is a custom action that can be performed on an entity.
  * They are displayed in the entity view and in the collection view.
  */
-export type EntityAction<M extends object = any, UserType extends User = User> = {
+export type EntityAction<M extends object = any, USER extends User = User> = {
     /**
      * Title of the action
      */
@@ -24,7 +24,7 @@ export type EntityAction<M extends object = any, UserType extends User = User> =
      * Callback when the action is clicked
      * @param props
      */
-    onClick: (props: EntityActionClickProps<M, UserType>) => Promise<void> | void;
+    onClick: (props: EntityActionClickProps<M, USER>) => Promise<void> | void;
 
     /**
      * Show this action collapsed in the menu of the collection view.
@@ -40,9 +40,9 @@ export type EntityAction<M extends object = any, UserType extends User = User> =
 
 }
 
-export type EntityActionClickProps<M extends object, UserType extends User = User> = {
+export type EntityActionClickProps<M extends object, USER extends User = User> = {
     entity: Entity<M>;
-    context: FireCMSContext<UserType>;
+    context: FireCMSContext<USER>;
     fullPath?: string;
     collection?: EntityCollection<M>;
     selectionController?: SelectionController;

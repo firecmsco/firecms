@@ -10,27 +10,27 @@ import { User } from "./user";
  * Useful for adding your own logic or blocking the execution of the operation.
  * @group Models
  */
-export type EntityCallbacks<M extends Record<string, any> = any, UserType extends User = User> = {
+export type EntityCallbacks<M extends Record<string, any> = any, USER extends User = User> = {
 
     /**
      * Callback used after fetching data
      * @param entityFetchProps
      */
-    onFetch?(entityFetchProps: EntityOnFetchProps<M, UserType>)
+    onFetch?(entityFetchProps: EntityOnFetchProps<M, USER>)
         : Promise<Entity<M>> | Entity<M>;
 
     /**
      * Callback used when save is successful
      * @param entitySaveProps
      */
-    onSaveSuccess?(entitySaveProps: EntityOnSaveProps<M, UserType>)
+    onSaveSuccess?(entitySaveProps: EntityOnSaveProps<M, USER>)
         : Promise<void> | void;
 
     /**
      * Callback used when saving fails
      * @param entitySaveProps
      */
-    onSaveFailure?(entitySaveProps: EntityOnSaveFailureProps<M, UserType>)
+    onSaveFailure?(entitySaveProps: EntityOnSaveFailureProps<M, USER>)
         : Promise<void> | void;
 
     /**
@@ -39,7 +39,7 @@ export type EntityCallbacks<M extends Record<string, any> = any, UserType extend
      * error snackbar gets displayed.
      * @param entitySaveProps
      */
-    onPreSave?(entitySaveProps: EntityOnPreSaveProps<M, UserType>)
+    onPreSave?(entitySaveProps: EntityOnPreSaveProps<M, USER>)
         : Promise<Partial<EntityValues<M>>> | Partial<EntityValues<M>>;
 
     /**
@@ -49,14 +49,14 @@ export type EntityCallbacks<M extends Record<string, any> = any, UserType extend
      *
      * @param entityDeleteProps
      */
-    onPreDelete?(entityDeleteProps: EntityOnDeleteProps<M, UserType>): void;
+    onPreDelete?(entityDeleteProps: EntityOnDeleteProps<M, USER>): void;
 
     /**
      * Callback used after the entity is deleted.
      *
      * @param entityDeleteProps
      */
-    onDelete?(entityDeleteProps: EntityOnDeleteProps<M, UserType>): void;
+    onDelete?(entityDeleteProps: EntityOnDeleteProps<M, USER>): void;
 
     /**
      * Callback fired when any value in the form changes. You can use it
@@ -73,12 +73,12 @@ export type EntityCallbacks<M extends Record<string, any> = any, UserType extend
  * Parameters passed to hooks when an entity is fetched
  * @group Models
  */
-export interface EntityOnFetchProps<M extends Record<string, any> = any, UserType extends User = User> {
+export interface EntityOnFetchProps<M extends Record<string, any> = any, USER extends User = User> {
 
     /**
      * Collection of the entity
      */
-    collection: EntityCollection<M, UserType>;
+    collection: EntityCollection<M, USER>;
 
     /**
      * Full path of the CMS where this collection is being fetched.
@@ -94,15 +94,15 @@ export interface EntityOnFetchProps<M extends Record<string, any> = any, UserTyp
     /**
      * Context of the app status
      */
-    context: FireCMSContext<UserType>;
+    context: FireCMSContext<USER>;
 }
 
 /**
  * Parameters passed to hooks before an entity is saved
  * @group Models
  */
-export type EntityOnPreSaveProps<M extends Record<string, any> = any, UserType extends User = User> =
-    Omit<EntityOnSaveProps<M, UserType>, "entityId">
+export type EntityOnPreSaveProps<M extends Record<string, any> = any, USER extends User = User> =
+    Omit<EntityOnSaveProps<M, USER>, "entityId">
     & {
     entityId?: string;
 }
@@ -110,8 +110,8 @@ export type EntityOnPreSaveProps<M extends Record<string, any> = any, UserType e
  * Parameters passed to hooks before an entity is saved
  * @group Models
  */
-export type EntityOnSaveFailureProps<M extends Record<string, any> = any, UserType extends User = User> =
-    Omit<EntityOnSaveProps<M, UserType>, "entityId">
+export type EntityOnSaveFailureProps<M extends Record<string, any> = any, USER extends User = User> =
+    Omit<EntityOnSaveProps<M, USER>, "entityId">
     & {
     entityId?: string;
 }
@@ -120,7 +120,7 @@ export type EntityOnSaveFailureProps<M extends Record<string, any> = any, UserTy
  * Parameters passed to hooks when an entity is saved
  * @group Models
  */
-export interface EntityOnSaveProps<M extends Record<string, any> = any, UserType extends User = User> {
+export interface EntityOnSaveProps<M extends Record<string, any> = any, USER extends User = User> {
 
     /**
      * Resolved collection of the entity
@@ -161,14 +161,14 @@ export interface EntityOnSaveProps<M extends Record<string, any> = any, UserType
     /**
      * Context of the app status
      */
-    context: FireCMSContext<UserType>;
+    context: FireCMSContext<USER>;
 }
 
 /**
  * Parameters passed to hooks when an entity is deleted
  * @group Models
  */
-export interface EntityOnDeleteProps<M extends Record<string, any> = any, UserType extends User = User> {
+export interface EntityOnDeleteProps<M extends Record<string, any> = any, USER extends User = User> {
 
     /**
      * collection of the entity being deleted
@@ -193,7 +193,7 @@ export interface EntityOnDeleteProps<M extends Record<string, any> = any, UserTy
     /**
      * Context of the app status
      */
-    context: FireCMSContext<UserType>;
+    context: FireCMSContext<USER>;
 }
 
 /**

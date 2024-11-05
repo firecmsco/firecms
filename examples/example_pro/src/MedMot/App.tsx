@@ -172,7 +172,7 @@ export function MedMotApp() {
     const storageSource = useFirebaseStorageSource({
         firebaseApp
     });
-    const baseAuthController: FirebaseAuthController = useFirebaseAuthController({
+    const firebaseAuthController: FirebaseAuthController = useFirebaseAuthController({
         firebaseApp,
         signInOptions,
     });
@@ -180,13 +180,12 @@ export function MedMotApp() {
      * Controller in charge of user management
      */
     const userManagement = useBuildUserManagement({
-        authController: baseAuthController,
+        authController: firebaseAuthController,
         dataSourceDelegate: firestoreDelegate
     });
 
-    const authController = userManagement.authController;
+    const authController = userManagement;
 
-    console.log("userManagement", userManagement);
     /**
      * Controller for managing authentication
      */

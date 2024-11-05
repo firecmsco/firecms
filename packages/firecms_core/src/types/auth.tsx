@@ -9,13 +9,13 @@ import { StorageSource } from "./storage";
  * to do it as the result of a hook.
  * @group Hooks and utilities
  */
-export type AuthController<UserType extends User = any, ExtraData = any> = {
+export type AuthController<USER extends User = any, ExtraData = any> = {
 
     /**
      * The user currently logged in
      * The values can be: the user object, null if they skipped login
      */
-    user: UserType | null;
+    user: USER | null;
 
     /**
      * Roles related to the logged user
@@ -64,7 +64,7 @@ export type AuthController<UserType extends User = any, ExtraData = any> = {
 
     setExtra: (extra: ExtraData) => void;
 
-    setUser?: (user: UserType | null) => void;
+    setUser?: (user: USER | null) => void;
 
     setUserRoles?: (roles: Role[]) => void;
 };
@@ -73,17 +73,17 @@ export type AuthController<UserType extends User = any, ExtraData = any> = {
  * Implement this function to allow access to specific users.
  * @group Hooks and utilities
  */
-export type Authenticator<UserType extends User = User, Controller extends AuthController<UserType> = AuthController<UserType>> = (props: {
+export type Authenticator<USER extends User = User> = (props: {
 
     /**
      * Logged-in user or null
      */
-    user: UserType | null;
+    user: USER | null;
 
     /**
      * AuthController
      */
-    authController: Controller;
+    authController: AuthController<USER>;
 
     /**
      * Connector to your database, e.g. your Firestore database

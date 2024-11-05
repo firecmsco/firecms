@@ -1,11 +1,11 @@
-import { FireCMSPlugin, useAuthController, useSnackbarController } from "@firecms/core";
+import { FireCMSPlugin, useAuthController, User, useSnackbarController } from "@firecms/core";
 import { UserManagementProvider } from "./UserManagementProvider";
-import { PersistedUser, UserManagement } from "./types";
+import { UserManagement } from "./types";
 import { AddIcon, Button, Paper, Typography } from "@firecms/ui";
 import { DEFAULT_ROLES } from "./components/roles/default_roles";
 
-export function useUserManagementPlugin({ userManagement }: {
-    userManagement: UserManagement,
+export function useUserManagementPlugin<USER extends User = any>({ userManagement }: {
+    userManagement: UserManagement<USER>,
 }): FireCMSPlugin {
 
     const noUsers = userManagement.users.length === 0;
@@ -39,7 +39,7 @@ export function IntroWidget({
                             }: {
     noUsers: boolean;
     noRoles: boolean;
-    userManagement: UserManagement<PersistedUser>;
+    userManagement: UserManagement<any>;
 }) {
 
     const authController = useAuthController();

@@ -14,11 +14,13 @@ import {
 } from "@firecms/core";
 import { resolveUserRolePermissions } from "../utils";
 
-type UserWithRoleIds = Omit<User, "roles"> & { roles: string[] };
+type UserWithRoleIds<USER extends User = any> = Omit<USER, "roles"> & { roles: string[] };
 
-export interface UserManagementParams<AUTH_CONTROLLER extends AuthController = any> {
+export interface UserManagementParams<CONTROLLER extends AuthController<any> = AuthController<any>,
+    USER extends User = CONTROLLER extends AuthController<infer U> ? U : any>
+     {
 
-    authController: AUTH_CONTROLLER;
+    authController: CONTROLLER;
 
     /**
      * The delegate in charge of persisting the data.
@@ -74,7 +76,8 @@ export interface UserManagementParams<AUTH_CONTROLLER extends AuthController = a
  * @param allowDefaultRolesCreation
  * @param includeCollectionConfigPermissions
  */
-export function useBuildUserManagement<UserType extends User = User, CONTROLLER extends AuthController<UserType> = AuthController<UserType>>
+export function useBuildUserManagement<CONTROLLER extends AuthController<any> = AuthController<any>,
+    USER extends User = CONTROLLER extends AuthController<infer U> ? U : any>
 ({
      authController,
      dataSourceDelegate,
@@ -84,19 +87,17 @@ export function useBuildUserManagement<UserType extends User = User, CONTROLLER 
      canEditRoles = true,
      allowDefaultRolesCreation,
      includeCollectionConfigPermissions
- }: UserManagementParams<CONTROLLER>): UserManagement<User> & {
-    authController: CONTROLLER;
-} {
+ }: UserManagementParams<CONTROLLER, USER>): UserManagement<USER> & CONTROLLER {
 
     const [rolesLoading, setRolesLoading] = React.useState<boolean>(true);
     const [usersLoading, setUsersLoading] = React.useState<boolean>(true);
     const [roles, setRoles] = React.useState<Role[]>([]);
-    const [usersWithRoleIds, setUsersWithRoleIds] = React.useState<UserWithRoleIds[]>([]);
+    const [usersWithRoleIds, setUsersWithRoleIds] = React.useState<UserWithRoleIds<USER>[]>([]);
 
     const users = usersWithRoleIds.map(u => ({
         ...u,
         roles: roles.filter(r => u.roles?.includes(r.id))
-    }) as User);
+    }) as USER);
 
     const [rolesError, setRolesError] = React.useState<Error | undefined>();
     const [usersError, setUsersError] = React.useState<Error | undefined>();
@@ -182,7 +183,7 @@ export function useBuildUserManagement<UserType extends User = User, CONTROLLER 
 
     }, [dataSourceDelegate?.initialised, authController?.initialLoading, authController?.user?.uid, usersPath]);
 
-    const saveUser = useCallback(async (user: User): Promise<User> => {
+    const saveUser = useCallback(async (user: USER): Promise<USER> => {
         if (!dataSourceDelegate) throw Error("useBuildUserManagement Firebase not initialised");
         if (!usersPath) throw Error("useBuildUserManagement Firestore not initialised");
 
@@ -279,15 +280,8 @@ export function useBuildUserManagement<UserType extends User = User, CONTROLLER 
         usersError
     });
 
-    const authenticator: Authenticator = useCallback(({ user }) => {
-        console.debug("Authenticating user", { user, users });
-
-        console.log({
-            usersLoading,
-            rolesLoading
-        })
+    const authenticator: Authenticator<USER> = useCallback(({ user }) => {
         if (loading) {
-            console.warn("User management is still loading");
             return false;
         }
 
@@ -308,11 +302,17 @@ export function useBuildUserManagement<UserType extends User = User, CONTROLLER 
     const userRoles = authController.user ? defineRolesFor(authController.user) : undefined;
     const isAdmin = (userRoles ?? []).some(r => r.id === "admin");
 
-    console.log("Setting roles", { user:authController.user, userRoles });
-    // useEffect(() => {
-    //     console.debug("Setting roles", { authController, userRoles });
-    //     authController.setUserRoles?.(userRoles ?? []);
-    // }, [userRoles?.map(r => r.id)]);
+    console.log("Setting roles", {
+        user: authController.user,
+        userRoles
+    });
+    useEffect(() => {
+        console.debug("Setting roles", {
+            authController,
+            userRoles
+        });
+        authController.setUserRoles?.(userRoles ?? []);
+    }, [userRoles?.map(r => r.id)]);
 
     return {
         loading,
@@ -332,15 +332,13 @@ export function useBuildUserManagement<UserType extends User = User, CONTROLLER 
         collectionPermissions,
         defineRolesFor,
         authenticator,
-        authController: {
-            ...authController,
-            initialLoading: authController.initialLoading || loading,
-            userRoles: userRoles,
-            user: authController.user ? {
-                ...authController.user,
-                roles: userRoles
-            } : null
-        }
+        ...authController,
+        initialLoading: authController.initialLoading || loading,
+        userRoles: userRoles,
+        user: authController.user ? {
+            ...authController.user,
+            roles: userRoles
+        } : null
     }
 }
 

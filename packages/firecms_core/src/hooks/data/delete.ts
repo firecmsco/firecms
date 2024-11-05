@@ -12,10 +12,10 @@ import {
 /**
  * @group Hooks and utilities
  */
-export type DeleteEntityWithCallbacksProps<M extends Record<string, any>, UserType extends User = User> =
+export type DeleteEntityWithCallbacksProps<M extends Record<string, any>, USER extends User = User> =
     DeleteEntityProps<M>
     & {
-    callbacks?: EntityCallbacks<M, UserType>;
+    callbacks?: EntityCallbacks<M, USER>;
     onDeleteSuccess?: (entity: Entity<M>) => void;
     onDeleteFailure?: (entity: Entity<M>, e: Error) => void;
     onPreDeleteHookError?: (entity: Entity<M>, e: Error) => void;
@@ -43,7 +43,7 @@ export type DeleteEntityWithCallbacksProps<M extends Record<string, any>, UserTy
  * @param context
  * @group Hooks and utilities
  */
-export async function deleteEntityWithCallbacks<M extends Record<string, any>, UserType extends User>({
+export async function deleteEntityWithCallbacks<M extends Record<string, any>, USER extends User>({
                                                                                                           dataSource,
                                                                                                           entity,
                                                                                                           collection,
@@ -56,7 +56,7 @@ export async function deleteEntityWithCallbacks<M extends Record<string, any>, U
                                                                                                       }: DeleteEntityWithCallbacksProps<M> & {
                                                                                                           collection: ResolvedEntityCollection<M>,
                                                                                                           dataSource: DataSource,
-                                                                                                          context: FireCMSContext<UserType>
+                                                                                                          context: FireCMSContext<USER>
                                                                                                       }
 ): Promise<boolean> {
 

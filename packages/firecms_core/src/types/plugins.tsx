@@ -166,7 +166,7 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
  *
  * @group Models
  */
-export interface PluginHomePageActionsProps<EP extends object = object, M extends Record<string, any> = any, UserType extends User = User, EC extends EntityCollection<M> = EntityCollection<M>> {
+export interface PluginHomePageActionsProps<EP extends object = object, M extends Record<string, any> = any, USER extends User = User, EC extends EntityCollection<M> = EntityCollection<M>> {
     /**
      * Collection path of this entity. This is the full path, like
      * `users/1234/addresses`
@@ -181,19 +181,19 @@ export interface PluginHomePageActionsProps<EP extends object = object, M extend
     /**
      * Context of the app status
      */
-    context: FireCMSContext<UserType>;
+    context: FireCMSContext<USER>;
 
     extraProps?: EP;
 
 }
 
-export interface PluginFormActionProps<UserType extends User = User, EC extends EntityCollection = EntityCollection> {
+export interface PluginFormActionProps<USER extends User = User, EC extends EntityCollection = EntityCollection> {
     entityId?: string;
     path: string;
     status: EntityStatus;
     collection: EC;
     formContext?: FormContext<any>;
-    context: FireCMSContext<UserType>;
+    context: FireCMSContext<USER>;
     currentEntityId?: string;
 }
 
@@ -207,11 +207,11 @@ export type PluginFieldBuilderParams<T extends CMSType = CMSType, M extends Reco
     collection?: EC;
 };
 
-export interface PluginGenericProps<UserType extends User = User> {
-    context: FireCMSContext<UserType>;
+export interface PluginGenericProps<USER extends User = User> {
+    context: FireCMSContext<USER>;
 }
 
-export interface PluginHomePageAdditionalCardsProps<UserType extends User = User> {
+export interface PluginHomePageAdditionalCardsProps<USER extends User = User> {
     group?: string;
-    context: FireCMSContext<UserType>;
+    context: FireCMSContext<USER>;
 }

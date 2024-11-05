@@ -95,7 +95,7 @@ export interface EntityEditViewProps<M extends Record<string, any>> {
  * You probably don't want to use this view directly since it is bound to the
  * side panel.
  */
-export function EntityEditView<M extends Record<string, any>, UserType extends User>({
+export function EntityEditView<M extends Record<string, any>, USER extends User>({
                                                                                          entityId,
                                                                                          ...props
                                                                                      }: EntityEditViewProps<M>) {
@@ -104,7 +104,7 @@ export function EntityEditView<M extends Record<string, any>, UserType extends U
         dataLoading,
         // eslint-disable-next-line no-unused-vars
         dataLoadingError
-    } = useEntityFetch<M, UserType>({
+    } = useEntityFetch<M, USER>({
         path: props.path,
         entityId: entityId,
         collection: props.collection,

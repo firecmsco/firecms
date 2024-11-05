@@ -27,9 +27,9 @@ import {
  * @group Builder
  */
 export function buildCollection<M extends Record<string, any> = any,
-    UserType extends User = User>(
-    collection: EntityCollection<M, UserType>
-): EntityCollection<M, UserType> {
+    USER extends User = User>(
+    collection: EntityCollection<M, USER>
+): EntityCollection<M, USER> {
     return collection;
 }
 
@@ -120,9 +120,9 @@ export function buildEntityCallbacks<M extends Record<string, any> = any>(
  * @param additionalFieldDelegate
  * @group Builder
  */
-export function buildAdditionalFieldDelegate<M extends Record<string, any>, UserType extends User = User>(
-    additionalFieldDelegate: AdditionalFieldDelegate<M, UserType>
-): AdditionalFieldDelegate<M, UserType> {
+export function buildAdditionalFieldDelegate<M extends Record<string, any>, USER extends User = User>(
+    additionalFieldDelegate: AdditionalFieldDelegate<M, USER>
+): AdditionalFieldDelegate<M, USER> {
     return additionalFieldDelegate;
 }
 

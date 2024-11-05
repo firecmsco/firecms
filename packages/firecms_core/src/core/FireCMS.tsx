@@ -30,7 +30,7 @@ import { useProjectLog } from "../hooks/useProjectLog";
 
  * @group Core
  */
-export function FireCMS<UserType extends User, EC extends EntityCollection>(props: FireCMSProps<UserType, EC>) {
+export function FireCMS<USER extends User, EC extends EntityCollection>(props: FireCMSProps<USER, EC>) {
 
     const {
         children,
