@@ -86,7 +86,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
             <ErrorBoundary>
                 <div
                     className={cls("flex py-0 px-3 h-full text-xs uppercase font-semibold relative select-none items-center bg-gray-50 dark:bg-gray-900",
-                        "text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 ",
+                        "text-text-secondary hover:text-text-primary dark:text-text-secondary-dark dark:hover:text-text-primary-dark",
                         "hover:bg-gray-100 dark:hover:bg-gray-800 hover:bg-opacity-50 dark:hover:bg-opacity-50",
                         column.frozen ? "sticky left-0 z-10" : "relative z-0"
                     )}
@@ -240,7 +240,7 @@ function FilterForm<M>({
               }}
               className={"text-gray-900 dark:text-white"}>
             <div
-                className={cls(defaultBorderMixin, "py-4 px-6 text-xs font-semibold uppercase border-b")}>
+                className={cls(defaultBorderMixin, "py-4 px-6 typography-label border-b")}>
                 {column.title ?? id}
             </div>
             {filterField && <div className="m-4">

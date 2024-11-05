@@ -69,7 +69,7 @@ export function SearchBar({
                 className)}>
             <div
                 className="absolute p-0 px-4 h-full pointer-events-none flex items-center justify-center top-0">
-                {loading ? <CircularProgress size={"small"}/> : <SearchIcon className={"text-slate-500 dark:text-gray-500"}/>}
+                {loading ? <CircularProgress size={"small"}/> : <SearchIcon className={"text-text-disabled dark:text-text-disabled-dark"}/>}
             </div>
             <input
                 value={searchText ?? ""}
@@ -87,7 +87,8 @@ export function SearchBar({
                 onBlur={() => setActive(false)}
                 className={cls(
                     (disabled || loading) && "pointer-events-none",
-                    "relative flex items-center rounded transition-all bg-transparent outline-none appearance-none border-none",
+                    "placeholder-text-disabled dark:placeholder-text-disabled-dark",
+                    "relative flex items-center rounded-lg transition-all bg-transparent outline-none appearance-none border-none",
                     "pl-12 h-full text-current ",
                     expandable ? (active ? "w-[220px]" : "w-[180px]") : "",
                     innerClassName

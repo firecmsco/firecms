@@ -1,3 +1,5 @@
+import typography from "@tailwindcss/typography";
+
 export default {
     darkMode: ["selector", "[data-theme=\"dark\"]"],
     mode: "jit",
@@ -7,7 +9,7 @@ export default {
         "./node_modules/@firecms/**/*.{js,ts,jsx,tsx}"
     ],
     plugins: [
-        require("@tailwindcss/typography")
+        typography
     ],
     theme: {
         extend: {
@@ -45,8 +47,8 @@ export default {
                 text: {
                     primary: "rgba(0, 0, 0, 0.87)",
                     "primary-dark": "#ffffff",
-                    secondary: "rgba(0, 0, 0, 0.6)",
-                    "secondary-dark": "rgba(255, 255, 255, 0.7)",
+                    secondary: "rgba(0, 0, 0, 0.55)",
+                    "secondary-dark": "rgba(255, 255, 255, 0.60)",
                     disabled: "rgba(0, 0, 0, 0.38)",
                     "disabled-dark": "rgba(255, 255, 255, 0.5)",
                     label: "rgb(131, 131, 131)"

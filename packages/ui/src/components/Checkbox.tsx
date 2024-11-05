@@ -80,7 +80,7 @@ export const Checkbox = ({
                         sizeClasses[size],
                         disabled
                             ? (indeterminate || isChecked ? "bg-slate-400 dark:bg-slate-600" : "bg-slate-400 dark:bg-slate-600")
-                            : (indeterminate || isChecked ? colorClasses[color] : "bg-white dark:bg-slate-900"),
+                            : (indeterminate || isChecked ? colorClasses[color] : "bg-white dark:bg-gray-900"),
                         (indeterminate || isChecked) ? "text-slate-100 dark:text-slate-900" : "",
                         disabled
                             ? "border-transparent"
