@@ -3,7 +3,7 @@ import { useCollectionEditorController } from "../useCollectionEditorController"
 
 export function NewCollectionButton() {
     const collectionEditorController = useCollectionEditorController();
-    return <div className={"bg-gray-50 dark:bg-gray-900 min-w-fit rounded"}>
+    return <div className={"bg-surface-50 dark:bg-surface-900 min-w-fit rounded"}>
         <Button className={"min-w-fit"}
                 variant={"outlined"}
                 onClick={() => collectionEditorController.createCollection({

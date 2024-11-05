@@ -205,10 +205,10 @@ export function CodeBlock({
 
                     {(consoleOutput || executionResult) && (
                         <Paper className={"w-full p-4 min-h-[92px] font-mono text-xs overflow-auto rounded-lg"}>
-                            {consoleOutput && <pre className={"text-sm font-mono text-gray-700 dark:text-gray-200"}>
+                            {consoleOutput && <pre className={"text-sm font-mono text-surface-700 dark:text-surface-200"}>
                                 {consoleOutput}
                             </pre>}
-                            {executionResult && <pre className={"text-xs font-mono text-gray-700 dark:text-gray-200"}>
+                            {executionResult && <pre className={"text-xs font-mono text-surface-700 dark:text-surface-200"}>
                                     {typeof executionResult === "string" ? executionResult : JSON.stringify(executionResult, null, 2)}
                             </pre>}
                         </Paper>

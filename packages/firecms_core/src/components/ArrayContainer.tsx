@@ -256,7 +256,7 @@ export function ArrayContainerItem({
         {...provided.draggableProps}
         style={provided.draggableProps.style}
         className={`${
-            !isDragging ? "hover:bg-slate-50 dark:hover:bg-gray-800 dark:hover:bg-opacity-20" : ""
+            !isDragging ? "hover:bg-surface-accent-50 dark:hover:bg-surface-800 dark:hover:bg-opacity-20" : ""
         } rounded-md opacity-100`}
     >
         <div

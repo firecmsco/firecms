@@ -34,7 +34,7 @@ const getColorClasses = (severity: string) => {
             return "bg-emerald-50 dark:bg-emerald-800 dark:text-emerald-100 text-emerald-900";
         case "base":
         default:
-            return "bg-slate-50 dark:bg-slate-800 dark:text-white text-slate-900";
+            return "bg-surface-accent-50 dark:bg-surface-accent-800 dark:text-white text-surface-accent-900";
     }
 };
 
@@ -61,7 +61,7 @@ export const Alert: React.FC<AlertProps> = ({
                 className)}>
             <div className={"flex-grow"}>{children}</div>
             {onDismiss && (
-                <button className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-400"
+                <button className="text-surface-accent-400 hover:text-surface-accent-600 dark:text-surface-accent-500 dark:hover:text-surface-accent-400"
                         onClick={onDismiss}>
                     &times;
                 </button>

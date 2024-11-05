@@ -111,12 +111,12 @@ function ReferenceFieldBindingInternal({
                 {!value && <div className="justify-center text-left">
                     <EntityPreviewContainer className={cls("px-6 h-16 text-sm font-medium flex items-center gap-6",
                         disabled || isSubmitting
-                            ? "text-slate-500"
-                            : "cursor-pointer text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800 group-hover:bg-slate-50 dark:group-hover:bg-gray-800")}
+                            ? "text-surface-accent-500"
+                            : "cursor-pointer text-surface-accent-700 dark:text-surface-accent-300 hover:bg-surface-accent-50 dark:hover:bg-surface-800 group-hover:bg-surface-accent-50 dark:group-hover:bg-surface-800")}
                                             onClick={onEntryClick}
                                             size={"medium"}>
                         <IconForView collectionOrView={collection}
-                                     className={"text-gray-300 dark:text-gray-600"}/>
+                                     className={"text-surface-300 dark:text-surface-600"}/>
                         {`Edit ${property.name}`.toUpperCase()}
                     </EntityPreviewContainer>
                 </div>}

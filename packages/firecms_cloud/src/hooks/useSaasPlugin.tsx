@@ -110,7 +110,7 @@ export function IntroWidget({ introMode }: {
             <div>
                 <Typography className={"inline"}>Get started with:</Typography>
                 <div
-                    className={"ml-2 select-all font-mono bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-white p-2 px-3  border-gray-200 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
+                    className={"ml-2 select-all font-mono bg-surface-100 text-surface-800 dark:bg-surface-800 dark:text-white p-2 px-3  border-surface-200 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
                     yarn create firecms-app
                 </div>
                 <Typography className={"inline ml-2"}>More info in the <a

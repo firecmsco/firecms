@@ -170,7 +170,7 @@ export function ExampleCMSView() {
                     <Sheet open={isSheetOpen}
                            onOpenChange={setOpenSheet}
                            side={"bottom"}>
-                        <div className="bg-white font-bold dark:bg-gray-800 p-4 h-[90vh]">
+                        <div className="bg-white font-bold dark:bg-surface-800 p-4 h-[90vh]">
                             Sheet Content
                         </div>
                     </Sheet>

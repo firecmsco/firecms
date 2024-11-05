@@ -67,7 +67,7 @@ export function NavigationCardBinding({
                             className={"text-secondary"}/>
                         : <StarBorderIcon
                             size={18}
-                            className={"text-gray-400 dark:text-gray-500"}/>}
+                            className={"text-surface-400 dark:text-surface-500"}/>}
             </IconButton>
         ]
         : [];

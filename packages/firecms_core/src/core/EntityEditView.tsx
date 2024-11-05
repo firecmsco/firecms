@@ -888,7 +888,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         let form = <>
 
             {pluginActions.length > 0 && <div
-                className={cls("w-full flex justify-end items-center sticky top-0 right-0 left-0 z-10 bg-opacity-60 bg-slate-200 dark:bg-opacity-60 dark:bg-slate-800 backdrop-blur-md")}>
+                className={cls("w-full flex justify-end items-center sticky top-0 right-0 left-0 z-10 bg-opacity-60 bg-surface-accent-200 dark:bg-opacity-60 dark:bg-surface-accent-800 backdrop-blur-md")}>
                 {pluginActions}
             </div>}
 
@@ -1004,7 +1004,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             <div className="flex flex-col h-full w-full">
 
                 <div
-                    className={cls(defaultBorderMixin, "no-scrollbar h-16 border-b pl-2 pr-2 pt-1 flex items-end overflow-scroll bg-gray-50 dark:bg-gray-950")}>
+                    className={cls(defaultBorderMixin, "no-scrollbar h-16 border-b pl-2 pr-2 pt-1 flex items-end overflow-scroll bg-surface-50 dark:bg-surface-950")}>
 
                     <div
                         className="pb-1 self-center">

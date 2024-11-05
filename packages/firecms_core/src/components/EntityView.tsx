@@ -40,10 +40,10 @@ export function EntityView<M extends Record<string, any>>(
             <div className={"w-full mb-4"}>
                 <div className={cls(defaultBorderMixin, "flex justify-between py-2 border-b last:border-b-0")}>
                     <div className="flex items-center w-1/4">
-                        <span className="pl-2 text-sm text-gray-600">Id</span>
+                        <span className="pl-2 text-sm text-surface-600">Id</span>
                     </div>
                     <div
-                        className="flex-grow p-2 ml-2 w-3/4 text-gray-900 dark:text-white min-h-[56px] flex items-center">
+                        className="flex-grow p-2 ml-2 w-3/4 text-surface-900 dark:text-white min-h-[56px] flex items-center">
                         <span className="flex-grow mr-2">{entity.id}</span>
                         {customizationController?.entityLinkBuilder &&
                             <a href={customizationController.entityLinkBuilder({ entity })}
@@ -64,10 +64,10 @@ export function EntityView<M extends Record<string, any>>(
                                 key={`reference_previews_${key}`}
                                 className={cls(defaultBorderMixin, "flex justify-between py-2 border-b last:border-b-0")}>
                                 <div className="flex items-center w-1/4">
-                                    <span className="pl-2 text-sm text-gray-600">{property.name}</span>
+                                    <span className="pl-2 text-sm text-surface-600">{property.name}</span>
                                 </div>
                                 <div
-                                    className="flex-grow p-2 ml-2 w-3/4 text-gray-900 dark:text-white min-h-[56px] flex items-center">
+                                    className="flex-grow p-2 ml-2 w-3/4 text-surface-900 dark:text-white min-h-[56px] flex items-center">
                                     <PropertyPreview
                                         propertyKey={key}
                                         value={value}

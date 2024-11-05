@@ -85,7 +85,7 @@ export function DefaultDrawer({
 
                     {groupsWithoutAdmin.map((group) => (
                         <div
-                            className={"bg-gray-50 dark:bg-gray-800 dark:bg-opacity-30 my-4 rounded-lg ml-4"}
+                            className={"bg-surface-50 dark:bg-surface-800 dark:bg-opacity-30 my-4 rounded-lg ml-4"}
                             key={`drawer_group_${group}`}>
                             {buildGroupHeader(group)}
                             {Object.values(navigationEntries)
@@ -112,7 +112,7 @@ export function DefaultDrawer({
                     trigger={
                         <IconButton
                             shape={"square"}
-                            className={"m-4 text-gray-900 dark:text-white w-fit"}>
+                            className={"m-4 text-surface-900 dark:text-white w-fit"}>
                             <Tooltip title={"Admin"}
                                      open={tooltipsOpen}
                                      side={"right"} sideOffset={28}>

@@ -18,7 +18,7 @@ export function Tabs({
 
     return <TabsPrimitive.Root value={value} onValueChange={onValueChange}>
         <TabsPrimitive.List className={cls(
-            "flex text-sm font-medium text-center text-slate-800 dark:text-white max-w-full overflow-auto no-scrollbar",
+            "flex text-sm font-medium text-center text-surface-accent-800 dark:text-white max-w-full overflow-auto no-scrollbar",
             className)
         }>
             {children}
@@ -45,15 +45,15 @@ export function Tab({
                                       "border-b-2 border-transparent",
                                       "data-[state=active]:border-secondary",
                                       disabled
-                                          ? "text-slate-400 dark:text-slate-500"
-                                          : cls("text-slate-700 dark:text-slate-300",
-                                              "data-[state=active]:text-slate-900 data-[state=active]:dark:text-white",
-                                              "hover:text-slate-800 dark:hover:text-slate-200"),
-                                      // disabled ? "text-slate-400 dark:text-slate-500" : "data-[state=active]:text-primary",
-                                      // "data-[state=active]:bg-slate-50 data-[state=active]:dark:bg-slate-800",
+                                          ? "text-surface-accent-400 dark:text-surface-accent-500"
+                                          : cls("text-surface-accent-700 dark:text-surface-accent-300",
+                                              "data-[state=active]:text-surface-accent-900 data-[state=active]:dark:text-white",
+                                              "hover:text-surface-accent-800 dark:hover:text-surface-accent-200"),
+                                      // disabled ? "text-surface-accent-400 dark:text-surface-accent-500" : "data-[state=active]:text-primary",
+                                      // "data-[state=active]:bg-surface-accent-50 data-[state=active]:dark:bg-surface-accent-800",
                                       className)}>
         <div className={cls("uppercase inline-block p-2 px-4 m-2 rounded",
-            "hover:bg-slate-200 hover:bg-opacity-75 dark:hover:bg-slate-800")}>
+            "hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-800")}>
             {children}
         </div>
     </TabsPrimitive.Trigger>;

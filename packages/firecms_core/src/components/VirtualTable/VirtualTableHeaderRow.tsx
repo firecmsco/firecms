@@ -100,7 +100,7 @@ export const VirtualTableHeaderRow = ({
 
     return (
         <div
-            className={cls(defaultBorderMixin, "z-20 sticky min-w-full flex w-fit flex-row top-0 left-0 h-12 border-b bg-gray-50 dark:bg-gray-900")}>
+            className={cls(defaultBorderMixin, "z-20 sticky min-w-full flex w-fit flex-row top-0 left-0 h-12 border-b bg-surface-50 dark:bg-surface-900")}>
             {columns.map((c, columnIndex) => {
                 const column = columns[columnIndex];
 

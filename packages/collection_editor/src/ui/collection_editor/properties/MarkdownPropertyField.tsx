@@ -54,7 +54,7 @@ export function MarkdownPropertyField({
             <div className={"col-span-12"}>
                 <ExpandablePanel
                     title={
-                        <div className="flex flex-row text-gray-500">
+                        <div className="flex flex-row text-surface-500">
                             <FileUploadIcon/>
                             <Typography variant={"subtitle2"}
                                         className="ml-2">

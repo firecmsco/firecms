@@ -8,7 +8,7 @@ export function SecurityRulesInstructions({}: {}) {
         <Typography>
             FireCMS uses Firebase security rules to restrict access to data.
             When creating a new user through FireCMS, the custom claim <Typography
-            className={"inline-block bg-white dark:bg-gray-950 px-1 rounded-md"}
+            className={"inline-block bg-white dark:bg-surface-950 px-1 rounded-md"}
             component={"pre"}>fireCMSUser</Typography> is added to the user
             in the client project. By adding the following security rules to your project, you
             ensure FireCMS users can access data through FireCMS.

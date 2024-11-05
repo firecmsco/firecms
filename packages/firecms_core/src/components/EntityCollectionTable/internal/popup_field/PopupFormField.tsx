@@ -353,7 +353,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         });
     }
     const form = <div
-        className={`text-gray-900 dark:text-white overflow-auto rounded rounded-md bg-white dark:bg-gray-950 ${!open ? "hidden" : ""} cursor-grab max-w-[100vw]`}>
+        className={`text-surface-900 dark:text-white overflow-auto rounded rounded-md bg-white dark:bg-surface-950 ${!open ? "hidden" : ""} cursor-grab max-w-[100vw]`}>
 
         {internalForm}
 
@@ -370,7 +370,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             style={{
                 boxShadow: "0 0 0 2px rgba(128,128,128,0.2)",
             }}
-            className={`inline-block fixed z-20 shadow-outline rounded-md bg-white dark:bg-gray-950 ${
+            className={`inline-block fixed z-20 shadow-outline rounded-md bg-white dark:bg-surface-950 ${
                 !open ? "invisible" : "visible"
             } cursor-grab overflow-visible`}
             ref={draggableRef}>
@@ -383,7 +383,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                 {form}
 
                 <div
-                    className="absolute -top-3.5 -right-3.5 bg-gray-500 rounded-full"
+                    className="absolute -top-3.5 -right-3.5 bg-surface-500 rounded-full"
                     style={{
                         width: "32px",
                         height: "32px"

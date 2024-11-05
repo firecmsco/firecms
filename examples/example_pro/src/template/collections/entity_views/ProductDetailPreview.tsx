@@ -46,7 +46,7 @@ export function ProductDetailPreview({
                             <button
                                 key={`image_${index}`}
                                 onClick={() => setSelectedImage(image)}
-                                className={cls("border hover:border-gray-900 rounded-lg overflow-hidden transition-colors dark:hover:border-gray-50", defaultBorderMixin)}>
+                                className={cls("border hover:border-surface-900 rounded-lg overflow-hidden transition-colors dark:hover:border-surface-50", defaultBorderMixin)}>
                                 <StorageImage storagePath={image}
                                               className="aspect-[5/6] object-contain bg-white"
                                               style={{
@@ -64,7 +64,7 @@ export function ProductDetailPreview({
                                 height: 600,
                                 width: 900
                             }}
-                            className="bg-white aspect-[2/3] object-contain border border-gray-200 w-full rounded-lg overflow-hidden dark:border-gray-800"
+                            className="bg-white aspect-[2/3] object-contain border border-surface-200 w-full rounded-lg overflow-hidden dark:border-surface-800"
                             storagePath={selectedImage}/>}
                     </div>
                 </div>
@@ -96,21 +96,21 @@ export function ProductDetailPreview({
                             </Label>
                             <RadioGroup className="flex items-center gap-2" defaultValue="black" id="color">
                                 <Label
-                                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-slate-100 dark:[&:has(:checked)]:bg-gray-800"
+                                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-accent-100 dark:[&:has(:checked)]:bg-surface-800"
                                     htmlFor="color-black"
                                 >
                                     <RadioGroupItem id="color-black" value="black"/>
                                     Black
                                 </Label>
                                 <Label
-                                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-slate-100 dark:[&:has(:checked)]:bg-gray-800"
+                                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-accent-100 dark:[&:has(:checked)]:bg-surface-800"
                                     htmlFor="color-white"
                                 >
                                     <RadioGroupItem id="color-white" value="white"/>
                                     White
                                 </Label>
                                 <Label
-                                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-slate-100 dark:[&:has(:checked)]:bg-gray-800"
+                                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-accent-100 dark:[&:has(:checked)]:bg-surface-800"
                                     htmlFor="color-blue"
                                 >
                                     <RadioGroupItem id="color-blue" value="blue"/>
@@ -124,35 +124,35 @@ export function ProductDetailPreview({
                             </Label>
                             <RadioGroup className="flex items-center gap-2" defaultValue="m" id="size">
                                 <Label
-                                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-slate-100 dark:[&:has(:checked)]:bg-gray-800"
+                                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-accent-100 dark:[&:has(:checked)]:bg-surface-800"
                                     htmlFor="size-xs"
                                 >
                                     <RadioGroupItem id="size-xs" value="xs"/>
                                     XS
                                 </Label>
                                 <Label
-                                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-slate-100 dark:[&:has(:checked)]:bg-gray-800"
+                                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-accent-100 dark:[&:has(:checked)]:bg-surface-800"
                                     htmlFor="size-s"
                                 >
                                     <RadioGroupItem id="size-s" value="s"/>
                                     S{"\n                          "}
                                 </Label>
                                 <Label
-                                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-slate-100 dark:[&:has(:checked)]:bg-gray-800"
+                                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-accent-100 dark:[&:has(:checked)]:bg-surface-800"
                                     htmlFor="size-m"
                                 >
                                     <RadioGroupItem id="size-m" value="m"/>
                                     M{"\n                          "}
                                 </Label>
                                 <Label
-                                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-slate-100 dark:[&:has(:checked)]:bg-gray-800"
+                                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-accent-100 dark:[&:has(:checked)]:bg-surface-800"
                                     htmlFor="size-l"
                                 >
                                     <RadioGroupItem id="size-l" value="l"/>
                                     L{"\n                          "}
                                 </Label>
                                 <Label
-                                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-slate-100 dark:[&:has(:checked)]:bg-gray-800"
+                                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-accent-100 dark:[&:has(:checked)]:bg-surface-800"
                                     htmlFor="size-xl"
                                 >
                                     <RadioGroupItem id="size-xl" value="xl"/>

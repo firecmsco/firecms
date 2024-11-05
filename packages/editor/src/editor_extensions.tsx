@@ -10,7 +10,7 @@ export const placeholder = Placeholder;
 export const tiptapLink = TiptapLink.configure({
     HTMLAttributes: {
         class: cls(
-            "text-gray-700 dark:text-slate-200 underline underline-offset-[3px] hover:text-primary transition-colors cursor-pointer",
+            "text-surface-700 dark:text-surface-accent-200 underline underline-offset-[3px] hover:text-primary transition-colors cursor-pointer",
         ),
     },
 });
@@ -60,12 +60,12 @@ export const starterKit = StarterKit.configure({
     },
     codeBlock: {
         HTMLAttributes: {
-            class: cls("rounded bg-blue-50 dark:bg-gray-700 border p-5 font-mono font-medium", defaultBorderMixin),
+            class: cls("rounded bg-blue-50 dark:bg-surface-700 border p-5 font-mono font-medium", defaultBorderMixin),
         },
     },
     code: {
         HTMLAttributes: {
-            class: cls("rounded-md bg-slate-50 dark:bg-gray-700 px-1.5 py-1 font-mono font-medium"),
+            class: cls("rounded-md bg-surface-accent-50 dark:bg-surface-700 px-1.5 py-1 font-mono font-medium"),
             spellcheck: "false",
         },
     },

@@ -210,7 +210,7 @@ export const SelectableTable = React.memo<SelectableTableProps<any>>(
                     selectedCell,
                 }}
             >
-                <div className="h-full w-full flex flex-col bg-white dark:bg-gray-950"
+                <div className="h-full w-full flex flex-col bg-white dark:bg-surface-950"
                      ref={ref}>
 
                     <VirtualTable
@@ -232,7 +232,7 @@ export const SelectableTable = React.memo<SelectableTableProps<any>>(
                         checkFilterCombination={checkFilterCombination}
                         createFilterField={filterable ? createFilterField : undefined}
                         rowClassName={useCallback((entity: Entity<M>) => {
-                            return highlightedRow?.(entity) ? "bg-gray-100 bg-opacity-75 dark:bg-gray-800 dark:bg-opacity-75" : "";
+                            return highlightedRow?.(entity) ? "bg-surface-100 bg-opacity-75 dark:bg-surface-800 dark:bg-opacity-75" : "";
                         }, [highlightedRow])}
                         className="flex-grow"
                         emptyComponent={emptyComponent}

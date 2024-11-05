@@ -109,7 +109,7 @@ export const AutocompleteExtension = Node.create<
                                         const parentNode = document.createElement("span");
                                         const addSpace = nextNode && nextNode.isText ? " " : "";
                                         parentNode.innerHTML = `${addSpace}${suggestion}`;
-                                        parentNode.classList.add("text-gray-400", "dark:text-gray-500", "suggestion");
+                                        parentNode.classList.add("text-surface-400", "dark:text-surface-500", "suggestion");
                                         return parentNode;
                                     }, {
                                         side: 1,

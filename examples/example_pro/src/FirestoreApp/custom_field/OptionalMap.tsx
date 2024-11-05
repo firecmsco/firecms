@@ -7,7 +7,7 @@ export const OptionalMap: typeof MapFieldBinding = (props) => {
     return (
         <div
             className={
-                "px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2 bg-slate-50 bg-opacity-50 dark:bg-gray-900" +
+                "px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2 bg-surface-accent-50 bg-opacity-50 dark:bg-surface-900" +
                 cls(defaultBorderMixin + " border", "rounded-md", "w-full")
             }
             style={{
@@ -17,7 +17,7 @@ export const OptionalMap: typeof MapFieldBinding = (props) => {
             <div
                 className={cls(
                     "rounded flex items-center justify-between w-full min-h-[52px]",
-                    "hover:bg-slate-50 dark:hover:bg-gray-800 dark:hover:bg-opacity-10",
+                    "hover:bg-surface-accent-50 dark:hover:bg-surface-800 dark:hover:bg-opacity-10",
                     "p-4"
                 )}
                 onClick={() => {

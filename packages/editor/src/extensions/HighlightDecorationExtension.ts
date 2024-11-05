@@ -32,7 +32,7 @@ function buildDecorationSet(highlight: any, doc: any) {
     if (highlight) {
         decorations.push(
             Decoration.inline(highlight.from, highlight.to, {
-                class: "dark:bg-slate-700 bg-slate-300"
+                class: "dark:bg-surface-accent-700 bg-surface-accent-300"
             })
         );
     }

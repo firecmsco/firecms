@@ -38,9 +38,9 @@ export function PlansComparison() {
 
     const freeTier = (
         <div
-            className="h-full max-w-sm p-6 border border-solid border-gray-200 rounded-lg shadow dark:border-gray-700 flex flex-col">
+            className="h-full max-w-sm p-6 border border-solid border-surface-200 rounded-lg shadow dark:border-surface-700 flex flex-col">
 
-            <h3 className={"text-2xl md:text-4xl font-bold text-center text-gray-800 dark:text-gray-200 uppercase my-3"}>
+            <h3 className={"text-2xl md:text-4xl font-bold text-center text-surface-800 dark:text-surface-200 uppercase my-3"}>
                 Free
             </h3>
             <div className={"grow"}>
@@ -58,7 +58,7 @@ export function PlansComparison() {
                     <li className={"ml-8 list-disc"}>3 users</li>
                 </ul>
             </div>
-            <div className={"text-center mt-4 text-gray-600 dark:text-gray-400 w-full"}>
+            <div className={"text-center mt-4 text-surface-600 dark:text-surface-400 w-full"}>
                 <span className={"text-2xl font-bold "}>€0 user/month</span>
             </div>
 
@@ -104,9 +104,9 @@ export function PlansComparison() {
 
     const proTier = (
         <div
-            className="h-full max-w-sm p-6 border border-solid border-gray-200 rounded-lg shadow dark:border-gray-700 flex flex-col">
+            className="h-full max-w-sm p-6 border border-solid border-surface-200 rounded-lg shadow dark:border-surface-700 flex flex-col">
 
-            <h3 className={"text-2xl md:text-4xl font-bold text-center text-gray-800 dark:text-gray-200 uppercase my-3"}>
+            <h3 className={"text-2xl md:text-4xl font-bold text-center text-surface-800 dark:text-surface-200 uppercase my-3"}>
                 Pro
             </h3>
             <div className={"grow"}>
@@ -125,7 +125,7 @@ export function PlansComparison() {
                     <li className={"ml-8 list-disc"}>Roadmap prioritization</li>
                 </ul>
             </div>
-            <div className={"text-center mt-4 text-gray-600 dark:text-gray-400 w-full"}>
+            <div className={"text-center mt-4 text-surface-600 dark:text-surface-400 w-full"}>
                 <span className={"text-2xl font-bold "}>Starting at €29.99</span>
             </div>
             <div className={"text-center mt-4 text-primary w-full"}>

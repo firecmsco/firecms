@@ -71,7 +71,7 @@ export const Checkbox = ({
                 padding ? paddingClasses[size] : "",
                 outerSizeClasses[size],
                 "inline-flex items-center justify-center text-sm font-medium focus:outline-none transition-colors ease-in-out duration-150",
-                onCheckedChange ? "rounded-full hover:bg-slate-200 hover:bg-opacity-75 dark:hover:bg-slate-700 dark:hover:bg-opacity-75" : "",
+                onCheckedChange ? "rounded-full hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-700 dark:hover:bg-opacity-75" : "",
                 onCheckedChange ? "cursor-pointer" : "cursor-default"
             )}>
                 <div
@@ -79,12 +79,12 @@ export const Checkbox = ({
                         "border-2 relative transition-colors ease-in-out duration-150",
                         sizeClasses[size],
                         disabled
-                            ? (indeterminate || isChecked ? "bg-slate-400 dark:bg-slate-600" : "bg-slate-400 dark:bg-slate-600")
-                            : (indeterminate || isChecked ? colorClasses[color] : "bg-white dark:bg-gray-900"),
-                        (indeterminate || isChecked) ? "text-slate-100 dark:text-slate-900" : "",
+                            ? (indeterminate || isChecked ? "bg-surface-accent-400 dark:bg-surface-accent-600" : "bg-surface-accent-400 dark:bg-surface-accent-600")
+                            : (indeterminate || isChecked ? colorClasses[color] : "bg-white dark:bg-surface-900"),
+                        (indeterminate || isChecked) ? "text-surface-accent-100 dark:text-surface-accent-900" : "",
                         disabled
                             ? "border-transparent"
-                            : (indeterminate || isChecked ? "border-transparent" : "border-slate-800 dark:border-slate-200")
+                            : (indeterminate || isChecked ? "border-transparent" : "border-surface-accent-800 dark:border-surface-accent-200")
                     )}>
                     <CheckboxPrimitive.Indicator asChild>
                         {indeterminate

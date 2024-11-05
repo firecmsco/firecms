@@ -65,7 +65,7 @@ export function UrlComponentPreview({
                     width: getThumbnailMeasure(size),
                     height: getThumbnailMeasure(size)
                 }}>
-                <DescriptionIcon className="text-gray-700 dark:text-gray-300"/>
+                <DescriptionIcon className="text-surface-700 dark:text-surface-300"/>
                 {hint &&
                     <Tooltip title={hint}>
                         <Typography

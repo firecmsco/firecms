@@ -9,19 +9,19 @@ const getBackgroundColor = (
     isGroupedOver: boolean
 ): string => {
     if (isDragging) {
-        return "bg-gray-100 dark:bg-gray-800";
+        return "bg-surface-100 dark:bg-surface-800";
     }
 
     if (isGroupedOver) {
-        return "bg-gray-200";
+        return "bg-surface-200";
     }
 
-    return "bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800";
+    return "bg-white dark:bg-surface-900 hover:bg-surface-100 dark:hover:bg-surface-800";
 };
 
 const getBorderColor = (
     isDragging: boolean
-): string => isDragging ? "border-gray-700 ring-2 ring-primary" : "border-transparent";
+): string => isDragging ? "border-surface-700 ring-2 ring-primary" : "border-transparent";
 
 const getStyle = (provided: DraggableProvided, style?: CSSProperties) => {
     return style ? { ...provided.draggableProps.style, ...style } : provided.draggableProps.style;

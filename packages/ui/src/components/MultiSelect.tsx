@@ -270,7 +270,7 @@ export const MultiSelect = React.forwardRef<
                         </button>
                     </PopoverPrimitive.Trigger>
                     <PopoverPrimitive.Content
-                        className={cls("z-50 relative overflow-hidden border bg-white dark:bg-gray-900 rounded-lg w-[400px]", defaultBorderMixin)}
+                        className={cls("z-50 relative overflow-hidden border bg-white dark:bg-surface-900 rounded-lg w-[400px]", defaultBorderMixin)}
                         align="start"
                         sideOffset={8}
                         onEscapeKeyDown={() => onPopoverOpenChange(false)}
@@ -306,8 +306,8 @@ export const MultiSelect = React.forwardRef<
                                                 "m-1",
                                                 "ring-offset-transparent",
                                                 "p-1 rounded aria-[selected=true]:outline-none aria-[selected=true]:ring-2 aria-[selected=true]:ring-primary aria-[selected=true]:ring-opacity-75 aria-[selected=true]:ring-offset-2",
-                                                "aria-[selected=true]:bg-slate-100 aria-[selected=true]:dark:bg-slate-900",
-                                                "cursor-pointer p-2 rounded aria-[selected=true]:bg-slate-100 aria-[selected=true]:dark:bg-slate-900"
+                                                "aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900",
+                                                "cursor-pointer p-2 rounded aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900"
                                             )
                                         }
                                     >
@@ -359,13 +359,13 @@ export function MultiSelectItem({
         }}
         className={cls(
             "flex flex-row items-center gap-1.5",
-            isSelected ? "bg-slate-200 dark:bg-slate-950" : "",
+            isSelected ? "bg-surface-accent-200 dark:bg-surface-accent-950" : "",
             "cursor-pointer",
             "m-1",
             "ring-offset-transparent",
             "p-1 rounded aria-[selected=true]:outline-none aria-[selected=true]:ring-2 aria-[selected=true]:ring-primary aria-[selected=true]:ring-opacity-75 aria-[selected=true]:ring-offset-2",
-            "aria-[selected=true]:bg-slate-100 aria-[selected=true]:dark:bg-slate-900",
-            "cursor-pointer p-2 rounded aria-[selected=true]:bg-slate-100 aria-[selected=true]:dark:bg-slate-900",
+            "aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900",
+            "cursor-pointer p-2 rounded aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900",
             className
         )}
     >
@@ -385,9 +385,9 @@ function InnerCheckBox({ checked }: { checked: boolean }) {
             className={cls(
                 "border-2 relative transition-colors ease-in-out duration-150",
                 "w-4 h-4 rounded flex items-center justify-center",
-                (checked ? "bg-primary" : "bg-white dark:bg-slate-900"),
-                (checked) ? "text-slate-100 dark:text-slate-900" : "",
-                (checked ? "border-transparent" : "border-slate-800 dark:border-slate-200")
+                (checked ? "bg-primary" : "bg-white dark:bg-surface-accent-900"),
+                (checked) ? "text-surface-accent-100 dark:text-surface-accent-900" : "",
+                (checked ? "border-transparent" : "border-surface-accent-800 dark:border-surface-accent-200")
             )}>
             {checked && <Icon iconKey={"check"} size={16} className={"absolute"}/>}
         </div>

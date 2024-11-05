@@ -291,15 +291,15 @@ export function App() {
     } = useValidateAuthenticator({
         disabled: userManagement.loading,
         authController,
-        authenticator: myAuthenticator,
-        // authenticator: userManagement.authenticator,
+        // authenticator: myAuthenticator,
+        authenticator: userManagement.authenticator,
         dataSourceDelegate: firestoreDelegate,
         storageSource
     });
 
     const navigationController = useBuildNavigationController({
         collections,
-        // collectionPermissions: userManagement.collectionPermissions,
+        collectionPermissions: userManagement.collectionPermissions,
         views,
         adminViews: userManagementAdminViews,
         authController,

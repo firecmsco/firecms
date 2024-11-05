@@ -229,7 +229,7 @@ export const FireCMSEditor = ({
                     tippyOptions={{
                         placement: "top"
                     }}
-                    className={cls("flex w-fit max-w-[90vw] h-10 overflow-hidden rounded border bg-white dark:bg-gray-900 shadow", defaultBorderMixin)}
+                    className={cls("flex w-fit max-w-[90vw] h-10 overflow-hidden rounded border bg-white dark:bg-surface-900 shadow", defaultBorderMixin)}
                 >
                     {/*<Separator orientation="vertical"/>*/}
                     <NodeSelector portalContainer={ref.current} open={openNode} onOpenChange={setOpenNode}/>

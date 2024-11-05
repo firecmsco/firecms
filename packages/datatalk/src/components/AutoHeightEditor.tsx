@@ -41,7 +41,7 @@ export function AutoHeightEditor({
     return <Editor
         height={height + "px"}
         theme={mode === "dark" ? "vs-dark" : "light"}
-        className={"rounded-lg flex-1 border dark:border-gray-800"}
+        className={"rounded-lg flex-1 border dark:border-surface-800"}
         defaultLanguage="javascript"
         value={value}
         onChange={onChange}

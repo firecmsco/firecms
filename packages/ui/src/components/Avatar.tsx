@@ -35,14 +35,14 @@ const AvatarInner: React.ForwardRefRenderFunction<HTMLButtonElement, AvatarProps
             {...props}
             className={cls(
                 "rounded-full flex items-center justify-center overflow-hidden",
-                "p-1 hover:bg-slate-200 hover:dark:bg-slate-700 w-12 h-12 min-w-12 min-h-12",
+                "p-1 hover:bg-surface-accent-200 hover:dark:bg-surface-accent-700 w-12 h-12 min-w-12 min-h-12",
                 outerClassName
             )}
         >
             {src && !isImageError ? (
                 <img
                     className={cls(
-                        "bg-slate-100 dark:bg-slate-800",
+                        "bg-surface-accent-100 dark:bg-surface-accent-800",
                         "w-full h-full object-cover rounded-full",
                         className
                     )}
@@ -53,9 +53,9 @@ const AvatarInner: React.ForwardRefRenderFunction<HTMLButtonElement, AvatarProps
             ) : (
                 <span
                     className={cls(
-                        "bg-slate-100 dark:bg-slate-800",
+                        "bg-surface-accent-100 dark:bg-surface-accent-800",
                         "flex items-center justify-center",
-                        "w-full h-full py-1.5 text-lg font-medium text-slate-900 dark:text-white rounded-full",
+                        "w-full h-full py-1.5 text-lg font-medium text-surface-accent-900 dark:text-white rounded-full",
                         className
                     )}
                 >

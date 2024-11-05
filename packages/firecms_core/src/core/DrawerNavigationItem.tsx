@@ -34,13 +34,13 @@ export function DrawerNavigationItem({
                 transition: drawerOpen ? "width 150ms ease-in" : undefined
             }}
             className={({ isActive }: any) => cls("rounded-lg truncate",
-                "hover:bg-slate-300 hover:bg-opacity-75 dark:hover:bg-slate-800 dark:hover:bg-opacity-75 text-text-secondary dark:text-gray-200 hover:text-gray-900 hover:dark:text-white",
+                "hover:bg-surface-accent-300 hover:bg-opacity-75 dark:hover:bg-surface-accent-800 dark:hover:bg-opacity-75 text-text-secondary dark:text-surface-200 hover:text-surface-900 hover:dark:text-white",
                 "flex flex-row items-center mr-8",
                 // "transition-all ease-in-out delay-100 duration-300",
                 // drawerOpen ? "w-full" : "w-18",
                 drawerOpen ? "pl-4 h-12" : "pl-4 h-11",
                 "font-medium text-sm",
-                isActive ? "bg-slate-200 bg-opacity-60 dark:bg-gray-800 dark:bg-opacity-50" : ""
+                isActive ? "bg-surface-accent-200 bg-opacity-60 dark:bg-surface-800 dark:bg-opacity-50" : ""
             )}
             to={url}
         >

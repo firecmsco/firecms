@@ -24,7 +24,7 @@ export function TestEditorView() {
     const editorAIController = useEditorAIController({ getAuthToken: authController.getAuthToken });
 
     return (
-        <Container className={"md:p-8 bg-white dark:bg-gray-950 md:my-4"}>
+        <Container className={"md:p-8 bg-white dark:bg-surface-950 md:my-4"}>
             {!initialContent && <CircularProgressCenter/>}
             {initialContent && <FireCMSEditor
                 content={initialContent}
