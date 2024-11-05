@@ -154,7 +154,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
 
         {fieldBinding}
 
-        {showEnhanceIcon && <div className={cls("dark:bg-gray-700 bg-gray-100 rounded-full absolute right-2 ",
+        {showEnhanceIcon && <div className={cls("dark:bg-surface-700 bg-surface-100 rounded-full absolute right-2 ",
             props.property.dataType === "string" && props.property.markdown ? "top-0" : "-top-4")}>
             <Tooltip
                 open={tooltipOpen}
@@ -172,7 +172,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                             size="small"
                             aria-label="Enhance field"
                             disabled={dataLoading || loading}
-                            className={enoughData ? "text-gray-900 dark:text-white" : "text-gray-400 dark:text-gray-600"}
+                            className={enoughData ? "text-surface-900 dark:text-white" : "text-surface-400 dark:text-surface-600"}
                             onClick={() => {
                                 if (!props.context.entityId) return;
                                 if (!enoughData) return;

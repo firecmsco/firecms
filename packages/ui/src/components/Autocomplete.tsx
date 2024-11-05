@@ -60,7 +60,7 @@ export function Autocomplete({
         <div ref={autocompleteRef}
              className={cls(
                  open ? paperMixin : "",
-                 "bg-slate-50 dark:bg-slate-900 py-2"
+                 "bg-surface-accent-50 dark:bg-surface-accent-900 py-2"
              )}>
             {children}
         </div>
@@ -80,7 +80,7 @@ export function AutocompleteItem({
 
     return (
         <div
-            className="flex w-full items-center pr-6 pl-14 h-[48px] cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="flex w-full items-center pr-6 pl-14 h-[48px] cursor-pointer hover:bg-surface-accent-100 dark:hover:bg-surface-accent-800"
             onClick={onClick}>
             {children}
         </div>

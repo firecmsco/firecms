@@ -11,9 +11,9 @@ import { ColumnTitle } from "./ColumnTitle";
 import type { Item, ItemViewProps } from "./types";
 
 const getBackgroundColor = (isDraggingOver: boolean, isDraggingFrom: boolean): string => {
-    if (isDraggingOver) return "bg-slate-200 dark:bg-gray-800";
-    if (isDraggingFrom) return "bg-slate-100 dark:bg-gray-900";
-    return "bg-gray-50 dark:bg-gray-950";
+    if (isDraggingOver) return "bg-surface-accent-200 dark:bg-surface-800";
+    if (isDraggingFrom) return "bg-surface-accent-100 dark:bg-surface-900";
+    return "bg-surface-50 dark:bg-surface-950";
 };
 
 interface SortableListProps {

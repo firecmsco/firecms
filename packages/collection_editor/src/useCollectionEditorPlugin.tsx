@@ -140,7 +140,7 @@ export function IntroWidget({}: {}) {
 
     return (
         <Paper
-            className={"my-4 px-4 py-6 flex flex-col  bg-white dark:bg-slate-800 gap-2"}>
+            className={"my-4 px-4 py-6 flex flex-col  bg-white dark:bg-surface-accent-800 gap-2"}>
             <Typography variant={"subtitle2"} className={"uppercase"}>No collections found</Typography>
             <Typography>
                 Start building collections in FireCMS easily. Map them to your existing

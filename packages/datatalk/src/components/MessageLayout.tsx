@@ -51,7 +51,7 @@ export function MessageLayout({
     }, [ref]);
 
     return <div ref={ref}
-                className="flex flex-col gap-2 bg-white dark:bg-gray-800 dark:bg-opacity-20 rounded-lg p-4 shadow-sm">
+                className="flex flex-col gap-2 bg-white dark:bg-surface-800 dark:bg-opacity-20 rounded-lg p-4 shadow-sm">
         <div className="flex items-start gap-3 justify-center">
             <Menu trigger={<Avatar className="w-10 h-10 shrink-0">
                 {message?.user === "USER" ? <PersonIcon/> : <AutoAwesomeIcon/>}
@@ -59,7 +59,7 @@ export function MessageLayout({
                 <MenuItem dense onClick={onRemove}>Remove</MenuItem>
             </Menu>
 
-            <div className="mt-3 flex-1 text-gray-700 dark:text-gray-200">
+            <div className="mt-3 flex-1 text-surface-700 dark:text-surface-200">
 
                 {message
                     ? (message.user === "USER"

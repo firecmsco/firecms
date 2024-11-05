@@ -85,9 +85,9 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
         return (
             <ErrorBoundary>
                 <div
-                    className={cls("flex py-0 px-3 h-full text-xs uppercase font-semibold relative select-none items-center bg-gray-50 dark:bg-gray-900",
-                        "text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 ",
-                        "hover:bg-gray-100 dark:hover:bg-gray-800 hover:bg-opacity-50 dark:hover:bg-opacity-50",
+                    className={cls("flex py-0 px-3 h-full text-xs uppercase font-semibold relative select-none items-center bg-surface-50 dark:bg-surface-900",
+                        "text-text-secondary hover:text-text-primary dark:text-text-secondary-dark dark:hover:text-text-primary-dark",
+                        "hover:bg-surface-100 dark:hover:bg-surface-800 hover:bg-opacity-50 dark:hover:bg-opacity-50",
                         column.frozen ? "sticky left-0 z-10" : "relative z-0"
                     )}
                     style={{
@@ -130,7 +130,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                    invisible={!sort}>
                                 <IconButton
                                     size={"small"}
-                                    className={onHover || openFilter ? "bg-white dark:bg-gray-950" : undefined}
+                                    className={onHover || openFilter ? "bg-white dark:bg-surface-950" : undefined}
                                     onClick={() => {
                                         onColumnSort(column.key as Extract<keyof M, string>);
                                     }}
@@ -157,7 +157,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                 modal={true}
                                 trigger={
                                     <IconButton
-                                        className={onHover || openFilter ? "bg-white dark:bg-gray-950" : undefined}
+                                        className={onHover || openFilter ? "bg-white dark:bg-surface-950" : undefined}
                                         size={"small"}
                                         onClick={handleSettingsClick}>
                                         <FilterListIcon size={"small"}/>
@@ -181,7 +181,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                         ref={resizeHandleRef}
                         className={cls(
                             "absolute h-full w-[6px] top-0 right-0 cursor-col-resize",
-                            hovered && "bg-gray-300 dark:bg-gray-700"
+                            hovered && "bg-surface-300 dark:bg-surface-700"
                         )}
                         onMouseDown={onClickResizeColumn ? () => onClickResizeColumn(columnIndex, column) : undefined}
                     />}
@@ -238,9 +238,9 @@ function FilterForm<M>({
                   e.preventDefault();
                   submit();
               }}
-              className={"text-gray-900 dark:text-white"}>
+              className={"text-surface-900 dark:text-white"}>
             <div
-                className={cls(defaultBorderMixin, "py-4 px-6 text-xs font-semibold uppercase border-b")}>
+                className={cls(defaultBorderMixin, "py-4 px-6 typography-label border-b")}>
                 {column.title ?? id}
             </div>
             {filterField && <div className="m-4">

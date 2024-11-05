@@ -115,7 +115,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                         "select-none rounded-md text-sm",
                         error ? "text-red-500 dark:text-red-600" : "focus:text-text-primary dark:focus:text-text-primary-dark",
                         error ? "border border-red-500 dark:border-red-600" : "",
-                        disabled ? "text-slate-600 dark:text-slate-400" : "text-slate-800 dark:text-white",
+                        disabled ? "text-surface-accent-600 dark:text-surface-accent-400" : "text-surface-accent-800 dark:text-white",
                         "relative flex flex-row items-center",
                         inputClassName
                     )}>
@@ -159,7 +159,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
             </div>
             <SelectPrimitive.Portal>
                 <SelectPrimitive.Content position={position}
-                                         className={cls(focusedDisabled, "z-50 relative overflow-hidden border bg-white dark:bg-gray-900 p-2 rounded-lg", defaultBorderMixin)}>
+                                         className={cls(focusedDisabled, "z-50 relative overflow-hidden border bg-white dark:bg-surface-900 p-2 rounded-lg", defaultBorderMixin)}>
                     <SelectPrimitive.Viewport className={"p-1"}
                                               style={{ maxHeight: "var(--radix-select-content-available-height)" }}>
                         {children}
@@ -191,10 +191,10 @@ export function SelectItem({
         disabled={disabled}
         className={cls(
             "w-full",
-            "relative flex items-center p-2 rounded-md text-sm text-slate-700 dark:text-slate-300",
+            "relative flex items-center p-2 rounded-md text-sm text-surface-accent-700 dark:text-surface-accent-300",
             "focus:z-10",
-            "data-[state=checked]:bg-slate-100 data-[state=checked]:dark:bg-slate-800 focus:bg-slate-100 dark:focus:bg-gray-950",
-            "data-[state=checked]:focus:bg-slate-200 data-[state=checked]:dark:focus:bg-gray-950",
+            "data-[state=checked]:bg-surface-accent-100 data-[state=checked]:dark:bg-surface-accent-800 focus:bg-surface-accent-100 dark:focus:bg-surface-950",
+            "data-[state=checked]:focus:bg-surface-accent-200 data-[state=checked]:dark:focus:bg-surface-950",
             disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
             "[&>*]:w-full",
             "overflow-visible",
@@ -222,7 +222,7 @@ export function SelectGroup({
     return <>
         <SelectPrimitive.Group
             className={cls(
-                "text-xs text-slate-900 dark:text-white uppercase tracking-wider font-bold mt-6 first:mt-2",
+                "text-xs text-surface-accent-900 dark:text-white uppercase tracking-wider font-bold mt-6 first:mt-2",
                 "px-2 py-2",
                 className
             )}>

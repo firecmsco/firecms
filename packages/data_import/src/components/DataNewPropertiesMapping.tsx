@@ -102,7 +102,7 @@ export function DataNewPropertiesMapping({
 
             <ExpandablePanel title="Default values" initiallyExpanded={false} innerClassName={"p-4 mt-4"}>
 
-                <div className={"text-sm text-slate-500 dark:text-slate-300 font-medium ml-3.5 mb-1"}>
+                <div className={"text-sm text-surface-accent-500 dark:text-surface-accent-300 font-medium ml-3.5 mb-1"}>
                     You can select a default value for unmapped columns and empty values:
                 </div>
                 <Table style={{

@@ -23,6 +23,7 @@ import { Button, ClearIcon, DialogActions, IconButton, Typography } from "@firec
 import { PropertyFieldBinding } from "../../../../form";
 import { useCustomizationController, useDataSource, useFireCMSContext } from "../../../../hooks";
 import { OnCellValueChangeParams } from "../../../common";
+import { yupToFormErrors } from "../../../../core/EntityEditView";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     customFieldValidator?: CustomFieldValidator;
@@ -240,11 +241,12 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             return validationSchema?.validate(values, { abortEarly: false })
                 .then(() => ({}))
                 .catch((e) => {
-                    const errors: Record<string, string> = {};
-                    e.inner.forEach((error: any) => {
-                        errors[error.path] = error.message;
-                    });
-                    return errors;
+                    // const errors: Record<string, string> = {};
+                    // e.inner.forEach((error: any) => {
+                    //     errors[error.path] = error.message;
+                    // });
+                    // return errors;
+                    return yupToFormErrors(e);
                 });
         },
         validateOnInitialRender: true,
@@ -351,7 +353,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         });
     }
     const form = <div
-        className={`text-gray-900 dark:text-white overflow-auto rounded rounded-md bg-white dark:bg-gray-950 ${!open ? "hidden" : ""} cursor-grab max-w-[100vw]`}>
+        className={`text-surface-900 dark:text-white overflow-auto rounded rounded-md bg-white dark:bg-surface-950 ${!open ? "hidden" : ""} cursor-grab max-w-[100vw]`}>
 
         {internalForm}
 
@@ -368,7 +370,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             style={{
                 boxShadow: "0 0 0 2px rgba(128,128,128,0.2)",
             }}
-            className={`inline-block fixed z-20 shadow-outline rounded-md bg-white dark:bg-gray-950 ${
+            className={`inline-block fixed z-20 shadow-outline rounded-md bg-white dark:bg-surface-950 ${
                 !open ? "invisible" : "visible"
             } cursor-grab overflow-visible`}
             ref={draggableRef}>
@@ -381,7 +383,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                 {form}
 
                 <div
-                    className="absolute -top-3.5 -right-3.5 bg-gray-500 rounded-full"
+                    className="absolute -top-3.5 -right-3.5 bg-surface-500 rounded-full"
                     style={{
                         width: "32px",
                         height: "32px"

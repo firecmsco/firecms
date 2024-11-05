@@ -536,7 +536,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
             <>
                 {!isNewCollection && <Tabs value={currentView}
-                                           className={cls(defaultBorderMixin, "justify-end bg-gray-50 dark:bg-gray-950 border-b")}
+                                           className={cls(defaultBorderMixin, "justify-end bg-surface-50 dark:bg-surface-950 border-b")}
                                            onValueChange={(v) => setCurrentView(v as EditorView)}>
                     <Tab value={"details"}>
                         Details

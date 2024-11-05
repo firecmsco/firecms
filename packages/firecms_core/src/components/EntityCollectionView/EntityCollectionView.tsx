@@ -538,7 +538,7 @@ export const EntityCollectionView = React.memo(
             </div>}
         >
 
-            {collection.description && <div className="m-4 text-gray-900 dark:text-white">
+            {collection.description && <div className="m-4 text-surface-900 dark:text-white">
                 <Markdown source={collection.description}/>
             </div>}
 
@@ -798,7 +798,7 @@ function EntityIdHeaderWidget({
                         <SearchIcon size={"small"}/>
                     </IconButton>
                 }>
-                <div className={cls("my-2 rounded-lg bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white")}>
+                <div className={cls("my-2 rounded-lg bg-surface-50 dark:bg-surface-950 text-surface-900 dark:text-white")}>
                     <form noValidate={true}
                           onSubmit={(e) => {
                               e.preventDefault();
@@ -823,7 +823,7 @@ function EntityIdHeaderWidget({
                                     setSearchString(e.target.value);
                                 }}
                                 value={searchString}
-                                className={"rounded-lg bg-white dark:bg-gray-800 flex-grow bg-transparent outline-none p-2 " + focusedDisabled}/>
+                                className={"rounded-lg bg-white dark:bg-surface-800 flex-grow bg-transparent outline-none p-2 " + focusedDisabled}/>
                             <Button variant={"text"}
                                     disabled={!(searchString.trim())}
                                     type={"submit"}

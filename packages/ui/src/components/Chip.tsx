@@ -46,9 +46,9 @@ export function Chip({
         <div
             className={cls("rounded-lg max-w-full w-max h-fit font-regular inline-flex gap-1",
                 "text-ellipsis",
-                onClick ? "cursor-pointer hover:bg-slate-300 hover:dark:bg-slate-700" : "",
+                onClick ? "cursor-pointer hover:bg-surface-accent-300 hover:dark:bg-surface-accent-700" : "",
                 sizeClassNames[size],
-                error || !usedColorScheme ? "bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-white" : "",
+                error || !usedColorScheme ? "bg-surface-accent-200 dark:bg-surface-accent-800 text-surface-accent-800 dark:text-white" : "",
                 error ? "text-red-500 dark:text-red-400" : "",
                 className)}
             onClick={onClick}

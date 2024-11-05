@@ -36,7 +36,7 @@ export function StorageItemPreview({
 
             {!placeholder && !disabled &&
                 <div
-                    className="absolute rounded-full -top-2 -right-2 z-10 bg-white dark:bg-gray-900">
+                    className="absolute rounded-full -top-2 -right-2 z-10 bg-white dark:bg-surface-900">
 
                     <Tooltip
                         asChild={true}
@@ -67,7 +67,7 @@ export function StorageItemPreview({
                 <div
                     onClick={(e) => e.stopPropagation()}
                     className="flex flex-col items-center justify-center w-full h-full">
-                    <DescriptionIcon className="text-gray-700 dark:text-gray-300"/>
+                    <DescriptionIcon className="text-surface-700 dark:text-surface-300"/>
                 </div>
             }
 

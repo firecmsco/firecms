@@ -259,7 +259,7 @@ function StorageUpload({
                 className="flex-grow m-2 max-w-[200px]"
                 onClick={open}>
                 <Typography
-                    className="text-gray-400 dark:text-gray-600"
+                    className="text-surface-400 dark:text-surface-600"
                     variant={"body2"}
                     align={"center"}>
                     {helpText}
@@ -276,7 +276,7 @@ function StorageUpload({
                     color={"inherit"}
                     size={"small"}
                     onClick={open}>
-                    <EditIcon size={"small"} className={"text-gray-500"}/>
+                    <EditIcon size={"small"} className={"text-surface-500"}/>
                 </IconButton>
             </EntityTableCellActions>
 

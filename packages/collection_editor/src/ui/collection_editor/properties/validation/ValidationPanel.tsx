@@ -12,7 +12,7 @@ export function ValidationPanel({
             asField={true}
             innerClassName="p-4"
             title={
-                <div className="flex flex-row text-gray-500">
+                <div className="flex flex-row text-surface-500">
                     <RuleIcon/>
                     <Typography variant={"subtitle2"}
                                 className="ml-2">

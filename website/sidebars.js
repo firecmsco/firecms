@@ -32,6 +32,7 @@ module.exports = {
                 "pro/firestore_rules",
                 "pro/sample_pro",
                 "pro/main_components",
+                "pro/styling_firecms",
                 "pro/deployment",
                 "pro/app_check",
                 "firebase_setup",

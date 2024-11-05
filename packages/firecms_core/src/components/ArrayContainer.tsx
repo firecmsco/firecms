@@ -5,7 +5,8 @@ import { DragDropContext, Draggable, DraggableProvided, Droppable } from "@hello
 import { getHashValue } from "../util";
 import {
     AddIcon,
-    Button, cls,
+    Button,
+    cls,
     ContentCopyIcon,
     HandleIcon,
     IconButton,
@@ -173,7 +174,7 @@ export function ArrayContainer<T>({
             >
                 {(droppableProvided, droppableSnapshot) => (
                     <div
-                        className={cls("space-y-1",className)}
+                        className={cls("space-y-1", className)}
                         {...droppableProvided.droppableProps}
                         ref={droppableProvided.innerRef}>
                         {hasValue && internalIds.map((internalId: number, index: number) => {
@@ -255,7 +256,7 @@ export function ArrayContainerItem({
         {...provided.draggableProps}
         style={provided.draggableProps.style}
         className={`${
-            !isDragging ? "hover:bg-slate-50 dark:hover:bg-gray-800 dark:hover:bg-opacity-20" : ""
+            !isDragging ? "hover:bg-surface-accent-50 dark:hover:bg-surface-800 dark:hover:bg-opacity-20" : ""
         } rounded-md opacity-100`}
     >
         <div

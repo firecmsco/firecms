@@ -28,7 +28,7 @@ export function AdminDrawerMenu({
         trigger={
             <IconButton
                 shape={"square"}
-                className={"m-4 text-gray-900 dark:text-white w-fit"}>
+                className={"m-4 text-surface-900 dark:text-white w-fit"}>
                 <Tooltip title={"Admin"}
                          open={tooltipsOpen}
                          side={"right"} sideOffset={28}>

@@ -12,7 +12,7 @@ export function NavigationGroup({
     return (
         <ExpandablePanel
             invisible={true}
-            titleClassName={"font-medium text-sm text-gray-600 dark:text-gray-400"}
+            titleClassName={"font-medium text-sm text-surface-600 dark:text-surface-400"}
             innerClassName={"py-4"}
             initiallyExpanded={!(userConfigurationPersistence?.collapsedGroups ?? []).includes(group ?? "ungrouped")}
             onExpandedChange={expanded => {

@@ -9,7 +9,7 @@ export function PropertyConfigBadge({
     propertyConfig: PropertyConfig | undefined,
     disabled?: boolean
 }): React.ReactNode {
-    const classes = "h-8 w-8 p-1 rounded-full shadow text-white " + (disabled ? "bg-gray-400 dark:bg-gray-600" : "");
+    const classes = "h-8 w-8 p-1 rounded-full shadow text-white " + (disabled ? "bg-surface-400 dark:bg-surface-600" : "");
 
     const defaultPropertyConfig = typeof propertyConfig?.property === "object" ? getDefaultFieldConfig(propertyConfig.property) : undefined;
 

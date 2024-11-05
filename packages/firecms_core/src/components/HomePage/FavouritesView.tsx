@@ -38,7 +38,7 @@ function NavigationChip({ entry }: { entry: TopNavigationEntry }) {
                 : <StarBorderIcon
                     onClick={onIconClick}
                     size={18}
-                    className={"text-gray-400 dark:text-gray-500"}/>}>
+                    className={"text-surface-400 dark:text-surface-500"}/>}>
         {entry.name}
     </Chip>;
 }

@@ -27,7 +27,7 @@ export function NavigationCard({
                 className="flex-grow w-full">
 
                 <div
-                    className="h-10 flex items-center w-full justify-between text-gray-300 dark:text-gray-600">
+                    className="h-10 flex items-center w-full justify-between text-surface-300 dark:text-surface-600">
 
                     {icon}
 

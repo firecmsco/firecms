@@ -15,7 +15,7 @@ export const Table = ({
                           ...rest
                       }: TableProps) => (
     <table
-        className={cls("text-left text-gray-800 dark:text-white rounded-md overflow-x-auto", className)}
+        className={cls("text-left text-surface-800 dark:text-white rounded-md overflow-x-auto", className)}
         style={style}
         {...rest}
     >
@@ -34,7 +34,7 @@ export const TableBody = ({
                               ...rest
                           }: TableBodyProps) => (
     <tbody
-        className={cls("bg-white dark:bg-gray-950 text-sm divide-y divide-gray-100 dark:divide-gray-700 dark:divide-opacity-70", className)}
+        className={cls("bg-white dark:bg-surface-950 text-sm divide-y divide-surface-100 dark:divide-surface-700 dark:divide-opacity-70", className)}
         {...rest}
     >
     {children}
@@ -55,8 +55,8 @@ export const TableHeader = ({
     <tr
         className={cls(
             defaultBorderMixin,
-            "text-sm font-medium text-gray-700 dark:text-slate-300",
-            "bg-slate-50 border-b dark:bg-gray-900",
+            "text-sm font-medium text-surface-700 dark:text-surface-accent-300",
+            "bg-surface-accent-50 border-b dark:bg-surface-900",
             className
         )}
     >
@@ -83,8 +83,8 @@ export const TableRow = ({
         onClick={onClick}
         style={style}
         className={cls(
-            "bg-white dark:bg-gray-950",
-            onClick ? "hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer" : "",
+            "bg-white dark:bg-surface-950",
+            onClick ? "hover:bg-surface-accent-100 dark:hover:bg-surface-accent-800 cursor-pointer" : "",
             className
         )}
         {...rest}

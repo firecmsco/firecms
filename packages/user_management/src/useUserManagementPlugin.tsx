@@ -53,7 +53,7 @@ export function IntroWidget({
 
     return (
         <Paper
-            className={"my-4 flex flex-col px-4 py-6 bg-white dark:bg-slate-800 gap-2"}>
+            className={"my-4 flex flex-col px-4 py-6 bg-white dark:bg-surface-accent-800 gap-2"}>
             <Typography variant={"subtitle2"} className={"uppercase"}>Create your users and roles</Typography>
             <Typography>
                 You have no users or roles defined. You can create default roles and add the current user as admin.

@@ -29,7 +29,7 @@ export function PropertyIdCopyTooltipContent({ propertyKey }: { propertyKey: str
     return (
         <div className={"flex flex-row gap-2 items-center justify-center text-white"}>
             <div>
-                <Typography variant={"caption"} className={"min-w-20 text-slate-400"}
+                <Typography variant={"caption"} className={"min-w-20 text-surface-accent-400"}
                             color={"disabled"}>{copied ? "Copied" : "Property ID"}</Typography>
                 <Typography variant={"caption"} className={"text-white"}><code>{propertyKey}</code></Typography>
             </div>

@@ -154,14 +154,14 @@ export const TableReferenceFieldInternal = React.memo(
                         className={cls("px-4 py-2 text-sm font-medium flex items-center uppercase",
                             multiselect ? "gap-4" : "gap-6",
                             disabled
-                                ? "text-slate-500"
-                                : "cursor-pointer text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800 group-hover:bg-slate-50 dark:group-hover:bg-gray-800")}
+                                ? "text-surface-accent-500"
+                                : "cursor-pointer text-surface-accent-700 dark:text-surface-accent-300 hover:bg-surface-accent-50 dark:hover:bg-surface-800 group-hover:bg-surface-accent-50 dark:group-hover:bg-surface-800")}
                         onClick={handleOpen}
                         size={"medium"}>
                         <IconForView
                             size={"small"}
                             collectionOrView={collection}
-                            className={"text-gray-300 dark:text-gray-600"}/>
+                            className={"text-surface-300 dark:text-surface-600"}/>
                         Edit {title}
                     </EntityPreviewContainer>}
 

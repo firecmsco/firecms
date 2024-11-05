@@ -71,7 +71,7 @@ export const LinkSelector = ({
                     autoFocus={open}
                     placeholder="Paste a link"
                     defaultValue={editor.getAttributes("link").href || ""}
-                    className={cls("text-gray-900 dark:text-white flex-grow bg-transparent p-1 text-sm outline-none", focusedDisabled)}/>
+                    className={cls("text-surface-900 dark:text-white flex-grow bg-transparent p-1 text-sm outline-none", focusedDisabled)}/>
 
                 {editor.getAttributes("link").href ? (
                     <Button

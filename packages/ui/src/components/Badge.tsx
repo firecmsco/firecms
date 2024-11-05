@@ -17,7 +17,7 @@ const getColor = (color: BadgeColor) => {
         case "error":
             return "bg-red-500";
         default:
-            return "bg-slate-300 dark:bg-slate-700";
+            return "bg-surface-accent-300 dark:bg-surface-accent-700";
     }
 }
 

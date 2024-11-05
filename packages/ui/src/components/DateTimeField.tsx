@@ -155,7 +155,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                             label ? "pt-8 pb-2" : "py-2",
                             inputClassName,
                             disabled &&
-                            "border border-transparent outline-none opacity-50 dark:opacity-50 text-slate-600 dark:text-slate-500"
+                            "border border-transparent outline-none opacity-50 dark:opacity-50 text-surface-accent-600 dark:text-surface-accent-500"
                         )}
                     />
                 <IconButton
@@ -163,14 +163,14 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                         e.stopPropagation();
                         inputRef.current?.showPicker();
                     }}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 !text-slate-500"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 !text-surface-accent-500"
                 >
                     <CalendarMonthIcon color={"disabled"}/>
                 </IconButton>
                 {clearable && value && (
                     <IconButton
                         onClick={handleClear}
-                        className="absolute right-14 top-1/2 transform -translate-y-1/2 text-slate-400 "
+                        className="absolute right-14 top-1/2 transform -translate-y-1/2 text-surface-accent-400 "
                     >
                         <ClearIcon/>
                     </IconButton>

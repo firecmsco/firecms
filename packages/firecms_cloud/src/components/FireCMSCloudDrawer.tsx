@@ -88,7 +88,7 @@ export function FireCMSCloudDrawer() {
                 {groups.map((group) => (
                     <div
                         key={`group_${group}`}
-                        className={"bg-gray-50 dark:bg-gray-800 dark:bg-opacity-30 my-4 rounded-lg ml-4"}>
+                        className={"bg-surface-50 dark:bg-surface-800 dark:bg-opacity-30 my-4 rounded-lg ml-4"}>
                         {buildGroupHeader(group)}
                         {Object.values(navigationEntries)
                             .filter(e => e.group === group)

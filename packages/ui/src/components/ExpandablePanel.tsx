@@ -94,7 +94,7 @@ export function ExpandablePanel({
                 <Collapsible.Trigger
                     className={cls(
                         "rounded-t flex items-center justify-between w-full min-h-[52px]",
-                        "hover:bg-slate-200 hover:bg-opacity-20 dark:hover:bg-gray-800 dark:hover:bg-opacity-20",
+                        "hover:bg-surface-accent-200 hover:bg-opacity-20 dark:hover:bg-surface-800 dark:hover:bg-opacity-20",
                         invisible ? "border-b px-2" : "p-4",
                         open ? "py-6" : "py-4",
                         "transition-all duration-200",

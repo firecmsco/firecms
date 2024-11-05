@@ -191,9 +191,9 @@ export function TemplateButton({
                 onClick={onClick}
                 className={cls(
                     "my-2 rounded-md border mx-0 p-6 px-4 focus:outline-none transition ease-in-out duration-150 flex flex-row gap-4 items-center",
-                    "text-gray-700 dark:text-slate-300",
+                    "text-surface-700 dark:text-surface-accent-300",
                     "hover:border-primary-dark hover:text-primary-dark dark:hover:text-primary focus:ring-primary hover:ring-1 hover:ring-primary",
-                    "border-gray-400 dark:border-gray-600 "
+                    "border-surface-400 dark:border-surface-600 "
                 )}
             >
                 {icon}

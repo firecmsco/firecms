@@ -43,7 +43,7 @@ export function FireCMSCloudHomePage() {
                             name={view.name}
                             url={view.path}
                             icon={<IconForView collectionOrView={view}
-                                               className={"text-gray-400 dark:text-gray-600"}/>}/>
+                                               className={"text-surface-400 dark:text-surface-600"}/>}/>
                     </div>)}
                 </div>
             </NavigationGroup>

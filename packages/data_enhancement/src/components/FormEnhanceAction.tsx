@@ -144,7 +144,7 @@ export function FormEnhanceAction({
                         defaultBorderMixin,
                         "border-b",
                         "flex w-full items-center gap-2 pr-4 pl-6",
-                        inputFocused ? "text-primary" : "text-gray-700 dark:text-gray-200"
+                        inputFocused ? "text-primary" : "text-surface-700 dark:text-surface-200"
                     )}>
 
                     <AutoFixHighIcon/>
@@ -226,7 +226,7 @@ export function FormEnhanceAction({
                         onClick={() => enhance(instructions)}
                         size={"large"}
                         color={inputFocused || !instructions ? "primary" : undefined}
-                        className={cls(!instructions ? "!bg-slate-50 dark:!bg-slate-800" : "")}
+                        className={cls(!instructions ? "!bg-surface-accent-50 dark:!bg-surface-accent-800" : "")}
                         disabled={loading}>
                         {loading &&
                             <CircularProgress size={"small"}/>}
@@ -257,14 +257,14 @@ export function FormEnhanceAction({
                 {/*        className={cn(*/}
                 {/*            defaultBorderMixin,*/}
                 {/*            autocompleteOpen ? "border-b shadow " : "",*/}
-                {/*            "bg-gray-100 dark:bg-gray-900",*/}
+                {/*            "bg-surface-100 dark:bg-surface-900",*/}
                 {/*            "z-20",*/}
                 {/*            "w-full")}>*/}
                 {/*        <div ref={autocompleteRef}>*/}
                 {/*            {samplePrompts?.map((samplePrompt, index) => {*/}
                 {/*                return <div*/}
                 {/*                    key={index}*/}
-                {/*                    className={"flex w-full items-center pr-6 pl-16 h-[48px] cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"}*/}
+                {/*                    className={"flex w-full items-center pr-6 pl-16 h-[48px] cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800"}*/}
                 {/*                    onClick={() => {*/}
                 {/*                        setInstructions(samplePrompt.prompt);*/}
                 {/*                        enhance(samplePrompt.prompt);*/}

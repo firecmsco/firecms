@@ -130,7 +130,7 @@ export function NonEditablePropertyPreview({
             <div className={"relative m-4"}>
                 {propertyConfig && <PropertyConfigBadge propertyConfig={propertyConfig}/>}
                 {!propertyConfig && <div
-                    className={"h-8 w-8 p-1 rounded-full shadow text-white bg-gray-500"}>
+                    className={"h-8 w-8 p-1 rounded-full shadow text-white bg-surface-500"}>
                     <FunctionsIcon color={"inherit"} size={"medium"}/>
                 </div>}
                 <RemoveCircleIcon color={"disabled"} size={"small"} className={"absolute -right-2 -top-2"}/>

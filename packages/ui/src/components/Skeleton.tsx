@@ -20,7 +20,7 @@ export function Skeleton({
         className={
         cls(
             "block",
-            "bg-slate-200 dark:bg-slate-800 rounded-md",
+            "bg-surface-accent-200 dark:bg-surface-accent-800 rounded-md",
             "animate-pulse",
             "max-w-full max-h-full",
             className)

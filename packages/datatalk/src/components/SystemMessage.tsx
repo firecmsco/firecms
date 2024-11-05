@@ -68,7 +68,7 @@ export function SystemMessage({
         {parsedElements && parsedElements.map((element, index) => {
             if (element.type === "html") {
                 return <div
-                    className={"max-w-full prose dark:prose-invert prose-headings:font-title text-base text-gray-700 dark:text-gray-200"}
+                    className={"max-w-full prose dark:prose-invert prose-headings:font-title text-base text-surface-700 dark:text-surface-200"}
                     dangerouslySetInnerHTML={{ __html: element.content }}
                     key={index}/>;
             } else if (element.type === "code") {
@@ -229,7 +229,7 @@ function FeedbackLabel({
     setSelected: (value: FeedbackSlug | null) => void
 }) {
     return <Label border={true}
-                  className={value === selected ? "bg-gray-300 dark:bg-gray-700 hover:bg-gray-300 hover:dark:bg-gray-700" : ""}
+                  className={value === selected ? "bg-surface-300 dark:bg-surface-700 hover:bg-surface-300 hover:dark:bg-surface-700" : ""}
                   onClick={() => {
                       setSelected(value);
                   }}>{title}</Label>;

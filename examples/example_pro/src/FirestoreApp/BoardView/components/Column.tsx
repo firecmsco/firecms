@@ -37,8 +37,8 @@ export default class Column extends Component<ColumnProps> {
                         <div
                             className={`flex items-center justify-center rounded-t-md ${
                                 snapshot.isDragging
-                                    ? "bg-gray-100 dark:bg-gray-900"
-                                    : "bg-gray-50 hover:bg-gray-100 dark:bg-gray-950 dark:hover:bg-gray-900"
+                                    ? "bg-surface-100 dark:bg-surface-900"
+                                    : "bg-surface-50 hover:bg-surface-100 dark:bg-surface-950 dark:hover:bg-surface-900"
                             } transition-colors duration-200 ease-in-out`}
                             {...provided.dragHandleProps}
                         >
@@ -49,7 +49,7 @@ export default class Column extends Component<ColumnProps> {
                         <SortableList
                             listId={title}
                             listType="ITEM"
-                            // className={`flex-1 ${snapshot.isDragging ? "bg-slate-50 dark:bg-gray-950 border-2" : ""}`}
+                            // className={`flex-1 ${snapshot.isDragging ? "bg-surface-accent-50 dark:bg-surface-950 border-2" : ""}`}
                             items={items}
                             isCombineEnabled={isCombineEnabled}
                             isDragging={snapshot.isDragging}

@@ -69,7 +69,7 @@ export function ImagePreview({
                             e.preventDefault();
                             return navigator.clipboard.writeText(url);
                         }}>
-                        <ContentCopyIcon className={"text-gray-700 dark:text-gray-300"}
+                        <ContentCopyIcon className={"text-surface-700 dark:text-surface-300"}
                                          size={"smallest"}/>
                     </IconButton>
                 </Tooltip>}
@@ -85,7 +85,7 @@ export function ImagePreview({
                         size={"small"}
                         onClick={(e: any) => e.stopPropagation()}
                     >
-                        <OpenInNewIcon className={"text-gray-700 dark:text-gray-300"}
+                        <OpenInNewIcon className={"text-surface-700 dark:text-surface-300"}
                                        size={"smallest"}/>
                     </IconButton>
                 </Tooltip>

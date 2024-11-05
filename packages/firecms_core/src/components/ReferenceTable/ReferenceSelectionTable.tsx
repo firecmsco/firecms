@@ -293,7 +293,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
                             <IconForView
                                 size={"small"}
                                 collectionOrView={collection}
-                                className={"text-gray-300 dark:text-gray-600"}/>
+                                className={"text-surface-300 dark:text-surface-600"}/>
                             {collection.singularName ? `Select ${collection.singularName}` : `Select from ${collection.name}`}
                         </Typography>}
                         defaultSize={collection.defaultSize}
