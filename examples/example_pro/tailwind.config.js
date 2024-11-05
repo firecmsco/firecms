@@ -11,29 +11,30 @@ export default {
     ],
     theme: {
         extend: {
-            // fontFamily: {
-            //     sans: [
-            //         "Roboto",
-            //         "Helvetica",
-            //         "Arial",
-            //         "sans-serif"
-            //     ],
-            //     headers: [
-            //         "Noto Serif",
-            //         "Roboto",
-            //         "Helvetica",
-            //         "Arial",
-            //         "sans-serif"
-            //     ],
-            //     mono: [
-            //         "JetBrains Mono",
-            //         "Space Mono",
-            //         "Lucida Console",
-            //         "monospace"
-            //     ]
-            // },
+            fontFamily: {
+                sans: [
+                    "Comic Neue",
+                    "Roboto",
+                    "Helvetica",
+                    "Arial",
+                    "sans-serif"
+                ],
+                headers: [
+                    "Noto Serif",
+                    "Roboto",
+                    "Helvetica",
+                    "Arial",
+                    "sans-serif"
+                ],
+                mono: [
+                    "JetBrains Mono",
+                    "Space Mono",
+                    "Lucida Console",
+                    "monospace"
+                ]
+            },
             colors: {
-                gray: {
+                surface: {
                     50: "#f5f9ff",
                     100: "#eaf3ff",
                     200: "#c8dfff",

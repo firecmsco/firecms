@@ -1,3 +1,78 @@
+## [3.0.0-beta.11] - 2024-07-10
+
+- [BREAKING] For self-hosted versions, there has been a change in the API for the data management controllers. The 
+`authController` is now passed to the User Management controller, instead of the other way around. The `userManagementController`
+can be used as an auth controller, but with all the added logic for user management. 
+
+Code before:
+```typescript
+    /**
+     * Controller in charge of user management
+     */
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate
+    });
+
+    /**
+     * Controller for managing authentication
+     */
+    const authController: FirebaseAuthController = useFirebaseAuthController({
+        firebaseApp,
+        signInOptions,
+        loading: userManagement.loading,
+        defineRolesFor: userManagement.defineRolesFor
+    });
+```
+
+Code after:
+
+```typescript
+    /**
+     * Controller for managing authentication
+     */
+    const authController: FirebaseAuthController = useFirebaseAuthController({
+        firebaseApp,
+        signInOptions
+    });
+
+    /**
+     * Controller in charge of user management
+     */
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
+        authController
+    });
+```
+
+Then you want to replace all previous references to `authController` with `userManagement`.
+For example, if you were using `authController.signInWithEmailAndPassword`, you should now use `userManagement.signInWithEmailAndPassword`.
+
+```typescript
+const navigationController = useBuildNavigationController({
+    collections: collectionsBuilder,
+    collectionPermissions: userManagement.collectionPermissions,
+    views,
+    adminViews: userManagementAdminViews,
+    authController: firebaseAuthController,
+    dataSourceDelegate: firestoreDelegate
+});
+```
+
+becomes:
+    
+```typescript
+const navigationController = useBuildNavigationController({
+  collections: collectionsBuilder,
+  collectionPermissions: userManagement.collectionPermissions,
+  views,
+  adminViews: userManagementAdminViews,
+  authController: userManagement,
+  dataSourceDelegate: firestoreDelegate
+});
+```
+
+## [3.0.0-beta.10] - 2024-07-10
+
 ## [3.0.0-beta.9] - 2024-07-10
 
 - **NEW MARKDOWN EDITOR**: The markdown editor has been completely revamped. It now supports a live preview, and a much

@@ -129,7 +129,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
     },
     multi_select: {
         key: "multi_select",
-        name: "Multi select",
+        name: "Multi select (enum)",
         description: "Select multiple text values from within an enumeration",
         Icon: ListAltIcon,
         color: "#4223c9",

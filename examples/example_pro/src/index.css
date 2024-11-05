@@ -12,3 +12,10 @@
 body {
     @apply w-full min-h-screen bg-surface-50 dark:bg-surface-900 flex flex-col items-center justify-center;
 }
+.typography-body1 {
+    @apply text-lg;
+}
+
+.typography-body2 {
+    @apply text-lg;
+}

@@ -13,8 +13,8 @@ export interface MarkdownProps {
 }
 
 const proseClasses = {
-    small: "prose-sm text-sm",
-    medium: "prose text-base",
+    small: "prose-sm typography-body2",
+    medium: "prose typography-body1",
     large: "prose-lg",
     xl: "prose-xl",
     "2xl": "prose-2xl"

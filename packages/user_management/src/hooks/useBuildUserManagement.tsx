@@ -302,17 +302,17 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
     const userRoles = authController.user ? defineRolesFor(authController.user) : undefined;
     const isAdmin = (userRoles ?? []).some(r => r.id === "admin");
 
-    console.log("Setting roles", {
-        user: authController.user,
-        userRoles
-    });
-    useEffect(() => {
-        console.debug("Setting roles", {
-            authController,
-            userRoles
-        });
-        authController.setUserRoles?.(userRoles ?? []);
-    }, [userRoles?.map(r => r.id)]);
+    // console.log("Setting roles", {
+    //     user: authController.user,
+    //     userRoles
+    // });
+    // useEffect(() => {
+    //     console.debug("Setting roles", {
+    //         authController,
+    //         userRoles
+    //     });
+    //     authController.setUserRoles?.(userRoles ?? []);
+    // }, [userRoles?.map(r => r.id)]);
 
     return {
         loading,

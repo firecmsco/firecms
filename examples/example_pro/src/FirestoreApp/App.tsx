@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo } from "react";
 
 import "typeface-rubik";
+import "@fontsource/comic-neue"; // Defaults to weight 400
+import "@fontsource/noto-serif"; // Defaults to weight 400
 import "@fontsource/jetbrains-mono";
 
 import logo from "./images/demo_logo.png";
