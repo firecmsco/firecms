@@ -345,8 +345,6 @@ export function FireCMSClientWithController({
         },
         [authController.authLoading, authController.user, userManagement.loading, userManagement.users]);
 
-    console.log("fireCMSUser", fireCMSUser);
-
     const {
         delegatedLoginLoading,
         delegatedLoginError
