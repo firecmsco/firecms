@@ -274,11 +274,6 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
         return mgmtUser?.roles;
     }, [roles, usersWithRoleIds]);
 
-    console.debug({
-        loading,
-        users,
-        usersError
-    });
 
     const authenticator: Authenticator<USER> = useCallback(({ user }) => {
         if (loading) {
