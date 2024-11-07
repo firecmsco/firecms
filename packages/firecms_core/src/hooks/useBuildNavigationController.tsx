@@ -188,7 +188,6 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         if (authController.initialLoading)
             return;
 
-        console.log("refresh", authController)
         console.debug("Refreshing navigation");
 
         try {

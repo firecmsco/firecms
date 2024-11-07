@@ -18,11 +18,6 @@ export type AuthController<USER extends User = any, ExtraData = any> = {
     user: USER | null;
 
     /**
-     * Roles related to the logged user
-     */
-    userRoles?: Role[];
-
-    /**
      * Initial loading flag. It is used not to display the login screen
      * when the app first loads, and it has not been checked whether the user
      * is logged in or not.
@@ -66,7 +61,6 @@ export type AuthController<USER extends User = any, ExtraData = any> = {
 
     setUser?: (user: USER | null) => void;
 
-    setUserRoles?: (roles: Role[]) => void;
 };
 
 /**

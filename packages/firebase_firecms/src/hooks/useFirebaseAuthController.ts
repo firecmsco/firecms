@@ -299,7 +299,6 @@ export const useFirebaseAuthController = <USER extends FirebaseUserWrapper = any
     return {
         user: firebaseUserWrapper as USER,
         setUser: updateUser,
-        userRoles,
         setUserRoles,
         authProviderError,
         authLoading,
