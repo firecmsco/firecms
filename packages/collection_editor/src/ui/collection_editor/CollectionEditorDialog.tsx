@@ -276,6 +276,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
     const saveCollection = (updatedCollection: PersistedCollection<M>): Promise<boolean> => {
         const id = updatedCollection.id || updatedCollection.path;
+
         return configController.saveCollection({
             id,
             collectionData: updatedCollection,
@@ -377,7 +378,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
             if (!isNewCollection) {
                 saveCollection(newCollectionState).then(() => {
-                    formexController.resetForm({ values: initialValues });
+                    formexController.resetForm();
                     handleClose(newCollectionState);
                 });
                 return;
@@ -466,7 +467,8 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     const formController = useCreateFormex<PersistedCollection<M>>({
         initialValues,
         onSubmit,
-        validation
+        validation,
+        debugId: "COLLECTION_EDITOR"
     });
 
     const {

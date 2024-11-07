@@ -10,18 +10,21 @@ export function useCreateFormex<T extends object>({
                                                       validation,
                                                       validateOnChange = false,
                                                       onSubmit,
-                                                      validateOnInitialRender = false
+                                                      validateOnInitialRender = false,
+                                                      debugId
                                                   }: {
     initialValues: T,
     initialErrors?: Record<string, string>,
     validateOnChange?: boolean,
     validateOnInitialRender?: boolean,
     validation?: (values: T) => Record<string, string> | Promise<Record<string, string>> | undefined | void,
-    onSubmit?: (values: T, controller: FormexController<T>) => void | Promise<void>
+    onSubmit?: (values: T, controller: FormexController<T>) => void | Promise<void>,
+    debugId?: string
 }): FormexController<T> {
 
     const initialValuesRef = React.useRef<T>(initialValues);
     const valuesRef = React.useRef<T>(initialValues);
+    const debugIdRef = React.useRef<string | undefined>(debugId);
 
     const [values, setValuesInner] = useState<T>(initialValues);
     const [touchedState, setTouchedState] = useState<Record<string, boolean>>({});
@@ -46,8 +49,7 @@ export function useCreateFormex<T extends object>({
 
     const validate = async () => {
         setIsValidating(true);
-        const values = valuesRef.current;
-        const validationErrors = await validation?.(values);
+        const validationErrors = await validation?.(valuesRef.current);
         setErrors(validationErrors ?? {});
         setIsValidating(false);
         return validationErrors;
@@ -159,7 +161,8 @@ export function useCreateFormex<T extends object>({
         validate,
         isValidating,
         resetForm,
-        version
+        version,
+        debugId: debugIdRef.current
     };
 
     const controllerRef = React.useRef<FormexController<T>>(controller);

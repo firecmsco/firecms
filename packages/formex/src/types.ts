@@ -26,6 +26,8 @@ export type FormexController<T extends object> = {
      * or the form is submitted.
      */
     version: number;
+
+    debugId?: string;
 }
 
 export type FormexResetProps<T extends object> = {

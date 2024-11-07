@@ -228,17 +228,13 @@ export function CollectionPropertiesEditorForm({
                                    namespace
                                }: OnPropertyChangedParams) => {
 
+        console.log("!!!!!! onPropertyChanged", property)
+
         const fullId = id ? getFullId(id, namespace) : undefined;
         const propertyPath = fullId ? idToPropertiesPath(fullId) : undefined;
 
         // If the id has changed we need to a little cleanup
         if (previousId && previousId !== id) {
-            console.debug("onPropertyChanged, id change", {
-                id,
-                property,
-                previousId,
-                namespace
-            })
 
             const previousFullId = getFullId(previousId, namespace);
             const previousPropertyPath = idToPropertiesPath(previousFullId);

@@ -142,6 +142,7 @@ export const PropertyForm = React.memo(
         };
 
         const formexController = useCreateFormex<PropertyWithId>({
+            debugId: "PROPERTY_FORM",
             initialValues: property
                 ? { id: propertyKey, ...property } as PropertyWithId
                 : initialValue,

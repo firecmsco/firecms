@@ -152,7 +152,7 @@ export function setNestedObjectValues<T>(
     return response;
 }
 
-function clone(value: any) {
+export function clone(value: any) {
     if (Array.isArray(value)) {
         return [...value];
     } else if (typeof value === "object" && value !== null) {

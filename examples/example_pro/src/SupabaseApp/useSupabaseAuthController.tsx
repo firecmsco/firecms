@@ -139,7 +139,7 @@ export const useSupabaseAuthController = ({
         } else {
             setLoggedUser(null);
             setRoles(undefined);
-            onSignOutProp && onSignOutProp();
+            onSignOutProp?.();
         }
         setLoginSkipped(false);
     }, [supabase, onSignOutProp]);
@@ -164,6 +164,7 @@ export const useSupabaseAuthController = ({
 
     const supabaseUserWrapper = loggedUser ? {
         ...loggedUser,
+        roles,
         supabaseUser: loggedUser
     } : null;
 
@@ -177,7 +178,6 @@ export const useSupabaseAuthController = ({
 
     return {
         user: supabaseUserWrapper,
-        userRoles: roles,
         setUser: updateUser,
         setRoles,
         getAuthToken,

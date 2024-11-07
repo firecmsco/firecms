@@ -4,6 +4,7 @@ import React from "react";
 import JSON5 from "json5";
 import { Highlight, themes } from "prism-react-renderer"
 import { camelCase } from "./utils/strings";
+import { clone } from "@firecms/formex";
 
 export function GetCodeDialog({
                                   collection,
@@ -14,7 +15,7 @@ export function GetCodeDialog({
     const snackbarController = useSnackbarController();
 
     const code = collection
-        ? "import { EntityCollection } from \"@firecms/core\";\n\nconst " + (collection?.name ? camelCase(collection.name) : "my") + "Collection:EntityCollection = " + JSON5.stringify(collectionToCode(collection), null, "\t")
+        ? "import { EntityCollection } from \"@firecms/core\";\n\nconst " + (collection?.name ? camelCase(collection.name) : "my") + "Collection:EntityCollection = " + JSON5.stringify(collectionToCode({ ...collection }), null, "\t")
         : "No collection selected";
     return <Dialog open={open}
                    onOpenChange={onOpenChange}
@@ -79,35 +80,36 @@ export function GetCodeDialog({
 function collectionToCode(collection: EntityCollection): object {
 
     const propertyCleanup = (value: any): any => {
-        if (typeof value === "function") {
-            return value;
+        const valueCopy = clone(value);
+        if (typeof valueCopy === "function") {
+            return valueCopy;
         }
-        if (Array.isArray(value)) {
-            return value.map((v: any) => propertyCleanup(v));
+        if (Array.isArray(valueCopy)) {
+            return valueCopy.map((v: any) => propertyCleanup(v));
         }
-        if (typeof value === "object") {
-            if (value === null)
-                return value;
-            Object.keys(value).forEach((key) => {
-                if (!isEmptyObject(value)) {
-                    const childRes = propertyCleanup(value[key]);
+        if (typeof valueCopy === "object") {
+            if (valueCopy === null)
+                return valueCopy;
+            Object.keys(valueCopy).forEach((key) => {
+                if (!isEmptyObject(valueCopy)) {
+                    const childRes = propertyCleanup(valueCopy[key]);
                     if (childRes !== null && childRes !== undefined && childRes !== false && !isEmptyObject(childRes)) {
-                        value[key] = childRes;
+                        valueCopy[key] = childRes;
                     } else {
-                        delete value[key];
+                        delete valueCopy[key];
                     }
                 }
             });
         }
 
-        delete value.fromBuilder;
-        delete value.resolved;
-        delete value.propertiesOrder;
-        delete value.propertyConfig;
-        delete value.resolvedProperties;
-        delete value.editable;
+        delete valueCopy.fromBuilder;
+        delete valueCopy.resolved;
+        delete valueCopy.propertiesOrder;
+        delete valueCopy.propertyConfig;
+        delete valueCopy.resolvedProperties;
+        delete valueCopy.editable;
 
-        return value;
+        return valueCopy;
     }
 
     return {

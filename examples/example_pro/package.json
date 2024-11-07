@@ -7,6 +7,7 @@
     "@firecms/collection_editor": "^3.0.0-canary.145",
     "@firecms/collection_editor_firebase": "^3.0.0-canary.145",
     "@firecms/core": "^3.0.0-canary.145",
+    "@firecms/formex": "^3.0.0-canary.145",
     "@firecms/data_enhancement": "^3.0.0-canary.145",
     "@firecms/data_export": "^3.0.0-canary.145",
     "@firecms/data_import": "^3.0.0-canary.145",
