@@ -13,7 +13,6 @@ export default {
     //     extend: {
     //         fontFamily: {
     //             sans: [
-    //                 "Comic Neue",
     //                 "Roboto",
     //                 "Helvetica",
     //                 "Arial",
@@ -35,6 +34,19 @@ export default {
     //         },
     //         colors: {
     //             surface: {
+    //                 50: "#f5f9ff",
+    //                 100: "#eaf3ff",
+    //                 200: "#c8dfff",
+    //                 300: "#a6cbff",
+    //                 400: "#63a3ff",
+    //                 500: "#208bff",
+    //                 600: "#1d7de6",
+    //                 700: "#1a6ac2",
+    //                 800: "#16579e",
+    //                 900: "#0d3a66",
+    //                 950: "#0a2c4f"
+    //             },
+    //             "surface-accent": {
     //                 50: "#f5f9ff",
     //                 100: "#eaf3ff",
     //                 200: "#c8dfff",

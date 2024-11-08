@@ -4,9 +4,10 @@
 @tailwind utilities;
 
 :root {
-    --fcms-primary: #0070F4;
-    --fcms-primary-bg: #0061e610;
-    --fcms-secondary: #FF5B79;
+    --fcms-primary: #FF5B79;
+    --fcms-primary-dark: #ec536e;
+    --fcms-primary-bg: #FF5B7910;
+    --fcms-secondary: #0070F4;
 }
 
 body {

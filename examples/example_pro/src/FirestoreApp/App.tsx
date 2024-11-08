@@ -9,7 +9,7 @@ import logo from "./images/demo_logo.png";
 
 import { getAnalytics, logEvent } from "@firebase/analytics";
 
-import { CenteredView, GitHubIcon, IconButton, Tooltip, } from "@firecms/ui";
+import { CenteredView, GitHubIcon, IconButton, Tooltip } from "@firecms/ui";
 import {
     AppBar,
     Authenticator,
@@ -28,7 +28,7 @@ import {
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     useBuildNavigationController,
-    useValidateAuthenticator,
+    useValidateAuthenticator
 } from "@firecms/core";
 import {
     FirebaseAuthController,
@@ -134,7 +134,6 @@ export function App() {
     const collectionConfigController = useFirestoreCollectionsConfigController({
         firebaseApp
     });
-
     // Example of adding a custom field
     const propertyConfigs: Record<string, PropertyConfig> = {
         // markdown: {
@@ -145,6 +144,24 @@ export function App() {
         //         Field: CustomColorTextField
         //     }
         // },
+        markdown_custom: {
+            key: "markdown_custom",
+            name: "Markdown field",
+            property: {
+                dataType: "map",
+                properties: {
+                    type: {
+                        dataType: "string",
+                        defaultValue: "markdown",
+                        Field: () => null
+                    },
+                    markdown_text: {
+                        dataType: "string",
+                        markdown: true
+                    }
+                }
+            }
+        },
         test_custom_field: {
             key: "test_custom_field",
             name: "Test custom field",
@@ -187,7 +204,7 @@ export function App() {
 
     const {
         firebaseApp: secondaryFirebaseApp,
-        firebaseConfigLoading: secondaryFirebaseConfigLoading,
+        firebaseConfigLoading: secondaryFirebaseConfigLoading
     } = useInitialiseFirebase({
         firebaseConfig: secondaryFirebaseConfig,
         name: "secondary",
@@ -196,7 +213,7 @@ export function App() {
 
     // Delegate used for fetching and saving data in Firestore
     const secondaryFirestoreDelegate = useFirestoreDelegate({
-        firebaseApp: secondaryFirebaseApp,
+        firebaseApp: secondaryFirebaseApp
     });
 
     // It is important to memoize the collections and views
@@ -259,7 +276,7 @@ export function App() {
     // Controller for managing authentication
     const firebaseAuthController: FirebaseAuthController = useFirebaseAuthController({
         firebaseApp,
-        signInOptions,
+        signInOptions
     });
 
     const userManagementController = useBuildUserManagement({
@@ -279,7 +296,7 @@ export function App() {
     const demoPlugin = useMemo(() => ({
         key: "demo",
         collectionView: {
-            CollectionActions: [DemoImportAction],
+            CollectionActions: [DemoImportAction]
         }
     }), []);
     /**
@@ -330,6 +347,7 @@ export function App() {
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
+
                     plugins={[userManagementPlugin, dataEnhancementPlugin, exportPlugin, demoPlugin
                         // collectionEditorPlugin
                     ]}

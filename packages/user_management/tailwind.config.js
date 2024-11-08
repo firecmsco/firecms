@@ -33,6 +33,7 @@ export default {
             },
             colors: {
                 primary: "var(--fcms-primary)",
+                "primary-dark": "var(--fcms-primary-dark)",
                 "primary-bg": "var(--fcms-primary-bg)",
                 secondary: "var(--fcms-secondary)",
                 field: {
@@ -48,7 +49,7 @@ export default {
                     "disabled-dark": "rgba(255, 255, 255, 0.5)",
                     label: "rgb(131, 131, 131)"
                 },
-                gray: {
+                surface: {
                     50: "#f8f8fc",
                     100: "#E7E7EB",
                     200: "#CFCFD6",

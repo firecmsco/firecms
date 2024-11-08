@@ -4,7 +4,7 @@ title: Permissions
 sidebar_label: Permissions
 ---
 
-You can define the `edit`, `create` and `delete` permissions at the collection
+You can define the `read`, `edit`, `create` and `delete` permissions at the collection
 level, also depending on the logged-in user.
 
 These define the actions that the logged user can perform over an entity.

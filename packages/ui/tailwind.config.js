@@ -37,6 +37,7 @@ export default {
             },
             colors: {
                 "primary": "var(--fcms-primary)",
+                "primary-dark": "var(--fcms-primary-dark)",
                 "primary-bg": "var(--fcms-primary-bg)",
                 "secondary": "var(--fcms-secondary)",
                 "field": {

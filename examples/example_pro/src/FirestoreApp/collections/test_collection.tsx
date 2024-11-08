@@ -67,137 +67,142 @@ export const testCollection = buildCollection<any>({
         //     }
         // }],
         properties: {
-            date: {
-                name: "on create",
-                dataType: "date",
-                // autoValue: "on_create"
+            title: {
+                dataType: 'map',
+                name: 'Title',
+                propertyConfig: 'markdown_custom',
             },
-
-            test_date: {
-                name: "Test date",
-                dataType: "date",
-                mode: "date_time",
-                clearable: true
-            },
-            locale: {
-                name: "Locales",
-                dataType: "string",
-                enumValues: locales
-            },
-            available_locales: {
-                name: "Available locales",
-                dataType: "array",
-                of: {
-                    dataType: "string",
-                    enumValues: locales
-                }
-            },
-            entryCondition: conditionProperty("Entry condition"),
-            fulfillmentCondition: conditionProperty("Fulfillment condition"),
-            //...
-            images: {
-                dataType: "array",
-                name: "Images",
-                of: {
-                    dataType: "string",
-                    storage: {
-                        storagePath: "images",
-                        acceptedFiles: ["image/*"],
-                        metadata: {
-                            cacheControl: "max-age=1000000"
-                        }
-                    }
-                }
-            },
-            readOnly: {
-                dataType: "string",
-                readOnly: true,
-                name: "Read only"
-            },
-            contactDetails: {
-                hideFromCollection: true,
-                dataType: "array",
-                name: "Contact details",
-                of: {
-                    dataType: "map",
-                    name: "Contact info",
-                    previewProperties: ["data"],
-                    properties: {
-                        id: {
-                            dataType: "string",
-                            name: "ID (auto)",
-                            // readOnly: true,
-                            // Field: () => null,
-                            defaultValue: crypto.randomUUID(),
-                        },
-                    },
-                },
-            },
-            type: {
-                dataType: "string",
-                disabled: true,
-                name: "Type",
-                enumValues: [
-                    {
-                        id: "seat",
-                        label: "Seat"
-                    },
-                    {
-                        id: "cabin",
-                        label: "Cabin"
-                    }
-                ]
-            },
-            config: ({ values }) => {
-                switch (values.type) {
-                    case "seat":
-                        return buildProperty({
-                            dataType: "map",
-                            name: "Seat config",
-                            properties: {
-                                category: {
-                                    dataType: "string",
-                                    name: "Category",
-                                    enumValues: [
-                                        {
-                                            id: "deck",
-                                            label: "Deck"
-                                        },
-                                        {
-                                            id: "lounge",
-                                            label: "Lounge"
-                                        },
-                                        {
-                                            id: "numbered",
-                                            label: "Numbered"
-                                        }
-                                    ]
-                                }
-                            }
-                        });
-                    case "cabin":
-                        return buildProperty({
-                            dataType: "map",
-                            name: "Cabin config",
-                            properties: {
-                                capacity: {
-                                    dataType: "number",
-                                    name: "Cabin capacity"
-                                },
-                                specialNeeds: {
-                                    dataType: "boolean",
-                                    name: "Special Needs"
-                                }
-                            }
-                        });
-
-                    default:
-                        return {
-                            dataType: "map",
-                            disabled: true
-                        };
-                }
-            },
+            // date: {
+            //     name: "on create",
+            //     dataType: "date",
+            //     // autoValue: "on_create"
+            // },
+            //
+            // test_date: {
+            //     name: "Test date",
+            //     dataType: "date",
+            //     mode: "date_time",
+            //     clearable: true
+            // },
+            // locale: {
+            //     name: "Locales",
+            //     dataType: "string",
+            //     enumValues: locales
+            // },
+            // available_locales: {
+            //     name: "Available locales",
+            //     dataType: "array",
+            //     of: {
+            //         dataType: "string",
+            //         enumValues: locales
+            //     }
+            // },
+            // entryCondition: conditionProperty("Entry condition"),
+            // fulfillmentCondition: conditionProperty("Fulfillment condition"),
+            // //...
+            // images: {
+            //     dataType: "array",
+            //     name: "Images",
+            //     of: {
+            //         dataType: "string",
+            //         storage: {
+            //             storagePath: "images",
+            //             acceptedFiles: ["image/*"],
+            //             metadata: {
+            //                 cacheControl: "max-age=1000000"
+            //             }
+            //         }
+            //     }
+            // },
+            // readOnly: {
+            //     dataType: "string",
+            //     readOnly: true,
+            //     name: "Read only"
+            // },
+            // contactDetails: {
+            //     hideFromCollection: true,
+            //     dataType: "array",
+            //     name: "Contact details",
+            //     of: {
+            //         dataType: "map",
+            //         name: "Contact info",
+            //         previewProperties: ["data"],
+            //         properties: {
+            //             id: {
+            //                 dataType: "string",
+            //                 name: "ID (auto)",
+            //                 // readOnly: true,
+            //                 // Field: () => null,
+            //                 defaultValue: crypto.randomUUID(),
+            //             },
+            //         },
+            //     },
+            // },
+            // type: {
+            //     dataType: "string",
+            //     disabled: true,
+            //     name: "Type",
+            //     enumValues: [
+            //         {
+            //             id: "seat",
+            //             label: "Seat"
+            //         },
+            //         {
+            //             id: "cabin",
+            //             label: "Cabin"
+            //         }
+            //     ]
+            // },
+            // config: ({ values }) => {
+            //     switch (values.type) {
+            //         case "seat":
+            //             return buildProperty({
+            //                 dataType: "map",
+            //                 name: "Seat config",
+            //                 properties: {
+            //                     category: {
+            //                         dataType: "string",
+            //                         name: "Category",
+            //                         enumValues: [
+            //                             {
+            //                                 id: "deck",
+            //                                 label: "Deck"
+            //                             },
+            //                             {
+            //                                 id: "lounge",
+            //                                 label: "Lounge"
+            //                             },
+            //                             {
+            //                                 id: "numbered",
+            //                                 label: "Numbered"
+            //                             }
+            //                         ]
+            //                     }
+            //                 }
+            //             });
+            //         case "cabin":
+            //             return buildProperty({
+            //                 dataType: "map",
+            //                 name: "Cabin config",
+            //                 properties: {
+            //                     capacity: {
+            //                         dataType: "number",
+            //                         name: "Cabin capacity"
+            //                     },
+            //                     specialNeeds: {
+            //                         dataType: "boolean",
+            //                         name: "Special Needs"
+            //                     }
+            //                 }
+            //             });
+            //
+            //         default:
+            //             return {
+            //                 dataType: "map",
+            //                 disabled: true
+            //             };
+            //     }
+            // },
             // isAdmin: {
             //     name: "Admin",
             //     dataType: "boolean",
@@ -279,32 +284,32 @@ export const testCollection = buildCollection<any>({
             //             }
             //         ]
             // },
-            upload: {
-                name: "Upload",
-                dataType: "string",
-                storage: {
-                    storagePath: "test",
-                    acceptedFiles: ["application/*"],
-                }
-            },
-            file: {
-                name: "File",
-                description: "The uploaded file of the document.",
-                hideFromCollection: false,
-                dataType: "string",
-                validation: {
-                    required: false,
-                },
-                propertyConfig: "file_upload",
-                storage: {
-                    storeUrl: true,
-                    storagePath: "/documents",
-                    acceptedFiles: [
-                        "application/",
-                        "text/"
-                    ],
-                },
-            },
+            // upload: {
+            //     name: "Upload",
+            //     dataType: "string",
+            //     storage: {
+            //         storagePath: "test",
+            //         acceptedFiles: ["application/*"],
+            //     }
+            // },
+            // file: {
+            //     name: "File",
+            //     description: "The uploaded file of the document.",
+            //     hideFromCollection: false,
+            //     dataType: "string",
+            //     validation: {
+            //         required: false,
+            //     },
+            //     propertyConfig: "file_upload",
+            //     storage: {
+            //         storeUrl: true,
+            //         storagePath: "/documents",
+            //         acceptedFiles: [
+            //             "application/",
+            //             "text/"
+            //         ],
+            //     },
+            // },
             // mainSaturation: {
             //     name: "Main saturation",
             //     description: "Saturation applied to all colors when there is no saturation on color applied",
@@ -449,13 +454,13 @@ export const testCollection = buildCollection<any>({
             //     validation: { required: false },
             //     clearable: true
             // },
-            tags: {
-                name: "Tags",
-                dataType: "array",
-                of: {
-                    dataType: "string"
-                }
-            },
+            // tags: {
+            //     name: "Tags",
+            //     dataType: "array",
+            //     of: {
+            //         dataType: "string"
+            //     }
+            // },
             // specSheet: ({
             //                 values,
             //                 entityId
