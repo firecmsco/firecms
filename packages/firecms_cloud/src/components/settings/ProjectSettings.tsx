@@ -200,6 +200,7 @@ function ThemeColors() {
         {showUpgradeBanner &&
             <SubscriptionPlanWidget
                 showForPlans={["free"]}
+                includeTooManyUsersAlert={true}
                 message={<>Upgrade to <b>PLUS</b> to customise the logo and colors</>}/>}
     </div>
 

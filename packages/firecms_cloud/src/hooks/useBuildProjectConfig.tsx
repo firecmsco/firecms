@@ -31,7 +31,7 @@ export type ProjectConfig = {
 
     subscriptionPlan?: ProjectSubscriptionPlan;
     subscriptionData?: ProjectSubscriptionData;
-    subscriptionStatus?: Object;
+    subscriptionStatus?: object;
     customizationRevision?: string;
     usersLimit?: number;
 

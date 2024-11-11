@@ -38,6 +38,7 @@ import {
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 
 import {
+    CloudUserManagement,
     FireCMSBackEndProvider,
     ProjectConfig,
     ProjectConfigProvider,
@@ -309,7 +310,7 @@ export function FireCMSClientWithController({
                                                 ...props
                                             }: FireCMSClientProps & {
     logo?: string;
-    userManagement: UserManagement<FireCMSCloudUserWithRoles>;
+    userManagement: CloudUserManagement;
     projectConfig: ProjectConfig;
     projectId: string;
     customizationLoading: boolean;
@@ -341,7 +342,7 @@ export function FireCMSClientWithController({
             if (userManagement.loading || authController.authLoading) return;
             const user = authController.user;
             if (!user) return;
-            return userManagement.users.find((fireCMSUser) => fireCMSUser.email.toLowerCase() === user?.email?.toLowerCase());
+            return userManagement.allowedUsers.find((fireCMSUser) => fireCMSUser.email.toLowerCase() === user?.email?.toLowerCase());
         },
         [authController.authLoading, authController.user, userManagement.loading, userManagement.users]);
 
@@ -761,7 +762,9 @@ function buildAdminRoutes(usersLimit: number | undefined,
             view: <UsersView>
                 <SubscriptionPlanWidget
                     showForPlans={["free"]}
-                    message={<>Upgrade to PLUS to remove the <b>{usersLimit} users limit</b></>}/>
+                    includeTooManyUsersAlert={true}
+                    message={<>
+                        Upgrade to PLUS to remove the <b>{usersLimit} users limit</b></>}/>
             </UsersView>
         },
         {
@@ -773,6 +776,7 @@ function buildAdminRoutes(usersLimit: number | undefined,
             view: <RolesView>
                 <SubscriptionPlanWidget
                     showForPlans={["free"]}
+                    includeTooManyUsersAlert={true}
                     message={<>Upgrade to PLUS to be able to customise <b>roles</b></>}/>
             </RolesView>
         },

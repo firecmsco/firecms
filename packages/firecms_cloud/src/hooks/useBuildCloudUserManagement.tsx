@@ -7,6 +7,8 @@ import {
     Firestore,
     getFirestore,
     onSnapshot,
+    orderBy,
+    query,
     setDoc
 } from "@firebase/firestore";
 import { FirebaseApp } from "@firebase/app";
@@ -26,6 +28,10 @@ interface UserManagementParams {
     fireCMSBackend: FireCMSBackend
 }
 
+export type CloudUserManagement = UserManagement<FireCMSCloudUserWithRoles> & {
+    allowedUsers: FireCMSCloudUserWithRoles[];
+};
+
 export function useBuildCloudUserManagement({
                                                 backendFirebaseApp,
                                                 projectId,
@@ -33,7 +39,7 @@ export function useBuildCloudUserManagement({
                                                 usersLimit,
                                                 canEditRoles,
                                                 fireCMSBackend
-                                            }: UserManagementParams): UserManagement<FireCMSCloudUserWithRoles> {
+                                            }: UserManagementParams): CloudUserManagement {
 
     const configPath = projectId ? `projects/${projectId}` : undefined;
 
@@ -85,7 +91,7 @@ export function useBuildCloudUserManagement({
         const firestore = firestoreRef.current;
         if (!firestore || !configPath) return;
 
-        return onSnapshot(collection(firestore, configPath, "users"),
+        return onSnapshot(query(collection(firestore, configPath, "users"), orderBy("created_on", "asc")),
             {
                 next: (snapshot) => {
                     setUsersError(undefined);
@@ -170,12 +176,15 @@ export function useBuildCloudUserManagement({
 
     const isAdmin = loggedInUser?.roles.some(r => r.id === "admin");
 
+    const allowedUsers = users.slice(0, usersLimit);
+
     return {
         allowDefaultRolesCreation: false,
         includeCollectionConfigPermissions: true,
         loading: rolesLoading || usersLoading,
         roles,
         users,
+        allowedUsers,
         saveUser,
         saveRole,
         defineRolesFor,

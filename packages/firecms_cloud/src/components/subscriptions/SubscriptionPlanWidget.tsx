@@ -1,14 +1,16 @@
 import React, { useEffect } from "react";
-import { Alert, Button, CircularProgress } from "@firecms/ui";
+import { Alert, Button, CircularProgress, Typography } from "@firecms/ui";
 import { PlansComparisonDialog } from "./PlansComparison";
 import { PlanChip } from "./PlanChip";
 import { useFireCMSBackend, useProjectConfig, useSubscriptionsForUserController } from "../../hooks";
 import { Subscription } from "../../types";
+import { useUserManagement } from "@firecms/user_management";
 
 export type SubscriptionPlanWidgetProps = {
     message?: React.ReactNode,
     showForPlans?: string[],
-    includeCTA?: boolean
+    includeCTA?: boolean,
+    includeTooManyUsersAlert?: boolean
 }
 
 function PastDueAlert({ subscription }: { subscription: Subscription }) {
@@ -43,7 +45,8 @@ function PastDueAlert({ subscription }: { subscription: Subscription }) {
 export function SubscriptionPlanWidget({
                                            message,
                                            showForPlans,
-                                           includeCTA = true
+                                           includeCTA = true,
+                                           includeTooManyUsersAlert = false
                                        }: SubscriptionPlanWidgetProps) {
 
     const {
@@ -51,6 +54,14 @@ export function SubscriptionPlanWidget({
         subscriptionPlan,
         subscriptionData
     } = useProjectConfig();
+
+    const {
+        users,
+        usersLimit
+    } = useUserManagement();
+
+    const tooManyUsers = usersLimit !== undefined && users && users.length >= usersLimit;
+
     const subscriptionsController = useSubscriptionsForUserController();
     const [dialogOpen, setDialogOpen] = React.useState(false);
 
@@ -64,11 +75,10 @@ export function SubscriptionPlanWidget({
     if (!subscriptionPlan) return null;
     if (showForPlans && !showForPlans.includes(subscriptionPlan)) return null;
 
-    return <>
+    return <div className={"my-2 flex flex-col gap-2"}>
 
         <Alert
             color={"info"}
-            className={"my-4"}
             action={includeCTA && <Button
                 className={"dark:!text-white dark:border-white dark:hover:bg-white dark:hover:!text-primary min-w-content"}
                 variant={"outlined"}
@@ -76,12 +86,20 @@ export function SubscriptionPlanWidget({
                 More info
             </Button>}>
             <div>This project is currently in the <PlanChip
-                subscriptionPlan={subscriptionPlan}/> <span
-                className={"ml-2"}>{!message && "Try out all the PLUS features for free!"}</span></div>
-            <div>{message}</div>
+                subscriptionPlan={subscriptionPlan}/>
+                <span
+                    className={"ml-2"}>{!message && "Try out all the PLUS features for free!"}</span></div>
+            <Typography variant={"caption"}>{message}</Typography>
         </Alert>
+
+        {includeTooManyUsersAlert && tooManyUsers && <Alert
+            color={"error"}>
+            <div>You have registered more users than you plan allows</div>
+            <Typography variant={"caption"}>Some users will not be able to access FireCMS Cloud</Typography>
+        </Alert>}
+
 
         <PlansComparisonDialog open={dialogOpen} onClose={() => setDialogOpen(false)}/>
 
-    </>;
+    </div>;
 }
