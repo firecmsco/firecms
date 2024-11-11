@@ -9,8 +9,8 @@ Every property you define in the CMS as a preview component associated by
 default. In some cases you may want to build a custom preview component.
 
 Just as you can customize how your property field is rendered, you can change
-how the preview of a property is displayed in collection and other read only
-views.
+how the preview of a property is **displayed in collection** and other **read only
+views**.
 
 You can build your preview as a React component that takes
 [PropertyPreviewProps](../api/interfaces/PropertyPreviewProps) as props.
@@ -24,19 +24,17 @@ done when defining custom fields.
 Example of a custom preview for a `boolean` property:
 
 ```tsx
-import React, { ReactElement } from "react";
-import { PropertyPreviewProps } from "@firecms/cloud";
-
-import CheckBoxOutlineBlank from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxOutlined from "@mui/icons-material/CheckBoxOutlined";
+import React from "react";
+import { PropertyPreviewProps } from "@firecms/core";
+import { CheckBoxIcon, CheckBoxOutlineBlankIcon } from "@firecms/ui";
 
 export default function CustomBooleanPreview({
-                                                 value, property, size
-                                             }: PropertyPreviewProps
-                                             <boolean>)
-     {
+                                                    value, property, size
+                                                }: PropertyPreviewProps<boolean>
+)
+{
     return (
-        value ? <CheckBoxOutlined/> : <CheckBoxOutlineBlank/>
+        value ? <CheckBoxIcon/> : <CheckBoxOutlineBlankIcon/>
     );
 }
 ```

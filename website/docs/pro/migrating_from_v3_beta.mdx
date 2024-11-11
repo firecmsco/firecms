@@ -12,6 +12,80 @@ you have additionally an `AppBar` and a `Drawer` component.
 
 More information about the main components can be found in the [Main Components](/docs/pro/main_components) section.
 
+### User management auth controller
+
+For self-hosted versions, there has been a change in the API for the data management controllers. The
+`authController` is now passed to the User Management controller, instead of the other way around. The `userManagementController`
+can be used as an auth controller, but with all the added logic for user management.
+
+Code before:
+```typescript
+    /**
+     * Controller in charge of user management
+     */
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate
+    });
+
+    /**
+     * Controller for managing authentication
+     */
+    const authController: FirebaseAuthController = useFirebaseAuthController({
+        firebaseApp,
+        signInOptions,
+        loading: userManagement.loading,
+        defineRolesFor: userManagement.defineRolesFor
+    });
+```
+
+Code after:
+
+```typescript
+    /**
+     * Controller for managing authentication
+     */
+    const authController: FirebaseAuthController = useFirebaseAuthController({
+        firebaseApp,
+        signInOptions
+    });
+
+    /**
+     * Controller in charge of user management
+     */
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
+        authController
+    });
+```
+
+Then you want to replace all previous references to `authController` with `userManagement`.
+For example, if you were using `authController.signInWithEmailAndPassword`, you should now use `userManagement.signInWithEmailAndPassword`.
+
+```typescript
+const navigationController = useBuildNavigationController({
+    collections: collectionsBuilder,
+    collectionPermissions: userManagement.collectionPermissions,
+    views,
+    adminViews: userManagementAdminViews,
+    authController: firebaseAuthController,
+    dataSourceDelegate: firestoreDelegate
+});
+```
+
+becomes:
+
+```typescript
+const navigationController = useBuildNavigationController({
+  collections: collectionsBuilder,
+  collectionPermissions: userManagement.collectionPermissions,
+  views,
+  adminViews: userManagementAdminViews,
+  authController: userManagement,
+  dataSourceDelegate: firestoreDelegate
+});
+```
+
+
 ### Styling
 
 You also will need to import the default FireCMS styles in your project. You can do this by adding the following import to your `index.css` file:

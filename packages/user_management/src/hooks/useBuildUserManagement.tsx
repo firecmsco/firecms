@@ -17,8 +17,7 @@ import { resolveUserRolePermissions } from "../utils";
 type UserWithRoleIds<USER extends User = any> = Omit<USER, "roles"> & { roles: string[] };
 
 export interface UserManagementParams<CONTROLLER extends AuthController<any> = AuthController<any>,
-    USER extends User = CONTROLLER extends AuthController<infer U> ? U : any>
-     {
+    USER extends User = CONTROLLER extends AuthController<infer U> ? U : any> {
 
     authController: CONTROLLER;
 
@@ -88,6 +87,10 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
      allowDefaultRolesCreation,
      includeCollectionConfigPermissions
  }: UserManagementParams<CONTROLLER, USER>): UserManagement<USER> & CONTROLLER {
+
+    if (!authController) {
+        throw Error("useBuildUserManagement: You need to provide an authController since version 3.0.0-beta.11. Check https://firecms.co/docs/pro/migrating_from_v3_beta");
+    }
 
     const [rolesLoading, setRolesLoading] = React.useState<boolean>(true);
     const [usersLoading, setUsersLoading] = React.useState<boolean>(true);
@@ -273,7 +276,6 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
         const mgmtUser = users.find(u => u.email?.toLowerCase() === user?.email?.toLowerCase());
         return mgmtUser?.roles;
     }, [roles, usersWithRoleIds]);
-
 
     const authenticator: Authenticator<USER> = useCallback(({ user }) => {
         if (loading) {
