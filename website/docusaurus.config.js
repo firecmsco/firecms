@@ -22,6 +22,9 @@ module.exports = {
         docSearchApiKey: process.env.REACT_APP_DOC_SEARCH_KEY,
         docSearchAppId: process.env.REACT_APP_DOC_SEARCH_APP_ID
     },
+    future: {
+        // experimental_faster: true,
+    },
     webpack: {},
     plugins: [
         "docusaurus-tailwindcss-loader",

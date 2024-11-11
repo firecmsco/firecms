@@ -1,3 +1,5 @@
+@import "@firecms/ui/index.css";
+
 h1 {
     @apply text-6xl font-headers font-semibold
 }

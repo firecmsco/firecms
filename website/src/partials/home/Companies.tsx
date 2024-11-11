@@ -26,7 +26,7 @@ export function Companies() {
         </h2>
 
 
-        <Marquee className={"rounded-xl space-x-4"} pauseOnHover={true} gradient={true} gradientColor={"#e7e7eb"}>
+        <Marquee className={"rounded-xl space-x-4"} pauseOnHover={true} gradient={true} gradientColor={"#f3f4f6"}>
 
             <a
                 target="_blank"
