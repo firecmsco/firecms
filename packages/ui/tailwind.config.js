@@ -46,7 +46,7 @@ export default {
                 },
                 "text": {
                     "primary": "rgba(0, 0, 0, 0.87)",
-                    "secondary": "rgba(0, 0, 0, 0.55)",
+                    "secondary": "rgba(0, 0, 0, 0.52)",
                     "disabled": "rgba(0, 0, 0, 0.38)",
                     "primary-dark": "#ffffff",
                     "secondary-dark": "rgba(255, 255, 255, 0.60)",
