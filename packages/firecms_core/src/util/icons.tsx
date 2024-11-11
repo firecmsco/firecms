@@ -1,16 +1,16 @@
 import React from "react";
 import { hashString } from "./hash";
-import { coolIconKeys, Icon, iconKeys } from "@firecms/ui";
+import { coolIconKeys, Icon, IconColor, iconKeys } from "@firecms/ui";
 import { slugify } from "./strings";
 import equal from "react-fast-compare"
 
-export function getIcon(iconKey?: string, className?: string): React.ReactElement | undefined {
+export function getIcon(iconKey?: string, className?: string, color?:IconColor): React.ReactElement | undefined {
     if (!iconKey) return undefined;
     iconKey = slugify(iconKey);
     if (!(iconKey in iconKeysMap)) {
         return undefined;
     }
-    return iconKey in iconKeysMap ? <Icon iconKey={iconKey} size={"medium"} className={className}/> : undefined;
+    return iconKey in iconKeysMap ? <Icon iconKey={iconKey} size={"medium"} className={className} color={color}/> : undefined;
 }
 
 export type IconViewProps = {
@@ -25,12 +25,16 @@ export const IconForView = React.memo(
     function IconForView({
                              collectionOrView,
                              className,
-                             size = "medium"
+                             color,
+                             size = "medium",
                          }: {
-        collectionOrView?: IconViewProps, className?: string, size?: "smallest" | "small" | "medium" | "large" | number,
+        collectionOrView?: IconViewProps,
+        color?: IconColor,
+        className?: string,
+        size?: "smallest" | "small" | "medium" | "large" | number,
     }): React.ReactElement {
         if (!collectionOrView) return <></>;
-        const icon = getIcon(collectionOrView.icon, className);
+        const icon = getIcon(collectionOrView.icon, className, color);
         if (collectionOrView?.icon && icon)
             return icon;
 
@@ -51,9 +55,9 @@ export const IconForView = React.memo(
         if (!key)
             key = coolIconKeys[hashString(collectionOrView.path) % iconsCount];
 
-        return <Icon iconKey={key} size={size} className={className}/>;
+        return <Icon iconKey={key} size={size} className={className} color={color}/>;
     }, (prevProps, nextProps) => {
-        return equal(prevProps.collectionOrView?.icon, nextProps.collectionOrView?.icon);
+        return equal(prevProps.collectionOrView?.icon, nextProps.collectionOrView?.icon) && equal(prevProps.color, nextProps.color);
     });
 
 const iconKeysMap: Record<string, string> = iconKeys.reduce((acc: Record<string, string>, key) => {

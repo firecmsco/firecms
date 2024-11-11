@@ -8,7 +8,7 @@ import { getPreviewSizeFrom } from "../../../preview/util";
 import { getReferenceFrom, IconForView } from "../../../util";
 import { useCustomizationController, useNavigationController, useReferenceDialog } from "../../../hooks";
 import { ErrorView } from "../../ErrorView";
-import { cls } from "@firecms/ui";
+import { cls, EditIcon } from "@firecms/ui";
 import { EntityPreviewContainer } from "../../EntityPreview";
 
 type TableReferenceFieldProps = {
@@ -151,18 +151,17 @@ export const TableReferenceFieldInternal = React.memo(
 
                 {valueNotSet &&
                     <EntityPreviewContainer
-                        className={cls("px-4 py-2 text-sm font-medium flex items-center uppercase",
+                        className={cls("px-3 py-2 text-sm font-medium flex items-center text-text-secondary dark:text-text-secondary-dark",
                             multiselect ? "gap-4" : "gap-6",
                             disabled
                                 ? "text-surface-accent-500"
                                 : "cursor-pointer text-surface-accent-700 dark:text-surface-accent-300 hover:bg-surface-accent-50 dark:hover:bg-surface-800 group-hover:bg-surface-accent-50 dark:group-hover:bg-surface-800")}
                         onClick={handleOpen}
                         size={"medium"}>
-                        <IconForView
+                        <EditIcon
                             size={"small"}
-                            collectionOrView={collection}
-                            className={"text-surface-300 dark:text-surface-600"}/>
-                        Edit {title}
+                            className={"ml-2 mr-1 text-surface-300 dark:text-surface-600"}/>
+                        {title}
                     </EntityPreviewContainer>}
 
             </div>

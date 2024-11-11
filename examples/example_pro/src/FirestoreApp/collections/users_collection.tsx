@@ -27,6 +27,14 @@ export const usersCollection = buildCollection({
             name: "Phone",
             dataType: "string"
         },
+        related_users: {
+            dataType: "array",
+            name: "Related users",
+            of: {
+                dataType: "reference",
+                path: "users"
+}
+        },
         liked_products: {
             dataType: "array",
             name: "Liked products",
