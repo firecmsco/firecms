@@ -18,7 +18,6 @@ import { Editor, EditorProvider, Extensions } from "@tiptap/react";
 import { removeClassesFromJson } from "./utils/remove_classes";
 import {
     horizontalRule,
-    markdownExtension,
     placeholder,
     starterKit,
     taskItem,
@@ -33,6 +32,9 @@ import { SlashCommand, suggestion } from "./extensions/slashCommand";
 import { EditorAIController } from "./types";
 import TextLoadingDecorationExtension from "./extensions/TextLoadingDecorationExtension";
 import { HighlightDecorationExtension } from "./extensions/HighlightDecorationExtension";
+import { CustomBlock } from "./extensions/CustomBlockComponent";
+import { CustomComponent } from "./SampleCustomComponent";
+import { Markdown } from "tiptap-markdown";
 
 export type FireCMSEditorTextSize = "sm" | "base" | "lg";
 
@@ -47,6 +49,17 @@ export type FireCMSEditorProps = {
     highlight?: { from: number, to: number },
     aiController?: EditorAIController,
     onDisabledAutocompleteClick?: () => void,
+    customComponents?: CustomEditorComponent[];
+};
+
+export type CustomEditorComponent = {
+    name: string,
+    component: React.FC
+};
+
+// custom components need to be able to display and update the editor content
+export type CustomEditorComponentProps = {
+
 };
 
 const CustomDocument = Document.extend({
@@ -56,7 +69,7 @@ const CustomDocument = Document.extend({
 const proseClasses = {
     "sm": "prose-sm",
     "base": "prose-base",
-    "lg": "prose-lg",
+    "lg": "prose-lg"
 }
 
 export const FireCMSEditor = ({
@@ -132,10 +145,13 @@ export const FireCMSEditor = ({
         Underline,
         TextStyle,
         Color,
-        BulletList,
         Highlight.configure({
             multicolor: true
         }),
+        // CustomBlock.configure({
+        //     component: CustomComponent,
+        //     delimiter: "```custom"
+        // }),
         CustomKeymap,
         DragAndDrop,
         placeholder,
@@ -143,7 +159,9 @@ export const FireCMSEditor = ({
         imageExtension,
         taskList,
         taskItem,
-        markdownExtension,
+        Markdown.configure({
+            html: true,
+        }),
         horizontalRule,
         SlashCommand.configure({
             HTMLAttributes: {
@@ -163,51 +181,10 @@ export const FireCMSEditor = ({
             className="relative min-h-[300px] w-full">
             {/*<Button onClick={() => {*/}
             {/*    // add content at the end*/}
-            {/*    editorRef.current?.commands.setContent(content + "\n" +*/}
-            {/*        " <table border=\"1\">\n" +*/}
-            {/*        "  <thead>\n" +*/}
-            {/*        "    <tr>\n" +*/}
-            {/*        "      <th>Rank</th>\n" +*/}
-            {/*        "      <th>Company Name</th>\n" +*/}
-            {/*        "      <th>Revenue (in millions)</th>\n" +*/}
-            {/*        "      <th>Profit (in millions)</th>\n" +*/}
-            {/*        "    </tr>\n" +*/}
-            {/*        "  </thead>\n" +*/}
-            {/*        "  <tbody>\n" +*/}
-            {/*        "    <tr>\n" +*/}
-            {/*        "      <td>1</td>\n" +*/}
-            {/*        "      <td>Walmart</td>\n" +*/}
-            {/*        "      <td>$524,000</td>\n" +*/}
-            {/*        "      <td>$15,000</td>\n" +*/}
-            {/*        "    </tr>\n" +*/}
-            {/*        "    <tr>\n" +*/}
-            {/*        "      <td>2</td>\n" +*/}
-            {/*        "      <td>Amazon</td>\n" +*/}
-            {/*        "      <td>$280,522</td>\n" +*/}
-            {/*        "      <td>$11,588</td>\n" +*/}
-            {/*        "    </tr>\n" +*/}
-            {/*        "    <tr>\n" +*/}
-            {/*        "      <td>3</td>\n" +*/}
-            {/*        "      <td>Apple</td>\n" +*/}
-            {/*        "      <td>$260,174</td>\n" +*/}
-            {/*        "      <td>$55,256</td>\n" +*/}
-            {/*        "    </tr>\n" +*/}
-            {/*        "    <tr>\n" +*/}
-            {/*        "      <td>4</td>\n" +*/}
-            {/*        "      <td>CVS Health</td>\n" +*/}
-            {/*        "      <td>$256,776</td>\n" +*/}
-            {/*        "      <td>$6,634</td>\n" +*/}
-            {/*        "    </tr>\n" +*/}
-            {/*        "    <tr>\n" +*/}
-            {/*        "      <td>5</td>\n" +*/}
-            {/*        "      <td>UnitedHealth Group</td>\n" +*/}
-            {/*        "      <td>$242,155</td>\n" +*/}
-            {/*        "      <td>$13,839</td>\n" +*/}
-            {/*        "    </tr>\n" +*/}
-            {/*        "  </tbody>\n" +*/}
-            {/*        "</table>");*/}
+            {/*    // @ts-ignore*/}
+            {/*    editorRef.current?.commands.toggleCustomBlock();*/}
             {/*}}>*/}
-            {/*    Add table*/}
+            {/*    Toggle*/}
             {/*</Button>*/}
             <EditorProvider
                 content={content ?? ""}
@@ -252,7 +229,7 @@ function addLineBreakAfterImages(markdown: string): string {
     // Regular expression to match markdown image syntax
     const imageRegex = /!\[.*?\]\(.*?\)/g;
     // Replace image with image followed by a line break
-    return markdown.replace(imageRegex, (match) => `${match}`);
+    return markdown.replace(imageRegex, (match) => `${match}\n`);
 }
 
 const cssStyles = `
