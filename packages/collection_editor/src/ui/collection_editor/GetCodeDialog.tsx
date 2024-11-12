@@ -80,6 +80,9 @@ export function GetCodeDialog({
 function collectionToCode(collection: EntityCollection): object {
 
     const propertyCleanup = (value: any): any => {
+        if (value === undefined || value === null) {
+            return value;
+        }
         const valueCopy = clone(value);
         if (typeof valueCopy === "function") {
             return valueCopy;
@@ -100,14 +103,14 @@ function collectionToCode(collection: EntityCollection): object {
                     }
                 }
             });
-        }
+            delete valueCopy.fromBuilder;
+            delete valueCopy.resolved;
+            delete valueCopy.propertiesOrder;
+            delete valueCopy.propertyConfig;
+            delete valueCopy.resolvedProperties;
+            delete valueCopy.editable;
 
-        delete valueCopy.fromBuilder;
-        delete valueCopy.resolved;
-        delete valueCopy.propertiesOrder;
-        delete valueCopy.propertyConfig;
-        delete valueCopy.resolvedProperties;
-        delete valueCopy.editable;
+        }
 
         return valueCopy;
     }
