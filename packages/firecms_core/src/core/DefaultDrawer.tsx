@@ -85,7 +85,7 @@ export function DefaultDrawer({
 
                     {groupsWithoutAdmin.map((group) => (
                         <div
-                            className={"bg-surface-50 dark:bg-surface-800 dark:bg-opacity-30 my-4 rounded-lg ml-4"}
+                            className={"bg-surface-50 dark:bg-surface-800 dark:bg-opacity-30 my-4 rounded-lg ml-3 mr-1"}
                             key={`drawer_group_${group}`}>
                             {buildGroupHeader(group)}
                             {Object.values(navigationEntries)
@@ -163,7 +163,7 @@ export function DrawerLogo({ logo }: {
             transition: "padding 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
             padding: drawerOpen ? "32px 144px 0px 24px" : "72px 12px 0px 12px"
         }}
-        className={cls("cursor-pointer ml-4")}>
+        className={cls("cursor-pointer ml-3 mr-1")}>
 
         <Tooltip title={"Home"}
                  sideOffset={20}

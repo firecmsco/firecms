@@ -168,7 +168,7 @@ function DrawerWrapper(props: {
                      sideOffset={12}
                      asChild={true}>
                 <div
-                    className="ml-2 fixed top-1 left-2 sm:top-2 sm:left-3 !bg-surface-50 dark:!bg-surface-900 rounded-full w-fit z-20">
+                    className="ml-2 fixed top-1 left-2 sm:top-2 sm:left-2 !bg-surface-50 dark:!bg-surface-900 rounded-full w-fit z-20">
                     <IconButton
                         color="inherit"
                         aria-label="Open menu"
@@ -209,7 +209,7 @@ function DrawerWrapper(props: {
                 aria-label="Open drawer"
                 onClick={() => props.setDrawerOpen(true)}
                 size="large"
-                className="absolute sm:top-2 sm:left-5 top-1 left-2"
+                className="absolute sm:top-2 sm:left-4 top-1 left-2"
             >
                 <MenuIcon/>
             </IconButton>
@@ -217,7 +217,7 @@ function DrawerWrapper(props: {
                    transparent={true}
                    open={props.open}
                    onOpenChange={props.setDrawerOpen}
-                   title={"Navigaion drawer"}
+                   title={"Navigation drawer"}
                    overlayClassName={"bg-white bg-opacity-80"}
             >
                 {innerDrawer}

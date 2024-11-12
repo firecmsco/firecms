@@ -13,7 +13,7 @@ export type IconButtonProps<C extends React.ElementType> =
     onClick?: React.MouseEventHandler<any>
 }
 
-const buttonClasses = "hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-800";
+const buttonClasses = "hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-800 hover:scale-110 transition-transform";
 const baseClasses = "inline-flex items-center justify-center p-2 text-sm font-medium focus:outline-none transition-colors ease-in-out duration-150";
 const colorClasses = "text-surface-accent-600 visited:text-surface-accent-600 dark:text-surface-accent-300 dark:visited:text-surface-300";
 const sizeClasses = {
