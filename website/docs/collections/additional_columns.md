@@ -32,7 +32,7 @@ import {
 type User = { name: string }
 
 export const fullNameAdditionalField: AdditionalFieldDelegate<User> = {
-    id: "full_name",
+    key: "full_name",
     name: "Full Name",
     Builder: ({ entity }) => {
         let values = entity.values;
@@ -63,8 +63,8 @@ import {
 } from "@firecms/cloud";
 
 export const productAdditionalField: AdditionalFieldDelegate<Product> = {
-    id: "spanish_title",
-    title: "Spanish title",
+    key: "spanish_title",
+    name: "Spanish title",
     Builder: ({ entity, context }) =>
         <AsyncPreviewComponent builder={
             context.dataSource.fetchEntity({

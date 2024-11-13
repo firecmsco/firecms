@@ -4,6 +4,7 @@ title: Changelog
 ---
 ## [3.0.0-beta.11] - 2024-07-10
 
+- [BREAKING] Removed `userRoles` from AuthController. You can now access the `roles` prop in the user object directly
 - [BREAKING] For self-hosted versions, there has been a change in the API for the data management controllers. The 
 `authController` is now passed to the User Management controller, instead of the other way around. The `userManagementController`
 can be used as an auth controller, but with all the added logic for user management. 
@@ -75,8 +76,44 @@ const navigationController = useBuildNavigationController({
 });
 ```
 
+- Fixed issues in collection editor code dialog.
+- Updated web styles and integrated improvements in Docusaurus.
+- Enhanced styling for empty references and minor design tweaks.
+- Continued work in progress on Editor custom components.
+- Reintroduced dark primary color variant for better theme options.
+- Minor web updates for improved aesthetics and functionality.
+- Fixed a bug where the Editor was not saving false values.
+- Replaced all instances of gray and slate colors with more unified surface and surface-accent colors for UI consistency.
+- Added Avatar component fallback and integrated ESLint configuration into templates.
+- Enhanced error handling in forms and improved cloud error messages.
+- Refactored user management logic for better code organization.
+- Improved the handling of boolean switch properties in configurations.
+- Introduced state management for children in ArrayContainer.
+- Added a recipe for slug creation, improving URL handling and SEO.
+- Fixed crash issues in repeat fields for subproperties and addressed various minor styling and functionality bugs.
+- Made improvements to heatmap responsiveness (HMR fixes).
+- Refactored text search functionalities for better efficiency and added relevant documentation.
+- Fixed issues with number input fields blocking scroll and replaced date picker with native HTML date input for consistency.
+
+
 ## [3.0.0-beta.10] - 2024-07-10
 
+- Fixed issues with wrong licenses.
+- Resolved TipTap dependencies.
+- Addressed various minor styling updates across the web.
+- Moved body CSS from default imports to individual files for better modularity.
+- Implemented several web updates, including select style fixes and dialog title adjustments for text search.
+- Updated the collection editor property select view and improved widget selection layout.
+- Applied AppBar tweaks to enhance behavior on mobile devices.
+- Improved console outputs and cleaned up miscellaneous code segments.
+- Enhanced UI with the addition of a Slider component and updated related documentation.
+- Replaced entity edit icon with a pencil for clarity.
+- Updated dependencies and refined project management with a license check feature.
+- Improved Formex handling of number inputs and fixed DateTimeField export in Next.js.
+- Added API key generation and project selection capabilities.
+- Introduced a past-due warning message and improvements in collection and subcollection data handling.
+- Provided better error handling and layout consistency in the application.
+- 
 ## [3.0.0-beta.9] - 2024-07-10
 
 - **NEW MARKDOWN EDITOR**: The markdown editor has been completely revamped. It now supports a live preview, and a much
