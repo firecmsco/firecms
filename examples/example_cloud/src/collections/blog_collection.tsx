@@ -1,16 +1,7 @@
 import { buildCollection, buildProperty } from "@firecms/core";
 import { BlogEntryPreview } from "../custom_entity_view/BlogEntryPreview";
+import { BlogEntry } from "../types";
 
-export type BlogEntry = {
-    name: string,
-    header_image: string,
-    content: any[],
-    created_on: Date,
-    publish_date: Date,
-    reviewed: boolean,
-    status: string,
-    tags: string[]
-}
 
 export const blogCollection = buildCollection<BlogEntry>({
     id: "blog",
@@ -20,7 +11,6 @@ export const blogCollection = buildCollection<BlogEntry>({
     group: "Content",
     icon: "Article",
     description: "A blog entry with a quirky humorist tone. Each entry should have at least 5 text pieces of around 100 words each and a quote at least. The quote can be anywhere.",
-    textSearchEnabled: true,
     defaultSize: "l",
     entityViews: [{
         key: "preview",

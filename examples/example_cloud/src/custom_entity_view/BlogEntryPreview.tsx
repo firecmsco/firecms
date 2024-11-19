@@ -109,7 +109,7 @@ function Quote({ quoteText }: {
         return <></>;
 
     return <Container maxWidth={"5xl"} className={"border-l-2 border-l-red-950 dark:border-l-red-100 my-8 italic"}>
-        <Typography variant="h5" sx={{ fontStyle: "italic" }}>
+        <Typography variant="h5">
             {quoteText}
         </Typography>
     </Container>;

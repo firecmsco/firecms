@@ -66,6 +66,7 @@ export default function ClientUIComponentsShowcase({
                                                        linksInNewTab
                                                    }: { docsUrl?: string, linksInNewTab?: boolean }) {
 
+    const [tabValue, setTabValue] = useState("tab1");
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [isSheetOpen, setSheetOpen] = useState(false);
     const [isExpandablePanelOpen, setExpandablePanelOpen] = useState(true);
@@ -111,6 +112,7 @@ export default function ClientUIComponentsShowcase({
                     <Button size="small">Small Button</Button>
                     <Button size="medium">Medium Button</Button>
                     <Button size="large">Large Button</Button>
+                    <Button variant={"ghost"}>Ghost Button</Button>
                     <Button variant={"text"}>Text Button</Button>
                     <Button variant={"outlined"}>Outlined Button</Button>
                 </div>
@@ -125,8 +127,7 @@ export default function ClientUIComponentsShowcase({
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
                 <Typography variant="subtitle2">Tabs</Typography>
-                <Tabs value="tab1" onValueChange={() => {
-                }}>
+                <Tabs value={tabValue} onValueChange={setTabValue}>
                     <Tab value="tab1">Tab 1</Tab>
                     <Tab value="tab2">Tab 2</Tab>
                     <Tab value="tab3">Tab 3</Tab>
