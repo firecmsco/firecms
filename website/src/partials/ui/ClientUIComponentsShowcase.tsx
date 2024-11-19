@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
     AddIcon,
     Alert,
@@ -60,12 +59,14 @@ import {
     Tooltip,
     Typography
 } from "@firecms/ui";
+import React, { useState } from "react";
 
 export default function ClientUIComponentsShowcase({
                                                        docsUrl,
                                                        linksInNewTab
                                                    }: { docsUrl?: string, linksInNewTab?: boolean }) {
 
+    const [tabValue, setTabValue] = useState("tab1");
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [isSheetOpen, setSheetOpen] = useState(false);
     const [isExpandablePanelOpen, setExpandablePanelOpen] = useState(true);
@@ -75,7 +76,7 @@ export default function ClientUIComponentsShowcase({
     const [badgeDisplayed, setBadgeDisplayed] = useState(true);
     const [textFieldValue, setTextFieldValue] = useState<string>("");
     const [sliderValue, setSliderValue] = useState<number[]>([4]);
-    const cardClasses = "relative p-4 mb-6 flex flex-col gap-2 break-inside-avoid dark:bg-gray-900 dark:bg-opacity-50";
+    const cardClasses = "relative p-4 mb-6 flex flex-col gap-2 break-inside-avoid dark:bg-surface-900 dark:bg-opacity-50";
 
     return <div className={"max-w-6xl mx-auto "}>
         <MenubarDemo/>
@@ -111,6 +112,7 @@ export default function ClientUIComponentsShowcase({
                     <Button size="small">Small Button</Button>
                     <Button size="medium">Medium Button</Button>
                     <Button size="large">Large Button</Button>
+                    <Button variant={"neutral"}>Neutral Button</Button>
                     <Button variant={"text"}>Text Button</Button>
                     <Button variant={"outlined"}>Outlined Button</Button>
                 </div>
@@ -125,8 +127,7 @@ export default function ClientUIComponentsShowcase({
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
                 <Typography variant="subtitle2">Tabs</Typography>
-                <Tabs value="tab1" onValueChange={() => {
-                }}>
+                <Tabs value={tabValue} onValueChange={setTabValue}>
                     <Tab value="tab1">Tab 1</Tab>
                     <Tab value="tab2">Tab 2</Tab>
                     <Tab value="tab3">Tab 3</Tab>
@@ -404,21 +405,21 @@ export default function ClientUIComponentsShowcase({
                 <Typography variant="subtitle2">Radio Group</Typography>
                 <RadioGroup className="flex items-center gap-2" defaultValue="black" id="color">
                     <Label
-                        className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
+                        className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800"
                         htmlFor="color-black"
                     >
                         <RadioGroupItem id="color-black" value="black"/>
                         Black
                     </Label>
                     <Label
-                        className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
+                        className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800"
                         htmlFor="color-white"
                     >
                         <RadioGroupItem id="color-white" value="white"/>
                         White
                     </Label>
                     <Label
-                        className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
+                        className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800"
                         htmlFor="color-blue"
                     >
                         <RadioGroupItem id="color-blue" value="blue"/>
@@ -561,8 +562,8 @@ export default function ClientUIComponentsShowcase({
                 <Typography variant="subtitle2">Sheet</Typography>
                 <Button onClick={() => setSheetOpen(true)}>Open Sheet</Button>
                 <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
-                    <div className="bg-white font-bold dark:bg-gray-800 p-4 h-full">
-                        Sheet Content
+                    <div className="bg-white dark:bg-surface-800 p-4 h-full">
+                        This is a sample sheet
                     </div>
                 </Sheet>
             </Card>

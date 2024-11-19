@@ -7,6 +7,9 @@ export default function VariantButtonDemo() {
             <Button variant="filled">
                 Filled Button
             </Button>
+            <Button variant="neutral">
+                Neutral Button
+            </Button>
             <Button variant="outlined">
                 Outlined Button
             </Button>

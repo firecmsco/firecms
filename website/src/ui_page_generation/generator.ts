@@ -1,7 +1,8 @@
 import OpenAI from "openai";
 // open all files recursively
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+
+import path from "path";
 
 const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 
@@ -4208,7 +4209,7 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //
 // export default UiPage;
 // `;
-const walk = function (dir) {
+const walk = function (dir:any) {
     let results: File[] = [];
     const list = fs.readdirSync(dir);
     list.forEach(function (file) {
@@ -4217,7 +4218,7 @@ const walk = function (dir) {
         if (stat && stat.isDirectory()) {
             results = results.concat(walk(file));
         } else {
-            results.push(file);
+            results.push(file as any);
         }
     });
     return results;
@@ -4237,7 +4238,7 @@ export async function generateUIPage() {
     //
     // // append the content of each file to the systemInstructions
     files.forEach((file) => {
-        const content = fs.readFileSync(file, "utf-8");
+        const content = fs.readFileSync(file as any, "utf-8");
         fileInstructions += `File: ${file}\n\n${content}\n\n`;
     });
 

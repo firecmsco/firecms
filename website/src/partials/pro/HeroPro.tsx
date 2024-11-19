@@ -51,7 +51,7 @@ export function HeroPro({
                     No more limits. No more compromises.
                 </p>
                 <h2 className={"h2 mt-0 uppercase font-mono"}>
-                    Try self-hosted FireCMS PRO completely for <b>free</b>.
+                    Try self-hosted FireCMS PRO one month completely for <b>free</b> .
                 </h2>
                 <div className={"flex flex-row gap-4 mt-8"}>
                     <div

@@ -39,6 +39,7 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 export default function ClientUIComponentsTeaser() {
 
+    const [tabValue, setTabValue] = useState("tab1");
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [isSheetOpen, setSheetOpen] = useState(false);
     const [checked, setChecked] = useState(true);
@@ -63,10 +64,10 @@ export default function ClientUIComponentsTeaser() {
                         <Button variant={"text"}>Buttons</Button>
                     </div>
                     <div className="relative p-2 flex flex-col gap-2 break-inside-avoid">
-                        <Tabs value="tab1" onValueChange={() => {
-                        }}>
+                        <Tabs value={tabValue} onValueChange={setTabValue}>
                             <Tab value="tab1">Tab 1</Tab>
                             <Tab value="tab2">Tab 2</Tab>
+                            <Tab value="tab3">Tab 3</Tab>
                         </Tabs>
                     </div>
 
@@ -207,4 +208,4 @@ export default function ClientUIComponentsTeaser() {
             </a>
         </div>
     );
-}
+};

@@ -168,6 +168,7 @@ export const MultiSelect = React.forwardRef<
             } else {
                 updateValues(allValues);
             }
+            onPopoverOpenChange(false);
         };
 
         useInjectStyles("MultiSelect", `
@@ -278,7 +279,7 @@ export const MultiSelect = React.forwardRef<
                         <CommandPrimitive>
                             <div className={"flex flex-row items-center"}>
                                 <CommandPrimitive.Input
-                                    className={cls(focusedDisabled, "bg-transparent outline-none flex-1 h-full w-full m-4 flex-grow")}
+                                    className={cls(focusedDisabled, "bg-transparent outline-none flex-1 h-full w-full m-4 flex-grow ")}
                                     placeholder="Search..."
                                     onKeyDown={handleInputKeyDown}
                                 />
