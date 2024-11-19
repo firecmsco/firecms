@@ -31,8 +31,8 @@ export function ErrorView({
     const body = (
         <div
             className="flex items-center m-2">
-            <ErrorIcon size={"small"} color={"error"}/>
-            <div className="pl-2">
+            <ErrorIcon className={"mx-2"} size={"small"} color={"error"}/>
+            <div className="pl-4">
                 {title && <Typography
                     variant={"body2"}
                     className="font-medium">{title}</Typography>}
