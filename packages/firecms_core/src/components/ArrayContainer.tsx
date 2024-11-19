@@ -10,6 +10,8 @@ import {
     ContentCopyIcon,
     HandleIcon,
     IconButton,
+    KeyboardArrowDownIcon,
+    KeyboardArrowUpIcon,
     Menu,
     MenuItem,
     RemoveIcon,
@@ -132,6 +134,18 @@ export function ArrayContainer<T>({
         onValueChange([...value.slice(0, index + 1), copyingItem, ...value.slice(index + 1)]);
     };
 
+    const addInIndex = (index: number) => {
+        const id = getRandomId();
+        const newIds: number[] = [
+            ...internalIds.splice(0, index),
+            id,
+            ...internalIds.slice(index)];
+        if (onInternalIdAdded)
+            onInternalIdAdded(id);
+        setInternalIds(newIds);
+        onValueChange([...value.slice(0, index), newDefaultEntry, ...value.slice(index)]);
+    }
+
     const onDragEnd = (result: any) => {
         // dropped outside the list
         if (!result.destination) {
@@ -168,6 +182,7 @@ export function ArrayContainer<T>({
                                    isDragging={snapshot.isDragging}
                                    storedProps={itemCustomPropsRef.current[internalId]}
                                    updateItemCustomProps={updateItemCustomProps}
+                                   addInIndex={addInIndex}
                                />
                            );
                        }}
@@ -197,6 +212,7 @@ export function ArrayContainer<T>({
                                             isDragging={snapshot.isDragging}
                                             storedProps={itemCustomPropsRef.current[internalId]}
                                             updateItemCustomProps={updateItemCustomProps}
+                                            addInIndex={addInIndex}
                                         />
                                     )}
                                 </Draggable>
@@ -232,6 +248,7 @@ type ArrayContainerItemProps = {
     buildEntry: ArrayEntryBuilder,
     remove: (index: number) => void,
     copy: (index: number) => void,
+    addInIndex?: (index: number) => void,
     isDragging: boolean,
     storedProps?: object,
     updateItemCustomProps: (internalId: number, props: object) => void
@@ -245,6 +262,7 @@ export function ArrayContainerItem({
                                        disabled,
                                        buildEntry,
                                        remove,
+                                       addInIndex,
                                        copy,
                                        isDragging,
                                        storedProps,
@@ -276,6 +294,7 @@ export function ArrayContainerItem({
                               remove={remove}
                               index={index}
                               provided={provided}
+                              addInIndex={addInIndex}
                               copy={copy}/>
         </div>
     </div>;
@@ -288,13 +307,15 @@ export function ArrayItemOptions({
                                      index,
                                      provided,
                                      copy,
+                                     addInIndex
                                  }: {
     direction?: "row" | "column",
     disabled: boolean,
     remove: (index: number) => void,
     index: number,
     provided: any,
-    copy: (index: number) => void
+    copy: (index: number) => void,
+    addInIndex?: (index: number) => void
 }) {
 
     const [menuOpen, setMenuOpen] = useState(false);
@@ -343,6 +364,24 @@ export function ArrayItemOptions({
                     <ContentCopyIcon size={"small"}/>
                     Copy
                 </MenuItem>
+
+                {addInIndex && <MenuItem dense
+                                         onClick={() => {
+                                             setMenuOpen(false);
+                                             addInIndex(index);
+                                         }}>
+                    <KeyboardArrowUpIcon size={"small"}/>
+                    Add on top
+                </MenuItem>}
+
+                {addInIndex && <MenuItem dense
+                                         onClick={() => {
+                                             setMenuOpen(false);
+                                             addInIndex(index + 1);
+                                         }}>
+                    <KeyboardArrowDownIcon size={"small"}/>
+                    Add below
+                </MenuItem>}
 
             </Menu>
         </Tooltip>
