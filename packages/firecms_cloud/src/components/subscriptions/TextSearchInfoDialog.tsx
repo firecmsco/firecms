@@ -43,6 +43,7 @@ export function TextSearchInfoDialog({
             id: collection.id,
             parentCollectionIds,
             collectionData: {
+                id: collection.id,
                 textSearchEnabled: true
             }
         })
