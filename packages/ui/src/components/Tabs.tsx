@@ -5,6 +5,7 @@ import { cls } from "../util";
 export type TabsProps = {
     value: string,
     children: React.ReactNode,
+    innerClassName?: string,
     className?: string,
     onValueChange: (value: string) => void
 };
@@ -13,13 +14,14 @@ export function Tabs({
                          value,
                          onValueChange,
                          className,
+                         innerClassName,
                          children
                      }: TabsProps) {
 
-    return <TabsPrimitive.Root value={value} onValueChange={onValueChange}>
+    return <TabsPrimitive.Root value={value} onValueChange={onValueChange} className={className}>
         <TabsPrimitive.List className={cls(
             "flex text-sm font-medium text-center text-surface-accent-800 dark:text-white max-w-full overflow-auto no-scrollbar",
-            className)
+            innerClassName)
         }>
             {children}
         </TabsPrimitive.List>
@@ -29,6 +31,7 @@ export function Tabs({
 export type TabProps = {
     value: string,
     className?: string,
+    innerClassName?: string,
     children: React.ReactNode,
     disabled?: boolean
 };
@@ -36,6 +39,7 @@ export type TabProps = {
 export function Tab({
                         value,
                         className,
+                        innerClassName,
                         children,
                         disabled
                     }: TabProps) {
@@ -53,7 +57,8 @@ export function Tab({
                                       // "data-[state=active]:bg-surface-accent-50 data-[state=active]:dark:bg-surface-accent-800",
                                       className)}>
         <div className={cls("uppercase inline-block p-2 px-4 m-2 rounded",
-            "hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-800")}>
+            "hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-800",
+            innerClassName)}>
             {children}
         </div>
     </TabsPrimitive.Trigger>;

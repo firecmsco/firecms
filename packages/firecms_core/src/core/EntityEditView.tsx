@@ -1029,7 +1029,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                         onValueChange={(value) => {
                             onSideTabClick(value);
                         }}
-                        className="pl-4 pr-4 pt-0">
+                        innerClassName="pl-4 pr-4 pt-0">
 
                         <Tab
                             disabled={!hasAdditionalViews}
