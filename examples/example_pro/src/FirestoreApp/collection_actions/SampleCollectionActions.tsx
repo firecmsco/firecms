@@ -53,7 +53,7 @@ export function CustomFiltersActions({
                     </IconButton> : undefined}
                 renderValue={(value) => value}
                 onValueChange={updateFilter}
-                size={"small"}
+                size={"medium"}
                 value={categoryFilterValue}>
             <SelectItem value="cameras">Cameras</SelectItem>
             <SelectItem value="bath">Bath</SelectItem>

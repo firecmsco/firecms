@@ -22,7 +22,7 @@ export function SubscriptionPriceSelect({
     return (productPrices ?? [])?.length > 1
         ? <>
             <Select
-                size={"small"}
+                size={"medium"}
                 invisible={true}
                 padding={false}
                 onChange={(e) => {
@@ -54,7 +54,7 @@ export function SubscriptionPriceSelect({
             (largePriceLabel ? <span
                     className={"ml-4 mb-4 text-2xl font-bold text-primary text-center my-8"}>{getPriceString(productPrices[0])}</span>
                 : <Chip
-                    size={"small"}>
+                    size={"medium"}>
                     {getPriceString(productPrices[0])}
                 </Chip>)
             : null;

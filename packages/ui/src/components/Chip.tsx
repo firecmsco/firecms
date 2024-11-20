@@ -11,7 +11,7 @@ export type ChipColorKey = keyof typeof CHIP_COLORS;
 export interface ChipProps {
     className?: string;
     children: React.ReactNode;
-    size?: "smallest" | "small" | "medium";
+    size?: "small" | "medium" | "large";
     colorScheme?: ChipColorScheme | ChipColorKey;
     error?: boolean;
     outlined?: boolean;
@@ -21,9 +21,9 @@ export interface ChipProps {
 }
 
 const sizeClassNames = {
-    smallest: "px-2 py-0.5 text-sm",
-    small: "px-3 py-1 text-sm",
-    medium: "px-4 py-1.5 text-sm"
+    small: "px-2 py-0.5 text-sm",
+    medium: "px-3 py-1 text-sm",
+    large: "px-4 py-1.5 text-sm"
 }
 
 /**
@@ -36,7 +36,7 @@ export function Chip({
                          outlined,
                          onClick,
                          icon,
-                         size = "medium",
+                         size = "large",
                          className,
                          style
                      }: ChipProps) {

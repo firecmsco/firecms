@@ -8,6 +8,7 @@ export default function FileUploadBasicDemo() {
 
     return (
         <FileUpload
+            size={"large"}
             accept={{ "image/*": [] }}
             onFilesAdded={onFilesAdded}
             title="Upload your file"

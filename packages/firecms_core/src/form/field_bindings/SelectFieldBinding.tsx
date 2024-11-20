@@ -29,7 +29,7 @@ export function SelectFieldBinding<T extends EnumType>({
                                                            touched,
                                                            property,
                                                            includeDescription,
-                                                           size = "medium"
+                                                           size = "large"
                                                        }: SelectProps<T>) {
 
     const enumValues = resolveEnumValues(property.enumValues ?? []);
@@ -50,9 +50,9 @@ export function SelectFieldBinding<T extends EnumType>({
         <>
 
             <Select
-                size={size === "medium" ? "medium" : "small"}
                 value={value !== undefined && value != null ? value.toString() : ""}
                 disabled={disabled}
+                size={size}
                 position="item-aligned"
                 inputClassName={cls("w-full")}
                 label={

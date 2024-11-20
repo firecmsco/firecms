@@ -20,7 +20,10 @@ import {
     MultiSelect,
     MultiSelectItem,
     Paper,
+    Select,
+    SelectItem,
     Sheet,
+    TextField,
     Tooltip,
     Typography
 } from "@firecms/ui";
@@ -157,6 +160,23 @@ export function ExampleCMSView() {
                                 ))}
                             </ul>
                         </div>
+                    </div>
+
+                    <div className="flex gap-2">
+                        <TextField
+                            size={"small"}
+                            placeholder="Invite others by email"
+                            className="flex-grow"
+                            endAdornment={<Select
+                                size={"medium"}
+                                value={"read"}>
+                                <SelectItem value={"write"}>Can edit</SelectItem>
+                                <SelectItem value={"read"}>Can view</SelectItem>
+                            </Select>}
+                        />
+                        <Button variant="neutral">
+                            Invite
+                        </Button>
                     </div>
 
                     <div>

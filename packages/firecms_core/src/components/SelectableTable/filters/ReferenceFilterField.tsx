@@ -147,6 +147,7 @@ export function ReferenceFilterField({
         <div className="flex w-[440px] flex-row">
             <div className="w-[140px]">
                 <Select value={operation}
+                        size={"large"}
                         onValueChange={(value) => {
                             updateFilter(value as VirtualTableWhereFilterOp, internalValue);
                         }}

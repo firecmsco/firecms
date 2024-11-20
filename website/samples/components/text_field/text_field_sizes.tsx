@@ -9,13 +9,6 @@ export default function TextFieldSizeDemo() {
             <TextField
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
-                label="Smallest Size"
-                placeholder="Smallest size"
-                size="smallest"
-            />
-            <TextField
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
                 label="Small Size"
                 placeholder="Small size"
                 size="small"
@@ -26,6 +19,13 @@ export default function TextFieldSizeDemo() {
                 label="Medium Size"
                 placeholder="Medium size"
                 size="medium"
+            />
+            <TextField
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                label="Large Size"
+                placeholder="Large size"
+                size="large"
             />
         </div>
     );

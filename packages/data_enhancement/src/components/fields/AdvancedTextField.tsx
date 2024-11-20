@@ -21,7 +21,7 @@ export function AdvancedTextField<T extends string | number>({
                                                                  highlight,
                                                                  disabled,
                                                                  error,
-                                                                 size = "medium",
+                                                                 size = "large",
                                                                  className
                                                              }: {
     inputType: InputType<T>,
@@ -32,7 +32,7 @@ export function AdvancedTextField<T extends string | number>({
     multiline?: boolean,
     disabled?: boolean,
     error?: boolean,
-    size?: "smallest" | "small" | "medium",
+    size?: "small" | "medium" | "large",
     className?: string,
 }) {
 
@@ -117,9 +117,9 @@ export function AdvancedTextField<T extends string | number>({
             disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
             error ? "border border-red-500 dark:border-red-600" : "",
             {
-                "min-h-[32px]": size === "smallest",
-                "min-h-[48px]": size === "small",
-                "min-h-[64px]": size === "medium"
+                "min-h-[32px]": size === "small",
+                "min-h-[48px]": size === "medium",
+                "min-h-[64px]": size === "large"
             },
             className)}>
 
@@ -128,7 +128,7 @@ export function AdvancedTextField<T extends string | number>({
                     className={cls("absolute pointer-events-none",
                         !error ? (focused ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-red-500 dark:text-red-600",
                         disabled ? "opacity-50" : "",
-                        size === "medium" ? "top-1" : "-top-1",)}
+                        size === "large" ? "top-1" : "-top-1",)}
                     shrink={hasValue || focused}
                 >
                     {label}
@@ -138,8 +138,8 @@ export function AdvancedTextField<T extends string | number>({
             <div ref={ref}
                  className={cls("inset-0 whitespace-pre-wrap overflow-x-auto select-none pb-2 px-3",
                      {
-                         "pt-8": size === "medium",
-                         "pt-4": size === "small" || size === "smallest",
+                         "pt-8": size === "large",
+                         "pt-4": size === "medium" || size === "small",
                      })}>
 
                 {addLineBreaks(originalValue, !endsWithHighlight && multiline)}
@@ -154,15 +154,15 @@ export function AdvancedTextField<T extends string | number>({
             <TextareaAutosize
                 className={cls(
                     {
-                        "min-h-[32px]": size === "smallest",
-                        "min-h-[48px]": size === "small",
-                        "min-h-[64px]": size === "medium"
+                        "min-h-[32px]": size === "small",
+                        "min-h-[48px]": size === "medium",
+                        "min-h-[64px]": size === "large"
                     },
                     "rounded-md resize-none w-full outline-none text-base bg-transparent ",
                     disabled && "border border-transparent outline-none opacity-50 text-surface-600 dark:text-surface-500",
                     "absolute top-0 right-0 left-0 max-w-full bg-transparent text-transparent caret-surface-800 dark:caret-surface-200",
                     "pt-8 pb-2 px-3",
-                    label ? (size === "medium" ? "pt-8 pb-2" : "pt-4 pb-2") : "py-2"
+                    label ? (size === "large" ? "pt-8 pb-2" : "pt-4 pb-2") : "py-2"
                 )}
                 ignoreBoxSizing={true}
                 ref={inputRef}

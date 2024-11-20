@@ -31,6 +31,7 @@ export function DateTimePropertyField({ disabled }: {
                     <Select name={modePath}
                             value={modeValue ?? "date"}
                             error={Boolean(modeError)}
+                            size={"large"}
                             onValueChange={(v) => setFieldValue(modePath, v)}
                             label={"Mode"}
                             renderValue={(v) => {
@@ -54,6 +55,7 @@ export function DateTimePropertyField({ disabled }: {
                 <div>
                     <Select name={autoValuePath}
                             disabled={disabled}
+                            size={"large"}
                             value={autoValueValue ?? ""}
                             onValueChange={(v) => setFieldValue(autoValuePath, v === "none" ? null : v)}
                             renderValue={(v) => {

@@ -215,13 +215,13 @@ export function InvoicesExport() {
                         }}/>
                     <div className="flex flex-row gap-2">
                         <DateTimeField
-                            size={"small"}
+                            size={"medium"}
                             label="Start Date"
                             value={startDate}
                             onChange={setStartDate}
                         />
                         <DateTimeField
-                            size={"small"}
+                            size={"medium"}
                             label="End date"
                             value={endDate}
                             onChange={setEndDate}

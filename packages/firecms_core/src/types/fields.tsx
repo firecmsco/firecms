@@ -108,7 +108,7 @@ export interface FieldProps<T extends CMSType = any, CustomProps = any, M extend
     /**
      * Size of the field
      */
-    size?: "smallest" | "small" | "medium";
+    size?: "small" | "medium" | "large";
 
     /**
      * Some properties might change internal state (like expanding a panel).
@@ -231,7 +231,7 @@ export interface PropertyFieldBindingProps<T extends CMSType, M extends Record<s
     /**
      * The size of the field
      */
-    size?: "smallest" | "small" | "medium",
+    size?: "small" | "medium" | "large",
 
     /**
      * Some properties might change internal state (like expanding a panel).

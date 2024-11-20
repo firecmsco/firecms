@@ -6,6 +6,7 @@ export default function SelectGroupDemo() {
 
     return (
         <Select
+            size={"large"}
             value={selected}
             onValueChange={setSelected}
             placeholder="Select an option"

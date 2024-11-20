@@ -196,7 +196,7 @@ function BadMessageIcon({
                                    selected={selected}
                                    setSelected={setSelected}/>
                 </div>
-                <TextField size={"smallest"}
+                <TextField size={"small"}
                            value={feedbackText}
                            onChange={(e) => setFeedbackText(e.target.value)}
                            placeholder={"Feel free to add specific details"}></TextField>

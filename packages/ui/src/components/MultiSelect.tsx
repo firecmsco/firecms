@@ -60,6 +60,7 @@ interface MultiSelectProps {
     position?: "item-aligned" | "popper",
     endAdornment?: React.ReactNode,
     multiple?: boolean,
+    includeSelectAll?: boolean,
     includeClear?: boolean,
     inputRef?: React.RefObject<HTMLButtonElement>,
     padding?: boolean,
@@ -84,6 +85,7 @@ export const MultiSelect = React.forwardRef<
             placeholder,
             modalPopover = true,
             includeClear = true,
+            includeSelectAll = true,
             useChips = true,
             className,
             children,
@@ -226,7 +228,7 @@ export const MultiSelect = React.forwardRef<
                                             }
                                             return (
                                                 <Chip
-                                                    size={"small"}
+                                                    size={"medium"}
                                                     key={value}
                                                     className={cls("flex flex-row items-center p-1")}
                                                 >
@@ -297,7 +299,7 @@ export const MultiSelect = React.forwardRef<
                                     No results found.
                                 </CommandPrimitive.Empty>
                                 <CommandPrimitive.Group>
-                                    <CommandPrimitive.Item
+                                    {includeSelectAll && <CommandPrimitive.Item
                                         key="all"
                                         onSelect={toggleAll}
                                         className={
@@ -314,7 +316,7 @@ export const MultiSelect = React.forwardRef<
                                     >
                                         <InnerCheckBox checked={selectedValues.length === allValues.length}/>
                                         <span className={"text-sm text-text-secondary dark:text-text-secondary-dark"}>(Select All)</span>
-                                    </CommandPrimitive.Item>
+                                    </CommandPrimitive.Item>}
                                     {children}
                                 </CommandPrimitive.Group>
 

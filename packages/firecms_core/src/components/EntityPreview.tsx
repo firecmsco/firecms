@@ -65,7 +65,7 @@ export function EntityPreview({
         propertyConfigs: customizationController.propertyConfigs
     }), [collection]);
 
-    const listProperties = useMemo(() => getEntityPreviewKeys(resolvedCollection, customizationController.propertyConfigs, previewProperties, size === "small" || size === "medium" ? 3 : 1),
+    const listProperties = useMemo(() => getEntityPreviewKeys(resolvedCollection, customizationController.propertyConfigs, previewProperties, size === "medium" || size === "large" ? 3 : 1),
         [previewProperties, resolvedCollection, size]);
 
     const titleProperty = getEntityTitlePropertyKey(resolvedCollection, customizationController.propertyConfigs);
@@ -77,10 +77,10 @@ export function EntityPreview({
     return <EntityPreviewContainer onClick={disabled ? undefined : onClick}
                                    hover={disabled ? undefined : hover}
                                    size={size}>
-        <div className={cls("flex w-10 h-10 ml-1 mr-2 shrink-0", size === "smallest" ? "my-0.5" : "m-2 self-start")}>
+        <div className={cls("flex w-10 h-10 ml-1 mr-2 shrink-0", size === "small" ? "my-0.5" : "m-2 self-start")}>
             {imageProperty && <PropertyPreview property={imageProperty}
                                                propertyKey={imagePropertyKey as string}
-                                               size={"smallest"}
+                                               size={"small"}
                                                value={getValueInPath(entity.values, imagePropertyKey as string)}/>}
             {!imageProperty && <IconForView collectionOrView={collection}
                                             color={"primary"}
@@ -91,10 +91,10 @@ export function EntityPreview({
 
         <div className={"flex flex-col grow-1 w-full max-w-full m-1"}>
 
-            {size !== "smallest" && includeId && (
+            {size !== "small" && includeId && (
                 entity
                     ? <div className={`${
-                        size !== "medium"
+                        size !== "large"
                             ? "block whitespace-nowrap overflow-hidden truncate"
                             : ""
                     }`}>
@@ -107,17 +107,17 @@ export function EntityPreview({
                     : <Skeleton/>)}
 
             {titleProperty && (
-                <div className={"my-0.5 text-sm font-medium"}>
+                <div className={"my-0.5 text-sm font-large"}>
                     {
                         entity
                             ? <PropertyPreview
                                 propertyKey={titleProperty as string}
                                 value={getValueInPath(entity.values, titleProperty)}
                                 property={resolvedCollection.properties[titleProperty as string] as ResolvedProperty}
-                                size={"medium"}/>
+                                size={"large"}/>
                             : <SkeletonPropertyComponent
                                 property={resolvedCollection.properties[titleProperty as string] as ResolvedProperty}
-                                size={"medium"}/>
+                                size={"large"}/>
                     }
                 </div>
             )}
@@ -135,10 +135,10 @@ export function EntityPreview({
                                     propertyKey={key as string}
                                     value={getValueInPath(entity.values, key)}
                                     property={childProperty as ResolvedProperty}
-                                    size={"smallest"}/>
+                                    size={"small"}/>
                                 : <SkeletonPropertyComponent
                                     property={childProperty as ResolvedProperty}
-                                    size={"smallest"}/>
+                                    size={"small"}/>
                         }
                     </div>
                 );
@@ -150,8 +150,8 @@ export function EntityPreview({
             <Tooltip title={`See details for ${entity.id}`}>
                 <IconButton
                     color={"inherit"}
-                    size={"small"}
-                    className={size !== "smallest" ? "self-start" : ""}
+                    size={"medium"}
+                    className={size !== "small" ? "self-start" : ""}
                     onClick={(e) => {
                         e.stopPropagation();
                         analyticsController.onAnalyticsEvent?.("entity_click_from_reference", {
@@ -165,7 +165,7 @@ export function EntityPreview({
                             updateUrl: true
                         });
                     }}>
-                    <KeyboardTabIcon size={"small"}/>
+                    <KeyboardTabIcon size={"medium"}/>
                 </IconButton>
             </Tooltip>}
 
@@ -207,7 +207,7 @@ export const EntityPreviewContainer = React.forwardRef<HTMLDivElement, EntityPre
             fullwidth ? "w-full" : "",
             "items-center",
             hover ? "hover:bg-surface-accent-50 dark:hover:bg-surface-800 group-hover:bg-surface-accent-50 dark:group-hover:bg-surface-800" : "",
-            size === "smallest" ? "p-1" : "px-2 py-1",
+            size === "small" ? "p-1" : "px-2 py-1",
             "flex border rounded-lg",
             onClick ? "cursor-pointer" : "",
             defaultBorderMixin,

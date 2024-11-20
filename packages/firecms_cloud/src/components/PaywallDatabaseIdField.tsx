@@ -29,7 +29,7 @@ export function PaywallDatabaseIdField() {
             </div>}>
             <TextField
                 inputRef={ref}
-                size={"smallest"}
+                size={"small"}
                 inputClassName={"text-end"}
                 className={"bg-transparent dark:bg-transparent"}
                 disabled={true}

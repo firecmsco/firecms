@@ -16,7 +16,7 @@ export default function SelectCustomDemo() {
         <Select
             value={selected}
             onValueChange={setSelected}
-            size="small"
+            size="medium"
             className="w-[400px] bg-yellow-200 dark:bg-yellow-800"
             inputClassName="custom-input-class"
             placeholder="Select your drinks"

@@ -5,7 +5,7 @@ export type BooleanSwitchProps = {
     value: boolean | null;
     className?: string;
     disabled?: boolean;
-    size?: "smallest" | "small" | "medium";
+    size?: "small" | "medium" | "large";
 } & ({
     allowIndeterminate: true;
     onValueChange?: (newValue: boolean | null) => void;
@@ -20,7 +20,7 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
                                                                          className,
                                                                          onValueChange,
                                                                          disabled = false,
-                                                                         size = "small",
+                                                                         size = "medium",
                                                                          ...props
                                                                      }: BooleanSwitchProps, ref: React.Ref<HTMLButtonElement>) {
         return <button
@@ -40,7 +40,7 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
                     }
                 }}
             className={cls(
-                size === "smallest" ? "w-[38px] h-[22px] min-w-[38px] min-h-[22px]" : "w-[42px] h-[26px] min-w-[42px] min-h-[26px]",
+                size === "small" ? "w-[38px] h-[22px] min-w-[38px] min-h-[22px]" : "w-[42px] h-[26px] min-w-[42px] min-h-[26px]",
                 "outline-none rounded-full relative shadow-sm",
                 value ? (disabled
                     ? "bg-white bg-opacity-54 dark:bg-surface-accent-950 border-surface-accent-100 dark:border-surface-accent-700 ring-1 ring-surface-accent-200 dark:ring-surface-accent-700"
@@ -55,10 +55,10 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
                     "block rounded-full transition-transform duration-100 transform will-change-auto",
                     disabled ? "bg-surface-accent-400 dark:bg-surface-accent-600" : "bg-surface-accent-400 dark:bg-surface-accent-600",
                     {
-                        "w-[21px] h-[10px]": size === "small" || size === "medium",
-                        "w-[19px] h-[8px]": size === "smallest",
-                        "translate-x-[10px]": size === "small" || size === "medium",
-                        "translate-x-[9px]": size === "smallest"
+                        "w-[21px] h-[10px]": size === "medium" || size === "large",
+                        "w-[19px] h-[8px]": size === "small",
+                        "translate-x-[10px]": size === "medium" || size === "large",
+                        "translate-x-[9px]": size === "small"
                     }
                 )}
             />}
@@ -69,10 +69,10 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
                     "block rounded-full transition-transform duration-100 transform will-change-auto",
                     disabled ? "bg-surface-accent-300 dark:bg-surface-accent-700" : (value ? "bg-white" : "bg-surface-accent-600 dark:bg-surface-accent-400"),
                     {
-                        "w-[21px] h-[21px]": size === "small" || size === "medium",
-                        "w-[19px] h-[19px]": size === "smallest",
-                        [value ? "translate-x-[19px]" : "translate-x-[3px]"]: size === "small" || size === "medium",
-                        [value ? "translate-x-[17px]" : "translate-x-[2px]"]: size === "smallest"
+                        "w-[21px] h-[21px]": size === "medium" || size === "large",
+                        "w-[19px] h-[19px]": size === "small",
+                        [value ? "translate-x-[19px]" : "translate-x-[3px]"]: size === "medium" || size === "large",
+                        [value ? "translate-x-[17px]" : "translate-x-[2px]"]: size === "small"
                     }
                 )}
             />}

@@ -96,6 +96,7 @@ export function EnumPropertyField({
                     onValueChange={(value: string) => {
                         setFieldValue("defaultValue", value);
                     }}
+                    size={"large"}
                     label={"Default value"}
                     value={defaultValue ?? ""}>
                     {enumValues

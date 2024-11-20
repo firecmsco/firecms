@@ -123,7 +123,7 @@ export const TableReferenceFieldInternal = React.memo(
                              key={`preview_array_ref_${name}_${index}`}>
                             <ReferencePreview
                                 onClick={disabled ? undefined : handleOpen}
-                                size={"smallest"}
+                                size={"small"}
                                 reference={reference}
                                 hover={!disabled}
                                 disabled={!path}

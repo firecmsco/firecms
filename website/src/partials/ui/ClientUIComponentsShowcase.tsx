@@ -521,12 +521,19 @@ export default function ClientUIComponentsShowcase({
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
                 <Typography variant="subtitle2">Select</Typography>
-                <Select value={""} onValueChange={() => {
-                }} placeholder="Select an option">
+                <Select
+                    size={"large"}
+                    value={""}
+                    onValueChange={() => {
+                    }}
+                    placeholder="Select an option">
                     <SelectItem value="option1">Option 1</SelectItem>
                     <SelectItem value="option2">Option 2</SelectItem>
                 </Select>
-                <Select placeholder="Select your drinks" value="" onValueChange={() => {
+                <Select
+                    size={"large"}
+                    placeholder="Select your drinks"
+                    value="" onValueChange={() => {
                 }}>
                     <SelectItem key="coffee" value="coffee">Coffee</SelectItem>
                     <SelectItem key="tea" value="tea">Tea</SelectItem>

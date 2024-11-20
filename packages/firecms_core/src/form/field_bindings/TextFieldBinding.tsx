@@ -28,7 +28,7 @@ export function TextFieldBinding<T extends string | number>({
                                                                 autoFocus,
                                                                 property,
                                                                 includeDescription,
-                                                                size = "medium"
+                                                                size = "large"
                                                             }: TextFieldBindingProps<T>) {
 
     let multiline: boolean | undefined;

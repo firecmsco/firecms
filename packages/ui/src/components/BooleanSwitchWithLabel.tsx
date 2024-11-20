@@ -67,9 +67,9 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
                 "rounded-md max-w-full justify-between box-border relative inline-flex items-center",
                 !invisible && focus && !disabled ? focusedClasses : "",
                 error ? "text-red-500 dark:text-red-600" : (focus && !disabled ? "text-primary" : (!disabled ? "text-text-primary dark:text-text-primary-dark" : "text-text-secondary dark:text-text-secondary-dark")),
-                size === "smallest" ? "min-h-[40px]" : (size === "small" ? "min-h-[48px]" : "min-h-[64px]"),
-                size === "smallest" ? "pl-2" : "pl-4",
-                size === "smallest" ? "pr-4" : "pr-6",
+                size === "small" ? "min-h-[40px]" : (size === "medium" ? "min-h-[48px]" : "min-h-[64px]"),
+                size === "small" ? "pl-2" : "pl-4",
+                size === "small" ? "pr-4" : "pr-6",
                 position === "end" ? "flex-row-reverse" : "flex-row",
                 fullWidth ? "w-full" : "",
                 className
@@ -98,7 +98,7 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
             <div className={cls(
                 "flex-grow",
                 position === "end" ? "mr-4" : "ml-4",
-                size === "smallest" ? "text-sm" : "text-base"
+                size === "small" ? "text-sm" : "text-base"
             )}>
                 {label}
             </div>

@@ -1,17 +1,17 @@
 import { CollectionSize } from "../types";
 import { PreviewSize } from "./PropertyPreviewProps";
 
-export const TINY_THUMBNAIL = 40;
-export const SMALL_THUMBNAIL = 100;
-export const REGULAR_THUMBNAIL = 200;
+export const SMALL_THUMBNAIL = 40;
+export const MEDIUM_THUMBNAIL = 100;
+export const LARGE_THUMBNAIL = 200;
 
 export function getThumbnailMeasure(size: PreviewSize): number {
-    if (size === "smallest")
-        return TINY_THUMBNAIL;
-    else if (size === "small")
+    if (size === "small")
         return SMALL_THUMBNAIL;
     else if (size === "medium")
-        return REGULAR_THUMBNAIL;
+        return MEDIUM_THUMBNAIL;
+    else if (size === "large")
+        return LARGE_THUMBNAIL;
     else throw Error("Thumbnail size not mapped");
 }
 
@@ -19,12 +19,12 @@ export function getPreviewSizeFrom(size: CollectionSize): PreviewSize {
     switch (size) {
         case "xs":
         case "s":
-            return "smallest";
-        case "m":
             return "small";
+        case "m":
+            return "medium";
         case "l":
         case "xl":
-            return "medium";
+            return "large";
         default:
             throw Error("Missing mapping value in getPreviewSizeFrom: " + size);
     }

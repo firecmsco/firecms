@@ -7,6 +7,7 @@ export default function SelectBasicDemo() {
     return (
         <Select
             value={selected}
+            size={"large"}
             onValueChange={setSelected}
             placeholder={<i>Select a character</i>}
             renderValue={(value) => {

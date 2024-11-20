@@ -4,6 +4,7 @@ import { FileUpload } from "@firecms/ui";
 export default function FileUploadDisabledDemo() {
     return (
         <FileUpload
+            size={"large"}
             accept={{ "image/*": [] }}
             onFilesAdded={() => {}}
             title="Upload Disabled"

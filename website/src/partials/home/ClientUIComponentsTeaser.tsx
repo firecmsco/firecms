@@ -79,6 +79,7 @@ export default function ClientUIComponentsTeaser() {
 
                     <div className="w-full relative p-2 flex flex-row gap-2 break-inside-avoid">
                         <Select
+                            size={"large"}
                             className={"w-full"}
                             value={selectedValue}
                             onValueChange={setSelectedValue}

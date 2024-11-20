@@ -81,17 +81,17 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
         return <></>;
 
     let mapPropertyKeys: string[];
-    if (size === "medium") {
+    if (size === "large") {
         mapPropertyKeys = Object.keys(property.properties);
     } else {
         mapPropertyKeys = (property.previewProperties || Object.keys(property.properties)) as string[];
-        if (size === "small")
+        if (size === "medium")
             mapPropertyKeys = mapPropertyKeys.slice(0, 3);
-        else if (size === "smallest")
+        else if (size === "small")
             mapPropertyKeys = mapPropertyKeys.slice(0, 1);
     }
 
-    if (size !== "medium")
+    if (size !== "large")
         return (
             <div
                 className="w-full flex flex-col space-y-4"
@@ -101,7 +101,7 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
                         {property.properties && property.properties[key] &&
                             <SkeletonPropertyComponent
                                 property={property.properties[key]}
-                                size={"small"}/>}
+                                size={"medium"}/>}
                     </div>
                 ))}
             </div>
@@ -128,7 +128,7 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
                                 {property.properties && property.properties[key] &&
                                     <SkeletonPropertyComponent
                                         property={property.properties[key]}
-                                        size={"small"}/>}
+                                        size={"medium"}/>}
                             </th>
                         </tr>
                     );
@@ -160,7 +160,7 @@ function renderArrayOfMaps<M extends Record<string, any>>(properties: ResolvedPr
                                     >
                                         <SkeletonPropertyComponent
                                             property={(properties)[key]}
-                                            size={"small"}/>
+                                            size={"medium"}/>
                                     </th>
                                 )
                             )}
@@ -210,7 +210,7 @@ function renderGenericArrayCell(
                     <>
                         <SkeletonPropertyComponent key={`i_${index}`}
                                                    property={property}
-                                                   size={"small"}/>
+                                                   size={"medium"}/>
                     </>
                 )}
         </div>
@@ -226,7 +226,7 @@ function renderUrlAudioComponent() {
 
 export function renderSkeletonImageThumbnail(size: PreviewSize) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const imageSize = size === "smallest" ? 40 : size === "small" ? 100 : 200;
+    const imageSize = size === "small" ? 40 : size === "medium" ? 100 : 200;
     return (
         <Skeleton width={imageSize}
                   height={imageSize}/>
@@ -236,8 +236,8 @@ export function renderSkeletonImageThumbnail(size: PreviewSize) {
 function renderUrlVideo(size: PreviewSize) {
 
     return (
-        <Skeleton width={size !== "medium" ? 300 : 500}
-                  height={size !== "medium" ? 200 : 250}/>
+        <Skeleton width={size !== "large" ? 300 : 500}
+                  height={size !== "large" ? 200 : 250}/>
     );
 }
 
@@ -245,7 +245,7 @@ function renderReference() {
     return <Skeleton width={200} height={100}/>;
 }
 
-function renderUrlComponent(property: ResolvedStringProperty, size: PreviewSize = "medium") {
+function renderUrlComponent(property: ResolvedStringProperty, size: PreviewSize = "large") {
 
     if (typeof property.url === "boolean") {
         return <div style={{

@@ -6,7 +6,7 @@ import { buildEnumLabel, enumToObjectEntries, getColorScheme, getLabelOrConfigFr
 export interface EnumValuesChipProps {
     enumValues?: EnumValues;
     enumKey: string | number;
-    size: "smallest" | "small" | "medium";
+    size: "small" | "medium" | "large";
     className?: string;
     children?: React.ReactNode;
 }

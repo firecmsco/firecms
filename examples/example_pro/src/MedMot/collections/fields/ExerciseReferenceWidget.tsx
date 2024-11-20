@@ -180,10 +180,10 @@ export function ExerciseReferenceWidget<M extends Record<string, any>>({
                                                 propertyKey={key as string}
                                                 value={(entity.values)[key]}
                                                 property={property as ResolvedProperty}
-                                                size={"smallest"}/>
+                                                size={"small"}/>
                                             : <SkeletonPropertyComponent
                                                 property={property as ResolvedProperty}
-                                                size={"smallest"}/>}
+                                                size={"small"}/>}
                                     </ErrorBoundary>
                                     <ExerciseTitle entity={{ path: value.path, id: value.id } as Entity<Exercise>}/>
                                 </div>

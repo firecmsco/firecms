@@ -14,6 +14,7 @@ export default function FileUploadCustomDemo() {
 
     return (
         <FileUpload
+            size={"large"}
             accept={{ "image/*": ["png", "jpg"] }}
             onFilesAdded={onFilesAdded}
             onFilesRejected={onFilesRejected}

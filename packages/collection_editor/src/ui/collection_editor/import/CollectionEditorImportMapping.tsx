@@ -235,6 +235,7 @@ function PropertySelect({
             open={selectOpen}
             onOpenChange={setSelectOpen}
             invisible={true}
+            size={"large"}
             className={"w-full"}
             disabled={disabled}
             error={!widget}

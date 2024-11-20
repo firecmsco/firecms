@@ -100,6 +100,7 @@ export function CustomIdField<M extends Record<string, any>>({
 
             {enumValues &&
                 <Select
+                    size={"large"}
                     error={error}
                     onValueChange={(v) => onChange(v as string)}
                     {...fieldProps}

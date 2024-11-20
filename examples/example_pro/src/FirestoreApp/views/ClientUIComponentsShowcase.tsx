@@ -112,7 +112,7 @@ export default function ClientUIComponentsShowcase({
                     <Button size="small">Small Button</Button>
                     <Button size="medium">Medium Button</Button>
                     <Button size="large">Large Button</Button>
-                    <Button variant={"ghost"}>Ghost Button</Button>
+                    <Button variant={"neutral"}>Neutral Button</Button>
                     <Button variant={"text"}>Text Button</Button>
                     <Button variant={"outlined"}>Outlined Button</Button>
                 </div>
@@ -144,6 +144,7 @@ export default function ClientUIComponentsShowcase({
                 </IconButton>
                 <Typography variant="subtitle2">File Upload</Typography>
                 <FileUpload
+                    size={"large"}
                     accept={{ "image/*": [] }}
                     onFilesAdded={() => {
                     }}
@@ -235,7 +236,7 @@ export default function ClientUIComponentsShowcase({
                 <Typography variant="subtitle2">Boolean Switch</Typography>
                 <div className={"flex flex-row items-center gap-2"}>
                     <BooleanSwitch value={checked}
-                                   size="medium"
+                                   size="large"
                                    onValueChange={() => {
                                        setChecked(!checked)
                                    }}/>
@@ -243,12 +244,12 @@ export default function ClientUIComponentsShowcase({
                                    onValueChange={() => {
                                        setChecked(!checked)
                                    }}
-                                   size="small"/>
+                                   size="medium"/>
                     <BooleanSwitch value={checked}
                                    onValueChange={() => {
                                        setChecked(!checked)
                                    }}
-                                   size="smallest"/>
+                                   size="small"/>
                 </div>
             </Card>
 
@@ -487,7 +488,8 @@ export default function ClientUIComponentsShowcase({
                     <ArrowForwardIcon size="smallest"/>
                 </IconButton>
                 <Typography variant="subtitle2">DateTime Field</Typography>
-                <DateTimeField value={selectedDate ?? undefined} onChange={setSelectedDate} label="Select a date"
+                <DateTimeField value={selectedDate ?? undefined}
+                               onChange={setSelectedDate} label="Select a date"
                                mode="date"/>
                 <DateTimeField value={new Date()} onChange={setSelectedDate}
                                label="Select date and time" mode="date_time"/>

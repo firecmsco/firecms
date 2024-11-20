@@ -21,6 +21,6 @@ export function BooleanPreview({
                   size={size}
                   color={"secondary"}/>
         {property.name && <span
-            className={cls("text-text-secondary dark:text-text-secondary-dark", size === "smallest" ? "text-sm" : "")}>{property.name}</span>}
+            className={cls("text-text-secondary dark:text-text-secondary-dark", size === "small" ? "text-sm" : "")}>{property.name}</span>}
     </div>;
 }

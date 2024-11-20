@@ -89,6 +89,7 @@ export function CollectionsSelect({
                 value={value ?? ""}
                 position={"item-aligned"}
                 name={pathPath}
+                size={"large"}
                 onChange={handleChange}
                 label={"Target collection"}
                 renderValue={(selected) => {

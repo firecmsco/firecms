@@ -56,7 +56,7 @@ export function CollectionTableToolbar({
             <Select
                 value={size as string}
                 className="w-16 h-10"
-                size={"small"}
+                size={"medium"}
                 onValueChange={(v) => onSizeChanged(v as CollectionSize)}
                 renderValue={(v) => <div className={"font-medium"}>{v.toUpperCase()}</div>}
             >

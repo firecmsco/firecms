@@ -123,6 +123,7 @@ function LogoUploadField({ onNoSubscriptionPlan }: {
     };
 
     return <FileUpload
+        size={"large"}
         accept={{ "*/image": [] }}
         maxSize={2048 * 1024}
         onFilesAdded={onFilesAdded}

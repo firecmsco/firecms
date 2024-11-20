@@ -176,7 +176,7 @@ function IdSelectField({
 }) {
     return <div>
         <Select
-            size={"small"}
+            size={"medium"}
             value={idColumn ?? ""}
             onChange={(event) => {
                 const value = event.target.value;
@@ -203,12 +203,12 @@ function DefaultValuesField({
                                 defaultValue
                             }: { property: Property, onValueChange: (value: any) => void, defaultValue?: any }) {
     if (property.dataType === "string") {
-        return <TextField size={"small"}
+        return <TextField size={"medium"}
                           placeholder={"Default value"}
                           value={defaultValue ?? ""}
                           onChange={(event) => onValueChange(event.target.value)}/>;
     } else if (property.dataType === "number") {
-        return <TextField size={"small"}
+        return <TextField size={"medium"}
                           type={"number"}
                           value={defaultValue ?? ""}
                           placeholder={"Default value"}
@@ -228,7 +228,7 @@ function DefaultValuesField({
     } else if (property.dataType === "date") {
         return <DateTimeField
             mode={property.mode ?? "date"}
-            size={"small"}
+            size={"medium"}
             value={defaultValue ?? undefined}
             onChange={(dateValue: Date | null) => {
                 onValueChange(dateValue);

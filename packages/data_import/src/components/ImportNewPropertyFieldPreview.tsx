@@ -40,7 +40,7 @@ export function ImportNewPropertyFieldPreview({
                 <div className={"flex flex-row items-center gap-2"}>
                     {includeName &&
                         <TextField
-                            size={"small"}
+                            size={"medium"}
                             className={"text-base grow"}
                             value={property?.name ?? ""}
                             onChange={(e) => {

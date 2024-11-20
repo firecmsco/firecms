@@ -28,7 +28,7 @@ export type FileUploadProps = {
     title?: React.ReactNode;
     uploadDescription?: React.ReactNode;
     preventDropOnDocument?: boolean;
-    size?: "small" | "medium";
+    size?: "medium" | "large";
 };
 
 export function FileUpload({
@@ -69,8 +69,8 @@ export function FileUpload({
             "flex gap-2",
             "p-4 box-border relative items-center border-2 border-solid border-transparent outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid",
             {
-                "h-44": size === "medium",
-                "h-28": size === "small",
+                "h-44": size === "large",
+                "h-28": size === "medium",
                 "cursor-pointer": !disabled,
                 [fieldBackgroundHoverMixin]: !isDragActive,
                 "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-red-500": isDragReject,

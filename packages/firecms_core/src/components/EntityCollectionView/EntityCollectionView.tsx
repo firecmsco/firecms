@@ -422,7 +422,7 @@ export const EntityCollectionView = React.memo(
                                         <ReferencePreview
                                             key={reference.path + "/" + reference.id}
                                             reference={reference}
-                                            size={"smallest"}/>
+                                            size={"small"}/>
                                     );
                                 })}
                             </div>

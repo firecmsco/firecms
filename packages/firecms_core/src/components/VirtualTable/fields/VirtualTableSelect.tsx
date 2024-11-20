@@ -91,6 +91,7 @@ export function VirtualTableSelect(props: {
             </MultiSelect>
             : <Select
                 inputRef={ref}
+                size={"large"}
                 className="w-full h-full p-0 bg-transparent"
                 position={"item-aligned"}
                 disabled={disabled}

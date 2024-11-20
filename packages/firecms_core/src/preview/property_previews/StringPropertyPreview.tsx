@@ -45,14 +45,14 @@ export function StringPropertyPreview({
         if (!value) return <></>;
         const lines = value.split("\n");
         return value && value.includes("\n")
-            ? <div className={cls("overflow-x-scroll", size === "smallest" ? "text-sm" : "")}>
+            ? <div className={cls("overflow-x-scroll", size === "small" ? "text-sm" : "")}>
                 {lines.map((str, index) =>
                     <React.Fragment key={`string_preview_${index}`}>
                         <span>{str}</span>
                         {index !== lines.length - 1 && <br/>}
                     </React.Fragment>)}
             </div>
-            : (size === "smallest"
+            : (size === "small"
                     ? <span className={"text-sm"}>{value}</span>
                     : <>{value}</>
             );

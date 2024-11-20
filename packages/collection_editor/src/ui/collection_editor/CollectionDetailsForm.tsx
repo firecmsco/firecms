@@ -298,6 +298,7 @@ export function CollectionDetailsForm({
                                 <div className={"col-span-12"}>
                                     <Select
                                         name="defaultSize"
+                                        size={"large"}
                                         label="Default row size"
                                         position={"item-aligned"}
                                         onChange={handleChange}
@@ -318,6 +319,7 @@ export function CollectionDetailsForm({
                                         name="customId"
                                         label="Document IDs generation"
                                         position={"item-aligned"}
+                                        size={"large"}
                                         disabled={customIdValue === "code_defined"}
                                         onValueChange={(v) => {
                                             if (v === "code_defined")
@@ -416,7 +418,7 @@ function DefaultDatabaseField({
     return <Tooltip title={"Database ID"}
                     side={"top"}
                     align={"start"}>
-        <TextField size={"smallest"}
+        <TextField size={"small"}
                    invisible={true}
                    inputClassName={"text-end"}
                    value={databaseId ?? ""}

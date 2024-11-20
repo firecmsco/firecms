@@ -25,7 +25,7 @@ export type SelectProps = {
     onValueChange?: (updatedValue: string) => void,
     placeholder?: React.ReactNode,
     renderValue?: (value: string) => React.ReactNode,
-    size?: "small" | "medium",
+    size?: "small" | "medium" | "large",
     label?: React.ReactNode | string,
     disabled?: boolean,
     error?: boolean,
@@ -51,7 +51,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                                                                    placeholder,
                                                                    renderValue,
                                                                    label,
-                                                                   size = "medium",
+                                                                   size = "large",
                                                                    error,
                                                                    disabled,
                                                                    padding = true,
@@ -97,7 +97,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
             {...props}>
             {typeof label === "string" ? <SelectInputLabel error={error}>{label}</SelectInputLabel> : label}
             <div className={cls(
-                size === "small" ? "min-h-[42px]" : "min-h-[64px]",
+                size === "medium" ? "min-h-[42px]" : "min-h-[64px]",
                 "select-none rounded-md text-sm",
                 invisible ? fieldBackgroundInvisibleMixin : fieldBackgroundMixin,
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
@@ -109,7 +109,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                     id={id}
                     className={cls(
                         "w-full h-full",
-                        size === "small" ? "h-[42px]" : "h-[64px]",
+                        size === "medium" ? "h-[42px]" : "h-[64px]",
                         padding ? "px-4 " : "",
                         "outline-none focus:outline-none",
                         "select-none rounded-md text-sm",
@@ -125,7 +125,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                         className={cls(
                             "flex-grow w-full max-w-full flex flex-row gap-2 items-center",
                             "overflow-visible",
-                            size === "small" ? "h-[42px]" : "h-[64px]"
+                            size === "medium" ? "h-[42px]" : "h-[64px]"
                         )}
                     >
                         <SelectPrimitive.Value
@@ -136,7 +136,20 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                             placeholder={placeholder}
                             className={"w-full"}>
                             {hasValue && value && renderValue ? renderValue(value) : placeholder}
-                            {hasValue && !renderValue && value}
+                            {/*{hasValue && !renderValue && value}*/}
+                            {hasValue && !renderValue && (() => {
+
+                                // @ts-ignore
+                                const childrenProps: SelectItemProps[] = Children.map(children, (child) => {
+                                    if (React.isValidElement(child)) {
+                                        return child.props;
+                                    }
+                                }).filter(Boolean);
+
+                                const option = childrenProps.find((o) => o.value === value);
+                                return option?.children;
+                            })()}
+
                         </SelectPrimitive.Value>
                     </div>
 
@@ -151,7 +164,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                         </div>
                     )}
                     <SelectPrimitive.Icon asChild>
-                        <ExpandMoreIcon size={"small"}
+                        <ExpandMoreIcon size={"medium"}
                                         className={cls("px-2 transition", open ? "rotate-180" : "")}/>
                     </SelectPrimitive.Icon>
                 </SelectPrimitive.Trigger>

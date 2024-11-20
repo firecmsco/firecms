@@ -76,6 +76,7 @@ export function DateTimeFilterField({
         <div className="flex w-[440px]">
             <div className="w-[80px]">
                 <Select value={operation}
+                        size={"large"}
                         onValueChange={(value) => {
                             updateFilter(value as VirtualTableWhereFilterOp, internalValue);
                         }}
@@ -92,7 +93,7 @@ export function DateTimeFilterField({
 
                 <DateTimeField
                     mode={mode}
-                    size={"medium"}
+                    size={"large"}
                     locale={locale}
                     value={internalValue ?? undefined}
                     onChange={(dateValue: Date | null) => {

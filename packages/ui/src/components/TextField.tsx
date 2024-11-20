@@ -40,7 +40,7 @@ export type TextFieldProps<T extends string | number> = {
     endAdornment?: React.ReactNode,
     autoFocus?: boolean,
     placeholder?: string,
-    size?: "smallest" | "small" | "medium",
+    size?: "small" | "medium" | "large",
     className?: string,
     style?: React.CSSProperties,
     inputClassName?: string,
@@ -61,7 +61,7 @@ export function TextField<T extends string | number>({
                                                          endAdornment,
                                                          autoFocus,
                                                          placeholder,
-                                                         size = "medium",
+                                                         size = "large",
                                                          className,
                                                          style,
                                                          inputClassName,
@@ -125,8 +125,8 @@ export function TextField<T extends string | number>({
                 "rounded-md",
                 invisible ? focusedInvisibleMixin : "",
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
-                size === "smallest" ? "min-h-[32px]" : (size === "small" ? "min-h-[48px]" : "min-h-[64px]"),
-                label ? (size === "medium" ? "pt-8 pb-2" : "pt-4 pb-2") : "py-2",
+                size === "small" ? "min-h-[32px]" : (size === "medium" ? "min-h-[48px]" : "min-h-[64px]"),
+                label ? (size === "large" ? "pt-8 pb-2" : "pt-4 pb-2") : "py-2",
                 focused ? "text-text-primary dark:text-text-primary-dark" : "",
                 endAdornment ? "pr-10" : "pr-3",
                 disabled && "border border-transparent outline-none opacity-50 dark:opacity-50 text-surface-accent-800 dark:text-white",
@@ -149,9 +149,9 @@ export function TextField<T extends string | number>({
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                 error ? "border border-red-500 dark:border-red-600" : "",
                 {
-                    "min-h-[32px]": !invisible && size === "smallest",
-                    "min-h-[48px]": !invisible && size === "small",
-                    "min-h-[64px]": !invisible && size === "medium"
+                    "min-h-[32px]": !invisible && size === "small",
+                    "min-h-[48px]": !invisible && size === "medium",
+                    "min-h-[64px]": !invisible && size === "large"
                 },
                 className)}
             style={style}>
@@ -160,7 +160,7 @@ export function TextField<T extends string | number>({
                 <InputLabel
                     className={cls(
                         "pointer-events-none absolute",
-                        size === "medium" ? "top-1" : "-top-1",
+                        size === "large" ? "top-1" : "-top-1",
                         !error ? (focused ? "text-primary dark:text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-red-500 dark:text-red-600",
                         disabled ? "opacity-50" : "")}
                     shrink={hasValue || focused}

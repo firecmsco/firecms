@@ -270,7 +270,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                 placeholder={"value"}
                 value={entryValue}
                 type={dataType === "number" ? "number" : "text"}
-                size={"small"}
+                size={"medium"}
                 disabled={disabled || !fieldKey}
                 onChange={(event) => {
                     if (dataType === "number") {
@@ -300,7 +300,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                 }}/>;
         } else if (dataType === "date") {
             return <DateTimeField value={entryValue}
-                                  size={"small"}
+                                  size={"medium"}
                                   locale={locale}
                                   disabled={disabled || !fieldKey}
                                   onChange={(date) => {
@@ -311,7 +311,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                                   }}/>;
         } else if (dataType === "boolean") {
             return <BooleanSwitchWithLabel value={entryValue}
-                                           size={"small"}
+                                           size={"medium"}
                                            position={"start"}
                                            disabled={disabled || !fieldKey}
                                            onValueChange={(newValue) => {
@@ -389,7 +389,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                         value={fieldKey}
                         placeholder={"key"}
                         disabled={disabled || (entryValue !== undefined && entryValue !== null && entryValue !== "")}
-                        size={"small"}
+                        size={"medium"}
                         onChange={(event) => {
                             onFieldKeyChange(event.target.value);
                         }}/>
@@ -457,7 +457,7 @@ function ArrayKeyValueRow<T>({
         if (dataType === "string" || dataType === "number") {
             return <TextField value={entryValue}
                               type={dataType === "number" ? "number" : "text"}
-                              size={"small"}
+                              size={"medium"}
                               onChange={(event) => {
                                   if (dataType === "number") {
                                       const numberValue = event.target.value ? parseFloat(event.target.value) : undefined;
@@ -474,7 +474,7 @@ function ArrayKeyValueRow<T>({
                               }}/>;
         } else if (dataType === "date") {
             return <DateTimeField value={entryValue}
-                                  size={"small"}
+                                  size={"medium"}
                                   locale={locale}
                                   onChange={(date) => {
                                       setValue(date as T);

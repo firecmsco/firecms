@@ -22,7 +22,7 @@ export function ImagePreview({
 
     const imageSize = useMemo(() => getThumbnailMeasure(size), [size]);
 
-    if (size === "smallest") {
+    if (size === "small") {
         return (
             <img src={url}
                  className={"rounded-md"}

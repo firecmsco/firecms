@@ -14,7 +14,7 @@ export type DateTimeFieldProps = {
     disabled?: boolean;
     clearable?: boolean;
     error?: boolean;
-    size?: "small" | "medium";
+    size?: "medium" | "large";
     label?: React.ReactNode;
     className?: string;
     style?: React.CSSProperties;
@@ -31,7 +31,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                                                                 clearable,
                                                                 mode = "date",
                                                                 error,
-                                                                size = "medium",
+                                                                size = "large",
                                                                 className,
                                                                 style,
                                                                 inputClassName,
@@ -109,8 +109,8 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                     !invisible && fieldBackgroundMixin,
                     disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                     {
-                        "min-h-[48px]": size === "small",
-                        "min-h-[64px]": size === "medium",
+                        "min-h-[48px]": size === "medium",
+                        "min-h-[64px]": size === "large",
                     },
                     className
                 )}
@@ -151,7 +151,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                             "w-full outline-none bg-transparent leading-normal text-base px-3",
                             clearable ? "pr-14" : "pr-12",
                             "rounded-md",
-                            size === "small" ? "min-h-[48px]" : "min-h-[64px]",
+                            size === "medium" ? "min-h-[48px]" : "min-h-[64px]",
                             label ? "pt-8 pb-2" : "py-2",
                             inputClassName,
                             disabled &&
@@ -178,9 +178,9 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
             </div>
             {invalidValue && (
                 <div className="flex items-center m-2">
-                    <ErrorIcon size={"small"} color={"error"}/>
+                    <ErrorIcon size={"medium"} color={"error"}/>
                     <div className="pl-2">
-                        <Typography variant={"body2"} className="font-medium">
+                        <Typography variant={"body2"} className="font-large">
                             Invalid date value for this field
                         </Typography>
                         <Typography variant={"body2"}>

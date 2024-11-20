@@ -167,7 +167,8 @@ function UnionField({
                 className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}
             />
             <Paper key={`form_control_${props.propertyKey}_${type}`} className={"flex flex-col gap-2 p-2"}>
-                <Select size="small" value={type}
+                <Select size="medium"
+                        value={type}
                         onValueChange={setType}
                         renderValue={(value) => <div>{value}</div>}>
                     <SelectItem value={"string"}>String</SelectItem>
