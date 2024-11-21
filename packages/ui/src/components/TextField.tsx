@@ -172,7 +172,11 @@ export function TextField<T extends string | number>({
             {input}
 
             {endAdornment && <div
-                className="flex flex-row justify-center items-center absolute h-full right-0 top-0 mr-4 ">{endAdornment}</div>}
+                className={cls("flex flex-row justify-center items-center absolute h-full right-0 top-0", {
+                    "mr-4": size === "large",
+                    "mr-3": size === "medium",
+                    "mr-2": size === "small"
+                })}>{endAdornment}</div>}
 
         </div>
     );

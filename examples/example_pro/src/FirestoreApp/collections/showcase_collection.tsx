@@ -206,6 +206,11 @@ export const showcaseCollection = buildCollection({
             name: "Selectable",
             dataType: "boolean"
         }),
+        metadata: buildProperty({
+            name: "Metadata",
+            dataType: "map",
+            keyValue: true
+        }),
         content: buildProperty({
             name: "Content",
             dataType: "array",

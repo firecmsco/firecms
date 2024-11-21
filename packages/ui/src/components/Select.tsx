@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, forwardRef, useCallback, useEffect, useState } from "react";
+import React, { ChangeEvent, Children, forwardRef, useCallback, useEffect, useState } from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import {
     defaultBorderMixin,
@@ -97,26 +97,38 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
             {...props}>
             {typeof label === "string" ? <SelectInputLabel error={error}>{label}</SelectInputLabel> : label}
             <div className={cls(
-                size === "medium" ? "min-h-[42px]" : "min-h-[64px]",
                 "select-none rounded-md text-sm",
                 invisible ? fieldBackgroundInvisibleMixin : fieldBackgroundMixin,
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                 "relative flex items-center",
-                className
+                className,
+                {
+                    "min-h-[28px]": size === "small",
+                    "min-h-[42px]": size === "medium",
+                    "min-h-[64px]": size === "large"
+                }
             )}>
                 <SelectPrimitive.Trigger
                     ref={inputRef}
                     id={id}
                     className={cls(
                         "w-full h-full",
-                        size === "medium" ? "h-[42px]" : "h-[64px]",
-                        padding ? "px-4 " : "",
+                        padding ? {
+                            "px-4": size === "large",
+                            "px-3": size === "medium",
+                            "px-2": size === "small"
+                        } : "",
                         "outline-none focus:outline-none",
                         "select-none rounded-md text-sm",
                         error ? "text-red-500 dark:text-red-600" : "focus:text-text-primary dark:focus:text-text-primary-dark",
                         error ? "border border-red-500 dark:border-red-600" : "",
                         disabled ? "text-surface-accent-600 dark:text-surface-accent-400" : "text-surface-accent-800 dark:text-white",
                         "relative flex flex-row items-center",
+                        {
+                            "min-h-[28px]": size === "small",
+                            "min-h-[42px]": size === "medium",
+                            "min-h-[64px]": size === "large"
+                        },
                         inputClassName
                     )}>
 
@@ -125,7 +137,11 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                         className={cls(
                             "flex-grow w-full max-w-full flex flex-row gap-2 items-center",
                             "overflow-visible",
-                            size === "medium" ? "h-[42px]" : "h-[64px]"
+                            {
+                                "min-h-[28px]": size === "small",
+                                "min-h-[42px]": size === "medium",
+                                "min-h-[64px]": size === "large"
+                            }
                         )}
                     >
                         <SelectPrimitive.Value
@@ -165,7 +181,10 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                     )}
                     <SelectPrimitive.Icon asChild>
                         <ExpandMoreIcon size={"medium"}
-                                        className={cls("px-2 transition", open ? "rotate-180" : "")}/>
+                                        className={cls("transition", open ? "rotate-180" : "", {
+                                            "px-2": size === "large",
+                                            "px-1": size === "medium" || size === "small",
+                                        })}/>
                     </SelectPrimitive.Icon>
                 </SelectPrimitive.Trigger>
 

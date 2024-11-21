@@ -162,13 +162,13 @@ export function ExampleCMSView() {
                         </div>
                     </div>
 
-                    <div className="flex gap-2">
+                    <div className="w-full flex gap-2">
                         <TextField
                             size={"small"}
                             placeholder="Invite others by email"
                             className="flex-grow"
                             endAdornment={<Select
-                                size={"medium"}
+                                size={"small"}
                                 value={"read"}>
                                 <SelectItem value={"write"}>Can edit</SelectItem>
                                 <SelectItem value={"read"}>Can view</SelectItem>
