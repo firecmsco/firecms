@@ -1,6 +1,8 @@
+"use client";
+
 import * as React from "react";
 import { cls } from "../util";
-import 'material-icons/iconfont/filled.css';
+import "material-icons/iconfont/filled.css";
 
 export type IconColor = "inherit" | "primary" | "secondary" | "disabled" | "error" | "success" | "warning";
 export type IconProps = {
