@@ -89,15 +89,13 @@ export function EntityPreview({
         </div>
 
 
-        <div className={"flex flex-col grow-1 w-full max-w-full m-1"}>
+        <div className={"flex flex-col grow-1 w-full m-1 shrink-1"} style={{
+            "maxWidth": "calc(100% - 96px)"
+        }}>
 
             {size !== "small" && includeId && (
                 entity
-                    ? <div className={`${
-                        size !== "large"
-                            ? "block whitespace-nowrap overflow-hidden truncate"
-                            : ""
-                    }`}>
+                    ? <div className={"block whitespace-nowrap overflow-hidden truncate"}>
                         <Typography variant={"caption"}
                                     color={"disabled"}
                                     className={"font-mono"}>
@@ -147,7 +145,7 @@ export function EntityPreview({
         </div>
 
         {entity && includeEntityLink &&
-            <Tooltip title={`See details for ${entity.id}`}>
+            <Tooltip title={`See details for ${entity.id}`} className={"shrink-0"}>
                 <IconButton
                     color={"inherit"}
                     size={"medium"}

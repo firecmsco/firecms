@@ -1,0 +1,51 @@
+{
+  "name": "toleroo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@firecms/collection_editor": "^3.0.0-canary.151",
+    "@firecms/collection_editor_firebase": "^3.0.0-canary.151",
+    "@firecms/core": "^3.0.0-canary.151",
+    "@firecms/data_enhancement": "^3.0.0-canary.151",
+    "@firecms/data_export": "^3.0.0-canary.151",
+    "@firecms/data_import": "^3.0.0-canary.151",
+    "@firecms/editor": "^3.0.0-canary.151",
+    "@firecms/firebase": "^3.0.0-canary.151",
+    "@firecms/schema_inference": "^3.0.0-canary.151",
+    "@firecms/ui": "^3.0.0-canary.151",
+    "@firecms/user_management": "^3.0.0-canary.151",
+    "@fontsource/jetbrains-mono": "^5.0.21",
+    "@fontsource/montserrat": "^5.0.19",
+    "@fontsource/playfair-display": "^5.0.25",
+    "@fontsource/poppins": "^5.0.15",
+    "@tailwindcss/typography": "^0.5.15",
+    "firebase": "^10",
+    "next": "15.0.3",
+    "nextjs-toploader": "^3.6.15",
+    "react": "19.0.0-rc-66855b96-20241106",
+    "react-dom": "19.0.0-rc-66855b96-20241106",
+    "react-router": "^6",
+    "react-router-dom": "^6",
+    "typeface-rubik": "^1.1.13"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "npm:types-react@19.0.0-rc.1",
+    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
+    "eslint": "^8",
+    "eslint-config-next": "15.0.3",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  },
+  "overrides": {
+    "@types/react": "npm:types-react@19.0.0-rc.1",
+    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
+  }
+}
