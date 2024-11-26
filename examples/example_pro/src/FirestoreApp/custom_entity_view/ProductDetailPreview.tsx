@@ -87,7 +87,7 @@ export function ProductDetailPreview({
                             </div>
                         </div>
                         <div
-                            className="text-4xl font-semibold ml-auto">{getCurrencySymbol(product.currency)}{product.price}</div>
+                            className="text-4xl font-medium ml-auto">{getCurrencySymbol(product.currency)}{product.price}</div>
                     </div>
                     <form className="grid gap-4 md:gap-10">
                         <div className="grid gap-2">

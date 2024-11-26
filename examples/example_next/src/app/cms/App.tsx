@@ -132,7 +132,7 @@ export function App() {
         canAccessMainView,
         notAllowedError
     } = useValidateAuthenticator({
-        authController: userManagement,
+        authController,
         disabled: userManagement.loading,
         authenticator: () => true,// TODO
         // authenticator: userManagement.authenticator, // you can define your own authenticator here
@@ -186,7 +186,7 @@ export function App() {
 
                 <FireCMS
                     navigationController={navigationController}
-                    authController={userManagement}
+                    authController={authController}
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
@@ -214,7 +214,7 @@ export function App() {
                                             allowSkipLogin={false}
                                             signInOptions={signInOptions}
                                             firebaseApp={firebaseApp}
-                                            authController={userManagement}
+                                            authController={authController}
                                             notAllowedError={notAllowedError}/>
                                     </div>
 

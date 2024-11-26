@@ -70,7 +70,7 @@ export function ProductDetailPreview({
                 <div className="grid gap-4 md:gap-10 items-start h-full content-center">
                     <div className="flex items-start">
                         <div className="grid gap-4">
-                            <h1 className="font-semibold text-3xl lg:text-4xl">{product.name ?? "Product name"} </h1>
+                            <h1 className="font-medium text-3xl lg:text-4xl">{product.name ?? "Product name"} </h1>
                             <div>
                                 {product.description}
                             </div>
@@ -86,7 +86,7 @@ export function ProductDetailPreview({
                             </div>
                         </div>
                         <div
-                            className="text-4xl font-semibold ml-auto">{getCurrencySymbol(product.currency)}{product.price}</div>
+                            className="text-4xl font-medium ml-auto">{getCurrencySymbol(product.currency)}{product.price}</div>
                     </div>
                     <form className="grid gap-4 md:gap-10">
                         <div className="grid gap-2">

@@ -274,17 +274,17 @@ export function App() {
     });
 
     // Controller for managing authentication
-    const firebaseAuthController: FirebaseAuthController = useFirebaseAuthController({
+    const authController: FirebaseAuthController = useFirebaseAuthController({
         firebaseApp,
         signInOptions
     });
 
-    const userManagementController = useBuildUserManagement({
+    const userManagement = useBuildUserManagement({
         dataSourceDelegate: firestoreDelegate,
-        authController: firebaseAuthController
+        authController: authController
     });
 
-    const userManagementPlugin = useUserManagementPlugin({ userManagement: userManagementController });
+    const userManagementPlugin = useUserManagementPlugin({ userManagement: userManagement });
 
     const collectionEditorPlugin = useCollectionEditorPlugin({
         collectionConfigController
@@ -307,20 +307,20 @@ export function App() {
         canAccessMainView,
         notAllowedError
     } = useValidateAuthenticator({
-        disabled: userManagementController.loading,
-        authController: userManagementController,
+        disabled: userManagement.loading,
+        authController: authController,
         // authenticator: myAuthenticator,
-        authenticator: userManagementController.authenticator,
+        authenticator: userManagement.authenticator,
         dataSourceDelegate: firestoreDelegate,
         storageSource
     });
 
     const navigationController = useBuildNavigationController({
         collections,
-        collectionPermissions: userManagementController.collectionPermissions,
+        collectionPermissions: userManagement.collectionPermissions,
         views,
         adminViews: userManagementAdminViews,
-        authController: userManagementController,
+        authController,
         dataSourceDelegate: firestoreDelegate
     });
 
@@ -342,7 +342,7 @@ export function App() {
                 <FireCMS
                     apiKey={import.meta.env.VITE_FIRECMS_API_KEY as string}
                     navigationController={navigationController}
-                    authController={userManagementController}
+                    authController={authController}
                     entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
@@ -362,16 +362,16 @@ export function App() {
                         if (loading || authLoading) {
                             return <CircularProgressCenter size={"large"}/>;
                         }
-                        if (userManagementController.user === null || !canAccessMainView) {
-                            return <CustomLoginView authController={userManagementController}
+                        if (userManagement.user === null || !canAccessMainView) {
+                            return <CustomLoginView authController={authController}
                                                     firebaseApp={firebaseApp}
                                                     signInOptions={signInOptions}
                                                     notAllowedError={notAllowedError}/>
                         }
 
-                        if (userManagementController.usersError) {
+                        if (userManagement.usersError) {
                             return <CenteredView><ErrorView
-                                error={userManagementController.usersError}/></CenteredView>;
+                                error={userManagement.usersError}/></CenteredView>;
                         }
 
                         return <Scaffold logo={logo}>

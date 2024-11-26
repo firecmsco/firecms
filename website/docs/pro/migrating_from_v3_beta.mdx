@@ -58,32 +58,8 @@ Code after:
     });
 ```
 
-Then you want to replace all previous references to `authController` with `userManagement`.
-For example, if you were using `authController.signInWithEmailAndPassword`, you should now use `userManagement.signInWithEmailAndPassword`.
-
-```typescript
-const navigationController = useBuildNavigationController({
-    collections: collectionsBuilder,
-    collectionPermissions: userManagement.collectionPermissions,
-    views,
-    adminViews: userManagementAdminViews,
-    authController: firebaseAuthController,
-    dataSourceDelegate: firestoreDelegate
-});
-```
-
-becomes:
-
-```typescript
-const navigationController = useBuildNavigationController({
-  collections: collectionsBuilder,
-  collectionPermissions: userManagement.collectionPermissions,
-  views,
-  adminViews: userManagementAdminViews,
-  authController: userManagement,
-  dataSourceDelegate: firestoreDelegate
-});
-```
+The `userManagement` controller now also qualifies as an `authController`, so you can use it as such, but it is not
+necessary to do so.
 
 
 ### Styling
