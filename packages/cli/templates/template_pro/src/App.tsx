@@ -116,7 +116,7 @@ export function App() {
     /**
      * Controller for managing authentication
      */
-    const firebaseAuthController: FirebaseAuthController = useFirebaseAuthController({
+    const authController: FirebaseAuthController = useFirebaseAuthController({
         firebaseApp,
         signInOptions,
     });
@@ -124,8 +124,8 @@ export function App() {
     /**
      * Controller in charge of user management
      */
-    const userManagementController = useBuildUserManagement({
-        authController: firebaseAuthController,
+    const userManagement = useBuildUserManagement({
+        authController,
         dataSourceDelegate: firestoreDelegate
     });
 
@@ -142,19 +142,19 @@ export function App() {
         canAccessMainView,
         notAllowedError
     } = useValidateAuthenticator({
-        authController: userManagementController,
-        disabled: userManagementController.loading,
-        authenticator: userManagementController.authenticator, // you can define your own authenticator here
+        authController,
+        disabled: userManagement.loading,
+        authenticator: userManagement.authenticator, // you can define your own authenticator here
         dataSourceDelegate: firestoreDelegate,
         storageSource
     });
 
     const navigationController = useBuildNavigationController({
         collections: collectionsBuilder,
-        collectionPermissions: userManagementController.collectionPermissions,
+        collectionPermissions: userManagement.collectionPermissions,
         views,
         adminViews: userManagementAdminViews,
-        authController: userManagementController,
+        authController,
         dataSourceDelegate: firestoreDelegate
     });
 
@@ -172,7 +172,7 @@ export function App() {
     /**
      * User management plugin
      */
-    const userManagementPlugin = useUserManagementPlugin({ userManagement: userManagementController });
+    const userManagementPlugin = useUserManagementPlugin({ userManagement });
 
     /**
      * Allow import and export data plugin
@@ -200,7 +200,7 @@ export function App() {
                 <FireCMS
                     apiKey={import.meta.env.VITE_FIRECMS_API_KEY}
                     navigationController={navigationController}
-                    authController={userManagementController}
+                    authController={authController}
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
@@ -227,7 +227,7 @@ export function App() {
                                         allowSkipLogin={false}
                                         signInOptions={signInOptions}
                                         firebaseApp={firebaseApp}
-                                        authController={userManagementController}
+                                        authController={authController}
                                         notAllowedError={notAllowedError}/>
                                 );
                             } else {
