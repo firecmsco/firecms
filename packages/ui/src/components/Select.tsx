@@ -111,7 +111,9 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                 <SelectPrimitive.Trigger
                     ref={inputRef}
                     id={id}
-                    className={cls(
+                    asChild
+                >
+                    <div className={cls(
                         "w-full h-full",
                         padding ? {
                             "px-4": size === "large",
@@ -131,61 +133,60 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                         },
                         inputClassName
                     )}>
-
-                    <div
-                        ref={ref}
-                        className={cls(
-                            "flex-grow w-full max-w-full flex flex-row gap-2 items-center",
-                            "overflow-visible",
-                            {
-                                "min-h-[28px]": size === "small",
-                                "min-h-[42px]": size === "medium",
-                                "min-h-[64px]": size === "large"
-                            }
-                        )}
-                    >
-                        <SelectPrimitive.Value
-                            onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                            }}
-                            placeholder={placeholder}
-                            className={"w-full"}>
-                            {hasValue && value && renderValue ? renderValue(value) : placeholder}
-                            {/*{hasValue && !renderValue && value}*/}
-                            {hasValue && !renderValue && (() => {
-
-                                // @ts-ignore
-                                const childrenProps: SelectItemProps[] = Children.map(children, (child) => {
-                                    if (React.isValidElement(child)) {
-                                        return child.props;
-                                    }
-                                }).filter(Boolean);
-
-                                const option = childrenProps.find((o) => o.value === value);
-                                return option?.children;
-                            })()}
-
-                        </SelectPrimitive.Value>
-                    </div>
-
-                    {endAdornment && (
                         <div
-                            className={cls("h-full flex items-center")}
-                            onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                            }}>
-                            {endAdornment}
+                            ref={ref}
+                            className={cls(
+                                "flex-grow w-full max-w-full flex flex-row gap-2 items-center",
+                                "overflow-visible",
+                                {
+                                    "min-h-[28px]": size === "small",
+                                    "min-h-[42px]": size === "medium",
+                                    "min-h-[64px]": size === "large"
+                                }
+                            )}>
+                            <SelectPrimitive.Value
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                }}
+                                placeholder={placeholder}
+                                className={"w-full"}>
+                                {hasValue && value && renderValue ? renderValue(value) : placeholder}
+                                {/*{hasValue && !renderValue && value}*/}
+                                {hasValue && !renderValue && (() => {
+
+                                    // @ts-ignore
+                                    const childrenProps: SelectItemProps[] = Children.map(children, (child) => {
+                                        if (React.isValidElement(child)) {
+                                            return child.props;
+                                        }
+                                    }).filter(Boolean);
+
+                                    const option = childrenProps.find((o) => o.value === value);
+                                    return option?.children;
+                                })()}
+
+                            </SelectPrimitive.Value>
                         </div>
-                    )}
-                    <SelectPrimitive.Icon asChild>
-                        <ExpandMoreIcon size={"medium"}
-                                        className={cls("transition", open ? "rotate-180" : "", {
-                                            "px-2": size === "large",
-                                            "px-1": size === "medium" || size === "small",
-                                        })}/>
-                    </SelectPrimitive.Icon>
+
+                        {endAdornment && (
+                            <div
+                                className={cls("h-full flex items-center")}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                }}>
+                                {endAdornment}
+                            </div>
+                        )}
+                        <SelectPrimitive.Icon asChild>
+                            <ExpandMoreIcon size={"medium"}
+                                            className={cls("transition", open ? "rotate-180" : "", {
+                                                "px-2": size === "large",
+                                                "px-1": size === "medium" || size === "small",
+                                            })}/>
+                        </SelectPrimitive.Icon>
+                    </div>
                 </SelectPrimitive.Trigger>
 
             </div>
