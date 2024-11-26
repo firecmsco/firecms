@@ -61,6 +61,5 @@ const IconButtonInner = <C extends React.ElementType = "button">({
         </Component>
     );
 };
-// React.ForwardRefRenderFunction<HTMLButtonElement, IconButtonProps<C>>
 
 export const IconButton = React.forwardRef(IconButtonInner as React.ForwardRefRenderFunction<HTMLButtonElement, IconButtonProps<any>>) as React.ComponentType<IconButtonProps<any>>;

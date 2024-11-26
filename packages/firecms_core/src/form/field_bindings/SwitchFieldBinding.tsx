@@ -16,18 +16,18 @@ type SwitchFieldProps = FieldProps<boolean>;
  * and tables to the specified properties.
  * @group Form fields
  */
-export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
-                                                                                   propertyKey,
-                                                                                   value,
-                                                                                   setValue,
-                                                                                   error,
-                                                                                   showError,
-                                                                                   autoFocus,
-                                                                                   disabled,
-                                                                                   size = "medium",
-                                                                                   property,
-                                                                                   includeDescription
-                                                                               }: SwitchFieldProps, ref) {
+export const SwitchFieldBinding = function SwitchFieldBinding({
+                                                                  propertyKey,
+                                                                  value,
+                                                                  setValue,
+                                                                  error,
+                                                                  showError,
+                                                                  autoFocus,
+                                                                  disabled,
+                                                                  size = "large",
+                                                                  property,
+                                                                  includeDescription
+                                                              }: SwitchFieldProps) {
 
     useClearRestoreValue({
         property,
@@ -39,18 +39,18 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
         <>
 
             <PropertyIdCopyTooltip propertyKey={propertyKey}>
-            <BooleanSwitchWithLabel
-                value={value}
-                onValueChange={(v) => setValue(v)}
-                error={showError}
-                label={<LabelWithIcon
-                    icon={getIconForProperty(property, "small")}
-                    required={property.validation?.required}
-                    title={property.name}/>}
-                disabled={disabled}
-                autoFocus={autoFocus}
-                size={size}
-            />
+                <BooleanSwitchWithLabel
+                    value={value}
+                    onValueChange={(v) => setValue(v)}
+                    error={showError}
+                    label={<LabelWithIcon
+                        icon={getIconForProperty(property, "small")}
+                        required={property.validation?.required}
+                        title={property.name}/>}
+                    disabled={disabled}
+                    autoFocus={autoFocus}
+                    size={size}
+                />
             </PropertyIdCopyTooltip>
 
             <FieldHelperText includeDescription={includeDescription}
@@ -61,4 +61,4 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
         </>
 
     );
-});
+};

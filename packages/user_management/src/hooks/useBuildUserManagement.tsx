@@ -16,8 +16,7 @@ import { resolveUserRolePermissions } from "../utils";
 
 type UserWithRoleIds<USER extends User = any> = Omit<USER, "roles"> & { roles: string[] };
 
-export interface UserManagementParams<CONTROLLER extends AuthController<any> = AuthController<any>,
-    USER extends User = CONTROLLER extends AuthController<infer U> ? U : any> {
+export interface UserManagementParams<CONTROLLER extends AuthController<any> = AuthController<any>> {
 
     authController: CONTROLLER;
 
@@ -86,7 +85,7 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
      canEditRoles = true,
      allowDefaultRolesCreation,
      includeCollectionConfigPermissions
- }: UserManagementParams<CONTROLLER, USER>): UserManagement<USER> & CONTROLLER {
+ }: UserManagementParams<CONTROLLER>): UserManagement<USER> & CONTROLLER {
 
     if (!authController) {
         throw Error("useBuildUserManagement: You need to provide an authController since version 3.0.0-beta.11. Check https://firecms.co/docs/pro/migrating_from_v3_beta");
@@ -154,10 +153,6 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
         if (authController?.initialLoading) {
             return;
         }
-        // if (authController.user === null) {
-        //     setUsersLoading(false);
-        //     return;
-        // }
 
         setUsersLoading(true);
         return dataSourceDelegate.listenCollection?.({
@@ -299,17 +294,11 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
     const userRoles = authController.user ? defineRolesFor(authController.user) : undefined;
     const isAdmin = (userRoles ?? []).some(r => r.id === "admin");
 
-    // console.log("Setting roles", {
-    //     user: authController.user,
-    //     userRoles
-    // });
-    // useEffect(() => {
-    //     console.debug("Setting roles", {
-    //         authController,
-    //         userRoles
-    //     });
-    //     authController.setUserRoles?.(userRoles ?? []);
-    // }, [userRoles?.map(r => r.id)]);
+    const userRoleIds = userRoles?.map(r => r.id);
+    useEffect(() => {
+        console.debug("Setting roles", userRoles);
+        authController.setUserRoles?.(userRoles ?? []);
+    }, [userRoleIds]);
 
     return {
         loading,

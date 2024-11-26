@@ -39,12 +39,12 @@ export interface FirebaseAuthControllerProps {
  * @group Firebase
  */
 export const useFirebaseAuthController = <USER extends FirebaseUserWrapper = any, ExtraData = any>({
-                                                                                                           loading,
-                                                                                                           firebaseApp,
-                                                                                                           signInOptions,
-                                                                                                           onSignOut: onSignOutProp,
-                                                                                                           defineRolesFor
-                                                                                                       }: FirebaseAuthControllerProps): FirebaseAuthController<USER, ExtraData> => {
+                                                                                                       loading,
+                                                                                                       firebaseApp,
+                                                                                                       signInOptions,
+                                                                                                       onSignOut: onSignOutProp,
+                                                                                                       defineRolesFor
+                                                                                                   }: FirebaseAuthControllerProps): FirebaseAuthController<USER, ExtraData> => {
 
     const [loggedUser, setLoggedUser] = useState<FirebaseUser | null | undefined>(undefined); // logged user, anonymous or logged out
     const [authError, setAuthError] = useState<any>();
@@ -53,8 +53,16 @@ export const useFirebaseAuthController = <USER extends FirebaseUserWrapper = any
     const [authLoading, setAuthLoading] = useState(true);
     const [loginSkipped, setLoginSkipped] = useState<boolean>(false);
     const [confirmationResult, setConfirmationResult] = useState<undefined | ConfirmationResult>();
-    const [userRoles, setUserRoles] = useState<Role[] | undefined>();
+    const [userRoles, _setUserRoles] = useState<Role[] | undefined>();
     const [extra, setExtra] = useState<any>();
+
+    const setUserRoles = useCallback((roles: Role[] | undefined) => {
+        const currentRoleIds = userRoles?.map(r => r.id);
+        const newRoleIds = roles?.map(r => r.id);
+        if (!equal(currentRoleIds, newRoleIds)) {
+            _setUserRoles(roles);
+        }
+    }, [userRoles]);
 
     const authRef = useRef(firebaseApp ? getAuth(firebaseApp) : null);
 

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useMemo } from "react";
 import { CenteredView, Typography } from "@firecms/ui";
 import { CustomizationController, EntityCollection, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
@@ -86,6 +88,7 @@ export function FireCMS<USER extends User, EC extends EntityCollection>(props: F
         dataSourceDelegate,
         plugins
     });
+
     if (accessResponse?.message) {
         console.warn(accessResponse.message);
     }
