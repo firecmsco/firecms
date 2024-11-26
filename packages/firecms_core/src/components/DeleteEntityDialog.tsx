@@ -1,6 +1,6 @@
 import { Entity, EntityCallbacks, EntityCollection } from "../types";
 import React, { useCallback, useMemo, useState } from "react";
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent, Typography } from "@firecms/ui";
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle } from "@firecms/ui";
 import {
     deleteEntityWithCallbacks,
     useCustomizationController,
@@ -40,20 +40,12 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
     const snackbarController = useSnackbarController();
     const [loading, setLoading] = useState(false);
 
-    const [entityOrEntities, setUsedEntityOrEntities] = React.useState<Entity<M> | Entity<M>[]>();
-
-    const [multipleEntities, setMultipleEntities] = React.useState<boolean>();
     const context = useFireCMSContext();
+    const entityOrEntities = Array.isArray(entityOrEntitiesToDelete) && entityOrEntitiesToDelete.length === 1
+        ? entityOrEntitiesToDelete[0]
+        : entityOrEntitiesToDelete;
 
-    React.useEffect(() => {
-        if (entityOrEntitiesToDelete) {
-            const revisedEntityOrEntities = Array.isArray(entityOrEntitiesToDelete) && entityOrEntitiesToDelete.length === 1
-                ? entityOrEntitiesToDelete[0]
-                : entityOrEntitiesToDelete;
-            setUsedEntityOrEntities(revisedEntityOrEntities);
-            setMultipleEntities(Array.isArray(revisedEntityOrEntities));
-        }
-    }, [entityOrEntitiesToDelete]);
+    const multipleEntities = Array.isArray(entityOrEntities);
 
     const resolvedCollection = useMemo(() => resolveCollection<M>({
         collection,
@@ -181,11 +173,10 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
             open={open}
             onOpenChange={(open) => !open ? onClose() : undefined}
         >
+            <DialogTitle id="delete-dialog-title">
+                {dialogTitle}
+            </DialogTitle>
             <DialogContent fullHeight={true}>
-                <Typography variant={"subtitle2"} className={"p-4"}>
-                    {dialogTitle}
-                </Typography>
-
                 {!multipleEntities && <div className={"p-4"}>{content}</div>}
             </DialogContent>
             <DialogActions>
