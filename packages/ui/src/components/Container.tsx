@@ -1,3 +1,4 @@
+"use client";
 import React, { ForwardRefRenderFunction } from "react";
 import { cls } from "../util";
 

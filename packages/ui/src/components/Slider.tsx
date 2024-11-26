@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 import { cls } from "../util";
 import * as SliderPrimitive from "@radix-ui/react-slider";
