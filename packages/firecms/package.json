@@ -11,6 +11,11 @@
     "build": "echo \"create-firecms-app: no need to build\" && exit 0",
     "clean": "echo \"create-firecms-app: no need to clean\" && exit 0"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/firecmsco/firecms.git",
+    "directory": "packages/firecms"
+  },
   "keywords": [
     "cli",
     "create-firecms-app",
