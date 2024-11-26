@@ -105,7 +105,7 @@ export function EntityPreview({
                     : <Skeleton/>)}
 
             {titleProperty && (
-                <div className={"my-0.5 text-sm font-large"}>
+                <div className={"my-0.5 text-sm font-medium"}>
                     {
                         entity
                             ? <PropertyPreview

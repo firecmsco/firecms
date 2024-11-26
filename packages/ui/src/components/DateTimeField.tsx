@@ -180,7 +180,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                 <div className="flex items-center m-2">
                     <ErrorIcon size={"medium"} color={"error"}/>
                     <div className="pl-2">
-                        <Typography variant={"body2"} className="font-large">
+                        <Typography variant={"body2"}>
                             Invalid date value for this field
                         </Typography>
                         <Typography variant={"body2"}>
