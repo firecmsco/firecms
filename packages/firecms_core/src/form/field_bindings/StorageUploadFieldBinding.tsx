@@ -339,7 +339,7 @@ export function StorageUpload({
     }
 
     const metadata: Record<string, unknown> | undefined = storage?.metadata;
-    const size = multipleFilesSupported ? "small" : "medium";
+    const size = multipleFilesSupported ? "medium" : "large";
 
     const moveItem = useCallback((fromIndex: number, toIndex: number) => {
         if (!multipleFilesSupported) return;
