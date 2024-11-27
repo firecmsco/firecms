@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@firecms/ui";
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    SearchIcon,
+    TextField,
+    Typography
+} from "@firecms/ui";
 
 export default function DialogBasicDemo() {
     const [open, setOpen] = useState(false);
@@ -10,13 +19,15 @@ export default function DialogBasicDemo() {
             <Dialog
                 open={open}
                 onOpenChange={setOpen}>
-                <DialogContent className="p-8 flex flex-col space-y-2">
-                    <DialogTitle variant={"h5"} gutterBottom>
-                        Your dialog
-                    </DialogTitle>
-                    <Typography gutterBottom>
-                        Basic Dialog Content
+                <DialogTitle variant={"h6"} className={"flex flex-row gap-4 items-center"}>
+                    <SearchIcon size={"small"}/>
+                    Search
+                </DialogTitle>
+                <DialogContent>
+                    <Typography variant={"body2"}>
+                        Search in your documents
                     </Typography>
+                    <TextField size={"small"}/>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setOpen(false)} variant={"text"}>

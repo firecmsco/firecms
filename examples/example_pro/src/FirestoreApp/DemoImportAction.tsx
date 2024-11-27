@@ -5,6 +5,7 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
+    DialogTitle,
     FileUploadIcon,
     IconButton,
     Tooltip,
@@ -26,8 +27,8 @@ export function DemoImportAction({}: CollectionActionsProps) {
 
         <Dialog open={open}
                 maxWidth={"lg"}>
+            <DialogTitle>Import data</DialogTitle>
             <DialogContent className={"flex flex-col gap-4 my-4"}>
-                <Typography variant={"h6"}>Import data</Typography>
                 <Typography variant={"body2"}>The import feature is disabled in this demo</Typography>
             </DialogContent>
             <DialogActions>

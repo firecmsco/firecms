@@ -26,7 +26,7 @@ export function ErrorView({
                               tooltip
                           }: ErrorViewProps): React.ReactElement {
     const component = error instanceof Error ? error.message : error;
-    console.error("ErrorView", error)
+    console.warn("ErrorView", error)
 
     const body = (
         <div

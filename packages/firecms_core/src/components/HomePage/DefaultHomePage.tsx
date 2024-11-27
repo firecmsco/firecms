@@ -140,6 +140,7 @@ export function DefaultHomePage({
                     <SearchBar onTextSearch={updateSearchResults}
                                placeholder={"Search collections"}
                                large={false}
+                               autoFocus={true}
                                innerClassName={"w-full"}
                                className={"w-full flex-grow"}/>
                     {additionalActions}

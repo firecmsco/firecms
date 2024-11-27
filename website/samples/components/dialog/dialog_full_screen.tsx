@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, Typography } from "@firecms/ui";
+import { Button, CenteredView, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@firecms/ui";
 
 export default function DialogFullScreenDemo() {
     const [open, setOpen] = useState(false);
@@ -12,13 +12,19 @@ export default function DialogFullScreenDemo() {
                 onOpenChange={setOpen}
                 fullScreen={true}
             >
-                <DialogContent className="p-8 flex flex-col space-y-2">
-                    <Typography variant={"h5"} gutterBottom>
-                        Your dialog
-                    </Typography>
-                    <Typography gutterBottom>
-                        Full-Screen Dialog Content
-                    </Typography>
+                <DialogContent
+                    includeMargin={false}>
+                    <CenteredView>
+                        <DialogTitle variant={"h3"} includeMargin={false}>
+                            Your dialog
+                        </DialogTitle>
+                        <Typography gutterBottom>
+                            Full-Screen Dialog Content
+                        </Typography>
+                        <Button variant={"outlined"}>
+                            Click me
+                        </Button>
+                    </CenteredView>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setOpen(false)}

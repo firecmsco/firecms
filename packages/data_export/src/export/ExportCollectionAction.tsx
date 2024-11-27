@@ -22,7 +22,7 @@ import {
     cls,
     Dialog,
     DialogActions,
-    DialogContent,
+    DialogContent, DialogTitle,
     GetAppIcon,
     IconButton,
     Tooltip,
@@ -192,9 +192,10 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
             open={open}
             onOpenChange={setOpen}
             maxWidth={"xl"}>
-            <DialogContent className={"flex flex-col gap-4 my-4"}>
 
-                <Typography variant={"h6"}>Export data</Typography>
+            <DialogTitle variant={"h6"}>Export data</DialogTitle>
+
+            <DialogContent className={"flex flex-col gap-4 my-4"}>
 
                 <div>Download the the content of this table as a CSV</div>
 

@@ -8,6 +8,7 @@ export type DialogContentProps = TypographyProps & {
     children: React.ReactNode,
     hidden?: boolean,
     className?: string,
+    includeMargin?: boolean,
     variant?: TypographyVariant
 };
 
@@ -16,12 +17,15 @@ export function DialogTitle({
                                 hidden,
                                 className,
                                 variant = "subtitle2",
+                                gutterBottom = true,
+                                includeMargin = true,
                                 ...props
                             }: DialogContentProps) {
 
     const title = <DialogPrimitive.Title asChild>
         <Typography variant={variant}
-                    className={cls("mt-8 mb-6 mx-6", className)}
+                    className={cls({ "mt-8 mx-6": includeMargin }, className)}
+                    gutterBottom={gutterBottom}
                     {...props}>
             {children}
         </Typography>

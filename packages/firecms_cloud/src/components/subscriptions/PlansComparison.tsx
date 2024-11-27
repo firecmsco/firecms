@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigationController } from "@firecms/core";
-import { Button, Chip, CloseIcon, Container, Dialog, DialogContent, IconButton, } from "@firecms/ui";
+import { Button, Chip, CloseIcon, Container, Dialog, DialogContent, DialogTitle, IconButton, } from "@firecms/ui";
 import { useNavigate } from "react-router-dom";
 import { UpgradeToPlusButton } from "./UpgradeToPlusButton";
 
@@ -24,6 +24,8 @@ export function PlansComparisonDialog({
         open={open}
         onOpenChange={(open) => !open ? onClose() : undefined}
     >
+
+        <DialogTitle hidden>Plans comparison</DialogTitle>
         <DialogContent fullHeight={true}>
             <PlansComparison/>
         </DialogContent>

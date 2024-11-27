@@ -9,7 +9,7 @@ import {
     ContentCopyIcon,
     Dialog,
     DialogActions,
-    DialogContent,
+    DialogContent, DialogTitle,
     IconButton,
     Label,
     LoopIcon,
@@ -172,8 +172,11 @@ function BadMessageIcon({
             onOpenAutoFocus={(e) => {
                 e.preventDefault();
             }}>
+
+            <DialogTitle variant={"h6"}>What was wrong with the response?</DialogTitle>
+
             <DialogContent className={"flex flex-col gap-4"}>
-                What was wrong with the response?
+
                 <div className={"flex flex-row gap-2 flex-wrap"}>
                     <FeedbackLabel title={"Not helpful"}
                                    value={"not_helpful"}

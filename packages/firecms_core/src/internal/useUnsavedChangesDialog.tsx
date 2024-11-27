@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Blocker, Transition } from "history";
 import { UNSAFE_NavigationContext, useNavigate } from "react-router-dom";
-import { Button, Dialog, DialogActions, DialogContent, Typography } from "@firecms/ui";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@firecms/ui";
 
 export function useNavigationUnsavedChangesDialog(when: boolean, onSuccess: () => void):
     {
@@ -89,8 +89,8 @@ export function UnsavedChangesDialog({
             }}
             open={open}
         >
+            <DialogTitle variant={"h6"}>{title}</DialogTitle>
             <DialogContent>
-                <Typography variant={"h6"}>{title}</Typography>
 
                 {body}
 

@@ -5,6 +5,7 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
+    DialogTitle,
     DoneIcon,
     LoadingButton,
     MultiSelect,
@@ -140,14 +141,11 @@ export function UserDetailsForm({
                         position: "relative",
                         height: "100%"
                     }}>
+
+                    <DialogTitle variant={"h4"} gutterBottom={false}>
+                        User
+                    </DialogTitle>
                     <DialogContent className="h-full flex-grow">
-                        <div
-                            className="flex flex-row pt-4 pb-4">
-                            <Typography variant={"h4"}
-                                        className="flex-grow">
-                                User
-                            </Typography>
-                        </div>
 
                         <div className={"grid grid-cols-12 gap-8"}>
 

@@ -1,8 +1,11 @@
 import { useCustomizationController } from "@firecms/core";
-import { Button, Dialog, DialogActions, DialogContent, Typography } from "@firecms/ui";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@firecms/ui";
 import React from "react";
 
-export function EntityCustomViewsSelectDialog({ open, onClose }: { open: boolean, onClose: (selectedViewKey?: string) => void }) {
+export function EntityCustomViewsSelectDialog({
+                                                  open,
+                                                  onClose
+                                              }: { open: boolean, onClose: (selectedViewKey?: string) => void }) {
     const {
         entityViews,
     } = useCustomizationController();
@@ -10,10 +13,8 @@ export function EntityCustomViewsSelectDialog({ open, onClose }: { open: boolean
     return <Dialog
         maxWidth={"md"}
         open={open}>
+        <DialogTitle>Select custom view</DialogTitle>
         <DialogContent className={"flex flex-col gap-4"}>
-            <Typography variant={"h6"}>
-                Select view
-            </Typography>
             {entityViews?.map((view) => {
                 return <Button
                     key={view.key}

@@ -17,6 +17,7 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
+    DialogTitle,
     ExpandablePanel,
     FaceIcon,
     FiberManualRecordIcon,
@@ -342,9 +343,10 @@ export default function ClientUIComponentsShowcase({
                 <Typography variant="subtitle2">Dialog</Typography>
                 <Button onClick={() => setDialogOpen(true)}>Open Dialog</Button>
                 <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
-
+                    <DialogTitle>
+                        Dialog
+                    </DialogTitle>
                     <DialogContent>
-                        <Typography variant={"h6"} className={"mb-2"}>Dialog</Typography>
                         This UI kit is amazing!
                     </DialogContent>
                     <DialogActions>

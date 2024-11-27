@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Button, Dialog, DialogActions, DialogContent, LoadingButton, Typography } from "@firecms/ui";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, LoadingButton, Typography } from "@firecms/ui";
 
 export function ConfirmationDialog({
                                              open,
@@ -22,8 +22,8 @@ export function ConfirmationDialog({
             open={open}
             onOpenChange={(open) => !open ? onCancel() : undefined}
         >
+            <DialogTitle variant={"h6"} className={"mb-2"}>{title}</DialogTitle>
             <DialogContent>
-                <Typography variant={"h6"} className={"mb-2"}>{title}</Typography>
                 {body}
             </DialogContent>
 

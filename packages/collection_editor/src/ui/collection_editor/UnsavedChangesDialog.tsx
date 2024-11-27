@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Dialog, DialogActions, DialogContent, Typography } from "@firecms/ui";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@firecms/ui";
 
 export interface UnsavedChangesDialogProps {
     open: boolean;
@@ -24,11 +24,9 @@ export function UnsavedChangesDialog({
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
-            <DialogContent>
-                <Typography variant={"h6"}>
-                    {title ?? "Unsaved changes"}
-                </Typography>
 
+            <DialogTitle>{title ?? "Unsaved changes"}</DialogTitle>
+            <DialogContent>
                 {body && <Typography>
                     {body}
                 </Typography>}

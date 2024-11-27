@@ -1,6 +1,15 @@
 import React, { useEffect } from "react";
 import { useSideDialogsController } from "@firecms/core";
-import { AutoFixHighIcon, Button, Dialog, DialogActions, DialogContent, IconButton, Typography, } from "@firecms/ui";
+import {
+    AutoFixHighIcon,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Typography,
+} from "@firecms/ui";
 
 /**
  * This whole component is a big hack used to point the user to the
@@ -37,10 +46,8 @@ export function OpenAIInstructionsActions() {
                 open={open}
                 onOpenChange={setOpen}
             >
+                <DialogTitle>OpenAI data enhancement</DialogTitle>
                 <DialogContent className="p-8 flex flex-col space-y-2">
-                    <Typography variant={"h5"} gutterBottom>
-                        OpenAI data enhancement DEMO
-                    </Typography>
                     <Typography gutterBottom>
                         Try it out by clicking on <b>ADD BOOK</b> and
                         then typing the title of your favourite book on the <b>AUTOFILL

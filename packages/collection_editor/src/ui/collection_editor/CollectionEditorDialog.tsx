@@ -32,6 +32,7 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
+    DialogTitle,
     DoneIcon,
     IconButton,
     LoadingButton,
@@ -114,6 +115,7 @@ export function CollectionEditorDialog(props: CollectionEditorDialogProps) {
             maxWidth={"7xl"}
             onOpenChange={(open) => !open ? handleCancel() : undefined}
         >
+            <DialogTitle hidden>Collection editor</DialogTitle>
             {open && <CollectionEditor {...props}
                                        handleCancel={handleCancel}
                                        setFormDirty={setFormDirty}/>}

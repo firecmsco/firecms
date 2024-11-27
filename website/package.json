@@ -19,12 +19,12 @@
   },
   "dependencies": {
     "@docsearch/js": "3.7.0",
-    "@docusaurus/core": "^3.6.1",
+    "@docusaurus/core": "latest",
     "@docusaurus/faster": "^3.6.1",
-    "@docusaurus/plugin-google-gtag": "^3.6.1",
-    "@docusaurus/plugin-sitemap": "^3.6.1",
-    "@docusaurus/preset-classic": "^3.6.1",
-    "@docusaurus/theme-search-algolia": "^3.6.1",
+    "@docusaurus/plugin-google-gtag": "latest",
+    "@docusaurus/plugin-sitemap": "latest",
+    "@docusaurus/preset-classic": "latest",
+    "@docusaurus/theme-search-algolia": "latest",
     "@firecms/collection_editor": "link:../packages/collection_editor",
     "@firecms/core": "link:../packages/firecms_core",
     "@firecms/data_enhancement": "link:../packages/data_enhancement",
@@ -67,8 +67,8 @@
     ]
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.6.1",
-    "@docusaurus/types": "^3.6.1",
+    "@docusaurus/module-type-aliases": "latest",
+    "@docusaurus/types": "latest",
     "@firecms/cloud": "link:../packages/firecms_cloud",
     "@tsconfig/docusaurus": "^2.0.3",
     "@types/react": "^18.3.12",

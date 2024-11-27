@@ -275,7 +275,9 @@ export function PropertyFormDialog({
                   e.stopPropagation();
                   formexRef.current?.handleSubmit(e)
               }}>
+            <DialogTitle hidden>Property edit view</DialogTitle>
             <DialogContent>
+
                 <PropertyForm {...formProps}
                               onDismiss={onCancel}
                               onPropertyChanged={(params) => {

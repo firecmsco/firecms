@@ -53,8 +53,6 @@ export function Tab({
                                           : cls("text-surface-accent-700 dark:text-surface-accent-300",
                                               "data-[state=active]:text-surface-accent-900 data-[state=active]:dark:text-white",
                                               "hover:text-surface-accent-800 dark:hover:text-surface-accent-200"),
-                                      // disabled ? "text-surface-accent-400 dark:text-surface-accent-500" : "data-[state=active]:text-primary",
-                                      // "data-[state=active]:bg-surface-accent-50 data-[state=active]:dark:bg-surface-accent-800",
                                       className)}>
         <div className={cls("uppercase inline-block p-2 px-4 m-2 rounded",
             "hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-800",

@@ -12,7 +12,7 @@ export default function DialogScrollableDemo() {
                 onOpenChange={setOpen}
                 scrollable={true}
             >
-                <div className={"p-8 bg-red-500 text-white"} style={{ height: "200vh" }}>Scrollable Dialog Content</div>
+                <div className={"p-8 bg-red-100 text-red-800"} style={{ height: "200vh" }}>Scrollable Dialog Content</div>
 
                 <DialogActions>
                     <Button onClick={() => setOpen(false)}

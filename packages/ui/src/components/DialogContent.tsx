@@ -4,9 +4,11 @@ import { cls } from "../util";
 export function DialogContent({
                                   children,
                                   className,
-                                  fullHeight
+                                  fullHeight,
+                                  includeMargin = true
                               }: {
     children: React.ReactNode,
+    includeMargin?: boolean,
     fullHeight?: boolean,
     className?: string
 }) {
@@ -17,7 +19,9 @@ export function DialogContent({
         </div>;
 
     return <div
-        className={cls("my-6 mx-6 h-full flex-grow", className)}>
+        className={cls("h-full flex-grow",
+            { "my-6 mx-6": includeMargin },
+            className)}>
         {children}
     </div>;
 }

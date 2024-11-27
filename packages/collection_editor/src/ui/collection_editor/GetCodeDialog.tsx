@@ -1,5 +1,5 @@
 import { EntityCollection, isEmptyObject, useSnackbarController } from "@firecms/core";
-import { Button, ContentCopyIcon, Dialog, DialogActions, DialogContent, Typography, } from "@firecms/ui";
+import { Button, ContentCopyIcon, Dialog, DialogActions, DialogContent, DialogTitle, Typography, } from "@firecms/ui";
 import React from "react";
 import JSON5 from "json5";
 import { Highlight, themes } from "prism-react-renderer"
@@ -20,10 +20,9 @@ export function GetCodeDialog({
     return <Dialog open={open}
                    onOpenChange={onOpenChange}
                    maxWidth={"4xl"}>
+        <DialogTitle variant={"h6"}>Code for {collection.name}</DialogTitle>
         <DialogContent>
-            <Typography variant={"h6"} className={"my-4"}>
-                Code for {collection.name}
-            </Typography>
+
             <Typography variant={"body2"} className={"my-4 mb-8"}>
                 If you want to customise the collection in code, you can add this collection code to your CMS
                 app configuration.

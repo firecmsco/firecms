@@ -10,6 +10,12 @@ Dialog components are used to present content in a layer above the app's main co
 
 To use the `Dialog`, import it from your components and pass the necessary props including `open`, `onOpenChange`, and the dialog's content as children. Optionally, you can customize its appearance with `className`, `fullWidth`, `fullHeight`, `fullScreen`, `scrollable`, `maxWidth`, `modal`, and `onOpenAutoFocus` props.
 
+:::caution
+You need to provide a `DialogTitle` in your `Dialog` component to ensure that the dialog is accessible.
+You will see a warning in the console if you forget to provide a `DialogTitle`.
+:::
+
+
 import CodeSample from "../../src/CodeSample";
 import CodeBlock from "@theme/CodeBlock";
 

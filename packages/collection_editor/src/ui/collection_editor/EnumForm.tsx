@@ -11,6 +11,7 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
+    DialogTitle,
     IconButton,
     ListIcon,
     Paper,
@@ -327,7 +328,7 @@ function EnumEntryDialog({
         open={open}
         onOpenChange={(open) => !open ? onClose() : undefined}
     >
-
+        <DialogTitle hidden>Enum form dialog</DialogTitle>
         <DialogContent>
             {index !== undefined &&
                 <div>

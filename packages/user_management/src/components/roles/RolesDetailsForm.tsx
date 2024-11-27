@@ -7,7 +7,7 @@ import {
     Checkbox,
     Dialog,
     DialogActions,
-    DialogContent,
+    DialogContent, DialogTitle,
     DoneIcon,
     LoadingButton,
     Paper,
@@ -143,14 +143,10 @@ export function RolesDetailsForm({
                           position: "relative",
                           height: "100%"
                       }}>
+                    <DialogTitle variant={"h4"} gutterBottom={false}>
+                        Role
+                    </DialogTitle>
                     <DialogContent className="flex-grow">
-                        <div
-                            className="flex flex-row pt-12 pb-8">
-                            <Typography variant={"h4"}
-                                        className="flex-grow">
-                                Role
-                            </Typography>
-                        </div>
 
                         <div className={"grid grid-cols-12 gap-8"}>
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent } from "@firecms/ui";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@firecms/ui";
 
 export default function DialogCustomWidthDemo() {
     const [open, setOpen] = useState(false);
@@ -12,7 +12,10 @@ export default function DialogCustomWidthDemo() {
                 onOpenChange={setOpen}
                 maxWidth="5xl"
             >
-                <DialogContent className="p-8">
+                <DialogTitle variant={"h5"} gutterBottom>
+                    Your dialog
+                </DialogTitle>
+                <DialogContent>
                     Dialog with Custom Width
                 </DialogContent>
                 <DialogActions>

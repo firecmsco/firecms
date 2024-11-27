@@ -11,7 +11,7 @@ import {
     DateTimeField,
     Dialog,
     DialogActions,
-    DialogContent,
+    DialogContent, DialogTitle,
     FaceIcon,
     FileUpload,
     IconButton,
@@ -115,8 +115,10 @@ export default function ClientUIComponentsTeaser() {
                         </Button>
                         <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
 
+                            <DialogTitle variant={"h6"} gutterBottom>
+                                Dialog
+                            </DialogTitle>
                             <DialogContent>
-                                <Typography variant={"h6"} className={"mb-2"}>Dialog</Typography>
                                 This UI kit is amazing!
                             </DialogContent>
                             <DialogActions>

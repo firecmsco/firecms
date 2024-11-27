@@ -22,7 +22,7 @@ import {
     defaultBorderMixin,
     Dialog,
     DialogActions,
-    DialogContent,
+    DialogContent, DialogTitle,
     FileUploadIcon,
     IconButton,
     Select,
@@ -126,17 +126,18 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
                 fullWidth={step === "preview"}
                 fullHeight={step === "preview"}
                 maxWidth={step === "initial" ? "lg" : "7xl"}>
+
+            <DialogTitle variant={"h6"}>Import data</DialogTitle>
+
             <DialogContent className={"flex flex-col gap-4 my-4"} fullHeight={step === "preview"}>
 
                 {step === "initial" && <>
-                    <Typography variant={"h6"}>Import data</Typography>
                     <Typography variant={"body2"}>Upload a CSV, Excel or JSON file and map it to your existing
                         schema</Typography>
                     <ImportFileUpload onDataAdded={onDataAdded}/>
                 </>}
 
                 {step === "mapping" && <>
-                    <Typography variant={"h6"} className={"ml-3.5"}>Map fields</Typography>
                     <DataNewPropertiesMapping importConfig={importConfig}
                                               destinationProperties={properties}
                                               buildPropertyView={({
