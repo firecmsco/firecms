@@ -95,7 +95,7 @@ const navigationController = useBuildNavigationController({
 - Made improvements to heatmap responsiveness (HMR fixes).
 - Refactored text search functionalities for better efficiency and added relevant documentation.
 - Fixed issues with number input fields blocking scroll and replaced date picker with native HTML date input for consistency.
-
+- If you are using the `Select` component, you don't need to provide a `renderValue` function anymore. The component will handle it automatically.
 
 ## [3.0.0-beta.10] - 2024-07-10
 

@@ -98,7 +98,6 @@ export function CustomFiltersActions({
                     <IconButton size={"small"} onClick={() => updateFilter(null)}>
                         <ClearIcon size={"smallest"}/>
                     </IconButton> : undefined}
-                renderValue={(value) => value}
                 onValueChange={updateFilter}
                 size={"small"}
                 value={categoryFilterValue}>

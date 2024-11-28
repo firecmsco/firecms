@@ -25,8 +25,8 @@
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
   },
   "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "dependencies": {
     "@firecms/ui": "^3.0.0-canary.154",
@@ -51,6 +51,7 @@
     "@tiptap/starter-kit": "2.9.1",
     "@tiptap/suggestion": "2.9.1",
     "@types/node": "20.16.11",
+    "react-compiler-runtime": "^19.0.0-beta-df7b47d-20241124",
     "react-markdown": "^9.0.1",
     "react-moveable": "^0.56.0",
     "tippy.js": "^6.3.7",
@@ -58,7 +59,14 @@
   },
   "devDependencies": {
     "@types/react": "^18.3.12",
-    "@types/react-dom": "18.3.1",
+    "@types/react-dom": "^18.3.1",
+    "@types/react-measure": "^2.0.12",
+    "@vitejs/plugin-react": "^4.3.3",
+    "babel-jest": "^29.7.0",
+    "babel-plugin-react-compiler": "beta",
+    "eslint-plugin-react-compiler": "beta",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
     "typescript": "^5.6.3",
     "vite": "^5.4.10"
   },

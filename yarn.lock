@@ -189,7 +189,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.16.0, @babel/core@npm:^7.21.3, @babel/core@npm:^7.23.9, @babel/core@npm:^7.25.2":
+"@babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.16.0, @babel/core@npm:^7.21.3, @babel/core@npm:^7.23.9, @babel/core@npm:^7.24.4, @babel/core@npm:^7.25.2":
   version: 7.26.0
   resolution: "@babel/core@npm:7.26.0"
   dependencies:
@@ -461,6 +461,17 @@ __metadata:
   bin:
     parser: ./bin/babel-parser.js
   checksum: 354320d1a0a7102b2f25620ceea1bbc809f5225432a73e8a8874009d2f82ed29e2b035fe68fb6d18bb7eafed78df1ec0fa12e8d8226b295d7a020f9b852de653
+  languageName: node
+  linkType: hard
+
+"@babel/parser@npm:^7.24.4":
+  version: 7.26.2
+  resolution: "@babel/parser@npm:7.26.2"
+  dependencies:
+    "@babel/types": ^7.26.0
+  bin:
+    parser: ./bin/babel-parser.js
+  checksum: c88b5ea0adf357ef909cdc2c31e284a154943edc59f63f6e8a4c20bf773a1b2f3d8c2205e59c09ca7cdad91e7466300114548876529277a80651b6436a48d5d9
   languageName: node
   linkType: hard
 
@@ -1713,7 +1724,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/types@npm:^7.0.0, @babel/types@npm:^7.20.7, @babel/types@npm:^7.21.3, @babel/types@npm:^7.25.9, @babel/types@npm:^7.26.0, @babel/types@npm:^7.3.3, @babel/types@npm:^7.4.4":
+"@babel/types@npm:^7.0.0, @babel/types@npm:^7.19.0, @babel/types@npm:^7.20.7, @babel/types@npm:^7.21.3, @babel/types@npm:^7.25.9, @babel/types@npm:^7.26.0, @babel/types@npm:^7.3.3, @babel/types@npm:^7.4.4":
   version: 7.26.0
   resolution: "@babel/types@npm:7.26.0"
   dependencies:
@@ -2687,6 +2698,8 @@ __metadata:
     "@types/node": ^20.16.11
     "@types/react": ^18.3.12
     "@types/react-dom": ^18.3.1
+    babel-plugin-react-compiler: beta
+    eslint-plugin-react-compiler: beta
     react-router: ^6.27.0
     react-router-dom: ^6.27.0
     typescript: ^5.6.3
@@ -2714,6 +2727,8 @@ __metadata:
     "@types/react": ^18.3.12
     "@types/react-dom": ^18.3.1
     "@vitejs/plugin-react": ^4.3.3
+    babel-plugin-react-compiler: beta
+    eslint-plugin-react-compiler: beta
     jest: ^29.7.0
     json5: ^2.2.3
     prism-react-renderer: ^2.4.0
@@ -2740,6 +2755,8 @@ __metadata:
     "@types/node": ^20.16.11
     "@types/react": ^18.3.12
     "@types/react-dom": ^18.3.1
+    babel-plugin-react-compiler: beta
+    eslint-plugin-react-compiler: beta
     typescript: ^5.6.3
     vite: ^5.4.10
   peerDependencies:
@@ -2768,9 +2785,11 @@ __metadata:
     "@types/react-dom": ^18.3.1
     "@types/react-measure": ^2.0.12
     "@vitejs/plugin-react": ^4.3.3
+    babel-plugin-react-compiler: beta
     clsx: ^2.1.1
     cross-env: ^7.0.3
     date-fns: ^3.6.0
+    eslint-plugin-react-compiler: beta
     firebase: ^10.14.1
     fuse.js: ^7.0.0
     history: ^5.3.0
@@ -2814,6 +2833,8 @@ __metadata:
     "@types/react-dom": ^18.3.1
     "@vitejs/plugin-react": ^4.3.3
     babel-jest: ^29.7.0
+    babel-plugin-react-compiler: beta
+    eslint-plugin-react-compiler: beta
     jest: ^29.7.0
     ts-jest: ^29.2.5
     typescript: ^5.6.3
@@ -2842,6 +2863,8 @@ __metadata:
     "@types/react-dom": ^18.3.1
     "@vitejs/plugin-react": ^4.3.3
     babel-jest: ^29.7.0
+    babel-plugin-react-compiler: beta
+    eslint-plugin-react-compiler: beta
     jest: ^29.7.0
     ts-jest: ^29.2.5
     typescript: ^5.6.3
@@ -2870,6 +2893,8 @@ __metadata:
     "@types/react-dom": ^18.3.1
     "@vitejs/plugin-react": ^4.3.3
     babel-jest: ^29.7.0
+    babel-plugin-react-compiler: beta
+    eslint-plugin-react-compiler: beta
     jest: ^29.7.0
     ts-jest: ^29.2.5
     typescript: ^5.6.3
@@ -2963,16 +2988,24 @@ __metadata:
     "@tiptap/suggestion": 2.9.1
     "@types/node": 20.16.11
     "@types/react": ^18.3.12
-    "@types/react-dom": 18.3.1
+    "@types/react-dom": ^18.3.1
+    "@types/react-measure": ^2.0.12
+    "@vitejs/plugin-react": ^4.3.3
+    babel-jest: ^29.7.0
+    babel-plugin-react-compiler: beta
+    eslint-plugin-react-compiler: beta
+    jest: ^29.7.0
+    react-compiler-runtime: ^19.0.0-beta-df7b47d-20241124
     react-markdown: ^9.0.1
     react-moveable: ^0.56.0
     tippy.js: ^6.3.7
     tiptap-markdown: ^0.8.10
+    ts-jest: ^29.2.5
     typescript: ^5.6.3
     vite: ^5.4.10
   peerDependencies:
-    react: ^18.0.0
-    react-dom: ^18.0.0
+    react: ^18.3.1
+    react-dom: ^18.3.1
   languageName: unknown
   linkType: soft
 
@@ -2992,6 +3025,8 @@ __metadata:
     "@types/node": ^20.16.11
     "@types/react": ^18.3.12
     "@types/react-dom": ^18.3.1
+    babel-plugin-react-compiler: beta
+    eslint-plugin-react-compiler: beta
     firebase: ^10.14.1
     react-router: ^6.27.0
     react-router-dom: ^6.27.0
@@ -3012,6 +3047,8 @@ __metadata:
     "@types/node": ^20.16.11
     "@types/react": ^18.3.12
     "@types/react-dom": ^18.3.1
+    babel-plugin-react-compiler: beta
+    eslint-plugin-react-compiler: beta
     jest: ^29.7.0
     react-fast-compare: ^3.2.2
     ts-jest: ^29.2.5
@@ -3084,10 +3121,12 @@ __metadata:
     "@types/react-dom": ^18.3.1
     "@types/react-measure": ^2.0.12
     "@vitejs/plugin-react": ^4.3.3
+    babel-plugin-react-compiler: beta
     clsx: ^2.1.1
     cmdk: ^0.2.1
     cross-env: ^7.0.3
     date-fns: ^3.6.0
+    eslint-plugin-react-compiler: beta
     firebase: ^10.14.1
     jest: ^29.7.0
     markdown-it: ^14.1.0
@@ -3118,7 +3157,9 @@ __metadata:
     "@types/node": ^20.16.11
     "@types/react": ^18.3.12
     "@types/react-dom": ^18.3.1
+    babel-plugin-react-compiler: beta
     date-fns: ^3.6.0
+    eslint-plugin-react-compiler: beta
     typescript: ^5.6.3
     vite: ^5.4.10
   peerDependencies:
@@ -7819,6 +7860,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"babel-plugin-react-compiler@npm:beta":
+  version: 19.0.0-beta-df7b47d-20241124
+  resolution: "babel-plugin-react-compiler@npm:19.0.0-beta-df7b47d-20241124"
+  dependencies:
+    "@babel/types": ^7.19.0
+  checksum: b2d1a6fd43899ecb7dfbb0932a3d46166103a382117e4804638246543df8707f17178d30676223376a9c65a6b5ff48a74c7c9f0f532c69f5e77c3c9975d54a49
+  languageName: node
+  linkType: hard
+
 "babel-plugin-transform-react-remove-prop-types@npm:^0.4.24":
   version: 0.4.24
   resolution: "babel-plugin-transform-react-remove-prop-types@npm:0.4.24"
@@ -9864,6 +9914,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-react-compiler@npm:beta":
+  version: 19.0.0-beta-df7b47d-20241124
+  resolution: "eslint-plugin-react-compiler@npm:19.0.0-beta-df7b47d-20241124"
+  dependencies:
+    "@babel/core": ^7.24.4
+    "@babel/parser": ^7.24.4
+    "@babel/plugin-transform-private-methods": ^7.25.9
+    hermes-parser: ^0.25.1
+    zod: ^3.22.4
+    zod-validation-error: ^3.0.3
+  peerDependencies:
+    eslint: ">=7"
+  checksum: 9c46252f4c09a9992c1250943601ae6453a2d41bb5ee20c3b1d2ee66035310abec657290931582aa746197700c80fa0771d6490ac820bb42709928cc8836c8f7
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-react-hooks@npm:^4.3.0, eslint-plugin-react-hooks@npm:^4.6.2":
   version: 4.6.2
   resolution: "eslint-plugin-react-hooks@npm:4.6.2"
@@ -11275,6 +11341,22 @@ __metadata:
   dependencies:
     "@types/hast": ^3.0.0
   checksum: 41d93ccce218ba935dc3c12acdf586193c35069489c8c8f50c2aa824c00dec94a3c78b03d1db40fa75381942a189161922e4b7bca700b3a2cc779634c351a1e4
+  languageName: node
+  linkType: hard
+
+"hermes-estree@npm:0.25.1":
+  version: 0.25.1
+  resolution: "hermes-estree@npm:0.25.1"
+  checksum: 97f42e9178dff61db017810b4f79f5a2cdbb3cde94b7d99ba84ed632ee2adfcae2244555587951b3151fc036676c68f48f57fbe2b49e253eb1f3f904d284a8b0
+  languageName: node
+  linkType: hard
+
+"hermes-parser@npm:^0.25.1":
+  version: 0.25.1
+  resolution: "hermes-parser@npm:0.25.1"
+  dependencies:
+    hermes-estree: 0.25.1
+  checksum: 4edcfaa3030931343b540182b83c432aba4cdcb1925952521ab4cfb7ab90c2c1543dfcb042ccd51d5e81e4bfe2809420e85902c2ff95ef7c6c64644ce17138ea
   languageName: node
   linkType: hard
 
@@ -15840,6 +15922,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-compiler-runtime@npm:^19.0.0-beta-df7b47d-20241124":
+  version: 19.0.0-beta-df7b47d-20241124
+  resolution: "react-compiler-runtime@npm:19.0.0-beta-df7b47d-20241124"
+  peerDependencies:
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: cfd241a2dc906d3d27ef4e34c99c6b4d9aef36d9d9d5bdcd9c3ea8ce3ed41cd2bc8145c789665c3e57906e18b1b8c7d8dd142177cee1cfa196359d958087f510
+  languageName: node
+  linkType: hard
+
 "react-css-styled@npm:^1.1.9":
   version: 1.1.9
   resolution: "react-css-styled@npm:1.1.9"
@@ -18896,6 +18987,22 @@ __metadata:
     lodash: ~2.4.1
     readable-stream: ~1.0.26
   checksum: 6cde80ec4133c76e269d4e6140aaff8c81d281af380f049218747ae3001d9b1978e33c093d37b363b403d70401f751dd8fa0f9077d7f023d24d9808c2974416d
+  languageName: node
+  linkType: hard
+
+"zod-validation-error@npm:^3.0.3":
+  version: 3.4.0
+  resolution: "zod-validation-error@npm:3.4.0"
+  peerDependencies:
+    zod: ^3.18.0
+  checksum: b07fbfc39582dbdf6972f5f5f0c3bac9e6b5e6d2e55ef3dd891fd08f1966ebf1023a4bc270e9b569eaa48ed1684ac2252c9f260b0bd07b167671596e6e4d0fa8
+  languageName: node
+  linkType: hard
+
+"zod@npm:^3.22.4":
+  version: 3.23.8
+  resolution: "zod@npm:3.23.8"
+  checksum: 15949ff82118f59c893dacd9d3c766d02b6fa2e71cf474d5aa888570c469dbf5446ac5ad562bb035bf7ac9650da94f290655c194f4a6de3e766f43febd432c5c
   languageName: node
   linkType: hard
 

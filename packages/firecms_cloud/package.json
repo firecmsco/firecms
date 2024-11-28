@@ -56,6 +56,8 @@
     "@types/node": "^20.16.11",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "babel-plugin-react-compiler": "beta",
+    "eslint-plugin-react-compiler": "beta",
     "typescript": "^5.6.3",
     "vite": "^5.4.10"
   },

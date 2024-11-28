@@ -3,7 +3,10 @@ import path from "path";
 
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react"
-import { resolve } from 'path';
+
+const ReactCompilerConfig = {
+    target: "18"
+};
 
 const isExternal = (id: string) => !id.startsWith(".") && !path.isAbsolute(id);
 
@@ -18,11 +21,11 @@ export default defineConfig(() => ({
             fileName: (format) => `index.${format}.js`
         },
         target: "ESNEXT",
-        sourcemap: true,
         minify: false,
+        sourcemap: true,
         rollupOptions: {
             external: isExternal
-        },
+        }
     },
     resolve: {
         alias: {
@@ -30,6 +33,12 @@ export default defineConfig(() => ({
         }
     },
     plugins: [
-        react({})
+        react({
+            babel: {
+                plugins: [
+                    ["babel-plugin-react-compiler", ReactCompilerConfig],
+                ],
+            }
+        })
     ]
 }));

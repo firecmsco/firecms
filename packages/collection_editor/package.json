@@ -53,6 +53,8 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
+    "babel-plugin-react-compiler": "beta",
+    "eslint-plugin-react-compiler": "beta",
     "jest": "^29.7.0",
     "react-router": "^6.27.0",
     "react-router-dom": "^6.27.0",

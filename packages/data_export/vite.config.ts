@@ -4,6 +4,10 @@ import path from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react"
 
+const ReactCompilerConfig = {
+    target: "18"
+};
+
 const isExternal = (id: string) => !id.startsWith(".") && !path.isAbsolute(id);
 
 export default defineConfig(() => ({
@@ -31,5 +35,11 @@ export default defineConfig(() => ({
             "@firecms/formex": path.resolve(__dirname, "../formex/src"),
         }
     },
-    plugins: [react()]
+    plugins: [react({
+            babel: {
+                plugins: [
+                    ["babel-plugin-react-compiler", ReactCompilerConfig],
+                ],
+            }
+        })]
 }));
