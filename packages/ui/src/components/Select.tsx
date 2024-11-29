@@ -16,6 +16,7 @@ import { SelectInputLabel } from "./common/SelectInputLabel";
 export type SelectProps = {
     open?: boolean,
     name?: string,
+    fullWidth?: boolean,
     id?: string,
     onOpenChange?: (open: boolean) => void,
     value?: string,
@@ -41,6 +42,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                                                                    inputRef,
                                                                    open,
                                                                    name,
+                                                                   fullWidth = true,
                                                                    id,
                                                                    onOpenChange,
                                                                    value,
@@ -105,7 +107,9 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                 {
                     "min-h-[28px]": size === "small",
                     "min-h-[42px]": size === "medium",
-                    "min-h-[64px]": size === "large"
+                    "min-h-[64px]": size === "large",
+                    "w-fit": !fullWidth,
+                    "w-full": fullWidth
                 }
             )}>
                 <SelectPrimitive.Trigger
@@ -114,7 +118,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                     asChild
                 >
                     <div className={cls(
-                        "w-full h-full",
+                        "h-full",
                         padding ? {
                             "px-4": size === "large",
                             "px-3": size === "medium",
@@ -129,14 +133,16 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                         {
                             "min-h-[28px]": size === "small",
                             "min-h-[42px]": size === "medium",
-                            "min-h-[64px]": size === "large"
+                            "min-h-[64px]": size === "large",
+                            "w-full": fullWidth,
+                            "w-fit": !fullWidth
                         },
                         inputClassName
                     )}>
                         <div
                             ref={ref}
                             className={cls(
-                                "flex-grow w-full max-w-full flex flex-row gap-2 items-center",
+                                "flex-grow max-w-full flex flex-row gap-2 items-center",
                                 "overflow-visible",
                                 {
                                     "min-h-[28px]": size === "small",
