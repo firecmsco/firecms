@@ -128,14 +128,14 @@ function CurrentSubscriptionView({
     } = useFireCMSBackend();
 
     const statusText = getSubscriptionStatusText(subscription.status);
-    const [stripePortalUrl, setStripePortalUrl] = useState<string | undefined>(undefined);
+    const [cancelLinkUrl, setCancelLinkUrl] = useState<string | undefined>(undefined);
 
     useEffect(() => {
-        if (!stripePortalUrl) {
+        if (!cancelLinkUrl && !subscription.canceled_at) {
             projectsApi.getStripeCancelLinkForSubscription(subscription.id)
-                .then(setStripePortalUrl);
+                .then(setCancelLinkUrl);
         }
-    }, []);
+    }, [subscription.canceled_at]);
 
     return (
         <div
@@ -164,12 +164,12 @@ function CurrentSubscriptionView({
                     will be active
                     until {subscription.cancel_at.toDate().toLocaleDateString()}. </>}
 
-                <a
+                {!subscription.canceled_at && <a
                     className={" " + subscription.canceled_at ? undefined : "text-text-secondary dark:text-text-secondary-dark"}
-                    href={stripePortalUrl}
+                    href={cancelLinkUrl}
                     target="_blank" rel="noreferrer">{
-                    subscription.canceled_at ? " Renew subscription" : " Manage subscription"
-                }</a>
+                    " Manage subscription"
+                }</a>}
             </div>
 
         </div>

@@ -14,7 +14,7 @@ export type SubscribeParams = {
     quantity?: number,
     licenseId?: string,
     productPrice: ProductPrice,
-    onCheckoutSessionReady: (url: string, error: Error) => void,
+    onCheckoutSessionReady: (url?: string, error?: Error) => void,
     type: SubscriptionType
 };
 
@@ -23,7 +23,7 @@ export interface SubscriptionsController {
     activeSubscriptionsLoading: boolean;
     activeSubscriptionsLoadingError?: Error;
     getSubscriptionsForProject: (projectId: string) => Subscription[];
-    subscribe: (params: SubscribeParams) => Promise<() => void>;
+    subscribe: (params: SubscribeParams) => Promise<void>;
     products?: ProductWithPrices[];
     productsLoading: boolean;
     productsLoadingError?: Error;
@@ -31,7 +31,10 @@ export interface SubscriptionsController {
 
 export function useSubscriptionsForUserController(): SubscriptionsController {
 
-    const { backendFirebaseApp: firebaseApp } = useFireCMSBackend();
+    const {
+        backendFirebaseApp: firebaseApp,
+        projectsApi
+    } = useFireCMSBackend();
     const { backendUid: userId } = useFireCMSBackend();
 
     const firestoreRef = useRef<Firestore>();
@@ -121,17 +124,29 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
                                  quantity,
                                  onCheckoutSessionReady,
                                  type
-
                              }: {
                                  projectId?: string,
                                  licenseId?: string,
                                  quantity?: number,
                                  productPrice: ProductPrice,
-                                 onCheckoutSessionReady: (url: string, error: Error) => void,
+                                 onCheckoutSessionReady: (url?: string, error?: Error) => void,
                                  type: SubscriptionType
                              }
-    ): Promise<() => void> => {
-        console.debug("Subscribing to product", productPrice.id);
+    ) => {
+        // console.debug("Subscribing to product", props);
+        // const productPriceId = productPrice.id;
+        // const productPriceType = productPrice.type;
+        // try {
+        //     const sessionUrl: string = await projectsApi.createStripeNewSubscriptionLink({
+        //         ...props,
+        //         productPriceId,
+        //         productPriceType
+        //     });
+        //     onCheckoutSessionReady(sessionUrl, undefined);
+        // } catch (e: any) {
+        //     console.error("Error subscribing to product", productPriceId, e);
+        //     onCheckoutSessionReady(undefined, e);
+        // }
 
         const firestore = firestoreRef.current;
         if (!firestore) throw new Error("Firestore not initialized");
@@ -180,24 +195,20 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
         const checkoutSessionRef = collection(firestore, CUSTOMERS_COLLECTION, userId, CHECKOUT_SESSION_COLLECTION);
         const docRef = await addDoc(checkoutSessionRef, checkoutSession);
 
-        return new Promise((resolve, reject) => {
-            const unsubscribe = onSnapshot(docRef, (snap) => {
-                const {
-                    error,
-                    url
-                } = snap.data();
+        const unsubscribe = onSnapshot(docRef, (snap) => {
+            const {
+                error,
+                url
+            } = snap.data();
 
-                console.debug("Checkout session updated", snap.data());
-                onCheckoutSessionReady(url, error);
+            console.debug("Checkout session updated", snap.data());
+            onCheckoutSessionReady(url, error);
 
-                if (url) {
-                    unsubscribe();
-                    resolve(url);
-                } else if (error) {
-                    unsubscribe();
-                    reject(error);
-                }
-            });
+            if (url) {
+                unsubscribe();
+            } else if (error) {
+                unsubscribe();
+            }
         });
     }
 

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Alert, LoadingButton, RocketLaunchIcon } from "@firecms/ui";
-import { ProductPrice, ProductWithPrices, SubscriptionType } from "../../types";
+import { ProductPrice, ProductWithPrices } from "../../types";
 import { getSubscriptionPlanName } from "../settings";
 import { SubscriptionPriceSelect } from "./SubscriptionPriceSelect";
+import { SubscribeParams } from "../../hooks";
 
 export function ProductUpgradeSmallView({
                                             product,
@@ -17,12 +18,7 @@ export function ProductUpgradeSmallView({
     includePriceSelect?: boolean,
     includePriceLabel?: boolean,
     largePriceLabel?: boolean,
-    subscribe: (params: {
-        projectId: string,
-        productPrice: ProductPrice,
-        onCheckoutSessionReady: (url: string, error: Error) => void,
-        type: SubscriptionType
-    }) => Promise<() => void>
+    subscribe: (params: SubscribeParams) => Promise<void>
 }) {
 
     const [error, setError] = useState<Error>();
