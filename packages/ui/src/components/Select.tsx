@@ -42,7 +42,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                                                                    inputRef,
                                                                    open,
                                                                    name,
-                                                                   fullWidth = true,
+                                                                   fullWidth = false,
                                                                    id,
                                                                    onOpenChange,
                                                                    value,

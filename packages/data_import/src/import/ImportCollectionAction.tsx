@@ -278,6 +278,7 @@ function PropertyTreeSelect({
 
     return <Select value={isIdColumn ? internalIDValue : (selectedPropertyKey ?? undefined)}
                    size={"large"}
+                   fullWidth={true}
                    onValueChange={onSelectValueChange}
                    renderValue={renderValue}>
 

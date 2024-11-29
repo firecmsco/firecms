@@ -98,6 +98,7 @@ export function StringNumberFilterField({
         <div className="flex w-[440px]">
             <div className={"w-[80px]"}>
                 <Select value={operation}
+                        fullWidth={true}
                         position={"item-aligned"}
                         onValueChange={(value) => {
                             updateFilter(value as VirtualTableWhereFilterOp, internalValue);
@@ -131,6 +132,7 @@ export function StringNumberFilterField({
                 {enumValues && !multiple &&
                     <Select
                         position={"item-aligned"}
+                        fullWidth={true}
                         value={typeof internalValue === "string" ? internalValue : ""}
                         onValueChange={(value) => {
                             if (value !== "")

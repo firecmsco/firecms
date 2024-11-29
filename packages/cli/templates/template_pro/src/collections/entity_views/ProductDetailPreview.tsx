@@ -165,6 +165,7 @@ export function ProductDetailPreview({
                                 Quantity
                             </Label>
                             <Select size={"medium"}
+                                    fullWidth={true}
                                     value={String(quantity)}
                                     onValueChange={(value) => setQuantity(Number(value))}>
                                 <SelectItem value="1">1</SelectItem>

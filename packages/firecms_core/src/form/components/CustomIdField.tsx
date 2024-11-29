@@ -102,6 +102,7 @@ export function CustomIdField<M extends Record<string, any>>({
                 <Select
                     size={"large"}
                     error={error}
+                    fullWidth={true}
                     onValueChange={(v) => onChange(v as string)}
                     {...fieldProps}
                     renderValue={(option) => {

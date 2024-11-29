@@ -163,7 +163,7 @@ export function ProductDetailPreview({
                             <Label className="text-base" htmlFor="quantity">
                                 Quantity
                             </Label>
-                            <Select size={"medium"} value={String(quantity)}>
+                            <Select size={"medium"} value={String(quantity)} fullWidth={true}>
                                 <SelectItem value="1">1</SelectItem>
                                 <SelectItem value="2">2</SelectItem>
                                 <SelectItem value="3">3</SelectItem>

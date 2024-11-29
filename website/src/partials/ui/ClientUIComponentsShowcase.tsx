@@ -523,6 +523,7 @@ export default function ClientUIComponentsShowcase({
                 <Typography variant="subtitle2">Select</Typography>
                 <Select
                     size={"large"}
+                    fullWidth={true}
                     value={""}
                     onValueChange={() => {
                     }}
@@ -532,6 +533,7 @@ export default function ClientUIComponentsShowcase({
                 </Select>
                 <Select
                     size={"large"}
+                    fullWidth={true}
                     placeholder="Select your drinks"
                     value="" onValueChange={() => {
                 }}>

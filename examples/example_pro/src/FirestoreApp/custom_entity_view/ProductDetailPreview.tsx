@@ -164,7 +164,9 @@ export function ProductDetailPreview({
                             <Label className="text-base" htmlFor="quantity">
                                 Quantity
                             </Label>
-                            <Select size={"small"} value={String(quantity)}
+                            <Select size={"small"}
+                                    fullWidth={true}
+                                    value={String(quantity)}
                                     onValueChange={(value) => setQuantity(Number(value))}>
                                 <SelectItem value="1">1</SelectItem>
                                 <SelectItem value="2">2</SelectItem>

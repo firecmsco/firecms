@@ -146,6 +146,7 @@ const buildPickKeysSelect = (disabled: boolean, properties: Properties, setValue
         <Select
             value={""}
             size={"large"}
+            fullWidth={true}
             disabled={disabled}
             onValueChange={handleAddProperty}
             renderValue={(key) => (properties as Properties)[key].name || key}>

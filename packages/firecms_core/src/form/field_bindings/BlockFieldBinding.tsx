@@ -226,6 +226,7 @@ function BlockEntry({
                                 placeholder={<Typography variant={"caption"}
                                                          className={"px-4 py-2 font-medium"}>Type</Typography>}
                                 size={"medium"}
+                                fullWidth={true}
                                 position={"item-aligned"}
                                 value={value1}
                                 renderValue={(enumKey: any) =>

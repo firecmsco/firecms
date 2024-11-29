@@ -93,6 +93,7 @@ export function EnumPropertyField({
                 <Select
                     disabled={disabled}
                     position={"item-aligned"}
+                    fullWidth={true}
                     onValueChange={(value: string) => {
                         setFieldValue("defaultValue", value);
                     }}

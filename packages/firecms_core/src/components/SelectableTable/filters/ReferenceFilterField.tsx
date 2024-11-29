@@ -148,6 +148,7 @@ export function ReferenceFilterField({
             <div className="w-[140px]">
                 <Select value={operation}
                         size={"large"}
+                        fullWidth={true}
                         onValueChange={(value) => {
                             updateFilter(value as VirtualTableWhereFilterOp, internalValue);
                         }}

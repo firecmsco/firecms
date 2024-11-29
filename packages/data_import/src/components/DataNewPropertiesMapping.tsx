@@ -178,6 +178,7 @@ function IdSelectField({
         <Select
             size={"medium"}
             value={idColumn ?? ""}
+            fullWidth={true}
             onChange={(event) => {
                 const value = event.target.value;
                 onChange(value === "__none__" ? null : value);

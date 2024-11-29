@@ -299,6 +299,7 @@ export function CollectionDetailsForm({
                                     <Select
                                         name="defaultSize"
                                         size={"large"}
+                                        fullWidth={true}
                                         label="Default row size"
                                         position={"item-aligned"}
                                         onChange={handleChange}
@@ -320,6 +321,7 @@ export function CollectionDetailsForm({
                                         label="Document IDs generation"
                                         position={"item-aligned"}
                                         size={"large"}
+                                        fullWidth={true}
                                         disabled={customIdValue === "code_defined"}
                                         onValueChange={(v) => {
                                             if (v === "code_defined")

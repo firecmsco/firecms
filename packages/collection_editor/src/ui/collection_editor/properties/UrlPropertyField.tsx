@@ -24,6 +24,7 @@ export function UrlPropertyField({
                 <Select
                     disabled={disabled}
                     position={"item-aligned"}
+                    fullWidth={true}
                     onValueChange={(value: string) => {
                         if (value === "[NONE]")
                             setFieldValue("url", true);

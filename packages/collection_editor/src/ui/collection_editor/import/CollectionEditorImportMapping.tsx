@@ -239,6 +239,7 @@ function PropertySelect({
             className={"w-full"}
             disabled={disabled}
             error={!widget}
+            fullWidth={true}
             value={fieldId ?? ""}
             placeholder={"Select a property widget"}
             position={"item-aligned"}

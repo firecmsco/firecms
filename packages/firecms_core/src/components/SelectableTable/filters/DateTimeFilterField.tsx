@@ -77,6 +77,7 @@ export function DateTimeFilterField({
             <div className="w-[80px]">
                 <Select value={operation}
                         size={"large"}
+                        fullWidth={true}
                         onValueChange={(value) => {
                             updateFilter(value as VirtualTableWhereFilterOp, internalValue);
                         }}

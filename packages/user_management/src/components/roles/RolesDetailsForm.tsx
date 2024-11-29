@@ -339,6 +339,7 @@ export function RolesDetailsForm({
                                 <Select
                                     error={touched.config && Boolean(errors.config)}
                                     size={"large"}
+                                    fullWidth={true}
                                     id="createCollections"
                                     name="createCollections"
                                     label="Create collections"
@@ -362,6 +363,7 @@ export function RolesDetailsForm({
                             <div className={"col-span-12 md:col-span-4"}>
                                 <Select
                                     size={"large"}
+                                    fullWidth={true}
                                     error={touched.config && Boolean(errors.config)}
                                     id="editCollections"
                                     name="editCollections"
@@ -389,6 +391,7 @@ export function RolesDetailsForm({
                             <div className={"col-span-12 md:col-span-4"}>
                                 <Select
                                     size={"large"}
+                                    fullWidth={true}
                                     error={touched.config && Boolean(errors.config)}
                                     id="deleteCollections"
                                     name="deleteCollections"

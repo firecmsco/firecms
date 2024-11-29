@@ -300,7 +300,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
     block: {
         key: "block",
         name: "Block",
-        description: "A complex field that allows the user to compose different fields together, with a key->value format",
+        description: "A complex field that allows the user to compose different fields together, with a key/value format",
         Icon: ViewStreamIcon,
         color: "#ff9408",
         property: {

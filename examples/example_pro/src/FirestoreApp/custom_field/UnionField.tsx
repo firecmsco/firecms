@@ -74,6 +74,7 @@ export function UnionField({
             />
             <Paper key={`form_control_${props.propertyKey}_${type}`} className={"flex flex-col gap-2 p-2"}>
                 <Select size="small" value={type} onValueChange={setType}
+                        fullWidth={true}
                         renderValue={(value) => <div>{value}</div>}>
                     <SelectItem value={"string"}>String</SelectItem>
                     <SelectItem value={"number"}>Number</SelectItem>

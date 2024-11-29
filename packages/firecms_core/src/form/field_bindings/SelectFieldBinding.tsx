@@ -53,6 +53,7 @@ export function SelectFieldBinding<T extends EnumType>({
                 value={value !== undefined && value != null ? value.toString() : ""}
                 disabled={disabled}
                 size={size}
+                fullWidth={true}
                 position="item-aligned"
                 inputClassName={cls("w-full")}
                 label={

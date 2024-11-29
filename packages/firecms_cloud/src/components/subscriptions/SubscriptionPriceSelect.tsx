@@ -25,6 +25,7 @@ export function SubscriptionPriceSelect({
                 size={"medium"}
                 invisible={true}
                 padding={false}
+                fullWidth={false}
                 onChange={(e) => {
                     setSelectedPrice((productPrices ?? []).find(price => price.id === e.target.value));
                 }}
