@@ -39,13 +39,13 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@types/node": "^20.16.11",
+    "@types/node": "^20.17.9",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "babel-plugin-react-compiler": "beta",
     "eslint-plugin-react-compiler": "beta",
-    "typescript": "^5.6.3",
-    "vite": "^5.4.10"
+    "typescript": "^5.7.2",
+    "vite": "^5.4.11"
   },
   "scripts": {
     "dev": "vite",
