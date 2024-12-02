@@ -176,12 +176,14 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
             throw new Error("When using additional fields you need to provide a Builder or a value");
         }
 
-        const child = Builder
+        const child: React.ReactNode = Builder
             ? <Builder entity={entity} context={context}/>
-            : <>{additionalField.value?.({
-                entity,
-                context
-            })}</>;
+            : <>
+                {additionalField.value?.({
+                    entity,
+                    context
+                })?.toString()}
+            </>;
 
         return (
             <EntityTableCell

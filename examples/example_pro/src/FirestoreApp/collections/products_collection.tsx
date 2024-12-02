@@ -24,7 +24,7 @@ export const localeCollection = buildCollection<Locale>({
             name: "Description",
             validation: { required: true },
             dataType: "string",
-            multiline: true
+            markdown: true
         },
         selectable: {
             name: "Selectable",

@@ -60,7 +60,7 @@ export function SubscriptionPlanWidget({
         usersLimit
     } = useUserManagement();
 
-    const tooManyUsers = usersLimit !== undefined && users && users.length >= usersLimit;
+    const tooManyUsers = usersLimit !== undefined && users && users.length > usersLimit;
 
     const subscriptionsController = useSubscriptionsForUserController();
     const [dialogOpen, setDialogOpen] = React.useState(false);

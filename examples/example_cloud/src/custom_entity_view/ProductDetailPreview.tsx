@@ -5,6 +5,7 @@ import {
     cls,
     defaultBorderMixin,
     Label,
+    Markdown,
     RadioGroup,
     RadioGroupItem,
     Select,
@@ -71,9 +72,7 @@ export function ProductDetailPreview({
                     <div className="flex items-start">
                         <div className="grid gap-4">
                             <h1 className="font-medium text-3xl lg:text-4xl">{product.name ?? "Product name"} </h1>
-                            <div>
-                                {product.description}
-                            </div>
+                            <Markdown source={product.description}/>
                             <div className="flex items-center gap-4">
                                 <div className="flex items-center gap-0.5">
                                     <StarIcon className="w-5 h-5 fill-blue-500 stroke-blue-500"/>

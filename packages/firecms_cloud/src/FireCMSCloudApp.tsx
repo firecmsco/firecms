@@ -412,7 +412,9 @@ export function FireCMSClientWithController({
     } else if (!authController.user) {
         loadingOrErrorComponent = <CircularProgressCenter text={"Auth loading"}/>;
     } else if (!fireCMSUser) {
-        loadingOrErrorComponent = <NoAccessError authController={authController} projectId={projectId}/>;
+        loadingOrErrorComponent = <NoAccessError authController={authController}
+                                                 userManagement={userManagement}
+                                                 projectId={projectId}/>;
     } else if (projectConfig.blocked) {
         loadingOrErrorComponent = <CenteredView>
             <Typography variant={"h4"}>Project blocked</Typography>
@@ -452,14 +454,20 @@ export function FireCMSClientWithController({
 
 function NoAccessError({
                            authController,
+                           userManagement,
                            projectId
                        }: {
     authController: FirebaseAuthController,
+    userManagement?: CloudUserManagement,
     projectId: string
 }) {
-    return <CenteredView maxWidth={"md"} className={"gap-4"}>
+    let error = "You can request permission to the owner.";
+    if (authController.user?.email && (userManagement?.users ?? []).map(user => user.email).includes(authController.user?.email)) {
+        error += " The user is registered in the project, but it is out of the free plan.";
+    }
+    return <CenteredView maxWidth={"lg"} className={"gap-4"}>
         <ErrorView title={"You don't have access to the project " + projectId}
-                   error={"You can request permission to the owner"}/>
+                   error={error}/>
         <Button variant="text" onClick={authController.signOut}>Sign out</Button>
     </CenteredView>;
 }

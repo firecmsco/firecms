@@ -96,9 +96,9 @@ export interface EntityEditViewProps<M extends Record<string, any>> {
  * side panel.
  */
 export function EntityEditView<M extends Record<string, any>, USER extends User>({
-                                                                                         entityId,
-                                                                                         ...props
-                                                                                     }: EntityEditViewProps<M>) {
+                                                                                     entityId,
+                                                                                     ...props
+                                                                                 }: EntityEditViewProps<M>) {
     const {
         entity,
         dataLoading,
@@ -778,10 +778,12 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
                         const child = Builder
                             ? <Builder entity={entity} context={context}/>
-                            : <>{additionalField.value?.({
-                                entity,
-                                context
-                            })}</>;
+                            : <>
+                                {additionalField.value?.({
+                                    entity,
+                                    context
+                                })?.toString()}
+                            </>;
                         return (
                             <div>
                                 <LabelWithIconAndTooltip

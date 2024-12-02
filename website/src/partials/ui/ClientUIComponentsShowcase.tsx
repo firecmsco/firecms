@@ -235,7 +235,7 @@ export default function ClientUIComponentsShowcase({
                 <Typography variant="subtitle2">Boolean Switch</Typography>
                 <div className={"flex flex-row items-center gap-2"}>
                     <BooleanSwitch value={checked}
-                                   size="medium"
+                                   size="large"
                                    onValueChange={() => {
                                        setChecked(!checked)
                                    }}/>
@@ -243,12 +243,12 @@ export default function ClientUIComponentsShowcase({
                                    onValueChange={() => {
                                        setChecked(!checked)
                                    }}
-                                   size="small"/>
+                                   size="medium"/>
                     <BooleanSwitch value={checked}
                                    onValueChange={() => {
                                        setChecked(!checked)
                                    }}
-                                   size="smallest"/>
+                                   size="small"/>
                 </div>
             </Card>
 

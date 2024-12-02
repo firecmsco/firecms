@@ -198,7 +198,7 @@ export function App() {
     // Delegate used for fetching and saving data in Firestore
     const firestoreDelegate = useFirestoreDelegate({
         firebaseApp,
-        localTextSearchEnabled: false,
+        localTextSearchEnabled: true,
         textSearchControllerBuilder: algoliaSearchControllerBuilder
     });
 

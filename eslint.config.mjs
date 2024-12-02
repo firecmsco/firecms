@@ -1,23 +1,15 @@
-import react from "eslint-plugin-react";
-import typescriptEslint from "@typescript-eslint/eslint-plugin";
-import globals from "globals";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import pluginJs from "@eslint/js";
+import pluginReact from "eslint-plugin-react";
+import tseslint from "typescript-eslint";
 
-import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
-
-const __filename = fileURLToPath(import.meta.url);
-
+/** @type {import("eslint").Linter.Config[]} */
 export default [
-    eslint.configs.recommended,
+    pluginJs.configs.recommended,
     ...tseslint.configs.recommended,
+    pluginReact.configs.flat.recommended,
     {
 
         files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],
-        plugins: {
-            react,
-        },
 
         languageOptions: {
             parserOptions: {
@@ -82,5 +74,6 @@ export default [
             "@typescript-eslint/no-inferrable-types": "warn",
             "@typescript-eslint/ban-ts-comment": "warn",
             "@typescript-eslint/no-explicit-any": "off",
-        },
-    }];
+        }
+    }
+];

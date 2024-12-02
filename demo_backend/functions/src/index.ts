@@ -4,7 +4,6 @@ import { Change } from "firebase-functions/v1";
 import { DocumentSnapshot } from "firebase-functions/v1/firestore";
 
 import { importDatabaseBackup } from "./backup";
-import { addUserToMailchimp } from "./mailchimp";
 import { deleteInAlgolia, indexInAlgolia } from "./indexing/algolia";
 
 admin.initializeApp();
@@ -63,42 +62,6 @@ export const scheduledFirestoreImport = functions
         return importDatabaseBackup();
     });
 
-export const sign_up_newsletter = functions
-    .region("europe-west3")
-    .https
-    .onRequest((req, res) => {
-
-        const data = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
-        console.log("sign_up_newsletter", data, typeof data);
-        res.set("Access-Control-Allow-Origin", "*");
-
-        if (req.method === "OPTIONS") {
-            res.set("Access-Control-Allow-Methods", "POST");
-            res.set("Access-Control-Allow-Headers", "Content-Type");
-            res.set("Access-Control-Max-Age", "3600");
-            res.status(204).send("");
-            return Promise.resolve();
-        } else {
-
-            const emailAddress = data.email_address;
-            const source = data.source;
-
-            if (!emailAddress)
-                throw Error("empty email_address");
-            const result = addUserToMailchimp(emailAddress, source);
-            return result
-                .then(function (response: any) {
-                    console.log("response from mailchimp", response);
-                    res.send(response);
-                    res.sendStatus(200);
-                })
-                .catch(function (error: any) {
-                    console.error(error);
-                    res.sendStatus(500);
-                });
-        }
-
-    });
 
 export {
     alpacaBchFirestoreImport, alpacaEthFirestoreImport, alpacaBtcFirestoreImport, alpacaLtcFirestoreImport

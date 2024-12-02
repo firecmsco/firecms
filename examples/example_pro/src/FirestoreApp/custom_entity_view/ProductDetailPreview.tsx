@@ -4,7 +4,7 @@ import {
     CenteredView,
     cls,
     defaultBorderMixin,
-    Label,
+    Label, Markdown,
     RadioGroup,
     RadioGroupItem,
     Select,
@@ -38,7 +38,7 @@ export function ProductDetailPreview({
 
     return (
         <CenteredView>
-            <div className="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto py-6">
+            <div className="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto py-6 my-8">
                 <div className="grid md:grid-cols-5 gap-3 items-start">
                     <div className="hidden md:flex flex-col gap-3 items-start">
 
@@ -71,10 +71,12 @@ export function ProductDetailPreview({
                 <div className="grid gap-4 md:gap-10 items-start h-full content-center">
                     <div className="flex items-start">
                         <div className="grid gap-4">
-                            <h1 className=" text-3xl lg:text-4xl">{product.name ?? "Product name"} </h1>
-                            <div>
-                                {product.description}
+                            <div className={"flex flex-row mb-4"}>
+                                <h1 className="flex-grow text-3xl lg:text-4xl">{product.name ?? "Product name"} </h1>
+                                <div
+                                    className="text-4xl font-medium ml-auto">{getCurrencySymbol(product.currency)}{product.price}</div>
                             </div>
+                            <Markdown source={product.description}/>
                             <div className="flex items-center gap-4">
                                 <div className="flex items-center gap-0.5">
                                     <StarIcon className="w-5 h-5 fill-blue-500 stroke-blue-500"/>
@@ -86,8 +88,6 @@ export function ProductDetailPreview({
                                 </div>
                             </div>
                         </div>
-                        <div
-                            className="text-4xl font-medium ml-auto">{getCurrencySymbol(product.currency)}{product.price}</div>
                     </div>
                     <form className="grid gap-4 md:gap-10">
                         <div className="grid gap-2">
@@ -164,7 +164,7 @@ export function ProductDetailPreview({
                             <Label className="text-base" htmlFor="quantity">
                                 Quantity
                             </Label>
-                            <Select size={"small"}
+                            <Select size={"medium"}
                                     fullWidth={true}
                                     value={String(quantity)}
                                     onValueChange={(value) => setQuantity(Number(value))}>

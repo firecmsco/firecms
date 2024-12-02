@@ -24,6 +24,7 @@
     "packages/formex",
     "examples/example_cloud",
     "examples/example",
+    "examples/example_next",
     "examples/example_pro"
   ],
   "npmClient": "yarn"

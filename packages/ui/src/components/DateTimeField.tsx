@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useRef, useState } from "react";
 import { CalendarMonthIcon, ClearIcon, ErrorIcon } from "../icons";
 import { IconButton } from "./IconButton";

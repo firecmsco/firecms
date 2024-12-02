@@ -110,7 +110,7 @@ export function KeyValuePreview({ value }: { value: any }) {
     return <div
         className="flex flex-col gap-1 w-full">
         {
-            Object.entries(value).map(([key, childValue]) => (
+            Object.entries(value).map(([key, childValue]: [string, any]) => (
                 <div
                     key={`map_preview_table_${key}}`}
                     className={cls(defaultBorderMixin, "last:border-b-0 border-b")}>
@@ -127,9 +127,9 @@ export function KeyValuePreview({ value }: { value: any }) {
                         </div>
                         <div
                             className="flex-grow max-w-[75%]">
-                            {typeof childValue !== "object" && <Typography>
+                            {childValue && ("toString" in childValue) && <Typography>
                                 <ErrorBoundary>
-                                    {childValue && childValue.toString()}
+                                    {childValue.toString()}
                                 </ErrorBoundary>
                             </Typography>}
                         </div>

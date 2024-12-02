@@ -1,114 +1,63 @@
-import { DocumentReference, Timestamp } from "@firebase/firestore";
+import { EntityReference } from "@firecms/core";
 
-export type UserRecipe = {
-    recipe: Recipe;
-    instructions: string;
-    created_on: Date;
-}
+export type ProductCategory = "home_storage" | "cameras" | "furniture" | "kitchen" | "sunglasses";
 
-export type Recipe = {
-    id: string;
+export type Product = {
     name: string;
-    created_on: Date;
-    imageUrl?: string;
-    videoUrl?: string;
+    category: ProductCategory;
+    available: boolean;
+    price: number;
+    currency: string;
+    public: boolean;
+    brand: string;
     description: string;
-    portions: number;
-    portions_unit: string;
-    duration: number;
-    duration_unit: string;
-    ingredients: Array<IngredientsSection>;
-    preparation: string;
-    comment: string;
-    author?: Author;
-    intolerances: Array<{
-        intolerance: Intolerance;
-        indications?: string;
-        status: "safe" | "adaptable" | "unsafe";
-    }>;
-    intolerances_matrix?: Map<string, "safe" | "adaptable" | "unsafe">;
-    diet: Diet;
-    category: RecipeCategory;
+    amazon_link: string;
+    images: string[];
+    related_products: EntityReference[];
+    publisher: {
+        name: string;
+        external_id: string;
+    },
+    added_on: Date;
+    tags: string[];
 }
 
-export type Author = {
-    name: string;
-    email: string;
-    image: string;
-    bio: string;
+export type ProductWithId = Product & { id: string };
+
+export type Locale = {
+    name: string,
+    description: string,
 }
 
-export type RecipeCategory = "breakfast" | "lunch" | "dinner" | "snack" | "dessert" | "drink" | "salad" | "soup" | "meal_prep" | "lunch_to_go" | "dressing";
-export type Diet = "vegan" | "vegetarian" | "paleo" | "keto" | "pescatarian" | "omnivore";
-
-export type DatabaseRecipe = {
-    name: string;
-    image?: string;
-    video?: string;
-    cooking_status?: string;
-    description: string;
-    portions: number;
-    portions_unit: string;
-    duration: number;
-    duration_unit: string;
-    ingredients: Array<{
-        name?: string; // Section Name (optional)
-        ingredients: {
-            quantity: string;
-            ingredient: DocumentReference;
-            description: string;
-            optional: boolean;
-        }[];
-    }>;
-    // this is generated with a cloud function
-    ingredient_slugs: string[];
-    preparation: string;
-    additional_images?: string[];
-    comment: string;
-    author?: DocumentReference;
-    intolerances: Array<{
-        intolerance: DocumentReference;
-        indications: string;
-        status: "safe" | "adaptable" | "unsafe";
-    }>;
-    intolerances_verified: boolean;
-    // this is generated with a cloud function
-    intolerances_matrix?: Map<string, "safe" | "adaptable" | "unsafe">;
-    created_on: Date;
-    diet: Diet;
-    category: RecipeCategory;
+export type BlogEntry = {
+    name: string,
+    header_image: string,
+    content: (BlogEntryImages | BlogEntryText | BlogEntryProducts | BlogQuote)[];
+    created_on: Date,
+    publish_date: Date,
+    reviewed: boolean,
+    status: string,
+    tags: string[]
 }
 
-export type IngredientsSection = {
-    name?: string; // Section Name (optional)
-    ingredients: IngredientMapping[];
-};
+export type BlogEntryWithId = BlogEntry & { id: string };
 
-export type IngredientMapping = {
-    quantity: string;
-    ingredient: Ingredient | null;
-    description: string;
-    optional: boolean;
+export type BlogEntryImages = {
+    type: "images";
+    value: string[];
 }
 
-export type Ingredient = {
-    id: string;
-    name: string;
-    description: string;
+export type BlogEntryText = {
+    type: "text";
+    value: string;
 }
 
-export type Intolerance = {
-    id: string;
-    name: string;
-    description: string;
+export type BlogEntryProducts = {
+    type: "products";
+    value: ProductWithId[];
 }
 
-export type SurveyData = {
-    name?: string;
-    email?: string;
-    foodType?: "Vegetarian" | "Vegan" | "Keto" | "Paleo" | "Pescatarian" | "Omnivore";
-    mealPattern?: "Snacks" | "One meal" | "Two meals" | "Three meals";
-    dietAspect?: "Taste" | "Convenience" | "Healthiness" | "Variety";
-    nutritionalRequirement?: ("Low carb" | "Low fat" | "High protein" | "Gluten-free")[];
-    goal?: "Weight loss" | "Muscle gain" | "Maintain weight";
-};
+export type BlogQuote = {
+    type: "quote";
+    value: string;
+}

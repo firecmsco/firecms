@@ -1,10 +1,5 @@
-"use client";
-import { App } from "@/app/cms/App";
-import { BrowserRouter } from "react-router-dom";
-
+import { CMSRoute } from "./CMSRoute";
 
 export default function CMS() {
-    return <BrowserRouter basename={"/cms"}>
-        <App/>
-    </BrowserRouter>;
+    return <CMSRoute/>;
 }

@@ -27,11 +27,13 @@
     "packages/editor",
     "examples/example_cloud",
     "examples/example",
+    "examples/example_next",
     "examples/example_pro"
   ],
   "scripts": {
     "dev": "cd examples/example && run-s dev",
     "pro": "cd examples/example_pro && run-s dev",
+    "next": "cd examples/example_next && run-s dev",
     "cloud": "cd examples/example_cloud && run-s dev",
     "saas": "cd saas && run-s dev",
     "datatalk": "cd saas_datatalk && run-s dev",
@@ -49,20 +51,21 @@
     "release": "git push origin main:release"
   },
   "devDependencies": {
-    "@eslint/js": "^9.12.0",
+    "@eslint/js": "^9.16.0",
     "@types/eslint__js": "^8.42.3",
-    "@typescript-eslint/eslint-plugin": "^8.8.1",
-    "eslint": "^9.12.0",
+    "@typescript-eslint/eslint-plugin": "^8.17.0",
+    "eslint": "^9.16.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-n": "^17.11.1",
     "eslint-plugin-promise": "^7.1.0",
-    "eslint-plugin-react": "^7.37.1",
+    "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^4.6.2",
+    "globals": "^15.13.0",
     "lerna": "^8.1.8",
     "npm-run-all": "^4.1.5",
-    "typescript": "^5.6.3",
-    "typescript-eslint": "^8.8.1"
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.16.0"
   },
   "dependencies": {
     "path-browserify": "^1.0.1"

@@ -1,13 +1,15 @@
-import { Recipe } from "./types";
 
-export function getDurationString(recipe: Recipe) {
-    switch(recipe.duration_unit) {
-        case "minutes":
-            return "Minuten";
-        case "hours":
-            return "Stunden";
-        case "days":
-            return "Tage";
+export function getCurrencySymbol(currency: string) {
+    switch (currency) {
+        case "USD":
+            return "$";
+        case "EUR":
+            return "€";
+        case "JPY":
+            return "¥";
+        case "GBP":
+            return "£";
+        default:
+            return currency;
     }
-    return recipe.duration_unit ?? "";
 }

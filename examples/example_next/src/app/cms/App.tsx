@@ -1,9 +1,9 @@
+"use client";
 import React, { useCallback } from "react";
 
 import "@/app/common/index.css"
-import "@fontsource/montserrat";
-import "@fontsource/poppins";
-import "@fontsource/playfair-display";
+import "typeface-rubik";
+import "@fontsource/inter";
 import "@fontsource/jetbrains-mono";
 
 import {
@@ -31,23 +31,19 @@ import {
     useInitialiseFirebase
 } from "@firecms/firebase";
 
-import { firebaseConfig } from "./firebase_config";
+import { firebaseConfig } from "../common/firebase";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
 import { useImportPlugin } from "@firecms/data_import";
 import { useExportPlugin } from "@firecms/data_export";
-import logo from "@/app/common/toleroo_logo.png";
-import { recipesCollection } from "./collections/recipes";
-import { intolerancesCollection } from "./collections/intolerances";
-import { ingredientsCollection } from "./collections/ingredients";
-import { usersCollection } from "./collections/users";
-import { surveysCollection } from "@/app/cms/collections/surveys";
-import { authorsCollection } from "./collections/authors";
+import logo from "@/app/common/logo.svg";
+import { productsCollection } from "./collections/products";
+import { blogCollection } from "@/app/cms/collections/blog";
 
 
 export function App() {
 
-    const title = "Toleroo CMS";
+    const title = "FireCMS E-commerce demo";
 
     if (!firebaseConfig?.projectId) {
         throw new Error("Firebase config not found. Please check your `firebase_config.ts` file and make sure it is correctly set up.");
@@ -59,18 +55,13 @@ export function App() {
         configError
     } = useInitialiseFirebase({
         firebaseConfig,
-        name: "Toleroo CMS",
+        name: "FireCMS",
     });
-
 
     const collectionsBuilder = useCallback(() => {
         return [
-            recipesCollection,
-            authorsCollection,
-            ingredientsCollection,
-            intolerancesCollection,
-            usersCollection,
-            surveysCollection
+            productsCollection,
+            blogCollection
         ];
     }, []);
 
@@ -132,7 +123,7 @@ export function App() {
         canAccessMainView,
         notAllowedError
     } = useValidateAuthenticator({
-        authController,
+        authController: userManagement,
         disabled: userManagement.loading,
         authenticator: () => true,// TODO
         // authenticator: userManagement.authenticator, // you can define your own authenticator here
@@ -154,7 +145,7 @@ export function App() {
      */
     const dataEnhancementPlugin = useDataEnhancementPlugin({
         getConfigForPath: ({ path }) => {
-            if (path === "recipes")
+            if (path === "products")
                 return true;
             return false;
         }
@@ -186,7 +177,7 @@ export function App() {
 
                 <FireCMS
                     navigationController={navigationController}
-                    authController={authController}
+                    authController={userManagement}
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
@@ -214,7 +205,7 @@ export function App() {
                                             allowSkipLogin={false}
                                             signInOptions={signInOptions}
                                             firebaseApp={firebaseApp}
-                                            authController={authController}
+                                            authController={userManagement}
                                             notAllowedError={notAllowedError}/>
                                     </div>
 

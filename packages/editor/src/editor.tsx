@@ -1,11 +1,25 @@
 "use client";
 import React, { useDeferredValue, useEffect, useMemo, useState } from "react";
 
-import { Underline } from "@tiptap/extension-underline";
+import { cls, defaultBorderMixin, Separator, useInjectStyles } from "@firecms/ui";
+
+import { Editor, EditorProvider, Extensions } from "@tiptap/react";
+import Document from "@tiptap/extension-document";
+import { Markdown } from "tiptap-markdown";
+import Underline from "@tiptap/extension-underline";
+import OrderedList from "@tiptap/extension-ordered-list";
+import BulletList from "@tiptap/extension-bullet-list";
+import Heading from "@tiptap/extension-heading";
 import TextStyle from "@tiptap/extension-text-style";
-import { Color } from "@tiptap/extension-color";
-import BulletList from "@tiptap/extension-bullet-list"
+import BlockQuote from "@tiptap/extension-blockquote";
+import CodeBlock from "@tiptap/extension-code-block";
+import Color from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
+import Bold from "@tiptap/extension-bold";
+import Italic from "@tiptap/extension-italic";
+import Code from "@tiptap/extension-code";
+import Strike from "@tiptap/extension-strike";
+
 
 import { EditorBubble, type JSONContent } from "./components";
 
@@ -13,28 +27,16 @@ import { NodeSelector } from "./selectors/node-selector";
 import { LinkSelector } from "./selectors/link-selector";
 import { TextButtons } from "./selectors/text-buttons";
 
-import { Button, cls, defaultBorderMixin, Separator, useInjectStyles } from "@firecms/ui";
-import { Editor, EditorProvider, Extensions } from "@tiptap/react";
 import { removeClassesFromJson } from "./utils/remove_classes";
-import {
-    horizontalRule,
-    placeholder,
-    starterKit,
-    taskItem,
-    taskList,
-    tiptapLink
-} from "./editor_extensions";
+import { horizontalRule, placeholder, starterKit, taskItem, taskList, tiptapLink } from "./editor_extensions";
 import { createDropImagePlugin, createImageExtension } from "./extensions/Image";
 import { CustomKeymap } from "./extensions/custom-keymap";
 import { DragAndDrop } from "./extensions/drag-and-drop";
-import Document from "@tiptap/extension-document"
-import { SlashCommand, suggestion } from "./extensions/slashCommand";
 import { EditorAIController } from "./types";
 import TextLoadingDecorationExtension from "./extensions/TextLoadingDecorationExtension";
 import { HighlightDecorationExtension } from "./extensions/HighlightDecorationExtension";
-import { CustomBlock } from "./extensions/CustomBlockComponent";
-import { CustomComponent } from "./SampleCustomComponent";
-import { Markdown } from "tiptap-markdown";
+
+import { SlashCommand, suggestion } from "./extensions/slashCommand";
 
 export type FireCMSEditorTextSize = "sm" | "base" | "lg";
 
@@ -58,9 +60,9 @@ export type CustomEditorComponent = {
 };
 
 // custom components need to be able to display and update the editor content
-export type CustomEditorComponentProps = {
-
-};
+// export type CustomEditorComponentProps = {
+//
+// };
 
 const CustomDocument = Document.extend({
     // content: 'heading block*',
@@ -138,12 +140,18 @@ export const FireCMSEditor = ({
     const proseClass = proseClasses[textSize];
 
     const extensions:Extensions = useMemo(() => ([
-        starterKit,
+        starterKit as any,
         CustomDocument,
         HighlightDecorationExtension(highlight),
         TextLoadingDecorationExtension,
         Underline,
+        Bold,
+        BlockQuote,
         TextStyle,
+        CodeBlock,
+        Italic,
+        Code,
+        Strike,
         Color,
         Highlight.configure({
             multicolor: true
@@ -152,6 +160,9 @@ export const FireCMSEditor = ({
         //     component: CustomComponent,
         //     delimiter: "```custom"
         // }),
+        Heading,
+        OrderedList,
+        BulletList,
         CustomKeymap,
         DragAndDrop,
         placeholder,
@@ -160,7 +171,7 @@ export const FireCMSEditor = ({
         taskList,
         taskItem,
         Markdown.configure({
-            html: true,
+            html: true
         }),
         horizontalRule,
         SlashCommand.configure({
