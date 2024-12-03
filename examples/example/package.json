@@ -15,7 +15,6 @@
     "@firecms/ui": "^3.0.0-canary.156",
     "@firecms/user_management": "^3.0.0-canary.156",
     "@fontsource/jetbrains-mono": "^5.1.1",
-    "@radix-ui/react-portal": "^1.1.2",
     "clsx": "^2.1.1",
     "firebase": "^10.14.1",
     "react": "^18.3.1",
@@ -47,8 +46,8 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.15",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "18.3.1",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.1",
     "@typescript-eslint/eslint-plugin": "^8.17.0",
     "@typescript-eslint/parser": "^8.17.0",
     "@vitejs/plugin-react": "^4.3.4",

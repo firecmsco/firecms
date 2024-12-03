@@ -71,7 +71,7 @@
     "@docusaurus/types": "latest",
     "@firecms/cloud": "link:../packages/firecms_cloud",
     "@tsconfig/docusaurus": "^2.0.3",
-    "@types/react": "^18.3.12",
+    "@types/react": "^18.3.11",
     "@types/react-helmet": "^6.1.11",
     "@types/react-router-dom": "^5.3.3",
     "docusaurus-plugin-sass": "^0.2.5",

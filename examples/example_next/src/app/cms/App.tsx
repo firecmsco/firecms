@@ -125,8 +125,7 @@ export function App() {
     } = useValidateAuthenticator({
         authController: userManagement,
         disabled: userManagement.loading,
-        authenticator: () => true,// TODO
-        // authenticator: userManagement.authenticator, // you can define your own authenticator here
+        authenticator: userManagement.authenticator, // you can define your own authenticator here
         dataSourceDelegate: firestoreDelegate,
         storageSource
     });

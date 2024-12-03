@@ -2650,7 +2650,7 @@ __metadata:
     execa: ^4.1.0
     form-data: ^4.0.1
     googleapis: ^144.0.0
-    inquirer: ^7.3.3
+    inquirer: ^12.1.0
     json5: ^2.2.3
     listr: ^0.14.3
     ncp: ^2.0.0
@@ -2685,7 +2685,7 @@ __metadata:
     "@firecms/schema_inference": ^3.0.0-canary.156
     "@firecms/user_management": ^3.0.0-canary.156
     "@types/node": ^20.17.9
-    "@types/react": ^18.3.12
+    "@types/react": ^18.3.11
     "@types/react-dom": ^18.3.1
     babel-plugin-react-compiler: beta
     eslint-plugin-react-compiler: beta
@@ -2713,7 +2713,7 @@ __metadata:
     "@firecms/schema_inference": ^3.0.0-canary.156
     "@firecms/ui": ^3.0.0-canary.156
     "@jest/globals": ^29.7.0
-    "@types/react": ^18.3.12
+    "@types/react": ^18.3.11
     "@types/react-dom": ^18.3.1
     "@vitejs/plugin-react": ^4.3.4
     babel-plugin-react-compiler: beta
@@ -2729,8 +2729,8 @@ __metadata:
   peerDependencies:
     react: ^18.3.1
     react-dom: ^18.3.1
-    react-router: ^6.25.1
-    react-router-dom: ^6.25.1
+    react-router: ^6.28.0
+    react-router-dom: ^6.28.0
   languageName: unknown
   linkType: soft
 
@@ -2742,7 +2742,7 @@ __metadata:
     "@firecms/core": ^3.0.0-canary.156
     "@firecms/firebase": ^3.0.0-canary.156
     "@types/node": ^20.17.9
-    "@types/react": ^18.3.12
+    "@types/react": ^18.3.11
     "@types/react-dom": ^18.3.1
     babel-plugin-react-compiler: beta
     eslint-plugin-react-compiler: beta
@@ -2770,7 +2770,7 @@ __metadata:
     "@types/jest": ^29.5.14
     "@types/node": ^20.17.9
     "@types/object-hash": ^3.0.6
-    "@types/react": ^18.3.12
+    "@types/react": ^18.3.11
     "@types/react-dom": ^18.3.1
     "@types/react-measure": ^2.0.12
     "@vitejs/plugin-react": ^4.3.4
@@ -2805,8 +2805,8 @@ __metadata:
     firebase: ^10.5.2
     react: ^18.3.1
     react-dom: ^18.3.1
-    react-router: ^6.25.1
-    react-router-dom: ^6.25.1
+    react-router: ^6.28.0
+    react-router-dom: ^6.28.0
   languageName: unknown
   linkType: soft
 
@@ -2818,7 +2818,7 @@ __metadata:
     "@firecms/editor": ^3.0.0-canary.156
     "@testing-library/jest-dom": ^6.6.3
     "@types/jest": ^29.5.14
-    "@types/react": ^18.3.12
+    "@types/react": ^18.3.11
     "@types/react-dom": ^18.3.1
     "@vitejs/plugin-react": ^4.3.4
     babel-jest: ^29.7.0
@@ -2832,8 +2832,8 @@ __metadata:
     firebase: ^10.5.2
     react: ^18.3.1
     react-dom: ^18.3.1
-    react-router: ^6.25.1
-    react-router-dom: ^6.25.1
+    react-router: ^6.28.0
+    react-router-dom: ^6.28.0
   languageName: unknown
   linkType: soft
 
@@ -2848,7 +2848,7 @@ __metadata:
     "@jest/globals": ^29.7.0
     "@testing-library/jest-dom": ^6.6.3
     "@types/jest": ^29.5.14
-    "@types/react": ^18.3.12
+    "@types/react": ^18.3.11
     "@types/react-dom": ^18.3.1
     "@vitejs/plugin-react": ^4.3.4
     babel-jest: ^29.7.0
@@ -2862,8 +2862,8 @@ __metadata:
     firebase: ^10.12.2
     react: ^18.3.1
     react-dom: ^18.3.1
-    react-router: ^6.25.1
-    react-router-dom: ^6.25.1
+    react-router: ^6.28.0
+    react-router-dom: ^6.28.0
   languageName: unknown
   linkType: soft
 
@@ -2878,7 +2878,7 @@ __metadata:
     "@jest/globals": ^29.7.0
     "@testing-library/jest-dom": ^6.6.3
     "@types/jest": ^29.5.14
-    "@types/react": ^18.3.12
+    "@types/react": ^18.3.11
     "@types/react-dom": ^18.3.1
     "@vitejs/plugin-react": ^4.3.4
     babel-jest: ^29.7.0
@@ -2893,8 +2893,8 @@ __metadata:
     firebase: ^10.12.2
     react: ^18.3.1
     react-dom: ^18.3.1
-    react-router: ^6.25.1
-    react-router-dom: ^6.25.1
+    react-router: ^6.28.0
+    react-router-dom: ^6.28.0
   languageName: unknown
   linkType: soft
 
@@ -2908,7 +2908,7 @@ __metadata:
     "@jest/globals": ^29.7.0
     "@testing-library/jest-dom": ^6.6.3
     "@types/jest": ^29.5.14
-    "@types/react": ^18.3.12
+    "@types/react": ^18.3.11
     "@types/react-dom": ^18.3.1
     "@vitejs/plugin-react": ^4.3.4
     babel-jest: ^29.7.0
@@ -2920,8 +2920,8 @@ __metadata:
     firebase: ^10.12.2
     react: ^18.3.1
     react-dom: ^18.3.1
-    react-router: ^6.25.1
-    react-router-dom: ^6.25.1
+    react-router: ^6.28.0
+    react-router-dom: ^6.28.0
   languageName: unknown
   linkType: soft
 
@@ -2940,8 +2940,8 @@ __metadata:
     "@firecms/ui": ^3.0.0-canary.156
     "@monaco-editor/react": ^4.6.0
     "@types/node": 20.17.9
-    "@types/react": ^18.3.12
-    "@types/react-dom": 18.3.1
+    "@types/react": ^18.3.11
+    "@types/react-dom": ^18.3.1
     typescript: ^5.7.2
     vite: ^5.4.11
   peerDependencies:
@@ -2983,7 +2983,7 @@ __metadata:
     "@tiptap/starter-kit": 2.10.3
     "@tiptap/suggestion": 2.10.3
     "@types/node": 20.17.9
-    "@types/react": ^18.3.12
+    "@types/react": ^18.3.11
     "@types/react-dom": ^18.3.1
     "@types/react-measure": ^2.0.12
     "@vitejs/plugin-react": ^4.3.4
@@ -3019,7 +3019,7 @@ __metadata:
     "@firecms/schema_inference": ^3.0.0-canary.156
     "@firecms/ui": ^3.0.0-canary.156
     "@types/node": ^20.17.9
-    "@types/react": ^18.3.12
+    "@types/react": ^18.3.11
     "@types/react-dom": ^18.3.1
     babel-plugin-react-compiler: beta
     eslint-plugin-react-compiler: beta
@@ -3041,7 +3041,7 @@ __metadata:
     "@jest/globals": ^29.7.0
     "@types/jest": ^29.5.14
     "@types/node": ^20.17.9
-    "@types/react": ^18.3.12
+    "@types/react": ^18.3.11
     "@types/react-dom": ^18.3.1
     babel-plugin-react-compiler: beta
     eslint-plugin-react-compiler: beta
@@ -3113,7 +3113,7 @@ __metadata:
     "@types/jest": ^29.5.14
     "@types/node": ^20.17.9
     "@types/object-hash": ^3.0.6
-    "@types/react": ^18.3.12
+    "@types/react": ^18.3.11
     "@types/react-dom": ^18.3.1
     "@types/react-measure": ^2.0.12
     "@vitejs/plugin-react": ^4.3.4
@@ -3151,7 +3151,7 @@ __metadata:
     "@firecms/formex": ^3.0.0-canary.156
     "@firecms/ui": ^3.0.0-canary.156
     "@types/node": ^20.17.9
-    "@types/react": ^18.3.12
+    "@types/react": ^18.3.11
     "@types/react-dom": ^18.3.1
     babel-plugin-react-compiler: beta
     date-fns: ^3.6.0
@@ -3503,6 +3503,191 @@ __metadata:
   version: 0.33.5
   resolution: "@img/sharp-win32-x64@npm:0.33.5"
   conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@inquirer/checkbox@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "@inquirer/checkbox@npm:4.0.2"
+  dependencies:
+    "@inquirer/core": ^10.1.0
+    "@inquirer/figures": ^1.0.8
+    "@inquirer/type": ^3.0.1
+    ansi-escapes: ^4.3.2
+    yoctocolors-cjs: ^2.1.2
+  peerDependencies:
+    "@types/node": ">=18"
+  checksum: 3c7d125346e44a74303b4df6a6756325a196ce1e540c1612bbd899a6fcba24ad9999390bcf5a524a37fe8034d24963cb110b7a66dfadd33ef0c3c8d8d8eff6be
+  languageName: node
+  linkType: hard
+
+"@inquirer/confirm@npm:^5.0.2":
+  version: 5.0.2
+  resolution: "@inquirer/confirm@npm:5.0.2"
+  dependencies:
+    "@inquirer/core": ^10.1.0
+    "@inquirer/type": ^3.0.1
+  peerDependencies:
+    "@types/node": ">=18"
+  checksum: 4e775b80b689adeb0b2852ed79b368ef23a82fe3d5f580a562f4af7cdf002a19e0ec1b3b95acc6d49427a72c0fcb5b6548e0cdcafe2f0d3f3d6a923e04aabd0c
+  languageName: node
+  linkType: hard
+
+"@inquirer/core@npm:^10.1.0":
+  version: 10.1.0
+  resolution: "@inquirer/core@npm:10.1.0"
+  dependencies:
+    "@inquirer/figures": ^1.0.8
+    "@inquirer/type": ^3.0.1
+    ansi-escapes: ^4.3.2
+    cli-width: ^4.1.0
+    mute-stream: ^2.0.0
+    signal-exit: ^4.1.0
+    strip-ansi: ^6.0.1
+    wrap-ansi: ^6.2.0
+    yoctocolors-cjs: ^2.1.2
+  checksum: c52be9ef04497a2b82ed6b1258ebd24ad0950b4b83a96e6fbde1a801eeced4e4b32ed5b2217eac98e504cc1d16ddc8d9d39243c96bdb5390ff13629b28c96591
+  languageName: node
+  linkType: hard
+
+"@inquirer/editor@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@inquirer/editor@npm:4.1.0"
+  dependencies:
+    "@inquirer/core": ^10.1.0
+    "@inquirer/type": ^3.0.1
+    external-editor: ^3.1.0
+  peerDependencies:
+    "@types/node": ">=18"
+  checksum: b529b1d6614df4fd2d9336231c7e4bcb4a708a43004e26ff89022976155b2079b8c48f7adf0b9237d9ab5040dbca2e38c8fbcbbd7c02d6837c43eb3d39ab68c9
+  languageName: node
+  linkType: hard
+
+"@inquirer/expand@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "@inquirer/expand@npm:4.0.2"
+  dependencies:
+    "@inquirer/core": ^10.1.0
+    "@inquirer/type": ^3.0.1
+    yoctocolors-cjs: ^2.1.2
+  peerDependencies:
+    "@types/node": ">=18"
+  checksum: 9c5f2e01bf12684bddb4ce88c6afbf41bf8b9057ac17565173b2225d691aad0e044be204e21ecedd5cc76907af76ab34678a2d519c890cf0ea3a1a83473faa12
+  languageName: node
+  linkType: hard
+
+"@inquirer/figures@npm:^1.0.8":
+  version: 1.0.8
+  resolution: "@inquirer/figures@npm:1.0.8"
+  checksum: 24c5c70f49a5f0e9d38f5552fb6936c258d2fc545f6a4944b17ba357c9ca4a729e8cffd77666971554ebc2a57948cfe5003331271a259c406b3f2de0e9c559b7
+  languageName: node
+  linkType: hard
+
+"@inquirer/input@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "@inquirer/input@npm:4.0.2"
+  dependencies:
+    "@inquirer/core": ^10.1.0
+    "@inquirer/type": ^3.0.1
+  peerDependencies:
+    "@types/node": ">=18"
+  checksum: 06ec535b90ebfc230b616df6f5058fdea9fdd00c9b965448c5d569fea7d76b67e8ad6427e0aa16d2b31c107f0e9a5ef93ac3224da59ff2e11b5fecfa2987e10e
+  languageName: node
+  linkType: hard
+
+"@inquirer/number@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "@inquirer/number@npm:3.0.2"
+  dependencies:
+    "@inquirer/core": ^10.1.0
+    "@inquirer/type": ^3.0.1
+  peerDependencies:
+    "@types/node": ">=18"
+  checksum: 51ae9b28607d1932768362cac1690e16db9f1fc8919c1c3c3faff165d035ec87e451a360c8458f3a9599879505641fe1946df6098c534d4439de98825bed0934
+  languageName: node
+  linkType: hard
+
+"@inquirer/password@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "@inquirer/password@npm:4.0.2"
+  dependencies:
+    "@inquirer/core": ^10.1.0
+    "@inquirer/type": ^3.0.1
+    ansi-escapes: ^4.3.2
+  peerDependencies:
+    "@types/node": ">=18"
+  checksum: 69dc3986098cdfb4ed73653b690f7db7d88e483fdd9026b7308d1f6ff1208e5a7599f8c49910735e1fd8008fb367a9bf8f0ff80e7551831c6de15733980277af
+  languageName: node
+  linkType: hard
+
+"@inquirer/prompts@npm:^7.1.0":
+  version: 7.1.0
+  resolution: "@inquirer/prompts@npm:7.1.0"
+  dependencies:
+    "@inquirer/checkbox": ^4.0.2
+    "@inquirer/confirm": ^5.0.2
+    "@inquirer/editor": ^4.1.0
+    "@inquirer/expand": ^4.0.2
+    "@inquirer/input": ^4.0.2
+    "@inquirer/number": ^3.0.2
+    "@inquirer/password": ^4.0.2
+    "@inquirer/rawlist": ^4.0.2
+    "@inquirer/search": ^3.0.2
+    "@inquirer/select": ^4.0.2
+  peerDependencies:
+    "@types/node": ">=18"
+  checksum: b44f4b3ce923bb1824be37676aa85a54fe921bc1147ffa57df9a8b83d0b0bc2a9e257109170e216121add82f4d45a4556f37360ede0083f3e7e553fc93b26b77
+  languageName: node
+  linkType: hard
+
+"@inquirer/rawlist@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "@inquirer/rawlist@npm:4.0.2"
+  dependencies:
+    "@inquirer/core": ^10.1.0
+    "@inquirer/type": ^3.0.1
+    yoctocolors-cjs: ^2.1.2
+  peerDependencies:
+    "@types/node": ">=18"
+  checksum: 942cd87d217659ecb304c266a8ec186e7de03a523ed2eaac5fe8458ab7b48ac884f1383e41c83231af1b68c1a2e448448234495ab06477ce0900421723c15d1d
+  languageName: node
+  linkType: hard
+
+"@inquirer/search@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "@inquirer/search@npm:3.0.2"
+  dependencies:
+    "@inquirer/core": ^10.1.0
+    "@inquirer/figures": ^1.0.8
+    "@inquirer/type": ^3.0.1
+    yoctocolors-cjs: ^2.1.2
+  peerDependencies:
+    "@types/node": ">=18"
+  checksum: 1fc45dc6ca97a604ebf51739f6cf3c5fe48365cb2dccf5451d43ddf2dc5b661c2a4574c422128485cf53d6a49918cf8ea00f91562f8e4c2358937cddbc882bca
+  languageName: node
+  linkType: hard
+
+"@inquirer/select@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "@inquirer/select@npm:4.0.2"
+  dependencies:
+    "@inquirer/core": ^10.1.0
+    "@inquirer/figures": ^1.0.8
+    "@inquirer/type": ^3.0.1
+    ansi-escapes: ^4.3.2
+    yoctocolors-cjs: ^2.1.2
+  peerDependencies:
+    "@types/node": ">=18"
+  checksum: 2d099c64e97453f6124d0d0074dd363280914488d53298dcd4c2b83a38569b20e49b4a260eed5b44d4c929c0fa36283f4063bf8f6755fe9b3bb1d373cecc54e8
+  languageName: node
+  linkType: hard
+
+"@inquirer/type@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@inquirer/type@npm:3.0.1"
+  peerDependencies:
+    "@types/node": ">=18"
+  checksum: af412f1e7541d43554b02199ae71a2039a1bff5dc51ceefd87de9ece55b199682733b28810fb4b6cb3ed4a159af4cc4a26d4bb29c58dd127e7d9dbda0797d8e7
   languageName: node
   linkType: hard
 
@@ -7002,7 +7187,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:18.3.1, @types/react-dom@npm:^18.3.1":
+"@types/react-dom@npm:^18.3.1":
   version: 18.3.1
   resolution: "@types/react-dom@npm:18.3.1"
   dependencies:
@@ -7020,7 +7205,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:18.3.12, @types/react@npm:^18.3.12":
+"@types/react@npm:*, @types/react@npm:18.3.12, @types/react@npm:^18.3.11":
   version: 18.3.12
   resolution: "@types/react@npm:18.3.12"
   dependencies:
@@ -7519,7 +7704,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansi-escapes@npm:^4.2.1":
+"ansi-escapes@npm:^4.2.1, ansi-escapes@npm:^4.3.2":
   version: 4.3.2
   resolution: "ansi-escapes@npm:4.3.2"
   dependencies:
@@ -8015,7 +8200,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-babel-plugin-react-compiler@beta:
+"babel-plugin-react-compiler@npm:beta":
   version: 19.0.0-beta-df7b47d-20241124
   resolution: "babel-plugin-react-compiler@npm:19.0.0-beta-df7b47d-20241124"
   dependencies:
@@ -8363,17 +8548,10 @@ babel-plugin-react-compiler@beta:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.30001579":
+"caniuse-lite@npm:^1.0.30001579, caniuse-lite@npm:^1.0.30001646, caniuse-lite@npm:^1.0.30001669":
   version: 1.0.30001686
   resolution: "caniuse-lite@npm:1.0.30001686"
   checksum: 9c8a0ce38ec201d5d7039ebd6da548cbda19c67f1449e2a1dd831a9ff6f1f92048e2896899bbc07795b39cfbdc895225393d89e3af97874865f3a0ea9cf680a8
-  languageName: node
-  linkType: hard
-
-"caniuse-lite@npm:^1.0.30001646, caniuse-lite@npm:^1.0.30001669":
-  version: 1.0.30001685
-  resolution: "caniuse-lite@npm:1.0.30001685"
-  checksum: 5926f672d985b43b62825e971a12881c33ca1989d1b26fe3c0daf5a834b63c2470f7dd78b883fbd334b4b69c6a56e9893e14b58b86028a3de7a452a1ea6a58e4
   languageName: node
   linkType: hard
 
@@ -8596,6 +8774,13 @@ babel-plugin-react-compiler@beta:
   version: 3.0.0
   resolution: "cli-width@npm:3.0.0"
   checksum: 4c94af3769367a70e11ed69aa6095f1c600c0ff510f3921ab4045af961820d57c0233acfa8b6396037391f31b4c397e1f614d234294f979ff61430a6c166c3f6
+  languageName: node
+  linkType: hard
+
+"cli-width@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "cli-width@npm:4.1.0"
+  checksum: 0a79cff2dbf89ef530bcd54c713703ba94461457b11e5634bd024c78796ed21401e32349c004995954e06f442d82609287e7aabf6a5f02c919a1cf3b9b6854ff
   languageName: node
   linkType: hard
 
@@ -9526,9 +9711,9 @@ babel-plugin-react-compiler@beta:
   linkType: hard
 
 "dotenv@npm:^16.4.5, dotenv@npm:~16.4.5":
-  version: 16.4.5
-  resolution: "dotenv@npm:16.4.5"
-  checksum: 301a12c3d44fd49888b74eb9ccf9f07a1f5df43f489e7fcb89647a2edcd84c42d6bc349dc8df099cd18f07c35c7b04685c1a4f3e6a6a9e6b30f8d48c15b7f49c
+  version: 16.4.7
+  resolution: "dotenv@npm:16.4.7"
+  checksum: c27419b5875a44addcc56cc69b7dc5b0e6587826ca85d5b355da9303c6fc317fc9989f1f18366a16378c9fdd9532d14117a1abe6029cc719cdbbef6eaef2cea4
   languageName: node
   linkType: hard
 
@@ -10187,7 +10372,7 @@ babel-plugin-react-compiler@beta:
   languageName: node
   linkType: hard
 
-eslint-plugin-react-compiler@beta:
+"eslint-plugin-react-compiler@npm:beta":
   version: 19.0.0-beta-df7b47d-20241124
   resolution: "eslint-plugin-react-compiler@npm:19.0.0-beta-df7b47d-20241124"
   dependencies:
@@ -10541,7 +10726,7 @@ eslint-plugin-react-compiler@beta:
   languageName: node
   linkType: hard
 
-"external-editor@npm:^3.0.3":
+"external-editor@npm:^3.0.3, external-editor@npm:^3.1.0":
   version: 3.1.0
   resolution: "external-editor@npm:3.1.0"
   dependencies:
@@ -10719,7 +10904,7 @@ eslint-plugin-react-compiler@beta:
   languageName: node
   linkType: hard
 
-"firebase@npm:^10, firebase@npm:^10.14.1":
+"firebase@npm:^10.14.1":
   version: 10.14.1
   resolution: "firebase@npm:10.14.1"
   dependencies:
@@ -10764,7 +10949,7 @@ eslint-plugin-react-compiler@beta:
     "@originjs/vite-plugin-federation": ^1.3.6
     "@tailwindcss/typography": ^0.5.15
     "@types/react": 18.3.12
-    "@types/react-dom": 18.3.1
+    "@types/react-dom": ^18.3.1
     "@vitejs/plugin-react": ^4.3.4
     autoprefixer: ^10.4.20
     firebase: ^10.14.1
@@ -10799,16 +10984,16 @@ eslint-plugin-react-compiler@beta:
     "@fontsource/poppins": ^5.1.0
     "@tailwindcss/typography": ^0.5.15
     "@types/node": ^20.17.9
-    "@types/react": ^18.3.12
+    "@types/react": ^18.3.11
     "@types/react-dom": ^18.3.1
     eslint: ^9.16.0
     eslint-config-next: 15.0.3
-    firebase: ^10
+    firebase: ^10.14.1
     next: 15.0.3
     nextjs-toploader: ^3.7.15
     postcss: ^8.4.49
-    react: 18.3.1
-    react-dom: 18.3.1
+    react: ^18.3.1
+    react-dom: ^18.3.1
     react-router: ^6.28.0
     react-router-dom: ^6.28.0
     tailwindcss: ^3.4.15
@@ -10838,8 +11023,8 @@ eslint-plugin-react-compiler@beta:
     "@fontsource/noto-serif": ^5.1.0
     "@supabase/supabase-js": ^2.46.2
     "@tailwindcss/typography": ^0.5.15
-    "@types/react": ^18.3.12
-    "@types/react-dom": 18.3.1
+    "@types/react": ^18.3.11
+    "@types/react-dom": ^18.3.1
     "@typescript-eslint/eslint-plugin": ^8.17.0
     "@typescript-eslint/parser": ^8.17.0
     "@vitejs/plugin-react": ^4.3.4
@@ -10885,10 +11070,9 @@ eslint-plugin-react-compiler@beta:
     "@firecms/ui": ^3.0.0-canary.156
     "@firecms/user_management": ^3.0.0-canary.156
     "@fontsource/jetbrains-mono": ^5.1.1
-    "@radix-ui/react-portal": ^1.1.2
     "@tailwindcss/typography": ^0.5.15
-    "@types/react": ^18.3.12
-    "@types/react-dom": 18.3.1
+    "@types/react": ^18.3.11
+    "@types/react-dom": ^18.3.1
     "@typescript-eslint/eslint-plugin": ^8.17.0
     "@typescript-eslint/parser": ^8.17.0
     "@vitejs/plugin-react": ^4.3.4
@@ -11948,24 +12132,20 @@ eslint-plugin-react-compiler@beta:
   languageName: node
   linkType: hard
 
-"inquirer@npm:^7.3.3":
-  version: 7.3.3
-  resolution: "inquirer@npm:7.3.3"
+"inquirer@npm:^12.1.0":
+  version: 12.1.0
+  resolution: "inquirer@npm:12.1.0"
   dependencies:
-    ansi-escapes: ^4.2.1
-    chalk: ^4.1.0
-    cli-cursor: ^3.1.0
-    cli-width: ^3.0.0
-    external-editor: ^3.0.3
-    figures: ^3.0.0
-    lodash: ^4.17.19
-    mute-stream: 0.0.8
-    run-async: ^2.4.0
-    rxjs: ^6.6.0
-    string-width: ^4.1.0
-    strip-ansi: ^6.0.0
-    through: ^2.3.6
-  checksum: 4d387fc1eb6126acbd58cbdb9ad99d2887d181df86ab0c2b9abdf734e751093e2d5882c2b6dc7144d9ab16b7ab30a78a1d7f01fb6a2850a44aeb175d1e3f8778
+    "@inquirer/core": ^10.1.0
+    "@inquirer/prompts": ^7.1.0
+    "@inquirer/type": ^3.0.1
+    ansi-escapes: ^4.3.2
+    mute-stream: ^2.0.0
+    run-async: ^3.0.0
+    rxjs: ^7.8.1
+  peerDependencies:
+    "@types/node": ">=18"
+  checksum: 1a015d488009b423c950c23134f7ab43b3d5ee0cf27dc7669e6b778564cb8793d18325800f94bb1dbbb20be6bdc5dc9106eae07c185bcdfa9e0d3efa3677d904
   languageName: node
   linkType: hard
 
@@ -13551,9 +13731,9 @@ eslint-plugin-react-compiler@beta:
   linkType: hard
 
 "lilconfig@npm:^3.0.0":
-  version: 3.1.2
-  resolution: "lilconfig@npm:3.1.2"
-  checksum: 4e8b83ddd1d0ad722600994e6ba5d858ddca14f0587aa6b9c8185e17548149b5e13d4d583d811e9e9323157fa8c6a527e827739794c7502b59243c58e210b8c3
+  version: 3.1.3
+  resolution: "lilconfig@npm:3.1.3"
+  checksum: 644eb10830350f9cdc88610f71a921f510574ed02424b57b0b3abb66ea725d7a082559552524a842f4e0272c196b88dfe1ff7d35ffcc6f45736777185cd67c9a
   languageName: node
   linkType: hard
 
@@ -13749,7 +13929,7 @@ eslint-plugin-react-compiler@beta:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.19, lodash@npm:^4.17.21":
+"lodash@npm:^4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
@@ -14689,6 +14869,13 @@ eslint-plugin-react-compiler@beta:
   version: 1.0.0
   resolution: "mute-stream@npm:1.0.0"
   checksum: 36fc968b0e9c9c63029d4f9dc63911950a3bdf55c9a87f58d3a266289b67180201cade911e7699f8b2fa596b34c9db43dad37649e3f7fdd13c3bb9edb0017ee7
+  languageName: node
+  linkType: hard
+
+"mute-stream@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "mute-stream@npm:2.0.0"
+  checksum: d2e4fd2f5aa342b89b98134a8d899d8ef9b0a6d69274c4af9df46faa2d97aeb1f2ce83d867880d6de63643c52386579b99139801e24e7526c3b9b0a6d1e18d6c
   languageName: node
   linkType: hard
 
@@ -16391,7 +16578,7 @@ eslint-plugin-react-compiler@beta:
   languageName: node
   linkType: hard
 
-"react-dom@npm:18.3.1, react-dom@npm:^18.3.1":
+"react-dom@npm:^18.3.1":
   version: 18.3.1
   resolution: "react-dom@npm:18.3.1"
   dependencies:
@@ -16665,7 +16852,7 @@ eslint-plugin-react-compiler@beta:
   languageName: node
   linkType: hard
 
-"react@npm:18.3.1, react@npm:^18.3.1":
+"react@npm:^18.3.1":
   version: 18.3.1
   resolution: "react@npm:18.3.1"
   dependencies:
@@ -17198,6 +17385,13 @@ eslint-plugin-react-compiler@beta:
   languageName: node
   linkType: hard
 
+"run-async@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "run-async@npm:3.0.0"
+  checksum: 280c03d5a88603f48103fc6fd69f07fb0c392a1e0d319c34ec96a2516030e07ba06f79231a563c78698b882649c2fc1fda601bc84705f57d50efcd1fa506cfc0
+  languageName: node
+  linkType: hard
+
 "run-parallel@npm:^1.1.9":
   version: 1.2.0
   resolution: "run-parallel@npm:1.2.0"
@@ -17207,7 +17401,7 @@ eslint-plugin-react-compiler@beta:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^6.3.3, rxjs@npm:^6.6.0":
+"rxjs@npm:^6.3.3":
   version: 6.6.7
   resolution: "rxjs@npm:6.6.7"
   dependencies:
@@ -17216,7 +17410,7 @@ eslint-plugin-react-compiler@beta:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^7.5.5":
+"rxjs@npm:^7.5.5, rxjs@npm:^7.8.1":
   version: 7.8.1
   resolution: "rxjs@npm:7.8.1"
   dependencies:
@@ -19312,7 +19506,7 @@ eslint-plugin-react-compiler@beta:
   languageName: node
   linkType: hard
 
-"wrap-ansi@npm:^6.0.1":
+"wrap-ansi@npm:^6.0.1, wrap-ansi@npm:^6.2.0":
   version: 6.2.0
   resolution: "wrap-ansi@npm:6.2.0"
   dependencies:
@@ -19520,6 +19714,13 @@ eslint-plugin-react-compiler@beta:
   version: 0.1.0
   resolution: "yocto-queue@npm:0.1.0"
   checksum: f77b3d8d00310def622123df93d4ee654fc6a0096182af8bd60679ddcdfb3474c56c6c7190817c84a2785648cdee9d721c0154eb45698c62176c322fb46fc700
+  languageName: node
+  linkType: hard
+
+"yoctocolors-cjs@npm:^2.1.2":
+  version: 2.1.2
+  resolution: "yoctocolors-cjs@npm:2.1.2"
+  checksum: 1c474d4b30a8c130e679279c5c2c33a0d48eba9684ffa0252cc64846c121fb56c3f25457fef902edbe1e2d7a7872130073a9fc8e795299d75e13fa3f5f548f1b
   languageName: node
   linkType: hard
 

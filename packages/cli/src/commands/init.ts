@@ -78,7 +78,6 @@ ${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
     let options = parseArgumentsIntoOptions(rawArgs);
     const currentUser = await getCurrentUser(options.env, options.debug);
     const mustLogin = ["cloud"].includes(options.template) && !currentUser;
-    const couldLogin = ["pro", "community"].includes(options.template) && !currentUser;
 
     async function promptLogin() {
         await inquirer.prompt([
@@ -104,12 +103,11 @@ ${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
             console.log("The login process was not completed. Exiting...");
             return;
         }
-    } else if (couldLogin) {
-        console.log("You can login to FireCMS Cloud to automatically set up your project, or continue without logging in");
-        await promptLogin();
-
     } else if (currentUser) {
         console.log("You are logged in as", currentUser["email"]);
+    } else {
+        console.log("You can login to FireCMS to automatically set up your project, or continue without logging in");
+        await promptLogin();
     }
 
     options = await promptForMissingOptions(options);
@@ -126,6 +124,7 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
             "--skipInstall": Boolean,
             "--projectId": String,
             "--v2": Boolean,
+            "--cloud": Boolean,
             "--pro": Boolean,
             "--community": Boolean,
             "--debug": Boolean,
@@ -142,9 +141,11 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
         return;
     }
 
-    let template: Template = "cloud";
+    let template: Template;
     if (args["--v2"]) {
         template = "v2";
+    } else if (args["--cloud"]) {
+        template = "cloud";
     } else if (args["--pro"]) {
         template = "pro";
     } else if (args["--community"]) {
@@ -171,11 +172,39 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
     // }
 
     const questions = [];
-    if (options.template !== "v2") {
-        if (options.template === "cloud") {
+
+    let template = options.template;
+    if (!template) {
+        const answers = await inquirer.prompt([
+            {
+                type: "list",
+                name: "template",
+                message: "Choose a template",
+                choices: [
+                    {
+                        name: "FireCMS Cloud " + chalk.gray("(use this option if you access FireCMS from app.firecms.co)"),
+                        value: "cloud"
+                    },
+                    {
+                        name: "FireCMS PRO " + chalk.gray("(self-hosted version with full functionality)"),
+                        value: "pro"
+                    },
+                    {
+                        name: "FireCMS Community " + chalk.gray("(MIT licensed version with limited functionality)"),
+                        value: "community"
+                    }
+                ]
+            }
+        ]);
+        template = answers.template;
+        options.template = template;
+    }
+
+    if (template !== "v2") {
+        if (template === "cloud") {
             questions.push({
                 type: "confirm",
-                name: "existing_firecms_project",
+                name: "existing_cloud_project",
                 message: "Do you already have a FireCMS Cloud project?",
                 default: true
             });
@@ -204,35 +233,40 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
                 });
 
             const fireCMSCloudProjects = projects.filter(project => project["fireCMSProject"]);
-            if (options.template === "cloud" && !fireCMSCloudProjects.length) {
+            if (template === "cloud" && !fireCMSCloudProjects.length) {
                 console.log("No FireCMS projects found. Please make sure you have initialised a FireCMS Cloud project first, in https://app.firecms.co");
                 process.exit(1);
             }
 
-            // console.log({ projects });
             questions.push({
                 type: "list",
                 name: "firebaseProjectId",
                 message: "Select your project",
-                when: (answers) => Boolean(answers.existing_firecms_project) || options.template !== "cloud",
-                choices: projects.map(project => project.projectId)
-            });
-        } else {
-            questions.push({
-                type: "input",
-                name: "firebaseProjectId",
-                message: "Please enter your Firebase project ID",
-                when: (answers) => Boolean(answers.existing_firecms_project) || options.template !== "cloud",
-                default: options.firebaseProjectId
+                when: (answers) => Boolean(answers.existing_cloud_project) || template !== "cloud",
+                choices: [{
+                    name: chalk.gray("Enter project id manually"),
+                    value: "!_-manual"
+                }, ...projects.map(project => ({
+                    name: project.projectId,
+                    value: project.projectId
+                }))]
             });
         }
+
+        questions.push({
+            type: "input",
+            name: "firebaseProjectIdManual",
+            message: "Please enter your Firebase project ID",
+            when: (answers) => !answers.firebaseProjectId || answers.firebaseProjectId === "!_-manual",
+            default: options.firebaseProjectId
+        });
     }
 
     questions.push({
         type: "input",
         name: "dir_name",
         message: "Please choose which folder to create the project in",
-        when: (answers) => Boolean(answers.existing_firecms_project) || options.template !== "cloud",
+        when: (answers) => Boolean(answers.existing_cloud_project) || template !== "cloud",
         default: options.dir_name ?? defaultName
     });
 
@@ -248,7 +282,7 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
 
     const answers = await inquirer.prompt(questions);
 
-    if (options.template === "cloud" && !answers.existing_firecms_project) {
+    if (template === "cloud" && !answers.existing_cloud_project) {
         console.log("Please create a FireCMS Cloud project first. Head to https://app.firecms.co to get started and then run this command again!");
         process.exit(1);
     }
@@ -257,7 +291,7 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
         ...options,
         dir_name: answers.dir_name ?? options.dir_name,
         git: options.git || answers.git,
-        firebaseProjectId: answers.firebaseProjectId
+        firebaseProjectId: answers.firebaseProjectIdManual || answers.firebaseProjectId
     };
 }
 
@@ -345,8 +379,10 @@ export async function createProject(options: InitOptions) {
     } else if (options.template === "pro" || options.template === "community") {
         console.log("Make sure you have a valid Firebase config in ");
         console.log(chalk.cyan.bold("src/firebase_config.ts"));
-        console.log("");
-        console.log(`Also, make sure the user that is logging in has read/write access to the path ${chalk.cyan.bold("__FIRECMS")} in your database `);
+        if (options.template === "pro") {
+            console.log("");
+            console.log(`Also, make sure the user that is logging in has read/write access to the path ${chalk.cyan.bold("__FIRECMS")} in your database `);
+        }
         console.log("");
         console.log("Run:");
         console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
