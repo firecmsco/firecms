@@ -473,7 +473,7 @@ const CommandList = forwardRef((props: {
                         value={item.title}
                         ref={el => {
                             if (!el) return;
-                            return itemRefs.current[index] = el;
+                            itemRefs.current[index] = el;
                         }}
                         onClick={() => selectItem(item)}
                         tabIndex={index === selectedIndex ? 0 : -1}

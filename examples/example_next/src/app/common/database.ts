@@ -1,4 +1,4 @@
-import { firebaseApp } from "./firebase";
+import { firebaseApp, storage } from "./firebase";
 import {
     collection,
     doc,
@@ -10,10 +10,9 @@ import {
     QueryConstraint,
     where
 } from "firebase/firestore";
-import { getDownloadURL, getStorage, ref } from "firebase/storage";
+import { getDownloadURL, ref } from "@firebase/storage";
 import { BlogEntryWithId, ProductWithId } from "@/app/common/types";
 
-const storage = getStorage(firebaseApp);
 
 export const getProducts = async ({
                                       limit = 10,
