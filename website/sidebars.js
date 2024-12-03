@@ -13,7 +13,12 @@ module.exports = {
             "type": "category",
             "label": "FireCMS Cloud  ☁️",
             "collapsed": false,
+            link: {
+                type: "doc",
+                id: "components"
+            },
             "items": [
+                "cloud/intro",
                 "cloud/quickstart",
                 "cloud/app_config",
                 "cloud/deployment",

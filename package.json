@@ -27,6 +27,7 @@
     "packages/editor",
     "examples/example_cloud",
     "examples/example",
+    "examples/example_next",
     "examples/example_pro"
   ],
   "scripts": {

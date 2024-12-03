@@ -199,7 +199,7 @@ export function ProductsListView({
                     <div className={"flex items-center gap-4 h-fit"}>
                         <div className={"flex items-center gap-2"}>
                             {hasFilters && <Chip
-                                className={"hover:bg-gray-200"}
+                                className={"hover:bg-surface-200"}
                                 onClick={() => {
                                     updateCategoriesFilter(undefined);
                                     updatePriceMaxFilter(undefined);
@@ -263,7 +263,7 @@ function CategoriesFilter({ value, setValue }: {
     return (
 
         <div>
-            <div className="text-xs font-medium mb-2 text-slate-500 dark:text-slate-300 uppercase">Category:</div>
+            <div className="text-xs font-medium mb-2 text-surface-accent-500 dark:text-surface-accent-300 uppercase">Category:</div>
             <div className="flex flex-wrap gap-2">
                 {categories.map(category => {
                     const selected = value === category;
@@ -293,7 +293,7 @@ function PriceFilter({ priceMin, priceMax, setPriceMin, setPriceMax }: {
 
     return (
         <div>
-            <div className="text-xs font-medium mb-2 text-slate-500 dark:text-slate-300 uppercase">Price:</div>
+            <div className="text-xs font-medium mb-2 text-surface-accent-500 dark:text-surface-accent-300 uppercase">Price:</div>
             <div className="flex flex-wrap gap-2">
                 <TextField
                     value={priceMin}

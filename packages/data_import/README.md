@@ -83,5 +83,3 @@ Some tips in order to get the best results:
   generate content accordingly. You can use this for making **summaries, reviews,
   translations, SEO content**, etc.
 
-## Current limitations
-- Markdown fields work but do not get the enhanced content highlighted.

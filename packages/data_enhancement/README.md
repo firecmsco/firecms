@@ -82,6 +82,3 @@ Some tips in order to get the best results:
   plugin will understand that the author is related to the book and will
   generate content accordingly. You can use this for making **summaries, reviews,
   translations, SEO content**, etc.
-
-## Current limitations
-- Markdown fields work but do not get the enhanced content highlighted.

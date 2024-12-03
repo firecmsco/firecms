@@ -11,7 +11,7 @@ interface BlogEntryPreviewCardProps {
 const BlogEntryPreviewCard: React.FC<BlogEntryPreviewCardProps> = ({ blogEntry }) => {
     return (
         <Link href={"/blog/" + blogEntry.id}
-              className="relative h-72 bg-gray-700 block w-full rounded overflow-hidden shadow-lg hover:shadow-xl transition duration-300 hover:scale-[1.02] text-white">
+              className="relative h-72 bg-surface-700 block w-full rounded overflow-hidden shadow-lg hover:shadow-xl transition duration-300 hover:scale-[1.02] text-white">
             {blogEntry.header_image && (
                 <img className="absolute h-full w-full object-cover"
                      src={blogEntry.header_image}
