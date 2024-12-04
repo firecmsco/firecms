@@ -44,7 +44,7 @@ const __dirname = path.dirname(__filename);
 
 const targetDirPath = findSpecificParentDir(__dirname, "cli");
 
-export type Template = "cloud" | "v2" | "pro" | "community";
+export type Template = "cloud" | "v2" | "next-pro" | "pro" | "community";
 export type InitOptions = Partial<{
     // skipPrompts: boolean;
     git: boolean;
@@ -126,6 +126,7 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
             "--v2": Boolean,
             "--cloud": Boolean,
             "--pro": Boolean,
+            "--next-pro": Boolean,
             "--community": Boolean,
             "--debug": Boolean,
             "--env": String
@@ -146,6 +147,8 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
         template = "v2";
     } else if (args["--cloud"]) {
         template = "cloud";
+    } else if (args["--next-pro"]) {
+        template = "next-pro";
     } else if (args["--pro"]) {
         template = "pro";
     } else if (args["--community"]) {
@@ -190,7 +193,11 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
                         value: "pro"
                     },
                     {
-                        name: "FireCMS Community " + chalk.gray("(MIT licensed version with limited functionality)"),
+                        name: "FireCMS PRO with Next.js frontend" + chalk.gray("(self-hosted version with frontend boilerplate CRUD app)"),
+                        value: "next-pro"
+                    },
+                    {
+                        name: "FireCMS Community " + chalk.gray("(MIT licensed version with the base functionality)"),
                         value: "community"
                     }
                 ]
@@ -322,6 +329,8 @@ export async function createProject(options: InitOptions) {
         templateFolder = "template_v2";
     } else if (options.template === "pro") {
         templateFolder = "template_pro";
+    } else if (options.template === "next-pro") {
+        templateFolder = "template_next_pro";
     } else if (options.template === "community") {
         templateFolder = "template";
     } else if (options.template === "cloud") {
@@ -352,7 +361,7 @@ export async function createProject(options: InitOptions) {
         {
             title: "Creating FireCMS webapp in project: " + options.firebaseProjectId,
             task: (ctx) => createWebApp(options),
-            enabled: () => currentUser && (options.template === "pro" || options.template === "community")
+            enabled: () => currentUser && isSelfHostedTemplate(options.template)
         },
         {
             title: "Initialize git",
@@ -383,6 +392,17 @@ export async function createProject(options: InitOptions) {
             console.log("");
             console.log(`Also, make sure the user that is logging in has read/write access to the path ${chalk.cyan.bold("__FIRECMS")} in your database `);
         }
+        console.log("");
+        console.log("Run:");
+        console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
+        console.log(chalk.bgYellow.black.bold("yarn"));
+        console.log(chalk.bgYellow.black.bold("yarn dev"));
+        console.log("");
+    } else if (options.template === "next-pro") {
+        console.log("Make sure you have a valid Firebase config in ");
+        console.log(chalk.cyan.bold("src/app/common/firebase_config.ts"));
+        console.log("");
+        console.log(`Also, make sure the user that is logging in has read/write access to the path ${chalk.cyan.bold("__FIRECMS")} in your database `);
         console.log("");
         console.log("Run:");
         console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
@@ -439,7 +459,9 @@ async function copyTemplateFiles(options: InitOptions) {
 
 async function copyWebAppConfig(options: InitOptions, firebaseConfig: object) {
 
-    const fullFileName = path.resolve(options.targetDirectory, "src/firebase_config.ts");
+    const internalTargetDirectory = options.template === "next-pro" ? "src/app/common/firebase_config.ts" : "src/firebase_config.ts"
+
+    const fullFileName = path.resolve(options.targetDirectory, internalTargetDirectory);
     fs.writeFile(fullFileName, "export const firebaseConfig = " + JSON.stringify(firebaseConfig, null, 4), err => {
         if (err) {
             console.error("Failed to write file:", err);
@@ -528,5 +550,9 @@ async function createSelfHostedProjectWebappConfig(env, projectId, debug, onErr?
             onErr(e);
         }
     }
+}
+
+function isSelfHostedTemplate(template: Template) {
+    return ["pro", "next-pro", "community"].includes(template);
 }
 
