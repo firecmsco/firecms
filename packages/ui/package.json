@@ -50,7 +50,7 @@
     "test:lint": "eslint \"src/**\" --quiet",
     "test": "jest",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
-    "generateIcons": "ts-node --esm src/scripts/generateIcons.ts"
+    "generateIcons": "bun --esm src/scripts/generateIcons.ts"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.1.2",

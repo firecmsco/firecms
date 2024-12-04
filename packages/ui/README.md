@@ -1,174 +1,84 @@
-<p align="center">
-    <img src="https://firecms.co/img/dark_mode.webp" alt="Intro video" style="max-width: 100%;"/>
-</p>
-
-<p align="center">
-  <a href="https://firecms.co">
-    <img src="https://firecms.co/img/logo_small.png" width="240px" alt="FireCMS logo" />
-  </a>
-</p>
-
-<h1 align="center">FireCMS</h1>
-<h3 align="center">Awesome Firebase/MongoDB-based headless CMS</h3>
-<p align="center"><a href="https://demo.firecms.co">Live demo</a></p>
-
-<br />
+## FireCMS UI
 
 
-[![NPM](https://img.shields.io/npm/v/firecms.svg)](https://www.npmjs.com/package/firecms) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+**FireCMS UI** is a high quality set of components that you can use to build your own custom views. You can
+use these components to build your own FireCMS views, or in any other React application. You just need to install
+`tailwindcss` and the `@firecms/ui` package.
 
-Designed by developers for developers, FireCMS is a headless CMS and admin panel
-that seamlessly integrates with **Firebase and Firestore** by default, but is
-also
-compatible with any backend.
+### Why build this UI kit?
+FireCMS was using MUI until version 3.0. MUI provides ready to use components with intuitive APIs, but it also
+comes with a lot of complexity and overhead. We wanted to build a simpler and more flexible UI kit that could be used
+in any React project, not just in FireCMS.
+We also wanted to make it easy to transition from MUI to our new UI kit, so we kept the API as similar as possible.
+The result it a set of components that are easy to use, easy to customize, **much more performant** and with a smaller bundle size.
 
-Effortlessly generate **CRUD views** based on your configuration. FireCMS is
-simple
-to set up for standard cases and easy to extend and customize for more specific
-needs.
+The components are primarily built using **Radix UI** primitives and **tailwindcss**. This means that you can easily customize them
+using tailwindcss classes or override the styles using CSS.
 
-Built to produce collection and form views that naturally align with the
-collection/document model, FireCMS covers a wide range of basic and advanced use
-cases. With extensibility in mind, it's easy to create your own views or modify
-existing ones.
+See the full list of components in https://firecms.co/docs/components
 
-FireCMS does **not impose any data structure** restrictions, ensuring a smooth,
-out-of-the-box experience for any project.
 
-### Core technologies
+> All the components are exported from the `@firecms/ui` package. These are the same components used internally in **FireCMS**.
 
-FireCMS is based on this great technologies:
 
-- Typescript
-- Tailwind CSS
-- Firebase SDK 10
-- React + React Router 6
+## Installation
 
-### Quickstart
+If you are using FireCMS, you don't need to install this package, as it is already included, and
+configured for you.
 
-The easiest way to get going is to check our quickstart guide! You will just
-need to follow some quick steps:
+To use the components in your own project, you need to install the `@firecms/ui` package:
 
-https://firecms.co/docs
+```bash
+yarn add @firecms/ui
+```
+or
+```bash
+npm install @firecms/ui
+```
 
-### Demo
+You also need to install `tailwindcss`:
 
-Check the demo with all the core functionalities.
+```bash
+yarn add tailwindcss @tailwindcss/typography
+```
 
-https://demo.firecms.co
+And initialize it in your project:
 
-> You can modify the data, but it gets periodically restored.
+```bash
+npx tailwindcss init
+```
 
-### Changelog
+And add then add the fireCMS preset in your `tailwind.config.js`:
 
-https://firecms.co/docs/changelog
+```javascript
+import fireCMSConfig from "@firecms/ui/tailwind.config.js";
 
-## Features
+export default {
+    presets: [fireCMSConfig],
+    content: [
+        "./index.html",
+        "./src/**/*.{js,ts,jsx,tsx}",
+        "./node_modules/firecms/src/**/*.{js,ts,jsx,tsx}",
+        "./node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}"
+    ]
+};
+```
+(You might need to adjust the paths in the `content` array to match your project structure)
 
-FireCMS has been meticulously crafted to make it incredibly easy for developers
-to build a CMS/admin tool while offering an excellent data editing experience
-and a user-friendly interface for marketers and content managers.
+Finally, you need to define your primary and secondary colors in your `index.css` file:
 
-### 🏓 Exceptional Spreadsheet View
+```css
+@import "@firecms/ui/index.css";
 
-We've developed a highly efficient windowed **spreadsheet view** for
-collections, allowing inline editing for most common fields, as well as popup
-views for other cases and your custom field implementations.
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-Featuring **real-time** support, FireCMS is perfect for apps that require
-constant updates. It also supports **text search** (through an external provider
-like Algolia, if using Firestore), **filtering and sorting**, and **exporting**
-data.
+:root {
+    --fcms-primary: #0070F4;
+    --fcms-primary-dark: #0061e6;
+    --fcms-primary-bg: #0061e610;
+    --fcms-secondary: #FF5B79;
+}
+```
 
-### ✨ Robust Forms
-
-![fields](https://firecms.co/img/form_editing.webp)
-
-When editing an entity, FireCMS offers a nested system of side dialogs for
-navigating through **subcollections** and accessing custom views (such as custom
-forms or blog previews). This functionality can also be accessed
-programmatically using the `useSideEntityController` hook.
-
-FireCMS includes **over 20 built-in fields** with numerous customization and
-validation options. The components have been carefully designed for an
-outstanding user experience, including advanced features like **references** to
-other collections, **markdown**, and **array reordering**.
-
-For unsupported use cases, create your own **custom field** as a React
-component.
-
-FireCMS also supports **conditional fields** in forms, allowing you to define
-rules for active fields based on your logic.
-
-### 👮 Authentication, Permissions, and Role System
-
-Define which navigation views users can see and the operations (create, edit,
-delete) they can perform based on your role system. You can even configure this
-on a per-entity or collection level.
-
-By default, FireCMS supports all Firebase authorization mechanisms, but you can
-implement your own.
-
-### 🏹 Relational Support
-
-Define references to entities in other collections and benefit from the
-integrated reference fields and shortcuts.
-
-You can also define subcollections at the entity level for nesting data in a
-collection/document/collection model.
-
-### 🆒 Real-Time Data
-
-Every view in the CMS supports real-time data, making it suitable for displaying
-constantly updated information.
-
-Forms also support this feature, with any modified value in the database being
-updated in any open form view as long as it hasn't been touched by the user.
-This enables advanced cases where a Cloud Function is triggered after saving an
-entity, modifying some values, and requiring real-time updates.
-
-### 🗂️ File Storage
-
-FireCMS supports uploading files to Firebase Storage out of the box and provides
-specific fields for handling single and multiple file uploads, as well as
-reordering.
-
-You can replace the Firebase Storage implementation with your own.
-
-## Included example
-
-You can access the code for the demo project under
-[`example`](https://github.com/FireCMSco/firecms/tree/master/example). It includes
-every feature provided by this CMS.
-
-Keep in mind you need to update the dependencies in that project if you want to
-use it as it is, without linking it to the library source code. More details in
-its README
-
-## Contact and support
-
-If you need general support, you can open a GitHub issue.
-
-Do you need consulting setting up your Firestore-based CMS in no time? We are
-happy to help!
-`hello@firecms.co`
-
-## Development
-
-If you would like to make changes to the source, feel free to submit a PR!
-
-When developing, the core library can be found under `lib`.
-There is an example project in the folder `example`.
-
-In order to run the project, you need to create a file
-called `firebase_config.ts`
-in `example/src`.
-
-That file needs to export a valid Firebase config, that you can get
-from your Firebase console when creating a webapp for your project.
-
-Then simply run `yarn` and `yarn dev`
-
-## License
-
-MIT © [FireCMS](https://github.com/FireCMSco)
