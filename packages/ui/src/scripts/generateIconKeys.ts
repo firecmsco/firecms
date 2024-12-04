@@ -4,8 +4,7 @@ import { fileURLToPath } from "url";
 
 const extractIconKeys = (cssData: string): string[] => {
     const iconKeys: string[] = [];
-    console.log("cssData", cssData);
-    const regex = /\.mi-(.*?)::before/g;
+    const regex = /"(.*?)"/g;
     let match;
 
     while ((match = regex.exec(cssData)) !== null) {
@@ -17,10 +16,17 @@ const extractIconKeys = (cssData: string): string[] => {
     return iconKeys;
 };
 
-//https://github.com/google/material-design-icons/blob/master/variablefont/MaterialSymbolsRounded%5BFILL%2CGRAD%2Copsz%2Cwght%5D.codepoints
+// export async function generateIconKeys() {
+//     const cssData = await fs.promises.readFile("../../node_modules/@material-symbols/font-400/index.d.ts", "utf-8");
+//     const keys = extractIconKeys(cssData);
+//     saveIconKeys(keys);
+//     return keys;
+// }
 export async function generateIconKeys() {
-    const cssData = await fs.promises.readFile("../../node_modules/material-icons/css/material-icons.css", 'utf-8');
-    const keys = extractIconKeys(cssData);
+    // fetch from https://raw.githubusercontent.com/google/material-design-icons/refs/heads/master/font/MaterialIconsRound-Regular.codepoints
+    const file = await fetch("https://raw.githubusercontent.com/google/material-design-icons/refs/heads/master/font/MaterialIconsRound-Regular.codepoints");
+    const data = await file.text();
+    const keys = data.split("\n").map((line) => line.split(" ")[0]);
     saveIconKeys(keys);
     return keys;
 }

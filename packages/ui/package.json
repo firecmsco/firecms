@@ -74,7 +74,7 @@
     "cmdk": "^0.2.1",
     "date-fns": "^3.6.0",
     "markdown-it": "^14.1.0",
-    "material-icons": "^1.13.12",
+    "material-symbols": "^0.27.1",
     "react-dropzone": "^14.3.5",
     "react-fast-compare": "^3.2.2",
     "tailwind-merge": "^2.5.5"

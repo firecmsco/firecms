@@ -3126,7 +3126,7 @@ __metadata:
     firebase: ^10.14.1
     jest: ^29.7.0
     markdown-it: ^14.1.0
-    material-icons: ^1.13.12
+    material-symbols: ^0.27.1
     npm-run-all: ^4.1.5
     react-dropzone: ^14.3.5
     react-fast-compare: ^3.2.2
@@ -14160,10 +14160,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"material-icons@npm:^1.13.12":
-  version: 1.13.12
-  resolution: "material-icons@npm:1.13.12"
-  checksum: 46f0e03c4c22e8334c633915dd87c3023f0c6345c1d9376170aa8bb8c54e944a5fc40ec128888965b563e2472a8fae83a2f5b75d3f957ede8b5d8476650e4109
+"material-symbols@npm:^0.27.1":
+  version: 0.27.1
+  resolution: "material-symbols@npm:0.27.1"
+  checksum: 4906f95ec47a5981fddc586c258527508f344f094682016359faa37206312662e1ee4403467866c8e2e432756ea3564d418fe8445c40c8799819484e61838dba
   languageName: node
   linkType: hard
 

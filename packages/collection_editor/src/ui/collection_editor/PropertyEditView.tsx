@@ -31,7 +31,7 @@ import {
     InfoLabel,
     Tooltip,
     Typography,
-    WarningOffIcon
+    WarningIcon
 } from "@firecms/ui";
 import { EnumPropertyField } from "./properties/EnumPropertyField";
 import { StoragePropertyField } from "./properties/StoragePropertyField";
@@ -774,7 +774,7 @@ export function WidgetSelectViewItem({
                 <div className={"flex flex-row gap-2 items-center"}>
                     {shouldWarnChangingDataType && <Tooltip
                         title={"This widget uses a different data type than the initially selected widget. This can cause errors with existing data."}>
-                        <WarningOffIcon size="smallest" className={"w-4"}/>
+                        <WarningIcon size="smallest" className={"w-4"}/>
                     </Tooltip>}
                     <Typography
                         color={shouldWarnChangingDataType ? "secondary" : undefined}>{propertyConfig.name}</Typography>

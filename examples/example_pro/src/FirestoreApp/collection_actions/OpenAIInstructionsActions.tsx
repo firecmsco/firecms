@@ -46,8 +46,8 @@ export function OpenAIInstructionsActions() {
                 open={open}
                 onOpenChange={setOpen}
             >
-                <DialogTitle>OpenAI data enhancement</DialogTitle>
-                <DialogContent className="p-8 flex flex-col space-y-2">
+                <DialogTitle variant={"h5"}>OpenAI data enhancement</DialogTitle>
+                <DialogContent className="flex flex-col space-y-2">
                     <Typography gutterBottom>
                         Try it out by clicking on <b>ADD BOOK</b> and
                         then typing the title of your favourite book on the <b>AUTOFILL

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { CenteredView, Typography } from "@firecms/ui";
+import { CenteredView, Typography, useIconStyles } from "@firecms/ui";
 import { CustomizationController, EntityCollection, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
 import { AuthControllerContext } from "../contexts";
 import { useBuildSideEntityController } from "../internal/useBuildSideEntityController";
@@ -67,6 +67,8 @@ export function FireCMS<USER extends User, EC extends EntityCollection>(props: F
     const pluginsLoading = plugins?.some(p => p.loading) ?? false;
 
     const loading = authController.initialLoading || navigationController.loading || pluginsLoading;
+
+    useIconStyles({});
 
     const customizationController: CustomizationController = {
         dateTimeFormat,

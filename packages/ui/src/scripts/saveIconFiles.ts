@@ -35,6 +35,7 @@ export function ${componentName}(props: IconProps) {
 `;
 
         const filePath = path.join(__dirname, `../icons/components/${componentName}.tsx`);
+        console.log(`Saving icon component to ${filePath}`);
         fs.writeFileSync(filePath, iconComponent);
 
         // add export to index file
