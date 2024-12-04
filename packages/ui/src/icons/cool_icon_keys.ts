@@ -9,4 +9,4 @@ export const coolIconKeys: string[] = [
     "credit_card", "earbuds", "egg_alt", "fiber_smart_record", "flag",
     "healing", "heat_pump", "hive", "hub", "local_library", "local_pizza",
     "memory", "outlet", "pages", "panorama_photosphere", "signal_cellular_0_bar",
-    "sports_baseball", "storm", "stairs"];
+    "sports_baseball", "storm", "stairs", "keyboard_command_key"];

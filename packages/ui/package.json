@@ -53,6 +53,8 @@
     "generateIcons": "bun --esm src/scripts/generateIcons.ts"
   },
   "dependencies": {
+    "@material-symbols/font-400": "^0.27.1",
+    "@material-symbols/font-500": "^0.27.1",
     "@radix-ui/react-checkbox": "^1.1.2",
     "@radix-ui/react-collapsible": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.2",
@@ -74,7 +76,6 @@
     "cmdk": "^0.2.1",
     "date-fns": "^3.6.0",
     "markdown-it": "^14.1.0",
-    "material-symbols": "^0.27.1",
     "react-dropzone": "^14.3.5",
     "react-fast-compare": "^3.2.2",
     "tailwind-merge": "^2.5.5"

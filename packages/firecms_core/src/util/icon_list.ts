@@ -15,6 +15,7 @@ const map = iconKeys
 export const iconsSearch = new Fuse(map, {
     isCaseSensitive: false,
     shouldSort: true,
+    ignoreLocation: true,
     distance: 0,
     keys: ["key", "synonyms"]
 })

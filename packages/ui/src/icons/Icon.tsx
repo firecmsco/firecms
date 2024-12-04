@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cls } from "../util";
-import "material-symbols/rounded.css";
+import "@material-symbols/font-500/rounded.css";
 import "./default.css";
 
 export type IconColor = "inherit" | "primary" | "secondary" | "disabled" | "error" | "success" | "warning";
