@@ -11,7 +11,7 @@ import clsx from "clsx";
 import { Panel } from "../general/Panel";
 import { LinedSpace } from "../layout/LinedSpace";
 
-function FirebaseIntro() {
+function FireCMSIntro() {
     return (
         <Panel color={"light-to-white"}
                container={false}
@@ -20,8 +20,7 @@ function FirebaseIntro() {
 
             <LinedSpace size={"larger"}/>
 
-            <div className={clsx("relative flex justify-center mb-8 border-b border-0", defaultBorderMixin)}
-                 data-aos="fade-up">
+            <div className={clsx("relative flex justify-center mb-8 border-b border-0", defaultBorderMixin)}>
                 <div
                     className="flex flex-row gap-8 md:gap-12 justify-center items-center p-4">
 
@@ -53,11 +52,10 @@ function FirebaseIntro() {
                     Much more than a CMS
                 </h2>
                 <p className="text-xl md:text-2xl">
-                    <b>FireCMS</b> is an open source headless admin panel built by <b>developers
-                    for developers</b>.
+                    <b>FireCMS</b> is a platform upon which thousands of companies build their <b>back-office
+                    applications</b>.
+                    Open-source, headless, extensible, and fully customizable.
                     <br/>
-                    Get a back-office app/dashboard for your Firebase or MongoDB project in
-                    <b> no time</b>.
                 </p>
             </div>
 
@@ -66,4 +64,4 @@ function FirebaseIntro() {
     );
 }
 
-export default FirebaseIntro;
+export default FireCMSIntro;

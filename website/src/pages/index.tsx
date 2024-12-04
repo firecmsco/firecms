@@ -7,7 +7,7 @@ import { TechSplash } from "../partials/home/TechSplash";
 import { ManageYour } from "../partials/home/ManageYour";
 import FeaturesPanels from "../partials/home/FeaturesPanels";
 import FirebaseTeaser from "../partials/home/OpenSourceDetails";
-import FirebaseIntro from "../partials/home/FirebaseIntro";
+import FireCMSIntro from "../partials/home/FireCMSIntro";
 import { Companies } from "../partials/home/Companies";
 import { UITeaser } from "../partials/home/UITeaser";
 import FeaturesTeaser from "../partials/home/FeaturesTeaser";
@@ -45,8 +45,9 @@ function Home() {
 
             <main className={"bg-white max-w-[100vw] overflow-x-hidden"}>
 
+                <FireCMSIntro/>
+
                 <ManageYour/>
-                <FirebaseIntro/>
 
                 <QuotesSection/>
 
@@ -55,7 +56,6 @@ function Home() {
                 <UITeaser/>
 
                 <FeaturesTeaser/>
-
 
                 <DeveloperFeatures/>
 

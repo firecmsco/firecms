@@ -15,10 +15,9 @@ module.exports = {
             "collapsed": false,
             link: {
                 type: "doc",
-                id: "components"
+                id: "cloud/intro"
             },
             "items": [
-                "cloud/intro",
                 "cloud/quickstart",
                 "cloud/app_config",
                 "cloud/deployment",
