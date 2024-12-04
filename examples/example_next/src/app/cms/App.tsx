@@ -3,7 +3,8 @@ import React, { useCallback } from "react";
 
 import "@/app/common/index.css"
 import "typeface-rubik";
-import "@fontsource/inter";
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/600.css";
 import "@fontsource/jetbrains-mono";
 
 import {
@@ -31,7 +32,7 @@ import {
     useInitialiseFirebase
 } from "@firecms/firebase";
 
-import { firebaseConfig } from "../common/firebase";
+import { firebaseConfig } from "../common/firebase_config";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
 import { useImportPlugin } from "@firecms/data_import";
