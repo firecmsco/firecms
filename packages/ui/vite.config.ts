@@ -1,7 +1,8 @@
 // @ts-ignore
 import path from "path";
+import preserveDirectives from "rollup-preserve-directives";
 
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 
@@ -29,6 +30,7 @@ export default defineConfig(() => ({
         }
     },
     plugins: [
+        preserveDirectives() as Plugin,
         react({
             babel: {
                 plugins: [
