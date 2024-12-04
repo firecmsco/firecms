@@ -1,6 +1,6 @@
 {
   "name": "@firecms/editor",
-  "version": "3.0.0-canary.159",
+  "version": "3.0.0-canary.160",
   "description": "Notion-style WYSIWYG editor for FireCMS",
   "type": "module",
   "main": "dist/index.cjs",
