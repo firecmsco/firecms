@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 import useMeasure from "react-use-measure";
 
-import { cls, RemoveCircleIcon, Tooltip } from "@firecms/ui";
+import { cls, DoNotDisturbOnIcon, Tooltip } from "@firecms/ui";
 import { ErrorBoundary } from "../../../components";
 import { getRowHeight, TableSize } from "../../common/table_height";
 
@@ -236,7 +236,7 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
                 {disabled && onHover && disabledTooltip &&
                     <div className="absolute top-1 right-1 text-xs">
                         <Tooltip title={disabledTooltip}>
-                            <RemoveCircleIcon size={"smallest"} color={"disabled"} className={"text-surface-500"}/>
+                            <DoNotDisturbOnIcon size={"smallest"} color={"disabled"} className={"text-surface-500"}/>
                         </Tooltip>
                     </div>}
 

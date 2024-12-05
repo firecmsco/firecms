@@ -3,7 +3,7 @@ import React, { useCallback, useState } from "react";
 
 import { defaultBorderMixin } from "../styles";
 import { CircularProgress, IconButton } from "./index";
-import { ClearIcon, SearchIcon } from "../icons";
+import { CloseIcon, SearchIcon } from "../icons";
 import { cls } from "../util";
 import { useDebounceValue } from "../hooks";
 
@@ -98,7 +98,7 @@ export function SearchBar({
                 ? <IconButton
                     className={`${large ? "mr-2 top-1" : "mr-1 top-0"} absolute right-0 z-10`}
                     onClick={clearText}>
-                    <ClearIcon size={"small"}/>
+                    <CloseIcon size={"small"}/>
                 </IconButton>
                 : <div style={{ width: 26 }}/>
             }

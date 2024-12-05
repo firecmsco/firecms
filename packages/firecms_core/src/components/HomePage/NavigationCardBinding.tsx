@@ -4,7 +4,7 @@ import { useCustomizationController, useFireCMSContext } from "../../hooks";
 import { PluginHomePageActionsProps, TopNavigationEntry } from "../../types";
 import { IconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
-import { IconButton, StarBorderIcon, StarIcon } from "@firecms/ui";
+import { IconButton, StarIcon } from "@firecms/ui";
 import { NavigationCard } from "./NavigationCard";
 import { SmallNavigationCard } from "./SmallNavigationCard";
 
@@ -60,14 +60,9 @@ export function NavigationCardBinding({
                         );
                     }
                 }}>
-                {
-                    favourite
-                        ? <StarIcon
-                            size={18}
-                            className={"text-secondary"}/>
-                        : <StarBorderIcon
-                            size={18}
-                            className={"text-surface-400 dark:text-surface-500"}/>}
+                <StarIcon
+                    size={18}
+                    className={favourite ? "text-secondary" : "text-surface-400 dark:text-surface-500"}/>
             </IconButton>
         ]
         : [];

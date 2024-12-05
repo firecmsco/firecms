@@ -5,7 +5,7 @@ import { PluginKey } from "@tiptap/pm/state"
 import Suggestion, { SuggestionOptions } from "@tiptap/suggestion";
 
 import {
-    AutoAwesomeIcon,
+    AutoFixHighIcon,
     CheckBoxIcon,
     cls,
     CodeIcon,
@@ -323,7 +323,7 @@ export const suggestion = (ref: React.MutableRefObject<any>, {
                         title: "Autocomplete",
                         description: "Add text based on the context.",
                         searchTerms: ["ai"],
-                        icon: <AutoAwesomeIcon size={18}/>,
+                        icon: <AutoFixHighIcon size={18}/>,
                         command: onDisabledAutocompleteClick
                     })
                 }
@@ -505,7 +505,7 @@ const autocompleteSuggestionItem: SuggestionItem = {
     title: "Autocomplete",
     description: "Add text based on the context.",
     searchTerms: ["ai"],
-    icon: <AutoAwesomeIcon size={18}/>,
+    icon: <AutoFixHighIcon size={18}/>,
     command: async ({
                         editor,
                         range,

@@ -3,7 +3,7 @@ import equal from "react-fast-compare"
 
 import { ArrayContainer, ArrayEntryParams, EnumValueConfig, EnumValues, FieldCaption, } from "@firecms/core";
 import {
-    AutoAwesomeIcon,
+    AutorenewIcon,
     Badge,
     Button,
     CircularProgress,
@@ -183,7 +183,7 @@ function EnumFormFields({
                             variant={"text"}
                             size={"small"}
                             onClick={inferValues}>
-                        {inferring ? <CircularProgress size={"small"}/> : <AutoAwesomeIcon/>}
+                        {inferring ? <CircularProgress size={"small"}/> : <AutorenewIcon/>}
                         Infer values from data
                     </Button>}
             </div>
@@ -267,7 +267,7 @@ const EnumEntry = React.memo(
                            size="small"
                            autoFocus={autoFocus}
                            autoComplete="off"
-                           endAdornment={inferredEntry && <AutoAwesomeIcon size={"small"}/>}
+                           endAdornment={inferredEntry && <AutorenewIcon size={"small"}/>}
                            error={Boolean(entryError?.label)}/>
 
                     {!disabled &&

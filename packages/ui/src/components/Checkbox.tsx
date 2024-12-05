@@ -1,7 +1,7 @@
 import React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 
-import { Icon } from "../icons";
+import { CheckIcon, RemoveIcon } from "../icons";
 import { cls } from "../util";
 
 export interface CheckboxProps {
@@ -89,10 +89,10 @@ export const Checkbox = ({
                     <CheckboxPrimitive.Indicator asChild>
                         {indeterminate
                             ? (
-                                <Icon iconKey={"remove"} size={iconSize} className={"absolute"}/>
+                                <RemoveIcon size={iconSize} className={"absolute"}/>
                             )
                             : (
-                                <Icon iconKey={"check"} size={iconSize} className={"absolute"}/>
+                                <CheckIcon size={iconSize} className={"absolute"}/>
                             )}
                     </CheckboxPrimitive.Indicator>
                 </div>

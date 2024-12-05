@@ -6,10 +6,10 @@ import {
     CheckBoxIcon,
     CheckIcon,
     CodeIcon,
-    ExpandMoreIcon,
     FormatListBulletedIcon,
     FormatListNumberedIcon,
     FormatQuoteIcon,
+    KeyboardArrowDownIcon,
     Looks3Icon,
     LooksOneIcon,
     LooksTwoIcon,
@@ -121,7 +121,7 @@ export const NodeSelector = ({
                              className="gap-2 rounded-none"
                              color="text">
                 <span className="whitespace-nowrap text-sm">{activeItem.name}</span>
-                <ExpandMoreIcon size={"small"}/>
+                <KeyboardArrowDownIcon size={"small"}/>
             </Button>}
             modal={true}
             open={open}

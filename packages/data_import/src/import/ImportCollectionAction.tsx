@@ -22,13 +22,14 @@ import {
     defaultBorderMixin,
     Dialog,
     DialogActions,
-    DialogContent, DialogTitle,
-    FileUploadIcon,
+    DialogContent,
+    DialogTitle,
     IconButton,
     Select,
     SelectItem,
     Tooltip,
     Typography,
+    UploadIcon,
 } from "@firecms/ui";
 import { buildEntityPropertiesFromData } from "@firecms/schema_inference";
 import { useImportConfig } from "../hooks";
@@ -118,7 +119,7 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
         <Tooltip title={"Import"}
                  asChild={true}>
             <IconButton color={"primary"} onClick={handleClickOpen}>
-                <FileUploadIcon/>
+                <UploadIcon/>
             </IconButton>
         </Tooltip>
 

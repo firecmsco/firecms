@@ -2,7 +2,6 @@ import {
     AddIcon,
     Alert,
     ArrowForwardIcon,
-    AudiotrackIcon,
     Avatar,
     Badge,
     BooleanSwitch,
@@ -44,6 +43,7 @@ import {
     MenubarSubTriggerIndicator,
     MenubarTrigger,
     MenuItem,
+    MusicNoteIcon,
     Popover,
     RadioGroup,
     RadioGroupItem,
@@ -305,7 +305,7 @@ export default function ClientUIComponentsShowcase({
                 <div className={"flex gap-2 items-center"}>
                     <Tooltip title={"Ghost button"}>
                         <IconButton variant="ghost" onClick={() => console.log("Clicked!")}>
-                            <AudiotrackIcon/>
+                            <MusicNoteIcon/>
                         </IconButton>
                     </Tooltip>
                     <Tooltip title={"Small button"}>

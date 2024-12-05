@@ -1,9 +1,9 @@
 import {
     ErrorBoundary,
-    PropertyConfigBadge,
     getFieldConfig,
     isPropertyBuilder,
     Property,
+    PropertyConfigBadge,
     PropertyOrBuilder,
     useCustomizationController,
 } from "@firecms/core";
@@ -12,9 +12,9 @@ import {
     cardMixin,
     cardSelectedMixin,
     cls,
+    DoNotDisturbOnIcon,
     FunctionsIcon,
     Paper,
-    RemoveCircleIcon,
     Typography,
 } from "@firecms/ui";
 
@@ -133,7 +133,7 @@ export function NonEditablePropertyPreview({
                     className={"h-8 w-8 p-1 rounded-full shadow text-white bg-surface-500"}>
                     <FunctionsIcon color={"inherit"} size={"medium"}/>
                 </div>}
-                <RemoveCircleIcon color={"disabled"} size={"small"} className={"absolute -right-2 -top-2"}/>
+                <DoNotDisturbOnIcon color={"disabled"} size={"small"} className={"absolute -right-2 -top-2"}/>
             </div>
             <Paper
                 className={cls(

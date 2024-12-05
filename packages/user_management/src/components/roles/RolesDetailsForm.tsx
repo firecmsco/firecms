@@ -5,10 +5,11 @@ import { EntityCollection, FieldCaption, Role, toSnakeCase, useAuthController, U
 import {
     Button,
     Checkbox,
+    CheckIcon,
     Dialog,
     DialogActions,
-    DialogContent, DialogTitle,
-    DoneIcon,
+    DialogContent,
+    DialogTitle,
     LoadingButton,
     Paper,
     Select,
@@ -436,7 +437,7 @@ export function RolesDetailsForm({
                             type="submit"
                             disabled={!dirty}
                             loading={isSubmitting}
-                            startIcon={<DoneIcon/>}
+                            startIcon={<CheckIcon/>}
                         >
                             {isNewRole ? "Create role" : "Update"}
                         </LoadingButton>

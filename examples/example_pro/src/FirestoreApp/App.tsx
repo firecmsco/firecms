@@ -309,8 +309,8 @@ export function App() {
     } = useValidateAuthenticator({
         disabled: userManagement.loading,
         authController: authController,
-        // authenticator: myAuthenticator,
-        authenticator: userManagement.authenticator,
+        authenticator: myAuthenticator,
+        // authenticator: userManagement.authenticator,
         dataSourceDelegate: firestoreDelegate,
         storageSource
     });

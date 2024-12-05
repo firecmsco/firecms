@@ -9,7 +9,7 @@ import {
     PropertiesOrBuilders,
     PropertyOrBuilder
 } from "@firecms/core";
-import { AutoAwesomeIcon, defaultBorderMixin, DragHandleIcon, IconButton, RemoveIcon, Tooltip } from "@firecms/ui";
+import { AutorenewIcon, defaultBorderMixin, DragHandleIcon, IconButton, RemoveIcon, Tooltip } from "@firecms/ui";
 import { NonEditablePropertyPreview, PropertyFieldPreview } from "./PropertyFieldPreview";
 import { DragDropContext, Draggable, DraggableProvided, Droppable } from "@hello-pangea/dnd";
 import { getFullId, getFullIdPath } from "./util";
@@ -224,7 +224,7 @@ export function PropertyTreeEntry({
             <div className="absolute top-2 right-2 flex flex-row ">
 
                 {isPropertyInferred && <Tooltip title={"Inferred property"}>
-                    <AutoAwesomeIcon size="small" className={"p-2"}/>
+                    <AutorenewIcon size="small" className={"p-2"}/>
                 </Tooltip>}
 
                 {onPropertyRemove && <Tooltip title={"Remove"}

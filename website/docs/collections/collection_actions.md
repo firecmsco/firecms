@@ -69,7 +69,7 @@ This is an example of how you can modify the filters in the collection bar:
 ```tsx
 import React from "react";
 import { CollectionActionsProps } from "@firecms/core";
-import { ClearIcon, IconButton, Select, SelectItem } from "@firecms/ui";
+import { CloseIcon, IconButton, Select, SelectItem } from "@firecms/ui";
 
 export function CustomFiltersActions({
                                          tableController
@@ -96,7 +96,7 @@ export function CustomFiltersActions({
                 className={"w-44"}
                 endAdornment={categoryFilterValue ?
                     <IconButton size={"small"} onClick={() => updateFilter(null)}>
-                        <ClearIcon size={"smallest"}/>
+                        <CloseIcon size={"smallest"}/>
                     </IconButton> : undefined}
                 onValueChange={updateFilter}
                 size={"small"}

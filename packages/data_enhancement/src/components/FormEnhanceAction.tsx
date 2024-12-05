@@ -1,13 +1,12 @@
 import React, { useCallback, useDeferredValue, useEffect, useMemo, useRef } from "react";
 
 import {
-    AutoAwesomeIcon,
     Autocomplete,
     AutocompleteItem,
     AutoFixHighIcon,
     Button,
     CircularProgress,
-    ClearIcon,
+    CloseIcon,
     cls,
     defaultBorderMixin,
     focusedDisabled,
@@ -203,7 +202,7 @@ export function FormEnhanceAction({
                                     }}
                                     size={"small"}
                                 >
-                                    <ClearIcon size="small"/>
+                                    <CloseIcon size="small"/>
                                 </IconButton>
                                 }
                             </AutocompleteItem>;
@@ -219,7 +218,7 @@ export function FormEnhanceAction({
                         }}
                         color={inputFocused || !instructions ? "primary" : undefined}
                         disabled={loading}>
-                        <ClearIcon size={"small"}/>
+                        <CloseIcon size={"small"}/>
                     </IconButton>}
 
                     {(loading || instructions) && <IconButton
@@ -243,7 +242,7 @@ export function FormEnhanceAction({
                                 size={"small"}
                                 onClick={() => enhance()}
                                 disabled={!enoughData || loading}>
-                            <AutoAwesomeIcon color={"primary"}/>
+                            <AutoFixHighIcon color={"primary"}/>
                             Autofill
                         </Button>
                     </Tooltip>}
@@ -283,7 +282,7 @@ export function FormEnhanceAction({
                 {/*                        }}*/}
                 {/*                        size={"small"}*/}
                 {/*                    >*/}
-                {/*                        <ClearIcon size="small"/>*/}
+                {/*                        <CloseIcon size="small"/>*/}
                 {/*                    </IconButton>*/}
                 {/*                    }*/}
                 {/*                </div>;*/}

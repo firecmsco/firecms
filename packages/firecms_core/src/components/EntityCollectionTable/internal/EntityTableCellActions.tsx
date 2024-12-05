@@ -1,4 +1,4 @@
-import { ErrorOutlineIcon, IconButton } from "@firecms/ui";
+import { ErrorIcon, IconButton } from "@firecms/ui";
 import { ErrorTooltip } from "../../ErrorTooltip";
 import { useCallback, useEffect, useRef } from "react";
 
@@ -68,7 +68,7 @@ export function EntityTableCellActions({
                             width: 32,
                             height: 32
                         }}>
-                        <ErrorOutlineIcon
+                        <ErrorIcon
                             size={"small"}
                             color={"error"}
                         />

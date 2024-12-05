@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
     AddIcon,
-    AudiotrackIcon,
     BooleanSwitch,
     Button,
     Checkbox,
@@ -11,13 +10,15 @@ import {
     DateTimeField,
     Dialog,
     DialogActions,
-    DialogContent, DialogTitle,
+    DialogContent,
+    DialogTitle,
     FaceIcon,
     FileUpload,
     IconButton,
     KeyboardTabIcon,
     MultiSelect,
     MultiSelectItem,
+    MusicNoteIcon,
     Person2Icon,
     Person4Icon,
     PersonIcon,
@@ -29,8 +30,7 @@ import {
     Skeleton,
     Tab,
     Tabs,
-    Tooltip,
-    Typography
+    Tooltip
 } from "@firecms/ui";
 import { CTAButtonDarkMixin } from "../styles";
 
@@ -145,7 +145,7 @@ export default function ClientUIComponentsTeaser() {
                         </Tooltip>
                         <Tooltip title={"Ghost button"}>
                             <IconButton variant="ghost" onClick={() => console.log("Clicked!")}>
-                                <AudiotrackIcon/>
+                                <MusicNoteIcon/>
                             </IconButton>
                         </Tooltip>
                         <Tooltip title={"Filled button"}>

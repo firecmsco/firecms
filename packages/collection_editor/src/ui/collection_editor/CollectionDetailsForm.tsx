@@ -5,7 +5,7 @@ import {
     AutocompleteItem,
     BooleanSwitchWithLabel,
     Chip,
-    ClearIcon,
+    CloseIcon,
     cls,
     Container,
     DebouncedTextField,
@@ -271,7 +271,7 @@ export function CollectionDetailsForm({
                                                 setFieldValue("sideDialogWidth", null);
                                             }}
                                             disabled={!values.sideDialogWidth}>
-                                            <ClearIcon size={"small"}/>
+                                            <CloseIcon size={"small"}/>
                                         </IconButton>}
                                         value={values.sideDialogWidth ?? ""}
                                         label={"Side dialog width"}/>

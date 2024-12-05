@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useBrowserTitleAndIcon } from "@firecms/core";
-import { AutoAwesomeIcon, Card, Chip, CircularProgress, cls, Typography, } from "@firecms/ui";
+import { Card, Chip, CircularProgress, cls, StarIcon, Typography, } from "@firecms/ui";
 import { useSubscriptionsForUserController } from "../../hooks/useSubscriptionsForUserController";
 import { ProductUpgradeSmallView } from "./ProductUpgradeSmallView";
 import { getPriceString, getSubscriptionStatusText } from "../settings/common";
@@ -80,28 +80,28 @@ export function ProjectSubscriptionPlans({ uid }: {
                             following features:</div>}
 
                         <ul className={"px-2 text-base"}>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>
+                            <li className={"flex gap-4 items-center py-0.5"}><StarIcon size={"small"}/>
                                 Local text search
                             </li>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>Unlimited
+                            <li className={"flex gap-4 items-center py-0.5"}><StarIcon size={"small"}/>Unlimited
                                 users and roles
                             </li>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>Theme and
+                            <li className={"flex gap-4 items-center py-0.5"}><StarIcon size={"small"}/>Theme and
                                 logo customization
                             </li>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>
+                            <li className={"flex gap-4 items-center py-0.5"}><StarIcon size={"small"}/>
                                 Custom form fields and custom views
                             </li>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>
+                            <li className={"flex gap-4 items-center py-0.5"}><StarIcon size={"small"}/>
                                 Secondary databases
                             </li>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>GPT-4
+                            <li className={"flex gap-4 items-center py-0.5"}><StarIcon size={"small"}/>GPT-4
                                 content generation
                             </li>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>
+                            <li className={"flex gap-4 items-center py-0.5"}><StarIcon size={"small"}/>
                                 Unlimited data export
                             </li>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>
+                            <li className={"flex gap-4 items-center py-0.5"}><StarIcon size={"small"}/>
                                 AppCheck
                             </li>
                         </ul>

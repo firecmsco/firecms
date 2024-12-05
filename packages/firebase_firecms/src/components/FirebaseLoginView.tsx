@@ -5,13 +5,13 @@ import { ErrorView, FireCMSLogo, useModeController, useSnackbarController, } fro
 import {
     ArrowBackIcon,
     Button,
+    CallIcon,
     CircularProgress,
     cls,
-    EmailIcon,
     IconButton,
     LoadingButton,
-    PersonOutlineIcon,
-    PhoneIcon,
+    MailIcon,
+    PersonIcon,
     TextField,
     Typography,
 } from "@firecms/ui";
@@ -259,21 +259,21 @@ export function FirebaseLoginView({
                         <LoginButton
                             disabled={disabled}
                             text={"Email/password"}
-                            icon={<EmailIcon size={28}/>}
+                            icon={<MailIcon size={28}/>}
                             onClick={() => setPasswordLoginSelected(true)}/>}
 
                     {resolvedSignInOptions.includes("phone") &&
                         <LoginButton
                             disabled={disabled}
                             text={"Phone number"}
-                            icon={<PhoneIcon size={28}/>}
+                            icon={<CallIcon size={28}/>}
                             onClick={() => setPhoneLoginSelected(true)}/>}
 
                     {resolvedSignInOptions.includes("anonymous") &&
                         <LoginButton
                             disabled={disabled}
                             text={"Log in anonymously"}
-                            icon={<PersonOutlineIcon
+                            icon={<PersonIcon
                                 size={28}/>}
                             onClick={authController.anonymousLogin}/>}
 

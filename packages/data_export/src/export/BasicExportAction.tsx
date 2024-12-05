@@ -9,10 +9,9 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    GetAppIcon,
+    DownloadIcon,
     IconButton,
-    Tooltip,
-    Typography
+    Tooltip
 } from "@firecms/ui";
 import { downloadEntitiesExport } from "./export";
 
@@ -63,7 +62,7 @@ export function BasicExportAction({
         <Tooltip title={"Export"}
                  asChild={true}>
             <IconButton color={"primary"} onClick={handleClickOpen}>
-                <GetAppIcon/>
+                <DownloadIcon/>
             </IconButton>
         </Tooltip>
 

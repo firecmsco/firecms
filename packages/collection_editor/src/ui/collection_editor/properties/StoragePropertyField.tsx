@@ -1,9 +1,9 @@
 import React from "react";
 import {
     Button,
+    CloudUploadIcon,
     DebouncedTextField,
     ExpandablePanel,
-    FileUploadIcon,
     MultiSelect,
     MultiSelectItem,
     Typography
@@ -75,7 +75,7 @@ export function StoragePropertyField({
                 <ExpandablePanel
                     title={
                         <div className="flex flex-row text-surface-500">
-                            <FileUploadIcon/>
+                            <CloudUploadIcon/>
                             <Typography variant={"subtitle2"}
                                         className="ml-2">
                                 File upload config

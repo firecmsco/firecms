@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 
-import { ClearIcon, Collapse, IconButton, TextField } from "@firecms/ui";
+import { CloseIcon, Collapse, IconButton, TextField } from "@firecms/ui";
 import { FieldProps, PreviewType } from "../../types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { getIconForProperty } from "../../util";
@@ -85,7 +85,7 @@ export function TextFieldBinding<T extends string | number>({
                     endAdornment={
                         property.clearable && <IconButton
                             onClick={handleClearClick}>
-                            <ClearIcon/>
+                            <CloseIcon/>
                         </IconButton>
                     }
                     error={showError ? error : undefined}

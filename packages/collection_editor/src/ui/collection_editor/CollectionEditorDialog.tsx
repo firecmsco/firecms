@@ -26,6 +26,7 @@ import {
 import {
     ArrowBackIcon,
     Button,
+    CheckIcon,
     cls,
     coolIconKeys,
     defaultBorderMixin,
@@ -33,7 +34,6 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    DoneIcon,
     IconButton,
     LoadingButton,
     Tab,
@@ -726,7 +726,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                 loading={isSubmitting}
                                 disabled={isSubmitting || (currentView === "details" && !validValues)}
                                 startIcon={currentView === "properties"
-                                    ? <DoneIcon/>
+                                    ? <CheckIcon/>
                                     : undefined}
                             >
                                 {currentView === "details" && "Next"}

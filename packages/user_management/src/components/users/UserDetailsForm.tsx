@@ -2,16 +2,15 @@ import React, { useCallback } from "react";
 import * as Yup from "yup";
 import {
     Button,
+    CheckIcon,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
-    DoneIcon,
     LoadingButton,
     MultiSelect,
     MultiSelectItem,
     TextField,
-    Typography,
 } from "@firecms/ui";
 import { FieldCaption, Role, useAuthController, User, useSnackbarController } from "@firecms/core";
 import { Formex, useCreateFormex } from "@firecms/formex";
@@ -218,7 +217,7 @@ export function UserDetailsForm({
                             type="submit"
                             disabled={!dirty}
                             loading={isSubmitting}
-                            startIcon={<DoneIcon/>}
+                            startIcon={<CheckIcon/>}
                         >
                             {isNewUser ? "Create user" : "Update"}
                         </LoadingButton>

@@ -3,7 +3,7 @@ import { StringPropertyValidation } from "./validation/StringPropertyValidation"
 import { ValidationPanel } from "./validation/ValidationPanel";
 import { Field, getIn, useFormex } from "@firecms/formex";
 
-import { DebouncedTextField, ExpandablePanel, FileUploadIcon, TextField, Typography } from "@firecms/ui";
+import { CloudUploadIcon, DebouncedTextField, ExpandablePanel, TextField, Typography } from "@firecms/ui";
 
 export function MarkdownPropertyField({
                                           disabled,
@@ -55,7 +55,7 @@ export function MarkdownPropertyField({
                 <ExpandablePanel
                     title={
                         <div className="flex flex-row text-surface-500">
-                            <FileUploadIcon/>
+                            <CloudUploadIcon/>
                             <Typography variant={"subtitle2"}
                                         className="ml-2">
                                 File upload config

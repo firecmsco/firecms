@@ -6,10 +6,10 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    FileUploadIcon,
     IconButton,
     Tooltip,
-    Typography
+    Typography,
+    UploadIcon
 } from "@firecms/ui";
 
 export function DemoImportAction({}: CollectionActionsProps) {
@@ -21,7 +21,7 @@ export function DemoImportAction({}: CollectionActionsProps) {
         <Tooltip title={"Import"}
                  asChild={true}>
             <IconButton color={"primary"} onClick={() => setOpen(true)}>
-                <FileUploadIcon/>
+                <UploadIcon/>
             </IconButton>
         </Tooltip>
 

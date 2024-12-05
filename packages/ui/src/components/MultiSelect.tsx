@@ -4,7 +4,7 @@ import * as React from "react";
 import { ChangeEvent, Children, useEffect } from "react";
 import { Command as CommandPrimitive } from "cmdk";
 import { cls } from "../util";
-import { CloseIcon, ExpandMoreIcon, Icon } from "../icons";
+import { CheckIcon, CloseIcon, KeyboardArrowDownIcon } from "../icons";
 import { Separator } from "./Separator";
 import { Chip } from "./Chip";
 import { SelectInputLabel } from "./common/SelectInputLabel";
@@ -254,7 +254,7 @@ export const MultiSelect = React.forwardRef<
                                             }}
                                         />}
                                         <div className={cls("px-2 h-full flex items-center")}>
-                                            <ExpandMoreIcon size={"small"}
+                                            <KeyboardArrowDownIcon size={"small"}
                                                             className={cls("transition", isPopoverOpen ? "rotate-180" : "")}/>
                                         </div>
                                     </div>
@@ -265,7 +265,7 @@ export const MultiSelect = React.forwardRef<
                                       {placeholder}
                                     </span>
                                     <div className={cls("px-2 h-full flex items-center")}>
-                                        <ExpandMoreIcon size={"small"}
+                                        <KeyboardArrowDownIcon size={"small"}
                                                         className={cls("transition", isPopoverOpen ? "rotate-180" : "")}/>
                                     </div>
                                 </div>
@@ -392,7 +392,7 @@ function InnerCheckBox({ checked }: { checked: boolean }) {
                 (checked) ? "text-surface-accent-100 dark:text-surface-accent-900" : "",
                 (checked ? "border-transparent" : "border-surface-accent-800 dark:border-surface-accent-200")
             )}>
-            {checked && <Icon iconKey={"check"} size={16} className={"absolute"}/>}
+            {checked && <CheckIcon size={16} className={"absolute"}/>}
         </div>
     </div>
 }

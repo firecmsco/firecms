@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 
-import { ArrowBackIcon, Button, CircularProgress, EmailIcon, IconButton, TextField, Typography, } from "@firecms/ui";
+import { ArrowBackIcon, Button, CircularProgress, IconButton, MailIcon, TextField, Typography, } from "@firecms/ui";
 import { ErrorView, FireCMSLogo, useModeController } from "@firecms/core";
 
 import { MongoAuthController } from "../useMongoDBAuthController";
@@ -124,7 +124,7 @@ export function MongoLoginView({
                     <LoginButton
                         disabled={disabled}
                         text={"Email/password"}
-                        icon={<EmailIcon size={"large"}/>}
+                        icon={<MailIcon size={"large"}/>}
                         onClick={() => {
                             setRegistrationSelected(false);
                             setPasswordLoginSelected(true);
@@ -135,7 +135,7 @@ export function MongoLoginView({
                     <LoginButton
                         disabled={disabled}
                         text={"Register"}
-                        icon={<EmailIcon size={"large"}/>}
+                        icon={<MailIcon size={"large"}/>}
                         onClick={() => {
                             setRegistrationSelected(true);
                             setPasswordLoginSelected(false);

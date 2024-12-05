@@ -3,7 +3,7 @@ import React, { PropsWithChildren, useEffect, useState } from "react";
 
 import * as Collapsible from "@radix-ui/react-collapsible";
 import { defaultBorderMixin, fieldBackgroundMixin } from "../styles";
-import { ExpandMoreIcon } from "../icons";
+import { KeyboardArrowDownIcon } from "../icons";
 import { cls } from "../util";
 import { useInjectStyles } from "../hooks";
 
@@ -104,7 +104,7 @@ export function ExpandablePanel({
                     )}
                 >
                     {title}
-                    <ExpandMoreIcon className={cls("transition", open ? "rotate-180" : "")}/>
+                    <KeyboardArrowDownIcon className={cls("transition", open ? "rotate-180" : "")}/>
                 </Collapsible.Trigger>
 
                 <Collapsible.Content

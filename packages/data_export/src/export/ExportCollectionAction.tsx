@@ -22,11 +22,11 @@ import {
     cls,
     Dialog,
     DialogActions,
-    DialogContent, DialogTitle,
-    GetAppIcon,
+    DialogContent,
+    DialogTitle,
+    DownloadIcon,
     IconButton,
-    Tooltip,
-    Typography
+    Tooltip
 } from "@firecms/ui";
 import { downloadEntitiesExport } from "./export";
 
@@ -184,7 +184,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
         <Tooltip title={"Export"}
                  asChild={true}>
             <IconButton color={"primary"} onClick={handleClickOpen}>
-                <GetAppIcon/>
+                <DownloadIcon/>
             </IconButton>
         </Tooltip>
 

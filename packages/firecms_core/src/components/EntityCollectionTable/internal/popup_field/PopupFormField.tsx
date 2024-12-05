@@ -19,7 +19,7 @@ import { CustomFieldValidator, getYupEntitySchema } from "../../../../form/valid
 import { useWindowSize } from "./useWindowSize";
 import { ElementResizeListener } from "./ElementResizeListener";
 import { getPropertyInPath, isReadOnly, resolveCollection } from "../../../../util";
-import { Button, ClearIcon, DialogActions, IconButton, Typography } from "@firecms/ui";
+import { Button, CloseIcon, DialogActions, IconButton, Typography } from "@firecms/ui";
 import { PropertyFieldBinding } from "../../../../form";
 import { useCustomizationController, useDataSource, useFireCMSContext } from "../../../../hooks";
 import { OnCellValueChangeParams } from "../../../common";
@@ -394,7 +394,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                             event.stopPropagation();
                             onClose();
                         }}>
-                        <ClearIcon className="text-white"
+                        <CloseIcon className="text-white"
                                    size={"small"}/>
                     </IconButton>
                 </div>

@@ -16,7 +16,7 @@ import {
 } from "@firecms/core";
 import {
     AddIcon,
-    AutoAwesomeIcon,
+    AutorenewIcon,
     Button,
     CircularProgress,
     cls,
@@ -362,7 +362,7 @@ export function CollectionPropertiesEditorForm({
                                 variant={"filled"}
                                 disabled={inferringProperties}
                                 onClick={inferPropertiesFromData}>
-                                {inferringProperties ? <CircularProgress size={"small"}/> : <AutoAwesomeIcon/>}
+                                {inferringProperties ? <CircularProgress size={"small"}/> : <AutorenewIcon/>}
                             </IconButton>
                         </Tooltip>}
                         <Tooltip title={"Add new property"}

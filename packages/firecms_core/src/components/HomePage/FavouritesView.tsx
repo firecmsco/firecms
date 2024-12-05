@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useNavigationController } from "../../hooks";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
 import { TopNavigationEntry } from "../../types";
-import { Chip, Collapse, StarBorderIcon, StarIcon } from "@firecms/ui";
+import { Chip, Collapse, StarIcon } from "@firecms/ui";
 
 function NavigationChip({ entry }: { entry: TopNavigationEntry }) {
 
@@ -29,16 +29,11 @@ function NavigationChip({ entry }: { entry: TopNavigationEntry }) {
     return <Chip
         key={entry.path}
         onClick={() => navigate(entry.url)}
-        icon={
-            favourite
-                ? <StarIcon
-                    onClick={onIconClick}
-                    size={18}
-                    className={"text-secondary"}/>
-                : <StarBorderIcon
-                    onClick={onIconClick}
-                    size={18}
-                    className={"text-surface-400 dark:text-surface-500"}/>}>
+        icon={<StarIcon
+            onClick={onIconClick}
+            size={18}
+            className={favourite ? "text-secondary" : "text-surface-400 dark:text-surface-500"}/>
+        }>
         {entry.name}
     </Chip>;
 }

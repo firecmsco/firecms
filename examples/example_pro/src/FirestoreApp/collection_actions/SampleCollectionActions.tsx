@@ -1,6 +1,6 @@
 import React from "react";
 import { CollectionActionsProps, useSnackbarController } from "@firecms/core";
-import { Button, ClearIcon, IconButton, Select, SelectItem } from "@firecms/ui";
+import { Button, CloseIcon, IconButton, Select, SelectItem } from "@firecms/ui";
 
 export function SampleCollectionActions({ selectionController }: CollectionActionsProps) {
 
@@ -49,7 +49,7 @@ export function CustomFiltersActions({
                 className={"w-44"}
                 endAdornment={categoryFilterValue ?
                     <IconButton size={"small"} onClick={() => updateFilter(null)}>
-                        <ClearIcon size={"smallest"}/>
+                        <CloseIcon size={"smallest"}/>
                     </IconButton> : undefined}
                 onValueChange={updateFilter}
                 size={"medium"}

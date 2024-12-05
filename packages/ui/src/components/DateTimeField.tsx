@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { CalendarMonthIcon, ClearIcon, ErrorIcon } from "../icons";
+import { CalendarMonthIcon, CloseIcon, ErrorIcon } from "../icons";
 import { IconButton } from "./IconButton";
 import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin, } from "../styles";
 import { InputLabel } from "./InputLabel";
@@ -174,7 +174,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                         onClick={handleClear}
                         className="absolute right-14 top-1/2 transform -translate-y-1/2 text-surface-accent-400 "
                     >
-                        <ClearIcon/>
+                        <CloseIcon/>
                     </IconButton>
                 )}
             </div>

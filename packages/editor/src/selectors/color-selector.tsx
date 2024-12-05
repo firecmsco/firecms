@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 import { EditorBubbleItem, useEditor } from "../components";
-import { Button, CheckIcon, ExpandMoreIcon, Popover } from "@firecms/ui";
+import { Button, CheckIcon, KeyboardArrowDownIcon, Popover } from "@firecms/ui";
 
 export interface BubbleColorMenuItem {
     name: string;
@@ -129,7 +129,7 @@ export const ColorSelector = ({
                       >
                         A
                       </span>
-                    <ExpandMoreIcon size={"small"}/>
+                    <KeyboardArrowDownIcon size={"small"}/>
                 </Button>}
             modal={true} open={open} onOpenChange={onOpenChange}>
 

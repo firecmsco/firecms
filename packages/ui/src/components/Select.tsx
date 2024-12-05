@@ -9,7 +9,7 @@ import {
     fieldBackgroundMixin,
     focusedDisabled
 } from "../styles";
-import { CheckIcon, ExpandMoreIcon } from "../icons";
+import { CheckIcon, KeyboardArrowDownIcon } from "../icons";
 import { cls } from "../util";
 import { SelectInputLabel } from "./common/SelectInputLabel";
 
@@ -186,7 +186,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                             </div>
                         )}
                         <SelectPrimitive.Icon asChild>
-                            <ExpandMoreIcon size={"medium"}
+                            <KeyboardArrowDownIcon size={"medium"}
                                             className={cls("transition", open ? "rotate-180" : "", {
                                                 "px-2": size === "large",
                                                 "px-1": size === "medium" || size === "small",

@@ -4,7 +4,7 @@ import { EnumType, FieldProps } from "../../types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { EnumValuesChip } from "../../preview";
 import { getIconForProperty, resolveEnumValues } from "../../util";
-import { ClearIcon, cls, IconButton, Select, SelectItem } from "@firecms/ui";
+import { CloseIcon, cls, IconButton, Select, SelectItem } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { PropertyIdCopyTooltip } from "../../components";
 
@@ -68,7 +68,7 @@ export function SelectFieldBinding<T extends EnumType>({
                 endAdornment={
                     property.clearable && <IconButton
                         onClick={handleClearClick}>
-                        <ClearIcon/>
+                        <CloseIcon/>
                     </IconButton>
                 }
                 onValueChange={(updatedValue: string) => {

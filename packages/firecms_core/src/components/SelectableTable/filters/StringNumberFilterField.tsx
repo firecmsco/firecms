@@ -3,7 +3,7 @@ import { EnumValuesChip } from "../../../preview";
 import { VirtualTableWhereFilterOp } from "../../VirtualTable";
 import {
     Checkbox,
-    ClearIcon,
+    CloseIcon,
     IconButton,
     Label,
     MultiSelect,
@@ -125,7 +125,7 @@ export function StringNumberFilterField({
                     }}
                     endAdornment={internalValue && <IconButton
                         onClick={(e) => updateFilter(operation, undefined)}>
-                        <ClearIcon/>
+                        <CloseIcon/>
                     </IconButton>}
                 />}
 
@@ -141,7 +141,7 @@ export function StringNumberFilterField({
                         endAdornment={internalValue && <IconButton
                             className="absolute right-2 top-3"
                             onClick={(e) => updateFilter(operation, undefined)}>
-                            <ClearIcon/>
+                            <CloseIcon/>
                         </IconButton>}
                         renderValue={(enumKey) => {
                             if (enumKey === null)
@@ -178,7 +178,7 @@ export function StringNumberFilterField({
                         endAdornment={internalValue && <IconButton
                             className="absolute right-2 top-3"
                             onClick={(e) => updateFilter(operation, undefined)}>
-                            <ClearIcon/>
+                            <CloseIcon/>
                         </IconButton>}
                         // renderValues={(enumKeys) => {
                         //     console.log("renderValues", enumKeys);
