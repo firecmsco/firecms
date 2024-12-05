@@ -56,7 +56,6 @@ export function ImagePreview({
                  className={"rounded-md"}
                  style={imageStyle}/>
 
-
             <div className={"flex flex-row gap-2 absolute bottom-[-4px] right-[-4px] invisible group-hover:visible"}>
                 {navigator && <Tooltip
                     asChild={true}

@@ -7,7 +7,6 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
     "./samples/**/*.{js,ts,jsx,tsx}",
     "../packages/**/src/**/*.{js,ts,jsx,tsx}",
-    "../**/node_modules/firecms/src/**/*.{js,ts,jsx,tsx}",
     "../**/node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {

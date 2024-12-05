@@ -2,8 +2,7 @@
 
 import * as React from "react";
 import { cls } from "../util";
-import "@material-symbols/font-500/rounded.css";
-import "./default.css";
+import "./material_icons.css";
 
 export type IconColor = "inherit" | "primary" | "secondary" | "disabled" | "error" | "success" | "warning";
 export type IconProps = {
@@ -59,7 +58,7 @@ export const Icon = React.forwardRef<HTMLSpanElement, IconProps & { iconKey: str
                 ...style
             }}
             className={
-                cls("material-symbols-rounded",
+                cls("material-icons",
                     color ? colorClassesMapping[color] : "",
                     "select-none",
                     className)}

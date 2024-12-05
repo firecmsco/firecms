@@ -1222,7 +1222,6 @@ export const iconSynonyms = {
     picture_in_picture_alt: "cropped overlap photo position shape",
     pie_chart: "analytics bars data diagram infographic measure metrics statistics tracking",
     pie_chart_outline: "analytics bars data diagram infographic measure metrics statistics tracking",
-    pie_chart_outlined: "graph",
     pin: "1 2 3 digit key login logout number password pattern security star symbol unlock",
     pinch: "arrows compress direction finger grasp hand navigation nip squeeze tweak",
     pin_drop: "destination direction gps location maps navigation place stop",

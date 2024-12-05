@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
 import { Entity, ResolvedArrayProperty, ResolvedStringProperty, StorageConfig } from "../../../types";
 import { useDropzone } from "react-dropzone";
@@ -140,9 +140,7 @@ function StorageUpload({
                            storagePathBuilder,
                        }: StorageUploadProps) {
 
-    const [onHover, setOnHover] = useState(false);
-
-    const previewSize = multipleFilesSupported && previewSizeInput === "medium" ? "small" : previewSizeInput;
+    const previewSize = previewSizeInput;
     if (multipleFilesSupported) {
         const arrayProperty = property as ResolvedArrayProperty<string[]>;
         if (Array.isArray(arrayProperty.of)) {
@@ -212,9 +210,6 @@ function StorageUpload({
 
     return (
         <div {...rootProps}
-             onMouseEnter={() => setOnHover(true)}
-             onMouseMove={() => setOnHover(true)}
-             onMouseLeave={() => setOnHover(false)}
              className={cls(dropZoneClasses,
                  "relative w-full h-full flex",
                  `justify-${hasValue ? "start" : "center"}`,
@@ -252,8 +247,7 @@ function StorageUpload({
                 }
 
                 return child;
-            })
-            }
+            })}
 
             {!internalValue && <div
                 className="flex-grow m-2 max-w-[200px]"

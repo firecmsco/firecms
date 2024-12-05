@@ -79,9 +79,9 @@ export function DefaultDrawer({
                 <DrawerLogo logo={logo}/>
 
                 <div className={"mt-4 flex-grow overflow-scroll no-scrollbar"}
-                style={{
-                    maskImage: "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)",
-                }}>
+                     style={{
+                         maskImage: "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)",
+                     }}>
 
                     {groupsWithoutAdmin.map((group) => (
                         <div
@@ -93,7 +93,8 @@ export function DefaultDrawer({
                                 .map((view, index) =>
                                     <DrawerNavigationItem
                                         key={`navigation_${index}`}
-                                        icon={<IconForView collectionOrView={view.collection ?? view.view} size={"small"}/>}
+                                        icon={<IconForView collectionOrView={view.collection ?? view.view}
+                                                           size={"small"}/>}
                                         tooltipsOpen={tooltipsOpen}
                                         adminMenuOpen={adminMenuOpen}
                                         drawerOpen={drawerOpen}
@@ -173,8 +174,8 @@ export function DrawerLogo({ logo }: {
                 {logo
                     ? <img src={logo}
                            alt="Logo"
-                           className={cls("max-w-full max-h-full",
-                               drawerOpen ?? "w-[112px] h-[112px]")}/>
+                           className={cls("max-w-full max-h-full transition-all",
+                               drawerOpen ? "w-[96px] h-[96px]" : "w-[32px] h-[32px]")}/>
                     : <FireCMSLogo/>}
 
             </Link>

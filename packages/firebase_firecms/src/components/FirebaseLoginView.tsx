@@ -85,6 +85,11 @@ export interface FirebaseLoginViewProps {
     noUserComponent?: ReactNode;
 
     /**
+     * Include additional components in the login view, on top of the login buttons.
+     */
+    children?: ReactNode;
+
+    /**
      * Display this component bellow the sign-in buttons.
      * Useful for adding checkboxes for privacy and terms and conditions.
      * You may want to use it in conjunction with the `disabled` prop.
@@ -104,6 +109,7 @@ export interface FirebaseLoginViewProps {
  * @category Firebase
  */
 export function FirebaseLoginView({
+                                      children,
                                       allowSkipLogin,
                                       logo,
                                       signInOptions,
@@ -244,6 +250,8 @@ export function FirebaseLoginView({
                     {logoComponent}
                 </div>
 
+                {children}
+
                 {notAllowedMessage &&
                     <div className="p-8">
                         <ErrorView error={notAllowedMessage}/>
@@ -326,6 +334,7 @@ export function LoginButton({
             <Button
                 className="w-full"
                 variant="outlined"
+                color={"primary"}
                 disabled={disabled}
                 onClick={onClick}>
                 <div

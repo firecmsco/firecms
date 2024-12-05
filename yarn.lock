@@ -3090,8 +3090,6 @@ __metadata:
   resolution: "@firecms/ui@workspace:packages/ui"
   dependencies:
     "@jest/globals": ^29.7.0
-    "@material-symbols/font-400": ^0.27.1
-    "@material-symbols/font-500": ^0.27.1
     "@radix-ui/react-checkbox": ^1.1.2
     "@radix-ui/react-collapsible": ^1.1.1
     "@radix-ui/react-dialog": ^1.1.2
@@ -4092,20 +4090,6 @@ __metadata:
     yargs: 17.7.2
     yargs-parser: 21.1.1
   checksum: 3c33438b2465bd46634242cf5146a8ea681d4eb5af6ba9edf6bfeba31de7db004b309f2062d0746617d465cee29fe9f21c4ef45d981d51641cc0bf92d43410ea
-  languageName: node
-  linkType: hard
-
-"@material-symbols/font-400@npm:^0.27.1":
-  version: 0.27.1
-  resolution: "@material-symbols/font-400@npm:0.27.1"
-  checksum: 5dd0d986724af46bb14b60dff3e3f63ded8c698cab3121f74c1751ae91fd9f64e444bef2158da1d0925e766852d9fa5d3c2b870242cfcfca6ccd2c85bec61d12
-  languageName: node
-  linkType: hard
-
-"@material-symbols/font-500@npm:^0.27.1":
-  version: 0.27.1
-  resolution: "@material-symbols/font-500@npm:0.27.1"
-  checksum: bdcc51d809aaa49b37168d9b7ff27224fbb233bf2008b0ccd55698cd8c98c6af748fc823f8ca75c393f19eb5f640b45ce68aa86c5fd6795d10c3e7f7b9b86256
   languageName: node
   linkType: hard
 

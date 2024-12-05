@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 
 import "@/app/common/index.css"
 import "typeface-rubik";
@@ -10,6 +10,7 @@ import "@fontsource/jetbrains-mono";
 import {
     AppBar,
     CircularProgressCenter,
+    CMSView,
     Drawer,
     FireCMS,
     ModeControllerProvider,
@@ -24,7 +25,6 @@ import {
 } from "@firecms/core";
 import {
     FirebaseAuthController,
-    FirebaseLoginView,
     FirebaseSignInProvider,
     useFirebaseAuthController,
     useFirebaseStorageSource,
@@ -40,7 +40,11 @@ import { useExportPlugin } from "@firecms/data_export";
 import logo from "@/app/common/logo.svg";
 import { productsCollection } from "./collections/products";
 import { blogCollection } from "@/app/cms/collections/blog";
-
+import { CustomLoginView } from "@/app/cms/components/CustomLoginView";
+import { ExampleCMSView } from "@/app/cms/views/ExampleCMSView";
+import { TestEditorView } from "./views/TestEditorView";
+import ClientUIComponentsShowcase from "./views/ClientUIComponentsShowcase";
+import { usersCollection } from "@/app/cms/collections/users_collection";
 
 export function App() {
 
@@ -62,16 +66,41 @@ export function App() {
     const collectionsBuilder = useCallback(() => {
         return [
             productsCollection,
-            blogCollection
+            blogCollection,
+            usersCollection
         ];
     }, []);
 
     // // Here you define your custom top-level views
-    // const views: CMSView[] = useMemo(() => ([{
-    //     path: "example",
-    //     name: "Example CMS view",
-    //     view: <ExampleCMSView/>
-    // }]), []);
+    const views: CMSView[] = useMemo(() => ([
+        {
+            path: "additional",
+            name: "Additional",
+            group: "Custom views",
+            description: "This is an example of an additional view that is defined by the user",
+            view: <ExampleCMSView/>
+        },
+        // {
+        //     path: "board_test",
+        //     name: "Board test",
+        //     group: "Content",
+        //     view: <TestBoardView/>
+        // },
+        {
+            path: "editor_test",
+            name: "Editor test",
+            description: "This view showcases a custom advanced editor",
+            group: "Custom views",
+            view: <TestEditorView/>
+        },
+        {
+            path: "ui_components",
+            description: "This view showcases some of the UI components available in FireCMS",
+            name: "UI components showcase",
+            group: "Custom views",
+            view: <ClientUIComponentsShowcase docsUrl={"https://firecms.co"} linksInNewTab={true}/>
+        }
+    ]), []);
 
     const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
 
@@ -110,7 +139,6 @@ export function App() {
         authController
     });
 
-
     /**
      * Controller for saving some user preferences locally.
      */
@@ -134,7 +162,7 @@ export function App() {
     const navigationController = useBuildNavigationController({
         collections: collectionsBuilder,
         // collectionPermissions: userManagement.collectionPermissions, // TODO: enable this
-        // views,
+        views,
         adminViews: userManagementAdminViews,
         authController,
         dataSourceDelegate: firestoreDelegate
@@ -170,7 +198,6 @@ export function App() {
         return <>{configError}</>;
     }
 
-
     return (
         <SnackbarProvider>
             <ModeControllerProvider value={modeController}>
@@ -199,8 +226,9 @@ export function App() {
                         } else {
                             if (!canAccessMainView) {
                                 component = (
-                                    <div className={"bg-white rounded-2xl max-w-[500px] w-full h-fit"}>
-                                        <FirebaseLoginView
+                                    <div
+                                        className={"bg-white dark:bg-surface-900 rounded-2xl max-w-[500px] w-full h-fit"}>
+                                        <CustomLoginView
                                             logo={logo.src}
                                             allowSkipLogin={false}
                                             signInOptions={signInOptions}

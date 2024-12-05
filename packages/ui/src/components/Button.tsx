@@ -61,6 +61,7 @@ const ButtonInner = React.forwardRef<
         "border border-transparent bg-surface-100 hover:bg-surface-accent-200 text-error dark:bg-surface-800 dark:hover:bg-surface-accent-700 dark:text-error": variant === "neutral" && color === "error" && !disabled,
 
         // Disabled states for all variants
+        "text-text-disabled dark:text-text-disabled-dark": disabled,
         "border border-transparent opacity-50": variant === "text" && disabled,
         "border border-surface-500 opacity-50": variant === "outlined" && disabled,
         "border border-surface-500 bg-surface-500 opacity-50": (variant === "filled" || variant === "neutral") && disabled,

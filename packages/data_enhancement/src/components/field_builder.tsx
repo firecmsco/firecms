@@ -4,7 +4,6 @@ import equal from "react-fast-compare"
 import { CMSType, FieldProps, MarkdownEditorFieldBinding, PluginFieldBuilderParams, } from "@firecms/core";
 import {
     AutoAwesomeIcon,
-    AutorenewIcon,
     CircularProgress,
     cls,
     IconButton,
@@ -188,7 +187,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                             }}>
                             {dataLoading || loading
                                 ? <CircularProgress size={"small"}/>
-                                : <AutorenewIcon
+                                : <AutoAwesomeIcon
                                     size={"small"}/>}
                         </IconButton>}>
                     <MenuItem onClick={() => enhanceData()}>

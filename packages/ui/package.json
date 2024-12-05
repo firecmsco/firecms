@@ -53,7 +53,6 @@
     "generateIcons": "bun --esm src/scripts/generateIcons.ts"
   },
   "dependencies": {
-    "@material-symbols/font-500": "^0.27.1",
     "@radix-ui/react-checkbox": "^1.1.2",
     "@radix-ui/react-collapsible": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.2",

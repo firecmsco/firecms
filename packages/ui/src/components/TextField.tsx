@@ -123,11 +123,11 @@ export function TextField<T extends string | number>({
             className={cls(
                 "w-full outline-none bg-transparent leading-normal px-3",
                 "rounded-md",
+                "focused:text-text-primary focused:dark:text-text-primary-dark",
                 invisible ? focusedInvisibleMixin : "",
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                 size === "small" ? "min-h-[32px]" : (size === "medium" ? "min-h-[48px]" : "min-h-[64px]"),
                 label ? (size === "large" ? "pt-8 pb-2" : "pt-4 pb-2") : "py-2",
-                focused ? "text-text-primary dark:text-text-primary-dark" : "",
                 endAdornment ? "pr-10" : "pr-3",
                 disabled && "border border-transparent outline-none opacity-50 dark:opacity-50 text-surface-accent-800 dark:text-white",
                 inputClassName
@@ -160,7 +160,7 @@ export function TextField<T extends string | number>({
                 <InputLabel
                     className={cls(
                         "pointer-events-none absolute",
-                        size === "large" ? "top-1" : "-top-1",
+                        size === "large" ? "top-1" : "top-[-1px]",
                         !error ? (focused ? "text-primary dark:text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-red-500 dark:text-red-600",
                         disabled ? "opacity-50" : "")}
                     shrink={hasValue || focused}

@@ -16,7 +16,7 @@ export function HeaderLink({ href, children, className }: HeaderLinkProps) {
     return (
         <Link href={href}
               className={cls("block uppercase py-2 text-sm font-semibold hover:text-primary-dark dark:text-surface-300",
-                  isActive ? 'text-primary' : 'text-surface-800',
+                  isActive ? 'text-secondary' : 'text-surface-800',
                   className)}>
             {children}
         </Link>

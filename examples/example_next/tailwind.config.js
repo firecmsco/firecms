@@ -8,15 +8,14 @@ export default {
         "./node_modules/@firecms/**/*.{js,ts,jsx,tsx}",
 
         "../../packages/**/src/**/*.{js,ts,jsx,tsx}",
-        "../../node_modules/firecms/src/**/*.{js,ts,jsx,tsx}",
-        "../../node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}",
+        "../../node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}"
     ],
     theme: {
         extend: {
             typography: {
                 DEFAULT: {
                     css: {
-                        maxWidth: '100ch', // override the default max-width of prose
+                        maxWidth: "100ch" // override the default max-width of prose
                     }
                 }
             },

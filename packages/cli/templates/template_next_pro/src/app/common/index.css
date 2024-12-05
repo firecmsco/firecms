@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 :root {
-    --fcms-primary: #12b6b2;
-    --fcms-primary-dark: #12aaa6;
-    --fcms-primary-bg: rgba(22, 214, 209, 0.09);
-    --fcms-secondary: #d84b0d;
+    --fcms-primary: #0070F4;
+    --fcms-primary-dark: #0061e6;
+    --fcms-primary-bg: #0061e610;
+    --fcms-secondary: #FF5B79;
 }
 
 @layer utilities {

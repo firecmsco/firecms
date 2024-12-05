@@ -132,11 +132,11 @@ export function ExampleCMSView() {
                         <Typography variant="h4">
                             This is an example of an additional view
                         </Typography>
-                        <p>
+                        <div>
                             {authController.user
                                 ? <>Logged in as <Chip>{authController.user.displayName}</Chip></>
                                 : <>You are not logged in</>}
-                        </p>
+                        </div>
                     </div>
 
                     <div className="w-full">
