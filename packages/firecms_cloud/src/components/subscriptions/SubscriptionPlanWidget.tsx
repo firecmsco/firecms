@@ -77,29 +77,18 @@ export function SubscriptionPlanWidget({
 
     return <div className={"my-2 flex flex-col gap-2"}>
 
-        {/*<Alert*/}
-        {/*    color={"info"}*/}
-        {/*    action={includeCTA && <Button*/}
-        {/*        className={"dark:!text-white dark:border-white dark:hover:bg-white dark:hover:!text-primary min-w-content"}*/}
-        {/*        variant={"outlined"}*/}
-        {/*        onClick={() => setDialogOpen(true)}>*/}
-        {/*        More info*/}
-        {/*    </Button>}>*/}
-        {/*    <div>This project is currently in the <PlanChip*/}
-        {/*        subscriptionPlan={subscriptionPlan}/>*/}
-        {/*        <span*/}
-        {/*            className={"ml-2"}>{!message && "Try out all the PLUS features for free!"}</span></div>*/}
-        {/*    <Typography variant={"caption"}>{message}</Typography>*/}
-        {/*</Alert>*/}
         <Alert
-            color={"warning"}
+            color={"info"}
             action={includeCTA && <Button
                 className={"dark:!text-white dark:border-white dark:hover:bg-white dark:hover:!text-primary min-w-content"}
                 variant={"outlined"}
                 onClick={() => setDialogOpen(true)}>
                 More info
             </Button>}>
-            <div>BLACK FRIDAY SPECIAL: Enjoy a 33% discount using the code <b>FRIDAY24</b> on checkout</div>
+            <div>This project is currently in the <PlanChip
+                subscriptionPlan={subscriptionPlan}/>
+                <span
+                    className={"ml-2"}>{!message && "Try out all the PLUS features for free!"}</span></div>
             <Typography variant={"caption"}>{message}</Typography>
         </Alert>
 
