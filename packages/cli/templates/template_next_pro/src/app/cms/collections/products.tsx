@@ -1,7 +1,7 @@
 import { buildCollection, EnumValues } from "@firecms/core";
 import { localeCollection } from "./locales";
 import { Product } from "@/app/common/types";
-import { CMSBProductPreview } from "./components/CMSProductPreview";
+import { CMSProductPreview } from "./components/CMSProductPreview";
 
 export const categories: EnumValues = {
     art_and_decoration: "Art and decoration",
@@ -59,9 +59,9 @@ export const productsCollection = buildCollection<Product>({
     subcollections: [localeCollection],
     entityViews: [
         {
-            key: "product_preview",
+            key: "preview",
             name: "Product preview",
-            Builder: ({ modifiedValues, entity }) => <CMSBProductPreview
+            Builder: ({ modifiedValues, entity }) => <CMSProductPreview
                 id={entity?.id ?? "temp"}
                 product={modifiedValues}/>
         }

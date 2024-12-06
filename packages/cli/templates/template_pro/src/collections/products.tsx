@@ -22,7 +22,7 @@ export const productsCollection = buildCollection<Product>({
     subcollections: [localeCollection],
     entityViews: [
         {
-            key: "product_preview",
+            key: "preview",
             name: "Sample preview",
             Builder: ProductDetailPreview
         }

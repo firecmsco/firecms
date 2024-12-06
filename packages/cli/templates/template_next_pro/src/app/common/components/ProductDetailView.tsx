@@ -1,14 +1,24 @@
 "use client";
 
 import React from "react";
-import { AddIcon, Button, CenteredView, Label, RadioGroup, RadioGroupItem, Select, SelectItem } from "@firecms/ui";
+import {
+    AddIcon,
+    Button,
+    CenteredView,
+    Label,
+    Markdown,
+    RadioGroup,
+    RadioGroupItem,
+    Select,
+    SelectItem
+} from "@firecms/ui";
 import { useSnackbarController } from "@firecms/core";
-import { Product } from "../types";
 import { getCurrencySymbol } from "@/app/common/utils";
+import { Product } from "../types";
 
 export function ProductDetailView({
-                                         product
-                                     }: {
+                                      product
+                                  }: {
     product?: Product;
 }) {
 
@@ -25,16 +35,19 @@ export function ProductDetailView({
 
     return (
         <CenteredView>
-            <div className="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto py-6">
+            <div className="my-8 grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto py-6">
                 <div className="grid md:grid-cols-5 gap-3 items-start">
                     <div className="hidden md:flex flex-col gap-3 items-start">
 
                         {product.images?.map((image, index) => (
                             <button
-                                key={`image_${index}`}
-                                onClick={() => setSelectedImage(image)}>
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setSelectedImage(image)
+                                }}
+                                key={`image_${index}`}>
                                 <img src={image}
-                                     className="aspect-[5/6] object-contain bg-white"
+                                     className="aspect-[5/6] object-contain bg-white rounded"
                                      style={{
                                          height: 120,
                                          width: 100
@@ -50,32 +63,31 @@ export function ProductDetailView({
                                 height: 600,
                                 width: 900
                             }}
-                            className="bg-white aspect-[2/3] object-contain border border-surface-200 w-full rounded-lg overflow-hidden dark:border-surface-800"
+                            className="bg-white aspect-[2/3] object-contain w-full rounded-lg overflow-hidden"
                             src={selectedImage}/>}
                     </div>
                 </div>
                 <div className="grid gap-4 md:gap-10 items-start h-full content-center">
-                    <div className="flex items-start">
-                        <div className="grid gap-4">
-                            <h1 className="font-headers text-3xl lg:text-4xl">{product.name ?? "Product name"} </h1>
-                            <div>
-                                {product.description}
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <div className="flex items-center gap-0.5">
-                                    <StarIcon className="w-5 h-5 fill-primary-500 stroke-primary-500"/>
-                                    <StarIcon className="w-5 h-5 fill-primary-500 stroke-primary-500"/>
-                                    <StarIcon className="w-5 h-5 fill-primary-500 stroke-primary-500"/>
-                                    <StarIcon className="w-5 h-5 fill-primary-500 stroke-primary-500"/>
-                                    <StarIcon
-                                        className="w-5 h-5 fill-primary-100 dark:fill-primary-900 stroke-primary-400 dark:stroke-primary-600"/>
-                                </div>
+                    <div className="grid gap-4">
+                        <div className="flex items-start">
+                            <h1 className="flex-grow font-headers text-3xl lg:text-4xl">{product.name ?? "Product name"} </h1>
+                            <div className="font-headers text-4xl font-medium ml-auto">
+                                {getCurrencySymbol(product.currency)}{product.price}
                             </div>
                         </div>
-                        <div
-                            className="font-headers text-4xl font-medium ml-auto">{getCurrencySymbol(product.currency)}{product.price}</div>
+                        <Markdown source={product.description}/>
+                        <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-0.5">
+                                <StarIcon className="w-5 h-5 fill-primary-500 stroke-primary-500"/>
+                                <StarIcon className="w-5 h-5 fill-primary-500 stroke-primary-500"/>
+                                <StarIcon className="w-5 h-5 fill-primary-500 stroke-primary-500"/>
+                                <StarIcon className="w-5 h-5 fill-primary-500 stroke-primary-500"/>
+                                <StarIcon
+                                    className="w-5 h-5 fill-primary-100 dark:fill-primary-900 stroke-primary-400 dark:stroke-primary-600"/>
+                            </div>
+                        </div>
                     </div>
-                    <div className="grid gap-4 md:gap-10">
+                    <div className="grid gap-4">
                         <div className="grid gap-2">
                             <Label className="text-base" htmlFor="color">
                                 Color
@@ -151,6 +163,7 @@ export function ProductDetailView({
                                 Quantity
                             </Label>
                             <Select size={"medium"}
+                                    fullWidth
                                     value={String(quantity)}
                                     onValueChange={(value) => setQuantity(Number(value))}>
                                 <SelectItem value="1">1</SelectItem>

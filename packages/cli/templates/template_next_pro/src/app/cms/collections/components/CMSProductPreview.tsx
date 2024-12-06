@@ -1,10 +1,14 @@
+import React, { useEffect } from "react";
+import Link from "next/link";
+import { Button, CircularProgress, OpenInNewIcon } from "@firecms/ui";
 import { Product, ProductWithId } from "@/app/common/types";
 import { convertProduct } from "@/app/common/database";
-import React, { useEffect } from "react";
-import { CircularProgress } from "@firecms/ui";
 import { ProductDetailView } from "@/app/common/components/ProductDetailView";
 
-export function CMSBProductPreview({ product, id }: {
+export function CMSProductPreview({
+                                       product,
+                                       id
+                                   }: {
     product?: Product,
     id: string
 }) {
@@ -19,6 +23,14 @@ export function CMSBProductPreview({ product, id }: {
         return <CircularProgress/>;
     }
 
-    return <ProductDetailView product={convertedProduct}/>;
+    return <div className={"bg-surface-50 dark:bg-surface-900"}>
+        <div className={"flex w-full justify-end p-4"}>
+            <Link href={"/products/" + id}
+                  target={"_blank"}>
+                <Button variant={"outlined"} size={"small"}><OpenInNewIcon/> See product in website</Button>
+            </Link>
+        </div>
+        <ProductDetailView product={convertedProduct}/>
+    </div>;
 
 }
