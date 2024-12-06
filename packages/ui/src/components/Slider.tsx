@@ -33,7 +33,7 @@ function SliderThumb(props: {
         <TooltipPrimitive.Trigger asChild>
             <SliderPrimitive.Thumb
                 className={cls({
-                        "border-primary bg-primary hover:bg-primary-dark outline-none": !props.props.disabled,
+                        "border-primary bg-primary outline-none": !props.props.disabled,
                         "border-surface-accent-300 bg-surface-accent-300 dark:border-surface-700 dark:bg-surface-700": props.props.disabled
                     },
                     props.classes,

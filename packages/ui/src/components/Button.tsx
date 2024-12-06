@@ -38,8 +38,8 @@ const ButtonInner = React.forwardRef<
         "w-fit": !fullWidth,
 
         // Filled Variants
-        "border border-primary bg-primary hover:bg-primary-dark focus:ring-primary shadow hover:ring-1 hover:ring-primary text-white hover:text-white": variant === "filled" && color === "primary" && !disabled,
-        "border border-secondary bg-secondary hover:bg-secondary-dark focus:ring-secondary shadow hover:ring-1 hover:ring-secondary text-white hover:text-white": variant === "filled" && color === "secondary" && !disabled,
+        "border border-primary bg-primary focus:ring-primary shadow hover:ring-1 hover:ring-primary text-white hover:text-white": variant === "filled" && color === "primary" && !disabled,
+        "border border-secondary bg-secondary focus:ring-secondary shadow hover:ring-1 hover:ring-secondary text-white hover:text-white": variant === "filled" && color === "secondary" && !disabled,
         "border border-red-500 bg-red-500 hover:bg-red-500 focus:ring-red-500 shadow hover:ring-1 hover:ring-red-600 text-white hover:text-white": variant === "filled" && color === "error" && !disabled,
         "border border-surface-accent-200 bg-surface-accent-200 hover:bg-surface-accent-300 focus:ring-surface-accent-400 shadow hover:ring-1 hover:ring-surface-accent-400 text-text-primary hover:text-text-primary dark:text-text-primary-dark hover:dark:text-text-primary-dark": variant === "filled" && color === "text" && !disabled,
 
