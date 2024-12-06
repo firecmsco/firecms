@@ -25,7 +25,7 @@ body {
 }
 
 a {
-    @apply text-primary dark:text-primary hover:underline
+    @apply text-primary dark:text-primary
 }
 
 :root {

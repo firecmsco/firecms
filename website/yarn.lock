@@ -6665,13 +6665,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^18.3.12":
-  version: 18.3.12
-  resolution: "@types/react@npm:18.3.12"
+"@types/react@npm:^18.3.11":
+  version: 18.3.14
+  resolution: "@types/react@npm:18.3.14"
   dependencies:
     "@types/prop-types": "*"
     csstype: ^3.0.2
-  checksum: 4ab1577a8c2105a5e316536f724117c90eee5f4bd5c137fc82a2253d8c1fd299dedaa07e8dfc95d6e2f04a4be3cb8b0e1b06098c6233ebd55c508d88099395b7
+  checksum: 40e2112301d784106bdc713e3eb925c8c710e676a3a31ef65c76ca7df8529cdde3dda2db6e0f6f1878253a79bc6cf87a461aa114bd8364f453bdd2be52c175e5
   languageName: node
   linkType: hard
 
@@ -17857,7 +17857,7 @@ __metadata:
     "@firecms/ui": "link:../packages/ui"
     "@mdx-js/react": ^3.1.0
     "@tsconfig/docusaurus": ^2.0.3
-    "@types/react": ^18.3.12
+    "@types/react": ^18.3.11
     "@types/react-helmet": ^6.1.11
     "@types/react-router-dom": ^5.3.3
     aos: ^2.3.4

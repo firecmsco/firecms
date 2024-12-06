@@ -179,6 +179,8 @@ export function App() {
         getConfigForPath: ({ path }) => {
             if (path === "products")
                 return true;
+            if (path === "books")
+                return true;
             return false;
         }
     });

@@ -8,8 +8,8 @@ const locales = buildEnumValues({
 });
 
 export const localeCollection = buildCollection<Locale>({
-    id: "locale",
-    path: "locale",
+    id: "locales",
+    path: "locales",
     customId: locales,
     name: "Locales",
     singularName: "Locales",

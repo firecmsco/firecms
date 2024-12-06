@@ -54,11 +54,11 @@ export const Icon = React.forwardRef<HTMLSpanElement, IconProps & { iconKey: str
             ref={ref} // Attach the ref to the span
             style={{
                 fontSize: `${sizeInPx}px`,
-                display: "block",
                 ...style
             }}
             className={
                 cls("material-icons",
+                    "block",
                     color ? colorClassesMapping[color] : "",
                     "select-none",
                     className)}

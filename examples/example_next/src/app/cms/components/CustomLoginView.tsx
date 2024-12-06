@@ -34,9 +34,10 @@ export function CustomLoginView(props: FirebaseLoginViewProps) {
                 <Typography className={"mb-4"} variant={"body2"}>
                     This is a demo application that showcases the capabilities of FireCMS.
                     Check the sample frontend application built with Next.js
-                    in <a href={"/"} target={"_blank"} rel={"noreferrer"}>this link <OpenInNewIcon
+                    in <a className={"inline"} href={"/products"} target={"_blank"} rel={"noreferrer"}>this link <OpenInNewIcon
+                    className={"inline align-text-top"}
                     size={"smallest"}
-                    className={"inline"}/></a>.
+                    /></a>.
                 </Typography>
 
                 {/*<Link*/}
