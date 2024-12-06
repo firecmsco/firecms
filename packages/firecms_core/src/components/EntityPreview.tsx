@@ -71,21 +71,24 @@ export function EntityPreview({
     const titleProperty = getEntityTitlePropertyKey(resolvedCollection, customizationController.propertyConfigs);
     const imagePropertyKey = getEntityImagePreviewPropertyKey(resolvedCollection);
     const imageProperty = imagePropertyKey ? resolvedCollection.properties[imagePropertyKey] : undefined;
-
+    const usedImageProperty = "of" in imageProperty ? imageProperty.of : imageProperty;
     const restProperties = listProperties.filter(p => p !== titleProperty && p !== imagePropertyKey);
+
+    const imageValue = getValueInPath(entity.values, imagePropertyKey as string);
+    const usedImageValue = "of" in imageProperty ? ((imageValue ?? []).length > 0 ? imageValue[0] : undefined) : imageValue;
 
     return <EntityPreviewContainer onClick={disabled ? undefined : onClick}
                                    hover={disabled ? undefined : hover}
                                    size={size}>
         <div className={cls("flex w-10 h-10 ml-1 mr-2 shrink-0", size === "small" ? "my-0.5" : "m-2 self-start")}>
-            {imageProperty && <PropertyPreview property={imageProperty}
-                                               propertyKey={imagePropertyKey as string}
-                                               size={"small"}
-                                               value={getValueInPath(entity.values, imagePropertyKey as string)}/>}
-            {!imageProperty && <IconForView collectionOrView={collection}
-                                            color={"primary"}
-                                            size={size}
-                                            className={"m-auto p-1"}/>}
+            {usedImageProperty && usedImageValue && <PropertyPreview property={usedImageProperty}
+                                                                     propertyKey={imagePropertyKey as string}
+                                                                     size={"small"}
+                                                                     value={usedImageValue}/>}
+            {(!usedImageProperty || !usedImageValue) && <IconForView collectionOrView={collection}
+                                                                     color={"primary"}
+                                                                     size={size}
+                                                                     className={"m-auto p-1"}/>}
         </div>
 
 
@@ -220,3 +223,5 @@ export const EntityPreviewContainer = React.forwardRef<HTMLDivElement, EntityPre
         {children}
     </div>;
 });
+
+EntityPreviewContainer.displayName = "EntityPreviewContainer";

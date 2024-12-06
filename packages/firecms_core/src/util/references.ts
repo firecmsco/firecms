@@ -42,13 +42,19 @@ export function getEntityTitlePropertyKey<M extends Record<string, any>>(collect
 
 export function getEntityImagePreviewPropertyKey<M extends object>(collection: ResolvedEntityCollection<M>): string | undefined {
 
-    // find first text field property
+    // find first storage property of type image
     for (const key in collection.properties) {
         const property = collection.properties[key];
         if (property.dataType === "string" && property.storage?.acceptedFiles?.includes("image/*")) {
             return key;
         }
-
+    }
+    // alternatively, look for the first array of images
+    for (const key in collection.properties) {
+        const property = collection.properties[key];
+        if (property.dataType === "array" && property.of?.dataType === "string" && property.of.storage?.acceptedFiles?.includes("image/*")) {
+            return key;
+        }
     }
     return undefined;
 }

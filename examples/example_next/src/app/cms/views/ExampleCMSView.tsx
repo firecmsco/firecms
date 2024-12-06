@@ -142,7 +142,7 @@ export function ExampleCMSView() {
                     <div className="w-full">
                         <MultiSelect
                             className={"w-full"}
-                            value={selectedFrameworks}
+                            value={selectedFrameworks ?? []}
                             onValueChange={setSelectedFrameworks}
                             placeholder="Select frameworks"
                         >
