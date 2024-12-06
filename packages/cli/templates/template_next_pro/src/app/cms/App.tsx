@@ -40,11 +40,12 @@ import { useExportPlugin } from "@firecms/data_export";
 import logo from "@/app/common/logo.svg";
 import { productsCollection } from "./collections/products";
 import { blogCollection } from "@/app/cms/collections/blog";
-
+import Link from "next/link";
+import { Button, OpenInNewIcon } from "@firecms/ui";
 
 export function App() {
 
-    const title = "FireCMS E-commerce demo";
+    const title = "FireCMS e-commerce and blog demo";
 
     if (!firebaseConfig?.projectId) {
         throw new Error("Firebase config not found. Please check your `firebase_config.ts` file and make sure it is correctly set up.");
@@ -110,7 +111,6 @@ export function App() {
         authController
     });
 
-
     /**
      * Controller for saving some user preferences locally.
      */
@@ -170,7 +170,6 @@ export function App() {
         return <>{configError}</>;
     }
 
-
     return (
         <SnackbarProvider>
             <ModeControllerProvider value={modeController}>
@@ -215,7 +214,13 @@ export function App() {
                                     <Scaffold
                                         logo={logo.src}
                                         autoOpenDrawer={false}>
-                                        <AppBar title={title}/>
+                                        <AppBar title={title}
+                                                endAdornment={<Link href={"../"} target={"_blank"}>
+                                                    <Button variant={"text"}>
+                                                        <OpenInNewIcon/>
+                                                        Go to website
+                                                    </Button>
+                                                </Link>}/>
                                         <Drawer/>
                                         <NavigationRoutes/>
                                         <SideDialogs/>

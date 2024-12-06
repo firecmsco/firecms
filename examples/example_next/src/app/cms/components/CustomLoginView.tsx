@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Alert, BooleanSwitchWithLabel, Typography } from "@firecms/ui";
+import { Alert, BooleanSwitchWithLabel, OpenInNewIcon, Typography } from "@firecms/ui";
 import { FirebaseLoginView, FirebaseLoginViewProps } from "@firecms/firebase";
 
 export function CustomLoginView(props: FirebaseLoginViewProps) {
@@ -27,14 +27,27 @@ export function CustomLoginView(props: FirebaseLoginViewProps) {
             disabled={!termsAccepted}
         >
             <>
-                <Typography variant={"h6"} className={"mb-2"}>
-                    FireCMS e-commerce demo
+                <Typography variant={"h5"} className={"mb-2"}>
+                    FireCMS e-commerce and blog demo
                 </Typography>
-                <Typography className={"mb-4"} variant={"caption"}>
+
+                <Typography className={"mb-4"} variant={"body2"}>
                     This is a demo application that showcases the capabilities of FireCMS.
-                    You can see a sample frontend application built with Next.js in
-                    this <a href={"/"} target={"_blank"} rel={"noreferrer"}> link</a>.
+                    Check the sample frontend application built with Next.js
+                    in <a href={"/"} target={"_blank"} rel={"noreferrer"}>this link <OpenInNewIcon
+                    size={"smallest"}
+                    className={"inline"}/></a>.
                 </Typography>
+
+                {/*<Link*/}
+                {/*    target={"_blank"}*/}
+                {/*    href={"../products"}>*/}
+                {/*    <Button size={"small"}*/}
+                {/*            variant={"text"}*/}
+                {/*            fullWidth*/}
+                {/*            startIcon={<OpenInNewIcon/>}>See demo frontend app</Button>*/}
+                {/*</Link>*/}
+
                 <BooleanSwitchWithLabel size="small"
                                         invisible={true}
                                         value={newsletterSubscribed}

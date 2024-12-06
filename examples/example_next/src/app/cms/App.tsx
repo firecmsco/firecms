@@ -50,7 +50,7 @@ import Link from "next/link";
 
 export function App() {
 
-    const title = "FireCMS E-commerce demo";
+    const title = "FireCMS e-commerce and blog demo";
 
     if (!firebaseConfig?.projectId) {
         throw new Error("Firebase config not found. Please check your `firebase_config.ts` file and make sure it is correctly set up.");
@@ -248,7 +248,7 @@ export function App() {
                                         logo={logo.src}
                                         autoOpenDrawer={false}>
                                         <AppBar title={title}
-                                                endAdornment={<Link href={"../"} target={"_blank"}>
+                                                endAdornment={<Link href={"../products"} target={"_blank"}>
                                                     <Button variant={"text"}>
                                                         <OpenInNewIcon/>
                                                         Go to website

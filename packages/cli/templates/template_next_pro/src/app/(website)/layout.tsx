@@ -8,7 +8,7 @@ import { Header } from "@/app/(website)/components/Header";
 import { Footer } from "@/app/(website)/components/Footer";
 
 export const metadata: Metadata = {
-    title: "FireCMS E-commerce demo",
+    title: "FireCMS e-commerce and blog demo",
     description: "This is a demo for using FireCMS as an e-commerce backend",
     generator: "FireCMS",
 };

@@ -4,21 +4,19 @@
 
 :root {
     --fcms-primary: #0070F4;
-    --fcms-primary-dark: #0061e6;
     --fcms-primary-bg: #0061e610;
     --fcms-secondary: #12b6b2;
 }
 
-@layer utilities {
-    /* Chrome, Safari and Opera */
-    .no-scrollbar::-webkit-scrollbar {
-        display: none;
-    }
+body {
+    @apply w-full min-h-screen bg-surface-50 dark:bg-surface-900 flex flex-col items-center justify-center;
+}
 
-    .no-scrollbar {
-        -ms-overflow-style: none; /* IE and Edge */
-        scrollbar-width: none; /* Firefox */
-    }
+a {
+    @apply text-primary dark:text-primary hover:underline
+}
+
+@layer utilities {
 
     .typography-h1 {
         @apply text-5xl font-headers;
@@ -75,9 +73,4 @@
     .typography-button {
         @apply text-sm font-medium uppercase;
     }
-}
-
-
-body {
-    @apply w-full min-h-screen bg-surface-50 dark:bg-surface-900 flex flex-col items-center justify-center;
 }
