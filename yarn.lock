@@ -3090,6 +3090,7 @@ __metadata:
   resolution: "@firecms/ui@workspace:packages/ui"
   dependencies:
     "@jest/globals": ^29.7.0
+    "@material-design-icons/font": ^0.14.13
     "@radix-ui/react-checkbox": ^1.1.2
     "@radix-ui/react-collapsible": ^1.1.1
     "@radix-ui/react-dialog": ^1.1.2
@@ -3206,13 +3207,6 @@ __metadata:
   version: 5.1.0
   resolution: "@fontsource/comic-neue@npm:5.1.0"
   checksum: 82d7f998f41ab88dfdedef6829f0e2dd582b969c9f93e1828a72d04e400c581834acfe38e40882e64d2c690f3b4d98e168593ded7f6edf15cca94b70775c823e
-  languageName: node
-  linkType: hard
-
-"@fontsource/inter@npm:^5.1.0":
-  version: 5.1.0
-  resolution: "@fontsource/inter@npm:5.1.0"
-  checksum: 357454d870a1cdb2cbe9c01ae254a0223045e78eba5ca5824f01e139dbcf7254e327c33aaa0e054c37499956229c0555390fa32bfca17aae6e2f23ba4e092633
   languageName: node
   linkType: hard
 
@@ -4090,6 +4084,13 @@ __metadata:
     yargs: 17.7.2
     yargs-parser: 21.1.1
   checksum: 3c33438b2465bd46634242cf5146a8ea681d4eb5af6ba9edf6bfeba31de7db004b309f2062d0746617d465cee29fe9f21c4ef45d981d51641cc0bf92d43410ea
+  languageName: node
+  linkType: hard
+
+"@material-design-icons/font@npm:^0.14.13":
+  version: 0.14.13
+  resolution: "@material-design-icons/font@npm:0.14.13"
+  checksum: 338a46396aaa91e2f9a01ad8bf411fc81bafe4ebc54994f9b92a4b9f82d3b9418be541abff1830dd16edeacbefdc5c7897b6ec1e615e7952196b6daf4a318cc8
   languageName: node
   linkType: hard
 
@@ -10978,7 +10979,6 @@ __metadata:
     "@firecms/schema_inference": ^3.0.0-canary.160
     "@firecms/ui": ^3.0.0-canary.159
     "@firecms/user_management": ^3.0.0-canary.160
-    "@fontsource/inter": ^5.1.0
     "@fontsource/jetbrains-mono": ^5.1.1
     "@fontsource/playfair-display": ^5.1.0
     "@fontsource/poppins": ^5.1.0
@@ -19157,7 +19157,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"use-sync-external-store@npm:^1, use-sync-external-store@npm:^1.0.0":
+"use-sync-external-store@npm:^1":
+  version: 1.4.0
+  resolution: "use-sync-external-store@npm:1.4.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: dc3843a1b59ac8bd01417bd79498d4c688d5df8bf4801be50008ef4bfaacb349058c0b1605b5b43c828e0a2d62722d7e861573b3f31cea77a7f23e8b0fc2f7e3
+  languageName: node
+  linkType: hard
+
+"use-sync-external-store@npm:^1.0.0":
   version: 1.2.2
   resolution: "use-sync-external-store@npm:1.2.2"
   peerDependencies:
