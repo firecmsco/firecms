@@ -3,8 +3,6 @@ import React, { useCallback, useMemo } from "react";
 
 import "@/app/common/index.css"
 import "typeface-rubik";
-import "@fontsource/inter/400.css";
-import "@fontsource/inter/600.css";
 import "@fontsource/jetbrains-mono";
 
 import {
@@ -45,6 +43,10 @@ import { ExampleCMSView } from "@/app/cms/views/ExampleCMSView";
 import { TestEditorView } from "./views/TestEditorView";
 import ClientUIComponentsShowcase from "./views/ClientUIComponentsShowcase";
 import { usersCollection } from "@/app/cms/collections/users_collection";
+import { booksCollection } from "@/app/cms/collections/books_collection";
+import { showcaseCollection } from "@/app/cms/collections/showcase_collection";
+import { Button, OpenInNewIcon } from "@firecms/ui";
+import Link from "next/link";
 
 export function App() {
 
@@ -67,7 +69,9 @@ export function App() {
         return [
             productsCollection,
             blogCollection,
-            usersCollection
+            usersCollection,
+            booksCollection,
+            showcaseCollection
         ];
     }, []);
 
@@ -243,7 +247,14 @@ export function App() {
                                     <Scaffold
                                         logo={logo.src}
                                         autoOpenDrawer={false}>
-                                        <AppBar title={title}/>
+                                        <AppBar title={title}
+                                                endAdornment={<Link href={"../"} target={"_blank"}>
+                                                    <Button variant={"text"}>
+                                                        <OpenInNewIcon/>
+                                                        Go to website
+                                                    </Button>
+                                                </Link>}
+                                        />
                                         <Drawer/>
                                         <NavigationRoutes/>
                                         <SideDialogs/>

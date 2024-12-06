@@ -21,7 +21,7 @@ export default {
             },
             fontFamily: {
                 sans: [
-                    "Inter",
+                    "Rubik",
                     "Roboto",
                     "Helvetica",
                     "Arial",
