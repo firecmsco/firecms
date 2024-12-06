@@ -7,19 +7,13 @@ import { Editor, EditorProvider, Extensions } from "@tiptap/react";
 import Document from "@tiptap/extension-document";
 import { Markdown } from "tiptap-markdown";
 import Underline from "@tiptap/extension-underline";
-import OrderedList from "@tiptap/extension-ordered-list";
-import BulletList from "@tiptap/extension-bullet-list";
 import Heading from "@tiptap/extension-heading";
 import TextStyle from "@tiptap/extension-text-style";
-import BlockQuote from "@tiptap/extension-blockquote";
-import CodeBlock from "@tiptap/extension-code-block";
 import Color from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
 import Bold from "@tiptap/extension-bold";
 import Italic from "@tiptap/extension-italic";
-import Code from "@tiptap/extension-code";
 import Strike from "@tiptap/extension-strike";
-
 
 import { EditorBubble, type JSONContent } from "./components";
 
@@ -28,7 +22,20 @@ import { LinkSelector } from "./selectors/link-selector";
 import { TextButtons } from "./selectors/text-buttons";
 
 import { removeClassesFromJson } from "./utils/remove_classes";
-import { horizontalRule, placeholder, starterKit, taskItem, taskList, tiptapLink } from "./editor_extensions";
+import {
+    blockquote,
+    bulletList,
+    code,
+    codeBlock,
+    horizontalRule,
+    listItem,
+    orderedList,
+    placeholder,
+    starterKit,
+    taskItem,
+    taskList,
+    tiptapLink
+} from "./editor_extensions";
 import { createDropImagePlugin, createImageExtension } from "./extensions/Image";
 import { CustomKeymap } from "./extensions/custom-keymap";
 import { DragAndDrop } from "./extensions/drag-and-drop";
@@ -146,11 +153,8 @@ export const FireCMSEditor = ({
         TextLoadingDecorationExtension,
         Underline,
         Bold,
-        BlockQuote,
         TextStyle,
-        CodeBlock,
         Italic,
-        Code,
         Strike,
         Color,
         Highlight.configure({
@@ -161,8 +165,6 @@ export const FireCMSEditor = ({
         //     delimiter: "```custom"
         // }),
         Heading,
-        OrderedList,
-        BulletList,
         CustomKeymap,
         DragAndDrop,
         placeholder,
@@ -174,6 +176,12 @@ export const FireCMSEditor = ({
             html: true
         }),
         horizontalRule,
+        bulletList,
+        orderedList,
+        listItem,
+        blockquote,
+        codeBlock,
+        code,
         SlashCommand.configure({
             HTMLAttributes: {
                 class: "mention"
