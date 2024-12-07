@@ -5,17 +5,27 @@ If you would like to make changes to the source, feel free to submit a PR!
 
 ## Getting Started
 
-You can find the source code for the library under `lib`.
-The demo project used for development is under `example`.
+This project is a monorepo managed with [Yarn workspaces](https://classic.yarnpkg.com/en/docs/workspaces/).
 
-After pulling the code you just need to run
+You can find all the FireCMS packages in the `packages` folder.
+The code that simulates a final project implemented by a user can be found in the `examples` folder.
+
+All dependencies are linked automatically and just running the following commands should be enough to get you started.
+
+After pulling the code you just need to run:
 
 ```bash
 yarn
 yarn dev
 ``` 
-
 to start the demo project.
+
+You can also run:
+```bash
+yarn
+yarn pro
+``` 
+to use the example project with the Pro version of FireCMS.
 
 ## Support and discussion
 

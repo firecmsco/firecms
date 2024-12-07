@@ -114,7 +114,7 @@ export const productsCollection = buildCollection<Product>({
         create: true,
         delete: true
     }),
-    Actions: [SampleCollectionActions, CustomFiltersActions],
+    Actions: [SampleCollectionActions],
     subcollections: [localeCollection],
     // defaultSelectedView: "sample_custom_view",
     entityViews: [

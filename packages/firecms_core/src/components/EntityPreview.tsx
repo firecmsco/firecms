@@ -71,11 +71,15 @@ export function EntityPreview({
     const titleProperty = getEntityTitlePropertyKey(resolvedCollection, customizationController.propertyConfigs);
     const imagePropertyKey = getEntityImagePreviewPropertyKey(resolvedCollection);
     const imageProperty = imagePropertyKey ? resolvedCollection.properties[imagePropertyKey] : undefined;
-    const usedImageProperty = "of" in imageProperty ? imageProperty.of : imageProperty;
+    const usedImageProperty = imageProperty && "of" in imageProperty ? imageProperty.of : imageProperty;
     const restProperties = listProperties.filter(p => p !== titleProperty && p !== imagePropertyKey);
 
-    const imageValue = getValueInPath(entity.values, imagePropertyKey as string);
-    const usedImageValue = "of" in imageProperty ? ((imageValue ?? []).length > 0 ? imageValue[0] : undefined) : imageValue;
+    const imageValue = imagePropertyKey ? getValueInPath(entity.values, imagePropertyKey) : undefined;
+    const usedImageValue = imageProperty !== undefined ? ("of" in imageProperty
+            ? ((imageValue ?? []).length > 0
+                ? imageValue[0] : undefined)
+            : imageValue)
+        : undefined;
 
     return <EntityPreviewContainer onClick={disabled ? undefined : onClick}
                                    hover={disabled ? undefined : hover}
@@ -108,7 +112,7 @@ export function EntityPreview({
                     : <Skeleton/>)}
 
             {titleProperty && (
-                <div className={"my-0.5 text-sm font-medium"}>
+                <div className={"truncate my-0.5 text-sm font-medium"}>
                     {
                         entity
                             ? <PropertyPreview
@@ -129,7 +133,7 @@ export function EntityPreview({
 
                 return (
                     <div key={"ref_prev_" + key}
-                         className={restProperties.length > 1 ? "my-0.5" : "my-0"}>
+                         className={cls("truncate", restProperties.length > 1 ? "my-0.5" : "my-0")}>
                         {
                             entity
                                 ? <PropertyPreview

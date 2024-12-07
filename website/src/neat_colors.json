@@ -21,7 +21,7 @@
       "enabled": true
     }
   ],
-  "speed": 3,
+  "speed": 2,
   "horizontalPressure": 2,
   "verticalPressure": 2,
   "waveFrequencyX": 2,

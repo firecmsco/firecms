@@ -785,7 +785,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                                 })?.toString()}
                             </>;
                         return (
-                            <div>
+                            <div key={`additional_${key}`}>
                                 <LabelWithIconAndTooltip
                                     propertyKey={key}
                                     icon={<NotesIcon size={"small"}/>}
@@ -808,8 +808,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 })
                 .filter(Boolean)}
 
-        </>
-    );
+        </>);
 
     const disabled = formex.isSubmitting || (!modified && status === "existing");
     const formRef = React.useRef<HTMLDivElement>(null);

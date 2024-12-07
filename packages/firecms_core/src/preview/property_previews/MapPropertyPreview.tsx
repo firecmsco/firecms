@@ -127,7 +127,7 @@ export function KeyValuePreview({ value }: { value: any }) {
                         </div>
                         <div
                             className="flex-grow max-w-[75%]">
-                            {childValue && ("toString" in childValue) && <Typography>
+                            {childValue && <Typography>
                                 <ErrorBoundary>
                                     {childValue.toString()}
                                 </ErrorBoundary>

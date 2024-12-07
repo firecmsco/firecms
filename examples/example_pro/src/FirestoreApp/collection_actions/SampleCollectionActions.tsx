@@ -17,9 +17,9 @@ export function SampleCollectionActions({ selectionController }: CollectionActio
 
     return (
         <Button onClick={onClick}
-                color="primary"
+                color="text"
                 variant={"text"}>
-            Extra action
+            Demo action
         </Button>
     );
 

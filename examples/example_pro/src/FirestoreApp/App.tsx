@@ -58,7 +58,7 @@ import CustomColorTextField from "./custom_field/CustomColorTextField";
 import { booksCollection } from "./collections/books_collection";
 import { FirebaseApp } from "@firebase/app";
 import { TestEditorView } from "./views/TestEditorView";
-import { useCollectionEditorPlugin } from "@firecms/collection_editor";
+import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { ReCaptchaEnterpriseProvider } from "@firebase/app-check";
 import { useExportPlugin } from "@firecms/data_export";
@@ -231,11 +231,11 @@ export function App() {
         if (process.env.NODE_ENV !== "production") {
             sourceCollections.push(testCollection);
         }
-        return sourceCollections;
-        // return mergeCollections(
-        //     sourceCollections,
-        //     collectionConfigController.collections ?? []
-        // )
+        // return sourceCollections;
+        return mergeCollections(
+            sourceCollections,
+            collectionConfigController.collections ?? []
+        );
     }, [collectionConfigController.collections, secondaryFirestoreDelegate]);
 
     const views: CMSView[] = useMemo(() => ([
@@ -348,8 +348,12 @@ export function App() {
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
 
-                    plugins={[userManagementPlugin, dataEnhancementPlugin, exportPlugin, demoPlugin
-                        // collectionEditorPlugin
+                    plugins={[
+                        userManagementPlugin,
+                        dataEnhancementPlugin,
+                        exportPlugin,
+                        demoPlugin,
+                        collectionEditorPlugin
                     ]}
                     onAnalyticsEvent={onAnalyticsEvent}
                     propertyConfigs={propertyConfigs}
