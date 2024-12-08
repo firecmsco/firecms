@@ -2,7 +2,7 @@ import React from "react";
 import HeroButtons from "./HeroButtons";
 
 // @ts-ignore
-import editingDemoDarkVideo from "@site/static/img/demo_square.mp4";
+import editingDemoDarkVideo from "@site/static/img/demo_square_2.webm";
 import { defaultBorderMixin } from "../styles";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
