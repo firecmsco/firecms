@@ -10,9 +10,10 @@ export function useSelectionController<M extends Record<string, any> = any>(
     const toggleEntitySelection = useCallback((entity: Entity<M>, newSelectedState?: boolean) => {
         let newValue;
         if (newSelectedState === undefined) {
-            if (selectedEntities.map(e => e.id).includes(entity.id)) {
+            const isSelected = Boolean(selectedEntities.find(e => e.id === entity.id && e.path === entity.path));
+            if (isSelected) {
                 onSelectionChange?.(entity, false);
-                newValue = selectedEntities.filter((item: Entity<M>) => item.id !== entity.id);
+                newValue = selectedEntities.filter((item: Entity<M>) => !(item.id === entity.id && item.path === entity.path));
             } else {
                 onSelectionChange?.(entity, true);
                 newValue = [...selectedEntities, entity];
@@ -23,14 +24,14 @@ export function useSelectionController<M extends Record<string, any> = any>(
                 newValue = [...selectedEntities, entity];
             } else {
                 onSelectionChange?.(entity, false);
-                newValue = selectedEntities.filter((item: Entity<M>) => item.id !== entity.id);
+                newValue = selectedEntities.filter((item: Entity<M>) => !(item.id === entity.id && item.path === entity.path));
             }
         }
         setSelectedEntities(newValue);
     }, [selectedEntities]);
 
     const isEntitySelected = useCallback((entity: Entity<M>) => {
-        return selectedEntities.map(e => e.id).includes(entity.id);
+        return Boolean(selectedEntities.find(e => e.id === entity.id && e.path === entity.path));
     }, [selectedEntities]);
 
     return {
