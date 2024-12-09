@@ -1,57 +1,62 @@
 ## [3.0.0-beta.11] - 2024-11-28
 
 - [BREAKING] Removed `userRoles` from AuthController. You can now access the `roles` prop in the user object directly
-- [BREAKING] Many FireCMS UI sizes have been adjusted for better consistency. This will affect you only if you are using custom components.
-- [BREAKING] The `authController` is now passed to the User Management controller, instead of the other way around. The `userManagementController` can be used as an auth controller, but with all the added logic for user management.
-  - `smallest` or `tiny` have been renamed to `small`.
-  - `small` has been renamed to `medium`.
-  - `medium` has been renamed to `large`.
-- [BREAKING] For self-hosted versions, there has been a change in the API for the data management controllers. The 
-`authController` is now passed to the User Management controller, instead of the other way around. The `userManagementController`
-can be used as an auth controller, but with all the added logic for user management. 
+- [BREAKING] Many FireCMS UI sizes have been adjusted for better consistency. This will affect you only if you are using
+  custom components.
+- [BREAKING] The `authController` is now passed to the User Management controller, instead of the other way around. The
+  `userManagementController` can be used as an auth controller, but with all the added logic for user management.
+    - `smallest` or `tiny` have been renamed to `small`.
+    - `small` has been renamed to `medium`.
+    - `medium` has been renamed to `large`.
+- [BREAKING] For self-hosted versions, there has been a change in the API for the data management controllers. The
+  `authController` is now passed to the User Management controller, instead of the other way around. The
+  `userManagementController`
+  can be used as an auth controller, but with all the added logic for user management.
 
-Code before:
+❌ Code before:
+
 ```typescript
     /**
-     * Controller in charge of user management
-     */
-    const userManagement = useBuildUserManagement({
+ * Controller in charge of user management
+ */
+const userManagement = useBuildUserManagement({
         dataSourceDelegate: firestoreDelegate
     });
 
-    /**
-     * Controller for managing authentication
-     */
-    const authController: FirebaseAuthController = useFirebaseAuthController({
-        firebaseApp,
-        signInOptions,
-        loading: userManagement.loading,
-        defineRolesFor: userManagement.defineRolesFor
-    });
+/**
+ * Controller for managing authentication
+ */
+const authController: FirebaseAuthController = useFirebaseAuthController({
+    firebaseApp,
+    signInOptions,
+    loading: userManagement.loading,
+    defineRolesFor: userManagement.defineRolesFor
+});
 ```
 
-Code after:
+✅ Code after:
 
 ```typescript
     /**
-     * Controller for managing authentication
-     */
-    const authController: FirebaseAuthController = useFirebaseAuthController({
+ * Controller for managing authentication
+ */
+const authController: FirebaseAuthController = useFirebaseAuthController({
         firebaseApp,
         signInOptions
     });
 
-    /**
-     * Controller in charge of user management
-     */
-    const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate,
-        authController
-    });
+/**
+ * Controller in charge of user management
+ */
+const userManagement = useBuildUserManagement({
+    dataSourceDelegate: firestoreDelegate,
+    authController
+});
 ```
 
 Then you want to replace all previous references to `authController` with `userManagement`.
-For example, if you were using `authController.signInWithEmailAndPassword`, you should now use `userManagement.signInWithEmailAndPassword`.
+For example, if you were using `authController.signInWithEmailAndPassword`, you should now use
+`userManagement.signInWithEmailAndPassword`.
 
 ```typescript
 const navigationController = useBuildNavigationController({
@@ -65,15 +70,15 @@ const navigationController = useBuildNavigationController({
 ```
 
 becomes:
-    
+
 ```typescript
 const navigationController = useBuildNavigationController({
-  collections: collectionsBuilder,
-  collectionPermissions: userManagement.collectionPermissions,
-  views,
-  adminViews: userManagementAdminViews,
-  authController: userManagement,
-  dataSourceDelegate: firestoreDelegate
+    collections: collectionsBuilder,
+    collectionPermissions: userManagement.collectionPermissions,
+    views,
+    adminViews: userManagementAdminViews,
+    authController: userManagement,
+    dataSourceDelegate: firestoreDelegate
 });
 ```
 
@@ -84,7 +89,8 @@ const navigationController = useBuildNavigationController({
 - Reintroduced dark primary color variant for better theme options.
 - Minor web updates for improved aesthetics and functionality.
 - Fixed a bug where the Editor was not saving false values.
-- Replaced all instances of gray and slate colors with more unified surface and surface-accent colors for UI consistency.
+- Replaced all instances of gray and slate colors with more unified surface and surface-accent colors for UI
+  consistency.
 - Added Avatar component fallback and integrated ESLint configuration into templates.
 - Enhanced error handling in forms and improved cloud error messages.
 - Refactored user management logic for better code organization.
@@ -94,8 +100,10 @@ const navigationController = useBuildNavigationController({
 - Fixed crash issues in repeat fields for subproperties and addressed various minor styling and functionality bugs.
 - Made improvements to heatmap responsiveness (HMR fixes).
 - Refactored text search functionalities for better efficiency and added relevant documentation.
-- Fixed issues with number input fields blocking scroll and replaced date picker with native HTML date input for consistency.
-- If you are using the `Select` component, you don't need to provide a `renderValue` function anymore. The component will handle it automatically.
+- Fixed issues with number input fields blocking scroll and replaced date picker with native HTML date input for
+  consistency.
+- If you are using the `Select` component, you don't need to provide a `renderValue` function anymore. The component
+  will handle it automatically.
 
 ## [3.0.0-beta.10] - 2024-07-10
 
@@ -114,7 +122,8 @@ const navigationController = useBuildNavigationController({
 - Added API key generation and project selection capabilities.
 - Introduced a past-due warning message and improvements in collection and subcollection data handling.
 - Provided better error handling and layout consistency in the application.
-- 
+-
+
 ## [3.0.0-beta.9] - 2024-07-10
 
 - **NEW MARKDOWN EDITOR**: The markdown editor has been completely revamped. It now supports a live preview, and a much

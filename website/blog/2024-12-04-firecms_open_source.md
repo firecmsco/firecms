@@ -2,7 +2,7 @@
 slug: firecms_open_source_at_heart
 title: FireCMS - Our Commitment to Open Source
 author: Marian Moldovan
-image: /img/avatars/marian_avatar.jpeg
+image: /img/blog/firecms_open_source.jpg
 author_url: https://www.linkedin.com/in/marianmoldovan/
 author_image_url: https://avatars.githubusercontent.com/u/1479084?v=4
 ---

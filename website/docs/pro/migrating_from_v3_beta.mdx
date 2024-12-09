@@ -18,7 +18,7 @@ For self-hosted versions, there has been a change in the API for the data manage
 `authController` is now passed to the User Management controller, instead of the other way around. The `userManagementController`
 can be used as an auth controller, but with all the added logic for user management.
 
-Code before:
+❌ Code before:
 ```typescript
     /**
      * Controller in charge of user management
@@ -38,7 +38,7 @@ Code before:
     });
 ```
 
-Code after:
+✅ Code after:
 
 ```typescript
     /**
