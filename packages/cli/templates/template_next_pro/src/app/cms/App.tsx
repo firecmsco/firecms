@@ -215,7 +215,7 @@ export function App() {
                                         logo={logo.src}
                                         autoOpenDrawer={false}>
                                         <AppBar title={title}
-                                                endAdornment={<Link href={"../"} target={"_blank"}>
+                                                endAdornment={<Link href={"/"} target={"_blank"}>
                                                     <Button variant={"text"}>
                                                         <OpenInNewIcon/>
                                                         Go to website
