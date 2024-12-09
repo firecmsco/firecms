@@ -88,8 +88,6 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
 
     const [size, setSize] = React.useState<CollectionSize>(defaultSize ?? "m");
 
-    const selectedEntityIds = selectedEntities?.map(e => e.id);
-
     const updateSize = useCallback((size: CollectionSize) => {
         if (onSizeChanged)
             onSizeChanged(size);
@@ -204,7 +202,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
             </EntityTableCell>
         );
 
-    }, [size, selectedEntityIds]);
+    }, [size]);
 
     const collectionColumns: VirtualTableColumn[] = (() => {
         const columnsResult: VirtualTableColumn[] = propertiesToColumns({
@@ -312,7 +310,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
                              inlineEditing={inlineEditing}
                              cellRenderer={cellRenderer}
                              onEntityClick={onEntityClick}
-                             highlightedRow={useCallback((entity: Entity<M>) => selectedEntityIds?.includes(entity.id) ?? false, [selectedEntityIds])}
+                             highlightedRow={(entity: Entity<M>) => Boolean(selectedEntities?.find(e => e.id === entity.id && e.path === entity.path))}
                              tableController={tableController}
                              onValueChange={onValueChange}
                              onColumnResize={onColumnResize}

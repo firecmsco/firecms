@@ -482,7 +482,7 @@ export const EntityCollectionView = React.memo(
             frozen?: boolean
         }) => {
 
-            const isSelected = usedSelectionController.selectedEntities.map(e => e.id).includes(entity.id);
+            const isSelected = Boolean(usedSelectionController.selectedEntities.find(e => e.id == entity.id && e.path == entity.path));
 
             const actions = getActionsForEntity({
                 entity,
