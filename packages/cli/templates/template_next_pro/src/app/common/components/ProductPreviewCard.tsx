@@ -27,7 +27,7 @@ const ProductPreviewCard: React.FC<ProductPreviewCardProps> = ({ product, classN
                 <div className="px-6 flex gap-4">
                     {product.price && <span
                         className="flex gap-2 text-white  py-1 text-sm font-semibold mr-2 mb-2 items-center">
-                    <b>{getCurrencySymbol(product.currency)}{product.price}</b>
+                    {getCurrencySymbol(product.currency)}{product.price}
                     </span>}
                 </div>
             </div>

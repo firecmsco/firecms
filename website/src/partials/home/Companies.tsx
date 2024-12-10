@@ -21,12 +21,7 @@ export function Companies() {
 
     return <Panel color={"light"} container={false}>
 
-        <h2 className={"text-2xl text-center text-gray-600 dark:text-gray-400"}>
-            Trusted by
-        </h2>
-
-
-        <Marquee className={"rounded-xl space-x-4"} pauseOnHover={true} gradient={true} gradientColor={"#f3f4f6"}>
+        <Marquee className={"grayscale rounded-xl space-x-4"} pauseOnHover={false} gradient={true} gradientColor={"#f3f4f6"}>
 
             <a
                 target="_blank"
@@ -94,7 +89,6 @@ export function Companies() {
                     className="w-52 m-4"/>
             </a>
         </Marquee>
-        <p className={"text-sm text-center font-bold text-gray-600"}>...and thousands more!</p>
     </Panel>;
 
 }

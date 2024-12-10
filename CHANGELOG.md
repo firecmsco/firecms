@@ -1,17 +1,14 @@
-## [3.0.0-beta.11] - 2024-11-28
+## [3.0.0-beta.11] - 2024-12-
 
 - [BREAKING] Removed `userRoles` from AuthController. You can now access the `roles` prop in the user object directly
 - [BREAKING] Many FireCMS UI sizes have been adjusted for better consistency. This will affect you only if you are using
   custom components.
-- [BREAKING] The `authController` is now passed to the User Management controller, instead of the other way around. The
-  `userManagementController` can be used as an auth controller, but with all the added logic for user management.
     - `smallest` or `tiny` have been renamed to `small`.
     - `small` has been renamed to `medium`.
     - `medium` has been renamed to `large`.
 - [BREAKING] For self-hosted versions, there has been a change in the API for the data management controllers. The
   `authController` is now passed to the User Management controller, instead of the other way around. The
-  `userManagementController`
-  can be used as an auth controller, but with all the added logic for user management.
+  `userManagementController` can be used as an auth controller, but with all the added logic for user management.
 
 ❌ Code before:
 
