@@ -217,12 +217,11 @@ export function useFirestoreDelegate({
 
         const auth = getAuth(firebaseApp);
         const currentUser = auth.currentUser;
-        if (!currentUser) throw Error("No current user");
 
         const search = textSearchController.search({
             path,
             searchString,
-            currentUser,
+            currentUser: currentUser ?? undefined,
             databaseId
         });
 
@@ -772,7 +771,7 @@ function buildTextSearchControllerWithLocalSearch({
         search: async (props: {
             searchString: string,
             path: string,
-            currentUser: any,
+            currentUser?: any,
             databaseId?: string
         }) => {
             const search = await textSearchController.search(props);

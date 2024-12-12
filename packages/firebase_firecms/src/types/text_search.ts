@@ -34,7 +34,7 @@ export type FirestoreTextSearchController = {
     search: (props: {
         searchString: string,
         path: string,
-        currentUser: FirebaseUser,
+        currentUser?: FirebaseUser,
         databaseId?: string
     }) => (Promise<readonly string[] | undefined>),
 

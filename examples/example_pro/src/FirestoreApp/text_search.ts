@@ -53,6 +53,9 @@ export const pineconeSearchControllerBuilder = buildPineconeSearchController({
                        searchString,
                        currentUser
                    }) => {
+        if(!currentUser){
+            throw new Error("User not authenticated");
+        }
         if (path === "products")
             return performPineconeTextSearch({
                 firebaseToken: await currentUser.getIdToken(),

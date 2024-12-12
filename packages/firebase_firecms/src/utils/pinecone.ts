@@ -53,7 +53,7 @@ export function buildPineconeSearchController({
     search: (props: {
         searchString: string,
         path: string,
-        currentUser: FirebaseUser
+        currentUser?: FirebaseUser
     }) => Promise<readonly string[] | undefined>,
 }): FirestoreTextSearchControllerBuilder {
     return (props): FirestoreTextSearchController => {
