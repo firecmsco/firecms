@@ -110,7 +110,7 @@ export const DefaultAppBar = function DefaultAppBar({
 
             {navigation && <div className="mr-8 hidden lg:block">
                 <ReactLink
-                    className="visited:text-inherit visited:dark:text-inherit"
+                    className="visited:text-inherit visited:dark:text-inherit block"
                     to={navigation?.basePath ?? "/"}
                 >
                     <div className={"flex flex-row gap-4"}>
@@ -122,8 +122,7 @@ export const DefaultAppBar = function DefaultAppBar({
 
                         {typeof title === "string"
                             ? <Typography variant="subtitle1"
-                                          noWrap
-                                          className={cls("transition-all", drawerOpen ? "ml-2" : "")}>
+                                          noWrap>
                                 {title}
                             </Typography>
                             : title}

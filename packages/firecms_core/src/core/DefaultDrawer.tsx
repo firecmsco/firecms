@@ -164,12 +164,13 @@ export function DrawerLogo({ logo }: {
             transition: "padding 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
             padding: drawerOpen ? "32px 144px 0px 24px" : "72px 12px 0px 12px"
         }}
-        className={cls("cursor-pointer ml-3 mr-1")}>
+        className={cls("cursor-pointer rounded ml-3 mr-1")}>
 
         <Tooltip title={"Home"}
                  sideOffset={20}
                  side="right">
             <Link
+                className={"block"}
                 to={navigation.basePath}>
                 {logo
                     ? <img src={logo}
