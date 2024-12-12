@@ -22,6 +22,7 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
         if (listeners[path]) {
             listeners[path]();
             delete listeners[path];
+            delete indexes[path];
         }
     }
 
@@ -42,9 +43,9 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
         currentPath = path;
 
         return new Promise(async (resolve, reject) => {
-            if (!indexes[path] && collectionProp) {
+            if (collectionProp) {
                 console.debug("Init local search controller", path);
-                const firestore = databaseId ? getFirestore(firebaseApp, databaseId): getFirestore(firebaseApp);
+                const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
                 const col = collection(firestore, path);
                 listeners[path] = onSnapshot(query(col),
                     {
