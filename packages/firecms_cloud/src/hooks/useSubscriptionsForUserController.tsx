@@ -1,4 +1,4 @@
-import { addDoc, collection, Firestore, getDocs, getFirestore, onSnapshot, query, where } from "@firebase/firestore";
+import { collection, Firestore, getDocs, getFirestore, onSnapshot, query, where } from "@firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import { ProductPrice, ProductWithPrices, Subscription, SubscriptionType } from "../types/subscriptions";
 import { useFireCMSBackend } from "./useFireCMSBackend";
@@ -117,14 +117,7 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
             });
     }, [firestoreRef, userId]);
 
-    const subscribe = async ({
-                                 projectId,
-                                 licenseId,
-                                 productPrice,
-                                 quantity,
-                                 onCheckoutSessionReady,
-                                 type
-                             }: {
+    const subscribe = async (props: {
                                  projectId?: string,
                                  licenseId?: string,
                                  quantity?: number,
@@ -133,83 +126,92 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
                                  type: SubscriptionType
                              }
     ) => {
-        // console.debug("Subscribing to product", props);
-        // const productPriceId = productPrice.id;
-        // const productPriceType = productPrice.type;
-        // try {
-        //     const sessionUrl: string = await projectsApi.createStripeNewSubscriptionLink({
-        //         ...props,
-        //         productPriceId,
-        //         productPriceType
-        //     });
-        //     onCheckoutSessionReady(sessionUrl, undefined);
-        // } catch (e: any) {
-        //     console.error("Error subscribing to product", productPriceId, e);
-        //     onCheckoutSessionReady(undefined, e);
-        // }
-
-        const firestore = firestoreRef.current;
-        if (!firestore) throw new Error("Firestore not initialized");
-        if (!userId) throw new Error("User not logged in");
-        if (!type) throw new Error("subscription type not provided. Make sure to assign the metadata.type field in the Stripe dashboard to a product.");
-
-        const subscriptionPricesRequest: any = {
-            price: productPrice.id
-        };
-
-        // For prices with metered billing we need to omit the quantity parameter.
-        // For all other prices we set quantity to 1.
-        if (productPrice.recurring?.usage_type !== "metered")
-            subscriptionPricesRequest.quantity = quantity ?? 1;
-
-        const metadata: Record<string, string> = {
+        const {
+            projectId,
+            licenseId,
+            productPrice,
+            quantity,
+            onCheckoutSessionReady,
             type
-        };
-        if (projectId) {
-            metadata.projectId = projectId;
-        }
-        if (licenseId) {
-            metadata.licenseId = licenseId;
-        }
+        } = props;
 
-        const checkoutSession: any = {
-            automatic_tax: true,
-            tax_id_collection: true,
-            collect_shipping_address: false,
-            allow_promotion_codes: true,
-            line_items: [subscriptionPricesRequest],
-            trial_from_plan: true,
-            trial_period_days: 28,
-            success_url: `${window.location.origin}${window.location.pathname}`,
-            cancel_url: `${window.location.origin}${window.location.pathname}`,
-            metadata
-        };
-
-        // For one time payments set mode to payment.
-        if (productPrice.type === "one_time") {
-            checkoutSession.mode = "payment";
-            checkoutSession.payment_method_types = ["card", "sepa_debit", "sofort"];
+        console.debug("Subscribing to product", props);
+        const productPriceId = productPrice.id;
+        const productPriceType = productPrice.type;
+        try {
+            const sessionUrl: string = await projectsApi.createStripeNewSubscriptionLink({
+                ...props,
+                productPriceId,
+                productPriceType
+            });
+            onCheckoutSessionReady(sessionUrl, undefined);
+        } catch (e: any) {
+            console.error("Error subscribing to product", productPriceId, e);
+            onCheckoutSessionReady(undefined, e);
         }
 
-        // Save checkout session to Firestore
-        const checkoutSessionRef = collection(firestore, CUSTOMERS_COLLECTION, userId, CHECKOUT_SESSION_COLLECTION);
-        const docRef = await addDoc(checkoutSessionRef, checkoutSession);
-
-        const unsubscribe = onSnapshot(docRef, (snap) => {
-            const {
-                error,
-                url
-            } = snap.data();
-
-            console.debug("Checkout session updated", snap.data());
-            onCheckoutSessionReady(url, error);
-
-            if (url) {
-                unsubscribe();
-            } else if (error) {
-                unsubscribe();
-            }
-        });
+        // const firestore = firestoreRef.current;
+        // if (!firestore) throw new Error("Firestore not initialized");
+        // if (!userId) throw new Error("User not logged in");
+        // if (!type) throw new Error("subscription type not provided. Make sure to assign the metadata.type field in the Stripe dashboard to a product.");
+        //
+        // const subscriptionPricesRequest: any = {
+        //     price: productPrice.id
+        // };
+        //
+        // // For prices with metered billing we need to omit the quantity parameter.
+        // // For all other prices we set quantity to 1.
+        // if (productPrice.recurring?.usage_type !== "metered")
+        //     subscriptionPricesRequest.quantity = quantity ?? 1;
+        //
+        // const metadata: Record<string, string> = {
+        //     type
+        // };
+        // if (projectId) {
+        //     metadata.projectId = projectId;
+        // }
+        // if (licenseId) {
+        //     metadata.licenseId = licenseId;
+        // }
+        //
+        // const checkoutSession: any = {
+        //     automatic_tax: true,
+        //     tax_id_collection: true,
+        //     collect_shipping_address: false,
+        //     allow_promotion_codes: true,
+        //     line_items: [subscriptionPricesRequest],
+        //     trial_from_plan: true,
+        //     trial_period_days: 28,
+        //     success_url: `${window.location.origin}${window.location.pathname}`,
+        //     cancel_url: `${window.location.origin}${window.location.pathname}`,
+        //     metadata
+        // };
+        //
+        // // For one time payments set mode to payment.
+        // if (productPrice.type === "one_time") {
+        //     checkoutSession.mode = "payment";
+        //     checkoutSession.payment_method_types = ["card", "sepa_debit", "sofort"];
+        // }
+        //
+        // // Save checkout session to Firestore
+        // const checkoutSessionRef = collection(firestore, CUSTOMERS_COLLECTION, userId, CHECKOUT_SESSION_COLLECTION);
+        // const docRef = await addDoc(checkoutSessionRef, checkoutSession);
+        //
+        // const unsubscribe = onSnapshot(docRef, (snap) => {
+        //     const {
+        //         error,
+        //         url
+        //     } = snap.data();
+        //
+        //     console.debug("Checkout session updated", snap.data());
+        //     onCheckoutSessionReady(url, error);
+        //
+        //     if (url) {
+        //         unsubscribe();
+        //     } else if (error) {
+        //         unsubscribe();
+        //     }
+        // });
     }
 
     const getSubscriptionsForProject = (projectId: string): Subscription[] => {
