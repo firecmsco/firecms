@@ -622,7 +622,7 @@ function FireCMSAppAuthenticated({
                 collectionConfigController.collections ?? [],
                 appConfig?.modifyCollection
             ),
-            [appConfig?.modifyCollection, collectionConfigController.collections])
+            [collectionConfigController.collections])
     });
 
     const introMode = navigationController.initialised &&
