@@ -67,6 +67,7 @@ import { DemoImportAction } from "./DemoImportAction";
 import { algoliaSearchControllerBuilder } from "./text_search";
 import { carsCollection } from "./collections/cars_collection";
 import ClientUIComponentsShowcase from "./views/ClientUIComponentsShowcase";
+import { TypographyDemo } from "./views/TypographyDemo";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
 
@@ -246,6 +247,13 @@ export function App() {
             description: "This is an example of an additional view that is defined by the user",
             view: <ExampleCMSView/>
         },
+        // {
+        //     path: "typography",
+        //     name: "Typography demo",
+        //     group: "Custom views",
+        //     description: "This is an example of an additional view that is defined by the user",
+        //     view: <TypographyDemo/>
+        // },
         // {
         //     path: "board_test",
         //     name: "Board test",
