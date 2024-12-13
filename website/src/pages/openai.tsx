@@ -22,7 +22,6 @@ function DataEnhancement() {
             <DataEnhancementUseCases/>
             <DataStructure/>
             <AutofillFeature/>
-            <BatchProcessing/>
             <Translations/>
             {/*<CustomizationOptions />*/}
             {/*<Testimonials />*/}

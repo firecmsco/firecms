@@ -209,7 +209,7 @@ export function VersionsComparison() {
                    <LinedSpace size={"large"}/>
 
                    <div className={clsx("border-0 border-b w-full", defaultBorderMixin)}>
-                       <h2 className={"h2 uppercase font-mono my-8 text-center"}>
+                       <h2 className={"uppercase font-mono my-8 text-center"}>
                            Versions comparison
                        </h2>
                    </div>

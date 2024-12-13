@@ -14,9 +14,9 @@ export function PublicFacingApps() {
         <div className="">
 
             <div className={"max-w-6xl mx-auto"}>
-                <h2 className={"h2 mb-3 uppercase font-mono"}>
+                <h3 className={"mb-3 uppercase font-mono"}>
                     Public Facing Applications
-                </h2>
+                </h3>
                 <p className="text-xl md:text-2xl">
                     If you are building a CRUD public facing application based on Firebase or MongoDB, FireCMS PRO is the perfect
                     solution for you. Define exactly what each user can do and customize the experience for each role.

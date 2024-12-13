@@ -50,7 +50,7 @@ export function HeroPro({
                 <p className={"text-gray-900 uppercase font-mono font-bold"}>
                     No more limits. No more compromises.
                 </p>
-                <h2 className={"h2 mt-0 uppercase font-mono"}>
+                <h2 className={"mt-0 uppercase font-mono"}>
                     Try self-hosted FireCMS PRO one month completely for <b>free</b>
                 </h2>
                 <div className={"flex flex-row gap-4 mt-8"}>
@@ -65,6 +65,9 @@ export function HeroPro({
                         See the docs
                     </a>
                 </div>
+                <p className={"block"}>Access your <a className={"text-white font-semibold"}
+                href={"https://app.firecms.co/subscriptions"}
+                > subscriptions here</a></p>
             </Panel>
             <div className={"relative"}>
                 <div className="h-full w-full mix-blend-multiply"

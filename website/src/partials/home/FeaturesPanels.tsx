@@ -28,17 +28,6 @@ function FeaturesPanels() {
             >
                 <div className={"w-full"}>
 
-                    <div
-                        className={clsx("w-full mb-4 relative  uppercase border-b border-0 ",
-                            ContainerInnerPaddingMixin,
-                            defaultBorderMixin)}>
-                        <div className={"max-w-6xl mx-auto flex items-center"}>
-                            <h2 className="h1 m-0 gradient-text">
-                                Batteries included
-                            </h2>
-                        </div>
-                    </div>
-
                     <p className={clsx("max-w-6xl mx-auto text-xl md:text-2xl py-4 ")}>
                         FireCMS provides all the flexibility you
                         need with the best UX.

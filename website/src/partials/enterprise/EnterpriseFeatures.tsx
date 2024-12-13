@@ -15,7 +15,7 @@ export function EnterpriseFeatures() {
             <Panel color={"white"}>
                 <div className={"flex items-center my-4 "}>
 
-                    <h2 className={"h2 m-0"}>Not just a CMS</h2>
+                    <h2 className={"m-0"}>Not just a CMS</h2>
 
                 </div>
 
@@ -88,7 +88,7 @@ export function EnterpriseFeatures() {
 
                         <div className={"flex items-center my-4 mb-3 "}>
 
-                            <h2 className={"h2 m-0"}>Why Choose FireCMS?</h2>
+                            <h2 className={"m-0"}>Why Choose FireCMS?</h2>
 
                         </div>
 

@@ -61,7 +61,7 @@ function ProPage() {
                     <ProDeveloperFeatures/>
 
                     <Panel color={"gray"} includePadding={true} innerClassName={"flex flex-col items-center"}>
-                        <h2 className={"h2 mb-3 uppercase font-mono text-center mx-auto"}>
+                        <h2 className={"mb-3 uppercase font-mono text-center mx-auto"}>
                             LEARN MORE ABOUT FIRECMS PRO
                         </h2>
                         <HeroProButtons/>

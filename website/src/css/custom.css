@@ -21,13 +21,16 @@ h5 {
 }
 
 h6 {
-    @apply text-xl font-headers font-medium
+    @apply text-xl font-headers font-normal
 }
 
-h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
+h1, .h1, h2, .h2, h3, .h3 {
     font-weight: 600 !important;
 }
-
+.footer__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
 tr {
     border-top: none;
 }
@@ -82,7 +85,6 @@ tr {
 }
 
 .gradient-text {
-    font-weight: 500;
     width: fit-content;
     color: transparent;
     background-clip: text;
@@ -161,11 +163,17 @@ tr {
     --ifm-color-primary-lightest: #3e97ff;
     --ifm-code-font-size: 95%;
     --ifm-font-weight-bold: 600;
-    --ifm-h1-font-size: 4rem;
     /*--ifm-list-left-padding: 0rem;*/
     --ifm-custom-navbar-background-color: rgba(48, 49, 55, 0.33);
     --ifm-border-color: rgba(100, 116, 139, 0.4);
     --ifm-background-color: white;
+
+    --ifm-h1-font-size: 3.75rem;
+    --ifm-h2-font-size: 3rem;
+    --ifm-h3-font-size: 2.25rem;
+    --ifm-h4-font-size: 1.875rem;
+    --ifm-h5-font-size: 1.5rem;
+    --ifm-h6-font-size: 1.25rem;
 
     --ifm-z-index-fixed: 20;
 
@@ -272,6 +280,14 @@ article blockquote {
     margin-bottom: 16px;
 }
 
+.theme-admonition {
+    --ifm-h5-font-size: 0.875rem;
+}
+.pagination-nav__link {
+    --ifm-h5-font-size: 0.875rem;
+    --ifm-h4-font-size: 1rem;
+}
+
 .sidebarViewport_node_modules-\@docusaurus-theme-classic-lib-theme-DocPage-Layout-Sidebar-styles-module {
     background-color: var(--ifm-background-color);
     border: none;
@@ -354,10 +370,6 @@ button a {
 
 a.btn {
     text-decoration: none;
-}
-
-h1, h2, h3 {
-    font-weight: 500;
 }
 
 h2 {
@@ -499,6 +511,10 @@ html[data-theme="dark"] {
 
 .theme-doc-toc-desktop {
     top: calc(var(--ifm-navbar-height) + 36px) !important;
+}
+
+.markdown h1:first-child {
+    --ifm-h1-font-size: 3rem;
 }
 
 .markdown > h1 {

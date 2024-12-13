@@ -61,9 +61,9 @@ function Home() {
 
                 <TechSplash/>
 
-                <FeaturesPanels/>
-
                 <ImportDataIntro/>
+
+                <FeaturesPanels/>
 
                 <UsageExamples/>
 

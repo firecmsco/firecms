@@ -19,7 +19,7 @@ import oikosAviationDemo from "@site/static/img/oikos_aviation_demo.png";
 export function ProInfo() {
     return <Panel color={"white"} container={false}>
         <div className={"max-w-6xl mx-auto"}>
-            <h2 className={"h2 mb-3 uppercase font-mono"}>
+            <h2 className={"mb-3 uppercase font-mono"}>
                 Build better applications faster
             </h2>
             <p className="text-xl md:text-2xl">

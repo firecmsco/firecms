@@ -124,7 +124,7 @@ export function FireCMSCloudVersions() {
 
         <div className={clsx(ContainerMixin, ContainerPaddingMixin, "flex flex-col items-center gap-8")}>
 
-            <h2 className={"h2 mb-3 uppercase font-mono"}>
+            <h2 className={"mb-3 uppercase font-mono"}>
                 Full no-code/low-code solution
             </h2>
 

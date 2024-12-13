@@ -11,10 +11,10 @@ export function ManageYour() {
     return <Panel color={"primary"} includePadding={false}>
         <div
             className={clsx(ContainerInnerPaddingMixin,)}>
-            <div className={"h1 relative items-center text-white uppercase mt-8"}>
-                <h4 className="h1 mb-4 text-white uppercase md:inline">
+            <h1 className={"relative items-center text-white uppercase mt-8"}>
+                <div className="mb-4 text-white uppercase md:inline">
                     Manage your&nbsp;
-                </h4>
+                </div>
                 <TypeAnimation
                     sequence={[
                         "Products",
@@ -41,7 +41,7 @@ export function ManageYour() {
                     cursor={true}
                     repeat={Infinity}
                 />
-            </div>
+            </h1>
 
             <div className={"mt-8 text-xl md:text-2xl"}>
                 <p>

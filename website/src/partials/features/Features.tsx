@@ -53,7 +53,7 @@ function Features() {
                     className={"mx-auto md:col-span-9 md:pr-8 flex justify-center flex-col h-full mb-16"}>
                     <div className={"flex items-center mb-3"}>
 
-                        <h3 className="h2 m-0 gradient-text uppercase">
+                        <h3 className="m-0 gradient-text uppercase">
                             Inline editing
                         </h3>
 
@@ -95,7 +95,7 @@ function Features() {
 
                             <div className={"flex items-center mb-3 "}>
 
-                                <h3 className="h2 m-0 gradient-text uppercase">
+                                <h3 className="m-0 gradient-text uppercase">
                                     Dedicated form view
                                 </h3>
 
@@ -168,7 +168,7 @@ function Features() {
                             <div
                                 className={"flex items-center mb-3"}>
 
-                                <h3 className="h2 m-0 gradient-text uppercase">
+                                <h3 className="m-0 gradient-text uppercase">
                                     Easy to customise
                                 </h3>
 

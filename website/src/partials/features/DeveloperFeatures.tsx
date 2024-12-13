@@ -74,7 +74,7 @@ export function DeveloperFeatures() {
 
                         <div
                             className={"flex items-center mb-3"}>
-                            <h3 className="h2 m-0">
+                            <h3 className="m-0">
                                 Easy schema definition
                             </h3>
 
@@ -87,9 +87,9 @@ export function DeveloperFeatures() {
                         </p>
 
                         <p className="text-xl md:text-2xl ">
-                            Use advanced features like conditional logic
+                            Integrate your own conditional logic
                             for your fields, references to other
-                            collections, markdown or file uploads
+                            collections, markdown, file uploads, and dozens of other features.
                         </p>
 
                     </>}/>
@@ -104,7 +104,7 @@ export function DeveloperFeatures() {
                         <div>
                             <div className={"flex items-center mb-3"}>
 
-                                <h3 className="h2 m-0">
+                                <h3 className="m-0">
                                     Built for every project
                                 </h3>
 

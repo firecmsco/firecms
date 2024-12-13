@@ -8,9 +8,9 @@ function ProTeaser() {
 
     return (
         <Panel>
-            <h2 className={"h2 mb-3 uppercase font-mono"}>
+            <h3 className={"mb-3 uppercase font-mono"}>
                 Go Pro for a completely customizable experience
-            </h2>
+            </h3>
             <p className="text-xl md:text-2xl">
                 If you want a self-hosted solution, with a completely customizable experience, FireCMS PRO is the
                 way to go.

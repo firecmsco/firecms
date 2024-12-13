@@ -45,7 +45,7 @@ export function ProDeveloperFeatures() {
                         {/*    <LightingIcon height={12} width={12}/>*/}
                         {/*</div>*/}
 
-                        <h3 className="h2 m-0 uppercase font-mono">
+                        <h3 className="m-0 uppercase font-mono">
                             No config, just React components
                         </h3>
 

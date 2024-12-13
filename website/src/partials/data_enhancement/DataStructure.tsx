@@ -16,7 +16,7 @@ export function DataStructure() {
     return (
 
         <Panel color={"secondary"}>
-            <h2 className="h2 mb-4">
+            <h2 className="mb-4">
                 Harness AI for Your Structured Data
             </h2>
             <p className="text-2xl">

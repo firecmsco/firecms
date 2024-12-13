@@ -32,11 +32,11 @@ function OpenAITeaser() {
                                 <MagicIcon/>
                             </div>
 
-                            <h1 className="h1 m-0">
+                            <h2 className="m-0">
                                 <span>ChatGPT </span>
                                 <span
                                     className="text-primary">Integration</span>
-                            </h1>
+                            </h2>
                         </div>
 
                         <div className="mt-3 text-xl sm:mt-4 md:text-2xl">

@@ -22,11 +22,11 @@ export function DataEnhancementHero() {
             left={
                 <div>
 
-                    <h1 className="text-4xl tracking-tight font-extrabold md:text-6xl">
+                    <h2 className="text-4xl tracking-tight font-extrabold md:text-6xl">
                         <span className="block">ChatGPT</span>
                         <span
                             className="block text-primary">Integration</span>
-                    </h1>
+                    </h2>
                     <div className="mt-3 text-xl sm:mt-4 md:text-2xl">
                         <p>
                             Discover the power of FireCMS with ChatGPT integration,

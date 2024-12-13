@@ -10,7 +10,7 @@ export function CLIInstructions() {
         // centered={false}
                   includePadding={true}>
 
-        <h2 className={"h2 mb-3 uppercase font-mono"}>
+        <h2 className={"mb-3 uppercase font-mono"}>
             Start hacking today
         </h2>
 

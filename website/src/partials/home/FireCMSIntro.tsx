@@ -48,9 +48,9 @@ function FireCMSIntro() {
 
             <div
                 className="max-w-5xl mx-auto text-center mb-12 px-8 py-8 md:px-8">
-                <h2 className="h1 mb-4 gradient-text uppercase m-auto">
+                <h1 className="mb-4 gradient-text uppercase m-auto">
                     Much more than a CMS
-                </h2>
+                </h1>
                 <p className="text-xl md:text-2xl">
                     <b>FireCMS</b> is a platform upon which thousands of companies build their <b>back-office
                     applications</b>.

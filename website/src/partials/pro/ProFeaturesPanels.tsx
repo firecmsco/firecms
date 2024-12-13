@@ -43,7 +43,7 @@ function ProFeaturesPanels() {
                     className={"container flex items-center mb-4 "}>
                     <div className={"max-w-6xl mx-auto"}>
 
-                        <h2 className="h2 mb-3 uppercase font-mono">
+                        <h2 className="mb-3 uppercase font-mono">
                             Advanced Functionality, Built-In
                         </h2>
 

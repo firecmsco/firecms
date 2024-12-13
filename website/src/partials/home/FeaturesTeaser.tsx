@@ -33,8 +33,8 @@ function FeaturesTeaser() {
 
                                 <div className={"flex items-center mb-3"}>
 
-                                    <h3 className="h2 m-0 uppercase">
-                                        Advanced Editing
+                                    <h3 className="m-0 uppercase">
+                                        Unmatched Editing Experience
                                     </h3>
 
                                 </div>
@@ -46,19 +46,6 @@ function FeaturesTeaser() {
                                     using a user-friendly <b>spreadsheet view and
                                     effective
                                     forms</b>.
-                                </p>
-
-                                <p>
-                                    FireCMS creates CRUD views based on your
-                                    configurations with ease. It's simple to set up
-                                    for
-                                    common cases and just as easy to extend and
-                                    customize to fit your specific needs.
-                                </p>
-
-                                <p>
-                                    FireCMS imposes no data structure restrictions, allowing
-                                    seamless integration with any project right from the start.
                                 </p>
 
                             </div>
@@ -118,7 +105,7 @@ function FeaturesTeaser() {
 
                             <div
                                 className={"flex items-center mb-3 "}>
-                                <h3 className="h2 m-0 uppercase">
+                                <h3 className="m-0 uppercase">
                                     Flexible Customization
                                 </h3>
 
@@ -128,13 +115,6 @@ function FeaturesTeaser() {
                                 FireCMS offers developers an easy way to adapt the
                                 platform to their specific needs while keeping the <b>initial setup simple</b>. Our
                                 practical defaults can be conveniently <b>overridden or expanded</b>.
-                            </p>
-                            <p className="text-xl ">
-                                Effortlessly integrate your custom form fields as
-                                React components and preview widgets. Moreover, you
-                                can create detailed views related to your entities
-                                or within the main navigation for a truly customized
-                                experience.
                             </p>
 
                         </div>
