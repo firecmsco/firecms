@@ -25,6 +25,10 @@ export const mergeCollections = (baseCollections: EntityCollection[],
     console.debug("Collections specified in code:", baseCollections);
     console.debug("Collections stored in the backend", storedCollections);
     const result = joinCollectionLists(baseCollections, storedCollections, [], modifyCollection);
+
+    // sort the collections so they are in the same order as the base collections
+    result.sort((a, b) => baseCollections.findIndex(c => c.id === a.id) - baseCollections.findIndex(c => c.id === b.id));
+
     console.debug("Collections after joining:", result);
     return result;
 }
