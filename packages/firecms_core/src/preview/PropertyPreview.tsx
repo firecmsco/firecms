@@ -56,7 +56,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
         propertyConfigs: customizationController.propertyConfigs
     });
 
-    if (value === undefined || property === null) {
+    if (property === null) {
         content = <EmptyValue/>;
     } else if (property.Preview) {
         content = createElement(property.Preview as React.ComponentType<PropertyPreviewProps>,
@@ -70,7 +70,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
                 // entity,
                 customProps: property.customProps
             });
-    } else if (value === null) {
+    } else if (value === undefined || value === null) {
         content = <EmptyValue/>;
     } else if (property.dataType === "string") {
         const stringProperty = property as ResolvedStringProperty;
