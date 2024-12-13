@@ -1,5 +1,6 @@
-## [3.0.0-beta.11] - 2024-12-
+## [3.0.0-beta.11] - 2024-12-13
 
+- New Next.js template for FireCMS PRO. You can now create a new project with the PRO template using the CLI.
 - [BREAKING] Removed `userRoles` from AuthController. You can now access the `roles` prop in the user object directly
 - [BREAKING] Many FireCMS UI sizes have been adjusted for better consistency. This will affect you only if you are using
   custom components.
@@ -51,34 +52,7 @@ const userManagement = useBuildUserManagement({
 });
 ```
 
-Then you want to replace all previous references to `authController` with `userManagement`.
-For example, if you were using `authController.signInWithEmailAndPassword`, you should now use
-`userManagement.signInWithEmailAndPassword`.
-
-```typescript
-const navigationController = useBuildNavigationController({
-    collections: collectionsBuilder,
-    collectionPermissions: userManagement.collectionPermissions,
-    views,
-    adminViews: userManagementAdminViews,
-    authController: firebaseAuthController,
-    dataSourceDelegate: firestoreDelegate
-});
-```
-
-becomes:
-
-```typescript
-const navigationController = useBuildNavigationController({
-    collections: collectionsBuilder,
-    collectionPermissions: userManagement.collectionPermissions,
-    views,
-    adminViews: userManagementAdminViews,
-    authController: userManagement,
-    dataSourceDelegate: firestoreDelegate
-});
-```
-
+- Added many "use client" directives to UI components.
 - Fixed issues in collection editor code dialog.
 - Updated web styles and integrated improvements in Docusaurus.
 - Enhanced styling for empty references and minor design tweaks.
@@ -86,7 +60,7 @@ const navigationController = useBuildNavigationController({
 - Reintroduced dark primary color variant for better theme options.
 - Minor web updates for improved aesthetics and functionality.
 - Fixed a bug where the Editor was not saving false values.
-- Replaced all instances of gray and slate colors with more unified surface and surface-accent colors for UI
+- Replaced all instances of gray and slate colors with more unified `surface` and `surface-accent` colors for UI
   consistency.
 - Added Avatar component fallback and integrated ESLint configuration into templates.
 - Enhanced error handling in forms and improved cloud error messages.
@@ -101,6 +75,12 @@ const navigationController = useBuildNavigationController({
   consistency.
 - If you are using the `Select` component, you don't need to provide a `renderValue` function anymore. The component
   will handle it automatically.
+- Custom preview properties are now rendered if the value is undefined.
+- Fixed for Cloud version refreshing navigation too often.
+- Fix for local search not working when returning to a collection.
+- Fix for bug when selecting a read only entity.
+- Fixed selection bug in collection groups for entities sharing id.
+- Reference previews now take into account arrays of images for the preview image.
 
 ## [3.0.0-beta.10] - 2024-07-10
 
@@ -119,7 +99,7 @@ const navigationController = useBuildNavigationController({
 - Added API key generation and project selection capabilities.
 - Introduced a past-due warning message and improvements in collection and subcollection data handling.
 - Provided better error handling and layout consistency in the application.
--
+
 
 ## [3.0.0-beta.9] - 2024-07-10
 
