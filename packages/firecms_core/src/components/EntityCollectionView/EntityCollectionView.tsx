@@ -61,6 +61,7 @@ import {
 import { setIn } from "@firecms/formex";
 import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common";
 import {
+    COLLECTION_GROUP_PARENT_ID,
     OnCellValueChange,
     OnColumnResizeParams,
     UniqueFieldValidator,
@@ -75,8 +76,7 @@ import { useAnalyticsController } from "../../hooks/useAnalyticsController";
 import { useSelectionController } from "./useSelectionController";
 import { EntityCollectionViewStartActions } from "./EntityCollectionViewStartActions";
 import { addRecentId, getRecentIds } from "./utils";
-
-const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
+import { mergeEntityActions } from "../../util/entity_actions";
 
 /**
  * @group Components
@@ -458,7 +458,7 @@ export const EntityCollectionView = React.memo(
             if (deleteEnabled)
                 actions.push(deleteEntityAction);
             if (customEntityActions)
-                actions.push(...customEntityActions);
+                return mergeEntityActions(actions, customEntityActions);
             return actions;
         };
 
@@ -798,7 +798,8 @@ function EntityIdHeaderWidget({
                         <SearchIcon size={"small"}/>
                     </IconButton>
                 }>
-                <div className={cls("my-2 rounded-lg bg-surface-50 dark:bg-surface-950 text-surface-900 dark:text-white")}>
+                <div
+                    className={cls("my-2 rounded-lg bg-surface-50 dark:bg-surface-950 text-surface-900 dark:text-white")}>
                     <form noValidate={true}
                           onSubmit={(e) => {
                               e.preventDefault();

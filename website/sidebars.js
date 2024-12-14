@@ -28,24 +28,45 @@ module.exports = {
         },
         {
             "type": "category",
-            "label": "FireCMS PRO",
+            "label": "Self-hosted",
             "collapsed": false,
-            className: "pro-sidebar-category",
             "items": [
-                "pro/pro_quickstart",
-                "pro/firestore_rules",
-                "pro/sample_pro",
-                "pro/main_components",
-                "pro/styling_firecms",
-                "pro/deployment",
+                "self/firestore_rules",
+                {
+                    "type": "doc",
+                    "label": "Quickstart PRO",
+                    "id": "pro/pro_quickstart",
+                    className: "pro-sidebar-item"
+                },
+                {
+                    "type": "doc",
+                    "label": "Sample PRO",
+                    "id": "pro/sample_pro",
+                    className: "pro-sidebar-item"
+                },
+                "self/controllers",
+                "self/main_components",
+                "self/styling_firecms",
+                "self/deployment",
                 "pro/app_check",
                 "firebase_setup",
-                "pro/mongodb",
-                "pro/user_management",
-                "pro/custom_storage",
+                "self/mongodb",
+                {
+                    "type": "doc",
+                    "label": "Licensing",
+                    "id": "pro/licensing",
+                    className: "pro-sidebar-item"
+                },
+                {
+                    "type": "doc",
+                    "label": "User management",
+                    "id": "pro/user_management",
+                    className: "pro-sidebar-item"
+                },
+                "self/custom_storage",
                 "pro/nextjs",
-                "pro/migrating_from_v2_to_pro",
-                "pro/migrating_from_v3_beta"
+                "self/migrating_from_v2_to_v3",
+                "self/migrating_from_v3_beta"
             ]
         },
         {

@@ -7,6 +7,7 @@ export * from "./objects";
 export * from "./paths";
 export * from "./regexp";
 export * from "./navigation_utils";
+export * from "./entity_actions";
 export * from "./useDebouncedCallback";
 export * from "./property_utils";
 export * from "./resolutions";

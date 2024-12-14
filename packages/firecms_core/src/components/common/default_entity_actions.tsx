@@ -5,6 +5,7 @@ import { addRecentId } from "../EntityCollectionView/utils";
 
 export const editEntityAction: EntityAction = {
     icon: <EditIcon/>,
+    key: "edit",
     name: "Edit",
     collapsed: false,
     onClick({
@@ -38,6 +39,7 @@ export const editEntityAction: EntityAction = {
 export const copyEntityAction: EntityAction = {
     icon: <FileCopyIcon/>,
     name: "Copy",
+    key: "copy",
     onClick({
                 entity,
                 collection,
@@ -62,38 +64,11 @@ export const copyEntityAction: EntityAction = {
     }
 }
 
-export const archiveEntityAction: EntityAction = {
-    icon: <ArchiveIcon/>,
-    name: "Archive",
-    onClick({
-                entity,
-                collection,
-                context: {
-                    dataSource,
-                }
-            }): Promise<void> {
-        // Add your code here
-        return Promise.resolve(undefined);
-    }
-}
-
-export const openWebsiteAction: EntityAction = {
-    icon: <OpenInNewIcon/>,
-    name: "See in website",
-    onClick({
-                entity,
-                collection,
-                context,
-            }): Promise<void> {
-        // open a new tab
-        window.open(`https://example.com/${entity.id}`, "_blank");
-        return Promise.resolve(undefined);
-    }
-}
 
 export const deleteEntityAction: EntityAction = {
     icon: <DeleteIcon/>,
     name: "Delete",
+    key: "delete",
     onClick({
                 entity,
                 fullPath,

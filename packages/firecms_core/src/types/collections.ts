@@ -119,7 +119,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * `hidden` in the property definition,will be ignored.
      * `propertiesOrder` has precedence over `hidden`.
      */
-    propertiesOrder?: (Extract<keyof M, string> | `subcollection:${string}`)[];
+    propertiesOrder?: (Extract<keyof M, string> | string | `subcollection:${string}` | "collectionGroupParent")[];
 
     /**
      * If enabled, content is loaded in batches. If `false` all entities in the

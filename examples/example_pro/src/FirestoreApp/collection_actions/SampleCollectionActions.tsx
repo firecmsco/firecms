@@ -1,9 +1,10 @@
 import React from "react";
-import { CollectionActionsProps, useSnackbarController } from "@firecms/core";
+import { CollectionActionsProps, useSideEntityController, useSnackbarController } from "@firecms/core";
 import { Button, CloseIcon, IconButton, Select, SelectItem } from "@firecms/ui";
 
 export function SampleCollectionActions({ selectionController }: CollectionActionsProps) {
 
+    const sideEntityController = useSideEntityController();
     const snackbarController = useSnackbarController();
 
     const onClick = (event: React.MouseEvent) => {
@@ -13,6 +14,11 @@ export function SampleCollectionActions({ selectionController }: CollectionActio
             type: "success",
             message: `User defined code here! ${count} products selected`
         });
+        // sideEntityController.open({
+        //     path: "showcase",
+        //     entityId: "delete_me",
+        //     collection: showcaseCollection
+        // });
     };
 
     return (

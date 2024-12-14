@@ -18,6 +18,7 @@ yarn
 ```
 
 And run the project locally:
+
 ```bash
 yarn dev
 ```
@@ -61,10 +62,18 @@ function isFireCMSUser(){
 
 ### Deploying the project
 
-You can deploy the project to Firebase hosting by following [these instructions](https://firecms.co/docs/pro/deployment).
-In order to deploy the project, you need to have a valid FireCMS PRO license.
+You can develop your project locally without a license, but you will need to purchase one to deploy it. There is a grace
+period after the first deployment to allow you to test it in production.
+
 You can create one in the [FireCMS subscriptions](https://app.firecms.co/subscriptions).
 When you get your API key, you can set it in the `.env` file.
+
+When creating your license, you need to specify the project IDs that will be using the license. You can find your
+project ID in the Firebase console.
+
+You will receive an API key that you need to pass to your FireCMS component. If you are using the starter template, you
+can set it in the .env file.
+
 
 
 

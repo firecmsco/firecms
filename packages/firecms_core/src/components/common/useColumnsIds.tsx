@@ -3,7 +3,7 @@ import { EntityCollection, ResolvedEntityCollection, ResolvedProperty } from "..
 import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common";
 import { PropertyColumnConfig } from "../EntityCollectionTable/EntityCollectionTableProps";
 
-const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
+export const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
 
 export function useColumnIds<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean): PropertyColumnConfig[] {
     return useMemo(() => {

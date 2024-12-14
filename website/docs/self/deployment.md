@@ -12,21 +12,6 @@ We recommend deploying to Firebase Hosting, as it is in the same ecosystem, and 
 pick up the Firebase config from the environment.
 
 
-## Purchase a PRO license
-
-You can develop your project locally without a license, but you will need to
-purchase one to deploy it. There is a grace period after the first deployment
-to allow you to test it in production.
-
-You can purchase a license in the [FireCMS subscriptions site](https://app.firecms.co/subscriptions).
-
-When creating your license, you need to specify the project IDs that will be
-using the license. You can find your project ID in the Firebase console.
-
-You will receive an API key that you need to pass to your `FireCMS` component.
-If you are using the starter template, you can set it in the `.env` file.
-
-
 ## Deployment to Firebase Hosting
 
 If you would like to deploy your CMS to Firebase Hosting, you need to enable

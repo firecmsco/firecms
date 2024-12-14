@@ -34,6 +34,7 @@ import {
     getValueInPath,
     isHidden,
     isReadOnly,
+    mergeEntityActions,
     removeInitialAndTrailingSlashes,
     resolveCollection,
     resolveDefaultSelectedView,
@@ -702,7 +703,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         if (deleteEnabled)
             actions.push(deleteEntityAction);
         if (customEntityActions)
-            actions.push(...customEntityActions);
+            return mergeEntityActions(actions, customEntityActions);
         return actions;
     }, [authController, inputCollection, path]);
 

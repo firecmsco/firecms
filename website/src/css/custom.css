@@ -513,6 +513,15 @@ html[data-theme="dark"] {
     top: calc(var(--ifm-navbar-height) + 36px) !important;
 }
 
+article {
+    --ifm-h1-font-size: 3rem;
+    --ifm-h2-font-size: 2.5rem;
+    --ifm-h3-font-size: 2rem;
+    --ifm-h4-font-size: 1.3rem;
+    --ifm-h5-font-size: 1.2rem;
+    --ifm-h6-font-size: 1.1rem;
+}
+
 .markdown h1:first-child {
     --ifm-h1-font-size: 3rem;
 }

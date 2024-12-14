@@ -16,6 +16,16 @@ export type EntityAction<M extends object = any, USER extends User = User> = {
     name: string;
 
     /**
+     * Key of the action. You only need to provide this if you want to
+     * override the default actions.
+     * The default actions are:
+     * - edit
+     * - delete
+     * - copy
+     */
+    key?: string;
+
+    /**
      * Icon of the action
      */
     icon?: React.ReactElement;

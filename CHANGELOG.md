@@ -1,3 +1,9 @@
+## [3.0.0-beta.12] - 2024-12-
+
+- You can now override custom entity actions. Just provide an action with one of the keys `edit`, `copy` or `delete` in
+the `entityActions` prop in the collection view. This will override the default actions for the entity.
+
+
 ## [3.0.0-beta.11] - 2024-12-13
 
 - New Next.js template for FireCMS PRO. You can now create a new project with the PRO template using the CLI.

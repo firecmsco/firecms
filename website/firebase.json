@@ -38,6 +38,41 @@
         "source": "/blog/cms_comparison_2023",
         "destination": "/blog/cms_comparison_2024",
         "type": 301
+      },
+      {
+        "source": "/pro/custom_storage",
+        "destination": "/self/firestore_rules",
+        "type": 301
+      },
+      {
+        "source": "/pro/custom_storage",
+        "destination": "/self/firestore_rules",
+        "type": 301
+      },
+      {
+        "source": "/pro/main_components",
+        "destination": "/self/main_components",
+        "type": 301
+      },
+      {
+        "source": "/pro/styling_firecms",
+        "destination": "/self/styling_firecms",
+        "type": 301
+      },
+      {
+        "source": "/pro/migrating_from_v2_to_pro",
+        "destination": "/self/migrating_from_v2_to_v3",
+        "type": 301
+      },
+      {
+        "source": "/pro/migrating_from_v3_beta",
+        "destination": "/self/migrating_from_v3_beta",
+        "type": 301
+      },
+      {
+        "source": "/pro/deployment",
+        "destination": "/self/deployment",
+        "type": 301
       }
     ],
     "rewrites": [

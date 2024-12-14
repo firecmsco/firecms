@@ -1,5 +1,5 @@
 ---
-id: Controllers
+id: controllers
 title: Controllers
 ---
 

@@ -232,6 +232,7 @@ export function App() {
         if (process.env.NODE_ENV !== "production") {
             sourceCollections.push(testCollection);
         }
+
         // return sourceCollections;
         return mergeCollections(
             sourceCollections,
@@ -325,7 +326,7 @@ export function App() {
 
     const navigationController = useBuildNavigationController({
         collections,
-        collectionPermissions: userManagement.collectionPermissions,
+        // collectionPermissions: userManagement.collectionPermissions,
         views,
         adminViews: userManagementAdminViews,
         authController,

@@ -1,12 +1,37 @@
 import { buildCollection, buildProperty } from "@firecms/core";
+import { AutoAwesomeIcon } from "@firecms/ui";
+import React from "react";
 
 export const showcaseCollection = buildCollection({
-    id: "showcase",
+    id: "id_showcase",
     path: "showcase",
     description: "Collection to showcase different field types",
     customId: false,
     icon: "bento",
     name: "Showcase",
+    entityActions: [
+        {
+            name: "Edit",
+            key: "edit",
+            onClick: async ({
+                                entity,
+                                collection
+                            }) => {
+                console.log("Custom action", entity, collection);
+            }
+        }
+    ],
+    subcollections: [{
+        id: "id_subcollection",
+        path: "subcollection",
+        name: "Subcollection",
+        properties: {
+            name: {
+                dataType: "string",
+                name: "Name"
+            }
+        }
+    }],
     properties: {
         name: buildProperty({
             dataType: "string",

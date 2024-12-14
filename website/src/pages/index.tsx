@@ -55,7 +55,6 @@ function Home() {
 
                 <UITeaser/>
 
-                <FeaturesTeaser/>
 
                 <DeveloperFeatures/>
 

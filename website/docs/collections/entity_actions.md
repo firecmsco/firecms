@@ -21,7 +21,6 @@ modifying data, accessing storage, opening dialogs, etc.
 In the `icon` prop, you can pass a React element to show an icon next to the action name.
 We recommend using any of the [FireCMS icons](/docs/icons), which are available in the `@firecms/ui` package.
 
-
 ```tsx
 
 export const productsCollection = buildCollection<Product>({
@@ -53,17 +52,22 @@ export const productsCollection = buildCollection<Product>({
 });
 ```
 
-
 #### EntityAction
 
 * `name`: Name of the action
+* `key`?: Key of the action. You only need to provide this if you want to
+  override the default actions.
+  The default actions are:
+    - edit
+    - delete
+    - copy
 * `icon`?: React.ReactElement Icon of the action
-* `onClick`: (props: EntityActionClickProps) => Promise 
-Function to be called when the action is clicked
-* `collapsed`?: boolean Show this action collapsed in the menu of the collection view. Defaults to true. If false, the action will be shown in the menu
+* `onClick`: (props: EntityActionClickProps) => Promise
+  Function to be called when the action is clicked
+* `collapsed`?: boolean Show this action collapsed in the menu of the collection view. Defaults to true. If false, the
+  action will be shown in the menu
 * `includeInForm`?: boolean Show this action in the form, defaults to true
 * `disabled`?: boolean Disable this action, defaults to false
-
 
 #### EntityActionClickProps
 
@@ -77,10 +81,9 @@ Function to be called when the action is clicked
 * `onCollectionChange`?: () => void
 * `sideEntityController`?: SideEntityController
 
-
 ## Example
 
-Let's build an example where we add an action to archive a product. 
+Let's build an example where we add an action to archive a product.
 When the action is clicked, we will call a Google Cloud Function to that will run some business logic,
 in the backend.
 

@@ -10,6 +10,7 @@ import {
     EntityCollection,
     EntityCollectionRowActions,
     EntityCollectionTable,
+    mergeEntityActions,
     OnCellValueChange,
     PropertiesOrBuilders,
     resolveCollection,
@@ -136,7 +137,7 @@ export function TableResults({
         actions.push(copyEntityAction);
         actions.push(deleteEntityAction);
         if (customEntityActions)
-            actions.push(...customEntityActions);
+            return mergeEntityActions(actions, customEntityActions);
         return actions;
     };
 
