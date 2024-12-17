@@ -55,7 +55,7 @@ describe("buildSidePanelsFromUrl", () => {
                 path: "products",
                 entityId: "entityA",
                 copy: false,
-                selectedSubPath: "locales"
+                selectedTab: "locales"
             }
         ];
         const sidePanels = buildSidePanelsFromUrl("/products/entityA/locales", mockCollections, false);
@@ -79,7 +79,7 @@ describe("buildSidePanelsFromUrl", () => {
                 path: "products",
                 entityId: "entityA",
                 copy: false,
-                selectedSubPath: "custom_view"
+                selectedTab: "custom_view"
             }
         ];
         const sidePanels = buildSidePanelsFromUrl("/products/entityA/custom_view", mockCollections, false);
@@ -92,7 +92,7 @@ describe("buildSidePanelsFromUrl", () => {
                 path: "users/J4WyZHd3DhgcWRdJaBodSkSAVuN2/experiences",
                 entityId: "pUAGjOQALls5wTwKq0sF",
                 copy: false,
-                selectedSubPath: "editor",
+                selectedTab: "editor",
                 width: undefined
             }
         ];

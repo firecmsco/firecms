@@ -2,7 +2,7 @@ import React from "react";
 import { cls } from "../util";
 
 export type CircularProgressProps = {
-    size?: "small" | "medium" | "large",
+    size?: "smallest" | "small" | "medium" | "large",
     className?: string
 }
 
@@ -12,8 +12,10 @@ export function CircularProgress({
                                  }: CircularProgressProps) {
 
     let sizeClasses = "";
-    if (size === "small") {
+    if (size === "smallest") {
         sizeClasses = "w-4 h-4";
+    } else if (size === "small") {
+        sizeClasses = "w-6 h-6";
     } else if (size === "medium") {
         sizeClasses = "w-8 h-8 m-1";
     } else {
@@ -21,8 +23,10 @@ export function CircularProgress({
     }
 
     let borderClasses = "";
-    if (size === "small") {
+    if (size === "smallest") {
         borderClasses = "border-[3px]";
+    } else if (size === "small") {
+        borderClasses = "border-[4px]";
     } else if (size === "medium") {
         borderClasses = "border-4";
     } else {

@@ -37,7 +37,7 @@ function PastDueAlert({ subscription }: { subscription: Subscription }) {
                 variant={"outlined"}>
                 Update
             </Button>
-            : <CircularProgress size={"small"}/>}>
+            : <CircularProgress size={"smallest"}/>}>
         <div>Your subscription is past due. Please update your payment method to avoid service disruption</div>
     </Alert>;
 }

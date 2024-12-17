@@ -183,7 +183,7 @@ function EnumFormFields({
                             variant={"text"}
                             size={"small"}
                             onClick={inferValues}>
-                        {inferring ? <CircularProgress size={"small"}/> : <AutorenewIcon/>}
+                        {inferring ? <CircularProgress size={"smallest"}/> : <AutorenewIcon/>}
                         Infer values from data
                     </Button>}
             </div>

@@ -64,7 +64,7 @@ const ButtonInner = React.forwardRef<
         "text-text-disabled dark:text-text-disabled-dark": disabled,
         "border border-transparent opacity-50": variant === "text" && disabled,
         "border border-surface-500 opacity-50": variant === "outlined" && disabled,
-        "border border-surface-500 bg-surface-500 opacity-50": (variant === "filled" || variant === "neutral") && disabled,
+        "border border-transparent bg-surface-300 dark:bg-surface-500 opacity-40": (variant === "filled" || variant === "neutral") && disabled,
     });
 
     const sizeClasses = cls(

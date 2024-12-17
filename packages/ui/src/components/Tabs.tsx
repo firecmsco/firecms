@@ -20,6 +20,7 @@ export function Tabs({
 
     return <TabsPrimitive.Root value={value} onValueChange={onValueChange} className={className}>
         <TabsPrimitive.List className={cls(
+            "w-max",
             "flex text-sm font-medium text-center text-surface-accent-800 dark:text-white max-w-full overflow-auto no-scrollbar items-end",
             innerClassName)
         }>
@@ -54,7 +55,8 @@ export function Tab({
                                               "data-[state=active]:text-surface-accent-900 data-[state=active]:dark:text-white",
                                               "hover:text-surface-accent-800 dark:hover:text-surface-accent-200"),
                                       className)}>
-        <div className={cls("uppercase inline-block p-2 px-4 m-2 rounded",
+        <div className={cls("line-clamp-1",
+            "uppercase inline-block p-2 px-4 m-1 rounded",
             "hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-800",
             innerClassName)}>
             {children}

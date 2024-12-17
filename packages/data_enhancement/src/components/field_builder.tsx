@@ -186,7 +186,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                                 }).finally(() => setDataLoading(false));
                             }}>
                             {dataLoading || loading
-                                ? <CircularProgress size={"small"}/>
+                                ? <CircularProgress size={"smallest"}/>
                                 : <AutoAwesomeIcon
                                     size={"small"}/>}
                         </IconButton>}>

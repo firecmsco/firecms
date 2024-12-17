@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 
 import { EntitySidePanelProps } from "../types";
-import { useNavigationController } from "../hooks";
+import { useNavigationController, useSideEntityController } from "../hooks";
 
 import { ErrorBoundary } from "../components";
-import { EntityEditView } from "./EntityEditView";
+import { EntityEditView, OnUpdateParams } from "./EntityEditView";
 import { useSideDialogContext } from "./SideDialogs";
 
 /**
@@ -20,10 +20,37 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     const {
         blocked,
         setBlocked,
-        setBlockedNavigationMessage
+        setBlockedNavigationMessage,
+        close
     } = useSideDialogContext();
 
+    const sideEntityController = useSideEntityController();
     const navigationController = useNavigationController();
+
+    const onClose = () => {
+        if (props.onClose) {
+            props.onClose();
+        }
+
+        setBlocked(false);
+        close(true);
+    }
+
+    const onUpdate = (params: OnUpdateParams) => {
+        if (props.onUpdate) {
+            props.onUpdate(params);
+        }
+        if (params.status !== "existing") {
+            sideEntityController.replace({
+                path: params.path,
+                entityId: params.entityId,
+                selectedTab: params.selectedTab,
+                updateUrl: true,
+                collection: params.collection,
+            });
+        }
+
+    }
 
     const parentCollectionIds = useMemo(() => {
         return navigationController.getParentCollectionIds(props.path);
@@ -79,9 +106,26 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
             <ErrorBoundary>
                 <EntityEditView
                     {...props}
+                    layout={"side_panel"}
                     collection={collection}
                     parentCollectionIds={parentCollectionIds}
                     onValuesAreModified={onValuesAreModified}
+                    onClose={onClose}
+                    onUpdate={onUpdate}
+                    onTabChange={({
+                                      path,
+                                      entityId,
+                                      selectedTab,
+                                      collection
+                                  }) => {
+                        sideEntityController.replace({
+                            path,
+                            entityId,
+                            selectedTab,
+                            updateUrl: true,
+                            collection
+                        });
+                    }}
                 />
             </ErrorBoundary>
 

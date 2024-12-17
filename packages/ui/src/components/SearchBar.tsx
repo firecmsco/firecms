@@ -69,7 +69,7 @@ export function SearchBar({
                 className)}>
             <div
                 className="absolute p-0 px-4 h-full pointer-events-none flex items-center justify-center top-0">
-                {loading ? <CircularProgress size={"small"}/> : <SearchIcon className={"text-text-disabled dark:text-text-disabled-dark"}/>}
+                {loading ? <CircularProgress size={"smallest"}/> : <SearchIcon className={"text-text-disabled dark:text-text-disabled-dark"}/>}
             </div>
             <input
                 value={searchText ?? ""}

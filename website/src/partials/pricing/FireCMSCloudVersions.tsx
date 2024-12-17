@@ -114,7 +114,7 @@ export function FireCMSCloudVersions() {
                 </a>
             </div>
             <div className={"mt-4 text-center text-gray-600 w-full"}>
-                <span className={"text-2xl font-bold "}>Starting at €49.99</span>
+                <span className={"text-2xl font-bold "}>Starting at €49.99/month</span>
             </div>
         </div>
     );

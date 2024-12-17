@@ -114,6 +114,7 @@ export const productsCollection = buildCollection<Product>({
         create: true,
         delete: true
     }),
+    openEntityMode: "full_screen",
     Actions: [SampleCollectionActions],
     subcollections: [localeCollection],
     // defaultSelectedView: "sample_custom_view",

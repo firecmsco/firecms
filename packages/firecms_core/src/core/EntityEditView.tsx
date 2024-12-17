@@ -7,11 +7,13 @@ import {
     EntityCustomView,
     EntityStatus,
     EntityValues,
+    FireCMSContext,
     FireCMSPlugin,
     FormContext,
     PluginFormActionProps,
     PropertyFieldBindingProps,
     ResolvedEntityCollection,
+    SideEntityController,
     User
 } from "../types";
 import equal from "react-fast-compare"
@@ -23,7 +25,7 @@ import {
     EntityCollectionView,
     EntityView,
     ErrorBoundary,
-    getFormFieldKeys,
+    getFormFieldKeys
 } from "../components";
 import {
     canCreateEntity,
@@ -49,6 +51,7 @@ import {
     useDataSource,
     useEntityFetch,
     useFireCMSContext,
+    useLargeLayout,
     useSideEntityController,
     useSnackbarController
 } from "../hooks";
@@ -67,7 +70,6 @@ import {
     Tabs,
     Typography
 } from "@firecms/ui";
-import { useSideDialogContext } from "./index";
 import { Formex, FormexController, getIn, setIn, useCreateFormex } from "@firecms/formex";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { CustomIdField } from "../form/components/CustomIdField";
@@ -78,16 +80,34 @@ import { ValidationError } from "yup";
 
 const MAIN_TAB_VALUE = "main_##Q$SC^#S6";
 
+export type OnUpdateParams = {
+    entity: Entity<any>,
+    status: EntityStatus,
+    path: string
+    entityId?: string;
+    selectedTab?: string;
+    collection: EntityCollection<any>
+};
+
+export type OnTabChangeParams<M extends Record<string, any>> = {
+    path: string;
+    entityId?: string;
+    selectedTab?: string;
+    collection: EntityCollection<M>;
+};
+
 export interface EntityEditViewProps<M extends Record<string, any>> {
     path: string;
     collection: EntityCollection<M>;
     entityId?: string;
     copy?: boolean;
-    selectedSubPath?: string;
+    selectedTab?: string;
     parentCollectionIds: string[];
-    onValuesAreModified: (modified: boolean) => void;
-    onUpdate?: (params: { entity: Entity<any> }) => void;
+    onValuesAreModified?: (modified: boolean) => void;
+    onUpdate?: (params: OnUpdateParams) => void;
     onClose?: () => void;
+    onTabChange?: (props: OnTabChangeParams<M>) => void;
+    layout?: "side_panel" | "full_screen";
 }
 
 /**
@@ -129,23 +149,28 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
 export function EntityEditViewInner<M extends Record<string, any>>({
                                                                        path,
                                                                        entityId: entityIdProp,
-                                                                       selectedSubPath: selectedSubPathProp,
+                                                                       selectedTab: selectedTabProp,
                                                                        copy,
                                                                        collection,
                                                                        parentCollectionIds,
                                                                        onValuesAreModified,
                                                                        onUpdate,
                                                                        onClose,
+                                                                       onTabChange,
                                                                        entity,
-                                                                       dataLoading
+                                                                       dataLoading,
+                                                                       layout = "side_panel"
                                                                    }: EntityEditViewProps<M> & {
     entity?: Entity<M>,
     dataLoading: boolean
 }) {
 
+    const largeLayout = useLargeLayout();
     if (collection.customId && collection.formAutoSave) {
         console.warn(`The collection ${collection.path} has customId and formAutoSave enabled. This is not supported and formAutoSave will be ignored`);
     }
+
+    const actionsAtTheBottom = !largeLayout || layout === "side_panel";
 
     const [saving, setSaving] = useState(false);
     /**
@@ -172,7 +197,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const authController = useAuthController();
     const dataSource = useDataSource(collection);
-    const sideDialogContext = useSideDialogContext();
     const sideEntityController = useSideEntityController();
     const snackbarController = useSnackbarController();
     const customizationController = useCustomizationController();
@@ -209,30 +233,27 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const [entityId, setEntityId] = React.useState<string | undefined>(initialEntityId);
 
-    // const doOnValuesChanges = (values?: EntityValues<M>) => {
-    //     const initialValues = formex.initialValues;
-    //     setInternalValues(values);
-    //     if (onValuesChanged)
-    //         onValuesChanged(values);
-    //     if (autoSave && values && !equal(values, initialValues)) {
-    //         save(values);
-    //     }
-    // };
-
     const [entityIdError, setEntityIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<Error | undefined>();
 
     const [customIdLoading, setCustomIdLoading] = React.useState<boolean>(false);
 
-    const defaultSelectedView = selectedSubPathProp ?? resolveDefaultSelectedView(
-        collection ? collection.defaultSelectedView : undefined,
-        {
-            status,
-            entityId
-        }
-    );
+    const defaultSelectedView = useMemo(() => selectedTabProp
+        ?? resolveDefaultSelectedView(
+            collection ? collection.defaultSelectedView : undefined,
+            {
+                status,
+                entityId
+            }
+        ), []);
 
     const [selectedTab, setSelectedTab] = useState<string>(defaultSelectedView ?? MAIN_TAB_VALUE);
+
+    useEffect(() => {
+        if ((selectedTabProp ?? MAIN_TAB_VALUE) !== selectedTab) {
+            setSelectedTab(selectedTabProp ?? MAIN_TAB_VALUE);
+        }
+    }, [selectedTabProp]);
 
     const mainViewVisible = selectedTab === MAIN_TAB_VALUE;
 
@@ -294,23 +315,21 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         setUsedEntity(updatedEntity);
         setStatus("existing");
 
-        onValuesAreModified(false);
+        onValuesAreModified?.(false);
 
-        if (onUpdate)
-            onUpdate({ entity: updatedEntity });
-
-        if (closeAfterSave) {
-            sideDialogContext.setBlocked(false);
-            sideDialogContext.close(true);
-            onClose?.();
-        } else if (status !== "existing") {
-            sideEntityController.replace({
+        if (onUpdate) {
+            onUpdate({
+                entity: updatedEntity,
+                status,
                 path,
                 entityId: updatedEntity.id,
-                selectedSubPath: MAIN_TAB_VALUE === selectedTab ? undefined : selectedTab,
-                updateUrl: true,
-                collection,
+                selectedTab: MAIN_TAB_VALUE === selectedTab ? undefined : selectedTab,
+                collection
             });
+        }
+
+        if (closeAfterSave) {
+            onClose?.();
         }
 
     };
@@ -499,8 +518,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             (customView, colIndex) => {
                 if (!customView)
                     return null;
-                if (selectedTab !== customView.key)
-                    return null;
                 const Builder = customView.Builder;
                 if (!Builder) {
                     console.error("customView.Builder is not defined");
@@ -508,7 +525,10 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 }
                 return <div
                     className={cls(defaultBorderMixin,
-                        "relative flex-grow w-full h-full overflow-auto ")}
+                        "relative flex-grow w-full h-full overflow-auto",
+                        {
+                            "hidden": selectedTab !== customView.key
+                        })}
                     key={`custom_view_${customView.key}`}
                     role="tabpanel">
                     <ErrorBoundary>
@@ -532,11 +552,12 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         (subcollection, colIndex) => {
             const subcollectionId = subcollection.id ?? subcollection.path;
             const fullPath = usedEntity ? `${path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollectionId)}` : undefined;
-            if (selectedTab !== subcollectionId)
-                return null;
             return (
                 <div
-                    className={"relative flex-grow h-full overflow-auto w-full"}
+                    className={cls("relative flex-grow h-full overflow-auto w-full",
+                        {
+                            "hidden": selectedTab !== subcollectionId
+                        })}
                     key={`subcol_${subcollectionId}`}
                     role="tabpanel">
 
@@ -564,18 +585,17 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     ).filter(Boolean);
 
     const onDiscard = useCallback(() => {
-        onValuesAreModified(false);
+        onValuesAreModified?.(false);
     }, []);
 
     const onSideTabClick = (value: string) => {
         setSelectedTab(value);
         if (status === "existing") {
-            sideEntityController.replace({
+            onTabChange?.({
                 path,
                 entityId,
-                selectedSubPath: value === MAIN_TAB_VALUE ? undefined : value,
-                updateUrl: true,
-                collection,
+                selectedTab: value === MAIN_TAB_VALUE ? undefined : value,
+                collection
             });
         }
     };
@@ -595,30 +615,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             }
             : undefined);
     }, []);
-
-    // useEffect(() => {
-    //     baseDataSourceValuesRef.current = getDataSourceEntityValues(initialResolvedCollection, status, entity);
-    //     const initialValues = formex.initialValues;
-    //     if (!formex.isSubmitting && initialValues && status === "existing") {
-    //         setUnderlyingChanges(
-    //             Object.entries(resolvedCollection.properties)
-    //                 .map(([key, property]) => {
-    //                     if (isHidden(property)) {
-    //                         return {};
-    //                     }
-    //                     const initialValue = initialValues[key];
-    //                     const latestValue = baseDataSourceValuesRef.current[key];
-    //                     if (!equal(initialValue, latestValue)) {
-    //                         return { [key]: latestValue };
-    //                     }
-    //                     return {};
-    //                 })
-    //                 .reduce((a, b) => ({ ...a, ...b }), {}) as Partial<EntityValues<M>>
-    //         );
-    //     } else {
-    //         setUnderlyingChanges({});
-    //     }
-    // }, [entity, initialResolvedCollection, status]);
 
     const pluginActions: React.ReactNode[] = [];
 
@@ -710,7 +706,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     const modified = formex.dirty;
     useEffect(() => {
         if (!autoSave) {
-            onValuesAreModified(modified);
+            onValuesAreModified?.(modified);
         } else {
             if (formex.values && !equal(formex.values, lastSavedValues.current)) {
                 save(formex.values);
@@ -820,145 +816,77 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     });
     const formActions = entityActions.filter(a => a.includeInForm === undefined || a.includeInForm);
 
-    const dialogActions = <DialogActions position={"absolute"}>
-
-        {savingError &&
-            <div className="text-right">
-                <Typography color={"error"}>
-                    {savingError.message}
-                </Typography>
-            </div>}
-
-        {entity && formActions.length > 0 && <div className="flex-grow flex overflow-auto no-scrollbar">
-            {formActions.map(action => (
-                <IconButton
-                    key={action.name}
-                    color="primary"
-                    onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-                        event.stopPropagation();
-                        if (entity)
-                            action.onClick({
-                                entity,
-                                fullPath: resolvedCollection.path,
-                                collection: resolvedCollection,
-                                context,
-                                sideEntityController
-                            });
-                    }}>
-                    {action.icon}
-                </IconButton>
-            ))}
-        </div>}
-        {formex.isSubmitting && <CircularProgress size={"small"}/>}
-        <Button
-            variant="text"
-            disabled={disabled || formex.isSubmitting}
-            type="reset">
-            {status === "existing" ? "Discard" : "Clear"}
-        </Button>
-
-        <Button
-            variant="text"
-            color="primary"
-            type="submit"
-            disabled={disabled || formex.isSubmitting}
-            onClick={() => {
-                closeAfterSaveRef.current = false;
-            }}>
-            {status === "existing" && "Save"}
-            {status === "copy" && "Create copy"}
-            {status === "new" && "Create"}
-        </Button>
-
-        <Button
-            variant="filled"
-            color="primary"
-            type="submit"
-            disabled={disabled || formex.isSubmitting}
-            onClick={() => {
-                closeAfterSaveRef.current = true;
-            }}>
-            {status === "existing" && "Save and close"}
-            {status === "copy" && "Create copy and close"}
-            {status === "new" && "Create and close"}
-        </Button>
-
-    </DialogActions>;
-
-    function buildForm() {
-
-        let form = <>
-
-            {pluginActions.length > 0 && <div
-                className={cls("w-full flex justify-end items-center sticky top-0 right-0 left-0 z-10 bg-opacity-60 bg-surface-accent-200 dark:bg-opacity-60 dark:bg-surface-accent-800 backdrop-blur-md")}>
-                {pluginActions}
-            </div>}
-
-            <div className="pt-12 pb-16 pl-4 sm:px-8 md:px-10">
-                <div
-                    className={`w-full py-2 flex flex-col items-start mt-${4 + (pluginActions ? 8 : 0)} lg:mt-${8 + (pluginActions ? 8 : 0)} mb-8`}>
-
-                    <Typography
-                        className={"mt-4 flex-grow line-clamp-1 " + inputCollection.hideIdFromForm ? "mb-2" : "mb-0"}
-                        variant={"h4"}>{title ?? inputCollection.singularName ?? inputCollection.name}
-                    </Typography>
-                    <Alert color={"base"} className={"w-full"} size={"small"}>
-                        <code className={"text-xs select-all"}>{path}/{entityId}</code>
-                    </Alert>
-                </div>
-
-                {!collection.hideIdFromForm &&
-                    <CustomIdField customId={inputCollection.customId}
-                                   entityId={entityId}
-                                   status={status}
-                                   onChange={setEntityId}
-                                   error={entityIdError}
-                                   loading={customIdLoading}
-                                   entity={entity}/>}
-
-                {entityId && formContext && <>
-                    <div className="mt-12 flex flex-col gap-8"
-                         ref={formRef}>
-
-                        {formFields}
-
-                        <ErrorFocus containerRef={formRef}/>
-
-                    </div>
-
-                    <div className="h-14"/>
-
-                </>}
-
-            </div>
-        </>;
-
-        if (plugins) {
-            plugins.forEach((plugin: FireCMSPlugin) => {
-                if (plugin.form?.provider) {
-                    form = (
-                        <plugin.form.provider.Component
-                            status={status}
-                            path={path}
-                            collection={collection}
-                            onDiscard={onDiscard}
-                            entity={usedEntity}
-                            context={context}
-                            formContext={formContext}
-                            {...plugin.form.provider.props}>
-                            {form}
-                        </plugin.form.provider.Component>
-                    );
-                }
-            });
-        }
-        return <ErrorBoundary>{form}</ErrorBoundary>;
-    }
+    const dialogActions = actionsAtTheBottom
+        ? buildBottomActions({
+            savingError: savingError,
+            entity: entity,
+            formActions: formActions,
+            resolvedCollection: resolvedCollection,
+            context: context,
+            sideEntityController: sideEntityController,
+            isSubmitting: formex.isSubmitting,
+            disabled: disabled,
+            status: status,
+            setPendingClose: (value: boolean) => {
+                closeAfterSaveRef.current = value;
+            }
+        })
+        : buildSideActions({
+            savingError: savingError,
+            entity: entity,
+            formActions: formActions,
+            resolvedCollection: resolvedCollection,
+            context: context,
+            sideEntityController: sideEntityController,
+            isSubmitting: formex.isSubmitting,
+            disabled: disabled,
+            status: status,
+        });
 
     const entityView = (readOnly === undefined)
         ? <></>
         : (!readOnly
-            ? buildForm()
+            ? (
+                <ErrorBoundary>
+                    <div className="w-full pt-12 pb-16 px-4 sm:px-8 md:px-10">
+                        <div
+                            className={"w-full py-2 flex flex-col items-start mt-4 lg:mt-8 mb-8"}>
+
+                            <Typography
+                                className={"mt-4 flex-grow line-clamp-1 " + inputCollection.hideIdFromForm ? "mb-2" : "mb-0"}
+                                variant={"h4"}>{title ?? inputCollection.singularName ?? inputCollection.name}
+                            </Typography>
+                            <Alert color={"base"} className={"w-full"} size={"small"}>
+                                <code className={"text-xs select-all text-text-secondary dark:text-text-secondary-dark"}>{path}/{entityId}</code>
+                            </Alert>
+                        </div>
+
+                        {!collection.hideIdFromForm &&
+                            <CustomIdField customId={inputCollection.customId}
+                                           entityId={entityId}
+                                           status={status}
+                                           onChange={setEntityId}
+                                           error={entityIdError}
+                                           loading={customIdLoading}
+                                           entity={entity}/>}
+
+                        {entityId && formContext && <>
+                            <div className="mt-12 flex flex-col gap-8"
+                                 ref={formRef}>
+
+                                {formFields}
+
+                                <ErrorFocus containerRef={formRef}/>
+
+                            </div>
+
+                            {actionsAtTheBottom && <div className="h-16"/>}
+
+                        </>}
+
+                    </div>
+                </ErrorBoundary>
+            )
             : (
                 <>
                     <Typography
@@ -977,7 +905,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     const subcollectionTabs = subcollections && subcollections.map(
         (subcollection) =>
             <Tab
-                className="text-sm min-w-[140px]"
+                className="text-sm min-w-[120px]"
                 value={subcollection.id}
                 key={`entity_detail_collection_tab_${subcollection.name}`}>
                 {subcollection.name}
@@ -988,7 +916,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         (view) =>
 
             <Tab
-                className="text-sm min-w-[140px]"
+                className="text-sm min-w-[120px]"
                 value={view.key}
                 key={`entity_detail_collection_tab_${view.name}`}>
                 {view.name}
@@ -1000,84 +928,111 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             onIdChange(entityId);
     }, [entityId, onIdChange]);
 
+    let result = <div className="relative flex flex-col h-full w-full bg-white dark:bg-surface-900">
+
+        <div
+            className={cls(defaultBorderMixin, "overflow-visible overflow-x-scroll w-full no-scrollbar h-16 border-b pl-2 pr-2 pt-1 flex items-end bg-surface-50 dark:bg-surface-950")}>
+
+            {onClose && <div
+                className="pb-1 self-center">
+                <IconButton
+                    onClick={() => {
+                        onClose?.();
+                    }}>
+                    <CloseIcon size={"small"}/>
+                </IconButton>
+            </div>}
+
+            {pluginActions.length > 0 && <div
+                className={cls("w-full flex justify-end items-center py-3 px-4")}>
+                {pluginActions}
+            </div>}
+
+            <div className={"flex-grow"}/>
+
+            {globalLoading && <div
+                className="self-center">
+                <CircularProgress size={"small"}/>
+            </div>}
+
+            {hasAdditionalViews && <Tabs
+                value={selectedTab}
+                onValueChange={(value) => {
+                    onSideTabClick(value);
+                }}>
+
+                <Tab
+                    disabled={!hasAdditionalViews}
+                    value={MAIN_TAB_VALUE}
+                    className={"text-sm min-w-[120px]"}
+                >{collection.singularName ?? collection.name}</Tab>
+
+                {customViewTabs}
+
+                {subcollectionTabs}
+            </Tabs>}
+
+        </div>
+
+        <form
+            onSubmit={formex.handleSubmit}
+            onReset={() => {
+                formex.resetForm();
+                return onDiscard && onDiscard();
+            }}
+            noValidate
+            className={"flex-grow h-full flex overflow-auto flex-row w-full justify-center"}>
+
+            <div
+                role="tabpanel"
+                hidden={!mainViewVisible}
+                id={`form_${path}`}
+                className={cls("relative flex flex-row max-w-4xl lg:max-w-3xl xl:max-w-5xl w-full h-fit", {
+                    "hidden": !mainViewVisible
+                })}>
+
+                {globalLoading
+                    ? <div className="w-full pt-12 pb-16 px-4 sm:px-8 md:px-10"><CircularProgressCenter/></div>
+                    : entityView}
+
+            </div>
+
+            {mainViewVisible && shouldShowEntityActions && !actionsAtTheBottom && dialogActions}
+
+            {customViewsView}
+
+            {subCollectionsViews}
+
+            {shouldShowEntityActions && actionsAtTheBottom && dialogActions}
+
+        </form>
+
+    </div>;
+
+    if (plugins) {
+        plugins.forEach((plugin: FireCMSPlugin) => {
+            if (plugin.form?.provider) {
+                result = (
+                    <plugin.form.provider.Component
+                        status={status}
+                        path={path}
+                        collection={collection}
+                        onDiscard={onDiscard}
+                        entity={usedEntity}
+                        context={context}
+                        formContext={formContext}
+                        {...plugin.form.provider.props}>
+                        {result}
+                    </plugin.form.provider.Component>
+                );
+            }
+        });
+    }
+
     return (
         <Formex value={formex}>
 
-            <div className="flex flex-col h-full w-full">
-
-                <div
-                    className={cls(defaultBorderMixin, "no-scrollbar h-16 border-b pl-2 pr-2 pt-1 flex items-end overflow-scroll bg-surface-50 dark:bg-surface-950")}>
-
-                    <div
-                        className="pb-1 self-center">
-                        <IconButton
-                            onClick={() => {
-                                onClose?.();
-                                return sideDialogContext.close(false);
-                            }}>
-                            <CloseIcon size={"small"}/>
-                        </IconButton>
-                    </div>
-
-                    <div className={"flex-grow"}/>
-
-                    {globalLoading && <div
-                        className="self-center">
-                        <CircularProgress size={"small"}/>
-                    </div>}
-
-                    <Tabs
-                        value={selectedTab}
-                        onValueChange={(value) => {
-                            onSideTabClick(value);
-                        }}
-                        innerClassName="pl-4 pr-4 pt-0">
-
-                        <Tab
-                            disabled={!hasAdditionalViews}
-                            value={MAIN_TAB_VALUE}
-                            className={`${
-                                !hasAdditionalViews ? "hidden" : ""
-                            } text-sm min-w-[140px]`}
-                        >{collection.singularName ?? collection.name}</Tab>
-
-                        {customViewTabs}
-
-                        {subcollectionTabs}
-                    </Tabs>
-
-                </div>
-
-                <form
-                    onSubmit={formex.handleSubmit}
-                    onReset={() => {
-                        formex.resetForm();
-                        return onDiscard && onDiscard();
-                    }}
-                    noValidate
-                    className={"flex-grow h-full flex overflow-auto flex-col w-full"}>
-
-                    <div
-                        role="tabpanel"
-                        hidden={!mainViewVisible}
-                        id={`form_${path}`}
-                        className={"relative w-full"}>
-
-                        {globalLoading
-                            ? <CircularProgressCenter/>
-                            : entityView}
-
-                    </div>
-
-                    {customViewsView}
-
-                    {subCollectionsViews}
-
-                    {shouldShowEntityActions && dialogActions}
-
-                </form>
-
-            </div>
+            {result}
         </Formex>
     );
 }
@@ -1124,3 +1079,149 @@ export function yupToFormErrors(yupError: ValidationError): Record<string, any> 
     }
     return errors;
 }
+
+type ActionsViewProps<M extends object> = {
+    savingError: Error | undefined,
+    entity: Entity<M> | undefined,
+    formActions: EntityAction[],
+    resolvedCollection: ResolvedEntityCollection,
+    context: FireCMSContext,
+    sideEntityController: SideEntityController,
+    isSubmitting: boolean,
+    disabled: boolean,
+    status: "new" | "existing" | "copy",
+    setPendingClose?: (value: boolean) => void
+};
+
+function buildBottomActions<M extends object>({
+                                                  savingError,
+                                                  entity,
+                                                  formActions,
+                                                  resolvedCollection,
+                                                  context,
+                                                  sideEntityController,
+                                                  isSubmitting,
+                                                  disabled,
+                                                  status,
+                                                  setPendingClose
+                                              }: ActionsViewProps<M>) {
+
+    return <DialogActions position={"absolute"}>
+
+        {savingError &&
+            <div className="text-right">
+                <Typography color={"error"}>
+                    {savingError.message}
+                </Typography>
+            </div>}
+
+        {entity && formActions.length > 0 && <div className="flex-grow flex overflow-auto no-scrollbar">
+            {formActions.map(action => (
+                <IconButton
+                    key={action.name}
+                    color="primary"
+                    onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                        event.stopPropagation();
+                        if (entity)
+                            action.onClick({
+                                entity,
+                                fullPath: resolvedCollection.path,
+                                collection: resolvedCollection,
+                                context,
+                                sideEntityController
+                            });
+                    }}>
+                    {action.icon}
+                </IconButton>
+            ))}
+        </div>}
+
+        {isSubmitting && <CircularProgress size={"smallest"}/>}
+
+        <Button
+            variant="text"
+            disabled={disabled || isSubmitting}
+            type="reset">
+            {status === "existing" ? "Discard" : "Clear"}
+        </Button>
+
+        <Button
+            variant="text"
+            color="primary"
+            type="submit"
+            disabled={disabled || isSubmitting}
+            onClick={() => {
+                setPendingClose?.(false);
+            }}>
+            {status === "existing" && "Save"}
+            {status === "copy" && "Create copy"}
+            {status === "new" && "Create"}
+        </Button>
+
+        <Button
+            variant="filled"
+            color="primary"
+            type="submit"
+            disabled={disabled || isSubmitting}
+            onClick={() => {
+                setPendingClose?.(true);
+            }}>
+            {status === "existing" && "Save and close"}
+            {status === "copy" && "Create copy and close"}
+            {status === "new" && "Create and close"}
+        </Button>
+
+    </DialogActions>;
+}
+
+function buildSideActions<M extends object>({
+                                                savingError,
+                                                entity,
+                                                formActions,
+                                                resolvedCollection,
+                                                context,
+                                                sideEntityController,
+                                                isSubmitting,
+                                                disabled,
+                                                status,
+                                                setPendingClose
+                                            }: ActionsViewProps<M>) {
+
+    return <div
+        className={cls("overflow-auto h-full flex flex-col gap-2 w-96 px-4 py-16 sticky top-0 border-l", defaultBorderMixin)}>
+
+        <Button
+            fullWidth={true}
+            variant="filled"
+            color="primary"
+            type="submit"
+            size={"large"}
+            disabled={disabled || isSubmitting}
+            onClick={() => {
+                setPendingClose?.(false);
+            }}>
+            {status === "existing" && "Save"}
+            {status === "copy" && "Create copy"}
+            {status === "new" && "Create"}
+        </Button>
+
+        <Button
+            fullWidth={true}
+            variant="text"
+            disabled={disabled || isSubmitting}
+            type="reset">
+            {status === "existing" ? "Discard" : "Clear"}
+        </Button>
+
+
+        {isSubmitting && <CircularProgress size={"smallest"}/>}
+        {savingError &&
+            <div className="text-right">
+                <Typography color={"error"}>
+                    {savingError.message}
+                </Typography>
+            </div>}
+
+    </div>;
+}
+

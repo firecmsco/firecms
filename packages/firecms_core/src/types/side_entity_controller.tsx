@@ -28,7 +28,7 @@ export interface EntitySidePanelProps<M extends Record<string, any> = any> {
      * Open the entity with a selected sub-collection view. If the panel for this
      * entity was already open, it is replaced.
      */
-    selectedSubPath?: string;
+    selectedTab?: string;
 
     /**
      * Use this prop to override the width of the form view.

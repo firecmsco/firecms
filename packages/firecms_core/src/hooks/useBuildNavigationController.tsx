@@ -26,6 +26,7 @@ import {
     resolvePermissions
 } from "../util";
 import { getParentReferencesFromPath } from "../util/parent_references_from_path";
+import { useNavigate } from "react-router-dom";
 
 const DEFAULT_BASE_PATH = "/";
 const DEFAULT_COLLECTION_PATH = "/c";
@@ -65,6 +66,8 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         dataSourceDelegate,
         injectCollections
     } = props;
+
+    const navigate = useNavigate();
 
     const collectionsRef = useRef<EntityCollection[] | undefined>();
     const viewsRef = useRef<CMSView[] | undefined>();
@@ -408,7 +411,8 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         refreshNavigation,
         getParentReferencesFromPath: getAllParentReferencesForPath,
         getParentCollectionIds,
-        convertIdsToPaths
+        convertIdsToPaths,
+        navigate
     };
 }
 

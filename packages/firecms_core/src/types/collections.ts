@@ -85,6 +85,11 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     properties: PropertiesOrBuilders<M>;
 
     /**
+     * Default preview properties displayed when this collection is referenced to.
+     */
+    previewProperties?: string[];
+
+    /**
      * Title property of the entity. This is the property that will be used
      * as the title in entity related views and references.
      * If not specified, the first property simple text property will be used.
@@ -92,11 +97,10 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     titleProperty?: keyof M;
 
     /**
-     * Can this collection be edited by the end user.
-     * Defaults to `true`.
-     * Keep in mind that you can also set this prop to individual properties.
+     * When editing an entity, you can choose to open the entity in a side dialog
+     * or in a full screen dialog. Defaults to `side_panel`.
      */
-    editable?: boolean;
+    openEntityMode?: "side_panel" | "full_screen";
 
     /**
      * Order in which the properties are displayed.
@@ -313,9 +317,12 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     sideDialogWidth?: number | string;
 
     /**
-     * Default preview properties displayed when this collection is referenced to.
+     * Can this collection configuration be edited by the end user.
+     * Defaults to `true`.
+     * Keep in mind that you can also set this prop to individual properties.
+     * This prop has only effect if you are using the collection editor.
      */
-    previewProperties?: string[];
+    editable?: boolean;
 }
 
 /**

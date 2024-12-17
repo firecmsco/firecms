@@ -15,11 +15,12 @@ import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from
 import { useLargeLayout } from "../hooks";
 import { EntitySidePanel } from "../core/EntitySidePanel";
 
-const NEW_URL_HASH = "new";
+const NEW_URL_HASH = "new_side";
+const SIDE_URL_HASH = "side";
 
 export function getEntityViewWidth(props: EntitySidePanelProps<any>, small: boolean): string {
     if (small) return CONTAINER_FULL_WIDTH;
-    const mainViewSelected = !props.selectedSubPath;
+    const mainViewSelected = !props.selectedTab;
     let resolvedWidth: string | undefined;
     if (props.width) {
         resolvedWidth = typeof props.width === "number" ? `${props.width}px` : props.width;
@@ -93,10 +94,12 @@ export const useBuildSideEntityController = (navigation: NavigationController,
 
     // only on initialisation, create panels from URL
     useEffect(() => {
+
+        const newFlag = location.hash === `#${NEW_URL_HASH}`;
+        const sideFlag = location.hash === `#${SIDE_URL_HASH}`;
+
         if (!navigation.loading && !initialised.current) {
-            console.debug("Initialising side entity controller");
-            if (navigation.isUrlCollectionPath(location.pathname)) {
-                const newFlag = location.hash === `#${NEW_URL_HASH}`;
+            if ((newFlag || sideFlag) && navigation.isUrlCollectionPath(location.pathname)) {
                 const entityOrCollectionPath = navigation.urlPathToDataPath(location.pathname);
                 const panelsFromUrl = buildSidePanelsFromUrl(entityOrCollectionPath, navigation.collections ?? [], newFlag);
                 for (let i = 0; i < panelsFromUrl.length; i++) {
@@ -108,12 +111,10 @@ export const useBuildSideEntityController = (navigation: NavigationController,
                             sideDialogsController.open(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveAliasesFrom, smallLayout))
                     }, 1);
                 }
-            } else {
-                // console.warn("Location path is not a collection path");
             }
             initialised.current = true;
         }
-    }, [location, navigation.loading, navigation.isUrlCollectionPath, navigation.buildUrlCollectionPath, navigation.resolveAliasesFrom, sideDialogsController, smallLayout, navigation]);
+    }, [navigation.loading]);
 
     useEffect(() => {
         const updatedSidePanels = sideDialogsController.sidePanels.map(sidePanelProps => {
@@ -143,10 +144,15 @@ export const useBuildSideEntityController = (navigation: NavigationController,
             }
         );
 
-        sideDialogsController.open(propsToSidePanel({
-            selectedSubPath: defaultSelectedView,
-            ...props,
-        }, navigation.buildUrlCollectionPath, navigation.resolveAliasesFrom, smallLayout));
+        sideDialogsController.open(
+            propsToSidePanel({
+                    selectedTab: defaultSelectedView,
+                    ...props
+                },
+                navigation.buildUrlCollectionPath,
+                navigation.resolveAliasesFrom,
+                smallLayout
+            ));
 
     }, [sideDialogsController, navigation.buildUrlCollectionPath, navigation.resolveAliasesFrom, smallLayout]);
 
@@ -197,13 +203,13 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
                 if (previousEntry.type === "entity") {
                     const lastSidePanel: EntitySidePanelProps<any> = sidePanels[sidePanels.length - 1];
                     if (lastSidePanel)
-                        lastSidePanel.selectedSubPath = navigationEntry.view.key;
+                        lastSidePanel.selectedTab = navigationEntry.view.key;
                 }
             } else if (navigationEntry.type === "collection") {
                 if (previousEntry.type === "entity") {
                     const lastSidePanel: EntitySidePanelProps<any> = sidePanels[sidePanels.length - 1];
                     if (lastSidePanel)
-                        lastSidePanel.selectedSubPath = navigationEntry.collection.id ?? navigationEntry.collection.path;
+                        lastSidePanel.selectedTab = navigationEntry.collection.id ?? navigationEntry.collection.path;
                 }
             }
         }
@@ -225,28 +231,31 @@ const propsToSidePanel = (props: EntitySidePanelProps,
                           resolveAliasesFrom: (pathWithAliases: string) => string,
                           smallLayout: boolean): SideDialogPanelProps => {
 
-        const collectionPath = removeInitialAndTrailingSlashes(props.path);
+    const collectionPath = removeInitialAndTrailingSlashes(props.path);
 
-        const newPath = props.entityId
-            ? buildUrlCollectionPath(`${collectionPath}/${props.entityId}/${props.selectedSubPath || ""}`)
-            : buildUrlCollectionPath(`${collectionPath}#${NEW_URL_HASH}`);
-        const resolvedPath = resolveAliasesFrom(props.path);
+    const newPath = props.entityId
+        ? buildUrlCollectionPath(`${collectionPath}/${props.entityId}${props.selectedTab ? "/" + props.selectedTab : ""}#${SIDE_URL_HASH}`)
+        : buildUrlCollectionPath(`${collectionPath}#${NEW_URL_HASH}`);
+    const resolvedPath = resolveAliasesFrom(props.path);
 
-        const resolvedPanelProps: EntitySidePanelProps<any> = {
-            ...props,
-            path: resolvedPath,
-        };
+    const resolvedPanelProps: EntitySidePanelProps<any> = {
+        ...props,
+        path: resolvedPath,
+    };
 
-        const entityViewWidth = getEntityViewWidth(props, smallLayout);
+    const entityViewWidth = getEntityViewWidth(props, smallLayout);
 
-        return {
-            key: `${props.path}/${props.entityId}`,
-            component: <EntitySidePanel {...resolvedPanelProps}/>,
-            urlPath: newPath,
-            parentUrlPath: buildUrlCollectionPath(collectionPath),
-            width: entityViewWidth,
-            onClose: props.onClose,
-            additional: props
-        };
-    }
-;
+    return {
+        key: `${props.path}/${props.entityId}`,
+        component: <EntitySidePanel {...resolvedPanelProps}/>,
+        urlPath: newPath,
+        parentUrlPath: buildUrlCollectionPath(collectionPath),
+        width: entityViewWidth,
+        onClose: props.onClose,
+        additional: props
+    };
+}
+
+function isSideUrl(url: string): boolean {
+    return url.endsWith("#" + SIDE_URL_HASH) || url.endsWith("#" + NEW_URL_HASH);
+}

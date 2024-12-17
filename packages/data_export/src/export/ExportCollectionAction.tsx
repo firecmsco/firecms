@@ -268,7 +268,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
 
             <DialogActions>
 
-                {dataLoading && <CircularProgress size={"small"}/>}
+                {dataLoading && <CircularProgress size={"smallest"}/>}
 
                 <Button onClick={handleClose}
                         variant={"text"}>

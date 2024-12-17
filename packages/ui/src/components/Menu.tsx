@@ -15,6 +15,9 @@ export type MenuProps = {
     portalContainer?: HTMLElement | null;
     side?: "top" | "right" | "bottom" | "left";
     align?: "start" | "center" | "end";
+
+    sideOffset?: number;
+    className?: string;
 }
 
 const Menu = React.forwardRef<
@@ -28,7 +31,9 @@ const Menu = React.forwardRef<
        side,
        align,
        onOpenChange,
-       portalContainer
+       portalContainer,
+       sideOffset = 4,
+                                    className
    }, ref) => (
     <DropdownMenu.Root
         open={open}
@@ -42,8 +47,9 @@ const Menu = React.forwardRef<
         <DropdownMenu.Portal container={portalContainer}>
             <DropdownMenu.Content
                 side={side}
+                sideOffset={sideOffset}
                 align={align}
-                className={cls(paperMixin, focusedDisabled, "shadow py-2 z-30")}>
+                className={cls(paperMixin, focusedDisabled, "shadow py-2 z-30", className)}>
                 {children}
             </DropdownMenu.Content>
         </DropdownMenu.Portal>
@@ -57,18 +63,21 @@ export type MenuItemProps = {
     children: React.ReactNode;
     dense?: boolean;
     onClick?: (event: React.MouseEvent) => void;
+    className?: string;
 };
 
 export function MenuItem({
                              children,
                              dense = false, // Default value is false if not provided
-                             onClick
+                             onClick,
+                             className
                          }: MenuItemProps) {
     // Dynamically adjusting the class based on the "dense" prop
     const classNames = cls(
         onClick && "cursor-pointer",
         "rounded-md text-sm font-medium text-surface-accent-700 dark:text-surface-accent-300 hover:bg-surface-accent-100 dark:hover:bg-surface-accent-900 flex items-center gap-4",
-        dense ? "px-3 py-1.5" : "px-4 py-2"
+        dense ? "px-3 py-1.5" : "px-4 py-2",
+        className
     );
 
     return (

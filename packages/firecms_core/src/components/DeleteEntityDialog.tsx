@@ -181,7 +181,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
             </DialogContent>
             <DialogActions>
 
-                {loading && <CircularProgress size={"small"}/>}
+                {loading && <CircularProgress size={"smallest"}/>}
 
                 <Button onClick={handleCancel}
                         disabled={loading}

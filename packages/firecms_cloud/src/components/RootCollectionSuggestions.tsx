@@ -68,7 +68,7 @@ export function RootCollectionSuggestions({ introMode }: { introMode?: "new_proj
                         </div>
                     );
                 })}
-                {rootPathSuggestions === undefined && <CircularProgress size={"small"}/>}
+                {rootPathSuggestions === undefined && <CircularProgress size={"smallest"}/>}
                 {rootPathSuggestions?.length === 0 && <Typography variant={"caption"}>No suggestions</Typography>}
             </div>
         </div>

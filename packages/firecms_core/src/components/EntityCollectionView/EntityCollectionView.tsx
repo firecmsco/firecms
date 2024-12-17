@@ -396,7 +396,7 @@ export const EntityCollectionView = React.memo(
                                     sideEntityController.open({
                                         path: fullPath,
                                         entityId: entity.id,
-                                        selectedSubPath: subcollection.id ?? subcollection.path,
+                                        selectedTab: subcollection.id ?? subcollection.path,
                                         collection,
                                         updateUrl: true,
                                     });

@@ -144,6 +144,17 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
      * @param ids
      */
     convertIdsToPaths: (ids: string[]) => string[];
+
+    navigate: (to: string, options?: NavigateOptions) => void;
+}
+
+export interface NavigateOptions {
+    replace?: boolean;
+    state?: any;
+    preventScrollReset?: boolean;
+    relative?: "route" | "path";
+    flushSync?: boolean;
+    viewTransition?: boolean;
 }
 
 /**

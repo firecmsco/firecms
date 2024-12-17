@@ -1,4 +1,4 @@
-import { ArchiveIcon, DeleteIcon, EditIcon, FileCopyIcon, OpenInNewIcon } from "@firecms/ui";
+import { DeleteIcon, EditIcon, FileCopyIcon } from "@firecms/ui";
 import { EntityAction } from "../../types";
 import { DeleteEntityDialog } from "../DeleteEntityDialog";
 import { addRecentId } from "../EntityCollectionView/utils";
@@ -16,23 +16,29 @@ export const editEntityAction: EntityAction = {
                 highlightEntity,
                 unhighlightEntity,
             }): Promise<void> {
-        highlightEntity?.(entity);
-        context.analyticsController?.onAnalyticsEvent?.("entity_click", {
-            path: entity.path,
-            entityId: entity.id
-        });
-        if (collection) {
-            addRecentId(collection.id, entity.id);
+        if (collection?.openEntityMode === "full_screen") {
+            context.navigation.navigate(context.navigation.buildUrlCollectionPath(`${fullPath}/${entity.id}`));
+            return Promise.resolve(undefined);
+        } else {
+
+            highlightEntity?.(entity);
+            context.analyticsController?.onAnalyticsEvent?.("entity_click", {
+                path: entity.path,
+                entityId: entity.id
+            });
+            if (collection) {
+                addRecentId(collection.id, entity.id);
+            }
+            const path = collection?.collectionGroup ? entity.path : (fullPath ?? entity.path);
+            context.sideEntityController.open({
+                entityId: entity.id,
+                path,
+                collection,
+                updateUrl: true,
+                onClose: () => unhighlightEntity?.(entity),
+            });
+            return Promise.resolve(undefined);
         }
-        const path = collection?.collectionGroup ? entity.path : (fullPath ?? entity.path);
-        context.sideEntityController.open({
-            entityId: entity.id,
-            path,
-            collection,
-            updateUrl: true,
-            onClose: () => unhighlightEntity?.(entity),
-        });
-        return Promise.resolve(undefined);
     }
 }
 
@@ -63,7 +69,6 @@ export const copyEntityAction: EntityAction = {
         return Promise.resolve(undefined);
     }
 }
-
 
 export const deleteEntityAction: EntityAction = {
     icon: <DeleteIcon/>,

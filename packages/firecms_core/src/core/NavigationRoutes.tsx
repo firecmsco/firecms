@@ -1,10 +1,11 @@
 import React from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
-import { CMSView } from "../types";
+import { CMSView, EntityCollection } from "../types";
 import { DefaultHomePage, EntityCollectionView, ErrorBoundary, NotFoundPage } from "../components";
 import { useNavigationController } from "../hooks";
 import { toArray } from "../util/arrays";
+import { EntityFullScreenView } from "../components/EntityFullScreenView";
 
 /**
  * @group Components
@@ -19,13 +20,44 @@ export type NavigationRoutesProps = {
 
 };
 
+function buildCollectionRoutes(basePath: string, collection: EntityCollection<any, any>) {
+
+
+    const routes = [
+        <Route path={basePath + "/*"}
+               key={`navigation_${collection.id ?? collection.path}`}
+               element={
+                   <ErrorBoundary>
+                       <EntityCollectionView
+                           key={`collection_view_${collection.id ?? collection.path}`}
+                           isSubCollection={false}
+                           parentCollectionIds={[]}
+                           fullPath={collection.id ?? collection.path}
+                           {...collection}
+                           Actions={toArray(collection.Actions)}/>
+                   </ErrorBoundary>
+               }/>,
+        <Route path={basePath + "/:id/*"}
+               key={`navigation_entity_${collection.id ?? collection.path}`}
+               element={
+                   <ErrorBoundary>
+                       <EntityFullScreenView
+                           key={`collection_entity_${collection.id ?? collection.path}`}
+                           fullPath={collection.id ?? collection.path}
+                           collection={collection}/>
+                   </ErrorBoundary>
+               }/>
+    ];
+
+    return routes;
+}
+
 /**
  * This component is in charge of rendering
  * all the related routes (entity collection root views, custom views
  * or the home route) related to a {@link NavigationController}.
  * This component needs a parent {@link FireCMS}
  *
-
  * @group Components
  */
 export const NavigationRoutes = React.memo<NavigationRoutesProps>(
@@ -74,19 +106,7 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
         const collectionRoutes = sortedCollections
             .map((collection) => {
                     const urlPath = navigation.buildUrlCollectionPath(collection.id ?? collection.path);
-                    return <Route path={urlPath + "/*"}
-                                  key={`navigation_${collection.id ?? collection.path}`}
-                                  element={
-                                      <ErrorBoundary>
-                                          <EntityCollectionView
-                                              key={`collection_view_${collection.id ?? collection.path}`}
-                                              isSubCollection={false}
-                                              parentCollectionIds={[]}
-                                              fullPath={collection.id ?? collection.path}
-                                              {...collection}
-                                              Actions={toArray(collection.Actions)}/>
-                                      </ErrorBoundary>
-                                  }/>;
+                    return buildCollectionRoutes(urlPath, collection);
                 }
             );
 
@@ -103,7 +123,7 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
         return (
             <Routes location={baseLocation}>
 
-                {collectionRoutes}
+                {...collectionRoutes}
 
                 {cmsViews}
 
