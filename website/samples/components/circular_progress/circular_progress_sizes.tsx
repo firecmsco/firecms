@@ -5,6 +5,10 @@ export default function CircularProgressSizesDemo() {
     return (
         <div>
             <div>
+                <p>Smallest</p>
+                <CircularProgress size="smallest" />
+            </div>
+            <div>
                 <p>Small</p>
                 <CircularProgress size="small" />
             </div>

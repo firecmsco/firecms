@@ -441,6 +441,7 @@ export default function ClientUIComponentsShowcase({
                     <CircularProgress size="large"/>
                     <CircularProgress/>
                     <CircularProgress size="small"/>
+                    <CircularProgress size="smallest"/>
                 </div>
             </Card>
 
