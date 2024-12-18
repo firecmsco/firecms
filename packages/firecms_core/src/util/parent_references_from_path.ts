@@ -23,10 +23,10 @@ export function getParentReferencesFromPath(props: {
         const collection: EntityCollection<any> | undefined = collections && collections.find((entry) => entry.id === subpathCombination || entry.path === subpathCombination);
 
         if (collection) {
-            const pathOrAlias = collection.id ?? collection.path;
+            const path = collection.path;
             const collectionPath = currentFullPath && currentFullPath.length > 0
-                ? (currentFullPath + "/" + pathOrAlias)
-                : pathOrAlias;
+                ? (currentFullPath + "/" + path)
+                : path;
 
             const restOfThePath = removeInitialAndTrailingSlashes(removeInitialAndTrailingSlashes(path).replace(subpathCombination, ""));
             const nextSegments = restOfThePath.length > 0 ? restOfThePath.split("/") : [];

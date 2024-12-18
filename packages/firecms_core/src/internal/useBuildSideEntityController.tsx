@@ -102,6 +102,7 @@ export const useBuildSideEntityController = (navigation: NavigationController,
             if ((newFlag || sideFlag) && navigation.isUrlCollectionPath(location.pathname)) {
                 const entityOrCollectionPath = navigation.urlPathToDataPath(location.pathname);
                 const panelsFromUrl = buildSidePanelsFromUrl(entityOrCollectionPath, navigation.collections ?? [], newFlag);
+                console.log("panelsFromUrl", panelsFromUrl);
                 for (let i = 0; i < panelsFromUrl.length; i++) {
                     const props = panelsFromUrl[i];
                     setTimeout(() => {
@@ -180,7 +181,7 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
         collections
     });
 
-    const sidePanels: EntitySidePanelProps<any>[] = [];
+    let sidePanel: EntitySidePanelProps<any> | undefined = undefined;
     let lastCollectionPath = "";
     for (let i = 0; i < navigationViewsForPath.length; i++) {
         const navigationEntry = navigationViewsForPath[i];
@@ -189,42 +190,90 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
             lastCollectionPath = navigationEntry.path;
         }
 
-        if (i > 0) { // the first collection is handled by the main navigation
-            const previousEntry = navigationViewsForPath[i - 1];
-            if (navigationEntry.type === "entity") {
-                sidePanels.push({
-                        path: navigationEntry.path,
-                        entityId: navigationEntry.entityId,
-                        copy: false,
-                        width: navigationEntry.parentCollection?.sideDialogWidth
-                    }
-                );
-            } else if (navigationEntry.type === "custom_view") {
-                if (previousEntry.type === "entity") {
-                    const lastSidePanel: EntitySidePanelProps<any> = sidePanels[sidePanels.length - 1];
-                    if (lastSidePanel)
-                        lastSidePanel.selectedTab = navigationEntry.view.key;
-                }
-            } else if (navigationEntry.type === "collection") {
-                if (previousEntry.type === "entity") {
-                    const lastSidePanel: EntitySidePanelProps<any> = sidePanels[sidePanels.length - 1];
-                    if (lastSidePanel)
-                        lastSidePanel.selectedTab = navigationEntry.collection.id ?? navigationEntry.collection.path;
-                }
+        const previousEntry = navigationViewsForPath[i - 1];
+        if (navigationEntry.type === "entity") {
+            sidePanel = {
+                path: navigationEntry.path,
+                entityId: navigationEntry.entityId,
+                copy: false,
+                width: navigationEntry.parentCollection?.sideDialogWidth
+            };
+        } else if (navigationEntry.type === "custom_view") {
+            if (previousEntry?.type === "entity") {
+                if (sidePanel)
+                    sidePanel.selectedTab = navigationEntry.view.key;
+            }
+        } else if (navigationEntry.type === "collection") {
+            if (previousEntry?.type === "entity") {
+                if (sidePanel)
+                    sidePanel.selectedTab = navigationEntry.collection.id ?? navigationEntry.collection.path;
             }
         }
 
     }
 
     if (newFlag) {
-        sidePanels.push({
+        sidePanel = {
             path: lastCollectionPath,
             copy: false
-        });
+        }
     }
 
-    return sidePanels;
+    return sidePanel ? [sidePanel] : [];
 }
+
+// export function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], newFlag: boolean): EntitySidePanelProps<any>[] {
+//
+//     const navigationViewsForPath: NavigationViewInternal<any>[] = getNavigationEntriesFromPathInternal({
+//         path,
+//         collections
+//     });
+//
+//     const sidePanels: EntitySidePanelProps<any>[] = [];
+//     let lastCollectionPath = "";
+//     for (let i = 0; i < navigationViewsForPath.length; i++) {
+//         const navigationEntry = navigationViewsForPath[i];
+//
+//         if (navigationEntry.type === "collection") {
+//             lastCollectionPath = navigationEntry.path;
+//         }
+//
+//         if (i > 0) { // the first collection is handled by the main navigation
+//             const previousEntry = navigationViewsForPath[i - 1];
+//             if (navigationEntry.type === "entity") {
+//                 sidePanels.push({
+//                         path: navigationEntry.path,
+//                         entityId: navigationEntry.entityId,
+//                         copy: false,
+//                         width: navigationEntry.parentCollection?.sideDialogWidth
+//                     }
+//                 );
+//             } else if (navigationEntry.type === "custom_view") {
+//                 if (previousEntry.type === "entity") {
+//                     const lastSidePanel: EntitySidePanelProps<any> = sidePanels[sidePanels.length - 1];
+//                     if (lastSidePanel)
+//                         lastSidePanel.selectedTab = navigationEntry.view.key;
+//                 }
+//             } else if (navigationEntry.type === "collection") {
+//                 if (previousEntry.type === "entity") {
+//                     const lastSidePanel: EntitySidePanelProps<any> = sidePanels[sidePanels.length - 1];
+//                     if (lastSidePanel)
+//                         lastSidePanel.selectedTab = navigationEntry.collection.id ?? navigationEntry.collection.path;
+//                 }
+//             }
+//         }
+//
+//     }
+//
+//     if (newFlag) {
+//         sidePanels.push({
+//             path: lastCollectionPath,
+//             copy: false
+//         });
+//     }
+//
+//     return sidePanels;
+// }
 
 const propsToSidePanel = (props: EntitySidePanelProps,
                           buildUrlCollectionPath: (path: string) => string,

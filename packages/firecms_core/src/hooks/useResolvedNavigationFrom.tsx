@@ -67,7 +67,7 @@ export function resolveNavigationFrom<M extends Record<string, any>, USER extend
     const navigation = context.navigation;
 
     if (!navigation) {
-        throw Error("Calling getNavigationFrom, but main navigation has not yet been initialised");
+        throw Error("Calling resolveNavigationFrom, but main navigation has not yet been initialised");
     }
 
     const navigationEntries = getNavigationEntriesFromPathInternal({

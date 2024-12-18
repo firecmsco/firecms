@@ -4,6 +4,7 @@ import { Entity } from "./entities";
 import { EntityCollection, SelectionController } from "./collections";
 import { User } from "./user";
 import { SideEntityController } from "./side_entity_controller";
+import { FormexController } from "@firecms/formex";
 
 /**
  * An entity action is a custom action that can be performed on an entity.

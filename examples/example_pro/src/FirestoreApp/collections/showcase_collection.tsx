@@ -9,18 +9,18 @@ export const showcaseCollection = buildCollection({
     customId: false,
     icon: "bento",
     name: "Showcase",
-    entityActions: [
-        {
-            name: "Edit",
-            key: "edit",
-            onClick: async ({
-                                entity,
-                                collection
-                            }) => {
-                console.log("Custom action", entity, collection);
-            }
-        }
-    ],
+    // entityActions: [
+    //     {
+    //         name: "Edit",
+    //         key: "edit",
+    //         onClick: async ({
+    //                             entity,
+    //                             collection
+    //                         }) => {
+    //             console.log("Custom action", entity, collection);
+    //         }
+    //     }
+    // ],
     subcollections: [{
         id: "id_subcollection",
         path: "subcollection",

@@ -44,7 +44,7 @@ export function EntityFullScreenView({
 
     const navigationFrom = useResolvedNavigationFrom({ path: fullPath + "/" + id + "/" + (urlTab ?? "") });
     // const navigationFrom = useResolvedNavigationFrom({ path: fullPath + "/" + id + "/" + (urlTab ?? "") });
-    // console.log("navigationFrom", navigationFrom);
+    console.log("navigationFrom", navigationFrom);
 
     if (!id) return null;
 
