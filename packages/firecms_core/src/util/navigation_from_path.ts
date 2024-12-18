@@ -27,7 +27,7 @@ export interface NavigationViewEntityCustomInternal<M extends Record<string, any
     view: EntityCustomView<M>;
 }
 
-export function getNavigationEntriesFromPathInternal(props: {
+export function getNavigationEntriesFromPath(props: {
     path: string,
     collections: EntityCollection[] | undefined,
     currentFullPath?: string,
@@ -50,10 +50,10 @@ export function getNavigationEntriesFromPathInternal(props: {
         const collection: EntityCollection<any> | undefined = collections && collections.find((entry) => entry.id === subpathCombination || entry.path === subpathCombination);
 
         if (collection) {
-            const path = collection.path;
+            const pathOrAlias = collection.id ?? collection.path;
             const collectionPath = currentFullPath && currentFullPath.length > 0
-                ? (currentFullPath + "/" + path)
-                : path;
+                ? (currentFullPath + "/" + pathOrAlias)
+                : pathOrAlias;
 
             result.push({
                 type: "collection",
@@ -92,7 +92,7 @@ export function getNavigationEntriesFromPathInternal(props: {
                             view: customView
                         });
                     } else if (collection.subcollections) {
-                        result.push(...getNavigationEntriesFromPathInternal({
+                        result.push(...getNavigationEntriesFromPath({
                             path: newPath,
                             collections: collection.subcollections,
                             currentFullPath: fullPath,

@@ -1,76 +1,84 @@
-import { useLocation, useParams } from "react-router";
-import { EntityCollection } from "../types";
+import { useLocation } from "react-router";
 import { EntityEditView } from "../core/EntityEditView";
-import { useResolvedNavigationFrom } from "../hooks";
+import { useNavigationController } from "../hooks";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+    getNavigationEntriesFromPath,
+    NavigationViewCollectionInternal,
+    NavigationViewEntityCustomInternal
+} from "../util/navigation_from_path";
 
 export function EntityFullScreenView({
                                          fullPath,
-                                         collection
-
                                      }: {
     fullPath: string
-    collection: EntityCollection
 }) {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const {
-        id,
-        "*": allSegments
-    } = useParams();
+    const navigation = useNavigationController();
 
-    const urlTab = allSegments === "" ? undefined : allSegments;
+    const pathname = location.pathname;
+    const usedPath = navigation.urlPathToDataPath(pathname);
+
+    const navigationEntries = getNavigationEntriesFromPath({
+        path: usedPath,
+        collections: navigation.collections ?? []
+    });
+    const lastEntityEntry = navigationEntries.findLast((entry) => entry.type === "entity");
+    const navigationEntriesAfterEntity = lastEntityEntry ? navigationEntries.slice(navigationEntries.indexOf(lastEntityEntry) + 1) : [];
+
+    const lastCustomView = navigationEntriesAfterEntity.findLast(
+        (entry) => entry.type === "custom_view" || entry.type === "collection"
+    ) as NavigationViewCollectionInternal<any> | NavigationViewEntityCustomInternal<any> | undefined;
+
+    if (!lastEntityEntry) return null;
+
+    const entityId = lastEntityEntry.entityId;
+
+
+    const urlTab = (lastCustomView && "id" in lastCustomView ? lastCustomView?.id : undefined) ?? lastCustomView?.path;
     const [selectedTab, setSelectedTab] = useState<string | undefined>(urlTab);
 
+    const parentCollectionIds = navigation.getParentCollectionIds(usedPath);
     useEffect(() => {
         if (urlTab !== selectedTab) {
             setSelectedTab(urlTab);
         }
     }, [urlTab]);
 
-    const pathname = location.pathname;
-
-    const basePath = pathname.substring(0, pathname.lastIndexOf(`/${id}`));
-
-    // console.log({
-    //     basePath,
-    //     pathname,
-    //     selectedTab,
-    //     id,
-    //     urlTab
-    // })
-
-    const navigationFrom = useResolvedNavigationFrom({ path: fullPath + "/" + id + "/" + (urlTab ?? "") });
-    // const navigationFrom = useResolvedNavigationFrom({ path: fullPath + "/" + id + "/" + (urlTab ?? "") });
-    console.log("navigationFrom", navigationFrom);
-
-    if (!id) return null;
+    const basePath = pathname.substring(0, pathname.lastIndexOf(`/${entityId}`));
+    console.log({
+        fullPath,
+        basePath,
+        pathname,
+        selectedTab,
+        entityId,
+        urlTab
+    });
 
     function updateUrl(newSelectedTab: string | undefined) {
-        console.log("params.selectedTab", newSelectedTab);
-        console.log("selectedTab", selectedTab);
         if ((newSelectedTab ?? null) === (selectedTab ?? null)) {
             return;
         }
 
         if (newSelectedTab) {
-            navigate(basePath + `/${id}/${newSelectedTab}`);
+            navigate(basePath + `/${entityId}/${newSelectedTab}`);
         } else {
-            navigate(basePath + `/${id}`);
+            navigate(basePath + `/${entityId}`);
         }
     }
 
-    return <EntityEditView entityId={id}
-                           collection={collection}
+    return <EntityEditView entityId={entityId}
+                           collection={lastEntityEntry.parentCollection}
                            layout={"full_screen"}
-                           path={fullPath}
+                           path={lastEntityEntry.path}
                            selectedTab={selectedTab ?? undefined}
                            onTabChange={(params) => {
                                updateUrl(params.selectedTab);
                                setSelectedTab(params.selectedTab);
                            }}
-                           parentCollectionIds={[]} // TODO
+                           parentCollectionIds={parentCollectionIds}
     />;
 }

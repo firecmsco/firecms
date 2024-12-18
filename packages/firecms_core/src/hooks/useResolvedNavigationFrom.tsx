@@ -1,6 +1,6 @@
 import { Entity, EntityCollection, EntityCustomView, FireCMSContext, User } from "../types";
 import { useEffect, useState } from "react";
-import { getNavigationEntriesFromPathInternal } from "../util/navigation_from_path";
+import { getNavigationEntriesFromPath } from "../util/navigation_from_path";
 import { useFireCMSContext } from "./useFireCMSContext";
 
 /**
@@ -70,7 +70,7 @@ export function resolveNavigationFrom<M extends Record<string, any>, USER extend
         throw Error("Calling resolveNavigationFrom, but main navigation has not yet been initialised");
     }
 
-    const navigationEntries = getNavigationEntriesFromPathInternal({
+    const navigationEntries = getNavigationEntriesFromPath({
         path,
         collections: navigation.collections ?? []
     });
@@ -143,9 +143,7 @@ export function useResolvedNavigationFrom<M extends Record<string, any>, USER ex
             setDataLoading(true);
             setDataLoadingError(undefined);
             resolveNavigationFrom<M, USER>({ path, context })
-                .then((res) => {
-                    setData(res);
-                })
+                .then(setData)
                 .catch((e) => setDataLoadingError(e))
                 .finally(() => setDataLoading(false));
         }

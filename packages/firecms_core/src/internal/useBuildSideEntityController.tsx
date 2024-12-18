@@ -8,7 +8,7 @@ import {
     SideDialogsController,
     SideEntityController
 } from "../types";
-import { getNavigationEntriesFromPathInternal, NavigationViewInternal } from "../util/navigation_from_path";
+import { getNavigationEntriesFromPath, NavigationViewInternal } from "../util/navigation_from_path";
 import { useLocation } from "react-router-dom";
 import { removeInitialAndTrailingSlashes, resolveCollection, resolveDefaultSelectedView } from "../util";
 import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "./common";
@@ -176,7 +176,7 @@ export const useBuildSideEntityController = (navigation: NavigationController,
 
 export function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], newFlag: boolean): EntitySidePanelProps<any>[] {
 
-    const navigationViewsForPath: NavigationViewInternal<any>[] = getNavigationEntriesFromPathInternal({
+    const navigationViewsForPath: NavigationViewInternal<any>[] = getNavigationEntriesFromPath({
         path,
         collections
     });

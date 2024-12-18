@@ -2,7 +2,7 @@ import { expect, it } from "@jest/globals";
 import { siteConfig } from "./test_site_config";
 import { EntityCollection } from "../src/types";
 import { getCollectionByPathOrId, resolveCollectionPathIds } from "../src";
-import { getNavigationEntriesFromPathInternal } from "../src/util/navigation_from_path";
+import { getNavigationEntriesFromPath } from "../src/util/navigation_from_path";
 
 const collections = siteConfig.collections as EntityCollection[];
 
@@ -47,7 +47,7 @@ it("collection view matches ok", () => {
 
 it("build entity collection array", () => {
 
-    const navigationEntries = getNavigationEntriesFromPathInternal({
+    const navigationEntries = getNavigationEntriesFromPath({
         path: "products/pid",
         collections: collections,
     });
@@ -60,7 +60,7 @@ it("build entity collection array", () => {
 
 it("Custom view internal", () => {
 
-    const navigationEntries = getNavigationEntriesFromPathInternal({
+    const navigationEntries = getNavigationEntriesFromPath({
         path: "products/pid/custom_view",
         collections: collections,
     });
@@ -70,7 +70,7 @@ it("Custom view internal", () => {
 
 it("build entity collection array 2", () => {
 
-    const navigationEntries = getNavigationEntriesFromPathInternal({
+    const navigationEntries = getNavigationEntriesFromPath({
         path: "products/pid/locales/yep",
         collections: collections,
     });
