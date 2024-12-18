@@ -46,6 +46,7 @@ export const DialogsProvider: React.FC<PropsWithChildren<{}>> = ({ children }) =
                 key={`dialog_${i}`}
                 open={true}
                 closeDialog={close}
+                {...entry.props}
             />)}
         </DialogsControllerContext.Provider>
     );

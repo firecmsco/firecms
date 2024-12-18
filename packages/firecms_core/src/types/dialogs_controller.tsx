@@ -22,12 +22,16 @@ export interface DialogsController {
  * Props used to open a side dialog
  * @group Hooks and utilities
  */
-export interface DialogControllerEntryProps {
+export interface DialogControllerEntryProps<T extends object = {}> {
 
     key: string;
     /**
      * The component type that will be rendered
      */
-    Component: React.ComponentType<{ open: boolean, closeDialog: () => void }>;
+    Component: React.ComponentType<{ open: boolean, closeDialog: () => void } & T>;
+    /**
+     * Props to pass to the dialog component
+     */
+    props?: T;
 
 }
