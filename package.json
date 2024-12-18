@@ -3,8 +3,11 @@
   "private": true,
   "description": "Awesome Firebase/Firestore-based headless open-source CMS",
   "author": "FireCMS",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/firecmsco/firecms.git"
+  },
   "homepage": "https://firecms.co",
-  "repository": "https://github.com/firecmsco/firecms.git",
   "workspaces": [
     "packages/firecms",
     "packages/firecms_cloud",
