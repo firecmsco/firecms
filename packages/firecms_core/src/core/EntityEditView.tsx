@@ -842,14 +842,17 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                                 fullPath: resolvedCollection.path,
                                 collection: resolvedCollection,
                                 context,
-                                sideEntityController
+                                sideEntityController,
+                                formContext
                             });
                     }}>
                     {action.icon}
                 </IconButton>
             ))}
         </div>}
+
         {formex.isSubmitting && <CircularProgress size={"small"}/>}
+
         <Button
             variant="text"
             disabled={disabled || formex.isSubmitting}

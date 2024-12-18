@@ -4,6 +4,8 @@ import { Entity } from "./entities";
 import { EntityCollection, SelectionController } from "./collections";
 import { User } from "./user";
 import { SideEntityController } from "./side_entity_controller";
+import { FormexController } from "@firecms/formex";
+import { FormContext } from "./fields";
 
 /**
  * An entity action is a custom action that can be performed on an entity.
@@ -63,4 +65,10 @@ export type EntityActionClickProps<M extends object, USER extends User = User> =
      * If this actions is being called from a side dialog
      */
     sideEntityController?: SideEntityController;
+
+    /**
+     * You can use the form context to manage the state of the form.
+     * This is only available if this action in being triggered from a form context.
+     */
+    formContext?: FormContext<M>;
 };
