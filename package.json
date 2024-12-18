@@ -4,6 +4,7 @@
   "description": "Awesome Firebase/Firestore-based headless open-source CMS",
   "author": "FireCMS",
   "homepage": "https://firecms.co",
+  "repository": "https://github.com/firecmsco/firecms.git",
   "workspaces": [
     "packages/firecms",
     "packages/firecms_cloud",
