@@ -59,7 +59,6 @@ import {
     Alert,
     Button,
     CircularProgress,
-    CloseIcon,
     cls,
     defaultBorderMixin,
     DialogActions,
@@ -103,11 +102,12 @@ export interface EntityEditViewProps<M extends Record<string, any>> {
     copy?: boolean;
     selectedTab?: string;
     parentCollectionIds: string[];
-    onValuesAreModified?: (modified: boolean) => void;
+    onValuesModified?: (modified: boolean) => void;
     onUpdate?: (params: OnUpdateParams) => void;
     onClose?: () => void;
     onTabChange?: (props: OnTabChangeParams<M>) => void;
     layout?: "side_panel" | "full_screen";
+    barActions?: React.ReactNode;
 }
 
 /**
@@ -153,13 +153,14 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                                                                        copy,
                                                                        collection,
                                                                        parentCollectionIds,
-                                                                       onValuesAreModified,
+                                                                       onValuesModified,
                                                                        onUpdate,
                                                                        onClose,
                                                                        onTabChange,
                                                                        entity,
                                                                        dataLoading,
-                                                                       layout = "side_panel"
+                                                                       layout = "side_panel",
+                                                                       barActions
                                                                    }: EntityEditViewProps<M> & {
     entity?: Entity<M>,
     dataLoading: boolean
@@ -315,7 +316,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         setUsedEntity(updatedEntity);
         setStatus("existing");
 
-        onValuesAreModified?.(false);
+        onValuesModified?.(false);
 
         if (onUpdate) {
             onUpdate({
@@ -585,7 +586,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     ).filter(Boolean);
 
     const onDiscard = useCallback(() => {
-        onValuesAreModified?.(false);
+        onValuesModified?.(false);
     }, []);
 
     const onSideTabClick = (value: string) => {
@@ -706,7 +707,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     const modified = formex.dirty;
     useEffect(() => {
         if (!autoSave) {
-            onValuesAreModified?.(modified);
+            onValuesModified?.(modified);
         } else {
             if (formex.values && !equal(formex.values, lastSavedValues.current)) {
                 save(formex.values);
@@ -857,7 +858,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                                 variant={"h4"}>{title ?? inputCollection.singularName ?? inputCollection.name}
                             </Typography>
                             <Alert color={"base"} className={"w-full"} size={"small"}>
-                                <code className={"text-xs select-all text-text-secondary dark:text-text-secondary-dark"}>{path}/{entityId}</code>
+                                <code
+                                    className={"text-xs select-all text-text-secondary dark:text-text-secondary-dark"}>{path}/{entityId}</code>
                             </Alert>
                         </div>
 
@@ -933,15 +935,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         <div
             className={cls(defaultBorderMixin, "overflow-visible overflow-x-scroll w-full no-scrollbar h-16 border-b pl-2 pr-2 pt-1 flex items-end bg-surface-50 dark:bg-surface-950")}>
 
-            {onClose && <div
-                className="pb-1 self-center">
-                <IconButton
-                    onClick={() => {
-                        onClose?.();
-                    }}>
-                    <CloseIcon size={"small"}/>
-                </IconButton>
-            </div>}
+            {barActions}
 
             {pluginActions.length > 0 && <div
                 className={cls("w-full flex justify-end items-center py-3 px-4")}>

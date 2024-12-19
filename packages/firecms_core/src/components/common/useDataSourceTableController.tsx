@@ -13,10 +13,11 @@ import {
 } from "../../types";
 import { useDebouncedData } from "./useDebouncedData";
 import equal from "react-fast-compare"
+import { ScrollRestorationController } from "./useScrollRestoration";
 
 const DEFAULT_PAGE_SIZE = 50;
 
-export type DataSourceEntityCollectionTableControllerProps<M extends Record<string, any> = any> = {
+export type DataSourceTableControllerProps<M extends Record<string, any> = any> = {
     /**
      * Full path where the data of this table is located
      */
@@ -37,6 +38,9 @@ export type DataSourceEntityCollectionTableControllerProps<M extends Record<stri
      * Force filter to be applied to the table.
      */
     forceFilter?: FilterValues<string>;
+
+    scrollRestoration?: ScrollRestorationController;
+
 }
 
 /**
@@ -48,18 +52,20 @@ export type DataSourceEntityCollectionTableControllerProps<M extends Record<stri
  *
  * @param fullPath
  * @param collection
+ * @param scrollRestoration
  * @param entitiesDisplayedFirst
  * @param lastDeleteTimestamp
  * @param forceFilterFromProps
  */
-export function useDataSourceEntityCollectionTableController<M extends Record<string, any> = any, USER extends User = User>(
+export function useDataSourceTableController<M extends Record<string, any> = any, USER extends User = User>(
     {
         fullPath,
         collection,
+        scrollRestoration,
         entitiesDisplayedFirst,
         lastDeleteTimestamp,
         forceFilter: forceFilterFromProps,
-    }: DataSourceEntityCollectionTableControllerProps<M>)
+    }: DataSourceTableControllerProps<M>)
     : EntityTableController<M> {
 
     const {
@@ -78,7 +84,6 @@ export function useDataSourceEntityCollectionTableController<M extends Record<st
     const pageSize = typeof collection.pagination === "number" ? collection.pagination : DEFAULT_PAGE_SIZE;
 
     const [searchString, setSearchString] = React.useState<string | undefined>();
-    const [itemCount, setItemCount] = React.useState<number | undefined>(paginationEnabled ? pageSize : undefined);
 
     const checkFilterCombination = useCallback((filterValues: FilterValues<any>,
                                                 sortBy?: [string, "asc" | "desc"]) => {
@@ -91,6 +96,21 @@ export function useDataSourceEntityCollectionTableController<M extends Record<st
             sortBy
         })
     }, []);
+
+    const onScroll = ({
+                          scrollOffset
+                      }: {
+        scrollOffset: number
+    }) => {
+        if (scrollRestoration) {
+            scrollRestoration.updateCollectionScroll({
+                fullPath: resolvedPath,
+                scrollOffset,
+                data: rawData,
+                filters: filterValues
+            });
+        }
+    }
 
     const initialSortInternal = useMemo(() => {
         if (initialSort && forceFilter && !checkFilterCombination(forceFilter, initialSort)) {
@@ -109,12 +129,17 @@ export function useDataSourceEntityCollectionTableController<M extends Record<st
     const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? initialFilter ?? undefined);
     const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>(initialSortInternal);
 
+    const collectionScroll = scrollRestoration?.getCollectionScroll(fullPath, filterValues);
+    const initialItemCount = collectionScroll?.data.length ?? pageSize;
+
+    const [itemCount, setItemCount] = React.useState<number | undefined>(paginationEnabled ? initialItemCount : undefined);
+
     const sortByProperty = sortBy ? sortBy[0] : undefined;
     const currentSort = sortBy ? sortBy[1] : undefined;
 
     const context: FireCMSContext<USER> = useFireCMSContext();
 
-    const [rawData, setRawData] = useState<Entity<M>[]>([]);
+    const [rawData, setRawData] = useState<Entity<M>[]>(collectionScroll?.data ?? []);
 
     const [dataLoading, setDataLoading] = useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = useState<Error | undefined>();
@@ -227,6 +252,8 @@ export function useDataSourceEntityCollectionTableController<M extends Record<st
         clearFilter,
         itemCount,
         setItemCount,
+        initialScroll: collectionScroll?.scrollOffset,
+        onScroll,
         paginationEnabled,
         pageSize,
         checkFilterCombination,

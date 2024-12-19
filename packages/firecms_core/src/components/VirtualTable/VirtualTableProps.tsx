@@ -83,6 +83,16 @@ export interface VirtualTableProps<T extends Record<string, any>> {
     onFilterUpdate?: (filter?: VirtualTableFilterValues<any> | undefined) => void;
 
     /**
+     * Callback when the table is scrolled
+     * @param props
+     */
+    onScroll?: (props: {
+        scrollDirection: "forward" | "backward",
+        scrollOffset: number,
+        scrollUpdateWasRequested: boolean
+    }) => void;
+
+    /**
      * Default sort applied to this collection
      */
     sortBy?: [string, "asc" | "desc"];
@@ -146,6 +156,11 @@ export interface VirtualTableProps<T extends Record<string, any>> {
      * @param column
      */
     AddColumnComponent?: React.ComponentType;
+
+    /**
+     * Initial scroll position
+     */
+    initialScroll?: number;
 
     /**
      * Debug mode

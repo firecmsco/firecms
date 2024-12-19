@@ -577,6 +577,12 @@ export type EntityTableController<M extends Record<string, any> = any> = {
     clearFilter?: () => void;
     itemCount?: number;
     setItemCount?: (itemCount: number) => void;
+    initialScroll?: number;
+    onScroll?: (props: {
+        scrollDirection: "forward" | "backward",
+        scrollOffset: number,
+        scrollUpdateWasRequested: boolean
+    }) => void;
     paginationEnabled?: boolean;
     pageSize?: number;
     checkFilterCombination?: (filterValues: FilterValues<any>,

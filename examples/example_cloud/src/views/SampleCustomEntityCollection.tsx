@@ -15,7 +15,7 @@ import {
     PropertyTableCell,
     resolveProperty,
     SelectableTable,
-    useDataSourceEntityCollectionTableController
+    useDataSourceTableController
 } from "@firecms/cloud";
 import { usersCollection } from "../collections/users_collection";
 

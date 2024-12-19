@@ -19,7 +19,7 @@ import {
 import {
     EntityCollectionRowActions,
     EntityCollectionTable,
-    useDataSourceEntityCollectionTableController
+    useDataSourceTableController
 } from "../EntityCollectionTable";
 
 import {
@@ -77,6 +77,7 @@ import { useSelectionController } from "./useSelectionController";
 import { EntityCollectionViewStartActions } from "./EntityCollectionViewStartActions";
 import { addRecentId, getRecentIds } from "./utils";
 import { mergeEntityActions } from "../../util/entity_actions";
+import { useScrollRestoration } from "../common/useScrollRestoration";
 
 /**
  * @group Components
@@ -146,6 +147,8 @@ export const EntityCollectionView = React.memo(
 
         const containerRef = React.useRef<HTMLDivElement>(null);
 
+        const scrollRestoration = useScrollRestoration();
+
         const collection = useMemo(() => {
             const userOverride = userConfigPersistence?.getCollectionConfig<M>(fullPath);
             return (userOverride ? mergeDeep(collectionProp, userOverride) : collectionProp) as EntityCollection<M>;
@@ -193,14 +196,11 @@ export const EntityCollectionView = React.memo(
             setSelectedEntities
         } = usedSelectionController;
 
-        // useEffect(() => {
-        //     setDeleteEntityClicked(undefined);
-        // }, [selectedEntities]);
-
-        const tableController = useDataSourceEntityCollectionTableController<M>({
+        const tableController = useDataSourceTableController<M>({
             fullPath,
             collection,
-            lastDeleteTimestamp
+            lastDeleteTimestamp,
+            scrollRestoration
         });
 
         const tableKey = React.useRef<string>(Math.random().toString(36));
@@ -617,6 +617,8 @@ export const EntityCollectionView = React.memo(
                     properties={resolvedCollection.properties}
                     getPropertyFor={getPropertyFor}
                     onTextSearchClick={textSearchInitialised ? undefined : onTextSearchClick}
+                    onScroll={tableController.onScroll}
+                    initialScroll={tableController.initialScroll}
                     textSearchLoading={textSearchLoading}
                     textSearchEnabled={textSearchEnabled}
                     actionsStart={<EntityCollectionViewStartActions

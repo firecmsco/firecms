@@ -4,7 +4,7 @@ import { CollectionSize, Entity, EntityCollection, FilterValues } from "../../ty
 import {
     EntityCollectionRowActions,
     EntityCollectionTable,
-    useDataSourceEntityCollectionTableController
+    useDataSourceTableController
 } from "../EntityCollectionTable";
 import {
     useAuthController,
@@ -256,7 +256,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
 
     const displayedColumnIds = useColumnIds(resolvedCollection, false);
 
-    const tableController = useDataSourceEntityCollectionTableController<M>({
+    const tableController = useDataSourceTableController<M>({
         fullPath,
         collection,
         entitiesDisplayedFirst,

@@ -6,6 +6,8 @@ import { useNavigationController, useSideEntityController } from "../hooks";
 import { ErrorBoundary } from "../components";
 import { EntityEditView, OnUpdateParams } from "./EntityEditView";
 import { useSideDialogContext } from "./SideDialogs";
+import { CloseIcon, IconButton, OpenInFullIcon } from "@firecms/ui";
+import { useLocation, useNavigate } from "react-router-dom";
 
 /**
  * This is the component in charge of rendering the side dialog used
@@ -23,6 +25,10 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
         setBlockedNavigationMessage,
         close
     } = useSideDialogContext();
+
+    const navigate = useNavigate();
+    const location = useLocation();
+    console.log({ location });
 
     const sideEntityController = useSideEntityController();
     const navigationController = useNavigationController();
@@ -90,7 +96,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
 
     }, [blocked, collection]);
 
-    const onValuesAreModified = useCallback((modified: boolean) => {
+    const onValuesModified = useCallback((modified: boolean) => {
         setBlocked(modified);
         setBlockedNavigationMessage(modified
             ? <> You have unsaved changes in this <b>{collection?.singularName ?? collection?.name}</b>.</>
@@ -109,9 +115,24 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                     layout={"side_panel"}
                     collection={collection}
                     parentCollectionIds={parentCollectionIds}
-                    onValuesAreModified={onValuesAreModified}
+                    onValuesModified={onValuesModified}
                     onClose={onClose}
                     onUpdate={onUpdate}
+                    barActions={<>
+                        <IconButton
+                            className="self-center"
+                            onClick={onClose}>
+                            <CloseIcon size={"small"}/>
+                        </IconButton>
+                        <IconButton
+                            className="self-center"
+                            onClick={() => {
+                                // onClose?.();
+                                navigate(location.pathname);
+                            }}>
+                            <OpenInFullIcon size={"small"}/>
+                        </IconButton>
+                    </>}
                     onTabChange={({
                                       path,
                                       entityId,

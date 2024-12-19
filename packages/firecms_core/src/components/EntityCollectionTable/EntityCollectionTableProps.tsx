@@ -73,6 +73,21 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
     onColumnResize?(params: OnColumnResizeParams): void;
 
     /**
+     * Initial scroll position
+     */
+    initialScroll?: number;
+
+    /**
+     * Callback when the table is scrolled
+     * @param props
+     */
+    onScroll?: (props: {
+        scrollDirection: "forward" | "backward",
+        scrollOffset: number,
+        scrollUpdateWasRequested: boolean
+    }) => void;
+
+    /**
      * Callback when the selected size of the table is changed
      */
     onSizeChanged?(size: CollectionSize): void;
@@ -90,7 +105,7 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
 
     /**
      * Controller holding the logic for the table
-     * {@link useDataSourceEntityCollectionTableController}
+     * {@link useDataSourceTableController}
      * {@link EntityTableController}
      */
     tableController: EntityTableController<M>;

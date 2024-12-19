@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import equal from "react-fast-compare";
 import {
     CollectionSize,
     Entity,
@@ -60,7 +59,7 @@ export type SelectableTableProps<M extends Record<string, any>> = {
 
     /**
      * Controller holding the logic for the table
-     * {@link useDataSourceEntityCollectionTableController}
+     * {@link useDataSourceTableController}
      * {@link EntityTableController}
      */
     tableController: EntityTableController<M>;
@@ -76,6 +75,18 @@ export type SelectableTableProps<M extends Record<string, any>> = {
     highlightedRow?: (data: Entity<M>) => boolean;
 
     size?: CollectionSize;
+
+    initialScroll?: number;
+
+    /**
+     * Callback when the table is scrolled
+     * @param props
+     */
+    onScroll?: (props: {
+        scrollDirection: "forward" | "backward",
+        scrollOffset: number,
+        scrollUpdateWasRequested: boolean
+    }) => void;
 
     emptyComponent?: React.ReactNode;
 
@@ -101,7 +112,7 @@ export type SelectableTableProps<M extends Record<string, any>> = {
  *
  * The data displayed in the table is managed by a {@link EntityTableController}.
  * You can build the default, bound to a path in the datasource, by using the hook
- * {@link useDataSourceEntityCollectionTableController}
+ * {@link useDataSourceTableController}
  *
  * @see EntityCollectionTableProps
  * @see EntityCollectionView
@@ -136,6 +147,8 @@ export const SelectableTable = React.memo<SelectableTableProps<any>>(
                  setPopupCell
              },
          filterable = true,
+         onScroll,
+         initialScroll,
          emptyComponent,
          columns,
          forceFilter,
@@ -229,6 +242,8 @@ export const SelectableTable = React.memo<SelectableTableProps<any>>(
                         sortBy={sortBy}
                         onSortByUpdate={setSortBy as ((sortBy?: [string, "asc" | "desc"]) => void)}
                         hoverRow={hoverRow}
+                        initialScroll={initialScroll}
+                        onScroll={onScroll}
                         checkFilterCombination={checkFilterCombination}
                         createFilterField={filterable ? createFilterField : undefined}
                         rowClassName={useCallback((entity: Entity<M>) => {

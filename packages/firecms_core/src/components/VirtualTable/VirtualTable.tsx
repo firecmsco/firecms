@@ -103,6 +103,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                                                              error,
                                                              emptyComponent,
                                                              onSortByUpdate,
+                                                             onScroll: onScrollProp,
                                                              loading,
                                                              cellRenderer,
                                                              hoverRow,
@@ -112,6 +113,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                                                              className,
                                                              endAdornment,
                                                              AddColumnComponent,
+                                                             initialScroll = 0,
                                                              debug
                                                          }: VirtualTableProps<T>) {
 
@@ -122,6 +124,13 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
 
         const tableRef = useRef<HTMLDivElement>(null);
         const endReachCallbackThreshold = useRef<number>(0);
+
+        // Set initial scroll position
+        useEffect(() => {
+            if (tableRef.current && initialScroll) {
+                tableRef.current.scrollTo(0, initialScroll);
+            }
+        }, [tableRef, initialScroll]);
 
         useEffect(() => {
             setColumns(columnsProp);
@@ -158,7 +167,6 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                 console.log("scrollToTop");
             endReachCallbackThreshold.current = 0;
             if (tableRef.current) {
-                // scrollRef.current = [scrollRef.current[0], 0];
                 tableRef.current.scrollTo(tableRef.current?.scrollLeft, 0);
             }
         }, []);
@@ -222,6 +230,13 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                     scrollOffset,
                     scrollUpdateWasRequested
                 });
+            if (onScrollProp) {
+                onScrollProp({
+                    scrollDirection,
+                    scrollOffset,
+                    scrollUpdateWasRequested
+                })
+            }
             if (!scrollUpdateWasRequested && (scrollOffset >= maxScroll - endOffset))
                 onEndReachedInternal(scrollOffset);
         }, [maxScroll, onEndReachedInternal]);
@@ -294,7 +309,6 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         if (debug)
             console.log("VirtualTable render", virtualListController);
 
-        // useTraceUpdate(virtualListController);
         return (
             <div
                 ref={measureRef}

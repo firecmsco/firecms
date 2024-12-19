@@ -8,5 +8,5 @@ export type {
 
 export * from "./PropertyTableCell";
 export * from "./EntityCollectionRowActions";
-export * from "../common/useDataSourceEntityCollectionTableController";
+export * from "../common/useDataSourceTableController";
 export * from "./column_utils";

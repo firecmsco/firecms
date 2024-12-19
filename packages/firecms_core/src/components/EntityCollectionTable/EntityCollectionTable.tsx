@@ -34,7 +34,7 @@ import { getRowHeight } from "../common/table_height";
  *
  * The data displayed in the table is managed by a {@link EntityTableController}.
  * You can build the default, bound to a path in the datasource, by using the hook
- * {@link useDataSourceEntityCollectionTableController}
+ * {@link useDataSourceTableController}
  *
  * @see EntityCollectionTableProps
  * @see EntityCollectionView
@@ -57,6 +57,8 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
      highlightedEntities,
      onEntityClick,
      onColumnResize,
+     initialScroll,
+     onScroll,
      onSizeChanged,
      textSearchEnabled = false,
      hoverRow = true,
@@ -313,6 +315,8 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
                              highlightedRow={(entity: Entity<M>) => Boolean(selectedEntities?.find(e => e.id === entity.id && e.path === entity.path))}
                              tableController={tableController}
                              onValueChange={onValueChange}
+                             initialScroll={initialScroll}
+                             onScroll={onScroll}
                              onColumnResize={onColumnResize}
                              hoverRow={hoverRow}
                              filterable={filterable}
