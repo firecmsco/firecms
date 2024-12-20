@@ -20,6 +20,7 @@ import { VirtualTableHeaderRow } from "./VirtualTableHeaderRow";
 import { VirtualTableRow } from "./VirtualTableRow";
 import { VirtualTableCell } from "./VirtualTableCell";
 import { AssignmentIcon, CenteredView, cls, Typography } from "@firecms/ui";
+import { useDebounceCallback } from "../common/useDebouncedCallback";
 
 const VirtualListContext = createContext<VirtualTableContextProps<any>>({} as any);
 VirtualListContext.displayName = "VirtualListContext";
@@ -124,6 +125,8 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
 
         const tableRef = useRef<HTMLDivElement>(null);
         const endReachCallbackThreshold = useRef<number>(0);
+
+        const debouncedScroll = useDebounceCallback(onScrollProp, 200);
 
         // Set initial scroll position
         useEffect(() => {
@@ -231,7 +234,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                     scrollUpdateWasRequested
                 });
             if (onScrollProp) {
-                onScrollProp({
+                debouncedScroll({
                     scrollDirection,
                     scrollOffset,
                     scrollUpdateWasRequested

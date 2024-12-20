@@ -570,6 +570,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                                 fullPath={fullPath}
                                 parentCollectionIds={[...parentCollectionIds, collection.id]}
                                 isSubCollection={true}
+                                updateUrl={true}
                                 {...subcollection}/>
                             : <div
                                 className="flex items-center justify-center w-full h-full p-3">
@@ -937,7 +938,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
             {barActions}
 
-            {pluginActions.length > 0 && <div
+            {selectedTab === MAIN_TAB_VALUE && pluginActions.length > 0 && <div
                 className={cls("w-full flex justify-end items-center py-3 px-4")}>
                 {pluginActions}
             </div>}
@@ -981,7 +982,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 role="tabpanel"
                 hidden={!mainViewVisible}
                 id={`form_${path}`}
-                className={cls("relative flex flex-row max-w-4xl lg:max-w-3xl xl:max-w-5xl w-full h-fit", {
+                className={cls("relative flex flex-row max-w-4xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl w-full h-fit", {
                     "hidden": !mainViewVisible
                 })}>
 

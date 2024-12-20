@@ -99,6 +99,11 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
 
     className?: string;
 
+    /**
+     * If true, this view will store its filter and sorting status in the url params
+     */
+    updateUrl?: boolean;
+
 } & EntityCollection<M>;
 
 /**
@@ -131,6 +136,7 @@ export const EntityCollectionView = React.memo(
                                                                      parentCollectionIds,
                                                                      isSubCollection,
                                                                      className,
+                                                                     updateUrl,
                                                                      ...collectionProp
                                                                  }: EntityCollectionViewProps<M>
     ) {
@@ -200,7 +206,8 @@ export const EntityCollectionView = React.memo(
             fullPath,
             collection,
             lastDeleteTimestamp,
-            scrollRestoration
+            scrollRestoration,
+            updateUrl
         });
 
         const tableKey = React.useRef<string>(Math.random().toString(36));

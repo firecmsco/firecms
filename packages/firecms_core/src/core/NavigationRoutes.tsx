@@ -22,7 +22,6 @@ export type NavigationRoutesProps = {
 
 function buildCollectionRoutes(basePath: string, collection: EntityCollection<any, any>) {
 
-
     const routes = [
         <Route path={basePath + "/*"}
                key={`navigation_${collection.id ?? collection.path}`}
@@ -33,6 +32,7 @@ function buildCollectionRoutes(basePath: string, collection: EntityCollection<an
                            isSubCollection={false}
                            parentCollectionIds={[]}
                            fullPath={collection.id ?? collection.path}
+                           updateUrl={true}
                            {...collection}
                            Actions={toArray(collection.Actions)}/>
                    </ErrorBoundary>
@@ -43,8 +43,7 @@ function buildCollectionRoutes(basePath: string, collection: EntityCollection<an
                    <ErrorBoundary>
                        <EntityFullScreenView
                            key={`collection_entity_${collection.id ?? collection.path}`}
-                           fullPath={collection.id ?? collection.path}
-                           collection={collection}/>
+                           fullPath={collection.id ?? collection.path}/>
                    </ErrorBoundary>
                }/>
     ];

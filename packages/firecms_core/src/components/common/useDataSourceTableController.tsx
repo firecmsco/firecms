@@ -9,10 +9,10 @@ import {
     FilterValues,
     FireCMSContext,
     SelectedCellProps,
-    User
+    User,
+    WhereFilterOp
 } from "../../types";
 import { useDebouncedData } from "./useDebouncedData";
-import equal from "react-fast-compare"
 import { ScrollRestorationController } from "./useScrollRestoration";
 
 const DEFAULT_PAGE_SIZE = 50;
@@ -41,6 +41,11 @@ export type DataSourceTableControllerProps<M extends Record<string, any> = any> 
 
     scrollRestoration?: ScrollRestorationController;
 
+    /**
+     * When set to true the filters and sort will be updated in the URL
+     */
+    updateUrl?: boolean;
+
 }
 
 /**
@@ -56,6 +61,7 @@ export type DataSourceTableControllerProps<M extends Record<string, any> = any> 
  * @param entitiesDisplayedFirst
  * @param lastDeleteTimestamp
  * @param forceFilterFromProps
+ * @param updateUrl
  */
 export function useDataSourceTableController<M extends Record<string, any> = any, USER extends User = User>(
     {
@@ -65,6 +71,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
         entitiesDisplayedFirst,
         lastDeleteTimestamp,
         forceFilter: forceFilterFromProps,
+        updateUrl
     }: DataSourceTableControllerProps<M>)
     : EntityTableController<M> {
 
@@ -120,14 +127,15 @@ export function useDataSourceTableController<M extends Record<string, any> = any
         return initialSort;
     }, [initialSort, forceFilter]);
 
-    useEffect(() => {
-        if (!equal(forceFilter, filterValues)) {
-            setFilterValues(forceFilter)
-        }
-    }, [forceFilter]);
+    const {
+        filterValues: initialFilteUrl,
+        sortBy: initialSortUrl,
+    } = parseFilterAndSort(window.location.search);
 
-    const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? initialFilter ?? undefined);
-    const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>(initialSortInternal);
+    const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? initialFilteUrl ?? initialFilter ?? undefined);
+    const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>(initialSortUrl ?? initialSortInternal);
+
+    useUpdateUrl(filterValues, sortBy, searchString, updateUrl);
 
     const collectionScroll = scrollRestoration?.getCollectionScroll(fullPath, filterValues);
     const initialItemCount = collectionScroll?.data.length ?? pageSize;
@@ -259,5 +267,67 @@ export function useDataSourceTableController<M extends Record<string, any> = any
         checkFilterCombination,
         popupCell,
         setPopupCell
+    }
+}
+
+function useUpdateUrl<M extends Record<string, any> = any>(
+    filterValues: FilterValues<Extract<keyof M, string>> | undefined,
+    sortBy: [Extract<keyof M, string>, "asc" | "desc"] | undefined,
+    searchString: string | undefined,
+    updateUrl: boolean | undefined
+) {
+
+    useEffect(() => {
+        if (updateUrl) {
+            const newUrl = encodeFilterAndSort(filterValues, sortBy);
+            const search = searchString ? `&search=${encodeURIComponent(searchString)}` : "";
+            const state = `${newUrl}${search}`;
+            if (state === "")
+                window.history.replaceState({}, "", window.location.pathname);
+            else
+                window.history.replaceState({}, "", `?${state}`);
+        }
+    }, [filterValues, sortBy, searchString, updateUrl]);
+}
+
+function encodeFilterAndSort(filterValues?: FilterValues<string> | undefined, sortBy?: [string, "asc" | "desc"] | undefined) {
+    const entries: Record<string, string> = {};
+    if (sortBy) {
+        entries["__sort"] = encodeURIComponent(sortBy[0]);
+        entries["__sort_order"] = encodeURIComponent(sortBy[1]);
+    }
+    if (filterValues) {
+        Object.entries(filterValues).forEach(([key, value]) => {
+            if (value) {
+                entries[encodeURIComponent(`${key}_op`)] = encodeURIComponent(value[0]);
+                entries[encodeURIComponent(`${key}_value`)] = encodeURIComponent(value[1]);
+            }
+        });
+    }
+    if (!Object.keys(entries).length) {
+        return "";
+    }
+    return Object.entries(entries).map(([key, value]) => `${key}=${value}`).join("&");
+}
+
+function parseFilterAndSort<M>(search: string): {
+    filterValues: FilterValues<string> | undefined,
+    sortBy?: [Extract<keyof M, string>, "asc" | "desc"]
+} {
+    const entries = new URLSearchParams(search);
+    const filterValues: FilterValues<string> = {};
+    let sortBy: [string, "asc" | "desc"] | undefined = undefined;
+    entries.forEach((value, key) => {
+        if (key === "__sort") {
+            sortBy = [value, entries.get("__sort_order") as "asc" | "desc"];
+        } else if (key.endsWith("_op")) {
+            const filterValue = entries.get(`${key.replace("_op", "_value")}`);
+            filterValues[key.replace("_op", "")] = [value as WhereFilterOp, filterValue as string];
+        }
+    });
+
+    return {
+        filterValues: Object.keys(filterValues).length ? filterValues : undefined,
+        sortBy
     }
 }
