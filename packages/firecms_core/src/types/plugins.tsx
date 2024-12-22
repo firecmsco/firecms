@@ -195,6 +195,7 @@ export interface PluginFormActionProps<USER extends User = User, EC extends Enti
     formContext?: FormContext<any>;
     context: FireCMSContext<USER>;
     currentEntityId?: string;
+    layout: "side_panel" | "full_screen";
 }
 
 export type PluginFieldBuilderParams<T extends CMSType = CMSType, M extends Record<string, any> = any, EC extends EntityCollection<M> = EntityCollection<M>> = {

@@ -16,12 +16,10 @@ export const editEntityAction: EntityAction = {
                 highlightEntity,
                 unhighlightEntity,
             }): Promise<void> {
-        if (collection?.openEntityMode === "full_screen") {
-            context.navigation.navigate(context.navigation.buildUrlCollectionPath(`${fullPath}/${entity.id}`));
-            return Promise.resolve(undefined);
-        } else {
 
-            highlightEntity?.(entity);
+        highlightEntity?.(entity);
+
+        if (collection?.openEntityMode === "side_panel") {
             context.analyticsController?.onAnalyticsEvent?.("entity_click", {
                 path: entity.path,
                 entityId: entity.id
@@ -38,6 +36,11 @@ export const editEntityAction: EntityAction = {
                 onClose: () => unhighlightEntity?.(entity),
             });
             return Promise.resolve(undefined);
+
+        } else {
+            context.navigation.navigate(context.navigation.buildUrlCollectionPath(`${fullPath}/${entity.id}`));
+            return Promise.resolve(undefined);
+
         }
     }
 }

@@ -87,9 +87,9 @@ export function CollectionTableToolbar({
 
             <div className="flex items-center gap-2">
 
-                {largeLayout && <div className="w-[22px]">
+                {largeLayout && <div className="w-[22px] mr-4">
                     {loading &&
-                        <CircularProgress size={"small"}/>}
+                        <CircularProgress size={"smallest"}/>}
                 </div>}
 
                 {(onTextSearch || onTextSearchClick) &&

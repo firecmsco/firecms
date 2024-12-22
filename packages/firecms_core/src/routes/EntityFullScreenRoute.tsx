@@ -8,16 +8,14 @@ import {
     NavigationViewCollectionInternal,
     NavigationViewEntityCustomInternal
 } from "../util/navigation_from_path";
+import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
 
-export function EntityFullScreenView({
-                                         fullPath,
-                                     }: {
-    fullPath: string
-}) {
+export function EntityFullScreenRoute() {
 
     const navigate = useNavigate();
     const location = useLocation();
     const navigation = useNavigationController();
+    const breadcrumbs = useBreadcrumbsController();
 
     const pathname = location.pathname;
     const usedPath = navigation.urlPathToDataPath(pathname);
@@ -26,6 +24,32 @@ export function EntityFullScreenView({
         path: usedPath,
         collections: navigation.collections ?? []
     });
+
+    useEffect(() => {
+        breadcrumbs.set({
+            breadcrumbs: navigationEntries.map(entry => {
+                if (entry.type === "entity") {
+                    return ({
+                        title: entry.entityId,
+                        url: navigation.buildUrlCollectionPath(entry.fullPath)
+                    });
+                } else if (entry.type === "custom_view") {
+                    return ({
+                        title: entry.view.name,
+                        url: navigation.buildUrlCollectionPath(entry.fullPath)
+                    });
+                } else if (entry.type === "collection") {
+                    return ({
+                        title: entry.collection.name,
+                        url: navigation.buildUrlCollectionPath(entry.fullPath)
+                    });
+                } else {
+                    throw new Error("Unexpected navigation entry type");
+                }
+            })
+        });
+    }, [navigationEntries.map(entry => entry.path).join(",")]);
+
     const lastEntityEntry = navigationEntries.findLast((entry) => entry.type === "entity");
     const navigationEntriesAfterEntity = lastEntityEntry ? navigationEntries.slice(navigationEntries.indexOf(lastEntityEntry) + 1) : [];
 
@@ -36,7 +60,6 @@ export function EntityFullScreenView({
     if (!lastEntityEntry) return null;
 
     const entityId = lastEntityEntry.entityId;
-
 
     const urlTab = (lastCustomView && "id" in lastCustomView ? lastCustomView?.id : undefined) ?? lastCustomView?.path;
     const [selectedTab, setSelectedTab] = useState<string | undefined>(urlTab);
@@ -49,14 +72,6 @@ export function EntityFullScreenView({
     }, [urlTab]);
 
     const basePath = pathname.substring(0, pathname.lastIndexOf(`/${entityId}`));
-    console.log({
-        fullPath,
-        basePath,
-        pathname,
-        selectedTab,
-        entityId,
-        urlTab
-    });
 
     function updateUrl(newSelectedTab: string | undefined) {
         if ((newSelectedTab ?? null) === (selectedTab ?? null)) {
@@ -70,15 +85,17 @@ export function EntityFullScreenView({
         }
     }
 
-    return <EntityEditView entityId={entityId}
-                           collection={lastEntityEntry.parentCollection}
-                           layout={"full_screen"}
-                           path={lastEntityEntry.path}
-                           selectedTab={selectedTab ?? undefined}
-                           onTabChange={(params) => {
-                               updateUrl(params.selectedTab);
-                               setSelectedTab(params.selectedTab);
-                           }}
-                           parentCollectionIds={parentCollectionIds}
+    return <EntityEditView
+        key={entityId}
+        entityId={entityId}
+        collection={lastEntityEntry.parentCollection}
+        layout={"full_screen"}
+        path={lastEntityEntry.path}
+        selectedTab={selectedTab ?? undefined}
+        onTabChange={(params) => {
+            updateUrl(params.selectedTab);
+            setSelectedTab(params.selectedTab);
+        }}
+        parentCollectionIds={parentCollectionIds}
     />;
 }

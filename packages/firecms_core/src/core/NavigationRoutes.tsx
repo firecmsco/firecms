@@ -2,10 +2,13 @@ import React from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView, EntityCollection } from "../types";
-import { DefaultHomePage, EntityCollectionView, ErrorBoundary, NotFoundPage } from "../components";
+import { DefaultHomePage, ErrorBoundary, NotFoundPage } from "../components";
 import { useNavigationController } from "../hooks";
 import { toArray } from "../util/arrays";
-import { EntityFullScreenView } from "../components/EntityFullScreenView";
+import { EntityFullScreenRoute } from "../routes/EntityFullScreenRoute";
+import { EntityCollectionRoute } from "../routes/EntityCollectionRoute";
+import { CustomCMSRoute } from "../routes/CustomCMSRoute";
+import { HashRouter } from 'react-router-dom';
 
 /**
  * @group Components
@@ -27,23 +30,22 @@ function buildCollectionRoutes(basePath: string, collection: EntityCollection<an
                key={`navigation_${collection.id ?? collection.path}`}
                element={
                    <ErrorBoundary>
-                       <EntityCollectionView
+                       <EntityCollectionRoute
                            key={`collection_view_${collection.id ?? collection.path}`}
                            isSubCollection={false}
                            parentCollectionIds={[]}
-                           fullPath={collection.id ?? collection.path}
+                           fullPath={collection.id}
                            updateUrl={true}
                            {...collection}
                            Actions={toArray(collection.Actions)}/>
                    </ErrorBoundary>
                }/>,
         <Route path={basePath + "/:id/*"}
-               key={`navigation_entity_${collection.id ?? collection.path}`}
+               key={`navigation_entity_${collection.id}`}
                element={
                    <ErrorBoundary>
-                       <EntityFullScreenView
-                           key={`collection_entity_${collection.id ?? collection.path}`}
-                           fullPath={collection.id ?? collection.path}/>
+                       <EntityFullScreenRoute
+                           key={`collection_entity_${collection.id}`}/>
                    </ErrorBoundary>
                }/>
     ];
@@ -140,6 +142,6 @@ const buildCMSViewRoute = (path: string, cmsView: CMSView) => {
     return <Route
         key={"navigation_view_" + path}
         path={path}
-        element={cmsView.view}
+        element={<CustomCMSRoute cmsView={cmsView}/>}
     />;
 };

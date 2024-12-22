@@ -17,6 +17,7 @@ import {
 import { useAuthController, useLargeLayout, useModeController, useNavigationController } from "../hooks";
 import { User } from "../types";
 import { useApp } from "../app/useApp";
+import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
 
 export type DefaultAppBarProps<ADDITIONAL_PROPS = object> = {
 
@@ -65,6 +66,8 @@ export const DefaultAppBar = function DefaultAppBar({
     } = useApp();
     const navigation = useNavigationController();
 
+    const breadcrumbs = useBreadcrumbsController();
+
     const authController = useAuthController();
     const {
         mode,
@@ -108,7 +111,7 @@ export const DefaultAppBar = function DefaultAppBar({
                 className)}>
 
 
-            {navigation && <div className="mr-8 hidden lg:block">
+            {navigation && <div className="mr-2 hidden lg:block">
                 <ReactLink
                     className="visited:text-inherit visited:dark:text-inherit block"
                     to={navigation?.basePath ?? "/"}
@@ -128,6 +131,27 @@ export const DefaultAppBar = function DefaultAppBar({
                             : title}
                     </div>
                 </ReactLink>
+            </div>}
+
+            {breadcrumbs.breadcrumbs && <div className="mr-8 hidden lg:block">
+                <div className={"flex flex-row gap-2"}>
+                    {breadcrumbs.breadcrumbs.map((breadcrumb, index) => {
+                        return <React.Fragment key={breadcrumb.url + "_" + index}>
+                            <Typography variant={"caption"} color={"secondary"}>
+                                /
+                            </Typography>
+                            <ReactLink
+                                key={index}
+                                className="visited:text-inherit visited:dark:text-inherit block"
+                                to={breadcrumb.url}
+                            >
+                                <Typography variant={"caption"} color={"secondary"}>
+                                    {breadcrumb.title}
+                                </Typography>
+                            </ReactLink>
+                        </React.Fragment>;
+                    })}
+                </div>
             </div>}
 
             {startAdornment}

@@ -22,6 +22,7 @@ import {
     Property,
     PropertyOrBuilder,
     stripCollectionPath,
+    useLargeLayout,
 } from "@firecms/core";
 import { useDataEnhancementController } from "./DataEnhancementControllerProvider";
 import { SamplePrompt } from "../types/data_enhancement_controller";
@@ -31,11 +32,13 @@ export function FormEnhanceAction({
                                       path,
                                       status,
                                       collection,
-                                      formContext
+                                      formContext,
+                                      layout
                                   }: PluginFormActionProps) {
 
-    const [internalStatus, setInternalStatus] = React.useState<EntityStatus>(status);
-    const storageKey = createLocalStorageKey(path, internalStatus);
+    const largeLayout = useLargeLayout();
+
+    const storageKey = createLocalStorageKey(path, status);
 
     const [loading, setLoading] = React.useState(false);
     const dataEnhancementController = useDataEnhancementController();
@@ -52,7 +55,7 @@ export function FormEnhanceAction({
     const updateSuggestedPrompts = useCallback(async function updateSuggestedPrompts(instructions?: string) {
             if (loadingPrompts.current) return;
             loadingPrompts.current = true;
-            const prompts = internalStatus === "new"
+            const prompts = status === "new"
                 ? (await getSamplePrompts(collection.singularName ?? collection.name, instructions)).prompts
                 : getPromptsForExistingEntities(collection.properties);
 
@@ -61,7 +64,7 @@ export function FormEnhanceAction({
             setSamplePrompts([...recentPromptsFromStorage, ...prompts.filter(p => !recentPrompts.includes(p.prompt))].slice(0, 5));
             loadingPrompts.current = false;
         },
-        [collection.name, collection.singularName, getSamplePrompts, internalStatus]);
+        [collection.name, collection.singularName, getSamplePrompts, status]);
 
     const deferredValues = useDeferredValue(formContext?.values);
     // const enoughData = countStringCharacters(deferredValues, collection.properties) > 20;
@@ -71,11 +74,11 @@ export function FormEnhanceAction({
             setSamplePrompts(getRecentPromptsFromStorage(storageKey));
             updateSuggestedPrompts().then();
         }
-    }, [samplePrompts, storageKey, updateSuggestedPrompts, instructions, internalStatus]);
+    }, [samplePrompts, storageKey, updateSuggestedPrompts, instructions, status]);
 
     useEffect(() => {
         updateSuggestedPrompts().then();
-    }, [internalStatus]);
+    }, [status]);
 
     const enhance = (prompt?: string) => {
         if (!entityId || !formContext?.values) return;
@@ -117,15 +120,15 @@ export function FormEnhanceAction({
             sideOffset={8}
             className={"max-w-[100vw]"}
             trigger={<Button variant={"outlined"}
+                             fullWidth={largeLayout && layout === "full_screen"}
                              size={"small"}
-                // onClick={() => enhance()}
                              disabled={loading}>
                 {!loading && <AutoFixHighIcon color={"primary"}/>}
                 {loading && <CircularProgress size={"small"}/>}
                 Autofill
             </Button>}>
 
-            <MenuItem className={"my-2"}
+            <MenuItem className={"py-4"}
                       onClick={() => {
                           enhance();
                       }}>
@@ -133,7 +136,7 @@ export function FormEnhanceAction({
                 Autofill based on the current content
             </MenuItem>
 
-            <Separator orientation={"horizontal"}/>
+            <Separator orientation={"horizontal"} className={"mt-2"}/>
 
             {samplePrompts?.map((samplePrompt, index) => {
                 return <MenuItem

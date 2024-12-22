@@ -19,6 +19,7 @@ import { useBuildDataSource } from "../internal/useBuildDataSource";
 import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext";
 import { AnalyticsContext } from "../contexts/AnalyticsContext";
 import { useProjectLog } from "../hooks/useProjectLog";
+import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
 
 /**
  * If you are using independent components of the CMS
@@ -147,10 +148,12 @@ export function FireCMS<USER extends User, EC extends EntityCollection>(props: F
                                         <NavigationContext.Provider
                                             value={navigationController}>
                                             <DialogsProvider>
-                                                <FireCMSInternal
-                                                    loading={loading}>
-                                                    {children}
-                                                </FireCMSInternal>
+                                                <BreadcrumbsProvider>
+                                                    <FireCMSInternal
+                                                        loading={loading}>
+                                                        {children}
+                                                    </FireCMSInternal>
+                                                </BreadcrumbsProvider>
                                             </DialogsProvider>
                                         </NavigationContext.Provider>
                                     </SideEntityControllerContext.Provider>

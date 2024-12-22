@@ -190,10 +190,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             });
     }, false, 2000);
 
-    // const largeLayout = useLargeLayout();
-    // const largeLayoutTabSelected = useRef(!largeLayout);
-    // const resolvedFormWidth: string = typeof formWidth === "number" ? `${formWidth}px` : formWidth ?? FORM_CONTAINER_WIDTH;
-
     const inputCollection = collection;
 
     const authController = useAuthController();
@@ -239,16 +235,15 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const [customIdLoading, setCustomIdLoading] = React.useState<boolean>(false);
 
-    const defaultSelectedView = useMemo(() => selectedTabProp
-        ?? resolveDefaultSelectedView(
-            collection ? collection.defaultSelectedView : undefined,
-            {
-                status,
-                entityId
-            }
-        ), []);
+    const defaultSelectedView = useMemo(() => resolveDefaultSelectedView(
+        collection ? collection.defaultSelectedView : undefined,
+        {
+            status,
+            entityId
+        }
+    ), []);
 
-    const [selectedTab, setSelectedTab] = useState<string>(defaultSelectedView ?? MAIN_TAB_VALUE);
+    const [selectedTab, setSelectedTab] = useState<string>(selectedTabProp ?? defaultSelectedView ?? MAIN_TAB_VALUE);
 
     useEffect(() => {
         if ((selectedTabProp ?? MAIN_TAB_VALUE) !== selectedTab) {
@@ -269,7 +264,13 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     const [usedEntity, setUsedEntity] = useState<Entity<M> | undefined>(entity);
     const [readOnly, setReadOnly] = useState<boolean | undefined>(undefined);
 
-    const baseDataSourceValuesRef = useRef<Partial<EntityValues<M>>>(getDataSourceEntityValues(initialResolvedCollection, status, usedEntity));
+    const baseDataSourceValuesRef = useRef<Partial<EntityValues<M>> | null>(!dataLoading && usedEntity ? getDataSourceEntityValues(initialResolvedCollection, status, usedEntity) : null);
+
+    useEffect(() => {
+        if (!dataLoading && !baseDataSourceValuesRef.current && usedEntity) {
+            baseDataSourceValuesRef.current = getDataSourceEntityValues(initialResolvedCollection, status, usedEntity);
+        }
+    }, [dataLoading])
 
     useEffect(() => {
         if (entity)
@@ -547,8 +548,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     const globalLoading = (dataLoading && !usedEntity) ||
         ((!usedEntity || readOnly === undefined) && (status === "existing" || status === "copy"));
 
-    const loading = globalLoading || saving;
-
     const subCollectionsViews = subcollections && subcollections.map(
         (subcollection, colIndex) => {
             const subcollectionId = subcollection.id ?? subcollection.path;
@@ -562,7 +561,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                     key={`subcol_${subcollectionId}`}
                     role="tabpanel">
 
-                    {loading && <CircularProgressCenter/>}
+                    {globalLoading || saving && <CircularProgressCenter/>}
 
                     {!globalLoading &&
                         (usedEntity && fullPath
@@ -630,7 +629,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             collection: inputCollection,
             context,
             currentEntityId: entityId,
-            formContext
+            formContext,
+            layout
         };
         pluginActions.push(...plugins.map((plugin, i) => (
             plugin.form?.Actions
@@ -831,7 +831,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             status: status,
             setPendingClose: (value: boolean) => {
                 closeAfterSaveRef.current = value;
-            }
+            },
+            pluginActions
         })
         : buildSideActions({
             savingError: savingError,
@@ -843,6 +844,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             isSubmitting: formex.isSubmitting,
             disabled: disabled,
             status: status,
+            pluginActions
         });
 
     const entityView = (readOnly === undefined)
@@ -934,14 +936,9 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     let result = <div className="relative flex flex-col h-full w-full bg-white dark:bg-surface-900">
 
         <div
-            className={cls(defaultBorderMixin, "overflow-visible overflow-x-scroll w-full no-scrollbar h-16 border-b pl-2 pr-2 pt-1 flex items-end bg-surface-50 dark:bg-surface-950")}>
+            className={cls("h-[60px] flex overflow-visible overflow-x-scroll w-full no-scrollbar h-16 border-b pl-2 pr-2 pt-1 flex items-end bg-surface-50 dark:bg-surface-950", defaultBorderMixin)}>
 
             {barActions}
-
-            {selectedTab === MAIN_TAB_VALUE && pluginActions.length > 0 && <div
-                className={cls("w-full flex justify-end items-center py-3 px-4")}>
-                {pluginActions}
-            </div>}
 
             <div className={"flex-grow"}/>
 
@@ -1085,7 +1082,8 @@ type ActionsViewProps<M extends object> = {
     isSubmitting: boolean,
     disabled: boolean,
     status: "new" | "existing" | "copy",
-    setPendingClose?: (value: boolean) => void
+    setPendingClose?: (value: boolean) => void,
+    pluginActions?: React.ReactNode[]
 };
 
 function buildBottomActions<M extends object>({
@@ -1098,7 +1096,8 @@ function buildBottomActions<M extends object>({
                                                   isSubmitting,
                                                   disabled,
                                                   status,
-                                                  setPendingClose
+                                                  setPendingClose,
+                                                  pluginActions
                                               }: ActionsViewProps<M>) {
 
     return <DialogActions position={"absolute"}>
@@ -1130,6 +1129,8 @@ function buildBottomActions<M extends object>({
                 </IconButton>
             ))}
         </div>}
+
+        {pluginActions}
 
         {isSubmitting && <CircularProgress size={"smallest"}/>}
 
@@ -1179,7 +1180,8 @@ function buildSideActions<M extends object>({
                                                 isSubmitting,
                                                 disabled,
                                                 status,
-                                                setPendingClose
+                                                setPendingClose,
+                                                pluginActions
                                             }: ActionsViewProps<M>) {
 
     return <div
@@ -1208,8 +1210,10 @@ function buildSideActions<M extends object>({
             {status === "existing" ? "Discard" : "Clear"}
         </Button>
 
+        {pluginActions}
 
         {isSubmitting && <CircularProgress size={"smallest"}/>}
+
         {savingError &&
             <div className="text-right">
                 <Typography color={"error"}>

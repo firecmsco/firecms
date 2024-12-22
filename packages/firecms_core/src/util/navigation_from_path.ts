@@ -11,6 +11,7 @@ export interface NavigationViewEntityInternal<M extends Record<string, any>> {
     type: "entity";
     entityId: string;
     path: string;
+    fullPath: string;
     parentCollection: EntityCollection<M>;
 }
 
@@ -18,12 +19,14 @@ export interface NavigationViewCollectionInternal<M extends Record<string, any>>
     type: "collection";
     id: string;
     path: string;
+    fullPath: string;
     collection: EntityCollection<M>;
 }
 
 export interface NavigationViewEntityCustomInternal<M extends Record<string, any>> {
     type: "custom_view";
     path: string;
+    fullPath: string;
     view: EntityCustomView<M>;
 }
 
@@ -59,6 +62,7 @@ export function getNavigationEntriesFromPath(props: {
                 type: "collection",
                 id: collection.id,
                 path: collectionPath,
+                fullPath: collectionPath,
                 collection
             });
             const restOfThePath = removeInitialAndTrailingSlashes(removeInitialAndTrailingSlashes(path).replace(subpathCombination, ""));
@@ -70,6 +74,7 @@ export function getNavigationEntriesFromPath(props: {
                     type: "entity",
                     entityId,
                     path: collectionPath,
+                    fullPath: fullPath,
                     parentCollection: collection
                 });
                 if (nextSegments.length > 1) {
@@ -89,6 +94,7 @@ export function getNavigationEntriesFromPath(props: {
                         result.push({
                             type: "custom_view",
                             path,
+                            fullPath: fullPath + "/" + path,
                             view: customView
                         });
                     } else if (collection.subcollections) {

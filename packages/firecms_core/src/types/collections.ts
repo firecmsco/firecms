@@ -98,7 +98,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
 
     /**
      * When editing an entity, you can choose to open the entity in a side dialog
-     * or in a full screen dialog. Defaults to `side_panel`.
+     * or in a full screen dialog. Defaults to `full_screen`.
      */
     openEntityMode?: "side_panel" | "full_screen";
 
