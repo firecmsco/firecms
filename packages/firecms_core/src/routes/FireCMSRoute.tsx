@@ -12,6 +12,7 @@ import {
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
 import { toArray } from "../util/arrays";
 import { EntityCollectionView } from "../components";
+import { UnsavedChangesDialog, useNavigationUnsavedChangesDialog } from "../internal/useUnsavedChangesDialog";
 
 export function FireCMSRoute() {
 
@@ -128,6 +129,20 @@ function EntityFullScreenRoute({
     const navigation = useNavigationController();
     const navigate = useNavigate();
 
+    // is navigating away blocked
+    const [blocked, setBlocked] = useState(false);
+
+    console.log("blocking", blocked)
+
+    const {
+        navigationWasBlocked,
+        handleOk: handleNavigationOk,
+        handleCancel: handleNavigationCancel
+    } = useNavigationUnsavedChangesDialog(
+        blocked,
+        () => setBlocked(false)
+    );
+
     const lastEntityEntry = navigationEntries.findLast((entry) => entry.type === "entity");
     const navigationEntriesAfterEntity = lastEntityEntry ? navigationEntries.slice(navigationEntries.indexOf(lastEntityEntry) + 1) : [];
 
@@ -176,20 +191,30 @@ function EntityFullScreenRoute({
     const collection = isNew ? lastCollectionEntry!.collection : lastEntityEntry!.parentCollection;
     const collectionPath = isNew ? lastCollectionEntry!.path : lastEntityEntry!.path;
 
-    return <EntityEditView
-        key={collection.id + "_" + entityId}
-        entityId={entityId}
-        collection={collection}
-        layout={"full_screen"}
-        path={collectionPath}
-        selectedTab={selectedTab ?? undefined}
-        onUpdate={(params) => {
-            updateUrl(params.entityId, params.selectedTab, true, isNew);
-        }}
-        onTabChange={(params) => {
-            updateUrl(params.entityId, params.selectedTab, !isNew, isNew);
-            setSelectedTab(params.selectedTab);
-        }}
-        parentCollectionIds={parentCollectionIds}
-    />;
+    return <>
+        <EntityEditView
+            key={collection.id + "_" + entityId}
+            entityId={entityId}
+            collection={collection}
+            layout={"full_screen"}
+            path={collectionPath}
+            selectedTab={selectedTab ?? undefined}
+            onValuesModified={setBlocked}
+            onUpdate={(params) => {
+                updateUrl(params.entityId, params.selectedTab, true, isNew);
+            }}
+            onTabChange={(params) => {
+                updateUrl(params.entityId, params.selectedTab, !isNew, isNew);
+                setSelectedTab(params.selectedTab);
+            }}
+            parentCollectionIds={parentCollectionIds}
+        />
+
+        <UnsavedChangesDialog
+            open={navigationWasBlocked}
+            handleOk={handleNavigationOk}
+            handleCancel={handleNavigationCancel}
+            body={"You have unsaved changes in this entity. Are you sure you want to leave this page?"}/>
+
+    </>;
 }

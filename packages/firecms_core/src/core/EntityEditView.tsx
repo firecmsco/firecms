@@ -935,7 +935,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     let result = <div className="relative flex flex-col h-full w-full bg-white dark:bg-surface-900">
 
         {shouldShowTopBar && <div
-            className={cls("h-[60px] flex overflow-visible overflow-x-scroll w-full no-scrollbar h-16 border-b pl-2 pr-2 pt-1 flex items-end bg-surface-50 dark:bg-surface-950", defaultBorderMixin)}>
+            className={cls("h-14 flex overflow-visible overflow-x-scroll w-full no-scrollbar h-16 border-b pl-2 pr-2 pt-1 flex items-end bg-surface-50 dark:bg-surface-950", defaultBorderMixin)}>
 
             {barActions}
 

@@ -111,8 +111,6 @@ function SideDialogView({
         }
     };
 
-    // const offsetClass = offsetPosition > 0 ? `transform translate-x-${offsetPosition}` : "";
-
     return (
         <SideDialogContext.Provider
             value={{
