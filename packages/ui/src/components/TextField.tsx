@@ -111,7 +111,7 @@ export function TextField<T extends string | number>({
             className={cls(
                 invisible ? focusedInvisibleMixin : "",
                 "rounded-md resize-none w-full outline-none p-[32px] text-base bg-transparent min-h-[64px] px-3 pt-8",
-                disabled && "border border-transparent outline-none opacity-50 text-surface-accent-600 dark:text-surface-accent-500"
+                disabled && "outline-none opacity-50 text-surface-accent-600 dark:text-surface-accent-500"
             )}
         />
         : <input
@@ -129,7 +129,7 @@ export function TextField<T extends string | number>({
                 size === "small" ? "min-h-[32px]" : (size === "medium" ? "min-h-[48px]" : "min-h-[64px]"),
                 label ? (size === "large" ? "pt-8 pb-2" : "pt-4 pb-2") : "py-2",
                 endAdornment ? "pr-10" : "pr-3",
-                disabled && "border border-transparent outline-none opacity-50 dark:opacity-50 text-surface-accent-800 dark:text-white",
+                disabled && "outline-none opacity-50 dark:opacity-50 text-surface-accent-800 dark:text-white",
                 inputClassName
             )}
             placeholder={focused || hasValue || !label ? placeholder : undefined}
