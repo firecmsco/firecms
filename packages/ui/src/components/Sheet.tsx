@@ -64,6 +64,7 @@ export const Sheet: React.FC<SheetProps> = ({
                 </DialogPrimitive.Title>
                 {includeBackgroundOverlay && <DialogPrimitive.Overlay
                     className={cls(
+                        "outline-none",
                         "fixed inset-0 transition-opacity z-20 ease-in-out duration-100 backdrop-blur-sm",
                         "bg-black bg-opacity-50",
                         "dark:bg-surface-900 dark:bg-opacity-60",
@@ -78,6 +79,7 @@ export const Sheet: React.FC<SheetProps> = ({
                     {...props}
                     onFocusCapture={(event) => event.preventDefault()}
                     className={cls(
+                        "outline-none",
                         borderClass[side],
                         defaultBorderMixin,
                         "transform-gpu",

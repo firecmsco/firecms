@@ -4,11 +4,8 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView, EntityCollection } from "../types";
 import { DefaultHomePage, ErrorBoundary, NotFoundPage } from "../components";
 import { useNavigationController } from "../hooks";
-import { toArray } from "../util/arrays";
-import { EntityFullScreenRoute } from "../routes/EntityFullScreenRoute";
-import { EntityCollectionRoute } from "../routes/EntityCollectionRoute";
+import { FireCMSRoute } from "../routes/FireCMSRoute";
 import { CustomCMSRoute } from "../routes/CustomCMSRoute";
-import { HashRouter } from 'react-router-dom';
 
 /**
  * @group Components
@@ -22,36 +19,6 @@ export type NavigationRoutesProps = {
     children?: React.ReactNode | React.ReactNode[]
 
 };
-
-function buildCollectionRoutes(basePath: string, collection: EntityCollection<any, any>) {
-
-    const routes = [
-        <Route path={basePath + "/*"}
-               key={`navigation_${collection.id ?? collection.path}`}
-               element={
-                   <ErrorBoundary>
-                       <EntityCollectionRoute
-                           key={`collection_view_${collection.id ?? collection.path}`}
-                           isSubCollection={false}
-                           parentCollectionIds={[]}
-                           fullPath={collection.id}
-                           updateUrl={true}
-                           {...collection}
-                           Actions={toArray(collection.Actions)}/>
-                   </ErrorBoundary>
-               }/>,
-        <Route path={basePath + "/:id/*"}
-               key={`navigation_entity_${collection.id}`}
-               element={
-                   <ErrorBoundary>
-                       <EntityFullScreenRoute
-                           key={`collection_entity_${collection.id}`}/>
-                   </ErrorBoundary>
-               }/>
-    ];
-
-    return routes;
-}
 
 /**
  * This component is in charge of rendering
@@ -107,7 +74,13 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
         const collectionRoutes = sortedCollections
             .map((collection) => {
                     const urlPath = navigation.buildUrlCollectionPath(collection.id ?? collection.path);
-                    return buildCollectionRoutes(urlPath, collection);
+                    return <Route path={urlPath + "/*"}
+                                  key={`navigation_entity_${collection.id}`}
+                                  element={
+                                      <ErrorBoundary>
+                                          <FireCMSRoute key={`collection_entity_${collection.id}`}/>
+                                      </ErrorBoundary>
+                                  }/>
                 }
             );
 
@@ -124,7 +97,7 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
         return (
             <Routes location={baseLocation}>
 
-                {...collectionRoutes}
+                {collectionRoutes}
 
                 {cmsViews}
 

@@ -63,6 +63,7 @@ import {
     defaultBorderMixin,
     DialogActions,
     IconButton,
+    LoadingButton,
     NotesIcon,
     paperMixin,
     Tab,
@@ -264,13 +265,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     const [usedEntity, setUsedEntity] = useState<Entity<M> | undefined>(entity);
     const [readOnly, setReadOnly] = useState<boolean | undefined>(undefined);
 
-    const baseDataSourceValuesRef = useRef<Partial<EntityValues<M>> | null>(!dataLoading && usedEntity ? getDataSourceEntityValues(initialResolvedCollection, status, usedEntity) : null);
-
-    useEffect(() => {
-        if (!dataLoading && !baseDataSourceValuesRef.current && usedEntity) {
-            baseDataSourceValuesRef.current = getDataSourceEntityValues(initialResolvedCollection, status, usedEntity);
-        }
-    }, [dataLoading])
+    const baseDataSourceValuesRef = useRef<Partial<EntityValues<M>> | null>(getDataSourceEntityValues(initialResolvedCollection, status, usedEntity));
 
     useEffect(() => {
         if (entity)
@@ -316,6 +311,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
         setUsedEntity(updatedEntity);
         setStatus("existing");
+        setEntityId(updatedEntity.id);
 
         onValuesModified?.(false);
 
@@ -569,7 +565,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                                 fullPath={fullPath}
                                 parentCollectionIds={[...parentCollectionIds, collection.id]}
                                 isSubCollection={true}
-                                updateUrl={true}
+                                updateUrl={false}
                                 {...subcollection}/>
                             : <div
                                 className="flex items-center justify-center w-full h-full p-3">
@@ -592,6 +588,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     const onSideTabClick = (value: string) => {
         setSelectedTab(value);
         if (status === "existing") {
+            console.log("onSideTabClick", entityId, value);
             onTabChange?.({
                 path,
                 entityId,
@@ -933,9 +930,11 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             onIdChange(entityId);
     }, [entityId, onIdChange]);
 
+    const shouldShowTopBar = Boolean(barActions) || hasAdditionalViews;
+
     let result = <div className="relative flex flex-col h-full w-full bg-white dark:bg-surface-900">
 
-        <div
+        {shouldShowTopBar && <div
             className={cls("h-[60px] flex overflow-visible overflow-x-scroll w-full no-scrollbar h-16 border-b pl-2 pr-2 pt-1 flex items-end bg-surface-50 dark:bg-surface-950", defaultBorderMixin)}>
 
             {barActions}
@@ -964,7 +963,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 {subcollectionTabs}
             </Tabs>}
 
-        </div>
+        </div>}
 
         <form
             onSubmit={formex.handleSubmit}
@@ -1132,8 +1131,6 @@ function buildBottomActions<M extends object>({
 
         {pluginActions}
 
-        {isSubmitting && <CircularProgress size={"smallest"}/>}
-
         <Button
             variant="text"
             disabled={disabled || isSubmitting}
@@ -1154,18 +1151,19 @@ function buildBottomActions<M extends object>({
             {status === "new" && "Create"}
         </Button>
 
-        <Button
+        <LoadingButton
             variant="filled"
             color="primary"
             type="submit"
-            disabled={disabled || isSubmitting}
+            loading={isSubmitting}
+            disabled={disabled}
             onClick={() => {
                 setPendingClose?.(true);
             }}>
             {status === "existing" && "Save and close"}
             {status === "copy" && "Create copy and close"}
             {status === "new" && "Create and close"}
-        </Button>
+        </LoadingButton>
 
     </DialogActions>;
 }
@@ -1187,7 +1185,7 @@ function buildSideActions<M extends object>({
     return <div
         className={cls("overflow-auto h-full flex flex-col gap-2 w-96 px-4 py-16 sticky top-0 border-l", defaultBorderMixin)}>
 
-        <Button
+        <LoadingButton
             fullWidth={true}
             variant="filled"
             color="primary"
@@ -1200,7 +1198,7 @@ function buildSideActions<M extends object>({
             {status === "existing" && "Save"}
             {status === "copy" && "Create copy"}
             {status === "new" && "Create"}
-        </Button>
+        </LoadingButton>
 
         <Button
             fullWidth={true}
@@ -1211,8 +1209,6 @@ function buildSideActions<M extends object>({
         </Button>
 
         {pluginActions}
-
-        {isSubmitting && <CircularProgress size={"smallest"}/>}
 
         {savingError &&
             <div className="text-right">

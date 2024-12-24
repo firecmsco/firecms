@@ -29,10 +29,6 @@ export function fieldBuilder<T extends CMSType = CMSType>
         property
     } = params;
 
-    if (property.disabled || property.readOnly || property.Field) {
-        return null;
-    }
-
     const wrappedComponent = React.useMemo(() => function FieldWrapper(props: FieldProps<T, any, any>) {
 
         const {
@@ -62,6 +58,10 @@ export function fieldBuilder<T extends CMSType = CMSType>
             interceptUsage={interceptUsage}/>
 
     }, []);
+
+    if (property.disabled || property.readOnly || property.Field) {
+        return null;
+    }
 
     if (SUPPORTED_FIELDS_ENHANCEMENT.includes(fieldConfigId)) {
         return wrappedComponent;

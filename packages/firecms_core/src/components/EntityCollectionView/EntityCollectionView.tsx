@@ -239,12 +239,16 @@ export const EntityCollectionView = React.memo(
             analyticsController.onAnalyticsEvent?.("new_entity_click", {
                 path: fullPath
             });
-            sideEntityController.open({
-                path: fullPath,
-                collection,
-                updateUrl: true,
-                onClose: unselectNavigatedEntity,
-            });
+            if (collection?.openEntityMode === "side_panel") {
+                sideEntityController.open({
+                    path: fullPath,
+                    collection,
+                    updateUrl: true,
+                    onClose: unselectNavigatedEntity,
+                });
+            } else {
+                navigation.navigate(navigation.buildUrlCollectionPath(`${fullPath}#new`));
+            }
         }, [fullPath, sideEntityController]);
 
         const onMultipleDeleteClick = () => {

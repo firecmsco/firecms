@@ -140,6 +140,17 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     const collectionScroll = scrollRestoration?.getCollectionScroll(fullPath, filterValues);
     const initialItemCount = collectionScroll?.data.length ?? pageSize;
 
+    useEffect(() => {
+        if (scrollRestoration) {
+            scrollRestoration.updateCollectionScroll({
+                fullPath: resolvedPath,
+                scrollOffset: collectionScroll?.scrollOffset ?? 0,
+                data: rawData,
+                filters: filterValues
+            });
+        }
+    }, []);
+
     const [itemCount, setItemCount] = React.useState<number | undefined>(paginationEnabled ? initialItemCount : undefined);
 
     const sortByProperty = sortBy ? sortBy[0] : undefined;
@@ -282,10 +293,11 @@ function useUpdateUrl<M extends Record<string, any> = any>(
             const newUrl = encodeFilterAndSort(filterValues, sortBy);
             const search = searchString ? `&search=${encodeURIComponent(searchString)}` : "";
             const state = `${newUrl}${search}`;
+            const hash = window.location.hash;
             if (state === "")
-                window.history.replaceState({}, "", window.location.pathname);
+                window.history.replaceState({}, "", `${window.location.pathname}${hash}`);
             else
-                window.history.replaceState({}, "", `?${state}`);
+                window.history.replaceState({}, "", `?${state}${hash}`);
         }
     }, [filterValues, sortBy, searchString, updateUrl]);
 }
