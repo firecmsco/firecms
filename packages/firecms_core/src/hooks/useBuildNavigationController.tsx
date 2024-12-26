@@ -9,6 +9,7 @@ import {
     EntityCollection,
     EntityCollectionsBuilder,
     EntityReference,
+    NavigationBlocker,
     NavigationController,
     PermissionsBuilder,
     TopNavigationEntry,
@@ -26,7 +27,7 @@ import {
     resolvePermissions
 } from "../util";
 import { getParentReferencesFromPath } from "../util/parent_references_from_path";
-import { useNavigate } from "react-router-dom";
+import { useBlocker, useNavigate } from "react-router-dom";
 
 const DEFAULT_BASE_PATH = "/";
 const DEFAULT_COLLECTION_PATH = "/c";
@@ -335,16 +336,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         throw Error("Expected path starting with " + fullCollectionPath);
     }, [fullCollectionPath]);
 
-    const buildUrlEditCollectionPath = useCallback(({
-                                                        path
-                                                    }: {
-            path: string
-        }): string => {
-            return `s/edit/${encodePath(path)}`;
-        },
-        []);
-
-    const resolveAliasesFrom = useCallback((path: string): string => {
+    const resolveIdsFrom = useCallback((path: string): string => {
         const collections = collectionsRef.current ?? [];
         return resolveCollectionPathIds(path, collections);
     }, []);
@@ -388,6 +380,8 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         return paths;
     }, [getCollectionFromIds]);
 
+    const blocker = useCustomBlocker();
+
     return {
         collections: collectionsRef.current,
         views: viewsRef.current,
@@ -404,23 +398,15 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         isUrlCollectionPath,
         urlPathToDataPath,
         buildUrlCollectionPath,
-        buildUrlEditCollectionPath,
-        buildCMSUrlPath,
-        resolveAliasesFrom,
+        resolveIdsFrom,
         topLevelNavigation,
         refreshNavigation,
         getParentReferencesFromPath: getAllParentReferencesForPath,
         getParentCollectionIds,
         convertIdsToPaths,
-        navigate
+        navigate,
+        blocker
     };
-}
-
-export function getSidePanelKey(path: string, entityId?: string) {
-    if (entityId)
-        return `${removeInitialAndTrailingSlashes(path)}/${removeInitialAndTrailingSlashes(entityId)}`;
-    else
-        return removeInitialAndTrailingSlashes(path);
 }
 
 function encodePath(input: string) {
@@ -516,4 +502,55 @@ function areCollectionsEqual(a: EntityCollection, b: EntityCollection) {
         return false;
     }
     return equal(removeFunctions(restA), removeFunctions(restB));
+}
+
+function useCustomBlocker(): NavigationBlocker {
+    const [blockListeners, setBlockListeners] = useState<Record<string, {
+        block: boolean,
+        basePath?: string
+    }>>({});
+
+    const shouldBlock = Object.values(blockListeners).some(b => b.block);
+
+    let blocker: any;
+    try {
+        blocker = useBlocker(({
+                                  nextLocation
+                              }) => {
+            const allBasePaths = Object.values(blockListeners).map(b => b.basePath).filter(Boolean) as string[];
+            if (allBasePaths && allBasePaths.some(path => nextLocation.pathname.startsWith(path)))
+                return false;
+            return shouldBlock;
+        });
+    } catch (e) {
+        console.warn("Blocker not available, navigation will not be blocked");
+    }
+
+    const updateBlockListener = (path: string, block: boolean, basePath?: string) => {
+        setBlockListeners(prev => ({
+            ...prev,
+            [path]: {
+                block,
+                basePath
+            }
+        }));
+        return () => setBlockListeners(prev => {
+            const {
+                [path]: removed,
+                ...rest
+            } = prev;
+            return rest;
+        })
+    };
+
+    const isBlocked = (path: string) => {
+        return (blockListeners[path]?.block ?? false) && blocker?.state === "blocked";
+    }
+
+    return {
+        updateBlockListener,
+        isBlocked,
+        proceed: blocker?.proceed,
+        reset: blocker?.reset
+    }
 }

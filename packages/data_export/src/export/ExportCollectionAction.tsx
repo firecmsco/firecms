@@ -60,7 +60,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
     const dataSource = useDataSource();
     const navigationController = useNavigationController();
 
-    const path = navigationController.resolveAliasesFrom(inputPath);
+    const path = navigationController.resolveIdsFrom(inputPath);
 
     const canExport = !exportAllowed || exportAllowed({
         collectionEntitiesCount,

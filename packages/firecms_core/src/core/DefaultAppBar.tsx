@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Link as ReactLink, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ErrorBoundary, FireCMSLogo } from "../components";
 import {
     Avatar,
@@ -112,7 +112,7 @@ export const DefaultAppBar = function DefaultAppBar({
 
 
             {navigation && <div className="mr-2 hidden lg:block">
-                <ReactLink
+                <Link
                     className="visited:text-inherit visited:dark:text-inherit block"
                     to={navigation?.basePath ?? "/"}
                 >
@@ -130,7 +130,7 @@ export const DefaultAppBar = function DefaultAppBar({
                             </Typography>
                             : title}
                     </div>
-                </ReactLink>
+                </Link>
             </div>}
 
             {breadcrumbs.breadcrumbs && <div className="mr-8 hidden lg:block">
@@ -140,7 +140,7 @@ export const DefaultAppBar = function DefaultAppBar({
                             <Typography variant={"caption"} color={"secondary"}>
                                 /
                             </Typography>
-                            <ReactLink
+                            <Link
                                 key={index}
                                 className="visited:text-inherit visited:dark:text-inherit block"
                                 to={breadcrumb.url}
@@ -148,7 +148,7 @@ export const DefaultAppBar = function DefaultAppBar({
                                 <Typography variant={"caption"} color={"secondary"}>
                                     {breadcrumb.title}
                                 </Typography>
-                            </ReactLink>
+                            </Link>
                         </React.Fragment>;
                     })}
                 </div>

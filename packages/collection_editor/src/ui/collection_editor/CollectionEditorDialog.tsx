@@ -487,7 +487,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     const pathError = validatePath(path, isNewCollection, existingPaths, values.id);
 
     const parentPaths = !pathError && parentCollectionIds ? navigation.convertIdsToPaths(parentCollectionIds) : undefined;
-    const resolvedPath = !pathError ? navigation.resolveAliasesFrom(updatedFullPath) : undefined;
+    const resolvedPath = !pathError ? navigation.resolveIdsFrom(updatedFullPath) : undefined;
     const getDataWithPath = resolvedPath && getData ? async () => {
         const data = await getData(resolvedPath, parentPaths ?? []);
         if (existingEntities) {

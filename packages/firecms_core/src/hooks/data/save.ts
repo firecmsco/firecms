@@ -75,7 +75,7 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, USE
 
     const customizationController = context.customizationController;
 
-    const resolvedPath = context.navigation.resolveAliasesFrom(path);
+    const resolvedPath = context.navigation.resolveIdsFrom(path);
 
     const callbacks = collection.callbacks;
     if (callbacks?.onPreSave) {

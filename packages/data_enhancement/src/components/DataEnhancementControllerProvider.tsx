@@ -239,7 +239,7 @@ export function DataEnhancementControllerProvider({
             return Promise.reject(new Error("Not logged in"));
         }
 
-        const resolvedPath = navigationController.resolveAliasesFrom(path);
+        const resolvedPath = navigationController.resolveIdsFrom(path);
         const firebaseToken = await authController.getAuthToken();
 
         if (props.propertyKey) {

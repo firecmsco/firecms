@@ -56,8 +56,8 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
      * Get the collection configuration for a given path.
      * The collection is resolved from the given path or alias.
      */
-    getCollection: (pathOrId: string,
-                    includeUserOverride?: boolean) => EC | undefined;
+    getCollection: (pathOrId: string, includeUserOverride?: boolean) => EC | undefined;
+
     /**
      * Get the collection configuration from its parent ids.
      */
@@ -69,12 +69,14 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
     getCollectionFromPaths: (pathSegments: string[]) => EC | undefined;
 
     /**
-     * Default path under the navigation routes of the CMS will be created
+     * Default path under the navigation routes of the CMS will be created.
+     * Defaults to '/'. You may want to change this `basepath` to 'admin' for example.
      */
     basePath: string;
 
     /**
-     * Default path under the collection routes of the CMS will be created
+     * Default path under the collection routes of the CMS will be created.
+     * It defaults to '/c'
      */
     baseCollectionPath: string;
 
@@ -86,16 +88,6 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
      * @param cmsPath
      */
     urlPathToDataPath: (cmsPath: string) => string;
-
-    /**
-     * Convert a collection or entity path to a URL path
-     * @param path
-     */
-    buildCMSUrlPath: (path: string) => string;
-
-    buildUrlEditCollectionPath: (props: {
-        path: string
-    }) => string;
 
     /**
      * Base url path for the home screen
@@ -117,10 +109,11 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
     buildUrlCollectionPath: (path: string) => string;
 
     /**
-     * Turn a path with aliases into a resolved path
+     * Turn a path with collection ids into a resolved path.
+     * The ids (typically used in urls) will be replaced with relative paths (typically used in database paths)
      * @param pathWithAliases
      */
-    resolveAliasesFrom: (pathWithAliases: string) => string;
+    resolveIdsFrom: (pathWithAliases: string) => string;
 
     /**
      * Call this method to recalculate the navigation
@@ -145,7 +138,15 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
      */
     convertIdsToPaths: (ids: string[]) => string[];
 
+    /**
+     * A function to navigate to a specified route or URL.
+     *
+     * @param {string} to - The target route or URL to navigate to.
+     * @param {NavigateOptions} [options] - Optional configuration settings for navigation, such as replace behavior or state data.
+     */
     navigate: (to: string, options?: NavigateOptions) => void;
+
+    blocker: NavigationBlocker;
 }
 
 export interface NavigateOptions {
@@ -156,6 +157,13 @@ export interface NavigateOptions {
     flushSync?: boolean;
     viewTransition?: boolean;
 }
+
+export type NavigationBlocker = {
+    updateBlockListener: (path: string, block: boolean, basePath?: string) => () => void;
+    isBlocked: (path: string) => boolean;
+    proceed?: () => void;
+    reset?: () => void;
+};
 
 /**
  * Custom additional views created by the developer, added to the main

@@ -28,7 +28,6 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
 
     const navigate = useNavigate();
     const location = useLocation();
-    console.log({ location });
 
     const sideEntityController = useSideEntityController();
     const navigationController = useNavigationController();

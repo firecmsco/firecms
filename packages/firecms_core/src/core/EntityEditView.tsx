@@ -302,6 +302,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const onSaveSuccess = (updatedEntity: Entity<M>, closeAfterSave: boolean) => {
 
+        onValuesModified?.(false);
+
         setSaving(false);
         if (!autoSave)
             snackbarController.open({
@@ -312,8 +314,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         setUsedEntity(updatedEntity);
         setStatus("existing");
         setEntityId(updatedEntity.id);
-
-        onValuesModified?.(false);
 
         if (onUpdate) {
             onUpdate({

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { FirebaseApp } from "@firebase/app";
-import { BrowserRouter, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 
 import {
     AppBar,
@@ -11,6 +11,7 @@ import {
     ErrorView,
     FireCMS,
     FireCMSPlugin,
+    FireCMSRouter,
     ModeController,
     ModeControllerProvider,
     NavigationController,
@@ -159,16 +160,9 @@ export function FireCMSCloudApp({
         />
     }
 
-    return <BrowserRouter basename={basePath}
-                          future={{
-                              v7_relativeSplatPath: true,
-                              v7_startTransition: true,
-                              // v7_fetcherPersist: true,
-                              // v7_normalizeFormMethod: true,
-                              // v7_partialHydration: true,
-                          }}>
+    return <FireCMSRouter basePath={basePath}>
         {component}
-    </BrowserRouter>;
+    </FireCMSRouter>;
 
 }
 

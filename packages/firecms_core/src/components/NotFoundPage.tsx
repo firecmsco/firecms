@@ -1,5 +1,5 @@
 import React from "react";
-import { Link as ReactLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button, Typography } from "@firecms/ui";
 
 export function NotFoundPage() {
@@ -17,7 +17,7 @@ export function NotFoundPage() {
                 </Typography>
                 <Button
                     variant={"text"}
-                    component={ReactLink}
+                    component={Link}
                     to={"/"}>Back to home</Button>
             </div>
         </div>

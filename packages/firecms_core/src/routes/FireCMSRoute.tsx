@@ -1,7 +1,7 @@
 import { useLocation } from "react-router";
 import { EntityEditView } from "../core/EntityEditView";
 import { useNavigationController } from "../hooks";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     getNavigationEntriesFromPath,
@@ -12,7 +12,8 @@ import {
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
 import { toArray } from "../util/arrays";
 import { EntityCollectionView } from "../components";
-import { UnsavedChangesDialog, useNavigationUnsavedChangesDialog } from "../internal/useUnsavedChangesDialog";
+import { useNavigationUnsavedChangesDialog } from "../internal/useUnsavedChangesDialog";
+import { UnsavedChangesDialog } from "../components/UnsavedChangesDialog";
 
 export function FireCMSRoute() {
 
@@ -24,19 +25,11 @@ export function FireCMSRoute() {
     const isSidePanel = hash.includes("#side");
     const isNew = hash.includes("#new");
 
-    const firstLoad = useRef(true);
-    useEffect(() => {
-        if (firstLoad.current) {
-            firstLoad.current = false;
-            return;
-        }
-    }, []);
-
     const pathname = location.pathname;
-    const usedPath = navigation.urlPathToDataPath(pathname);
+    const navigationPath = navigation.urlPathToDataPath(pathname);
 
     const navigationEntries = getNavigationEntriesFromPath({
-        path: usedPath,
+        path: navigationPath,
         collections: navigation.collections ?? []
     });
 
@@ -68,7 +61,6 @@ export function FireCMSRoute() {
     if (isNew) {
         return <EntityFullScreenRoute
             pathname={pathname}
-            usedPath={usedPath}
             navigationEntries={navigationEntries}
             isNew={true}
         />;
@@ -107,21 +99,18 @@ export function FireCMSRoute() {
 
     return <EntityFullScreenRoute
         pathname={pathname}
-        usedPath={usedPath}
         navigationEntries={navigationEntries}
-        isNew={false}
+        isNew={isNew}
     />;
 
 }
 
 function EntityFullScreenRoute({
                                    pathname,
-                                   usedPath,
                                    navigationEntries,
                                    isNew
                                }: {
     pathname: string;
-    usedPath: string;
     navigationEntries: NavigationViewInternal[],
     isNew: boolean
 }) {
@@ -129,19 +118,10 @@ function EntityFullScreenRoute({
     const navigation = useNavigationController();
     const navigate = useNavigate();
 
+    const navigationPath = navigation.urlPathToDataPath(pathname);
+
     // is navigating away blocked
     const [blocked, setBlocked] = useState(false);
-
-    console.log("blocking", blocked)
-
-    const {
-        navigationWasBlocked,
-        handleOk: handleNavigationOk,
-        handleCancel: handleNavigationCancel
-    } = useNavigationUnsavedChangesDialog(
-        blocked,
-        () => setBlocked(false)
-    );
 
     const lastEntityEntry = navigationEntries.findLast((entry) => entry.type === "entity");
     const navigationEntriesAfterEntity = lastEntityEntry ? navigationEntries.slice(navigationEntries.indexOf(lastEntityEntry) + 1) : [];
@@ -152,10 +132,10 @@ function EntityFullScreenRoute({
 
     const entityId = lastEntityEntry?.entityId;
 
-    const urlTab = (lastCustomView && "id" in lastCustomView ? lastCustomView?.id : undefined) ?? lastCustomView?.path;
+    const urlTab = isNew ? undefined : (lastCustomView && "id" in lastCustomView ? lastCustomView?.id : undefined) ?? lastCustomView?.path;
     const [selectedTab, setSelectedTab] = useState<string | undefined>(urlTab);
 
-    const parentCollectionIds = navigation.getParentCollectionIds(usedPath);
+    const parentCollectionIds = navigation.getParentCollectionIds(navigationPath);
     useEffect(() => {
         if (urlTab !== selectedTab) {
             setSelectedTab(urlTab);
@@ -166,16 +146,46 @@ function EntityFullScreenRoute({
         ? pathname.substring(0, pathname.lastIndexOf(`/${entityId}`))
         : pathname;
 
-    function updateUrl(entityId: string | undefined, newSelectedTab: string | undefined, replace: boolean, isNew: boolean) {
+    const entityPath = basePath + `/${entityId}`;
+
+    const {
+        navigationWasBlocked,
+        handleOk: handleNavigationOk,
+        handleCancel: handleNavigationCancel
+    } = useNavigationUnsavedChangesDialog(
+        "main",
+        blocked,
+        () => setBlocked(false),
+        entityPath
+    );
+
+    function updateUrl(entityId: string | undefined, newSelectedTab: string | undefined, replace: boolean, path: string, isNew: boolean) {
+
+        console.log("Updating url", {
+            entityId,
+            newSelectedTab,
+            replace,
+            path,
+            isNew
+        });
         if (!isNew && (newSelectedTab ?? null) === (selectedTab ?? null)) {
+            console.log("No change in url");
             return;
         }
 
-        if (newSelectedTab) {
-            navigate(basePath + `/${entityId}/${newSelectedTab}`, { replace: replace });
-        } else {
-            navigate(basePath + `/${entityId}`, { replace: replace });
+        if (isNew) {
+            // setTimeout(() => {
+                navigate(`/${path}/${entityId}`, { replace: replace });
+                // return;
+            // }, 16);
         }
+
+        if (newSelectedTab) {
+            navigate(`${basePath}/${entityId}/${newSelectedTab}`, { replace: replace });
+        } else {
+            navigate(`${basePath}/${entityId}`, { replace: replace });
+        }
+
     }
 
     const lastCollectionEntry = navigationEntries.findLast((entry) => entry.type === "collection");
@@ -189,22 +199,22 @@ function EntityFullScreenRoute({
     }
 
     const collection = isNew ? lastCollectionEntry!.collection : lastEntityEntry!.parentCollection;
-    const collectionPath = isNew ? lastCollectionEntry!.path : lastEntityEntry!.path;
+    const collectionPath = navigation.resolveIdsFrom(isNew ? lastCollectionEntry!.path : lastEntityEntry!.path);
 
     return <>
         <EntityEditView
-            key={collection.id + "_" + entityId}
-            entityId={entityId}
+            key={collection.id + "_" + (isNew ? "new" : entityId)}
+            entityId={isNew ? undefined : entityId}
             collection={collection}
             layout={"full_screen"}
             path={collectionPath}
             selectedTab={selectedTab ?? undefined}
             onValuesModified={setBlocked}
             onUpdate={(params) => {
-                updateUrl(params.entityId, params.selectedTab, true, isNew);
+                updateUrl(params.entityId, params.selectedTab, true, params.path, isNew);
             }}
             onTabChange={(params) => {
-                updateUrl(params.entityId, params.selectedTab, !isNew, isNew);
+                updateUrl(params.entityId, params.selectedTab, !isNew, params.path, isNew);
                 setSelectedTab(params.selectedTab);
             }}
             parentCollectionIds={parentCollectionIds}
@@ -214,7 +224,7 @@ function EntityFullScreenRoute({
             open={navigationWasBlocked}
             handleOk={handleNavigationOk}
             handleCancel={handleNavigationCancel}
-            body={"You have unsaved changes in this entity. Are you sure you want to leave this page?"}/>
+            body={"You have unsaved changes in this entity."}/>
 
     </>;
 }

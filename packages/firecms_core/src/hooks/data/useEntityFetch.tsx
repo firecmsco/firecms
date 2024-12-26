@@ -46,7 +46,7 @@ export function useEntityFetch<M extends Record<string, any>, USER extends User>
     const dataSource = useDataSource(collection);
     const navigationController = useNavigationController();
 
-    const path = navigationController.resolveAliasesFrom(inputPath);
+    const path = navigationController.resolveIdsFrom(inputPath);
 
     const context: FireCMSContext<USER> = useFireCMSContext();
 

@@ -73,7 +73,7 @@ export function useCollectionFetch<M extends Record<string, any>, USER extends U
     const dataSource = useDataSource(collection);
     const navigationController = useNavigationController();
 
-    const path = navigationController.resolveAliasesFrom(inputPath);
+    const path = navigationController.resolveIdsFrom(inputPath);
 
     const sortByProperty = sortBy ? sortBy[0] : undefined;
     const currentSort = sortBy ? sortBy[1] : undefined;

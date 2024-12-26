@@ -107,7 +107,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
     const analyticsController = useAnalyticsController();
     const customizationController = useCustomizationController();
 
-    const fullPath = navigation.resolveAliasesFrom(pathInput);
+    const fullPath = navigation.resolveIdsFrom(pathInput);
 
     const dataSource = useDataSource(collection);
 

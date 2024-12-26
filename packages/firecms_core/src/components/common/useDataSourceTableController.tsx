@@ -84,7 +84,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
     const navigation = useNavigationController();
     const dataSource = useDataSource(collection);
-    const resolvedPath = useMemo(() => navigation.resolveAliasesFrom(fullPath), [fullPath, navigation.resolveAliasesFrom]);
+    const resolvedPath = useMemo(() => navigation.resolveIdsFrom(fullPath), [fullPath, navigation.resolveIdsFrom]);
 
     const forceFilter = forceFilterFromProps ?? forceFilterFromCollection;
     const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);

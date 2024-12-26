@@ -111,12 +111,12 @@ are running it. In this case, we are running it in `/cms`.
 ```tsx
 "use client";
 import { FireCMSApp } from "@/cms/FireCMSApp";
-import { BrowserRouter } from "react-router-dom";
+import { FireCMSRouter } from "@firecms/core";
 
 export default function CMS() {
-    return <BrowserRouter basename={"/cms"}>
+    return <FireCMSRouter basePath={"/cms"}>
         <FireCMSApp/>
-    </BrowserRouter>;
+    </FireCMSRouter>;
 }
 
 ```

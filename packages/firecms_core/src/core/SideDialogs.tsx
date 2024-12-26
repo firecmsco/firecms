@@ -2,8 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { useSideDialogsController } from "../hooks";
 import { SideDialogPanelProps } from "../types";
 import { Sheet } from "@firecms/ui";
-import { UnsavedChangesDialog, useNavigationUnsavedChangesDialog } from "../internal/useUnsavedChangesDialog";
+import { useNavigationUnsavedChangesDialog } from "../internal/useUnsavedChangesDialog";
 import { ErrorBoundary } from "../components";
+import { UnsavedChangesDialog } from "../components/UnsavedChangesDialog";
 
 export type SideDialogContextProps = {
     blocked: boolean,
@@ -82,6 +83,7 @@ function SideDialogView({
         handleOk: handleNavigationOk,
         handleCancel: handleNavigationCancel
     } = useNavigationUnsavedChangesDialog(
+        "side",
         blocked && !drawerCloseRequested,
         () => setBlocked(false)
     );

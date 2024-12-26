@@ -150,9 +150,6 @@ export const productsCollection = buildCollection<Product>({
                 }
             },
             description: "Upload field for images",
-            validation: {
-                required: true
-            }
         },
         category: {
             dataType: "string",

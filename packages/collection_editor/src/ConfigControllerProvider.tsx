@@ -277,7 +277,7 @@ export const ConfigControllerProvider = React.memo(
                         getData={getData && currentPropertyDialog?.editedCollectionId
                             ? () => {
                                 console.debug("get data for property", currentPropertyDialog?.editedCollectionId);
-                                const resolvedPath = navigation.resolveAliasesFrom(currentPropertyDialog.editedCollectionId!)
+                                const resolvedPath = navigation.resolveIdsFrom(currentPropertyDialog.editedCollectionId!)
                                 return getData(resolvedPath, []);
                             }
                             : undefined}

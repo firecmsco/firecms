@@ -360,7 +360,7 @@ export const EntityCollectionView = React.memo(
 
         };
 
-        const resolvedFullPath = navigation.resolveAliasesFrom(fullPath);
+        const resolvedFullPath = navigation.resolveIdsFrom(fullPath);
         const resolvedCollection = useMemo(() => resolveCollection<M>({
             collection,
             path: fullPath,
@@ -746,7 +746,7 @@ function EntitiesCount({
 
     const sortByProperty = sortBy ? sortBy[0] : undefined;
     const currentSort = sortBy ? sortBy[1] : undefined;
-    const resolvedPath = useMemo(() => navigation.resolveAliasesFrom(fullPath), [fullPath, navigation.resolveAliasesFrom]);
+    const resolvedPath = useMemo(() => navigation.resolveIdsFrom(fullPath), [fullPath, navigation.resolveIdsFrom]);
 
     useEffect(() => {
         if (dataSource.countEntities)
