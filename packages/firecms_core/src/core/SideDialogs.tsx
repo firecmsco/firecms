@@ -83,7 +83,6 @@ function SideDialogView({
         handleOk: handleNavigationOk,
         handleCancel: handleNavigationCancel
     } = useNavigationUnsavedChangesDialog(
-        "side",
         blocked && !drawerCloseRequested,
         () => setBlocked(false)
     );

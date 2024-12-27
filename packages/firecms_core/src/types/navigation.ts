@@ -146,7 +146,6 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
      */
     navigate: (to: string, options?: NavigateOptions) => void;
 
-    blocker: NavigationBlocker;
 }
 
 export interface NavigateOptions {
@@ -158,6 +157,7 @@ export interface NavigateOptions {
     viewTransition?: boolean;
 }
 
+// currently not used, in favor of a single blocker in `FireCMSRoute`
 export type NavigationBlocker = {
     updateBlockListener: (path: string, block: boolean, basePath?: string) => () => void;
     isBlocked: (path: string) => boolean;

@@ -1,7 +1,7 @@
-import { useLocation } from "react-router";
+import { Blocker, useBlocker, useLocation } from "react-router";
 import { EntityEditView } from "../core/EntityEditView";
 import { useNavigationController } from "../hooks";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     getNavigationEntriesFromPath,
@@ -12,7 +12,6 @@ import {
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
 import { toArray } from "../util/arrays";
 import { EntityCollectionView } from "../components";
-import { useNavigationUnsavedChangesDialog } from "../internal/useUnsavedChangesDialog";
 import { UnsavedChangesDialog } from "../components/UnsavedChangesDialog";
 
 export function FireCMSRoute() {
@@ -121,7 +120,7 @@ function EntityFullScreenRoute({
     const navigationPath = navigation.urlPathToDataPath(pathname);
 
     // is navigating away blocked
-    const [blocked, setBlocked] = useState(false);
+    const blocked = useRef(false);
 
     const lastEntityEntry = navigationEntries.findLast((entry) => entry.type === "entity");
     const navigationEntriesAfterEntity = lastEntityEntry ? navigationEntries.slice(navigationEntries.indexOf(lastEntityEntry) + 1) : [];
@@ -148,16 +147,20 @@ function EntityFullScreenRoute({
 
     const entityPath = basePath + `/${entityId}`;
 
-    const {
-        navigationWasBlocked,
-        handleOk: handleNavigationOk,
-        handleCancel: handleNavigationCancel
-    } = useNavigationUnsavedChangesDialog(
-        "main",
-        blocked,
-        () => setBlocked(false),
-        entityPath
-    );
+    console.log("blocked", blocked);
+
+    let blocker: Blocker | undefined = undefined;
+    try {
+        blocker = useBlocker(({
+                                  nextLocation
+                              }) => {
+            if (nextLocation.pathname.startsWith(entityPath))
+                return false;
+            return blocked.current;
+        });
+    } catch (e) {
+        console.warn("Blocker not available, navigation will not be blocked");
+    }
 
     function updateUrl(entityId: string | undefined, newSelectedTab: string | undefined, replace: boolean, path: string, isNew: boolean) {
 
@@ -165,19 +168,18 @@ function EntityFullScreenRoute({
             entityId,
             newSelectedTab,
             replace,
+            basePath,
             path,
             isNew
         });
+
         if (!isNew && (newSelectedTab ?? null) === (selectedTab ?? null)) {
-            console.log("No change in url");
             return;
         }
 
         if (isNew) {
-            // setTimeout(() => {
-                navigate(`/${path}/${entityId}`, { replace: replace });
-                // return;
-            // }, 16);
+            navigate(`${basePath}/${entityId}`, { replace: replace });
+            return;
         }
 
         if (newSelectedTab) {
@@ -209,7 +211,7 @@ function EntityFullScreenRoute({
             layout={"full_screen"}
             path={collectionPath}
             selectedTab={selectedTab ?? undefined}
-            onValuesModified={setBlocked}
+            onValuesModified={(modified) => blocked.current = modified}
             onUpdate={(params) => {
                 updateUrl(params.entityId, params.selectedTab, true, params.path, isNew);
             }}
@@ -221,9 +223,9 @@ function EntityFullScreenRoute({
         />
 
         <UnsavedChangesDialog
-            open={navigationWasBlocked}
-            handleOk={handleNavigationOk}
-            handleCancel={handleNavigationCancel}
+            open={blocker?.state === "blocked"}
+            handleOk={() => blocker?.proceed?.()}
+            handleCancel={() => blocker?.reset?.()}
             body={"You have unsaved changes in this entity."}/>
 
     </>;

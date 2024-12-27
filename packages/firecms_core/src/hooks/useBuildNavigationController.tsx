@@ -380,8 +380,6 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         return paths;
     }, [getCollectionFromIds]);
 
-    const blocker = useCustomBlocker();
-
     return {
         collections: collectionsRef.current,
         views: viewsRef.current,
@@ -405,7 +403,6 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         getParentCollectionIds,
         convertIdsToPaths,
         navigate,
-        blocker
     };
 }
 
