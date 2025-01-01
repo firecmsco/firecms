@@ -1,4 +1,4 @@
-import { EntityCollection } from "../types";
+import { EntityCollection, NavigationController, SideEntityController } from "../types";
 
 export function removeInitialAndTrailingSlashes(s: string): string {
     return removeInitialSlash(removeTrailingSlash(s));
@@ -107,5 +107,57 @@ export function getCollectionPathsCombinations(subpaths: string[]): string[] {
         result.push(entries.slice(0, i).join("/"));
     }
     return result;
+
+}
+
+export function navigateToEntity({
+                                     openEntityMode,
+                                     collection,
+                                     entityId,
+                                     copy,
+                                     path,
+                                     selectedTab,
+                                     sideEntityController,
+                                     onClose,
+                                     navigation
+                                 }:
+
+                                 {
+                                     openEntityMode: "side_panel" | "full_screen";
+                                     collection?: EntityCollection;
+                                     entityId?: string;
+                                     selectedTab?: string;
+                                     copy?: boolean;
+                                     path: string;
+                                     sideEntityController: SideEntityController;
+                                     onClose?: () => void;
+                                     navigation: NavigationController
+                                 }) {
+
+    if (openEntityMode === "side_panel") {
+
+        sideEntityController.open({
+            entityId,
+            path,
+            copy,
+            selectedTab,
+            collection,
+            updateUrl: true,
+            onClose
+        });
+
+    } else {
+        let to = navigation.buildUrlCollectionPath(entityId ? `${path}/${entityId}` : path);
+        if (entityId && selectedTab) {
+            to += `/${selectedTab}`;
+        }
+        if (!entityId) {
+            to += "#new";
+        }
+        if (copy) {
+            to += "#copy";
+        }
+        navigation.navigate(to);
+    }
 
 }

@@ -96,10 +96,10 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     }, [blocked, collection]);
 
     const onValuesModified = useCallback((modified: boolean) => {
-        setBlocked(modified);
         setBlockedNavigationMessage(modified
             ? <> You have unsaved changes in this <b>{collection?.singularName ?? collection?.name}</b>.</>
             : undefined)
+        setBlocked(modified);
     }, [collection?.name, setBlocked, setBlockedNavigationMessage]);
 
     if (!props || !collection) {
@@ -116,7 +116,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                     parentCollectionIds={parentCollectionIds}
                     onValuesModified={onValuesModified}
                     onClose={onClose}
-                    onUpdate={onUpdate}
+                    onSaved={onUpdate}
                     barActions={<>
                         <IconButton
                             className="self-center"

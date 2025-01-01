@@ -13,7 +13,7 @@ export function CircularProgressCenter({ text, ...props }: CircularProgressProps
 }) {
     return (
         <div
-            className="flex w-full h-screen max-h-full max-w-full bg-surface-50 dark:bg-surface-900 gap-4">
+            className="flex w-full h-screen max-h-full max-w-full gap-4">
             <div className="m-auto flex flex-col gap-2 items-center">
                 <CircularProgress {...props}/>
                 {text && <Typography

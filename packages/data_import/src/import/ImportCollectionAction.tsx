@@ -407,6 +407,7 @@ export function ImportDataPreview<M extends Record<string, any>>({
         endAdornment={<div className={"h-12"}/>}
         filterable={false}
         sortable={false}
+        openEntityMode={"full_screen"}
         selectionController={selectionController}
         properties={properties}/>
 

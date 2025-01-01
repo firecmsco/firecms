@@ -34,7 +34,7 @@ export function SampleCustomEntityCollection() {
     });
 
     const columns = [idColumn, ...propertyColumns];
-    const tableController = useDataSourceEntityCollectionTableController({
+    const tableController = useDataSourceTableController({
         fullPath: path,
         collection: collection,
     });
@@ -81,6 +81,7 @@ export function SampleCustomEntityCollection() {
         if (columnIndex === 0) {
             return <EntityCollectionRowActions entity={entity}
                                                width={column.width}
+                                               openEntityMode={"side_panel"}
                                                size={"m"}/>
         }
 

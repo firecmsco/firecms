@@ -2,6 +2,7 @@ import { DeleteIcon, EditIcon, FileCopyIcon } from "@firecms/ui";
 import { EntityAction } from "../../types";
 import { DeleteEntityDialog } from "../DeleteEntityDialog";
 import { addRecentId } from "../EntityCollectionView/utils";
+import { navigateToEntity } from "../../util";
 
 export const editEntityAction: EntityAction = {
     icon: <EditIcon/>,
@@ -15,34 +16,30 @@ export const editEntityAction: EntityAction = {
                 context,
                 highlightEntity,
                 unhighlightEntity,
+                openEntityMode
             }): Promise<void> {
 
-        console.debug("Edit entity action", fullPath, entity?.id);
-
         highlightEntity?.(entity);
+
         context.analyticsController?.onAnalyticsEvent?.("entity_click", {
             path: entity.path,
             entityId: entity.id
         });
 
-        if (collection?.openEntityMode === "side_panel") {
-
-            if (collection) {
-                addRecentId(collection.id, entity.id);
-            }
-            const path = collection?.collectionGroup ? entity.path : (fullPath ?? entity.path);
-            context.sideEntityController.open({
-                entityId: entity.id,
-                path,
-                collection,
-                updateUrl: true,
-                onClose: () => unhighlightEntity?.(entity),
-            });
-
-        } else {
-            const path = collection?.collectionGroup ? entity.path : (fullPath ?? entity.path);
-            context.navigation.navigate(context.navigation.buildUrlCollectionPath(`${path}/${entity.id}`));
+        if (collection) {
+            addRecentId(collection.id, entity.id);
         }
+
+        const path = collection?.collectionGroup ? entity.path : (fullPath ?? entity.path)
+        navigateToEntity({
+            openEntityMode,
+            collection,
+            entityId: entity.id,
+            path,
+            sideEntityController: context.sideEntityController,
+            onClose: () => unhighlightEntity?.(entity),
+            navigation: context.navigation
+        });
 
         return Promise.resolve(undefined);
     }
@@ -59,27 +56,25 @@ export const copyEntityAction: EntityAction = {
                 fullPath,
                 highlightEntity,
                 unhighlightEntity,
+                openEntityMode
             }): Promise<void> {
         highlightEntity?.(entity);
         context.analyticsController?.onAnalyticsEvent?.("copy_entity_click", {
             path: entity.path,
             entityId: entity.id
         });
+        const path = collection?.collectionGroup ? entity.path : (fullPath ?? entity.path)
+        navigateToEntity({
+            openEntityMode,
+            collection,
+            entityId: entity.id,
+            path,
+            copy: true,
+            sideEntityController: context.sideEntityController,
+            onClose: () => unhighlightEntity?.(entity),
+            navigation: context.navigation
+        });
 
-        if (collection?.openEntityMode === "side_panel") {
-            context.sideEntityController.open({
-                entityId: entity.id,
-                path: entity.path,
-                copy: true,
-                collection,
-                updateUrl: true,
-                onClose: () => unhighlightEntity?.(entity),
-            });
-        } else {
-            const path = collection?.collectionGroup ? entity.path : (fullPath ?? entity.path);
-            context.navigation.navigate(context.navigation.buildUrlCollectionPath(`${path}/${entity.id}#copy`));
-
-        }
         return Promise.resolve(undefined);
     }
 }

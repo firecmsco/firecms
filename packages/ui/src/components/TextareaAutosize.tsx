@@ -270,7 +270,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
                     // Need a large enough difference to allow scrolling.
                     // This prevents infinite rendering loop.
                     overflow: state.overflow ? "hidden" : undefined,
-                    ...style
+                    ...style,
                 }}
                 onScroll={onScroll}
                 {...other}
@@ -282,9 +282,9 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
                 ref={shadowRef}
                 tabIndex={-1}
                 style={{
+                    padding: 0,
                     ...styles.shadow,
                     ...style,
-                    padding: 0
                 }}
             />
         </React.Fragment>

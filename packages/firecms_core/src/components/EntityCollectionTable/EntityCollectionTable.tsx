@@ -41,7 +41,7 @@ import { getRowHeight } from "../common/table_height";
  * @see VirtualTable
  * @group Components
  */
-export const EntityCollectionTable = function EntityCollectionTable<M extends Record<string, any>, USER extends User>
+export const EntityCollectionTable = function EntityCollectionTable<M extends Record<string, any> = any, USER extends User = any>
 ({
      className,
      style,
@@ -78,7 +78,8 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
      getIdColumnWidth,
      onTextSearchClick,
      textSearchLoading,
-     enablePopupIcon
+     enablePopupIcon,
+     openEntityMode = "side_panel"
  }: EntityCollectionTableProps<M>) {
 
     const ref = useRef<HTMLDivElement>(null);
@@ -267,7 +268,8 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
                                                        width={column.width}
                                                        frozen={column.frozen}
                                                        isSelected={false}
-                                                       size={size}/>;
+                                                       size={size}
+                                                       openEntityMode={openEntityMode}/>;
             } else if (additionalFieldsMap[columnKey]) {
                 return additionalCellRenderer(props);
             } else if (props.columnIndex < columns.length + 1) {

@@ -32,23 +32,25 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                                                                                   actions = [],
                                                                                   hideId,
                                                                                   selectionController,
+                                                                                  openEntityMode
                                                                               }:
-                                                                                  {
-                                                                                      entity: Entity<any>,
-                                                                                      collection?: EntityCollection<any>,
-                                                                                      fullPath?: string,
-                                                                                      width: number,
-                                                                                      frozen?: boolean,
-                                                                                      size: CollectionSize,
-                                                                                      isSelected?: boolean,
-                                                                                      selectionEnabled?: boolean,
-                                                                                      actions?: EntityAction[],
-                                                                                      hideId?: boolean,
-                                                                                      onCollectionChange?: () => void,
-                                                                                      selectionController?: SelectionController;
-                                                                                      highlightEntity?: (entity: Entity<any>) => void;
-                                                                                      unhighlightEntity?: (entity: Entity<any>) => void;
-                                                                                  }) {
+                                                                              {
+                                                                                  entity: Entity<any>,
+                                                                                  collection?: EntityCollection<any>,
+                                                                                  fullPath?: string,
+                                                                                  width: number,
+                                                                                  frozen?: boolean,
+                                                                                  size: CollectionSize,
+                                                                                  isSelected?: boolean,
+                                                                                  selectionEnabled?: boolean,
+                                                                                  actions?: EntityAction[],
+                                                                                  hideId?: boolean,
+                                                                                  onCollectionChange?: () => void,
+                                                                                  selectionController?: SelectionController;
+                                                                                  highlightEntity?: (entity: Entity<any>) => void;
+                                                                                  unhighlightEntity?: (entity: Entity<any>) => void;
+                                                                                  openEntityMode: "side_panel" | "full_screen";
+                                                                              }) {
 
     const largeLayout = useLargeLayout();
 
@@ -98,6 +100,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                                         highlightEntity,
                                         unhighlightEntity,
                                         onCollectionChange,
+                                        openEntityMode: openEntityMode ?? collection?.openEntityMode
                                     });
                                 }}
                                 size={largeLayout ? "medium" : "small"}>
@@ -126,6 +129,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                                             highlightEntity,
                                             unhighlightEntity,
                                             onCollectionChange,
+                                            openEntityMode: openEntityMode ?? collection?.openEntityMode
                                         });
                                     }}>
                                     {action.icon}

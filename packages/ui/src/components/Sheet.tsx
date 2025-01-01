@@ -15,7 +15,9 @@ interface SheetProps {
     transparent?: boolean;
     onOpenChange?: (open: boolean) => void;
     className?: string;
+    style?: React.CSSProperties;
     overlayClassName?: string;
+    overlayStyle?: React.CSSProperties;
 }
 
 export const Sheet: React.FC<SheetProps> = ({
@@ -28,7 +30,9 @@ export const Sheet: React.FC<SheetProps> = ({
                                                 onOpenChange,
                                                 transparent,
                                                 className,
+                                                style,
                                                 overlayClassName,
+                                                overlayStyle,
                                                 ...props
                                             }) => {
     const [displayed, setDisplayed] = useState(false);
@@ -72,7 +76,8 @@ export const Sheet: React.FC<SheetProps> = ({
                         overlayClassName
                     )}
                     style={{
-                        pointerEvents: displayed ? "auto" : "none"
+                        pointerEvents: displayed ? "auto" : "none",
+                        ...overlayStyle
                     }}
                 />}
                 <DialogPrimitive.Content
@@ -95,6 +100,7 @@ export const Sheet: React.FC<SheetProps> = ({
                         !displayed || !open ? transformValue[side] : "",
                         className
                     )}
+                    style={style}
                 >
                     {children}
                 </DialogPrimitive.Content>

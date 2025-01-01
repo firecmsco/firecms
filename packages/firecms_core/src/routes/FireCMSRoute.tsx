@@ -141,13 +141,11 @@ function EntityFullScreenRoute({
         }
     }, [urlTab]);
 
-    const basePath = entityId
-        ? pathname.substring(0, pathname.lastIndexOf(`/${entityId}`))
-        : pathname;
+    const basePath = !entityId || isNew
+        ? pathname
+        : pathname.substring(0, pathname.lastIndexOf(`/${entityId}`));
 
     const entityPath = basePath + `/${entityId}`;
-
-    console.log("blocked", blocked);
 
     let blocker: Blocker | undefined = undefined;
     try {
@@ -212,7 +210,7 @@ function EntityFullScreenRoute({
             path={collectionPath}
             selectedTab={selectedTab ?? undefined}
             onValuesModified={(modified) => blocked.current = modified}
-            onUpdate={(params) => {
+            onSaved={(params) => {
                 updateUrl(params.entityId, params.selectedTab, true, params.path, isNew);
             }}
             onTabChange={(params) => {

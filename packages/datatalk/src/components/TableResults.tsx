@@ -170,6 +170,7 @@ export function TableResults({
                 fullPath={path}
                 actions={actions}
                 hideId={resolvedCollection?.hideIdFromCollection}
+                openEntityMode={"side_panel"}
             />
         );
 

@@ -6,6 +6,7 @@ import { DefaultHomePage, ErrorBoundary, NotFoundPage } from "../components";
 import { useNavigationController } from "../hooks";
 import { FireCMSRoute } from "../routes/FireCMSRoute";
 import { CustomCMSRoute } from "../routes/CustomCMSRoute";
+import { HomePageRoute } from "../routes/HomePageRoute";
 
 /**
  * @group Components
@@ -67,23 +68,6 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
             });
         }
 
-        // we reorder collections so that nested paths are included first
-        const sortedCollections = [...(navigation.collections ?? [])]
-            .sort((a, b) => b.path.length - a.path.length);
-
-        // const collectionRoutes = sortedCollections
-        //     .map((collection) => {
-        //             const urlPath = navigation.buildUrlCollectionPath(collection.id ?? collection.path);
-        //             return <Route path={urlPath + "/*"}
-        //                           key={`navigation_entity_${collection.id}`}
-        //                           element={
-        //                               <ErrorBoundary>
-        //                                   <FireCMSRoute key={`collection_entity_${collection.id}`}/>
-        //                               </ErrorBoundary>
-        //                           }/>
-        //         }
-        //     );
-
         const urlPath = navigation.buildUrlCollectionPath("");
         const collectionRoute = <Route path={urlPath + "/*"}
                                        key={`navigation_entity`}
@@ -95,7 +79,7 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
 
         const homeRoute = (
             <Route path={"/"}
-                   element={homePage}/>
+                   element={<HomePageRoute>{homePage}</HomePageRoute>}/>
         );
 
         const notFoundRoute = <Route path={"*"}

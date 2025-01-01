@@ -23,6 +23,7 @@ import {
 
 import { Field, getIn, useFormex } from "@firecms/formex";
 import { useCollectionEditorController } from "../../useCollectionEditorController";
+import { LayoutModeSwitch } from "./LayoutModeSwitch";
 
 export function CollectionDetailsForm({
                                           isNewCollection,
@@ -207,9 +208,16 @@ export function CollectionDetailsForm({
                         <FieldCaption>
                             {showErrors && Boolean(errors.group) ? errors.group : "Group in the home page"}
                         </FieldCaption>
+
+
                     </div>}
 
-                    <div className={"col-span-12"}>
+                    <LayoutModeSwitch
+                        className={"col-span-12"}
+                        value={values.openEntityMode ?? "side_panel"}
+                        onChange={(value) => setFieldValue("openEntityMode", value)}/>
+
+                    <div className={"col-span-12 mt-8"}>
                         <ExpandablePanel
                             expanded={advancedPanelExpanded}
                             onExpandedChange={setAdvancedPanelExpanded}

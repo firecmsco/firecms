@@ -47,6 +47,7 @@ export function CollectionEditorImportDataPreview({
             key: p,
             disabled: false
         }))}
+        openEntityMode={"side_panel"}
         properties={properties}
         enablePopupIcon={false}/>
 

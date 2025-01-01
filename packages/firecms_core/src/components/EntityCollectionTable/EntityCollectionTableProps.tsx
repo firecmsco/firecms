@@ -151,6 +151,8 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
     textSearchLoading?: boolean;
 
     enablePopupIcon: boolean;
+
+    openEntityMode?: "side_panel" | "full_screen";
 };
 
 export type GetPropertyForProps<M extends Record<string, any>> = {

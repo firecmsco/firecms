@@ -28,6 +28,8 @@ import {
     canEditEntity,
     getPropertyInPath,
     mergeDeep,
+    mergeEntityActions,
+    navigateToEntity,
     resolveCollection,
     resolveProperty
 } from "../../util";
@@ -62,6 +64,9 @@ import { setIn } from "@firecms/formex";
 import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common";
 import {
     COLLECTION_GROUP_PARENT_ID,
+    copyEntityAction,
+    deleteEntityAction,
+    editEntityAction,
     OnCellValueChange,
     OnColumnResizeParams,
     UniqueFieldValidator,
@@ -70,14 +75,14 @@ import {
 } from "../common";
 import { PopupFormField } from "../EntityCollectionTable/internal/popup_field/PopupFormField";
 import { GetPropertyForProps } from "../EntityCollectionTable/EntityCollectionTableProps";
-import { copyEntityAction, deleteEntityAction, editEntityAction } from "../common/default_entity_actions";
 import { DeleteEntityDialog } from "../DeleteEntityDialog";
 import { useAnalyticsController } from "../../hooks/useAnalyticsController";
 import { useSelectionController } from "./useSelectionController";
 import { EntityCollectionViewStartActions } from "./EntityCollectionViewStartActions";
 import { addRecentId, getRecentIds } from "./utils";
-import { mergeEntityActions } from "../../util/entity_actions";
 import { useScrollRestoration } from "../common/useScrollRestoration";
+
+const DEFAULT_ENTITY_OPEN_MODE: "side_panel" | "full_screen" = "side_panel";
 
 /**
  * @group Components
@@ -160,6 +165,8 @@ export const EntityCollectionView = React.memo(
             return (userOverride ? mergeDeep(collectionProp, userOverride) : collectionProp) as EntityCollection<M>;
         }, [collectionProp, fullPath, userConfigPersistence?.getCollectionConfig]);
 
+        const openEntityMode = collection?.openEntityMode ?? DEFAULT_ENTITY_OPEN_MODE;
+
         const collectionRef = React.useRef(collection);
         useEffect(() => {
             collectionRef.current = collection;
@@ -224,13 +231,21 @@ export const EntityCollectionView = React.memo(
                 path: clickedEntity.path,
                 entityId: clickedEntity.id
             });
-            return sideEntityController.open({
-                entityId: clickedEntity.id,
-                path: clickedEntity.path,
+
+            if (collection) {
+                addRecentId(collection.id, clickedEntity.id);
+            }
+
+            const path = collection?.collectionGroup ? clickedEntity.path : (fullPath ?? clickedEntity.path);
+            navigateToEntity({
+                navigation,
+                path,
+                sideEntityController,
+                openEntityMode,
                 collection,
-                updateUrl: true,
-                onClose: unselectNavigatedEntity,
+                entityId: clickedEntity.id
             });
+
         }, [unselectNavigatedEntity, sideEntityController]);
 
         const onNewClick = useCallback(() => {
@@ -239,16 +254,15 @@ export const EntityCollectionView = React.memo(
             analyticsController.onAnalyticsEvent?.("new_entity_click", {
                 path: fullPath
             });
-            if (collection?.openEntityMode === "side_panel") {
-                sideEntityController.open({
-                    path: fullPath,
-                    collection,
-                    updateUrl: true,
-                    onClose: unselectNavigatedEntity,
-                });
-            } else {
-                navigation.navigate(navigation.buildUrlCollectionPath(`${fullPath}#new`));
-            }
+            navigateToEntity({
+                openEntityMode,
+                collection,
+                entityId: undefined,
+                path: fullPath,
+                sideEntityController,
+                navigation,
+                onClose: unselectNavigatedEntity
+            })
         }, [fullPath, sideEntityController]);
 
         const onMultipleDeleteClick = () => {
@@ -404,13 +418,15 @@ export const EntityCollectionView = React.memo(
                                 startIcon={<KeyboardTabIcon size={"small"}/>}
                                 onClick={(event: any) => {
                                     event.stopPropagation();
-                                    sideEntityController.open({
-                                        path: fullPath,
+                                    navigateToEntity({
+                                        openEntityMode,
+                                        collection,
                                         entityId: entity.id,
                                         selectedTab: subcollection.id ?? subcollection.path,
-                                        collection,
-                                        updateUrl: true,
-                                    });
+                                        path: fullPath,
+                                        navigation,
+                                        sideEntityController
+                                    })
                                 }}>
                             {subcollection.name}
                         </Button>
@@ -516,6 +532,7 @@ export const EntityCollectionView = React.memo(
                     hideId={collection?.hideIdFromCollection}
                     onCollectionChange={updateLastDeleteTimestamp}
                     selectionController={usedSelectionController}
+                    openEntityMode={openEntityMode}
                 />
             );
 
@@ -675,6 +692,7 @@ export const EntityCollectionView = React.memo(
                     additionalIDHeaderWidget={<EntityIdHeaderWidget
                         path={fullPath}
                         collection={collection}/>}
+                    openEntityMode={openEntityMode}
                 />
 
                 {popupCell && <PopupFormField
@@ -705,7 +723,7 @@ export const EntityCollectionView = React.memo(
             </div>
         );
     }, (a, b) => {
-        return equal(a.fullPath, b.fullPath) &&
+        return equal(a.path, b.path) &&
             equal(a.parentCollectionIds, b.parentCollectionIds) &&
             equal(a.isSubCollection, b.isSubCollection) &&
             equal(a.className, b.className) &&
@@ -722,6 +740,7 @@ export const EntityCollectionView = React.memo(
             equal(a.textSearchEnabled, b.textSearchEnabled) &&
             equal(a.additionalFields, b.additionalFields) &&
             equal(a.sideDialogWidth, b.sideDialogWidth) &&
+            equal(a.openEntityMode, b.openEntityMode) &&
             equal(a.forceFilter, b.forceFilter);
     }) as React.FunctionComponent<EntityCollectionViewProps<any>>
 
@@ -793,10 +812,14 @@ function EntityIdHeaderWidget({
     collection: EntityCollection,
     path: string
 }) {
+
+    const navigation = useNavigationController();
     const [openPopup, setOpenPopup] = React.useState(false);
     const [searchString, setSearchString] = React.useState("");
     const [recentIds, setRecentIds] = React.useState<string[]>(getRecentIds(collection.id));
     const sideEntityController = useSideEntityController();
+
+    const openEntityMode = collection?.openEntityMode ?? DEFAULT_ENTITY_OPEN_MODE;
 
     return (
         <Tooltip title={!openPopup ? "Find by ID" : undefined} asChild={false}>
@@ -818,13 +841,16 @@ function EntityIdHeaderWidget({
                               e.preventDefault();
                               if (!searchString) return;
                               setOpenPopup(false);
-                              setRecentIds(addRecentId(collection.id, searchString.trim()));
-                              return sideEntityController.open({
-                                  entityId: searchString.trim(),
-                                  path,
+                              const entityId = searchString.trim();
+                              setRecentIds(addRecentId(collection.id, entityId));
+                              navigateToEntity({
+                                  openEntityMode,
                                   collection,
-                                  updateUrl: true
-                              });
+                                  entityId,
+                                  path,
+                                  sideEntityController,
+                                  navigation
+                              })
                           }}
                           className={"w-96 max-w-full"}>
 
@@ -851,12 +877,14 @@ function EntityIdHeaderWidget({
                                               hover={true}
                                               onClick={() => {
                                                   setOpenPopup(false);
-                                                  sideEntityController.open({
+                                                  navigateToEntity({
+                                                      openEntityMode,
+                                                      collection,
                                                       entityId: id,
                                                       path,
-                                                      collection,
-                                                      updateUrl: true
-                                                  });
+                                                      sideEntityController,
+                                                      navigation
+                                                  })
                                               }}
                                               includeEntityLink={false}
                                               size={"small"}/>

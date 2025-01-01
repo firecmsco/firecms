@@ -104,7 +104,7 @@ export interface EntityEditViewProps<M extends Record<string, any>> {
     selectedTab?: string;
     parentCollectionIds: string[];
     onValuesModified?: (modified: boolean) => void;
-    onUpdate?: (params: OnUpdateParams) => void;
+    onSaved?: (params: OnUpdateParams) => void;
     onClose?: () => void;
     onTabChange?: (props: OnTabChangeParams<M>) => void;
     layout?: "side_panel" | "full_screen";
@@ -155,7 +155,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                                                                        collection,
                                                                        parentCollectionIds,
                                                                        onValuesModified,
-                                                                       onUpdate,
+                                                                       onSaved,
                                                                        onClose,
                                                                        onTabChange,
                                                                        entity,
@@ -315,8 +315,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         setStatus("existing");
         setEntityId(updatedEntity.id);
 
-        if (onUpdate) {
-            onUpdate({
+        if (onSaved) {
+            onSaved({
                 entity: updatedEntity,
                 status,
                 path,
@@ -566,7 +566,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                                 parentCollectionIds={[...parentCollectionIds, collection.id]}
                                 isSubCollection={true}
                                 updateUrl={false}
-                                {...subcollection}/>
+                                {...subcollection}
+                                openEntityMode={layout}/>
                             : <div
                                 className="flex items-center justify-center w-full h-full p-3">
                                 <Typography variant={"label"}>
@@ -588,7 +589,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     const onSideTabClick = (value: string) => {
         setSelectedTab(value);
         if (status === "existing") {
-            console.log("onSideTabClick", entityId, value);
             onTabChange?.({
                 path,
                 entityId,
@@ -829,7 +829,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             setPendingClose: (value: boolean) => {
                 closeAfterSaveRef.current = value;
             },
-            pluginActions
+            pluginActions,
+            layout
         })
         : buildSideActions({
             savingError: savingError,
@@ -841,7 +842,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             isSubmitting: formex.isSubmitting,
             disabled: disabled,
             status: status,
-            pluginActions
+            pluginActions,
+            layout
         });
 
     const entityView = (readOnly === undefined)
@@ -935,7 +937,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     let result = <div className="relative flex flex-col h-full w-full bg-white dark:bg-surface-900">
 
         {shouldShowTopBar && <div
-            className={cls("h-14 flex overflow-visible overflow-x-scroll w-full no-scrollbar h-16 border-b pl-2 pr-2 pt-1 flex items-end bg-surface-50 dark:bg-surface-950", defaultBorderMixin)}>
+            className={cls("h-14 flex overflow-visible overflow-x-scroll w-full no-scrollbar h-14 border-b pl-2 pr-2 pt-1 flex items-end bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
 
             {barActions}
 
@@ -972,7 +974,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 return onDiscard && onDiscard();
             }}
             noValidate
-            className={"flex-grow h-full flex overflow-auto flex-row w-full justify-center"}>
+            className={"flex-1 flex flex-row w-full overflow-y-auto justify-center"}>
 
             <div
                 role="tabpanel"
@@ -1082,7 +1084,8 @@ type ActionsViewProps<M extends object> = {
     disabled: boolean,
     status: "new" | "existing" | "copy",
     setPendingClose?: (value: boolean) => void,
-    pluginActions?: React.ReactNode[]
+    pluginActions?: React.ReactNode[],
+    layout: "side_panel" | "full_screen";
 };
 
 function buildBottomActions<M extends object>({
@@ -1096,7 +1099,8 @@ function buildBottomActions<M extends object>({
                                                   disabled,
                                                   status,
                                                   setPendingClose,
-                                                  pluginActions
+                                                  pluginActions,
+                                                  layout
                                               }: ActionsViewProps<M>) {
 
     return <DialogActions position={"absolute"}>
@@ -1121,7 +1125,8 @@ function buildBottomActions<M extends object>({
                                 fullPath: resolvedCollection.path,
                                 collection: resolvedCollection,
                                 context,
-                                sideEntityController
+                                sideEntityController,
+                                openEntityMode: layout
                             });
                     }}>
                     {action.icon}

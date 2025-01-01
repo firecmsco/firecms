@@ -98,25 +98,36 @@ export const useBuildSideEntityController = (navigation: NavigationController,
         const newFlag = location.hash === `#${NEW_URL_HASH}`;
         const sideFlag = location.hash === `#${SIDE_URL_HASH}`;
 
-        if (!navigation.loading && !initialised.current) {
+        if (!navigation.loading) {
             if ((newFlag || sideFlag) && navigation.isUrlCollectionPath(location.pathname)) {
                 const entityOrCollectionPath = navigation.urlPathToDataPath(location.pathname);
                 const panelsFromUrl = buildSidePanelsFromUrl(entityOrCollectionPath, navigation.collections ?? [], newFlag);
-                console.log("panelsFromUrl", panelsFromUrl);
                 for (let i = 0; i < panelsFromUrl.length; i++) {
                     const props = panelsFromUrl[i];
-                    setTimeout(() => {
-                        if (i === 0)
-                            sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout));
-                        else
-                            sideDialogsController.open(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout))
-                    }, 1);
+                    // setTimeout(() => {
+                    if (i === 0)
+                        sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout));
+                    else
+                        sideDialogsController.open(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout))
+                    // }, 1);
                 }
             }
             initialised.current = true;
         }
     }, [navigation.loading]);
 
+    // sync panels if URL changes with #side
+    useEffect(() => {
+        if (initialised.current) {
+            if (isSideUrl(location.hash)) {
+                const entityOrCollectionPath = navigation.urlPathToDataPath(location.pathname);
+                const panelsFromUrl = buildSidePanelsFromUrl(entityOrCollectionPath, navigation.collections ?? [], false);
+                sideDialogsController.replace(propsToSidePanel(panelsFromUrl[0], navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout));
+            }
+        }
+    }, [location.pathname, location.hash]);
+
+    // update side panels to match browser size
     useEffect(() => {
         const updatedSidePanels = sideDialogsController.sidePanels.map(sidePanelProps => {
             if (sidePanelProps.additional) {

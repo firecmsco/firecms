@@ -233,7 +233,9 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
             selectionEnabled={multiselect}
             hideId={collection?.hideIdFromCollection}
             fullPath={fullPath}
-            selectionController={selectionController}/>;
+            selectionController={selectionController}
+            openEntityMode={"side_panel"}
+        />;
 
     };
 
@@ -289,12 +291,14 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
                         tableController={tableController}
                         enablePopupIcon={false}
                         tableRowActionsBuilder={tableRowActionsBuilder}
+                        openEntityMode={"side_panel"}
                         title={<Typography variant={"subtitle2"} className={"flex flex-row gap-2"}>
                             <IconForView
                                 size={"small"}
                                 collectionOrView={collection}
                                 className={"text-surface-300 dark:text-surface-600"}/>
-                            {collection.singularName ? `Select ${collection.singularName}` : `Select from ${collection.name}`}
+                            {collection.singularName ? `Select ${collection.singularName}` : `Select
+                                                                                              from ${collection.name}`}
                         </Typography>}
                         defaultSize={collection.defaultSize}
                         properties={resolvedCollection.properties}
