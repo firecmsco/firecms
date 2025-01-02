@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import * as firestoreLibrary from "@firebase/firestore";
 import { CircularProgressCenter, EntityCollection } from "@firecms/core";
 import { Button, cls, Paper, useDebounceValue } from "@firecms/ui";
 import { AutoHeightEditor } from "./AutoHeightEditor";
 import { extractStringLiterals } from "../utils/extract_literals";
-import { TableResults } from "./TableResults";
+import { QueryTableResults } from "./QueryTableResults";
+import { DataTable } from "./DataTable";
+import { firestoreToCMSModel } from "@firecms/firebase";
 
 // @ts-ignore
 window.firestoreLibrary = firestoreLibrary
@@ -163,6 +165,9 @@ export function CodeBlock({
         }
     };
 
+    const arrayOfObjects = isArrayOfObjects(executionResult);
+    const convertedData = useMemo(() => arrayOfObjects ? firestoreToCMSModel(executionResult) : undefined, [arrayOfObjects]);
+
     return (
         <div className={"flex flex-col my-4 gap-2"}
              style={{
@@ -197,21 +202,29 @@ export function CodeBlock({
                         "h-[480px]": querySnapshot,
                         "h-[92px]": !querySnapshot && loadingQuery
                     })}>
+
                     {loadingQuery && <CircularProgressCenter/>}
 
-                    {querySnapshot && <TableResults querySnapshot={querySnapshot}
-                                                    priorityKeys={codePriorityKeys}
-                                                    collections={collections}/>}
+                    {querySnapshot && <QueryTableResults querySnapshot={querySnapshot}
+                                                         priorityKeys={codePriorityKeys}
+                                                         collections={collections}/>}
 
                     {(consoleOutput || executionResult) && (
-                        <Paper className={"w-full p-4 min-h-[92px] font-mono text-xs overflow-auto rounded-lg"}>
-                            {consoleOutput && <pre className={"text-sm font-mono text-surface-700 dark:text-surface-200"}>
+                        <>
+                            {!arrayOfObjects &&
+                                <Paper className={"w-full p-4 min-h-[92px] font-mono text-xs overflow-auto rounded-lg"}>
+                                    {consoleOutput &&
+                                        <pre className={"text-sm font-mono text-surface-700 dark:text-surface-200"}>
                                 {consoleOutput}
                             </pre>}
-                            {executionResult && <pre className={"text-xs font-mono text-surface-700 dark:text-surface-200"}>
+                                    {executionResult &&
+                                        <pre className={"text-xs font-mono text-surface-700 dark:text-surface-200"}>
                                     {typeof executionResult === "string" ? executionResult : JSON.stringify(executionResult, null, 2)}
                             </pre>}
-                        </Paper>
+                                </Paper>}
+
+                            {arrayOfObjects && <DataTable data={convertedData}/>}
+                        </>
                     )}
                 </div>
             )}
@@ -259,4 +272,8 @@ function pipeConsoleLog(onConsoleLog: (...message: any) => void) {
 
 function buildAuxScript() {
     return `${Object.keys(firestoreLibrary).map(key => `const ${key} = window.firestoreLibrary.${key};`).join("\n")}\n`;
+}
+
+function isArrayOfObjects(value: any): boolean {
+    return Array.isArray(value) && value.length > 0 && typeof value[0] === "object";
 }

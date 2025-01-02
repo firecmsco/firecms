@@ -25,7 +25,7 @@ import { BasicExportAction } from "@firecms/data_import_export";
 import { getPropertiesFromData } from "@firecms/collection_editor_firebase";
 import { buildPropertiesOrder } from "@firecms/schema_inference";
 
-export function TableResults({
+export function QueryTableResults({
                                  querySnapshot,
                                  priorityKeys,
                                  collections
