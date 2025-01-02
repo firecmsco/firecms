@@ -141,25 +141,19 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
     });
 
     const cachedValues = entityId ? getEntityFromCache(props.path + "/" + entityId) : getEntityFromCache(props.path + "#new");
-    const cachedEntity: Entity | undefined = cachedValues && entityId ? {
-        id: entityId,
-        values: cachedValues,
-        path: props.path,
-        databaseId: props.databaseId
-    } : undefined;
 
-    if (dataLoading && !cachedEntity) {
+    if (dataLoading && !cachedValues) {
         return <CircularProgressCenter/>
     }
 
-    if (entityId && !entity && !cachedEntity) {
+    if (entityId && !entity && !cachedValues) {
         console.error(`Entity with id ${entityId} not found in collection ${props.path}`);
     }
 
     return <EntityEditViewInner<M> {...props}
                                    entityId={entityId}
                                    entity={entity}
-                                   cachedEntity={cachedEntity}
+                                   cachedDirtyValues={cachedValues as Partial<M>}
                                    dataLoading={dataLoading}
     />;
 }
@@ -176,13 +170,13 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                                                                        onClose,
                                                                        onTabChange,
                                                                        entity,
-                                                                       cachedEntity,
+                                                                       cachedDirtyValues,
                                                                        dataLoading,
                                                                        layout = "side_panel",
                                                                        barActions
                                                                    }: EntityEditViewProps<M> & {
     entity?: Entity<M>,
-    cachedEntity?: Entity<M>, // dirty cached entity in memory
+    cachedDirtyValues?: Partial<M>, // dirty cached entity in memory
     dataLoading: boolean,
 }) {
 
@@ -281,10 +275,10 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0;
 
-    const [usedEntity, setUsedEntity] = useState<Entity<M> | undefined>(cachedEntity ?? entity);
+    const [usedEntity, setUsedEntity] = useState<Entity<M> | undefined>(entity);
     const [readOnly, setReadOnly] = useState<boolean | undefined>(undefined);
 
-    const baseDataSourceValuesRef = useRef<Partial<EntityValues<M>> | null>(getDataSourceEntityValues(initialResolvedCollection, status, usedEntity));
+    const baseDataSourceValuesRef = useRef<Partial<EntityValues<M>> | null>(cachedDirtyValues ?? getDataSourceEntityValues(initialResolvedCollection, status, usedEntity));
 
     useEffect(() => {
         if (entity)
@@ -471,7 +465,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const formex: FormexController<M> = useCreateFormex<M>({
         initialValues: baseDataSourceValuesRef.current as M,
-        initialDirty: Boolean(cachedEntity),
+        initialDirty: Boolean(cachedDirtyValues),
         onSubmit,
         validation: (values) => {
             return validationSchema?.validate(values, { abortEarly: false })
@@ -739,8 +733,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         const key = (status === "new" || status === "copy") ? path + "#new" : path + "/" + entityId;
         if (modified) {
             saveEntityToCache(key, deferredValues);
-        } else {
-            removeEntityFromCache(key);
         }
     }, [deferredValues, modified]);
 
@@ -894,13 +886,13 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
                         {formex.dirty
                             ? <Tooltip title={"Unsaved changes"}
-                                       className={"self-end sticky top-4 z-30"}>
+                                       className={"self-end sticky top-4 z-10"}>
                                 <Chip size={"small"} colorScheme={"orangeDarker"}>
                                     <EditIcon size={"smallest"}/>
                                 </Chip>
                             </Tooltip>
-                            : <Tooltip title={"In sync"}
-                                       className={"self-end sticky top-4 z-30"}>
+                            : <Tooltip title={"In sync with the database"}
+                                       className={"self-end sticky top-4 z-10"}>
                                 <Chip size={"small"}>
                                     <CheckIcon size={"smallest"}/>
                                 </Chip>

@@ -71,7 +71,7 @@ export async function convertProduct(data: Record<string, any>, id: string): Pro
         amazon_link: data.amazon_link,
         publisher: data.publisher,
         tags: data.tags,
-        added_on: "added_on" in data && data.added_on instanceof Date ? data.added_on : (data["added_on"] as any)?.toDate(),
+        added_on: "added_on" in data && data.added_on instanceof Date ? data.added_on : data["added_on"] as any,
     } as ProductWithId;
 }
 

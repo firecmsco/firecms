@@ -124,6 +124,10 @@ export const useBuildSideEntityController = (navigation: NavigationController,
             if (sideFlag) {
                 const entityOrCollectionPath = navigation.urlPathToDataPath(location.pathname);
                 const panelsFromUrl = buildSidePanelsFromUrl(entityOrCollectionPath, navigation.collections ?? [], false);
+                // if we have more panels than determined by the url, we ignore the url. We might have references open
+                if (panelsFromUrl.length <= currentPanelKeys.length) {
+                    return;
+                }
                 const lastPanel = panelsFromUrl[panelsFromUrl.length - 1];
                 const panelProps = propsToSidePanel(lastPanel, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout);
                 const lastCurrentPanel = currentPanelKeys.length > 0 ? currentPanelKeys[currentPanelKeys.length - 1] : undefined;

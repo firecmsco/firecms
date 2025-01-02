@@ -22,7 +22,7 @@ export function FireCMSRoute() {
 
     const hash = location.hash;
     const isSidePanel = hash.includes("#side");
-    const isNew = hash.includes("#new");
+    const isNew = hash.includes("#new") || hash.includes("#new_side");
 
     const pathname = location.pathname;
     const navigationPath = navigation.urlPathToDataPath(pathname);

@@ -1,7 +1,14 @@
-## [3.0.0-beta.12] - 2024-12-
+## [3.0.0-beta.12] - 2025-12-
 
+- **Full-screen entity views**: You can now open entities in a full-screen view. This is useful when you want to focus on
+  the entity you are editing. You can enable this feature by setting the `openEntityMode` prop to `full_screen` in the collection
+  view. The default mode continues to be `side_panel`. There has been a big navigation revamp to accomodate all the new use cases.
+- **Scroll preservation**. When you open an entity in a full-screen view, the scroll position of the collection view is preserved.
+- **Drafts saved locally**: Drafts are now saved locally in the browser. This means that if you close the browser and open it again,
+  the draft will still be there. This will help prevent losing data if you accidentally close the browser, or you navigate away.
+- The state of filters ans sorting is now preserved in the URL.
 - You can now override custom entity actions. Just provide an action with one of the keys `edit`, `copy` or `delete` in
-the `entityActions` prop in the collection view. This will override the default actions for the entity.
+  the `entityActions` prop in the collection view. This will override the default actions for the entity.
 
 
 ## [3.0.0-beta.11] - 2024-12-13

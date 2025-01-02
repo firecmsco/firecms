@@ -1,8 +1,20 @@
 import React, { MouseEvent, useCallback } from "react";
 
 import { CollectionSize, Entity, EntityAction, EntityCollection, SelectionController } from "../../types";
-import { Checkbox, cls, IconButton, Menu, MenuItem, MoreVertIcon, Skeleton, Tooltip } from "@firecms/ui";
+import {
+    Checkbox,
+    Chip,
+    cls,
+    EditIcon,
+    IconButton,
+    Menu,
+    MenuItem,
+    MoreVertIcon,
+    Skeleton,
+    Tooltip
+} from "@firecms/ui";
 import { useFireCMSContext, useLargeLayout } from "../../hooks";
+import { hasEntityInCache } from "../../util/entity_cache";
 
 /**
  *
@@ -65,6 +77,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
 
     const collapsedActions = actions.filter(a => a.collapsed || a.collapsed === undefined);
     const uncollapsedActions = actions.filter(a => a.collapsed === false);
+    const hasDraft = hasEntityInCache(fullPath + "/" + entity.id);
     return (
         <div
             className={cls(
@@ -152,11 +165,15 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
 
             {!hideId && size !== "xs" && (
                 <div
-                    className="w-[138px] text-center overflow-hidden truncate font-mono text-xs text-text-secondary dark:text-text-secondary-dark max-w-full text-ellipsis px-2"
+                    className="w-[138px] overflow-hidden truncate font-mono text-xs text-text-secondary dark:text-text-secondary-dark max-w-full text-ellipsis px-2 align-center flex items-center justify-center gap-1"
                     onClick={(event) => {
                         event.stopPropagation();
                     }}>
-
+                    {hasDraft && <Tooltip title={"Unsaved changes"} className={"inline"}>
+                        <Chip colorScheme={"orangeDarker"} className={"p-0.5"}>
+                            <EditIcon size={12}/>
+                        </Chip>
+                    </Tooltip>}
                     {entity
                         ? entity.id
                         : <Skeleton/>

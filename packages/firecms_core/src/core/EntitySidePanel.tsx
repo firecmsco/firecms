@@ -126,8 +126,10 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                         <IconButton
                             className="self-center"
                             onClick={() => {
-                                // onClose?.();
-                                navigate(location.pathname);
+                                if (props.entityId)
+                                    navigate(location.pathname);
+                                else
+                                    navigate(location.pathname + "#new");
                             }}>
                             <OpenInFullIcon size={"small"}/>
                         </IconButton>
