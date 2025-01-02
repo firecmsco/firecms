@@ -117,15 +117,22 @@ export const useBuildSideEntityController = (navigation: NavigationController,
     }, [navigation.loading]);
 
     // sync panels if URL changes with #side
+    const currentPanelKeys = sideDialogsController.sidePanels.map(p => p.key);
     useEffect(() => {
         if (initialised.current) {
-            if (isSideUrl(location.hash)) {
+            const sideFlag = location.hash === `#${SIDE_URL_HASH}`;
+            if (sideFlag) {
                 const entityOrCollectionPath = navigation.urlPathToDataPath(location.pathname);
                 const panelsFromUrl = buildSidePanelsFromUrl(entityOrCollectionPath, navigation.collections ?? [], false);
-                sideDialogsController.replace(propsToSidePanel(panelsFromUrl[0], navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout));
+                const lastPanel = panelsFromUrl[panelsFromUrl.length - 1];
+                const panelProps = propsToSidePanel(lastPanel, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout);
+                const lastCurrentPanel = currentPanelKeys.length > 0 ? currentPanelKeys[currentPanelKeys.length - 1] : undefined;
+                if (!lastCurrentPanel || lastCurrentPanel !== panelProps.key) {
+                    sideDialogsController.replace(panelProps);
+                }
             }
         }
-    }, [location.pathname, location.hash]);
+    }, [location.pathname, location.hash, currentPanelKeys]);
 
     // update side panels to match browser size
     useEffect(() => {

@@ -7,6 +7,7 @@ import { FormexController, FormexResetProps } from "./types";
 export function useCreateFormex<T extends object>({
                                                       initialValues,
                                                       initialErrors,
+                                                      initialDirty,
                                                       validation,
                                                       validateOnChange = false,
                                                       onSubmit,
@@ -15,6 +16,7 @@ export function useCreateFormex<T extends object>({
                                                   }: {
     initialValues: T,
     initialErrors?: Record<string, string>,
+    initialDirty?: boolean,
     validateOnChange?: boolean,
     validateOnInitialRender?: boolean,
     validation?: (values: T) => Record<string, string> | Promise<Record<string, string>> | undefined | void,
@@ -29,7 +31,7 @@ export function useCreateFormex<T extends object>({
     const [values, setValuesInner] = useState<T>(initialValues);
     const [touchedState, setTouchedState] = useState<Record<string, boolean>>({});
     const [errors, setErrors] = useState<Record<string, string>>(initialErrors ?? {});
-    const [dirty, setDirty] = useState(false);
+    const [dirty, setDirty] = useState(initialDirty ?? false);
     const [submitCount, setSubmitCount] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isValidating, setIsValidating] = useState(false);

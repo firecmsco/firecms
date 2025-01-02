@@ -8,7 +8,7 @@ export type EntityStatus = "new" | "existing" | "copy";
  * Representation of an entity fetched from the datasource
  * @group Models
  */
-export interface Entity<M extends object> {
+export interface Entity<M extends object = any> {
 
     /**
      * ID of the entity

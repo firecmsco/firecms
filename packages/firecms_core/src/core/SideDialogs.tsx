@@ -151,7 +151,7 @@ function SideDialogView({
             </Sheet>
 
             <UnsavedChangesDialog
-                open={navigationWasBlocked || drawerCloseRequested}
+                open={drawerCloseRequested}
                 handleOk={drawerCloseRequested ? handleDrawerCloseOk : handleNavigationOk}
                 handleCancel={drawerCloseRequested ? handleDrawerCloseCancel : handleNavigationCancel}
                 body={blockedNavigationMessage}/>

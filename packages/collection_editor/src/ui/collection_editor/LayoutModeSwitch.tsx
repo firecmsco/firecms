@@ -1,4 +1,4 @@
-import { Card, cls, Tooltip, Typography, VerticalSplitIcon, ViewSidebarIcon } from "@firecms/ui";
+import { Card, cls, SquareIcon, Tooltip, Typography, VerticalSplitIcon } from "@firecms/ui";
 
 export function LayoutModeSwitch({
                                      value,
@@ -41,7 +41,7 @@ export function LayoutModeSwitch({
                         value === "full_screen" ? "border-primary dark:border-primary" : "border-surface-400 dark:border-surface-600",
                     )}
                 >
-                    <ViewSidebarIcon/>
+                    <SquareIcon/>
                     <Typography variant={"label"}>
                         Full screen
                     </Typography>

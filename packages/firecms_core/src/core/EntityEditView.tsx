@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import {
     CMSAnalyticsEvent,
     Entity,
@@ -58,16 +58,20 @@ import {
 import {
     Alert,
     Button,
+    CheckIcon,
+    Chip,
     CircularProgress,
     cls,
     defaultBorderMixin,
     DialogActions,
+    EditIcon,
     IconButton,
     LoadingButton,
     NotesIcon,
     paperMixin,
     Tab,
     Tabs,
+    Tooltip,
     Typography
 } from "@firecms/ui";
 import { Formex, FormexController, getIn, setIn, useCreateFormex } from "@firecms/formex";
@@ -77,6 +81,7 @@ import { CustomFieldValidator, getYupEntitySchema } from "../form/validation";
 import { ErrorFocus } from "../form/components/ErrorFocus";
 import { LabelWithIconAndTooltip, PropertyFieldBinding } from "../form";
 import { ValidationError } from "yup";
+import { getEntityFromCache, removeEntityFromCache, saveEntityToCache } from "../util/entity_cache";
 
 const MAIN_TAB_VALUE = "main_##Q$SC^#S6";
 
@@ -100,6 +105,7 @@ export interface EntityEditViewProps<M extends Record<string, any>> {
     path: string;
     collection: EntityCollection<M>;
     entityId?: string;
+    databaseId?: string;
     copy?: boolean;
     selectedTab?: string;
     parentCollectionIds: string[];
@@ -130,21 +136,32 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
         path: props.path,
         entityId: entityId,
         collection: props.collection,
+        databaseId: props.databaseId,
         useCache: false
     });
 
-    if (dataLoading) {
+    const cachedValues = entityId ? getEntityFromCache(props.path + "/" + entityId) : getEntityFromCache(props.path + "#new");
+    const cachedEntity: Entity | undefined = cachedValues && entityId ? {
+        id: entityId,
+        values: cachedValues,
+        path: props.path,
+        databaseId: props.databaseId
+    } : undefined;
+
+    if (dataLoading && !cachedEntity) {
         return <CircularProgressCenter/>
     }
 
-    if (entityId && !entity) {
-        console.error(`Entity with id ${entityId} not found in collection ${props.collection.path}`);
+    if (entityId && !entity && !cachedEntity) {
+        console.error(`Entity with id ${entityId} not found in collection ${props.path}`);
     }
 
     return <EntityEditViewInner<M> {...props}
                                    entityId={entityId}
                                    entity={entity}
-                                   dataLoading={dataLoading}/>;
+                                   cachedEntity={cachedEntity}
+                                   dataLoading={dataLoading}
+    />;
 }
 
 export function EntityEditViewInner<M extends Record<string, any>>({
@@ -159,12 +176,14 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                                                                        onClose,
                                                                        onTabChange,
                                                                        entity,
+                                                                       cachedEntity,
                                                                        dataLoading,
                                                                        layout = "side_panel",
                                                                        barActions
                                                                    }: EntityEditViewProps<M> & {
     entity?: Entity<M>,
-    dataLoading: boolean
+    cachedEntity?: Entity<M>, // dirty cached entity in memory
+    dataLoading: boolean,
 }) {
 
     const largeLayout = useLargeLayout();
@@ -262,7 +281,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0;
 
-    const [usedEntity, setUsedEntity] = useState<Entity<M> | undefined>(entity);
+    const [usedEntity, setUsedEntity] = useState<Entity<M> | undefined>(cachedEntity ?? entity);
     const [readOnly, setReadOnly] = useState<boolean | undefined>(undefined);
 
     const baseDataSourceValuesRef = useRef<Partial<EntityValues<M>> | null>(getDataSourceEntityValues(initialResolvedCollection, status, usedEntity));
@@ -300,7 +319,17 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         console.error(e);
     }, [snackbarController]);
 
+    function clearDirtyCache() {
+        if (status === "new" || status === "copy") {
+            removeEntityFromCache(path + "#new");
+        } else {
+            removeEntityFromCache(path + "/" + entityId);
+        }
+    }
+
     const onSaveSuccess = (updatedEntity: Entity<M>, closeAfterSave: boolean) => {
+
+        clearDirtyCache();
 
         onValuesModified?.(false);
 
@@ -442,6 +471,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const formex: FormexController<M> = useCreateFormex<M>({
         initialValues: baseDataSourceValuesRef.current as M,
+        initialDirty: Boolean(cachedEntity),
         onSubmit,
         validation: (values) => {
             return validationSchema?.validate(values, { abortEarly: false })
@@ -702,16 +732,25 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         return actions;
     }, [authController, inputCollection, path]);
 
+    const deferredValues = useDeferredValue(formex.values);
     const modified = formex.dirty;
+
+    useEffect(() => {
+        const key = (status === "new" || status === "copy") ? path + "#new" : path + "/" + entityId;
+        if (modified) {
+            saveEntityToCache(key, deferredValues);
+        } else {
+            removeEntityFromCache(key);
+        }
+    }, [deferredValues, modified]);
+
     useEffect(() => {
         if (!autoSave) {
             onValuesModified?.(modified);
-        } else {
-            if (formex.values && !equal(formex.values, lastSavedValues.current)) {
-                save(formex.values);
-            }
         }
-    }, [modified, formex.values]);
+    }, [modified]);
+
+    useOnAutoSave(autoSave, formex, lastSavedValues, save);
 
     useEffect(() => {
         if (!autoSave && !formex.isSubmitting && underlyingChanges && entity) {
@@ -851,7 +890,22 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         : (!readOnly
             ? (
                 <ErrorBoundary>
-                    <div className="w-full pt-12 pb-16 px-4 sm:px-8 md:px-10">
+                    <div className="flex flex-col w-full pt-12 pb-16 px-4 sm:px-8 md:px-10">
+
+                        {formex.dirty
+                            ? <Tooltip title={"Unsaved changes"}
+                                       className={"self-end sticky top-4 z-30"}>
+                                <Chip size={"small"} colorScheme={"orangeDarker"}>
+                                    <EditIcon size={"smallest"}/>
+                                </Chip>
+                            </Tooltip>
+                            : <Tooltip title={"In sync"}
+                                       className={"self-end sticky top-4 z-30"}>
+                                <Chip size={"small"}>
+                                    <CheckIcon size={"smallest"}/>
+                                </Chip>
+                            </Tooltip>}
+
                         <div
                             className={"w-full py-2 flex flex-col items-start mt-4 lg:mt-8 mb-8"}>
 
@@ -970,8 +1024,14 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         <form
             onSubmit={formex.handleSubmit}
             onReset={() => {
-                formex.resetForm();
-                return onDiscard && onDiscard();
+
+                clearDirtyCache();
+
+                formex.resetForm({
+                    values: getDataSourceEntityValues(initialResolvedCollection, status, entity) as M,
+                });
+
+                return onDiscard();
             }}
             noValidate
             className={"flex-1 flex flex-row w-full overflow-y-auto justify-center"}>
@@ -1030,11 +1090,11 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     );
 }
 
-function getDataSourceEntityValues<M extends object>(initialResolvedCollection: ResolvedEntityCollection,
+function getDataSourceEntityValues<M extends object>(collection: ResolvedEntityCollection,
                                                      status: "new" | "existing" | "copy",
                                                      entity: Entity<M> | undefined): Partial<EntityValues<M>> {
 
-    const properties = initialResolvedCollection.properties;
+    const properties = collection.properties;
     if ((status === "existing" || status === "copy") && entity) {
         return entity.values ?? getDefaultValuesFor(properties);
     } else if (status === "new") {
@@ -1223,5 +1283,16 @@ function buildSideActions<M extends object>({
             </div>}
 
     </div>;
+}
+
+function useOnAutoSave(autoSave: undefined | boolean, formex: FormexController<any>, lastSavedValues: any, save: (values: EntityValues<any>) => Promise<void>) {
+    if (!autoSave) return;
+    useEffect(() => {
+        if (autoSave) {
+            if (formex.values && !equal(formex.values, lastSavedValues.current)) {
+                save(formex.values);
+            }
+        }
+    }, [formex.values]);
 }
 

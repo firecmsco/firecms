@@ -10,6 +10,7 @@ import { useFireCMSContext } from "../useFireCMSContext";
 export interface EntityFetchProps<M extends Record<string, any>, USER extends User = User> {
     path: string;
     entityId?: string;
+    databaseId?: string;
     collection: EntityCollection<M, USER>;
     useCache?: boolean;
 }
@@ -40,6 +41,7 @@ export function useEntityFetch<M extends Record<string, any>, USER extends User>
         path: inputPath,
         entityId,
         collection,
+        databaseId,
         useCache = false
     }: EntityFetchProps<M, USER>): EntityFetchResult<M> {
 
@@ -96,6 +98,7 @@ export function useEntityFetch<M extends Record<string, any>, USER extends User>
                 return dataSource.listenEntity<M>({
                     path,
                     entityId,
+                    databaseId,
                     collection,
                     onUpdate: onEntityUpdate,
                     onError
@@ -104,6 +107,7 @@ export function useEntityFetch<M extends Record<string, any>, USER extends User>
                 dataSource.fetchEntity<M>({
                     path,
                     entityId,
+                    databaseId,
                     collection
                 })
                     .then(onEntityUpdate)

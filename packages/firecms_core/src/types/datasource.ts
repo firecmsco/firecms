@@ -9,6 +9,7 @@ import { FireCMSContext } from "./firecms_context";
 export interface FetchEntityProps<M extends Record<string, any> = any> {
     path: string;
     entityId: string;
+    databaseId?: string;
     collection?: EntityCollection<M, any>
 }
 
@@ -18,7 +19,6 @@ export interface FetchEntityProps<M extends Record<string, any> = any> {
 export type ListenEntityProps<M extends Record<string, any> = any> =
     FetchEntityProps<M>
     & {
-    databaseId?: string;
     onUpdate: (entity: Entity<M>) => void,
     onError?: (error: Error) => void,
 }
@@ -139,6 +139,7 @@ export interface DataSource {
     fetchEntity<M extends Record<string, any> = any>({
                                                          path,
                                                          entityId,
+                                                         databaseId,
                                                          collection
                                                      }: FetchEntityProps<M>
     ): Promise<Entity<M> | undefined>;

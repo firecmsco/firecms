@@ -25,8 +25,9 @@ export function useBuildSideDialogsController(): SideDialogsController {
         const newPanels = panelKeys
             .map(key => routesStore.current[key])
             .filter(p => Boolean(p)) as SideDialogPanelProps[];
-        if (!equal(sidePanelsRef.current.map(p => p.key), newPanels.map(p => p.key)))
+        if (!equal(sidePanelsRef.current.map(p => p.key), newPanels.map(p => p.key))) {
             updateSidePanels(newPanels);
+        }
     }, [location]);
 
     const close = useCallback(() => {
@@ -39,7 +40,8 @@ export function useBuildSideDialogsController(): SideDialogsController {
         updateSidePanels(updatedPanels);
 
         if (routesCount.current > 0) {
-            navigate(-1);
+            if (lastSidePanel.urlPath) // if it has a url path, we need to navigate back, don't remove this code
+                navigate(-1);
             routesCount.current--;
         } else if (lastSidePanel.parentUrlPath) {
             const baseLocation = (location.state as any)?.base_location ?? location;
@@ -88,6 +90,7 @@ export function useBuildSideDialogsController(): SideDialogsController {
 
     const replace = useCallback((panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => {
 
+        console.log("replace", panelProps);
         const newPanels: SideDialogPanelProps[] = Array.isArray(panelProps) ? panelProps : [panelProps];
         newPanels.forEach((panel) => {
             routesStore.current[panel.key] = panel;
