@@ -3,6 +3,7 @@ import { ProjectSubscriptionPlan } from "../../types/projects";
 
 export function getPriceString(price: ProductPrice) {
 
+    const type = price.metadata.type;
     if (price.billing_scheme === "tiered") {
         const firstFlatPrice = price.tiers.find(p => p.flat_amount);
         if (firstFlatPrice)
@@ -11,7 +12,7 @@ export function getPriceString(price: ProductPrice) {
             return "Billing in " + price.currency;
     }
 
-    return formatPrice(price.unit_amount, price.currency) + " user/" + price.interval;
+    return formatPrice(price.unit_amount, price.currency) + (type === "per_user" ? " user/" : " project/") + price.interval;
 
 }
 

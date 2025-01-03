@@ -18,7 +18,6 @@ export function SubscriptionPriceSelect({
                                             fullWidth = true
                                         }: SubscriptionPriceSelectParams) {
 
-
     return (productPrices ?? [])?.length > 1
         ? <>
             <Select

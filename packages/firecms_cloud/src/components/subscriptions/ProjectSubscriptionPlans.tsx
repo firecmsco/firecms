@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useBrowserTitleAndIcon } from "@firecms/core";
-import { Card, Chip, CircularProgress, cls, AutoAwesomeIcon, Typography, } from "@firecms/ui";
+import { AutoAwesomeIcon, Card, Chip, CircularProgress, cls, Typography, } from "@firecms/ui";
 import { useSubscriptionsForUserController } from "../../hooks/useSubscriptionsForUserController";
 import { ProductUpgradeSmallView } from "./ProductUpgradeSmallView";
 import { getPriceString, getSubscriptionStatusText } from "../settings/common";
@@ -63,7 +63,7 @@ export function ProjectSubscriptionPlans({ uid }: {
                         subscribe={subscribe}/>}
 
                     {subscriptionPlan === "cloud_plus" && plusSubscription &&
-                        <CurrentSubscriptionView subscription={plusSubscription}/>}
+                        <CurrentCloudSubscriptionView subscription={plusSubscription}/>}
 
                     <StripeDisclaimer/>
 
@@ -118,9 +118,9 @@ interface CurrentSubscriptionViewProps {
     subscription: Subscription;
 }
 
-function CurrentSubscriptionView({
-                                     subscription,
-                                 }: CurrentSubscriptionViewProps) {
+function CurrentCloudSubscriptionView({
+                                          subscription,
+                                      }: CurrentSubscriptionViewProps) {
 
     const {
         getBackendAuthToken,

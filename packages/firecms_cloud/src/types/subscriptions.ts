@@ -25,6 +25,7 @@ export type ProductPrice = {
     interval_count: number;
     metadata: {
         product: string;
+        type: "per_user" | "per_project";
     }
     tiers: ProductPriceTier[];
     default: boolean;
@@ -64,6 +65,7 @@ export type Subscription = {
     id: string;
     price: ProductPrice;
     unit_amount: number;
+    quantity: number;
     interval: string;
     interval_count: number;
     product: Product;

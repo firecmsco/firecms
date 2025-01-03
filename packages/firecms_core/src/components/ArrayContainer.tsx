@@ -41,6 +41,8 @@ export interface ArrayContainerProps<T> {
     newDefaultEntry: T;
     onValueChange: (value: T[]) => void,
     className?: string;
+    min?: number;
+    max?: number;
 }
 
 const buildIdsMap = (value: any[]) =>
@@ -67,7 +69,9 @@ export function ArrayContainer<T>({
                                       includeAddButton,
                                       newDefaultEntry,
                                       onValueChange,
-                                      className
+                                      className,
+                                      min = 0,
+                                      max = Infinity
                                   }: ArrayContainerProps<T>) {
 
     const hasValue = value && Array.isArray(value) && value.length > 0;
@@ -78,7 +82,8 @@ export function ArrayContainer<T>({
     const [internalIds, setInternalIds] = useState<number[]>(
         hasValue
             ? Object.values(internalIdsRef.current)
-            : []);
+            : []
+    );
 
     const itemCustomPropsRef = useRef<Record<number, object>>({});
 
@@ -104,7 +109,7 @@ export function ArrayContainer<T>({
 
     const insertInEnd = (e: React.SyntheticEvent) => {
         e.preventDefault();
-        if (disabled) return;
+        if (disabled || value.length >= max) return;
         const id = getRandomId();
         const newIds: number[] = [...internalIds, id];
         if (onInternalIdAdded)
@@ -114,6 +119,7 @@ export function ArrayContainer<T>({
     };
 
     const remove = (index: number) => {
+        if (value.length <= min) return;
         const newIds = [...internalIds];
         newIds.splice(index, 1);
         setInternalIds(newIds);
@@ -121,12 +127,14 @@ export function ArrayContainer<T>({
     };
 
     const copy = (index: number) => {
+        if (value.length >= max) return;
         const id = getRandomId();
         const copyingItem = value[index];
         const newIds: number[] = [
-            ...internalIds.splice(0, index + 1),
+            ...internalIds.slice(0, index + 1),
             id,
-            ...internalIds.splice(index + 1, internalIds.length - index - 1)];
+            ...internalIds.slice(index + 1)
+        ];
         if (onInternalIdAdded)
             onInternalIdAdded(id);
         setInternalIds(newIds);
@@ -135,11 +143,13 @@ export function ArrayContainer<T>({
     };
 
     const addInIndex = (index: number) => {
+        if (value.length >= max) return;
         const id = getRandomId();
         const newIds: number[] = [
-            ...internalIds.splice(0, index),
+            ...internalIds.slice(0, index),
             id,
-            ...internalIds.slice(index)];
+            ...internalIds.slice(index)
+        ];
         if (onInternalIdAdded)
             onInternalIdAdded(id);
         setInternalIds(newIds);
@@ -183,6 +193,7 @@ export function ArrayContainer<T>({
                                    storedProps={itemCustomPropsRef.current[internalId]}
                                    updateItemCustomProps={updateItemCustomProps}
                                    addInIndex={addInIndex}
+                                   includeAddButton={includeAddButton}
                                />
                            );
                        }}
@@ -213,6 +224,7 @@ export function ArrayContainer<T>({
                                             storedProps={itemCustomPropsRef.current[internalId]}
                                             updateItemCustomProps={updateItemCustomProps}
                                             addInIndex={addInIndex}
+                                            includeAddButton={includeAddButton}
                                         />
                                     )}
                                 </Draggable>
@@ -221,17 +233,19 @@ export function ArrayContainer<T>({
 
                         {droppableProvided.placeholder}
 
-                        {includeAddButton && <div className="py-4 justify-center text-left">
-                            <Button
-                                variant={"text"}
-                                size={size === "small" ? "small" : "medium"}
-                                color="primary"
-                                disabled={disabled}
-                                startIcon={<AddIcon/>}
-                                onClick={insertInEnd}>
-                                {addLabel ?? "Add"}
-                            </Button>
-                        </div>}
+                        {includeAddButton && (
+                            <div className="my-4 justify-center text-left">
+                                <Button
+                                    variant={"text"}
+                                    size={size === "small" ? "small" : "medium"}
+                                    color="primary"
+                                    disabled={disabled || value.length >= max}
+                                    startIcon={<AddIcon/>}
+                                    onClick={insertInEnd}>
+                                    {addLabel ?? "Add"}
+                                </Button>
+                            </div>
+                        )}
                     </div>
                 )}
             </Droppable>
@@ -249,6 +263,7 @@ type ArrayContainerItemProps = {
     remove: (index: number) => void,
     copy: (index: number) => void,
     addInIndex?: (index: number) => void,
+    includeAddButton?: boolean,
     isDragging: boolean,
     storedProps?: object,
     updateItemCustomProps: (internalId: number, props: object) => void
@@ -263,6 +278,7 @@ export function ArrayContainerItem({
                                        buildEntry,
                                        remove,
                                        addInIndex,
+                                       includeAddButton,
                                        copy,
                                        isDragging,
                                        storedProps,
@@ -295,6 +311,7 @@ export function ArrayContainerItem({
                               index={index}
                               provided={provided}
                               addInIndex={addInIndex}
+                              includeAddButton={includeAddButton}
                               copy={copy}/>
         </div>
     </div>;
@@ -307,6 +324,7 @@ export function ArrayItemOptions({
                                      index,
                                      provided,
                                      copy,
+                                     includeAddButton,
                                      addInIndex
                                  }: {
     direction?: "row" | "column",
@@ -315,6 +333,7 @@ export function ArrayItemOptions({
     index: number,
     provided: any,
     copy: (index: number) => void,
+    includeAddButton?: boolean,
     addInIndex?: (index: number) => void
 }) {
 
@@ -365,20 +384,20 @@ export function ArrayItemOptions({
                     Copy
                 </MenuItem>
 
-                {addInIndex && <MenuItem dense
-                                         onClick={() => {
-                                             setMenuOpen(false);
-                                             addInIndex(index);
-                                         }}>
+                {includeAddButton && addInIndex && <MenuItem dense
+                                                             onClick={() => {
+                                                                 setMenuOpen(false);
+                                                                 addInIndex(index);
+                                                             }}>
                     <KeyboardArrowUpIcon size={"small"}/>
                     Add on top
                 </MenuItem>}
 
-                {addInIndex && <MenuItem dense
-                                         onClick={() => {
-                                             setMenuOpen(false);
-                                             addInIndex(index + 1);
-                                         }}>
+                {includeAddButton && addInIndex && <MenuItem dense
+                                                             onClick={() => {
+                                                                 setMenuOpen(false);
+                                                                 addInIndex(index + 1);
+                                                             }}>
                     <KeyboardArrowDownIcon size={"small"}/>
                     Add below
                 </MenuItem>}

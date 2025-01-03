@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { ProductPrice, ProductWithPrices, Subscription, SubscriptionType } from "../types/subscriptions";
 import { useFireCMSBackend } from "./useFireCMSBackend";
 import { convertDocToSubscription } from "../api/firestore";
+import { useSnackbarController } from "@firecms/core";
 
 const SUBSCRIPTIONS_COLLECTION = "subscriptions";
 const PRODUCTS_COLLECTION = "products";
@@ -36,7 +37,7 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
         projectsApi
     } = useFireCMSBackend();
     const { backendUid: userId } = useFireCMSBackend();
-
+    const snackbar = useSnackbarController();
     const firestoreRef = useRef<Firestore>();
 
     const [products, setProducts] = useState<ProductWithPrices[] | undefined>();
@@ -147,7 +148,11 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
             onCheckoutSessionReady(sessionUrl, undefined);
         } catch (e: any) {
             console.error("Error subscribing to product", productPriceId, e);
-            onCheckoutSessionReady(undefined, e);
+            snackbar.open({
+                message: e?.message ?? "Error subscribing to product",
+                type: "error"
+            });
+            // onCheckoutSessionReady(undefined, e);
         }
 
         // const firestore = firestoreRef.current;

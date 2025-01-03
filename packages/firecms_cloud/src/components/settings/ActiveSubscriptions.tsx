@@ -9,6 +9,9 @@ interface CurrentSubscriptionViewProps {
     subscription: Subscription;
 }
 
+/**
+ * @deprecated
+ */
 export function CurrentSubscriptionView({
                                             subscription,
                                         }: CurrentSubscriptionViewProps) {
@@ -79,6 +82,9 @@ export function CurrentSubscriptionView({
     );
 }
 
+/**
+ * @deprecated
+ */
 export function ActiveSubscriptions({ activeSubscriptions }: {
     activeSubscriptions: Subscription[],
 }) {
