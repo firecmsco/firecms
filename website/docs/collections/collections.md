@@ -5,7 +5,9 @@ sidebar_label: Collections
 description: Discover how FireCMS Collections can streamline your data organization and management. Including features like top-level grouping and subcollections, define collections using UI or code, and implement advanced customizations, filtering, and permissions for optimized control over your CMS. Explore how to define, modify, and extend collections through intuitive UI interactions or detailed code customizations. Leverage FireCMS's robust entity and subcollection framework, with powerful filtering and sorting capabilities, for a seamless administrative experience. Learn more about collection configurations, entity actions, and inline editing options tailored to your needs. Whether you're managing products, articles, or custom data types, FireCMS Collections are the backbone of your efficient, scalable content management system.
 ---
 
-In FireCMS, **collections** represent groups of entities.
+In FireCMS, **collections** represent groups of entities. They map to your database collections and are used to define the
+schema of your entities. Collections are the backbone of your CMS, and they are used to define the fields of your entities,
+the permissions, the filters, and the actions that can be performed on them.
 
 You can find collections at the **top level** of the navigation tree (the entries displayed in the home page and the
 navigation drawer), or as **subcollections**.
@@ -50,105 +52,102 @@ functions that will help you detect type and configuration errors
 :::
 
 ```tsx
-import {
-    buildCollection,
-    buildProperty,
-    EntityReference
-} from "@firecms/cloud";
+import { buildCollection, buildProperty, EntityReference } from "@firecms/cloud";
 
 type Product = {
+  name: string;
+  main_image: string;
+  available: boolean;
+  price: number;
+  related_products: EntityReference[];
+  publisher: {
     name: string;
-    main_image: string;
-    available: boolean;
-    price: number;
-    related_products: EntityReference[];
-    publisher: {
-        name: string;
-        external_id: string;
-    }
+    external_id: string;
+  }
 }
 
 const productsCollection = buildCollection<Product>({
-    id: "products",
-    path: "products",
-    name: "Products",
-    group: "Main",
-    description: "List of the products currently sold in our shop",
-    textSearchEnabled: true,
-    properties: {
-        name: buildProperty({
-            dataType: "string",
-            name: "Name",
-            validation: { required: true }
-        }),
-        main_image: buildProperty({
-            dataType: "string",
-            name: "Image",
-            storage: {
-                mediaType: "image",
-                storagePath: "images",
-                acceptedFiles: ["image/*"],
-                metadata: {
-                    cacheControl: "max-age=1000000"
-                }
-            },
-            description: "Upload field for images",
-            validation: {
-                required: true
-            }
-        }),
-        available: buildProperty({
-            dataType: "boolean",
-            name: "Available",
-            columnWidth: 100
-        }),
-        price: buildProperty(({ values }) => ({
-            dataType: "number",
-            name: "Price",
-            validation: {
-                requiredMessage: "You must set a price between 0 and 1000",
-                min: 0,
-                max: 1000
-            },
-            disabled: !values.available && {
-                clearOnDisabled: true,
-                disabledMessage: "You can only set the price on available items"
-            },
-            description: "Price with range validation"
-        })),
-        related_products: buildProperty({
-            dataType: "array",
-            name: "Related products",
-            description: "Reference to self",
-            of: {
-                dataType: "reference",
-                path: "products"
-            }
-        }),
-        publisher: buildProperty({
-            name: "Publisher",
-            description: "This is an example of a map property",
-            dataType: "map",
-            properties: {
-                name: {
-                    name: "Name",
-                    dataType: "string"
-                },
-                external_id: {
-                    name: "External id",
-                    dataType: "string"
-                }
-            }
-        })
-    },
-    permissions: ({
-                      user,
-                      authController
-                  }) => ({
-        edit: true,
-        create: true,
-        delete: false
+  id: "products",
+  path: "products",
+  name: "Products",
+  group: "Main",
+  description: "List of the products currently sold in our shop",
+  textSearchEnabled: true,
+  openEntityMode: "side_panel",
+  properties: {
+    name: buildProperty({
+      dataType: "string",
+      name: "Name",
+      validation: { required: true }
+    }),
+    main_image: buildProperty({
+      dataType: "string",
+      name: "Image",
+      storage: {
+        mediaType: "image",
+        storagePath: "images",
+        acceptedFiles: ["image/*"],
+        metadata: {
+          cacheControl: "max-age=1000000"
+        }
+      },
+      description: "Upload field for images",
+      validation: {
+        required: true
+      }
+    }),
+    available: buildProperty({
+      dataType: "boolean",
+      name: "Available",
+      columnWidth: 100
+    }),
+    price: buildProperty(({ values }) => ({
+      dataType: "number",
+      name: "Price",
+      validation: {
+        requiredMessage: "You must set a price between 0 and 1000",
+        min: 0,
+        max: 1000
+      },
+      disabled: !values.available && {
+        clearOnDisabled: true,
+        disabledMessage: "You can only set the price on available items"
+      },
+      description: "Price with range validation"
+    })),
+    related_products: buildProperty({
+      dataType: "array",
+      name: "Related products",
+      description: "Reference to self",
+      of: {
+        dataType: "reference",
+        path: "products"
+      }
+    }),
+    publisher: buildProperty({
+      name: "Publisher",
+      description: "This is an example of a map property",
+      dataType: "map",
+      properties: {
+        name: {
+          name: "Name",
+          dataType: "string"
+        },
+        external_id: {
+          name: "External id",
+          dataType: "string"
+        }
+      }
     })
+  },
+  permissions: ({
+                  user,
+                  authController
+                }) => ({
+    edit: true,
+    create: true,
+    delete: false
+  })
 });
 ```
 
@@ -271,6 +270,8 @@ to `false` in the collection configuration.
   propertiesOrder: ["name", "price", "subcollection:orders"]
   ```
 
+- **`openEntityMode`**: Determines how the entity view is opened. You can choose between `side_panel` (default) or
+  `full_screen`.
 - **`formAutoSave`**: If set to true, the form will be auto-saved when the user changes the value of a field. Defaults
   to false. You can't use this prop if you are using a `customId`.
 - **`collectionGroup`**: If this collection is a top-level navigation entry, you can set this property to `true` to

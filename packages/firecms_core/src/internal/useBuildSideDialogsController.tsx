@@ -90,7 +90,6 @@ export function useBuildSideDialogsController(): SideDialogsController {
 
     const replace = useCallback((panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => {
 
-        console.log("replace", panelProps);
         const newPanels: SideDialogPanelProps[] = Array.isArray(panelProps) ? panelProps : [panelProps];
         newPanels.forEach((panel) => {
             routesStore.current[panel.key] = panel;

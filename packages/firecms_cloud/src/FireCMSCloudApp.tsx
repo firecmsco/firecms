@@ -633,7 +633,6 @@ function FireCMSAppAuthenticated({
 
     const saasPlugin = useSaasPlugin({
         projectConfig,
-        firestoreDelegate,
         collectionConfigController,
         appConfig,
         dataTalkSuggestions: dataTalkConfig.rootPromptsSuggestions,

@@ -10,8 +10,7 @@
   "dependencies": {
     "@firecms/core": "^3.0.0-canary.169",
     "@firecms/firebase": "^3.0.0-canary.169",
-    "@firecms/ui": "^3.0.0-canary.169",
-    "firebase": "^10.14.1"
+    "@firecms/ui": "^3.0.0-canary.169"
   },
   "exports": {
     ".": {

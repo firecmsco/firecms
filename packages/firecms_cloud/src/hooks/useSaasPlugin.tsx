@@ -1,5 +1,4 @@
 import { FireCMSPlugin, useNavigationController } from "@firecms/core";
-import { FirestoreDelegate } from "@firecms/firebase";
 import { CollectionsConfigController } from "@firecms/collection_editor";
 import { Typography } from "@firecms/ui";
 import { ProjectConfig } from "./useBuildProjectConfig";
@@ -10,7 +9,6 @@ import { DataTalkSuggestions } from "../components/DataTalkSuggestions";
 
 export function useSaasPlugin({
                                   projectConfig,
-                                  firestoreDelegate,
                                   collectionConfigController,
                                   appConfig,
                                   dataTalkSuggestions,
@@ -18,7 +16,6 @@ export function useSaasPlugin({
                               }: {
     projectConfig: ProjectConfig;
     appConfig?: FireCMSAppConfig;
-    firestoreDelegate: FirestoreDelegate
     collectionConfigController: CollectionsConfigController;
     dataTalkSuggestions?: string[];
     introMode?: "new_project" | "existing_project";
