@@ -175,7 +175,7 @@ export function DrawerLogo({ logo }: {
                 {logo
                     ? <img src={logo}
                            alt="Logo"
-                           className={cls("max-w-full max-h-full transition-all",
+                           className={cls("max-w-full max-h-full transition-all object-contain",
                                drawerOpen ? "w-[96px] h-[96px]" : "w-[32px] h-[32px]")}/>
                     : <FireCMSLogo/>}
 

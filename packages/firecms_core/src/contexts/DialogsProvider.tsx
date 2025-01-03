@@ -8,7 +8,7 @@ export const DialogsProvider: React.FC<PropsWithChildren<{}>> = ({ children }) =
     const [dialogEntries, setDialogEntries] = useState<DialogControllerEntryProps[]>([]);
     const dialogEntriesRef = useRef<DialogControllerEntryProps[]>(dialogEntries);
 
-    const updateDialogEntries = (newPanels: DialogControllerEntryProps[]) => {
+    const updateDialogEntries = (newPanels: DialogControllerEntryProps<any>[]) => {
         dialogEntriesRef.current = newPanels;
         setDialogEntries(newPanels);
     };
@@ -23,7 +23,7 @@ export const DialogsProvider: React.FC<PropsWithChildren<{}>> = ({ children }) =
 
     }, [dialogEntries]);
 
-    const open = useCallback((dialogEntry: DialogControllerEntryProps) => {
+    const open = useCallback(<T extends object = object>(dialogEntry: DialogControllerEntryProps<T>) => {
 
         const updatedPanels = [...dialogEntriesRef.current, dialogEntry];
         updateDialogEntries(updatedPanels);
@@ -46,6 +46,7 @@ export const DialogsProvider: React.FC<PropsWithChildren<{}>> = ({ children }) =
                 key={`dialog_${i}`}
                 open={true}
                 closeDialog={close}
+                {...entry.props}
             />)}
         </DialogsControllerContext.Provider>
     );
