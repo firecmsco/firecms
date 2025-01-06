@@ -23,14 +23,11 @@ export type Product = {
 }
 
 export type BlogEntry = {
-    name: string,
-    header_image: string,
+    name: string;
+    header_image: string;
     content: (BlogEntryImages | BlogEntryText | BlogEntryProducts)[];
-    created_on: Date,
-    publish_date: Date,
-    reviewed: boolean,
-    status: string,
-    tags: string[]
+    status: string;
+    created_on: Date
 }
 
 export type BlogEntryImages = {

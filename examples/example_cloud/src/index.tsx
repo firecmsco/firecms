@@ -1,122 +1,35 @@
-import { Entity, EntityCollection, FireCMSAppConfig } from "@firecms/cloud";
-import { testCollection } from "./collections/test_collection";
-import { productsCollection } from "./collections/products_collection";
-import { SampleEntityView } from "./custom_entity_view/SampleEntityView";
-import { colorPropertyConfig } from "./property_configs/color_property_config";
-import { pricePropertyConfig } from "./property_configs/property_config_builder";
-import { usersCollection } from "./collections/users_collection";
-import { ExampleCMSView } from "./views/ExampleCMSView";
-import { SampleCustomEntityCollection } from "./views/SampleCustomEntityCollection";
-import { homesCollection } from "./collections/homes";
-import { featureConfig } from "./property_configs/feature_property";
-import { ReCaptchaEnterpriseProvider } from "@firebase/app-check";
-import { blogCollection } from "./collections/blog_collection";
+import { FireCMSAppConfig } from "@firecms/cloud";
+import { SampleEntityView } from "./entity_views/SampleEntityView";
+import { demoCollection } from "./collections/demo";
 
 const appConfig: FireCMSAppConfig = {
     version: "1",
-    // appCheck: {
-    //     provider: new ReCaptchaEnterpriseProvider("6Lc2XsMpAAAAADJhk7R10GmKv-nBRTYymRgRhAiY"),
-    // },
-    collections: async ({
-                            authController,
-                            dataSource
-                        }) => {
-        const firstProducts = await dataSource.fetchCollection({
-            path: "products",
-            limit: 5
-        });
-        const newTestCollection = {
-            ...testCollection,
-            properties: {
-                ...testCollection.properties,
-                fetched_products: {
-                    dataType: "string",
-                    name: "Fetched products",
-                    enumValues: firstProducts.map((product: Entity<any>) => ({
-                        id: product.id,
-                        label: product.values.name
-                    }))
-                }
-            }
-        } satisfies EntityCollection;
-
-        return ([
-            newTestCollection,
-            productsCollection,
-            blogCollection,
-            usersCollection,
-            homesCollection
-            // pagesCollection
-            // showcaseCollection
-        ]);
-    },
-    views: [
-        {
-            path: "sample",
-            name: "Sample additional view",
-            icon: "extension",
-            view: <ExampleCMSView/>
-        },
-        {
-            path: "custom_entity_table",
-            name: "Sample entity table",
-            icon: "extension",
-            view: <SampleCustomEntityCollection/>
-        }
+    collections: [
+        demoCollection
     ],
-    modifyCollection: ({ collection }) => {
-        if (collection.id === "products") {
-            return {
-                ...collection,
-                name: "Products modified",
-                entityActions: [
-                    {
-                        name: "Test",
-                        onClick: ({ entity }) => {
-                            console.log("Entity", entity);
-                        }
-                    }
-                ]
-            }
-        }
-        return collection;
-    },
-    propertyConfigs: [
-        colorPropertyConfig,
-        pricePropertyConfig,
-        {
-            name: "Feature",
-            key: "feature",
-            property: featureConfig.property,
-        },
-        {
-            name: "Translated string",
-            key: "translated_string",
-            property: {
-                dataType: "map",
-                properties: {
-                    en: {
-                        dataType: "string",
-                        name: "English",
-                        editable: true
-                    },
-                    es: {
-                        dataType: "string",
-                        name: "Español"
-                    },
-                    it: {
-                        dataType: "string",
-                        name: "Italiano"
-                    }
-                },
+    propertyConfigs: [{
+        name: "String with color",
+        key: "color",
+        property: {
+            dataType: "string",
+            name: "Main color",
+            Preview: ({ value }) => {
+                return <div style={{
+                    width: 20,
+                    height: 20,
+                    backgroundColor: value,
+                    borderRadius: "4px",
+                }}/>;
             },
+        },
+    }],
+    entityViews: [
+        {
+            key: "sample_entity_view",
+            name: "Sample entity view",
+            Builder: SampleEntityView
         }
-    ],
-    entityViews: [{
-        key: "test",
-        name: "Test",
-        Builder: SampleEntityView
-    }]
+    ]
 }
 
 export default appConfig;

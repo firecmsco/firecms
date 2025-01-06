@@ -1,6 +1,5 @@
 import React from "react";
-import { Entity, EntityValues, useSnackbarController } from "@firecms/cloud";
-import { Button } from "@firecms/ui";
+import { Button, Entity, EntityValues, useSnackbarController } from "@firecms/cloud";
 import { Product } from "../types";
 
 export function SampleEntityView({
@@ -12,6 +11,7 @@ export function SampleEntityView({
 }) {
 
     const snackbarController = useSnackbarController();
+
     const onClick = (event: React.MouseEvent) => {
         snackbarController.open({
             type: "success",
