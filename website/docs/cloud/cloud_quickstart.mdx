@@ -33,6 +33,8 @@ or
 yarn create firecms-app
 ```
 
+Make sure to select the option FireCMS Cloud, and follow the instructions in the CLI.
+
 This will create a new folder with all the code you need to get started.
 In the code you will be able to add custom collections, custom pages, custom
 fields, custom actions, custom properties, etc.
@@ -50,9 +52,10 @@ yarn dev
 This will execute a version of your project that uses FireCMS backend to
 store config data but runs locally.
 
-You should be able to see your FireCMS instance in your browser, awesome!
+You should be able to see your FireCMS instance in your browser, including all the configuration you
+have already created in the Cloud version... Awesome!
 
-If you want to deploy to FireCMS cloud your module must export a
+If you want to deploy to FireCMS Cloud your module must export a
 `FireCMSAppConfig` object. You can find more information about this object
 in the [App config section](./app_config) reference.
 
@@ -65,3 +68,6 @@ Firebase Auth will require to add this url to the authorized domains in the
 Firebase console.
 Alternatively, you can use the url `http://localhost:5173`.
 :::
+
+## How does code upload work?
+

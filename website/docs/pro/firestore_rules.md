@@ -4,7 +4,12 @@ title: Firestore Rules
 sidebar_label: Firestore Rules
 ---
 
-FireCMS saves some configuration data in Firestore to manage user roles and permissions, as well as the
+:::note
+These rules apply specifically to the FireCMS PRO plugins configuration. If you are using the community version
+you are encouraged to write your own rules to secure your data.
+:::
+
+FireCMS PRO saves some configuration data in Firestore to manage user roles and permissions, as well as the
 collections configuration. In order to work properly, you need to set up the Firestore rules to allow
 the plugin to read and write to the specified paths.
 

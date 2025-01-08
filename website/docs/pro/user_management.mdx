@@ -59,7 +59,7 @@ Below are the parameters you can configure:
 
 ### Hook Usage
 
-The main hook to utilize the plugin's functionality is `useFirestoreUserManagement`. Here's an example of how to use it:
+The main hook to initialize the plugin's functionality is `useBuildUserManagement`. Here's an example of how to use it:
 
 ```jsx
 
@@ -221,7 +221,7 @@ if (userManagement.usersError) {
 Once you have set up the plugin, you will have created a provider that you can use to manage users and roles within
 your application. You can access the user management functions and data through the `useUserManagement` hook.
 
-The `userManagement` object returned by the `useFirestoreUserManagement` hook includes the following properties:
+The `userManagement` object returned by the `useUserManagement` hook includes the following properties:
 
 - **`loading`**: Indicates if the data is being loaded. Boolean value.
 - **`users`**: Array of user objects. Contains the users being managed.

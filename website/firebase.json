@@ -10,6 +10,11 @@
     ],
     "redirects": [
       {
+        "source": "/docs/pro/pro_quickstart",
+        "destination": "/docs/self",
+        "type": 301
+      },
+      {
         "source": "/docs/cloud_quickstart",
         "destination": "/docs/cloud/quickstart",
         "type": 301

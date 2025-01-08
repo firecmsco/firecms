@@ -67,7 +67,7 @@ the rest.
 
 If you want to delve into the code and adapt anything, you can try: `npx create-firecms-app` and start from there.
 
-### FireCMS Pro
+### FireCMS PRO
 
 The new kid on the block. After building FireCMS Cloud, we decided to create a version that is self-hosted but includes
 some of the features of the Cloud version. You can obtain the same advanced features as the Cloud version but host it

@@ -155,5 +155,5 @@ https://firecms.co/docs/changelog
 ## License
 
 The core of FireCMS is licensed under the MIT license.
-Some packages, used in FireCMS Pro and Cloud, are licensed under the Business Source License 1.1 (BSL). 
+Some packages, used in FireCMS PRO and Cloud, are licensed under the Business Source License 1.1 (BSL). 
 Check the full [License here](https://github.com/firecmsco/firecms?tab=License-1-ov-file#readme).
