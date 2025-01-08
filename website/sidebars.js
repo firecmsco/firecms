@@ -63,6 +63,12 @@ module.exports = {
                     "id": "pro/user_management",
                     className: "pro-sidebar-item"
                 },
+                {
+                    "type": "doc",
+                    "label": "Collection editor UI",
+                    "id": "pro/collection_editor",
+                    className: "pro-sidebar-item"
+                },
                 "self/custom_storage",
                 "pro/nextjs",
                 "self/migrating_from_v2_to_v3",

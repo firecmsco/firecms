@@ -73,8 +73,8 @@ const productCallbacks = buildEntityCallbacks({
                       context
                   }: EntityOnDeleteProps<Product>
     ) => {
-        if (context.authController.user)
-            throw Error("Product deletion not allowed");
+        if (!context.authController.user)
+            throw Error("Not logged in users cannot delete products");
     },
 
     onDelete: (props: EntityOnDeleteProps<Product>) => {

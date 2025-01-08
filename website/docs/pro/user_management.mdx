@@ -4,11 +4,11 @@ title: User Management
 ---
 
 This document provides an overview of how to use the User Management Plugin with FireCMS to manage
-users and roles in a Firestore backend.
+users and roles.
 
 The User Management Plugin allows you to create, edit, and delete users and roles within your FireCMS project.
 It ensures that users have the appropriate permissions based on their roles and integrates this authentication
-and permissions system directly into your Firestore backend. This plugin allows you to control which users can access
+and permissions system directly into your backend. This plugin allows you to control which users can access
 your application and what actions they can perform over what specific collections.
 
 In this document, we will cover how to set up and use this plugin in your FireCMS application.
@@ -28,10 +28,10 @@ yarn add @firecms/user_management
 
 The plugin requires several configurations, including paths for storing user and role data.
 
-The default config of the plugin will be saved to your Firestore database under the path `__FIRECMS/config`,
+The default config of the plugin will be saved to your database under the path `__FIRECMS/config`,
 but you can customize this path as needed.
 
-Make sure to set up the Firestore rules to allow the plugin to read and write to the specified paths.
+If you are using Firestore, make sure to set up the Firestore rules to allow the plugin to read and write to the specified paths.
 We suggest adding these rules to your Firestore security rules, which will allow users with the correct roles to access the user management data.
 
 ```

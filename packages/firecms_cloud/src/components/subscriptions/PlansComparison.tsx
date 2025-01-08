@@ -128,7 +128,7 @@ export function PlansComparison() {
                 </ul>
             </div>
             <div className={"text-center mt-4 text-surface-600 dark:text-surface-400 w-full"}>
-                <span className={"text-2xl font-bold "}>Starting at €49.99/month</span>
+                <span className={"text-2xl font-bold "}>€49.99 project/month</span>
             </div>
             <div className={"text-center mt-4 text-primary w-full"}>
                 <Button

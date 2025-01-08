@@ -56,7 +56,6 @@ export function FireCMSFirebaseApp({
                                        name,
                                        logo,
                                        logoDark,
-                                       toolbarExtraWidget,
                                        authenticator,
                                        collections,
                                        views,

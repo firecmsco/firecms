@@ -14,6 +14,7 @@ export function HomePageEditorCollectionAction({
                                                    collection
                                                }: PluginHomePageActionsProps) {
 
+
     const snackbarController = useSnackbarController();
     const authController = useAuthController();
     const configController = useCollectionsConfigController();

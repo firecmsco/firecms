@@ -3,7 +3,7 @@ import { EntityCollection, FireCMSPlugin } from "@firecms/core";
 import { ExportCollectionAction } from "./export";
 
 /**
- *
+ * Use this plugin to be able to export collections data as JSON or CSV
  */
 export function useExportPlugin(props?: ExportPluginProps): FireCMSPlugin<any, any, any, ExportPluginProps> {
 

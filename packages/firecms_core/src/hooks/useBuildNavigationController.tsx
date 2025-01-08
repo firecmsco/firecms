@@ -414,6 +414,7 @@ function encodePath(input: string) {
 
 function filterOutNotAllowedCollections(resolvedCollections: EntityCollection[], authController: AuthController<User>): EntityCollection[] {
     return resolvedCollections
+        .filter((c) => Boolean(c.path))
         .filter((c) => {
             if (!c.permissions) return true;
             const resolvedPermissions = resolvePermissions(c, authController, c.path, null);

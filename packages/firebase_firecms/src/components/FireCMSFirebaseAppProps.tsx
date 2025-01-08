@@ -115,11 +115,6 @@ export type FireCMSFirebaseAppProps = {
     appCheckOptions?: AppCheckOptions;
 
     /**
-     * A component that gets rendered on the upper side of the main toolbar
-     */
-    toolbarExtraWidget?: React.ReactNode;
-
-    /**
      * Format of the dates in the CMS.
      * Defaults to 'MMMM dd, yyyy, HH:mm:ss'
      */

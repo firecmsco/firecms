@@ -28,7 +28,7 @@ export function CLIInstructions() {
             This way you can create a CMS tailored to your needs.
         </p>
 
-        <p className={"font-mono uppercase font-bold mb-2 mt-6"}>FireCMS Cloud</p>
+        {/*<p className={"font-mono uppercase font-bold mb-2 mt-6"}>FireCMS Cloud</p>*/}
         <div className={"flex gap-4 items-center flex-col md:flex-row"}>
 
             <div
@@ -56,34 +56,34 @@ export function CLIInstructions() {
             {/*    <CTACaret/>*/}
             {/*</a>*/}
         </div>
-        <p className={"font-mono uppercase font-bold mb-2 mt-6"}>FireCMS PRO</p>
-        <div className={"flex gap-4 items-center flex-col md:flex-row"}>
+        {/*<p className={"font-mono uppercase font-bold mb-2 mt-6"}>FireCMS PRO</p>*/}
+        {/*<div className={"flex gap-4 items-center flex-col md:flex-row"}>*/}
 
-            <div
-                className={"select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
-                npx create-firecms-app --pro
-            </div>
-            or
-            <div
-                className={"select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
-                yarn create firecms-app --pro
-            </div>
+        {/*    <div*/}
+        {/*        className={"select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>*/}
+        {/*        npx create-firecms-app --pro*/}
+        {/*    </div>*/}
+        {/*    or*/}
+        {/*    <div*/}
+        {/*        className={"select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>*/}
+        {/*        yarn create firecms-app --pro*/}
+        {/*    </div>*/}
 
-            <a
-                className={CTAOutlinedButtonMixin}
-                href={useBaseUrl("docs/pro")}
-            >
-                Docs
-                <CTACaret/>
-            </a>
-            {/*<a*/}
-            {/*    className={CTAOutlinedButtonMixin}*/}
-            {/*    href={"https://demo.firecms.co"}*/}
-            {/*>*/}
-            {/*    See self-hosted demo*/}
-            {/*    <CTACaret/>*/}
-            {/*</a>*/}
-        </div>
+        {/*    <a*/}
+        {/*        className={CTAOutlinedButtonMixin}*/}
+        {/*        href={useBaseUrl("docs/pro")}*/}
+        {/*    >*/}
+        {/*        Docs*/}
+        {/*        <CTACaret/>*/}
+        {/*    </a>*/}
+        {/*    /!*<a*!/*/}
+        {/*    /!*    className={CTAOutlinedButtonMixin}*!/*/}
+        {/*    /!*    href={"https://demo.firecms.co"}*!/*/}
+        {/*    /!*>*!/*/}
+        {/*    /!*    See self-hosted demo*!/*/}
+        {/*    /!*    <CTACaret/>*!/*/}
+        {/*    /!*</a>*!/*/}
+        {/*</div>*/}
     </Panel>;
 
 }
