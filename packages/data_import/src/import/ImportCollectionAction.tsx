@@ -124,8 +124,8 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
         </Tooltip>
 
         <Dialog open={open}
-                fullWidth={step === "preview"}
-                fullHeight={step === "preview"}
+                fullWidth={step !== "initial"}
+                fullHeight={step !== "initial"}
                 maxWidth={step === "initial" ? "lg" : "7xl"}>
 
             <DialogTitle variant={"h6"}>Import data</DialogTitle>

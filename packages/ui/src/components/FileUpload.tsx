@@ -89,7 +89,8 @@ export function FileUpload({
         <div
             className="flex-grow h-28 box-border flex flex-col items-center justify-center text-center">
             <Typography align={"center"}
-                        variant={"label"}>
+                        variant={"label"}
+                        className={"flex flex-row gap-2 justify-center"}>
                 {uploadDescription}
             </Typography>
         </div>

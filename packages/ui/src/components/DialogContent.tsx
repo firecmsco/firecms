@@ -19,7 +19,7 @@ export function DialogContent({
         </div>;
 
     return <div
-        className={cls("h-full flex-grow",
+        className={cls("flex-grow",
             { "my-6 mx-6": includeMargin },
             className)}>
         {children}

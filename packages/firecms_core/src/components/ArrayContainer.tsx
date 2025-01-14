@@ -239,7 +239,7 @@ export function ArrayContainer<T>({
                                     variant={"text"}
                                     size={size === "small" ? "small" : "medium"}
                                     color="primary"
-                                    disabled={disabled || value.length >= max}
+                                    disabled={disabled || value?.length >= max}
                                     startIcon={<AddIcon/>}
                                     onClick={insertInEnd}>
                                     {addLabel ?? "Add"}
