@@ -1,10 +1,7 @@
 ---
 slug: openai_integration
 title: Integrating ChatGPT into Existing CMS Systems - A Game Changer for Content Management
-author: Francesco Gatti
-image: /img/avatars/francesco_avatar.jpg
-author_url: https://www.linkedin.com/in/fgatti675
-author_image_url: https://avatars.githubusercontent.com/u/5120271?v=4
+authors: francesco
 ---
 
 ![pawel-czerwinski-C2tWWNKExfw-unsplash.jpg](..%2Fstatic%2Fimg%2Fblog%2Fpawel-czerwinski-C2tWWNKExfw-unsplash.jpg)
@@ -42,6 +39,8 @@ including CMS systems.
 Picture ChatGPT as the superhero sidekick to your CMS. It’s here to help you
 tackle content management challenges and make your life easier. Let’s take a
 look at some of the extraordinary abilities it brings to the table:
+
+<!-- truncate -->
 
 **1. Autofilling Fields**
 ChatGPT can be used to autofill fields within a CMS, saving time and effort

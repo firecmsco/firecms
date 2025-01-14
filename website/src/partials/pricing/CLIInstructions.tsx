@@ -56,6 +56,12 @@ export function CLIInstructions() {
             {/*    <CTACaret/>*/}
             {/*</a>*/}
         </div>
+        <div className={"mt-2"}>
+            <a href={"https://app.firecms.co"}
+               target={"_blank"}
+               rel={"noopener noreferrer"}
+            >Projects in FireCMS Cloud are initiated within the app.</a>
+        </div>
         {/*<p className={"font-mono uppercase font-bold mb-2 mt-6"}>FireCMS PRO</p>*/}
         {/*<div className={"flex gap-4 items-center flex-col md:flex-row"}>*/}
 

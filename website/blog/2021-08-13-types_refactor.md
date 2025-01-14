@@ -1,10 +1,7 @@
 ---
 slug: types_refactor
 title: Big types refactor
-author: Francesco Gatti
-image: /img/avatars/francesco_avatar.jpg
-author_url: https://www.linkedin.com/in/fgatti675
-author_image_url: https://avatars.githubusercontent.com/u/5120271?v=4
+authors: francesco
 ---
 
 ### Types update
@@ -38,6 +35,8 @@ const productSchema = buildSchema<Product>({
 This change propagates to all the rest of the types used internally and in
 the public API, especially to all the types that had `EntitySchema` as a generic
 type argument.
+
+<!-- truncate -->
 
 For example `EntityValues` (representing the data related to an entity) had the
 signature `EntityValues<S extends EntitySchema<Key>, Key extends string>` and now

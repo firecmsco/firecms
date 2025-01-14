@@ -359,6 +359,7 @@ module.exports = {
                 },
                 blog: {
                     showReadingTime: true,
+                    blogSidebarCount: 0,
                     feedOptions: {
                         type: "all"
                     }

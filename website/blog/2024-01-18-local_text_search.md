@@ -1,10 +1,7 @@
 ---
 slug: local_text_search
 title: Building in browser text search for Firebase with a Lean mindset
-image: /img/avatars/marian_avatar.jpeg
-author_name: Marian Moldovan
-author_url: https://www.linkedin.com/in/marianmoldovan/
-author_image_url: https://avatars.githubusercontent.com/u/1479084?v=4
+authors: marian
 ---
 
 Nowadays, search is a basic feature in a public online tool. It’s a commodity, a feature that you expect to be there.
@@ -23,6 +20,8 @@ launched [FireCMS Cloud](https://app.firecms.co/p/hey-hoy-letsgo-cm3hx). We stil
 Google Cloud project resources, but the app used for managing the data is on our side. So, we are in charge of the CMS,
 you don’t need to worry about that. Okay, great. We help you manage the app, rolling updates, support, and everything
 else.
+
+<!-- truncate -->
 
 But, how can you build text search features for every project without indexing each one of your records? Well, there are
 many responses, from using an external platform, such as Algolia, having our own Elasticsearch cluster or if you want to

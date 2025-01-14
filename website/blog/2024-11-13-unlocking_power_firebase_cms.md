@@ -2,9 +2,7 @@
 slug: unlocking_power_firebase_cms
 title: "Firebase: The Ultimate Backend for Your CMS"
 image: /img/blog/firebase_firecms_banner.png
-author_name: Marian Moldovan
-author_url: https://www.linkedin.com/in/marianmoldovan/
-author_image_url: https://avatars.githubusercontent.com/u/1479084?v=4
+authors: marian
 ---
 
 ![Firebase logo](../static/img/blog/firebase-logo-standard.svg)
@@ -30,6 +28,8 @@ By leveraging Firebase, FireCMS offers a CMS that is not only powerful but aso s
 
 ![FireCMS Dashboard](../static/img/blog/firecms-dashboard.png)
 *The sleek and intuitive FireCMS dashboard powered by Firebase.*
+
+<!-- truncate -->
 
 ## Why Choose Firebase Over Alternative CMS Backends?
 

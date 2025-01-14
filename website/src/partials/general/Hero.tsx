@@ -16,7 +16,6 @@ export function Hero({
     subtitleColor?: "gray" | "dark_gray" | "light_gray" | "white" | "primary" | "secondary" | "light" | "lighter" | "transparent",
 }) {
 
-
     return (
         <>
             <div className={"w-full relative -mt-20 bg-gray-950"}>
@@ -41,16 +40,17 @@ export function Hero({
                 </Panel>
             </div>
 
-            <Panel color={subtitleColor} includePadding={false} innerClassName={"py-8 md:py-12 p-4 md:p-8"}>
-                {subtitle &&
-                    <div className="font-mono uppercase m-0 text-xl md:text-2xl">
-                        {subtitle}
+            {subtitle || cta &&
+                <Panel color={subtitleColor} includePadding={false} innerClassName={"py-8 md:py-12 p-4 md:p-8"}>
+                    {subtitle &&
+                        <div className="font-mono uppercase m-0 text-xl md:text-2xl">
+                            {subtitle}
+                        </div>}
+                    {cta && <div
+                        className="mt-5 sm:mt-8">
+                        {cta}
                     </div>}
-                {cta && <div
-                    className="mt-5 sm:mt-8">
-                    {cta}
-                </div>}
-            </Panel>
+                </Panel>}
         </>
     );
 }

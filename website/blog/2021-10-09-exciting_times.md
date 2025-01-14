@@ -1,10 +1,7 @@
 ---
 slug: exciting_times_1_0_0
 title: FireCMS enters the beta period
-author: Francesco Gatti
-image: /img/avatars/francesco_avatar.jpg
-author_url: https://www.linkedin.com/in/fgatti675
-author_image_url: https://avatars.githubusercontent.com/u/5120271?v=4
+authors: francesco
 ---
 
 
@@ -29,6 +26,8 @@ backend admin panel/CMS. We took some of those tools we had built, and merged
 them into a single generic project that would support any database structure and
 data type. We needed to make sure that we would need to be able to customize
 many aspects of each implementation based on the necessity.
+
+<!-- truncate -->
 
 The outcome was a very good starting point to what would become FireCMS after
 many iterations and feature updates. One of the consequences of this approach

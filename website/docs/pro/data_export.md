@@ -3,6 +3,9 @@ id: data_export
 title: Data Export
 ---
 
+![data_export.png](/img/data_export.png)
+
+
 This document provides an overview of how to use the **Data Export Plugin** with FireCMS to export collection data in
 JSON or CSV formats.
 

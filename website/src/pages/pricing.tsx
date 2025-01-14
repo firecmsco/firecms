@@ -67,18 +67,18 @@ function FeaturesPage() {
                     <>
                         <span className="block lg:inline">Pricing</span>
                     </>}
-                subtitle={
-                    <>
-                        <p>
-                            Experience the power of FireCMS today completely for <b>free</b>.
-                        </p>
-                        <p>
-                            Try <b>FireCMS
-                            Cloud</b> for a fully-managed, full-service solution, or <b>FireCMS PRO</b> for a
-                            self-hosted
-                            version with additional features.
-                        </p>
-                    </>}
+                // subtitle={
+                //     <>
+                //         <p>
+                //             Experience the power of FireCMS today completely for <b>free</b>.
+                //         </p>
+                //         <p>
+                //             Try <b>FireCMS
+                //             Cloud</b> for a fully-managed, full-service solution, or <b>FireCMS PRO</b> for a
+                //             self-hosted
+                //             version with additional features.
+                //         </p>
+                //     </>}
                 // cta={<a
                 //     href="mailto:hello@firecms.co?subject=FireCMS%20consulting"
                 //     rel="noopener noreferrer"

@@ -183,7 +183,6 @@ tr {
     --ifm-leading-desktop: 1;
 
     --ifm-footer-link-color: white;
-    /*--ifm-leading-desktop: 1.25;*/
     /*--ifm-leading: calc(var(--ifm-leading-desktop) * 1rem);*/
     /*--ifm-custom-navbar-background-color: rgba(255, 255, 255, 0.33);*/
     /*--ifm-heading-font-family: 'Spline Sans Mono', "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
@@ -527,15 +526,15 @@ article {
 }
 
 .markdown > h1 {
-    margin-top: 6rem;
-}
-
-.markdown > h2 {
     margin-top: 5rem;
 }
 
+.markdown > h2 {
+    margin-top: 4rem;
+}
+
 .markdown > h3 {
-    margin-top: 3rem;
+    margin-top: 2rem;
 }
 
 h1 {

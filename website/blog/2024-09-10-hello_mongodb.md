@@ -1,10 +1,7 @@
 ---
 slug: hello_mongodb
 title: Hello MongoDB! FireCMS Gets a NoSQL Boost
-image: /img/avatars/marian_avatar.jpeg
-author_name: Marian Moldovan
-author_url: https://www.linkedin.com/in/marianmoldovan/
-author_image_url: https://avatars.githubusercontent.com/u/1479084?v=4
+authors: marian
 ---
 
 ![Dark mode](../static/img/mongo_header.png)
@@ -25,6 +22,8 @@ Choosing the right database is crucial, and MongoDB, especially when paired with
 ### Same FireCMS Experience, Now Powered by MongoDB
 
 We implemented the necessary **utilities** to connect and consume Atlas MongoDB **database** and **authentication** services.
+
+<!-- truncate -->
 
 So that means that you can use **all the features already available** in FireCMS. From the collection editor to the LLM based content generation, you can use all of them.
 

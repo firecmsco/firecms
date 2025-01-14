@@ -1,10 +1,7 @@
 ---
 slug: cms_comparison_2024
 title: Picking a CMS in 2024
-author: Francesco Gatti
-image: /img/avatars/francesco_avatar.jpg
-author_url: https://www.linkedin.com/in/fgatti675
-author_image_url: https://avatars.githubusercontent.com/u/5120271?v=4
+authors: francesco
 ---
 
 ![CMSs](../static/img/cmss_cloud.png)
@@ -20,7 +17,6 @@ We can distinguish some categories straight away:
 * Headless or traditional
 * By access to data APIs (GraphQL, REST, SDKs)
 * Cloud based or self-hosted
-
 
 > We are building this guide to help you pick the right CMS for your project.
 > We will be updating it regularly, so make sure to check back often.
@@ -38,6 +34,8 @@ The first thing to consider is whether you need a general purpose CMS or a
 web-oriented one. A general purpose CMS is a tool that can be used to manage
 content for any kind of project (apps, desktop, web), while a web-oriented CMS
 is a tool that is designed to manage content for websites.
+
+<!-- truncate -->
 
 **Web oriented CMSs** are built with the assumption that the content will be
 displayed on a website, and they usually provide a **web editor** to edit the
@@ -149,47 +147,47 @@ while others are proprietary.
 
 Check the comparison table below to see which APIs are provided by each CMS.
 
-| NAME                           | FireCMS | Agility CMS | ButterCMS | Contentful | Ghost | GraphCMS | Keystone JS | Prismic | Sanity | Storyblok | Strapi | Wordpress - unite cms |
+|              NAME              | FireCMS | Agility CMS | ButterCMS | Contentful | Ghost | GraphCMS | Keystone JS | Prismic | Sanity | Storyblok | Strapi | Wordpress - unite cms |
 |:------------------------------:|:-------:|:-----------:|:---------:|:----------:|:-----:|:--------:|:-----------:|:-------:|:------:|:---------:|:------:|:---------------------:|
-| **Installation**               |         |             |           |            |       |          |             |         |        |           |        |                       |
-| Open Source                    | ✅       | ❌           | ❌         | ❌          | ✅     | ❌        | ✅           | ❌       | ✅      | ❌         | ✅      | ✅                     |
-| Cloud Service                  | WIP     | ✅           | ✅         | ✅          | ✅     | ✅        | ❌           | ✅       | ✅      | ✅         | ❌      | ✅                     |
-| On Premises Installation       | ✅       | ❌           | ❌         | ❌          | ✅     | ❌        | ❌           | ❌       | ❌      | ✅         | ✅      | ✅                     |
-| Cloud Service Hosted in Europe | ✅       | ❌           | ~         | ❌          | ~     | ✅        | ❌           | ~       | ✅      | ✅         | ~      | ✅                     |
-| Commercial Support Available?  | ✅       | ✅           | ✅         | ✅          | ✅     | ✅        | ❌           | ✅       | ✅      | ✅         | ✅      | ✅                     |
-| **Users**                      |         |             |           |            |       |          |             |         |        |           |        |                       |
-| User Management                | ✅       | ✅           | ❌         | ❌          | ❌     | ❌        | ✅           | ❌       | ✅      | ✅         | ✅      | ❌                     |
-| Role Based Permissions         | ✅       | ✅           | ✅         | ✅          | ✅     | ✅        | ✅           | ✅       | ✅      | ✅         | ✅      | ✅                     |
-| Document Level Permissions     | ✅       | ✅           | ❌         | ❌          | ❌     | ❌        | ✅           | ❌       | ✅      | ✅         | ✅      | ✅                     |
-| **Features**                   |         |             |           |            |       |          |             |         |        |           |        |                       |
-| Web builder                    | ❌       | ❌           | ❌         | ❌          | ✅     | ❌        | ❌           | ✅       | ❌      | ✅         | ❌      | ✅                     |
-| Real time support              | ✅       | ❌           | ❌         | ❌          | ❌     | ❌        | ❌           | ❌       | ❌      | ❌         | ❌      | ❌                     |
-| Search: Full Text Search       | ✅       | ✅           | ✅         | ✅          | ~     | ✅        | ❌           | ✅       | ✅      | ✅         | ✅      | ~                     |
-| Eventbus                       | ✅       | ~           | ❌         | ❌          | ~     | ❌        | ❌           | ❌       | ✅      | ✅         | ❌      | ❌                     |
-| Client Side Forms              | ✅       | ✅           | ❌         | ❌          | ~     | ✅        | ✅           | ❌       | ✅      | ❌         | ✅      | ❌                     |
-| Plugin System                  | ✅       | ✅           | ❌         | ❌          | ❌     | ❌        | ✅           | ❌       | ✅      | ✅         | ✅      | ❌                     |
-| Customizable UI                | ✅       | ✅           | ❌         | ✅          | ~     | ❌        | ✅           | ❌       | ✅      | ✅         | ✅      | ✅                     |
-| Content Trees                  | ✅       | ✅           | ❌         | ❌          | ~     | ❌        | ❌           | ❌       | ❌      | ✅         | ❌      | ~                     |
-| Nesting fields/elements        | ✅       | ✅           | ✅         | ✅          | ~     | ❌        |             | ❌       | ✅      | ✅         | ✅      | ✅                     |
-| Image: Manipulation            | ✅       | ✅           | ✅         | ✅          | ~     | ✅        |             | ✅       | ✅      | ✅         | ✅      | ~                     |
-| **Technical**                  |         |             |           |            |       |          |             |         |        |           |        |                       |
-| OAuth 2.0 Support              | ✅       | ✅           | ❌         | ✅          | ~     | ❌        | ✅           | ❌       | ✅      | ✅         | ✅      | ~                     |
-| CDN Support                    | ✅       | ✅           | ✅         | ✅          | ~     | ✅        | ❌           | ✅       | ✅      | ✅         | ✅      | ✅                     |
-| Backup Feature                 | ✅       | ~           | ❌         | ❌          | ~     | ✅        | ❌           | ❌       | ❌      | ✅         | ❌      | ❌                     |
-| Import/Export                  | ✅       | ✅           | ✅         | ✅          | ~     | ✅        | ✅           | ✅       | ✅      | ✅         | ❌      | ✅                     |
-| CLI                            | ❌       | ❌           | ❌         | ✅          | ✅     | ❌        | ✅           | ✅       | ✅      | ✅         | ✅      | ✅                     |
-| Web Hooks                      | ✅       | ✅           | ✅         | ✅          | ✅     | ✅        | ❌           | ✅       | ✅      | ✅         | ✅      | ✅                     |
-| Versioning                     | ✅       | ✅           | ❌         | ✅          | ❌     | ❌        | ❌           | ✅       | ✅      | ✅         | ❌      | ✅                     |
-| **Data**                       |         |             |           |            |       |          |             |         |        |           |        |                       |
-| GraphQL: API                   | ❌       | ✅           | ✅         | ✅          | ❌     | ✅        | ✅           | ✅       | ✅      | ✅         | ✅      | ✅                     |
-| REST: API                      | ✅       | ✅           | ✅         | ✅          | ✅     | ✅        | ❌           | ✅       | ✅      | ✅         | ✅      | ✅                     |
-| SDK: Java                      | ✅       | ❌           | ❌         | ✅          | ~     | ❌        | ❌           | ✅       | ❌      | ✅         | ❌      | ❌                     |
-| SDK: C#                        | ✅       | ✅           | ✅         | ✅          | ~     | ❌        | ❌           | ✅       | ✅      | ❌         | ❌      | ❌                     |
-| SDK: PHP                       | ✅       | ❌           | ✅         | ✅          | ~     | ❌        | ❌           | ✅       | ✅      | ✅         | ❌      | ❌                     |
-| SDK: JavaScript                | ✅       | ✅           | ✅         | ✅          | ✅     | ✅        | ❌           | ✅       | ✅      | ✅         | ✅      | ❌                     |
-| SDK: React                     | ✅       | ✅           | ✅         | ❌          | ~     | ✅        | ❌           | ❌       | ✅      | ✅         | ❌      | ❌                     |
-| SDK: AngularJS                 | ✅       | ❌           | ✅         | ❌          | ~     | ✅        | ❌           | ❌       | ❌      | ✅         | ❌      | ❌                     |
-| SDK: TypeScript                | ✅       | ❌           | ❌         | ✅          | ~     | ✅        | ❌           | ❌       | ✅      | ✅         | ❌      | ❌                     |
+|        **Installation**        |         |             |           |            |       |          |             |         |        |           |        |                       |
+|          Open Source           |    ✅    |      ❌      |     ❌     |     ❌      |   ✅   |    ❌     |      ✅      |    ❌    |   ✅    |     ❌     |   ✅    |           ✅           |
+|         Cloud Service          |   WIP   |      ✅      |     ✅     |     ✅      |   ✅   |    ✅     |      ❌      |    ✅    |   ✅    |     ✅     |   ❌    |           ✅           |
+|    On Premises Installation    |    ✅    |      ❌      |     ❌     |     ❌      |   ✅   |    ❌     |      ❌      |    ❌    |   ❌    |     ✅     |   ✅    |           ✅           |
+| Cloud Service Hosted in Europe |    ✅    |      ❌      |     ~     |     ❌      |   ~   |    ✅     |      ❌      |    ~    |   ✅    |     ✅     |   ~    |           ✅           |
+| Commercial Support Available?  |    ✅    |      ✅      |     ✅     |     ✅      |   ✅   |    ✅     |      ❌      |    ✅    |   ✅    |     ✅     |   ✅    |           ✅           |
+|           **Users**            |         |             |           |            |       |          |             |         |        |           |        |                       |
+|        User Management         |    ✅    |      ✅      |     ❌     |     ❌      |   ❌   |    ❌     |      ✅      |    ❌    |   ✅    |     ✅     |   ✅    |           ❌           |
+|     Role Based Permissions     |    ✅    |      ✅      |     ✅     |     ✅      |   ✅   |    ✅     |      ✅      |    ✅    |   ✅    |     ✅     |   ✅    |           ✅           |
+|   Document Level Permissions   |    ✅    |      ✅      |     ❌     |     ❌      |   ❌   |    ❌     |      ✅      |    ❌    |   ✅    |     ✅     |   ✅    |           ✅           |
+|          **Features**          |         |             |           |            |       |          |             |         |        |           |        |                       |
+|          Web builder           |    ❌    |      ❌      |     ❌     |     ❌      |   ✅   |    ❌     |      ❌      |    ✅    |   ❌    |     ✅     |   ❌    |           ✅           |
+|       Real time support        |    ✅    |      ❌      |     ❌     |     ❌      |   ❌   |    ❌     |      ❌      |    ❌    |   ❌    |     ❌     |   ❌    |           ❌           |
+|    Search: Full Text Search    |    ✅    |      ✅      |     ✅     |     ✅      |   ~   |    ✅     |      ❌      |    ✅    |   ✅    |     ✅     |   ✅    |           ~           |
+|            Eventbus            |    ✅    |      ~      |     ❌     |     ❌      |   ~   |    ❌     |      ❌      |    ❌    |   ✅    |     ✅     |   ❌    |           ❌           |
+|       Client Side Forms        |    ✅    |      ✅      |     ❌     |     ❌      |   ~   |    ✅     |      ✅      |    ❌    |   ✅    |     ❌     |   ✅    |           ❌           |
+|         Plugin System          |    ✅    |      ✅      |     ❌     |     ❌      |   ❌   |    ❌     |      ✅      |    ❌    |   ✅    |     ✅     |   ✅    |           ❌           |
+|        Customizable UI         |    ✅    |      ✅      |     ❌     |     ✅      |   ~   |    ❌     |      ✅      |    ❌    |   ✅    |     ✅     |   ✅    |           ✅           |
+|         Content Trees          |    ✅    |      ✅      |     ❌     |     ❌      |   ~   |    ❌     |      ❌      |    ❌    |   ❌    |     ✅     |   ❌    |           ~           |
+|    Nesting fields/elements     |    ✅    |      ✅      |     ✅     |     ✅      |   ~   |    ❌     |             |    ❌    |   ✅    |     ✅     |   ✅    |           ✅           |
+|      Image: Manipulation       |    ✅    |      ✅      |     ✅     |     ✅      |   ~   |    ✅     |             |    ✅    |   ✅    |     ✅     |   ✅    |           ~           |
+|         **Technical**          |         |             |           |            |       |          |             |         |        |           |        |                       |
+|       OAuth 2.0 Support        |    ✅    |      ✅      |     ❌     |     ✅      |   ~   |    ❌     |      ✅      |    ❌    |   ✅    |     ✅     |   ✅    |           ~           |
+|          CDN Support           |    ✅    |      ✅      |     ✅     |     ✅      |   ~   |    ✅     |      ❌      |    ✅    |   ✅    |     ✅     |   ✅    |           ✅           |
+|         Backup Feature         |    ✅    |      ~      |     ❌     |     ❌      |   ~   |    ✅     |      ❌      |    ❌    |   ❌    |     ✅     |   ❌    |           ❌           |
+|         Import/Export          |    ✅    |      ✅      |     ✅     |     ✅      |   ~   |    ✅     |      ✅      |    ✅    |   ✅    |     ✅     |   ❌    |           ✅           |
+|              CLI               |    ✅    |      ❌      |     ❌     |     ✅      |   ✅   |    ❌     |      ✅      |    ✅    |   ✅    |     ✅     |   ✅    |           ✅           |
+|           Web Hooks            |    ✅    |      ✅      |     ✅     |     ✅      |   ✅   |    ✅     |      ❌      |    ✅    |   ✅    |     ✅     |   ✅    |           ✅           |
+|           Versioning           |    ✅    |      ✅      |     ❌     |     ✅      |   ❌   |    ❌     |      ❌      |    ✅    |   ✅    |     ✅     |   ❌    |           ✅           |
+|            **Data**            |         |             |           |            |       |          |             |         |        |           |        |                       |
+|          GraphQL: API          |    ❌    |      ✅      |     ✅     |     ✅      |   ❌   |    ✅     |      ✅      |    ✅    |   ✅    |     ✅     |   ✅    |           ✅           |
+|           REST: API            |    ✅    |      ✅      |     ✅     |     ✅      |   ✅   |    ✅     |      ❌      |    ✅    |   ✅    |     ✅     |   ✅    |           ✅           |
+|           SDK: Java            |    ✅    |      ❌      |     ❌     |     ✅      |   ~   |    ❌     |      ❌      |    ✅    |   ❌    |     ✅     |   ❌    |           ❌           |
+|            SDK: C#             |    ✅    |      ✅      |     ✅     |     ✅      |   ~   |    ❌     |      ❌      |    ✅    |   ✅    |     ❌     |   ❌    |           ❌           |
+|            SDK: PHP            |    ✅    |      ❌      |     ✅     |     ✅      |   ~   |    ❌     |      ❌      |    ✅    |   ✅    |     ✅     |   ❌    |           ❌           |
+|        SDK: JavaScript         |    ✅    |      ✅      |     ✅     |     ✅      |   ✅   |    ✅     |      ❌      |    ✅    |   ✅    |     ✅     |   ✅    |           ❌           |
+|           SDK: React           |    ✅    |      ✅      |     ✅     |     ❌      |   ~   |    ✅     |      ❌      |    ❌    |   ✅    |     ✅     |   ❌    |           ❌           |
+|         SDK: AngularJS         |    ✅    |      ❌      |     ✅     |     ❌      |   ~   |    ✅     |      ❌      |    ❌    |   ❌    |     ✅     |   ❌    |           ❌           |
+|        SDK: TypeScript         |    ✅    |      ❌      |     ❌     |     ✅      |   ~   |    ✅     |      ❌      |    ❌    |   ✅    |     ✅     |   ❌    |           ❌           |
 
 :::tip
 Picking a CMS is a very personal decision, and there is no one-size-fits-all

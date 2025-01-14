@@ -1,10 +1,7 @@
 ---
 slug: advantages_of_react_based_headless_cms
 title: Exploring the Advantages of a React-based Headless CMS
-author: Francesco Gatti
-image: /img/avatars/francesco_avatar.jpg
-author_url: https://www.linkedin.com/in/fgatti675
-author_image_url: https://avatars.githubusercontent.com/u/5120271?v=4
+authors: francesco
 ---
 
 ![React Code](/img/blog/lautaro-andreani-UYsBCu9RP3Y-unsplash.jpg)

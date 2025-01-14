@@ -3,6 +3,8 @@ id: collection_editor
 title: Collection Editor UI
 ---
 
+![collection_editor.png](/img/collection_editor.png)
+
 This document describes how to use the **Collection Editor UI Plugin** with **FireCMS** to manage and configure your
 Firestore collections. The Collection Editor UI Plugin provides an interface for creating, editing, and organizing
 collections, with support for customizable permissions and configuration options.

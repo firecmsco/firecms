@@ -1,10 +1,7 @@
 ---
 slug: do_you_need_a_no_code_tool_for_firebase
 title: Do you Need a No Code Tool for Firebase?
-image: /img/avatars/marian_avatar.jpeg
-author_name: Marian Moldovan
-author_url: https://www.linkedin.com/in/marianmoldovan/
-author_image_url: https://avatars.githubusercontent.com/u/1479084?v=4
+authors: marian
 ---
 
 ![Firebase Landscape](../static/img/blog/landscape.jpg)
@@ -32,6 +29,8 @@ Is your value proposition building an Authentication system, Storage, or Backend
 ### Firebase in Your Tech Stack
 
 So, you decided to use Firebase to build your product. That usually means you are a developer or have an internal development team. The first decision is made. I am building a React App, so I am going to use Firebase for the Backend.
+
+<!-- truncate -->
 
 How are you going to integrate your client with Firebase? What strategy are you going to use to build your core product? The essence of your company.
 

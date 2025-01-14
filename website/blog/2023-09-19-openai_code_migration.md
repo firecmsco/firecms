@@ -1,9 +1,7 @@
 ---
 slug: openai_code_migration
 title: Automated code migrations with OpenAI's GPT-4
-image: /img/avatars/francesco_avatar.jpg
-author_url: https://www.linkedin.com/in/fgatti675
-author_image_url: https://avatars.githubusercontent.com/u/5120271?v=4
+authors: francesco
 ---
 
 In the day-to-day world of development, activities such as refactoring and migrating code consume a significant amount
@@ -28,6 +26,8 @@ Note that you can apply the same approach to any other **code migration**.
 
 - Emotion defines styles utilizing the `sx` prop, as shown in the code snippet below, which presents a button with a red
   background:
+
+<!-- truncate -->
 
 ```tsx
 import {Button} from "@mui/material";

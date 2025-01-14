@@ -27,6 +27,11 @@ function ProFeaturesPanels() {
             icon: iconStars,
             title: "Data enhancement",
             description: "Use large language models (LLMs) to automatically enrich data for you and your clients. Gain valuable insights, context, and added value from your information."
+        },
+        {
+            icon: iconStars,
+            title: "Data import/export",
+            description: "Easily import and export data to and from your collections, using CSV, JSON or XLSX. Seamlessly move data between systems and services for a more efficient workflow."
         }
     ];
 

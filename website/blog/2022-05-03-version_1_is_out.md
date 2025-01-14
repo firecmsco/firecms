@@ -1,10 +1,7 @@
 ---
 slug: version_1_is_out
 title: Release of version 1.0.0
-author: Francesco Gatti
-image: /img/avatars/francesco_avatar.jpg
-author_url: https://www.linkedin.com/in/fgatti675
-author_image_url: https://avatars.githubusercontent.com/u/5120271?v=4
+authors: francesco
 ---
 
 ![Dark mode](../static/img/dark_mode.png)
@@ -23,8 +20,10 @@ to finally end the beta and release-candidate phases and ship version 1.0.0
 
 ## Why Firebase and FireCMS
 
-At Camberi, we have been developing web apps and mobile apps for a long time. We have
+At [Camberi](https://camberi.com), we have been developing web apps and mobile apps for a long time. We have
 used Firebase and Firestore as a backend and database in multiple projects.
+
+<!-- truncate -->
 
 Our experience overall has been great!
 

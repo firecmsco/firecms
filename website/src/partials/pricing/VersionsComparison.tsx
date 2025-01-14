@@ -10,179 +10,185 @@ import clsx from "clsx";
 
 const data = [{
         feature: "Unlimited projects",
-        selfHosted: "Yes",
+        community: "Yes",
         cloud: "Yes",
         cloudPlus: "Yes",
-        cloudPro: "Yes",
+        pro: "Yes",
     }, {
         feature: "Unlimited collections",
-        selfHosted: "Yes",
+        community: "Yes",
         cloud: "Yes",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
         feature: "20+ form fields",
-        selfHosted: "Yes",
+        community: "Yes",
         cloud: "Yes",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
         feature: "Subcollection support",
-        selfHosted: "Yes",
+        community: "Yes",
         cloud: "Yes",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
-        feature: "Collection editor",
-        selfHosted: "No",
+        feature: "Collection editor UI",
+        community: "No",
         cloud: "Yes",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
         feature: "Data schema inference",
-        selfHosted: "No",
+        community: "No",
         cloud: "Yes",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
         feature: "Fine grained control",
-        selfHosted: "Yes",
+        community: "Yes",
         cloud: "Yes",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "Yes"
+    }, {
+        feature: "Notion style editor",
+        community: "No",
+        cloud: "Yes",
+        cloudPlus: "Yes",
+        pro: "Yes"
     }, {
         feature: "Data export",
-        selfHosted: "Yes",
+        community: "No",
         cloud: "Yes",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
         feature: "Data import",
-        selfHosted: "No",
+        community: "No",
         cloud: "Yes",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
         feature: "User and role management",
-        selfHosted: "Dev managed",
+        community: "Dev managed",
         cloud: "Yes",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
         feature: "Custom form fields",
-        selfHosted: "Yes",
+        community: "Yes",
         cloud: "Yes",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
         feature: "Custom entity views",
-        selfHosted: "Yes",
+        community: "Yes",
         cloud: "Yes",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
         feature: "Dynamic properties",
-        selfHosted: "Yes",
+        community: "Yes",
         cloud: "Yes",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
         feature: "Custom routes",
-        selfHosted: "Yes",
+        community: "Yes",
         cloud: "Yes",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
         feature: "Firebase App Check",
-        selfHosted: "Yes",
+        community: "Yes",
         cloud: "No",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
         feature: "OpenAI data augmentation",
-        selfHosted: "With subscription",
+        community: "No",
         cloud: "No",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
         feature: "DataTalk",
-        selfHosted: "No",
+        community: "No",
         cloud: "No",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "No"
     }, {
         feature: "Local text search",
-        selfHosted: "Dev managed",
+        community: "No",
         cloud: "No",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
         feature: "Text search",
-        selfHosted: "Dev managed",
+        community: "Dev managed",
         cloud: "No",
         cloudPlus: "Dev managed",
-        cloudPro: "Dev managed"
+        pro: "Dev managed"
     }, {
         feature: "Support",
-        selfHosted: "Enterprise",
+        community: "Community",
         cloud: "No",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
-        feature: "Custom user roles",
-        selfHosted: "Dev managed",
+        feature: "User and role management",
+        community: "Dev managed",
         cloud: "No",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
         feature: "Unlimited users",
-        selfHosted: "Yes",
+        community: "Yes",
         cloud: "No",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
         feature: "Logo customisation",
-        selfHosted: "Yes",
+        community: "Yes",
         cloud: "No",
         cloudPlus: "Yes",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
         feature: "Self-hosted version",
-        selfHosted: "Yes",
+        community: "Yes",
         cloud: "No",
         cloudPlus: "No",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
         feature: "Custom login screen",
-        selfHosted: "Yes",
+        community: "Yes",
         cloud: "No",
         cloudPlus: "No",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
         feature: "Full theme customization",
-        selfHosted: "Yes",
+        community: "Yes",
         cloud: "No",
-        cloudPlus: "No",
-        cloudPro: "Yes"
+        cloudPlus: "Yes",
+        pro: "Yes"
     }, {
         feature: "CMS components customization",
-        selfHosted: "Yes",
+        community: "Yes",
         cloud: "No",
         cloudPlus: "No",
-        cloudPro: "Yes"
+        pro: "Yes"
     }, {
         feature: "Custom domain",
-        selfHosted: "No",
+        community: "Yes",
         cloud: "No",
         cloudPlus: "No",
-        cloudPro: "Yes"
+        pro: "Yes"
     },
         // {
         //     feature: "SAML SSO",
-        //     selfHosted: "No",
+        //     community: "No",
         //     cloud: "No",
         //     cloudPlus: "No",
-        //     cloudPro: "Yes"
+        //     pro: "Yes"
         // }
     ]
 ;
@@ -209,7 +215,7 @@ export function VersionsComparison() {
                    <LinedSpace size={"large"}/>
 
                    <div className={clsx("border-0 border-b w-full", defaultBorderMixin)}>
-                       <h2 className={"uppercase font-mono my-8 text-center"}>
+                       <h2 className={"uppercase font-mono my-8 text-center"} id={"comparison"}>
                            Versions comparison
                        </h2>
                    </div>
@@ -243,15 +249,15 @@ export function VersionsComparison() {
                         </th>
                         <th scope="col"
                             className="border-none rounded-lg text-base md:px-4 md:py-4 text-center min-w-36">
-                            Free
-                        </th>
-                        <th scope="col"
-                            className="border-none rounded-lg text-base md:px-4 md:py-4 text-center min-w-36">
-                            Plus
+                            Community
                         </th>
                         <th scope="col"
                             className="border-none rounded-lg text-base md:px-4 md:py-4 text-center min-w-36">
                             Pro
+                        </th>
+                        <th scope="col"
+                            className="border-none rounded-lg text-base md:px-4 md:py-4 text-center min-w-36">
+                            Cloud
                         </th>
                         {/*<th scope="col"*/}
                         {/*    className="border-none rounded-lg text-base md:px-6 md:py-4 text-center ">*/}
@@ -268,17 +274,18 @@ export function VersionsComparison() {
                                     className="bg-gray-50 mx-2 border-none rounded-lg px-6 py-2 text-gray-800 font-bold md:min-w-[360px]">
                                     {row.feature}
                                 </td>
-                                <td className={"bg-gray-50 mx-2  border-none rounded-lg px-4 py-2 text-gray-800  text-center " + getEntryClass(row.cloud)}>
-                                    {getFeatureComponent(row.cloud)}
+                                <td className={"bg-gray-50 mx-2  border-none rounded-lg px-4 py-2 text-gray-800  text-center " + getEntryClass(row.community)}>
+                                    {getFeatureComponent(row.community)}
+                                </td>
+                                <td className={"bg-gray-50 mx-2  border-none rounded-lg px-4 py-2 text-gray-800  text-center " + getEntryClass(row.pro)}>
+                                    {getFeatureComponent(row.pro)}
                                 </td>
                                 <td className={"bg-gray-50 mx-2  border-none rounded-lg px-4 py-2 text-gray-800  text-center " + getEntryClass(row.cloudPlus)}>
                                     {getFeatureComponent(row.cloudPlus)}
                                 </td>
-                                <td className={"bg-gray-50 mx-2  border-none rounded-lg px-4 py-2 text-gray-800  text-center " + getEntryClass(row.cloudPro)}>
-                                    {getFeatureComponent(row.cloudPro)}
-                                </td>
-                                {/*<td className={"bg-gray-50 mx-2  border-none rounded-lg px-6 py-2 text-gray-800  text-center " + getEntryClass(row.selfHosted)}>*/}
-                                {/*    {getFeatureComponent(row.selfHosted)}*/}
+
+                                {/*<td className={"bg-gray-50 mx-2  border-none rounded-lg px-6 py-2 text-gray-800  text-center " + getEntryClass(row.community)}>*/}
+                                {/*    {getFeatureComponent(row.community)}*/}
                                 {/*</td>*/}
                             </tr>
                         ))
@@ -289,18 +296,8 @@ export function VersionsComparison() {
                         className="text-xs text-gray-800 uppercase font-mono bg-gray-50  font-bold">
                     <tr>
                         <th scope="col"
-                            className="border-none rounded-lg px-6 py-3 invisible">
-                        </th>
-                        <th
-                            className={" table-cell p-0 border-none"}
                             colSpan={2}
-                        >
-                            <a className={CTAButtonMixin + " w-full"}
-                               rel="noopener noreferrer"
-                               target="_blank"
-                               href={"https://app.firecms.co"}>
-                                Go to FireCMS Cloud
-                            </a>
+                            className="border-none rounded-lg px-6 py-3 invisible">
                         </th>
                         <th
                             className={" table-cell p-0 border-none"}
@@ -311,6 +308,18 @@ export function VersionsComparison() {
                                target="_blank"
                                href={"/pro"}>
                                 More info
+                            </a>
+                        </th>
+
+                        <th
+                            className={" table-cell p-0 border-none"}
+                            colSpan={1}
+                        >
+                            <a className={CTAButtonMixin + " w-full"}
+                               rel="noopener noreferrer"
+                               target="_blank"
+                               href={"https://app.firecms.co"}>
+                                FireCMS Cloud
                             </a>
                         </th>
                         {/*<a*/}

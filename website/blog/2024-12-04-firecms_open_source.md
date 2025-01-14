@@ -1,10 +1,8 @@
 ---
 slug: firecms_open_source_at_heart
 title: FireCMS - Our Commitment to Open Source
-author: Marian Moldovan
 image: /img/blog/firecms_open_source.jpg
-author_url: https://www.linkedin.com/in/marianmoldovan/
-author_image_url: https://avatars.githubusercontent.com/u/1479084?v=4
+authors: marian
 ---
 
 ![Open Source](../static/img/blog/firecms_open_source.jpg)
@@ -34,6 +32,8 @@ The **core** of **FireCMS** has an **MIT** license. Use it as you wish, with the
 is how we started, and we will keep it that way.
 
 A TypeScript library built on top of React to manage data in Firestore forms the foundation of all other versions.
+
+<!-- truncate -->
 
 That's not all you need to start, but you get the idea. We are working to update the CLI to make it easier to start a
 new project.
