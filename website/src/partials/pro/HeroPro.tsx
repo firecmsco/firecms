@@ -46,7 +46,7 @@ export function HeroPro({
                     </div>
                 </Panel>
             </div>
-            <Panel color={"secondary"}>
+            <Panel color={"primary"}>
                 <p className={"text-gray-900 uppercase font-mono font-bold"}>
                     No more limits. No more compromises.
                 </p>

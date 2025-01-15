@@ -1,6 +1,6 @@
 ---
 id: eject_collections
-title: Eject Collections.
+title: Eject Collections
 sidebar_label: Eject Collections
 ---
 

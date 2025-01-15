@@ -40,7 +40,7 @@ export function Hero({
                 </Panel>
             </div>
 
-            {subtitle || cta &&
+            {(subtitle || cta) &&
                 <Panel color={subtitleColor} includePadding={false} innerClassName={"py-8 md:py-12 p-4 md:p-8"}>
                     {subtitle &&
                         <div className="font-mono uppercase m-0 text-xl md:text-2xl">

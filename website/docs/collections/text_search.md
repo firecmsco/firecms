@@ -87,7 +87,7 @@ export default function App() {
 }
 ```
 
-### Using Algolia in FireCMS PRO
+### Using Algolia in self-hosted FireCMS
 
 For FireCMS PRO, you need to define a `FirestoreTextSearchControllerBuilder`.
 

@@ -12,184 +12,148 @@ const data = [{
         feature: "Unlimited projects",
         community: "Yes",
         cloud: "Yes",
-        cloudPlus: "Yes",
         pro: "Yes",
     }, {
         feature: "Unlimited collections",
         community: "Yes",
         cloud: "Yes",
-        cloudPlus: "Yes",
         pro: "Yes"
     }, {
         feature: "20+ form fields",
         community: "Yes",
         cloud: "Yes",
-        cloudPlus: "Yes",
         pro: "Yes"
     }, {
         feature: "Subcollection support",
         community: "Yes",
         cloud: "Yes",
-        cloudPlus: "Yes",
         pro: "Yes"
     }, {
         feature: "Collection editor UI",
         community: "No",
         cloud: "Yes",
-        cloudPlus: "Yes",
         pro: "Yes"
     }, {
         feature: "Data schema inference",
         community: "No",
         cloud: "Yes",
-        cloudPlus: "Yes",
         pro: "Yes"
     }, {
         feature: "Fine grained control",
         community: "Yes",
         cloud: "Yes",
-        cloudPlus: "Yes",
         pro: "Yes"
     }, {
         feature: "Notion style editor",
         community: "No",
         cloud: "Yes",
-        cloudPlus: "Yes",
         pro: "Yes"
     }, {
         feature: "Data export",
         community: "No",
         cloud: "Yes",
-        cloudPlus: "Yes",
         pro: "Yes"
     }, {
         feature: "Data import",
         community: "No",
         cloud: "Yes",
-        cloudPlus: "Yes",
         pro: "Yes"
     }, {
         feature: "User and role management",
         community: "Dev managed",
         cloud: "Yes",
-        cloudPlus: "Yes",
         pro: "Yes"
     }, {
         feature: "Custom form fields",
         community: "Yes",
         cloud: "Yes",
-        cloudPlus: "Yes",
         pro: "Yes"
     }, {
         feature: "Custom entity views",
         community: "Yes",
         cloud: "Yes",
-        cloudPlus: "Yes",
         pro: "Yes"
     }, {
         feature: "Dynamic properties",
         community: "Yes",
         cloud: "Yes",
-        cloudPlus: "Yes",
         pro: "Yes"
     }, {
         feature: "Custom routes",
         community: "Yes",
         cloud: "Yes",
-        cloudPlus: "Yes",
         pro: "Yes"
     }, {
         feature: "Firebase App Check",
         community: "Yes",
-        cloud: "No",
-        cloudPlus: "Yes",
+        cloud: "Yes",
         pro: "Yes"
     }, {
         feature: "OpenAI data augmentation",
         community: "No",
-        cloud: "No",
-        cloudPlus: "Yes",
+        cloud: "Yes",
         pro: "Yes"
     }, {
         feature: "DataTalk",
         community: "No",
-        cloud: "No",
-        cloudPlus: "Yes",
+        cloud: "Yes",
         pro: "No"
     }, {
         feature: "Local text search",
         community: "No",
-        cloud: "No",
-        cloudPlus: "Yes",
+        cloud: "Yes",
         pro: "Yes"
     }, {
         feature: "Text search",
         community: "Dev managed",
-        cloud: "No",
-        cloudPlus: "Dev managed",
+        cloud: "Dev managed",
         pro: "Dev managed"
     }, {
         feature: "Support",
         community: "Community",
-        cloud: "No",
-        cloudPlus: "Yes",
+        cloud: "Yes",
         pro: "Yes"
     }, {
         feature: "User and role management",
         community: "Dev managed",
-        cloud: "No",
-        cloudPlus: "Yes",
+        cloud: "Yes",
         pro: "Yes"
     }, {
         feature: "Unlimited users",
         community: "Yes",
-        cloud: "No",
-        cloudPlus: "Yes",
+        cloud: "Yes",
         pro: "Yes"
     }, {
         feature: "Logo customisation",
         community: "Yes",
-        cloud: "No",
-        cloudPlus: "Yes",
+        cloud: "Yes",
         pro: "Yes"
     }, {
         feature: "Self-hosted version",
         community: "Yes",
         cloud: "No",
-        cloudPlus: "No",
         pro: "Yes"
     }, {
         feature: "Custom login screen",
         community: "Yes",
         cloud: "No",
-        cloudPlus: "No",
         pro: "Yes"
     }, {
         feature: "Full theme customization",
         community: "Yes",
-        cloud: "No",
-        cloudPlus: "Yes",
+        cloud: "Yes",
         pro: "Yes"
     }, {
         feature: "CMS components customization",
         community: "Yes",
         cloud: "No",
-        cloudPlus: "No",
         pro: "Yes"
     }, {
         feature: "Custom domain",
         community: "Yes",
         cloud: "No",
-        cloudPlus: "No",
         pro: "Yes"
-    },
-        // {
-        //     feature: "SAML SSO",
-        //     community: "No",
-        //     cloud: "No",
-        //     cloudPlus: "No",
-        //     pro: "Yes"
-        // }
+    }
     ]
 ;
 
@@ -280,8 +244,8 @@ export function VersionsComparison() {
                                 <td className={"bg-gray-50 mx-2  border-none rounded-lg px-4 py-2 text-gray-800  text-center " + getEntryClass(row.pro)}>
                                     {getFeatureComponent(row.pro)}
                                 </td>
-                                <td className={"bg-gray-50 mx-2  border-none rounded-lg px-4 py-2 text-gray-800  text-center " + getEntryClass(row.cloudPlus)}>
-                                    {getFeatureComponent(row.cloudPlus)}
+                                <td className={"bg-gray-50 mx-2  border-none rounded-lg px-4 py-2 text-gray-800  text-center " + getEntryClass(row.cloud)}>
+                                    {getFeatureComponent(row.cloud)}
                                 </td>
 
                                 {/*<td className={"bg-gray-50 mx-2  border-none rounded-lg px-6 py-2 text-gray-800  text-center " + getEntryClass(row.community)}>*/}

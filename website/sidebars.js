@@ -23,7 +23,8 @@ module.exports = {
                 "cloud/deployment",
                 "cloud/app_check",
                 "cloud/creating_service_account",
-                "cloud/migrating_from_v2"
+                "cloud/migrating_from_v2",
+                "cloud/eject_collections"
             ]
         },
         {
@@ -99,8 +100,7 @@ module.exports = {
                 "collections/dynamic_collections",
                 "collections/collection_actions",
                 "collections/collection_groups",
-                "collections/entity_actions",
-                "collections/eject_collections"
+                "collections/entity_actions"
             ]
         },
         {

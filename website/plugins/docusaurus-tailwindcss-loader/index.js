@@ -1,9 +1,7 @@
 module.exports = function (context, options) {
-    console.log("postcss-tailwindcss-loader");
     return {
         name: "postcss-tailwindcss-loader",
         configurePostCss(postcssOptions) {
-            console.log("postcss configurePostCss")
             const postcss = require("postcss-import");
             const tailwindcss = require("tailwindcss");
             const postcssenv = require("postcss-preset-env");

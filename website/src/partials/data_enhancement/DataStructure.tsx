@@ -15,7 +15,7 @@ export function DataStructure() {
     const isDarkTheme = colorMode === "dark";
     return (
 
-        <Panel color={"secondary"}>
+        <Panel color={"primary"}>
             <h2 className="mb-4">
                 Harness AI for Your Structured Data
             </h2>
