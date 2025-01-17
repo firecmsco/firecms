@@ -31,16 +31,10 @@ export type ProjectConfig = {
 
     subscriptionPlan?: ProjectSubscriptionPlan;
     subscriptionData?: ProjectSubscriptionData;
+    trialValidUntil?: Date;
+    isTrialOver: boolean;
     subscriptionStatus?: object;
     customizationRevision?: string;
-    usersLimit?: number;
-
-    canEditRoles: boolean;
-    canModifyTheme: boolean;
-    canExport: boolean;
-    canUseLocalTextSearch: boolean;
-    canUseCustomDatabase: boolean;
-    canUseDataEnhancement: boolean;
 
     localTextSearchEnabled: boolean;
     updateLocalTextSearchEnabled: (allow: boolean) => Promise<void>;
@@ -78,6 +72,9 @@ export function useBuildProjectConfig({
     const [clientProjectName, setClientProjectName] = useState<string | undefined>();
     const [subscriptionPlan, setSubscriptionPlan] = useState<ProjectSubscriptionPlan>();
     const [subscriptionData, setSubscriptionData] = useState<ProjectSubscriptionData | undefined>();
+    const [trialValidUntil, setTrialValidUntil] = useState<Date | undefined>();
+
+    const isTrialOver = (subscriptionPlan === "free" && trialValidUntil ? new Date() > trialValidUntil : false) || false;
 
     const [clientConfigLoading, setClientConfigLoading] = useState<boolean>(false);
     const [clientFirebaseConfig, setClientFirebaseConfig] = useState<Record<string, unknown> | undefined>();
@@ -180,16 +177,16 @@ export function useBuildProjectConfig({
                     });
                     setClientProjectName(snapshot.get("name"));
                     const plan = snapshot.get("subscription_plan") ?? "free";
-                    setSubscriptionPlan(plan); // TODO: remove default value
+                    setSubscriptionPlan(plan);
                     setSubscriptionData(snapshot.get("subscription_data"));
                     setLocalTextSearchEnabled(snapshot.get("local_text_search_enabled") ?? false);
-                    if (plan === "free") {
-                        setPrimaryColor(DEFAULT_PRIMARY_COLOR);
-                        setSecondaryColor(DEFAULT_SECONDARY_COLOR);
-                    } else {
-                        setPrimaryColor(snapshot.get("primary_color") ?? DEFAULT_PRIMARY_COLOR);
-                        setSecondaryColor(snapshot.get("secondary_color") ?? DEFAULT_SECONDARY_COLOR);
+                    const trialTimestamp = snapshot.get("trial_valid_until");
+                    if (trialTimestamp) {
+                        setTrialValidUntil(trialTimestamp.toDate());
                     }
+
+                    setPrimaryColor(snapshot.get("primary_color") ?? DEFAULT_PRIMARY_COLOR);
+                    setSecondaryColor(snapshot.get("secondary_color") ?? DEFAULT_SECONDARY_COLOR);
 
                     const currentCustomizationRevision = snapshot.get("current_app_config_revision");
                     setCustomizationRevision(currentCustomizationRevision);
@@ -198,15 +195,9 @@ export function useBuildProjectConfig({
 
                     const updatedSerializedAppCheck = snapshot.get("app_check");
                     if (updatedSerializedAppCheck) {
-                        if (plan === "free") {
-                            console.warn("AppCheck is not supported in the free plan. Ignoring configuration. Please upgrade to PLUS in order to use this feature")
-                            setAppCheck(undefined);
-                            setSerializedAppCheck(null);
-                        } else {
-                            const appCheckOptions = updatedSerializedAppCheck ? deserializeAppCheckOptions(updatedSerializedAppCheck) : undefined;
-                            setAppCheck(appCheckOptions);
-                            setSerializedAppCheck(updatedSerializedAppCheck);
-                        }
+                        const appCheckOptions = updatedSerializedAppCheck ? deserializeAppCheckOptions(updatedSerializedAppCheck) : undefined;
+                        setAppCheck(appCheckOptions);
+                        setSerializedAppCheck(updatedSerializedAppCheck);
                     }
 
                     const firebaseConfig = snapshot.get("firebase_config");
@@ -237,31 +228,21 @@ export function useBuildProjectConfig({
         );
     }, [backendFirebaseApp, projectId]);
 
-    const usersLimit = subscriptionPlan === "free" ? 3 : undefined;
-    const canEditRoles = subscriptionPlan !== "free";
-    const canModifyTheme = subscriptionPlan !== "free";
-    const canExport = subscriptionPlan !== "free";
-    const canUseLocalTextSearch = subscriptionPlan !== "free";
-    const canUseCustomDatabase = subscriptionPlan !== "free";
-    const canUseDataEnhancement = subscriptionPlan !== "free";
-
     const updatePrimaryColor = useCallback(async (color?: string): Promise<void> => {
         if (!backendFirebaseApp) throw Error("useBuildProjectConfig Firebase not initialised");
         const firestore = getFirestore(backendFirebaseApp);
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         setPrimaryColor(color);
-        if (canModifyTheme)
-            setDoc(doc(firestore, configPath), { primary_color: color }, { merge: true });
-    }, [configPath, canModifyTheme]);
+        setDoc(doc(firestore, configPath), { primary_color: color }, { merge: true });
+    }, [configPath]);
 
     const updateSecondaryColor = useCallback(async (color?: string): Promise<void> => {
         if (!backendFirebaseApp) throw Error("useBuildProjectConfig Firebase not initialised");
         const firestore = getFirestore(backendFirebaseApp);
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         setSecondaryColor(color);
-        if (canModifyTheme)
-            setDoc(doc(firestore, configPath), { secondary_color: color }, { merge: true });
-    }, [configPath, canModifyTheme]);
+        setDoc(doc(firestore, configPath), { secondary_color: color }, { merge: true });
+    }, [configPath]);
 
     const updateAppCheck = useCallback(async (appCheck: SerializedAppCheckOptions | null): Promise<void> => {
         if (!backendFirebaseApp) throw Error("useBuildProjectConfig Firebase not initialised");
@@ -273,26 +254,21 @@ export function useBuildProjectConfig({
     return {
 
         projectId,
-        logo: canModifyTheme ? logo : undefined,
+        logo,
         uploadLogo,
         updateProjectName,
 
         projectName: clientProjectName,
         subscriptionPlan: loadedProjectIdRef.current !== projectId ? undefined : subscriptionPlan,
         subscriptionData: loadedProjectIdRef.current !== projectId ? undefined : subscriptionData,
+        trialValidUntil: loadedProjectIdRef.current !== projectId ? undefined : trialValidUntil,
+        isTrialOver: (loadedProjectIdRef.current !== projectId ? undefined : isTrialOver) ?? false,
         customizationRevision: loadedProjectIdRef.current !== projectId ? undefined : customizationRevision,
         configLoading: loadedProjectIdRef.current !== projectId || clientConfigLoading,
         configError: loadedProjectIdRef.current !== projectId ? undefined : clientConfigError,
         clientFirebaseConfig: loadedProjectIdRef.current !== projectId ? undefined : clientFirebaseConfig,
         clientFirebaseMissing: loadedProjectIdRef.current !== projectId ? undefined : clientFirebaseMissing,
         serviceAccountMissing: loadedProjectIdRef.current !== projectId ? undefined : serviceAccountMissing,
-        usersLimit,
-        canEditRoles,
-        canModifyTheme,
-        canExport,
-        canUseLocalTextSearch,
-        canUseCustomDatabase,
-        canUseDataEnhancement,
         localTextSearchEnabled,
         updateLocalTextSearchEnabled,
         primaryColor,

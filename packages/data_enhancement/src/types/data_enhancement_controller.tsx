@@ -22,7 +22,6 @@ export type DataEnhancementController = {
     clearAllSuggestions: () => void;
     getSamplePrompts: (entityName: string, input?: string) => Promise<SamplePromptsResult>;
     loadingSuggestions: string[],
-    interceptUsage?: () => void;
     editorAIController?: EditorAIController;
 }
 

@@ -14,7 +14,7 @@ import {
     Typography,
 } from "@firecms/ui";
 import { useFireCMSBackend, useProjectConfig } from "../../hooks";
-import { ProjectSubscriptionPlans, SubscriptionPlanWidget } from "../subscriptions";
+import { ProjectSubscriptionPlans } from "../subscriptions";
 import { SecurityRulesInstructions } from "../SecurityRulesInstructions";
 import { AppCheckSettingsView } from "./AppCheckSettingsView";
 
@@ -32,9 +32,9 @@ export function ProjectSettings() {
 
     return (
         <Container maxWidth={"6xl"}
-                      className={"w-full flex flex-col gap-16 px-4 py-16"}>
+                   className={"w-full flex flex-col gap-16 px-4 py-16"}>
 
-            <ProjectSubscriptionPlans uid={backendUid}/>
+            <ProjectSubscriptionPlans/>
 
             <div className={"flex flex-col gap-2"}>
 
@@ -84,23 +84,16 @@ function ProjectNameTextField() {
 
 }
 
-function LogoUploadField({ onNoSubscriptionPlan }: {
-    onNoSubscriptionPlan: () => void
-}) {
+function LogoUploadField() {
 
     const {
         logo,
-        canModifyTheme,
         uploadLogo
     } = useProjectConfig();
 
     const snackbarContext = useSnackbarController();
 
     const onFilesAdded = async (acceptedFiles: File[]) => {
-        if (!canModifyTheme) {
-            onNoSubscriptionPlan();
-            return;
-        }
         if (!acceptedFiles.length)
             return;
 
@@ -108,16 +101,12 @@ function LogoUploadField({ onNoSubscriptionPlan }: {
     }
 
     const onFilesRejected: OnFileUploadRejected = (fileRejections, event) => {
-        if (!canModifyTheme) {
-            onNoSubscriptionPlan();
-        } else {
-            for (const fileRejection of fileRejections) {
-                for (const error of fileRejection.errors) {
-                    snackbarContext.open({
-                        type: "error",
-                        message: `Error uploading file: ${error.message}`
-                    });
-                }
+        for (const fileRejection of fileRejections) {
+            for (const error of fileRejection.errors) {
+                snackbarContext.open({
+                    type: "error",
+                    message: `Error uploading file: ${error.message}`
+                });
             }
         }
     };
@@ -155,7 +144,6 @@ function SampleComponents() {
 }
 
 function ThemeColors() {
-    const [showUpgradeBanner, setShowUpgradeBanner] = useState<boolean>(false);
 
     const projectConfig = useProjectConfig();
     return <div className={"flex flex-col gap-2 mt-4 mb-2"}>
@@ -164,7 +152,7 @@ function ThemeColors() {
         <div className={"grid grid-cols-12 gap-4"}>
 
             <div className={"col-span-12 md:col-span-6"}>
-                <LogoUploadField onNoSubscriptionPlan={() => setShowUpgradeBanner(true)}/>
+                <LogoUploadField/>
             </div>
 
             <div className={"col-span-12 md:col-span-6"}>
@@ -176,7 +164,6 @@ function ThemeColors() {
                                 type="color"
                                 value={projectConfig.primaryColor}
                                 onChange={e => {
-                                    setShowUpgradeBanner(true);
                                     return projectConfig.updatePrimaryColor(e.target.value);
                                 }}
                             />
@@ -187,7 +174,6 @@ function ThemeColors() {
                                 type="color"
                                 value={projectConfig.secondaryColor}
                                 onChange={e => {
-                                    setShowUpgradeBanner(true);
                                     return projectConfig.updateSecondaryColor(e.target.value);
                                 }}
                             />
@@ -198,11 +184,7 @@ function ThemeColors() {
                 </Paper>
             </div>
         </div>
-        {showUpgradeBanner &&
-            <SubscriptionPlanWidget
-                showForPlans={["free"]}
-                includeTooManyUsersAlert={true}
-                message={<>Upgrade to <b>PLUS</b> to customise the logo and colors</>}/>}
+
     </div>
 
 }

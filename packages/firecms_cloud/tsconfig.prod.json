@@ -13,6 +13,7 @@
     "../collection_editor_firebase/src",
     "../data_enhancement/src",
     "../schema_inference/src",
+    "../user_management/src",
     "../formex/src",
     "../datatalk/src",
     "../data_import_export/src"

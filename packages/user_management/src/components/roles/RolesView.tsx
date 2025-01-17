@@ -1,10 +1,9 @@
 import React, { useCallback, useState } from "react";
 
 import { Role, useNavigationController } from "@firecms/core";
-import { AddIcon, Button, Container, Tooltip, Typography } from "@firecms/ui";
+import { AddIcon, Button, Container, Typography } from "@firecms/ui";
 import { RolesTable } from "./RolesTable";
 import { RolesDetailsForm } from "./RolesDetailsForm";
-import { useUserManagement } from "../../hooks";
 
 export const RolesView = React.memo(
     function RolesView({ children }: { children?: React.ReactNode }) {
@@ -12,8 +11,6 @@ export const RolesView = React.memo(
         const { collections } = useNavigationController();
         const [dialogOpen, setDialogOpen] = useState(false);
         const [selectedRole, setSelectedRole] = useState<Role | undefined>();
-
-        const { canEditRoles } = useUserManagement();
 
         const onRoleClicked = useCallback((user: Role) => {
             setDialogOpen(true);
@@ -36,26 +33,21 @@ export const RolesView = React.memo(
                                 component="h4">
                         Roles
                     </Typography>
-                    <Tooltip
-                        asChild={true}
-                        title={!canEditRoles ? "Update plans to customise roles" : undefined}>
-                        <Button
-                            size={"large"}
-                            disabled={!canEditRoles}
-                            startIcon={<AddIcon/>}
-                            onClick={() => setDialogOpen(true)}>
-                            Add role
-                        </Button>
-                    </Tooltip>
+                    <Button
+                        size={"large"}
+                        startIcon={<AddIcon/>}
+                        onClick={() => setDialogOpen(true)}>
+                        Add role
+                    </Button>
                 </div>
 
-                <RolesTable onRoleClicked={onRoleClicked} editable={Boolean(canEditRoles)}/>
+                <RolesTable onRoleClicked={onRoleClicked} editable={true}/>
 
                 <RolesDetailsForm
                     key={selectedRole?.id ?? "new"}
                     open={dialogOpen}
                     role={selectedRole}
-                    editable={canEditRoles}
+                    editable={true}
                     collections={collections}
                     handleClose={handleClose}/>
 

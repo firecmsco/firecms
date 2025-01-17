@@ -57,7 +57,6 @@ export type FireCMSEditorProps = {
     textSize?: FireCMSEditorTextSize,
     highlight?: { from: number, to: number },
     aiController?: EditorAIController,
-    onDisabledAutocompleteClick?: () => void,
     customComponents?: CustomEditorComponent[];
 };
 
@@ -91,7 +90,6 @@ export const FireCMSEditor = ({
                                   highlight,
                                   handleImageUpload,
                                   aiController,
-                                  onDisabledAutocompleteClick
                               }: FireCMSEditorProps) => {
 
     const ref = React.useRef<HTMLDivElement | null>(null);
@@ -189,7 +187,6 @@ export const FireCMSEditor = ({
             suggestion: suggestion(ref, {
                 upload: handleImageUpload,
                 aiController,
-                onDisabledAutocompleteClick
             })
         })
     ]), []);

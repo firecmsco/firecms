@@ -23,21 +23,15 @@ interface UserManagementParams {
     backendFirebaseApp?: FirebaseApp;
     projectId: string;
     projectsApi: ProjectsApi;
-    usersLimit?: number;
-    canEditRoles?: boolean;
     fireCMSBackend: FireCMSBackend
 }
 
-export type CloudUserManagement = UserManagement<FireCMSCloudUserWithRoles> & {
-    allowedUsers: FireCMSCloudUserWithRoles[];
-};
+export type CloudUserManagement = UserManagement<FireCMSCloudUserWithRoles>;
 
 export function useBuildCloudUserManagement({
                                                 backendFirebaseApp,
                                                 projectId,
                                                 projectsApi,
-                                                usersLimit,
-                                                canEditRoles,
                                                 fireCMSBackend
                                             }: UserManagementParams): CloudUserManagement {
 
@@ -176,7 +170,6 @@ export function useBuildCloudUserManagement({
 
     const isAdmin = loggedInUser?.roles.some(r => r.id === "admin");
 
-    const allowedUsers = users.slice(0, usersLimit);
 
     return {
         allowDefaultRolesCreation: false,
@@ -184,15 +177,12 @@ export function useBuildCloudUserManagement({
         loading: rolesLoading || usersLoading,
         roles,
         users,
-        allowedUsers,
         saveUser,
         saveRole,
         defineRolesFor,
         deleteUser: removeUser,
         deleteRole,
-        usersLimit,
         isAdmin,
-        canEditRoles: canEditRoles === undefined ? true : canEditRoles,
         collectionPermissions
     }
 }

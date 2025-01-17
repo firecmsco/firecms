@@ -89,8 +89,6 @@ export function CollectionDetailsForm({
         }
     }, [errors.id]);
 
-    const DatabaseField = collectionEditor.components?.DatabaseField ?? DefaultDatabaseField;
-
     const collectionIcon = <IconForView collectionOrView={values}/>;
 
     const groupOptions = groups?.filter((group) => !reservedGroups?.includes(group));
@@ -127,8 +125,8 @@ export function CollectionDetailsForm({
                         <Typography variant={!isNewCollection ? "h5" : "h4"} className={"flex-grow"}>
                             {isNewCollection ? "New collection" : `${values?.name} collection`}
                         </Typography>
-                        <DatabaseField databaseId={values.databaseId}
-                                       onDatabaseIdUpdate={updateDatabaseId}/>
+                        <DefaultDatabaseField databaseId={values.databaseId}
+                                              onDatabaseIdUpdate={updateDatabaseId}/>
 
                         <Tooltip title={"Change icon"}
                                  asChild={true}>

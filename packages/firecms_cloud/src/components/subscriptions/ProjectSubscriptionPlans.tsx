@@ -2,21 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useBrowserTitleAndIcon } from "@firecms/core";
 import { AutoAwesomeIcon, Card, Chip, CircularProgress, cls, Typography, } from "@firecms/ui";
 import { useSubscriptionsForUserController } from "../../hooks/useSubscriptionsForUserController";
-import { ProductUpgradeSmallView } from "./ProductUpgradeSmallView";
+import { UpgradeCloudSubscriptionView } from "./UpgradeCloudSubscriptionView";
 import { getPriceString, getSubscriptionStatusText } from "../settings/common";
 import { Subscription } from "../../types";
 import { StripeDisclaimer } from "./StripeDisclaimer";
 import { useFireCMSBackend, useProjectConfig } from "../../hooks";
-import { PlanChip } from "./PlanChip";
 
-export function ProjectSubscriptionPlans({ uid }: {
-    uid: string
-}) {
+export function ProjectSubscriptionPlans() {
 
     const {
         subscriptionPlan,
-        projectId
+        projectId,
+        trialValidUntil
     } = useProjectConfig();
+
     if (!subscriptionPlan)
         throw new Error("No subscription plan");
 
@@ -24,7 +23,7 @@ export function ProjectSubscriptionPlans({ uid }: {
 
     const {
         products,
-        subscribe,
+        subscribeCloud,
         activeSubscriptions,
         getSubscriptionsForProject
     } = useSubscriptionsForUserController();
@@ -50,17 +49,24 @@ export function ProjectSubscriptionPlans({ uid }: {
 
                     <Typography variant={"h4"} className="mt-4 mb-2">Subscription Plan</Typography>
 
-                    <Typography
-                        variant={"subtitle1"}
-                        className="my-2">
-                        This project is on the <PlanChip subscriptionPlan={subscriptionPlan}/>
+                    {subscriptionPlan === "cloud_plus" &&
+                        <Typography
+                            variant={"subtitle1"}
+                            className="my-2">
+                            You are currently subscribed to <Chip size={"small"}>FireCMS Cloud</Chip>.
+                        </Typography>}
 
-                    </Typography>
+                    {trialValidUntil &&
+                        <Typography
+                            variant={"subtitle1"}
+                            className="my-2">
+                            Your trial is valid until {trialValidUntil.toLocaleDateString()}.
+                        </Typography>}
 
-                    {subscriptionPlan !== "cloud_plus" && plusProduct && <ProductUpgradeSmallView
+                    {subscriptionPlan !== "cloud_plus" && plusProduct && <UpgradeCloudSubscriptionView
                         product={plusProduct}
                         projectId={projectId}
-                        subscribe={subscribe}/>}
+                        subscribeCloud={subscribeCloud}/>}
 
                     {subscriptionPlan === "cloud_plus" && plusSubscription &&
                         <CurrentCloudSubscriptionView subscription={plusSubscription}/>}
@@ -73,13 +79,13 @@ export function ProjectSubscriptionPlans({ uid }: {
                     <Card
                         className={"p-6 bg-amber-200 dark:bg-amber-700 border-amber-300 dark:border-amber-800 flex flex-col gap-4"}>
 
-                        {subscriptionPlan === "free" && <div>Upgrade to the <b>PLUS</b> plan to enable the following
-                            features:</div>}
-
-                        {subscriptionPlan === "cloud_plus" && <div>By being on the <b>PLUS</b> plan you are enjoying the
-                            following features:</div>}
+                        <div>These are some of the features you are already enjoying by using FireCMS Cloud
+                        </div>
 
                         <ul className={"px-2 text-base"}>
+                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>
+                                Managed always up-to-date service
+                            </li>
                             <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>
                                 Local text search
                             </li>

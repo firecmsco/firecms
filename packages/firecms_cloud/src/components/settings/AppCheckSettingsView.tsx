@@ -10,13 +10,11 @@ import {
 } from "@firecms/ui";
 import { useProjectConfig } from "../../hooks";
 import { useState } from "react";
-import { SubscriptionPlanWidget } from "../subscriptions";
 import { useSnackbarController } from "@firecms/core";
 
 export function AppCheckSettingsView() {
 
     const projectConfig = useProjectConfig();
-    const isInFreePlan = projectConfig.subscriptionPlan === "free";
 
     const snackbarController = useSnackbarController();
 
@@ -55,10 +53,6 @@ export function AppCheckSettingsView() {
                  }}>
         <Typography variant={"h4"}>AppCheck</Typography>
 
-        <SubscriptionPlanWidget
-            showForPlans={["free"]}
-            message={<>Upgrade to <b>PLUS</b> to enable AppCheck</>}/>
-
         <Typography>
             You can enable AppCheck to protect your Firebase services from abuse.
             Check how to configure it in the <a href={"https://firebase.google.com/docs/app-check"}>Firebase
@@ -74,7 +68,6 @@ export function AppCheckSettingsView() {
         <BooleanSwitchWithLabel value={enabled}
                                 position={"start"}
                                 size={"small"}
-                                disabled={isInFreePlan}
                                 label={"Enable AppCheck"}
                                 onValueChange={(value) => {
                                     setEnabled(value);
@@ -111,7 +104,6 @@ export function AppCheckSettingsView() {
             </div>
 
             <Button variant={"outlined"}
-                    disabled={isInFreePlan}
                     type={"submit"}>
                 Update AppCheck
             </Button>

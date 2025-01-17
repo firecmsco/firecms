@@ -56,7 +56,6 @@ import {
     CloudErrorView,
     FireCMSCloudDrawer,
     FireCMSCloudLoginView,
-    FireCMSDataEnhancementSubscriptionMessage,
     ProjectSettings,
     SubscriptionPlanWidget
 } from "./components";
@@ -70,7 +69,7 @@ import {
     useFirestoreDelegate,
     useInitialiseFirebase
 } from "@firecms/firebase";
-import { ExportAllowedParams, useExportPlugin } from "@firecms/data_export";
+import { useExportPlugin } from "@firecms/data_export";
 import { useImportPlugin } from "@firecms/data_import";
 import { Button, CenteredView, ErrorIcon, Typography } from "@firecms/ui";
 import { useSaasPlugin } from "./hooks/useSaasPlugin";
@@ -84,9 +83,6 @@ import {
 import { DataTalkProvider, DataTalkRoutes, useBuildDataTalkConfig } from "@firecms/datatalk";
 import { useDataTalkMode } from "./hooks/useDataTalkMode";
 import { FireCMSCloudDataTalkDrawer } from "./components/FireCMSCloudDataTalkDrawer";
-import { PaywallDatabaseIdField } from "./components/PaywallDatabaseIdField";
-
-const DOCS_LIMIT = 200;
 
 /**
  * This is the default implementation of a FireCMS app using the Firebase services
@@ -213,8 +209,6 @@ export const FireCMSClient = function FireCMSClient({
         backendFirebaseApp: fireCMSBackend.backendFirebaseApp,
         projectId,
         projectsApi: fireCMSBackend.projectsApi,
-        usersLimit: projectConfig.usersLimit,
-        canEditRoles: projectConfig.canEditRoles,
         fireCMSBackend
     });
 
@@ -336,7 +330,7 @@ export function FireCMSClientWithController({
             if (userManagement.loading || authController.authLoading) return;
             const user = authController.user;
             if (!user) return;
-            return userManagement.allowedUsers.find((fireCMSUser) => fireCMSUser.email.toLowerCase() === user?.email?.toLowerCase());
+            return userManagement.users.find((fireCMSUser) => fireCMSUser.email.toLowerCase() === user?.email?.toLowerCase());
         },
         [authController.authLoading, authController.user, userManagement.loading, userManagement.users]);
 
@@ -528,14 +522,12 @@ function FireCMSAppAuthenticated({
     const dataTalkMode = includeDataTalk && dataTalkPath;
     const dataTalkEndpoint = fireCMSBackend.backendApiHost + "/projects/" + projectConfig.projectId;
 
-    const canUseDataEnhancement = projectConfig.canUseDataEnhancement;
-
-    const adminRoutes = useMemo(() => buildAdminRoutes(userManagement.usersLimit,
+    const adminRoutes = useMemo(() => buildAdminRoutes(
         includeDataTalk,
         fireCMSBackend,
         projectConfig,
         dataTalkEndpoint,
-        onAnalyticsEvent), [includeDataTalk, userManagement.usersLimit, onAnalyticsEvent]);
+        onAnalyticsEvent), [includeDataTalk, onAnalyticsEvent]);
 
     const configPermissions: CollectionEditorPermissionsBuilder<User, PersistedCollection> = useCallback(({
                                                                                                               user,
@@ -555,27 +547,15 @@ function FireCMSAppAuthenticated({
     }, [appConfig?.propertyConfigs]);
 
     const exportPlugin = useExportPlugin({
-        exportAllowed: useCallback(({ collectionEntitiesCount }: ExportAllowedParams) => {
-            return projectConfig.canExport || collectionEntitiesCount <= DOCS_LIMIT;
-        }, [projectConfig.canExport]),
+        exportAllowed: () => true,
         onAnalyticsEvent,
-        notAllowedView: <SubscriptionPlanWidget showForPlans={["free"]}
-                                                message={`Upgrade to export more than ${DOCS_LIMIT} entities`}/>
     });
     const importPlugin = useImportPlugin({
         onAnalyticsEvent,
     });
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({
-        SubscriptionMessage: FireCMSDataEnhancementSubscriptionMessage,
         host: fireCMSBackend.backendApiHost,
-        interceptUsage: canUseDataEnhancement ? undefined : () => {
-            snackbarController.open({
-                type: "warning",
-                message: <FireCMSDataEnhancementSubscriptionMessage projectId={projectConfig.projectId}/>,
-                autoHideDuration: 4000
-            })
-        }
     });
 
     /**
@@ -592,7 +572,7 @@ function FireCMSAppAuthenticated({
         firebaseApp,
         textSearchControllerBuilder: appConfig?.textSearchControllerBuilder,
         firestoreIndexesBuilder: appConfig?.firestoreIndexesBuilder,
-        localTextSearchEnabled: projectConfig.canUseLocalTextSearch && projectConfig.localTextSearchEnabled
+        localTextSearchEnabled: projectConfig.localTextSearchEnabled
     });
 
     /**
@@ -652,9 +632,6 @@ function FireCMSAppAuthenticated({
         collectionInference: buildCollectionInference(firebaseApp),
         getData: (path, parentPaths) => getFirestoreDataInPath(firebaseApp, path, parentPaths, 400),
         onAnalyticsEvent,
-        components: {
-            DatabaseField: projectConfig.canUseCustomDatabase ? undefined : PaywallDatabaseIdField
-        }
     });
 
     const plugins: FireCMSPlugin<any, any, any>[] = [saasPlugin, exportPlugin, importPlugin, collectionEditorPlugin, dataEnhancementPlugin];
@@ -746,8 +723,7 @@ function FireCMSAppAuthenticated({
 
 }
 
-function buildAdminRoutes(usersLimit: number | undefined,
-                          includeDataTalk: boolean,
+function buildAdminRoutes(includeDataTalk: boolean,
                           fireCMSBackend: FireCMSBackend,
                           projectConfig: ProjectConfig,
                           dataTalkEndpoint: string,
@@ -760,13 +736,7 @@ function buildAdminRoutes(usersLimit: number | undefined,
             group: "Admin",
             icon: "face",
             hideFromNavigation: true,
-            view: <UsersView>
-                <SubscriptionPlanWidget
-                    showForPlans={["free"]}
-                    includeTooManyUsersAlert={true}
-                    message={<>
-                        Upgrade to PLUS to remove the <b>{usersLimit} users limit</b></>}/>
-            </UsersView>
+            view: <UsersView/>
         },
         {
             path: "roles",
@@ -774,12 +744,7 @@ function buildAdminRoutes(usersLimit: number | undefined,
             group: "Admin",
             icon: "gpp_good",
             hideFromNavigation: true,
-            view: <RolesView>
-                <SubscriptionPlanWidget
-                    showForPlans={["free"]}
-                    includeTooManyUsersAlert={true}
-                    message={<>Upgrade to PLUS to be able to customise <b>roles</b></>}/>
-            </RolesView>
+            view: <RolesView/>
         },
         {
             path: "settings",

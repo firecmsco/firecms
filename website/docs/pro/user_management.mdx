@@ -55,8 +55,6 @@ Below are the parameters you can configure:
 - **firebaseApp**: The Firebase app to use for user management.
 - **usersPath**: Path in Firestore where user configurations are stored. Default is `__FIRECMS/config/users`.
 - **rolesPath**: Path in Firestore where role configurations are stored. Default is `__FIRECMS/config/roles`.
-- **usersLimit**: Maximum number of users that can be created.
-- **canEditRoles**: Determines if the logged-in user can edit roles. Default is `true`.
 - **allowDefaultRolesCreation**: If there are no roles in the database, show a button to create default roles. Default is `true`.
 
 ### Hook Usage
@@ -71,7 +69,6 @@ const userManagement = useBuildUserManagement({
     dataSourceDelegate: firestoreDelegate,
     usersPath: "__FIRECMS/config/users",
     rolesPath: "__FIRECMS/config/roles",
-    canEditRoles: true,
     allowDefaultRolesCreation: true,
 });
 ```
@@ -99,8 +96,6 @@ function App() {
         dataSourceDelegate: firestoreDelegate,
         usersPath: "__FIRECMS/config/users",
         rolesPath: "__FIRECMS/config/roles",
-        usersLimit: 100,
-        canEditRoles: true,
         allowDefaultRolesCreation: true,
         includeCollectionConfigPermissions: true,
     });
@@ -232,8 +227,6 @@ The `userManagement` object returned by the `useUserManagement` hook includes th
 - **`roles`**: Array of role objects. Contains the roles available in the system.
 - **`saveRole`**: Function to persist a role. Takes a `role` object and returns a promise resolving when the role is saved.
 - **`deleteRole`**: Function to delete a role. Takes a `role` object and returns a promise resolving when the role is deleted.
-- **`usersLimit`**: Optional. Maximum number of users that can be created.
-- **`canEditRoles`**: Optional. Determines if the logged-in user can edit roles. Boolean value.
 - **`isAdmin`**: Optional. Boolean to check if the logged-in user is an Admin.
 - **`allowDefaultRolesCreation`**: Optional. Include a button to create default roles, in case there are no roles in the system. Boolean value.
 - **`includeCollectionConfigPermissions`**: Optional. Include the collection config permissions in the user management system. Boolean value.

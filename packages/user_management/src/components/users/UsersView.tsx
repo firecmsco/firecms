@@ -11,9 +11,7 @@ export const UsersView = function UsersView({ children }: { children?: React.Rea
     const [dialogOpen, setDialogOpen] = useState<boolean>();
     const [selectedUser, setSelectedUser] = useState<User | undefined>();
 
-    const { users, usersLimit } = useUserManagement();
-
-    const reachedUsersLimit = usersLimit !== undefined && (users && users.length >= usersLimit);
+    const { users } = useUserManagement();
 
     const onUserClicked = useCallback((user: User) => {
         setSelectedUser(user);
@@ -39,7 +37,6 @@ export const UsersView = function UsersView({ children }: { children?: React.Rea
                 </Typography>
                 <Button
                     size={"large"}
-                    disabled={reachedUsersLimit}
                     startIcon={<AddIcon/>}
                     onClick={() => setDialogOpen(true)}>
                     Add user

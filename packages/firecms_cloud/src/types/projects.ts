@@ -10,4 +10,5 @@ export type FireCMSProject = {
     projectId: string,
     subscription_plan: ProjectSubscriptionPlan,
     subscription_data: ProjectSubscriptionData,
+    trial_valid_until: Date;
 }

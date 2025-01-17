@@ -46,7 +46,7 @@ export function useSaasPlugin({
                               collection,
                               parentCollectionIds
                           }) => {
-                return !(projectConfig.canUseLocalTextSearch && projectConfig.localTextSearchEnabled && collection.textSearchEnabled);
+                return !(projectConfig.localTextSearchEnabled && collection.textSearchEnabled);
             },
 
             showTextSearchBar: ({
@@ -66,7 +66,7 @@ export function useSaasPlugin({
                                     parentCollectionIds
                                 }) => {
 
-                const canSearch = projectConfig.canUseLocalTextSearch && projectConfig.localTextSearchEnabled && collection.textSearchEnabled;
+                const canSearch = projectConfig.localTextSearchEnabled && collection.textSearchEnabled;
                 if (!canSearch) {
                     if (parentCollectionIds === undefined) {
                         console.warn("Enabling text search: Parent collection ids are undefined")

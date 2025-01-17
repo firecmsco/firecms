@@ -10,8 +10,6 @@ import {
     Typography
 } from "@firecms/ui";
 import { useProjectConfig } from "../../hooks";
-import { SubscriptionPlanWidget } from "./SubscriptionPlanWidget";
-import { UpgradeToPlusButton } from "./UpgradeToPlusButton";
 import { EntityCollection, useSnackbarController } from "@firecms/core";
 import { useState } from "react";
 import { CollectionsConfigController } from "@firecms/collection_editor";
@@ -61,11 +59,6 @@ export function TextSearchInfoDialog({
         </DialogTitle>
         <DialogContent className={"flex flex-col gap-4"}>
 
-            <SubscriptionPlanWidget
-                includeCTA={false}
-                showForPlans={["free"]}
-                message={<>Upgrade to PLUS to use text search</>}/>
-
             {!hasOwnTextSearchImplementation && <>
 
                 <div className={"flex flex-col gap-2 mb-2"}>
@@ -103,7 +96,7 @@ export function TextSearchInfoDialog({
             </>}
 
             <div className={"flex items-end justify-end gap-4"}>
-                {(hasOwnTextSearchImplementation || projectConfig.localTextSearchEnabled) && !collection.textSearchEnabled && projectConfig.canUseLocalTextSearch &&
+                {(hasOwnTextSearchImplementation || projectConfig.localTextSearchEnabled) && !collection.textSearchEnabled &&
                     <LoadingButton variant={"outlined"}
                                    loading={enablingForCollection}
                                    size={"large"}
@@ -118,8 +111,7 @@ export function TextSearchInfoDialog({
                                                closeDialog();
                                            })
                                            .finally(() => setEnablingForCollection(false));
-                                   }}
-                                   disabled={!projectConfig.canUseLocalTextSearch}>
+                                   }}>
                         Enable for this collection
                     </LoadingButton>}
 
@@ -140,14 +132,9 @@ export function TextSearchInfoDialog({
                                                closeDialog();
                                            })
                                            .finally(() => setEnablingLocalSearch(false));
-                                   }}
-                                   disabled={!projectConfig.canUseLocalTextSearch}>
+                                   }}>
                         Enable for project
                     </LoadingButton>}
-
-                {!projectConfig.canUseLocalTextSearch && <UpgradeToPlusButton includePriceSelect={true}
-                                                                              largePriceLabel={false}
-                                                                              includePriceLabel={false}/>}
 
             </div>
 

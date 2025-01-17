@@ -15,6 +15,13 @@ export type ProductWithPrices = Product & {
     prices: ProductPrice[];
 }
 
+export type CurrencyOption = {
+    custom_unit_amount: number | null;
+    tax_behavior: string;
+    unit_amount: number;
+    unit_amount_decimal: string;
+};
+
 export type ProductPrice = {
     id: string;
     active: boolean;
@@ -27,6 +34,7 @@ export type ProductPrice = {
         product: string;
         type: "per_user" | "per_project";
     }
+    currency_options: Record<"eur" | "usd", CurrencyOption>
     tiers: ProductPriceTier[];
     default: boolean;
     tax_behavior: string;

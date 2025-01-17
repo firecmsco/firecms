@@ -1,9 +1,19 @@
-import { ProductPrice, SubscriptionStatus } from "../../types/subscriptions";
+import { CurrencyOption, ProductPrice, SubscriptionStatus } from "../../types/subscriptions";
 import { ProjectSubscriptionPlan } from "../../types/projects";
+
+export function getCurrencyString({
+                                      key,
+                                      option,
+                                      price
+                                  }: { key: string, option: CurrencyOption, price: ProductPrice }) {
+    const type = price.metadata.type ?? "per_user";
+    return formatPrice(option.unit_amount, key) + (type === "per_user" ? " user/" : " project/") + price.interval;
+
+}
 
 export function getPriceString(price: ProductPrice) {
 
-    const type = price.metadata.type;
+    const type = price.metadata.type ?? "per_user";
     if (price.billing_scheme === "tiered") {
         const firstFlatPrice = price.tiers.find(p => p.flat_amount);
         if (firstFlatPrice)

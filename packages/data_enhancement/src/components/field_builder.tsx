@@ -36,7 +36,6 @@ export function fieldBuilder<T extends CMSType = CMSType>
             suggestions,
             enhance,
             loadingSuggestions,
-            interceptUsage,
             editorAIController
         } = useDataEnhancementController();
 
@@ -54,8 +53,7 @@ export function fieldBuilder<T extends CMSType = CMSType>
             enoughData={enoughData}
             Field={params.Field as React.ComponentType<FieldProps>}
             enhance={enhance}
-            editorAIController={editorAIController}
-            interceptUsage={interceptUsage}/>
+            editorAIController={editorAIController}/>
 
     }, []);
 
@@ -77,7 +75,6 @@ interface FieldInnerParams<T extends CMSType = CMSType, M extends Record<string,
     enoughData: boolean;
     Field: React.ComponentType<FieldProps<T, any, M>>;
     enhance: (props: EnhanceParams<M>) => Promise<EnhancedDataResult | null>;
-    interceptUsage?: () => void;
     editorAIController?: EditorAIController;
 }
 
@@ -89,7 +86,6 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                                                                                                                         enoughData,
                                                                                                                         Field,
                                                                                                                         enhance,
-                                                                                                                        interceptUsage,
                                                                                                                         editorAIController
                                                                                                                     }: FieldInnerParams<T, M>) {
 
@@ -120,7 +116,6 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                                                        highlight: highlightRange,
                                                        editorProps: {
                                                            aiController: editorAIController,
-                                                           onDisabledAutocompleteClick: interceptUsage
                                                        }
                                                    }}/>;
     } else if (props.property.dataType === "string" && !props.property.enumValues) {
@@ -131,10 +126,6 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
     }
 
     const enhanceData = (instructions?: string) => {
-        if (interceptUsage) {
-            interceptUsage();
-            return;
-        }
         if (!props.context.entityId) return;
         if (!enoughData) return;
         setMenuOpen(false);

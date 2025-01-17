@@ -305,27 +305,16 @@ export interface SuggestionItem {
 
 export const suggestion = (ref: React.MutableRefObject<any>, {
     upload,
-    onDisabledAutocompleteClick,
     aiController
 }: {
     upload: UploadFn,
-    onDisabledAutocompleteClick?: () => void,
     aiController?: EditorAIController
 }): Omit<SuggestionOptions<SuggestionItem, any>, "editor"> =>
     ({
             items: ({ query }) => {
                 const availableSuggestionItems = [...suggestionItems];
-                if (!onDisabledAutocompleteClick && aiController) {
+                if ( aiController) {
                     availableSuggestionItems.push(autocompleteSuggestionItem)
-                }
-                if (onDisabledAutocompleteClick) {
-                    availableSuggestionItems.push({
-                        title: "Autocomplete",
-                        description: "Add text based on the context.",
-                        searchTerms: ["ai"],
-                        icon: <AutoFixHighIcon size={18}/>,
-                        command: onDisabledAutocompleteClick
-                    })
                 }
 
                 return availableSuggestionItems
@@ -500,6 +489,8 @@ const CommandList = forwardRef((props: {
         </div>
     );
 });
+CommandList.displayName = "CommandList";
+
 
 const autocompleteSuggestionItem: SuggestionItem = {
     title: "Autocomplete",

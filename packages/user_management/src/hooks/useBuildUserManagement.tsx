@@ -41,16 +41,6 @@ export interface UserManagementParams<CONTROLLER extends AuthController<any> = A
     rolesPath?: string;
 
     /**
-     * Maximum number of users that can be created.
-     */
-    usersLimit?: number;
-
-    /**
-     * Can the logged user edit roles
-     */
-    canEditRoles?: boolean;
-
-    /**
      * If there are no roles in the database, provide a button to create the default roles.
      */
     allowDefaultRolesCreation?: boolean;
@@ -69,8 +59,6 @@ export interface UserManagementParams<CONTROLLER extends AuthController<any> = A
  * @param dataSourceDelegate
  * @param usersPath
  * @param rolesPath
- * @param usersLimit
- * @param canEditRoles
  * @param allowDefaultRolesCreation
  * @param includeCollectionConfigPermissions
  */
@@ -81,8 +69,6 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
      dataSourceDelegate,
      usersPath = "__FIRECMS/config/users",
      rolesPath = "__FIRECMS/config/roles",
-     usersLimit,
-     canEditRoles = true,
      allowDefaultRolesCreation,
      includeCollectionConfigPermissions
  }: UserManagementParams<CONTROLLER>): UserManagement<USER> & CONTROLLER {
@@ -309,10 +295,8 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
         rolesError,
         deleteUser,
         deleteRole,
-        usersLimit,
         usersError,
         isAdmin,
-        canEditRoles: canEditRoles === undefined ? true : canEditRoles,
         allowDefaultRolesCreation: allowDefaultRolesCreation === undefined ? true : allowDefaultRolesCreation,
         includeCollectionConfigPermissions: Boolean(includeCollectionConfigPermissions),
         collectionPermissions,

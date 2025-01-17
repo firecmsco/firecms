@@ -27,13 +27,6 @@ export interface DataEnhancementPluginProps {
         user: User | null
     }) => boolean;
 
-    interceptUsage?: () => void;
-
-    /**
-     * Component to render when the user has finished their free usage quota.
-     */
-    SubscriptionMessage?: React.ComponentType<SubscriptionMessageProps>;
-
     /**
      * Host to use for the data enhancement API.
      * This prop is only use in development mode.
@@ -71,8 +64,6 @@ export function useDataEnhancementPlugin(props?: DataEnhancementPluginProps): Fi
                 props: {
                     apiKey,
                     getConfigForPath,
-                    interceptUsage: props?.interceptUsage,
-                    SubscriptionMessage: props?.SubscriptionMessage,
                     host: props?.host
                 }
             },

@@ -1,4 +1,4 @@
-import { ApiError, FireCMSCloudUserWithRoles, SubscriptionType } from "../types";
+import { ApiError, FireCMSCloudUserWithRoles, ProductPrice, SubscriptionType } from "../types";
 import { handleApiResponse } from "./common";
 
 export type ProjectsApi = ReturnType<typeof buildProjectsApi>;
@@ -274,6 +274,27 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
             });
     }
 
+    async function createCloudStripeNewSubscriptionLink(props: {
+        projectId: string,
+        currency: string
+    }): Promise<string> {
+        const firebaseAccessToken = await getBackendAuthToken();
+        return fetch(`${host}/customer/cloud-checkout-session?return_url=${encodeURIComponent(window.location.href)}`,
+            {
+                method: "POST",
+                headers: buildHeaders({ firebaseAccessToken }),
+                body: JSON.stringify(props)
+            })
+            .then(async (res) => {
+                const data = await res.json();
+                if (!res.ok) {
+                    throw new Error(data?.error ?? "Error creating checkout session");
+                }
+                console.log("createStripeNewSubscriptionLink result", data);
+                return data.url as string;
+            });
+    }
+
     async function getRemoteConfigUrl(projectId: string, revisionId?: string) {
         return `${host}/projects/${projectId}/app_config/${revisionId}/${await getBackendAuthToken()}/remoteEntry.js`;
     }
@@ -290,6 +311,8 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         getRootCollections,
         doDelegatedLogin,
         createStripeNewSubscriptionLink,
+        createCloudStripeNewSubscriptionLink,
+
         getStripePortalLink,
         getStripeUpdateLinkForSubscription,
         getStripeCancelLinkForSubscription,

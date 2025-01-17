@@ -1,56 +1,64 @@
 import { useEffect, useState } from "react";
 import { Alert, LoadingButton, RocketLaunchIcon } from "@firecms/ui";
 import { ProductPrice, ProductWithPrices } from "../../types";
-import { getSubscriptionPlanName } from "../settings";
-import { SubscriptionPriceSelect } from "./SubscriptionPriceSelect";
-import { SubscribeParams } from "../../hooks";
+import { SubscribeCloudParams } from "../../hooks";
+import { CurrencyPriceSelect } from "./CurrencyPriceSelect";
 
-export function ProductUpgradeSmallView({
+function getDefaultCurrency(productPrice: ProductPrice) {
+    return productPrice.currency;
+}
+
+// get the user locale based on the browser
+function getUserLocale() {
+    return navigator.language || "en-US";
+}
+
+export function UpgradeCloudSubscriptionView({
                                             product,
                                             includePriceSelect = true,
-                                            includePriceLabel = true,
                                             largePriceLabel = false,
-                                            subscribe,
+                                            subscribeCloud,
                                             projectId
                                         }: {
     product: ProductWithPrices,
     projectId?: string,
     includePriceSelect?: boolean,
-    includePriceLabel?: boolean,
     largePriceLabel?: boolean,
-    subscribe: (params: SubscribeParams) => Promise<void>
+    subscribeCloud: (params: SubscribeCloudParams) => Promise<void>
 }) {
 
     const [error, setError] = useState<Error>();
 
-    const [selectedPrice, setSelectedPrice] = useState<ProductPrice>();
-    const productPrices: ProductPrice[] = product.prices;
-    useEffect(() => {
-        if (productPrices.length > 0) {
-            setSelectedPrice(productPrices[0]);
-        }
-    }, [productPrices]);
+    const productPrices: ProductPrice[] = product.prices.filter((p) => Boolean(p.recurring && p.currency_options));
+
+    if (!productPrices) {
+        throw new Error("INTERNAL: No product prices found");
+    }
+
+    const productPrice = productPrices[0];
+    const currencies = Object.keys(productPrice.currency_options);
+    const [currency, setCurrency] = useState<string>(getDefaultCurrency(productPrice));
 
     if (product.metadata.type !== "pro" && product.metadata.type !== "cloud_plus") {
         throw new Error("Error: Unmapped product type in ProductView");
     }
 
-    const planName = getSubscriptionPlanName(product.metadata.type);
-
-    const priceSelect = <SubscriptionPriceSelect
-        productPrices={productPrices}
-        selectedPrice={selectedPrice}
-        setSelectedPrice={setSelectedPrice}
+    console.log("currency", currency);
+    const priceSelect = <CurrencyPriceSelect
+        price={productPrice}
+        currencies={productPrice.currency_options}
+        selectedCurrency={currency}
+        setSelectedCurrency={setCurrency}
         largePriceLabel={largePriceLabel}/>;
 
     const [linkLoading, setLinkLoading] = useState<boolean>(false);
 
     const doSubscribe = () => {
-        if (!projectId || selectedPrice === undefined) return;
+        if (!projectId || currency === undefined) return;
         setLinkLoading(true);
-        return subscribe({
+        return subscribeCloud({
             projectId,
-            productPrice: selectedPrice,
+            currency,
             onCheckoutSessionReady: (url, error) => {
                 if (!url && !error)
                     return;
@@ -63,26 +71,20 @@ export function ProductUpgradeSmallView({
                         window.location.assign(url);
                 }
                 setLinkLoading(false);
-            },
-            type: product.metadata.type
+            }
         });
     }
 
     return <>
 
-        {includePriceSelect && <>
-            {includePriceLabel && <div className={"my-2 flex items-center gap-2"}>
-                You can upgrade your project for {priceSelect}
-            </div>}
-            {!includePriceLabel && priceSelect}
-        </>}
+        {includePriceSelect && priceSelect}
 
         <LoadingButton
             variant={"filled"}
             loading={linkLoading}
             onClick={doSubscribe}
             startIcon={<RocketLaunchIcon/>}>
-            Upgrade to {planName}
+            Create a subscription
         </LoadingButton>
 
         {error &&

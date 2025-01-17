@@ -43,11 +43,4 @@ export interface CollectionEditorController {
 
     getPathSuggestions?: (path: string) => Promise<string[]>;
 
-    components?: {
-        /**
-         * Custom component to render the database field
-         */
-        DatabaseField?: React.ComponentType<{ databaseId?: string, onDatabaseIdUpdate: (databaseId: string) => void }>;
-    };
-
 }

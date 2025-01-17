@@ -15,16 +15,6 @@ export type UserManagement<USER extends User = User> = {
     deleteRole: (role: Role) => Promise<void>;
 
     /**
-     * Maximum number of users that can be created.
-     */
-    usersLimit?: number;
-
-    /**
-     * Can the logged user edit roles?
-     */
-    canEditRoles?: boolean;
-
-    /**
      * Is the logged user Admin?
      */
     isAdmin?: boolean;

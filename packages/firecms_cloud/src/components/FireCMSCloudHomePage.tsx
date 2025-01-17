@@ -32,7 +32,7 @@ export function FireCMSCloudHomePage() {
     return <DefaultHomePage
         additionalActions={<> {pluginActions} </>}
         additionalChildrenStart={showSubscriptionWidget
-            ? <SubscriptionPlanWidget showForPlans={["free"]} includeTooManyUsersAlert={true}/>
+            ? <SubscriptionPlanWidget/>
             : undefined}
         additionalChildrenEnd={
             <NavigationGroup group={"ADMIN"}>

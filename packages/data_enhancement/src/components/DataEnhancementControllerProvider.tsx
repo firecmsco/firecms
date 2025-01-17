@@ -23,8 +23,6 @@ import {
 import { enhanceDataAPIStream, fetchEntityPromptSuggestion } from "../api";
 import { getAppendableSuggestion } from "../utils/suggestions";
 import { getSimplifiedProperties } from "../utils/properties";
-import { DefaultSubscriptionMessage } from "./DefaultSubscriptionMessage";
-import { SubscriptionMessageProps } from "../types/subscriptions_message_props";
 import { useEditorAIController } from "../editor/useEditorAIController";
 
 export const DataEnhancementControllerContext = React.createContext<DataEnhancementController>({} as any);
@@ -37,10 +35,6 @@ export type DataEnhancementControllerProviderProps = {
         path: string,
         collection: EntityCollection
     }) => boolean;
-
-    interceptUsage?: () => void;
-
-    SubscriptionMessage?: React.ComponentType<SubscriptionMessageProps>;
 
     host?: string;
 }
@@ -70,8 +64,6 @@ export function DataEnhancementControllerProvider({
                                                       path,
                                                       collection,
                                                       formContext,
-                                                      interceptUsage,
-                                                      SubscriptionMessage: SubscriptionMessageProp = DefaultSubscriptionMessage
                                                   }: PropsWithChildren<DataEnhancementControllerProviderProps & PluginFormActionProps<any>>) {
 
     const [enabled, setEnabled] = useState(false);
@@ -218,7 +210,7 @@ export function DataEnhancementControllerProvider({
     function displayNeededSubscriptionSnackbar(projectId: any) {
         snackbarController.open({
             type: "warning",
-            message: <SubscriptionMessageProp projectId={projectId}/>,
+            message: "A valid subscription is needed in order to use this function.",
             autoHideDuration: 4000
         })
     }
@@ -226,10 +218,6 @@ export function DataEnhancementControllerProvider({
     const editorAIController = useEditorAIController({ getAuthToken: authController.getAuthToken });
 
     const enhance = async (props: EnhanceParams<any>): Promise<EnhancedDataResult | null> => {
-        if (interceptUsage) {
-            interceptUsage();
-            return null;
-        }
 
         if (!authController.user) {
             snackbarController.open({
@@ -338,7 +326,6 @@ export function DataEnhancementControllerProvider({
         clearAllSuggestions,
         getSamplePrompts,
         loadingSuggestions,
-        interceptUsage,
         editorAIController
     };
 

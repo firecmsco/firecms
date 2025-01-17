@@ -8,7 +8,6 @@ import { useSnackbarController } from "@firecms/core";
 const SUBSCRIPTIONS_COLLECTION = "subscriptions";
 const PRODUCTS_COLLECTION = "products";
 const CUSTOMERS_COLLECTION = "customers";
-const CHECKOUT_SESSION_COLLECTION = "checkout_sessions";
 
 export type SubscribeParams = {
     projectId?: string,
@@ -19,12 +18,19 @@ export type SubscribeParams = {
     type: SubscriptionType
 };
 
+export type SubscribeCloudParams = {
+    projectId: string,
+    currency: string,
+    onCheckoutSessionReady: (url?: string, error?: Error) => void,
+};
+
 export interface SubscriptionsController {
     activeSubscriptions?: Subscription[];
     activeSubscriptionsLoading: boolean;
     activeSubscriptionsLoadingError?: Error;
     getSubscriptionsForProject: (projectId: string) => Subscription[];
     subscribe: (params: SubscribeParams) => Promise<void>;
+    subscribeCloud: (params: SubscribeCloudParams) => Promise<void>;
     products?: ProductWithPrices[];
     productsLoading: boolean;
     productsLoadingError?: Error;
@@ -36,6 +42,7 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
         backendFirebaseApp: firebaseApp,
         projectsApi
     } = useFireCMSBackend();
+
     const { backendUid: userId } = useFireCMSBackend();
     const snackbar = useSnackbarController();
     const firestoreRef = useRef<Firestore>();
@@ -152,71 +159,30 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
                 message: e?.message ?? "Error subscribing to product",
                 type: "error"
             });
-            // onCheckoutSessionReady(undefined, e);
         }
+    }
 
-        // const firestore = firestoreRef.current;
-        // if (!firestore) throw new Error("Firestore not initialized");
-        // if (!userId) throw new Error("User not logged in");
-        // if (!type) throw new Error("subscription type not provided. Make sure to assign the metadata.type field in the Stripe dashboard to a product.");
-        //
-        // const subscriptionPricesRequest: any = {
-        //     price: productPrice.id
-        // };
-        //
-        // // For prices with metered billing we need to omit the quantity parameter.
-        // // For all other prices we set quantity to 1.
-        // if (productPrice.recurring?.usage_type !== "metered")
-        //     subscriptionPricesRequest.quantity = quantity ?? 1;
-        //
-        // const metadata: Record<string, string> = {
-        //     type
-        // };
-        // if (projectId) {
-        //     metadata.projectId = projectId;
-        // }
-        // if (licenseId) {
-        //     metadata.licenseId = licenseId;
-        // }
-        //
-        // const checkoutSession: any = {
-        //     automatic_tax: true,
-        //     tax_id_collection: true,
-        //     collect_shipping_address: false,
-        //     allow_promotion_codes: true,
-        //     line_items: [subscriptionPricesRequest],
-        //     trial_from_plan: true,
-        //     trial_period_days: 28,
-        //     success_url: `${window.location.origin}${window.location.pathname}`,
-        //     cancel_url: `${window.location.origin}${window.location.pathname}`,
-        //     metadata
-        // };
-        //
-        // // For one time payments set mode to payment.
-        // if (productPrice.type === "one_time") {
-        //     checkoutSession.mode = "payment";
-        //     checkoutSession.payment_method_types = ["card", "sepa_debit", "sofort"];
-        // }
-        //
-        // // Save checkout session to Firestore
-        // const checkoutSessionRef = collection(firestore, CUSTOMERS_COLLECTION, userId, CHECKOUT_SESSION_COLLECTION);
-        // const docRef = await addDoc(checkoutSessionRef, checkoutSession);
-        //
-        // const unsubscribe = onSnapshot(docRef, (snap) => {
-        //     const {
-        //         error,
-        //         url
-        //     } = snap.data();
-        //
-        //     console.debug("Checkout session updated", snap.data());
-        //     onCheckoutSessionReady(url, error);
-        //
-        //     if (url) {
-        //         unsubscribe();
-        //     } else if (error) {
-        //         unsubscribe();
-        //     }
-        // });
+    const subscribeCloud = async (props: SubscribeCloudParams) => {
+        const {
+            projectId,
+            currency,
+            onCheckoutSessionReady,
+        } = props;
+
+        console.debug("Subscribing to product", props);
+        try {
+            const sessionUrl: string = await projectsApi.createCloudStripeNewSubscriptionLink({
+                projectId,
+                currency
+            });
+            onCheckoutSessionReady(sessionUrl, undefined);
+        } catch (e: any) {
+            console.error("Error subscribing to Cloud", projectId, e);
+            snackbar.open({
+                message: e?.message ?? "Error subscribing to product",
+                type: "error"
+            });
+        }
     }
 
     const getSubscriptionsForProject = (projectId: string): Subscription[] => {
@@ -226,6 +192,7 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
     return {
         products,
         subscribe,
+        subscribeCloud,
         getSubscriptionsForProject,
         activeSubscriptions,
         productsLoading,
