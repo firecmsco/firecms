@@ -35,12 +35,10 @@ const operationLabels = {
 const multipleSelectOperations = ["array-contains-any", "in", "not-in"];
 
 export function ReferenceFilterField({
-                                         name,
                                          value,
                                          setValue,
                                          isArray,
                                          path,
-                                         title,
                                          includeId = true,
                                          previewProperties,
                                          setHidden
@@ -50,9 +48,11 @@ export function ReferenceFilterField({
         ? ["array-contains"]
         : ["==", "!=", ">", "<", ">=", "<="];
 
-    isArray
-        ? possibleOperations.push("array-contains-any")
-        : possibleOperations.push("in", "not-in");
+    if (isArray) {
+        possibleOperations.push("array-contains-any");
+    } else {
+        possibleOperations.push("in", "not-in");
+    }
 
     const [fieldOperation, fieldValue] = value || [possibleOperations[0], undefined];
     const [operation, setOperation] = useState<VirtualTableWhereFilterOp>(fieldOperation);
@@ -144,7 +144,7 @@ export function ReferenceFilterField({
 
     return (
 
-        <div className="flex w-[440px] flex-row">
+        <div className="flex w-[480px] flex-row">
             <div className="w-[140px]">
                 <Select value={operation}
                         size={"large"}
@@ -161,7 +161,7 @@ export function ReferenceFilterField({
                 </Select>
             </div>
 
-            <div className="flex-grow ml-2 h-full gap-2 flex flex-col">
+            <div className="flex-grow ml-2 h-full gap-2 flex flex-col w-[340px]">
 
                 {internalValue && Array.isArray(internalValue) && <div>
                     {internalValue.map((ref, index) => buildEntry(ref))}
