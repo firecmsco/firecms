@@ -76,6 +76,7 @@ export type Subscription = {
         licenseId?: string;
         type: SubscriptionType
     },
+    created: Timestamp;
     cancel_at_period_end: boolean;
     cancel_at: Timestamp;
     canceled_at: Timestamp;

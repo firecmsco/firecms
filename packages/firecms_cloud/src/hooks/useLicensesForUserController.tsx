@@ -71,7 +71,6 @@ export function useLicensesForUserController(): LicensesController {
                         const updatedSubscriptions = snapshot.docs
                             .map(convertDocToLicense)
                             .filter(Boolean);
-
                         setLicensesLoading(false);
                         setLicensesLoadingError(undefined);
                         setLicenses(updatedSubscriptions);
@@ -100,9 +99,11 @@ export function useLicensesForUserController(): LicensesController {
         if (!firestore || !userId)
             throw new Error("Firestore not initialized");
         const licensesRef = doc(firestore, LICENSES_COLLECTION, id);
-        return updateDoc(licensesRef, license).then(() => {
-            return license as ProLicense;
-        });
+        console.log("Updating license", id, license);
+        return updateDoc(licensesRef, license)
+            .then(() => {
+                return license as ProLicense;
+            });
     }
 
     const listenSubscriptionsForLicense = useCallback((licenseId: string,

@@ -17,7 +17,7 @@ export function CurrentSubscriptionView({
                                         }: CurrentSubscriptionViewProps) {
     const { projectsApi } = useFireCMSBackend();
 
-    const statusText = getSubscriptionStatusText(subscription.status);
+    const statusText = getSubscriptionStatusText(subscription);
     const [stripePortalUrl, setStripePortalUrl] = useState<string | undefined>(undefined);
 
     useEffect(() => {
