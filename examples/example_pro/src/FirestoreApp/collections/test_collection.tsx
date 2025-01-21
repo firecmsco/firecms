@@ -1,13 +1,15 @@
 import {
     buildCollection,
-    buildProperty,
     EntityCallbacks,
     EntityOnFetchProps,
-    resolveNavigationFrom
+    FieldProps,
+    resolveNavigationFrom,
+    slugify,
+    TextFieldBinding
 } from "@firecms/core";
 import { SecondaryForm } from "../custom_entity_view/SecondaryForm";
-import { conditionProperty } from "../custom_field/RecursiveField";
-import { locales } from "./enums";
+import { Icon, IconButton, Typography } from "@firecms/ui";
+import React from "react";
 
 export const testCallbacks: EntityCallbacks = {
     onFetch({
@@ -47,6 +49,25 @@ export const testCallbacks: EntityCallbacks = {
     }
 };
 
+const CustomField = (fieldProps: FieldProps) => {
+    return (
+        <>
+            <TextFieldBinding {...fieldProps} />
+            <div className={"flex flex-row items-center gap-2"}>
+                <IconButton
+                    size={"small"}
+                    onClick={() => {
+                        fieldProps.setValue(fieldProps.customProps?.slugified);
+                    }}
+                >
+                    <Icon size={"smallest"} iconKey="autorenew"/>
+                </IconButton>
+                <Typography variant={"caption"}>{fieldProps.customProps?.slugified}</Typography>
+            </div>
+        </>
+    );
+};
+
 export const testCollection = buildCollection<any>({
         callbacks: testCallbacks,
         id: "test_entity",
@@ -67,11 +88,68 @@ export const testCollection = buildCollection<any>({
         //     }
         // }],
         properties: {
-            title: {
-                dataType: 'map',
-                name: 'Title',
-                propertyConfig: 'markdown_custom',
+            slug: ({ propertyValue }) => {
+                const slugified = slugify(propertyValue);
+                const regExp = new RegExp(slugified);
+                return {
+                    dataType: "string",
+                    name: "Slug",
+                    Field: CustomField,
+                    customProps: {
+                        slugified
+                    },
+                    validation: {
+                        required: true,
+                        matches: regExp,
+                        matchesMessage: "Text entered must equal slugified string: " + slugified
+                    }
+                };
             },
+
+            title: {
+                dataType: "map",
+                name: "Title",
+                propertyConfig: "markdown_custom"
+            },
+            listaProductos: {
+                name: "Productos",
+                dataType: "array",
+                of: {
+                    dataType: "map",
+                    properties: {
+                        producto: {
+                            name: "Producto",
+                            dataType: "reference",
+                            path: "products",
+                            previewProperties: ["PRODUCTO DESCRIPCION"],
+                            validation: {
+                                required: true
+                            }
+                        },
+                        unidades: {
+                            name: "Uds.",
+                            dataType: "number",
+                            validation: {
+                                required: true
+                            },
+                            Preview: ({ value }) => {
+                                return (
+                                    <Typography>
+                                        Uds.: {value}
+                                    </Typography>
+                                );
+                            }
+                        },
+                        total: {
+                            name: "Total",
+                            dataType: "string",
+                            validation: {
+                                required: true
+                            }
+                        }
+                    }
+                }
+            }
             // date: {
             //     name: "on create",
             //     dataType: "date",
@@ -1022,7 +1100,7 @@ export const testCollection = buildCollection<any>({
             //         acceptedFiles: ['application/pdf'],
             //     }
             // }),
-        },
+        }
         // additionalFields:
         //     [
         //         {

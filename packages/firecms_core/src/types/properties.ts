@@ -285,14 +285,14 @@ export type PropertyBuilder<T extends CMSType = any, M extends Record<string, an
 /**
  * @group Entity properties
  */
-export type PropertyOrBuilder<T extends CMSType = CMSType, M extends Record<string, any> = Record<string, any>> =
+export type PropertyOrBuilder<T extends CMSType = CMSType, M extends Record<string, any> = any> =
     Property<T>
     | PropertyBuilder<T, M>;
 
 /**
  * @group Entity properties
  */
-export type PropertiesOrBuilders<M extends Record<string, any> = Record<string, any>> =
+export type PropertiesOrBuilders<M extends Record<string, any> = any> =
     {
         [k in keyof M]: PropertyOrBuilder<M[k], M>;
     };

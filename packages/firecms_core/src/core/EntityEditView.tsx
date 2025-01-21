@@ -1042,13 +1042,11 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
             </div>
 
-            {mainViewVisible && shouldShowEntityActions && !actionsAtTheBottom && dialogActions}
-
             {customViewsView}
 
             {subCollectionsViews}
 
-            {shouldShowEntityActions && actionsAtTheBottom && dialogActions}
+            {shouldShowEntityActions && dialogActions}
 
         </form>
 

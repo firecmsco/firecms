@@ -74,7 +74,7 @@ export const PropertyFieldBinding = React.memo(PropertyFieldBindingInternal, (a:
     return false;
 }) as typeof PropertyFieldBindingInternal;
 
-function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Record<string, any> = Record<string, any>>
+function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Record<string, any> = any>
 ({
      propertyKey,
      property,
@@ -175,7 +175,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
 
 }
 
-type ResolvedPropertyFieldBindingProps<T extends CMSType = CMSType, M extends Record<string, any> = Record<string, any>> =
+type ResolvedPropertyFieldBindingProps<T extends CMSType = CMSType, M extends Record<string, any> = any> =
     Omit<PropertyFieldBindingProps<T, M>, "property">
     & {
     property: ResolvedProperty<T>

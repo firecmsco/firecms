@@ -39,7 +39,7 @@ export function buildCollection<M extends Record<string, any> = any,
  * @param property
  * @group Builder
  */
-export function buildProperty<T extends CMSType = CMSType, P extends PropertyOrBuilder<T> = PropertyOrBuilder<T>, M extends Record<string, any> = Record<string, any>>(
+export function buildProperty<T extends CMSType = CMSType, P extends PropertyOrBuilder<T> = PropertyOrBuilder<T>, M extends Record<string, any> = any>(
     property: P
 ):
     P extends StringProperty ? StringProperty :

@@ -62,7 +62,6 @@ function FeaturesPage() {
             </script>
 
             <Hero
-                color={"primary"}
                 title={
                     <>
                         <span className="block lg:inline">Pricing</span>
