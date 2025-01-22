@@ -1,21 +1,21 @@
 {
   "name": "@firecms/collection_editor",
   "type": "module",
-  "version": "3.0.0-canary.174",
+  "version": "3.0.0-canary.175",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/data_export": "^3.0.0-canary.174",
-    "@firecms/data_import": "^3.0.0-canary.174",
-    "@firecms/data_import_export": "^3.0.0-canary.174",
-    "@firecms/formex": "^3.0.0-canary.174",
-    "@firecms/schema_inference": "^3.0.0-canary.174",
-    "@firecms/ui": "^3.0.0-canary.174",
+    "@firecms/data_export": "^3.0.0-canary.175",
+    "@firecms/data_import": "^3.0.0-canary.175",
+    "@firecms/data_import_export": "^3.0.0-canary.175",
+    "@firecms/formex": "^3.0.0-canary.175",
+    "@firecms/schema_inference": "^3.0.0-canary.175",
+    "@firecms/ui": "^3.0.0-canary.175",
     "@hello-pangea/dnd": "^17.0.0",
     "json5": "^2.2.3",
-    "prism-react-renderer": "^2.4.0"
+    "prism-react-renderer": "^2.4.1"
   },
   "peerDependencies": {
     "react": "^18.3.1",
@@ -51,17 +51,17 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
-    "@types/react": "^18.3.11",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.4",
     "babel-plugin-react-compiler": "beta",
     "eslint-plugin-react-compiler": "beta",
     "jest": "^29.7.0",
-    "react-router": "^6.28.0",
-    "react-router-dom": "^6.28.0",
+    "react-router": "^6.28.2",
+    "react-router-dom": "^6.28.2",
     "ts-jest": "^29.2.5",
-    "typescript": "^5.7.2",
-    "vite": "^5.4.11"
+    "typescript": "^5.7.3",
+    "vite": "^5.4.14"
   },
   "files": [
     "dist",

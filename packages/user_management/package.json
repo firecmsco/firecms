@@ -1,7 +1,7 @@
 {
   "name": "@firecms/user_management",
   "type": "module",
-  "version": "3.0.0-canary.174",
+  "version": "3.0.0-canary.175",
   "publishConfig": {
     "access": "public"
   },
@@ -29,9 +29,9 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "^3.0.0-canary.174",
-    "@firecms/formex": "^3.0.0-canary.174",
-    "@firecms/ui": "^3.0.0-canary.174",
+    "@firecms/core": "^3.0.0-canary.175",
+    "@firecms/formex": "^3.0.0-canary.175",
+    "@firecms/ui": "^3.0.0-canary.175",
     "date-fns": "^3.6.0"
   },
   "peerDependencies": {
@@ -39,13 +39,13 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@types/node": "^20.17.9",
-    "@types/react": "^18.3.11",
-    "@types/react-dom": "^18.3.1",
+    "@types/node": "^20.17.14",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.0",
     "babel-plugin-react-compiler": "beta",
     "eslint-plugin-react-compiler": "beta",
-    "typescript": "^5.7.2",
-    "vite": "^5.4.11"
+    "typescript": "^5.7.3",
+    "vite": "^5.4.14"
   },
   "scripts": {
     "dev": "vite",
