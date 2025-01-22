@@ -1,7 +1,7 @@
 {
   "name": "@firecms/ui",
   "type": "module",
-  "version": "3.0.0-canary.177",
+  "version": "3.0.0-canary.178",
   "description": "Awesome Firebase/Firestore-based headless open-source CMS",
   "funding": {
     "url": "https://github.com/sponsors/firecmsco"
@@ -115,7 +115,7 @@
     "index.css",
     "tailwind.config.js"
   ],
-  "gitHead": "41075e0bfa191634e1a52442c8889d3ca53eb922",
+  "gitHead": "e265baef6fad623e57376b3338475bc0d5b49372",
   "publishConfig": {
     "access": "public"
   }
