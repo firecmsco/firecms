@@ -33,6 +33,7 @@ import {
 } from "@firecms/firebase";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 import { booksCollection } from "./books_collection";
+import { BrowserRouter } from "react-router-dom";
 
 export const firebaseConfig = {
     apiKey: "AIzaSyBzt-JvcXvpDrdNU7jYX3fC3v0EAHjTKEw",
@@ -47,9 +48,9 @@ export const firebaseConfig = {
 
 function ProSample() {
     return (
-        <FireCMSRouter>
+        <BrowserRouter>
             <ProSampleInner/>
-        </FireCMSRouter>
+        </BrowserRouter>
     );
 }
 

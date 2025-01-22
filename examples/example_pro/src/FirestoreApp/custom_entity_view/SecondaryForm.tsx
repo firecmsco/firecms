@@ -6,7 +6,7 @@ export function SecondaryForm({
                               }: EntityCustomViewParams) {
 
     return (
-        <Container className={"my-16"}>
+        <>
             <PropertyFieldBinding context={formContext}
                                   propertyKey={"myTestMap"}
                                   property={{
@@ -24,6 +24,6 @@ export function SecondaryForm({
                                           }
                                       }
                                   }}/>
-        </Container>
+        </>
     );
 }

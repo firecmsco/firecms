@@ -51,8 +51,8 @@ export const localeCollection = buildCollection<Locale>({
 export const localeCollectionGroup = buildCollection({
     ...localeCollection,
     name: "Product locales group",
-    description: "This is a collection group related to the locales subcollection of products",
-    group: "E-commerce",
+    description: "This is a collection group that allows you to see all locales of all products at once",
+    group: "Collection group demo",
     collectionGroup: true
 })
 

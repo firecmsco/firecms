@@ -76,12 +76,12 @@ import {
 } from "@firecms/ui";
 import { Formex, FormexController, getIn, setIn, useCreateFormex } from "@firecms/formex";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
-import { CustomIdField } from "../form/components/CustomIdField";
 import { CustomFieldValidator, getYupEntitySchema } from "../form/validation";
-import { ErrorFocus } from "../form/components/ErrorFocus";
 import { LabelWithIconAndTooltip, PropertyFieldBinding } from "../form";
 import { ValidationError } from "yup";
 import { getEntityFromCache, removeEntityFromCache, saveEntityToCache } from "../util/entity_cache";
+import { CustomIdField } from "../form/components/CustomIdField";
+import { ErrorFocus } from "../form/components/ErrorFocus";
 
 const MAIN_TAB_VALUE = "main_##Q$SC^#S6";
 
@@ -156,6 +156,46 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
                                    cachedDirtyValues={cachedValues as Partial<M>}
                                    dataLoading={dataLoading}
     />;
+}
+
+function FormLayout({
+                        id,
+                        formex,
+                        children,
+                        className
+                    }: {
+    id?: string,
+    formex: FormexController<any>,
+    children: React.ReactNode,
+    className?: string
+}) {
+
+    return <div
+        role="tabpanel"
+        id={id}
+        className={cls("relative flex flex-row max-w-4xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl w-full h-fit", className)}>
+
+        <div className={cls("flex flex-col w-full pt-12 pb-16 px-4 sm:px-8 md:px-10")}>
+
+            {formex.dirty
+                ? <Tooltip title={"Unsaved changes"}
+                           className={"self-end sticky top-4 z-10"}>
+                    <Chip size={"small"} colorScheme={"orangeDarker"}>
+                        <EditIcon size={"smallest"}/>
+                    </Chip>
+                </Tooltip>
+                : <Tooltip title={"In sync with the database"}
+                           className={"self-end sticky top-4 z-10"}>
+                    <Chip size={"small"}>
+                        <CheckIcon size={"smallest"}/>
+                    </Chip>
+                </Tooltip>}
+
+            {children}
+
+        </div>
+
+    </div>
 }
 
 export function EntityEditViewInner<M extends Record<string, any>>({
@@ -535,7 +575,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     const selectedEntityView = resolvedEntityViews.find(e => e.key === selectedTab);
     const shouldShowEntityActions = !autoSave && (selectedTab === MAIN_TAB_VALUE || selectedEntityView?.includeActions);
 
-    const customViewsView: React.ReactNode[] | undefined = customViews && resolvedEntityViews
+    const secondaryForms: React.ReactNode[] | undefined = customViews && resolvedEntityViews
+        .filter(e => e.includeActions)
         .map(
             (customView, colIndex) => {
                 if (!customView)
@@ -545,6 +586,36 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                     console.error("customView.Builder is not defined");
                     return null;
                 }
+
+                return <FormLayout
+                    key={`custom_view_${customView.key}`}
+                    className={selectedTab !== customView.key ? "hidden" : ""}
+                    formex={formex}>
+                    <ErrorBoundary>
+                        {formContext && <Builder
+                            collection={collection}
+                            entity={usedEntity}
+                            modifiedValues={formex.values ?? usedEntity?.values}
+                            formContext={formContext}
+                        />}
+                    </ErrorBoundary>
+                </FormLayout>
+
+            }
+        ).filter(Boolean);
+
+    const customViewsView: React.ReactNode[] | undefined = customViews && resolvedEntityViews
+        .filter(e => !e.includeActions)
+        .map(
+            (customView, colIndex) => {
+                if (!customView)
+                    return null;
+                const Builder = customView.Builder;
+                if (!Builder) {
+                    console.error("customView.Builder is not defined");
+                    return null;
+                }
+
                 return <div
                     className={cls(defaultBorderMixin,
                         "relative flex-grow w-full h-full overflow-auto",
@@ -572,12 +643,10 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         (subcollection, colIndex) => {
             const subcollectionId = subcollection.id ?? subcollection.path;
             const fullPath = usedEntity ? `${path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollectionId)}` : undefined;
+            if (selectedTab !== subcollectionId) return null;
             return (
                 <div
-                    className={cls("relative flex-grow h-full overflow-auto w-full",
-                        {
-                            "hidden": selectedTab !== subcollectionId
-                        })}
+                    className={"relative flex-grow h-full overflow-auto w-full"}
                     key={`subcol_${subcollectionId}`}
                     role="tabpanel">
 
@@ -882,22 +951,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         : (!readOnly
             ? (
                 <ErrorBoundary>
-                    <div className="flex flex-col w-full pt-12 pb-16 px-4 sm:px-8 md:px-10">
-
-                        {formex.dirty
-                            ? <Tooltip title={"Unsaved changes"}
-                                       className={"self-end sticky top-4 z-10"}>
-                                <Chip size={"small"} colorScheme={"orangeDarker"}>
-                                    <EditIcon size={"smallest"}/>
-                                </Chip>
-                            </Tooltip>
-                            : <Tooltip title={"In sync with the database"}
-                                       className={"self-end sticky top-4 z-10"}>
-                                <Chip size={"small"}>
-                                    <CheckIcon size={"smallest"}/>
-                                </Chip>
-                            </Tooltip>}
-
+                    <>
                         <div
                             className={"w-full py-2 flex flex-col items-start mt-4 lg:mt-8 mb-8"}>
 
@@ -929,12 +983,11 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                                 <ErrorFocus containerRef={formRef}/>
 
                             </div>
-
-                            {actionsAtTheBottom && <div className="h-16"/>}
-
                         </>}
 
-                    </div>
+                        {actionsAtTheBottom && <div className="h-16"/>}
+
+                    </>
                 </ErrorBoundary>
             )
             : (
@@ -1028,27 +1081,26 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             noValidate
             className={"flex-1 flex flex-row w-full overflow-y-auto justify-center"}>
 
-            <div
-                role="tabpanel"
-                hidden={!mainViewVisible}
+            <FormLayout
+                className={!mainViewVisible ? "hidden" : ""}
                 id={`form_${path}`}
-                className={cls("relative flex flex-row max-w-4xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl w-full h-fit", {
-                    "hidden": !mainViewVisible
-                })}>
-
+                formex={formex}>
                 {globalLoading
-                    ? <div className="w-full pt-12 pb-16 px-4 sm:px-8 md:px-10"><CircularProgressCenter/></div>
+                    ? <div className="w-full pt-12 pb-16 px-4 sm:px-8 md:px-10">
+                        <CircularProgressCenter/>
+                    </div>
                     : entityView}
+            </FormLayout>
 
-            </div>
-
-            {customViewsView}
-
-            {subCollectionsViews}
+            {secondaryForms}
 
             {shouldShowEntityActions && dialogActions}
 
         </form>
+
+        {customViewsView}
+
+        {subCollectionsViews}
 
     </div>;
 

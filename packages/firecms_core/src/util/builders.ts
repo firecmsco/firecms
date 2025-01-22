@@ -26,8 +26,10 @@ import {
  * @param collection
  * @group Builder
  */
-export function buildCollection<M extends Record<string, any> = any,
-    USER extends User = User>(
+export function buildCollection<
+    M extends Record<string, any> = any,
+    USER extends User = User>
+(
     collection: EntityCollection<M, USER>
 ): EntityCollection<M, USER> {
     return collection;

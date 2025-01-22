@@ -87,6 +87,6 @@
     "postcss-preset-env": "^9.6.0",
     "typedoc": "^0.26.5",
     "typedoc-plugin-markdown": "^4.2.3",
-    "typescript": "^5.5.4"
+    "typescript": "^5.7.3"
   }
 }
