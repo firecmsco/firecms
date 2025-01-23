@@ -42,15 +42,15 @@ function FireCMSIntro() {
                             height: 150,
                             maxWidth: "30%"
                         }}/>
-                    <FireCMSLogo/>
+                    {/*<FireCMSLogo/>*/}
                 </div>
             </div>
 
             <div
-                className="max-w-5xl mx-auto text-center mb-12 px-8 py-8 md:px-8">
-                <h1 className="mb-4 gradient-text uppercase m-auto">
+                className="max-w-5xl mx-auto text-center mb-12 px-8 py-4 md:px-8">
+                <h2 className="mb-4 gradient-text uppercase m-auto">
                     Much more than a CMS
-                </h1>
+                </h2>
                 <p className="text-xl md:text-2xl">
                     <b>FireCMS</b> is a platform upon which thousands of companies build their <b>back-office
                     applications</b>.
