@@ -20,13 +20,15 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
                                                                         showError,
                                                                         isSubmitting,
                                                                         setValue,
-                                                                        minimalistView,
+                                                                        minimalistView: minimalistViewProp,
                                                                         property,
                                                                         includeDescription,
                                                                         underlyingValueHasChanged,
                                                                         context,
                                                                         disabled
                                                                     }: FieldProps<T, any, any>) {
+
+    const minimalistView = minimalistViewProp || property.minimalistView;
 
     let resolvedProperties = "resolvedProperties" in property ? property.resolvedProperties : undefined;
     if (!resolvedProperties) {

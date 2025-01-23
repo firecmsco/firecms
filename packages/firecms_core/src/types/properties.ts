@@ -469,6 +469,12 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
      */
     expanded?: boolean;
 
+    /**
+     * Display the child properties directly, without being wrapped in an
+     * extendable panel.
+     */
+    minimalistView?: boolean;
+
 }
 
 /**
@@ -516,6 +522,12 @@ export interface MapProperty<T extends Record<string, CMSType> = Record<string, 
      * view
      */
     spreadChildren?: boolean;
+
+    /**
+     * Display the child properties directly, without being wrapped in an
+     * extendable panel. Note that this will also hide the title of this property.
+     */
+    minimalistView?: boolean;
 
     /**
      * Should the field be initially expanded. Defaults to `true`

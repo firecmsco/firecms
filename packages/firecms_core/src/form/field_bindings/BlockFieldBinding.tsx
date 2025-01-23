@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Field, useFormex } from "@firecms/formex";
 
@@ -28,13 +28,15 @@ export function BlockFieldBinding<T extends Array<any>>({
                                                             isSubmitting,
                                                             setValue,
                                                             setFieldValue,
-                                                            minimalistView,
+                                                            minimalistView: minimalistViewProp,
                                                             property,
                                                             includeDescription,
                                                             underlyingValueHasChanged,
                                                             context,
                                                             disabled
                                                         }: FieldProps<T>) {
+
+    const minimalistView = minimalistViewProp || property.minimalistView;
 
     if (!property.oneOf)
         throw Error("ArrayOneOfField misconfiguration. Property `oneOf` not set");

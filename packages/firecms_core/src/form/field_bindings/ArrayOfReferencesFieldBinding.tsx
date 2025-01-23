@@ -25,12 +25,14 @@ export function ArrayOfReferencesFieldBinding({
                                                   showError,
                                                   disabled,
                                                   isSubmitting,
-                                                  minimalistView,
+                                                  minimalistView: minimalistViewProp,
                                                   property,
                                                   includeDescription,
                                                   setValue,
                                                   setFieldValue
                                               }: ArrayOfReferencesFieldProps) {
+
+    const minimalistView = minimalistViewProp || property.minimalistView;
 
     const ofProperty = property.of as ResolvedProperty;
     if (ofProperty.dataType !== "reference") {

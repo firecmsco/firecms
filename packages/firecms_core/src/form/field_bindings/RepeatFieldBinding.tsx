@@ -23,13 +23,15 @@ export function RepeatFieldBinding<T extends Array<any>>({
                                                              isSubmitting,
                                                              setValue,
                                                              setFieldValue,
-                                                             minimalistView,
+                                                             minimalistView: minimalistViewProp,
                                                              property,
                                                              includeDescription,
                                                              underlyingValueHasChanged,
                                                              context,
                                                              disabled
                                                          }: FieldProps<T>) {
+
+    const minimalistView = minimalistViewProp || property.minimalistView;
 
     if (!property.of)
         throw Error("RepeatFieldBinding misconfiguration. Property `of` not set");

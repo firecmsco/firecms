@@ -21,7 +21,7 @@ export function MapFieldBinding({
                                     error,
                                     disabled,
                                     property,
-                                    minimalistView,
+                                    minimalistView: minimalistViewProp,
                                     includeDescription,
                                     underlyingValueHasChanged,
                                     autoFocus,
@@ -31,6 +31,7 @@ export function MapFieldBinding({
 
     const pickOnlySomeKeys = property.pickOnlySomeKeys || false;
     const expanded = property.expanded === undefined ? true : property.expanded;
+    const minimalistView = minimalistViewProp || property.minimalistView;
 
     if (!property.properties) {
         throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${propertyKey}`);
