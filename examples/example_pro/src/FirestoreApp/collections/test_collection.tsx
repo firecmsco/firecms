@@ -111,45 +111,27 @@ export const testCollection = buildCollection<any>({
                 name: "Title",
                 propertyConfig: "markdown_custom"
             },
-            listaProductos: {
-                name: "Productos",
-                dataType: "array",
-                of: {
-                    dataType: "map",
-                    properties: {
-                        producto: {
-                            name: "Producto",
-                            dataType: "reference",
-                            path: "products",
-                            previewProperties: ["PRODUCTO DESCRIPCION"],
-                            validation: {
-                                required: true
-                            }
-                        },
-                        unidades: {
-                            name: "Uds.",
-                            dataType: "number",
-                            validation: {
-                                required: true
-                            },
-                            Preview: ({ value }) => {
-                                return (
-                                    <Typography>
-                                        Uds.: {value}
-                                    </Typography>
-                                );
-                            }
-                        },
-                        total: {
-                            name: "Total",
-                            dataType: "string",
-                            validation: {
-                                required: true
-                            }
+            size: {
+                dataType: "map",
+                minimalistView: true,
+                name: "Size",
+                properties: {
+                    width: {
+                        name: "Width",
+                        dataType: "number",
+                        validation: {
+                            required: true
+                        }
+                    },
+                    height: {
+                        name: "Height",
+                        dataType: "number",
+                        validation: {
+                            required: true
                         }
                     }
                 }
-            }
+            },
             // date: {
             //     name: "on create",
             //     dataType: "date",
@@ -295,27 +277,7 @@ export const testCollection = buildCollection<any>({
             //         of: { dataType: "reference", path: "users", previewProperties: ["name"] }
             //     });
             // },
-            // size: {
-            //     dataType: "map",
-            //     name: "Size",
-            //     properties: {
-            //         width: {
-            //             name: "Width",
-            //             dataType: "number",
-            //             validation: {
-            //                 required: true
-            //             }
-            //         },
-            //         height: {
-            //             name: "Height",
-            //             dataType: "number",
-            //             validation: {
-            //                 required: true
-            //             }
-            //         }
-            //     },
-            //     Field: OptionalMap
-            // },
+
             // rerender: () => ({
             //     dataType: "map",
             //     hideFromCollection: true,
