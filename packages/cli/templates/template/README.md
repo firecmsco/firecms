@@ -2,6 +2,10 @@
 
 Welcome to FireCMS!
 
+Remember to drop a ⭐ in our [Github page](https://github.com/firecmsco/firecms),
+and join our [Discord community](https://discord.gg/fxy7xsQm3m) to get help and
+share your projects.
+
 This is a starter template for your next project. It includes the basic
 configuration to get you started.
 

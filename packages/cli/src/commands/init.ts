@@ -418,9 +418,14 @@ export async function createProject(options: InitOptions) {
         console.log("If you want to deploy your project, run:");
         console.log(chalk.bgYellow.black.bold("yarn deploy"));
         console.log("and see it running in https://app.firecms.co");
+        console.log("");
     } else {
         throw new Error("createProject: Invalid template");
     }
+
+    console.log("Remember to:");
+    console.log("  - Drop a ⭐ in our [Github page](https://github.com/firecmsco/firecms)");
+    console.log("  - Join our [Discord community](https://discord.gg/fxy7xsQm3m) to get help and share your projects.");
 
     return true;
 }

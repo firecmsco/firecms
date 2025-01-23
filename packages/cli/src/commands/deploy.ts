@@ -22,19 +22,6 @@ export async function deploy(projectId: string, env: "prod" | "dev", debug: bool
     await uploadZip(projectId, zipFilePath, env, debug);
 }
 
-export function build() {
-
-    exec("yarn build", (err, stdout, stderr) => {
-        if (err) {
-            // Node couldn't execute the command
-            return console.error(`exec error: ${err}`);
-        }
-        // The output of the command is passed in stdout and stderr
-        console.log(`stdout: ${stdout}`);
-        console.error(`stderr: ${stderr}`);
-    });
-}
-
 export async function createZipFromBuild(): Promise<string> {
     return new Promise((resolve, reject) => {
         const tmpdir = os.tmpdir();
