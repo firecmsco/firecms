@@ -34,13 +34,13 @@ export function DeveloperFeatures() {
                 <TwoColumns
                     reverseSmall={true}
                     animation={false}
-                    className={"py-16"}
+                    className={"py-16 p-4"}
                     // className={"p-4 md:p-8"}
                     left={<div
                         className="relative flex-col font-mono overflow-x-hidden">
 
                         <SyntaxHighlighter
-                            className={clsx("md:p-4 max-w-md sm:max-w-full overflow-y-hidden border border-solid", defaultBorderMixin)}
+                            className={clsx("p-4 max-w-md sm:max-w-full overflow-y-hidden border border-solid", defaultBorderMixin)}
                             language={"typescript"}
                             showLineNumbers={false}
                             wrapLines={true}
@@ -70,7 +70,7 @@ export function DeveloperFeatures() {
                         </div>
                     </div>
                     }
-                    right={<>
+                    right={<div className={"p-4"}>
 
                         <div
                             className={"flex items-center mb-3"}>
@@ -92,7 +92,7 @@ export function DeveloperFeatures() {
                             collections, markdown, file uploads, and dozens of other features.
                         </p>
 
-                    </>}/>
+                    </div>}/>
             </Panel>
 
             <Panel color={"gray"} includeMargin={false} includePadding={false} >
@@ -101,7 +101,7 @@ export function DeveloperFeatures() {
                     className={"py-16"}
                     // className={"p-4 md:p-8"}
                     left={
-                        <div>
+                        <div className={"p-4"}>
                             <div className={"flex items-center mb-3"}>
 
                                 <h3 className="m-0">

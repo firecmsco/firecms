@@ -10,7 +10,7 @@ function OpenSourceDetails() {
 
             <div
                 className="max-w-4xl mx-auto text-center pb-8">
-                <h2 className="mb-4 font-mono mx-auto uppercase"
+                <h2 className="text-4xl md:text-5xl mb-4 font-mono mx-auto uppercase"
                     data-aos="zoom-y-out">
                     All the power of <span style={{ color: "#FF9100" }}>Firebase</span>/<span
                     style={{ color: "#00684A" }}>MongoDB</span><br/>

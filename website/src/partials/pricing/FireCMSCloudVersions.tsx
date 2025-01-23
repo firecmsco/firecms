@@ -2,6 +2,8 @@ import React from "react";
 import { ContainerMixin, ContainerPaddingMixin, CTACaret, defaultBorderMixin } from "../styles";
 import clsx from "clsx";
 import { LinedSpace } from "../layout/LinedSpace";
+import { InfoIcon, InfoOutlineIcon, Tooltip } from "@firecms/ui";
+import { Tip } from "./Tip";
 
 export function FireCMSCloudVersions() {
 
@@ -17,15 +19,25 @@ export function FireCMSCloudVersions() {
                 MIT licensed first-class CMS/admin panel
             </p>
 
-            <div className={"my-4 text-gray-800 w-full"}>
+            <div className={"my-4 text-gray-700 w-full"}>
                 <span className={"text-3xl font-bold "}>€0 user/month</span>
             </div>
 
-            <div className={"grow mt-8"}>
+            <div className={"grow mt-4"}>
                 <ul className={"pl-4"}>
-                    <li className={"list-disc"}>Seamless integration with Firebase and MongoDB Atlas</li>
-                    <li className={"list-disc"}>Custom form fields and custom views</li>
-                    <li className={"list-disc"}>Access to a 40+ first class components library</li>
+                    <li className={"list-disc ml-2"}>
+                        <Tip tip={"Easily connect to your Firebase and MongoDB Atlas databases."}>
+                            Seamless integration with Firebase and MongoDB Atlas
+                        </Tip>
+                    </li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Plus too many to count validation options"}>Access to a
+                        40+ first class components library</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip
+                        tip={"Customize your forms with React components"}>Custom form fields and custom views</Tip>
+                    </li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Enjoy a robust, lightweight editor"}>Notion-style Markdown editor </Tip>
+                    </li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Change your logo, theme, colors, fonts, home page, form fields, custom views..."}>Full CMS customization</Tip></li>
                 </ul>
             </div>
 
@@ -63,20 +75,20 @@ export function FireCMSCloudVersions() {
 
             <div className={"grow"}>
                 <ul className={"pl-4"}>
-                    <li className={"list-disc"}>Fully managed service</li>
-                    <li className={"list-disc"}>Notion-style editor</li>
-                    <li className={"list-disc"}>Local text search</li>
-                    <li className={"list-disc"}>Unlimited collections</li>
-                    <li className={"list-disc"}>Unlimited users and roles</li>
-                    <li className={"list-disc"}>Data import and export</li>
-                    <li className={"list-disc"}>Theme and logo customization</li>
-                    <li className={"list-disc"}>GPT-4 content generation</li>
-                    <li className={"list-disc"}>Secondary databases</li>
-                    <li className={"list-disc"}>AppCheck</li>
-                    <li className={"list-disc"}>User and role management</li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Always up to date, including your own custom code"}>Fully managed service</Tip></li>
+                    <li className={"list-disc ml-2"}>Everything in the community version</li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Customise your views, form fields, navigation routes, custom views and more, using module federation"}>Custom code</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Instantly search through your data with powerful query capabilities."}>Local text search</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Create as many data collections as you need."}>Unlimited collections</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Manage any number of users and define roles to control access."}>Unlimited users and roles</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Easily migrate or backup your data."}>Data import and export</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Personalize the appearance of your CMS to match your brand."}>Theme and logo customization</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Leverage AI to generate smart content."}>GPT-4 content generation</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Utilize additional databases for extended functionality."}>Secondary databases</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Ensure application security with AppCheck integration."}>AppCheck</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Fine-tune user permissions and roles for your team."}>User and role management</Tip></li>
                 </ul>
             </div>
-
 
         </div>
     );
@@ -91,7 +103,7 @@ export function FireCMSCloudVersions() {
             <p className={"text-lg mb-4 font-bold h-16"}>
                 Perfect for startups, enterprise or agencies.
             </p>
-            <div className={"mt-4  text-gray-600 w-full"}>
+            <div className={"mt-4  text-gray-800 w-full"}>
                 <span className={"text-3xl font-bold "}>€49.99 project/month</span>
             </div>
             <div className={"w-fit my-6 flex flex-row gap-2"}>
@@ -111,17 +123,17 @@ export function FireCMSCloudVersions() {
 
             <div className={"grow"}>
                 <ul className={"pl-4"}>
-                    <li className={"list-disc"}>Schema editor and data inference</li>
-                    <li className={"list-disc"}>Advanced data import and export</li>
-                    <li className={"list-disc"}>Data import and export</li>
-                    <li className={"list-disc"}>Notion-style editor</li>
-                    <li className={"list-disc"}>Local text search</li>
-                    <li className={"list-disc"}>User and role management</li>
-                    <li className={"list-disc"}>Custom authentication and access control</li>
-                    <li className={"list-disc"}>Access to all FireCMS plugins</li>
-                    <li className={"list-disc"}>Full CMS components customization</li>
-                    <li className={"list-disc"}>Priority support</li>
-                    <li className={"list-disc"}>Roadmap prioritization</li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Easily design and infer data schemas for your project."}>Schema editor and data inference</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Manage complex data migrations with advanced tools."}>Advanced data import and export</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Manage complex data migrations with advanced tools."}>Data import and export</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Edit content seamlessly with an intuitive Notion-like interface."}>Notion-style editor</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Instantly search through your data with powerful query capabilities."}>Local text search</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Fine-tune user permissions and roles for your team."}>User and role management</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Implement tailored authentication methods and precise access controls."}>Custom authentication and access control</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Extend functionality with our full range of plugins."}>Access to all FireCMS plugins</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Fully customize your CMS components to suit your needs."}>Full CMS components customization</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Get faster assistance with our priority support."}>Priority support</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Influence the development of future features through roadmap prioritization."}>Roadmap prioritization</Tip></li>
                 </ul>
             </div>
 
@@ -154,7 +166,6 @@ export function FireCMSCloudVersions() {
                 {proTier}
             </div>
 
-
             {/*<ThreeColumns*/}
             {/*    left={freeTier}*/}
             {/*    center={plusTier}*/}
@@ -166,4 +177,3 @@ export function FireCMSCloudVersions() {
     </section>;
 
 }
-

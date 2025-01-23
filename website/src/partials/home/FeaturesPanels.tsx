@@ -41,7 +41,7 @@ function FeaturesPanels() {
 
 
             <div
-                className={"max-w-6xl flex flex-col lg:items-center gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 lg:w-full lg:mx-auto"}>
+                className={"max-w-6xl flex flex-col lg:items-center gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 lg:w-full lg:mx-auto p-4"}>
                 <div
                     className={clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
                     {iconStars}
@@ -49,8 +49,8 @@ function FeaturesPanels() {
                         Consistent Data Management
                     </h4>
                     <p className=" text-center">
-                        Establish schemas for your data types and set
-                        validation options
+                        No matter your data structure, FireCMS
+                        adapts to your needs.
                     </p>
                 </div>
 
