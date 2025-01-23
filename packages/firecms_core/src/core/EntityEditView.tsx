@@ -173,7 +173,7 @@ function FormLayout({
     return <div
         role="tabpanel"
         id={id}
-        className={cls("relative flex flex-row max-w-4xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl w-full h-fit", className)}>
+        className={cls("relative flex flex-row max-w-4xl lg:max-w-3xl xl:max-w-5xl 2xl:max-w-7xl w-full h-fit", className)}>
 
         <div className={cls("flex flex-col w-full pt-12 pb-16 px-4 sm:px-8 md:px-10")}>
 
@@ -224,8 +224,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     if (collection.customId && collection.formAutoSave) {
         console.warn(`The collection ${collection.path} has customId and formAutoSave enabled. This is not supported and formAutoSave will be ignored`);
     }
-
-    const actionsAtTheBottom = !largeLayout || layout === "side_panel";
 
     const [saving, setSaving] = useState(false);
     /**
@@ -573,7 +571,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         : [];
 
     const selectedEntityView = resolvedEntityViews.find(e => e.key === selectedTab);
-    const shouldShowEntityActions = !autoSave && (selectedTab === MAIN_TAB_VALUE || selectedEntityView?.includeActions);
+    const shouldShowEntityActions = selectedTab === MAIN_TAB_VALUE || selectedEntityView?.includeActions;
+    const actionsAtTheBottom = !largeLayout || layout === "side_panel" || shouldShowEntityActions === "bottom";
 
     const secondaryForms: React.ReactNode[] | undefined = customViews && resolvedEntityViews
         .filter(e => e.includeActions)
@@ -1290,7 +1289,7 @@ function buildSideActions<M extends object>({
                                             }: ActionsViewProps<M>) {
 
     return <div
-        className={cls("overflow-auto h-full flex flex-col gap-2 w-96 px-4 py-16 sticky top-0 border-l", defaultBorderMixin)}>
+        className={cls("overflow-auto h-full flex flex-col gap-2 w-80 xl:w-96 px-4 py-16 sticky top-0 border-l", defaultBorderMixin)}>
 
         <LoadingButton
             fullWidth={true}
