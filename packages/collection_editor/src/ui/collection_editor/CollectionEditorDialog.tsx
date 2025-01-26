@@ -2,6 +2,7 @@ import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import {
     CircularProgressCenter,
+    ConfirmationDialog,
     Entity,
     EntityCollection,
     ErrorView,
@@ -37,7 +38,8 @@ import {
     IconButton,
     LoadingButton,
     Tab,
-    Tabs
+    Tabs,
+    Typography
 } from "@firecms/ui";
 import { YupSchema } from "./CollectionYupValidation";
 import { CollectionDetailsForm } from "./CollectionDetailsForm";
@@ -533,7 +535,23 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     };
 
     const editable = collection?.editable === undefined || collection?.editable === true;
+    // @ts-ignore
+    const isMergedCollection = collection?.merged ?? false;
     const collectionEditable = editable || isNewCollection;
+
+    const [deleteRequested, setDeleteRequested] = useState(false);
+
+    const deleteCollection = () => {
+        if (!collection) return;
+        configController?.deleteCollection({ id: collection.id }).then(() => {
+            setDeleteRequested(false);
+            handleCancel();
+            snackbarController.open({
+                message: "Collection deleted",
+                type: "success"
+            });
+        });
+    };
 
     return <DialogContent fullHeight={true}>
         <Formex value={formController}>
@@ -614,7 +632,18 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             groups={groups}
                             parentCollectionIds={parentCollectionIds}
                             parentCollection={parentCollection}
-                            isNewCollection={isNewCollection}/>}
+                            isNewCollection={isNewCollection}>
+                            {!isNewCollection && isMergedCollection && <div className={"flex flex-col gap-4 mt-8"}>
+                                <Typography variant={"body2"} color={"secondary"}>This collection is defined in code.
+                                    The changes done in this editor will override the properties defined in code.
+                                    You can delete the overridden values to revert to the state defined in code.
+                                </Typography>
+                                <Button variant={"neutral"}
+                                        onClick={() => {
+                                            setDeleteRequested(true);
+                                        }}>Reset to code</Button>
+                            </div>}
+                        </CollectionDetailsForm>}
 
                     {currentView === "subcollections" && collection &&
                         <SubcollectionsEditTab
@@ -747,6 +776,15 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             </>
 
         </Formex>
+
+        <ConfirmationDialog
+            open={deleteRequested}
+            onAccept={deleteCollection}
+            onCancel={() => setDeleteRequested(false)}
+            title={<>Delete the stored config?</>}
+            body={<> This will <b>not
+                delete any data</b>, only
+                the stored config, and reset to the code state.</>}/>
 
     </DialogContent>
 
