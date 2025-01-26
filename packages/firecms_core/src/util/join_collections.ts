@@ -115,6 +115,9 @@ export function mergeCollection(target: EntityCollection,
         if (modifiedCollection)
             resultCollection = modifiedCollection;
     }
+
+    // @ts-ignore
+    resultCollection["merged"] = true;
     return resultCollection
 }
 
