@@ -109,7 +109,8 @@ export const testCollection = buildCollection<any>({
             title: {
                 dataType: "map",
                 name: "Title",
-                propertyConfig: "markdown_custom"
+                propertyConfig: "markdown_custom",
+                widthPercentage: 50,
             },
             size: {
                 dataType: "map",
@@ -130,7 +131,8 @@ export const testCollection = buildCollection<any>({
                             required: true
                         }
                     }
-                }
+                },
+                widthPercentage: 50,
             },
             // date: {
             //     name: "on create",

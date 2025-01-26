@@ -9,6 +9,7 @@ export const showcaseCollection = buildCollection({
     customId: false,
     icon: "bento",
     name: "Showcase",
+    singularName: "Showcase entry",
     // entityActions: [
     //     {
     //         name: "Edit",

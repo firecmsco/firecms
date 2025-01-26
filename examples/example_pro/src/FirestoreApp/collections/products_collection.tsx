@@ -105,7 +105,7 @@ export const productsCollection = buildCollection<Product>({
     callbacks: productCallbacks,
     name: "Products",
     singularName: "Product",
-    group: "E-commerce",
+    group: "Demo collections",
     icon: "shopping_cart",
     description: "List of the products currently sold in our shop",
     textSearchEnabled: true,
@@ -177,12 +177,14 @@ export const productsCollection = buildCollection<Product>({
                 disabledMessage: "You can only set the price on available items"
             },
             Preview: PriceTextPreview,
-            description: "Price with range validation"
+            description: "Price with range validation",
+            widthPercentage: 50
         }),
         currency: {
             dataType: "string",
             name: "Currency",
             enumValues: currencies,
+            widthPercentage: 50,
             validation: {
                 required: true
             }
@@ -299,7 +301,6 @@ export const productsSimpleCollection = buildCollection<any>({
     path: "products",
     name: "Products",
     singularName: "Product",
-    group: "E-commerce",
     icon: "ShoppingCart",
     properties: {
         name: {
