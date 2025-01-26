@@ -22,11 +22,11 @@ export function getParentReferencesFromPath(props: {
 
         const collection: EntityCollection<any> | undefined = collections && collections.find((entry) => entry.id === subpathCombination || entry.path === subpathCombination);
 
+        // If we find a collection, we add the reference and continue
         if (collection) {
-            const path = collection.path;
             const collectionPath = currentFullPath && currentFullPath.length > 0
-                ? (currentFullPath + "/" + path)
-                : path;
+                ? (currentFullPath + "/" + collection.path)
+                : collection.path;
 
             const restOfThePath = removeInitialAndTrailingSlashes(removeInitialAndTrailingSlashes(path).replace(subpathCombination, ""));
             const nextSegments = restOfThePath.length > 0 ? restOfThePath.split("/") : [];
