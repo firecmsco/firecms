@@ -71,7 +71,6 @@ export const Tooltip = ({
                         align={align}
                         side={side}>
                         {title}
-                        {/*<TooltipPrimitive.Arrow className="fill-surface-accent-600"/>*/}
                     </TooltipPrimitive.Content>
                 </TooltipPrimitive.Portal>
             </TooltipPrimitive.Root>
