@@ -134,11 +134,12 @@ export const testCollection = buildCollection<any>({
                 },
                 widthPercentage: 50,
             },
-            // date: {
-            //     name: "on create",
-            //     dataType: "date",
-            //     // autoValue: "on_create"
-            // },
+            date: {
+                name: "My date",
+                dataType: "date",
+                disabled: true
+                // autoValue: "on_create"
+            },
             //
             // test_date: {
             //     name: "Test date",
@@ -1020,21 +1021,20 @@ export const testCollection = buildCollection<any>({
             //         acceptedFiles: ["image/*"]
             //     }
             // },
-            // created_on: {
-            //     name: "Created on",
-            //     dataType: "date",
-            //     autoValue: "on_create"
-            // },
+            created_on: {
+                name: "Created on",
+                dataType: "date",
+                autoValue: "on_create"
+            },
             // updated_on: {
             //     name: "Updated on",
             //     dataType: "date",
             //     autoValue: "on_update"
             // }
-            // description: {
-            //     name: "Description",
-            //     dataType: "string",
-            //     multiline: true
-            // },
+            description: {
+                name: "Description",
+                dataType: "string"
+            },
             // search_adjacent: {
             //     name: "Search adjacent",
             //     dataType: "boolean"

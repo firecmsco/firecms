@@ -95,15 +95,6 @@ export function MapFieldBinding({
         </>
     ;
 
-    const title = (
-        <LabelWithIconAndTooltip
-            propertyKey={propertyKey}
-            icon={getIconForProperty(property, "small")}
-            required={property.validation?.required}
-            title={property.name}
-            className={"text-text-secondary dark:text-text-secondary-dark"}/>
-    );
-
     return (
         <ErrorBoundary>
 
@@ -113,8 +104,16 @@ export function MapFieldBinding({
                                                          expanded
                                                      });
                                                  }}
+                                                 className={property.widthPercentage !== undefined ? "mt-8" : undefined}
                                                  innerClassName={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2 bg-white dark:bg-surface-900"}
-                                                 title={title}>{mapFormView}</ExpandablePanel>}
+                                                 title={<LabelWithIconAndTooltip
+                                                     propertyKey={propertyKey}
+                                                     icon={getIconForProperty(property, "small")}
+                                                     required={property.validation?.required}
+                                                     title={property.name}
+                                                     className={"text-text-secondary dark:text-text-secondary-dark"}/>}>
+                {mapFormView}
+            </ExpandablePanel>}
 
             {minimalistView && mapFormView}
 

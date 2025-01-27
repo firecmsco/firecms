@@ -106,7 +106,7 @@ export function ArrayOfReferencesFieldBinding({
             icon={getIconForProperty(property, "small")}
             required={property.validation?.required}
             title={property.name}
-            className={"flex flex-grow text-text-secondary dark:text-text-secondary-dark"}/>
+            className={"h-8 flex flex-grow text-text-secondary dark:text-text-secondary-dark"}/>
         {Array.isArray(value) && <Typography variant={"caption"} className={"px-4"}>({value.length})</Typography>}
     </>);
 

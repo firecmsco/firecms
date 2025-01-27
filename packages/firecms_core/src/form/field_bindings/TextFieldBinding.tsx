@@ -75,6 +75,7 @@ export function TextFieldBinding<T extends string | number>({
                     value={value}
                     onChange={onChange}
                     autoFocus={autoFocus}
+                    className={property.widthPercentage !== undefined ? "mt-8" : undefined}
                     label={<LabelWithIcon
                         icon={getIconForProperty(property, "small")}
                         required={property.validation?.required}

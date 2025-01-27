@@ -127,6 +127,7 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
                                                                                      entityId,
                                                                                      ...props
                                                                                  }: EntityEditViewProps<M>) {
+
     const {
         entity,
         dataLoading,
@@ -173,7 +174,7 @@ function FormLayout({
     return <div
         role="tabpanel"
         id={id}
-        className={cls("relative flex flex-row max-w-4xl lg:max-w-3xl xl:max-w-5xl 2xl:max-w-7xl w-full h-fit", className)}>
+        className={cls("relative flex flex-row max-w-4xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-6xl w-full h-fit", className)}>
 
         <div className={cls("flex flex-col w-full pt-12 pb-16 px-4 sm:px-8 md:px-10")}>
 
@@ -314,7 +315,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0;
 
     const [usedEntity, setUsedEntity] = useState<Entity<M> | undefined>(entity);
-    const [readOnly, setReadOnly] = useState<boolean | undefined>(undefined);
 
     const baseDataSourceValuesRef = useRef<Partial<EntityValues<M>> | null>(cachedDirtyValues ?? getDataSourceEntityValues(initialResolvedCollection, status, usedEntity));
 
@@ -323,15 +323,16 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             setUsedEntity(entity);
     }, [entity]);
 
-    useEffect(() => {
-        if (status === "new") {
-            setReadOnly(false);
+    const canEdit = useMemo(() => {
+        if (status === "new" || status === "copy") {
+            return true;
         } else {
-            const editEnabled = usedEntity ? canEditEntity(collection, authController, path, usedEntity ?? null) : false;
-            if (usedEntity)
-                setReadOnly(!editEnabled);
+            return usedEntity ? canEditEntity(collection, authController, path, usedEntity ?? null) : false;
         }
     }, [authController, usedEntity, status]);
+
+    const readOnly = !canEdit;
+    console.log("readOnly", readOnly);
 
     const onPreSaveHookError = useCallback((e: Error) => {
         setSaving(false);
@@ -571,7 +572,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         : [];
 
     const selectedEntityView = resolvedEntityViews.find(e => e.key === selectedTab);
-    const shouldShowEntityActions = selectedTab === MAIN_TAB_VALUE || selectedEntityView?.includeActions;
+    const shouldShowEntityActions = !readOnly && (selectedTab === MAIN_TAB_VALUE || selectedEntityView?.includeActions);
     const actionsAtTheBottom = !largeLayout || layout === "side_panel" || shouldShowEntityActions === "bottom";
 
     const secondaryForms: React.ReactNode[] | undefined = customViews && resolvedEntityViews
@@ -617,7 +618,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
                 return <div
                     className={cls(defaultBorderMixin,
-                        "relative flex-grow w-full h-full overflow-auto",
+                        "relative flex-1 w-full h-full overflow-auto",
                         {
                             "hidden": selectedTab !== customView.key
                         })}
@@ -645,7 +646,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             if (selectedTab !== subcollectionId) return null;
             return (
                 <div
-                    className={"relative flex-grow h-full overflow-auto w-full"}
+                    className={"relative flex-1 h-full overflow-auto w-full"}
                     key={`subcol_${subcollectionId}`}
                     role="tabpanel">
 
@@ -826,9 +827,12 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         }
     }, [formex.isSubmitting, autoSave, underlyingChanges, entity, formex.values, formex.touched, formex.setFieldValue]);
 
+    const formFieldKeys = getFormFieldKeys(resolvedCollection);
+    const resolvedProperties = formFieldKeys.map(key => resolvedCollection.properties[key]);
+
     const formFields = (
-        <>
-            {(getFormFieldKeys(resolvedCollection))
+        <div className={"flex flex-wrap gap-x-4 w-full space-y-8"}>
+            {formFieldKeys
                 .map((key) => {
 
                     const property = resolvedCollection.properties[key];
@@ -842,6 +846,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                         const disabled = (!autoSave && formex.isSubmitting) || isReadOnly(property) || Boolean(property.disabled);
                         const hidden = isHidden(property);
                         if (hidden) return null;
+                        const widthPercentage = property.widthPercentage ?? 100;
                         const cmsFormFieldProps: PropertyFieldBindingProps<any, M> = {
                             propertyKey: key,
                             disabled,
@@ -856,6 +861,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
                         return (
                             <div id={`form_field_${key}`}
+                                 className={"relative"}
+                                 style={{ width: widthPercentage === 100 ? "100%" : `calc(${widthPercentage}% - 8px)` }}
                                  key={`field_${resolvedCollection.name}_${key}`}>
                                 <ErrorBoundary>
                                     <PropertyFieldBinding {...cmsFormFieldProps}/>
@@ -873,21 +880,22 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
                         const child = Builder
                             ? <Builder entity={entity} context={context}/>
-                            : <>
+                            : <div className={"w-full"}>
                                 {additionalField.value?.({
                                     entity,
                                     context
                                 })?.toString()}
-                            </>;
+                            </div>;
+
                         return (
-                            <div key={`additional_${key}`}>
+                            <div key={`additional_${key}`} className={"w-full"}>
                                 <LabelWithIconAndTooltip
                                     propertyKey={key}
                                     icon={<NotesIcon size={"small"}/>}
                                     title={additionalField.name}
                                     className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
                                 <div
-                                    className={cls(paperMixin, "min-h-14 p-4 md:p-6 overflow-x-scroll no-scrollbar")}>
+                                    className={cls(paperMixin, "w-full min-h-14 p-4 md:p-6 overflow-x-scroll no-scrollbar")}>
 
                                     <ErrorBoundary>
                                         {child}
@@ -903,7 +911,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 })
                 .filter(Boolean)}
 
-        </>);
+        </div>);
 
     const disabled = formex.isSubmitting || (!modified && status === "existing");
     const formRef = React.useRef<HTMLDivElement>(null);
@@ -960,7 +968,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                             </Typography>
                             <Alert color={"base"} className={"w-full"} size={"small"}>
                                 <code
-                                    className={"text-xs select-all text-text-secondary dark:text-text-secondary-dark"}>{path}/{entityId}</code>
+                                    className={"text-xs select-all text-text-secondary dark:text-text-secondary-dark"}>{entity?.path ?? path}/{entityId}</code>
                             </Alert>
                         </div>
 
@@ -990,18 +998,18 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 </ErrorBoundary>
             )
             : (
-                <>
+                <div className={"flex flex-col"}>
                     <Typography
                         className={"mt-16 mb-8 mx-8"}
                         variant={"h4"}>{collection.singularName ?? collection.name}
                     </Typography>
                     <EntityView
-                        className={"px-12"}
+                        className={"px-8"}
                         entity={usedEntity as Entity<M>}
                         path={path}
                         collection={collection}/>
 
-                </>
+                </div>
             ));
 
     const subcollectionTabs = subcollections && subcollections.map(
@@ -1031,6 +1039,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     }, [entityId, onIdChange]);
 
     const shouldShowTopBar = Boolean(barActions) || hasAdditionalViews;
+    const shouldIncludeForm = selectedTab === MAIN_TAB_VALUE || selectedEntityView?.includeActions;
 
     let result = <div className="relative flex flex-col h-full w-full bg-white dark:bg-surface-900">
 
@@ -1078,7 +1087,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 return onDiscard();
             }}
             noValidate
-            className={"flex-1 flex flex-row w-full overflow-y-auto justify-center"}>
+            className={cls("flex-1 flex flex-row w-full overflow-y-auto justify-center",
+                shouldIncludeForm ? "" : "hidden")}>
 
             <FormLayout
                 className={!mainViewVisible ? "hidden" : ""}
@@ -1204,6 +1214,7 @@ function buildBottomActions<M extends object>({
                                                   layout
                                               }: ActionsViewProps<M>) {
 
+    const canClose = layout === "side_panel";
     return <DialogActions position={"absolute"}>
 
         {savingError &&
@@ -1245,7 +1256,7 @@ function buildBottomActions<M extends object>({
         </Button>
 
         <Button
-            variant="text"
+            variant={canClose ? "text" : "filled"}
             color="primary"
             type="submit"
             disabled={disabled || isSubmitting}
@@ -1257,7 +1268,7 @@ function buildBottomActions<M extends object>({
             {status === "new" && "Create"}
         </Button>
 
-        <LoadingButton
+        {canClose && <LoadingButton
             variant="filled"
             color="primary"
             type="submit"
@@ -1269,7 +1280,7 @@ function buildBottomActions<M extends object>({
             {status === "existing" && "Save and close"}
             {status === "copy" && "Create copy and close"}
             {status === "new" && "Create and close"}
-        </LoadingButton>
+        </LoadingButton>}
 
     </DialogActions>;
 }
@@ -1289,7 +1300,7 @@ function buildSideActions<M extends object>({
                                             }: ActionsViewProps<M>) {
 
     return <div
-        className={cls("overflow-auto h-full flex flex-col gap-2 w-80 xl:w-96 px-4 py-16 sticky top-0 border-l", defaultBorderMixin)}>
+        className={cls("overflow-auto h-full flex flex-col gap-2 w-80 2xl:w-96 px-4 py-16 sticky top-0 border-l", defaultBorderMixin)}>
 
         <LoadingButton
             fullWidth={true}

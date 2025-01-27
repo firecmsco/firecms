@@ -156,6 +156,12 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
      * save the new config. The saved config will then become the source of truth.
      */
     editable?: boolean;
+
+    /**
+     * A number between 0 and 100 that indicates the width of the field in the form view.
+     * It defaults to 100, but you can set it to 50 to have two fields in the same row.
+     */
+    widthPercentage?: number;
 }
 
 /**

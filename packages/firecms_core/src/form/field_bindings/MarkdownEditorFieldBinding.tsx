@@ -135,7 +135,7 @@ export function MarkdownEditorFieldBinding({
                 icon={getIconForProperty(property, "small")}
                 required={property.validation?.required}
                 title={property.name}
-                className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
+                className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
             <div className={cls("rounded-md", fieldBackgroundMixin, fieldBackgroundHoverMixin)}>
                 {editor}
             </div>

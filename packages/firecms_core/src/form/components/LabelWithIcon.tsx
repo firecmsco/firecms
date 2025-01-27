@@ -1,4 +1,5 @@
 import React, { forwardRef } from "react";
+import { cls } from "@firecms/ui";
 
 interface LabelWithIconProps {
     icon: React.ReactNode;
@@ -23,9 +24,11 @@ export const LabelWithIcon = forwardRef<HTMLDivElement, LabelWithIconProps>(
         return (
             <div
                 ref={ref}
-                className={`inline-flex items-center my-0.5 ${small ? "gap-1" : "gap-2"} ${className ?? ""}`}
+                className={cls("inline-flex items-center my-0.5",
+                    small ? "gap-1" : "gap-2",
+                    className)}
             >
-        {icon}
+                {icon}
                 <span
                     className={`text-start font-medium text-${small ? "base" : "sm"} origin-top-left transform ${
                         small ? "translate-x-2 scale-75" : ""
@@ -33,7 +36,7 @@ export const LabelWithIcon = forwardRef<HTMLDivElement, LabelWithIconProps>(
                 >
           {(title ?? "") + (required ? " *" : "")}
         </span>
-      </div>
+            </div>
         );
     }
 );

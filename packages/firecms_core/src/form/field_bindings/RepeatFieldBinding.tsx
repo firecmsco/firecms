@@ -90,6 +90,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
                                            includeAddButton={!property.disabled}
                                            newDefaultEntry={getDefaultValueFor(property.of)}
                                            onValueChange={(value) => setFieldValue(propertyKey, value)}
+                                           className={property.widthPercentage !== undefined ? "mt-8" : undefined}
     />;
 
     const title = (<>
@@ -98,7 +99,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
             icon={getIconForProperty(property, "small")}
             required={property.validation?.required}
             title={property.name}
-            className={"flex flex-grow text-text-secondary dark:text-text-secondary-dark"}/>
+            className={"h-8 flex flex-grow text-text-secondary dark:text-text-secondary-dark"}/>
         {Array.isArray(value) && <Typography variant={"caption"} className={"px-4"}>({value.length})</Typography>}
     </>);
 

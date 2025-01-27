@@ -39,11 +39,11 @@ export function ReadOnlyFieldBinding({
                 icon={getIconForProperty(property, "small")}
                 required={property.validation?.required}
                 title={property.name}
-                className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
+                className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
             }
 
             <div
-                className={cls(paperMixin, "min-h-14 p-4 md:p-6 overflow-x-scroll no-scrollbar")}>
+                className={cls(paperMixin, "w-full min-h-14 p-4 md:p-6 overflow-x-scroll no-scrollbar")}>
 
                 <ErrorBoundary>
                     <PropertyPreview propertyKey={propertyKey}

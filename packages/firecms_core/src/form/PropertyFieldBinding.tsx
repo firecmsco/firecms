@@ -5,13 +5,13 @@ import { Field, FieldProps as FormexFieldProps, getIn } from "@firecms/formex";
 
 import {
     CMSType,
-    EntityCollection,
     FieldProps,
     FireCMSPlugin,
     PluginFieldBuilderParams,
     Property,
     PropertyFieldBindingProps,
     PropertyOrBuilder,
+    ResolvedEntityCollection,
     ResolvedProperty
 } from "../types";
 import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
@@ -147,7 +147,9 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                     console.warn(`No field component found for property ${propertyKey}`);
                     console.warn("Property:", property);
                     return (
-                        <div>{`Currently the field ${resolvedProperty.dataType} is not supported`}</div>
+                        <div className={"w-full"}>
+                            {`Currently the field ${resolvedProperty.dataType} is not supported`}
+                        </div>
                     );
                 }
 
@@ -199,11 +201,11 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
      },
      formexFieldProps
  }:
-     {
-         Component: ComponentType<FieldProps<T, any, M>>,
-         componentProps: ResolvedPropertyFieldBindingProps<T, M>,
-         formexFieldProps: FormexFieldProps<T, any>
-     }) {
+ {
+     Component: ComponentType<FieldProps<T, any, M>>,
+     componentProps: ResolvedPropertyFieldBindingProps<T, M>,
+     formexFieldProps: FormexFieldProps<T, any>
+ }) {
 
     const { plugins } = useCustomizationController();
 
@@ -296,7 +298,7 @@ const shouldPropertyReRender = (property: PropertyOrBuilder | ResolvedProperty, 
 
 interface UseWrappedComponentParams<T extends CMSType = CMSType, M extends Record<string, any> = any> {
     path?: string,
-    collection?: EntityCollection<M>,
+    collection?: ResolvedEntityCollection<M>,
     propertyKey: string,
     property: ResolvedProperty<T>,
     Component: ComponentType<FieldProps<T, any, M>>,
@@ -327,7 +329,7 @@ function useWrappedComponent<T extends CMSType = CMSType, M extends Record<strin
                         Field: Component,
                         plugin,
                         path,
-                        collection
+                        collection,
                     };
                     const enabled = plugin.form?.fieldBuilderEnabled?.(params);
                     if (enabled === undefined || enabled)

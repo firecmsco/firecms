@@ -103,7 +103,8 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
         return <Field {...props} />
     }
 
-    const showEnhanceIcon = !props.disabled && (!props.value || (props.property.dataType === "string" && (props.property.multiline || props.property.markdown)));
+    const property = props.property;
+    const showEnhanceIcon = !props.disabled && (!props.value || (property.dataType === "string" && (property.multiline || property.markdown)));
 
     const indexOfSuggestion = props.value && typeof props.value === "string" && typeof suggestedValue === "string" && props.value.endsWith(suggestedValue) ?
         props.value.indexOf(suggestedValue) + 1 : undefined;
@@ -114,7 +115,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
     } : undefined;
 
     let fieldBinding: React.ReactElement;
-    if (props.property.dataType === "string" && props.property.markdown) {
+    if (property.dataType === "string" && property.markdown) {
         fieldBinding = <MarkdownEditorFieldBinding {...props as FieldProps<any>}
                                                    customProps={{
                                                        highlight: highlightRange,
@@ -123,7 +124,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                                                            onDisabledAutocompleteClick: interceptUsage
                                                        }
                                                    }}/>;
-    } else if (props.property.dataType === "string" && !props.property.enumValues) {
+    } else if (property.dataType === "string" && !property.enumValues) {
         fieldBinding = <EnhanceTextFieldBinding {...props as FieldProps<any>}
                                                 highlight={suggestedValue as string}/>;
     } else {
@@ -148,22 +149,23 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
         }).finally(() => setDataLoading(false));
     };
 
-    const allowInstructions = props.property.dataType === "string" && !props.property.enumValues;
+    const allowInstructions = property.dataType === "string" && !property.enumValues;
 
-    return <div className={"relative"}>
+    const positionClass = property.widthPercentage !== undefined ? "top-4" : (property.dataType === "string" && property.markdown ? "top-3" : "-top-4");
+    return <>
 
         {fieldBinding}
 
         {showEnhanceIcon && <div className={cls("dark:bg-surface-700 bg-surface-100 rounded-full absolute right-2 ",
-            props.property.dataType === "string" && props.property.markdown ? "top-0" : "-top-4")}>
+            positionClass)}>
             <Tooltip
                 open={tooltipOpen}
                 onOpenChange={setTooltipOpen}
                 side={"left"}
                 asChild={false}
                 title={enoughData
-                    ? `Autofill ${props.property.name ?? "this field"}`
-                    : `You need to input some data in the form before enhancing ${props.property.name ?? "this field"}`}>
+                    ? `Autofill ${property.name ?? "this field"}`
+                    : `You need to input some data in the form before enhancing ${property.name ?? "this field"}`}>
                 <Menu
                     open={menuOpen}
                     onOpenChange={setMenuOpen}
@@ -194,7 +196,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                         <AutoAwesomeIcon size="small"/>
                         <div className={"flex flex-col"}>
                             <Typography
-                                variant={"body2"}> {`Autofill ${props.property.name ?? "this field"}`}</Typography>
+                                variant={"body2"}> {`Autofill ${property.name ?? "this field"}`}</Typography>
                             <Typography variant={"caption"}>based on the rest of the entity</Typography>
                         </div>
                     </MenuItem>
@@ -225,7 +227,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
             </Tooltip>
         </div>}
 
-    </div>
+    </>
 }, (prevProps, nextProps) => {
     return prevProps.loading === nextProps.loading &&
         prevProps.suggestedValue === nextProps.suggestedValue &&
