@@ -5,7 +5,7 @@ import { ErrorBoundary } from "../../components";
 import { getIconForProperty, isHidden, isReadOnly, pick } from "../../util";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
-import { ExpandablePanel, InputLabel, Select, SelectItem } from "@firecms/ui";
+import { cls, ExpandablePanel, InputLabel, Select, SelectItem } from "@firecms/ui";
 
 /**
  * Field that renders the children property fields
@@ -52,7 +52,7 @@ export function MapFieldBinding({
     }
 
     const mapFormView = <>
-            <div className="py-1 flex flex-col space-y-2">
+            <div className={cls("py-1 flex flex-col space-y-2", minimalistView && property.widthPercentage !== undefined ? "mt-8" : undefined)}>
                 {Object.entries(mapProperties)
                     .filter(([_, property]) => !isHidden(property))
                     .map(([entryKey, childProperty], index) => {
