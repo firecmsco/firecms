@@ -332,7 +332,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     }, [authController, usedEntity, status]);
 
     const readOnly = !canEdit;
-    console.log("readOnly", readOnly);
 
     const onPreSaveHookError = useCallback((e: Error) => {
         setSaving(false);

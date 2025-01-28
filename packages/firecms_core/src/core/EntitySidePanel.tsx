@@ -62,20 +62,18 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     }, [navigationController, props.path]);
 
     const collection = useMemo(() => {
-        if (!props) return undefined;
-        let usedCollection = props.collection;
+        if (props.collection) {
+            return props.collection;
+        }
 
         const registryCollection = navigationController.getCollection(props.path);
         if (registryCollection) {
-            usedCollection = registryCollection;
-        }
-        if (!usedCollection) {
-            console.error("ERROR: No collection found in path `", props.path, "`. Entity id: ", props.entityId);
-            throw Error("ERROR: No collection found in path `" + props.path + "`. Make sure you have defined a collection for this path in the root navigation.");
+            return registryCollection;
         }
 
-        return usedCollection;
-    }, [navigationController, props]);
+        console.error("ERROR: No collection found in path `", props.path, "`. Entity id: ", props.entityId);
+        throw Error("ERROR: No collection found in path `" + props.path + "`. Make sure you have defined a collection for this path in the root navigation.");
+    }, [navigationController, props.collection]);
 
     useEffect(() => {
         function beforeunload(e: any) {
