@@ -64,7 +64,11 @@ function FeaturesPage() {
             <Hero
                 title={
                     <>
-                        <span className="block lg:inline">Pricing</span>
+                        <div className="max-w-4xl mx-auto">
+                            <h2 className={"uppercase font-mono"}>
+                                Full no-code/low-code solution
+                            </h2>
+                        </div>
                     </>}
                 // subtitle={
                 //     <>
@@ -92,7 +96,7 @@ function FeaturesPage() {
             <FireCMSCloudVersions/>
 
             <CLIInstructions/>
-<PricingQuote/>
+            <PricingQuote/>
             <VersionsComparison/>
 
 

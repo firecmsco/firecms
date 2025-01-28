@@ -144,13 +144,9 @@ export function FireCMSCloudVersions() {
         className={clsx(defaultBorderMixin, "flex flex-col text-gray-900 items-center justify-center text-lg border-0 border-t bg-gray-50")}>
 
         <div className={clsx(ContainerMixin, ContainerPaddingMixin, "flex flex-col gap-8")}>
-
+w
             <div className={"max-w-4xl mx-auto"}>
-                <h2 className={"mb-3 uppercase font-mono"}>
-                    Full no-code/low-code solution
-                </h2>
-
-                <p className={"max-w-6xl mx-auto"}>
+                <p className={"max-w-6xl mx-auto mt-0 mb-8"}>
                     <strong>FireCMS Cloud</strong> offers a complete, end-to-end
                     solution for businesses that require the highest level of
                     support and security. With dedicated hosting, advanced features, and

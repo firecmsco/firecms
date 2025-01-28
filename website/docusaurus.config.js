@@ -1,9 +1,14 @@
 import { themes as prismThemes } from "prism-react-renderer";
 
-const fontaine = require("fontaine");
-const path = require("path");
+// const fontaine = require("fontaine");
+import path from "path";
 
-require("dotenv").config();
+import { config } from "dotenv";
+
+import { defineReactCompilerLoaderOption, reactCompilerLoader } from "react-compiler-webpack";
+
+config();
+
 
 const generateAPI = process.env.REACT_GENERATE_API === "true";
 
@@ -23,9 +28,43 @@ module.exports = {
         docSearchAppId: process.env.REACT_APP_DOC_SEARCH_APP_ID
     },
     future: {
-        // experimental_faster: true,
+        // experimental_faster: false,
+        experimental_faster: {
+            swcJsLoader: true,
+            swcJsMinimizer: true,
+            swcHtmlMinimizer: true,
+            lightningCssMinimizer: true,
+            rspackBundler: true,
+            mdxCrossCompilerCache: true,
+        },
     },
-    webpack: {},
+    webpack: {
+        // rules: [
+        //     {
+        //         test: /\.js$/,
+        //         use: [
+        //             {
+        //                 loader: "builtin:swc-loader",
+        //                 options: {
+        //                     // SWC options for JS
+        //                 },
+        //             },
+        //         ],
+        //     },
+        //     {
+        //         test: /\.jsx$/,
+        //         use: [
+        //             {
+        //                 loader: "builtin:swc-loader",
+        //                 options: {
+        //                     // SWC options for JSX
+        //                 },
+        //             },
+        //             { loader: "babel-loader" },
+        //         ],
+        //     },
+        // ],
+    },
     plugins: [
         "docusaurus-tailwindcss-loader",
         "docusaurus-plugin-sass",
@@ -83,30 +122,59 @@ module.exports = {
                 }
             };
         },
-        function fontainePlugin(_context, _options) {
+        // function fontainePlugin(_context, _options) {
+        //     return {
+        //         name: "fontaine-plugin",
+        //         configureWebpack(_config, _isServer) {
+        //             return {
+        //                 plugins: [
+        //                     fontaine.FontaineTransform.webpack({
+        //                         fallbacks: [
+        //                             "system-ui",
+        //                             "-apple-system",
+        //                             "BlinkMacSystemFont",
+        //                             "Segoe UI",
+        //                             "Roboto",
+        //                             "Oxygen",
+        //                             "Ubuntu",
+        //                             "Cantarell",
+        //                             "Open Sans",
+        //                             "Helvetica Neue",
+        //                             "sans-serif"
+        //                         ],
+        //                         // You may need to resolve assets like `/fonts/Poppins-Bold.ttf` to a particular directory
+        //                         resolvePath: (id) => "../fonts/" + id
+        //                     })
+        //                 ]
+        //             };
+        //         }
+        //     };
+        // },
+        function reactCompiler(_context, _options) {
             return {
-                name: "fontaine-plugin",
+                name: "react-compiler-plugin",
                 configureWebpack(_config, _isServer) {
                     return {
-                        plugins: [
-                            fontaine.FontaineTransform.webpack({
-                                fallbacks: [
-                                    "system-ui",
-                                    "-apple-system",
-                                    "BlinkMacSystemFont",
-                                    "Segoe UI",
-                                    "Roboto",
-                                    "Oxygen",
-                                    "Ubuntu",
-                                    "Cantarell",
-                                    "Open Sans",
-                                    "Helvetica Neue",
-                                    "sans-serif"
-                                ],
-                                // You may need to resolve assets like `/fonts/Poppins-Bold.ttf` to a particular directory
-                                resolvePath: (id) => "../fonts/" + id
-                            })
-                        ]
+                        module: {
+                            rules: [
+                                {
+                                    test: /\.[mc]?[jt]sx?$/i,
+                                    exclude: /node_modules/,
+                                    use: [
+                                        // babel-loader, swc-loader, esbuild-loader, or anything you like to transpile JSX should go here.
+                                        // If you are using rspack, the rspack's buiilt-in react transformation is sufficient.
+                                        // { loader: 'swc-loader' },
+                                        // Now add forgetti-loader
+                                        {
+                                            loader: reactCompilerLoader,
+                                            options: defineReactCompilerLoaderOption({
+                                                // React Compiler options goes here
+                                            })
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
                     };
                 }
             };
