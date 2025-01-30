@@ -6,7 +6,7 @@ import { VersionsComparison } from "../partials/pricing/VersionsComparison";
 import { CLIInstructions } from "../partials/pricing/CLIInstructions";
 import { FireCMSCloudVersions } from "../partials/pricing/FireCMSCloudVersions";
 import { PricingQuote } from "../partials/pricing/PricingQuote";
-import { clarityScript } from "../partials/clarity_head";
+// import { clarityScript } from "../partials/clarity_head";
 import Head from "@docusaurus/Head";
 
 function FeaturesPage() {
@@ -53,9 +53,9 @@ function FeaturesPage() {
                 <meta property="og:description"
                       content="Self-hosted version and free Cloud tier, adaptive pricing for everyone"/>
                 <meta property="og:image" content="/img/firecms_logo.svg"/>
-                <script type="text/javascript">
-                    {clarityScript}
-                </script>
+                {/*<script type="text/javascript">*/}
+                {/*    {clarityScript}*/}
+                {/*</script>*/}
             </Head>
             <script type="application/ld+json">
                 {JSON.stringify(schemaMarkup)}

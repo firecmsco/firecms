@@ -18,6 +18,7 @@ module.exports = {
     url: "https://firecms.co",
     baseUrl: "/",
     onBrokenLinks: "warn",
+    trailingSlash: false,
     onBrokenMarkdownLinks: "warn",
     favicon: "img/favicon.ico",
     organizationName: "FireCMS S.L.",

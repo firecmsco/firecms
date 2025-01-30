@@ -13,7 +13,7 @@ import { EnterpriseArchitectures } from "../partials/enterprise/EnterpriseArchit
 import { SchemaEditorIntro } from "../partials/features/SchemaEditorIntro";
 import OpenAITeaser from "../partials/features/OpenAITeaser";
 import Head from "@docusaurus/Head";
-import { clarityScript } from "../partials/clarity_head";
+// import { clarityScript } from "../partials/clarity_head";
 
 function FeaturesPage() {
 
@@ -26,9 +26,9 @@ function FeaturesPage() {
                 <meta property="og:description"
                       content="FireCMS includes all the features you need to kickstart your project and all the customization options you may need."/>
                 <meta property="og:image" content="/img/firecms_logo.svg"/>
-                <script type="text/javascript">
-                    {clarityScript}
-                </script>
+                {/*<script type="text/javascript">*/}
+                {/*    {clarityScript}*/}
+                {/*</script>*/}
             </Head>
 
             <div className="flex flex-col min-h-screen">

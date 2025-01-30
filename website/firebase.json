@@ -83,6 +83,11 @@
         "source": "/docs/pro/deployment",
         "destination": "/docs/self/deployment",
         "type": 301
+      },
+      {
+        "source": "/docs/pro/",
+        "destination": "/pro",
+        "type": 301
       }
     ],
     "rewrites": [

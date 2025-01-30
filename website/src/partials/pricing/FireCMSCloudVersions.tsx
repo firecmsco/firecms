@@ -2,7 +2,6 @@ import React from "react";
 import { ContainerMixin, ContainerPaddingMixin, CTACaret, defaultBorderMixin } from "../styles";
 import clsx from "clsx";
 import { LinedSpace } from "../layout/LinedSpace";
-import { InfoIcon, InfoOutlineIcon, Tooltip } from "@firecms/ui";
 import { Tip } from "./Tip";
 
 export function FireCMSCloudVersions() {
