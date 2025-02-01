@@ -1,6 +1,6 @@
 {
   "name": "@firecms/editor",
-  "version": "3.0.0-canary.180",
+  "version": "3.0.0-canary.182",
   "description": "Notion-style WYSIWYG editor for FireCMS",
   "type": "module",
   "main": "dist/index.cjs",
@@ -25,11 +25,11 @@
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
   },
   "peerDependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
   },
   "dependencies": {
-    "@firecms/ui": "^3.0.0-canary.180",
+    "@firecms/ui": "^3.0.0-canary.182",
     "@radix-ui/react-slot": "^1.1.1",
     "@tiptap/core": "2.11.2",
     "@tiptap/extension-blockquote": "2.11.2",
