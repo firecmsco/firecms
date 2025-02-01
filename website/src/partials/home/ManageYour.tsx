@@ -28,10 +28,8 @@ export function ManageYour() {
                     your own custom back-office app/admin panel in no time.
                 </p>
                 <p>
-                    <b>Easy to get started, easy to customize and easy to extend.</b>
-                    FireCMS is great both for existing projects, since it will
-                    adapt
-                    to any database structure you have, as well as for new ones.
+                    <b>Easy to get started, easy to customize and easy to extend.</b> FireCMS is great both for existing
+                    projects, since it will adapt to any database structure you have, as well as for new ones.
                 </p>
             </div>
 

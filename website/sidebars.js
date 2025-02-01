@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const typedocSidebar = require("./docs/api/typedoc-sidebar");
+const typedocSidebar = require("./docs/api/typedoc-sidebar.cjs");
 
 module.exports = {
     "docsSidebar": [

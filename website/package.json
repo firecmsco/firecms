@@ -2,7 +2,6 @@
   "name": "website",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "docusaurus": "docusaurus",
     "dev": "run-s copyChangelog && docusaurus start",
@@ -52,8 +51,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.26.7",
-    "dotenv": "^16.4.5",
-    "sass": "^1.77.8",
     "@babel/plugin-syntax-jsx": "^7.25.9",
     "@docusaurus/module-type-aliases": "latest",
     "@docusaurus/types": "latest",
@@ -77,8 +74,10 @@
     "docusaurus-plugin-typedoc": "^1.2.2",
     "docusaurus-plugin-typedoc-api": "^4.4.0",
     "docusaurus-tailwindcss-loader": "file:plugins/docusaurus-tailwindcss-loader",
+    "dotenv": "^16.4.5",
     "esbuild-loader": "^4.2.2",
     "fontaine": "^0.5.0",
+    "gray-matter": "^4.0.3",
     "highlight.js": "^11.11.1",
     "openai": "^4.55.0",
     "postcss": "^8.4.41",
@@ -88,6 +87,7 @@
     "prismjs": "^1.29.0",
     "raw-loader": "^4.0.2",
     "react-compiler-webpack": "^0.1.2",
+    "sass": "^1.77.8",
     "typedoc": "^0.27.6",
     "typedoc-plugin-markdown": "^4.2.3",
     "typescript": "^5.7.3"

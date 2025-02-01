@@ -6,28 +6,14 @@ import PrismJsx from 'prismjs/components/prism-jsx.js';
 
 import fs from "fs";
 
-const proExampleCode = `const productCollection = buildCollection({
-    name: "Product",
-    properties: {
-        name: {
-            dataType: "string",
-            name: "Name",
-            defaultValue: "Default name"
-        },
-        uppercase: {
-            dataType: "string",
-            name: "Uppercase Name",
-            readOnly: true
-        }
-    }
-});
-    
-const productCallbacks = buildEntityCallbacks({
-    onPreSave: ({ values }) => {
-        values.uppercase = values.name.toUpperCase();
-        return values;
-    }
-});`;
+const proExampleCode = `
+    const {
+        firebaseApp,
+        firebaseConfigLoading,
+        configError
+    } = useInitialiseFirebase({
+        firebaseConfig
+    });`;
 
 
 function generate() {

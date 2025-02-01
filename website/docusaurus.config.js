@@ -9,7 +9,6 @@ import { defineReactCompilerLoaderOption, reactCompilerLoader } from "react-comp
 
 config();
 
-
 const generateAPI = process.env.REACT_GENERATE_API === "true";
 
 module.exports = {
@@ -331,12 +330,20 @@ module.exports = {
                             label: "Manage subscriptions"
                         },
                         {
+                            to: "https://app.firecms.co",
+                            label: "FireCMS Cloud"
+                        },
+                        {
                             label: "Demo",
                             to: "https://demo.firecms.co"
                         },
                         {
                             label: "FireCMS PRO",
                             to: "pro"
+                        },
+                        {
+                            label: "llms.txt",
+                            href: "https://firecms.co/llms.txt"
                         },
                         {
                             label: "Blog",
