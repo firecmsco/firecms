@@ -13,7 +13,7 @@ import { LinedSpace } from "../layout/LinedSpace";
 
 function FireCMSIntro() {
     return (
-        <Panel color={"light-to-white"}
+        <Panel color={"dark_gray"}
                container={false}
                includePadding={false}
                includeMargin={false}>

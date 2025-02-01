@@ -90,7 +90,7 @@ export default function HomeHeroNeatGradient() {
             return () => {
             };
 
-        const backgroundColor = "rgb(17,48,157)";
+        const backgroundColor = "rgb(16,24,39)";
 
         const width = window?.innerWidth ?? 1400;
 

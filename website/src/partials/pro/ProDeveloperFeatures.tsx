@@ -104,9 +104,9 @@ const proExampleCode = `<span class="token keyword">function</span> <span class=
 
     <span class="token comment">// Use your own authentication logic here</span>
     <span class="token keyword">const</span> <span class="token literal-property property">myAuthenticator</span><span class="token operator">:</span> Authenticator<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">FirebaseUserWrapper</span></span><span class="token punctuation">></span></span><span class="token plain-text"> = useCallback(async ({
-                                                                                user,
-                                                                                authController
-                                                                            }) => </span><span class="token punctuation">{</span>
+                                                                                       user,
+                                                                                       authController
+                                                                                   }) => </span><span class="token punctuation">{</span>
 
         <span class="token keyword">if</span> <span class="token punctuation">(</span>user<span class="token operator">?.</span>email<span class="token operator">?.</span><span class="token function">includes</span><span class="token punctuation">(</span><span class="token string">"flanders"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token keyword">throw</span> <span class="token function">Error</span><span class="token punctuation">(</span><span class="token string">"Stupid Flanders!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -114,75 +114,113 @@ const proExampleCode = `<span class="token keyword">function</span> <span class=
 
         <span class="token comment">// This is an example of retrieving async data related to the user</span>
         <span class="token comment">// and storing it in the controller's extra field</span>
-        <span class="token keyword">const</span> idTokenResult <span class="token operator">=</span> <span class="token keyword">await</span> user<span class="token operator">?.</span><span class="token function">getIdTokenResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">const</span> idTokenResult <span class="token operator">=</span> <span class="token keyword">await</span> user<span class="token operator">?.</span>firebaseUser<span class="token operator">?.</span><span class="token function">getIdTokenResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">const</span> userIsAdmin <span class="token operator">=</span> idTokenResult<span class="token operator">?.</span>claims<span class="token punctuation">.</span>admin <span class="token operator">||</span> user<span class="token operator">?.</span>email<span class="token operator">?.</span><span class="token function">endsWith</span><span class="token punctuation">(</span><span class="token string">"@firecms.co"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
         console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"Allowing access to"</span><span class="token punctuation">,</span> user<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">return</span> <span class="token function">Boolean</span><span class="token punctuation">(</span>userIsAdmin<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span><span class="token plain-text">, []);
-
-    const collections = [
-        booksCollection,
-        // Your collections here
-    ];
-
-    const </span><span class="token punctuation">{</span>
+    
+    <span class="token keyword">const</span> <span class="token punctuation">{</span>
         firebaseApp<span class="token punctuation">,</span>
         firebaseConfigLoading<span class="token punctuation">,</span>
         configError
-    <span class="token punctuation">}</span><span class="token plain-text"> = useInitialiseFirebase(</span><span class="token punctuation">{</span>
+    <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">useInitialiseFirebase</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
         firebaseConfig
-    <span class="token punctuation">}</span><span class="token plain-text">);
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    // Controller used to manage the dark or light color mode
-    const modeController = useBuildModeController();
 
-    const signInOptions: FirebaseSignInProvider[] = ["google.com"];
+    <span class="token comment">// Controller used to manage the dark or light color mode</span>
+    <span class="token keyword">const</span> modeController <span class="token operator">=</span> <span class="token function">useBuildModeController</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    // Controller for managing authentication
-    const authController: FirebaseAuthController = useFirebaseAuthController(</span><span class="token punctuation">{</span>
+    <span class="token keyword">const</span> <span class="token literal-property property">signInOptions</span><span class="token operator">:</span> FirebaseSignInProvider<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"google.com"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// Controller for saving some user preferences locally.</span>
+    <span class="token keyword">const</span> userConfigPersistence <span class="token operator">=</span> <span class="token function">useBuildLocalConfigurationPersistence</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// Delegate used for fetching and saving data in Firestore</span>
+    <span class="token keyword">const</span> firestoreDelegate <span class="token operator">=</span> <span class="token function">useFirestoreDelegate</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        firebaseApp
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// Controller used for saving and fetching files in storage</span>
+    <span class="token keyword">const</span> storageSource <span class="token operator">=</span> <span class="token function">useFirebaseStorageSource</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        firebaseApp
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">const</span> collectionConfigController <span class="token operator">=</span> <span class="token function">useFirestoreCollectionsConfigController</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        firebaseApp
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// Controller for managing authentication</span>
+    <span class="token keyword">const</span> <span class="token literal-property property">firebaseAuthController</span><span class="token operator">:</span> FirebaseAuthController <span class="token operator">=</span> <span class="token function">useFirebaseAuthController</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
         firebaseApp<span class="token punctuation">,</span>
         signInOptions
-    <span class="token punctuation">}</span><span class="token plain-text">);
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    // Controller for saving some user preferences locally.
-    const userConfigPersistence = useBuildLocalConfigurationPersistence();
+    <span class="token comment">// controller in charge of user management</span>
+    <span class="token keyword">const</span> userManagement <span class="token operator">=</span> <span class="token function">useBuildUserManagement</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        <span class="token literal-property property">dataSourceDelegate</span><span class="token operator">:</span> firestoreDelegate<span class="token punctuation">,</span>
+        <span class="token literal-property property">authController</span><span class="token operator">:</span> firebaseAuthController
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    // Delegate used for fetching and saving data in Firestore
-    const firestoreDelegate = useFirestoreDelegate(</span><span class="token punctuation">{</span>
-        firebaseApp
-    <span class="token punctuation">}</span><span class="token plain-text">);
+    <span class="token keyword">const</span> authController <span class="token operator">=</span> userManagement<span class="token punctuation">;</span>
 
-    // Controller used for saving and fetching files in storage
-    const storageSource = useFirebaseStorageSource(</span><span class="token punctuation">{</span>
-        firebaseApp
-    <span class="token punctuation">}</span><span class="token plain-text">);
+    <span class="token keyword">const</span> <span class="token punctuation">{</span>
+        authLoading<span class="token punctuation">,</span>
+        canAccessMainView<span class="token punctuation">,</span>
+        notAllowedError
+    <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">useValidateAuthenticator</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        <span class="token literal-property property">disabled</span><span class="token operator">:</span> userManagement<span class="token punctuation">.</span>loading<span class="token punctuation">,</span>
+        <span class="token literal-property property">authenticator</span><span class="token operator">:</span> userManagement<span class="token punctuation">.</span>authenticator<span class="token punctuation">,</span>
+        authController<span class="token punctuation">,</span>
+        <span class="token comment">// authenticator: myAuthenticator,</span>
+        <span class="token literal-property property">dataSourceDelegate</span><span class="token operator">:</span> firestoreDelegate<span class="token punctuation">,</span>
+        storageSource
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    const navigationController = useBuildNavigationController(</span><span class="token punctuation">{</span>
-        collections<span class="token punctuation">,</span>
+    <span class="token keyword">const</span> collectionsBuilder <span class="token operator">=</span> <span class="token function">useCallback</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+        <span class="token keyword">const</span> collections <span class="token operator">=</span> <span class="token punctuation">[</span>
+            booksCollection<span class="token punctuation">,</span>
+            <span class="token comment">// Your collections here</span>
+        <span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token function">mergeCollections</span><span class="token punctuation">(</span>collections<span class="token punctuation">,</span> collectionConfigController<span class="token punctuation">.</span>collections <span class="token operator">??</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>collectionConfigController<span class="token punctuation">.</span>collections<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">const</span> navigationController <span class="token operator">=</span> <span class="token function">useBuildNavigationController</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        <span class="token literal-property property">collections</span><span class="token operator">:</span> collectionsBuilder<span class="token punctuation">,</span>
+        <span class="token literal-property property">collectionPermissions</span><span class="token operator">:</span> userManagement<span class="token punctuation">.</span>collectionPermissions<span class="token punctuation">,</span>
+        <span class="token literal-property property">adminViews</span><span class="token operator">:</span> userManagementAdminViews<span class="token punctuation">,</span>
         authController<span class="token punctuation">,</span>
         <span class="token literal-property property">dataSourceDelegate</span><span class="token operator">:</span> firestoreDelegate
-    <span class="token punctuation">}</span><span class="token plain-text">);
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    const dataEnhancementPlugin = useDataEnhancementPlugin(</span><span class="token punctuation">{</span>
+    <span class="token keyword">const</span> dataEnhancementPlugin <span class="token operator">=</span> <span class="token function">useDataEnhancementPlugin</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
         <span class="token function-variable function">getConfigForPath</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">{</span> path <span class="token punctuation">}</span></span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
             <span class="token keyword">if</span> <span class="token punctuation">(</span>path <span class="token operator">===</span> <span class="token string">"books"</span><span class="token punctuation">)</span>
                 <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
             <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span><span class="token plain-text">);
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    const importExportPlugin = useImportExportPlugin();
+    <span class="token keyword">const</span> userManagementPlugin <span class="token operator">=</span> <span class="token function">useUserManagementPlugin</span><span class="token punctuation">(</span><span class="token punctuation">{</span> userManagement <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    if (firebaseConfigLoading || !firebaseApp) </span><span class="token punctuation">{</span>
+    <span class="token keyword">const</span> importPlugin <span class="token operator">=</span> <span class="token function">useImportPlugin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> exportPlugin <span class="token operator">=</span> <span class="token function">useExportPlugin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">const</span> collectionEditorPlugin <span class="token operator">=</span> <span class="token function">useCollectionEditorPlugin</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        collectionConfigController
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>firebaseConfigLoading <span class="token operator">||</span> <span class="token operator">!</span>firebaseApp<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">return</span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">CircularProgressCenter</span></span><span class="token punctuation">/></span></span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span><span class="token plain-text">
+    <span class="token punctuation">}</span>
 
-    if (configError) </span><span class="token punctuation">{</span>
-        <span class="token keyword">return</span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">CenteredView</span></span><span class="token punctuation">></span></span><span class="token punctuation">{</span>configError<span class="token punctuation">}</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">CenteredView</span></span><span class="token punctuation">></span></span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span><span class="token plain-text">
-    return (
-        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">SnackbarProvider</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>configError<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span></span><span class="token punctuation">></span></span><span class="token punctuation">{</span>configError<span class="token punctuation">}</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span></span><span class="token punctuation">></span></span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">SnackbarProvider</span></span><span class="token punctuation">></span></span><span class="token plain-text">
             </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">ModeControllerProvider</span></span> <span class="token attr-name">value</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>modeController<span class="token punctuation">}</span></span><span class="token punctuation">></span></span><span class="token plain-text">
                 </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">FireCMS</span></span>
                     <span class="token attr-name">navigationController</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>navigationController<span class="token punctuation">}</span></span>
@@ -190,24 +228,26 @@ const proExampleCode = `<span class="token keyword">function</span> <span class=
                     <span class="token attr-name">userConfigPersistence</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>userConfigPersistence<span class="token punctuation">}</span></span>
                     <span class="token attr-name">dataSourceDelegate</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>firestoreDelegate<span class="token punctuation">}</span></span>
                     <span class="token attr-name">storageSource</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>storageSource<span class="token punctuation">}</span></span>
-                    <span class="token attr-name">plugins</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token punctuation">[</span>dataEnhancementPlugin<span class="token punctuation">,</span> importExportPlugin<span class="token punctuation">]</span><span class="token punctuation">}</span></span>
+                    <span class="token attr-name">plugins</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token punctuation">[</span>dataEnhancementPlugin<span class="token punctuation">,</span> importPlugin<span class="token punctuation">,</span> exportPlugin<span class="token punctuation">,</span> userManagementPlugin<span class="token punctuation">,</span> collectionEditorPlugin<span class="token punctuation">]</span><span class="token punctuation">}</span></span>
                 <span class="token punctuation">></span></span><span class="token plain-text">
                     </span><span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">{</span>
                           context<span class="token punctuation">,</span>
                           loading
                       <span class="token punctuation">}</span></span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
 
-                        <span class="token keyword">if</span> <span class="token punctuation">(</span>loading<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                        <span class="token keyword">if</span> <span class="token punctuation">(</span>loading <span class="token operator">||</span> authLoading<span class="token punctuation">)</span> <span class="token punctuation">{</span>
                             <span class="token keyword">return</span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">CircularProgressCenter</span></span> <span class="token attr-name">size</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token string">"large"</span><span class="token punctuation">}</span></span><span class="token punctuation">/></span></span><span class="token punctuation">;</span>
                         <span class="token punctuation">}</span>
-                        <span class="token keyword">if</span> <span class="token punctuation">(</span>authController<span class="token punctuation">.</span>user <span class="token operator">===</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>canAccessMainView<span class="token punctuation">)</span> <span class="token punctuation">{</span>
                             <span class="token keyword">return</span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">FirebaseLoginView</span></span> <span class="token attr-name">authController</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>authController<span class="token punctuation">}</span></span>
                                                       <span class="token attr-name">firebaseApp</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>firebaseApp<span class="token punctuation">}</span></span>
-                                                      <span class="token attr-name">signInOptions</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>signInOptions<span class="token punctuation">}</span></span><span class="token punctuation">/></span></span>
+                                                      <span class="token attr-name">signInOptions</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>signInOptions<span class="token punctuation">}</span></span>
+                                                      <span class="token attr-name">notAllowedError</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>notAllowedError<span class="token punctuation">}</span></span><span class="token punctuation">/></span></span><span class="token punctuation">;</span>
                         <span class="token punctuation">}</span>
 
-                        <span class="token keyword">return</span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Scaffold</span></span> <span class="token attr-name">autoOpenDrawer</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token boolean">false</span><span class="token punctuation">}</span></span><span class="token punctuation">></span></span><span class="token plain-text">
-                            </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">AppBar</span></span> <span class="token attr-name">title</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token string">"My amazing CMS"</span><span class="token punctuation">}</span></span><span class="token punctuation">/></span></span><span class="token plain-text">
+                        <span class="token keyword">return</span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Scaffold</span></span>
+                            <span class="token attr-name">autoOpenDrawer</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token boolean">false</span><span class="token punctuation">}</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+                            </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">AppBar</span></span> <span class="token attr-name">title</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token string">"My demo app"</span><span class="token punctuation">}</span></span><span class="token punctuation">/></span></span><span class="token plain-text">
                             </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Drawer</span></span><span class="token punctuation">/></span></span><span class="token plain-text">
                             </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">NavigationRoutes</span></span><span class="token punctuation">/></span></span><span class="token plain-text">
                             </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">SideDialogs</span></span><span class="token punctuation">/></span></span><span class="token plain-text">
@@ -215,10 +255,11 @@ const proExampleCode = `<span class="token keyword">function</span> <span class=
                     <span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token plain-text">
                 </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">FireCMS</span></span><span class="token punctuation">></span></span><span class="token plain-text">
             </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">ModeControllerProvider</span></span><span class="token punctuation">></span></span><span class="token plain-text">
-        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">SnackbarProvider</span></span><span class="token punctuation">></span></span><span class="token plain-text">
-    );
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">SnackbarProvider</span></span><span class="token punctuation">></span></span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-}</span>`;
+<span class="token punctuation">}</span>
+`;
 
 // const proExampleCode = `function ProSample() {
 //

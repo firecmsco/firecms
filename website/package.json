@@ -2,6 +2,7 @@
   "name": "website",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "docusaurus": "docusaurus",
     "dev": "run-s copyChangelog && docusaurus start",

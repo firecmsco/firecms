@@ -15,6 +15,11 @@
         "type": 301
       },
       {
+        "source": "/cloud/quickstart",
+        "destination": "/docs/cloud/quickstart",
+        "type": 301
+      },
+      {
         "source": "/docs/cloud_quickstart",
         "destination": "/docs/cloud/quickstart",
         "type": 301

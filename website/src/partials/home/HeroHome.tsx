@@ -34,7 +34,7 @@ function HeroHome({}) {
             "px-16 md:px-24 py-8 md:py-16",
             "border-0 border-b",
             defaultBorderMixin)}>
-            <div className={"block"}>
+            <span className={"block"}>
                 <span>Your </span>
                 <span
                     style={{
@@ -44,7 +44,7 @@ function HeroHome({}) {
                         backgroundImage: "linear-gradient(to right, #EC4C51, #FA5574, #9543C1, #9543C1)"
                     }}
                     className="font-extrabold text-transparent bg-clip-text text-7xl md:text-8xl">CMS</span>
-            </div>
+            </span>
             <span>based on </span>
             <span
                 className={"text-5xl md:text-7xl"}
