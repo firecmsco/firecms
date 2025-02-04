@@ -37,6 +37,7 @@ export function ProjectSubscriptionPlans() {
     const plusProduct = cloudProducts.find(p => p.metadata?.type === "cloud_plus");
     const plusSubscription = projectSubscriptions.find(s => s.product.metadata?.type === "cloud_plus");
 
+    const isSubscribed = subscriptionPlan === "cloud_plus";
     return (
         <div className={"relative"}>
 
@@ -49,14 +50,14 @@ export function ProjectSubscriptionPlans() {
 
                     <Typography variant={"h4"} className="mt-4 mb-2">Subscription Plan</Typography>
 
-                    {subscriptionPlan === "cloud_plus" &&
+                    {isSubscribed &&
                         <Typography
                             variant={"subtitle1"}
                             className="my-2">
                             You are currently subscribed to <Chip size={"small"}>FireCMS Cloud</Chip>.
                         </Typography>}
 
-                    {trialValidUntil &&
+                    {!isSubscribed && trialValidUntil &&
                         <Typography
                             variant={"subtitle1"}
                             className="my-2">
@@ -68,7 +69,7 @@ export function ProjectSubscriptionPlans() {
                         projectId={projectId}
                         subscribeCloud={subscribeCloud}/>}
 
-                    {subscriptionPlan === "cloud_plus" && plusSubscription &&
+                    {isSubscribed && plusSubscription &&
                         <CurrentCloudSubscriptionView subscription={plusSubscription}/>}
 
                     <StripeDisclaimer/>

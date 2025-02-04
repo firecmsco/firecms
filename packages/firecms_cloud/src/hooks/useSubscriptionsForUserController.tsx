@@ -155,6 +155,7 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
             onCheckoutSessionReady(sessionUrl, undefined);
         } catch (e: any) {
             console.error("Error subscribing to product", productPriceId, e);
+            onCheckoutSessionReady(undefined, e);
             snackbar.open({
                 message: e?.message ?? "Error subscribing to product",
                 type: "error"
@@ -170,19 +171,15 @@ export function useSubscriptionsForUserController(): SubscriptionsController {
         } = props;
 
         console.debug("Subscribing to product", props);
-        try {
-            const sessionUrl: string = await projectsApi.createCloudStripeNewSubscriptionLink({
-                projectId,
-                currency
-            });
+        await projectsApi.createCloudStripeNewSubscriptionLink({
+            projectId,
+            currency
+        }).then((sessionUrl) => {
             onCheckoutSessionReady(sessionUrl, undefined);
-        } catch (e: any) {
+        }).catch(e => {
             console.error("Error subscribing to Cloud", projectId, e);
-            snackbar.open({
-                message: e?.message ?? "Error subscribing to product",
-                type: "error"
-            });
-        }
+            onCheckoutSessionReady(undefined, e);
+        });
     }
 
     const getSubscriptionsForProject = (projectId: string): Subscription[] => {

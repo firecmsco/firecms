@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Alert, LoadingButton, RocketLaunchIcon } from "@firecms/ui";
 import { ProductPrice, ProductWithPrices } from "../../types";
 import { SubscribeCloudParams } from "../../hooks";
@@ -8,18 +8,13 @@ function getDefaultCurrency(productPrice: ProductPrice) {
     return productPrice.currency;
 }
 
-// get the user locale based on the browser
-function getUserLocale() {
-    return navigator.language || "en-US";
-}
-
 export function UpgradeCloudSubscriptionView({
-                                            product,
-                                            includePriceSelect = true,
-                                            largePriceLabel = false,
-                                            subscribeCloud,
-                                            projectId
-                                        }: {
+                                                 product,
+                                                 includePriceSelect = true,
+                                                 largePriceLabel = false,
+                                                 subscribeCloud,
+                                                 projectId
+                                             }: {
     product: ProductWithPrices,
     projectId?: string,
     includePriceSelect?: boolean,
@@ -36,14 +31,12 @@ export function UpgradeCloudSubscriptionView({
     }
 
     const productPrice = productPrices[0];
-    const currencies = Object.keys(productPrice.currency_options);
     const [currency, setCurrency] = useState<string>(getDefaultCurrency(productPrice));
 
     if (product.metadata.type !== "pro" && product.metadata.type !== "cloud_plus") {
         throw new Error("Error: Unmapped product type in ProductView");
     }
 
-    console.log("currency", currency);
     const priceSelect = <CurrencyPriceSelect
         price={productPrice}
         currencies={productPrice.currency_options}
@@ -56,40 +49,48 @@ export function UpgradeCloudSubscriptionView({
     const doSubscribe = () => {
         if (!projectId || currency === undefined) return;
         setLinkLoading(true);
-        return subscribeCloud({
-            projectId,
-            currency,
-            onCheckoutSessionReady: (url, error) => {
-                if (!url && !error)
-                    return;
-                if (error) {
-                    setError(error);
+        try {
+            subscribeCloud({
+                projectId,
+                currency,
+                onCheckoutSessionReady: (url, error) => {
+
+                    setLinkLoading(false);
+
+                    if (!url && !error)
+                        return;
+                    if (error) {
+                        setError(error);
+                    }
+                    if (url) {
+                        if (typeof window !== "undefined")
+                            // window.open(url, "_blank"); // Open a new tab
+                            window.location.assign(url);
+                    }
                 }
-                if (url) {
-                    if (typeof window !== "undefined")
-                        // window.open(url, "_blank"); // Open a new tab
-                        window.location.assign(url);
-                }
-                setLinkLoading(false);
-            }
-        });
+            });
+        } catch (e: any) {
+            setLinkLoading(false);
+            setError(e);
+        }
     }
 
-    return <>
+    return <div className={"flex flex-col gap-4"}>
+        <div className={"flex flex-row gap-4"}>
+            {includePriceSelect && priceSelect}
 
-        {includePriceSelect && priceSelect}
+            <LoadingButton
+                variant={"filled"}
+                loading={linkLoading}
+                onClick={doSubscribe}
+                startIcon={<RocketLaunchIcon/>}>
+                Create a subscription
+            </LoadingButton>
 
-        <LoadingButton
-            variant={"filled"}
-            loading={linkLoading}
-            onClick={doSubscribe}
-            startIcon={<RocketLaunchIcon/>}>
-            Create a subscription
-        </LoadingButton>
-
+        </div>
         {error &&
             <Alert color="error" className={"my-4"}>{error.message}</Alert>
         }
 
-    </>;
+    </div>;
 }

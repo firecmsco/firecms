@@ -8,9 +8,13 @@ import {
     DialogContent,
     DialogTitle,
     IconButton,
-    Typography,
+    LoadingButton,
+    RocketLaunchIcon,
+    Typography
 } from "@firecms/ui";
-import { UpgradeToPlusButton } from "./UpgradeToPlusButton";
+
+import { UpgradeCloudSubscriptionView } from "./UpgradeCloudSubscriptionView";
+import { useProjectConfig, useSubscriptionsForUserController } from "../../hooks";
 
 export function PaywallDialog({
                                   open,
@@ -76,12 +80,44 @@ export function Paywall({ trialOver }: {
             </Typography>
 
             <div className={"flex flex-row gap-4 mt-8"}>
-                <UpgradeToPlusButton includePriceSelect={true}
-                                     largePriceLabel={true}/>
+                <UpgradeButton/>
             </div>
 
 
         </Container>
     </CenteredView>;
 
+}
+
+function UpgradeButton() {
+    const {
+        subscriptionPlan,
+        projectId
+    } = useProjectConfig();
+
+    if (!subscriptionPlan)
+        throw new Error("No subscription plan");
+
+    const {
+        products,
+        subscribeCloud
+    } = useSubscriptionsForUserController();
+
+    const plusProduct = products?.find(p => p.metadata?.type === "cloud_plus");
+
+    if (!plusProduct) {
+        return <LoadingButton
+            variant={"filled"}
+            loading={true}
+            startIcon={<RocketLaunchIcon/>}>
+            Create a subscription
+        </LoadingButton>
+    }
+
+    return <UpgradeCloudSubscriptionView
+        includePriceSelect={true}
+        largePriceLabel={true}
+        product={plusProduct}
+        projectId={projectId}
+        subscribeCloud={subscribeCloud}/>
 }
