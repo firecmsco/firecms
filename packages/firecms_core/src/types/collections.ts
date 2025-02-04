@@ -498,21 +498,26 @@ export type EntityCustomView<M extends Record<string, any> = any> =
         /**
          * Key of this custom view.
          */
-        key: string,
+        key: string;
+
         /**
          * Name of this custom view.
          */
-        name: string,
+        name: string;
+
         /**
-         * If set to true, the actions of the entity will be included in the
-         * bottom of the panel (save buttons, delete buttons, etc.)
+         * If set to true, the actions of the entity (save, discard,delete) will be
+         * included in the view. By default the actions are located in the right or bottom,
+         * based on the screen size. You can force the actions to be located at the bottom
+         * by setting this prop to "bottom".
          */
-        includeActions?: boolean;
+        includeActions?: boolean | "bottom";
+
         /**
          * Builder for rendering the custom view
          */
         Builder?: React.ComponentType<EntityCustomViewParams<M>>;
-    }
+    };
 
 /**
  * Parameters passed to the builder in charge of rendering a custom panel for

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { canCreateEntity, canDeleteEntity, fullPathToCollectionSegments } from "../../util";
+import { canCreateEntity, canDeleteEntity } from "../../util";
 import { useAuthController, useCustomizationController, useFireCMSContext, useLargeLayout } from "../../hooks";
 import { CollectionActionsProps, EntityCollection, EntityTableController, SelectionController } from "../../types";
 import { AddIcon, Button, DeleteIcon, IconButton, Tooltip } from "@firecms/ui";
@@ -124,7 +124,9 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
 
     return (
         <>
-            {actions}
+            <ErrorBoundary>
+                {actions}
+            </ErrorBoundary>
             {multipleDeleteButton}
             {addButton}
         </>

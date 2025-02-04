@@ -36,9 +36,9 @@ function Home() {
                 <script type="application/ld+json">
                     {JSON.stringify(organizationSchema)}
                 </script>
-                <script type="text/javascript">
-                    {clarityScript}
-                </script>
+                {/*<script type="text/javascript">*/}
+                {/*    {clarityScript}*/}
+                {/*</script>*/}
             </Head>
 
             <HeroHome/>

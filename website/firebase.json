@@ -15,6 +15,11 @@
         "type": 301
       },
       {
+        "source": "/cloud/quickstart",
+        "destination": "/docs/cloud/quickstart",
+        "type": 301
+      },
+      {
         "source": "/docs/cloud_quickstart",
         "destination": "/docs/cloud/quickstart",
         "type": 301
@@ -82,6 +87,11 @@
       {
         "source": "/docs/pro/deployment",
         "destination": "/docs/self/deployment",
+        "type": 301
+      },
+      {
+        "source": "/docs/pro/",
+        "destination": "/pro",
         "type": 301
       }
     ],

@@ -51,6 +51,7 @@ export function DateTimeFieldBinding({
                     clearable={property.clearable}
                     locale={locale}
                     error={showError}
+                    disabled={disabled}
                     label={<LabelWithIcon
                         icon={getIconForProperty(property, "small")}
                         required={property.validation?.required}

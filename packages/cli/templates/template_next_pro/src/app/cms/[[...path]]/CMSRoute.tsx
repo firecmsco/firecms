@@ -1,8 +1,8 @@
 "use client";
 
-import { FireCMSRouter } from "@firecms/core";
 import { useEffect, useState } from "react";
 import { App } from "../App";
+import { BrowserRouter } from "react-router-dom";
 
 export function CMSRoute(){
     const [mounted, setMounted] = useState(false)
@@ -12,7 +12,7 @@ export function CMSRoute(){
     }, [])
     if (!mounted) return null;
 
-    return <FireCMSRouter basePath={"/cms"}>
+    return <BrowserRouter basename={"/cms"}>
         <App/>
-    </FireCMSRouter>;
+    </BrowserRouter>;
 }

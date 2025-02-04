@@ -111,7 +111,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         if (!firebaseApp || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         const firestore = getFirestore(firebaseApp);
         const collectionPath = buildCollectionId(id, parentCollectionIds);
-        console.debug("!!Deleting collection", collectionPath);
+        console.debug("Deleting collection", collectionPath);
         const ref = doc(firestore, configPath, collectionPath);
         return deleteDoc(ref);
     }, [configPath, firebaseApp]);

@@ -582,3 +582,94 @@ p {
 ul {
     padding: revert;
 }
+
+/* Name : VSCode Default Dark Plus Author: Fuyuno Mikazuki <https://mochizuki.moe> Original Color by Microsoft Visual Studio Code <https://github.com/microsoft/vscode> and dark-plus-syntax <https://github.com/dunstontc/dark-plus-syntax> */
+/* common tokens */
+.token.annotation, .token.builtin {
+    color: #4ec9b0;
+}
+.token.boolean {
+    color: #569cd6;
+}
+.token.comment, .token.doctype {
+    color: #6a9955;
+}
+.token.constant, .token.class-name {
+    color: #4ec9b0;
+}
+.token.deleted {
+    color: #f44747;
+}
+.token.function {
+    color: #dcdcaa;
+}
+.token.keyword {
+    color: #569cd6;
+}
+.token.macro.property {
+    color: #569cd6;
+}
+.token.number {
+    color: #b5cea8;
+}
+.token.operator {
+    color: #d4d4d4;
+}
+.token.tag .token.attr-name {
+    color: #9cdcfe;
+}
+.token.tag .token.attr-value {
+    color: #ce9178;
+}
+.token.tag .token.attr-value.punctuation {
+    color: #ce9178;
+}
+.token.tag .token.class-name {
+    color: #4ec9b0;
+}
+.token.tag .token.punctuation {
+    color: #d4d4d4;
+    opacity: 0.7;
+}
+.token.tag .token.tag {
+    color: #569cd6;
+}
+.token.url {
+    /* text-decoration: underline */
+}
+.token.parent.important {
+    color: #569cd6;
+}
+.token.property {
+    color: #9cdcfe;
+}
+.token.regex {
+    color: #646695;
+}
+.token.rule {
+    color: #569cd6;
+}
+.token.selector {
+    color: #d7ba7d;
+}
+.token.string {
+    color: #ce9178;
+}
+.token.variable {
+    color: #9cdcfe;
+}
+/* JavaScript React, TypeScript React */
+code.language-tsx .token.interpolation .interpolation-punctuation, code.language-jsx .token.interpolation .interpolation-punctuation, pre.language-tsx .token.interpolation .interpolation-punctuation, pre.language-jsx .token.interpolation .interpolation-punctuation {
+    color: #569cd6;
+}
+code.language-tsx .token.tag .token.script .token.punctuation, code.language-jsx .token.tag .token.script .token.punctuation, pre.language-tsx .token.tag .token.script .token.punctuation, pre.language-jsx .token.tag .token.script .token.punctuation {
+    color: #569cd6;
+}
+code.language-tsx .token.tag .token.script .token.script-punctuation, code.language-jsx .token.tag .token.script .token.script-punctuation, pre.language-tsx .token.tag .token.script .token.script-punctuation, pre.language-jsx .token.tag .token.script .token.script-punctuation {
+    color: #d4d4d4;
+    opacity: 0.7;
+}
+/* SASS, SCSS */
+code.language-sass .token.property, code.language-scss .token.property {
+    color: #9cdcfe;
+}

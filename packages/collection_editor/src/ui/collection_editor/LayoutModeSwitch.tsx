@@ -49,5 +49,6 @@ export function LayoutModeSwitch({
             </Tooltip>
 
         </div>
+        <Typography variant={"caption"} color={"secondary"} className={"ml-3.5"}>Should documents be opened full screen or in an inline side dialog</Typography>
     </div>
 }

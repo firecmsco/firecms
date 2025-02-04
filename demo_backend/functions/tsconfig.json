@@ -1,21 +1,34 @@
 {
     "compilerOptions": {
-        "lib": [
-            "es7",
-            "dom"
-        ],
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "experimentalDecorators": true,
+        "strictPropertyInitialization": false,
         "module": "commonjs",
         "noImplicitReturns": true,
-        "noUnusedLocals": false,
+        "esModuleInterop": true,
         "outDir": "lib",
-
+        "sourceMap": true,
         "strict": true,
         "target": "es2018",
+        "lib": [
+            "esnext",
+            "dom"
+        ],
         "skipLibCheck": true,
-        "experimentalDecorators": true
+        "moduleResolution": "node",
+        "noFallthroughCasesInSwitch": true,
+        "declaration": true,
+        "noImplicitThis": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
     },
     "compileOnSave": true,
     "include": [
-        "src"
+        "src",
+        "scripts"
     ]
 }

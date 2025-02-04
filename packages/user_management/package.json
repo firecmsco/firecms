@@ -1,7 +1,7 @@
 {
   "name": "@firecms/user_management",
   "type": "module",
-  "version": "3.0.0-canary.170",
+  "version": "3.0.0-canary.183",
   "publishConfig": {
     "access": "public"
   },
@@ -29,23 +29,23 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "^3.0.0-canary.170",
-    "@firecms/formex": "^3.0.0-canary.170",
-    "@firecms/ui": "^3.0.0-canary.170",
+    "@firecms/core": "^3.0.0-canary.183",
+    "@firecms/formex": "^3.0.0-canary.183",
+    "@firecms/ui": "^3.0.0-canary.183",
     "date-fns": "^3.6.0"
   },
   "peerDependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.17.9",
-    "@types/react": "^18.3.11",
-    "@types/react-dom": "^18.3.1",
+    "@types/node": "^20.17.14",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.0",
     "babel-plugin-react-compiler": "beta",
     "eslint-plugin-react-compiler": "beta",
-    "typescript": "^5.7.2",
-    "vite": "^5.4.11"
+    "typescript": "^5.7.3",
+    "vite": "^5.4.14"
   },
   "scripts": {
     "dev": "vite",
@@ -57,5 +57,5 @@
     "src",
     "bin"
   ],
-  "gitHead": "78b61328121fb331b164ca96030419b9607971a1"
+  "gitHead": "e265baef6fad623e57376b3338475bc0d5b49372"
 }

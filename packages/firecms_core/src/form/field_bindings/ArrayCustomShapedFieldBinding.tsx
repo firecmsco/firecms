@@ -20,13 +20,15 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
                                                                         showError,
                                                                         isSubmitting,
                                                                         setValue,
-                                                                        minimalistView,
+                                                                        minimalistView: minimalistViewProp,
                                                                         property,
                                                                         includeDescription,
                                                                         underlyingValueHasChanged,
                                                                         context,
                                                                         disabled
                                                                     }: FieldProps<T, any, any>) {
+
+    const minimalistView = minimalistViewProp || property.minimalistView;
 
     let resolvedProperties = "resolvedProperties" in property ? property.resolvedProperties : undefined;
     if (!resolvedProperties) {
@@ -52,7 +54,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
             icon={getIconForProperty(property, "small")}
             required={property.validation?.required}
             title={property.name}
-            className={"flex-grow text-text-secondary dark:text-text-secondary-dark"}/>
+            className={"h-8 flex-grow text-text-secondary dark:text-text-secondary-dark"}/>
         {Array.isArray(value) && <Typography variant={"caption"} className={"px-4"}>({value.length})</Typography>}
     </>);
 

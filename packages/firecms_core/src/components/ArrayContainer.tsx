@@ -109,7 +109,7 @@ export function ArrayContainer<T>({
 
     const insertInEnd = (e: React.SyntheticEvent) => {
         e.preventDefault();
-        if (disabled || value.length >= max) return;
+        if (disabled || (value ?? []).length >= max) return;
         const id = getRandomId();
         const newIds: number[] = [...internalIds, id];
         if (onInternalIdAdded)
@@ -119,7 +119,7 @@ export function ArrayContainer<T>({
     };
 
     const remove = (index: number) => {
-        if (value.length <= min) return;
+        if ((value ?? []).length <= min) return;
         const newIds = [...internalIds];
         newIds.splice(index, 1);
         setInternalIds(newIds);
@@ -127,7 +127,7 @@ export function ArrayContainer<T>({
     };
 
     const copy = (index: number) => {
-        if (value.length >= max) return;
+        if ((value ?? []).length >= max) return;
         const id = getRandomId();
         const copyingItem = value[index];
         const newIds: number[] = [
@@ -143,7 +143,7 @@ export function ArrayContainer<T>({
     };
 
     const addInIndex = (index: number) => {
-        if (value.length >= max) return;
+        if ((value ?? []).length >= max) return;
         const id = getRandomId();
         const newIds: number[] = [
             ...internalIds.slice(0, index),

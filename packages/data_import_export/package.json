@@ -1,21 +1,20 @@
 {
   "name": "@firecms/data_import_export",
   "type": "module",
-  "version": "3.0.0-canary.170",
+  "version": "3.0.0-canary.183",
   "access": "public",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "^3.0.0-canary.170",
-    "@firecms/data_export": "^3.0.0-canary.170",
-    "@firecms/data_import": "^3.0.0-canary.170"
+    "@firecms/core": "^3.0.0-canary.183",
+    "@firecms/data_export": "^3.0.0-canary.183",
+    "@firecms/data_import": "^3.0.0-canary.183"
   },
   "peerDependencies": {
-    "firebase": "^10.12.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0",
     "react-router": "^6.28.0",
     "react-router-dom": "^6.28.0"
   },
@@ -50,14 +49,14 @@
     "@jest/globals": "^29.7.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@types/jest": "^29.5.14",
-    "@types/react": "^18.3.11",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.4",
     "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
-    "typescript": "^5.7.2",
-    "vite": "^5.4.11"
+    "typescript": "^5.7.3",
+    "vite": "^5.4.14"
   },
   "jest": {
     "transform": {
@@ -83,5 +82,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "78b61328121fb331b164ca96030419b9607971a1"
+  "gitHead": "e265baef6fad623e57376b3338475bc0d5b49372"
 }

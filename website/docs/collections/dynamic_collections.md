@@ -36,7 +36,7 @@ const collectionsBuilder: EntityCollectionsBuilder = async ({
 
 :::note
 If you want to make customizations at the property level only, check the
-[conditional fields](../properties/conditional_fields.md) section. But note that conditional fields are not
+[conditional fields](../properties/conditional_fields) section. But note that conditional fields are not
 suitable for asynchronous operations.
 :::
 

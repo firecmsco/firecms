@@ -16,7 +16,7 @@ The code is bundled and compiled using **module federation** and
 The bundle will not include any of the dependencies that are already
 included in FireCMS, so you can use any version of any package you want.
 
-Deploy your code to [FireCMS Cloud,](https://app.firecms.co) with a single command,
+Deploy your code to [FireCMS Cloud](https://app.firecms.co) with a single command,
 and it will be served from there:
 
 ```bash
@@ -50,8 +50,9 @@ and
 firecms deploy --project=your-project-id
 ```
 
-## Deployment to Firebase Hosting
+## Deployment
 
-:::important
-You can only deploy outside FireCMS Cloud if you have a **PRO plan**.
-:::
+FireCMS Cloud projects can only be deployed to FireCMS Cloud. 
+
+If you need a self-hosted version of FireCMS, you can use the PRO plan, or use the community version.
+Since the APIs are the same for all versions, you can easily switch between them.

@@ -11,7 +11,7 @@ import {
 } from "../util/navigation_from_path";
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
 import { toArray } from "../util/arrays";
-import { EntityCollectionView } from "../components";
+import { EntityCollectionView, NotFoundPage } from "../components";
 import { UnsavedChangesDialog } from "../components/UnsavedChangesDialog";
 
 export function FireCMSRoute() {
@@ -191,11 +191,11 @@ function EntityFullScreenRoute({
     const lastCollectionEntry = navigationEntries.findLast((entry) => entry.type === "collection");
 
     if (isNew && !lastCollectionEntry) {
-        throw new Error("No collection found in the navigation");
+        throw new Error("INTERNAL: No collection found in the navigation");
     }
 
     if (!isNew && !lastEntityEntry) {
-        throw new Error("No entity found in the navigation");
+        return <NotFoundPage/>;
     }
 
     const collection = isNew ? lastCollectionEntry!.collection : lastEntityEntry!.parentCollection;

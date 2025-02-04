@@ -1,12 +1,14 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
+
+admin.initializeApp();
+
 import { Change } from "firebase-functions/v1";
 import { DocumentSnapshot } from "firebase-functions/v1/firestore";
 
 import { importDatabaseBackup } from "./backup";
 import { deleteInAlgolia, indexInAlgolia } from "./indexing/algolia";
 
-admin.initializeApp();
 
 export { setProductAvailableLocales, onDeleteSubcollections } from "./products";
 
@@ -64,5 +66,5 @@ export const scheduledFirestoreImport = functions
 
 
 export {
-    alpacaBchFirestoreImport, alpacaEthFirestoreImport, alpacaBtcFirestoreImport, alpacaLtcFirestoreImport
-} from "./alpaca";
+    coingeckoMultipleFirestoreImport,
+} from "./crypto";

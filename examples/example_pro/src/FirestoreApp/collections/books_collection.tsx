@@ -27,7 +27,7 @@ export const booksCollection = buildCollection({
     id: "books",
     path: "books",
     icon: "MenuBook",
-    group: "Content",
+    group: "Data enhancement demo",
     textSearchEnabled: true,
     Actions: OpenAIInstructionsActions,
     description: "Example of a books collection that allows data enhancement through the use of the **OpenAI plugin**",

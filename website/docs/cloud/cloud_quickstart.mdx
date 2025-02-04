@@ -9,14 +9,15 @@ description: Jumpstart your FireCMS customization with this quickstart guide, pe
 import { DocsCloudCTA } from "../../src/DocsCloudCTA";
 
 :::note
-Start here if you want to customize FireCMS.
-You can run a FireCMS 3.0 project without writing a single line of code
+Start here if you want to customize FireCMS Cloud.
+You can run a FireCMS project without writing a single line of code
 from [FireCMS Cloud](https://app.firecms.co).
+This guide is for developers who want to add custom code to their FireCMS project.
 :::
 
 In order to add custom code to your FireCMS project, you need:
-- A Firebase project
-- A FireCMS project
+- A **Firebase** project
+- A **FireCMS** project
 
 You can create both projects from FireCMS Cloud.
 <DocsCloudCTA/>
@@ -46,6 +47,11 @@ To run your project locally, you can run the following command, like any
 other Vite project:
 
 ```
+npm run dev
+```
+or
+
+```
 yarn dev
 ```
 
@@ -57,7 +63,7 @@ have already created in the Cloud version... Awesome!
 
 If you want to deploy to FireCMS Cloud your module must export a
 `FireCMSAppConfig` object. You can find more information about this object
-in the [App config section](./app_config) reference.
+in the [App config section](./cloud/app_config) reference.
 
 :::important
 Vite uses the default url `http://127.0.0.1:5173` for the development server
@@ -70,4 +76,20 @@ Alternatively, you can use the url `http://localhost:5173`.
 :::
 
 ## How does code upload work?
+
+We use module federation to upload your code to FireCMS Cloud.
+This means that you can upload your code to FireCMS Cloud without
+having to worry about the infrastructure.
+
+When you run the command `yarn deploy` or `npm run deploy`, your code
+will be uploaded to FireCMS Cloud and will be available in the
+FireCMS Cloud instance.
+
+Only your code will be uploaded, and it will be integrated into the core
+FireCMS Cloud. This means that you can use the same authentication
+system, the same collections, the same pages, etc.
+
+This approach allows you to have a CMS that is fully customizable
+while still benefiting of the continuous improvements and updates
+that we provide in FireCMS Cloud.
 

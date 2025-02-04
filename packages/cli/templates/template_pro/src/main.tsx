@@ -1,16 +1,17 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
+import { BrowserRouter } from "react-router-dom";
 
 import { App } from "./App"
 import "./index.css"
-import { ErrorBoundary, FireCMSRouter } from "@firecms/core";
+import { ErrorBoundary } from "@firecms/core";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
         <ErrorBoundary>
-            <FireCMSRouter>
+            <BrowserRouter>
                 <App/>
-            </FireCMSRouter>
+            </BrowserRouter>
         </ErrorBoundary>
     </React.StrictMode>
 )

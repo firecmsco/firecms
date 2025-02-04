@@ -156,6 +156,12 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
      * save the new config. The saved config will then become the source of truth.
      */
     editable?: boolean;
+
+    /**
+     * A number between 0 and 100 that indicates the width of the field in the form view.
+     * It defaults to 100, but you can set it to 50 to have two fields in the same row.
+     */
+    widthPercentage?: number;
 }
 
 /**
@@ -285,14 +291,14 @@ export type PropertyBuilder<T extends CMSType = any, M extends Record<string, an
 /**
  * @group Entity properties
  */
-export type PropertyOrBuilder<T extends CMSType = CMSType, M extends Record<string, any> = Record<string, any>> =
+export type PropertyOrBuilder<T extends CMSType = CMSType, M extends Record<string, any> = any> =
     Property<T>
     | PropertyBuilder<T, M>;
 
 /**
  * @group Entity properties
  */
-export type PropertiesOrBuilders<M extends Record<string, any> = Record<string, any>> =
+export type PropertiesOrBuilders<M extends Record<string, any> = any> =
     {
         [k in keyof M]: PropertyOrBuilder<M[k], M>;
     };
@@ -469,6 +475,12 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
      */
     expanded?: boolean;
 
+    /**
+     * Display the child properties directly, without being wrapped in an
+     * extendable panel.
+     */
+    minimalistView?: boolean;
+
 }
 
 /**
@@ -516,6 +528,12 @@ export interface MapProperty<T extends Record<string, CMSType> = Record<string, 
      * view
      */
     spreadChildren?: boolean;
+
+    /**
+     * Display the child properties directly, without being wrapped in an
+     * extendable panel. Note that this will also hide the title of this property.
+     */
+    minimalistView?: boolean;
 
     /**
      * Should the field be initially expanded. Defaults to `true`

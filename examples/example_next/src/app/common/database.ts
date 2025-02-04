@@ -13,7 +13,6 @@ import {
 import { getDownloadURL, ref } from "@firebase/storage";
 import { BlogEntryWithId, ProductWithId } from "@/app/common/types";
 
-
 export const getProducts = async ({
                                       limit = 10,
                                       categoryFilter,
@@ -25,7 +24,10 @@ export const getProducts = async ({
     minPriceFilter?: number,
     maxPriceFilter?: number,
 }): Promise<ProductWithId[]> => {
-    console.log("Getting products", { limit, categoryFilter });
+    console.log("Getting products", {
+        limit,
+        categoryFilter
+    });
     const colRef = collection(getFirestore(firebaseApp), "products");
     const queryConstraints: QueryConstraint[] = [limitClause(limit)];
     if (categoryFilter) {
@@ -41,7 +43,6 @@ export const getProducts = async ({
     const querySnapshot = await getDocs(query(colRef, ...queryConstraints));
     return Promise.all(querySnapshot.docs.map((doc) => convertProduct(doc.data(), doc.id)));
 };
-
 
 export const getProduct = async (id: string): Promise<ProductWithId | null> => {
     console.log("Getting product", id);
@@ -71,8 +72,19 @@ export async function convertProduct(data: Record<string, any>, id: string): Pro
         amazon_link: data.amazon_link,
         publisher: data.publisher,
         tags: data.tags,
-        added_on: "added_on" in data && data.added_on instanceof Date ? data.added_on : data["added_on"] as any,
+        added_on: convertDate(data["added_on"])
     } as ProductWithId;
+}
+
+function convertDate(data: any) {
+    if (!data) return null;
+    if (data instanceof Date) {
+        return data;
+    }
+    if (typeof data === "object" && "toDate" in data) {
+        return data.toDate();
+    }
+    return null;
 }
 
 export const getBlogEntries = async ({
@@ -149,7 +161,7 @@ export async function convertBlogEntry(data: Record<string, any>, id: string): P
         name: data.name,
         header_image: headerImage,
         content: content,
-        created_on: data.created_on?.toDate(),
+        created_on: convertDate(data.created_on),
         reviewed: data.reviewed,
         status: data.status,
         tags: data.tags,

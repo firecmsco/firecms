@@ -133,7 +133,7 @@ function CurrentCloudSubscriptionView({
         projectsApi
     } = useFireCMSBackend();
 
-    const statusText = getSubscriptionStatusText(subscription.status);
+    const statusText = getSubscriptionStatusText(subscription);
     const [cancelLinkUrl, setCancelLinkUrl] = useState<string | undefined>(undefined);
 
     useEffect(() => {

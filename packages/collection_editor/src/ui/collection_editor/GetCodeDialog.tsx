@@ -28,7 +28,7 @@ export function GetCodeDialog({
                 app configuration.
                 More info in the <a
                 rel="noopener noreferrer"
-                href={"https://firecms.co/docs/customization_quickstart"}>docs</a>.
+                href={"https://firecms.co/docs/cloud/quickstart"}>docs</a>.
             </Typography>
             <Highlight
                 theme={themes.vsDark}

@@ -43,7 +43,7 @@ can define an enum string property and the values will be merged from both defin
 :::note
 FireCMS provides around 20 different fields (such as text fields, selects, and complex ones like reference or
 sortable array fields). If your use case is not covered by one of the provided fields, you can create your
-own [custom field](../properties/custom_fields.md).
+own [custom field](../properties/custom_fields).
 :::
 
 :::tip
@@ -256,7 +256,7 @@ to `false` in the collection configuration.
 - **`path`**: Relative Firestore path of this view to its parent. If this view is in the root, the path is equal to the
   absolute one. This path also determines the URL in FireCMS.
 - **`properties`**: Object defining the properties for the entity schema. More information
-  in [Properties](../properties/properties_intro.md).
+  in [Properties](../properties/properties_intro).
 - **`propertiesOrder`**: Order in which the properties are displayed.
     - For properties, use the property key.
     - For additional columns, use the column id.

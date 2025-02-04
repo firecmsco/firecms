@@ -5,7 +5,7 @@ import { ErrorBoundary } from "../../components";
 import { getIconForProperty, isHidden, isReadOnly, pick } from "../../util";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
-import { ExpandablePanel, InputLabel, Select, SelectItem } from "@firecms/ui";
+import { cls, ExpandablePanel, InputLabel, Select, SelectItem } from "@firecms/ui";
 
 /**
  * Field that renders the children property fields
@@ -21,7 +21,7 @@ export function MapFieldBinding({
                                     error,
                                     disabled,
                                     property,
-                                    minimalistView,
+                                    minimalistView: minimalistViewProp,
                                     includeDescription,
                                     underlyingValueHasChanged,
                                     autoFocus,
@@ -31,6 +31,7 @@ export function MapFieldBinding({
 
     const pickOnlySomeKeys = property.pickOnlySomeKeys || false;
     const expanded = property.expanded === undefined ? true : property.expanded;
+    const minimalistView = minimalistViewProp || property.minimalistView;
 
     if (!property.properties) {
         throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${propertyKey}`);
@@ -51,7 +52,7 @@ export function MapFieldBinding({
     }
 
     const mapFormView = <>
-            <div className="py-1 flex flex-col space-y-2">
+            <div className={cls("py-1 flex flex-col space-y-2", minimalistView && property.widthPercentage !== undefined ? "mt-8" : undefined)}>
                 {Object.entries(mapProperties)
                     .filter(([_, property]) => !isHidden(property))
                     .map(([entryKey, childProperty], index) => {
@@ -94,15 +95,6 @@ export function MapFieldBinding({
         </>
     ;
 
-    const title = (
-        <LabelWithIconAndTooltip
-            propertyKey={propertyKey}
-            icon={getIconForProperty(property, "small")}
-            required={property.validation?.required}
-            title={property.name}
-            className={"text-text-secondary dark:text-text-secondary-dark"}/>
-    );
-
     return (
         <ErrorBoundary>
 
@@ -112,8 +104,16 @@ export function MapFieldBinding({
                                                          expanded
                                                      });
                                                  }}
+                                                 className={property.widthPercentage !== undefined ? "mt-8" : undefined}
                                                  innerClassName={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2 bg-white dark:bg-surface-900"}
-                                                 title={title}>{mapFormView}</ExpandablePanel>}
+                                                 title={<LabelWithIconAndTooltip
+                                                     propertyKey={propertyKey}
+                                                     icon={getIconForProperty(property, "small")}
+                                                     required={property.validation?.required}
+                                                     title={property.name}
+                                                     className={"text-text-secondary dark:text-text-secondary-dark"}/>}>
+                {mapFormView}
+            </ExpandablePanel>}
 
             {minimalistView && mapFormView}
 

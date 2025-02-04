@@ -1,7 +1,7 @@
 import React from "react"
 
 // @ts-ignore
-import dataImportVideo from "@site/static/img/import.mp4";
+import dataImportVideo from "@site/static/img/import.webm";
 import { ContainerMixin, ContainerPaddingMixin, defaultBorderMixin } from "../styles";
 import clsx from "clsx";
 
@@ -9,7 +9,7 @@ export const ImportDataIntro = () => {
 
     return (
         <section
-            className="relative bg-white">
+            className="relative bg-gray-700">
 
             <div
                 className={clsx("px-4 sm:px-6  bg-light bg-gray-800 text-white dark:text-white",

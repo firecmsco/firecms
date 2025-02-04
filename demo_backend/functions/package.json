@@ -11,9 +11,8 @@
     "engines": {
         "node": "16"
     },
-    "main": "lib/index.js",
+    "main": "lib/src/index.js",
     "dependencies": {
-        "@alpacahq/alpaca-trade-api": "^2.16.1",
         "@elastic/elasticsearch": "^8.13.0",
         "@google-cloud/firestore": "^6.8.0",
         "algoliasearch": "^4.23.2",
@@ -27,10 +26,11 @@
         "firebase-tools": "^11.30.0",
         "md5": "^2.3.0",
         "meilisearch": "^0.32.5",
+        "node-fetch": "^2.6.1",
         "typesense": "^1.7.2"
     },
     "devDependencies": {
-        "typescript": "^4.9.5"
+        "typescript": "^5.7.3"
     },
     "private": true
 }

@@ -262,7 +262,8 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
         fullPath,
         collection,
         entitiesDisplayedFirst,
-        forceFilter
+        forceFilter,
+        updateUrl: false,
     });
 
     const {

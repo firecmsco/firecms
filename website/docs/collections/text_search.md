@@ -89,7 +89,7 @@ export default function App() {
 
 ### Using Algolia in self-hosted FireCMS
 
-For FireCMS PRO, you need to define a `FirestoreTextSearchControllerBuilder`.
+For self-hosted FireCMS, you need to define a `FirestoreTextSearchControllerBuilder`.
 
 ```tsx
 import { algoliasearch, SearchClient } from "algoliasearch";
@@ -143,3 +143,7 @@ Then you need to mark each collection with `textSearchEnabled: true`.
 If you have declared an external indexing provider, the local text search will be
 effective **only for the paths not supported by the external provider**.
 
+
+### Using an external search provider
+
+When using an external search provider, you need to implement a `FirestoreTextSearchController`.

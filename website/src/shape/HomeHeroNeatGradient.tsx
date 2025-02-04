@@ -3,8 +3,8 @@ import { NeatGradient } from "@firecms/neat";
 import { easeInOut } from "../partials/styles";
 
 function getBrightnessFrom(scroll: number) {
-    const min = .4;
-    const max = .8;
+    const min = .3;
+    const max = .7;
     return Math.min(max, Math.max(min, min + scroll / 1000));
 }
 
@@ -22,12 +22,12 @@ function getSaturateFrom(scroll: number) {
 
 function getAmplitude(scroll: number) {
     const min = 10;
-    const max = 40;
+    const max = 30;
     return Math.min(max, Math.max(min, min + scroll / 50));
 }
 
 function getResolution(width: number) {
-    return Math.log(width) / 15;
+    return Math.log(width) / 22;
     // return 1 / 2;
     // const min = 1 / 3.33335;
     // const max = 1 / 2;
@@ -90,7 +90,7 @@ export default function HomeHeroNeatGradient() {
             return () => {
             };
 
-        const backgroundColor = "rgb(17,48,157)";
+        const backgroundColor = "rgb(16,24,39)";
 
         const width = window?.innerWidth ?? 1400;
 
@@ -111,11 +111,11 @@ export default function HomeHeroNeatGradient() {
                     "enabled": true
                 }
             ],
-            "speed": 1.5,
+            "speed": 1.2,
             "horizontalPressure": 5,
             "verticalPressure": 10,
-            "waveFrequencyX": 1,
-            "waveFrequencyY": 2,
+            "waveFrequencyX": 2,
+            "waveFrequencyY": 1,
             "waveAmplitude": getAmplitude(scrollRef.current),
             "shadows": 0,
             "highlights": 0,

@@ -235,7 +235,7 @@ export function ExampleCMSView() {
                                 variant={"outlined"}
                                 onClick={() => sideEntityController.open({
                                     entityId: "B003WT1622",
-                                    path: "/products-test",
+                                    path: "/products",
                                     collection: customProductCollection,
                                     width: 1000
                                 })}>

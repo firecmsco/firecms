@@ -5,6 +5,7 @@ import { useDataOrder } from "../../hooks/data/useDataOrder";
 import {
     Entity,
     EntityCollection,
+    EntityReference,
     EntityTableController,
     FilterValues,
     FireCMSContext,
@@ -128,11 +129,11 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     }, [initialSort, forceFilter]);
 
     const {
-        filterValues: initialFilteUrl,
+        filterValues: initialFilterUrl,
         sortBy: initialSortUrl,
     } = parseFilterAndSort(window.location.search);
 
-    const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? initialFilteUrl ?? initialFilter ?? undefined);
+    const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? (updateUrl ? initialFilterUrl : undefined) ?? initialFilter ?? undefined);
     const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>(initialSortUrl ?? initialSortInternal);
 
     useUpdateUrl(filterValues, sortBy, searchString, updateUrl);
@@ -302,7 +303,7 @@ function useUpdateUrl<M extends Record<string, any> = any>(
     }, [filterValues, sortBy, searchString, updateUrl]);
 }
 
-function encodeFilterAndSort(filterValues?: FilterValues<string> | undefined, sortBy?: [string, "asc" | "desc"] | undefined) {
+function encodeFilterAndSort(filterValues?: FilterValues<string>, sortBy?: [string, "asc" | "desc"] | undefined) {
     const entries: Record<string, string> = {};
     if (sortBy) {
         entries["__sort"] = encodeURIComponent(sortBy[0]);
@@ -311,8 +312,30 @@ function encodeFilterAndSort(filterValues?: FilterValues<string> | undefined, so
     if (filterValues) {
         Object.entries(filterValues).forEach(([key, value]) => {
             if (value) {
-                entries[encodeURIComponent(`${key}_op`)] = encodeURIComponent(value[0]);
-                entries[encodeURIComponent(`${key}_value`)] = encodeURIComponent(value[1]);
+                const [op, val] = value;
+                let encodedValue: any = val;
+                try {
+                    if (typeof val === "object") {
+                        if (val instanceof Date) {
+                            encodedValue = val.toISOString();
+                        } else if (Array.isArray(val)) {
+                            encodedValue = JSON.stringify(val, (key, value) => {
+                                if (value instanceof EntityReference) {
+                                    return encodeRef(value);
+                                }
+                                return value;
+                            });
+                        } else if (val instanceof EntityReference) {
+                            encodedValue = encodeRef(val);
+                        }
+                    }
+                } catch (e) {
+                    encodedValue = val;
+                }
+                if (encodedValue !== undefined) {
+                    entries[encodeURIComponent(`${key}_op`)] = encodeURIComponent(op);
+                    entries[encodeURIComponent(`${key}_value`)] = encodeURIComponent(encodedValue.toString());
+                }
             }
         });
     }
@@ -331,10 +354,14 @@ function parseFilterAndSort<M>(search: string): {
     let sortBy: [string, "asc" | "desc"] | undefined = undefined;
     entries.forEach((value, key) => {
         if (key === "__sort") {
-            sortBy = [value, entries.get("__sort_order") as "asc" | "desc"];
+            sortBy = [decodeURIComponent(value), entries.get("__sort_order") as "asc" | "desc"];
         } else if (key.endsWith("_op")) {
-            const filterValue = entries.get(`${key.replace("_op", "_value")}`);
-            filterValues[key.replace("_op", "")] = [value as WhereFilterOp, filterValue as string];
+            const field = key.replace("_op", "");
+            const filterOp = decodeURIComponent(value) as WhereFilterOp;
+            const filterValStr = entries.get(`${field}_value`);
+            if (filterValStr !== null) {
+                filterValues[field] = [filterOp, decodeString(filterValStr)];
+            }
         }
     });
 
@@ -342,4 +369,52 @@ function parseFilterAndSort<M>(search: string): {
         filterValues: Object.keys(filterValues).length ? filterValues : undefined,
         sortBy
     }
+}
+
+function isDate(dateString: string): boolean {
+    // Define a regex pattern that matches the exact date format: 2025-01-07T23:00:00.000Z
+    const regexPattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+
+    // Test the dateString against the regex pattern
+    if (!regexPattern.test(dateString)) {
+        return false;
+    }
+
+    // If the regex matches, further validate if it is a valid UTC date
+    const date = new Date(dateString);
+    return date.toISOString() === dateString;
+}
+
+function encodeRef(val: EntityReference) {
+    return `ref::${val.path}/${val.id}`;
+}
+
+function decodeString(val: string): EntityReference | Date | string {
+    let parsedFilterVal: any = val;
+    if (isDate(val)) {
+        try {
+            parsedFilterVal = new Date(val);
+        } catch (e) {
+            // ignore
+        }
+    }
+    if (typeof parsedFilterVal === "string") {
+        try {
+            parsedFilterVal = JSON.parse(parsedFilterVal, (key, value) => {
+                if (typeof value === "string" && value.startsWith("ref::")) {
+                    const [path, id] = value.substring(5).split("/");
+                    return new EntityReference(id, path);
+                }
+                return value;
+            });
+        } catch (e) {
+            // ignore
+        }
+    }
+
+    if (typeof parsedFilterVal === "string" && parsedFilterVal.startsWith("ref::")) {
+        const [path, id] = parsedFilterVal.substring(5).split("/");
+        return new EntityReference(id, path);
+    }
+    return parsedFilterVal;
 }

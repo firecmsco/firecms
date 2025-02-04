@@ -141,25 +141,25 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                     </InputLabel>
                 )}
 
-                    <input
-                        ref={inputRef}
-                        type={mode === "date_time" ? "datetime-local" : "date"}
-                        value={valueAsInputValue(value ?? null, mode)}
-                        onChange={handleInputChange}
-                        onFocus={() => setFocused(true)}
-                        onBlur={() => setFocused(false)}
-                        disabled={disabled}
-                        className={cls(
-                            "w-full outline-none bg-transparent leading-normal text-base px-3",
-                            clearable ? "pr-14" : "pr-12",
-                            "rounded-md",
-                            size === "medium" ? "min-h-[48px]" : "min-h-[64px]",
-                            label ? "pt-8 pb-2" : "py-2",
-                            inputClassName,
-                            disabled &&
-                            "border border-transparent outline-none opacity-50 dark:opacity-50 text-surface-accent-600 dark:text-surface-accent-500"
-                        )}
-                    />
+                <input
+                    ref={inputRef}
+                    type={mode === "date_time" ? "datetime-local" : "date"}
+                    value={valueAsInputValue(value ?? null, mode)}
+                    onChange={handleInputChange}
+                    onFocus={() => setFocused(true)}
+                    onBlur={() => setFocused(false)}
+                    disabled={disabled}
+                    className={cls(
+                        "w-full outline-none bg-transparent leading-normal text-base px-3",
+                        clearable ? "pr-14" : "pr-12",
+                        "rounded-md",
+                        size === "medium" ? "min-h-[48px]" : "min-h-[64px]",
+                        label ? "pt-8 pb-2" : "py-2",
+                        inputClassName,
+                        disabled &&
+                        "border border-transparent outline-none opacity-50 dark:opacity-50 text-surface-accent-600 dark:text-surface-accent-500"
+                    )}
+                />
                 <IconButton
                     onClick={(e) => {
                         e.stopPropagation();

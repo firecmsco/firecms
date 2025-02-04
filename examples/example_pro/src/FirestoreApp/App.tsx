@@ -221,12 +221,12 @@ export function App() {
         const sourceCollections: EntityCollection[] = [
             productsCollection,
             booksCollection,
-            localeCollectionGroup,
             usersCollection,
             blogCollection,
             showcaseCollection,
             cryptoCollection,
-            carsCollection(secondaryFirestoreDelegate)
+            localeCollectionGroup,
+            // carsCollection(secondaryFirestoreDelegate)
         ];
         if (process.env.NODE_ENV !== "production") {
             sourceCollections.push(testCollection);

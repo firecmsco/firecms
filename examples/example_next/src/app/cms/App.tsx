@@ -50,7 +50,7 @@ import Link from "next/link";
 
 export function App() {
 
-    const title = "FireCMS e-commerce and blog demo";
+    const title = "FireCMS Next.js e-commerce and blog demo";
 
     if (!firebaseConfig?.projectId) {
         throw new Error("Firebase config not found. Please check your `firebase_config.ts` file and make sure it is correctly set up.");

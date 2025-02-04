@@ -81,7 +81,8 @@ export interface FieldProps<T extends CMSType = any, CustomProps = any, M extend
     partOfArray?: boolean;
 
     /**
-     * Should this field render with the minimal amount of UI elements
+     * Display the child properties directly, without being wrapped in an
+     * extendable panel. Note that this will also hide the title of this property.
      */
     minimalistView?: boolean;
 
@@ -207,7 +208,8 @@ export interface PropertyFieldBindingProps<T extends CMSType, M extends Record<s
     partOfArray?: boolean;
 
     /**
-     * Is this field part of a block (oneOf array)
+     * Display the child properties directly, without being wrapped in an
+     * extendable panel. Note that this will also hide the title of this property.
      */
     minimalistView?: boolean;
 

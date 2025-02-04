@@ -31,7 +31,8 @@ export function CollectionDetailsForm({
                                           existingPaths,
                                           existingIds,
                                           groups,
-                                          parentCollection
+                                          parentCollection,
+                                          children
                                       }: {
     isNewCollection: boolean,
     reservedGroups?: string[];
@@ -40,6 +41,7 @@ export function CollectionDetailsForm({
     groups: string[] | null;
     parentCollection?: EntityCollection;
     parentCollectionIds?: string[];
+    children?: React.ReactNode;
 }) {
 
     const groupRef = React.useRef<HTMLInputElement>(null);
@@ -388,8 +390,12 @@ export function CollectionDetailsForm({
                                         for large collections, as it may incur in performance and cost issues.
                                     </FieldCaption>
                                 </div>
+
+
                             </div>
                         </ExpandablePanel>
+
+                        {children}
 
                     </div>
 

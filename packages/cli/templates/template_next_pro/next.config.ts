@@ -4,12 +4,12 @@ const nextConfig: NextConfig = {
     async redirects() {
         return [
             {
-                source: '/',
-                destination: '/products',
-                permanent: true,
-            },
+                source: "/",
+                destination: "/products",
+                permanent: false
+            }
         ]
-    },
+    }
 };
 
 export default nextConfig;

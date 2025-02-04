@@ -111,7 +111,7 @@ export function IntroWidget({ introMode }: {
                     yarn create firecms-app
                 </div>
                 <Typography className={"inline ml-2"}>More info in the <a
-                    href={"https://firecms.co/docs/customization_quickstart"}
+                    href={"https://firecms.co/docs/cloud/quickstart"}
                     rel="noopener noreferrer"
                     target="_blank">docs</a></Typography>
             </div>

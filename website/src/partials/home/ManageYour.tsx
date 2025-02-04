@@ -1,10 +1,10 @@
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import React from "react";
 
-import { TypeAnimation } from "react-type-animation";
 import { ContainerInnerPaddingMixin, CTACaret, CTAOutlinedButtonWhiteMixin } from "../styles";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
+import { LazyTypeAnimation } from "../ui/LazyTypeAnimation";
 
 export function ManageYour() {
 
@@ -15,32 +15,7 @@ export function ManageYour() {
                 <div className="mb-4 text-white uppercase md:inline">
                     Manage your&nbsp;
                 </div>
-                <TypeAnimation
-                    sequence={[
-                        "Products",
-                        1000,
-                        "Blogs",
-                        1000,
-                        "Invoices",
-                        1000,
-                        "Users",
-                        1000,
-                        "Podcasts",
-                        1000,
-                        "Fitness exercises",
-                        1000,
-                        "Recipes",
-                        1000,
-                        "Events",
-                        1000,
-                        "Inventory",
-                        1000,
-                    ]}
-                    wrapper="div"
-                    className={"md:inline text-text-primary"}
-                    cursor={true}
-                    repeat={Infinity}
-                />
+                <LazyTypeAnimation/>
             </h1>
 
             <div className={"mt-8 text-xl md:text-2xl"}>
@@ -53,10 +28,8 @@ export function ManageYour() {
                     your own custom back-office app/admin panel in no time.
                 </p>
                 <p>
-                    Easy to get started, easy to customize and easy to extend.
-                    FireCMS is great both for existing projects, since it will
-                    adapt
-                    to any database structure you have, as well as for new ones.
+                    <b>Easy to get started, easy to customize and easy to extend.</b> FireCMS is great both for existing
+                    projects, since it will adapt to any database structure you have, as well as for new ones.
                 </p>
             </div>
 

@@ -4,8 +4,3 @@ export const clarityScript = ` (function(c,l,a,r,i,t,y){
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "omou3nm4h5");`;
 
-export function ClarityHead() {
-    return <script type="text/javascript">
-        {clarityScript}
-    </script>
-}

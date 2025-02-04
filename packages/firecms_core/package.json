@@ -1,7 +1,7 @@
 {
   "name": "@firecms/core",
   "type": "module",
-  "version": "3.0.0-canary.170",
+  "version": "3.0.0-canary.183",
   "description": "Awesome Firebase/Firestore-based headless open-source CMS",
   "funding": {
     "url": "https://github.com/sponsors/firecmsco"
@@ -50,41 +50,41 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/editor": "^3.0.0-canary.170",
-    "@firecms/formex": "^3.0.0-canary.170",
-    "@firecms/ui": "^3.0.0-canary.170",
+    "@firecms/editor": "^3.0.0-canary.183",
+    "@firecms/formex": "^3.0.0-canary.183",
+    "@firecms/ui": "^3.0.0-canary.183",
     "@hello-pangea/dnd": "^17.0.0",
-    "@radix-ui/react-portal": "^1.1.2",
+    "@radix-ui/react-portal": "^1.1.3",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "fuse.js": "^7.0.0",
     "history": "^5.3.0",
     "markdown-it": "^14.1.0",
-    "notistack": "^3.0.1",
+    "notistack": "^3.0.2",
     "object-hash": "^3.0.0",
     "react-dropzone": "^14.3.5",
     "react-fast-compare": "^3.2.2",
     "react-image-file-resizer": "^0.4.8",
     "react-transition-group": "^4.4.5",
     "react-use-measure": "^2.1.1",
-    "react-window": "^1.8.10",
+    "react-window": "^1.8.11",
     "yup": "^0.32.11"
   },
   "peerDependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0",
     "react-router": "^6.28.0",
     "react-router-dom": "^6.28.0"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
-    "@testing-library/react": "^16.0.1",
-    "@testing-library/user-event": "^14.5.2",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/jest": "^29.5.14",
-    "@types/node": "^20.17.9",
+    "@types/node": "^20.17.14",
     "@types/object-hash": "^3.0.6",
-    "@types/react": "^18.3.11",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.0",
     "@types/react-measure": "^2.0.12",
     "@vitejs/plugin-react": "^4.3.4",
     "babel-plugin-react-compiler": "beta",
@@ -92,19 +92,19 @@
     "eslint-plugin-react-compiler": "beta",
     "jest": "^29.7.0",
     "npm-run-all": "^4.1.5",
-    "react-router": "^6.28.0",
-    "react-router-dom": "^6.28.0",
+    "react-router": "^6.28.2",
+    "react-router-dom": "^6.28.2",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "tsd": "^0.31.2",
-    "typescript": "^5.7.2",
-    "vite": "^5.4.11"
+    "typescript": "^5.7.3",
+    "vite": "^5.4.14"
   },
   "files": [
     "dist",
     "src"
   ],
-  "gitHead": "78b61328121fb331b164ca96030419b9607971a1",
+  "gitHead": "e265baef6fad623e57376b3338475bc0d5b49372",
   "publishConfig": {
     "access": "public"
   },

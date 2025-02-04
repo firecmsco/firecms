@@ -1,13 +1,15 @@
 import {
     buildCollection,
-    buildProperty,
     EntityCallbacks,
     EntityOnFetchProps,
-    resolveNavigationFrom
+    FieldProps,
+    resolveNavigationFrom,
+    slugify,
+    TextFieldBinding
 } from "@firecms/core";
 import { SecondaryForm } from "../custom_entity_view/SecondaryForm";
-import { conditionProperty } from "../custom_field/RecursiveField";
-import { locales } from "./enums";
+import { Icon, IconButton, Typography } from "@firecms/ui";
+import React from "react";
 
 export const testCallbacks: EntityCallbacks = {
     onFetch({
@@ -47,6 +49,25 @@ export const testCallbacks: EntityCallbacks = {
     }
 };
 
+const CustomField = (fieldProps: FieldProps) => {
+    return (
+        <>
+            <TextFieldBinding {...fieldProps} />
+            <div className={"flex flex-row items-center gap-2"}>
+                <IconButton
+                    size={"small"}
+                    onClick={() => {
+                        fieldProps.setValue(fieldProps.customProps?.slugified);
+                    }}
+                >
+                    <Icon size={"smallest"} iconKey="autorenew"/>
+                </IconButton>
+                <Typography variant={"caption"}>{fieldProps.customProps?.slugified}</Typography>
+            </div>
+        </>
+    );
+};
+
 export const testCollection = buildCollection<any>({
         callbacks: testCallbacks,
         id: "test_entity",
@@ -67,16 +88,58 @@ export const testCollection = buildCollection<any>({
         //     }
         // }],
         properties: {
-            title: {
-                dataType: 'map',
-                name: 'Title',
-                propertyConfig: 'markdown_custom',
+            slug: ({ propertyValue }) => {
+                const slugified = slugify(propertyValue);
+                const regExp = new RegExp(slugified);
+                return {
+                    dataType: "string",
+                    name: "Slug",
+                    Field: CustomField,
+                    customProps: {
+                        slugified
+                    },
+                    validation: {
+                        required: true,
+                        matches: regExp,
+                        matchesMessage: "Text entered must equal slugified string: " + slugified
+                    }
+                };
             },
-            // date: {
-            //     name: "on create",
-            //     dataType: "date",
-            //     // autoValue: "on_create"
-            // },
+
+            title: {
+                dataType: "map",
+                name: "Title",
+                propertyConfig: "markdown_custom",
+                widthPercentage: 50,
+            },
+            size: {
+                dataType: "map",
+                minimalistView: true,
+                name: "Size",
+                properties: {
+                    width: {
+                        name: "Width",
+                        dataType: "number",
+                        validation: {
+                            required: true
+                        }
+                    },
+                    height: {
+                        name: "Height",
+                        dataType: "number",
+                        validation: {
+                            required: true
+                        }
+                    }
+                },
+                widthPercentage: 50,
+            },
+            date: {
+                name: "My date",
+                dataType: "date",
+                disabled: true
+                // autoValue: "on_create"
+            },
             //
             // test_date: {
             //     name: "Test date",
@@ -217,27 +280,7 @@ export const testCollection = buildCollection<any>({
             //         of: { dataType: "reference", path: "users", previewProperties: ["name"] }
             //     });
             // },
-            // size: {
-            //     dataType: "map",
-            //     name: "Size",
-            //     properties: {
-            //         width: {
-            //             name: "Width",
-            //             dataType: "number",
-            //             validation: {
-            //                 required: true
-            //             }
-            //         },
-            //         height: {
-            //             name: "Height",
-            //             dataType: "number",
-            //             validation: {
-            //                 required: true
-            //             }
-            //         }
-            //     },
-            //     Field: OptionalMap
-            // },
+
             // rerender: () => ({
             //     dataType: "map",
             //     hideFromCollection: true,
@@ -978,21 +1021,20 @@ export const testCollection = buildCollection<any>({
             //         acceptedFiles: ["image/*"]
             //     }
             // },
-            // created_on: {
-            //     name: "Created on",
-            //     dataType: "date",
-            //     autoValue: "on_create"
-            // },
+            created_on: {
+                name: "Created on",
+                dataType: "date",
+                autoValue: "on_create"
+            },
             // updated_on: {
             //     name: "Updated on",
             //     dataType: "date",
             //     autoValue: "on_update"
             // }
-            // description: {
-            //     name: "Description",
-            //     dataType: "string",
-            //     multiline: true
-            // },
+            description: {
+                name: "Description",
+                dataType: "string"
+            },
             // search_adjacent: {
             //     name: "Search adjacent",
             //     dataType: "boolean"
@@ -1022,7 +1064,7 @@ export const testCollection = buildCollection<any>({
             //         acceptedFiles: ['application/pdf'],
             //     }
             // }),
-        },
+        }
         // additionalFields:
         //     [
         //         {

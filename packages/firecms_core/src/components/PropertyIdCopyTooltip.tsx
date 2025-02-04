@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 export function PropertyIdCopyTooltip({
                                           propertyKey,
                                           className,
-                                          children
+                                          children,
                                       }: {
     propertyKey: string,
     className?: string,
@@ -13,11 +13,10 @@ export function PropertyIdCopyTooltip({
     return <Tooltip title={<PropertyIdCopyTooltipContent propertyKey={propertyKey}/>}
                     delayDuration={800}
                     side={"top"}
-                    asChild={false}
                     align={"start"}
                     sideOffset={8}
                     className={className}>
-        {children}
+            {children}
     </Tooltip>
 
 }
