@@ -114,7 +114,7 @@ export const localSearchControllerBuilder: FirestoreTextSearchControllerBuilder 
 
 function buildIndex(list: (object & { id: string })[], collection: EntityCollection | ResolvedEntityCollection) {
 
-    const keys = Object.keys(collection.properties);
+    const keys = ["id", ...Object.keys(collection.properties)];
 
     const fuseOptions = {
         // isCaseSensitive: false,
