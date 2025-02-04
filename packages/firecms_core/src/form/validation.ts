@@ -90,11 +90,11 @@ export function mapPropertyToYup<T extends CMSType>(propertyContext: PropertyCon
 }
 
 export function getYupMapObjectSchema({
-                                                                         property,
-                                                                         entityId,
-                                                                         customFieldValidator,
-                                                                         name
-                                                                     }: PropertyContext<Record<string, any>>): ObjectSchema<any> {
+                                          property,
+                                          entityId,
+                                          customFieldValidator,
+                                          name
+                                      }: PropertyContext<Record<string, any>>): ObjectSchema<any> {
     const objectSchema: any = {};
     const validation = property.validation;
     if (property.properties)
@@ -159,7 +159,13 @@ function getYupStringSchema({
         if (validation.lowercase) collection = collection.lowercase();
         if (validation.uppercase) collection = collection.uppercase();
         if (property.email) collection = collection.email(`${property.name} must be an email`);
-        if (property.url) collection = collection.url(`${property.name} must be a url`);
+        if (property.url) {
+            if (!property.storage || property.storage?.storeUrl) {
+                collection = collection.url(`${property.name} must be a url`);
+            } else {
+                console.warn(`Property ${property.name} has a url validation but its storage configuration is not set to store urls`);
+            }
+        }
     } else {
         collection = collection.notRequired().nullable(true);
     }
