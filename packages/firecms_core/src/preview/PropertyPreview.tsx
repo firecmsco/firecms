@@ -75,7 +75,14 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
     } else if (property.dataType === "string") {
         const stringProperty = property as ResolvedStringProperty;
         if (typeof value === "string") {
-            if (stringProperty.url) {
+            if (stringProperty.storage) {
+                const filePath = stringProperty.storage.previewUrl ? stringProperty.storage.previewUrl(value) : value;
+                content = <StorageThumbnail
+                    interactive={interactive}
+                    storeUrl={property.storage?.storeUrl ?? false}
+                    size={props.size}
+                    storagePathOrDownloadUrl={filePath}/>;
+            } else if (stringProperty.url) {
                 if (typeof stringProperty.url === "boolean")
                     content =
                         <UrlComponentPreview size={props.size}
@@ -88,13 +95,6 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
                                              previewType={stringProperty.url}/>;
             } else if (stringProperty.markdown) {
                 content = <Markdown source={value} size={"small"}/>;
-            } else if (stringProperty.storage) {
-                const filePath = stringProperty.storage.previewUrl ? stringProperty.storage.previewUrl(value) : value;
-                content = <StorageThumbnail
-                    interactive={interactive}
-                    storeUrl={property.storage?.storeUrl ?? false}
-                    size={props.size}
-                    storagePathOrDownloadUrl={filePath}/>;
             } else {
                 content = <StringPropertyPreview {...props}
                                                  property={stringProperty}
