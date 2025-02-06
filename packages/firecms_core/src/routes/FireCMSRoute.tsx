@@ -23,6 +23,7 @@ export function FireCMSRoute() {
     const hash = location.hash;
     const isSidePanel = hash.includes("#side");
     const isNew = hash.includes("#new") || hash.includes("#new_side");
+    const isCopy = hash.includes("#copy");
 
     const pathname = location.pathname;
     const navigationPath = navigation.urlPathToDataPath(pathname);
@@ -62,6 +63,7 @@ export function FireCMSRoute() {
             pathname={pathname}
             navigationEntries={navigationEntries}
             isNew={true}
+            isCopy={false}
         />;
     }
 
@@ -100,6 +102,7 @@ export function FireCMSRoute() {
         pathname={pathname}
         navigationEntries={navigationEntries}
         isNew={isNew}
+        isCopy={isCopy}
     />;
 
 }
@@ -107,11 +110,13 @@ export function FireCMSRoute() {
 function EntityFullScreenRoute({
                                    pathname,
                                    navigationEntries,
-                                   isNew
+                                   isNew,
+                                   isCopy
                                }: {
     pathname: string;
     navigationEntries: NavigationViewInternal[],
-    isNew: boolean
+    isNew: boolean,
+    isCopy: boolean
 }) {
 
     const navigation = useNavigationController();
@@ -160,34 +165,6 @@ function EntityFullScreenRoute({
         console.warn("Blocker not available, navigation will not be blocked");
     }
 
-    function updateUrl(entityId: string | undefined, newSelectedTab: string | undefined, replace: boolean, path: string, isNew: boolean) {
-
-        console.log("Updating url", {
-            entityId,
-            newSelectedTab,
-            replace,
-            basePath,
-            path,
-            isNew
-        });
-
-        if (!isNew && (newSelectedTab ?? null) === (selectedTab ?? null)) {
-            return;
-        }
-
-        if (isNew) {
-            navigate(`${basePath}/${entityId}`, { replace: replace });
-            return;
-        }
-
-        if (newSelectedTab) {
-            navigate(`${basePath}/${entityId}/${newSelectedTab}`, { replace: replace });
-        } else {
-            navigate(`${basePath}/${entityId}`, { replace: replace });
-        }
-
-    }
-
     const lastCollectionEntry = navigationEntries.findLast((entry) => entry.type === "collection");
 
     if (isNew && !lastCollectionEntry) {
@@ -203,19 +180,30 @@ function EntityFullScreenRoute({
 
     return <>
         <EntityEditView
-            key={collection.id + "_" + (isNew ? "new" : entityId)}
+            key={collection.id + "_" + (isNew ? "new" : (isCopy ? entityId + "_copy" : entityId))}
             entityId={isNew ? undefined : entityId}
             collection={collection}
             layout={"full_screen"}
             path={collectionPath}
+            copy={isCopy}
             selectedTab={selectedTab ?? undefined}
             onValuesModified={(modified) => blocked.current = modified}
             onSaved={(params) => {
-                updateUrl(params.entityId, params.selectedTab, true, params.path, isNew);
+                console.log("Entity saved", params);
+                navigate(`${basePath}/${params.entityId}`, { replace: true });
             }}
             onTabChange={(params) => {
-                updateUrl(params.entityId, params.selectedTab, !isNew, params.path, isNew);
+                // updateUrl(params.entityId, params.selectedTab, !isNew, params.path, isNew);
                 setSelectedTab(params.selectedTab);
+                if (isNew) {
+                    return;
+                }
+                const newSelectedTab = params.selectedTab;
+                if (newSelectedTab) {
+                    navigate(`${basePath}/${entityId}/${newSelectedTab}`, { replace: true });
+                } else {
+                    navigate(`${basePath}/${entityId}`, { replace: true });
+                }
             }}
             parentCollectionIds={parentCollectionIds}
         />
