@@ -101,6 +101,7 @@ function App() {
     });
 
     const navigationController = useBuildNavigationController({
+        disabled: authLoading,
         collections,
         authController,
         dataSourceDelegate: firestoreDelegate

@@ -1,5 +1,5 @@
 import {
-    buildCollection,
+    buildCollection, buildProperty,
     EntityCallbacks,
     EntityOnFetchProps,
     FieldProps,
@@ -88,6 +88,19 @@ export const testCollection = buildCollection<any>({
         //     }
         // }],
         properties: {
+            test_upload: buildProperty({
+                dataType: "string",
+                columnWidth: 400,
+                metadata: {
+                    cacheControl: "public, max-age=31536000", // 1 year
+                },
+                storage: {
+                    acceptedFiles: ["audio/*"],
+                    storagePath: "media/",
+                    fileName: "{file}",
+                },
+                name: "Media",
+            }),
             slug: ({ propertyValue }) => {
                 const slugified = slugify(propertyValue);
                 const regExp = new RegExp(slugified);

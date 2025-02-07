@@ -150,6 +150,7 @@ export function App() {
     });
 
     const navigationController = useBuildNavigationController({
+        disabled: authLoading || collectionConfigController.loading,
         collections: collectionsBuilder,
         collectionPermissions: userManagement.collectionPermissions,
         views,

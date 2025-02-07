@@ -265,14 +265,16 @@ export function useFirestoreDelegate({
 
     }, [firebaseApp, listenEntity]);
 
+    const cmsToDelegateModel = useCallback((values: any) => {
+        if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
+        return cmsToFirestoreModel(values, getFirestore(firebaseApp));
+    }, [firebaseApp]);
+
     return {
         key: "firestore",
         setDateToMidnight,
         delegateToCMSModel: firestoreToCMSModel,
-        cmsToDelegateModel: (values) => {
-            if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
-            return cmsToFirestoreModel(values, getFirestore(firebaseApp));
-        },
+        cmsToDelegateModel,
         currentTime,
 
         initialised: Boolean(firebaseApp),

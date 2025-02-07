@@ -58,6 +58,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
             {mapPropertyKeys &&
                 mapPropertyKeys.map((key, index) => {
                     const childProperty = mapProperty.properties![key];
+                    const isArrayOrMap = childProperty.dataType === "map" || childProperty === "array";
                     return (
                         <div
                             key={`map_preview_table_${key}}`}
@@ -75,7 +76,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                                 <div
                                     className="flex-grow max-w-[75%]">
                                     <ErrorBoundary>
-                                        {!(childProperty.dataType === "map" || childProperty === "array") &&
+                                        {!isArrayOrMap &&
                                             <PropertyPreview
                                                 propertyKey={key}
                                                 value={(value)[key]}
@@ -86,7 +87,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                                 </div>
                             </div>
 
-                            {(childProperty.dataType === "map" || childProperty === "array") &&
+                            {isArrayOrMap &&
                                 <div className={cls(defaultBorderMixin, "border-l pl-4 ml-2 my-2")}>
                                     <PropertyPreview
                                         propertyKey={key}

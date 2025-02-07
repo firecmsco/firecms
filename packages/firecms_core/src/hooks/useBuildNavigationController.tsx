@@ -51,6 +51,11 @@ export type BuildNavigationContextProps<EC extends EntityCollection, USER extend
      * @param collections
      */
     injectCollections?: (collections: EntityCollection[]) => EntityCollection[];
+
+    /**
+     * If true, the navigation logic will not be updated until this flag is false
+     */
+    disabled?: boolean;
 };
 
 export function useBuildNavigationController<EC extends EntityCollection, USER extends User>(props: BuildNavigationContextProps<EC, USER>): NavigationController {
@@ -65,7 +70,8 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         viewsOrder,
         userConfigPersistence,
         dataSourceDelegate,
-        injectCollections
+        injectCollections,
+        disabled
     } = props;
 
     const navigate = useNavigate();
@@ -189,7 +195,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
     const refreshNavigation = useCallback(async () => {
 
-        if (authController.initialLoading)
+        if (disabled || authController.initialLoading)
             return;
 
         console.debug("Refreshing navigation");
@@ -241,6 +247,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         collectionPermissions,
         authController.user,
         authController.initialLoading,
+        disabled,
         viewsProp,
         adminViewsProp,
         computeTopNavigation,

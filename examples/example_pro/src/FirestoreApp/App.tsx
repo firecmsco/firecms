@@ -17,6 +17,7 @@ import {
     CMSView,
     Drawer,
     EntityCollection,
+    EntityCollectionsBuilder,
     ErrorView,
     FireCMS,
     ModeControllerProvider,
@@ -65,7 +66,6 @@ import { useExportPlugin } from "@firecms/data_export";
 import { useImportPlugin } from "@firecms/data_import";
 import { DemoImportAction } from "./DemoImportAction";
 import { algoliaSearchControllerBuilder } from "./text_search";
-import { carsCollection } from "./collections/cars_collection";
 import ClientUIComponentsShowcase from "./views/ClientUIComponentsShowcase";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
@@ -77,6 +77,8 @@ export function App() {
                                                                                        authController
                                                                                    }) => {
 
+        console.log("Authenticating user", user);
+
         if (user?.email?.includes("flanders")) {
             // You can throw an error to prevent access
             throw Error("Stupid Flanders!");
@@ -84,6 +86,8 @@ export function App() {
 
         const idTokenResult = await user?.firebaseUser?.getIdTokenResult();
         const userIsAdmin = idTokenResult?.claims.admin || user?.email?.endsWith("@firecms.co");
+
+        authController.setExtra({ userIsAdmin });
 
         console.log("Allowing access to", user);
 
@@ -217,7 +221,10 @@ export function App() {
     });
 
     // It is important to memoize the collections and views
-    const collections = useCallback(() => {
+    const collections: EntityCollectionsBuilder = useCallback(async ({
+                                                                         authController
+                                                                     }) => {
+
         const sourceCollections: EntityCollection[] = [
             productsCollection,
             booksCollection,
@@ -324,6 +331,7 @@ export function App() {
     });
 
     const navigationController = useBuildNavigationController({
+        disabled: authLoading || collectionConfigController.loading,
         // basePath: "cms",
         collections,
         // collectionPermissions: userManagement.collectionPermissions,
