@@ -19,7 +19,7 @@ is [`DateTimeFieldBinding`](../../api/functions/DateTimeFieldBinding).
 ![Field](/img/fields/Date.png)
 
 ```typescript jsx
-import { buildProperty } from "@firecms/cloud";
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "date",
@@ -33,7 +33,7 @@ buildProperty({
 ![Field](/img/fields/Date_time.png)
 
 ```typescript jsx
-import { buildProperty } from "@firecms/cloud";
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "date",
@@ -45,7 +45,7 @@ buildProperty({
 #### Update on creation
 
 ```typescript jsx
-import { buildProperty } from "@firecms/cloud";
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "date",
@@ -57,7 +57,7 @@ buildProperty({
 #### Update on update
 
 ```typescript jsx
-import { buildProperty } from "@firecms/cloud";
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     dataType: "date",

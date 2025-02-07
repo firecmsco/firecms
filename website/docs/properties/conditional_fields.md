@@ -32,7 +32,7 @@ import {
     buildCollection,
     EntityCollection,
     EntityReference
-} from "@firecms/cloud";
+} from "@firecms/core";
 
 type Product = {
     name: string;
@@ -82,7 +82,7 @@ import {
     EntityCollection,
     buildProperty,
     buildProperties
-} from "@firecms/cloud";
+} from "@firecms/core";
 
 type User = {
     source: {

@@ -30,7 +30,85 @@ This is an example of how you can define a `FirestoreIndexesBuilder`.
 You can then return an array of indexes that will be used to filter the collection.
 
 ```tsx
-import { FireCMSCloudApp, FirestoreIndexesBuilder } from "@firecms/cloud";
+import { FirestoreIndexesBuilder } from "@firecms/firebase";
+
+// Sample index builder that allows filtering by `category` and `available` for the `products` collection
+const firestoreIndexesBuilder: FirestoreIndexesBuilder = ({ path }) => {
+    if (path === "products") {
+        // For 2 fields, you need to define 4 indexes (I know...)
+        return [
+            {
+                category: "asc",
+                available: "desc"
+            },
+            {
+                category: "asc",
+                available: "asc"
+            },
+            {
+                category: "desc",
+                available: "desc"
+            },
+            {
+                category: "desc",
+                available: "asc"
+            }
+        ];
+    }
+    return undefined;
+}
+
+```
+
+
+## Adding your indexes in self-hosted FireCMS
+
+```tsx
+import { FirestoreIndexesBuilder, useFirestoreDelegate } from "@firecms/firebase";
+
+// ...
+
+    // Sample index builder that allows filtering by `category` and `available` for the `products` collection
+    const firestoreIndexesBuilder: FirestoreIndexesBuilder = ({ path }) => {
+        if (path === "products") {
+            // For 2 fields, you need to define 4 indexes (I know...)
+            return [
+                {
+                    category: "asc",
+                    available: "desc"
+                },
+                {
+                    category: "asc",
+                    available: "asc"
+                },
+                {
+                    category: "desc",
+                    available: "desc"
+                },
+                {
+                    category: "desc",
+                    available: "asc"
+                }
+            ];
+        }
+        return undefined;
+    }
+
+    // Delegate used for fetching and saving data in Firestore
+    const firestoreDelegate = useFirestoreDelegate({
+        // ...
+        firestoreIndexesBuilder
+    });
+    
+    // ...
+```
+
+
+## Adding your indexes in FireCMS Cloud
+
+```tsx
+import { FireCMSCloudApp } from "@firecms/cloud";
+import { FirestoreIndexesBuilder } from "@firecms/firebase";
 
 // Sample index builder that allows filtering by `category` and `available` for the `products` collection
 const firestoreIndexesBuilder: FirestoreIndexesBuilder = ({ path }) => {
@@ -67,6 +145,4 @@ function MyApp() {
         // ...
     />;
 }
-
 ```
-

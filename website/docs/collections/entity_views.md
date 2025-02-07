@@ -158,7 +158,7 @@ In FireCMS Cloud, you can add it to the entity view registry in your
 main `FireCMSAppConfig` export:
 
 ```tsx
-import { FireCMSAppConfig } from "@firecms/cloud";
+import { FireCMSAppConfig } from "@firecms/core";
 
 const appConfig: FireCMSAppConfig = {
     version: "1",
