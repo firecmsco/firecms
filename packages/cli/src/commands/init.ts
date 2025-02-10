@@ -208,63 +208,89 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
     }
 
     if (template !== "v2") {
-        if (template === "cloud") {
-            questions.push({
-                type: "confirm",
-                name: "existing_cloud_project",
-                message: "Do you already have a FireCMS Cloud project?",
-                default: true
-            });
-        }
 
         const currentUser = await getCurrentUser(options.env, options.debug);
+        let shouldAskForProjectManually = false;
+
         if (currentUser) {
             const spinner = ora("Loading your projects").start();
-            const projects = await getProjects(options.env,
-                options.debug,
-                onErr => {
-                    spinner.fail("Error loading projects");
-                })
-                .then((res) => {
-                    if (!res) {
+
+            let cloudProjects: any;
+            let gcpProjects: any;
+
+            if (template === "cloud") {
+                cloudProjects = await getCloudProjects(options.env,
+                    options.debug,
+                    onErr => {
+                        spinner.fail("Error loading projects");
+                    })
+                    .then((res) => {
+                        if (!res) {
+                            if (spinner.isSpinning)
+                                spinner.fail("Error loading projects");
+                            process.exit(1);
+                        }
+                        spinner.succeed();
+                        return res;
+                    })
+                    .catch((e) => {
                         if (spinner.isSpinning)
                             spinner.fail("Error loading projects");
-                        process.exit(1);
-                    }
-                    spinner.succeed();
-                    return res;
-                })
-                .catch((e) => {
-                    if (spinner.isSpinning)
+                    });
+                if (cloudProjects.length === 0) {
+                    console.log("Please create a FireCMS Cloud project first. Head to https://app.firecms.co to get started and then run this command again!");
+                }
+            } else {
+                gcpProjects = await getGcpProjects(options.env,
+                    options.debug,
+                    onErr => {
                         spinner.fail("Error loading projects");
-                });
-
-            const fireCMSCloudProjects = projects.filter(project => project["fireCMSProject"]);
-            if (template === "cloud" && !fireCMSCloudProjects.length) {
-                console.log("No FireCMS projects found. Please make sure you have initialised a FireCMS Cloud project first, in https://app.firecms.co");
-                process.exit(1);
+                    })
+                    .then((res) => {
+                        if (!res) {
+                            if (spinner.isSpinning)
+                                spinner.fail("Error loading projects");
+                            process.exit(1);
+                        }
+                        spinner.succeed();
+                        return res;
+                    })
+                    .catch((e) => {
+                        if (spinner.isSpinning)
+                            spinner.fail("Error loading projects");
+                    });
             }
 
-            questions.push({
-                type: "list",
-                name: "firebaseProjectId",
-                message: "Select your project",
-                when: (answers) => Boolean(answers.existing_cloud_project) || template !== "cloud",
-                choices: [{
-                    name: chalk.gray("Enter project id manually"),
-                    value: "!_-manual"
-                }, ...projects.map(project => ({
-                    name: project.projectId,
-                    value: project.projectId
-                }))]
-            });
+            if (template === "cloud" && cloudProjects.length === 0) {
+                shouldAskForProjectManually = true;
+            } else {
+                const choices = [
+                    {
+                        name: chalk.gray("Enter project id manually"),
+                        value: "!_-manual"
+                    },
+                    ...(cloudProjects ?? []).map(project => ({
+                        name: project.id,
+                        value: project.name
+                    })),
+                    ...(gcpProjects ?? []).map(project => ({
+                        name: project.projectId,
+                        value: project.projectId
+                    }))
+                ];
+                questions.push({
+                    type: "list",
+                    name: "firebaseProjectId",
+                    message: "Select your project",
+                    choices: choices
+                });
+            }
         }
-
         questions.push({
             type: "input",
             name: "firebaseProjectIdManual",
             message: "Please enter your Firebase project ID",
-            when: (answers) => !answers.firebaseProjectId || answers.firebaseProjectId === "!_-manual",
+            when: (answers) => shouldAskForProjectManually || !answers.firebaseProjectId || answers.firebaseProjectId === "!_-manual",
             default: options.firebaseProjectId
         });
     }
@@ -273,7 +299,6 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
         type: "input",
         name: "dir_name",
         message: "Please choose which folder to create the project in",
-        when: (answers) => Boolean(answers.existing_cloud_project) || template !== "cloud",
         default: options.dir_name ?? defaultName
     });
 
@@ -288,11 +313,6 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
     }
 
     const answers = await inquirer.prompt(questions);
-
-    if (template === "cloud" && !answers.existing_cloud_project) {
-        console.log("Please create a FireCMS Cloud project first. Head to https://app.firecms.co to get started and then run this command again!");
-        process.exit(1);
-    }
 
     return {
         ...options,
@@ -424,8 +444,8 @@ export async function createProject(options: InitOptions) {
     }
 
     console.log("Remember to:");
-    console.log("  - Drop a ⭐ in our [Github page](https://github.com/firecmsco/firecms)");
-    console.log("  - Join our [Discord community](https://discord.gg/fxy7xsQm3m) to get help and share your projects.");
+    console.log("  - Drop a ⭐  in our Github page: https://github.com/firecmsco/firecms");
+    console.log("  - Join our Discord community: https://discord.gg/fxy7xsQm3m to get help and share your projects.");
 
     return true;
 }
@@ -501,7 +521,7 @@ async function initGit(options: InitOptions) {
     return;
 }
 
-async function getProjects(env: "prod" | "dev", debug: boolean, onErr?: (e: any) => void) {
+async function getGcpProjects(env: "prod" | "dev", debug: boolean, onErr?: (e: any) => void) {
 
     try {
         const credentials = await getTokens(env, debug);
@@ -511,6 +531,35 @@ async function getProjects(env: "prod" | "dev", debug: boolean, onErr?: (e: any)
         }
         const server = env === "prod" ? DEFAULT_SERVER : DEFAULT_SERVER_DEV;
         const response = await axios.get(server + "/gcp_projects", {
+            headers: {
+                ["x-admin-authorization"]: `Bearer ${tokens["access_token"]}`
+            }
+        });
+
+        if (response.status >= 400) {
+            console.log(response.data.data?.message);
+            return null;
+        }
+        return response.data.data;
+    } catch (e) {
+        if (onErr) {
+            onErr(e);
+        }
+        console.error("Error getting projects", e.response?.data);
+    }
+}
+
+async function getCloudProjects(env: "prod" | "dev", debug: boolean, onErr?: (e: any) => void) {
+
+    try {
+        const credentials = await getTokens(env, debug);
+        const tokens = await refreshCredentials(env, credentials, onErr);
+        if (!tokens) {
+            return null;
+        }
+        const server = env === "prod" ? DEFAULT_SERVER : DEFAULT_SERVER_DEV;
+        console.log("Getting projects from", server + "/projects");
+        const response = await axios.get(server + "/projects", {
             headers: {
                 ["x-admin-authorization"]: `Bearer ${tokens["access_token"]}`
             }
