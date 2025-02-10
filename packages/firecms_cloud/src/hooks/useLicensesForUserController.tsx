@@ -68,9 +68,11 @@ export function useLicensesForUserController(): LicensesController {
             {
                 next:
                     async (snapshot) => {
+                    console.log("Licenses snapshot", snapshot.docs);
                         const updatedSubscriptions = snapshot.docs
                             .map(convertDocToLicense)
                             .filter(Boolean);
+                        console.log("Licenses updated", updatedSubscriptions);
                         setLicensesLoading(false);
                         setLicensesLoadingError(undefined);
                         setLicenses(updatedSubscriptions);
