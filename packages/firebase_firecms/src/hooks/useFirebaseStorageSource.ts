@@ -33,7 +33,14 @@ export function useFirebaseStorageSource({
             const storage = getStorage(firebaseApp, storageBucketUrl);
             if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
             const usedFilename = fileName ?? file.name;
-            console.debug("Uploading file", usedFilename, file, path, metadata);
+            console.debug("Uploading file", {
+                firebaseApp,
+                storageBucketUrl,
+                usedFilename,
+                file,
+                path,
+                metadata
+            });
             return uploadBytes(ref(storage, `${path}/${usedFilename}`), file, metadata).then(snapshot => ({
                 path: snapshot.ref.fullPath
             }));
