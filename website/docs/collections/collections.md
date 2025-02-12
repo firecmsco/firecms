@@ -43,7 +43,7 @@ can define an enum string property and the values will be merged from both defin
 :::note
 FireCMS provides around 20 different fields (such as text fields, selects, and complex ones like reference or
 sortable array fields). If your use case is not covered by one of the provided fields, you can create your
-own [custom field](../properties/custom_fields).
+own [custom field](../properties/custom_fields.mdx).
 :::
 
 :::tip

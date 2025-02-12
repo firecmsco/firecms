@@ -33,7 +33,7 @@ Each property in the CMS has its own API, but they all share some **common props
   the value and additional utility props such as if there is an error. You
   can customize it by passing custom props that are received in the
   component. More details about how to
-  implement [custom fields](../custom_fields)
+  implement [custom fields](../custom_fields.mdx)
 
 * `Preview`
   Configure how a property is displayed as a preview, e.g. in the collection

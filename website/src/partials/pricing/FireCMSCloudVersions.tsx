@@ -79,7 +79,6 @@ export function FireCMSCloudVersions() {
                     <li className={"list-disc ml-2"}><Tip tip={"Customise your views, form fields, navigation routes, custom views and more, using module federation"}>Custom code</Tip></li>
                     <li className={"list-disc ml-2"}><Tip tip={"Instantly search through your data with powerful query capabilities."}>Local text search</Tip></li>
                     <li className={"list-disc ml-2"}><Tip tip={"Create as many data collections as you need."}>Unlimited collections</Tip></li>
-                    <li className={"list-disc ml-2"}><Tip tip={"Manage any number of users and define roles to control access."}>Unlimited users and roles</Tip></li>
                     <li className={"list-disc ml-2"}><Tip tip={"Easily migrate or backup your data."}>Data import and export</Tip></li>
                     <li className={"list-disc ml-2"}><Tip tip={"Personalize the appearance of your CMS to match your brand."}>Theme and logo customization</Tip></li>
                     <li className={"list-disc ml-2"}><Tip tip={"Leverage AI to generate smart content."}>GPT-4 content generation</Tip></li>
