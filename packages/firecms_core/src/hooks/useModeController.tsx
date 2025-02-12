@@ -6,7 +6,7 @@ import { useContext } from "react";
  * @group Hooks and utilities
  */
 export interface ModeController {
-    mode: "light" | "dark" | "system";
+    mode: "light" | "dark";
     setMode: (mode: "light" | "dark" | "system") => void;
 }
 
