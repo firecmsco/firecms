@@ -16,51 +16,35 @@ export function useBuildModeController(): ModeController {
     }, []);
 
     const prefersDarkModeStorage: boolean | null = localStorage.getItem("prefers-dark-mode") != null ? localStorage.getItem("prefers-dark-mode") === "true" : null;
-    const prefersDarkMode = prefersDarkModeStorage ?? prefersDarkModeQuery;
-    const [mode, setMode] = useState<"light" | "dark">(prefersDarkMode ? "dark" : "light");
+    const prefersDarkMode = prefersDarkModeStorage ?? prefersDarkModeQuery();
+    const [mode, setMode] = useState<"light" | "dark" | "system">(prefersDarkMode ? "dark" : "light");
 
     useEffect(() => {
         setMode(prefersDarkMode ? "dark" : "light");
         setDocumentMode(prefersDarkMode ? "dark" : "light");
     }, [prefersDarkMode]);
 
-    // color-scheme: dark;
-    const setDarkMode = useCallback(() => {
-        setMode("dark");
-        setDocumentMode("dark");
-    }, []);
-
-    const setLightMode = useCallback(() => {
-        setMode("light");
-        setDocumentMode("light");
-    }, []);
-
     const setDocumentMode = (mode: "light" | "dark") => {
         document.body.style.setProperty("color-scheme", mode);
         document.documentElement.dataset.theme = mode;
     };
 
-    const toggleMode = useCallback(() => {
-
-        const prefersDarkModeQueryResult = prefersDarkModeQuery();
+    const setModeInternal = useCallback((mode: "light" | "dark" | "system") => {
         if (mode === "light") {
-            if (!prefersDarkModeQueryResult)
-                localStorage.setItem("prefers-dark-mode", "true");
-            else
-                localStorage.removeItem("prefers-dark-mode");
-            setDarkMode();
+            setDocumentMode("light");
+            localStorage.setItem("prefers-dark-mode", "false");
+        } else if (mode === "dark") {
+            setDocumentMode("dark");
+            localStorage.setItem("prefers-dark-mode", "true");
         } else {
-            if (prefersDarkModeQueryResult)
-                localStorage.setItem("prefers-dark-mode", "false");
-            else
-                localStorage.removeItem("prefers-dark-mode");
-            setLightMode();
+            setDocumentMode(prefersDarkModeQuery() ? "dark" : "light");
+            localStorage.removeItem("prefers-dark-mode");
         }
-    }, [mode, prefersDarkModeQuery]);
+        setMode(mode);
+    }, [prefersDarkModeQuery]);
 
     return {
         mode,
-        setMode,
-        toggleMode
+        setMode: setModeInternal
     };
 }

@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ErrorBoundary, FireCMSLogo } from "../components";
 import {
     Avatar,
+    BrightnessMediumIcon,
     cls,
     DarkModeIcon,
     IconButton,
@@ -71,7 +72,7 @@ export const DefaultAppBar = function DefaultAppBar({
     const authController = useAuthController();
     const {
         mode,
-        toggleMode
+        setMode
     } = useModeController();
 
     const navigate = useNavigate();
@@ -163,15 +164,20 @@ export const DefaultAppBar = function DefaultAppBar({
                     {endAdornment}
                 </ErrorBoundary>}
 
-            {includeModeToggle && <IconButton
-                color="inherit"
-                aria-label="Open drawer"
-                onClick={toggleMode}
-                size="large">
-                {mode === "dark"
-                    ? <DarkModeIcon/>
-                    : <LightModeIcon/>}
-            </IconButton>}
+            {includeModeToggle &&
+                <Menu
+                    trigger={<IconButton
+                        color="inherit"
+                        aria-label="Open drawer"
+                        size="large">
+                        {mode === "dark"
+                            ? <DarkModeIcon/>
+                            : <LightModeIcon/>}
+                    </IconButton>}>
+                    <MenuItem onClick={() => setMode("dark")}><DarkModeIcon size={"smallest"}/> Dark</MenuItem>
+                    <MenuItem onClick={() => setMode("light")}><LightModeIcon size={"smallest"}/> Light </MenuItem>
+                    <MenuItem onClick={() => setMode("system")}> <BrightnessMediumIcon size={"smallest"}/>System</MenuItem>
+                </Menu>}
 
             <Menu trigger={avatarComponent}>
                 {user && <div className={"px-4 py-2 mb-2"}>
