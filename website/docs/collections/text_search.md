@@ -28,6 +28,7 @@ The examples below show how to use Algolia as an external search provider, using
 
 ### Using Algolia in FireCMS Cloud
 
+
 We provide a utility method for performing searches in Algolia `performAlgoliaTextSearch`.
 You need to import the `algoliasearch` library and create an Algolia client.
 Then you can use the `performAlgoliaTextSearch` method to perform the search.
@@ -46,7 +47,8 @@ import {
     FirestoreTextSearchController,
     buildCollection,
     FireCMSCloudApp,
-    EntityCollectionsBuilder
+    EntityCollectionsBuilder,
+    FireCMSAppConfig
 } from "@firecms/cloud";
 
 const client: SearchClient | undefined = algoliasearch("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_SEARCH_KEY");
@@ -57,33 +59,18 @@ const algoliaSearchController = buildExternalSearchController({
                        path,
                        searchString
                    }) => {
-        if (path === "products")
+        if (path === "products") {
             return performAlgoliaTextSearch(client, "products", searchString);
+        }
         return undefined;
     }
 });
 
-export default function App() {
 
-    const productCollection = buildCollection({
-        path: "products",
-        name: "Products",
-        textSearchEnabled: true,
-        properties: {
-            name: {
-                dataType: "string",
-                name: "Name",
-                validation: { required: true }
-            }
-        }
-    });
-
-    return <FireCMSCloudApp
-        name={"My Online Shop"}
-        collections={[productCollection]}
-        textSearchController={algoliaSearchController}
-        firebaseConfig={firebaseConfig}
-    />;
+const appConfig: FireCMSAppConfig = {
+    version: "1",
+    textSearchControllerBuilder: algoliaSearchController,
+    // ...
 }
 ```
 
@@ -135,7 +122,7 @@ provider, such as Algolia. This is the recommended approach.
 
 You can use local text search in FireCMS Cloud, or in self-hosted versions.
 
-For FireCMS Cloud, you just need to enable it with the UI.
+For FireCMS Cloud, you just need to enable it in the UI.
 
 For self-hosted versions, you can enable it by setting the `localTextSearchEnabled` in `useFirestoreDelegate`.
 Then you need to mark each collection with `textSearchEnabled: true`.
