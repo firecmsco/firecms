@@ -5,6 +5,7 @@ import { EntityReference } from "./entities";
 /**
  * Controller that includes the resolved navigation and utility methods and
  * attributes.
+ * This controller holds the state of the navigation including the collections.
  * @group Models
  */
 export type NavigationController<EC extends EntityCollection = EntityCollection<any>> = {

@@ -624,9 +624,10 @@ const createEntityFromDocument = <M extends Record<string, any>>(
     databaseId?: string
 ): Entity<M> => {
     const values = firestoreToCMSModel(docSnap.data());
+    const path = getCMSPathFromFirestorePath(docSnap.ref.path);
     return {
         id: docSnap.id,
-        path: getCMSPathFromFirestorePath(docSnap.ref.path),
+        path,
         values,
         databaseId
     };

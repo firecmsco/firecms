@@ -68,24 +68,28 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
             });
         }
 
-        const urlPath = navigation.buildUrlCollectionPath("");
-        const collectionRoute = <Route path={urlPath + "/*"}
-                                       key={`navigation_entity`}
-                                       element={
-                                           <ErrorBoundary>
-                                               <FireCMSRoute/>
-                                           </ErrorBoundary>
-                                       }/>
+        const collectionUrlPath = navigation.buildUrlCollectionPath("");
+        const collectionRoute = (
+            <Route path={collectionUrlPath + "/*"}
+                   key={`navigation_entity`}
+                   element={
+                       <ErrorBoundary>
+                           <FireCMSRoute/>
+                       </ErrorBoundary>
+                   }/>
+        );
 
         const homeRoute = (
             <Route path={"/"}
                    element={<HomePageRoute>{homePage}</HomePageRoute>}/>
         );
 
-        const notFoundRoute = <Route path={"*"}
-                                     element={
-                                         <NotFoundPage/>
-                                     }/>;
+        const notFoundRoute = (
+            <Route path={"*"}
+                   element={
+                       <NotFoundPage/>
+                   }/>
+        );
 
         return (
             <Routes location={baseLocation}>
