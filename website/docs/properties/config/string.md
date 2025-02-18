@@ -32,10 +32,26 @@ indicate that this string refers to a path in Google Cloud Storage.
   reference. Note that you can also use the asterisk notation, so `image/*`
   accepts any image file, and so on.
 * `metadata` Specific metadata set in your uploaded file.
-* `fileName` You can specify a fileName callback if you need to
-  customize the name of the file
-* `storagePath` You can specify a storage path callback if you need to
-  customize the path where it is stored.
+* `fileName` You can use this prop to customize the uploaded filename.
+  You can use a function as a callback or a string where you
+  specify some placeholders that get replaced with the corresponding values.
+  - `{file}` - Full file name
+  - `{file.name}` - Name of the file without extension
+  - `{file.ext}` - Extension of the file
+  - `{rand}` - Random value used to avoid name collisions
+  - `{entityId}` - ID of the entity
+  - `{propertyKey}` - ID of this property
+  - `{path}` - Path of this entity
+* `storagePath` Absolute path in your bucket.
+  You can use a function as a callback or a string where you
+  specify some placeholders that get replaced with the corresponding values.
+  - `{file}` - Full file name
+  - `{file.name}` - Name of the file without extension
+  - `{file.ext}` - Extension of the file
+  - `{rand}` - Random value used to avoid name collisions
+  - `{entityId}` - ID of the entity
+  - `{propertyKey}` - ID of this property
+  - `{path}` - Path of this entity
 * `storeUrl` When set to `true`, this flag indicates that the download
   URL of the file will be saved in Firestore instead of the Cloud
   storage path. Note that the generated URL may use a token that, if

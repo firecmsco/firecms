@@ -97,31 +97,6 @@ export function ExampleCMSView() {
         </Tooltip>
     );
 
-    const frameworksList = [
-        {
-            value: "react",
-            label: "React",
-        },
-        {
-            value: "angular",
-            label: "Angular",
-        },
-        {
-            value: "vue",
-            label: "Vue",
-        },
-        {
-            value: "svelte",
-            label: "Svelte",
-        },
-        {
-            value: "ember",
-            label: "Ember",
-        },
-    ];
-
-    const [selectedFrameworks, setSelectedFrameworks] = useState<string[]>(["react", "angular"]);
-
     return (
         <div className="flex h-full">
             <div className="m-auto flex flex-col items-center max-w-4xl">
@@ -136,31 +111,6 @@ export function ExampleCMSView() {
                             {authController.user
                                 ? <>Logged in as <Chip>{authController.user.displayName}</Chip></>
                                 : <>You are not logged in</>}
-                        </div>
-                    </div>
-
-                    <div className="w-full">
-                        <MultiSelect
-                            className={"w-full"}
-                            value={selectedFrameworks ?? []}
-                            onValueChange={setSelectedFrameworks}
-                            placeholder="Select frameworks"
-                        >
-                            {frameworksList.map((framework) => (
-                                <MultiSelectItem
-                                    key={framework.value}
-                                    value={framework.value}>
-                                    {framework.label}
-                                </MultiSelectItem>
-                            ))}
-                        </MultiSelect>
-                        <div className="mt-4">
-                            <h2 className="text-xl font-semibold">Selected Frameworks:</h2>
-                            <ul className="list-disc list-inside">
-                                {selectedFrameworks.map((framework) => (
-                                    <li key={framework}>{framework}</li>
-                                ))}
-                            </ul>
                         </div>
                     </div>
 

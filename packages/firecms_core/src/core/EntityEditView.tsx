@@ -243,8 +243,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             });
     }, false, 2000);
 
-    const inputCollection = collection;
-
     const authController = useAuthController();
     const dataSource = useDataSource(collection);
     const sideEntityController = useSideEntityController();
@@ -256,18 +254,11 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const analyticsController = useAnalyticsController();
 
-    const initialResolvedCollection = useMemo(() => resolveCollection({
-        collection: inputCollection,
-        path,
-        values: entity?.values,
-        propertyConfigs: customizationController.propertyConfigs
-    }), [entity?.values, path, customizationController.propertyConfigs]);
-
     const initialStatus = copy ? "copy" : (entityIdProp ? "existing" : "new");
     const [status, setStatus] = useState<EntityStatus>(initialStatus);
 
     const mustSetCustomId: boolean = (status === "new" || status === "copy") &&
-        (Boolean(initialResolvedCollection.customId) && initialResolvedCollection.customId !== "optional");
+        (Boolean(collection.customId) && collection.customId !== "optional");
 
     const initialEntityId: string | undefined = useMemo((): string | undefined => {
         if (status === "new" || status === "copy") {
@@ -315,8 +306,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0;
 
     const [usedEntity, setUsedEntity] = useState<Entity<M> | undefined>(entity);
-
-    const baseDataSourceValuesRef = useRef<Partial<EntityValues<M>> | null>(cachedDirtyValues ?? getDataSourceEntityValues(initialResolvedCollection, status, usedEntity));
 
     useEffect(() => {
         if (entity)
@@ -478,8 +467,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         if (status === "existing") {
             if (!entity?.id) throw Error("Form misconfiguration when saving, no id for existing entity");
         } else if (status === "new" || status === "copy") {
-            if (inputCollection.customId) {
-                if (inputCollection.customId !== "optional" && !entityId) {
+            if (collection.customId) {
+                if (collection.customId !== "optional" && !entityId) {
                     throw Error("Form misconfiguration when saving, entityId should be set");
                 }
             }
@@ -502,7 +491,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     };
 
     const formex: FormexController<M> = useCreateFormex<M>({
-        initialValues: baseDataSourceValuesRef.current as M,
+        initialValues: (cachedDirtyValues ?? getInitialEntityValues(collection, path, status, usedEntity)) as M,
         initialDirty: Boolean(cachedDirtyValues),
         onSubmit,
         validation: (values) => {
@@ -521,7 +510,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     });
 
     const resolvedCollection = resolveCollection<M>({
-        collection: inputCollection,
+        collection,
         path,
         entityId,
         values: formex.values,
@@ -710,12 +699,12 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const plugins = customizationController.plugins;
 
-    if (plugins && inputCollection) {
+    if (plugins && collection) {
         const actionProps: PluginFormActionProps = {
             entityId,
             path,
             status,
-            collection: inputCollection,
+            collection: collection,
             context,
             currentEntityId: entityId,
             formContext,
@@ -732,7 +721,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     const titlePropertyKey = getEntityTitlePropertyKey(resolvedCollection, customizationController.propertyConfigs);
     const title = formex.values && titlePropertyKey ? getValueInPath(formex.values, titlePropertyKey) : undefined;
 
-    const onIdUpdate = inputCollection.callbacks?.onIdUpdate;
+    const onIdUpdate = collection.callbacks?.onIdUpdate;
 
     const doOnIdUpdate = useCallback(async () => {
         if (onIdUpdate && formex.values && (status === "new" || status === "copy")) {
@@ -782,8 +771,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         entity?: Entity<M>,
         customEntityActions?: EntityAction[]
     }): EntityAction[] => {
-        const createEnabled = canCreateEntity(inputCollection, authController, path, null);
-        const deleteEnabled = entity ? canDeleteEntity(inputCollection, authController, path, entity) : true;
+        const createEnabled = canCreateEntity(collection, authController, path, null);
+        const deleteEnabled = entity ? canDeleteEntity(collection, authController, path, entity) : true;
         const actions: EntityAction[] = [];
         if (createEnabled)
             actions.push(copyEntityAction);
@@ -792,7 +781,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         if (customEntityActions)
             return mergeEntityActions(actions, customEntityActions);
         return actions;
-    }, [authController, inputCollection, path]);
+    }, [authController, collection, path]);
 
     const deferredValues = useDeferredValue(formex.values);
     const modified = formex.dirty;
@@ -827,8 +816,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     }, [formex.isSubmitting, autoSave, underlyingChanges, entity, formex.values, formex.touched, formex.setFieldValue]);
 
     const formFieldKeys = getFormFieldKeys(resolvedCollection);
-    const resolvedProperties = formFieldKeys.map(key => resolvedCollection.properties[key]);
-
     const formFields = (
         <div className={"flex flex-wrap gap-x-4 w-full space-y-8"}>
             {formFieldKeys
@@ -917,7 +904,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const entityActions = getActionsForEntity({
         entity,
-        customEntityActions: inputCollection.entityActions
+        customEntityActions: collection.entityActions
     });
     const formActions = entityActions.filter(a => a.includeInForm === undefined || a.includeInForm);
 
@@ -962,8 +949,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                             className={"w-full py-2 flex flex-col items-start mt-4 lg:mt-8 mb-8"}>
 
                             <Typography
-                                className={"mt-4 flex-grow line-clamp-1 " + inputCollection.hideIdFromForm ? "mb-2" : "mb-0"}
-                                variant={"h4"}>{title ?? inputCollection.singularName ?? inputCollection.name}
+                                className={"mt-4 flex-grow line-clamp-1 " + collection.hideIdFromForm ? "mb-2" : "mb-0"}
+                                variant={"h4"}>{title ?? collection.singularName ?? collection.name}
                             </Typography>
                             <Alert color={"base"} className={"w-full"} size={"small"}>
                                 <code
@@ -972,7 +959,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                         </div>
 
                         {!collection.hideIdFromForm &&
-                            <CustomIdField customId={inputCollection.customId}
+                            <CustomIdField customId={collection.customId}
                                            entityId={entityId}
                                            status={status}
                                            onChange={setEntityId}
@@ -1080,7 +1067,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 clearDirtyCache();
 
                 formex.resetForm({
-                    values: getDataSourceEntityValues(initialResolvedCollection, status, entity) as M,
+                    values: getInitialEntityValues(collection, path, status, entity) as M,
                 });
 
                 return onDiscard();
@@ -1140,11 +1127,17 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     );
 }
 
-function getDataSourceEntityValues<M extends object>(collection: ResolvedEntityCollection,
-                                                     status: "new" | "existing" | "copy",
-                                                     entity: Entity<M> | undefined): Partial<EntityValues<M>> {
+function getInitialEntityValues<M extends object>(collection: EntityCollection,
+                                                  path: string,
+                                                  status: "new" | "existing" | "copy",
+                                                  entity: Entity<M> | undefined): Partial<EntityValues<M>> {
+    const resolvedCollection = resolveCollection({
+        collection,
+        path,
+        values: entity?.values,
+    });
 
-    const properties = collection.properties;
+    const properties = resolvedCollection.properties;
     if ((status === "existing" || status === "copy") && entity) {
         return entity.values ?? getDefaultValuesFor(properties);
     } else if (status === "new") {
