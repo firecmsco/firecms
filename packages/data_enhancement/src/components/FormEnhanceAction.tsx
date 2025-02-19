@@ -33,7 +33,7 @@ export function FormEnhanceAction({
                                       status,
                                       collection,
                                       formContext,
-                                      layout
+                                      openEntityMode
                                   }: PluginFormActionProps) {
 
     const largeLayout = useLargeLayout();
@@ -120,7 +120,7 @@ export function FormEnhanceAction({
             sideOffset={8}
             className={"max-w-[100vw]"}
             trigger={<Button variant={"outlined"}
-                             fullWidth={largeLayout && layout === "full_screen"}
+                             fullWidth={largeLayout && openEntityMode === "full_screen"}
                              size={"small"}
                              disabled={loading}>
                 {!loading && <AutoFixHighIcon color={"primary"}/>}

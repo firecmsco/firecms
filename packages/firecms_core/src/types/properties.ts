@@ -377,7 +377,7 @@ export interface StringProperty extends BaseProperty<string> {
 
     /**
      * You can specify a `Storage` configuration. It is used to
-     * indicate that this string refers to a path in Google Cloud Storage.
+     * indicate that this string refers to a path in your storage provider.
      */
     storage?: StorageConfig;
 

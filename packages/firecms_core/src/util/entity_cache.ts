@@ -10,23 +10,31 @@ const entityCache: Map<string, object> = new Map();
 const isLocalStorageAvailable = typeof localStorage !== "undefined";
 
 // Define custom replacer for JSON.stringify
-function customReplacer(key: string, value: any): any {
+function customReplacer(key: string): any {
+
+    // @ts-ignore
+    const value = this[key];
+
     // Handle Date objects
+    // @ts-ignore
     if (value instanceof Date) {
         return { __type: "Date", value: value.toISOString() };
     }
 
     // Handle EntityReference
+    // @ts-ignore
     if (value instanceof EntityReference) {
         return { __type: "EntityReference", id: value.id, path: value.path };
     }
 
     // Handle GeoPoint
+    // @ts-ignore
     if (value instanceof GeoPoint) {
         return { __type: "GeoPoint", latitude: value.latitude, longitude: value.longitude };
     }
 
     // Handle Vector
+    // @ts-ignore
     if (value instanceof Vector) {
         return { __type: "Vector", value: value.value };
     }
@@ -93,6 +101,7 @@ export function saveEntityToCache(path: string, data: object): void {
     if (isLocalStorageAvailable) {
         try {
             const key = LOCAL_STORAGE_PREFIX + path;
+            console.log("Saving entity to cache", key, data);
             const entityString = JSON.stringify(data, customReplacer);
             localStorage.setItem(key, entityString);
         } catch (error) {

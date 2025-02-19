@@ -23,7 +23,6 @@ export function MapFieldBinding({
                                     property,
                                     minimalistView: minimalistViewProp,
                                     includeDescription,
-                                    underlyingValueHasChanged,
                                     autoFocus,
                                     context,
                                     onPropertyChange
@@ -62,7 +61,6 @@ export function MapFieldBinding({
                                 disabled: disabled || thisDisabled,
                                 property: childProperty,
                                 includeDescription,
-                                underlyingValueHasChanged,
                                 context,
                                 partOfArray: false,
                                 minimalistView: false,

@@ -7,7 +7,7 @@ import {
     slugify,
     TextFieldBinding
 } from "@firecms/core";
-import { SecondaryForm } from "../custom_entity_view/SecondaryForm";
+import { ProductsSecondaryForm } from "../custom_entity_view/ProductsSecondaryForm";
 import { Icon, IconButton, Typography } from "@firecms/ui";
 import React from "react";
 
@@ -78,7 +78,7 @@ export const testCollection = buildCollection<any>({
             key: "sec",
             name: "Secondary form",
             includeActions: true,
-            Builder: SecondaryForm
+            Builder: ProductsSecondaryForm
         }],
         // additionalFields: [{
         //     key: "custom",

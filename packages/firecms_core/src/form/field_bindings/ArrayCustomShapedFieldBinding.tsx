@@ -23,7 +23,6 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
                                                                         minimalistView: minimalistViewProp,
                                                                         property,
                                                                         includeDescription,
-                                                                        underlyingValueHasChanged,
                                                                         context,
                                                                         disabled
                                                                     }: FieldProps<T, any, any>) {
@@ -65,7 +64,6 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
             disabled: disabled || thisDisabled,
             property: childProperty,
             includeDescription,
-            underlyingValueHasChanged,
             context,
             partOfArray: true,
             minimalistView: false,

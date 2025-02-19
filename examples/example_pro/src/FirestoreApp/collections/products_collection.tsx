@@ -6,6 +6,7 @@ import { Locale, Product } from "../types";
 import { categories, currencies, locales } from "./enums";
 import CustomColorTextField from "../custom_field/CustomColorTextField";
 import { ProductDetailPreview } from "../custom_entity_view/ProductDetailPreview";
+import { ProductsSecondaryForm } from "../custom_entity_view/ProductsSecondaryForm";
 
 export const localeCollection = buildCollection<Locale>({
     id: "product_locales",
@@ -65,7 +66,7 @@ const productAdditionalField: AdditionalFieldDelegate<Product> = {
               }) =>
         <AsyncPreviewComponent builder={
             context.dataSource.fetchEntity({
-                path: `${entity.id}/${entity.id}/locales`,
+                path: `${entity.path}/${entity.id}/locales`,
                 entityId: "es",
                 collection: localeCollection
             }).then((entity) => entity?.values.name)
@@ -123,6 +124,12 @@ export const productsCollection = buildCollection<Product>({
             key: "sample_custom_view",
             name: "Custom preview",
             Builder: ProductDetailPreview
+        },
+        {
+            key: "sec",
+            name: "Secondary form",
+            includeActions: true,
+            Builder: ProductsSecondaryForm
         }
     ],
     additionalFields: [productAdditionalField],

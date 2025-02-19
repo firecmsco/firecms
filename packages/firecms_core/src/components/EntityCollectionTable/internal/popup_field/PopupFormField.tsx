@@ -23,7 +23,7 @@ import { Button, CloseIcon, DialogActions, IconButton, Typography } from "@firec
 import { PropertyFieldBinding } from "../../../../form";
 import { useCustomizationController, useDataSource, useFireCMSContext } from "../../../../hooks";
 import { OnCellValueChangeParams } from "../../../common";
-import { yupToFormErrors } from "../../../../core/EntityEditView";
+import { yupToFormErrors } from "../../../../core/EntityForm";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     customFieldValidator?: CustomFieldValidator;
@@ -278,7 +278,9 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         path,
         setFieldValue,
         save: saveValue,
-        formex
+        formex,
+        status: "existing",
+        openEntityMode: "side_panel",
     };
 
     const property: ResolvedProperty<any> | undefined = propertyKey && getPropertyInPath(collection?.properties ?? {} as ResolvedProperties, propertyKey as string);

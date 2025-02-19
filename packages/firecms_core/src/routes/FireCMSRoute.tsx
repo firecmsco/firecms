@@ -190,10 +190,15 @@ function EntityFullScreenRoute({
             onValuesModified={(modified) => blocked.current = modified}
             onSaved={(params) => {
                 console.log("Entity saved", params);
-                navigate(`${basePath}/${params.entityId}`, { replace: true });
+                const newSelectedTab = params.selectedTab;
+                const newEntityId = params.entityId;
+                if (newSelectedTab) {
+                    navigate(`${basePath}/${newEntityId}/${newSelectedTab}`, { replace: true });
+                } else {
+                    navigate(`${basePath}/${newEntityId}`, { replace: true });
+                }
             }}
             onTabChange={(params) => {
-                // updateUrl(params.entityId, params.selectedTab, !isNew, params.path, isNew);
                 setSelectedTab(params.selectedTab);
                 if (isNew) {
                     return;

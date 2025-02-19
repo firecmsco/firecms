@@ -1,6 +1,7 @@
 import { CMSType, Property, PropertyOrBuilder } from "./properties";
 import { ResolvedEntityCollection, ResolvedProperty } from "./resolved_entities";
 import { FormexController } from "@firecms/formex";
+import { Entity } from "./entities";
 
 /**
  * When building a custom field you need to create a React component that takes
@@ -160,6 +161,21 @@ export interface FormContext<M extends Record<string, any> = any> {
      * Path this entity is located at
      */
     path?: string;
+
+    status: "new" | "existing" | "copy";
+
+    entity?: Entity<M>;
+
+    savingError?: Error;
+
+    openEntityMode: "side_panel" | "full_screen";
+
+    /**
+     * If pending close is set to true, the form will close when the user
+     * saves the entity
+     * @param pendingClose
+     */
+    setPendingClose?: (pendingClose: boolean) => void;
 
     /**
      * This is the underlying formex controller that powers the form
