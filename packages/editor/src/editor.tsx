@@ -58,6 +58,7 @@ export type FireCMSEditorProps = {
     highlight?: { from: number, to: number },
     aiController?: EditorAIController,
     customComponents?: CustomEditorComponent[];
+    disabled?: boolean;
 };
 
 export type CustomEditorComponent = {
@@ -90,6 +91,7 @@ export const FireCMSEditor = ({
                                   highlight,
                                   handleImageUpload,
                                   aiController,
+                                  disabled
                               }: FireCMSEditorProps) => {
 
     const ref = React.useRef<HTMLDivElement | null>(null);
@@ -111,6 +113,10 @@ export const FireCMSEditor = ({
             editorRef.current?.commands.setContent(content ?? "");
         }
     }, [version]);
+
+    useEffect(() => {
+        editorRef?.current?.setEditable(!disabled);
+    }, [disabled]);
 
     useEffect(() => {
         if (version === undefined) return;
@@ -144,7 +150,7 @@ export const FireCMSEditor = ({
 
     const proseClass = proseClasses[textSize];
 
-    const extensions:Extensions = useMemo(() => ([
+    const extensions: Extensions = useMemo(() => ([
         starterKit as any,
         CustomDocument,
         HighlightDecorationExtension(highlight),
@@ -195,17 +201,12 @@ export const FireCMSEditor = ({
         <div
             ref={ref}
             className="relative min-h-[300px] w-full">
-            {/*<Button onClick={() => {*/}
-            {/*    // add content at the end*/}
-            {/*    // @ts-ignore*/}
-            {/*    editorRef.current?.commands.toggleCustomBlock();*/}
-            {/*}}>*/}
-            {/*    Toggle*/}
-            {/*</Button>*/}
+
             <EditorProvider
                 content={content ?? ""}
                 extensions={extensions}
                 editorProps={{
+                    editable: () => !disabled,
                     attributes: {
                         class: cls(proseClass, "prose-headings:font-title font-default focus:outline-none max-w-full p-12")
                     }
@@ -213,6 +214,7 @@ export const FireCMSEditor = ({
                 onCreate={({ editor }) => {
                     // @ts-ignore
                     editorRef.current = editor;
+                    editor.setEditable(!disabled);
                 }}
                 onUpdate={({ editor }) => {
                     onEditorUpdate(editor as Editor);
@@ -224,15 +226,11 @@ export const FireCMSEditor = ({
                     }}
                     className={cls("flex w-fit max-w-[90vw] h-10 overflow-hidden rounded border bg-white dark:bg-surface-900 shadow", defaultBorderMixin)}
                 >
-                    {/*<Separator orientation="vertical"/>*/}
                     <NodeSelector portalContainer={ref.current} open={openNode} onOpenChange={setOpenNode}/>
                     <Separator orientation="vertical"/>
-
                     <LinkSelector open={openLink} onOpenChange={setOpenLink}/>
                     <Separator orientation="vertical"/>
                     <TextButtons/>
-                    {/*<Separator orientation="vertical"/>*/}
-                    {/*<ColorSelector open={openColor} onOpenChange={setOpenColor}/>*/}
                 </EditorBubble>
 
             </EditorProvider>

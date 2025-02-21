@@ -3,13 +3,14 @@ import {
     FieldHelperText,
     FieldProps,
     getIconForProperty,
-    LabelWithIconAndTooltip, PropertyOrBuilder,
+    LabelWithIconAndTooltip,
+    PropertyOrBuilder,
     randomString,
     ResolvedArrayProperty,
     ResolvedStringProperty,
     useStorageSource
 } from "../../index";
-import { cls, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "@firecms/ui";
+import { cls, fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "@firecms/ui";
 import { FireCMSEditor, FireCMSEditorProps } from "@firecms/editor";
 import { resolveProperty, resolveStorageFilenameString, resolveStoragePathString } from "../../util";
 
@@ -27,11 +28,13 @@ export function MarkdownEditorFieldBinding({
                                                showError,
                                                error,
                                                minimalistView,
+                                               disabled: disabledProp,
                                                isSubmitting,
                                                context,
                                                customProps,
                                            }: FieldProps<string, MarkdownEditorFieldProps>) {
 
+    const disabled = disabledProp || isSubmitting;
     const highlight = customProps?.highlight;
     const editorProps = customProps?.editorProps;
     const storageSource = useStorageSource();
@@ -54,10 +57,8 @@ export function MarkdownEditorFieldBinding({
         if (internalValue.current !== value) {
             internalValue.current = value;
             setFieldVersion(fieldVersion + 1);
-            // fieldVersion.current = fieldVersion.current + 1;
         }
     }, [value]);
-
 
     const resolvedProperty = resolveProperty({
         propertyOrBuilder: property as PropertyOrBuilder,
@@ -107,6 +108,7 @@ export function MarkdownEditorFieldBinding({
         onMarkdownContentChange={onContentChange}
         version={context.formex.version + fieldVersion}
         highlight={highlight}
+        disabled={disabled}
         handleImageUpload={async (file: File) => {
             const storagePath = storagePathBuilder(file);
             const fileName = await fileNameBuilder(file);
@@ -136,7 +138,8 @@ export function MarkdownEditorFieldBinding({
                 required={property.validation?.required}
                 title={property.name}
                 className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
-            <div className={cls("rounded-md", fieldBackgroundMixin, fieldBackgroundHoverMixin)}>
+            <div
+                className={cls("rounded-md", fieldBackgroundMixin, disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin)}>
                 {editor}
             </div>
             <FieldHelperText includeDescription={includeDescription}
