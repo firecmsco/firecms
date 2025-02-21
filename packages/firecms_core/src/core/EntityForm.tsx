@@ -72,134 +72,26 @@ export type OnUpdateParams = {
     collection: EntityCollection<any>
 };
 
-export function FormLayoutInner<M extends object>({
-                                               id,
-                                               formContext,
-                                               children,
-                                               className,
-                                               forceActionsAtTheBottom,
-                                               pluginActions
-                                           }: {
-    id?: string,
-    formContext: FormContext,
-    children: React.ReactNode,
-    className?: string,
-    forceActionsAtTheBottom?: boolean,
-    pluginActions?: React.ReactNode[],
-}) {
-
-    const context = useFireCMSContext();
-    const sideEntityController = useSideEntityController();
-    const authController = useAuthController();
-
-    const formex = formContext.formex;
-    const collection = formContext.collection;
-    const path = formContext.path;
-    const entity = formContext.entity;
-    const savingError = formContext.savingError;
-    const status = formContext.status;
-    const openEntityMode = formContext.openEntityMode;
-    const setPendingClose = formContext.setPendingClose;
-    const disabled = formex.isSubmitting || (!formex.dirty && status === "existing");
-
-    if (!collection || !path) {
-        throw Error("INTERNAL: Collection and path must be defined in form context");
-    }
-
-    const getActionsForEntity = useCallback(({
-                                                 entity,
-                                                 customEntityActions
-                                             }: {
-        entity?: Entity<M>,
-        customEntityActions?: EntityAction[]
-    }): EntityAction[] => {
-
-        const createEnabled = canCreateEntity(collection, authController, path, null);
-        const deleteEnabled = entity ? canDeleteEntity(collection, authController, path, entity) : false;
-        const actions: EntityAction[] = [];
-        if (createEnabled)
-            actions.push(copyEntityAction);
-        if (deleteEnabled)
-            actions.push(deleteEntityAction);
-        if (customEntityActions)
-            return mergeEntityActions(actions, customEntityActions);
-        return actions;
-    }, [authController, collection, path]);
-
-    const entityActions = getActionsForEntity({
-        entity,
-        customEntityActions: collection.entityActions
-    });
-    const formActions = entityActions.filter(a => a.includeInForm === undefined || a.includeInForm);
-
-    const dialogActions = forceActionsAtTheBottom
-        ? buildBottomActions({
-            savingError,
-            entity,
-            formActions,
-            collection,
-            context,
-            sideEntityController,
-            isSubmitting: formex.isSubmitting,
-            disabled,
-            status,
-            setPendingClose,
-            pluginActions,
-            openEntityMode
-        })
-        : buildSideActions({
-            savingError,
-            entity,
-            formActions,
-            collection,
-            context,
-            sideEntityController,
-            isSubmitting: formex.isSubmitting,
-            disabled,
-            status,
-            pluginActions,
-            openEntityMode
-        });
-
-    return (
-        <Formex value={formContext.formex}>
-            <form
-                onSubmit={formContext.formex.handleSubmit}
-                onReset={() => formex.resetForm({
-                    values: getInitialEntityValues(collection, path, status, entity),
-                })}
-                noValidate
-                className={cls("flex-1 flex flex-row w-full overflow-y-auto justify-center", className)}>
-                <div
-                    id={id}
-                    className={cls("relative flex flex-row max-w-4xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-6xl w-full h-fit")}>
-
-                    <div className={cls("flex flex-col w-full pt-12 pb-16 px-4 sm:px-8 md:px-10")}>
-
-                        {formContext.formex.dirty
-                            ? <Tooltip title={"Unsaved changes"}
-                                       className={"self-end sticky top-4 z-10"}>
-                                <Chip size={"small"} colorScheme={"orangeDarker"}>
-                                    <EditIcon size={"smallest"}/>
-                                </Chip>
-                            </Tooltip>
-                            : <Tooltip title={"In sync with the database"}
-                                       className={"self-end sticky top-4 z-10"}>
-                                <Chip size={"small"}>
-                                    <CheckIcon size={"smallest"}/>
-                                </Chip>
-                            </Tooltip>}
-                        {children}
-
-                    </div>
-
-                </div>
-                {dialogActions}
-            </form>
-
-        </Formex>
-    );
-}
+type EntityFormProps<M extends Record<string, any>> = {
+    path: string;
+    collection: EntityCollection<M>;
+    entityId?: string;
+    entity?: Entity<M>;
+    databaseId?: string;
+    onIdChange?: (id: string) => void;
+    onValuesModified?: (modified: boolean) => void;
+    onSaved?: (params: OnUpdateParams) => void;
+    onClose?: () => void;
+    cachedDirtyValues?: Partial<M>; // dirty cached entity in memory
+    onFormContextReady?: (formContext: FormContext) => void;
+    forceActionsAtTheBottom?: boolean;
+    initialStatus: EntityStatus;
+    className?: string;
+    onStatusChange?: (status: EntityStatus) => void;
+    onEntityChange?: (entity: Entity<M>) => void;
+    formex?: FormexController<M>;
+    openEntityMode?: "side_panel" | "full_screen";
+};
 
 export function EntityForm<M extends Record<string, any>>({
                                                               path,
@@ -218,29 +110,8 @@ export function EntityForm<M extends Record<string, any>>({
                                                               onStatusChange,
                                                               onEntityChange,
                                                               openEntityMode = "full_screen",
-                                                              formex: formexProp,
-                                                              children
-                                                          }: {
-    path: string;
-    collection: EntityCollection<M>;
-    entityId?: string;
-    entity?: Entity<M>;
-    databaseId?: string;
-    onIdChange?: (id: string) => void;
-    onValuesModified?: (modified: boolean) => void;
-    onSaved?: (params: OnUpdateParams) => void;
-    onClose?: () => void;
-    openEntityMode?: "side_panel" | "full_screen";
-    cachedDirtyValues?: Partial<M>; // dirty cached entity in memory
-    onFormContextReady?: (formContext: FormContext) => void;
-    forceActionsAtTheBottom?: boolean;
-    initialStatus: EntityStatus;
-    className?: string;
-    onStatusChange?: (status: EntityStatus) => void;
-    onEntityChange?: (entity: Entity<M>) => void;
-    formex?: FormexController<M>;
-    children?: React.ReactNode;
-}) {
+                                                              formex: formexProp
+                                                          }: EntityFormProps<M>) {
 
     if (collection.customId && collection.formAutoSave) {
         console.warn(`The collection ${collection.path} has customId and formAutoSave enabled. This is not supported and formAutoSave will be ignored`);
@@ -726,7 +597,7 @@ export function EntityForm<M extends Record<string, any>>({
 
     const formRef = useRef<HTMLDivElement>(null);
 
-    const formView = children ?? <ErrorBoundary>
+    const formView = <ErrorBoundary>
         <>
             <div className={"w-full py-2 flex flex-col items-start mt-4 lg:mt-8 mb-8"}>
                 <Typography
@@ -818,6 +689,135 @@ export function yupToFormErrors(yupError: ValidationError): Record<string, any> 
         }
     }
     return errors;
+}
+
+export function FormLayoutInner<M extends object>({
+                                                      id,
+                                                      formContext,
+                                                      children,
+                                                      className,
+                                                      forceActionsAtTheBottom,
+                                                      pluginActions
+                                                  }: {
+    id?: string,
+    formContext: FormContext,
+    children: React.ReactNode,
+    className?: string,
+    forceActionsAtTheBottom?: boolean,
+    pluginActions?: React.ReactNode[],
+}) {
+
+    const context = useFireCMSContext();
+    const sideEntityController = useSideEntityController();
+    const authController = useAuthController();
+
+    const formex = formContext.formex;
+    const collection = formContext.collection;
+    const path = formContext.path;
+    const entity = formContext.entity;
+    const savingError = formContext.savingError;
+    const status = formContext.status;
+    const openEntityMode = formContext.openEntityMode;
+    const setPendingClose = formContext.setPendingClose;
+    const disabled = formex.isSubmitting || (!formex.dirty && status === "existing");
+
+    if (!collection || !path) {
+        throw Error("INTERNAL: Collection and path must be defined in form context");
+    }
+
+    const getActionsForEntity = useCallback(({
+                                                 entity,
+                                                 customEntityActions
+                                             }: {
+        entity?: Entity<M>,
+        customEntityActions?: EntityAction[]
+    }): EntityAction[] => {
+
+        const createEnabled = canCreateEntity(collection, authController, path, null);
+        const deleteEnabled = entity ? canDeleteEntity(collection, authController, path, entity) : false;
+        const actions: EntityAction[] = [];
+        if (createEnabled)
+            actions.push(copyEntityAction);
+        if (deleteEnabled)
+            actions.push(deleteEntityAction);
+        if (customEntityActions)
+            return mergeEntityActions(actions, customEntityActions);
+        return actions;
+    }, [authController, collection, path]);
+
+    const entityActions = getActionsForEntity({
+        entity,
+        customEntityActions: collection.entityActions
+    });
+    const formActions = entityActions.filter(a => a.includeInForm === undefined || a.includeInForm);
+
+    const dialogActions = forceActionsAtTheBottom
+        ? buildBottomActions({
+            savingError,
+            entity,
+            formActions,
+            collection,
+            context,
+            sideEntityController,
+            isSubmitting: formex.isSubmitting,
+            disabled,
+            status,
+            setPendingClose,
+            pluginActions,
+            openEntityMode
+        })
+        : buildSideActions({
+            savingError,
+            entity,
+            formActions,
+            collection,
+            context,
+            sideEntityController,
+            isSubmitting: formex.isSubmitting,
+            disabled,
+            status,
+            pluginActions,
+            openEntityMode
+        });
+
+    return (
+        <Formex value={formContext.formex}>
+            <form
+                onSubmit={formContext.formex.handleSubmit}
+                onReset={() => formex.resetForm({
+                    values: getInitialEntityValues(collection, path, status, entity),
+                })}
+                noValidate
+                className={cls("flex-1 flex flex-row w-full overflow-y-auto justify-center", className)}>
+                <div
+                    id={id}
+                    className={cls("relative flex flex-row max-w-4xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-6xl w-full h-fit")}>
+
+                    <div className={cls("flex flex-col w-full pt-12 pb-16 px-4 sm:px-8 md:px-10")}>
+
+                        {formContext.formex.dirty
+                            ? <Tooltip title={"Unsaved changes"}
+                                       className={"self-end sticky top-4 z-10"}>
+                                <Chip size={"small"} colorScheme={"orangeDarker"}>
+                                    <EditIcon size={"smallest"}/>
+                                </Chip>
+                            </Tooltip>
+                            : <Tooltip title={"In sync with the database"}
+                                       className={"self-end sticky top-4 z-10"}>
+                                <Chip size={"small"}>
+                                    <CheckIcon size={"smallest"}/>
+                                </Chip>
+                            </Tooltip>}
+                        {children}
+
+                    </div>
+
+                </div>
+                {dialogActions}
+            </form>
+
+        </Formex>
+    );
 }
 
 type ActionsViewProps<M extends object> = {
