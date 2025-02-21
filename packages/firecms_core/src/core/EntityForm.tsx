@@ -891,10 +891,14 @@ function buildBottomActions<M extends object>({
             {status === "copy" && "Create copy"}
             {status === "new" && "Create"}
         </Button>
-        {canClose && <LoadingButton variant="filled" color="primary" type="submit" loading={isSubmitting}
-                                    disabled={disabled} onClick={() => {
-            setPendingClose?.(true);
-        }}>
+        {canClose && <LoadingButton variant="filled"
+                                    color="primary"
+                                    type="submit"
+                                    loading={isSubmitting}
+                                    disabled={disabled}
+                                    onClick={() => {
+                                        setPendingClose?.(true);
+                                    }}>
             {status === "existing" && "Save and close"}
             {status === "copy" && "Create copy and close"}
             {status === "new" && "Create and close"}

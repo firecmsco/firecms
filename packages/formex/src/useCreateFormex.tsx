@@ -174,6 +174,7 @@ export function useCreateFormex<T extends object>({
         } =
         props ?? {};
         valuesRef.current = valuesProp ?? initialValuesRef.current;
+        initialValuesRef.current = valuesProp ?? initialValuesRef.current;
         setValuesInner(valuesProp ?? initialValuesRef.current);
         setErrors(errorsProp ?? {});
         setTouchedState(touchedProp ?? {});
