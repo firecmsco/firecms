@@ -55,24 +55,23 @@ export function UrlComponentPreview({
         return <VideoPreview size={size} src={url} interactive={interactive}/>;
     } else {
         return (
-            <a
-                href={url}
-                rel="noopener noreferrer"
-                target="_blank"
-                onClick={(e) => e.stopPropagation()}
-                className="flex flex-col items-center justify-center"
-                style={{
-                    width: getThumbnailMeasure(size),
-                    height: getThumbnailMeasure(size)
-                }}>
-                <DescriptionIcon className="text-surface-700 dark:text-surface-300"/>
-                {hint &&
-                    <Tooltip title={hint}>
-                        <Typography
-                            className="max-w-full truncate rtl text-left"
-                            variant={"caption"}>{hint}</Typography>
-                    </Tooltip>}
-            </a>
+            <Tooltip title={hint}>
+                <a
+                    href={url}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex flex-col items-center justify-center"
+                    style={{
+                        width: getThumbnailMeasure(size),
+                        height: getThumbnailMeasure(size)
+                    }}>
+                    <DescriptionIcon className="text-surface-700 dark:text-surface-300"/>
+                    {hint && <Typography
+                        className="max-w-full truncate rtl text-left"
+                        variant={"caption"}>{hint}</Typography>}
+                </a>
+            </Tooltip>
         );
     }
 }

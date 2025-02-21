@@ -92,7 +92,7 @@ export function StorageUploadProgress({
             `min-w-[${imageSize}px] min-h-[${imageSize}px]`)}>
 
             {loading &&
-                <Skeleton className="w-full h-full"/>}
+                <Skeleton className="m-4 w-full h-full"/>}
 
             {error && <ErrorView title={"Error uploading file"}
                                  error={error}/>}

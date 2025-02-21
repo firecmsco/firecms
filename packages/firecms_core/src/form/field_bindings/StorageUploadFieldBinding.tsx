@@ -28,7 +28,7 @@ import {
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
 const dropZoneClasses = "box-border relative pt-[2px] items-center border border-transparent min-h-[254px] outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
-const disabledClasses = "border-dotted-gray"
+const disabledClasses = fieldBackgroundDisabledMixin;
 const nonActiveDropClasses = fieldBackgroundHoverMixin
 const activeDropClasses = "pt-0 border-2 border-solid"
 const acceptDropClasses = "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-2 border-solid border-green-500"
@@ -206,6 +206,7 @@ function FileDropComponent({
             className={cls(
                 fieldBackgroundMixin,
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
+                disabled ? "text-surface-accent-600 dark:text-surface-accent-500" : "",
                 dropZoneClasses,
                 multipleFilesSupported && internalValue.length ? "" : "flex",
                 {
@@ -248,7 +249,7 @@ function FileDropComponent({
                                 metadata={metadata}
                                 storagePath={storagePathBuilder(entry.file)}
                                 onFileUploadComplete={onFileUploadComplete}
-                                imageSize={size === "medium" ? 220 : 118}
+                                imageSize={size === "large" ? 220 : 118}
                                 simple={false}
                             />
                         );
@@ -285,7 +286,8 @@ function FileDropComponent({
             <div
                 className="flex-grow min-h-[38px] box-border m-2 text-center">
                 <Typography align={"center"}
-                            variant={"label"}>
+                            variant={"label"}
+                            className={disabled ? "text-surface-accent-600 dark:text-surface-accent-500" : ""}>
                     {helpText}
                 </Typography>
             </div>

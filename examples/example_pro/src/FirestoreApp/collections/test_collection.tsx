@@ -1,5 +1,6 @@
 import {
-    buildCollection, buildProperty,
+    buildCollection,
+    buildProperty,
     EntityCallbacks,
     EntityOnFetchProps,
     FieldProps,
@@ -88,19 +89,18 @@ export const testCollection = buildCollection<any>({
         //     }
         // }],
         properties: {
-            test_upload: buildProperty({
-                dataType: "string",
-                columnWidth: 400,
-                metadata: {
-                    cacheControl: "public, max-age=31536000", // 1 year
-                },
-                storage: {
-                    acceptedFiles: ["audio/*"],
-                    storagePath: "media/",
-                    fileName: "{file}",
-                },
-                name: "Media",
-            }),
+            test_upload: {
+                dataType: "array",
+                name: "Test upload",
+                of: buildProperty({
+                    dataType: "string",
+                    columnWidth: 400,
+                    storage: {
+                        storagePath: "/",
+                    },
+                    name: "Media",
+                })
+            },
             slug: ({ propertyValue }) => {
                 const slugified = slugify(propertyValue);
                 const regExp = new RegExp(slugified);
@@ -117,13 +117,6 @@ export const testCollection = buildCollection<any>({
                         matchesMessage: "Text entered must equal slugified string: " + slugified
                     }
                 };
-            },
-
-            title: {
-                dataType: "map",
-                name: "Title",
-                propertyConfig: "markdown_custom",
-                widthPercentage: 50,
             },
             size: {
                 dataType: "map",

@@ -34,6 +34,7 @@ export interface StorageFieldItem {
     size: PreviewSize
 }
 
+
 export function useStorageUploadController<M extends object>({
                                                                  entityId,
                                                                  entityValues,
@@ -45,17 +46,17 @@ export function useStorageUploadController<M extends object>({
                                                                  disabled,
                                                                  onChange
                                                              }:
-                                                                 {
-                                                                     entityId: string,
-                                                                     entityValues: EntityValues<M>,
-                                                                     value: string | string[] | null;
-                                                                     path?: string,
-                                                                     propertyKey: string,
-                                                                     property: StringProperty | ArrayProperty<string[]> | ResolvedStringProperty | ResolvedArrayProperty<string[]>,
-                                                                     storageSource: StorageSource,
-                                                                     disabled: boolean,
-                                                                     onChange: (value: string | string[] | null) => void
-                                                                 }) {
+                                                             {
+                                                                 entityId: string,
+                                                                 entityValues: EntityValues<M>,
+                                                                 value: string | string[] | null;
+                                                                 path?: string,
+                                                                 propertyKey: string,
+                                                                 property: StringProperty | ArrayProperty<string[]> | ResolvedStringProperty | ResolvedArrayProperty<string[]>,
+                                                                 storageSource: StorageSource,
+                                                                 disabled: boolean,
+                                                                 onChange: (value: string | string[] | null) => void
+                                                             }) {
 
     const storage: StorageConfig | undefined = property.dataType === "string"
         ? property.storage
@@ -75,16 +76,7 @@ export function useStorageUploadController<M extends object>({
     const compression: ImageCompression | undefined = storage?.imageCompression;
 
     const internalInitialValue: StorageFieldItem[] =
-        (multipleFilesSupported
-            ? (value ?? []) as string[]
-            : value ? [value as string] : []).map(entry => (
-            {
-                id: getRandomId(),
-                storagePathOrDownloadUrl: entry,
-                metadata,
-                size
-            }
-        ));
+        getInternalInitialValue(multipleFilesSupported, value, metadata, size);
 
     const [initialValue, setInitialValue] = useState<string | string[] | null>(value);
     const [internalValue, setInternalValue] = useState<StorageFieldItem[]>(internalInitialValue);
@@ -224,6 +216,32 @@ export function useStorageUploadController<M extends object>({
         onFilesAdded,
         multipleFilesSupported
     }
+}
+
+function getInternalInitialValue(multipleFilesSupported: boolean,
+                                 value: string | string[] | null,
+                                 metadata: Record<string, any> | undefined,
+                                 size: PreviewSize): StorageFieldItem[] {
+    let strings: string[] = [];
+    if (multipleFilesSupported) {
+        if (Array.isArray(value) && value.every((v) => typeof v === "string")) {
+            strings = (value ?? []) as string[];
+        }
+    } else {
+        if (typeof value === "string") {
+            strings = value ? [value as string] : [];
+        }
+    }
+
+    return strings
+        .map(entry => (
+            {
+                id: getRandomId(),
+                storagePathOrDownloadUrl: entry,
+                metadata,
+                size
+            }
+        ));
 }
 
 function removeDuplicates(items: StorageFieldItem[]) {
