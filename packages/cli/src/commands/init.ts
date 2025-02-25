@@ -271,7 +271,7 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
                     },
                     ...(cloudProjects ?? []).map(project => ({
                         name: project.id,
-                        value: project.name
+                        value: project.id
                     })),
                     ...(gcpProjects ?? []).map(project => ({
                         name: project.projectId,
