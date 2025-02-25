@@ -20,10 +20,9 @@ import { useWindowSize } from "./useWindowSize";
 import { ElementResizeListener } from "./ElementResizeListener";
 import { getPropertyInPath, isReadOnly, resolveCollection } from "../../../../util";
 import { Button, CloseIcon, DialogActions, IconButton, Typography } from "@firecms/ui";
-import { PropertyFieldBinding } from "../../../../form";
+import { PropertyFieldBinding, yupToFormErrors } from "../../../../form";
 import { useCustomizationController, useDataSource, useFireCMSContext } from "../../../../hooks";
 import { OnCellValueChangeParams } from "../../../common";
-import { yupToFormErrors } from "../../../../core/EntityForm";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     customFieldValidator?: CustomFieldValidator;
@@ -240,14 +239,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         validation: (values) => {
             return validationSchema?.validate(values, { abortEarly: false })
                 .then(() => ({}))
-                .catch((e) => {
-                    // const errors: Record<string, string> = {};
-                    // e.inner.forEach((error: any) => {
-                    //     errors[error.path] = error.message;
-                    // });
-                    // return errors;
-                    return yupToFormErrors(e);
-                });
+                .catch(yupToFormErrors);
         },
         validateOnInitialRender: true,
         onSubmit: (values, actions) => {

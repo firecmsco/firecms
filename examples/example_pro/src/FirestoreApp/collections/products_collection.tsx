@@ -15,6 +15,14 @@ export const localeCollection = buildCollection<Locale>({
     customId: locales,
     name: "Locales",
     singularName: "Locale",
+    entityViews: [
+        {
+            key: "sec",
+            name: "Secondary form",
+            includeActions: true,
+            Builder: ProductsSecondaryForm
+        }
+    ],
     properties: {
         name: {
             name: "Name",

@@ -244,58 +244,6 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
     return sidePanel ? [sidePanel] : [];
 }
 
-// export function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], newFlag: boolean): EntitySidePanelProps<any>[] {
-//
-//     const navigationViewsForPath: NavigationViewInternal<any>[] = getNavigationEntriesFromPathInternal({
-//         path,
-//         collections
-//     });
-//
-//     const sidePanels: EntitySidePanelProps<any>[] = [];
-//     let lastCollectionPath = "";
-//     for (let i = 0; i < navigationViewsForPath.length; i++) {
-//         const navigationEntry = navigationViewsForPath[i];
-//
-//         if (navigationEntry.type === "collection") {
-//             lastCollectionPath = navigationEntry.path;
-//         }
-//
-//         if (i > 0) { // the first collection is handled by the main navigation
-//             const previousEntry = navigationViewsForPath[i - 1];
-//             if (navigationEntry.type === "entity") {
-//                 sidePanels.push({
-//                         path: navigationEntry.path,
-//                         entityId: navigationEntry.entityId,
-//                         copy: false,
-//                         width: navigationEntry.parentCollection?.sideDialogWidth
-//                     }
-//                 );
-//             } else if (navigationEntry.type === "custom_view") {
-//                 if (previousEntry.type === "entity") {
-//                     const lastSidePanel: EntitySidePanelProps<any> = sidePanels[sidePanels.length - 1];
-//                     if (lastSidePanel)
-//                         lastSidePanel.selectedTab = navigationEntry.view.key;
-//                 }
-//             } else if (navigationEntry.type === "collection") {
-//                 if (previousEntry.type === "entity") {
-//                     const lastSidePanel: EntitySidePanelProps<any> = sidePanels[sidePanels.length - 1];
-//                     if (lastSidePanel)
-//                         lastSidePanel.selectedTab = navigationEntry.collection.id ?? navigationEntry.collection.path;
-//                 }
-//             }
-//         }
-//
-//     }
-//
-//     if (newFlag) {
-//         sidePanels.push({
-//             path: lastCollectionPath,
-//             copy: false
-//         });
-//     }
-//
-//     return sidePanels;
-// }
 
 const propsToSidePanel = (props: EntitySidePanelProps,
                           buildUrlCollectionPath: (path: string) => string,

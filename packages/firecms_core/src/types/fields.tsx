@@ -171,13 +171,6 @@ export interface FormContext<M extends Record<string, any> = any> {
     openEntityMode: "side_panel" | "full_screen";
 
     /**
-     * If pending close is set to true, the form will close when the user
-     * saves the entity
-     * @param pendingClose
-     */
-    setPendingClose?: (pendingClose: boolean) => void;
-
-    /**
      * This is the underlying formex controller that powers the form
      */
     formex: FormexController<M>;

@@ -31,6 +31,9 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
 
     const sideEntityController = useSideEntityController();
     const navigationController = useNavigationController();
+    const sideDialogsController = useSideDialogContext();
+
+    console.log("sideDialogsController", sideDialogsController);
 
     const onClose = () => {
         if (props.onClose) {
@@ -53,6 +56,11 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                 updateUrl: true,
                 collection: params.collection,
             });
+        }
+
+        if (sideDialogsController.pendingClose) {
+            sideDialogsController.setPendingClose(false);
+            onClose();
         }
 
     }
@@ -113,7 +121,6 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                     collection={collection}
                     parentCollectionIds={parentCollectionIds}
                     onValuesModified={onValuesModified}
-                    onClose={onClose}
                     onSaved={onUpdate}
                     barActions={<>
                         <IconButton

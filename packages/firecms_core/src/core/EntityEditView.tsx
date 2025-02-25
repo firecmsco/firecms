@@ -1,88 +1,20 @@
-import React, { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
-import {
-    CMSAnalyticsEvent,
-    Entity,
-    EntityAction,
-    EntityCollection,
-    EntityCustomView,
-    EntityStatus,
-    EntityValues,
-    FireCMSContext,
-    FireCMSPlugin,
-    FormContext,
-    PluginFormActionProps,
-    PropertyFieldBindingProps,
-    ResolvedEntityCollection,
-    SideEntityController,
-    User
-} from "../types";
-import equal from "react-fast-compare";
+import React, { useEffect, useMemo, useState } from "react";
+import { Entity, EntityCollection, EntityCustomView, EntityStatus, FireCMSPlugin, FormContext, User } from "../types";
+
+import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary } from "../components";
+import { canEditEntity, removeInitialAndTrailingSlashes, resolveDefaultSelectedView, resolveEntityView } from "../util";
 
 import {
-    CircularProgressCenter,
-    copyEntityAction,
-    deleteEntityAction,
-    EntityCollectionView,
-    EntityView,
-    ErrorBoundary,
-    getFormFieldKeys
-} from "../components";
-import {
-    canCreateEntity,
-    canDeleteEntity,
-    canEditEntity,
-    getDefaultValuesFor,
-    getEntityTitlePropertyKey,
-    getValueInPath,
-    isHidden,
-    isReadOnly,
-    mergeEntityActions,
-    removeInitialAndTrailingSlashes,
-    resolveCollection,
-    resolveDefaultSelectedView,
-    resolveEntityView,
-    useDebouncedCallback
-} from "../util";
-
-import {
-    saveEntityWithCallbacks,
     useAuthController,
     useCustomizationController,
-    useDataSource,
     useEntityFetch,
     useFireCMSContext,
-    useLargeLayout,
-    useSideEntityController,
-    useSnackbarController
+    useLargeLayout
 } from "../hooks";
-import {
-    Alert,
-    Button,
-    CheckIcon,
-    Chip,
-    CircularProgress,
-    cls,
-    defaultBorderMixin,
-    DialogActions,
-    EditIcon,
-    IconButton,
-    LoadingButton,
-    NotesIcon,
-    paperMixin,
-    Tab,
-    Tabs,
-    Tooltip,
-    Typography
-} from "@firecms/ui";
-import { Formex, FormexController, getIn, setIn, useCreateFormex } from "@firecms/formex";
-import { useAnalyticsController } from "../hooks/useAnalyticsController";
-import { FormEntry, FormLayout, LabelWithIconAndTooltip, PropertyFieldBinding } from "../form";
-import { ValidationError } from "yup";
-import { getEntityFromCache, removeEntityFromCache, saveEntityToCache } from "../util/entity_cache";
-import { CustomIdField } from "../form/components/CustomIdField";
-import { ErrorFocus } from "../form/components/ErrorFocus";
-import { CustomFieldValidator, getYupEntitySchema } from "../form/validation";
-import { EntityForm, FormLayoutInner } from "./EntityForm";
+import { CircularProgress, cls, defaultBorderMixin, Tab, Tabs, Typography } from "@firecms/ui";
+import { getEntityFromCache } from "../util/entity_cache";
+import { EntityForm, FormLayoutInner } from "../form";
+import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
 
 const MAIN_TAB_VALUE = "main_##Q$SC^#S6";
 
@@ -112,7 +44,6 @@ export interface EntityEditViewProps<M extends Record<string, any>> {
     parentCollectionIds: string[];
     onValuesModified?: (modified: boolean) => void;
     onSaved?: (params: OnUpdateParams) => void;
-    onClose?: () => void;
     onTabChange?: (props: OnTabChangeParams<M>) => void;
     layout?: "side_panel" | "full_screen";
     barActions?: React.ReactNode;
@@ -188,21 +119,20 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
     />;
 }
 
-
 function SecondaryForm<M extends object>({
                                              collection,
                                              className,
                                              customView,
                                              entity,
                                              formContext,
-                                             forceActionsAtTheBottom
+                                             forceActionsAtTheBottom,
                                          }: {
     className?: string,
     customView: EntityCustomView,
     formContext: FormContext<M>,
     collection: EntityCollection<M>,
     forceActionsAtTheBottom?: boolean,
-    entity: Entity<M> | undefined
+    entity: Entity<M> | undefined,
 }) {
 
     if (!customView.Builder) {
@@ -213,7 +143,8 @@ function SecondaryForm<M extends object>({
     return <FormLayoutInner
         className={className}
         forceActionsAtTheBottom={forceActionsAtTheBottom}
-        formContext={formContext}>
+        formContext={formContext}
+        EntityFormActionsComponent={EntityEditViewFormActions}>
         <ErrorBoundary>
             {formContext && <customView.Builder
                 collection={collection}
@@ -229,12 +160,10 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                                                                        path,
                                                                        entityId,
                                                                        selectedTab: selectedTabProp,
-                                                                       copy,
                                                                        collection,
                                                                        parentCollectionIds,
                                                                        onValuesModified,
                                                                        onSaved,
-                                                                       onClose,
                                                                        onTabChange,
                                                                        entity,
                                                                        cachedDirtyValues,
@@ -406,7 +335,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             ...params,
             selectedTab: MAIN_TAB_VALUE === selectedTab ? undefined : selectedTab,
         }) : undefined}
-        onClose={onClose}
         entity={entity}
         cachedDirtyValues={cachedDirtyValues}
         openEntityMode={layout}
@@ -415,6 +343,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         initialStatus={status}
         onStatusChange={setStatus}
         className={!mainViewVisible ? "hidden" : ""}
+        EntityFormActionsComponent={EntityEditViewFormActions}
         onEntityChange={setUsedEntity}
     />;
 

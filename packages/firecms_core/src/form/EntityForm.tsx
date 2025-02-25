@@ -2,29 +2,23 @@ import React, { useCallback, useDeferredValue, useEffect, useMemo, useRef, useSt
 import {
     CMSAnalyticsEvent,
     Entity,
-    EntityAction,
     EntityCollection,
     EntityStatus,
     EntityValues,
-    FireCMSContext,
     FormContext,
     PluginFormActionProps,
     PropertyFieldBindingProps,
-    ResolvedEntityCollection,
-    SideEntityController
+    ResolvedEntityCollection
 } from "../types";
 import equal from "react-fast-compare";
 
-import { copyEntityAction, deleteEntityAction, ErrorBoundary, getFormFieldKeys } from "../components";
+import { ErrorBoundary, getFormFieldKeys } from "../components";
 import {
-    canCreateEntity,
-    canDeleteEntity,
     getDefaultValuesFor,
     getEntityTitlePropertyKey,
     getValueInPath,
     isHidden,
     isReadOnly,
-    mergeEntityActions,
     resolveCollection,
     useDebouncedCallback
 } from "../util";
@@ -34,26 +28,11 @@ import {
     useAuthController,
     useCustomizationController,
     useDataSource,
-    useFireCMSContext,
+    useFireCMSContext, useSideDialogsController,
     useSideEntityController,
     useSnackbarController
 } from "../hooks";
-import {
-    Alert,
-    Button,
-    CheckIcon,
-    Chip,
-    cls,
-    defaultBorderMixin,
-    DialogActions,
-    EditIcon,
-    IconButton,
-    LoadingButton,
-    NotesIcon,
-    paperMixin,
-    Tooltip,
-    Typography
-} from "@firecms/ui";
+import { Alert, CheckIcon, Chip, cls, EditIcon, NotesIcon, paperMixin, Tooltip, Typography } from "@firecms/ui";
 import { Formex, FormexController, getIn, setIn, useCreateFormex } from "@firecms/formex";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { FormEntry, FormLayout, LabelWithIconAndTooltip, PropertyFieldBinding } from "../form";
@@ -62,6 +41,8 @@ import { removeEntityFromCache, saveEntityToCache } from "../util/entity_cache";
 import { CustomIdField } from "../form/components/CustomIdField";
 import { ErrorFocus } from "../form/components/ErrorFocus";
 import { CustomFieldValidator, getYupEntitySchema } from "../form/validation";
+import { EntityFormActions, EntityFormActionsProps } from "./EntityFormActions";
+import { useSideDialogContext } from "../core";
 
 export type OnUpdateParams = {
     entity: Entity<any>,
@@ -81,16 +62,16 @@ type EntityFormProps<M extends Record<string, any>> = {
     onIdChange?: (id: string) => void;
     onValuesModified?: (modified: boolean) => void;
     onSaved?: (params: OnUpdateParams) => void;
-    onClose?: () => void;
     cachedDirtyValues?: Partial<M>; // dirty cached entity in memory
     onFormContextReady?: (formContext: FormContext) => void;
     forceActionsAtTheBottom?: boolean;
-    initialStatus: EntityStatus;
     className?: string;
+    initialStatus: EntityStatus;
     onStatusChange?: (status: EntityStatus) => void;
     onEntityChange?: (entity: Entity<M>) => void;
     formex?: FormexController<M>;
     openEntityMode?: "side_panel" | "full_screen";
+    EntityFormActionsComponent?: React.FC<EntityFormActionsProps>;
 };
 
 export function EntityForm<M extends Record<string, any>>({
@@ -100,7 +81,6 @@ export function EntityForm<M extends Record<string, any>>({
                                                               onValuesModified,
                                                               onIdChange,
                                                               onSaved,
-                                                              onClose,
                                                               entity,
                                                               cachedDirtyValues,
                                                               onFormContextReady,
@@ -110,7 +90,8 @@ export function EntityForm<M extends Record<string, any>>({
                                                               onStatusChange,
                                                               onEntityChange,
                                                               openEntityMode = "full_screen",
-                                                              formex: formexProp
+                                                              formex: formexProp,
+                                                              EntityFormActionsComponent = EntityFormActions
                                                           }: EntityFormProps<M>) {
 
     if (collection.customId && collection.formAutoSave) {
@@ -133,17 +114,13 @@ export function EntityForm<M extends Record<string, any>>({
                 collection,
                 path,
                 values: valuesToBeSaved,
-                closeAfterSave: false
             });
     }, false, 2000);
 
-    const authController = useAuthController();
     const dataSource = useDataSource(collection);
-    const sideEntityController = useSideEntityController();
     const snackbarController = useSnackbarController();
     const customizationController = useCustomizationController();
     const context = useFireCMSContext();
-    const closeAfterSaveRef = useRef(false);
     const analyticsController = useAnalyticsController();
 
     const [underlyingChanges, setUnderlyingChanges] = useState<Partial<EntityValues<M>>>({});
@@ -262,7 +239,7 @@ export function EntityForm<M extends Record<string, any>>({
         }
     }
 
-    const onSaveSuccess = (updatedEntity: Entity<M>, closeAfterSave: boolean) => {
+    const onSaveSuccess = (updatedEntity: Entity<M>) => {
 
         clearDirtyCache();
         onValuesModified?.(false);
@@ -285,10 +262,6 @@ export function EntityForm<M extends Record<string, any>>({
                 collection
             });
         }
-
-        if (closeAfterSave) {
-            onClose?.();
-        }
     };
 
     const onSaveFailure = useCallback((e: Error) => {
@@ -304,7 +277,6 @@ export function EntityForm<M extends Record<string, any>>({
     const saveEntity = ({
                             values,
                             previousValues,
-                            closeAfterSave,
                             entityId,
                             collection,
                             path
@@ -314,7 +286,6 @@ export function EntityForm<M extends Record<string, any>>({
         entityId: string | undefined,
         values: M,
         previousValues?: M,
-        closeAfterSave: boolean,
     }) => {
         setSaving(true);
         return saveEntityWithCallbacks({
@@ -326,7 +297,7 @@ export function EntityForm<M extends Record<string, any>>({
             status,
             dataSource,
             context,
-            onSaveSuccess: (updatedEntity: Entity<M>) => onSaveSuccess(updatedEntity, closeAfterSave),
+            onSaveSuccess: (updatedEntity: Entity<M>) => onSaveSuccess(updatedEntity),
             onSaveFailure,
             onPreSaveHookError,
             onSaveSuccessHookError
@@ -339,7 +310,6 @@ export function EntityForm<M extends Record<string, any>>({
         entityId: string | undefined,
         values: EntityValues<M>,
         previousValues?: EntityValues<M>,
-        closeAfterSave: boolean,
         autoSave: boolean
     };
 
@@ -349,7 +319,6 @@ export function EntityForm<M extends Record<string, any>>({
                                            entityId,
                                            values,
                                            previousValues,
-                                           closeAfterSave,
                                            autoSave
                                        }: EntityFormSaveParams<M>): Promise<void> => {
         if (!status)
@@ -363,7 +332,6 @@ export function EntityForm<M extends Record<string, any>>({
                 entityId,
                 values,
                 previousValues,
-                closeAfterSave
             });
         }
     };
@@ -377,9 +345,8 @@ export function EntityForm<M extends Record<string, any>>({
             entityId,
             values,
             previousValues: entity?.values,
-            closeAfterSave: closeAfterSaveRef.current,
             autoSave: autoSave ?? false
-        }).then(_ => {
+        }).then((res) => {
             const eventName: CMSAnalyticsEvent = status === "new"
                 ? "new_entity_saved"
                 : (status === "copy" ? "entity_copied" : (status === "existing" ? "entity_edited" : "unmapped_event"));
@@ -387,8 +354,6 @@ export function EntityForm<M extends Record<string, any>>({
         }).catch(e => {
             console.error(e);
             setSavingError(e);
-        }).finally(() => {
-            closeAfterSaveRef.current = false;
         });
     };
 
@@ -404,10 +369,7 @@ export function EntityForm<M extends Record<string, any>>({
         entity,
         savingError,
         status,
-        openEntityMode,
-        setPendingClose: (value: boolean) => {
-            closeAfterSaveRef.current = value;
-        }
+        openEntityMode
     };
 
     useEffect(() => {
@@ -645,6 +607,7 @@ export function EntityForm<M extends Record<string, any>>({
             id={`form_${path}`}
             pluginActions={pluginActions}
             forceActionsAtTheBottom={forceActionsAtTheBottom}
+            EntityFormActionsComponent={EntityFormActionsComponent}
             formContext={formContext}>
             {formView}
         </FormLayoutInner>
@@ -691,25 +654,23 @@ export function yupToFormErrors(yupError: ValidationError): Record<string, any> 
     return errors;
 }
 
-export function FormLayoutInner<M extends object>({
-                                                      id,
-                                                      formContext,
-                                                      children,
-                                                      className,
-                                                      forceActionsAtTheBottom,
-                                                      pluginActions
-                                                  }: {
+export function FormLayoutInner({
+                                    id,
+                                    formContext,
+                                    children,
+                                    className,
+                                    forceActionsAtTheBottom,
+                                    pluginActions,
+                                    EntityFormActionsComponent
+                                }: {
     id?: string,
     formContext: FormContext,
     children: React.ReactNode,
     className?: string,
     forceActionsAtTheBottom?: boolean,
     pluginActions?: React.ReactNode[],
+    EntityFormActionsComponent: React.FC<EntityFormActionsProps>;
 }) {
-
-    const context = useFireCMSContext();
-    const sideEntityController = useSideEntityController();
-    const authController = useAuthController();
 
     const formex = formContext.formex;
     const collection = formContext.collection;
@@ -718,67 +679,24 @@ export function FormLayoutInner<M extends object>({
     const savingError = formContext.savingError;
     const status = formContext.status;
     const openEntityMode = formContext.openEntityMode;
-    const setPendingClose = formContext.setPendingClose;
     const disabled = formex.isSubmitting || (!formex.dirty && status === "existing");
 
     if (!collection || !path) {
         throw Error("INTERNAL: Collection and path must be defined in form context");
     }
 
-    const getActionsForEntity = useCallback(({
-                                                 entity,
-                                                 customEntityActions
-                                             }: {
-        entity?: Entity<M>,
-        customEntityActions?: EntityAction[]
-    }): EntityAction[] => {
-
-        const createEnabled = canCreateEntity(collection, authController, path, null);
-        const deleteEnabled = entity ? canDeleteEntity(collection, authController, path, entity) : false;
-        const actions: EntityAction[] = [];
-        if (createEnabled)
-            actions.push(copyEntityAction);
-        if (deleteEnabled)
-            actions.push(deleteEntityAction);
-        if (customEntityActions)
-            return mergeEntityActions(actions, customEntityActions);
-        return actions;
-    }, [authController, collection, path]);
-
-    const entityActions = getActionsForEntity({
-        entity,
-        customEntityActions: collection.entityActions
-    });
-    const formActions = entityActions.filter(a => a.includeInForm === undefined || a.includeInForm);
-
-    const dialogActions = forceActionsAtTheBottom
-        ? buildBottomActions({
-            savingError,
-            entity,
-            formActions,
-            collection,
-            context,
-            sideEntityController,
-            isSubmitting: formex.isSubmitting,
-            disabled,
-            status,
-            setPendingClose,
-            pluginActions,
-            openEntityMode
-        })
-        : buildSideActions({
-            savingError,
-            entity,
-            formActions,
-            collection,
-            context,
-            sideEntityController,
-            isSubmitting: formex.isSubmitting,
-            disabled,
-            status,
-            pluginActions,
-            openEntityMode
-        });
+    const dialogActions = <EntityFormActionsComponent
+        collection={collection}
+        path={path}
+        entity={entity}
+        layout={forceActionsAtTheBottom ? "bottom" : "side"}
+        savingError={savingError}
+        formex={formex}
+        disabled={disabled}
+        status={status}
+        pluginActions={pluginActions ?? []}
+        openEntityMode={openEntityMode}
+    />;
 
     return (
         <Formex value={formContext.formex}>
@@ -818,130 +736,6 @@ export function FormLayoutInner<M extends object>({
 
         </Formex>
     );
-}
-
-type ActionsViewProps<M extends object> = {
-    savingError: Error | undefined,
-    entity: Entity<M> | undefined,
-    formActions: EntityAction[],
-    collection: ResolvedEntityCollection,
-    context: FireCMSContext,
-    sideEntityController: SideEntityController,
-    isSubmitting: boolean,
-    disabled: boolean,
-    status: "new" | "existing" | "copy",
-    setPendingClose?: (value: boolean) => void,
-    pluginActions?: React.ReactNode[],
-    openEntityMode: "side_panel" | "full_screen";
-};
-
-function buildBottomActions<M extends object>({
-                                                  savingError,
-                                                  entity,
-                                                  formActions,
-                                                  collection,
-                                                  context,
-                                                  sideEntityController,
-                                                  isSubmitting,
-                                                  disabled,
-                                                  status,
-                                                  setPendingClose,
-                                                  pluginActions,
-                                                  openEntityMode
-                                              }: ActionsViewProps<M>) {
-
-    const canClose = openEntityMode === "side_panel";
-    return <DialogActions position={"absolute"}>
-        {savingError &&
-            <div className="text-right">
-                <Typography color={"error"}>{savingError.message}</Typography>
-            </div>
-        }
-        {entity && formActions.length > 0 && <div className="flex-grow flex overflow-auto no-scrollbar">
-            {formActions.map(action => (
-                <IconButton
-                    key={action.name}
-                    color="primary"
-                    onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-                        event.stopPropagation();
-                        if (entity)
-                            action.onClick({
-                                entity,
-                                fullPath: collection.path,
-                                collection: collection,
-                                context,
-                                sideEntityController,
-                                openEntityMode: openEntityMode
-                            });
-                    }}>
-                    {action.icon}
-                </IconButton>
-            ))}
-        </div>}
-        {pluginActions}
-        <Button variant="text" disabled={disabled || isSubmitting} type="reset">
-            {status === "existing" ? "Discard" : "Clear"}
-        </Button>
-        <Button variant={canClose ? "text" : "filled"} color="primary" type="submit"
-                disabled={disabled || isSubmitting}
-                onClick={() => {
-                    setPendingClose?.(false);
-                }}>
-            {status === "existing" && "Save"}
-            {status === "copy" && "Create copy"}
-            {status === "new" && "Create"}
-        </Button>
-        {canClose && <LoadingButton variant="filled"
-                                    color="primary"
-                                    type="submit"
-                                    loading={isSubmitting}
-                                    disabled={disabled}
-                                    onClick={() => {
-                                        setPendingClose?.(true);
-                                    }}>
-            {status === "existing" && "Save and close"}
-            {status === "copy" && "Create copy and close"}
-            {status === "new" && "Create and close"}
-        </LoadingButton>}
-    </DialogActions>;
-}
-
-function buildSideActions<M extends object>({
-                                                savingError,
-                                                entity,
-                                                formActions,
-                                                collection,
-                                                context,
-                                                sideEntityController,
-                                                isSubmitting,
-                                                disabled,
-                                                status,
-                                                setPendingClose,
-                                                pluginActions
-                                            }: ActionsViewProps<M>) {
-
-    return <div
-        className={cls("overflow-auto h-full flex flex-col gap-2 w-80 2xl:w-96 px-4 py-16 sticky top-0 border-l", defaultBorderMixin)}>
-        <LoadingButton fullWidth={true} variant="filled" color="primary" type="submit" size={"large"}
-                       disabled={disabled || isSubmitting} onClick={() => {
-            setPendingClose?.(false);
-        }}>
-            {status === "existing" && "Save"}
-            {status === "copy" && "Create copy"}
-            {status === "new" && "Create"}
-        </LoadingButton>
-        <Button fullWidth={true} variant="text" disabled={disabled || isSubmitting} type="reset">
-            {status === "existing" ? "Discard" : "Clear"}
-        </Button>
-
-        {pluginActions}
-
-        {savingError &&
-            <div className="text-right">
-                <Typography color={"error"}>{savingError.message}</Typography>
-            </div>
-        }
-    </div>;
 }
 
 function useOnAutoSave(autoSave: undefined | boolean, formex: FormexController<any>, lastSavedValues: any, save: (values: EntityValues<any>) => Promise<void>) {

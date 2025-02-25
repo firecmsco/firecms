@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useSideDialogsController } from "../hooks";
 import { SideDialogPanelProps } from "../types";
 import { Sheet } from "@firecms/ui";
@@ -6,15 +6,17 @@ import { useNavigationUnsavedChangesDialog } from "../internal/useUnsavedChanges
 import { ErrorBoundary } from "../components";
 import { UnsavedChangesDialog } from "../components/UnsavedChangesDialog";
 
-export type SideDialogContextProps = {
+export type SideDialogController = {
     blocked: boolean,
     setBlocked: (blocked: boolean) => void,
     setBlockedNavigationMessage: (message?: React.ReactNode) => void,
     width?: string,
-    close: (force?: boolean) => void
+    close: (force?: boolean) => void;
+    pendingClose: boolean,
+    setPendingClose: (pendingClose: boolean) => void
 }
 
-const SideDialogContext = React.createContext<SideDialogContextProps>({
+const SideDialogContext = React.createContext<SideDialogController>({
     width: "",
     blocked: false,
     setBlocked: (blocked: boolean) => {
@@ -22,6 +24,10 @@ const SideDialogContext = React.createContext<SideDialogContextProps>({
     setBlockedNavigationMessage: (message?: React.ReactNode) => {
     },
     close: () => {
+    },
+    pendingClose: false,
+    setPendingClose: () => {
+
     }
 });
 
@@ -30,7 +36,7 @@ const SideDialogContext = React.createContext<SideDialogContextProps>({
  * in contrast with {@link useSideDialogsController} which handles the
  * state of all the dialogs.
  */
-export const useSideDialogContext = () => useContext<SideDialogContextProps>(SideDialogContext);
+export const useSideDialogContext = () => useContext<SideDialogController>(SideDialogContext);
 
 /**
  * This is the component in charge of rendering the side dialogs used
@@ -72,6 +78,8 @@ function SideDialogView({
     const [drawerCloseRequested, setDrawerCloseRequested] = useState<boolean>(false);
     const [blocked, setBlocked] = useState(false);
     const [blockedNavigationMessage, setBlockedNavigationMessage] = useState<React.ReactNode | undefined>();
+
+    const [pendingClose, setPendingClose] = useState(false);
 
     const widthRef = React.useRef<string | undefined>(panel?.width);
     const width = widthRef.current;
@@ -119,19 +127,15 @@ function SideDialogView({
                 setBlocked,
                 setBlockedNavigationMessage,
                 width,
-                close: onCloseRequest
+                close: onCloseRequest,
+                pendingClose,
+                setPendingClose
             }}>
 
             <Sheet
                 open={Boolean(panel)}
                 onOpenChange={(open) => !open && onCloseRequest()}
                 title={"Side dialog " + panel?.key}
-                // style={{
-                //     zIndex: offsetPosition * 20 + 20,
-                // }}
-                // overlayStyle={{
-                //     zIndex: offsetPosition * 20 + 10,
-                // }}
             >
                 {panel &&
                     <div
