@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { FirebaseApp } from "@firebase/app";
-import { Route } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 
 import {
     AppBar,
@@ -11,7 +11,6 @@ import {
     ErrorView,
     FireCMS,
     FireCMSPlugin,
-    FireCMSRouter,
     ModeController,
     ModeControllerProvider,
     NavigationController,
@@ -52,13 +51,7 @@ import {
 import { FireCMSCloudAppProps } from "./FireCMSCloudAppProps";
 import { ApiError, FireCMSAppConfig, FireCMSBackend, FireCMSCloudUser, FireCMSCloudUserWithRoles } from "./types";
 import { RESERVED_GROUPS, resolveCollectionConfigPermissions } from "./utils";
-import {
-    CloudErrorView,
-    FireCMSCloudDrawer,
-    FireCMSCloudLoginView,
-    ProjectSettings,
-    SubscriptionPlanWidget
-} from "./components";
+import { CloudErrorView, FireCMSCloudDrawer, FireCMSCloudLoginView, ProjectSettings } from "./components";
 import { FireCMSCloudHomePage } from "./components/FireCMSCloudHomePage";
 import {
     FirebaseAuthController,
@@ -156,9 +149,9 @@ export function FireCMSCloudApp({
         />
     }
 
-    return <FireCMSRouter basePath={basePath}>
+    return <BrowserRouter basename={basePath}>
         {component}
-    </FireCMSRouter>;
+    </BrowserRouter>;
 
 }
 

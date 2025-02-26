@@ -22,7 +22,7 @@ export default defineConfig(() => ({
         minify: false,
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
-            name: "FireCMS",
+            name: "FireCMS Cloud",
             fileName: (format) => `index.${format}.js`
         },
         rollupOptions: {
