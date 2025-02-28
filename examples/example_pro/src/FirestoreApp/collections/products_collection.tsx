@@ -1,7 +1,7 @@
 import { AdditionalFieldDelegate, AsyncPreviewComponent, buildCollection, EntityCallbacks } from "@firecms/core";
 
 import PriceTextPreview from "../custom_field_preview/PriceTextPreview";
-import { CustomFiltersActions, SampleCollectionActions } from "../collection_actions/SampleCollectionActions";
+import { SampleCollectionActions } from "../collection_actions/SampleCollectionActions";
 import { Locale, Product } from "../types";
 import { categories, currencies, locales } from "./enums";
 import CustomColorTextField from "../custom_field/CustomColorTextField";

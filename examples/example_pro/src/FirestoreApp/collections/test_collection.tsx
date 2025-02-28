@@ -546,11 +546,11 @@ export const testCollection = buildCollection<any>({
             //         required: true
             //     }
             // },
-            // test_custom: {
-            //     dataType: "string",
-            //     name: "Test custom",
-            //     fieldConfig: "test_custom_field"
-            // },
+            test_custom: {
+                dataType: "string",
+                name: "Test custom",
+                fieldConfig: "test_custom_field"
+            },
             // map: {
             //     dataType: "map",
             //     properties: {
