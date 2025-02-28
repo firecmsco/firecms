@@ -323,6 +323,13 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * This prop has only effect if you are using the collection editor.
      */
     editable?: boolean;
+
+    /**
+     * If set to true, the default values of the properties will be applied
+     * to the entity every time the entity is updated (not only when created).
+     * Defaults to false.
+     */
+    alwaysApplyDefaultValues?: boolean;
 }
 
 /**

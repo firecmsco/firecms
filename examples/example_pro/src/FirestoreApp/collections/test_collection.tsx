@@ -75,6 +75,7 @@ export const testCollection = buildCollection<any>({
         path: "test_entity",
         customId: true,
         name: "Test entities",
+        alwaysApplyDefaultValues: true,
         entityViews: [{
             key: "sec",
             name: "Secondary form",
@@ -122,6 +123,7 @@ export const testCollection = buildCollection<any>({
                 dataType: "string",
                 name: "Multiline",
                 multiline: true,
+                defaultValue: "Hello\nWorld"
             },
             size: {
                 dataType: "map",

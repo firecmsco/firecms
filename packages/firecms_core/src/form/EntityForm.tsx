@@ -20,6 +20,7 @@ import {
     getValueInPath,
     isHidden,
     isReadOnly,
+    mergeDeep,
     resolveCollection,
     useDebouncedCallback
 } from "../util";
@@ -639,7 +640,11 @@ function getInitialEntityValues<M extends object>(
     });
     const properties = resolvedCollection.properties;
     if ((status === "existing" || status === "copy") && entity) {
-        return entity.values ?? getDefaultValuesFor(properties);
+        if (!collection.alwaysApplyDefaultValues) {
+            return entity.values ?? getDefaultValuesFor(properties);
+        } else {
+            return mergeDeep(getDefaultValuesFor(properties), entity.values ?? {});
+        }
     } else if (status === "new") {
         return getDefaultValuesFor(properties);
     } else {
