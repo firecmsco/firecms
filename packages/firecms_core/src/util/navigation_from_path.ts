@@ -27,6 +27,7 @@ export interface NavigationViewEntityCustomInternal<M extends Record<string, any
     type: "custom_view";
     path: string;
     fullPath: string;
+    entityId: string;
     view: EntityCustomView<M>;
 }
 
@@ -88,13 +89,11 @@ export function getNavigationEntriesFromPath(props: {
                         .filter(Boolean)
                         .find((entry) => entry!.key === newPath);
                     if (customView) {
-                        const path = currentFullPath && currentFullPath.length > 0
-                            ? (currentFullPath + "/" + customView.key)
-                            : customView.key;
                         result.push({
                             type: "custom_view",
-                            path,
-                            fullPath: fullPath + "/" + path,
+                            path: collectionPath,
+                            entityId: entityId,
+                            fullPath: fullPath + "/" + customView.key,
                             view: customView
                         });
                     } else if (collection.subcollections) {

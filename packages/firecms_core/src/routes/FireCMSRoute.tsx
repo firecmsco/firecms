@@ -107,6 +107,19 @@ export function FireCMSRoute() {
 
 }
 
+function getSelectedTabFromUrl(isNew: boolean, lastCustomView: NavigationViewCollectionInternal<any> | NavigationViewEntityCustomInternal<any> | undefined) {
+    if (isNew) {
+        return undefined;
+    } else if (lastCustomView) {
+        if (lastCustomView.type === "custom_view") {
+            return lastCustomView.view.key;
+        } else if (lastCustomView.type === "collection") {
+            return lastCustomView.id ?? lastCustomView.path;
+        }
+    }
+    return undefined;
+}
+
 function EntityFullScreenRoute({
                                    pathname,
                                    navigationEntries,
@@ -136,7 +149,7 @@ function EntityFullScreenRoute({
 
     const entityId = lastEntityEntry?.entityId;
 
-    const urlTab = isNew ? undefined : (lastCustomView && "id" in lastCustomView ? lastCustomView?.id : undefined) ?? lastCustomView?.path;
+    const urlTab = getSelectedTabFromUrl(isNew, lastCustomView);
     const [selectedTab, setSelectedTab] = useState<string | undefined>(urlTab);
 
     const parentCollectionIds = navigation.getParentCollectionIds(navigationPath);

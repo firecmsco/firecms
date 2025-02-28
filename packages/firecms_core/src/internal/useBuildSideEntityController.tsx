@@ -104,12 +104,10 @@ export const useBuildSideEntityController = (navigation: NavigationController,
                 const panelsFromUrl = buildSidePanelsFromUrl(entityOrCollectionPath, navigation.collections ?? [], newFlag);
                 for (let i = 0; i < panelsFromUrl.length; i++) {
                     const props = panelsFromUrl[i];
-                    // setTimeout(() => {
                     if (i === 0)
                         sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout));
                     else
                         sideDialogsController.open(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout))
-                    // }, 1);
                 }
             }
             initialised.current = true;
