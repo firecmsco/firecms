@@ -7,6 +7,7 @@ import {
     EntityValues,
     FormContext,
     PluginFormActionProps,
+    PropertyConfig,
     PropertyFieldBindingProps,
     ResolvedEntityCollection
 } from "../types";
@@ -195,7 +196,7 @@ export function EntityForm<M extends Record<string, any>>({
     };
 
     const formex: FormexController<M> = formexProp ?? useCreateFormex<M>({
-        initialValues: (initialDirtyValues ?? getInitialEntityValues(collection, path, status, entity)) as M,
+        initialValues: (initialDirtyValues ?? getInitialEntityValues(collection, path, status, entity, customizationController.propertyConfigs)) as M,
         initialDirty: Boolean(initialDirtyValues),
         onSubmit,
         onReset: () => {
@@ -627,12 +628,14 @@ function getInitialEntityValues<M extends object>(
     collection: EntityCollection,
     path: string,
     status: "new" | "existing" | "copy",
-    entity: Entity<M> | undefined
+    entity: Entity<M> | undefined,
+    propertyConfigs?: Record<string, PropertyConfig>
 ): Partial<EntityValues<M>> {
     const resolvedCollection = resolveCollection({
         collection,
         path,
         values: entity?.values,
+        propertyConfigs
     });
     const properties = resolvedCollection.properties;
     if ((status === "existing" || status === "copy") && entity) {
@@ -671,7 +674,7 @@ export function FormLayoutInner({
                                     forceActionsAtTheBottom,
                                     pluginActions,
                                     EntityFormActionsComponent,
-                                    showDefaultActions
+                                    showDefaultActions,
                                 }: {
     id?: string,
     formContext: FormContext,
@@ -691,6 +694,8 @@ export function FormLayoutInner({
     const status = formContext.status;
     const openEntityMode = formContext.openEntityMode;
     const disabled = formex.isSubmitting || (!formex.dirty && status === "existing");
+
+    const customizationController = useCustomizationController();
 
     if (!collection || !path) {
         throw Error("INTERNAL: Collection and path must be defined in form context");
@@ -715,7 +720,7 @@ export function FormLayoutInner({
             <form
                 onSubmit={formContext.formex.handleSubmit}
                 onReset={() => formex.resetForm({
-                    values: getInitialEntityValues(collection, path, status, entity),
+                    values: getInitialEntityValues(collection, path, status, entity, customizationController.propertyConfigs),
                 })}
                 noValidate
                 className={cls("flex-1 flex flex-row w-full overflow-y-auto justify-center", className)}>
