@@ -118,6 +118,11 @@ export const testCollection = buildCollection<any>({
                     }
                 };
             },
+            multiline: {
+                dataType: "string",
+                name: "Multiline",
+                multiline: true,
+            },
             size: {
                 dataType: "map",
                 minimalistView: true,
@@ -549,7 +554,7 @@ export const testCollection = buildCollection<any>({
             test_custom: {
                 dataType: "string",
                 name: "Test custom",
-                fieldConfig: "test_custom_field"
+                propertyConfig: "test_custom_field"
             },
             // map: {
             //     dataType: "map",

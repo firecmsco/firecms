@@ -128,12 +128,12 @@ export function App() {
         onFirebaseInit
     });
 
-    const appCheckResult = useAppCheck({
-        firebaseApp,
-        options: {
-            provider: new ReCaptchaEnterpriseProvider(import.meta.env.VITE_RECAPTCHA_SITE_KEY as string)
-        }
-    });
+    // const appCheckResult = useAppCheck({
+    //     firebaseApp,
+    //     options: {
+    //         provider: new ReCaptchaEnterpriseProvider(import.meta.env.VITE_RECAPTCHA_SITE_KEY as string)
+    //     }
+    // });
 
     const collectionConfigController = useFirestoreCollectionsConfigController({
         firebaseApp
