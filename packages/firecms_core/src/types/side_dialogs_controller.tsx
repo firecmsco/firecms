@@ -1,4 +1,5 @@
 import React from "react";
+import { EntityFormProps } from "../form";
 
 /**
  * Controller to open the side dialog
@@ -78,4 +79,5 @@ export interface SideDialogPanelProps {
      * Use this prop to store additional data in the panel
      */
     additional?: any;
+
 }

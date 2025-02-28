@@ -33,8 +33,6 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     const navigationController = useNavigationController();
     const sideDialogsController = useSideDialogContext();
 
-    console.log("sideDialogsController", sideDialogsController);
-
     const onClose = () => {
         if (props.onClose) {
             props.onClose();
@@ -153,6 +151,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                             collection
                         });
                     }}
+                    formProps={props.formProps}
                 />
             </ErrorBoundary>
 

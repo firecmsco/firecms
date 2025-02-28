@@ -15,6 +15,7 @@ export interface EntityFormActionsProps {
     status: "new" | "existing" | "copy";
     pluginActions: React.ReactNode[];
     openEntityMode: "side_panel" | "full_screen";
+    showDefaultActions?: boolean;
 }
 
 export function EntityFormActions({

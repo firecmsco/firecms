@@ -260,6 +260,7 @@ const propsToSidePanel = (props: EntitySidePanelProps,
     const resolvedPanelProps: EntitySidePanelProps<any> = {
         ...props,
         path: resolvedPath,
+        formProps: props.formProps
     };
 
     const entityViewWidth = getEntityViewWidth(props, smallLayout);

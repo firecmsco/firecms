@@ -18,7 +18,8 @@ export function EntityEditViewFormActions({
                                               disabled,
                                               status,
                                               pluginActions,
-                                              openEntityMode
+                                              openEntityMode,
+                                              showDefaultActions = true
                                           }: EntityFormActionsProps) {
 
     const authController = useAuthController();
@@ -40,7 +41,7 @@ export function EntityEditViewFormActions({
         return actions;
     }, [authController, collection, path]);
 
-    const formActions = entityActions.filter(a => a.includeInForm === undefined || a.includeInForm);
+    const formActions = showDefaultActions ? entityActions.filter(a => a.includeInForm === undefined || a.includeInForm) : [];
 
     return layout === "bottom"
         ? buildBottomActions({
@@ -55,7 +56,7 @@ export function EntityEditViewFormActions({
             status,
             sideDialogContext,
             pluginActions,
-            openEntityMode
+            openEntityMode,
         })
         : buildSideActions({
             savingError,
@@ -69,7 +70,7 @@ export function EntityEditViewFormActions({
             disabled,
             status,
             pluginActions,
-            openEntityMode
+            openEntityMode,
         });
 }
 
@@ -100,7 +101,7 @@ function buildBottomActions<M extends object>({
                                                   status,
                                                   sideDialogContext,
                                                   pluginActions,
-                                                  openEntityMode
+                                                  openEntityMode,
                                               }: ActionsViewProps<M>) {
 
     const canClose = openEntityMode === "side_panel";

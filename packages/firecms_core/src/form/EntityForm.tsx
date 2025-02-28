@@ -25,11 +25,9 @@ import {
 
 import {
     saveEntityWithCallbacks,
-    useAuthController,
     useCustomizationController,
     useDataSource,
-    useFireCMSContext, useSideDialogsController,
-    useSideEntityController,
+    useFireCMSContext,
     useSnackbarController
 } from "../hooks";
 import { Alert, CheckIcon, Chip, cls, EditIcon, NotesIcon, paperMixin, Tooltip, Typography } from "@firecms/ui";
@@ -42,7 +40,6 @@ import { CustomIdField } from "../form/components/CustomIdField";
 import { ErrorFocus } from "../form/components/ErrorFocus";
 import { CustomFieldValidator, getYupEntitySchema } from "../form/validation";
 import { EntityFormActions, EntityFormActionsProps } from "./EntityFormActions";
-import { useSideDialogContext } from "../core";
 
 export type OnUpdateParams = {
     entity: Entity<any>,
@@ -53,7 +50,7 @@ export type OnUpdateParams = {
     collection: EntityCollection<any>
 };
 
-type EntityFormProps<M extends Record<string, any>> = {
+export type EntityFormProps<M extends Record<string, any>> = {
     path: string;
     collection: EntityCollection<M>;
     entityId?: string;
@@ -62,7 +59,7 @@ type EntityFormProps<M extends Record<string, any>> = {
     onIdChange?: (id: string) => void;
     onValuesModified?: (modified: boolean) => void;
     onSaved?: (params: OnUpdateParams) => void;
-    cachedDirtyValues?: Partial<M>; // dirty cached entity in memory
+    initialDirtyValues?: Partial<M>; // dirty cached entity in memory
     onFormContextReady?: (formContext: FormContext) => void;
     forceActionsAtTheBottom?: boolean;
     className?: string;
@@ -71,6 +68,16 @@ type EntityFormProps<M extends Record<string, any>> = {
     onEntityChange?: (entity: Entity<M>) => void;
     formex?: FormexController<M>;
     openEntityMode?: "side_panel" | "full_screen";
+    /**
+     * Include the copy and delete actions in the form
+     */
+    showDefaultActions?: boolean;
+
+    /**
+     * Display the entity path in the form
+     */
+    showEntityPath?: boolean;
+
     EntityFormActionsComponent?: React.FC<EntityFormActionsProps>;
 };
 
@@ -82,7 +89,7 @@ export function EntityForm<M extends Record<string, any>>({
                                                               onIdChange,
                                                               onSaved,
                                                               entity,
-                                                              cachedDirtyValues,
+                                                              initialDirtyValues,
                                                               onFormContextReady,
                                                               forceActionsAtTheBottom,
                                                               initialStatus,
@@ -91,7 +98,9 @@ export function EntityForm<M extends Record<string, any>>({
                                                               onEntityChange,
                                                               openEntityMode = "full_screen",
                                                               formex: formexProp,
-                                                              EntityFormActionsComponent = EntityFormActions
+                                                              EntityFormActionsComponent = EntityFormActions,
+                                                              showDefaultActions = true,
+                                                              showEntityPath = true
                                                           }: EntityFormProps<M>) {
 
     if (collection.customId && collection.formAutoSave) {
@@ -186,8 +195,8 @@ export function EntityForm<M extends Record<string, any>>({
     };
 
     const formex: FormexController<M> = formexProp ?? useCreateFormex<M>({
-        initialValues: (cachedDirtyValues ?? getInitialEntityValues(collection, path, status, entity)) as M,
-        initialDirty: Boolean(cachedDirtyValues),
+        initialValues: (initialDirtyValues ?? getInitialEntityValues(collection, path, status, entity)) as M,
+        initialDirty: Boolean(initialDirtyValues),
         onSubmit,
         onReset: () => {
             clearDirtyCache();
@@ -485,77 +494,76 @@ export function EntityForm<M extends Record<string, any>>({
     const formFieldKeys = getFormFieldKeys(resolvedCollection);
 
     const formFields = () => (
-            <FormLayout>
-                {formFieldKeys.map((key) => {
-                    const property = resolvedCollection.properties[key];
-                    if (property) {
-                        const underlyingValueHasChanged: boolean =
-                            !!underlyingChanges &&
-                            Object.keys(underlyingChanges).includes(key) &&
-                            formex.touched[key];
-                        const disabled = (!autoSave && formex.isSubmitting) || isReadOnly(property) || Boolean(property.disabled);
-                        const hidden = isHidden(property);
-                        if (hidden) return null;
-                        const widthPercentage = property.widthPercentage ?? 100;
-                        const cmsFormFieldProps: PropertyFieldBindingProps<any, M> = {
-                            propertyKey: key,
-                            disabled,
-                            property,
-                            includeDescription: property.description || property.longDescription,
-                            underlyingValueHasChanged: underlyingValueHasChanged && !autoSave,
-                            context: formContext,
-                            partOfArray: false,
-                            minimalistView: false,
-                            autoFocus: false
-                        };
+        <FormLayout>
+            {formFieldKeys.map((key) => {
+                const property = resolvedCollection.properties[key];
+                if (property) {
+                    const underlyingValueHasChanged: boolean =
+                        !!underlyingChanges &&
+                        Object.keys(underlyingChanges).includes(key) &&
+                        formex.touched[key];
+                    const disabled = (!autoSave && formex.isSubmitting) || isReadOnly(property) || Boolean(property.disabled);
+                    const hidden = isHidden(property);
+                    if (hidden) return null;
+                    const widthPercentage = property.widthPercentage ?? 100;
+                    const cmsFormFieldProps: PropertyFieldBindingProps<any, M> = {
+                        propertyKey: key,
+                        disabled,
+                        property,
+                        includeDescription: property.description || property.longDescription,
+                        underlyingValueHasChanged: underlyingValueHasChanged && !autoSave,
+                        context: formContext,
+                        partOfArray: false,
+                        minimalistView: false,
+                        autoFocus: false
+                    };
 
-                        return (
-                            <FormEntry propertyKey={key}
-                                       widthPercentage={widthPercentage}
-                                       key={`field_${key}`}>
-                                <PropertyFieldBinding {...cmsFormFieldProps} />
-                            </FormEntry>
-                        );
+                    return (
+                        <FormEntry propertyKey={key}
+                                   widthPercentage={widthPercentage}
+                                   key={`field_${key}`}>
+                            <PropertyFieldBinding {...cmsFormFieldProps} />
+                        </FormEntry>
+                    );
+                }
+
+                const additionalField = resolvedCollection.additionalFields?.find(f => f.key === key);
+                if (additionalField && entity) {
+                    const Builder = additionalField.Builder;
+                    if (!Builder && !additionalField.value) {
+                        throw new Error("When using additional fields you need to provide a Builder or a value");
                     }
+                    const child = Builder
+                        ? <Builder entity={entity} context={context}/>
+                        : <div className={"w-full"}>
+                            {additionalField.value?.({
+                                entity,
+                                context
+                            })?.toString()}
+                        </div>;
 
-                    const additionalField = resolvedCollection.additionalFields?.find(f => f.key === key);
-                    if (additionalField && entity) {
-                        const Builder = additionalField.Builder;
-                        if (!Builder && !additionalField.value) {
-                            throw new Error("When using additional fields you need to provide a Builder or a value");
-                        }
-                        const child = Builder
-                            ? <Builder entity={entity} context={context}/>
-                            : <div className={"w-full"}>
-                                {additionalField.value?.({
-                                    entity,
-                                    context
-                                })?.toString()}
-                            </div>;
-
-                        return (
-                            <div key={`additional_${key}`} className={"w-full"}>
-                                <LabelWithIconAndTooltip
-                                    propertyKey={key}
-                                    icon={<NotesIcon size={"small"}/>}
-                                    title={additionalField.name}
-                                    className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
-                                <div
-                                    className={cls(paperMixin, "w-full min-h-14 p-4 md:p-6 overflow-x-scroll no-scrollbar")}>
-                                    <ErrorBoundary>
-                                        {child}
-                                    </ErrorBoundary>
-                                </div>
+                    return (
+                        <div key={`additional_${key}`} className={"w-full"}>
+                            <LabelWithIconAndTooltip
+                                propertyKey={key}
+                                icon={<NotesIcon size={"small"}/>}
+                                title={additionalField.name}
+                                className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
+                            <div
+                                className={cls(paperMixin, "w-full min-h-14 p-4 md:p-6 overflow-x-scroll no-scrollbar")}>
+                                <ErrorBoundary>
+                                    {child}
+                                </ErrorBoundary>
                             </div>
-                        );
-                    }
+                        </div>
+                    );
+                }
 
-                    console.warn(`Property ${key} not found in collection ${resolvedCollection.name} in properties or additional fields. Skipping.`);
-                    return null;
-                }).filter(Boolean)}
-            </FormLayout>
-        )
-    ;
+                console.warn(`Property ${key} not found in collection ${resolvedCollection.name} in properties or additional fields. Skipping.`);
+                return null;
+            }).filter(Boolean)}
+        </FormLayout>
+    );
 
     const formRef = useRef<HTMLDivElement>(null);
 
@@ -567,12 +575,12 @@ export function EntityForm<M extends Record<string, any>>({
                     variant={"h4"}>
                     {title ?? collection.singularName ?? collection.name}
                 </Typography>
-                <Alert color={"base"} className={"w-full"} size={"small"}>
+                {showEntityPath && <Alert color={"base"} className={"w-full"} size={"small"}>
                     <code
                         className={"text-xs select-all text-text-secondary dark:text-text-secondary-dark"}>
                         {entity?.path ?? path}/{entityId}
                     </code>
-                </Alert>
+                </Alert>}
             </div>
 
             {!collection.hideIdFromForm &&
@@ -608,7 +616,8 @@ export function EntityForm<M extends Record<string, any>>({
             pluginActions={pluginActions}
             forceActionsAtTheBottom={forceActionsAtTheBottom}
             EntityFormActionsComponent={EntityFormActionsComponent}
-            formContext={formContext}>
+            formContext={formContext}
+            showDefaultActions={showDefaultActions}>
             {formView}
         </FormLayoutInner>
     );
@@ -661,7 +670,8 @@ export function FormLayoutInner({
                                     className,
                                     forceActionsAtTheBottom,
                                     pluginActions,
-                                    EntityFormActionsComponent
+                                    EntityFormActionsComponent,
+                                    showDefaultActions
                                 }: {
     id?: string,
     formContext: FormContext,
@@ -670,6 +680,7 @@ export function FormLayoutInner({
     forceActionsAtTheBottom?: boolean,
     pluginActions?: React.ReactNode[],
     EntityFormActionsComponent: React.FC<EntityFormActionsProps>;
+    showDefaultActions?: boolean;
 }) {
 
     const formex = formContext.formex;
@@ -696,6 +707,7 @@ export function FormLayoutInner({
         status={status}
         pluginActions={pluginActions ?? []}
         openEntityMode={openEntityMode}
+        showDefaultActions={showDefaultActions}
     />;
 
     return (

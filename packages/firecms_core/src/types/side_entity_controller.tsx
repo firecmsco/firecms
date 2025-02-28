@@ -2,6 +2,7 @@ import { EntityCollection } from "./collections";
 import { ResolvedEntityCollection } from "./resolved_entities";
 import { Entity } from "./entities";
 import { EntityOverrides } from "./entity_overrides";
+import { EntityFormProps } from "../form";
 
 /**
  * Props used to open a side dialog
@@ -66,6 +67,10 @@ export interface EntitySidePanelProps<M extends Record<string, any> = any> {
      */
     closeOnSave?: boolean;
 
+    /**
+     * Override some form properties
+     */
+    formProps?: Partial<EntityFormProps<M>>;
 }
 
 /**

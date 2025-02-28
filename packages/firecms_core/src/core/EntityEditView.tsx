@@ -13,7 +13,7 @@ import {
 } from "../hooks";
 import { CircularProgress, cls, defaultBorderMixin, Tab, Tabs, Typography } from "@firecms/ui";
 import { getEntityFromCache } from "../util/entity_cache";
-import { EntityForm, FormLayoutInner } from "../form";
+import { EntityForm, EntityFormProps, FormLayoutInner } from "../form";
 import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
 
 const MAIN_TAB_VALUE = "main_##Q$SC^#S6";
@@ -47,6 +47,7 @@ export interface EntityEditViewProps<M extends Record<string, any>> {
     onTabChange?: (props: OnTabChangeParams<M>) => void;
     layout?: "side_panel" | "full_screen";
     barActions?: React.ReactNode;
+    formProps?: Partial<EntityFormProps<M>>
 }
 
 /**
@@ -172,6 +173,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                                                                        barActions,
                                                                        status,
                                                                        setStatus,
+                                                                       formProps,
                                                                    }: EntityEditViewProps<M> & {
     entity?: Entity<M>,
     cachedDirtyValues?: Partial<M>, // dirty cached entity in memory
@@ -331,20 +333,34 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         path={path}
         entityId={entityId ?? usedEntity?.id}
         onValuesModified={onValuesModified}
-        onSaved={onSaved ? (params) => onSaved({
-            ...params,
-            selectedTab: MAIN_TAB_VALUE === selectedTab ? undefined : selectedTab,
-        }) : undefined}
         entity={entity}
-        cachedDirtyValues={cachedDirtyValues}
+        initialDirtyValues={cachedDirtyValues}
         openEntityMode={layout}
-        onFormContextReady={setFormContext}
         forceActionsAtTheBottom={actionsAtTheBottom}
         initialStatus={status}
-        onStatusChange={setStatus}
-        className={!mainViewVisible ? "hidden" : ""}
+        className={cls(!mainViewVisible ? "hidden" : "", formProps?.className)}
         EntityFormActionsComponent={EntityEditViewFormActions}
-        onEntityChange={setUsedEntity}
+        {...formProps}
+        onEntityChange={(entity) => {
+            setUsedEntity(entity);
+            formProps?.onEntityChange?.(entity);
+        }}
+        onStatusChange={(status) => {
+            setStatus(status);
+            formProps?.onStatusChange?.(status);
+        }}
+        onFormContextReady={(formContext) => {
+            setFormContext(formContext);
+            formProps?.onFormContextReady?.(formContext);
+        }}
+        onSaved={(params) => {
+            const res = {
+                ...params,
+                selectedTab: MAIN_TAB_VALUE === selectedTab ? undefined : selectedTab,
+            };
+            onSaved?.(res);
+            formProps?.onSaved?.(res);
+        }}
     />;
 
     const subcollectionTabs = subcollections && subcollections.map((subcollection) =>
