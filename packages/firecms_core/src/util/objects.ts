@@ -18,7 +18,10 @@ export function mergeDeep<T extends Record<any, any>, U extends Record<any, any>
     if (targetIsObject && isObject(source)) {
         Object.keys(source).forEach(key => {
             const sourceElement = source[key];
-            if (isObject(sourceElement)) {
+            if (sourceElement instanceof Date) {
+                // Assign a new Date instance with the same time value
+                Object.assign(output, { [key]: new Date(sourceElement.getTime()) });
+            } else if (isObject(sourceElement)) {
                 if (!(key in target))
                     Object.assign(output, { [key]: sourceElement });
                 else

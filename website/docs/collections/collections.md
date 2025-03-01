@@ -359,3 +359,6 @@ initialSort: ["price", "asc"]
   or deleted. Useful for adding your own logic or blocking the operation's execution. [More information](./callbacks).
 - **`views`**: Array of builders for rendering additional panels in an entity view. Useful if you need to render custom
   views for your entities. [More information](./entity_views).
+- **`alwaysApplyDefaultValues`**: If set to true, the default values of the properties will be applied
+  to the entity every time the entity is updated (not only when created).
+  Defaults to false.

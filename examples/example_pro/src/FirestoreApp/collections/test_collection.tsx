@@ -11,6 +11,7 @@ import {
 import { ProductsSecondaryForm } from "../custom_entity_view/ProductsSecondaryForm";
 import { Icon, IconButton, Typography } from "@firecms/ui";
 import React from "react";
+import { PromptConfigSecondaryForm } from "../custom_entity_view/PromptConfigSecondaryForm";
 
 export const testCallbacks: EntityCallbacks = {
     onFetch({
@@ -76,12 +77,19 @@ export const testCollection = buildCollection<any>({
         customId: true,
         name: "Test entities",
         alwaysApplyDefaultValues: true,
-        entityViews: [{
-            key: "sec",
-            name: "Secondary form",
-            includeActions: true,
-            Builder: ProductsSecondaryForm
-        }],
+        entityViews: [
+            {
+                key: "sec",
+                name: "Secondary form",
+                includeActions: true,
+                Builder: ProductsSecondaryForm
+            }, {
+                key: "prompt",
+                name: "Prompt",
+                includeActions: true,
+                Builder: PromptConfigSecondaryForm
+            }
+        ],
         // additionalFields: [{
         //     key: "custom",
         //     name: "Custom",
@@ -150,8 +158,13 @@ export const testCollection = buildCollection<any>({
             date: {
                 name: "My date",
                 dataType: "date",
-                disabled: true
-                // autoValue: "on_create"
+                // disabled: true
+                autoValue: "on_create"
+            },
+            date_update: {
+                name: "My date update",
+                dataType: "date",
+                autoValue: "on_update"
             },
             //
             // test_date: {

@@ -643,7 +643,8 @@ function getInitialEntityValues<M extends object>(
         if (!collection.alwaysApplyDefaultValues) {
             return entity.values ?? getDefaultValuesFor(properties);
         } else {
-            return mergeDeep(getDefaultValuesFor(properties), entity.values ?? {});
+            const defaultValues = getDefaultValuesFor(properties);
+            return mergeDeep(defaultValues, entity.values ?? {});
         }
     } else if (status === "new") {
         return getDefaultValuesFor(properties);
