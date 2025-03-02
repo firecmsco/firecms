@@ -75,7 +75,7 @@ export function MapFieldBinding({
                             };
 
                             return (
-                                <div key={`map-${propertyKey}-${index}`}>
+                                <div key={`map-${propertyKey}-${index}`} className={"relative"}>
                                     <ErrorBoundary>
                                         <PropertyFieldBinding
                                             {...fieldBindingProps}/>

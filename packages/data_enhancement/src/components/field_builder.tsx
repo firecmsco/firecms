@@ -142,13 +142,17 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
 
     const allowInstructions = property.dataType === "string" && !property.enumValues;
 
-    const positionClass = property.widthPercentage !== undefined ? "top-4" : (property.dataType === "string" && property.markdown ? "top-3" : "-top-4");
+    const topClass = property.widthPercentage !== undefined
+        ? "top-4"
+        : (property.dataType === "string" && property.markdown ? "top-3" : "-top-4");
+    const rightClass = props.partOfArray ? "right-12" : "right-2";
     return <>
 
         {fieldBinding}
 
-        {showEnhanceIcon && <div className={cls("dark:bg-surface-700 bg-surface-100 rounded-full absolute right-2 ",
-            positionClass)}>
+        {showEnhanceIcon && <div className={cls("dark:bg-surface-700 bg-surface-100 rounded-full absolute",
+            rightClass,
+            topClass)}>
             <Tooltip
                 open={tooltipOpen}
                 onOpenChange={setTooltipOpen}

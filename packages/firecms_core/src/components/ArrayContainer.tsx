@@ -289,7 +289,7 @@ export function ArrayContainerItem({
         ref={provided.innerRef}
         {...provided.draggableProps}
         style={provided.draggableProps.style}
-        className={`${
+        className={`relative ${
             !isDragging ? "hover:bg-surface-accent-50 dark:hover:bg-surface-800 dark:hover:bg-opacity-20" : ""
         } rounded-md opacity-100`}
     >

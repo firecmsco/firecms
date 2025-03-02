@@ -81,6 +81,8 @@ export type EntityFormProps<M extends Record<string, any>> = {
     showEntityPath?: boolean;
 
     EntityFormActionsComponent?: React.FC<EntityFormActionsProps>;
+
+    children?: React.ReactNode;
 };
 
 export function EntityForm<M extends Record<string, any>>({
@@ -102,7 +104,8 @@ export function EntityForm<M extends Record<string, any>>({
                                                               formex: formexProp,
                                                               EntityFormActionsComponent = EntityFormActions,
                                                               showDefaultActions = true,
-                                                              showEntityPath = true
+                                                              showEntityPath = true,
+                                                              children
                                                           }: EntityFormProps<M>) {
 
     if (collection.customId && collection.formAutoSave) {
@@ -571,7 +574,7 @@ export function EntityForm<M extends Record<string, any>>({
 
     const formView = <ErrorBoundary>
         <>
-            <div className={"w-full py-2 flex flex-col items-start mt-4 lg:mt-8 mb-8"}>
+            <div className={"w-full py-2 flex flex-col items-start my-4 lg:my-6"}>
                 <Typography
                     className={"py-4 flex-grow line-clamp-1 " + (collection.hideIdFromForm ? "mb-2" : "mb-0")}
                     variant={"h4"}>
@@ -584,6 +587,8 @@ export function EntityForm<M extends Record<string, any>>({
                     </code>
                 </Alert>}
             </div>
+
+            {children}
 
             {!collection.hideIdFromForm &&
                 <CustomIdField customId={collection.customId}
