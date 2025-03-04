@@ -1,8 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Entity, EntityCollection, EntityCustomView, EntityStatus, FireCMSPlugin, FormContext, User } from "../types";
+import { Entity, EntityCollection, EntityStatus, FireCMSPlugin, FormContext, User } from "../types";
 
 import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary } from "../components";
-import { canEditEntity, removeInitialAndTrailingSlashes, resolveDefaultSelectedView, resolveEntityView } from "../util";
+import {
+    canEditEntity,
+    removeInitialAndTrailingSlashes,
+    resolveDefaultSelectedView,
+    resolvedSelectedEntityView
+} from "../util";
 
 import {
     useAuthController,
@@ -13,7 +18,7 @@ import {
 } from "../hooks";
 import { CircularProgress, cls, defaultBorderMixin, Tab, Tabs, Typography } from "@firecms/ui";
 import { getEntityFromCache } from "../util/entity_cache";
-import { EntityForm, EntityFormProps, FormLayoutInner } from "../form";
+import { EntityForm, EntityFormProps } from "../form";
 import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
 
 const MAIN_TAB_VALUE = "main_##Q$SC^#S6";
@@ -120,43 +125,6 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
     />;
 }
 
-function SecondaryForm<M extends object>({
-                                             collection,
-                                             className,
-                                             customView,
-                                             entity,
-                                             formContext,
-                                             forceActionsAtTheBottom,
-                                         }: {
-    className?: string,
-    customView: EntityCustomView,
-    formContext: FormContext<M>,
-    collection: EntityCollection<M>,
-    forceActionsAtTheBottom?: boolean,
-    entity: Entity<M> | undefined,
-}) {
-
-    if (!customView.Builder) {
-        console.error("customView.Builder is not defined");
-        return null;
-    }
-
-    return <FormLayoutInner
-        className={className}
-        forceActionsAtTheBottom={forceActionsAtTheBottom}
-        formContext={formContext}
-        EntityFormActionsComponent={EntityEditViewFormActions}>
-        <ErrorBoundary>
-            {formContext && <customView.Builder
-                collection={collection}
-                entity={entity}
-                modifiedValues={formContext.formex.values ?? entity?.values}
-                formContext={formContext}
-            />}
-        </ErrorBoundary>
-    </FormLayoutInner>;
-}
-
 export function EntityEditViewInner<M extends Record<string, any>>({
                                                                        path,
                                                                        entityId,
@@ -214,42 +182,21 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         }
     }, [selectedTabProp]);
 
-    const mainViewVisible = selectedTab === MAIN_TAB_VALUE;
-
     const subcollections = (collection.subcollections ?? []).filter(c => !c.hideFromNavigation);
     const subcollectionsCount = subcollections?.length ?? 0;
     const customViews = collection.entityViews;
     const customViewsCount = customViews?.length ?? 0;
     const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0;
 
-    const resolvedEntityViews = customViews ? customViews
-            .map(e => resolveEntityView(e, customizationController.entityViews))
-            .filter(Boolean) as EntityCustomView[]
-        : [];
+    const {
+        resolvedEntityViews,
+        selectedEntityView,
+        selectedSecondaryForm
+    } = resolvedSelectedEntityView(customViews, customizationController, selectedTab);
 
-    const selectedEntityView = resolvedEntityViews.find(e => e.key === selectedTab);
     const actionsAtTheBottom = !largeLayout || layout === "side_panel" || selectedEntityView?.includeActions === "bottom";
 
-    const secondaryForms: React.ReactNode[] | undefined = formContext && customViews && resolvedEntityViews
-        .filter(e => e.includeActions)
-        .map((customView) => {
-            if (!customView || !formContext)
-                return null;
-
-            if (!customView.Builder) {
-                console.error("customView.Builder is not defined");
-                return null;
-            }
-
-            return <SecondaryForm key={`custom_view_${customView.key}`}
-                                  className={selectedTab !== customView.key ? "hidden" : ""}
-                                  customView={customView}
-                                  formContext={formContext}
-                                  collection={collection}
-                                  forceActionsAtTheBottom={!largeLayout || layout === "side_panel" || customView.includeActions === "bottom"}
-                                  entity={usedEntity}/>;
-
-        }).filter(Boolean);
+    const mainViewVisible = selectedTab === MAIN_TAB_VALUE || Boolean(selectedSecondaryForm);
 
     const customViewsView: React.ReactNode[] | undefined = customViews && resolvedEntityViews
         .filter(e => !e.includeActions)
@@ -322,7 +269,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 path,
                 entityId,
                 selectedTab: value === MAIN_TAB_VALUE ? undefined : value,
-                collection
+                collection,
             });
         }
     };
@@ -361,6 +308,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             onSaved?.(res);
             formProps?.onSaved?.(res);
         }}
+        Builder={selectedSecondaryForm?.Builder}
     />;
 
     const subcollectionTabs = subcollections && subcollections.map((subcollection) =>
@@ -421,7 +369,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             </div>
             : entityView}
 
-        {secondaryForms}
+        {/*{secondaryForms}*/}
 
         {customViewsView}
 

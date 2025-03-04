@@ -1,6 +1,7 @@
 import {
     ArrayProperty,
     CMSType,
+    CustomizationController,
     EntityCollection,
     EntityCustomView,
     EntityValues,
@@ -218,11 +219,11 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
 }
 
 export function getArrayResolvedProperties<M>({
-                                           propertyKey,
-                                           propertyValue,
-                                           property,
-                                           ...props
-                                       }: {
+                                                  propertyKey,
+                                                  propertyValue,
+                                                  property,
+                                                  ...props
+                                              }: {
     propertyValue: any,
     propertyKey?: string,
     property: ArrayProperty<any> | ResolvedArrayProperty<any>,
@@ -429,4 +430,24 @@ export function resolveEntityView(entityView: string | EntityCustomView<any>, co
     } else {
         return entityView;
     }
+}
+
+export function resolvedSelectedEntityView<M extends Record<string, any>>(
+    customViews: (string | EntityCustomView<M>)[] | undefined,
+    customizationController: CustomizationController,
+    selectedTab?: string
+) {
+    const resolvedEntityViews = customViews ? customViews
+            .map(e => resolveEntityView(e, customizationController.entityViews))
+            .filter(Boolean) as EntityCustomView[]
+        : [];
+
+    const selectedEntityView = resolvedEntityViews.find(e => e.key === selectedTab);
+    const selectedSecondaryForm = customViews
+        && resolvedEntityViews.filter(e => e.includeActions).find(e => e.key === selectedTab);
+    return {
+        resolvedEntityViews,
+        selectedEntityView,
+        selectedSecondaryForm
+    };
 }

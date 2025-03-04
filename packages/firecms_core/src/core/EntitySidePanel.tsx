@@ -141,14 +141,14 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                                       path,
                                       entityId,
                                       selectedTab,
-                                      collection
+                                      collection,
                                   }) => {
                         sideEntityController.replace({
                             path,
                             entityId,
                             selectedTab,
                             updateUrl: true,
-                            collection
+                            collection,
                         });
                     }}
                     formProps={props.formProps}

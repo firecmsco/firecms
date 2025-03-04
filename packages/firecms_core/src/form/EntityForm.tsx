@@ -3,6 +3,7 @@ import {
     CMSAnalyticsEvent,
     Entity,
     EntityCollection,
+    EntityCustomViewParams,
     EntityStatus,
     EntityValues,
     FormContext,
@@ -82,6 +83,8 @@ export type EntityFormProps<M extends Record<string, any>> = {
 
     EntityFormActionsComponent?: React.FC<EntityFormActionsProps>;
 
+    Builder?: React.ComponentType<EntityCustomViewParams<M>>;
+
     children?: React.ReactNode;
 };
 
@@ -102,6 +105,7 @@ export function EntityForm<M extends Record<string, any>>({
                                                               onEntityChange,
                                                               openEntityMode = "full_screen",
                                                               formex: formexProp,
+                                                              Builder,
                                                               EntityFormActionsComponent = EntityFormActions,
                                                               showDefaultActions = true,
                                                               showEntityPath = true,
@@ -498,83 +502,94 @@ export function EntityForm<M extends Record<string, any>>({
 
     const formFieldKeys = getFormFieldKeys(resolvedCollection);
 
-    const formFields = () => (
-        <FormLayout>
-            {formFieldKeys.map((key) => {
-                const property = resolvedCollection.properties[key];
-                if (property) {
-                    const underlyingValueHasChanged: boolean =
-                        !!underlyingChanges &&
-                        Object.keys(underlyingChanges).includes(key) &&
-                        formex.touched[key];
-                    const disabled = (!autoSave && formex.isSubmitting) || isReadOnly(property) || Boolean(property.disabled);
-                    const hidden = isHidden(property);
-                    if (hidden) return null;
-                    const widthPercentage = property.widthPercentage ?? 100;
-                    const cmsFormFieldProps: PropertyFieldBindingProps<any, M> = {
-                        propertyKey: key,
-                        disabled,
-                        property,
-                        includeDescription: property.description || property.longDescription,
-                        underlyingValueHasChanged: underlyingValueHasChanged && !autoSave,
-                        context: formContext,
-                        partOfArray: false,
-                        minimalistView: false,
-                        autoFocus: false
-                    };
+    const formFields = () => {
 
-                    return (
-                        <FormEntry propertyKey={key}
-                                   widthPercentage={widthPercentage}
-                                   key={`field_${key}`}>
-                            <PropertyFieldBinding {...cmsFormFieldProps} />
-                        </FormEntry>
-                    );
-                }
+        if (Builder) {
+            return <Builder
+                collection={collection}
+                entity={entity}
+                modifiedValues={formex.values}
+                formContext={formContext}
+            />;
+        }
+        return (
+            <FormLayout>
+                {formFieldKeys.map((key) => {
+                    const property = resolvedCollection.properties[key];
+                    if (property) {
+                        const underlyingValueHasChanged: boolean =
+                            !!underlyingChanges &&
+                            Object.keys(underlyingChanges).includes(key) &&
+                            formex.touched[key];
+                        const disabled = (!autoSave && formex.isSubmitting) || isReadOnly(property) || Boolean(property.disabled);
+                        const hidden = isHidden(property);
+                        if (hidden) return null;
+                        const widthPercentage = property.widthPercentage ?? 100;
+                        const cmsFormFieldProps: PropertyFieldBindingProps<any, M> = {
+                            propertyKey: key,
+                            disabled,
+                            property,
+                            includeDescription: property.description || property.longDescription,
+                            underlyingValueHasChanged: underlyingValueHasChanged && !autoSave,
+                            context: formContext,
+                            partOfArray: false,
+                            minimalistView: false,
+                            autoFocus: false
+                        };
 
-                const additionalField = resolvedCollection.additionalFields?.find(f => f.key === key);
-                if (additionalField && entity) {
-                    const Builder = additionalField.Builder;
-                    if (!Builder && !additionalField.value) {
-                        throw new Error("When using additional fields you need to provide a Builder or a value");
+                        return (
+                            <FormEntry propertyKey={key}
+                                       widthPercentage={widthPercentage}
+                                       key={`field_${key}`}>
+                                <PropertyFieldBinding {...cmsFormFieldProps} />
+                            </FormEntry>
+                        );
                     }
-                    const child = Builder
-                        ? <Builder entity={entity} context={context}/>
-                        : <div className={"w-full"}>
-                            {additionalField.value?.({
-                                entity,
-                                context
-                            })?.toString()}
-                        </div>;
 
-                    return (
-                        <div key={`additional_${key}`} className={"w-full"}>
-                            <LabelWithIconAndTooltip
-                                propertyKey={key}
-                                icon={<NotesIcon size={"small"}/>}
-                                title={additionalField.name}
-                                className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
-                            <div
-                                className={cls(paperMixin, "w-full min-h-14 p-4 md:p-6 overflow-x-scroll no-scrollbar")}>
-                                <ErrorBoundary>
-                                    {child}
-                                </ErrorBoundary>
+                    const additionalField = resolvedCollection.additionalFields?.find(f => f.key === key);
+                    if (additionalField && entity) {
+                        const Builder = additionalField.Builder;
+                        if (!Builder && !additionalField.value) {
+                            throw new Error("When using additional fields you need to provide a Builder or a value");
+                        }
+                        const child = Builder
+                            ? <Builder entity={entity} context={context}/>
+                            : <div className={"w-full"}>
+                                {additionalField.value?.({
+                                    entity,
+                                    context
+                                })?.toString()}
+                            </div>;
+
+                        return (
+                            <div key={`additional_${key}`} className={"w-full"}>
+                                <LabelWithIconAndTooltip
+                                    propertyKey={key}
+                                    icon={<NotesIcon size={"small"}/>}
+                                    title={additionalField.name}
+                                    className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
+                                <div
+                                    className={cls(paperMixin, "w-full min-h-14 p-4 md:p-6 overflow-x-scroll no-scrollbar")}>
+                                    <ErrorBoundary>
+                                        {child}
+                                    </ErrorBoundary>
+                                </div>
                             </div>
-                        </div>
-                    );
-                }
+                        );
+                    }
 
-                console.warn(`Property ${key} not found in collection ${resolvedCollection.name} in properties or additional fields. Skipping.`);
-                return null;
-            }).filter(Boolean)}
-        </FormLayout>
-    );
+                    console.warn(`Property ${key} not found in collection ${resolvedCollection.name} in properties or additional fields. Skipping.`);
+                    return null;
+                }).filter(Boolean)}
+            </FormLayout>
+        );
+    };
 
     const formRef = useRef<HTMLDivElement>(null);
 
     const formView = <ErrorBoundary>
         <>
-            <div className={"w-full py-2 flex flex-col items-start my-4 lg:my-6"}>
+            {!Builder && <div className={"w-full py-2 flex flex-col items-start my-4 lg:my-6"}>
                 <Typography
                     className={"py-4 flex-grow line-clamp-1 " + (collection.hideIdFromForm ? "mb-2" : "mb-0")}
                     variant={"h4"}>
@@ -586,11 +601,11 @@ export function EntityForm<M extends Record<string, any>>({
                         {entity?.path ?? path}/{entityId}
                     </code>
                 </Alert>}
-            </div>
+            </div>}
 
             {children}
 
-            {!collection.hideIdFromForm &&
+            {!Builder && !collection.hideIdFromForm &&
                 <CustomIdField customId={collection.customId}
                                entityId={entityId}
                                status={status}
@@ -616,17 +631,64 @@ export function EntityForm<M extends Record<string, any>>({
             onIdChange(entityId);
     }, [entityId, onIdChange]);
 
+    const disabled = formex.isSubmitting || (!formex.dirty && status === "existing");
+
+    if (!resolvedCollection || !path) {
+        throw Error("INTERNAL: Collection and path must be defined in form context");
+    }
+
+    const dialogActions = <EntityFormActionsComponent
+        collection={resolvedCollection}
+        path={path}
+        entity={entity}
+        layout={forceActionsAtTheBottom ? "bottom" : "side"}
+        savingError={savingError}
+        formex={formex}
+        disabled={disabled}
+        status={status}
+        pluginActions={pluginActions ?? []}
+        openEntityMode={openEntityMode}
+        showDefaultActions={showDefaultActions}
+    />;
+
     return (
-        <FormLayoutInner
-            className={className}
-            id={`form_${path}`}
-            pluginActions={pluginActions}
-            forceActionsAtTheBottom={forceActionsAtTheBottom}
-            EntityFormActionsComponent={EntityFormActionsComponent}
-            formContext={formContext}
-            showDefaultActions={showDefaultActions}>
-            {formView}
-        </FormLayoutInner>
+        <Formex value={formContext.formex}>
+            <form
+                onSubmit={formContext.formex.handleSubmit}
+                onReset={() => formex.resetForm({
+                    values: getInitialEntityValues(collection, path, status, entity, customizationController.propertyConfigs) as M,
+                })}
+                noValidate
+                className={cls("flex-1 flex flex-row w-full overflow-y-auto justify-center", className)}>
+                <div
+                    id={`form_${path}`}
+                    className={cls("relative flex flex-row max-w-4xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-6xl w-full h-fit")}>
+
+                    <div className={cls("flex flex-col w-full pt-12 pb-16 px-4 sm:px-8 md:px-10")}>
+
+                        {formContext.formex.dirty
+                            ? <Tooltip title={"Unsaved changes"}
+                                       className={"self-end sticky top-4 z-10"}>
+                                <Chip size={"small"} colorScheme={"orangeDarker"}>
+                                    <EditIcon size={"smallest"}/>
+                                </Chip>
+                            </Tooltip>
+                            : <Tooltip title={"In sync with the database"}
+                                       className={"self-end sticky top-4 z-10"}>
+                                <Chip size={"small"}>
+                                    <CheckIcon size={"smallest"}/>
+                                </Chip>
+                            </Tooltip>}
+
+                        {formView}
+
+                    </div>
+
+                </div>
+                {dialogActions}
+            </form>
+
+        </Formex>
     );
 }
 
@@ -675,95 +737,6 @@ export function yupToFormErrors(yupError: ValidationError): Record<string, any> 
         }
     }
     return errors;
-}
-
-export function FormLayoutInner({
-                                    id,
-                                    formContext,
-                                    children,
-                                    className,
-                                    forceActionsAtTheBottom,
-                                    pluginActions,
-                                    EntityFormActionsComponent,
-                                    showDefaultActions,
-                                }: {
-    id?: string,
-    formContext: FormContext,
-    children: React.ReactNode,
-    className?: string,
-    forceActionsAtTheBottom?: boolean,
-    pluginActions?: React.ReactNode[],
-    EntityFormActionsComponent: React.FC<EntityFormActionsProps>;
-    showDefaultActions?: boolean;
-}) {
-
-    const formex = formContext.formex;
-    const collection = formContext.collection;
-    const path = formContext.path;
-    const entity = formContext.entity;
-    const savingError = formContext.savingError;
-    const status = formContext.status;
-    const openEntityMode = formContext.openEntityMode;
-    const disabled = formex.isSubmitting || (!formex.dirty && status === "existing");
-
-    const customizationController = useCustomizationController();
-
-    if (!collection || !path) {
-        throw Error("INTERNAL: Collection and path must be defined in form context");
-    }
-
-    const dialogActions = <EntityFormActionsComponent
-        collection={collection}
-        path={path}
-        entity={entity}
-        layout={forceActionsAtTheBottom ? "bottom" : "side"}
-        savingError={savingError}
-        formex={formex}
-        disabled={disabled}
-        status={status}
-        pluginActions={pluginActions ?? []}
-        openEntityMode={openEntityMode}
-        showDefaultActions={showDefaultActions}
-    />;
-
-    return (
-        <Formex value={formContext.formex}>
-            <form
-                onSubmit={formContext.formex.handleSubmit}
-                onReset={() => formex.resetForm({
-                    values: getInitialEntityValues(collection, path, status, entity, customizationController.propertyConfigs),
-                })}
-                noValidate
-                className={cls("flex-1 flex flex-row w-full overflow-y-auto justify-center", className)}>
-                <div
-                    id={id}
-                    className={cls("relative flex flex-row max-w-4xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-6xl w-full h-fit")}>
-
-                    <div className={cls("flex flex-col w-full pt-12 pb-16 px-4 sm:px-8 md:px-10")}>
-
-                        {formContext.formex.dirty
-                            ? <Tooltip title={"Unsaved changes"}
-                                       className={"self-end sticky top-4 z-10"}>
-                                <Chip size={"small"} colorScheme={"orangeDarker"}>
-                                    <EditIcon size={"smallest"}/>
-                                </Chip>
-                            </Tooltip>
-                            : <Tooltip title={"In sync with the database"}
-                                       className={"self-end sticky top-4 z-10"}>
-                                <Chip size={"small"}>
-                                    <CheckIcon size={"smallest"}/>
-                                </Chip>
-                            </Tooltip>}
-                        {children}
-
-                    </div>
-
-                </div>
-                {dialogActions}
-            </form>
-
-        </Formex>
-    );
 }
 
 function useOnAutoSave(autoSave: undefined | boolean, formex: FormexController<any>, lastSavedValues: any, save: (values: EntityValues<any>) => Promise<void>) {

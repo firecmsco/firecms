@@ -10,8 +10,9 @@ export function useCreateFormex<T extends object>({
                                                       initialDirty,
                                                       validation,
                                                       validateOnChange = false,
-                                                      onSubmit,
                                                       validateOnInitialRender = false,
+                                                      onSubmit,
+                                                      onReset,
                                                       debugId
                                                   }: {
     initialValues: T,
@@ -21,6 +22,7 @@ export function useCreateFormex<T extends object>({
     validateOnInitialRender?: boolean,
     validation?: (values: T) => Record<string, string> | Promise<Record<string, string>> | undefined | void,
     onSubmit?: (values: T, controller: FormexController<T>) => void | Promise<void>,
+    onReset?: (controller: FormexController<T>) => void | Promise<void>;
     debugId?: string
 }): FormexController<T> {
 
@@ -140,6 +142,7 @@ export function useCreateFormex<T extends object>({
         setDirty(false);
         setSubmitCount(submitCountProp ?? 0);
         setVersion(version + 1);
+        onReset?.(controllerRef.current);
     }
 
     const controller: FormexController<T> = {

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 import {
+    CustomizationController,
     EntityCollection,
     EntitySidePanelProps,
     NavigationController,
@@ -10,17 +11,28 @@ import {
 } from "../types";
 import { getNavigationEntriesFromPath, NavigationViewInternal } from "../util/navigation_from_path";
 import { useLocation } from "react-router-dom";
-import { removeInitialAndTrailingSlashes, resolveCollection, resolveDefaultSelectedView } from "../util";
+import {
+    removeInitialAndTrailingSlashes,
+    resolveCollection,
+    resolveDefaultSelectedView,
+    resolvedSelectedEntityView
+} from "../util";
 import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "./common";
-import { useLargeLayout } from "../hooks";
+import { useCustomizationController, useLargeLayout } from "../hooks";
 import { EntitySidePanel } from "../core/EntitySidePanel";
 
 const NEW_URL_HASH = "new_side";
 const SIDE_URL_HASH = "side";
 
-export function getEntityViewWidth(props: EntitySidePanelProps<any>, small: boolean): string {
+export function getEntityViewWidth(props: EntitySidePanelProps<any>, small: boolean, customizationController: CustomizationController): string {
     if (small) return CONTAINER_FULL_WIDTH;
-    const mainViewSelected = !props.selectedTab;
+
+    const {
+        selectedSecondaryForm
+    } = resolvedSelectedEntityView(props.collection?.entityViews, customizationController, props.selectedTab);
+
+    const shouldUseSmallLayout = !props.selectedTab || Boolean(selectedSecondaryForm);
+
     let resolvedWidth: string | undefined;
     if (props.width) {
         resolvedWidth = typeof props.width === "number" ? `${props.width}px` : props.width;
@@ -28,7 +40,7 @@ export function getEntityViewWidth(props: EntitySidePanelProps<any>, small: bool
         resolvedWidth = typeof props.collection.sideDialogWidth === "number" ? `${props.collection.sideDialogWidth}px` : props.collection.sideDialogWidth;
     }
 
-    if (!mainViewSelected) {
+    if (!shouldUseSmallLayout) {
         return `calc(${ADDITIONAL_TAB_WIDTH} + ${resolvedWidth ?? FORM_CONTAINER_WIDTH})`
     } else {
         if (resolvedWidth) {
@@ -89,6 +101,7 @@ export const useBuildSideEntityController = (navigation: NavigationController,
 
     const location = useLocation();
     const initialised = useRef<boolean>(false);
+    const customizationController = useCustomizationController();
 
     const smallLayout = !useLargeLayout();
 
@@ -105,9 +118,9 @@ export const useBuildSideEntityController = (navigation: NavigationController,
                 for (let i = 0; i < panelsFromUrl.length; i++) {
                     const props = panelsFromUrl[i];
                     if (i === 0)
-                        sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout));
+                        sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController));
                     else
-                        sideDialogsController.open(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout))
+                        sideDialogsController.open(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController))
                 }
             }
             initialised.current = true;
@@ -127,7 +140,7 @@ export const useBuildSideEntityController = (navigation: NavigationController,
                     return;
                 }
                 const lastPanel = panelsFromUrl[panelsFromUrl.length - 1];
-                const panelProps = propsToSidePanel(lastPanel, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout);
+                const panelProps = propsToSidePanel(lastPanel, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController);
                 const lastCurrentPanel = currentPanelKeys.length > 0 ? currentPanelKeys[currentPanelKeys.length - 1] : undefined;
                 if (!lastCurrentPanel || lastCurrentPanel !== panelProps.key) {
                     sideDialogsController.replace(panelProps);
@@ -140,7 +153,7 @@ export const useBuildSideEntityController = (navigation: NavigationController,
     useEffect(() => {
         const updatedSidePanels = sideDialogsController.sidePanels.map(sidePanelProps => {
             if (sidePanelProps.additional) {
-                return propsToSidePanel(sidePanelProps.additional, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout);
+                return propsToSidePanel(sidePanelProps.additional, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController);
             }
             return sidePanelProps;
         });
@@ -172,7 +185,8 @@ export const useBuildSideEntityController = (navigation: NavigationController,
                 },
                 navigation.buildUrlCollectionPath,
                 navigation.resolveIdsFrom,
-                smallLayout
+                smallLayout,
+                customizationController
             ));
 
     }, [sideDialogsController, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout]);
@@ -183,7 +197,7 @@ export const useBuildSideEntityController = (navigation: NavigationController,
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
 
-        sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout));
+        sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController));
 
     }, [navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, sideDialogsController, smallLayout]);
 
@@ -242,11 +256,11 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
     return sidePanel ? [sidePanel] : [];
 }
 
-
 const propsToSidePanel = (props: EntitySidePanelProps,
                           buildUrlCollectionPath: (path: string) => string,
                           resolveIdsFrom: (pathWithAliases: string) => string,
-                          smallLayout: boolean): SideDialogPanelProps => {
+                          smallLayout: boolean,
+                          customizationController: CustomizationController): SideDialogPanelProps => {
 
     const collectionPath = removeInitialAndTrailingSlashes(props.path);
 
@@ -261,7 +275,7 @@ const propsToSidePanel = (props: EntitySidePanelProps,
         formProps: props.formProps
     };
 
-    const entityViewWidth = getEntityViewWidth(props, smallLayout);
+    const entityViewWidth = getEntityViewWidth(props, smallLayout, customizationController);
 
     return {
         key: `${props.path}/${props.entityId}`,
