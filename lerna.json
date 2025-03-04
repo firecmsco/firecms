@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "version": "3.0.0-canary.205",
+  "version": "3.0.0-canary.206",
   "packages": [
     "packages/firecms",
     "packages/firecms_cloud",
