@@ -1,6 +1,6 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { getIn, setIn } from "./utils";
-import equal from "react-fast-compare"
+import equal from "react-fast-compare";
 
 import { FormexController, FormexResetProps } from "./types";
 
@@ -13,22 +13,27 @@ export function useCreateFormex<T extends object>({
                                                       validateOnInitialRender = false,
                                                       onSubmit,
                                                       onReset,
-                                                      debugId
+                                                      debugId,
                                                   }: {
-    initialValues: T,
-    initialErrors?: Record<string, string>,
-    initialDirty?: boolean,
-    validateOnChange?: boolean,
-    validateOnInitialRender?: boolean,
-    validation?: (values: T) => Record<string, string> | Promise<Record<string, string>> | undefined | void,
-    onSubmit?: (values: T, controller: FormexController<T>) => void | Promise<void>,
+    initialValues: T;
+    initialErrors?: Record<string, string>;
+    initialDirty?: boolean;
+    validateOnChange?: boolean;
+    validateOnInitialRender?: boolean;
+    validation?: (
+        values: T
+    ) =>
+        | Record<string, string>
+        | Promise<Record<string, string>>
+        | undefined
+        | void;
+    onSubmit?: (values: T, controller: FormexController<T>) => void | Promise<void>;
     onReset?: (controller: FormexController<T>) => void | Promise<void>;
-    debugId?: string
+    debugId?: string;
 }): FormexController<T> {
-
-    const initialValuesRef = React.useRef<T>(initialValues);
-    const valuesRef = React.useRef<T>(initialValues);
-    const debugIdRef = React.useRef<string | undefined>(debugId);
+    const initialValuesRef = useRef<T>(initialValues);
+    const valuesRef = useRef<T>(initialValues);
+    const debugIdRef = useRef<string | undefined>(debugId);
 
     const [values, setValuesInner] = useState<T>(initialValues);
     const [touchedState, setTouchedState] = useState<Record<string, boolean>>({});
@@ -39,138 +44,215 @@ export function useCreateFormex<T extends object>({
     const [isValidating, setIsValidating] = useState(false);
     const [version, setVersion] = useState(0);
 
+    // Replace state for history with refs
+    const historyRef = useRef<T[]>([initialValues]);
+    const historyIndexRef = useRef<number>(0);
+
     useEffect(() => {
         if (validateOnInitialRender) {
             validate();
         }
     }, []);
 
-    const setValues = (newValues: T) => {
+    const setValues = useCallback((newValues: T) => {
         valuesRef.current = newValues;
         setValuesInner(newValues);
-        setDirty(equal(initialValuesRef.current, newValues));
-    }
+        setDirty(!equal(initialValuesRef.current, newValues));
+        // Update history using refs
+        const newHistory = historyRef.current.slice(0, historyIndexRef.current + 1);
+        newHistory.push(newValues);
+        historyRef.current = newHistory;
+        historyIndexRef.current = newHistory.length - 1;
+    }, []);
 
-    const validate = async () => {
+    const validate = useCallback(async () => {
         setIsValidating(true);
         const validationErrors = await validation?.(valuesRef.current);
         setErrors(validationErrors ?? {});
         setIsValidating(false);
         return validationErrors;
-    }
+    }, [validation]);
 
-    const setFieldValue = (key: string, value: any, shouldValidate?: boolean) => {
-        const newValues = setIn(valuesRef.current, key, value);
-        valuesRef.current = newValues;
-        setValuesInner(newValues);
-        if (!equal(getIn(initialValuesRef.current, key), value)) {
-            setDirty(true);
-        }
-        if (shouldValidate) {
-            validate();
-        }
-    }
+    const setFieldValue = useCallback(
+        (key: string, value: any, shouldValidate?: boolean) => {
+            const newValues = setIn(valuesRef.current, key, value);
+            valuesRef.current = newValues;
+            setValuesInner(newValues);
+            if (!equal(getIn(initialValuesRef.current, key), value)) {
+                setDirty(true);
+            }
+            if (shouldValidate) {
+                validate();
+            }
+            // Update history using refs
+            const newHistory = historyRef.current.slice(0, historyIndexRef.current + 1);
+            newHistory.push(newValues);
+            historyRef.current = newHistory;
+            historyIndexRef.current = newHistory.length - 1;
+        },
+        [validate]
+    );
 
-    const setFieldError = (key: string, error: string | undefined) => {
-        const newErrors = { ...errors };
-        if (error) {
-            newErrors[key] = error;
-        } else {
-            delete newErrors[key];
-        }
-        setErrors(newErrors);
-    }
+    const setFieldError = useCallback((key: string, error: string | undefined) => {
+        setErrors((prevErrors) => {
+            const newErrors = { ...prevErrors };
+            if (error) {
+                newErrors[key] = error;
+            } else {
+                delete newErrors[key];
+            }
+            return newErrors;
+        });
+    }, []);
 
-    const setFieldTouched = (key: string, touched: boolean, shouldValidate?: boolean | undefined) => {
-        const newTouched = { ...touchedState };
-        newTouched[key] = touched;
-        setTouchedState(newTouched);
-        if (shouldValidate) {
-            validate();
-        }
-    }
+    const setFieldTouched = useCallback(
+        (key: string, touched: boolean, shouldValidate?: boolean) => {
+            setTouchedState((prev) => ({
+                ...prev,
+                [key]: touched,
+            }));
+            if (shouldValidate) {
+                validate();
+            }
+        },
+        [validate]
+    );
 
-    const handleChange = (event: React.SyntheticEvent) => {
+    const handleChange = useCallback(
+        (event: React.SyntheticEvent) => {
+            const target = event.target as HTMLInputElement;
+            let value;
+            if (target.type === "checkbox") {
+                value = target.checked;
+            } else if (target.type === "number") {
+                value = target.valueAsNumber;
+            } else {
+                value = target.value;
+            }
+            const name = target.name;
+            setFieldValue(name, value, validateOnChange);
+            setFieldTouched(name, true);
+        },
+        [setFieldValue, setFieldTouched, validateOnChange]
+    );
+
+    const handleBlur = useCallback((event: React.FocusEvent) => {
         const target = event.target as HTMLInputElement;
-        let value;
-        if (target.type === "checkbox") {
-            value = target.checked;
-        } else if (target.type === "number") {
-            value = target.valueAsNumber;
-        } else {
-            value = target.value;
-        }
-        const name = target.name;
-        setFieldValue(name, value, validateOnChange);
-        setFieldTouched(name, true);
-    }
-
-    const handleBlur = (event: React.FocusEvent) => {
-        const target = event.target as HTMLInputElement;
         const name = target.name;
         setFieldTouched(name, true);
-    }
+    }, [setFieldTouched]);
 
-    const submit = async (e?: FormEvent<HTMLFormElement>) => {
-        e?.preventDefault();
-        e?.stopPropagation();
-        setIsSubmitting(true);
-        setSubmitCount(submitCount + 1);
-        const validationErrors = await validation?.(valuesRef.current);
-        if (validationErrors && Object.keys(validationErrors).length > 0) {
-            setErrors(validationErrors);
-        } else {
-            setErrors({});
-            await onSubmit?.(valuesRef.current, controllerRef.current);
-        }
-        setIsSubmitting(false);
-        setVersion(version + 1);
-    }
+    const submit = useCallback(
+        async (e?: React.FormEvent<HTMLFormElement>) => {
+            e?.preventDefault();
+            e?.stopPropagation();
+            setIsSubmitting(true);
+            setSubmitCount((prev) => prev + 1);
+            const validationErrors = await validation?.(valuesRef.current);
+            if (validationErrors && Object.keys(validationErrors).length > 0) {
+                setErrors(validationErrors);
+            } else {
+                setErrors({});
+                await onSubmit?.(valuesRef.current, controllerRef.current);
+            }
+            setIsSubmitting(false);
+            setVersion((prev) => prev + 1);
+        },
+        [onSubmit, validation]
+    );
 
-    const resetForm = (props?: FormexResetProps<T>) => {
-        const {
-            submitCount: submitCountProp,
-            values: valuesProp,
-            errors: errorsProp,
-            touched: touchedProp
-        } = props ?? {};
-        initialValuesRef.current = valuesProp ?? initialValues;
-        valuesRef.current = valuesProp ?? initialValues;
-        setValuesInner(valuesProp ?? initialValues);
+    const resetForm = useCallback((props?: FormexResetProps<T>) => {
+        const { submitCount: submitCountProp, values: valuesProp, errors: errorsProp, touched: touchedProp } = props ?? {};
+        valuesRef.current = valuesProp ?? initialValuesRef.current;
+        setValuesInner(valuesProp ?? initialValuesRef.current);
         setErrors(errorsProp ?? {});
         setTouchedState(touchedProp ?? {});
         setDirty(false);
         setSubmitCount(submitCountProp ?? 0);
-        setVersion(version + 1);
+        setVersion((prev) => prev + 1);
         onReset?.(controllerRef.current);
-    }
+        // Reset history with refs
+        historyRef.current = [valuesProp ?? initialValuesRef.current];
+        historyIndexRef.current = 0;
+    }, [onReset]);
 
-    const controller: FormexController<T> = {
-        values,
-        initialValues: initialValuesRef.current,
-        handleChange,
-        isSubmitting,
-        setSubmitting: setIsSubmitting,
-        setValues,
-        setFieldValue,
-        errors,
-        setFieldError,
-        touched: touchedState,
-        setFieldTouched,
-        dirty,
-        setDirty,
-        handleSubmit: submit,
-        submitCount,
-        setSubmitCount,
-        handleBlur,
-        validate,
-        isValidating,
-        resetForm,
-        version,
-        debugId: debugIdRef.current
-    };
+    const undo = useCallback(() => {
+        if (historyIndexRef.current > 0) {
+            const newIndex = historyIndexRef.current - 1;
+            const newValues = historyRef.current[newIndex];
+            setValuesInner(newValues);
+            valuesRef.current = newValues;
+            historyIndexRef.current = newIndex;
+        }
+    }, []);
 
-    const controllerRef = React.useRef<FormexController<T>>(controller);
-    controllerRef.current = controller;
-    return controller
+    const redo = useCallback(() => {
+        if (historyIndexRef.current < historyRef.current.length - 1) {
+            const newIndex = historyIndexRef.current + 1;
+            const newValues = historyRef.current[newIndex];
+            setValuesInner(newValues);
+            valuesRef.current = newValues;
+            historyIndexRef.current = newIndex;
+        }
+    }, []);
+
+    const controllerRef = useRef<FormexController<T>>({} as FormexController<T>);
+
+    const controller = useMemo<FormexController<T>>(
+        () => ({
+            values,
+            initialValues: initialValuesRef.current,
+            handleChange,
+            isSubmitting,
+            setSubmitting: setIsSubmitting,
+            setValues,
+            setFieldValue,
+            errors,
+            setFieldError,
+            touched: touchedState,
+            setFieldTouched,
+            dirty,
+            setDirty,
+            handleSubmit: submit,
+            submitCount,
+            setSubmitCount,
+            handleBlur,
+            validate,
+            isValidating,
+            resetForm,
+            version,
+            debugId: debugIdRef.current,
+            undo,
+            redo,
+            canUndo: historyIndexRef.current > 0,
+            canRedo: historyIndexRef.current < historyRef.current.length - 1,
+        }),
+        [
+            values,
+            errors,
+            touchedState,
+            dirty,
+            isSubmitting,
+            submitCount,
+            isValidating,
+            version,
+            handleChange,
+            handleBlur,
+            setValues,
+            setFieldValue,
+            setFieldTouched,
+            setFieldError,
+            validate,
+            submit,
+            resetForm,
+            undo,
+            redo,
+        ]
+    );
+
+    useEffect(() => {
+        controllerRef.current = controller;
+    }, [controller]);
+
+    return controller;
 }

@@ -28,6 +28,12 @@ export type FormexController<T extends object> = {
     version: number;
 
     debugId?: string;
+
+    undo: () => void;
+    redo: () => void;
+
+    canUndo: boolean;
+    canRedo: boolean;
 }
 
 export type FormexResetProps<T extends object> = {

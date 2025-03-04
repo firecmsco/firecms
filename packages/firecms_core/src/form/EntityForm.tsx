@@ -131,7 +131,7 @@ export function EntityForm<M extends Record<string, any>>({
                 entityId: entityIdProp,
                 collection,
                 path,
-                values: valuesToBeSaved,
+                values: valuesToBeSaved
             });
     }, false, 2000);
 
@@ -221,6 +221,29 @@ export function EntityForm<M extends Record<string, any>>({
                 });
         }
     });
+
+
+    useEffect(() => {
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            const isUndo = (e.metaKey || e.ctrlKey) && !e.shiftKey && e.key.toLowerCase() === "z";
+            const isRedo =
+                ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === "z") ||
+                ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key.toLowerCase() === "y");
+
+            if (isUndo && formex.canUndo) {
+                e.preventDefault();
+                formex.undo();
+            } else if (isRedo && formex.canRedo) {
+                e.preventDefault();
+                formex.redo();
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+
+    }, [formex]);
 
     const resolvedCollection = useMemo(() => resolveCollection<M>({
         collection,
@@ -349,7 +372,7 @@ export function EntityForm<M extends Record<string, any>>({
                 path,
                 entityId,
                 values,
-                previousValues,
+                previousValues
             });
         }
     };
@@ -656,7 +679,7 @@ export function EntityForm<M extends Record<string, any>>({
             <form
                 onSubmit={formContext.formex.handleSubmit}
                 onReset={() => formex.resetForm({
-                    values: getInitialEntityValues(collection, path, status, entity, customizationController.propertyConfigs) as M,
+                    values: getInitialEntityValues(collection, path, status, entity, customizationController.propertyConfigs) as M
                 })}
                 noValidate
                 className={cls("flex-1 flex flex-row w-full overflow-y-auto justify-center", className)}>
