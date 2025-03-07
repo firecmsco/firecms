@@ -49,7 +49,6 @@ export default function HomeHeroNeatGradient() {
 
             gradientRef.current.backgroundAlpha = getAlphaFrom(scroll);
             gradientRef.current.resolution = getResolution(width);
-            console.log("resolution", getResolution(width));
         }
     }
 

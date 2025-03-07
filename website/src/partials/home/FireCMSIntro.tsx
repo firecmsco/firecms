@@ -5,6 +5,8 @@ import ReactLogo from "@site/static/img/reactjs-icon.svg";
 import FirebaseLogo from "@site/static/img/firebase.svg";
 // @ts-ignore
 import TailwindLogo from "@site/static/img/tailwind_logo.svg";
+// @ts-ignore
+import TypescriptLogo from "@site/static/img/typescript_logo.svg";
 import { defaultBorderMixin } from "../styles";
 import clsx from "clsx";
 import { Panel } from "../general/Panel";
@@ -53,6 +55,12 @@ function FireCMSIntro() {
                         style={{
                             width: 140,
                             height: 150,
+                            maxWidth: "30%"
+                        }}/>
+                    <TypescriptLogo
+                        style={{
+                            width: 130,
+                            height: 130,
                             maxWidth: "30%"
                         }}/>
                     {/*<FireCMSLogo/>*/}
