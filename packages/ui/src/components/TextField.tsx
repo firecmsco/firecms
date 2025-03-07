@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useRef, forwardRef, ForwardedRef } from "react";
+import React, { ForwardedRef, forwardRef, useEffect, useRef } from "react";
 
 import { TextareaAutosize } from "./TextareaAutosize";
 import {
@@ -33,7 +33,6 @@ export type TextFieldProps<T extends string | number> = {
     onChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     label?: React.ReactNode;
     multiline?: boolean;
-    rows?: number;
     disabled?: boolean;
     invisible?: boolean;
     error?: boolean;
@@ -46,6 +45,15 @@ export type TextFieldProps<T extends string | number> = {
     inputClassName?: string;
     inputStyle?: React.CSSProperties;
     inputRef?: React.ForwardedRef<any>;
+    /**
+     * Maximum number of rows to display.
+     */
+    maxRows?: number | string;
+    /**
+     * Minimum number of rows to display.
+     * @default 1
+     */
+    minRows?: number | string;
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">;
 
 export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | number>>(
@@ -57,7 +65,8 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
             type = "text",
             multiline = false,
             invisible,
-            rows,
+            maxRows,
+            minRows,
             disabled,
             error,
             endAdornment,
@@ -101,7 +110,8 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                 ref={inputRef}
                 placeholder={focused || hasValue || !label ? placeholder : undefined}
                 autoFocus={autoFocus}
-                rows={rows}
+                minRows={minRows}
+                maxRows={maxRows}
                 value={value ?? ""}
                 onChange={onChange}
                 style={inputStyle}
