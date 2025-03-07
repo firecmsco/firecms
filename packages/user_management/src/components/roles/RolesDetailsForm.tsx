@@ -33,7 +33,6 @@ export const RoleYupSchema = Yup.object().shape({
 
 function canRoleBeEdited(loggedUser: User) {
     const loggedUserIsAdmin = loggedUser.roles?.map(r => r.id).includes("admin");
-    console.log("loggedUserIsAdmin", loggedUser);
     if (!loggedUserIsAdmin) {
         throw new Error("Only admins can edit roles");
     }

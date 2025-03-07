@@ -202,7 +202,6 @@ function EntityFullScreenRoute({
             selectedTab={selectedTab ?? undefined}
             onValuesModified={(modified) => blocked.current = modified}
             onSaved={(params) => {
-                console.log("Entity saved", params);
                 const newSelectedTab = params.selectedTab;
                 const newEntityId = params.entityId;
                 if (newSelectedTab) {

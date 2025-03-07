@@ -212,7 +212,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             let shouldUpdateTopLevelNav = false;
             if (!areCollectionListsEqual(collectionsRef.current ?? [], resolvedCollections)) {
                 collectionsRef.current = resolvedCollections;
-                console.log("Collections have changed", resolvedCollections);
+                console.debug("Collections have changed", resolvedCollections);
                 shouldUpdateTopLevelNav = true;
             }
             if (collectionsRef.current === undefined) {

@@ -269,7 +269,6 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                 if (!res.ok) {
                     throw new Error(data?.error ?? "Error creating checkout session");
                 }
-                console.log("createStripeNewSubscriptionLink result", data);
                 return data.url as string;
             });
     }
@@ -290,7 +289,6 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                 if (!res.ok) {
                     throw new Error(data?.error ?? "Error creating checkout session");
                 }
-                console.log("createStripeNewSubscriptionLink result", data);
                 return data.url as string;
             });
     }
