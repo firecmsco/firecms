@@ -55,7 +55,7 @@ function ProFeaturesPanels() {
                         <p className={clsx("text-xl md:text-2xl py-4")}>
                             <b>FireCMS PRO</b> gives you full access to all the features and components of FireCMS, with
                             the freedom to style and customize as you like. Plus, it offers extra tools and elements to
-                            help you create superior back-office applications more efficiently. With FireCMS PRO, you
+                            help you create superior back-office applications/admin panels more efficiently. With FireCMS PRO, you
                             gain greater control and efficiency, enjoying a user experience tailored for professionals.
                             Take charge of your data with advanced tools, including an easy-to-use <strong
                             className={"gradient-text"}>spreadsheet view</strong> and <strong

@@ -57,7 +57,7 @@ export function ProDeveloperFeatures() {
 
                     <p className="text-xl ">
                         No need to learn a new framework or a new way of doing things. Just use the components and hooks
-                        you need. No magic, no hidden logic, no configuration.
+                        you need. No magic, no hidden logic, no configuration. Get an admin panel up and running in minutes.
                     </p>
 
                     <div className={"space-y-4 space-x-4"}>

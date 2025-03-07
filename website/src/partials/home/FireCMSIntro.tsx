@@ -66,7 +66,7 @@ function FireCMSIntro() {
                 </h2>
                 <p className="text-xl md:text-2xl">
                     <b>FireCMS</b> is a platform upon which thousands of companies build their <b>back-office
-                    applications</b>.
+                    applications</b> and <b>admin panels</b>.
                     Open-source, headless, extensible, and fully customizable.
                     <br/>
                 </p>
