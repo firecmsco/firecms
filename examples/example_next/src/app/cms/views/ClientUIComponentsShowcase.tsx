@@ -394,7 +394,7 @@ export default function ClientUIComponentsShowcase({
                            endAdornment={<span>@</span>}/>
                 <TextField value={textFieldValue} onChange={(event) => {
                     setTextFieldValue(event.target.value);
-                }} label="Multiline Text Field" placeholder="Enter text" multiline rows={4}/>
+                }} label="Multiline Text Field" placeholder="Enter text" multiline minRows={4}/>
             </Card>
 
             <Card className={cardClasses}>

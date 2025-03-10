@@ -47,7 +47,7 @@ export type CMSViewsBuilder = (params: {
 /**
  * @group Models
  */
-export type FireCMSProps<USER extends User, EC extends EntityCollection> = {
+export type FireCMSProps<USER extends User> = {
 
     /**
      * Use this function to return the components you want to render under

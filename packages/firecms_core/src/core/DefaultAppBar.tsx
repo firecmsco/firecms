@@ -22,12 +22,19 @@ import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
 
 export type DefaultAppBarProps<ADDITIONAL_PROPS = object> = {
 
-    title?: React.ReactNode;
     /**
-     * A component that gets rendered on the upper side of the main toolbar
+     * The content of the app bar, usually a title or logo. This includes a link to the home page.
+     */
+    title?: React.ReactNode;
+
+    /**
+     * A component that gets rendered on the upper side to the end of the main toolbar
      */
     endAdornment?: React.ReactNode;
 
+    /**
+     * A component that gets rendered on the upper side to the start of the main toolbar
+     */
     startAdornment?: React.ReactNode;
 
     dropDownActions?: React.ReactNode;
@@ -57,14 +64,18 @@ export const DefaultAppBar = function DefaultAppBar({
                                                         includeModeToggle = true,
                                                         className,
                                                         style,
-                                                        user: userProp
+                                                        user: userProp,
+                                                        logo: logoProp,
                                                     }: DefaultAppBarProps) {
 
     const {
         hasDrawer,
         drawerOpen,
-        logo
+        logo: appLogo
     } = useApp();
+
+    const logo = logoProp ?? appLogo;
+
     const navigation = useNavigationController();
 
     const breadcrumbs = useBreadcrumbsController();
@@ -134,7 +145,7 @@ export const DefaultAppBar = function DefaultAppBar({
                 </Link>
             </div>}
 
-            {breadcrumbs.breadcrumbs && <div className="mr-8 hidden lg:block">
+            {(breadcrumbs.breadcrumbs ?? []).length > 0 && <div className="mr-8 hidden lg:block">
                 <div className={"flex flex-row gap-2"}>
                     {breadcrumbs.breadcrumbs.map((breadcrumb, index) => {
                         return <React.Fragment key={breadcrumb.url + "_" + index}>
@@ -176,7 +187,8 @@ export const DefaultAppBar = function DefaultAppBar({
                     </IconButton>}>
                     <MenuItem onClick={() => setMode("dark")}><DarkModeIcon size={"smallest"}/> Dark</MenuItem>
                     <MenuItem onClick={() => setMode("light")}><LightModeIcon size={"smallest"}/> Light </MenuItem>
-                    <MenuItem onClick={() => setMode("system")}> <BrightnessMediumIcon size={"smallest"}/>System</MenuItem>
+                    <MenuItem onClick={() => setMode("system")}> <BrightnessMediumIcon
+                        size={"smallest"}/>System</MenuItem>
                 </Menu>}
 
             <Menu trigger={avatarComponent}>

@@ -23,6 +23,11 @@ export interface ScaffoldProps {
      */
     logo?: string;
 
+    /**
+     * If true, the main content will be padded in large layouts. Defaults to true.
+     */
+    padding?: boolean;
+
     className?: string;
 
     style?: React.CSSProperties;
@@ -47,7 +52,8 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
             autoOpenDrawer,
             logo,
             className,
-            style
+            style,
+            padding = true
         } = props;
 
         const drawerChildren = React.Children.toArray(children).filter((child: any) => child.type.componentType === "Drawer");
@@ -116,10 +122,14 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
 
                     <main
                         className="flex flex-col flex-grow overflow-auto">
+
                         {hasAppBar && <DrawerHeader/>}
+
                         <div
-                            className={cls(defaultBorderMixin, "flex-grow overflow-auto lg:m-0 lg:mx-4 lg:mb-4 lg:rounded-lg lg:border lg:border-solid m-0 mt-1", {
-                                "lg:mt-4": !hasAppBar
+                            className={cls(defaultBorderMixin, "flex-grow overflow-auto m-0 ", {
+                                "lg:mt-4": !hasAppBar,
+                                "mt-1 lg:m-0 lg:mx-4 lg:mb-4 lg:rounded-lg lg:border lg:border-solid": padding,
+                                "border-t": hasAppBar && !padding,
                             })}>
 
                             <ErrorBoundary>

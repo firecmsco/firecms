@@ -33,7 +33,7 @@ import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
 
  * @group Core
  */
-export function FireCMS<USER extends User, EC extends EntityCollection>(props: FireCMSProps<USER, EC>) {
+export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
 
     const {
         children,

@@ -294,7 +294,7 @@ export function CollectionDetailsForm({
                                         value={values.description ?? ""}
                                         onChange={handleChange}
                                         multiline
-                                        rows={2}
+                                        minRows={2}
                                         aria-describedby="description-helper-text"
                                         label="Description"
                                     />
