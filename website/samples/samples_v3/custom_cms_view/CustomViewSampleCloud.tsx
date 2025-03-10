@@ -12,7 +12,7 @@ const customViews: CMSView[] = [{
     view: <ExampleCMSView/>
 }];
 
-const productCollection = buildCollection({
+const productCollection = buildCollection<any>({
     name: "Product",
     id: "products",
     path: "products",
@@ -30,7 +30,7 @@ const appConfig: FireCMSAppConfig = {
     collections: ({ user }) => [
         productCollection
     ],
-    views: customViews
+    views: ({ user }) => customViews
 };
 
 export default function App() {

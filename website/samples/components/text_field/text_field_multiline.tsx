@@ -11,7 +11,7 @@ export default function TextFieldMultilineDemo() {
             label="Multiline Text Field"
             placeholder="Enter text"
             multiline
-            rows={4}
+            minRows={4}
         />
     );
 }
