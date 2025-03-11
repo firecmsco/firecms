@@ -16,11 +16,14 @@ export function EntityJsonPreview({ values }: { values: object }) {
               getLineProps,
               getTokenProps
           }) => (
-            <pre style={{ ...style, background: "inherit" }} className={"container mx-auto p-8 rounded text-sm"}>
+            <pre style={{
+                ...style,
+                background: "inherit"
+            }} className={"container mx-auto p-8 rounded text-sm"}>
     {tokens.map((line, i) => (
-        <div key={i} {...getLineProps({ line })} style={{ textWrap: "wrap" }}>
+        <div key={i} {...getLineProps({ line })} className={"text-wrap"}>
             {line.map((token, key) => (
-                <span key={key} {...getTokenProps({ token })} />
+                <span key={key} {...getTokenProps({ token })} className={"word-break"}/>
             ))}
         </div>
     ))}
