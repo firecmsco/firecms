@@ -9,7 +9,7 @@
         "logs": "firebase functions:log"
     },
     "engines": {
-        "node": "16"
+        "node": "20"
     },
     "main": "lib/src/index.js",
     "dependencies": {
@@ -23,14 +23,14 @@
         "fast-csv": "^4.3.6",
         "firebase-admin": "^11.11.1",
         "firebase-functions": "^4.8.1",
-        "firebase-tools": "^11.30.0",
+        "firebase-tools": "^13.33.0",
         "md5": "^2.3.0",
         "meilisearch": "^0.32.5",
         "node-fetch": "^2.6.1",
         "typesense": "^1.7.2"
     },
     "devDependencies": {
-        "typescript": "^5.7.3"
+        "typescript": "^5.8.2"
     },
     "private": true
 }
