@@ -7,8 +7,10 @@ import {
     useCustomizationController,
     useNavigationController
 } from "@firecms/core";
-import { SubscriptionPlanWidget } from "./subscriptions";
+import { Paywall, SubscriptionPlanWidget } from "./subscriptions";
 import { ADMIN_VIEWS_CONFIG } from "../utils";
+import { useProjectConfig } from "../hooks";
+import { CenteredView } from "@firecms/ui";
 
 /**
  * Default entry view for the CMS under the path "/"
@@ -21,6 +23,9 @@ export function FireCMSCloudHomePage() {
 
     const navigation = useNavigationController();
     const { plugins } = useCustomizationController();
+    const {
+        isTrialOver,
+    } = useProjectConfig();
 
     const pluginActions: React.ReactNode[] = [];
     if (plugins) {
@@ -29,6 +34,12 @@ export function FireCMSCloudHomePage() {
         )).filter(Boolean));
     }
     const showSubscriptionWidget = (navigation.collections ?? []).length > 0;
+
+    if (isTrialOver) {
+        return <CenteredView>
+            <Paywall trialOver={isTrialOver}/>
+        </CenteredView>;
+    }
     return <DefaultHomePage
         additionalActions={<> {pluginActions} </>}
         additionalChildrenStart={showSubscriptionWidget

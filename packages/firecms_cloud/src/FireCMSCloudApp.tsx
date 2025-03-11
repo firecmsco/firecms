@@ -23,8 +23,7 @@ import {
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     useBuildNavigationController,
-    User,
-    useSnackbarController
+    User
 } from "@firecms/core";
 import { buildCollectionInference, useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import {
@@ -508,8 +507,6 @@ function FireCMSAppAuthenticated({
         throw Error("You can only use FireCMSAppAuthenticated with an authenticated user");
     }
 
-    const snackbarController = useSnackbarController();
-
     const includeDataTalk = userManagement.isAdmin ?? false;
     const dataTalkPath = useDataTalkMode();
     const dataTalkMode = includeDataTalk && dataTalkPath;
@@ -579,11 +576,11 @@ function FireCMSAppAuthenticated({
         basePath,
         baseCollectionPath,
         authController,
-        collections: appConfig?.collections,
+        collections: projectConfig.isTrialOver ? [] : appConfig?.collections,
         views: appConfig?.views,
         userConfigPersistence,
         dataSourceDelegate: firestoreDelegate,
-        injectCollections: useCallback(
+        injectCollections: projectConfig.isTrialOver ? undefined : useCallback(
             (collections: EntityCollection[]) => mergeCollections(
                 collections,
                 collectionConfigController.collections ?? [],
