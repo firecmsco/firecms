@@ -2,9 +2,8 @@
 import React from "react";
 import { cls } from "../util";
 
-export type ButtonProps<P extends React.ElementType> =
-    Omit<(P extends "button" ? React.ButtonHTMLAttributes<HTMLButtonElement> : React.ComponentProps<P>), "onClick">
-    & {
+export type ButtonProps<C extends React.ElementType = "button"> = {
+    children?: React.ReactNode;
     variant?: "filled" | "neutral" | "outlined" | "text";
     disabled?: boolean;
     color?: "primary" | "secondary" | "text" | "error";
@@ -12,11 +11,13 @@ export type ButtonProps<P extends React.ElementType> =
     startIcon?: React.ReactNode;
     fullWidth?: boolean;
     className?: string;
-    onClick?: React.MouseEventHandler<any>
-};
+    component?: C;
+    onClick?: React.MouseEventHandler<any>;
+} & React.ComponentPropsWithoutRef<C>;
 
 const ButtonInner = React.forwardRef<
-    ButtonProps<React.ElementType<any>>
+    HTMLButtonElement,
+    ButtonProps<React.ElementType>
 >(({
        children,
        className,
@@ -44,8 +45,8 @@ const ButtonInner = React.forwardRef<
         "border border-surface-accent-200 bg-surface-accent-200 hover:bg-surface-accent-300 focus:ring-surface-accent-400 shadow hover:ring-1 hover:ring-surface-accent-400 text-text-primary hover:text-text-primary dark:text-text-primary-dark hover:dark:text-text-primary-dark": variant === "filled" && color === "text" && !disabled,
 
         // Text Variants
-        "border border-transparent text-primary hover:text-primary hover:bg-surface-accent-200 dark:hover:bg-surface-900": variant === "text" && color === "primary" && !disabled,
-        "border border-transparent text-secondary hover:text-secondary hover:bg-secondary-bg": variant === "text" && color === "secondary" && !disabled,
+        "border border-transparent text-primary hover:text-primary hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-800": variant === "text" && color === "primary" && !disabled,
+        "border border-transparent text-secondary hover:text-secondary hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-800": variant === "text" && color === "secondary" && !disabled,
         "border border-transparent text-red-500 hover:text-red-500 hover:bg-red-500 hover:bg-opacity-10": variant === "text" && color === "error" && !disabled,
         "border border-transparent text-text-primary hover:text-text-primary dark:text-text-primary-dark hover:dark:text-text-primary-dark hover:bg-surface-accent-200 hover:dark:bg-surface-700": variant === "text" && color === "text" && !disabled,
 
@@ -83,7 +84,7 @@ const ButtonInner = React.forwardRef<
                 ref={ref}
                 onClick={props.onClick}
                 className={cls(startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}
-                {...(props as React.ComponentPropsWithRef<any>)}>
+                {...props}>
                 {startIcon}
                 {children}
             </Component>

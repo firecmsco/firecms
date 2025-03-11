@@ -16,12 +16,14 @@ import {
     useFireCMSContext,
     useLargeLayout
 } from "../hooks";
-import { CircularProgress, cls, defaultBorderMixin, Tab, Tabs, Typography } from "@firecms/ui";
+import { CircularProgress, cls, CodeIcon, defaultBorderMixin, Tab, Tabs, Typography } from "@firecms/ui";
 import { getEntityFromCache } from "../util/entity_cache";
 import { EntityForm, EntityFormProps } from "../form";
 import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
+import { EntityJsonPreview } from "../components/EntityJsonPreview";
 
-const MAIN_TAB_VALUE = "main_##Q$SC^#S6";
+export const MAIN_TAB_VALUE = "__main_##Q$SC^#S6";
+export const JSON_TAB_VALUE = "__json";
 
 export type OnUpdateParams = {
     entity: Entity<any>,
@@ -141,7 +143,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                                                                        barActions,
                                                                        status,
                                                                        setStatus,
-                                                                       formProps,
+                                                                       formProps
                                                                    }: EntityEditViewProps<M> & {
     entity?: Entity<M>,
     cachedDirtyValues?: Partial<M>, // dirty cached entity in memory
@@ -186,7 +188,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     const subcollectionsCount = subcollections?.length ?? 0;
     const customViews = collection.entityViews;
     const customViewsCount = customViews?.length ?? 0;
-    const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0;
+    const includeJsonView = true;
+    const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0 || includeJsonView;
 
     const {
         resolvedEntityViews,
@@ -229,6 +232,17 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const globalLoading = dataLoading && !usedEntity;
 
+    const jsonView = <div
+        className={cls("relative flex-1 h-full overflow-auto w-full",
+            { "hidden": selectedTab !== JSON_TAB_VALUE })}
+        key={"json_view"}
+        role="tabpanel">
+        <ErrorBoundary>
+            <EntityJsonPreview
+                values={formContext?.values ?? {}}/>
+        </ErrorBoundary>
+    </div>;
+
     const subCollectionsViews = subcollections && subcollections.map((subcollection) => {
         const subcollectionId = subcollection.id ?? subcollection.path;
         const fullPath = usedEntity ? `${path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollectionId)}` : undefined;
@@ -269,7 +283,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 path,
                 entityId,
                 selectedTab: value === MAIN_TAB_VALUE ? undefined : value,
-                collection,
+                collection
             });
         }
     };
@@ -303,7 +317,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         onSaved={(params) => {
             const res = {
                 ...params,
-                selectedTab: MAIN_TAB_VALUE === selectedTab ? undefined : selectedTab,
+                selectedTab: MAIN_TAB_VALUE === selectedTab ? undefined : selectedTab
             };
             onSaved?.(res);
             formProps?.onSaved?.(res);
@@ -350,12 +364,21 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                     onSideTabClick(value);
                 }}>
 
+                {includeJsonView && <Tab
+                    disabled={!hasAdditionalViews}
+                    value={JSON_TAB_VALUE}
+                    innerClassName={"block"}
+                    className={"text-sm"}>
+                    <CodeIcon size={"small"}/>
+                </Tab>}
+
                 <Tab
                     disabled={!hasAdditionalViews}
                     value={MAIN_TAB_VALUE}
                     className={"text-sm min-w-[120px]"}>
                     {collection.singularName ?? collection.name}
                 </Tab>
+
 
                 {customViewTabs}
 
@@ -369,7 +392,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             </div>
             : entityView}
 
-        {/*{secondaryForms}*/}
+        {jsonView}
 
         {customViewsView}
 

@@ -20,6 +20,7 @@ import {
 import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "./common";
 import { useCustomizationController, useLargeLayout } from "../hooks";
 import { EntitySidePanel } from "../core/EntitySidePanel";
+import { JSON_TAB_VALUE } from "../core/EntityEditView";
 
 const NEW_URL_HASH = "new_side";
 const SIDE_URL_HASH = "side";
@@ -31,7 +32,7 @@ export function getEntityViewWidth(props: EntitySidePanelProps<any>, small: bool
         selectedSecondaryForm
     } = resolvedSelectedEntityView(props.collection?.entityViews, customizationController, props.selectedTab);
 
-    const shouldUseSmallLayout = !props.selectedTab || Boolean(selectedSecondaryForm);
+    const shouldUseSmallLayout = !props.selectedTab || props.selectedTab === JSON_TAB_VALUE || Boolean(selectedSecondaryForm);
 
     let resolvedWidth: string | undefined;
     if (props.width) {
