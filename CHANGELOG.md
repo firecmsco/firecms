@@ -1,15 +1,27 @@
-## [3.0.0-beta.12] - 2025-12-
+## [3.0.0-beta.12] - 2025-03-13
 
-- **Full-screen entity views**: You can now open entities in a full-screen view. This is useful when you want to focus on
-  the entity you are editing. You can enable this feature by setting the `openEntityMode` prop to `full_screen` in the collection
-  view. The default mode continues to be `side_panel`. There has been a big navigation revamp to accomodate all the new use cases.
-- **Scroll preservation**. When you open an entity in a full-screen view, the scroll position of the collection view is preserved.
-- **Drafts saved locally**: Drafts are now saved locally in the browser. This means that if you close the browser and open it again,
-  the draft will still be there. This will help prevent losing data if you accidentally close the browser, or you navigate away.
-- The state of filters ans sorting is now preserved in the URL.
-- You can now override custom entity actions. Just provide an action with one of the keys `edit`, `copy` or `delete` in
-  the `entityActions` prop in the collection view. This will override the default actions for the entity.
-
+- **Full-screen entity views**: You can now open entities in a full-screen view. This is useful when you want to
+focus on the entity you are editing. You can enable this feature by setting the `openEntityMode` prop to `full_screen`
+in the collection view. The default mode continues to be `side_panel`. There has been a big navigation revamp to
+accommodate all the new use cases.
+- **Scroll preservation**: When you open an entity in a full-screen view, the scroll position of the collection view is preserved.
+- **Drafts saved locally**: Drafts are now saved locally in the browser. This means that if you accidentally close the browser or navigate away, your changes will still be there when you come back.
+- URL state preservation: The state of filters and sorting is now preserved in the URL.
+- **Undo/redo functionality**: Added ability to undo and redo changes when editing entities.
+- Added `alwaysApplyDefaultValues` flag to collections. This flag allows you to enforce the default values when updating
+entities, not just when creating them.
+- Secondary forms now preserve their width when in side panel mode. You can create full secondary forms 
+that live in their own tab. Secondary forms are built as custom components and can include any components, including
+field bindings.
+- Added system color mode besides dark and light modes. The button is now a dropdown instead of a toggle.
+- Form improvements including fixed initial state reset after save and detached entity form actions.
+- Warning when leaving unsaved forms to prevent accidental data loss.
+- You can now override default entity actions by providing an action with one of the keys `edit`, `copy` or `delete`
+  in the `entityActions` prop.
+- Fix: String properties with storage now take preference in previews.
+- Fix for URL encoding for collections.
+- Fixed dialog actions scrolling when they shouldn't.
+- Fix for navigating to new entities from side panel.
 
 ## [3.0.0-beta.11] - 2024-12-13
 
