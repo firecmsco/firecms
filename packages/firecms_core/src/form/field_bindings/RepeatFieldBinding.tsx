@@ -6,6 +6,7 @@ import { getArrayResolvedProperties, getDefaultValueFor, getIconForProperty, mer
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel, Typography } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
+import { useAuthController } from "../../hooks";
 
 /**
  * Generic array field that allows reordering and renders the child property
@@ -31,6 +32,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
                                                              disabled
                                                          }: FieldProps<T>) {
 
+    const authController = useAuthController();
     const minimalistView = minimalistViewProp || property.minimalistView;
 
     if (!property.of)
@@ -42,7 +44,8 @@ export function RepeatFieldBinding<T extends Array<any>>({
             propertyValue: value,
             propertyKey,
             property,
-            ignoreMissingFields: false
+            ignoreMissingFields: false,
+            authController
         })
     }
 

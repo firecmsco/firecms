@@ -13,7 +13,12 @@ import {
 } from "../util";
 import { cls, defaultBorderMixin, IconButton, KeyboardTabIcon, Skeleton, Tooltip, Typography } from "@firecms/ui";
 import { PreviewSize, PropertyPreview, SkeletonPropertyComponent } from "../preview";
-import { useCustomizationController, useNavigationController, useSideEntityController } from "../hooks";
+import {
+    useAuthController,
+    useCustomizationController,
+    useNavigationController,
+    useSideEntityController
+} from "../hooks";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 
 export type EntityPreviewProps = {
@@ -46,6 +51,7 @@ export function EntityPreview({
                                   entity
                               }: EntityPreviewProps) {
 
+    const authController = useAuthController();
     const analyticsController = useAnalyticsController();
     const sideEntityController = useSideEntityController();
     const customizationController = useCustomizationController();
@@ -62,10 +68,11 @@ export function EntityPreview({
         collection,
         path: entity.path,
         values: entity.values,
-        propertyConfigs: customizationController.propertyConfigs
+        propertyConfigs: customizationController.propertyConfigs,
+        authController
     }), [collection]);
 
-    const listProperties = useMemo(() => getEntityPreviewKeys(resolvedCollection, customizationController.propertyConfigs, previewProperties, size === "medium" || size === "large" ? 3 : 1),
+    const listProperties = useMemo(() => getEntityPreviewKeys(authController, resolvedCollection, customizationController.propertyConfigs, previewProperties, size === "medium" || size === "large" ? 3 : 1),
         [previewProperties, resolvedCollection, size]);
 
     const titleProperty = getEntityTitlePropertyKey(resolvedCollection, customizationController.propertyConfigs);

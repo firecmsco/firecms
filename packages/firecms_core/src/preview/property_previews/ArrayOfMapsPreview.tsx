@@ -1,6 +1,6 @@
 import React from "react";
 import { ErrorBoundary } from "../../components";
-import { useCustomizationController } from "../../hooks";
+import { useAuthController, useCustomizationController } from "../../hooks";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
 import { resolveArrayProperty } from "../../util";
@@ -15,12 +15,13 @@ export function ArrayOfMapsPreview({
                                        size,
                                        // entity
                                    }: PropertyPreviewProps<Record<string, any>[]>) {
-
+    const authController = useAuthController();
     const customizationController = useCustomizationController();
     const property = resolveArrayProperty({
         propertyKey,
         property: inputProperty,
-        propertyConfigs: customizationController.propertyConfigs
+        propertyConfigs: customizationController.propertyConfigs,
+        authController
     });
 
     if (Array.isArray(property?.of)) {

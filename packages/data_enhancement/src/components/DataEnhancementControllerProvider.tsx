@@ -81,7 +81,8 @@ export function DataEnhancementControllerProvider({
         path,
         entityId: formContext?.entityId,
         values: formContext?.values,
-        propertyConfigs: customizationController.propertyConfigs
+        propertyConfigs: customizationController.propertyConfigs,
+        authController
     });
 
     const properties = useMemo(() => getSimplifiedProperties(resolvedCollection.properties, formContext?.values), [formContext?.values]);

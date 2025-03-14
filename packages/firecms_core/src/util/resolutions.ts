@@ -1,5 +1,6 @@
 import {
     ArrayProperty,
+    AuthController,
     CMSType,
     CustomizationController,
     EntityCollection,
@@ -27,9 +28,7 @@ import { getDefaultValuesFor, isPropertyBuilder } from "./entities";
 import { DEFAULT_ONE_OF_TYPE } from "./common";
 import { getIn } from "@firecms/formex";
 import { enumToObjectEntries } from "./enums";
-import { isDefaultFieldConfigId } from "../core/field_configs";
-
-// import util from "util";
+import { isDefaultFieldConfigId } from "../core";
 
 export const resolveCollection = <M extends Record<string, any>, >
 ({
@@ -40,7 +39,8 @@ export const resolveCollection = <M extends Record<string, any>, >
      previousValues,
      userConfigPersistence,
      propertyConfigs,
-     ignoreMissingFields = false
+     ignoreMissingFields = false,
+     authController
  }: {
     collection: EntityCollection<M> | ResolvedEntityCollection<M>;
     path: string,
@@ -50,6 +50,7 @@ export const resolveCollection = <M extends Record<string, any>, >
     userConfigPersistence?: UserConfigurationPersistence;
     propertyConfigs?: Record<string, PropertyConfig>;
     ignoreMissingFields?: boolean;
+    authController: AuthController;
 }): ResolvedEntityCollection<M> => {
 
     const collectionOverride = userConfigPersistence?.getCollectionConfig<M>(path);
@@ -69,7 +70,8 @@ export const resolveCollection = <M extends Record<string, any>, >
                 path,
                 entityId,
                 propertyConfigs: propertyConfigs,
-                ignoreMissingFields
+                ignoreMissingFields,
+                authController
             });
             if (!childResolvedProperty) return {};
             return ({
@@ -114,6 +116,7 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
     fromBuilder?: boolean;
     propertyConfigs?: Record<string, PropertyConfig<any>>;
     ignoreMissingFields?: boolean;
+    authController: AuthController;
 }): ResolvedProperty<T> | null {
 
     if (typeof propertyOrBuilder === "object" && "resolved" in propertyOrBuilder) {
@@ -234,7 +237,8 @@ export function getArrayResolvedProperties<M>({
     entityId?: string;
     index?: number;
     fromBuilder?: boolean;
-    propertyConfigs?: Record<string, PropertyConfig>
+    propertyConfigs?: Record<string, PropertyConfig>;
+    authController: AuthController;
 }) {
 
     const of = property.of;
@@ -266,6 +270,7 @@ export function resolveArrayProperty<T extends any[], M>({
     fromBuilder?: boolean;
     propertyConfigs?: Record<string, PropertyConfig>;
     ignoreMissingFields?: boolean;
+    authController: AuthController;
 }): ResolvedArrayProperty {
     const propertyValue = propertyKey ? getIn(props.values, propertyKey) : undefined;
 
@@ -281,7 +286,7 @@ export function resolveArrayProperty<T extends any[], M>({
                         propertyOrBuilder: p as Property<any>,
                         ignoreMissingFields,
                         ...props,
-                        index
+                        index,
                     });
                 })
             } as ResolvedArrayProperty;
@@ -373,6 +378,7 @@ export function resolveProperties<M extends Record<string, any>>({
     fromBuilder?: boolean;
     propertyConfigs?: Record<string, PropertyConfig>;
     ignoreMissingFields?: boolean;
+    authController: AuthController;
 }): ResolvedProperties<M> {
     return Object.entries<PropertyOrBuilder>(properties as Record<string, PropertyOrBuilder>)
         .map(([key, property]) => {

@@ -3,7 +3,7 @@ import React from "react";
 import { resolveArrayProperty } from "../../util";
 import { ResolvedProperty } from "../../types";
 
-import { useCustomizationController } from "../../hooks";
+import { useAuthController, useCustomizationController } from "../../hooks";
 import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
 import { ErrorBoundary } from "../../components";
@@ -19,11 +19,13 @@ export function ArrayOfStorageComponentsPreview({
                                                     size
                                                 }: PropertyPreviewProps<any[]>) {
 
+    const authController = useAuthController();
     const customizationController = useCustomizationController();
     const property = resolveArrayProperty({
         propertyKey,
         property: inputProperty,
-        propertyConfigs: customizationController.propertyConfigs
+        propertyConfigs: customizationController.propertyConfigs,
+        authController
     });
 
     if (Array.isArray(property.of)) {

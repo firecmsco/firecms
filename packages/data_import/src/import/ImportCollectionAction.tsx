@@ -11,6 +11,7 @@ import {
     resolveCollection,
     ResolvedProperties,
     slugify,
+    useAuthController,
     useCustomizationController,
     User,
     useSelectionController,
@@ -40,14 +41,15 @@ import { ImportConfig } from "../types";
 type ImportState = "initial" | "mapping" | "preview" | "import_data_saving";
 
 export function ImportCollectionAction<M extends Record<string, any>, USER extends User>({
-                                                                                                 collection,
-                                                                                                 path,
-                                                                                                 onAnalyticsEvent
-                                                                                             }: CollectionActionsProps<M, USER> & {
-                                                                                                 onAnalyticsEvent?: (event: string, params?: any) => void;
-                                                                                             }
+                                                                                             collection,
+                                                                                             path,
+                                                                                             onAnalyticsEvent
+                                                                                         }: CollectionActionsProps<M, USER> & {
+                                                                                             onAnalyticsEvent?: (event: string, params?: any) => void;
+                                                                                         }
 ) {
 
+    const authController = useAuthController();
     const customizationController = useCustomizationController();
 
     const snackbarController = useSnackbarController();
@@ -102,7 +104,8 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
     const resolvedCollection = resolveCollection({
         collection,
         path,
-        propertyConfigs: customizationController.propertyConfigs
+        propertyConfigs: customizationController.propertyConfigs,
+        authController
     });
 
     const properties = getPropertiesWithPropertiesOrder<M>(resolvedCollection.properties, resolvedCollection.propertiesOrder as Extract<keyof M, string>[]) as ResolvedProperties<M>;
@@ -385,9 +388,9 @@ export function ImportDataPreview<M extends Record<string, any>>({
     properties: ResolvedProperties<M>,
     propertiesOrder: Extract<keyof M, string>[],
 }) {
-
+    const authController = useAuthController();
     useEffect(() => {
-        const mappedData = importConfig.importData.map(d => convertDataToEntity(d, importConfig.idColumn, importConfig.headersMapping, properties, "TEMP_PATH", importConfig.defaultValues));
+        const mappedData = importConfig.importData.map(d => convertDataToEntity(authController, d, importConfig.idColumn, importConfig.headersMapping, properties, "TEMP_PATH", importConfig.defaultValues));
         importConfig.setEntities(mappedData);
     }, []);
 

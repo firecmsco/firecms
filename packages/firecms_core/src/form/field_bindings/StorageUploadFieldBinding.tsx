@@ -13,7 +13,7 @@ import { PreviewSize } from "../../preview";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 
 import { getIconForProperty, isReadOnly, resolveProperty } from "../../util";
-import { useSnackbarController, useStorageSource } from "../../hooks";
+import { useAuthController, useSnackbarController, useStorageSource } from "../../hooks";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { StorageFieldItem, useStorageUploadController } from "../../util/useStorageUploadController";
 import { StorageUploadProgress } from "../components/StorageUploadProgress";
@@ -57,6 +57,8 @@ export function StorageUploadFieldBinding({
                                               isSubmitting,
                                           }: StorageUploadFieldProps) {
 
+    const authController = useAuthController();
+
     if (!context.entityId)
         throw new Error("StorageUploadFieldBinding: Entity id is null");
 
@@ -91,6 +93,7 @@ export function StorageUploadFieldBinding({
 
     const resolvedProperty = resolveProperty({
         propertyOrBuilder: property as PropertyOrBuilder,
+        authController
     }) as ResolvedStringProperty | ResolvedArrayProperty<string[]>;
 
     return (

@@ -67,33 +67,3 @@ export const useFireCMSContext = <USER extends User = User, AuthControllerType e
 
     return fireCMSContextRef.current;
 }
-
-// export const useFireCMSContext = <USER extends User = User, AuthControllerType extends AuthController<USER> = AuthController<USER>>(): FireCMSContext<USER, AuthControllerType> => {
-//
-//     const authController = useAuthController<USER, AuthControllerType>();
-//     const sideDialogsController = useSideDialogsController();
-//     const sideEntityController = useSideEntityController();
-//     const navigation = useNavigationController();
-//     const dataSource = useDataSource();
-//     const storageSource = useStorageSource();
-//     const snackbarController = useSnackbarController();
-//     const userConfigPersistence = useUserConfigurationPersistence();
-//     const dialogsController = useDialogsController();
-//     const customizationController = useCustomizationController();
-//     const analyticsController = useAnalyticsController();
-//
-//     return {
-//         authController,
-//         sideDialogsController,
-//         sideEntityController,
-//         navigation,
-//         dataSource,
-//         storageSource,
-//         snackbarController,
-//         userConfigPersistence,
-//         dialogsController,
-//         customizationController,
-//         analyticsController
-//     };
-//
-// };

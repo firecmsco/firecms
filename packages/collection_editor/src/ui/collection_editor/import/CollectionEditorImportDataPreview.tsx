@@ -1,5 +1,11 @@
 import { convertDataToEntity, ImportConfig } from "@firecms/data_import_export";
-import { CircularProgressCenter, EntityCollectionTable, Properties, useSelectionController } from "@firecms/core";
+import {
+    CircularProgressCenter,
+    EntityCollectionTable,
+    Properties,
+    useAuthController,
+    useSelectionController
+} from "@firecms/core";
 import { useEffect, useState } from "react";
 import { Typography } from "@firecms/ui";
 
@@ -13,11 +19,12 @@ export function CollectionEditorImportDataPreview({
     propertiesOrder: string[]
 }) {
 
+    const authController = useAuthController();
     const [loading, setLoading] = useState<boolean>(false);
 
     async function loadEntities() {
         // const propertiesMapping = getPropertiesMapping(importConfig.originProperties, properties, importConfig.headersMapping);
-        const mappedData = importConfig.importData.map(d => convertDataToEntity(d, importConfig.idColumn, importConfig.headersMapping, properties, "TEMP_PATH", importConfig.defaultValues));
+        const mappedData = importConfig.importData.map(d => convertDataToEntity(authController, d, importConfig.idColumn, importConfig.headersMapping, properties, "TEMP_PATH", importConfig.defaultValues));
         importConfig.setEntities(mappedData);
     }
 

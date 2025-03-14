@@ -5,6 +5,7 @@ import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel, Typography } from "@firecms/ui";
 import { getArrayResolvedProperties, getIconForProperty, isReadOnly } from "../../util";
 import { useClearRestoreValue } from "../useClearRestoreValue";
+import { useAuthController } from "../../hooks";
 
 /**
  * Array field used for custom
@@ -27,6 +28,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
                                                                         disabled
                                                                     }: FieldProps<T, any, any>) {
 
+    const authController = useAuthController();
     const minimalistView = minimalistViewProp || property.minimalistView;
 
     let resolvedProperties = "resolvedProperties" in property ? property.resolvedProperties : undefined;
@@ -35,7 +37,8 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
             propertyValue: value,
             propertyKey,
             property,
-            ignoreMissingFields: false
+            ignoreMissingFields: false,
+            authController
         })
     }
 

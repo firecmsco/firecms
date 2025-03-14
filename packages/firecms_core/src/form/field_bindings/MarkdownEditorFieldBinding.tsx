@@ -8,6 +8,7 @@ import {
     randomString,
     ResolvedArrayProperty,
     ResolvedStringProperty,
+    useAuthController,
     useStorageSource
 } from "../../index";
 import { cls, fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "@firecms/ui";
@@ -34,6 +35,7 @@ export function MarkdownEditorFieldBinding({
                                                customProps,
                                            }: FieldProps<string, MarkdownEditorFieldProps>) {
 
+    const authController = useAuthController();
     const disabled = disabledProp || isSubmitting;
     const highlight = customProps?.highlight;
     const editorProps = customProps?.editorProps;
@@ -62,7 +64,8 @@ export function MarkdownEditorFieldBinding({
 
     const resolvedProperty = resolveProperty({
         propertyOrBuilder: property as PropertyOrBuilder,
-        values: entityValues
+        values: entityValues,
+        authController
     }) as ResolvedStringProperty | ResolvedArrayProperty<string[]>;
 
     const fileNameBuilder = useCallback(async (file: File) => {
@@ -89,7 +92,8 @@ export function MarkdownEditorFieldBinding({
         if (!storage) return "/";
         const resolvedProperty = resolveProperty({
             propertyOrBuilder: property,
-            values: entityValues
+            values: entityValues,
+            authController
         }) as ResolvedStringProperty | ResolvedArrayProperty<string[]>;
         return resolveStoragePathString({
             input: storage.storagePath,

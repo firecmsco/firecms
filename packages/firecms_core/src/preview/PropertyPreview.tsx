@@ -13,7 +13,7 @@ import {
 import { resolveProperty } from "../util";
 
 import { PropertyPreviewProps } from "./PropertyPreviewProps";
-import { useCustomizationController } from "../hooks";
+import { useAuthController, useCustomizationController } from "../hooks";
 import { EmptyValue } from "./components/EmptyValue";
 import { UrlComponentPreview } from "./components/UrlComponentPreview";
 import { StorageThumbnail } from "./components/StorageThumbnail";
@@ -37,6 +37,7 @@ import { ErrorView } from "../components";
  */
 export const PropertyPreview = React.memo(function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T>) {
 
+    const authController = useAuthController();
     const customizationController = useCustomizationController();
 
     let content: React.ReactNode | any;
@@ -53,7 +54,8 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
     const property = resolveProperty({
         propertyKey,
         propertyOrBuilder: inputProperty,
-        propertyConfigs: customizationController.propertyConfigs
+        propertyConfigs: customizationController.propertyConfigs,
+        authController
     });
 
     if (property === null) {

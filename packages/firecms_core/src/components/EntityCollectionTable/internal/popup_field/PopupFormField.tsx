@@ -21,7 +21,7 @@ import { ElementResizeListener } from "./ElementResizeListener";
 import { getPropertyInPath, isReadOnly, resolveCollection } from "../../../../util";
 import { Button, CloseIcon, DialogActions, IconButton, Typography } from "@firecms/ui";
 import { PropertyFieldBinding, yupToFormErrors } from "../../../../form";
-import { useCustomizationController, useDataSource, useFireCMSContext } from "../../../../hooks";
+import { useAuthController, useCustomizationController, useDataSource, useFireCMSContext } from "../../../../hooks";
 import { OnCellValueChangeParams } from "../../../common";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
@@ -107,6 +107,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 }) {
 
     const fireCMSContext = useFireCMSContext();
+    const authController = useAuthController();
     const customizationController = useCustomizationController();
 
     const [savingError, setSavingError] = React.useState<any>();
@@ -121,7 +122,8 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             path,
             values: entity?.values,
             entityId,
-            propertyConfigs: customizationController.propertyConfigs
+            propertyConfigs: customizationController.propertyConfigs,
+            authController
         })
         : undefined;
 

@@ -8,6 +8,7 @@ import {
     getDefaultValuesFor,
     resolveCollection,
     ResolvedEntityCollection,
+    useAuthController,
     useCustomizationController,
     useDataSource,
     useFireCMSContext,
@@ -33,13 +34,13 @@ import { downloadEntitiesExport } from "./export";
 const DOCS_LIMIT = 500;
 
 export function ExportCollectionAction<M extends Record<string, any>, USER extends User>({
-                                                                                                 collection: inputCollection,
-                                                                                                 path: inputPath,
-                                                                                                 collectionEntitiesCount,
-                                                                                                 onAnalyticsEvent,
-                                                                                                 exportAllowed,
-                                                                                                 notAllowedView
-                                                                                             }: CollectionActionsProps<M, USER, EntityCollection<M, any>> & {
+                                                                                             collection: inputCollection,
+                                                                                             path: inputPath,
+                                                                                             collectionEntitiesCount,
+                                                                                             onAnalyticsEvent,
+                                                                                             exportAllowed,
+                                                                                             notAllowedView
+                                                                                         }: CollectionActionsProps<M, USER, EntityCollection<M, any>> & {
     exportAllowed?: (props: { collectionEntitiesCount: number, path: string, collection: EntityCollection }) => boolean;
     notAllowedView?: React.ReactNode;
     onAnalyticsEvent?: (event: string, params?: any) => void;
@@ -56,6 +57,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
     const [exportType, setExportType] = React.useState<"csv" | "json">("csv");
     const [dateExportType, setDateExportType] = React.useState<"timestamp" | "string">("string");
 
+    const authController = useAuthController();
     const context = useFireCMSContext<USER>();
     const dataSource = useDataSource();
     const navigationController = useNavigationController();
@@ -71,7 +73,8 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
     const collection: ResolvedEntityCollection<M> = React.useMemo(() => resolveCollection({
         collection: inputCollection,
         path,
-        propertyConfigs: customizationController.propertyConfigs
+        propertyConfigs: customizationController.propertyConfigs,
+        authController,
     }), [inputCollection, path]);
 
     const [dataLoading, setDataLoading] = React.useState<boolean>(false);
@@ -234,7 +237,8 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                                    onChange={() => setDateExportType("timestamp")}
                                    className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
                             <label htmlFor="radio-timestamp"
-                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">Dates as
+                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">Dates
+                                as
                                 timestamps ({dateRef.current.getTime()})</label>
                         </div>
                         <div className="flex items-center">
@@ -243,7 +247,8 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                                    onChange={() => setDateExportType("string")}
                                    className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
                             <label htmlFor="radio-string"
-                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">Dates as
+                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">Dates
+                                as
                                 strings ({dateRef.current.toISOString()})</label>
                         </div>
                     </div>

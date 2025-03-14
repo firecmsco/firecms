@@ -14,6 +14,7 @@ import {
     OnCellValueChange,
     PropertiesOrBuilders,
     resolveCollection,
+    useAuthController,
     useCustomizationController,
     useNavigationController,
     useSelectionController
@@ -26,15 +27,16 @@ import { getPropertiesFromData } from "@firecms/collection_editor_firebase";
 import { buildPropertiesOrder } from "@firecms/schema_inference";
 
 export function QueryTableResults({
-                                 querySnapshot,
-                                 priorityKeys,
-                                 collections
-                             }: {
+                                      querySnapshot,
+                                      priorityKeys,
+                                      collections
+                                  }: {
     querySnapshot: QuerySnapshot,
     priorityKeys?: string[],
     collections?: EntityCollection[]
 }) {
 
+    const authController = useAuthController();
     const navigation = useNavigationController();
     const customizationController = useCustomizationController();
 
@@ -88,7 +90,8 @@ export function QueryTableResults({
         return collection && path ? resolveCollection<any>({
                 collection,
                 path,
-                propertyConfigs: customizationController.propertyConfigs
+                propertyConfigs: customizationController.propertyConfigs,
+                authController
             })
             : undefined;
     }, [collection, path]);

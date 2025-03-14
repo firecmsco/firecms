@@ -1,5 +1,6 @@
 import React, { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import {
+    AuthController,
     CMSAnalyticsEvent,
     Entity,
     EntityCollection,
@@ -28,6 +29,7 @@ import {
 
 import {
     saveEntityWithCallbacks,
+    useAuthController,
     useCustomizationController,
     useDataSource,
     useFireCMSContext,
@@ -116,6 +118,7 @@ export function EntityForm<M extends Record<string, any>>({
         console.warn(`The collection ${collection.path} has customId and formAutoSave enabled. This is not supported and formAutoSave will be ignored`);
     }
 
+    const authController = useAuthController();
     const [status, setStatus] = useState<EntityStatus>(initialStatus);
     const [saving, setSaving] = useState(false);
 
@@ -204,7 +207,7 @@ export function EntityForm<M extends Record<string, any>>({
     };
 
     const formex: FormexController<M> = formexProp ?? useCreateFormex<M>({
-        initialValues: (initialDirtyValues ?? getInitialEntityValues(collection, path, status, entity, customizationController.propertyConfigs)) as M,
+        initialValues: (initialDirtyValues ?? getInitialEntityValues(authController, collection, path, status, entity, customizationController.propertyConfigs)) as M,
         initialDirty: Boolean(initialDirtyValues),
         onSubmit,
         onReset: () => {
@@ -221,7 +224,6 @@ export function EntityForm<M extends Record<string, any>>({
                 });
         }
     });
-
 
     useEffect(() => {
 
@@ -251,7 +253,8 @@ export function EntityForm<M extends Record<string, any>>({
         entityId,
         values: formex.values,
         previousValues: formex.initialValues,
-        propertyConfigs: customizationController.propertyConfigs
+        propertyConfigs: customizationController.propertyConfigs,
+        authController
     }), [collection, path, entityId, formex.values, formex.initialValues, customizationController.propertyConfigs]);
 
     const onPreSaveHookError = useCallback((e: Error) => {
@@ -679,7 +682,7 @@ export function EntityForm<M extends Record<string, any>>({
             <form
                 onSubmit={formContext.formex.handleSubmit}
                 onReset={() => formex.resetForm({
-                    values: getInitialEntityValues(collection, path, status, entity, customizationController.propertyConfigs) as M
+                    values: getInitialEntityValues(authController, collection, path, status, entity, customizationController.propertyConfigs) as M
                 })}
                 noValidate
                 className={cls("flex-1 flex flex-row w-full overflow-y-auto justify-center", className)}>
@@ -716,17 +719,19 @@ export function EntityForm<M extends Record<string, any>>({
 }
 
 function getInitialEntityValues<M extends object>(
+    authController: AuthController,
     collection: EntityCollection,
     path: string,
     status: "new" | "existing" | "copy",
     entity: Entity<M> | undefined,
-    propertyConfigs?: Record<string, PropertyConfig>
+    propertyConfigs?: Record<string, PropertyConfig>,
 ): Partial<EntityValues<M>> {
     const resolvedCollection = resolveCollection({
         collection,
         path,
         values: entity?.values,
-        propertyConfigs
+        propertyConfigs,
+        authController
     });
     const properties = resolvedCollection.properties;
     if ((status === "existing" || status === "copy") && entity) {

@@ -5,6 +5,7 @@ import { resolveCollection } from "../util";
 import { cls, defaultBorderMixin, IconButton, OpenInNewIcon } from "@firecms/ui";
 import { CustomizationController } from "../types/customization_controller";
 import { useCustomizationController } from "../hooks/useCustomizationController";
+import { useAuthController } from "../hooks";
 
 /**
  * @group Components
@@ -24,13 +25,15 @@ export function EntityView<M extends Record<string, any>>(
         className
     }: EntityViewProps<M>) {
 
+    const authController = useAuthController();
     const customizationController: CustomizationController = useCustomizationController();
     const resolvedCollection: ResolvedEntityCollection<M> = useMemo(() => resolveCollection<M>({
         collection,
         path,
         entityId: entity.id,
         values: entity.values,
-        propertyConfigs: customizationController.propertyConfigs
+        propertyConfigs: customizationController.propertyConfigs,
+        authController
     }), [collection, path, entity, customizationController.propertyConfigs]);
 
     const properties: ResolvedProperties = resolvedCollection.properties;

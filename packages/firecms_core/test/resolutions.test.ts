@@ -1,5 +1,5 @@
 import { describe, test } from "@jest/globals";
-import { buildCollection, resolveCollection } from "../src/util";
+import { buildCollection, buildProperty, resolveCollection } from "../src/util";
 import * as util from "util";
 
 const testCollection = buildCollection({
@@ -23,11 +23,10 @@ const testCollection = buildCollection({
                             fromTo: "Saturation available range",
                         }
                     },
-                    value: ({
-                                propertyValue,
-                                values,
-                                index
-                            }) => {
+                    value: buildProperty(({
+                                              values,
+                                              index
+                                          }) => {
                         if (!index) {
                             return null;
                         }
@@ -73,7 +72,7 @@ const testCollection = buildCollection({
                                 disabled: { hidden: true }
                             };
                         }
-                    }
+                    })
                 }
             },
         },
@@ -103,7 +102,8 @@ describe("resolutions", () => {
         const resolvedCollection = resolveCollection({
             collection: testCollection,
             path: "ignore",
-            values
+            values,
+            authController: {} as any
         });
 
         console.log("resolvedCollection", util.inspect(resolvedCollection, false, null, true));

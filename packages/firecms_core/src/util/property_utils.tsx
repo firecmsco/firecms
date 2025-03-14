@@ -1,6 +1,7 @@
 import React from "react";
 
 import {
+    AuthController,
     EntityCollection,
     PropertiesOrBuilders,
     PropertyConfig,
@@ -13,12 +14,15 @@ import { resolveProperty } from "./resolutions";
 import { CircleIcon, FunctionsIcon } from "@firecms/ui";
 import { getFieldConfig } from "../core";
 
-export function isReferenceProperty(propertyOrBuilder: PropertyOrBuilder,
-                                    fields: Record<string, PropertyConfig>) {
+export function isReferenceProperty(
+    authController: AuthController,
+    propertyOrBuilder: PropertyOrBuilder,
+    fields: Record<string, PropertyConfig>) {
     const resolvedProperty = resolveProperty({
         propertyKey: "ignore", // TODO
         propertyOrBuilder,
-        propertyConfigs: fields
+        propertyConfigs: fields,
+        authController
     });
     if (!resolvedProperty) return null;
     if (resolvedProperty.dataType === "reference") {

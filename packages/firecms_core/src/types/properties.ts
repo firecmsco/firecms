@@ -5,6 +5,7 @@ import { EntityReference, EntityValues, GeoPoint, Vector } from "./entities";
 import { ResolvedArrayProperty, ResolvedStringProperty } from "./resolved_entities";
 import { FilterValues } from "./collections";
 import { ChipColorKey, ChipColorScheme } from "@firecms/ui";
+import { AuthController } from "./auth";
 
 /**
  * @group Entity properties
@@ -270,6 +271,11 @@ export type PropertyBuilderProps<M extends Record<string, any> = any> =
          * Entity ID
          */
         entityId?: string;
+
+        /**
+         * Controller to manage authentication
+         */
+        authController: AuthController;
     };
 
 /**
@@ -285,7 +291,8 @@ export type PropertyBuilder<T extends CMSType = any, M extends Record<string, an
          propertyValue,
          index,
          path,
-         entityId
+         entityId,
+         authController
      }: PropertyBuilderProps<M>) => Property<T> | null;
 
 /**

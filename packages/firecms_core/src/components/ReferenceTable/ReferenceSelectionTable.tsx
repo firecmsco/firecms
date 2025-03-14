@@ -101,6 +101,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
         maxSelection,
     }: ReferenceSelectionInnerProps<M>) {
 
+    const authController = useAuthController();
     const sideDialogContext = useSideDialogContext();
     const sideEntityController = useSideEntityController();
     const navigation = useNavigationController();
@@ -253,7 +254,8 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
         collection: collection,
         path: fullPath,
         values: {},
-        propertyConfigs: customizationController.propertyConfigs
+        propertyConfigs: customizationController.propertyConfigs,
+        authController
     }), [collection, customizationController.propertyConfigs, fullPath]);
 
     const displayedColumnIds = useColumnIds(resolvedCollection, false);

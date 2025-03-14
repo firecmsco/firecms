@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import {
+    AuthController,
     DataSource,
     DataSourceDelegate,
     DeleteEntityProps,
@@ -27,11 +28,13 @@ import { resolveCollection, updateDateAutoValues } from "../util";
 export function useBuildDataSource({
                                        delegate,
                                        propertyConfigs,
-                                       navigationController
+                                       navigationController,
+                                       authController
                                    }: {
     delegate: DataSourceDelegate,
     propertyConfigs?: Record<string, PropertyConfig>;
     navigationController: NavigationController;
+    authController: AuthController;
 }): DataSource {
 
     return {
@@ -209,26 +212,27 @@ export function useBuildDataSource({
                     collection,
                     path,
                     entityId,
-                    propertyConfigs: propertyConfigs
+                    propertyConfigs: propertyConfigs,
+                    authController
                 })
                 : undefined;
 
             const properties: ResolvedProperties<M> | undefined = resolvedCollection?.properties;
 
-            const firestoreValues = usedDelegate.cmsToDelegateModel(
+            const delegateValues = usedDelegate.cmsToDelegateModel(
                 values,
             );
 
             const updatedValues: EntityValues<M> = properties
                 ? updateDateAutoValues(
                     {
-                        inputValues: firestoreValues,
+                        inputValues: delegateValues,
                         properties,
                         status,
                         timestampNowValue: usedDelegate.currentTime?.() ?? new Date(),
                         setDateToMidnight: usedDelegate.setDateToMidnight
                     })
-                : firestoreValues;
+                : delegateValues;
 
             return usedDelegate.saveEntity({
                 path,

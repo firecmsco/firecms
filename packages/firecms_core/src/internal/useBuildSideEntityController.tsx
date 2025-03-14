@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 import {
+    AuthController,
     CustomizationController,
     EntityCollection,
     EntitySidePanelProps,
@@ -25,7 +26,7 @@ import { JSON_TAB_VALUE } from "../core/EntityEditView";
 const NEW_URL_HASH = "new_side";
 const SIDE_URL_HASH = "side";
 
-export function getEntityViewWidth(props: EntitySidePanelProps<any>, small: boolean, customizationController: CustomizationController): string {
+export function getEntityViewWidth(props: EntitySidePanelProps<any>, small: boolean, customizationController: CustomizationController, authController: AuthController): string {
     if (small) return CONTAINER_FULL_WIDTH;
 
     const {
@@ -49,21 +50,22 @@ export function getEntityViewWidth(props: EntitySidePanelProps<any>, small: bool
         } else if (!props.collection) {
             return FORM_CONTAINER_WIDTH;
         } else {
-            return calculateCollectionDesiredWidth(props.collection);
+            return calculateCollectionDesiredWidth(props.collection, authController);
         }
     }
 }
 
 const collectionViewWidthCache: { [key: string]: string } = {};
 
-function calculateCollectionDesiredWidth(collection: EntityCollection<any>): string {
+function calculateCollectionDesiredWidth(collection: EntityCollection<any>, authController: AuthController): string {
     if (collectionViewWidthCache[collection.id]) {
         return collectionViewWidthCache[collection.id];
     }
     const resolvedCollection = resolveCollection({
         collection,
         path: "__ignored",
-        ignoreMissingFields: true
+        ignoreMissingFields: true,
+        authController
     });
 
     let result = FORM_CONTAINER_WIDTH
@@ -98,7 +100,9 @@ function getNestedPropertiesDepth(property: ResolvedProperty, accumulator: numbe
 }
 
 export const useBuildSideEntityController = (navigation: NavigationController,
-                                             sideDialogsController: SideDialogsController): SideEntityController => {
+                                             sideDialogsController: SideDialogsController,
+                                             authController: AuthController
+): SideEntityController => {
 
     const location = useLocation();
     const initialised = useRef<boolean>(false);
@@ -106,7 +110,6 @@ export const useBuildSideEntityController = (navigation: NavigationController,
 
     const smallLayout = !useLargeLayout();
 
-    // only on initialisation, create panels from URL
     useEffect(() => {
 
         const newFlag = location.hash === `#${NEW_URL_HASH}`;
@@ -119,9 +122,9 @@ export const useBuildSideEntityController = (navigation: NavigationController,
                 for (let i = 0; i < panelsFromUrl.length; i++) {
                     const props = panelsFromUrl[i];
                     if (i === 0)
-                        sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController));
+                        sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController, authController));
                     else
-                        sideDialogsController.open(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController))
+                        sideDialogsController.open(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController, authController))
                 }
             }
             initialised.current = true;
@@ -141,7 +144,7 @@ export const useBuildSideEntityController = (navigation: NavigationController,
                     return;
                 }
                 const lastPanel = panelsFromUrl[panelsFromUrl.length - 1];
-                const panelProps = propsToSidePanel(lastPanel, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController);
+                const panelProps = propsToSidePanel(lastPanel, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController, authController);
                 const lastCurrentPanel = currentPanelKeys.length > 0 ? currentPanelKeys[currentPanelKeys.length - 1] : undefined;
                 if (!lastCurrentPanel || lastCurrentPanel !== panelProps.key) {
                     sideDialogsController.replace(panelProps);
@@ -154,7 +157,7 @@ export const useBuildSideEntityController = (navigation: NavigationController,
     useEffect(() => {
         const updatedSidePanels = sideDialogsController.sidePanels.map(sidePanelProps => {
             if (sidePanelProps.additional) {
-                return propsToSidePanel(sidePanelProps.additional, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController);
+                return propsToSidePanel(sidePanelProps.additional, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController, authController);
             }
             return sidePanelProps;
         });
@@ -187,10 +190,11 @@ export const useBuildSideEntityController = (navigation: NavigationController,
                 navigation.buildUrlCollectionPath,
                 navigation.resolveIdsFrom,
                 smallLayout,
-                customizationController
+                customizationController,
+                authController
             ));
 
-    }, [sideDialogsController, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout]);
+    }, [sideDialogsController, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, authController.user]);
 
     const replace = useCallback((props: EntitySidePanelProps<any>) => {
 
@@ -198,9 +202,9 @@ export const useBuildSideEntityController = (navigation: NavigationController,
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
 
-        sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController));
+        sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController, authController));
 
-    }, [navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, sideDialogsController, smallLayout]);
+    }, [navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, sideDialogsController, smallLayout, authController.user]);
 
     return {
         close,
@@ -261,7 +265,9 @@ const propsToSidePanel = (props: EntitySidePanelProps,
                           buildUrlCollectionPath: (path: string) => string,
                           resolveIdsFrom: (pathWithAliases: string) => string,
                           smallLayout: boolean,
-                          customizationController: CustomizationController): SideDialogPanelProps => {
+                          customizationController: CustomizationController,
+                          authController: AuthController
+): SideDialogPanelProps => {
 
     const collectionPath = removeInitialAndTrailingSlashes(props.path);
 
@@ -276,7 +282,7 @@ const propsToSidePanel = (props: EntitySidePanelProps,
         formProps: props.formProps
     };
 
-    const entityViewWidth = getEntityViewWidth(props, smallLayout, customizationController);
+    const entityViewWidth = getEntityViewWidth(props, smallLayout, customizationController, authController);
 
     return {
         key: `${props.path}/${props.entityId}`,

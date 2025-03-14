@@ -3,7 +3,7 @@ import { ResolvedStringProperty } from "../../types";
 
 import { resolveArrayProperty } from "../../util";
 import { PropertyPreviewProps, StringPropertyPreview } from "../../preview";
-import { useCustomizationController } from "../../hooks";
+import { useAuthController, useCustomizationController } from "../../hooks";
 import { ErrorBoundary } from "../../components";
 
 /**
@@ -16,12 +16,13 @@ export function ArrayOfStringsPreview({
                                           // entity,
                                           size
                                       }: PropertyPreviewProps<string[]>) {
-
+    const authController = useAuthController();
     const customizationController = useCustomizationController();
     const property = resolveArrayProperty({
         propertyKey,
         property: inputProperty,
-        propertyConfigs: customizationController.propertyConfigs
+        propertyConfigs: customizationController.propertyConfigs,
+        authController
     });
 
     if (Array.isArray(property.of)) {

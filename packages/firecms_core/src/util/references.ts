@@ -1,12 +1,14 @@
-import { EntityCollection, PropertyConfig, ResolvedEntityCollection } from "../types";
+import { AuthController, EntityCollection, PropertyConfig, ResolvedEntityCollection } from "../types";
 import { isReferenceProperty } from "./property_utils";
 import { isPropertyBuilder } from "./entities";
 import { getFieldConfig } from "../core";
 
-export function getEntityPreviewKeys(targetCollection: EntityCollection<any>,
-                                     fields: Record<string, PropertyConfig>,
-                                     previewProperties?: string[],
-                                     limit = 3) {
+export function getEntityPreviewKeys(
+    authController: AuthController,
+    targetCollection: EntityCollection<any>,
+    fields: Record<string, PropertyConfig>,
+    previewProperties?: string[],
+    limit = 3) {
     const allProperties = Object.keys(targetCollection.properties);
     let listProperties = previewProperties?.filter(p => allProperties.includes(p as string));
     if (!listProperties && targetCollection.previewProperties) {
@@ -18,7 +20,7 @@ export function getEntityPreviewKeys(targetCollection: EntityCollection<any>,
         listProperties = allProperties;
         return listProperties.filter(key => {
             const propertyOrBuilder = targetCollection.properties[key];
-            return propertyOrBuilder && !isPropertyBuilder(propertyOrBuilder) && !isReferenceProperty(propertyOrBuilder, fields);
+            return propertyOrBuilder && !isPropertyBuilder(propertyOrBuilder) && !isReferenceProperty(authController, propertyOrBuilder, fields);
         }).slice(0, limit);
     }
 }

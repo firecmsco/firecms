@@ -3,6 +3,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle } from "@firecms/ui";
 import {
     deleteEntityWithCallbacks,
+    useAuthController,
     useCustomizationController,
     useDataSource,
     useFireCMSContext,
@@ -34,7 +35,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
                                                                       onMultipleEntitiesDelete,
                                                                       path
                                                                   }: DeleteEntityDialogProps<M>) {
-
+    const authController = useAuthController();
     const dataSource = useDataSource(collection);
     const customizationController = useCustomizationController();
     const snackbarController = useSnackbarController();
@@ -50,7 +51,8 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
     const resolvedCollection = useMemo(() => resolveCollection<M>({
         collection,
         path,
-        propertyConfigs: customizationController.propertyConfigs
+        propertyConfigs: customizationController.propertyConfigs,
+        authController
     }), [collection, path]);
 
     const handleCancel = useCallback(() => {

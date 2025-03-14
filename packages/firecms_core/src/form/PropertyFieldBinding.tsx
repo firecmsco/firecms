@@ -17,7 +17,7 @@ import {
 import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
 
 import { isHidden, isPropertyBuilder, isReadOnly, resolveProperty } from "../util";
-import { useCustomizationController } from "../hooks";
+import { useAuthController, useCustomizationController } from "../hooks";
 import { Typography } from "@firecms/ui";
 import { getFieldConfig, getFieldId } from "../core";
 import { ErrorBoundary } from "../components";
@@ -90,6 +90,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
      onPropertyChange
  }: PropertyFieldBindingProps<T, M>): ReactElement<PropertyFieldBindingProps<T, M>> {
 
+    const authController = useAuthController();
     const customizationController = useCustomizationController();
 
     return (
@@ -107,7 +108,8 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                     path: context.path,
                     entityId: context.entityId,
                     propertyConfigs: customizationController.propertyConfigs,
-                    index
+                    index,
+                    authController
                 });
 
                 const disabled = disabledProp || isReadOnly(resolvedProperty) || Boolean(resolvedProperty?.disabled);
@@ -139,7 +141,8 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                         path: context.path,
                         entityId: context.entityId,
                         propertyConfigs: customizationController.propertyConfigs,
-                        index
+                        index,
+                        authController
                     });
                     Component = configProperty.Field as ComponentType<FieldProps<T>>;
                 }

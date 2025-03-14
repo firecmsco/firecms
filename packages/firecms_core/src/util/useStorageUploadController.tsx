@@ -18,6 +18,7 @@ import { PreviewSize } from "../preview";
 import { randomString } from "./strings";
 import { resolveStorageFilenameString, resolveStoragePathString } from "./storage";
 import { resolveProperty } from "./resolutions";
+import { useAuthController } from "../hooks";
 
 /**
  * Internal representation of an item in the storage
@@ -33,7 +34,6 @@ export interface StorageFieldItem {
     metadata?: any,
     size: PreviewSize
 }
-
 
 export function useStorageUploadController<M extends object>({
                                                                  entityId,
@@ -58,6 +58,7 @@ export function useStorageUploadController<M extends object>({
                                                                  onChange: (value: string | string[] | null) => void
                                                              }) {
 
+    const authController = useAuthController();
     const storage: StorageConfig | undefined = property.dataType === "string"
         ? property.storage
         : property.dataType === "array" &&
@@ -90,7 +91,8 @@ export function useStorageUploadController<M extends object>({
 
     const resolvedProperty = resolveProperty({
         propertyOrBuilder: property as PropertyOrBuilder,
-        values: entityValues
+        values: entityValues,
+        authController
     }) as ResolvedStringProperty | ResolvedArrayProperty<string[]>;
 
     const fileNameBuilder = useCallback(async (file: File) => {

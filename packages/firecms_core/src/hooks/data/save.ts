@@ -1,12 +1,4 @@
-import {
-    DataSource,
-    Entity,
-    EntityCollection,
-    EntityValues,
-    FireCMSContext,
-    SaveEntityProps,
-    User
-} from "../../types";
+import { DataSource, Entity, EntityCollection, EntityValues, FireCMSContext, SaveEntityProps, User } from "../../types";
 import { useDataSource } from "./useDataSource";
 import { resolveCollection } from "../../util";
 
@@ -49,23 +41,23 @@ export type SaveEntityWithCallbacksProps<M extends Record<string, any>> =
  * @group Hooks and utilities
  */
 export async function saveEntityWithCallbacks<M extends Record<string, any>, USER extends User>({
-                                                                                                        collection,
-                                                                                                        path,
-                                                                                                        entityId,
-                                                                                                        values,
-                                                                                                        previousValues,
-                                                                                                        status,
-                                                                                                        dataSource,
-                                                                                                        context,
-                                                                                                        onSaveSuccess,
-                                                                                                        onSaveFailure,
-                                                                                                        onPreSaveHookError,
-                                                                                                        onSaveSuccessHookError
-                                                                                                    }: SaveEntityWithCallbacksProps<M> & {
-                                                                                                        collection: EntityCollection<M, USER>,
-                                                                                                        dataSource: DataSource,
-                                                                                                        context: FireCMSContext<USER>,
-                                                                                                    }
+                                                                                                    collection,
+                                                                                                    path,
+                                                                                                    entityId,
+                                                                                                    values,
+                                                                                                    previousValues,
+                                                                                                    status,
+                                                                                                    dataSource,
+                                                                                                    context,
+                                                                                                    onSaveSuccess,
+                                                                                                    onSaveFailure,
+                                                                                                    onPreSaveHookError,
+                                                                                                    onSaveSuccessHookError
+                                                                                                }: SaveEntityWithCallbacksProps<M> & {
+                                                                                                    collection: EntityCollection<M, USER>,
+                                                                                                    dataSource: DataSource,
+                                                                                                    context: FireCMSContext,
+                                                                                                }
 ): Promise<void> {
 
     if (status !== "new" && !entityId) {
@@ -85,7 +77,8 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, USE
                 path,
                 values: previousValues as EntityValues<M>,
                 entityId,
-                propertyConfigs: customizationController.propertyConfigs
+                propertyConfigs: customizationController.propertyConfigs,
+                authController: context.authController
             });
             updatedValues = await callbacks.onPreSave({
                 collection: resolvedCollection,
@@ -127,7 +120,8 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, USE
                     path,
                     values: updatedValues as EntityValues<M>,
                     entityId,
-                    propertyConfigs: customizationController.propertyConfigs
+                    propertyConfigs: customizationController.propertyConfigs,
+                    authController: context.authController
                 });
                 callbacks.onSaveSuccess({
                     collection: resolvedCollection,
@@ -156,7 +150,8 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, USE
                     path,
                     values: updatedValues as EntityValues<M>,
                     entityId,
-                    propertyConfigs: customizationController.propertyConfigs
+                    propertyConfigs: customizationController.propertyConfigs,
+                    authController: context.authController
                 });
                 callbacks.onSaveFailure({
                     collection: resolvedCollection,

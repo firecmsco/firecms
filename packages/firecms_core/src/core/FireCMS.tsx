@@ -2,7 +2,7 @@
 
 import React, { useMemo } from "react";
 import { CenteredView, Typography } from "@firecms/ui";
-import { CustomizationController, EntityCollection, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
+import { CustomizationController, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
 import { AuthControllerContext } from "../contexts";
 import { useBuildSideEntityController } from "../internal/useBuildSideEntityController";
 import { useCustomizationController, useFireCMSContext } from "../hooks";
@@ -53,17 +53,8 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         apiKey
     } = props;
 
-    /**
-     * Controller in charge of fetching and persisting data
-     */
-    const dataSource = useBuildDataSource({
-        delegate: dataSourceDelegate,
-        propertyConfigs,
-        navigationController
-    });
-
     const sideDialogsController = useBuildSideDialogsController();
-    const sideEntityController = useBuildSideEntityController(navigationController, sideDialogsController);
+    const sideEntityController = useBuildSideEntityController(navigationController, sideDialogsController, authController);
 
     const pluginsLoading = plugins?.some(p => p.loading) ?? false;
 
@@ -88,6 +79,16 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         authController,
         dataSourceDelegate,
         plugins
+    });
+
+    /**
+     * Controller in charge of fetching and persisting data
+     */
+    const dataSource = useBuildDataSource({
+        delegate: dataSourceDelegate,
+        propertyConfigs,
+        navigationController,
+        authController
     });
 
     if (accessResponse?.message) {
