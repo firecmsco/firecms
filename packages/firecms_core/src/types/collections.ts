@@ -215,6 +215,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * Force a filter in this view. If applied, the rest of the filters will
      * be disabled. Filters applied with this prop cannot be changed.
      * e.g. `forceFilter: { age: [">=", 18] }`
+     * e.g. `forceFilter: { related_user: ["==", new EntityReference("sdc43dsw2", "users")] }`
      */
     forceFilter?: FilterValues<Extract<keyof M, string>>;
 
@@ -222,6 +223,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * Initial filters applied to the collection this collection is related to.
      * Defaults to none. Filters applied with this prop can be changed.
      * e.g. `initialFilter: { age: [">=", 18] }`
+     * e.g. `initialFilter: { related_user: ["==", new EntityReference("sdc43dsw2", "users")] }`
      */
     initialFilter?: FilterValues<Extract<keyof M, string>>; // setting FilterValues<M> can break defining collections by code
 

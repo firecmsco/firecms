@@ -18,39 +18,31 @@ import {
 } from "../styles";
 import { useInjectStyles } from "../hooks";
 
-interface MultiSelectContextProps {
-    fieldValue?: string[];
-    onItemClick: (v: string) => void;
+export type MultiSelectValue = string | number | boolean;
+
+// Make the context properly generic
+interface MultiSelectContextProps<T extends MultiSelectValue = string> {
+    fieldValue?: T[];
+    onItemClick: (v: T) => void;
 }
 
-export const MultiSelectContext = React.createContext<MultiSelectContextProps>({} as any);
+// Create a proper generic context
+export const MultiSelectContext = React.createContext<MultiSelectContextProps<any>>({} as any);
 
 /**
  * Props for MultiSelect component
  */
-interface MultiSelectProps {
-
-    /**
-     * The modality of the popover. When set to true, interaction with outside elements
-     * will be disabled and only popover content will be visible to screen readers.
-     * Optional, defaults to false.
-     */
+interface MultiSelectProps<T extends MultiSelectValue = string> {
     modalPopover?: boolean;
-
-    /**
-     * Additional class names to apply custom styles to the multi-select component.
-     * Optional, can be used to add custom styles.
-     */
     className?: string;
-
     open?: boolean,
     name?: string,
     id?: string,
     onOpenChange?: (open: boolean) => void,
-    value?: string[],
+    value?: T[],
     inputClassName?: string,
     onChange?: React.EventHandler<ChangeEvent<HTMLSelectElement>>,
-    onValueChange?: (updatedValue: string[]) => void,
+    onValueChange?: (updatedValue: T[]) => void,
     placeholder?: React.ReactNode,
     size?: "small" | "medium",
     useChips?: boolean,
@@ -66,9 +58,10 @@ interface MultiSelectProps {
     padding?: boolean,
     invisible?: boolean,
     children: React.ReactNode;
-    renderValues?: (values: string[]) => React.ReactNode;
+    renderValues?: (values: T[]) => React.ReactNode;
 }
 
+// Use generic type for the forwarded ref
 export const MultiSelect = React.forwardRef<
     HTMLButtonElement,
     MultiSelectProps
@@ -95,8 +88,9 @@ export const MultiSelect = React.forwardRef<
         },
         ref
     ) => {
+        // Properly type the state variables to match the generic props
         const [isPopoverOpen, setIsPopoverOpen] = React.useState(open ?? false);
-        const [selectedValues, setSelectedValues] = React.useState<string[]>(value ?? []);
+        const [selectedValues, setSelectedValues] = React.useState<any[]>(value ?? []);
 
         const onPopoverOpenChange = (open: boolean) => {
             setIsPopoverOpen(open);
@@ -115,24 +109,24 @@ export const MultiSelect = React.forwardRef<
                     return child.props.value;
                 }
                 return null;
-            }).filter(Boolean) as string[]
+            }).filter(Boolean) as any[]
             : [];
 
         React.useEffect(() => {
             setSelectedValues(value ?? []);
         }, [value]);
 
-        function onItemClick(newValue: string) {
-            let newSelectedValues: string[];
-            if (selectedValues.includes(newValue)) {
-                newSelectedValues = selectedValues.filter((v) => v !== newValue);
+        function onItemClick(newValue: any) {
+            let newSelectedValues: any[];
+            if (selectedValues.some(v => String(v) === String(newValue))) {
+                newSelectedValues = selectedValues.filter(v => String(v) !== String(newValue));
             } else {
                 newSelectedValues = [...selectedValues, newValue];
             }
             updateValues(newSelectedValues);
         }
 
-        function updateValues(values: string[]) {
+        function updateValues(values: any[]) {
             setSelectedValues(values);
             onValueChange?.(values);
         }
@@ -149,9 +143,9 @@ export const MultiSelect = React.forwardRef<
             }
         };
 
-        const toggleOption = (value: string) => {
-            const newSelectedValues = selectedValues.includes(value)
-                ? selectedValues.filter((v) => v !== value)
+        const toggleOption = (value: any) => {
+            const newSelectedValues = selectedValues.some(v => String(v) === String(value))
+                ? selectedValues.filter(v => String(v) !== String(value))
                 : [...selectedValues, value];
             updateValues(newSelectedValues);
         };
@@ -222,14 +216,14 @@ export const MultiSelect = React.forwardRef<
                                                 }
                                             }).filter(Boolean);
 
-                                            const option = childrenProps.find((o) => o.value === value);
+                                            const option = childrenProps.find((o) => String(o.value) === String(value));
                                             if (!useChips) {
                                                 return option?.children;
                                             }
                                             return (
                                                 <Chip
                                                     size={"medium"}
-                                                    key={value}
+                                                    key={String(value)}
                                                     className={cls("flex flex-row items-center p-1")}
                                                 >
                                                     {option?.children}
@@ -255,7 +249,7 @@ export const MultiSelect = React.forwardRef<
                                         />}
                                         <div className={cls("px-2 h-full flex items-center")}>
                                             <KeyboardArrowDownIcon size={"small"}
-                                                            className={cls("transition", isPopoverOpen ? "rotate-180" : "")}/>
+                                                                   className={cls("transition", isPopoverOpen ? "rotate-180" : "")}/>
                                         </div>
                                     </div>
                                 </div>
@@ -266,7 +260,7 @@ export const MultiSelect = React.forwardRef<
                                     </span>
                                     <div className={cls("px-2 h-full flex items-center")}>
                                         <KeyboardArrowDownIcon size={"small"}
-                                                        className={cls("transition", isPopoverOpen ? "rotate-180" : "")}/>
+                                                               className={cls("transition", isPopoverOpen ? "rotate-180" : "")}/>
                                     </div>
                                 </div>
                             )}
@@ -319,7 +313,6 @@ export const MultiSelect = React.forwardRef<
                                     </CommandPrimitive.Item>}
                                     {children}
                                 </CommandPrimitive.Group>
-
                             </CommandPrimitive.List>
                         </CommandPrimitive>
                     </PopoverPrimitive.Content>
@@ -331,18 +324,17 @@ export const MultiSelect = React.forwardRef<
 
 MultiSelect.displayName = "MultiSelect";
 
-export interface MultiSelectItemProps {
-    value: string;
+export interface MultiSelectItemProps<T extends MultiSelectValue = string> {
+    value: T;
     children?: React.ReactNode,
     className?: string;
 }
 
-export function MultiSelectItem({
-                                    children,
-                                    value,
-                                    className
-                                }: MultiSelectItemProps) {
-
+export function MultiSelectItem<T extends MultiSelectValue = string>({
+                                                                         children,
+                                                                         value,
+                                                                         className
+                                                                     }: MultiSelectItemProps<T>) {
     const context = React.useContext(MultiSelectContext);
     if (!context) throw new Error("MultiSelectItem must be used inside a MultiSelect");
     const {
@@ -350,9 +342,9 @@ export function MultiSelectItem({
         onItemClick
     } = context;
 
-    const isSelected = (fieldValue ?? []).includes(value);
+    const isSelected = (fieldValue ?? []).some(v => String(v) === String(value));
+
     return <CommandPrimitive.Item
-        // value={value}
         onMouseDown={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -375,8 +367,8 @@ export function MultiSelectItem({
         <InnerCheckBox checked={isSelected}/>
         {children}
     </CommandPrimitive.Item>;
-
 }
+
 
 function InnerCheckBox({ checked }: { checked: boolean }) {
     return <div className={cls(

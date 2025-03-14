@@ -43,6 +43,8 @@ import {
     MenubarSubTriggerIndicator,
     MenubarTrigger,
     MenuItem,
+    MultiSelect,
+    MultiSelectItem,
     MusicNoteIcon,
     Popover,
     RadioGroup,
@@ -545,20 +547,41 @@ export default function ClientUIComponentsShowcase({
                 </Select>
             </Card>
 
-            {/*<Card className={cardClasses}>*/}
-            {/*    <Typography variant="subtitle2">MultiSelect</Typography>*/}
-            {/*    <MultiSelect value={[]} label="MultiSelect" onMultiValueChange={() => {*/}
-            {/*    }}>*/}
-            {/*        <MultiSelectItem value="option1">Option 1</MultiSelectItem>*/}
-            {/*        <MultiSelectItem value="option2">Option 2</MultiSelectItem>*/}
-            {/*    </MultiSelect>*/}
-            {/*    <MultiSelect value={[]} label="Custom Render MultiSelect" onMultiValueChange={() => {*/}
-            {/*    }}>*/}
-            {/*        <MultiSelectItem value="red">Red</MultiSelectItem>*/}
-            {/*        <MultiSelectItem value="green">Green</MultiSelectItem>*/}
-            {/*        <MultiSelectItem value="blue">Blue</MultiSelectItem>*/}
-            {/*    </MultiSelect>*/}
-            {/*</Card>*/}
+            <Card className={cardClasses}>
+                <IconButton className="absolute top-2 right-2 hover:no-underline"
+                            component={"a"}
+                            target={linksInNewTab ? "_blank" : undefined}
+                            href={(docsUrl ?? "") + "/docs/components/multiselect"}
+                            size="smallest">
+                    <ArrowForwardIcon size="smallest"/>
+                </IconButton>
+                <Typography variant="subtitle2">MultiSelect</Typography>
+
+                {/* Custom render example with chips */}
+                <MultiSelect
+                    value={[]}
+                    label="Colors MultiSelect"
+                    renderValues={(values) => (
+                        <div className="flex gap-1">
+                            {values.map(value => (
+                                <Chip
+                                    key={value}
+                                    className={`${value === "red" ? "bg-red-200" :
+                                        value === "blue" ? "bg-blue-200" :
+                                            value === "green" ? "bg-green-200" : ""}`}
+                                >
+                                    {value}
+                                </Chip>
+                            ))}
+                        </div>
+                    )}
+                    onValueChange={() => {
+                    }}>
+                    <MultiSelectItem value="red">Red</MultiSelectItem>
+                    <MultiSelectItem value="blue">Blue</MultiSelectItem>
+                    <MultiSelectItem value="green">Green</MultiSelectItem>
+                </MultiSelect>
+            </Card>
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"

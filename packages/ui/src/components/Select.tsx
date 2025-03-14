@@ -13,19 +13,21 @@ import { CheckIcon, KeyboardArrowDownIcon } from "../icons";
 import { cls } from "../util";
 import { SelectInputLabel } from "./common/SelectInputLabel";
 
-export type SelectProps = {
+export type SelectValue = string | number | boolean;
+
+export type SelectProps<T extends SelectValue = string> = {
     open?: boolean,
     name?: string,
     fullWidth?: boolean,
     id?: string,
     onOpenChange?: (open: boolean) => void,
-    value?: string,
+    value?: T,
     className?: string,
     inputClassName?: string,
     onChange?: React.EventHandler<ChangeEvent<HTMLSelectElement>>,
-    onValueChange?: (updatedValue: string) => void,
+    onValueChange?: (updatedValue: T) => void,
     placeholder?: React.ReactNode,
-    renderValue?: (value: string) => React.ReactNode,
+    renderValue?: (value: T) => React.ReactNode,
     size?: "small" | "medium" | "large",
     label?: React.ReactNode | string,
     disabled?: boolean,
@@ -39,30 +41,30 @@ export type SelectProps = {
 };
 
 export const Select = forwardRef<HTMLDivElement, SelectProps>(({
-                                                                   inputRef,
-                                                                   open,
-                                                                   name,
-                                                                   fullWidth = false,
-                                                                   id,
-                                                                   onOpenChange,
-                                                                   value,
-                                                                   onChange,
-                                                                   onValueChange,
-                                                                   className,
-                                                                   inputClassName,
-                                                                   placeholder,
-                                                                   renderValue,
-                                                                   label,
-                                                                   size = "large",
-                                                                   error,
-                                                                   disabled,
-                                                                   padding = true,
-                                                                   position = "item-aligned",
-                                                                   endAdornment,
-                                                                   invisible,
-                                                                   children,
-                                                                   ...props
-                                                               }, ref) => {
+                                                                                inputRef,
+                                                                                open,
+                                                                                name,
+                                                                                fullWidth = false,
+                                                                                id,
+                                                                                onOpenChange,
+                                                                                value,
+                                                                                onChange,
+                                                                                onValueChange,
+                                                                                className,
+                                                                                inputClassName,
+                                                                                placeholder,
+                                                                                renderValue,
+                                                                                label,
+                                                                                size = "large",
+                                                                                error,
+                                                                                disabled,
+                                                                                padding = true,
+                                                                                position = "item-aligned",
+                                                                                endAdornment,
+                                                                                invisible,
+                                                                                children,
+                                                                                ...props
+                                                                            }, ref) => {
 
     const [openInternal, setOpenInternal] = useState(open ?? false);
 
@@ -71,24 +73,32 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
     }, [open]);
 
     const onValueChangeInternal = useCallback((newValue: string) => {
-        onValueChange?.(newValue);
+        // Convert string value to appropriate type
+        let typedValue: SelectValue = newValue;
+        if (newValue === "true") typedValue = true;
+        else if (newValue === "false") typedValue = false;
+        else if (!isNaN(Number(newValue)) && newValue.trim() !== '') typedValue = Number(newValue);
+
+        onValueChange?.(typedValue as any);
         if (onChange) {
             const event = {
                 target: {
                     name,
-                    value: newValue
+                    value: typedValue
                 }
-            } as ChangeEvent<HTMLSelectElement>;
+            } as unknown as ChangeEvent<HTMLSelectElement>;
             onChange(event);
         }
-    }, [onChange, value, onValueChange]);
+    }, [onChange, onValueChange, name]);
 
     const hasValue = Array.isArray(value) ? value.length > 0 : (value != null && value !== "" && value !== undefined);
+    // Convert non-string values to strings for Radix UI
+    const stringValue = value !== undefined ? String(value) : undefined;
 
     return (
         <SelectPrimitive.Root
             name={name}
-            value={value}
+            value={stringValue}
             open={openInternal}
             disabled={disabled}
             onValueChange={onValueChangeInternal}
@@ -157,10 +167,9 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                                 }}
                                 placeholder={placeholder}
                                 className={"w-full"}>
-                                {hasValue && value && renderValue ? renderValue(value) : placeholder}
+                                {hasValue && value !== undefined && renderValue ? renderValue(value) : placeholder}
                                 {/*{hasValue && !renderValue && value}*/}
                                 {hasValue && !renderValue && (() => {
-
                                     // @ts-ignore
                                     const childrenProps: SelectItemProps[] = Children.map(children, (child) => {
                                         if (React.isValidElement(child)) {
@@ -168,7 +177,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                                         }
                                     }).filter(Boolean);
 
-                                    const option = childrenProps.find((o) => o.value === value);
+                                    const option = childrenProps.find((o) => String(o.value) === String(value));
                                     return option?.children;
                                 })()}
 
@@ -187,10 +196,10 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                         )}
                         <SelectPrimitive.Icon asChild>
                             <KeyboardArrowDownIcon size={"medium"}
-                                            className={cls("transition", open ? "rotate-180" : "", {
-                                                "px-2": size === "large",
-                                                "px-1": size === "medium" || size === "small",
-                                            })}/>
+                                                   className={cls("transition", open ? "rotate-180" : "", {
+                                                       "px-2": size === "large",
+                                                       "px-1": size === "medium" || size === "small",
+                                                   })}/>
                         </SelectPrimitive.Icon>
                     </div>
                 </SelectPrimitive.Trigger>
@@ -211,22 +220,25 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
 
 Select.displayName = "Select";
 
-export type SelectItemProps = {
-    value: string,
+export type SelectItemProps<T extends SelectValue = string> = {
+    value: T,
     children?: React.ReactNode,
     disabled?: boolean,
     className?: string,
 };
 
-export function SelectItem({
-                               value,
-                               children,
-                               disabled,
-                               className
-                           }: SelectItemProps) {
+export function SelectItem<T extends SelectValue = string>({
+                                                               value,
+                                                               children,
+                                                               disabled,
+                                                               className
+                                                           }: SelectItemProps<T>) {
+    // Convert value to string for Radix UI
+    const stringValue = String(value);
+
     return <SelectPrimitive.Item
-        key={value}
-        value={value}
+        key={stringValue}
+        value={stringValue}
         disabled={disabled}
         className={cls(
             "w-full",

@@ -317,6 +317,11 @@ initialFilter: {
     age: [">=", 18]
 }
 ```
+```tsx
+initialFilter: {
+    related_user: ["==", new EntityReference("sdc43dsw2", "users")]
+}
+```
 
 - **`forceFilter`**: Force a filter in this view. If applied, the rest of the filters will be disabled. Filters applied
   with this prop cannot be changed.
@@ -324,6 +329,11 @@ initialFilter: {
 ```tsx
 forceFilter: {
     age: [">=", 18]
+}
+```
+```tsx
+forceFilter: {
+    related_user: ["==", new EntityReference("sdc43dsw2", "users")]
 }
 ```
 
