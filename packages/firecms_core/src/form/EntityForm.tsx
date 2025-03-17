@@ -693,7 +693,7 @@ export function EntityForm<M extends Record<string, any>>({
                     <div className={cls("flex flex-col w-full pt-12 pb-16 px-4 sm:px-8 md:px-10")}>
 
                         {formContext.formex.dirty
-                            ? <Tooltip title={"Unsaved changes"}
+                            ? <Tooltip title={"Local unsaved changes"}
                                        className={"self-end sticky top-4 z-10"}>
                                 <Chip size={"small"} colorScheme={"orangeDarker"}>
                                     <EditIcon size={"smallest"}/>

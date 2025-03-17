@@ -165,19 +165,21 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
 
             {!hideId && size !== "xs" && (
                 <div
-                    className="w-[138px] overflow-hidden truncate font-mono text-xs text-text-secondary dark:text-text-secondary-dark max-w-full text-ellipsis px-2 align-center flex items-center justify-center gap-1"
+                    className="w-[138px] overflow-hidden truncate font-mono text-xs text-text-secondary dark:text-text-secondary-dark max-w-full text-ellipsis px-2 align-center flex items-center gap-1"
                     onClick={(event) => {
                         event.stopPropagation();
                     }}>
-                    {hasDraft && <Tooltip title={"Unsaved changes"} className={"inline"}>
+                    {hasDraft && <Tooltip title={"Local unsaved changes"} className={"inline"}>
                         <Chip colorScheme={"orangeDarker"} className={"p-0.5"}>
                             <EditIcon size={12}/>
                         </Chip>
                     </Tooltip>}
-                    {entity
-                        ? entity.id
-                        : <Skeleton/>
-                    }
+                    <span className="min-w-0 truncate text-center">
+                        {entity
+                            ? entity.id
+                            : <Skeleton/>
+                        }
+                    </span>
                 </div>
             )}
 
