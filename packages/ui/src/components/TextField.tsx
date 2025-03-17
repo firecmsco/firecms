@@ -168,9 +168,9 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                     disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                     error ? "border border-red-500 dark:border-red-600" : "",
                     {
-                        "min-h-[32px]": !invisible && size === "small",
-                        "min-h-[48px]": !invisible && size === "medium",
-                        "min-h-[64px]": !invisible && size === "large",
+                        "min-h-[28px]": size === "small",
+                        "min-h-[42px]": size === "medium",
+                        "min-h-[64px]": size === "large",
                     },
                     className
                 )}

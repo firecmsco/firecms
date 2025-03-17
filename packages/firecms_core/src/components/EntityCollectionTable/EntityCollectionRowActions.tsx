@@ -165,7 +165,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
 
             {!hideId && size !== "xs" && (
                 <div
-                    className="w-[138px] overflow-hidden truncate font-mono text-xs text-text-secondary dark:text-text-secondary-dark max-w-full text-ellipsis px-2 align-center flex items-center gap-1"
+                    className="w-[138px] overflow-hidden truncate font-mono text-xs text-text-secondary dark:text-text-secondary-dark max-w-full text-ellipsis px-2 align-center justify-center flex items-center gap-1"
                     onClick={(event) => {
                         event.stopPropagation();
                     }}>
