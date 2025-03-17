@@ -93,6 +93,55 @@ const contentProperty = buildProperty({
 });
 ```
 
+
+### `sortable`
+
+Controls whether elements in this array can be reordered. Defaults to `true`.
+This property has no effect if `disabled` is set to `true`.
+
+Example:
+```tsx
+import { buildProperty } from "@firecms/core";
+
+const tagsProperty = buildProperty({
+  name: "Tags",
+  dataType: "array",
+  of: {
+    dataType: "string",
+    previewAsTag: true
+  },
+  sortable: false // disable reordering
+});
+```
+
+### `canAddElements`
+
+Controls whether elements can be added to the array. Defaults to `true`.
+This property has no effect if `disabled` is set to `true`.
+
+Example:
+```tsx
+import { buildProperty } from "@firecms/core";
+
+const readOnlyTagsProperty = buildProperty({
+  name: "Tags",
+  dataType: "array",
+  of: {
+    dataType: "string"
+  },
+  canAddElements: false // prevent adding new tags
+});
+```
+
+### `expanded`
+
+Determines whether the field should be initially expanded. Defaults to `true`.
+
+### `minimalistView`
+
+When set to `true`, displays the child properties directly without being wrapped in an extendable panel.
+
+
 ### `validation`
 
 * `required` Should this field be compulsory.

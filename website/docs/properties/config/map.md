@@ -50,6 +50,14 @@ Should the map be expanded by default in the form view. Defaults to `false`.
 Render this map as a key-value table that allows to use
 arbitrary keys. You don't need to define the properties in this case.
 
+### `expanded`
+
+Determines whether the field should be initially expanded. Defaults to `true`.
+
+### `minimalistView`
+
+When set to `true`, displays the child properties directly without being wrapped in an extendable panel.
+
 ### `validation`
 
 * `required` Should this field be compulsory.

@@ -329,7 +329,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                                 addLabel={fieldKey ? `Add to ${fieldKey}` : "Add"}
                                 size={"small"}
                                 disabled={disabled || !fieldKey}
-                                includeAddButton={true}
+                                canAddElements={true}
                                 onValueChange={(newValue) => {
                                     setValue({
                                         ...value,

@@ -197,7 +197,7 @@ function EnumFormFields({
                                 size={"small"}
                                 buildEntry={buildEntry}
                                 onInternalIdAdded={setLastInternalIdAdded}
-                                includeAddButton={true}
+                                canAddElements={true}
                                 onValueChange={(value) => setFieldValue(enumValuesPath, value)}
                                 newDefaultEntry={{ id: "", label: "" }}/>
 

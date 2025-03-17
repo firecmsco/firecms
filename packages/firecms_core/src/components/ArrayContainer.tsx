@@ -37,7 +37,12 @@ export interface ArrayContainerProps<T> {
     disabled?: boolean;
     size?: "small" | "medium";
     onInternalIdAdded?: (id: number) => void;
+    /**
+     * @deprecated Use `canAddElements` instead
+     */
     includeAddButton?: boolean;
+    canAddElements?: boolean;
+    sortable?: boolean;
     newDefaultEntry: T;
     onValueChange: (value: T[]) => void,
     className?: string;
@@ -66,13 +71,18 @@ export function ArrayContainer<T>({
                                       buildEntry,
                                       size = "medium",
                                       onInternalIdAdded,
-                                      includeAddButton,
+                                      includeAddButton: deprecatedIncludeAddButton,
+                                      canAddElements: canAddElementsProp = true,
+                                      sortable = true,
                                       newDefaultEntry,
                                       onValueChange,
                                       className,
                                       min = 0,
                                       max = Infinity
                                   }: ArrayContainerProps<T>) {
+
+    const canAddElements = (canAddElementsProp || canAddElementsProp === undefined)
+        && (deprecatedIncludeAddButton === undefined || deprecatedIncludeAddButton);
 
     const hasValue = value && Array.isArray(value) && value.length > 0;
 
@@ -193,7 +203,8 @@ export function ArrayContainer<T>({
                                    storedProps={itemCustomPropsRef.current[internalId]}
                                    updateItemCustomProps={updateItemCustomProps}
                                    addInIndex={addInIndex}
-                                   includeAddButton={includeAddButton}
+                                   canAddElements={canAddElements}
+                                   sortable={sortable}
                                />
                            );
                        }}
@@ -208,7 +219,7 @@ export function ArrayContainer<T>({
                                 <Draggable
                                     key={`array_field_${internalId}`}
                                     draggableId={`array_field_${internalId}`}
-                                    isDragDisabled={disabled}
+                                    isDragDisabled={disabled || !sortable}
                                     index={index}>
                                     {(provided, snapshot) => (
                                         <ArrayContainerItem
@@ -224,7 +235,8 @@ export function ArrayContainer<T>({
                                             storedProps={itemCustomPropsRef.current[internalId]}
                                             updateItemCustomProps={updateItemCustomProps}
                                             addInIndex={addInIndex}
-                                            includeAddButton={includeAddButton}
+                                            canAddElements={canAddElements}
+                                            sortable={sortable}
                                         />
                                     )}
                                 </Draggable>
@@ -233,7 +245,7 @@ export function ArrayContainer<T>({
 
                         {droppableProvided.placeholder}
 
-                        {includeAddButton && (
+                        {canAddElements && (
                             <div className="my-4 justify-center text-left">
                                 <Button
                                     variant={"text"}
@@ -263,7 +275,8 @@ type ArrayContainerItemProps = {
     remove: (index: number) => void,
     copy: (index: number) => void,
     addInIndex?: (index: number) => void,
-    includeAddButton?: boolean,
+    canAddElements?: boolean,
+    sortable: boolean,
     isDragging: boolean,
     storedProps?: object,
     updateItemCustomProps: (internalId: number, props: object) => void
@@ -278,7 +291,8 @@ export function ArrayContainerItem({
                                        buildEntry,
                                        remove,
                                        addInIndex,
-                                       includeAddButton,
+                                       canAddElements,
+                                       sortable,
                                        copy,
                                        isDragging,
                                        storedProps,
@@ -311,7 +325,8 @@ export function ArrayContainerItem({
                               index={index}
                               provided={provided}
                               addInIndex={addInIndex}
-                              includeAddButton={includeAddButton}
+                              canAddElements={canAddElements}
+                              sortable={sortable}
                               copy={copy}/>
         </div>
     </div>;
@@ -324,7 +339,8 @@ export function ArrayItemOptions({
                                      index,
                                      provided,
                                      copy,
-                                     includeAddButton,
+                                     canAddElements,
+                                     sortable,
                                      addInIndex
                                  }: {
     direction?: "row" | "column",
@@ -333,7 +349,8 @@ export function ArrayItemOptions({
     index: number,
     provided: any,
     copy: (index: number) => void,
-    includeAddButton?: boolean,
+    sortable: boolean,
+    canAddElements?: boolean,
     addInIndex?: (index: number) => void
 }) {
 
@@ -349,10 +366,10 @@ export function ArrayItemOptions({
             delayDuration={400}
             open={menuOpen ? false : undefined}
             side={direction === "column" ? "left" : undefined}
-            title="Drag to move. Click for more options">
+            title={!disabled && sortable ? "Drag to move. Click for more options" : undefined}>
             <IconButton
                 size="small"
-                disabled={disabled}
+                disabled={disabled || !canAddElements}
                 onClick={(e) => {
                     e.preventDefault();
                     setMenuOpen(true);
@@ -360,7 +377,7 @@ export function ArrayItemOptions({
                 onDragStart={(e: any) => {
                     setMenuOpen(false);
                 }}
-                className={`cursor-${disabled ? "inherit" : "grab"}`}>
+                className={disabled || !sortable ? "cursor-inherit" : "cursor-grab"}>
                 <HandleIcon/>
             </IconButton>
 
@@ -384,20 +401,20 @@ export function ArrayItemOptions({
                     Copy
                 </MenuItem>
 
-                {includeAddButton && addInIndex && <MenuItem dense
-                                                             onClick={() => {
-                                                                 setMenuOpen(false);
-                                                                 addInIndex(index);
-                                                             }}>
+                {addInIndex && <MenuItem dense
+                                         onClick={() => {
+                                             setMenuOpen(false);
+                                             addInIndex(index);
+                                         }}>
                     <KeyboardArrowUpIcon size={"small"}/>
                     Add on top
                 </MenuItem>}
 
-                {includeAddButton && addInIndex && <MenuItem dense
-                                                             onClick={() => {
-                                                                 setMenuOpen(false);
-                                                                 addInIndex(index + 1);
-                                                             }}>
+                {addInIndex && <MenuItem dense
+                                         onClick={() => {
+                                             setMenuOpen(false);
+                                             addInIndex(index + 1);
+                                         }}>
                     <KeyboardArrowDownIcon size={"small"}/>
                     Add below
                 </MenuItem>}

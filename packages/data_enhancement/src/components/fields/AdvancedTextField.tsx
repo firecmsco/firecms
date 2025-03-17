@@ -117,9 +117,9 @@ export function AdvancedTextField<T extends string | number>({
             disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
             error ? "border border-red-500 dark:border-red-600" : "",
             {
-                "min-h-[32px]": size === "small",
-                "min-h-[48px]": size === "medium",
-                "min-h-[64px]": size === "large"
+                "min-h-[28px]": size === "small",
+                "min-h-[42px]": size === "medium",
+                "min-h-[64px]": size === "large",
             },
             className)}>
 
@@ -154,9 +154,9 @@ export function AdvancedTextField<T extends string | number>({
             <TextareaAutosize
                 className={cls(
                     {
-                        "min-h-[32px]": size === "small",
-                        "min-h-[48px]": size === "medium",
-                        "min-h-[64px]": size === "large"
+                        "min-h-[28px]": size === "small",
+                        "min-h-[42px]": size === "medium",
+                        "min-h-[64px]": size === "large",
                     },
                     "rounded-md resize-none w-full outline-none text-base bg-transparent ",
                     disabled && "border border-transparent outline-none opacity-50 text-surface-600 dark:text-surface-500",

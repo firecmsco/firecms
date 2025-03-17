@@ -44,7 +44,7 @@ interface MultiSelectProps<T extends MultiSelectValue = string> {
     onChange?: React.EventHandler<ChangeEvent<HTMLSelectElement>>,
     onValueChange?: (updatedValue: T[]) => void,
     placeholder?: React.ReactNode,
-    size?: "small" | "medium",
+    size?: "small" | "medium" | "large",
     useChips?: boolean,
     label?: React.ReactNode | string,
     disabled?: boolean,
@@ -69,7 +69,7 @@ export const MultiSelect = React.forwardRef<
     (
         {
             value,
-            size,
+            size = "large",
             label,
             error,
             onValueChange,
@@ -193,9 +193,19 @@ export const MultiSelect = React.forwardRef<
                             ref={ref}
                             onClick={handleTogglePopover}
                             className={cls(
-                                size === "small" ? "min-h-[42px]" : "min-h-[64px]",
-                                "py-2",
-                                "px-4",
+                                {
+                                    "min-h-[28px]": size === "small",
+                                    "min-h-[42px]": size === "medium",
+                                    "min-h-[64px]": size === "large",
+                                },
+                                {
+                                    "py-1": size === "small",
+                                    "py-2": size === "medium" || size === "large",
+                                },
+                                {
+                                    "px-2": size === "small",
+                                    "px-4": size === "medium" || size === "large",
+                                },
                                 "select-none rounded-md text-sm",
                                 invisible ? fieldBackgroundInvisibleMixin : fieldBackgroundMixin,
                                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,

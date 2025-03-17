@@ -23,7 +23,7 @@ export function MultiSelectFieldBinding({
                                             disabled,
                                             property,
                                             includeDescription,
-                                            size = "medium",
+                                            size = "large",
                                             autoFocus
                                         }: FieldProps<EnumType[], any, any>) {
 
@@ -83,7 +83,7 @@ export function MultiSelectFieldBinding({
         <>
             <MultiSelect
                 className={"w-full mt-2"}
-                size={size === "medium" ? "medium" : "small"}
+                size={size}
                 value={validValue ? value.map((v) => v.toString()) : []}
                 disabled={disabled}
                 modalPopover={true}

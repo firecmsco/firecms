@@ -26,7 +26,9 @@ buildProperty({
         dataType: "string",
         previewAsTag: true
     },
-    expanded: true
+    expanded: true,
+    sortable: true, // default is true
+    canAddElements: true, // default is true
 });
 ```
 

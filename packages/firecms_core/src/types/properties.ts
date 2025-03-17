@@ -488,6 +488,18 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
      */
     minimalistView?: boolean;
 
+    /**
+     * Can the elements in this array be reordered. Defaults to `true`.
+     * This prop has no effect if `disabled` is set to true.
+     */
+    sortable?: boolean;
+
+    /**
+     * Can the elements in this array be added. Defaults to `true`
+     * This prop has no effect if `disabled` is set to true.
+     */
+    canAddElements?: boolean;
+
 }
 
 /**

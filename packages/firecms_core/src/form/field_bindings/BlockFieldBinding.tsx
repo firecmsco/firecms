@@ -88,7 +88,7 @@ export function BlockFieldBinding<T extends Array<any>>({
                                  buildEntry={buildEntry}
                                  onInternalIdAdded={setLastAddedId}
                                  disabled={isSubmitting || Boolean(property.disabled)}
-                                 includeAddButton={!property.disabled}
+                                 canAddElements={!property.disabled}
                                  onValueChange={(value) => setFieldValue(propertyKey, value)}
                                  newDefaultEntry={{
                                      [property.oneOf!.typeField ?? DEFAULT_ONE_OF_TYPE]: firstOneOfKey,

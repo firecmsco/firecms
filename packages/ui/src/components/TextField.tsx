@@ -134,11 +134,11 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                     "focused:text-text-primary focused:dark:text-text-primary-dark",
                     invisible ? focusedInvisibleMixin : "",
                     disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
-                    size === "small"
-                        ? "min-h-[32px]"
-                        : size === "medium"
-                            ? "min-h-[48px]"
-                            : "min-h-[64px]",
+                    {
+                        "min-h-[28px]": size === "small",
+                        "min-h-[42px]": size === "medium",
+                        "min-h-[64px]": size === "large",
+                    },
                     label
                         ? size === "large"
                             ? "pt-8 pb-2"

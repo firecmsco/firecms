@@ -84,13 +84,16 @@ export function RepeatFieldBinding<T extends Array<any>>({
         </ErrorBoundary>;
     };
 
+    const canAddElements = !property.disabled && !isSubmitting && !disabled && (property.canAddElements || property.canAddElements === undefined);
+    const sortable = property.sortable === undefined ? true : property.sortable;
     const arrayContainer = <ArrayContainer droppableId={propertyKey}
                                            addLabel={property.name ? "Add entry to " + property.name : "Add entry"}
                                            value={value}
                                            buildEntry={buildEntry}
                                            onInternalIdAdded={setLastAddedId}
                                            disabled={isSubmitting || Boolean(property.disabled)}
-                                           includeAddButton={!property.disabled}
+                                           canAddElements={canAddElements}
+                                           sortable={sortable}
                                            newDefaultEntry={getDefaultValueFor(property.of)}
                                            onValueChange={(value) => setFieldValue(propertyKey, value)}
                                            className={property.widthPercentage !== undefined ? "mt-8" : undefined}

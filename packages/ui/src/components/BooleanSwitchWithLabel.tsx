@@ -67,7 +67,11 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
                 "rounded-md max-w-full justify-between box-border relative inline-flex items-center",
                 !invisible && focus && !disabled ? focusedClasses : "",
                 error ? "text-red-500 dark:text-red-600" : (focus && !disabled ? "text-primary" : (!disabled ? "text-text-primary dark:text-text-primary-dark" : "text-text-secondary dark:text-text-secondary-dark")),
-                size === "small" ? "min-h-[40px]" : (size === "medium" ? "min-h-[48px]" : "min-h-[64px]"),
+                {
+                    "min-h-[28px]": size === "small",
+                    "min-h-[42px]": size === "medium",
+                    "min-h-[64px]": size === "large",
+                },
                 size === "small" ? "pl-2" : "pl-4",
                 size === "small" ? "pr-4" : "pr-6",
                 position === "end" ? "flex-row-reverse" : "flex-row",

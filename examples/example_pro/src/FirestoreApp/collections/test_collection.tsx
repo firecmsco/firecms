@@ -523,13 +523,15 @@ export const testCollection = buildCollection<any>({
             //     validation: { required: false },
             //     clearable: true
             // },
-            // tags: {
-            //     name: "Tags",
-            //     dataType: "array",
-            //     of: {
-            //         dataType: "string"
-            //     }
-            // },
+            tags: {
+                name: "Tags",
+                dataType: "array",
+                sortable: false,
+                canAddElements: false,
+                of: {
+                    dataType: "string"
+                }
+            },
             // specSheet: ({
             //                 values,
             //                 entityId
