@@ -71,6 +71,8 @@ export function useStorageUploadController<M extends object>({
     if (!storage)
         throw Error("Storage meta must be specified");
 
+    const processFile = storage?.processFile;
+
     const metadata: Record<string, any> | undefined = storage?.metadata;
     const size = multipleFilesSupported ? "medium" : "large";
 
@@ -172,7 +174,22 @@ export function useStorageUploadController<M extends object>({
         if (!acceptedFiles.length || disabled)
             return;
 
+        if (processFile) {
+            try {
+                acceptedFiles = await Promise.all(acceptedFiles.map(async file => {
+                    const processedFile = await processFile(file);
+                    if (!processedFile) {
+                        return file;
+                    }
+                    return processedFile;
+                }));
+            } catch (e) {
+                console.error("Error processing file with custom code. Attempting to continue uploading.", e);
+            }
+        }
+
         let newInternalValue: StorageFieldItem[];
+
         if (multipleFilesSupported) {
             newInternalValue = [...internalValue,
                 ...(await Promise.all(acceptedFiles.map(async file => {

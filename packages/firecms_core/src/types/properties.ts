@@ -816,6 +816,13 @@ export type StorageConfig = {
     maxSize?: number,
 
     /**
+     * Use this callback to process the file before uploading it to the storage.
+     * If nothing is returned, the file is uploaded as it is.
+     * @param file
+     */
+    processFile?: (file: File) => Promise<File> | undefined;
+
+    /**
      * Postprocess the saved value (storage path or URL)
      * after it has been resolved.
      */
