@@ -5,6 +5,7 @@ import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary
 import {
     canEditEntity,
     removeInitialAndTrailingSlashes,
+    resolveCollection,
     resolveDefaultSelectedView,
     resolvedSelectedEntityView
 } from "../util";
@@ -21,6 +22,7 @@ import { getEntityFromCache } from "../util/entity_cache";
 import { EntityForm, EntityFormProps } from "../form";
 import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
 import { EntityJsonPreview } from "../components/EntityJsonPreview";
+import { createFormexStub } from "../util/createFormexStub";
 
 export const MAIN_TAB_VALUE = "__main_##Q$SC^#S6";
 export const JSON_TAB_VALUE = "__json";
@@ -54,7 +56,7 @@ export interface EntityEditViewProps<M extends Record<string, any>> {
     onTabChange?: (props: OnTabChangeParams<M>) => void;
     layout?: "side_panel" | "full_screen";
     barActions?: React.ReactNode;
-    formProps?: Partial<EntityFormProps<M>>
+    formProps?: Partial<EntityFormProps<M>>,
 }
 
 /**
@@ -104,19 +106,6 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
         console.error(`Entity with id ${entityId} not found in collection ${props.path}`);
     }
 
-    if (!canEdit) {
-        return <div className={"flex flex-col"}>
-            <Typography className={"mt-16 mb-8 mx-8"} variant={"h4"}>
-                {props.collection.singularName ?? props.collection.name}
-            </Typography>
-            <EntityView
-                className={"px-8"}
-                entity={entity as Entity<M>}
-                path={props.path}
-                collection={props.collection}/>
-        </div>
-    }
-
     return <EntityEditViewInner<M> {...props}
                                    entityId={entityId}
                                    entity={entity}
@@ -124,8 +113,10 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
                                    dataLoading={dataLoading}
                                    status={status}
                                    setStatus={setStatus}
+                                   canEdit={canEdit}
     />;
 }
+
 
 export function EntityEditViewInner<M extends Record<string, any>>({
                                                                        path,
@@ -143,13 +134,15 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                                                                        barActions,
                                                                        status,
                                                                        setStatus,
-                                                                       formProps
+                                                                       formProps,
+                                                                       canEdit
                                                                    }: EntityEditViewProps<M> & {
     entity?: Entity<M>,
     cachedDirtyValues?: Partial<M>, // dirty cached entity in memory
     dataLoading: boolean,
     status: EntityStatus,
     setStatus: (status: EntityStatus) => void,
+    canEdit?: boolean,
 }) {
 
     const context = useFireCMSContext();
@@ -194,22 +187,57 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         resolvedEntityViews,
         selectedEntityView,
         selectedSecondaryForm
-    } = resolvedSelectedEntityView(customViews, customizationController, selectedTab);
+    } = resolvedSelectedEntityView(customViews, customizationController, selectedTab, canEdit);
 
     const actionsAtTheBottom = !largeLayout || layout === "side_panel" || selectedEntityView?.includeActions === "bottom";
 
     const mainViewVisible = selectedTab === MAIN_TAB_VALUE || Boolean(selectedSecondaryForm);
 
+    const authController = useAuthController();
+
     const customViewsView: React.ReactNode[] | undefined = customViews && resolvedEntityViews
         .filter(e => !e.includeActions)
         .map((customView) => {
+
             if (!customView)
                 return null;
             const Builder = customView.Builder;
             if (!Builder) {
-                console.error("customView.Builder is not defined");
+                console.error("INTERNAL: customView.Builder is not defined");
                 return null;
             }
+
+            if (!entityId) {
+                console.error("INTERNAL: entityId is not defined");
+                return null;
+            }
+
+            const formexStub = createFormexStub<M>(usedEntity?.values ?? {} as M);
+            const usedFormContext: FormContext = formContext ?? {
+                entityId,
+                openEntityMode: layout,
+                status: status,
+                values: usedEntity?.values ?? {},
+                setFieldValue: (key: string, value: any) => {
+                    throw new Error("You can't update values in read only mode");
+                },
+                save: () => {
+                    throw new Error("You can't save in read only mode");
+                },
+                collection: resolveCollection<M>({
+                    collection,
+                    path,
+                    entityId,
+                    values: usedEntity?.values ?? {},
+                    previousValues: usedEntity?.values ?? {},
+                    propertyConfigs: customizationController.propertyConfigs,
+                    authController
+                }),
+                path,
+                entity: usedEntity,
+                savingError: undefined,
+                formex: formexStub
+            };
 
             return <div
                 className={cls(defaultBorderMixin,
@@ -219,11 +247,11 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 key={`custom_view_${customView.key}`}
                 role="tabpanel">
                 <ErrorBoundary>
-                    {formContext && <Builder
+                    {usedFormContext && <Builder
                         collection={collection}
                         entity={usedEntity}
-                        modifiedValues={formContext.formex.values ?? usedEntity?.values}
-                        formContext={formContext}
+                        modifiedValues={usedFormContext?.formex?.values ?? usedEntity?.values}
+                        formContext={usedFormContext}
                     />}
                 </ErrorBoundary>
             </div>;
@@ -238,7 +266,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         role="tabpanel">
         <ErrorBoundary>
             <EntityJsonPreview
-                values={formContext?.values ?? {}}/>
+                values={formContext?.values ?? entity?.values ?? {}}/>
         </ErrorBoundary>
     </div>;
 
@@ -287,42 +315,61 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         }
     };
 
-    // Render the main entity form view (or a read-only view if the user cannot edit)
-    const entityView = <EntityForm<M>
-        collection={collection}
-        path={path}
-        entityId={entityId ?? usedEntity?.id}
-        onValuesModified={onValuesModified}
-        entity={entity}
-        initialDirtyValues={cachedDirtyValues}
-        openEntityMode={layout}
-        forceActionsAtTheBottom={actionsAtTheBottom}
-        initialStatus={status}
-        className={cls(!mainViewVisible ? "hidden" : "", formProps?.className)}
-        EntityFormActionsComponent={EntityEditViewFormActions}
-        {...formProps}
-        onEntityChange={(entity) => {
-            setUsedEntity(entity);
-            formProps?.onEntityChange?.(entity);
-        }}
-        onStatusChange={(status) => {
-            setStatus(status);
-            formProps?.onStatusChange?.(status);
-        }}
-        onFormContextReady={(formContext) => {
-            setFormContext(formContext);
-            formProps?.onFormContextReady?.(formContext);
-        }}
-        onSaved={(params) => {
-            const res = {
-                ...params,
-                selectedTab: MAIN_TAB_VALUE === selectedTab ? undefined : selectedTab
-            };
-            onSaved?.(res);
-            formProps?.onSaved?.(res);
-        }}
-        Builder={selectedSecondaryForm?.Builder}
-    />;
+    const entityView = !canEdit ?
+        (
+            <div
+                className={cls("flex-1 flex flex-row w-full overflow-y-auto justify-center", !mainViewVisible ? "hidden" : "")}>
+                <div
+                    className={cls("relative flex flex-col max-w-4xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-6xl w-full h-fit")}>
+                    <Typography className={"mt-16 mb-8 mx-8"} variant={"h4"}>
+                        {collection.singularName ?? collection.name}
+                    </Typography>
+                    <EntityView
+                        className={"px-8 h-full overflow-auto"}
+                        entity={entity as Entity<M>}
+                        path={path}
+                        collection={collection}/>
+                </div>
+            </div>
+)
+:
+    (
+        <EntityForm<M>
+            collection={collection}
+            path={path}
+            entityId={entityId ?? usedEntity?.id}
+            onValuesModified={onValuesModified}
+            entity={entity}
+            initialDirtyValues={cachedDirtyValues}
+                openEntityMode={layout}
+                forceActionsAtTheBottom={actionsAtTheBottom}
+                initialStatus={status}
+                className={cls(!mainViewVisible ? "hidden" : "", formProps?.className)}
+                EntityFormActionsComponent={EntityEditViewFormActions}
+                {...formProps}
+                onEntityChange={(entity) => {
+                    setUsedEntity(entity);
+                    formProps?.onEntityChange?.(entity);
+                }}
+                onStatusChange={(status) => {
+                    setStatus(status);
+                    formProps?.onStatusChange?.(status);
+                }}
+                onFormContextReady={(formContext) => {
+                    setFormContext(formContext);
+                    formProps?.onFormContextReady?.(formContext);
+                }}
+                onSaved={(params) => {
+                    const res = {
+                        ...params,
+                        selectedTab: MAIN_TAB_VALUE === selectedTab ? undefined : selectedTab
+                    };
+                    onSaved?.(res);
+                    formProps?.onSaved?.(res);
+                }}
+                Builder={selectedSecondaryForm?.Builder}
+            />
+        );
 
     const subcollectionTabs = subcollections && subcollections.map((subcollection) =>
         <Tab

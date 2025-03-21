@@ -12,12 +12,16 @@ export function isObject(item: any) {
     return item && typeof item === "object" && !Array.isArray(item);
 }
 
-export function mergeDeep<T extends Record<any, any>, U extends Record<any, any>>(target: T, source: U): T & U {
+export function mergeDeep<T extends Record<any, any>, U extends Record<any, any>>(target: T, source: U, ignoreUndefined: boolean = false): T & U {
     const targetIsObject = isObject(target);
     const output = targetIsObject ? { ...target } : target;
     if (targetIsObject && isObject(source)) {
         Object.keys(source).forEach(key => {
             const sourceElement = source[key];
+            // Skip undefined values when ignoreUndefined is true
+            if (ignoreUndefined && sourceElement === undefined) {
+                return;
+            }
             if (sourceElement instanceof Date) {
                 // Assign a new Date instance with the same time value
                 Object.assign(output, { [key]: new Date(sourceElement.getTime()) });

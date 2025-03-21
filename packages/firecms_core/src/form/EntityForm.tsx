@@ -90,6 +90,7 @@ export type EntityFormProps<M extends Record<string, any>> = {
     children?: React.ReactNode;
 };
 
+
 export function EntityForm<M extends Record<string, any>>({
                                                               path,
                                                               entityId: entityIdProp,
@@ -678,9 +679,9 @@ export function EntityForm<M extends Record<string, any>>({
     />;
 
     return (
-        <Formex value={formContext.formex}>
+        <Formex value={formex}>
             <form
-                onSubmit={formContext.formex.handleSubmit}
+                onSubmit={formex.handleSubmit}
                 onReset={() => formex.resetForm({
                     values: getInitialEntityValues(authController, collection, path, status, entity, customizationController.propertyConfigs) as M
                 })}
@@ -692,7 +693,7 @@ export function EntityForm<M extends Record<string, any>>({
 
                     <div className={cls("flex flex-col w-full pt-12 pb-16 px-4 sm:px-8 md:px-10")}>
 
-                        {formContext.formex.dirty
+                        {formex.dirty
                             ? <Tooltip title={"Local unsaved changes"}
                                        className={"self-end sticky top-4 z-10"}>
                                 <Chip size={"small"} colorScheme={"orangeDarker"}>
@@ -777,3 +778,4 @@ function useOnAutoSave(autoSave: undefined | boolean, formex: FormexController<a
         }
     }, [formex.values]);
 }
+

@@ -175,7 +175,7 @@ function EntityFullScreenRoute({
             return blocked.current;
         });
     } catch (e) {
-        console.warn("Blocker not available, navigation will not be blocked");
+        // console.warn("Blocker not available, navigation will not be blocked");
     }
 
     const lastCollectionEntry = navigationEntries.findLast((entry) => entry.type === "collection");

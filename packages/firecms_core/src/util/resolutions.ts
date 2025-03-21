@@ -441,11 +441,13 @@ export function resolveEntityView(entityView: string | EntityCustomView<any>, co
 export function resolvedSelectedEntityView<M extends Record<string, any>>(
     customViews: (string | EntityCustomView<M>)[] | undefined,
     customizationController: CustomizationController,
-    selectedTab?: string
+    selectedTab?: string,
+    canEdit?: boolean,
 ) {
     const resolvedEntityViews = customViews ? customViews
             .map(e => resolveEntityView(e, customizationController.entityViews))
-            .filter(Boolean) as EntityCustomView[]
+            .filter((e): e is EntityCustomView<M> => Boolean(e))
+            .filter((e) => canEdit || !e.includeActions)
         : [];
 
     const selectedEntityView = resolvedEntityViews.find(e => e.key === selectedTab);

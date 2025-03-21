@@ -171,7 +171,9 @@ export interface FormContext<M extends Record<string, any> = any> {
     openEntityMode: "side_panel" | "full_screen";
 
     /**
-     * This is the underlying formex controller that powers the form
+     * This is the underlying formex controller that powers the form.
+     * If you are in a red only mode, the formex controller is there, but you can't
+     * operate with it
      */
     formex: FormexController<M>;
 }

@@ -38,7 +38,7 @@ export function EntityJsonPreview({ values }: { values: object }) {
 
     return (
         <Highlight
-            theme={mode === "dark" ? themes.vsDark : themes.vsLight}
+            theme={mode === "dark" ? themes.vsDark : themes.github}
             code={code}
             language="json"
         >
@@ -48,9 +48,9 @@ export function EntityJsonPreview({ values }: { values: object }) {
                     ref={preRef}
                     style={{
                         ...style,
-                        background: "inherit"
+                        backgroundColor: "inherit"
                     }}
-                    className="container mx-auto p-8 rounded text-sm"
+                    className="max-w-6xl mx-auto p-8 rounded text-sm"
                 >
           {tokens.map((line, i) => (
               <div key={i} {...getLineProps({ line })} className="text-wrap">

@@ -78,6 +78,7 @@ export function mergeCollection(target: EntityCollection,
                                 modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | void
 ): EntityCollection {
 
+
     const subcollectionsMerged = joinCollectionLists(
         target?.subcollections ?? [],
         source?.subcollections ?? [],
@@ -94,7 +95,7 @@ export function mergeCollection(target: EntityCollection,
             propertiesMerged[key] = source.properties[key] as PropertyOrBuilder;
     });
 
-    const mergedCollection = mergeDeep(target, source);
+    const mergedCollection = mergeDeep(target, source, true);
     const targetPropertiesOrder = getCollectionKeys(target);
     const sourcePropertiesOrder = getCollectionKeys(source);
     const mergedPropertiesOrder = [...new Set([...sourcePropertiesOrder, ...targetPropertiesOrder])];
@@ -118,6 +119,7 @@ export function mergeCollection(target: EntityCollection,
 
     // @ts-ignore
     resultCollection["merged"] = true;
+
     return resultCollection
 }
 

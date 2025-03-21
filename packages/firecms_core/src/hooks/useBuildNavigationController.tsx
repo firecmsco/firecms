@@ -528,7 +528,7 @@ function useCustomBlocker(): NavigationBlocker {
             return shouldBlock;
         });
     } catch (e) {
-        console.warn("Blocker not available, navigation will not be blocked");
+        // console.warn("Blocker not available, navigation will not be blocked");
     }
 
     const updateBlockListener = (path: string, block: boolean, basePath?: string) => {
