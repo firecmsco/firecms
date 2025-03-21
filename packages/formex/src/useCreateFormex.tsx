@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { getIn, setIn } from "./utils";
 import equal from "react-fast-compare";
 
@@ -162,8 +162,14 @@ export function useCreateFormex<T extends object>({
     );
 
     const resetForm = useCallback((props?: FormexResetProps<T>) => {
-        const { submitCount: submitCountProp, values: valuesProp, errors: errorsProp, touched: touchedProp } = props ?? {};
+        const {
+            submitCount: submitCountProp,
+            values: valuesProp,
+            errors: errorsProp,
+            touched: touchedProp
+        } = props ?? {};
         valuesRef.current = valuesProp ?? initialValuesRef.current;
+        initialValuesRef.current = valuesProp ?? initialValuesRef.current;
         setValuesInner(valuesProp ?? initialValuesRef.current);
         setErrors(errorsProp ?? {});
         setTouchedState(touchedProp ?? {});
@@ -253,6 +259,12 @@ export function useCreateFormex<T extends object>({
     useEffect(() => {
         controllerRef.current = controller;
     }, [controller]);
+
+    // @ts-ignore
+    console.log("initialValuesRef.current.name", initialValuesRef.current.name);
+    // @ts-ignore
+    console.log("values.name", values.name);
+    console.log("dirty", dirty);
 
     return controller;
 }
