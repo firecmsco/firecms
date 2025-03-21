@@ -115,7 +115,7 @@ export default function ClientUIComponentsShowcase({
                     <Button size="small">Small Button</Button>
                     <Button size="medium">Medium Button</Button>
                     <Button size="large">Large Button</Button>
-                    <Button variant={"neutral"}>Neutral Button</Button>
+                    <Button color={"neutral"}>Neutral Button</Button>
                     <Button variant={"text"}>Text Button</Button>
                     <Button variant={"outlined"}>Outlined Button</Button>
                 </div>

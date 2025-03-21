@@ -638,7 +638,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                     The changes done in this editor will override the properties defined in code.
                                     You can delete the overridden values to revert to the state defined in code.
                                 </Typography>
-                                <Button variant={"neutral"}
+                                <Button color={"neutral"}
                                         onClick={() => {
                                             setDeleteRequested(true);
                                         }}>Reset to code</Button>

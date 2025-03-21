@@ -120,7 +120,7 @@ export const productsCollection = buildCollection<Product>({
     description: "List of the products currently sold in our shop",
     textSearchEnabled: true,
     permissions: ({ authController }) => ({
-        edit: true,
+        edit: false,
         create: true,
         delete: true
     }),

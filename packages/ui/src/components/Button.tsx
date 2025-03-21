@@ -4,9 +4,9 @@ import { cls } from "../util";
 
 export type ButtonProps<C extends React.ElementType = "button"> = {
     children?: React.ReactNode;
-    variant?: "filled" | "neutral" | "outlined" | "text";
+    variant?: "filled" | "outlined" | "text";
     disabled?: boolean;
-    color?: "primary" | "secondary" | "text" | "error";
+    color?: "primary" | "secondary" | "text" | "error" | "neutral";
     size?: "small" | "medium" | "large" | "xl" | "2xl";
     startIcon?: React.ReactNode;
     fullWidth?: boolean;
@@ -43,29 +43,27 @@ const ButtonInner = React.forwardRef<
         "border border-secondary bg-secondary focus:ring-secondary shadow hover:ring-1 hover:ring-secondary text-white hover:text-white": variant === "filled" && color === "secondary" && !disabled,
         "border border-red-500 bg-red-500 hover:bg-red-500 focus:ring-red-500 shadow hover:ring-1 hover:ring-red-600 text-white hover:text-white": variant === "filled" && color === "error" && !disabled,
         "border border-surface-accent-200 bg-surface-accent-200 hover:bg-surface-accent-300 focus:ring-surface-accent-400 shadow hover:ring-1 hover:ring-surface-accent-400 text-text-primary hover:text-text-primary dark:text-text-primary-dark hover:dark:text-text-primary-dark": variant === "filled" && color === "text" && !disabled,
+        "border border-transparent bg-surface-100 hover:bg-surface-accent-200 text-text-primary dark:bg-surface-800 dark:hover:bg-surface-accent-700 dark:text-text-primary-dark": variant === "filled" && color === "neutral" && !disabled,
 
         // Text Variants
         "border border-transparent text-primary hover:text-primary hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-800": variant === "text" && color === "primary" && !disabled,
         "border border-transparent text-secondary hover:text-secondary hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-800": variant === "text" && color === "secondary" && !disabled,
         "border border-transparent text-red-500 hover:text-red-500 hover:bg-red-500 hover:bg-opacity-10": variant === "text" && color === "error" && !disabled,
         "border border-transparent text-text-primary hover:text-text-primary dark:text-text-primary-dark hover:dark:text-text-primary-dark hover:bg-surface-accent-200 hover:dark:bg-surface-700": variant === "text" && color === "text" && !disabled,
+        "border border-transparent text-text-primary hover:text-text-primary hover:bg-surface-accent-200 dark:text-text-primary-dark dark:hover:bg-surface-accent-700": variant === "text" && color === "neutral" && !disabled,
 
         // Outlined Variants
         "border border-primary text-primary hover:text-primary hover:bg-primary-bg": variant === "outlined" && color === "primary" && !disabled,
         "border border-secondary text-secondary hover:text-secondary hover:bg-secondary-bg": variant === "outlined" && color === "secondary" && !disabled,
         "border border-red-500 text-red-500 hover:text-red-500 hover:bg-red-500 hover:text-white": variant === "outlined" && color === "error" && !disabled,
         "border border-surface-accent-400 text-text-primary hover:text-text-primary dark:text-text-primary-dark hover:bg-surface-accent-200": variant === "outlined" && color === "text" && !disabled,
-
-        // Neutral Variants
-        "border border-transparent bg-surface-100 hover:bg-surface-accent-200 text-text-primary dark:bg-surface-800 dark:hover:bg-surface-accent-700 dark:text-white": variant === "neutral" && (color === "primary" || color === "text") && !disabled,
-        "border border-transparent bg-surface-100 hover:bg-surface-accent-200 text-text-secondary dark:bg-surface-800 dark:hover:bg-surface-accent-700 dark:text-white": variant === "neutral" && color === "secondary" && !disabled,
-        "border border-transparent bg-surface-100 hover:bg-surface-accent-200 text-error dark:bg-surface-800 dark:hover:bg-surface-accent-700 dark:text-error": variant === "neutral" && color === "error" && !disabled,
+        "border border-surface-400 text-text-primary hover:bg-surface-accent-200 dark:border-surface-600 dark:text-text-primary-dark dark:hover:bg-surface-accent-700": variant === "outlined" && color === "neutral" && !disabled,
 
         // Disabled states for all variants
         "text-text-disabled dark:text-text-disabled-dark": disabled,
         "border border-transparent opacity-50": variant === "text" && disabled,
         "border border-surface-500 opacity-50": variant === "outlined" && disabled,
-        "border border-transparent bg-surface-300 dark:bg-surface-500 opacity-40": (variant === "filled" || variant === "neutral") && disabled,
+        "border border-transparent bg-surface-300 dark:bg-surface-500 opacity-40": variant === "filled" && disabled,
     });
 
     const sizeClasses = cls(

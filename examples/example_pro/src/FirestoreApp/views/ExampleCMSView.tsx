@@ -126,7 +126,7 @@ export function ExampleCMSView() {
                                 <SelectItem value={"read"}>Can view</SelectItem>
                             </Select>}
                         />
-                        <Button variant="neutral">
+                        <Button color="neutral">
                             Invite
                         </Button>
                     </div>
