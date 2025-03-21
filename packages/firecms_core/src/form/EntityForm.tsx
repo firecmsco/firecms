@@ -119,15 +119,12 @@ export function EntityForm<M extends Record<string, any>>({
                                                               children
                                                           }: EntityFormProps<M>) {
 
-    console.log("disabledProp", disabledProp);
-
     if (collection.customId && collection.formAutoSave) {
         console.warn(`The collection ${collection.path} has customId and formAutoSave enabled. This is not supported and formAutoSave will be ignored`);
     }
 
     const authController = useAuthController();
     const [status, setStatus] = useState<EntityStatus>(initialStatus);
-    const [saving, setSaving] = useState(false);
 
     const updateStatus = (status: EntityStatus) => {
         setStatus(status);
@@ -265,7 +262,6 @@ export function EntityForm<M extends Record<string, any>>({
     }), [collection, path, entityId, formex.values, formex.initialValues, customizationController.propertyConfigs]);
 
     const onPreSaveHookError = useCallback((e: Error) => {
-        setSaving(false);
         snackbarController.open({
             type: "error",
             message: "Error before saving: " + e?.message
@@ -274,7 +270,6 @@ export function EntityForm<M extends Record<string, any>>({
     }, [snackbarController]);
 
     const onSaveSuccessHookError = useCallback((e: Error) => {
-        setSaving(false);
         snackbarController.open({
             type: "error",
             message: "Error after saving (entity is saved): " + e?.message
@@ -294,7 +289,6 @@ export function EntityForm<M extends Record<string, any>>({
 
         clearDirtyCache();
         onValuesModified?.(false);
-        setSaving(false);
         if (!autoSave)
             snackbarController.open({
                 type: "success",
@@ -316,7 +310,6 @@ export function EntityForm<M extends Record<string, any>>({
     };
 
     const onSaveFailure = useCallback((e: Error) => {
-        setSaving(false);
         snackbarController.open({
             type: "error",
             message: "Error saving: " + e?.message
@@ -338,7 +331,6 @@ export function EntityForm<M extends Record<string, any>>({
         values: M,
         previousValues?: M,
     }) => {
-        setSaving(true);
         return saveEntityWithCallbacks({
             path,
             entityId,
@@ -348,7 +340,7 @@ export function EntityForm<M extends Record<string, any>>({
             status,
             dataSource,
             context,
-            onSaveSuccess: (updatedEntity: Entity<M>) => onSaveSuccess(updatedEntity),
+            onSaveSuccess,
             onSaveFailure,
             onPreSaveHookError,
             onSaveSuccessHookError
@@ -409,7 +401,6 @@ export function EntityForm<M extends Record<string, any>>({
     };
 
     const disabled = formex.isSubmitting || Boolean(disabledProp);
-    console.log("disabled", disabled);
 
     const formContext: FormContext<M> = {
         // @ts-ignore

@@ -275,6 +275,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         formex,
         status: "existing",
         openEntityMode: "side_panel",
+        disabled: false,
     };
 
     const property: ResolvedProperty<any> | undefined = propertyKey && getPropertyInPath(collection?.properties ?? {} as ResolvedProperties, propertyKey as string);

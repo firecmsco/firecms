@@ -98,10 +98,6 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
         }
     }, [authController, entity, status]);
 
-    console.log({
-        canEdit
-    })
-
     if ((dataLoading && !cachedValues) || (!entity || canEdit === undefined) && (status === "existing" || status === "copy")) {
         return <CircularProgressCenter/>;
     }
