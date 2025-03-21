@@ -87,7 +87,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
      autoFocus,
      index,
      size,
-     onPropertyChange
+     onPropertyChange,
  }: PropertyFieldBindingProps<T, M>): ReactElement<PropertyFieldBindingProps<T, M>> {
 
     const authController = useAuthController();
@@ -112,7 +112,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                     authController
                 });
 
-                const disabled = disabledProp || isReadOnly(resolvedProperty) || Boolean(resolvedProperty?.disabled);
+                const disabled = disabledProp || isReadOnly(resolvedProperty) || Boolean(resolvedProperty?.disabled) || context.disabled;
 
                 if (resolvedProperty === null || isHidden(resolvedProperty)) {
                     return <></>;

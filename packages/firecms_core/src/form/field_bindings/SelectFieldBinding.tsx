@@ -66,7 +66,7 @@ export function SelectFieldBinding<T extends EnumType>({
                         />
                     </PropertyIdCopyTooltip>}
                 endAdornment={
-                    property.clearable && <IconButton
+                    property.clearable && !disabled && <IconButton
                         onClick={handleClearClick}>
                         <CloseIcon/>
                     </IconButton>

@@ -447,7 +447,7 @@ export function resolvedSelectedEntityView<M extends Record<string, any>>(
     const resolvedEntityViews = customViews ? customViews
             .map(e => resolveEntityView(e, customizationController.entityViews))
             .filter((e): e is EntityCustomView<M> => Boolean(e))
-            .filter((e) => canEdit || !e.includeActions)
+            // .filter((e) => canEdit || !e.includeActions)
         : [];
 
     const selectedEntityView = resolvedEntityViews.find(e => e.key === selectedTab);

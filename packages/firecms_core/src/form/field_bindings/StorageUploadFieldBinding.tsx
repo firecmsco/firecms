@@ -63,7 +63,7 @@ export function StorageUploadFieldBinding({
         throw new Error("StorageUploadFieldBinding: Entity id is null");
 
     const storageSource = useStorageSource(context.collection);
-    const disabled = isReadOnly(property) || !!property.disabled || isSubmitting;
+    const disabled = isReadOnly(property) || !!property.disabled || isSubmitting || context.disabled;
 
     const {
         internalValue,

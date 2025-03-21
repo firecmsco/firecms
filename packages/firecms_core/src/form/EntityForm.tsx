@@ -74,6 +74,10 @@ export type EntityFormProps<M extends Record<string, any>> = {
     formex?: FormexController<M>;
     openEntityMode?: "side_panel" | "full_screen";
     /**
+     * If true, the form will be disabled and no actions will be available
+     */
+    disabled?: boolean;
+    /**
      * Include the copy and delete actions in the form
      */
     showDefaultActions?: boolean;
@@ -89,7 +93,6 @@ export type EntityFormProps<M extends Record<string, any>> = {
 
     children?: React.ReactNode;
 };
-
 
 export function EntityForm<M extends Record<string, any>>({
                                                               path,
@@ -108,12 +111,15 @@ export function EntityForm<M extends Record<string, any>>({
                                                               onEntityChange,
                                                               openEntityMode = "full_screen",
                                                               formex: formexProp,
+                                                              disabled: disabledProp,
                                                               Builder,
                                                               EntityFormActionsComponent = EntityFormActions,
                                                               showDefaultActions = true,
                                                               showEntityPath = true,
                                                               children
                                                           }: EntityFormProps<M>) {
+
+    console.log("disabledProp", disabledProp);
 
     if (collection.customId && collection.formAutoSave) {
         console.warn(`The collection ${collection.path} has customId and formAutoSave enabled. This is not supported and formAutoSave will be ignored`);
@@ -402,6 +408,9 @@ export function EntityForm<M extends Record<string, any>>({
         });
     };
 
+    const disabled = formex.isSubmitting || Boolean(disabledProp);
+    console.log("disabled", disabled);
+
     const formContext: FormContext<M> = {
         // @ts-ignore
         setFieldValue: useCallback(formex.setFieldValue, []),
@@ -414,7 +423,8 @@ export function EntityForm<M extends Record<string, any>>({
         entity,
         savingError,
         status,
-        openEntityMode
+        openEntityMode,
+        disabled
     };
 
     useEffect(() => {
@@ -431,6 +441,7 @@ export function EntityForm<M extends Record<string, any>>({
     const pluginActions: React.ReactNode[] = [];
     const plugins = customizationController.plugins;
 
+    const actionsDisabled = disabled || formex.isSubmitting || (status === "existing" && !formex.dirty) || Boolean(disabledProp);
     if (plugins && collection) {
         const actionProps: PluginFormActionProps = {
             entityId,
@@ -440,7 +451,8 @@ export function EntityForm<M extends Record<string, any>>({
             context,
             currentEntityId: entityId,
             formContext,
-            openEntityMode
+            openEntityMode,
+            disabled: actionsDisabled,
         };
         pluginActions.push(...plugins.map((plugin) => (
             plugin.form?.Actions
@@ -548,7 +560,7 @@ export function EntityForm<M extends Record<string, any>>({
                             !!underlyingChanges &&
                             Object.keys(underlyingChanges).includes(key) &&
                             formex.touched[key];
-                        const disabled = (!autoSave && formex.isSubmitting) || isReadOnly(property) || Boolean(property.disabled);
+                        const disabled = disabledProp || (!autoSave && formex.isSubmitting) || isReadOnly(property) || Boolean(property.disabled);
                         const hidden = isHidden(property);
                         if (hidden) return null;
                         const widthPercentage = property.widthPercentage ?? 100;
@@ -658,8 +670,6 @@ export function EntityForm<M extends Record<string, any>>({
             onIdChange(entityId);
     }, [entityId, onIdChange]);
 
-    const disabled = formex.isSubmitting || (!formex.dirty && status === "existing");
-
     if (!resolvedCollection || !path) {
         throw Error("INTERNAL: Collection and path must be defined in form context");
     }
@@ -671,7 +681,7 @@ export function EntityForm<M extends Record<string, any>>({
         layout={forceActionsAtTheBottom ? "bottom" : "side"}
         savingError={savingError}
         formex={formex}
-        disabled={disabled}
+        disabled={actionsDisabled}
         status={status}
         pluginActions={pluginActions ?? []}
         openEntityMode={openEntityMode}

@@ -98,6 +98,10 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
         }
     }, [authController, entity, status]);
 
+    console.log({
+        canEdit
+    })
+
     if ((dataLoading && !cachedValues) || (!entity || canEdit === undefined) && (status === "existing" || status === "copy")) {
         return <CircularProgressCenter/>;
     }
@@ -116,7 +120,6 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
                                    canEdit={canEdit}
     />;
 }
-
 
 export function EntityEditViewInner<M extends Record<string, any>>({
                                                                        path,
@@ -215,6 +218,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             const formexStub = createFormexStub<M>(usedEntity?.values ?? {} as M);
             const usedFormContext: FormContext = formContext ?? {
                 entityId,
+                disabled: false,
                 openEntityMode: layout,
                 status: status,
                 values: usedEntity?.values ?? {},
@@ -315,61 +319,57 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         }
     };
 
-    const entityView = !canEdit ?
-        (
-            <div
-                className={cls("flex-1 flex flex-row w-full overflow-y-auto justify-center", !mainViewVisible ? "hidden" : "")}>
-                <div
-                    className={cls("relative flex flex-col max-w-4xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-6xl w-full h-fit")}>
-                    <Typography className={"mt-16 mb-8 mx-8"} variant={"h4"}>
-                        {collection.singularName ?? collection.name}
-                    </Typography>
-                    <EntityView
-                        className={"px-8 h-full overflow-auto"}
-                        entity={entity as Entity<M>}
-                        path={path}
-                        collection={collection}/>
-                </div>
-            </div>
-)
-:
-    (
-        <EntityForm<M>
-            collection={collection}
-            path={path}
-            entityId={entityId ?? usedEntity?.id}
-            onValuesModified={onValuesModified}
-            entity={entity}
-            initialDirtyValues={cachedDirtyValues}
-                openEntityMode={layout}
-                forceActionsAtTheBottom={actionsAtTheBottom}
-                initialStatus={status}
-                className={cls(!mainViewVisible ? "hidden" : "", formProps?.className)}
-                EntityFormActionsComponent={EntityEditViewFormActions}
-                {...formProps}
-                onEntityChange={(entity) => {
-                    setUsedEntity(entity);
-                    formProps?.onEntityChange?.(entity);
-                }}
-                onStatusChange={(status) => {
-                    setStatus(status);
-                    formProps?.onStatusChange?.(status);
-                }}
-                onFormContextReady={(formContext) => {
-                    setFormContext(formContext);
-                    formProps?.onFormContextReady?.(formContext);
-                }}
-                onSaved={(params) => {
-                    const res = {
-                        ...params,
-                        selectedTab: MAIN_TAB_VALUE === selectedTab ? undefined : selectedTab
-                    };
-                    onSaved?.(res);
-                    formProps?.onSaved?.(res);
-                }}
-                Builder={selectedSecondaryForm?.Builder}
-            />
-        );
+    const entityReadOnlyView = <div
+        className={cls("flex-1 flex flex-row w-full overflow-y-auto justify-center", (canEdit || !mainViewVisible || selectedSecondaryForm) ? "hidden" : "")}>
+        <div
+            className={cls("relative flex flex-col max-w-4xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-6xl w-full h-fit")}>
+            <Typography className={"mt-16 mb-8 mx-8"} variant={"h4"}>
+                {collection.singularName ?? collection.name}
+            </Typography>
+            <EntityView
+                className={"px-8 h-full overflow-auto"}
+                entity={entity as Entity<M>}
+                path={path}
+                collection={collection}/>
+        </div>
+    </div>;
+
+    const entityView = <EntityForm<M>
+        collection={collection}
+        path={path}
+        entityId={entityId ?? usedEntity?.id}
+        onValuesModified={onValuesModified}
+        entity={entity}
+        initialDirtyValues={cachedDirtyValues}
+        openEntityMode={layout}
+        forceActionsAtTheBottom={actionsAtTheBottom}
+        initialStatus={status}
+        className={cls((!mainViewVisible || !canEdit) && !selectedSecondaryForm ? "hidden" : "", formProps?.className)}
+        EntityFormActionsComponent={EntityEditViewFormActions}
+        disabled={!canEdit}
+        {...formProps}
+        onEntityChange={(entity) => {
+            setUsedEntity(entity);
+            formProps?.onEntityChange?.(entity);
+        }}
+        onStatusChange={(status) => {
+            setStatus(status);
+            formProps?.onStatusChange?.(status);
+        }}
+        onFormContextReady={(formContext) => {
+            setFormContext(formContext);
+            formProps?.onFormContextReady?.(formContext);
+        }}
+        onSaved={(params) => {
+            const res = {
+                ...params,
+                selectedTab: MAIN_TAB_VALUE === selectedTab ? undefined : selectedTab
+            };
+            onSaved?.(res);
+            formProps?.onSaved?.(res);
+        }}
+        Builder={selectedSecondaryForm?.Builder}
+    />;
 
     const subcollectionTabs = subcollections && subcollections.map((subcollection) =>
         <Tab
@@ -436,7 +436,10 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             ? <div className="w-full pt-12 pb-16 px-4 sm:px-8 md:px-10">
                 <CircularProgressCenter/>
             </div>
-            : entityView}
+            : <>
+                {entityReadOnlyView}
+                {entityView}
+            </>}
 
         {jsonView}
 

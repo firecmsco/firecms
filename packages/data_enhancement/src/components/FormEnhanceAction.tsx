@@ -32,6 +32,7 @@ export function FormEnhanceAction({
                                       path,
                                       status,
                                       collection,
+                                      disabled,
                                       formContext,
                                       openEntityMode
                                   }: PluginFormActionProps) {
@@ -122,7 +123,7 @@ export function FormEnhanceAction({
             trigger={<Button variant={"outlined"}
                              fullWidth={largeLayout && openEntityMode === "full_screen"}
                              size={"small"}
-                             disabled={loading}>
+                             disabled={loading || disabled}>
                 {!loading && <AutoFixHighIcon color={"primary"}/>}
                 {loading && <CircularProgress size={"small"}/>}
                 Autofill

@@ -176,6 +176,8 @@ export interface FormContext<M extends Record<string, any> = any> {
      * operate with it
      */
     formex: FormexController<M>;
+
+    disabled: boolean;
 }
 
 /**
