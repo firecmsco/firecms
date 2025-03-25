@@ -2,7 +2,7 @@ import { DeleteIcon, EditIcon, FileCopyIcon } from "@firecms/ui";
 import { EntityAction } from "../../types";
 import { DeleteEntityDialog } from "../DeleteEntityDialog";
 import { addRecentId } from "../EntityCollectionView/utils";
-import { navigateToEntity } from "../../util";
+import { navigateToEntity, resolveDefaultSelectedView } from "../../util";
 
 export const editEntityAction: EntityAction = {
     icon: <EditIcon/>,
@@ -30,7 +30,14 @@ export const editEntityAction: EntityAction = {
             addRecentId(collection.id, entity.id);
         }
 
-        const path = collection?.collectionGroup ? entity.path : (fullPath ?? entity.path)
+        const path = collection?.collectionGroup ? entity.path : (fullPath ?? entity.path);
+        const defaultSelectedView = resolveDefaultSelectedView(
+            collection ? collection.defaultSelectedView : undefined,
+            {
+                status: "existing",
+                entityId: entity.id,
+            }
+        );
         navigateToEntity({
             openEntityMode,
             collection,
@@ -38,7 +45,8 @@ export const editEntityAction: EntityAction = {
             path,
             sideEntityController: context.sideEntityController,
             onClose: () => unhighlightEntity?.(entity),
-            navigation: context.navigation
+            navigation: context.navigation,
+            selectedTab: defaultSelectedView
         });
 
         return Promise.resolve(undefined);

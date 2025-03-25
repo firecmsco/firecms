@@ -260,11 +260,5 @@ export function useCreateFormex<T extends object>({
         controllerRef.current = controller;
     }, [controller]);
 
-    // @ts-ignore
-    console.log("initialValuesRef.current.name", initialValuesRef.current.name);
-    // @ts-ignore
-    console.log("values.name", values.name);
-    console.log("dirty", dirty);
-
     return controller;
 }
