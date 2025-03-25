@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from "react";
+import React, { useRef } from "react";
 import { Highlight, themes } from "prism-react-renderer";
 import { useModeController } from "../hooks";
 
@@ -8,33 +8,33 @@ export function EntityJsonPreview({ values }: { values: object }) {
     const preRef = useRef<HTMLPreElement>(null);
 
     // Global keydown handler
-    const handleGlobalKeyDown = useCallback((e: KeyboardEvent) => {
-        // Check for Control (Windows/Linux) or Command (macOS) + "a":
-        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "a") {
-            // If our code view is mounted, perform selection
-            if (preRef.current) {
-                e.preventDefault();
-                e.stopPropagation();
+    // const handleGlobalKeyDown = useCallback((e: KeyboardEvent) => {
+    //     // Check for Control (Windows/Linux) or Command (macOS) + "a":
+    //     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "a") {
+    //         // If our code view is mounted, perform selection
+    //         if (preRef.current) {
+    //             e.preventDefault();
+    //             e.stopPropagation();
+    //
+    //             const selection = window.getSelection();
+    //             const range = document.createRange();
+    //             range.selectNodeContents(preRef.current);
+    //             if (selection) {
+    //                 selection.removeAllRanges();
+    //                 selection.addRange(range);
+    //             }
+    //         }
+    //     }
+    // }, []);
 
-                const selection = window.getSelection();
-                const range = document.createRange();
-                range.selectNodeContents(preRef.current);
-                if (selection) {
-                    selection.removeAllRanges();
-                    selection.addRange(range);
-                }
-            }
-        }
-    }, []);
-
-    // Attach the global keydown listener when component mounts,
-    // and remove it when it unmounts.
-    useEffect(() => {
-        document.addEventListener("keydown", handleGlobalKeyDown);
-        return () => {
-            document.removeEventListener("keydown", handleGlobalKeyDown);
-        };
-    }, [handleGlobalKeyDown]);
+    // // Attach the global keydown listener when component mounts,
+    // // and remove it when it unmounts.
+    // useEffect(() => {
+    //     document.addEventListener("keydown", handleGlobalKeyDown);
+    //     return () => {
+    //         document.removeEventListener("keydown", handleGlobalKeyDown);
+    //     };
+    // }, [handleGlobalKeyDown]);
 
     return (
         <Highlight
