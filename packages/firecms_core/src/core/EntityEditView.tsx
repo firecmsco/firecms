@@ -179,7 +179,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     const subcollectionsCount = subcollections?.length ?? 0;
     const customViews = collection.entityViews;
     const customViewsCount = customViews?.length ?? 0;
-    const includeJsonView = true;
+    const includeJsonView = collection.includeJsonView === undefined ? true : collection.includeJsonView;
     const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0 || includeJsonView;
 
     const {

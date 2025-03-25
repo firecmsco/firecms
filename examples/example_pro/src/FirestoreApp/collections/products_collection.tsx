@@ -124,6 +124,7 @@ export const productsCollection = buildCollection<Product>({
         create: true,
         delete: true
     }),
+    includeJsonView: false,
     Actions: [SampleCollectionActions],
     subcollections: [localeCollection],
     // defaultSelectedView: "sample_custom_view",
@@ -374,39 +375,3 @@ export const productsSimpleCollection = buildCollection<any>({
     }
 
 });
-
-
-export const pppCollection = buildCollection<Product>({
-    path: "products",
-    id: "ppp",
-    callbacks: productCallbacks,
-    name: "PPP",
-    group: "Demo collections",
-    icon: "shopping_cart",
-    openEntityMode: "full_screen",
-    description: "List of the products currently sold in our shop",
-    textSearchEnabled: true,
-    permissions: ({ authController }) => ({
-        edit: true,
-        create: true,
-        delete: true
-    }),
-    Actions: [SampleCollectionActions],
-    subcollections: [localeCollection],
-    // defaultSelectedView: "sample_custom_view",
-    additionalFields: [productAdditionalField],
-    // @ts-ignore
-    properties: {
-        name: {
-            dataType: "string",
-            name: "Name",
-            description: "Name of this product",
-            clearable: true,
-            validation: {
-                required: true
-            }
-        }
-    }
-
-});
-

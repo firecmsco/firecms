@@ -332,6 +332,11 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * Defaults to false.
      */
     alwaysApplyDefaultValues?: boolean;
+
+    /**
+     * If set to true, a tab including the JSON representation of the entity will be included.
+     */
+    includeJsonView?: boolean;
 }
 
 /**

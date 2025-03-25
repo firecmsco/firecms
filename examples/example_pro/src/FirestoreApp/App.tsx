@@ -35,7 +35,6 @@ import {
     FirebaseAuthController,
     FirebaseSignInProvider,
     FirebaseUserWrapper,
-    useAppCheck,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDelegate,
@@ -49,7 +48,7 @@ import { firebaseConfig, secondaryFirebaseConfig } from "../firebase_config";
 import { ExampleCMSView } from "./views/ExampleCMSView";
 import { testCollection } from "./collections/test_collection";
 import { usersCollection } from "./collections/users_collection";
-import { localeCollectionGroup, pppCollection, productsCollection } from "./collections/products_collection";
+import { localeCollectionGroup, productsCollection } from "./collections/products_collection";
 import { blogCollection } from "./collections/blog_collection";
 import { showcaseCollection } from "./collections/showcase_collection";
 
@@ -61,7 +60,6 @@ import { FirebaseApp } from "@firebase/app";
 import { TestEditorView } from "./views/TestEditorView";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
 import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
-import { ReCaptchaEnterpriseProvider } from "@firebase/app-check";
 import { useExportPlugin } from "@firecms/data_export";
 import { useImportPlugin } from "@firecms/data_import";
 import { DemoImportAction } from "./DemoImportAction";
@@ -233,7 +231,6 @@ export function App() {
             showcaseCollection,
             cryptoCollection,
             localeCollectionGroup,
-            pppCollection,
             // carsCollection(secondaryFirestoreDelegate)
         ];
         if (process.env.NODE_ENV !== "production") {
