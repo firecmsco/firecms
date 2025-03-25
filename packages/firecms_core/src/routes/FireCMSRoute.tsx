@@ -13,6 +13,7 @@ import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
 import { toArray } from "../util/arrays";
 import { EntityCollectionView, NotFoundPage } from "../components";
 import { UnsavedChangesDialog } from "../components/UnsavedChangesDialog";
+import { EntityCollection } from "../types";
 
 export function FireCMSRoute() {
 
@@ -68,7 +69,10 @@ export function FireCMSRoute() {
     }
 
     if (navigationEntries.length === 1 && navigationEntries[0].type === "collection") {
-        const collection = navigation.getCollection(navigationEntries[0].path);
+        let collection: EntityCollection<any> | undefined;
+        collection = navigation.getCollectionById(navigationEntries[0].id);
+        if (!collection)
+            collection = navigation.getCollection(navigationEntries[0].path);
         if (!collection)
             return null;
         return <EntityCollectionView
@@ -84,7 +88,11 @@ export function FireCMSRoute() {
     if (isSidePanel) {
         const lastCollectionEntry = navigationEntries.findLast((entry) => entry.type === "collection");
         if (lastCollectionEntry) {
-            const collection = navigation.getCollection(lastCollectionEntry.path);
+            let collection: EntityCollection<any> | undefined;
+            const firstEntry = navigationEntries[0] as NavigationViewCollectionInternal<any>;
+            collection = navigation.getCollectionById(firstEntry.id);
+            if (!collection)
+                collection = navigation.getCollection(firstEntry.path);
             if (!collection)
                 return null;
             return <EntityCollectionView

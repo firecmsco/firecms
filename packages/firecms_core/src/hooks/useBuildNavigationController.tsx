@@ -291,6 +291,16 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
     }, [userConfigPersistence]);
 
+    const getCollectionById = useCallback((id: string): EC | undefined => {
+        const collections = collectionsRef.current;
+        if (collections === undefined)
+            throw Error("getCollectionById: Collections have not been initialised yet");
+        const collection: EntityCollection | undefined = collections.find(c => c.id === id);
+        if (!collection)
+            return undefined;
+        return collection as EC;
+    }, []);
+
     const getCollectionFromPaths = useCallback(<EC extends EntityCollection>(pathSegments: string[]): EC | undefined => {
 
         const collections = collectionsRef.current;
@@ -398,6 +408,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         baseCollectionPath,
         initialised,
         getCollection,
+        getCollectionById,
         getCollectionFromPaths,
         getCollectionFromIds,
         isUrlCollectionPath,

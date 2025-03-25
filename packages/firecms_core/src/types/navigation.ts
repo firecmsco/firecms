@@ -60,6 +60,11 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
     getCollection: (pathOrId: string, includeUserOverride?: boolean) => EC | undefined;
 
     /**
+     * Get the top level collection configuration for a given id
+     */
+    getCollectionById: (id: string) => EC | undefined;
+
+    /**
      * Get the collection configuration from its parent ids.
      */
     getCollectionFromIds: (ids: string[]) => EC | undefined;
