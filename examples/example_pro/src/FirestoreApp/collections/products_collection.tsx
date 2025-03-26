@@ -124,7 +124,7 @@ export const productsCollection = buildCollection<Product>({
         create: true,
         delete: true
     }),
-    includeJsonView: false,
+    includeJsonView: true,
     Actions: [SampleCollectionActions],
     subcollections: [localeCollection],
     // defaultSelectedView: "sample_custom_view",

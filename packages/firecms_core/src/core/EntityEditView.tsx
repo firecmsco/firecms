@@ -315,7 +315,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         }
     };
 
-    const entityReadOnlyView = <div
+    const entityReadOnlyView = !canEdit && entity ? <div
         className={cls("flex-1 flex flex-row w-full overflow-y-auto justify-center", (canEdit || !mainViewVisible || selectedSecondaryForm) ? "hidden" : "")}>
         <div
             className={cls("relative flex flex-col max-w-4xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-6xl w-full h-fit")}>
@@ -324,11 +324,11 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             </Typography>
             <EntityView
                 className={"px-8 h-full overflow-auto"}
-                entity={entity as Entity<M>}
+                entity={entity}
                 path={path}
                 collection={collection}/>
         </div>
-    </div>;
+    </div> : null;
 
     const entityView = <EntityForm<M>
         collection={collection}
