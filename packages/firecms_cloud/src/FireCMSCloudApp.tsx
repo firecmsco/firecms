@@ -224,16 +224,19 @@ export const FireCMSClient = function FireCMSClient({
 function ErrorDelegatingLoginView({
                                       configError,
                                       onLogout,
-                                      fireCMSBackend
+                                      fireCMSBackend,
+                                      onFixed
                                   }: {
     configError: Error | ApiError,
     onLogout: () => void,
-    fireCMSBackend: FireCMSBackend
+    fireCMSBackend: FireCMSBackend,
+    onFixed?: () => void
 }) {
 
     const errorBody = "code" in configError
         ? <CloudErrorView error={configError}
-                          fireCMSBackend={fireCMSBackend}/>
+                          fireCMSBackend={fireCMSBackend}
+                          onFixed={onFixed}/>
         : <>
             <Typography>{configError.message}</Typography>
             <Typography>
@@ -249,7 +252,7 @@ function ErrorDelegatingLoginView({
         </>;
 
     return <CenteredView maxWidth={"2xl"} className={"flex flex-col gap-4"}>
-        <div className={"flex gap-4"}>
+        <div className={"flex gap-4 items-center"}>
             <ErrorIcon color={"error"}/>
             <Typography variant={"h4"}>Error logging in</Typography>
         </div>
@@ -328,7 +331,8 @@ export function FireCMSClientWithController({
 
     const {
         delegatedLoginLoading,
-        delegatedLoginError
+        delegatedLoginError,
+        checkLogin
     } = useDelegatedLogin({
         projectsApi: fireCMSBackend.projectsApi,
         firebaseApp: clientFirebaseApp,
@@ -370,7 +374,8 @@ export function FireCMSClientWithController({
         console.error("Delegated login error", delegatedLoginError)
         loadingOrErrorComponent = <ErrorDelegatingLoginView configError={delegatedLoginError}
                                                             fireCMSBackend={fireCMSBackend}
-                                                            onLogout={fireCMSBackend.signOut}/>
+                                                            onLogout={fireCMSBackend.signOut}
+                                                            onFixed={() => checkLogin()}/>
     } else if (notValidUser) {
         console.warn("No user was found with email " + notValidUser.email);
         loadingOrErrorComponent = <NoAccessError authController={authController}

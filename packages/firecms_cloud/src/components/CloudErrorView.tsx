@@ -34,6 +34,12 @@ export function CloudErrorView({
     if (code === "service-account-missing" && projectId && fireCMSBackend) {
         return <CloudMissingServiceAccountErrorView projectId={projectId}
                                                     fireCMSBackend={fireCMSBackend}
+                                                    message={"Service account missing for this project. You need to link your project to a service account to use this feature."}
+                                                    onFixed={onFixed}/>;
+    } else if (code === "service-account-corrupt" && projectId && fireCMSBackend) {
+        return <CloudMissingServiceAccountErrorView projectId={projectId}
+                                                    fireCMSBackend={fireCMSBackend}
+                                                    message={"The service account linked to this project is invalid. You need to link your project to a valid service account to use this feature. The user fixing the issue must have the appropriate permissions."}
                                                     onFixed={onFixed}/>;
     } else if (code === "user-has-to-accept-googles-terms-of-service" && projectId) {
         return <CloudNeedsToAcceptTermsErrorView projectId={projectId}
@@ -84,11 +90,13 @@ export function CloudErrorView({
 function CloudMissingServiceAccountErrorView({
                                                  fireCMSBackend,
                                                  projectId,
-                                                 onFixed
+                                                 onFixed,
+                                                 message
                                              }: {
     fireCMSBackend: FireCMSBackend,
     projectId: string,
     onFixed?: () => void,
+    message: string
 }) {
 
     const { projectsApi } = useFireCMSBackend();
@@ -103,7 +111,7 @@ function CloudMissingServiceAccountErrorView({
             throw new Error("SassMissingServiceAccountErrorView: No access token found");
         }
         setIsSubmitting(true);
-        return projectsApi.createServiceAccount(fireCMSBackend.googleCredential.accessToken, projectId)
+        return projectsApi.createServiceAccount(fireCMSBackend.googleCredential.accessToken, projectId, true)
             .finally(() => setIsSubmitting(false))
     };
 
@@ -138,7 +146,7 @@ function CloudMissingServiceAccountErrorView({
     return <div
         className="flex flex-col space-y-2 py-4">
         <Typography color={"error"}>
-            Service account missing
+            {message}
         </Typography>
         <LoadingButton
             variant="outlined"

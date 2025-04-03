@@ -87,7 +87,8 @@ export function useDelegatedLogin({
     return {
         loginSuccessful,
         delegatedLoginLoading,
-        delegatedLoginError
+        delegatedLoginError,
+        checkLogin
     };
 
 }

@@ -1,4 +1,4 @@
-import { ApiError, FireCMSCloudUserWithRoles, ProductPrice, SubscriptionType } from "../types";
+import { ApiError, FireCMSCloudUserWithRoles, SubscriptionType } from "../types";
 import { handleApiResponse } from "./common";
 
 export type ProjectsApi = ReturnType<typeof buildProjectsApi>;
@@ -160,9 +160,12 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
     }
 
     async function createServiceAccount(googleAccessToken: string,
-                                        projectId: string): Promise<FireCMSCloudUserWithRoles> {
+                                        projectId: string,
+                                        reset: boolean): Promise<FireCMSCloudUserWithRoles> {
         const firebaseAccessToken = await getBackendAuthToken();
-        return fetch(host + "/projects/" + projectId + "/service_accounts",
+        const url = `${host}/projects/${projectId}/service_accounts?reset=${reset}`;
+
+        return fetch(url,
             {
                 method: "POST",
                 headers: buildHeaders({
