@@ -217,7 +217,7 @@ function entryToCSVRow(entry: any[]) {
         .map((v: any) => {
             if (v === null || v === undefined) return "";
             if (Array.isArray(v))
-                return "\"" + JSON.stringify(v).replaceAll("\"", "\\\"") + "\"";
+                return "\"" + JSON.stringify(v).replaceAll("\"", "\"\"") + "\"";
             const s = String(v);
             return "\"" + s.replaceAll("\"", "\"\"") + "\"";
         })
