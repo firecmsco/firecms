@@ -32,31 +32,76 @@ export function getLastSegment(path: string) {
 }
 
 export function resolveCollectionPathIds(path: string, allCollections: EntityCollection[]): string {
-
     const cleanPath = removeInitialAndTrailingSlashes(path);
     const subpaths = cleanPath.split("/");
+
     if (subpaths.length % 2 === 0) {
-        throw Error(`resolveCollectionPathAliases: Collection paths must have an odd number of segments: ${path}`);
+        throw Error(`resolveCollectionPathIds: Collection paths must have an odd number of segments: ${path}`);
     }
 
-    const aliasedCollection = allCollections.find((col) => col.id === subpaths[0]);
-    let resolvedAliased;
-    if (aliasedCollection) {
-        resolvedAliased = aliasedCollection.path;
+    // Check if the path exactly matches a collection path
+    const exactMatch = allCollections.find(col => col.path === cleanPath);
+    if (exactMatch) {
+        return exactMatch.path;
     }
 
-    if (subpaths.length > 1) {
-        const segmentCollection = getCollectionByPathOrId(resolvedAliased ?? subpaths[0], allCollections);
-        if (!segmentCollection?.subcollections) {
+    if (subpaths.length === 1) {
+        // Find collection by ID and return its path
+        const aliasedCollection = allCollections.find((col) => col.id === subpaths[0]);
+        return aliasedCollection?.path ?? subpaths[0];
+    }
+
+    // Try to match a multi-segment collection path
+    let matchingCollection: EntityCollection | undefined;
+    let entityIndex = 1;
+
+    // Check if the path starts with a multi-segment collection path
+    for (const collection of allCollections) {
+        const pathSegments = collection.path.split("/");
+        if (pathSegments.length > 1 &&
+            subpaths.slice(0, pathSegments.length).join("/") === collection.path) {
+            matchingCollection = collection;
+            entityIndex = pathSegments.length;
+            break;
+        }
+    }
+
+    // If no multi-segment match, fall back to single segment matching
+    if (!matchingCollection) {
+        const matchingCollections = allCollections.filter(col =>
+            col.id === subpaths[0] || col.path === subpaths[0]
+        );
+
+        if (!matchingCollections.length) {
             return cleanPath;
         }
-        const restOfThePath = cleanPath.split("/").slice(2).join("/");
-        return (resolvedAliased ?? subpaths[0]) + "/" + subpaths[1] + "/" + resolveCollectionPathIds(restOfThePath, segmentCollection.subcollections);
-    } else {
-        return resolvedAliased ?? cleanPath;
-    }
-}
 
+        matchingCollection = matchingCollections[0];
+    }
+
+    const entityId = subpaths[entityIndex];
+    const remainingPath = subpaths.slice(entityIndex + 1);
+
+    // If we have a subcollection ID, try to resolve it
+    if (remainingPath.length > 0) {
+        const subcollectionId = remainingPath[0];
+        const subcollection = matchingCollection.subcollections?.find(
+            subcol => subcol.id === subcollectionId
+        );
+
+        if (subcollection) {
+            return `${matchingCollection.path}/${entityId}/${subcollection.path}`;
+        }
+    }
+
+    // If there are no remaining path segments, just return the collection path with entity ID
+    if (remainingPath.length === 0) {
+        return `${matchingCollection.path}/${entityId}`;
+    }
+
+    // Default case - couldn't match subcollection
+    return `${matchingCollection.path}/${entityId}/${remainingPath.join("/")}`;
+}
 /**
  * Find the corresponding view at any depth for a given path.
  * Note that path or segments of the paths can be collection aliases.

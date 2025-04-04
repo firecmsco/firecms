@@ -194,6 +194,18 @@ const localeCollection = buildCollection({
     }
 });
 
+const pricesCollection = buildCollection({
+    id: "product_price",
+    path: "prices",
+    name: "Prices",
+    properties: {
+        value: buildProperty({
+            title: "Value",
+            validation: { required: true },
+            dataType: "number"
+        })
+    }
+});
 
 const productCallbacks: EntityCallbacks<any> = {
     onPreSave: ({
@@ -291,7 +303,7 @@ export const siteConfig = {
             path: "sites/es/products",
             callbacks: productCallbacks,
             singularName: "Products",
-            subcollections: [localeCollection]
+            subcollections: [localeCollection, pricesCollection]
         }),
         buildCollection({
             ...productsCollection,
