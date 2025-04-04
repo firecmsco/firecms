@@ -28,7 +28,7 @@ export type SelectProps<T extends SelectValue = string> = {
     onValueChange?: (updatedValue: T) => void,
     placeholder?: React.ReactNode,
     renderValue?: (value: T) => React.ReactNode,
-    size?: "small" | "medium" | "large",
+    size?: "smallest" | "small" | "medium" | "large",
     label?: React.ReactNode | string,
     disabled?: boolean,
     error?: boolean,
@@ -115,7 +115,8 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                 "relative flex items-center",
                 className,
                 {
-                    "min-h-[28px]": size === "small",
+                    "min-h-[28px]": size === "smallest",
+                    "min-h-[32px]": size === "small",
                     "min-h-[42px]": size === "medium",
                     "min-h-[64px]": size === "large",
                     "w-fit": !fullWidth,
@@ -132,7 +133,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                         padding ? {
                             "px-4": size === "large",
                             "px-3": size === "medium",
-                            "px-2": size === "small"
+                            "px-2": size === "small" || size === "smallest",
                         } : "",
                         "outline-none focus:outline-none",
                         "select-none rounded-md text-sm",
@@ -141,7 +142,8 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                         disabled ? "text-surface-accent-600 dark:text-surface-accent-400" : "text-surface-accent-800 dark:text-white",
                         "relative flex flex-row items-center",
                         {
-                            "min-h-[28px]": size === "small",
+                            "min-h-[28px]": size === "smallest",
+                            "min-h-[32px]": size === "small",
                             "min-h-[42px]": size === "medium",
                             "min-h-[64px]": size === "large",
                             "w-full": fullWidth,
@@ -155,7 +157,8 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                                 "flex-grow max-w-full flex flex-row gap-2 items-center",
                                 "overflow-visible",
                                 {
-                                    "min-h-[28px]": size === "small",
+                                    "min-h-[28px]": size === "smallest",
+                                    "min-h-[32px]": size === "small",
                                     "min-h-[42px]": size === "medium",
                                     "min-h-[64px]": size === "large"
                                 }

@@ -16,7 +16,7 @@ export type DateTimeFieldProps = {
     disabled?: boolean;
     clearable?: boolean;
     error?: boolean;
-    size?: "small" | "medium" | "large";
+    size?: "smallest" | "small" | "medium" | "large";
     label?: React.ReactNode;
     className?: string;
     style?: React.CSSProperties;
@@ -110,7 +110,8 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                     !invisible && fieldBackgroundMixin,
                     disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                     {
-                        "min-h-[28px]": size === "small",
+                        "min-h-[28px]": size === "smallest",
+                        "min-h-[32px]": size === "small",
                         "min-h-[42px]": size === "medium",
                         "min-h-[64px]": size === "large",
                     },
@@ -154,7 +155,8 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                         clearable ? "pr-14" : "pr-12",
                         "rounded-md",
                         {
-                            "min-h-[28px]": size === "small",
+                            "min-h-[28px]": size === "smallest",
+                            "min-h-[32px]": size === "small",
                             "min-h-[42px]": size === "medium",
                             "min-h-[64px]": size === "large",
                         },

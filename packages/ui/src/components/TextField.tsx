@@ -39,7 +39,7 @@ export type TextFieldProps<T extends string | number> = {
     endAdornment?: React.ReactNode;
     autoFocus?: boolean;
     placeholder?: string;
-    size?: "small" | "medium" | "large";
+    size?: "smallest" | "small" | "medium" | "large";
     className?: string;
     style?: React.CSSProperties;
     inputClassName?: string;
@@ -135,7 +135,8 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                     invisible ? focusedInvisibleMixin : "",
                     disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                     {
-                        "min-h-[28px]": size === "small",
+                        "min-h-[28px]": size === "smallest",
+                        "min-h-[32px]": size === "small",
                         "min-h-[42px]": size === "medium",
                         "min-h-[64px]": size === "large",
                     },
@@ -168,7 +169,8 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                     disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                     error ? "border border-red-500 dark:border-red-600" : "",
                     {
-                        "min-h-[28px]": size === "small",
+                        "min-h-[28px]": size === "smallest",
+                        "min-h-[32px]": size === "small",
                         "min-h-[42px]": size === "medium",
                         "min-h-[64px]": size === "large",
                     },
@@ -203,7 +205,7 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                             {
                                 "mr-4": size === "large",
                                 "mr-3": size === "medium",
-                                "mr-2": size === "small",
+                                "mr-2": size === "small" || size === "smallest",
                             }
                         )}
                     >

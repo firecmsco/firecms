@@ -6,7 +6,7 @@ export type BooleanSwitchProps = {
     value: boolean | null;
     className?: string;
     disabled?: boolean;
-    size?: "small" | "medium" | "large";
+    size?: "smallest" | "small" | "medium" | "large";
 } & ({
     allowIndeterminate: true;
     onValueChange?: (newValue: boolean | null) => void;

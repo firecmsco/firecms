@@ -44,7 +44,7 @@ interface MultiSelectProps<T extends MultiSelectValue = string> {
     onChange?: React.EventHandler<ChangeEvent<HTMLSelectElement>>,
     onValueChange?: (updatedValue: T[]) => void,
     placeholder?: React.ReactNode,
-    size?: "small" | "medium" | "large",
+    size?: "smallest" | "small" | "medium" | "large",
     useChips?: boolean,
     label?: React.ReactNode | string,
     disabled?: boolean,
@@ -194,16 +194,17 @@ export const MultiSelect = React.forwardRef<
                             onClick={handleTogglePopover}
                             className={cls(
                                 {
-                                    "min-h-[28px]": size === "small",
+                                    "min-h-[28px]": size === "smallest",
+                                    "min-h-[32px]": size === "small",
                                     "min-h-[42px]": size === "medium",
                                     "min-h-[64px]": size === "large",
                                 },
                                 {
-                                    "py-1": size === "small",
+                                    "py-1": size === "small" || size === "smallest",
                                     "py-2": size === "medium" || size === "large",
                                 },
                                 {
-                                    "px-2": size === "small",
+                                    "px-2": size === "small" || size === "smallest",
                                     "px-4": size === "medium" || size === "large",
                                 },
                                 "select-none rounded-md text-sm",
