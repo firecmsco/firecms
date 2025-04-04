@@ -141,7 +141,6 @@ export const productsCollection = buildCollection<Product>({
             Builder: ProductsSecondaryForm
         }
     ],
-    defaultSelectedView: "sec",
     additionalFields: [productAdditionalField],
     properties: {
         name: {

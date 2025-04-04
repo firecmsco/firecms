@@ -117,6 +117,7 @@ export function CollectionDetailsForm({
     }
 
     const showErrors = submitCount > 0;
+
     return (
         <div className={"overflow-auto my-auto"}>
             <Container maxWidth={"4xl"} className={"flex flex-col gap-4 p-8 m-auto"}>
@@ -334,12 +335,7 @@ export function CollectionDetailsForm({
                                         onValueChange={(v) => {
                                             if (v === "code_defined")
                                                 throw new Error("This should not happen");
-                                            else if (v === "true")
-                                                setFieldValue("customId", true);
-                                            else if (v === "false")
-                                                setFieldValue("customId", false);
-                                            else if (v === "optional")
-                                                setFieldValue("customId", "optional");
+                                            setFieldValue("customId", v);
                                         }}
                                         value={customIdValue ?? ""}
                                         renderValue={(value: any) => {
@@ -364,9 +360,10 @@ export function CollectionDetailsForm({
                                         </SelectItem>
                                     </Select>
                                 </div>
-                                <div className={"col-span-12"}>
+                                <div className={"col-span-12 mt-4"}>
                                     <BooleanSwitchWithLabel
                                         position={"start"}
+                                        size={"large"}
                                         label="Collection group"
                                         onValueChange={(v) => setFieldValue("collectionGroup", v)}
                                         value={values.collectionGroup ?? false}
@@ -380,6 +377,7 @@ export function CollectionDetailsForm({
                                 <div className={"col-span-12"}>
                                     <BooleanSwitchWithLabel
                                         position={"start"}
+                                        size={"large"}
                                         label="Enable text search for this collection"
                                         onValueChange={(v) => setFieldValue("textSearchEnabled", v)}
                                         value={values.textSearchEnabled ?? false}
