@@ -148,11 +148,7 @@ export const EntityCollectionView = React.memo(
 
         const context = useFireCMSContext();
         const navigation = useNavigationController();
-        const fullPath = (fullPathProp ? navigation.resolveIdsFrom(fullPathProp) : undefined) ?? collectionProp.path;
-        console.log("aaa", {
-            fullPathProp,
-            fullPath,
-        })
+        const fullPath = fullPathProp ?? collectionProp.path;
         const dataSource = useDataSource(collectionProp);
         const sideEntityController = useSideEntityController();
         const authController = useAuthController();

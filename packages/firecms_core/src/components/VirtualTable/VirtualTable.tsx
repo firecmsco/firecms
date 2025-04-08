@@ -139,7 +139,35 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             setColumns(columnsProp);
         }, [columnsProp]);
 
-        const [measureRef, bounds] = useMeasure();
+        const [_, setForceUpdate] = useState(false);
+        useEffect(() => {
+            // Create a ResizeObserver to detect size changes more aggressively
+            if (tableRef.current) {
+                const resizeObserver = new ResizeObserver(() => {
+                    // Force a re-render when size changes
+                    setForceUpdate(prev => !prev);
+                });
+
+                resizeObserver.observe(tableRef.current);
+
+                return () => {
+                    if (tableRef.current) {
+                        resizeObserver.unobserve(tableRef.current);
+                    }
+                    resizeObserver.disconnect();
+                };
+            }
+            return () => {
+            }
+        }, [tableRef]);
+
+        const [measureRef, bounds] = useMeasure({
+            debounce: 50,
+            polyfill: ResizeObserver,
+            scroll: true,
+            // This is important for handling zooming in react-flow
+            offsetSize: true
+        });
 
         const onColumnResizeInternal = useCallback((params: OnVirtualTableColumnResizeParams) => {
             if (debug)

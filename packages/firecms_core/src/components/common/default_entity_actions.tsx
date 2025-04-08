@@ -30,7 +30,7 @@ export const editEntityAction: EntityAction = {
             addRecentId(collection.id, entity.id);
         }
 
-        const path = collection?.collectionGroup ? entity.path : (fullPath ?? entity.path);
+        const path = collection?.collectionGroup ? collection.id : (fullPath ?? collection?.id ?? entity.path);
         const defaultSelectedView = resolveDefaultSelectedView(
             collection ? collection.defaultSelectedView : undefined,
             {
@@ -71,7 +71,8 @@ export const copyEntityAction: EntityAction = {
             path: entity.path,
             entityId: entity.id
         });
-        const path = collection?.collectionGroup ? entity.path : (fullPath ?? entity.path)
+
+        const path = collection?.collectionGroup ? collection.id : (fullPath ?? collection?.id ?? entity.path);
         navigateToEntity({
             openEntityMode,
             collection,

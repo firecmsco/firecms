@@ -38,10 +38,14 @@ jest.mock("@tiptap/extension-code", () => ({
     configure: jest.fn(() => ({}))
 }));
 
+jest.mock("@tiptap/extension-document", () => ({
+    extend: jest.fn(() => ({}))
+}));
+
 import { expect, it } from "@jest/globals";
 import { siteConfig } from "./test_site_config";
 import { EntityCollection } from "../src/types";
-import { getCollectionByPathOrId, resolveCollectionPathIds, buildCollection, buildProperty } from "../src";
+import { buildCollection, buildProperty, getCollectionByPathOrId, resolveCollectionPathIds } from "../src";
 import { getNavigationEntriesFromPath } from "../src/util/navigation_from_path";
 
 const collections = siteConfig.collections as EntityCollection[];
@@ -136,7 +140,6 @@ describe("Resolving paths test", () => {
         expect(resolvedPath5).toEqual("products/id/subcollection_inline");
     });
 
-
     it("should correctly resolve subcollection with different id and path", () => {
         // Simplified locale collection
         const jointLocaleCollection = buildCollection({
@@ -197,4 +200,5 @@ describe("Resolving paths test", () => {
 
         expect(result2).toEqual("medico/v2.0.0/joints/cervical_spine/movements");
     });
+
 });

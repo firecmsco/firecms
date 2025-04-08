@@ -63,7 +63,7 @@ export const localeCollectionGroup = buildCollection({
     description: "This is a collection group that allows you to see all locales of all products at once",
     group: "Collection group demo",
     collectionGroup: true
-})
+});
 
 const productAdditionalField: AdditionalFieldDelegate<Product> = {
     key: "spanish_title",
@@ -374,3 +374,29 @@ export const productsSimpleCollection = buildCollection<any>({
     }
 
 });
+
+// export const productsCollection2 = {
+//     ...productsCollection,
+//     name: "Products 2",
+//     id: "products_2",
+//     properties: {
+//         name: {
+//             dataType: "string",
+//             name: "Name",
+//             description: "Name of this product",
+//             clearable: true,
+//             validation: {
+//                 required: true
+//             }
+//         }
+//     }
+// }
+//
+//
+// export const localeWithAlias = buildCollection({
+//     ...localeCollection,
+//     path: "products/B000P0MDMS/locales",
+//     collectionGroup: false,
+//     name: "Product locale with alias",
+//     description: "This is a collection group that allows you to see all locales of all products at once",
+// });

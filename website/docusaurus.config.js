@@ -407,7 +407,7 @@ module.exports = {
                 //     ]
                 // }
             ],
-            copyright: `© ${new Date().getFullYear()} - FireCMS S.L.`
+            copyright: `We are based in Madrid, Spain, Europe 🇪🇺 - © ${new Date().getFullYear()} - FireCMS S.L.`
         },
         prism: {
             theme: prismThemes.vsDark
