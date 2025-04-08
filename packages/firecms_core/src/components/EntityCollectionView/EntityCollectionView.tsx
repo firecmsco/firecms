@@ -94,6 +94,10 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
      */
     fullPath?: string;
     /**
+     * Full path using navigation ids.
+     */
+    fullIdPath?: string;
+    /**
      * If this is a subcollection, specify the parent collection ids.
      */
     parentCollectionIds?: string[];
@@ -138,6 +142,7 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
 export const EntityCollectionView = React.memo(
     function EntityCollectionView<M extends Record<string, any>>({
                                                                      fullPath: fullPathProp,
+                                                                     fullIdPath,
                                                                      parentCollectionIds,
                                                                      isSubCollection,
                                                                      className,
@@ -145,6 +150,7 @@ export const EntityCollectionView = React.memo(
                                                                      ...collectionProp
                                                                  }: EntityCollectionViewProps<M>
     ) {
+
 
         const context = useFireCMSContext();
         const navigation = useNavigationController();
@@ -240,6 +246,7 @@ export const EntityCollectionView = React.memo(
             navigateToEntity({
                 navigation,
                 path,
+                fullIdPath,
                 sideEntityController,
                 openEntityMode,
                 collection,
@@ -259,6 +266,7 @@ export const EntityCollectionView = React.memo(
                 collection,
                 entityId: undefined,
                 path: fullPath,
+                fullIdPath,
                 sideEntityController,
                 navigation,
                 onClose: unselectNavigatedEntity
@@ -426,6 +434,7 @@ export const EntityCollectionView = React.memo(
                                         entityId: entity.id,
                                         selectedTab: subcollection.id ?? subcollection.path,
                                         path: fullPath,
+                                        fullIdPath,
                                         navigation,
                                         sideEntityController
                                     })
@@ -529,7 +538,7 @@ export const EntityCollectionView = React.memo(
                     highlightEntity={setHighlightedEntity}
                     unhighlightEntity={unselectNavigatedEntity}
                     collection={collection}
-                    fullPath={fullPath}
+                    fullPath={fullIdPath ?? fullPath}
                     actions={actions}
                     hideId={collection?.hideIdFromCollection}
                     onCollectionChange={updateLastDeleteTimestamp}
@@ -693,6 +702,7 @@ export const EntityCollectionView = React.memo(
                     getIdColumnWidth={getIdColumnWidth}
                     additionalIDHeaderWidget={<EntityIdHeaderWidget
                         path={fullPath}
+                        fullIdPath={fullIdPath ?? fullPath}
                         collection={collection}/>}
                     openEntityMode={openEntityMode}
                 />
@@ -809,10 +819,12 @@ function buildPropertyWidthOverwrite(key: string, width: number): PartialEntityC
 
 function EntityIdHeaderWidget({
                                   collection,
-                                  path
+                                  path,
+                                  fullIdPath
                               }: {
     collection: EntityCollection,
-    path: string
+    path: string,
+    fullIdPath: string
 }) {
 
     const navigation = useNavigationController();
@@ -850,6 +862,7 @@ function EntityIdHeaderWidget({
                                   collection,
                                   entityId,
                                   path,
+                                  fullIdPath,
                                   sideEntityController,
                                   navigation
                               })
@@ -884,6 +897,7 @@ function EntityIdHeaderWidget({
                                                       collection,
                                                       entityId: id,
                                                       path,
+                                                      fullIdPath,
                                                       sideEntityController,
                                                       navigation
                                                   })

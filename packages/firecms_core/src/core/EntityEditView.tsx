@@ -45,6 +45,10 @@ export type OnTabChangeParams<M extends Record<string, any>> = {
 
 export interface EntityEditViewProps<M extends Record<string, any>> {
     path: string;
+    /**
+     * The navigation path to the entity.
+     */
+    fullIdPath?: string;
     collection: EntityCollection<M>;
     entityId?: string;
     databaseId?: string;
@@ -119,6 +123,7 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
 
 export function EntityEditViewInner<M extends Record<string, any>>({
                                                                        path,
+                                                                       fullIdPath,
                                                                        entityId,
                                                                        selectedTab: selectedTabProp,
                                                                        collection,
@@ -272,7 +277,9 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const subCollectionsViews = subcollections && subcollections.map((subcollection) => {
         const subcollectionId = subcollection.id ?? subcollection.path;
-        const fullPath = usedEntity ? `${path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollectionId)}` : undefined;
+        const newFullPath = usedEntity ? `${path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollectionId)}` : undefined;
+        const newFullIdPath = fullIdPath ? `${fullIdPath}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollectionId)}` : undefined;
+
         if (selectedTab !== subcollectionId) return null;
         return (
             <div
@@ -283,9 +290,10 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 {globalLoading && <CircularProgressCenter/>}
 
                 {!globalLoading &&
-                    (usedEntity && fullPath
+                    (usedEntity && newFullPath
                         ? <EntityCollectionView
-                            fullPath={fullPath}
+                            fullPath={newFullPath}
+                            fullIdPath={newFullIdPath}
                             parentCollectionIds={[...parentCollectionIds, collection.id]}
                             isSubCollection={true}
                             updateUrl={false}
@@ -307,7 +315,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         setSelectedTab(value);
         if (status === "existing") {
             onTabChange?.({
-                path,
+                path: fullIdPath ?? path,
                 entityId,
                 selectedTab: value === MAIN_TAB_VALUE ? undefined : value,
                 collection

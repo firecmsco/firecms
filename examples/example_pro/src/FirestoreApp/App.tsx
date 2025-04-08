@@ -48,7 +48,7 @@ import { firebaseConfig, secondaryFirebaseConfig } from "../firebase_config";
 import { ExampleCMSView } from "./views/ExampleCMSView";
 import { testCollection } from "./collections/test_collection";
 import { usersCollection } from "./collections/users_collection";
-import { localeCollectionGroup, productsCollection } from "./collections/products_collection";
+import { localeCollectionGroup, productsCollection, productsCollection2 } from "./collections/products_collection";
 import { blogCollection } from "./collections/blog_collection";
 import { showcaseCollection } from "./collections/showcase_collection";
 
@@ -225,6 +225,8 @@ export function App() {
 
         const sourceCollections: EntityCollection[] = [
             productsCollection,
+            productsCollection2,
+
             booksCollection,
             usersCollection,
             blogCollection,

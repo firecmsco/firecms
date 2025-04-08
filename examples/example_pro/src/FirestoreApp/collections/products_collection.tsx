@@ -375,22 +375,48 @@ export const productsSimpleCollection = buildCollection<any>({
 
 });
 
-// export const productsCollection2 = {
-//     ...productsCollection,
-//     name: "Products 2",
-//     id: "products_2",
-//     properties: {
-//         name: {
-//             dataType: "string",
-//             name: "Name",
-//             description: "Name of this product",
-//             clearable: true,
-//             validation: {
-//                 required: true
-//             }
-//         }
-//     }
-// }
+export const productsCollection2 = buildCollection({
+    path: "products",
+    name: "Products 2",
+    id: "products_2",
+    // openEntityMode: "full_screen",
+    subcollections: [
+        buildCollection({
+            id: "product_locales_2",
+            path: "locales",
+            icon: "Translate",
+            customId: locales,
+            name: "Locales",
+            singularName: "Locale",
+            entityViews: [
+                {
+                    key: "sec",
+                    name: "Secondary form",
+                    includeActions: true,
+                    Builder: ProductsSecondaryForm
+                }
+            ],
+            properties: {
+                name: {
+                    name: "Name",
+                    validation: { required: true },
+                    dataType: "string"
+                }
+            }
+        })
+    ],
+    properties: {
+        name: {
+            dataType: "string",
+            name: "Name",
+            description: "Name of this product",
+            clearable: true,
+            validation: {
+                required: true
+            }
+        }
+    }
+});
 //
 //
 // export const localeWithAlias = buildCollection({

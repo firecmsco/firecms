@@ -233,6 +233,7 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
         if (navigationEntry.type === "entity") {
             sidePanel = {
                 path: navigationEntry.path,
+                // fullIdPath: navigationEntry.path,
                 entityId: navigationEntry.entityId,
                 copy: false,
                 width: navigationEntry.parentCollection?.sideDialogWidth
@@ -254,6 +255,7 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
     if (newFlag) {
         sidePanel = {
             path: lastCollectionPath,
+            // fullIdPath: lastCollectionPath,
             copy: false
         }
     }
@@ -274,16 +276,13 @@ const propsToSidePanel = (props: EntitySidePanelProps,
     const newPath = props.entityId
         ? buildUrlCollectionPath(`${collectionPath}/${props.entityId}${props.selectedTab ? "/" + props.selectedTab : ""}#${SIDE_URL_HASH}`)
         : buildUrlCollectionPath(`${collectionPath}#${NEW_URL_HASH}`);
-    const resolvedPath = resolveIdsFrom(props.path);
 
     const resolvedPanelProps: EntitySidePanelProps<any> = {
         ...props,
-        path: resolvedPath,
         formProps: props.formProps
     };
 
     const entityViewWidth = getEntityViewWidth(props, smallLayout, customizationController, authController);
-
     return {
         key: `${props.path}/${props.entityId}`,
         component: <EntitySidePanel {...resolvedPanelProps}/>,

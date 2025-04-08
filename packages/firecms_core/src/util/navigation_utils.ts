@@ -102,6 +102,7 @@ export function resolveCollectionPathIds(path: string, allCollections: EntityCol
     // Default case - couldn't match subcollection
     return `${matchingCollection.path}/${entityId}/${remainingPath.join("/")}`;
 }
+
 /**
  * Find the corresponding view at any depth for a given path.
  * Note that path or segments of the paths can be collection aliases.
@@ -161,6 +162,7 @@ export function navigateToEntity({
                                      entityId,
                                      copy,
                                      path,
+                                     fullIdPath,
                                      selectedTab,
                                      sideEntityController,
                                      onClose,
@@ -174,6 +176,7 @@ export function navigateToEntity({
                                      selectedTab?: string;
                                      copy?: boolean;
                                      path: string;
+                                     fullIdPath?: string;
                                      sideEntityController: SideEntityController;
                                      onClose?: () => void;
                                      navigation: NavigationController
@@ -183,7 +186,8 @@ export function navigateToEntity({
 
         sideEntityController.open({
             entityId,
-            path,
+            path: fullIdPath ?? path,
+            // fullIdPath,
             copy,
             selectedTab,
             collection,
@@ -192,7 +196,7 @@ export function navigateToEntity({
         });
 
     } else {
-        let to = navigation.buildUrlCollectionPath(entityId ? `${path}/${entityId}` : path);
+        let to = navigation.buildUrlCollectionPath(entityId ? `${fullIdPath ?? path}/${entityId}` : fullIdPath ?? path);
         if (entityId && selectedTab) {
             to += `/${selectedTab}`;
         }

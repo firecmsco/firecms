@@ -97,6 +97,7 @@ export function FireCMSRoute() {
                 return null;
             return <EntityCollectionView
                 key={`collection_view_${collection.id ?? collection.path}`}
+                fullIdPath={collection.id}
                 isSubCollection={false}
                 parentCollectionIds={[]}
                 fullPath={collection.id}
@@ -197,12 +198,14 @@ function EntityFullScreenRoute({
     }
 
     const collection = isNew ? lastCollectionEntry!.collection : lastEntityEntry!.parentCollection;
-    const collectionPath = navigation.resolveIdsFrom(isNew ? lastCollectionEntry!.path : lastEntityEntry!.path);
+    const fullIdPath = isNew ? lastCollectionEntry!.path : lastEntityEntry!.path;
+    const collectionPath = navigation.resolveIdsFrom(fullIdPath);
 
     return <>
         <EntityEditView
             key={collection.id + "_" + (isNew ? "new" : (isCopy ? entityId + "_copy" : entityId))}
             entityId={isNew ? undefined : entityId}
+            fullIdPath={fullIdPath}
             collection={collection}
             layout={"full_screen"}
             path={collectionPath}

@@ -20,6 +20,11 @@ export interface EntitySidePanelProps<M extends Record<string, any> = any> {
      */
     entityId?: string;
 
+    // /**
+    //  * Navigation path with ids of the entity
+    //  */
+    // fullIdPath: string;
+
     /**
      * Set this flag to true if you want to make a copy of an existing entity
      */
