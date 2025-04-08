@@ -108,7 +108,7 @@ function ProductGroupPreview({ products }: {
     })}>
         {products.map((p, index) => <ProductPreviewCard
             className={cls("w-full", {
-                "flex-grow": !manyProducts,
+                "grow": !manyProducts,
             })}
             key={`products_${index}`}
             product={p}/>)}

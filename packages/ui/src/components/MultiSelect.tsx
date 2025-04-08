@@ -286,7 +286,7 @@ export const MultiSelect = React.forwardRef<
                         <CommandPrimitive>
                             <div className={"flex flex-row items-center"}>
                                 <CommandPrimitive.Input
-                                    className={cls(focusedDisabled, "bg-transparent outline-none flex-1 h-full w-full m-4 flex-grow ")}
+                                    className={cls(focusedDisabled, "bg-transparent outline-hidden flex-1 h-full w-full m-4 grow ")}
                                     placeholder="Search..."
                                     onKeyDown={handleInputKeyDown}
                                 />
@@ -313,9 +313,9 @@ export const MultiSelect = React.forwardRef<
                                                 "cursor-pointer",
                                                 "m-1",
                                                 "ring-offset-transparent",
-                                                "p-1 rounded aria-[selected=true]:outline-none aria-[selected=true]:ring-2 aria-[selected=true]:ring-primary aria-[selected=true]:ring-opacity-75 aria-[selected=true]:ring-offset-2",
-                                                "aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900",
-                                                "cursor-pointer p-2 rounded aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900"
+                                                "p-1 rounded-xs aria-selected:outline-hidden aria-selected:ring-2 aria-selected:ring-primary/75 aria-selected:ring-offset-2",
+                                                "aria-selected:bg-surface-accent-100 dark:aria-selected:bg-surface-accent-900",
+                                                "cursor-pointer p-2 rounded-xs aria-selected:bg-surface-accent-100 dark:aria-selected:bg-surface-accent-900"
                                             )
                                         }
                                     >
@@ -369,9 +369,9 @@ export function MultiSelectItem<T extends MultiSelectValue = string>({
             "cursor-pointer",
             "m-1",
             "ring-offset-transparent",
-            "p-1 rounded aria-[selected=true]:outline-none aria-[selected=true]:ring-2 aria-[selected=true]:ring-primary aria-[selected=true]:ring-opacity-75 aria-[selected=true]:ring-offset-2",
-            "aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900",
-            "cursor-pointer p-2 rounded aria-[selected=true]:bg-surface-accent-100 aria-[selected=true]:dark:bg-surface-accent-900",
+            "p-1 rounded-xs aria-selected:outline-hidden aria-selected:ring-2 aria-selected:ring-primary/75 aria-selected:ring-offset-2",
+            "aria-selected:bg-surface-accent-100 dark:aria-selected:bg-surface-accent-900",
+            "cursor-pointer p-2 rounded-xs aria-selected:bg-surface-accent-100 dark:aria-selected:bg-surface-accent-900",
             className
         )}
     >
@@ -385,12 +385,12 @@ function InnerCheckBox({ checked }: { checked: boolean }) {
     return <div className={cls(
         "p-2",
         "w-8 h-8",
-        "inline-flex items-center justify-center text-sm font-medium focus:outline-none transition-colors ease-in-out duration-150",
+        "inline-flex items-center justify-center text-sm font-medium focus:outline-hidden transition-colors ease-in-out duration-150",
     )}>
         <div
             className={cls(
                 "border-2 relative transition-colors ease-in-out duration-150",
-                "w-4 h-4 rounded flex items-center justify-center",
+                "w-4 h-4 rounded-xs flex items-center justify-center",
                 (checked ? "bg-primary" : "bg-white dark:bg-surface-accent-900"),
                 (checked) ? "text-surface-accent-100 dark:text-surface-accent-900" : "",
                 (checked ? "border-transparent" : "border-surface-accent-800 dark:border-surface-accent-200")

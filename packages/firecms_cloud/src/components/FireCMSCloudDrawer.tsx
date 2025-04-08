@@ -50,7 +50,7 @@ export function FireCMSCloudDrawer() {
         return <div className="pl-6 pr-4 pt-2 pb-2 flex flex-row items-center">
             <Typography variant={"caption"}
                         color={"secondary"}
-                        className="flex-grow font-medium">
+                        className="grow font-medium">
                 {group ? group.toUpperCase() : "Views".toUpperCase()}
             </Typography>
             {canCreateCollections && <Tooltip
@@ -80,7 +80,7 @@ export function FireCMSCloudDrawer() {
         <>
             <DrawerLogo logo={logo}/>
 
-            <div className={"mt-4 flex-grow overflow-scroll no-scrollbar"}
+            <div className={"mt-4 grow overflow-scroll no-scrollbar"}
                  style={{
                      maskImage: "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)",
                  }}>
@@ -88,7 +88,7 @@ export function FireCMSCloudDrawer() {
                 {groups.map((group) => (
                     <div
                         key={`group_${group}`}
-                        className={"bg-surface-50 dark:bg-surface-800 dark:bg-opacity-30 my-4 rounded-lg rounded-lg ml-3 mr-1"}>
+                        className={"bg-surface-50 dark:bg-surface-800/30 my-4 rounded-lg rounded-lg ml-3 mr-1"}>
                         {buildGroupHeader(group)}
                         {Object.values(navigationEntries)
                             .filter(e => e.group === group)

@@ -115,10 +115,8 @@ export function useBuildProjectConfig({
     useEffect(() => {
         if (primaryColor) {
             document.documentElement.style.setProperty("--fcms-primary", primaryColor);
-            document.documentElement.style.setProperty("--fcms-primary-bg", hexToRgbaWithOpacity(primaryColor, 10));
         } else {
             document.documentElement.style.setProperty("--fcms-primary", darkenColor(DEFAULT_PRIMARY_COLOR, 10));
-            document.documentElement.style.setProperty("--fcms-primary-bg", hexToRgbaWithOpacity(DEFAULT_PRIMARY_COLOR, 10));
         }
         if (secondaryColor) {
             document.documentElement.style.setProperty("--fcms-secondary", secondaryColor);

@@ -117,11 +117,11 @@ export const ColorSelector = ({
         <Popover
             sideOffset={5}
             align={"start"}
-            className="my-1 flex max-h-80 w-48 flex-col overflow-hidden overflow-y-auto rounded border p-1 shadow"
+            className="my-1 flex max-h-80 w-48 flex-col overflow-hidden overflow-y-auto rounded-xs border p-1 shadow-2xs"
             trigger={
                 <Button className="gap-2 rounded-none" variant="text" color={"text"}>
                       <span
-                          className="rounded px-1"
+                          className="rounded-xs px-1"
                           style={{
                               color: activeColorItem?.color,
                               backgroundColor: activeHighlightItem?.color,
@@ -153,11 +153,11 @@ export const ColorSelector = ({
                                 .setColor(color || "")
                                 .run();
                         }}
-                        className="flex cursor-pointer items-center justify-between px-2 py-1 text-sm hover:bg-blue-50 hover:dark:bg-surface-700"
+                        className="flex cursor-pointer items-center justify-between px-2 py-1 text-sm hover:bg-blue-50 dark:hover:bg-surface-700"
                     >
                         <div className="flex items-center gap-2">
                             <div
-                                className="rounded border px-2 py-px font-medium"
+                                className="rounded-xs border px-2 py-px font-medium"
                                 style={{ color }}
                             >
                                 A
@@ -181,11 +181,11 @@ export const ColorSelector = ({
                             editor.commands.unsetHighlight();
                             name !== "Default" && editor.commands.setHighlight({ color });
                         }}
-                        className="flex cursor-pointer items-center justify-between px-2 py-1 text-sm hover:bg-blue-50 hover:dark:bg-surface-700"
+                        className="flex cursor-pointer items-center justify-between px-2 py-1 text-sm hover:bg-blue-50 dark:hover:bg-surface-700"
                     >
                         <div className="flex items-center gap-2">
                             <div
-                                className="rounded border px-2 py-px font-medium"
+                                className="rounded-xs border px-2 py-px font-medium"
                                 style={{ backgroundColor: color }}
                             >
                                 A

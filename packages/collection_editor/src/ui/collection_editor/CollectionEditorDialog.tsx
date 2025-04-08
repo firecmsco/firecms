@@ -575,7 +575,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                       onSubmit={formController.handleSubmit}
                       className={cls(
                           isNewCollection ? "h-full" : "h-[calc(100%-48px)]",
-                          "flex-grow flex flex-col relative")}>
+                          "grow flex flex-col relative")}>
 
                     {currentView === "loading" &&
                         <CircularProgressCenter/>}

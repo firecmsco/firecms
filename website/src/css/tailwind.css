@@ -1,10 +1,8 @@
-@import 'additional-styles/utility-patterns.css';
+@import './additional-styles/utility-patterns.css' layer(base);
 
+@import 'tailwindcss';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+@config '../../tailwind.config.js';
 
 .navbar__items--left .navbar__item {
     @apply font-mono font-bold uppercase;

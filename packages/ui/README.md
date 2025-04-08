@@ -75,7 +75,6 @@ Finally, you need to define your primary and secondary colors in your `index.css
 
 :root {
     --fcms-primary: #0070F4;
-    --fcms-primary-bg: #0061e610;
     --fcms-secondary: #FF5B79;
 }
 ```

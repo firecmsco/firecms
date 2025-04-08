@@ -456,7 +456,7 @@
 //                     className={`w-full py-2 flex flex-col items-start mt-${4 + (pluginActions ? 8 : 0)} lg:mt-${8 + (pluginActions ? 8 : 0)} mb-8`}>
 //
 //                     <Typography
-//                         className={"mt-4 flex-grow line-clamp-1 " + inputCollection.hideIdFromForm ? "mb-2" : "mb-0"}
+//                         className={"mt-4 grow line-clamp-1 " + inputCollection.hideIdFromForm ? "mb-2" : "mb-0"}
 //                         variant={"h4"}>{title ?? inputCollection.singularName ?? inputCollection.name}
 //                     </Typography>
 //                     <Alert color={"base"} className={"w-full"} size={"small"}>
@@ -645,7 +645,7 @@
 //                         </Typography>
 //                     </div>}
 //
-//                 {entity && formActions.length > 0 && <div className="flex-grow flex overflow-auto no-scrollbar">
+//                 {entity && formActions.length > 0 && <div className="grow flex overflow-auto no-scrollbar">
 //                     {formActions.map(action => (
 //                         <IconButton
 //                             key={action.name}

@@ -13,7 +13,7 @@ export interface ProductPreviewCardProps {
 const ProductPreviewCard: React.FC<ProductPreviewCardProps> = ({ product, className }) => {
     return (
         <Link href={"/products/" + product.id}
-              className={cls("relative h-72 block w-full rounded overflow-hidden shadow-lg bg-white hover:shadow-xl transition duration-300 hover:scale-[1.02] text-white", className)}>
+              className={cls("relative h-72 block w-full rounded-sm overflow-hidden shadow-lg bg-white hover:shadow-xl transition duration-300 hover:scale-[1.02] text-white", className)}>
             {product.images.length > 0 && (
                 <img className="absolute h-full w-full object-contain p-2 "
                      src={product.images[0]}
@@ -22,7 +22,7 @@ const ProductPreviewCard: React.FC<ProductPreviewCardProps> = ({ product, classN
             )}
 
             <div
-                className={"h-full relative flex flex-col justify-end bg-gradient-to-t from-surface-600 via-[#00000010] via-40% to-60% pb-2"}>
+                className={"h-full relative flex flex-col justify-end bg-linear-to-t from-surface-600 via-[#00000010] via-40% to-60% pb-2"}>
                 <div className="px-6 typography-h6">{product.name}</div>
                 <div className="px-6 flex gap-4">
                     {product.price && <span

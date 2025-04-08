@@ -101,7 +101,7 @@ export function ExampleCMSView() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <Paper className={"w-full flex flex-col p-4 items-start"}>
-                            <p className="mb-4 flex-grow">
+                            <p className="mb-4 grow">
                                 Use this button to select an entity under the
                                 path <code>products</code> programmatically
                             </p>
@@ -114,7 +114,7 @@ export function ExampleCMSView() {
                         </Paper>
 
                         <Paper className="w-full flex flex-col p-4 items-start">
-                            <p className="mb-4 flex-grow">
+                            <p className="mb-4 grow">
                                 Use this button to open a snackbar
                             </p>
                             <Button
@@ -129,7 +129,7 @@ export function ExampleCMSView() {
                         </Paper>
 
                         <Paper className="w-full flex flex-col p-4 items-start">
-                            <p className="mb-4 flex-grow">
+                            <p className="mb-4 grow">
                                 Use this button to open an entity in a custom path with a custom schema
                             </p>
                             <Button

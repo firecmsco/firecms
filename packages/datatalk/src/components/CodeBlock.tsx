@@ -198,7 +198,7 @@ export function CodeBlock({
                         marginLeft: querySnapshot ? "-64px" : undefined,
                         width: querySnapshot ? "calc(100% + 64px)" : undefined
                     }}
-                    className={cls("w-full rounded-lg shadow-sm overflow-hidden transition-all", {
+                    className={cls("w-full rounded-lg shadow-2xs overflow-hidden transition-all", {
                         "h-[480px]": querySnapshot,
                         "h-[92px]": !querySnapshot && loadingQuery
                     })}>

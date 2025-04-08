@@ -134,12 +134,11 @@ export function ReferenceWidget<M extends Record<string, any>>({
     }
     return <div className={cls("text-sm font-medium",
         "min-w-80 flex flex-col gap-4",
-        "relative transition-colors duration-200 ease-in rounded font-medium",
+        "relative transition-colors duration-200 ease-in rounded-xs font-medium",
         disabled ? "bg-opacity-50" : "hover:bg-opacity-75",
-        "text-opacity-50 dark:text-white dark:text-opacity-50",
+        "dark:text-white/50 dark:text-text-primary-dark/50",
         className
-    )}
-    >
+    )}>
 
         {child}
         {!value && <div className="justify-center text-left">

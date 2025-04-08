@@ -43,7 +43,6 @@ export default {
             },
             colors: {
                 primary: "var(--fcms-primary)",
-                "primary-bg": "var(--fcms-primary-bg)",
                 secondary: "var(--fcms-secondary)",
                 field: {
                     disabled: "rgb(224 224 226)",

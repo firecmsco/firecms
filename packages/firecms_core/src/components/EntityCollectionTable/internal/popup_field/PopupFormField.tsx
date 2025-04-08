@@ -350,7 +350,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         });
     }
     const form = <div
-        className={`text-surface-900 dark:text-white overflow-auto rounded rounded-md bg-white dark:bg-surface-950 ${!open ? "hidden" : ""} cursor-grab max-w-[100vw]`}>
+        className={`text-surface-900 dark:text-white overflow-auto rounded-xs rounded-md bg-white dark:bg-surface-950 ${!open ? "hidden" : ""} cursor-grab max-w-[100vw]`}>
 
         {internalForm}
 

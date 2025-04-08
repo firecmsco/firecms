@@ -101,7 +101,7 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
             />
 
             <div className={cls(
-                "flex-grow",
+                "grow",
                 position === "end" ? "mr-4" : "ml-4",
                 size === "small" ? "text-sm" : "text-base"
             )}>

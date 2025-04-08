@@ -42,7 +42,7 @@ export function GetCodeDialog({
                       getLineProps,
                       getTokenProps
                   }) => (
-                    <pre style={style} className={"p-4 rounded text-sm"}>
+                    <pre style={style} className={"p-4 rounded-xs text-sm"}>
         {tokens.map((line, i) => (
             <div key={i} {...getLineProps({ line })}>
                 {line.map((token, key) => (

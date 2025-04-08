@@ -33,7 +33,7 @@ export function DataStructure() {
             </p>
 
             <a
-                className={CTAOutlinedButtonWhiteMixin + "  sm:mb-0 w-full sm:w-auto rounded"}
+                className={CTAOutlinedButtonWhiteMixin + "  sm:mb-0 w-full sm:w-auto rounded-sm"}
                 href={useBaseUrl("docs/openai")}
             >
                 Get started

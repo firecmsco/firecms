@@ -304,13 +304,13 @@ export function ArrayContainerItem({
         {...provided.draggableProps}
         style={provided.draggableProps.style}
         className={`relative ${
-            !isDragging ? "hover:bg-surface-accent-50 dark:hover:bg-surface-800 dark:hover:bg-opacity-20" : ""
+            !isDragging ? "hover:bg-surface-accent-50 dark:hover:bg-surface-800/20" : ""
         } rounded-md opacity-100`}
     >
         <div
             className="flex items-start">
             <div
-                className="flex-grow w-[calc(100%-48px)] text-text-primary dark:text-text-primary-dark">
+                className="grow w-[calc(100%-48px)] text-text-primary dark:text-text-primary-dark">
                 {buildEntry({
                     index,
                     internalId,

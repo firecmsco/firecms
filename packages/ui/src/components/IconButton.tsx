@@ -14,14 +14,14 @@ export type IconButtonProps<C extends React.ElementType> =
     onClick?: React.MouseEventHandler<any>
 }
 
-const buttonClasses = "hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-800 hover:scale-105 transition-transform";
-const baseClasses = "inline-flex items-center justify-center p-2 text-sm font-medium focus:outline-none transition-colors ease-in-out duration-150";
+const buttonClasses = "hover:bg-surface-accent-200/75 dark:hover:bg-surface-accent-800/75 hover:scale-105 transition-transform";
+const baseClasses = "inline-flex items-center justify-center p-2 text-sm font-medium focus:outline-hidden transition-colors ease-in-out duration-150";
 const colorClasses = "text-surface-accent-600 visited:text-surface-accent-600 dark:text-surface-accent-300 dark:visited:text-surface-300";
 const sizeClasses = {
-    medium: "w-10 !h-10 min-w-10 min-h-10",
-    small: "w-8 !h-8 min-w-8 min-h-8",
-    smallest: "w-6 !h-6 min-w-6 min-h-6",
-    large: "w-12 !h-12 min-w-12 min-h-12"
+    medium: "w-10 h-10! min-w-10 min-h-10",
+    small: "w-8 h-8! min-w-8 min-h-8",
+    smallest: "w-6 h-6! min-w-6 min-h-6",
+    large: "w-12 h-12! min-w-12 min-h-12"
 }
 const shapeClasses = {
     circular: "rounded-full",
@@ -40,7 +40,7 @@ const IconButtonInner = <C extends React.ElementType = "button">({
                                                                      ...props
                                                                  }: IconButtonProps<C>, ref: React.ForwardedRef<HTMLButtonElement>) => {
 
-    const bgClasses = variant === "ghost" ? "bg-transparent" : "bg-surface-accent-200 bg-opacity-50 dark:bg-surface-950 dark:bg-opacity-50";
+    const bgClasses = variant === "ghost" ? "bg-transparent" : "bg-surface-accent-200/50 dark:bg-surface-950/50";
     const Component: React.ElementType<any> = component || "button";
     return (
         <Component

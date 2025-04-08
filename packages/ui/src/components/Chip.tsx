@@ -47,7 +47,7 @@ export function Chip({
             className={cls("rounded-lg max-w-full w-max h-fit font-regular inline-flex gap-1",
                 "text-ellipsis",
                 "items-center",
-                onClick ? "cursor-pointer hover:bg-surface-accent-300 hover:dark:bg-surface-accent-700" : "",
+                onClick ? "cursor-pointer hover:bg-surface-accent-300 dark:hover:bg-surface-accent-700" : "",
                 sizeClassNames[size],
                 error || !usedColorScheme ? "bg-surface-accent-200 dark:bg-surface-accent-800 text-surface-accent-800 dark:text-white" : "",
                 error ? "text-red-500 dark:text-red-400" : "",

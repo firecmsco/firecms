@@ -27,7 +27,7 @@ import {
 } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
-const dropZoneClasses = "box-border relative pt-[2px] items-center border border-transparent min-h-[254px] outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
+const dropZoneClasses = "box-border relative pt-[2px] items-center border border-transparent min-h-[254px] outline-hidden rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
 const disabledClasses = fieldBackgroundDisabledMixin;
 const nonActiveDropClasses = fieldBackgroundHoverMixin
 const activeDropClasses = "pt-0 border-2 border-solid"
@@ -287,7 +287,7 @@ function FileDropComponent({
             </div>
 
             <div
-                className="flex-grow min-h-[38px] box-border m-2 text-center">
+                className="grow min-h-[38px] box-border m-2 text-center">
                 <Typography align={"center"}
                             variant={"label"}
                             className={disabled ? "text-surface-accent-600 dark:text-surface-accent-500" : ""}>
@@ -403,7 +403,7 @@ export function StorageUpload({
                             style={
                                 provided.draggableProps.style
                             }
-                            className="rounded"
+                            className="rounded-xs"
                         >
                             <StorageItemPreview
                                 name={`storage_preview_${entry.storagePathOrDownloadUrl}`}

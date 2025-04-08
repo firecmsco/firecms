@@ -144,7 +144,7 @@ export function UserDetailsForm({
                     <DialogTitle variant={"h4"} gutterBottom={false}>
                         User
                     </DialogTitle>
-                    <DialogContent className="h-full flex-grow">
+                    <DialogContent className="h-full grow">
 
                         <div className={"grid grid-cols-12 gap-8"}>
 

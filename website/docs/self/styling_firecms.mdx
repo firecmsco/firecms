@@ -49,7 +49,6 @@ in your `index.css` file:
 
 :root {
     --fcms-primary: #0070F4;
-    --fcms-primary-bg: #0061e610;
     --fcms-secondary: #FF5B79;
 }
 
@@ -59,7 +58,6 @@ body {
 ```
 
 These are the default values but you can change them to match your brand.
-The `--fcms-primary-bg` variable is used when hovering over primary elements, like cards ( it is usually mostly transparent)
 
 Just like in the previous section, feel free to take a look at the original
 [`index.css`](https://github.com/firecmsco/firecms/blob/main/packages/ui/src/index.css) file in the `@firecms/ui` package.
@@ -89,7 +87,6 @@ export default {
         extend: {
             colors: {
                 "primary": "var(--fcms-primary)",
-                "primary-bg": "var(--fcms-primary-bg)",
                 "secondary": "var(--fcms-secondary)",
                 "field": {
                     "disabled": "rgb(224 224 226)",

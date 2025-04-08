@@ -878,7 +878,7 @@ function EntityIdHeaderWidget({
                                     setSearchString(e.target.value);
                                 }}
                                 value={searchString}
-                                className={"rounded-lg bg-white dark:bg-surface-800 flex-grow bg-transparent outline-none p-2 " + focusedDisabled}/>
+                                className={"rounded-lg bg-white dark:bg-surface-800 grow bg-transparent outline-hidden p-2 " + focusedDisabled}/>
                             <Button variant={"text"}
                                     disabled={!(searchString.trim())}
                                     type={"submit"}

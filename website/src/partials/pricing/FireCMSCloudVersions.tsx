@@ -45,7 +45,7 @@ export function FireCMSCloudVersions() {
 
     const cloud = (
         <div
-            className={clsx("bg-white w-full max-w-xl lg:max-w-none h-full p-6 rounded-lg flex flex-col outline-none ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent")}>
+            className={clsx("bg-white w-full max-w-xl lg:max-w-none h-full p-6 rounded-lg flex flex-col outline-hidden ring-2 ring-primary/75 ring-offset-2 ring-offset-transparent")}>
 
             <h3 className={"text-3xl md:text-4xl font-bold  text-primary uppercase my-2"}>
                 FireCMS Cloud
@@ -62,7 +62,7 @@ export function FireCMSCloudVersions() {
             <div className={"flex flex-row gap-4 my-6"}>
 
                 <a
-                    className={"h-fit text-sm btn btn-sm py-2 px-3 text-white bg-primary  hover:bg-blue-700  hover:text-white uppercase border-solid rounded "}
+                    className={"h-fit text-sm btn btn-sm py-2 px-3 text-white bg-primary  hover:bg-blue-700  hover:text-white uppercase border-solid rounded-sm "}
                     href="http://app.firecms.co"
                     rel="noopener noreferrer"
                     target="_blank"
@@ -113,7 +113,7 @@ export function FireCMSCloudVersions() {
                     }}>
                     TRY OUT FOR FREE
                 </div>
-                <a className={clsx("btn px-4 py-2  uppercase rounded border-solid text-base dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-900 dark:hover:border-gray-800 ")}
+                <a className={clsx("btn px-4 py-2  uppercase rounded-sm border-solid text-base dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-900 dark:hover:border-gray-800 ")}
                    href="/pro">
                     More info
                 </a>

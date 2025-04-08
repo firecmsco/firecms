@@ -20,7 +20,7 @@ export function DataTalkDrawer() {
     return (
 
         <>
-            <div className={"flex-grow overflow-scroll no-scrollbar my-8"}>
+            <div className={"grow overflow-scroll no-scrollbar my-8"}>
                 {!drawerOpen && <div className={"flex justify-center p-4 h-full cursor-pointer"} onClick={openDrawer}>
                     <ManageSearchIcon/>
                 </div>}
@@ -39,10 +39,10 @@ export function DataTalkDrawer() {
                             className={({ isActive }: any) => cls("transition-opacity flex flex-col justify-between p-4",
                                 !drawerOpen ? "opacity-0" : "opacity-1",
                                 "rounded-r-lg truncate",
-                                "hover:bg-surface-accent-300 hover:bg-opacity-60 dark:hover:bg-surface-700 dark:hover:bg-opacity-60 text-surface-800 dark:text-surface-200 hover:text-surface-900 hover:dark:text-white",
+                                "hover:bg-surface-accent-300/60 dark:hover:bg-surface-700/60 text-surface-800 dark:text-surface-200 hover:text-surface-900 dark:hover:text-white",
                                 "mr-8",
                                 "font-medium text-sm",
-                                isActive ? "bg-surface-accent-200 bg-opacity-60 dark:bg-surface-800 dark:bg-opacity-30" : ""
+                                isActive ? "bg-surface-accent-200/60 dark:bg-surface-800/30" : ""
                             )}
                             to={navigation.homeUrl + "/datatalk/" + session.id}
                         >

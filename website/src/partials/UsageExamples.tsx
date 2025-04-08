@@ -44,7 +44,7 @@ export function UsageExamples() {
     const parallaxOffset = easeInOut(Math.max(0, Math.min(1, (400 + currentTop / 2) / offsetHeight))) * 2 - 1;
 
     return <div ref={ref}
-                className={clsx("flex flex-col items-center justify-center mt-16 bg-gradient-to-b from-white to-slate-50")}>
+                className={clsx("flex flex-col items-center justify-center mt-16 bg-linear-to-b from-white to-slate-50")}>
 
         <LinedSpace position={"bottom"} size={"large"}/>
 

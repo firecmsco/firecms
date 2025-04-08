@@ -35,7 +35,7 @@ export function CurrentSubscriptionView({
         >
             <div className="flex">
                 <Typography
-                    className="flex-grow"
+                    className="grow"
                     variant={"h6"}>{subscription.product.name}</Typography>
 
                 <Chip
@@ -46,7 +46,7 @@ export function CurrentSubscriptionView({
             </div>
             <div className="flex mt-2 items-center">
                 <div
-                    className="flex-grow flex flex-col items-start gap-2">
+                    className="grow flex flex-col items-start gap-2">
                     {subscription.metadata.projectId && <Typography>
                         Project: <b>{subscription.metadata.projectId}</b>
                     </Typography>}

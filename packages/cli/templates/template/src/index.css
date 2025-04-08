@@ -1,12 +1,11 @@
-@import "@firecms/ui/index.css";
+@import '@firecms/ui/index.css' layer(base);
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@config '../tailwind.config.js';
 
 :root {
     --fcms-primary: #0070F4;
-    --fcms-primary-bg: #0061e610;
     --fcms-secondary: #FF5B79;
 }
 

@@ -64,7 +64,7 @@ export const Tooltip = ({
                     <TooltipPrimitive.Content
                         className={cls("TooltipContent",
                             "max-w-lg leading-relaxed",
-                            "z-50 rounded px-3 py-2 text-xs leading-none bg-surface-accent-700 dark:bg-surface-accent-800 bg-opacity-90 font-medium text-surface-accent-50 shadow-2xl select-none duration-400 ease-in transform opacity-100",
+                            "z-50 rounded-xs px-3 py-2 text-xs leading-none bg-surface-accent-700 dark:bg-surface-accent-800/90 font-medium text-surface-accent-50 shadow-2xl select-none duration-400 ease-in transform opacity-100",
                             tooltipClassName)}
                         style={tooltipStyle}
                         sideOffset={sideOffset === undefined ? 4 : sideOffset}

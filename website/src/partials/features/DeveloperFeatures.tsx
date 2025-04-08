@@ -36,7 +36,7 @@ export function DeveloperFeatures() {
                     left={<div
                         className="relative flex-col font-mono overflow-x-hidden">
 
-                        <pre className={"bg-gray-900 mt-8 p-4 rounded"}
+                        <pre className={"bg-gray-900 mt-8 p-4 rounded-sm"}
                              dangerouslySetInnerHTML={{ __html: priceCodeDemo }}></pre>
 
                         <div
@@ -106,7 +106,7 @@ export function DeveloperFeatures() {
                         <div
                             className="relative flex-col font-mono overflow-x-hidden">
 
-                        <pre className={"bg-gray-900 mt-8 p-4 rounded"}
+                        <pre className={"bg-gray-900 mt-8 p-4 rounded-sm"}
                              dangerouslySetInnerHTML={{ __html: builtForEveryProjectCode }}></pre>
 
                             {/*                            <SyntaxHighlighter*/}

@@ -295,7 +295,7 @@ export function DataTalkSession({
                             submit(textInput);
                     }}
                     autoComplete="off"
-                    className="relative bg-white dark:bg-surface-800 rounded-lg shadow-sm flex items-center gap-2 ">
+                    className="relative bg-white dark:bg-surface-800 rounded-lg shadow-2xs flex items-center gap-2 ">
                     <TextareaAutosize
                         value={textInput}
                         autoFocus={true}

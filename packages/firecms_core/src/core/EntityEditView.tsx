@@ -402,7 +402,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
             {barActions}
 
-            <div className={"flex-grow"}/>
+            <div className={"grow"}/>
 
             {globalLoading && <div className="self-center">
                 <CircularProgress size={"small"}/>

@@ -88,7 +88,7 @@ export function SearchBar({
                 className={cls(
                     (disabled || loading) && "pointer-events-none",
                     "placeholder-text-disabled dark:placeholder-text-disabled-dark",
-                    "relative flex items-center rounded-lg transition-all bg-transparent outline-none appearance-none border-none",
+                    "relative flex items-center rounded-lg transition-all bg-transparent outline-hidden appearance-none border-none",
                     "pl-12 h-full text-current ",
                     expandable ? (active ? "w-[220px]" : "w-[180px]") : "",
                     innerClassName

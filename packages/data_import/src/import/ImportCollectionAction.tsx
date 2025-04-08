@@ -357,10 +357,10 @@ export function PropertySelectEntry({
             </Tooltip>
         </div>
 
-        <div className={"flex flex-col flex-grow p-2 pl-2"}>
+        <div className={"flex flex-col grow p-2 pl-2"}>
             <Typography variant="body1"
                         component="span"
-                        className="flex-grow pr-2">
+                        className="grow pr-2">
                 {property.name
                     ? property.name
                     : "\u00a0"

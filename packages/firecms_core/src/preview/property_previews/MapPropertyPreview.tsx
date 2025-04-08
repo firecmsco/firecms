@@ -74,7 +74,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                                     </Typography>
                                 </div>
                                 <div
-                                    className="flex-grow max-w-[75%]">
+                                    className="grow max-w-[75%]">
                                     <ErrorBoundary>
                                         {!isArrayOrMap &&
                                             <PropertyPreview
@@ -127,7 +127,7 @@ export function KeyValuePreview({ value }: { value: any }) {
                             </Typography>
                         </div>
                         <div
-                            className="flex-grow max-w-[75%]">
+                            className="grow max-w-[75%]">
                             {childValue && <Typography>
                                 <ErrorBoundary>
                                     {childValue.toString()}

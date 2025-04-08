@@ -71,7 +71,7 @@ function ProFeaturesPanels() {
                     <table className="w-full text-xl border-none table-auto">
                         <tbody>
                         {features.map((feature, index) => (
-                            <tr key={index} className={"border-none !bg-transparent"}>
+                            <tr key={index} className={"border-none bg-transparent!"}>
                                 <td className="text-center border-none">{feature.icon}</td>
                                 <td className={"border-none"}>
                                     <div className={"h4"}>{feature.title}</div>

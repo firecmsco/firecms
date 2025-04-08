@@ -28,9 +28,9 @@ export function Panel({
 
     const colorClass = color === "transparent" ? "" :
         color === "white" ? "bg-white text-text-primary" :
-            color === "white-to-slate" ? "bg-gradient-to-b from-white to-slate-50 text-text-primary" :
+            color === "white-to-slate" ? "bg-linear-to-b from-white to-slate-50 text-text-primary" :
                 color === "light" ? "bg-gray-100 text-text-primary" :
-                color === "light-to-white" ? "bg-gradient-to-b from-gray-100 to-white text-text-primary" :
+                color === "light-to-white" ? "bg-linear-to-b from-gray-100 to-white text-text-primary" :
                     color === "lighter" ? "bg-gray-50 text-text-primary" :
                         color === "light_gray" ? "bg-gray-700 text-white dark:text-white" :
                             color === "gray" ? "bg-gray-800 text-white dark:text-white" :
@@ -38,7 +38,7 @@ export function Panel({
                                     color === "primary" ? "bg-primary text-white dark:text-white" :
                                         color === "secondary" ? "bg-secondary text-white dark:text-white" : "";
 
-    const borderClass = color === "primary" ? "border-solid border-white border-opacity-20 dark:border-opacity-20" : defaultBorderMixin;
+    const borderClass = color === "primary" ? "border-solid border-white/20" : defaultBorderMixin;
 
     return (
         <section

@@ -16,7 +16,7 @@ export function InfoLabel({
 
     return (
         <div
-            className={cls("my-3 py-2 px-4 rounded", colorClasses[mode])}>
+            className={cls("my-3 py-2 px-4 rounded-xs", colorClasses[mode])}>
             {children}
         </div>
     )

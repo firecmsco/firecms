@@ -151,7 +151,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                     onBlur={() => setFocused(false)}
                     disabled={disabled}
                     className={cls(
-                        "w-full outline-none bg-transparent leading-normal text-base px-3",
+                        "w-full outline-hidden bg-transparent leading-normal text-base px-3",
                         clearable ? "pr-14" : "pr-12",
                         "rounded-md",
                         {
@@ -163,7 +163,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                         label ? "pt-8 pb-2" : "py-2",
                         inputClassName,
                         disabled &&
-                        "border border-transparent outline-none opacity-50 dark:opacity-50 text-surface-accent-600 dark:text-surface-accent-500"
+                        "border border-transparent outline-hidden opacity-50 dark:opacity-50 text-surface-accent-600 dark:text-surface-accent-500"
                     )}
                 />
                 <IconButton
@@ -171,7 +171,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                         e.stopPropagation();
                         inputRef.current?.showPicker();
                     }}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 !text-surface-accent-500"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-surface-accent-500!"
                 >
                     <CalendarMonthIcon color={"disabled"}/>
                 </IconButton>

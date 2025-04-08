@@ -29,7 +29,7 @@ export function PropertyAddColumnComponent({
             asChild={true}
             title={canEditCollection ? "Add new property" : "You don't have permission to add new properties"}>
             <div
-                className={"p-0.5 w-20 h-full flex items-center justify-center cursor-pointer bg-surface-100 bg-opacity-40 hover:bg-surface-100 dark:bg-surface-950 dark:bg-opacity-40 dark:hover:bg-surface-950"}
+                className={"p-0.5 w-20 h-full flex items-center justify-center cursor-pointer bg-surface-100/40 hover:bg-surface-100 dark:bg-surface-950 dark:bg-opacity-40 dark:hover:bg-surface-950"}
                 // className={onHover ? "bg-white dark:bg-surface-950" : undefined}
                 onClick={() => {
                     collectionEditorController.editProperty({

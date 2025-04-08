@@ -53,7 +53,7 @@ export function Autocomplete({
         duration={50}
         className={cls(
             "absolute top-full left-0 right-0 overflow-visible",
-            open ? "shadow" : "",
+            open ? "shadow-2xs" : "",
             "my-2",
             "z-20",
             "w-full")}>

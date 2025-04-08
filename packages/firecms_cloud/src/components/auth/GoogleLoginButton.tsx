@@ -12,7 +12,7 @@ export function GoogleLoginButton({
 }) {
     return (
         <div className={"m-4 w-full"}>
-            <Button className={cls("w-full bg-white text-surface-900 dark:text-surface-900", disabled ? "" : "hover:text-white hover:dark:text-white")}
+            <Button className={cls("w-full bg-white text-surface-900 dark:text-surface-900", disabled ? "" : "hover:text-white dark:hover:text-white")}
                     style={{
                         height: "40px",
                         borderRadius: "4px",
@@ -27,7 +27,7 @@ export function GoogleLoginButton({
                         {googleIcon()}
                     </div>
                     <div
-                        className={cls("flex-grow pl-6 text-left")}>
+                        className={cls("grow pl-6 text-left")}>
                         {"Sign in with Google"}
                     </div>
                 </div>

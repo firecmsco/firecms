@@ -283,7 +283,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
 
         <div className="flex flex-col h-full">
 
-            <div className="flex-grow">
+            <div className="grow">
                 {entitiesDisplayedFirst &&
                     <EntityCollectionTable
                         textSearchLoading={textSearchLoading}
@@ -319,7 +319,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
             <DialogActions translucent={false}>
                 {description &&
                     <Typography variant={"body2"}
-                                className="flex-grow text-left">
+                                className="grow text-left">
                         {description}
                     </Typography>}
                 <Button

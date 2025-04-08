@@ -68,10 +68,10 @@ export const Sheet: React.FC<SheetProps> = ({
                 </DialogPrimitive.Title>
                 {includeBackgroundOverlay && <DialogPrimitive.Overlay
                     className={cls(
-                        "outline-none",
-                        "fixed inset-0 transition-opacity z-20 ease-in-out duration-100 backdrop-blur-sm",
-                        "bg-black bg-opacity-50",
-                        "dark:bg-surface-900 dark:bg-opacity-60",
+                        "outline-hidden",
+                        "fixed inset-0 transition-opacity z-20 ease-in-out duration-100 backdrop-blur-xs",
+                        "bg-black/50",
+                        "dark:bg-surface-900/60",
                         displayed && open ? "opacity-100" : "opacity-0",
                         overlayClassName
                     )}
@@ -84,7 +84,7 @@ export const Sheet: React.FC<SheetProps> = ({
                     {...props}
                     onFocusCapture={(event) => event.preventDefault()}
                     className={cls(
-                        "outline-none",
+                        "outline-hidden",
                         borderClass[side],
                         defaultBorderMixin,
                         "transform-gpu",
@@ -92,7 +92,7 @@ export const Sheet: React.FC<SheetProps> = ({
                         "text-surface-accent-900 dark:text-white",
                         "fixed transform z-20 transition-all ease-in-out",
                         !displayed ? "duration-150" : "duration-100",
-                        "outline-none focus:outline-none",
+                        "outline-hidden focus:outline-hidden",
                         transparent ? "" : "shadow-md bg-white dark:bg-surface-950",
                         side === "top" || side === "bottom" ? "w-full" : "h-full",
                         side === "left" || side === "top" ? "left-0 top-0" : "right-0 bottom-0",

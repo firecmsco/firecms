@@ -148,7 +148,7 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                             </div>
 //                             <div className="mt-6 sm:mt-10 sm:flex sm:items-center sm:justify-center sm:gap-x-4">
 //                                 <a
-//                                     className="inline-flex cursor-pointer items-center justify-center rounded-md py-2 sm:text-sm font-medium disabled:pointer-events-none disabled:opacity-60 transition-all ease-in-out focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2 relative group bg-gradient-to-b from-blue-500 to-blue-600 hover:opacity-90 text-white active:scale-[99%] duration-200 shadow-sm h-10 w-full px-5 sm:w-fit"
+//                                     className="inline-flex cursor-pointer items-center justify-center rounded-md py-2 sm:text-sm font-medium disabled:pointer-events-none disabled:opacity-60 transition-all ease-in-out focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2 relative group bg-linear-to-b from-blue-500 to-blue-600 hover:opacity-90 text-white active:scale-[99%] duration-200 shadow-xs h-10 w-full px-5 sm:w-fit"
 //                                     href="https://blocks.tremor.so"
 //                                 >
 //                                     Get started
@@ -157,7 +157,7 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                                     role="button"
 //                                     type="button"
 //                                     aria-label="Copy code"
-//                                     className="group rounded-md p-1.5 mt-2 flex h-10 w-full items-center justify-center gap-x-2 border border-slate-200 bg-white pl-5 pr-3 font-mono text-sm font-medium shadow-sm hover:bg-slate-50 sm:mt-0 sm:h-[42px] sm:w-fit"
+//                                     className="group rounded-md p-1.5 mt-2 flex h-10 w-full items-center justify-center gap-x-2 border border-slate-200 bg-white pl-5 pr-3 font-mono text-sm font-medium shadow-xs hover:bg-slate-50 sm:mt-0 sm:h-[42px] sm:w-fit"
 //                                 >
 //                                     npm i @tremor/react
 //                                     <svg
@@ -1953,7 +1953,7 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                                                     <li className=" w-full flex justify-between items-center text-slate-600-default py-2 space-x-3 truncate">
 //                                                         <div className="flex space-x-2.5 truncate px-2 py-1">
 //                         <span
-//                             className="bg-blue-500 w-1 shrink-0 rounded-sm"
+//                             className="bg-blue-500 w-1 shrink-0 rounded-xs"
 //                             aria-hidden="true"
 //                         />
 //                                                             <span className="truncate">Vitainvest Core</span>
@@ -1963,7 +1963,7 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                                                     <li className=" w-full flex justify-between items-center text-slate-600-default py-2 space-x-3 truncate">
 //                                                         <div className="flex space-x-2.5 truncate px-2 py-1">
 //                         <span
-//                             className="bg-cyan-500 w-1 shrink-0 rounded-sm"
+//                             className="bg-cyan-500 w-1 shrink-0 rounded-xs"
 //                             aria-hidden="true"
 //                         />
 //                                                             <span className="truncate">ETF Shares Vital</span>
@@ -1973,7 +1973,7 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                                                     <li className=" w-full flex justify-between items-center text-slate-600-default py-2 space-x-3 truncate">
 //                                                         <div className="flex space-x-2.5 truncate px-2 py-1">
 //                         <span
-//                             className="bg-fuchsia-500 w-1 shrink-0 rounded-sm"
+//                             className="bg-fuchsia-500 w-1 shrink-0 rounded-xs"
 //                             aria-hidden="true"
 //                         />
 //                                                             <span className="truncate">iShares Tech Growth</span>
@@ -2013,7 +2013,7 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                                                             >
 //                                                                 <div className="relative w-full">
 //                                                                     <button
-//                                                                         className="w-full outline-none text-left whitespace-nowrap truncate focus:ring-2 transition duration-100 rounded-l-slate-600-default flex flex-nowrap border pl-3 py-2 rounded-l-slate-600-default focus:border-slate-600-brand-subtle focus:ring-slate-600-brand-muted dark:focus:border-dark-slate-600-brand-subtle dark:focus:ring-dark-slate-600-brand-muted rounded-slate-600-default pr-8 bg-slate-600-background dark:bg-dark-slate-600-background hover:bg-slate-600-background-muted dark:hover:bg-dark-slate-600-background-muted text-slate-600-content dark:text-dark-slate-600-content border-slate-600-border dark:border-dark-slate-600-border"
+//                                                                         className="w-full outline-hidden text-left whitespace-nowrap truncate focus:ring-2 transition duration-100 rounded-l-slate-600-default flex flex-nowrap border pl-3 py-2 rounded-l-slate-600-default focus:border-slate-600-brand-subtle focus:ring-slate-600-brand-muted dark:focus:border-dark-slate-600-brand-subtle dark:focus:ring-dark-slate-600-brand-muted rounded-slate-600-default pr-8 bg-slate-600-background dark:bg-dark-slate-600-background hover:bg-slate-600-background-muted dark:hover:bg-dark-slate-600-background-muted text-slate-600-content dark:text-dark-slate-600-content border-slate-600-border dark:border-dark-slate-600-border"
 //                                                                         type="button"
 //                                                                         aria-expanded="false"
 //                                                                         data-headlessui-state=""
@@ -2087,7 +2087,7 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                                                                 </select>
 //                                                                 <div id="multi-select" data-headlessui-state="">
 //                                                                     <button
-//                                                                         className="w-full outline-none text-left whitespace-nowrap truncate rounded-slate-600-default focus:ring-2 transition duration-100 border pr-8 py-1.5 shadow-slate-600-input focus:border-slate-600-brand-subtle focus:ring-slate-600-brand-muted dark:shadow-dark-slate-600-input dark:focus:border-dark-slate-600-brand-subtle dark:focus:ring-dark-slate-600-brand-muted pl-3 bg-slate-600-background dark:bg-dark-slate-600-background hover:bg-slate-600-background-muted dark:hover:bg-dark-slate-600-background-muted text-slate-600-content dark:text-dark-slate-600-content border-slate-600-border dark:border-dark-slate-600-border"
+//                                                                         className="w-full outline-hidden text-left whitespace-nowrap truncate rounded-slate-600-default focus:ring-2 transition duration-100 border pr-8 py-1.5 shadow-slate-600-input focus:border-slate-600-brand-subtle focus:ring-slate-600-brand-muted dark:shadow-dark-slate-600-input dark:focus:border-dark-slate-600-brand-subtle dark:focus:ring-dark-slate-600-brand-muted pl-3 bg-slate-600-background dark:bg-dark-slate-600-background hover:bg-slate-600-background-muted dark:hover:bg-dark-slate-600-background-muted text-slate-600-content dark:text-dark-slate-600-content border-slate-600-border dark:border-dark-slate-600-border"
 //                                                                         id="headlessui-listbox-button-:r5:"
 //                                                                         type="button"
 //                                                                         aria-haspopup="listbox"
@@ -2122,9 +2122,9 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                                                             Number input
 //                                                         </label>
 //                                                         <div
-//                                                             className=" relative w-full flex items-center min-w-[10rem] outline-none rounded-slate-600-default transition duration-100 border shadow-slate-600-input dark:shadow-dark-slate-600-input bg-slate-600-background dark:bg-dark-slate-600-background hover:bg-slate-600-background-muted dark:hover:bg-dark-slate-600-background-muted text-slate-600-content dark:text-dark-slate-600-content border-slate-600-border dark:border-dark-slate-600-border mt-2">
+//                                                             className=" relative w-full flex items-center min-w-[10rem] outline-hidden rounded-slate-600-default transition duration-100 border shadow-slate-600-input dark:shadow-dark-slate-600-input bg-slate-600-background dark:bg-dark-slate-600-background hover:bg-slate-600-background-muted dark:hover:bg-dark-slate-600-background-muted text-slate-600-content dark:text-dark-slate-600-content border-slate-600-border dark:border-dark-slate-600-border mt-2">
 //                                                             <input
-//                                                                 className=" w-full bg-transparent focus:outline-none focus:ring-0 border-none text-slate-600-default rounded-slate-600-default transition duration-100 py-2 text-slate-600-content-emphasis dark:text-dark-slate-600-content-emphasis [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none pr-3 pl-3 placeholder:text-slate-600-content dark:placeholder:text-dark-slate-600-content"
+//                                                                 className=" w-full bg-transparent focus:outline-hidden focus:ring-0 border-none text-slate-600-default rounded-slate-600-default transition duration-100 py-2 text-slate-600-content-emphasis dark:text-dark-slate-600-content-emphasis [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none pr-3 pl-3 placeholder:text-slate-600-content dark:placeholder:text-dark-slate-600-content"
 //                                                                 placeholder="Type..."
 //                                                                 data-testid="base-input"
 //                                                                 id="number-input"
@@ -2174,9 +2174,9 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                                                             Text input
 //                                                         </label>
 //                                                         <div
-//                                                             className=" relative w-full flex items-center min-w-[10rem] outline-none rounded-slate-600-default transition duration-100 border shadow-slate-600-input dark:shadow-dark-slate-600-input bg-slate-600-background dark:bg-dark-slate-600-background hover:bg-slate-600-background-muted dark:hover:bg-dark-slate-600-background-muted text-slate-600-content dark:text-dark-slate-600-content border-slate-600-border dark:border-dark-slate-600-border mt-2">
+//                                                             className=" relative w-full flex items-center min-w-[10rem] outline-hidden rounded-slate-600-default transition duration-100 border shadow-slate-600-input dark:shadow-dark-slate-600-input bg-slate-600-background dark:bg-dark-slate-600-background hover:bg-slate-600-background-muted dark:hover:bg-dark-slate-600-background-muted text-slate-600-content dark:text-dark-slate-600-content border-slate-600-border dark:border-dark-slate-600-border mt-2">
 //                                                             <input
-//                                                                 className=" w-full bg-transparent focus:outline-none focus:ring-0 border-none text-slate-600-default rounded-slate-600-default transition duration-100 py-2 text-slate-600-content-emphasis dark:text-dark-slate-600-content-emphasis [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none pr-3 pl-3 placeholder:text-slate-600-content dark:placeholder:text-dark-slate-600-content"
+//                                                                 className=" w-full bg-transparent focus:outline-hidden focus:ring-0 border-none text-slate-600-default rounded-slate-600-default transition duration-100 py-2 text-slate-600-content-emphasis dark:text-dark-slate-600-content-emphasis [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none pr-3 pl-3 placeholder:text-slate-600-content dark:placeholder:text-dark-slate-600-content"
 //                                                                 placeholder="Search..."
 //                                                                 data-testid="base-input"
 //                                                                 id="text-input"
@@ -2473,7 +2473,7 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                       </span>
 //                                                     </div>
 //                                                     <div className="flex flex-wrap items-center gap-6">
-//                       <span className="flex items-center justify-center rounded-lg bg-blue-500 p-3 shadow">
+//                       <span className="flex items-center justify-center rounded-lg bg-blue-500 p-3 shadow-sm">
 //                         <svg
 //                             viewBox="0 0 24 24"
 //                             xmlns="http://www.w3.org/2000/svg"
@@ -2488,7 +2488,7 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                         </svg>
 //                       </span>
 //                                                         <span
-//                                                             className="flex items-center justify-center rounded-lg bg-blue-500 p-3 shadow">
+//                                                             className="flex items-center justify-center rounded-lg bg-blue-500 p-3 shadow-sm">
 //                         <svg
 //                             viewBox="0 0 24 24"
 //                             xmlns="http://www.w3.org/2000/svg"
@@ -2503,7 +2503,7 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                         </svg>
 //                       </span>
 //                                                         <span
-//                                                             className="flex items-center justify-center rounded-lg bg-blue-500 p-3 shadow">
+//                                                             className="flex items-center justify-center rounded-lg bg-blue-500 p-3 shadow-sm">
 //                         <svg
 //                             viewBox="0 0 24 24"
 //                             xmlns="http://www.w3.org/2000/svg"
@@ -2518,7 +2518,7 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                         </svg>
 //                       </span>
 //                                                         <span
-//                                                             className="flex items-center justify-center rounded-lg bg-blue-500 p-3 shadow">
+//                                                             className="flex items-center justify-center rounded-lg bg-blue-500 p-3 shadow-sm">
 //                         <svg
 //                             viewBox="0 0 24 24"
 //                             xmlns="http://www.w3.org/2000/svg"
@@ -2533,7 +2533,7 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                         </svg>
 //                       </span>
 //                                                         <span
-//                                                             className="hidden items-center justify-center rounded-lg bg-blue-500 p-3 shadow sm:flex">
+//                                                             className="hidden items-center justify-center rounded-lg bg-blue-500 p-3 shadow-sm sm:flex">
 //                         <svg
 //                             viewBox="0 0 24 24"
 //                             xmlns="http://www.w3.org/2000/svg"
@@ -2556,7 +2556,7 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                                                                 aria-orientation="horizontal"
 //                                                             >
 //                                                                 <button
-//                                                                     className=" flex whitespace-nowrap truncate max-w-xs outline-none ui-focus-visible:ring text-slate-600-default transition duration-100 border-transparent border rounded-slate-600-small px-2.5 py-1 ui-selected:border-slate-600-border ui-selected:bg-slate-600-background ui-selected:shadow-slate-600-input ui-not-selected:hover:text-slate-600-content-emphasis ui-not-selected:text-slate-600-content dark:ui-selected:border-dark-slate-600-border dark:ui-selected:bg-dark-slate-600-background dark:ui-selected:shadow-dark-slate-600-input dark:ui-not-selected:hover:text-dark-slate-600-content-emphasis dark:ui-not-selected:text-dark-slate-600-content ui-selected:text-blue-500 dark:ui-selected:text-blue-500 w-full justify-center font-medium"
+//                                                                     className=" flex whitespace-nowrap truncate max-w-xs outline-hidden ui-focus-visible:ring text-slate-600-default transition duration-100 border-transparent border rounded-slate-600-small px-2.5 py-1 ui-selected:border-slate-600-border ui-selected:bg-slate-600-background ui-selected:shadow-slate-600-input ui-not-selected:hover:text-slate-600-content-emphasis ui-not-selected:text-slate-600-content dark:ui-selected:border-dark-slate-600-border dark:ui-selected:bg-dark-slate-600-background dark:ui-selected:shadow-dark-slate-600-input dark:ui-not-selected:hover:text-dark-slate-600-content-emphasis dark:ui-not-selected:text-dark-slate-600-content ui-selected:text-blue-500 dark:ui-selected:text-blue-500 w-full justify-center font-medium"
 //                                                                     id="headlessui-tabs-tab-:r5g:"
 //                                                                     role="tab"
 //                                                                     type="button"
@@ -2567,7 +2567,7 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                                                                     <span>Overview</span>
 //                                                                 </button>
 //                                                                 <button
-//                                                                     className=" flex whitespace-nowrap truncate max-w-xs outline-none ui-focus-visible:ring text-slate-600-default transition duration-100 border-transparent border rounded-slate-600-small px-2.5 py-1 ui-selected:border-slate-600-border ui-selected:bg-slate-600-background ui-selected:shadow-slate-600-input ui-not-selected:hover:text-slate-600-content-emphasis ui-not-selected:text-slate-600-content dark:ui-selected:border-dark-slate-600-border dark:ui-selected:bg-dark-slate-600-background dark:ui-selected:shadow-dark-slate-600-input dark:ui-not-selected:hover:text-dark-slate-600-content-emphasis dark:ui-not-selected:text-dark-slate-600-content ui-selected:text-blue-500 dark:ui-selected:text-blue-500 w-full justify-center font-medium"
+//                                                                     className=" flex whitespace-nowrap truncate max-w-xs outline-hidden ui-focus-visible:ring text-slate-600-default transition duration-100 border-transparent border rounded-slate-600-small px-2.5 py-1 ui-selected:border-slate-600-border ui-selected:bg-slate-600-background ui-selected:shadow-slate-600-input ui-not-selected:hover:text-slate-600-content-emphasis ui-not-selected:text-slate-600-content dark:ui-selected:border-dark-slate-600-border dark:ui-selected:bg-dark-slate-600-background dark:ui-selected:shadow-dark-slate-600-input dark:ui-not-selected:hover:text-dark-slate-600-content-emphasis dark:ui-not-selected:text-dark-slate-600-content ui-selected:text-blue-500 dark:ui-selected:text-blue-500 w-full justify-center font-medium"
 //                                                                     id="headlessui-tabs-tab-:r5h:"
 //                                                                     role="tab"
 //                                                                     type="button"
@@ -2578,7 +2578,7 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                                                                     <span>Report</span>
 //                                                                 </button>
 //                                                                 <button
-//                                                                     className=" flex whitespace-nowrap truncate max-w-xs outline-none ui-focus-visible:ring text-slate-600-default transition duration-100 border-transparent border rounded-slate-600-small px-2.5 py-1 ui-selected:border-slate-600-border ui-selected:bg-slate-600-background ui-selected:shadow-slate-600-input ui-not-selected:hover:text-slate-600-content-emphasis ui-not-selected:text-slate-600-content dark:ui-selected:border-dark-slate-600-border dark:ui-selected:bg-dark-slate-600-background dark:ui-selected:shadow-dark-slate-600-input dark:ui-not-selected:hover:text-dark-slate-600-content-emphasis dark:ui-not-selected:text-dark-slate-600-content ui-selected:text-blue-500 dark:ui-selected:text-blue-500 w-full justify-center font-medium"
+//                                                                     className=" flex whitespace-nowrap truncate max-w-xs outline-hidden ui-focus-visible:ring text-slate-600-default transition duration-100 border-transparent border rounded-slate-600-small px-2.5 py-1 ui-selected:border-slate-600-border ui-selected:bg-slate-600-background ui-selected:shadow-slate-600-input ui-not-selected:hover:text-slate-600-content-emphasis ui-not-selected:text-slate-600-content dark:ui-selected:border-dark-slate-600-border dark:ui-selected:bg-dark-slate-600-background dark:ui-selected:shadow-dark-slate-600-input dark:ui-not-selected:hover:text-dark-slate-600-content-emphasis dark:ui-not-selected:text-dark-slate-600-content ui-selected:text-blue-500 dark:ui-selected:text-blue-500 w-full justify-center font-medium"
 //                                                                     id="headlessui-tabs-tab-:r5i:"
 //                                                                     role="tab"
 //                                                                     type="button"
@@ -2812,7 +2812,7 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                 <div className="mx-auto max-w-7xl px-4 lg:px-8 overflow-hidde mt-14 sm:mt-28">
 //                     <section
 //                         id="tweets"
-//                         className="relative mb-40 mt-0 scroll-mt-24 focus:outline-none "
+//                         className="relative mb-40 mt-0 scroll-mt-24 focus:outline-hidden "
 //                     >
 //                         <div className="mx-auto flex items-center justify-start space-x-2 text-blue-500">
 //         <span className="font-semibold tracking-tight text-blue-500">
@@ -4054,9 +4054,9 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                                 </li>
 //                             </ul>
 //                         </div>
-//                         <a className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center bg-gradient-to-t from-white pb-8 pt-12">
+//                         <a className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center bg-linear-to-t from-white pb-8 pt-12">
 //                             <button
-//                                 className="inline-flex w-fit cursor-pointer items-center justify-center rounded-md sm:text-sm font-medium disabled:pointer-events-none disabled:opacity-60 transition-all ease-in-out focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2 relative group bg-gradient-to-b hover:opacity-90 active:scale-[99%] duration-200 shadow-sm pointer-events-auto from-slate-800 to-slate-900 px-3.5 py-2.5 text-white hover:from-slate-700 hover:to-slate-800"
+//                                 className="inline-flex w-fit cursor-pointer items-center justify-center rounded-md sm:text-sm font-medium disabled:pointer-events-none disabled:opacity-60 transition-all ease-in-out focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2 relative group bg-linear-to-b hover:opacity-90 active:scale-[99%] duration-200 shadow-xs pointer-events-auto from-slate-800 to-slate-900 px-3.5 py-2.5 text-white hover:from-slate-700 hover:to-slate-800"
 //                                 type="button"
 //                             >
 //                                 Show less
@@ -4077,12 +4077,12 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                             <li aria-label="NPM Link" className="relative">
 //                                 <a
 //                                     href="https://www.npmjs.com/package/@tremor/react"
-//                                     className="focus:outline-none"
+//                                     className="focus:outline-hidden"
 //                                     target="_blank"
 //                                     rel="noreferrer"
 //                                 >
 //             <span
-//                 className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white p-3 shadow-sm">
+//                 className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white p-3 shadow-xs">
 //               <svg
 //                   fill="currentColor"
 //                   viewBox="0 0 24 24"
@@ -4094,7 +4094,7 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //               </svg>
 //             </span>
 //                                 </a>
-//                                 <h3 className="mt-4 w-fit text-clip bg-gradient-to-t from-slate-900 to-slate-700 bg-clip-text text-4xl font-bold text-transparent">
+//                                 <h3 className="mt-4 w-fit text-clip bg-linear-to-t from-slate-900 to-slate-700 bg-clip-text text-4xl font-bold text-transparent">
 //                                     280K+
 //                                 </h3>
 //                                 <p className="mt-1 text-base font-medium text-slate-900">
@@ -4108,12 +4108,12 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                             <li aria-label="GitHub FireCMS UI Repository" className="relative">
 //                                 <a
 //                                     href="https://github.com/tremorlabs/tremor"
-//                                     className="focus:outline-none"
+//                                     className="focus:outline-hidden"
 //                                     target="_blank"
 //                                     rel="noreferrer"
 //                                 >
 //             <span
-//                 className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white p-3 shadow-sm">
+//                 className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white p-3 shadow-xs">
 //               <svg
 //                   aria-hidden="true"
 //                   viewBox="0 0 24 24"
@@ -4127,7 +4127,7 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //               </svg>
 //             </span>
 //                                 </a>
-//                                 <h3 className="mt-4 w-fit text-clip bg-gradient-to-t from-slate-900 to-slate-700 bg-clip-text text-4xl font-bold text-transparent">
+//                                 <h3 className="mt-4 w-fit text-clip bg-linear-to-t from-slate-900 to-slate-700 bg-clip-text text-4xl font-bold text-transparent">
 //                                     15K+
 //                                 </h3>
 //                                 <p className="mt-1 text-base font-medium text-slate-900">
@@ -4141,12 +4141,12 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //                             <li aria-label="Figma FireCMS UI Repository" className="relative">
 //                                 <a
 //                                     href="https://www.tremor.so/figma"
-//                                     className="focus:outline-none"
+//                                     className="focus:outline-hidden"
 //                                     target="_blank"
 //                                     rel="noreferrer"
 //                                 >
 //             <span
-//                 className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white p-3 shadow-sm">
+//                 className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white p-3 shadow-xs">
 //               <svg
 //                   width={13}
 //                   height={20}
@@ -4186,7 +4186,7 @@ const currentCode = fs.readFileSync("./src/pages/ui.tsx", "utf-8");
 //               </svg>
 //             </span>
 //                                 </a>
-//                                 <h3 className="mt-4 w-fit text-clip bg-gradient-to-t from-slate-900 to-slate-700 bg-clip-text text-4xl font-bold text-transparent">
+//                                 <h3 className="mt-4 w-fit text-clip bg-linear-to-t from-slate-900 to-slate-700 bg-clip-text text-4xl font-bold text-transparent">
 //                                     4K+
 //                                 </h3>
 //                                 <p className="mt-1 text-base font-medium text-slate-900">

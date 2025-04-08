@@ -32,7 +32,7 @@ export function PricingQuote() {
                         "flex flex-col",
                         "max-w-[540px] min-w-[380px] relative flex flex-col items-center justify-center px-8 py-6 rounded-2xl",)}>
 
-                    <div className={"flex-grow flex flex-col items-center justify-center"}>
+                    <div className={"grow flex flex-col items-center justify-center"}>
                         <svg xmlns="http://www.w3.org/2000/svg" className={"text-inherit"} width="24"
                              height="24" viewBox="0 0 24 24">
                             <path

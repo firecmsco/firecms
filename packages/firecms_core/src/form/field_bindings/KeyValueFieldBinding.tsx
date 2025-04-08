@@ -395,7 +395,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                         }}/>
                 </div>
 
-                <div className="flex-grow">
+                <div className="grow">
                     {(dataType !== "map" && dataType !== "array") && buildInput(entryValue, fieldKey, dataType)}
                 </div>
                 <div className={"flex flex-col"}>
@@ -510,7 +510,7 @@ function ArrayKeyValueRow<T>({
                         component={"div"}
                         className="font-mono flex min-h-12 flex-row gap-1 items-center">
 
-                <div className="flex-grow">
+                <div className="grow">
                     {selectedDataType !== "map" && buildInput(value, selectedDataType)}
                 </div>
 

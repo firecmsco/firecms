@@ -261,7 +261,7 @@ const EnumEntry = React.memo(
                 <div className={"flex w-full align-center justify-center"}>
                     <Field name={`${enumValuesPath}[${index}].label`}
                            as={DebouncedTextField}
-                           className={"flex-grow"}
+                           className={"grow"}
                            required
                            disabled={disabled}
                            size="small"

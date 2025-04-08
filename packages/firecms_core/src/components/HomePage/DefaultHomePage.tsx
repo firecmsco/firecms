@@ -142,7 +142,7 @@ export function DefaultHomePage({
                                large={false}
                                autoFocus={true}
                                innerClassName={"w-full"}
-                               className={"w-full flex-grow"}/>
+                               className={"w-full grow"}/>
                     {additionalActions}
                 </div>
 

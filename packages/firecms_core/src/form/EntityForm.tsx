@@ -621,7 +621,7 @@ export function EntityForm<M extends Record<string, any>>({
         <>
             {!Builder && <div className={"w-full py-2 flex flex-col items-start my-4 lg:my-6"}>
                 <Typography
-                    className={"py-4 flex-grow line-clamp-1 " + (collection.hideIdFromForm ? "mb-2" : "mb-0")}
+                    className={"py-4 grow line-clamp-1 " + (collection.hideIdFromForm ? "mb-2" : "mb-0")}
                     variant={"h4"}>
                     {title ?? collection.singularName ?? collection.name}
                 </Typography>

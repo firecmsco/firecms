@@ -47,7 +47,7 @@ export function RootCollectionSuggestions({ introMode }: { introMode?: "new_proj
                 className={"flex flex-row gap-1 overflow-scroll no-scrollbar "}>
                 {(rootPathSuggestions ?? []).map((path) => {
                     return (
-                        <div key={path} className={"flex-shrink-0"}>
+                        <div key={path} className={"shrink-0"}>
                             <Chip
                                 icon={<AddIcon size={"small"}/>}
                                 colorScheme={"cyanLighter"}

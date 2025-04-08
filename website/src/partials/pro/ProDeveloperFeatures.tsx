@@ -41,7 +41,7 @@ export function ProDeveloperFeatures() {
                     <div className={"flex items-center mb-4 mt-16"}>
 
                         {/*<div*/}
-                        {/*    className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-3">*/}
+                        {/*    className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow-sm shrink-0 mr-3">*/}
                         {/*    <LightingIcon height={12} width={12}/>*/}
                         {/*</div>*/}
 
@@ -81,7 +81,7 @@ export function ProDeveloperFeatures() {
                         </a>
                     </div>
 
-                    <pre className={"bg-gray-900 mt-8 p-4 rounded"} dangerouslySetInnerHTML={{ __html: proExampleCode }}></pre>
+                    <pre className={"bg-gray-900 mt-8 p-4 rounded-sm"} dangerouslySetInnerHTML={{ __html: proExampleCode }}></pre>
 
                     {/*<SyntaxHighlighter*/}
                     {/*    className={clsx("mt-16 p-4 overflow-x-auto md:max-w-full overflow-y-hidden border border-solid", defaultBorderMixin)}*/}

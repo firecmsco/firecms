@@ -56,7 +56,7 @@ export function DefaultDrawer({
             className="pl-6 pr-8 py-4 flex flex-row items-center">
             <Typography variant={"caption"}
                         color={"secondary"}
-                        className="font-medium flex-grow line-clamp-1">
+                        className="font-medium grow line-clamp-1">
                 {group ? group.toUpperCase() : "Views".toUpperCase()}
             </Typography>
 
@@ -74,18 +74,18 @@ export function DefaultDrawer({
 
     return (
         <>
-            <div className={cls("flex flex-col h-full relative flex-grow w-full", className)} style={style}>
+            <div className={cls("flex flex-col h-full relative grow w-full", className)} style={style}>
 
                 <DrawerLogo logo={logo}/>
 
-                <div className={"mt-4 flex-grow overflow-scroll no-scrollbar"}
+                <div className={"mt-4 grow overflow-scroll no-scrollbar"}
                      style={{
                          maskImage: "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)",
                      }}>
 
                     {groupsWithoutAdmin.map((group) => (
                         <div
-                            className={"bg-surface-50 dark:bg-surface-800 dark:bg-opacity-30 my-4 rounded-lg ml-3 mr-1"}
+                            className={"bg-surface-50 dark:bg-surface-800/30 my-4 rounded-lg ml-3 mr-1"}
                             key={`drawer_group_${group}`}>
                             {buildGroupHeader(group)}
                             {Object.values(navigationEntries)
@@ -164,7 +164,7 @@ export function DrawerLogo({ logo }: {
             transition: "padding 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
             padding: drawerOpen ? "32px 144px 0px 24px" : "72px 12px 0px 12px"
         }}
-        className={cls("cursor-pointer rounded ml-3 mr-1")}>
+        className={cls("cursor-pointer rounded-xs ml-3 mr-1")}>
 
         <Tooltip title={"Home"}
                  sideOffset={20}

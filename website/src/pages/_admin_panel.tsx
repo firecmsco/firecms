@@ -12,7 +12,7 @@ function AdminPanel() {
         <Layout title="Your admin panel" description="Customize FireCMS to exactly met the needs of your business">
             <div className="flex flex-col min-h-screen">
 
-                <main className="flex-grow">
+                <main className="grow">
 
                     <EnterpriseHero/>
                     <EnterpriseFeatures/>
