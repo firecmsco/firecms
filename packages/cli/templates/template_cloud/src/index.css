@@ -1,2 +1,3 @@
-@import '@firecms/ui/index.css' layer(base);
-@import 'tailwindcss';
+@import "tailwindcss";
+@import "@firecms/ui/index.css" layer(base);
+@source "./node_modules/@firecms/**/*.{js,ts,jsx,tsx}";

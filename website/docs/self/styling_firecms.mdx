@@ -41,15 +41,15 @@ FireCMS UI uses a primary color and a secondary color. You can customize these c
 in your `index.css` file:
 
 ```css
-@import "@firecms/ui/index.css";
+@import "@firecms/ui/index.css" layer(base);
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-    --fcms-primary: #0070F4;
-    --fcms-secondary: #FF5B79;
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
 }
 
 body {
@@ -86,8 +86,8 @@ export default {
     theme: {
         extend: {
             colors: {
-                "primary": "var(--fcms-primary)",
-                "secondary": "var(--fcms-secondary)",
+                "primary": "var(--color-primary)",
+                "secondary": "var(--color-secondary)",
                 "field": {
                     "disabled": "rgb(224 224 226)",
                     "disabled-dark": "rgb(35 35 37)"

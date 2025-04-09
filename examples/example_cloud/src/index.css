@@ -2,6 +2,6 @@
 @import 'tailwindcss';
 
 @theme {
-    --fcms-primary: #0070F4;
-    --fcms-secondary: #FF5B79;
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
 }

@@ -1,9 +1,9 @@
 @import 'tailwindcss';
-@import "@firecms/ui/index.css";
+@import "@firecms/ui/index.css" layer(base);
 
 @theme {
-    --fcms-primary: #0070f4;
-    --fcms-secondary: #12b6b2;
+    --color-primary: #0070f4;
+    --color-secondary: #12b6b2;
 }
 
 @layer utilities {
