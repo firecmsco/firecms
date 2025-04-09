@@ -120,6 +120,7 @@ export function ArrayOfReferencesFieldBinding({
                             value={value}
                             disabled={isSubmitting}
                             buildEntry={buildEntry}
+                            canAddElements={false}
                             addLabel={property.name ? "Add reference to " + property.name : "Add reference"}
                             newDefaultEntry={property.of.defaultValue}
                             onValueChange={(value) => setFieldValue(propertyKey, value)}
