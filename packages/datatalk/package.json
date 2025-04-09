@@ -38,14 +38,14 @@
     "@firecms/formex": "^3.0.0-canary.228",
     "@firecms/schema_inference": "^3.0.0-canary.228",
     "@firecms/ui": "^3.0.0-canary.228",
-    "@monaco-editor/react": "^4.6.0"
+    "@monaco-editor/react": "^4.7.0"
   },
   "devDependencies": {
     "@types/node": "20.17.14",
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.0",
-    "typescript": "^5.7.3",
-    "vite": "^5.4.14"
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.6",
+    "typescript": "^5.8.3",
+    "vite": "^5.4.17"
   },
   "gitHead": "2faf1ad46963f197c503b8d7e97abb27587b4ce6"
 }

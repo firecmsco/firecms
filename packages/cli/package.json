@@ -36,15 +36,15 @@
     "execa": "^4.1.0",
     "form-data": "^4.0.1",
     "googleapis": "^144.0.0",
-    "inquirer": "12.3.2",
+    "inquirer": "12.5.2",
     "json5": "^2.2.3",
     "listr": "^0.14.3",
     "ncp": "^2.0.0",
     "nocache": "^4.0.0",
     "open": "^10.1.0",
-    "ora": "^8.1.1",
+    "ora": "^8.2.0",
     "pump": "^3.0.2",
-    "ws": "^8.18.0",
+    "ws": "^8.18.1",
     "zip-folder": "^1.0.0"
   },
   "devDependencies": {
@@ -52,8 +52,8 @@
     "npm-run-all": "^4.1.5",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.3",
-    "vite": "^5.4.14"
+    "typescript": "^5.8.3",
+    "vite": "^5.4.17"
   },
   "files": [
     "bin/",

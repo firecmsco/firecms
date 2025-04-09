@@ -30,7 +30,8 @@
   },
   "dependencies": {
     "@firecms/ui": "^3.0.0-canary.228",
-    "@radix-ui/react-slot": "^1.1.1",
+    "@radix-ui/react-slot": "^1.2.0",
+    "prosemirror-view": "1.37.0",
     "@tiptap/core": "2.11.5",
     "@tiptap/extension-blockquote": "2.11.5",
     "@tiptap/extension-bold": "2.11.5",
@@ -58,25 +59,25 @@
     "@tiptap/starter-kit": "2.11.5",
     "@tiptap/suggestion": "2.11.5",
     "@types/node": "20.17.14",
-    "prosemirror-view": "1.37.2",
-    "react-compiler-runtime": "^19.0.0-beta-e552027-20250112",
-    "react-markdown": "^9.0.3",
+    "prosemirror-view": "1.39.1",
+    "react-compiler-runtime": "^19.0.0-beta-e993439-20250405",
+    "react-markdown": "^9.1.0",
     "react-moveable": "^0.56.0",
     "tippy.js": "^6.3.7",
     "tiptap-markdown": "^0.8.10"
   },
   "devDependencies": {
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.0",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.6",
     "@types/react-measure": "^2.0.12",
     "@vitejs/plugin-react": "^4.3.4",
     "babel-jest": "^29.7.0",
     "babel-plugin-react-compiler": "beta",
     "eslint-plugin-react-compiler": "beta",
     "jest": "^29.7.0",
-    "ts-jest": "^29.2.5",
-    "typescript": "^5.7.3",
-    "vite": "^5.4.14"
+    "ts-jest": "^29.3.1",
+    "typescript": "^5.8.3",
+    "vite": "^5.4.17"
   },
   "gitHead": "2faf1ad46963f197c503b8d7e97abb27587b4ce6"
 }

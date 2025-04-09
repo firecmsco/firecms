@@ -40,12 +40,12 @@
   },
   "devDependencies": {
     "@types/node": "^20.17.14",
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.0",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.6",
     "babel-plugin-react-compiler": "beta",
     "eslint-plugin-react-compiler": "beta",
-    "typescript": "^5.7.3",
-    "vite": "^5.4.14"
+    "typescript": "^5.8.3",
+    "vite": "^5.4.17"
   },
   "scripts": {
     "dev": "vite",

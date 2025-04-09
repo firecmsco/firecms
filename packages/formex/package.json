@@ -39,14 +39,14 @@
     "@jest/globals": "^29.7.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^20.17.14",
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.0",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.6",
     "babel-plugin-react-compiler": "beta",
     "eslint-plugin-react-compiler": "beta",
     "jest": "^29.7.0",
-    "ts-jest": "^29.2.5",
-    "typescript": "^5.7.3",
-    "vite": "^5.4.14"
+    "ts-jest": "^29.3.1",
+    "typescript": "^5.8.3",
+    "vite": "^5.4.17"
   },
   "scripts": {
     "dev": "vite",
@@ -57,7 +57,6 @@
   "files": [
     "dist",
     "src",
-    "tailwind.config.js",
     "bin"
   ],
   "jest": {
