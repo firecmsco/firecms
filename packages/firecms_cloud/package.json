@@ -1,7 +1,7 @@
 {
   "name": "@firecms/cloud",
   "type": "module",
-  "version": "3.0.0-canary.229",
+  "version": "3.0.0-canary.230",
   "publishConfig": {
     "access": "public"
   },
@@ -33,18 +33,18 @@
   "source": "src/index.ts",
   "dependencies": {
     "@firebase/auth": "*",
-    "@firecms/cli": "^3.0.0-canary.229",
-    "@firecms/collection_editor": "^3.0.0-canary.229",
-    "@firecms/collection_editor_firebase": "^3.0.0-canary.229",
-    "@firecms/core": "^3.0.0-canary.229",
-    "@firecms/data_enhancement": "^3.0.0-canary.229",
-    "@firecms/data_export": "^3.0.0-canary.229",
-    "@firecms/data_import": "^3.0.0-canary.229",
-    "@firecms/datatalk": "^3.0.0-canary.229",
-    "@firecms/firebase": "^3.0.0-canary.229",
-    "@firecms/formex": "^3.0.0-canary.229",
-    "@firecms/schema_inference": "^3.0.0-canary.229",
-    "@firecms/user_management": "^3.0.0-canary.229",
+    "@firecms/cli": "^3.0.0-canary.230",
+    "@firecms/collection_editor": "^3.0.0-canary.230",
+    "@firecms/collection_editor_firebase": "^3.0.0-canary.230",
+    "@firecms/core": "^3.0.0-canary.230",
+    "@firecms/data_enhancement": "^3.0.0-canary.230",
+    "@firecms/data_export": "^3.0.0-canary.230",
+    "@firecms/data_import": "^3.0.0-canary.230",
+    "@firecms/datatalk": "^3.0.0-canary.230",
+    "@firecms/firebase": "^3.0.0-canary.230",
+    "@firecms/formex": "^3.0.0-canary.230",
+    "@firecms/schema_inference": "^3.0.0-canary.230",
+    "@firecms/user_management": "^3.0.0-canary.230",
     "firebase": "10.14.1",
     "react-router": "^6.28.2",
     "react-router-dom": "^6.28.2"
@@ -72,5 +72,5 @@
     "src",
     "bin"
   ],
-  "gitHead": "2faf1ad46963f197c503b8d7e97abb27587b4ce6"
+  "gitHead": "a0a1c97c8f3ca5d9c7013973681b9b81a5a9994a"
 }

@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-canary.229",
+  "version": "3.0.0-canary.230",
   "type": "module",
   "name": "@firecms/schema_inference",
   "access": "public",
@@ -8,7 +8,7 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "devDependencies": {
-    "@firecms/core": "^3.0.0-canary.229",
+    "@firecms/core": "^3.0.0-canary.230",
     "@types/node": "^20.17.14",
     "typescript": "^5.7.3",
     "vite": "^5.4.14"
@@ -30,5 +30,5 @@
     "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
   },
-  "gitHead": "2faf1ad46963f197c503b8d7e97abb27587b4ce6"
+  "gitHead": "a0a1c97c8f3ca5d9c7013973681b9b81a5a9994a"
 }
