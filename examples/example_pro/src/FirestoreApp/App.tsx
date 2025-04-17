@@ -268,8 +268,8 @@ export function App() {
         //     view: <TestBoardView/>
         // },
         {
-            path: "editor_test",
-            name: "Editor test",
+            path: "editor_demo",
+            name: "The FireCMS editor",
             description: "This view showcases a custom advanced editor",
             group: "Custom views",
             view: <TestEditorView/>

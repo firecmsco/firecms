@@ -91,7 +91,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
             roles: user.roles.map(r => r.id),
             updated_on: new Date()
         }
-        console.log("Updating user", persistedUserData);
+        console.debug("Updating user", persistedUserData);
         return fetch(host + "/projects/" + projectId + "/users/" + uid,
             {
                 method: "PATCH",

@@ -24,7 +24,7 @@ export function AppCheckSettingsView() {
     const [siteKey, setSiteKey] = useState<string | null>(projectConfig.serializedAppCheck?.siteKey ?? null);
 
     const saveAppCheck = () => {
-        console.log("Saving app check", enabled, provider, siteKey);
+        console.debug("Saving app check", enabled, provider, siteKey);
         if (enabled && provider && siteKey) {
             try {
                 projectConfig.updateAppCheck({

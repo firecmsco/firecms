@@ -85,6 +85,7 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
+    "@tailwindcss/postcss": "^4.1.4",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.6.1",

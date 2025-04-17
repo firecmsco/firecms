@@ -103,19 +103,7 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
                     const image = item.getAsFile();
                     if (image) {
                         anyImageFound = true;
-                        // if (item.type.indexOf("image") === 0) {
-                        //     event.preventDefault();
-                        //
-                        //     if (upload && image) {
-                        //         upload(image).then((src) => {
-                        //             const node = schema.nodes.image.create({
-                        //                 src
-                        //             });
-                        //             const transaction = view.state.tr.replaceSelectionWith(node);
-                        //             view.dispatch(transaction);
-                        //         });
-                        //     }
-                        // } else {
+
                         const reader = new FileReader();
 
                         reader.onload = async (readerEvent) => {
