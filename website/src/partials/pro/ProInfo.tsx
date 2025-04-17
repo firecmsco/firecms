@@ -24,11 +24,11 @@ export function ProInfo() {
             </h2>
             <p className="text-xl md:text-2xl">
                 FireCMS PRO allows you to use all the internal components and features of FireCMS, but also provides
-                additional tools and components to help you build better <strong className={"gradient-text"}>back-office
-                applications</strong> and <strong className={"gradient-text"}>admin panels</strong> faster.
+                additional tools and components to help you build better <strong className={"text-primary"}>back-office
+                applications</strong> and <strong className={"text-primary"}>admin panels</strong> faster.
             </p>
             <p className="text-xl md:text-2xl mb-16">
-                <strong className={"gradient-text"}>Customizable, extensible</strong> and with a strong focus on
+                <strong className={"text-primary"}>Customizable, extensible</strong> and with a strong focus on
                 developer
                 experience, <strong>FireCMS PRO</strong> is the perfect
                 solution for your next project.

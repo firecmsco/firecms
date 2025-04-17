@@ -39,7 +39,7 @@ export function HeroPro({
                                         backgroundClip: "text",
                                         backgroundImage: "linear-gradient(to right, #EC4C51, #FA5574, #9543C1, #9543C1)"
                                     }}
-                                    className="font-extrabold text-transparent bg-clip-text text-7xl md:text-8xl">PRO</span>
+                                    className="font-medium text-transparent bg-clip-text text-7xl md:text-8xl">PRO</span>
                             </div>
 
                         </h1>

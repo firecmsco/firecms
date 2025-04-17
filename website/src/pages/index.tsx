@@ -17,6 +17,10 @@ import { QuotesSection } from "../partials/Quotes";
 import { organizationSchema, softwareApplicationSchema } from "../partials/markup";
 import { ImportDataIntro } from "../partials/home/ImportDataIntro";
 import { clarityScript } from "../partials/clarity_head";
+import { MainHeroBackground } from "../partials/general/MainHeroBackground";
+import { LaunchInSteps } from "../partials/home/LaunchInSteps";
+import { BuiltFor } from "../partials/home/BuiltFor";
+import { SchemaEditorShowcase } from "../partials/home/SchemaEditorShowcase";
 
 function Home() {
 
@@ -41,6 +45,8 @@ function Home() {
                 {/*</script>*/}
             </Head>
 
+            <MainHeroBackground/>
+
             <HeroHome/>
 
             <main className={"bg-white max-w-[100vw] overflow-x-hidden"}>
@@ -49,18 +55,21 @@ function Home() {
 
                 <ManageYour/>
 
-                <QuotesSection/>
+                <LaunchInSteps/>
 
+                <SchemaEditorShowcase/>
+
+                <QuotesSection/>
                 <Companies/>
 
-                <UITeaser/>
+                <BuiltFor/>
 
+                <ImportDataIntro/>
 
                 <DeveloperFeatures/>
 
                 <TechSplash/>
 
-                <ImportDataIntro/>
 
                 <FeaturesPanels/>
 

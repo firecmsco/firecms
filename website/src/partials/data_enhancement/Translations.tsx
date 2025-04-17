@@ -15,7 +15,7 @@ export function Translations() {
     const { colorMode } = useColorMode();
     const isDarkTheme = colorMode === "dark";
     return (
-        <Panel>
+        <Panel color={"light_gray"}>
             <TwoColumns
                 left={<>
                     <h2 className={"h2"}>

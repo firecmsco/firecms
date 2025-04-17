@@ -25,13 +25,15 @@ export function Panel({
     innerClassName?: string,
     container?: boolean
 }) {
-
-    const colorClass = color === "transparent" ? "" :
+//
+    // color={"lighter"}
+    //           className={"dark:bg-transparent text-gray-900 dark:text-white"}
+    const colorClass = color === "transparent" ? "text-white" :
         color === "white" ? "bg-white text-text-primary" :
             color === "white-to-slate" ? "bg-gradient-to-b from-white to-slate-50 text-text-primary" :
-                color === "light" ? "bg-gray-100 text-text-primary" :
+                color === "light" ? "bg-gray-200 text-text-primary" :
                 color === "light-to-white" ? "bg-gradient-to-b from-gray-100 to-white text-text-primary" :
-                    color === "lighter" ? "bg-gray-50 text-text-primary" :
+                    color === "lighter" ? "bg-gray-100 text-text-primary" :
                         color === "light_gray" ? "bg-gray-700 text-white dark:text-white" :
                             color === "gray" ? "bg-gray-800 text-white dark:text-white" :
                                 color === "dark_gray" ? "bg-gray-900 text-white dark:text-white" :

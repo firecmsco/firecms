@@ -9,7 +9,7 @@ h2 {
 }
 
 h3 {
-    @apply text-4xl font-headers font-semibold
+    @apply text-4xl font-headers font-bold
 }
 
 h4 {
@@ -24,8 +24,12 @@ h6 {
     @apply text-xl font-headers font-normal
 }
 
-h1, .h1, h2, .h2, h3, .h3 {
-    font-weight: 600 !important;
+h1, .h1, h2, .h2 {
+    font-weight: 600;
+}
+
+h3, .h3 {
+    font-weight: 700;
 }
 .footer__title {
     font-size: 1.25rem;
@@ -33,6 +37,10 @@ h1, .h1, h2, .h2, h3, .h3 {
 }
 tr {
     border-top: none;
+}
+
+.main-wrapper {
+    position: relative;
 }
 
 .theme-doc-sidebar-item-category-level-1, .theme-doc-sidebar-item-link-level-1 {
@@ -226,9 +234,9 @@ html[data-theme='dark'] {
     --ifm-table-stripe-background: inherit;
     --ifm-border-color: rgba(100, 116, 139, 0.4);
     --ifm-toc-border-color: var(--ifm-border-color);
-    --ifm-custom-navbar-background-color: rgba(48, 49, 55, 0.33);
+    --ifm-custom-navbar-background-color: rgba(48, 49, 55, 0.20);
     /*--ifm-background-color: #ececec;*/
-    --ifm-background-color: #18181C;
+    --ifm-background-color: #090b15;
     --ifm-background-surface-color: #232328;
     --ifm-color-emphasis-100: #232328;
     /*--ifm-background-surface-color: #242526;*/
@@ -267,6 +275,10 @@ article header {
 article .theme-admonition {
     margin-top: 32px;
     margin-bottom: 32px;
+}
+
+article h1 {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 article h2 {

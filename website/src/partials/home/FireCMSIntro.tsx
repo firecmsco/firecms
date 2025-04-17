@@ -14,24 +14,31 @@ import { LinedSpace } from "../layout/LinedSpace";
 
 function FireCMSIntro() {
     return (
-        <Panel color={"dark_gray"}
+        <Panel color={"transparent"}
                container={false}
-               innerClassName={"flex flex-col"}
+               innerClassName={"flex flex-col text-white"}
                includePadding={false}
                includeMargin={false}>
 
-            <a href="/llms.txt"
-               target={"_blank"}
-               rel={"noreferrer"}
-               className="mx-auto justify-center uppercase mt-16 inline-flex items-center text-white bg-gray-950 hover:bg-gray-800 focus:ring-4 font-semibold rounded-lg text-sm px-5 py-2.5 text-center focus:ring-primary-900 hover:no-underline">
-                ✨ AI docs ready!
-                <svg className="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                     xmlns="http://www.w3.org/2000/svg">
-                    <path fillRule="evenodd"
-                          d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                          clipRule="evenodd"></path>
-                </svg>
-            </a>
+            <div className="mt-16 mx-auto flex row items-center justify-center gap-2">
+
+                <span
+                    className="text-sm font-semibold bg-gray-700 text-white px-2 py-1 rounded">MIT licensed</span>
+
+                <a href="/llms.txt"
+                   target={"_blank"}
+                   rel={"noreferrer"}
+                   className="justify-center uppercase  inline-flex items-center text-white bg-gray-950 hover:bg-gray-800 focus:ring-4 font-semibold rounded-lg text-sm px-5 py-2.5 text-center focus:ring-primary-900 hover:no-underline">
+                    ✨ AI docs ready!
+                    <svg className="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path fillRule="evenodd"
+                              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                              clipRule="evenodd"></path>
+                    </svg>
+                </a>
+
+            </div>
 
             <LinedSpace size={"medium"}/>
 
@@ -68,8 +75,8 @@ function FireCMSIntro() {
             </div>
 
             <div
-                className="max-w-5xl mx-auto text-center mb-12 px-8 py-4 md:px-8">
-                <h2 className="mb-4 gradient-text uppercase m-auto">
+                className="max-w-6xl mx-auto text-center mb-12 px-8 py-4 md:px-8">
+                <h2 className="mb-4 uppercase m-auto">
                     Much more than a CMS
                 </h2>
                 <p className="text-xl md:text-2xl">

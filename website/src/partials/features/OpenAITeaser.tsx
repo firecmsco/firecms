@@ -33,15 +33,14 @@ function OpenAITeaser() {
                             </div>
 
                             <h2 className="m-0">
-                                <span>ChatGPT </span>
-                                <span
-                                    className="text-primary">Integration</span>
+                                <span>AI </span>
+                                <span className="text-primary">Integration</span>
                             </h2>
                         </div>
 
                         <div className="mt-3 text-xl sm:mt-4 md:text-2xl">
                             <p>
-                                FireCMS with ChatGPT integration offers a
+                                FireCMS with AI integration offers a
                                 powerful
                                 autofill
                                 feature that can save you time and increase the

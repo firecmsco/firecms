@@ -12,7 +12,6 @@ import useBaseUrl from "@docusaurus/useBaseUrl";
 export function DataStructure() {
 
     const { colorMode } = useColorMode();
-    const isDarkTheme = colorMode === "dark";
     return (
 
         <Panel color={"primary"}>
@@ -28,17 +27,9 @@ export function DataStructure() {
                 relevant content.
             </p>
             <p className="text-xl">
-                It's proficient in handling <b>strings, numbers,
+                It&#39;s proficient in handling <b>strings, numbers,
                 enumerations, arrays, objects, and more.</b>
             </p>
-
-            <a
-                className={CTAOutlinedButtonWhiteMixin + "  sm:mb-0 w-full sm:w-auto rounded"}
-                href={useBaseUrl("docs/openai")}
-            >
-                Get started
-                <CTACaret/>
-            </a>
         </Panel>
     );
 }

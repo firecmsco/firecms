@@ -6,13 +6,14 @@ import { Hero } from "../partials/general/Hero";
 import HeroButtons from "../partials/home/HeroButtons";
 import { Panel } from "../partials/general/Panel";
 import ProTeaser from "../partials/home/ProTeaser";
-import { IntroText } from "../partials/features/IntroText";
-import { FormInfo } from "../partials/features/FormInfo";
+import { UnbeatableUX } from "../partials/features/UnbeatableUX";
+import { CustomFields } from "../partials/features/CustomFields";
 import { EnterpriseFeatures } from "../partials/enterprise/EnterpriseFeatures";
 import { EnterpriseArchitectures } from "../partials/enterprise/EnterpriseArchitectures";
 import { SchemaEditorIntro } from "../partials/features/SchemaEditorIntro";
 import OpenAITeaser from "../partials/features/OpenAITeaser";
 import Head from "@docusaurus/Head";
+import { PagesHeroBackground } from "../partials/general/PagesHeroBackground";
 // import { clarityScript } from "../partials/clarity_head";
 
 function FeaturesPage() {
@@ -37,9 +38,9 @@ function FeaturesPage() {
                     <Hero
                         title={
                             <>
-                                <span
-                                    className="block lg:inline">Features</span>
+                                <span className="block lg:inline">Unmatched Editing Experience </span>
                             </>}
+                        subtitleColor={"light"}
                         subtitle={
                             <>
                                 <p>
@@ -54,15 +55,9 @@ function FeaturesPage() {
 
                     <Features/>
 
-                    <IntroText/>
-
-                    <FormInfo/>
-
 
                     <SchemaEditorIntro/>
 
-                    <EnterpriseFeatures/>
-                    <EnterpriseArchitectures/>
                     <OpenAITeaser/>
 
                     <Panel color={"light"} includePadding={true}>

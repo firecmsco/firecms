@@ -1,3 +1,28 @@
+## [3.0.0-beta.13] - 2025-04-11
+
+- **JSON Preview**: Added JSON preview tab to entities, providing a raw data view. Can be disabled with `disableJsonTab` prop.
+- **TextField Enhancements**: Added `maxRows` and `minRows` props to TextField component for better control of multiline inputs.
+- **AuthController in PropertyBuilder**: Added `authController` to PropertyBuilder callback, allowing access to authentication context.
+- **Storage Improvements**: Added `processFile` to storage properties for pre-processing files before upload.
+- **Secondary Forms**: Secondary forms are now always rendered, even if disabled, for better consistency.
+- **UI Improvements**:
+  - Adjusted small and smallest field sizes for better visual hierarchy
+  - Updated Button neutral color styling
+  - Improved layout for long entity IDs
+  - Various minor layout tweaks
+- **Fixes**:
+  - Fixed array reference field with incorrect add button
+  - Fixed subcollections not resolving path correctly
+  - Fixed complex subcollection with alias navigation bug
+  - Fixed export functionality when flatten arrays is false (double quotes are now escaped correctly)
+  - Fixed CollectionDetailsForm enum select issues
+  - Fixed entity creation bug
+  - Fixed URL update for entities with default selected view
+  - Fixed values not resetting correctly
+  - Fixed read-only entity views missing tabs
+  - Fixed camel case related bug
+- **Demo**: Added MultiSelect component demonstration
+
 ## [3.0.0-beta.12] - 2025-03-13
 
 - **Full-screen entity views**: You can now open entities in a full-screen view. This is useful when you want to

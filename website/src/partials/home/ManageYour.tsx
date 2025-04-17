@@ -11,12 +11,12 @@ export function ManageYour() {
     return <Panel color={"primary"} includePadding={false}>
         <div
             className={clsx(ContainerInnerPaddingMixin,)}>
-            <h1 className={"relative items-center text-white uppercase mt-8"}>
+            <h2 className={"relative items-center text-white uppercase mt-8"}>
                 <div className="mb-4 text-white uppercase md:inline">
                     Manage your&nbsp;
                 </div>
                 <LazyTypeAnimation/>
-            </h1>
+            </h2>
 
             <div className={"mt-8 text-xl md:text-2xl"}>
                 <p>

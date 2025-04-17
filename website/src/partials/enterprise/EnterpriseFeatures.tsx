@@ -14,9 +14,7 @@ export function EnterpriseFeatures() {
 
             <Panel color={"white"}>
                 <div className={"flex items-center my-4 "}>
-
-                    <h2 className={"m-0"}>Not just a CMS</h2>
-
+                    <h2 className={"m-0 text-3xl"}>Not just a CMS</h2>
                 </div>
 
                 <p className={"text-2xl "}>
@@ -81,55 +79,55 @@ export function EnterpriseFeatures() {
 
             </Panel>
 
-            <Panel color={"white"}>
+            {/*<Panel color={"white"}>*/}
 
-                <TwoColumns
-                    left={<>
+            {/*    <TwoColumns*/}
+            {/*        left={<>*/}
 
-                        <div className={"flex items-center my-4 mb-3 "}>
+            {/*            <div className={"flex items-center my-4 mb-3 "}>*/}
 
-                            <h2 className={"m-0"}>Why Choose FireCMS?</h2>
+            {/*                <h2 className={"m-0"}>Why Choose FireCMS?</h2>*/}
 
-                        </div>
+            {/*            </div>*/}
 
 
-                        <p className={"text-2xl "}>
-                            Every organization has unique content management
-                            requirements. We've designed FireCMS with flexibility
-                            and customization in mind to cater to these diverse
-                            needs.
-                        </p>
+            {/*            <p className={"text-2xl "}>*/}
+            {/*                Every organization has unique content management*/}
+            {/*                requirements. We've designed FireCMS with flexibility*/}
+            {/*                and customization in mind to cater to these diverse*/}
+            {/*                needs.*/}
+            {/*            </p>*/}
 
-                        <p className={"text-2xl "}>
-                            Firebase offers exceptional scalability, making it an
-                            ideal choice for companies aiming to build products that
-                            can accommodate millions of users. With Firebase/Firestore, you
-                            can focus on your product without concerns about
-                            infrastructure limitations.
-                        </p>
-                    </>}
-                    right={<>
-                        <div className={"m-4 text-3xl"}>
-                            <div className={"flex items-center gap-4"}>
-                                <CheckCircleIcon/>SSO integration
-                            </div>
-                            <div className={"flex items-center gap-4"}>
-                                <CheckCircleIcon/>Advanced data filtering
-                            </div>
-                            <div className={"flex items-center gap-4"}>
-                                <CheckCircleIcon/>Text search
-                            </div>
-                            <div className={"flex items-center gap-4"}>
-                                <CheckCircleIcon/>Support SLA
-                            </div>
-                            <div className={"flex items-center gap-4"}>
-                                <CheckCircleIcon/>Custom integrations
-                            </div>
+            {/*            <p className={"text-2xl "}>*/}
+            {/*                Firebase offers exceptional scalability, making it an*/}
+            {/*                ideal choice for companies aiming to build products that*/}
+            {/*                can accommodate millions of users. With Firebase/Firestore, you*/}
+            {/*                can focus on your product without concerns about*/}
+            {/*                infrastructure limitations.*/}
+            {/*            </p>*/}
+            {/*        </>}*/}
+            {/*        right={<>*/}
+            {/*            <div className={"m-4 text-3xl"}>*/}
+            {/*                <div className={"flex items-center gap-4"}>*/}
+            {/*                    <CheckCircleIcon/>SSO integration*/}
+            {/*                </div>*/}
+            {/*                <div className={"flex items-center gap-4"}>*/}
+            {/*                    <CheckCircleIcon/>Advanced data filtering*/}
+            {/*                </div>*/}
+            {/*                <div className={"flex items-center gap-4"}>*/}
+            {/*                    <CheckCircleIcon/>Text search*/}
+            {/*                </div>*/}
+            {/*                <div className={"flex items-center gap-4"}>*/}
+            {/*                    <CheckCircleIcon/>Support SLA*/}
+            {/*                </div>*/}
+            {/*                <div className={"flex items-center gap-4"}>*/}
+            {/*                    <CheckCircleIcon/>Custom integrations*/}
+            {/*                </div>*/}
 
-                        </div>
-                    </>}/>
+            {/*            </div>*/}
+            {/*        </>}/>*/}
 
-            </Panel>
+            {/*</Panel>*/}
 
             {/*<section className={ContainerMixin + " my-8"}>*/}
 

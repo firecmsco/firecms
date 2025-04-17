@@ -40,15 +40,16 @@ export default function HomeHeroNeatGradient() {
     const gradientRef = useRef<NeatGradient | null>(null);
     const scrollRef = useRef<number>(0);
 
-    function onScrollUpdate(scroll: number, width: number = 0) {
+    function onScrollUpdate(scroll: number, width = 0) {
         scrollRef.current = scroll;
         if (gradientRef.current) {
-            gradientRef.current.colorBrightness = getBrightnessFrom(scroll);
-            gradientRef.current.colorSaturation = getSaturateFrom(scroll);
-            gradientRef.current.waveAmplitude = getAmplitude(scroll);
-
-            gradientRef.current.backgroundAlpha = getAlphaFrom(scroll);
-            gradientRef.current.resolution = getResolution(width);
+            // gradientRef.current.colorBrightness = getBrightnessFrom(scroll);
+            // gradientRef.current.colorSaturation = getSaturateFrom(scroll);
+            // gradientRef.current.waveAmplitude = getAmplitude(scroll);
+            //
+            // gradientRef.current.backgroundAlpha = getAlphaFrom(scroll);
+            // gradientRef.current.resolution = getResolution(width);
+            gradientRef.current.yOffset = scroll * .6;
         }
     }
 
@@ -94,38 +95,94 @@ export default function HomeHeroNeatGradient() {
         const width = window?.innerWidth ?? 1400;
 
         const alphaFrom = getAlphaFrom(scrollRef.current);
+
+        // {
+        //     colors: [
+        //         {
+        //             color: '#554226',
+        //             enabled: true,
+        //         },
+        //         {
+        //             color: '#03162D',
+        //             enabled: true,
+        //         },
+        //         {
+        //             color: '#002027',
+        //             enabled: true,
+        //         },
+        //         {
+        //             color: '#020210',
+        //             enabled: true,
+        //         },
+        //         {
+        //             color: '#02152A',
+        //             enabled: true,
+        //         },
+        //     ],
+        //     speed: 2,
+        //     horizontalPressure: 3,
+        //     verticalPressure: 5,
+        //     waveFrequencyX: 1,
+        //     waveFrequencyY: 3,
+        //     waveAmplitude: 8,
+        //     shadows: 0,
+        //     highlights: 2,
+        //     colorBrightness: 1,
+        //     colorSaturation: 6,
+        //     wireframe: false,
+        //     colorBlending: 7,
+        //     backgroundColor: '#003FFF',
+        //     backgroundAlpha: 1,
+        //     grainScale: 2,
+        //     grainSparsity: 0,
+        //     grainIntensity: 0.175,
+        //     grainSpeed: 1,
+        //     resolution: 1,
+        // }
         gradientRef.current = new NeatGradient({
             ref: canvasRef.current,
-            "colors": [
+            colors: [
                 {
-                    "color": "#0070F4",
-                    "enabled": true
+                    color: "#001010",
+                    enabled: true,
                 },
                 {
-                    "color": "#fb5607",
-                    "enabled": true
+                    color: "#001120",
+                    enabled: true,
                 },
                 {
-                    "color": "#8338ec",
-                    "enabled": true
-                }
+                    color: "#090018",
+                    enabled: true,
+                },
+                {
+                    color: "#070407",
+                    enabled: true,
+                },
+                {
+                    color: "#0C223B",
+                    enabled: true,
+                },
             ],
-            "speed": 1.2,
-            "horizontalPressure": 5,
-            "verticalPressure": 10,
-            "waveFrequencyX": 2,
-            "waveFrequencyY": 1,
-            "waveAmplitude": getAmplitude(scrollRef.current),
-            "shadows": 0,
-            "highlights": 0,
-            "colorSaturation": getSaturateFrom(scrollRef.current),
-            "colorBrightness": getBrightnessFrom(scrollRef.current),
-            "wireframe": true,
-            "colorBlending": 6,
-            "backgroundColor": backgroundColor,
-            // "backgroundColor": "#201f22",
-            "backgroundAlpha": alphaFrom,
-            resolution: getResolution(width)
+            speed: 1,
+            horizontalPressure: 5,
+            verticalPressure: 5,
+            waveFrequencyX: 3,
+            waveFrequencyY: 2,
+            waveAmplitude: 1,
+            shadows: 0,
+            highlights: 0,
+            colorBrightness: 1,
+            colorSaturation: 0,
+            wireframe: false,
+            colorBlending: 5,
+            backgroundColor: "#010101",
+            backgroundAlpha: 1,
+            grainScale: 2,
+            grainSparsity: 0,
+            grainIntensity: 0,
+            grainSpeed: 1,
+            resolution: 0.2,
+            yOffset: 0
         });
 
         return gradientRef.current.destroy;
@@ -136,13 +193,12 @@ export default function HomeHeroNeatGradient() {
         <canvas
             // className={"bg-gray-100"}
             style={{
-                position: "absolute",
+                position: "fixed",
                 isolation: "isolate",
-                height: "100%",
+                height: "100vh",
                 width: "100%",
-                top: `0px`,
-                margin: "auto",
-                left: `0px`,
+                top: "0px",
+                left: "0px",
                 right: 0,
             }}
             ref={canvasRef}

@@ -23,7 +23,7 @@ export function DataEnhancementHero() {
                 <div>
 
                     <h2 className="text-4xl tracking-tight font-extrabold md:text-6xl">
-                        <span className="block">ChatGPT</span>
+                        <span className="block">AI</span>
                         <span
                             className="block text-primary">Integration</span>
                     </h2>

@@ -1,9 +1,9 @@
 .h1 {
-    @apply text-4xl font-extrabold leading-tight tracking-tighter;
+    @apply text-4xl font-semibold leading-tight tracking-tighter;
 }
 
 .h2 {
-    @apply text-3xl font-extrabold leading-tight tracking-tighter;
+    @apply text-3xl font-semibold leading-tight tracking-tighter;
 }
 
 .h3 {

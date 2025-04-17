@@ -21,7 +21,7 @@ export function Companies() {
 
     return <Panel color={"light"} container={false}>
 
-        <Marquee className={"grayscale rounded-xl space-x-4"} pauseOnHover={false} gradient={true} gradientColor={"#f3f4f6"}>
+        <Marquee className={"grayscale rounded-xl space-x-4"} pauseOnHover={false} gradient={true} gradientColor={"rgb(237 237 237)"}>
 
             <a
                 target="_blank"

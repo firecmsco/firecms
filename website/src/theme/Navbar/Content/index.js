@@ -5,9 +5,8 @@ import NavbarItem from "@theme/NavbarItem";
 import NavbarColorModeToggle from "@theme/Navbar/ColorModeToggle";
 import SearchBar from "@theme/SearchBar";
 import NavbarMobileSidebarToggle from "@theme/Navbar/MobileSidebar/Toggle";
-import NavbarLogo from "@theme/Navbar/Logo";
 import NavbarSearch from "@theme/Navbar/Search";
-import styles from "./styles.module.css";
+import NavigationDropdown from "../../../NavigationDropdown";
 
 function useNavbarItems() {
     // TODO temporary casting until ThemeConfig type is improved
@@ -28,7 +27,7 @@ ${JSON.stringify(item, null, 2)}`,
                             { cause: error },
                         )
                     }>
-                    {item.className === "colorSwitch" && <div className={"px-4"}><NavbarColorModeToggle /></div>}
+                    {item.className === "colorSwitch" && <div className={"px-4"}><NavbarColorModeToggle/></div>}
                     {item.className !== "colorSwitch" && <NavbarItem {...item} />}
                 </ErrorCauseBoundary>
             ))}
@@ -52,15 +51,48 @@ export default function NavbarContent() {
     const mobileSidebar = useNavbarMobileSidebar();
     const items = useNavbarItems();
     const [leftItems, rightItems] = splitNavbarItems(items);
+    console.log("leftItems", leftItems);
     const searchBarItem = items.find((item) => item.type === "search");
+    const dropdownItems = leftItems.filter((item) => item.items?.length > 0);
+    const notDropdownItems = leftItems.filter((item) => !(item.items?.length > 0));
     return (
         <NavbarContentLayout
             left={
                 // TODO stop hardcoding items?
                 <>
                     {!mobileSidebar.disabled && <NavbarMobileSidebarToggle/>}
-                    <NavbarLogo/>
-                    <NavbarItems items={leftItems}/>
+
+                    {/*<NavbarLogo/>*/}
+                    <a href="/" className="navbar__brand">
+                        <img
+                            className={"w-8 h-8 mr-4"}
+                            src="/img/logo_small.png"
+                            alt="Logo"
+                        />
+                    </a>
+                    {dropdownItems.map((item, i) => {
+                        const innerLeftItems = item.items.filter((item) => item.customPosition !== "right");
+                        const innerRightItems = item.items.filter((item) => item.customPosition === "right");
+                        return (
+                            <NavigationDropdown
+                                key={item.to}
+                                trigger={<div className="navbar__item dropdown dropdown--hoverable">
+                                    <a className="navbar__link"
+                                       role="button"
+                                       href="/features">{item.label}</a>
+                                </div>}>
+                                <div className={"flex flex-row gap-16 py-8"}>
+                                    {innerLeftItems && <div className={"flex flex-col"}>
+                                        <NavbarItems items={innerLeftItems}/>
+                                    </div>}
+                                    {innerRightItems && <div className={"flex flex-col"}>
+                                        <NavbarItems items={innerRightItems}/>
+                                    </div>}
+                                </div>
+                            </NavigationDropdown>);
+                    })}
+
+                    <NavbarItems items={notDropdownItems}/>
                 </>
             }
             right={
