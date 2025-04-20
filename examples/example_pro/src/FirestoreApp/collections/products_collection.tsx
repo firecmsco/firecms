@@ -291,6 +291,11 @@ export const productsCollection = buildCollection<Product>({
             },
             defaultValue: ["es"]
         },
+        metadata: {
+            name: "Metadata",
+            dataType: "map",
+            keyValue: true
+        },
         uppercase_name: {
             name: "Uppercase Name",
             dataType: "string",

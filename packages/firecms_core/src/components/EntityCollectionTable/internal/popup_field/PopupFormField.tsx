@@ -288,7 +288,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             underlyingValueHasChanged: false,
             context: formContext,
             partOfArray: false,
-            minimalistView: false,
+            minimalistView: true,
             autoFocus: open
         }
         : undefined;

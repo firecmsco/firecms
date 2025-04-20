@@ -69,6 +69,8 @@ export function KeyValueFieldBinding({
         title={property.name}
         className={"text-text-secondary dark:text-text-secondary-dark"}/>;
 
+
+    console.log("minimalistView", propertyKey, minimalistView)
     return (
         <>
 

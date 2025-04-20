@@ -21,6 +21,7 @@ export type Product = {
     uppercase_name: string,
     added_on: Date;
     tags: string[];
+    metadata: Record<string, any>,
 }
 
 export type Locale = {

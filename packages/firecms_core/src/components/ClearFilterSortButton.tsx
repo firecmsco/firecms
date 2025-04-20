@@ -18,7 +18,7 @@ export function ClearFilterSortButton({
     if ((filterIsSet || sortIsSet) && (tableController.clearFilter || tableController.setSortBy)) {
         let label;
         if (filterIsSet && sortIsSet) {
-            label = "Clear filter and sort";
+            label = "Clear filter/sort";
         } else if (filterIsSet) {
             label = "Clear filter";
         } else {
