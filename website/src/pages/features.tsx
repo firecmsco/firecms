@@ -1,20 +1,17 @@
 import React from "react";
 import Layout from "@theme/Layout";
-
-import Features from "../partials/features/Features";
 import { Hero } from "../partials/general/Hero";
 import HeroButtons from "../partials/home/HeroButtons";
 import { Panel } from "../partials/general/Panel";
 import ProTeaser from "../partials/home/ProTeaser";
 import { UnbeatableUX } from "../partials/features/UnbeatableUX";
-import { CustomFields } from "../partials/features/CustomFields";
-import { EnterpriseFeatures } from "../partials/enterprise/EnterpriseFeatures";
-import { EnterpriseArchitectures } from "../partials/enterprise/EnterpriseArchitectures";
 import { SchemaEditorIntro } from "../partials/features/SchemaEditorIntro";
 import OpenAITeaser from "../partials/features/OpenAITeaser";
 import Head from "@docusaurus/Head";
-import { PagesHeroBackground } from "../partials/general/PagesHeroBackground";
+import { DataTalkIntro } from "../partials/home/DataTalkIntro";
+import { FeaturesCarousel } from "../partials/features/FeaturesCarousel";
 // import { clarityScript } from "../partials/clarity_head";
+import { AirTableLike } from "../partials/features/AirTableLike";
 
 function FeaturesPage() {
 
@@ -53,12 +50,17 @@ function FeaturesPage() {
                         // }
                     />
 
-                    <Features/>
+                    <AirTableLike/>
 
+                    <FeaturesCarousel/>
+
+                    <UnbeatableUX/>
 
                     <SchemaEditorIntro/>
 
                     <OpenAITeaser/>
+
+                    <DataTalkIntro/>
 
                     <Panel color={"light"} includePadding={true}>
                         <HeroButtons/>

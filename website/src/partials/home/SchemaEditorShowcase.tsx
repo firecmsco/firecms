@@ -22,7 +22,7 @@ export const SchemaEditorShowcase = () => {
 
                     <div className={"relative max-w-6xl mx-auto pb-16 my-16"}>
                         <h3 className="mb-4 uppercase">
-                            We set up your schema for you.
+                            Automatic schema detection
                         </h3>
 
                         <div className={"mt-4 mx-auto text-xl"}>

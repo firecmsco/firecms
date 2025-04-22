@@ -1,16 +1,14 @@
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import React from "react";
 
-import { ContainerInnerPaddingMixin, CTACaret, CTAOutlinedButtonWhiteMixin } from "../styles";
+import { ContainerPaddingMixin, CTACaret, CTAOutlinedButtonWhiteMixin } from "../styles";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
 import { LazyTypeAnimation } from "../ui/LazyTypeAnimation";
 
 export function ManageYour() {
 
-    return <Panel color={"primary"} includePadding={false}>
-        <div
-            className={clsx(ContainerInnerPaddingMixin,)}>
+    return <Panel color={"primary"} includePadding={true}>
             <h2 className={"relative items-center text-white uppercase mt-8"}>
                 <div className="mb-4 text-white uppercase md:inline">
                     Manage your&nbsp;
@@ -42,6 +40,5 @@ export function ManageYour() {
                     <CTACaret/>
                 </a>
             </div>
-        </div>
     </Panel>;
 }

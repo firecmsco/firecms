@@ -221,13 +221,18 @@ module.exports = {
                             customPosition: "left"
                         },
                         {
+                            label: "For developers",
+                            to: "/developers",
+                            customPosition: "left"
+                        },
+                        {
                             label: "For startups",
                             to: "/startups",
                             customPosition: "left"
                         },
                         {
-                            label: "For developers",
-                            to: "/developers",
+                            label: "For agencies",
+                            to: "/agencies",
                             customPosition: "left"
                         },
                         {

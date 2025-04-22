@@ -143,23 +143,23 @@ export default function HomeHeroNeatGradient() {
             ref: canvasRef.current,
             colors: [
                 {
-                    color: "#001010",
+                    color: '#001010',
                     enabled: true,
                 },
                 {
-                    color: "#001120",
+                    color: '#0C0500',
                     enabled: true,
                 },
                 {
-                    color: "#090018",
+                    color: '#160F00',
                     enabled: true,
                 },
                 {
-                    color: "#070407",
+                    color: '#0E0808',
                     enabled: true,
                 },
                 {
-                    color: "#0C223B",
+                    color: '#0C223B',
                     enabled: true,
                 },
             ],

@@ -7,7 +7,6 @@ import { defaultBorderMixin } from "../styles";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
 import { LinedSpace } from "../layout/LinedSpace";
-import { MainHeroBackground } from "../general/MainHeroBackground";
 
 function HeroHome({}) {
 
@@ -60,9 +59,8 @@ function HeroHome({}) {
         <HeroButtons/>
 
         <h2 className={clsx("font-mono text-center uppercase m-0 text-2xl px-8 md:px-16 py-8 md:py-12 border-0 border-t text-white", defaultBorderMixin)}>
-            Your Firebase project missing piece
+            The # 1 open-source Firebase CMS/Admin Panel
         </h2>
-
 
     </>;
 

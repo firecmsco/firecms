@@ -1,4 +1,5 @@
 import { buildCollection } from "@firecms/core";
+import { EmailIcon } from "@firecms/ui";
 
 export const usersCollection = buildCollection({
     id: "users",
@@ -8,6 +9,19 @@ export const usersCollection = buildCollection({
     description: "Registered users",
     textSearchEnabled: true,
     icon: "Person",
+    entityActions: [{
+        icon: <EmailIcon/>,
+        name: "Send email voucher code",
+        onClick: async ({
+                            entity,
+                            context
+                        }) => {
+            context.snackbarController.open({
+                type: "info",
+                message: `Sending email to ${entity.values.email}`,
+            })
+        }
+    },],
     properties: {
         first_name: {
             name: "First name",
@@ -32,7 +46,7 @@ export const usersCollection = buildCollection({
             of: {
                 dataType: "reference",
                 path: "users"
-}
+            }
         },
         liked_products: {
             dataType: "array",
@@ -65,7 +79,9 @@ export const usersCollection = buildCollection({
         {
             key: "sample_additional",
             name: "Sample additional",
-            Builder: ({ entity }) => <>{`Generated column: ${entity.values.first_name}`}</>,
+            Builder: ({ entity }) => <div
+                className={"text-red-500"}>{`Generated column: ${entity.values.first_name}`}</div>,
+            value: async ({ entity }) => `Export value: ${entity.values.first_name}`,
             dependencies: ["first_name"]
         }
     ]

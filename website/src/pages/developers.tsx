@@ -14,6 +14,7 @@ import { StartHacking } from "../partials/home/StartHacking";
 import { defaultBorderMixin } from "../partials/styles";
 import { TechSplash } from "../partials/home/TechSplash";
 import { CustomFields } from "../partials/features/CustomFields";
+import { DataTalkBatch } from "../partials/home/DataTalkBatch";
 
 function DevelopersPage() {
     return (
@@ -109,6 +110,8 @@ function DevelopersPage() {
 
                             </div>}/>
                     </Panel>
+
+                    <DataTalkBatch/>
 
                     <UITeaser/>
 
@@ -324,6 +327,23 @@ const productsCollection = buildCollection({
 
                     <EnterpriseArchitectures/>
 
+                    <Panel color={"dark_gray"} includePadding={true}>
+                        <h2 className="text-3xl font-bold mb-8 text-center">Simple deployment to FireCMS Cloud</h2>
+                        <div className={"mt-8 mb-12 bg-gray-800 rounded-xl p-6 border " + defaultBorderMixin}>
+                            <div className="flex items-center mb-3">
+                                <div className="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
+                                <div className="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
+                                <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                                <div className="text-gray-400 text-sm"></div>
+                            </div>
+                            <div className="font-mono">
+                                <span className="text-green-500">&gt;</span>
+                                <span className="text-white ml-2">firecms deploy</span>
+                                <span
+                                    className={`ml-1 inline-block w-2 h-5 bg-white animate-pulse`}></span>
+                            </div>
+                        </div>
+                    </Panel>
                     <Panel color={"dark_gray"} includePadding={true}>
                         <StartHacking/>
                     </Panel>

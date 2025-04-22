@@ -8,10 +8,15 @@ import { useColorMode } from "@docusaurus/theme-common";
 import { TwoColumns } from "../general/TwoColumns";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
-import { ContainerInnerPaddingMixin, CTAButtonDarkMixin, defaultBorderMixin } from "../styles";
+import {
+    ContainerInnerPaddingMixin,
+    CTAButtonDarkMixin,
+    CTAButtonMixin,
+    CTAButtonMixinLight, CTAOutlinedButtonWhiteMixin,
+    defaultBorderMixin
+} from "../styles";
 import CodeBlock from "@theme/CodeBlock";
 import Link from "@docusaurus/Link";
-
 
 // @ts-ignore
 import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
@@ -38,7 +43,8 @@ export function DeveloperFeatures() {
                                         Define your data models in TypeScript for complete type safety. Your schemas
                                         become the single source of truth for both your admin panel and application.
                                     </p>
-                                    <CodeBlock language="typescript">
+                                    <CodeBlock language="typescript"
+                                               className={"bg-gray-900 text-gray-200"}>
                                         {`const productCollection = buildCollection({
       name: "Products",
       path: "products",
@@ -92,7 +98,7 @@ export function DeveloperFeatures() {
                         </p>
                         <Link
                             to="/developers"
-                            className={CTAButtonDarkMixin + " w-full lg:w-auto "}>
+                            className={CTAOutlinedButtonWhiteMixin + " w-full lg:w-auto "}>
                             Explore Developer Features
                         </Link>
                     </div>

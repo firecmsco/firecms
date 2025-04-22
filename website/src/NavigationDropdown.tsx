@@ -5,7 +5,7 @@ const DropdownPanelContent = ({ children }: {
     children?: React.ReactNode;
 }) => {
     return (
-        <div className={"relative max-w-full w-[84rem] mx-auto px-4 py-5 pl-[80px]" }>
+        <div className={"relative max-w-full w-[84rem] mx-auto px-4 py-5 pl-[80px]"}>
             {children}
         </div>
     );
@@ -98,7 +98,7 @@ const NavigationDropdown = ({
         >
             {trigger}
 
-            <div
+            {isVisible && <div
                 className={`absolute top-full left-0 w-screen bg-gray-900 shadow-lg z-50 transition-opacity duration-150 ease-in-out ${isVisible ? "opacity-100 visible" : "opacity-0 invisible"} ${dropdownClassName} border-b ` + defaultBorderMixin}
                 style={{ transform: `translateX(-${leftOffset}px) translateY(24px)` }}
                 role="region"
@@ -109,7 +109,7 @@ const NavigationDropdown = ({
                 <DropdownPanelContent>
                     {children}
                 </DropdownPanelContent>
-            </div>
+            </div>}
         </div>
     );
 };

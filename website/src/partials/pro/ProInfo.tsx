@@ -34,15 +34,19 @@ export function ProInfo() {
                 solution for your next project.
             </p>
         </div>
-        <Marquee className={"rounded-xl"}>
-            {[
-                MMApp,
-                overlay,
-                primeUm,
-                mmDark,
-                oikosAviationDemo
-            ].map((image, index) => <img key={index} src={image} alt={`Slide ${index}`}
-                                         className="mx-4 rounded-xl w-auto h-full max-h-72 object-cover inline-block"/>)}
-        </Marquee>
+        <ScreenshotsMarquee/>
     </Panel>
+}
+
+export function ScreenshotsMarquee() {
+    return <Marquee className={"rounded-xl"}>
+        {[
+            MMApp,
+            overlay,
+            primeUm,
+            mmDark,
+            oikosAviationDemo
+        ].map((image, index) => <img key={index} src={image} alt={`Slide ${index}`}
+                                     className="mx-4 rounded-xl w-auto h-full max-h-72 object-cover inline-block"/>)}
+    </Marquee>;
 }

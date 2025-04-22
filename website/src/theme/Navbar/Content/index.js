@@ -51,7 +51,6 @@ export default function NavbarContent() {
     const mobileSidebar = useNavbarMobileSidebar();
     const items = useNavbarItems();
     const [leftItems, rightItems] = splitNavbarItems(items);
-    console.log("leftItems", leftItems);
     const searchBarItem = items.find((item) => item.type === "search");
     const dropdownItems = leftItems.filter((item) => item.items?.length > 0);
     const notDropdownItems = leftItems.filter((item) => !(item.items?.length > 0));
