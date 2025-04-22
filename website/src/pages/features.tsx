@@ -40,17 +40,17 @@ function FeaturesPage() {
                             <>
                                 <span className="block lg:inline">Unmatched Editing Experience </span>
                             </>}
-                        subtitleColor={"light"}
-                        subtitle={
-                            <>
-                                <p>
-                                    Easily Create, Edit, and Publish with a CMS that
-                                    both <b>content managers and developers will
-                                    love</b>.
-
-                                </p>
-                            </>
-                        }
+                        // subtitleColor={"light"}
+                        // subtitle={
+                        //     <>
+                        //         <p>
+                        //             Easily Create, Edit, and Publish with a CMS that
+                        //             both <b>content managers and developers will
+                        //             love</b>.
+                        //
+                        //         </p>
+                        //     </>
+                        // }
                     />
 
                     <Features/>
