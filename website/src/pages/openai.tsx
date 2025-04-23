@@ -7,7 +7,6 @@ import { AutofillFeature } from "../partials/data_enhancement/AutofillFeature";
 // import { Contact } from "../partials/data_enhancement/Contact";
 import { DataEnhancementUseCases } from "../partials/data_enhancement/DataEnhancementUseCases";
 import { DataEnhancementHero } from "../partials/data_enhancement/DataEnhancementHero";
-import { BatchProcessing } from "../partials/data_enhancement/BatchProcessing";
 import { Translations } from "../partials/data_enhancement/Translations";
 import { DataStructure } from "../partials/data_enhancement/DataStructure";
 
@@ -20,12 +19,9 @@ function DataEnhancement() {
             <DataEnhancementHero/>
 
             <DataEnhancementUseCases/>
-            <DataStructure/>
             <AutofillFeature/>
+            <DataStructure/>
             <Translations/>
-            {/*<CustomizationOptions />*/}
-            {/*<Testimonials />*/}
-            {/*<Contact />*/}
         </Layout>
     );
 }

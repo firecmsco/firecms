@@ -225,7 +225,7 @@ export function App() {
 
         const sourceCollections: EntityCollection[] = [
             productsCollection,
-            productsCollection2,
+            // productsCollection2,
 
             booksCollection,
             usersCollection,

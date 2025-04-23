@@ -8,17 +8,12 @@ export function EnterpriseArchitectures() {
     return (
         <>
 
-            <Panel color={"primary"} centered={true}>
-                <h2 className="mb-4 uppercase">
-                    Open source is the path to success
-                </h2>
-            </Panel>
 
-            <Panel color={"light"} includePadding={false}>
+            <Panel color={"dark_gray"} includePadding={false}>
                 <TwoColumns
                     left={<div className={"text-2xl pr-8"}>
 
-                        <h2 className={"h2"}>Adaptable to Your Architecture</h2>
+                        <h2 className={"h2 font-mono"}>Adaptable to Your Architecture</h2>
                         <p>
                             Our team has developed comprehensive solutions for
                             numerous successful companies and gained expertise in
@@ -54,6 +49,11 @@ export function EnterpriseArchitectures() {
                     }/>
             </Panel>
 
+            <Panel color={"primary"} centered={true}>
+                <h2 className="mb-4 uppercase font-mono">
+                    Open source is the path to success
+                </h2>
+            </Panel>
         </>
     );
 }

@@ -18,6 +18,7 @@ import { BrowserFrame } from "./BrowserFrame";
 import { PhoneFrame } from "./PhoneFrame";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { LinedSpace } from "./layout/LinedSpace";
+import { Panel } from "./general/Panel";
 
 export function UsageExamples() {
 
@@ -43,10 +44,12 @@ export function UsageExamples() {
     const currentTop = ref.current?.getBoundingClientRect().top ?? 0;
     const parallaxOffset = easeInOut(Math.max(0, Math.min(1, (400 + currentTop / 2) / offsetHeight))) * 2 - 1;
 
-    return <div ref={ref}
-                className={clsx("flex flex-col items-center justify-center mt-16 bg-gradient-to-b from-white to-slate-50")}>
+    return <Panel ref={ref}
+                  container={false}
+                  includePadding={false}
+                  className={clsx("relative flex flex-col items-center justify-center bg-gradient-to-b from-white to-gray-200")}>
 
-        <LinedSpace position={"bottom"} size={"large"}/>
+        <LinedSpace position={"bottom"} size={"larger"}/>
 
         <div className={"relative max-w-full w-[84rem] mx-auto"}
              style={{ height: 900 }}>
@@ -158,6 +161,6 @@ export function UsageExamples() {
             </div>
         </div>
         <div style={{ height: 300 }}></div>
-    </div>;
+    </Panel>;
 }
 

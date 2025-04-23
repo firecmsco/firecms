@@ -58,8 +58,8 @@ function ProFeaturesPanels() {
                             help you create superior back-office applications/admin panels more efficiently. With FireCMS PRO, you
                             gain greater control and efficiency, enjoying a user experience tailored for professionals.
                             Take charge of your data with advanced tools, including an easy-to-use <strong
-                            className={"gradient-text"}>spreadsheet view</strong> and <strong
-                            className={"gradient-text"}>dynamic, feature-rich forms</strong>. It's the professional
+                            className={"text-primary"}>spreadsheet view</strong> and <strong
+                            className={"text-primary"}>dynamic, feature-rich forms</strong>. It's the professional
                             advantage your projects need.
                         </p>
                     </div>

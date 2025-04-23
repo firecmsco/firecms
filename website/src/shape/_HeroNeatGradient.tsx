@@ -22,7 +22,7 @@ function getSaturation(scroll: number, isDark: boolean) {
     return Math.min(max, Math.max(min, min + scroll / 50));
 }
 
-export default function HeroNeatGradient({ color }: {
+export default function _HeroNeatGradient({ color }: {
     color: "primary" | "secondary" | "dark" | "transparent",
 }) {
 
@@ -59,7 +59,9 @@ export default function HeroNeatGradient({ color }: {
     useEffect(() => {
 
         if (!canvasRef.current)
-            return;
+            return () => {
+
+            };
 
         const config = {
             "colors": [
@@ -115,12 +117,11 @@ export default function HeroNeatGradient({ color }: {
         bgColor = "bg-blue-600";
     } else if (color === "secondary") {
         bgColor = "bg-rose-500";
-    } else if(color === "dark"){
+    } else if (color === "dark") {
         bgColor = "bg-gray-900";
     } else {
         bgColor = "bg-transparent";
     }
-
 
     return (
         <canvas

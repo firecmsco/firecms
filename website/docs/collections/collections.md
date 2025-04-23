@@ -259,7 +259,7 @@ to `false` in the collection configuration.
   in [Properties](../properties/properties_intro).
 - **`propertiesOrder`**: Order in which the properties are displayed.
     - For properties, use the property key.
-    - For additional columns, use the column id.
+    - For additional field, use the field key.
     - If you have subcollections, you get a column for each subcollection, with the path (or alias) as the
       subcollection, prefixed with `subcollection:`. E.g., `subcollection:orders`.
     - If you are using a collection group, you will also have an additional `collectionGroupParent` column.

@@ -1,19 +1,17 @@
 import React from "react";
 import Layout from "@theme/Layout";
-
-import Features from "../partials/features/Features";
 import { Hero } from "../partials/general/Hero";
 import HeroButtons from "../partials/home/HeroButtons";
 import { Panel } from "../partials/general/Panel";
 import ProTeaser from "../partials/home/ProTeaser";
-import { IntroText } from "../partials/features/IntroText";
-import { FormInfo } from "../partials/features/FormInfo";
-import { EnterpriseFeatures } from "../partials/enterprise/EnterpriseFeatures";
-import { EnterpriseArchitectures } from "../partials/enterprise/EnterpriseArchitectures";
+import { UnbeatableUX } from "../partials/features/UnbeatableUX";
 import { SchemaEditorIntro } from "../partials/features/SchemaEditorIntro";
 import OpenAITeaser from "../partials/features/OpenAITeaser";
 import Head from "@docusaurus/Head";
+import { DataTalkIntro } from "../partials/home/DataTalkIntro";
+import { FeaturesCarousel } from "../partials/features/FeaturesCarousel";
 // import { clarityScript } from "../partials/clarity_head";
+import { AirTableLike } from "../partials/features/AirTableLike";
 
 function FeaturesPage() {
 
@@ -37,33 +35,32 @@ function FeaturesPage() {
                     <Hero
                         title={
                             <>
-                                <span
-                                    className="block lg:inline">Features</span>
+                                <span className="block lg:inline">Unmatched Editing Experience </span>
                             </>}
-                        subtitle={
-                            <>
-                                <p>
-                                    Easily Create, Edit, and Publish with a CMS that
-                                    both <b>content managers and developers will
-                                    love</b>.
-
-                                </p>
-                            </>
-                        }
+                        // subtitleColor={"light"}
+                        // subtitle={
+                        //     <>
+                        //         <p>
+                        //             Easily Create, Edit, and Publish with a CMS that
+                        //             both <b>content managers and developers will
+                        //             love</b>.
+                        //
+                        //         </p>
+                        //     </>
+                        // }
                     />
 
-                    <Features/>
+                    <AirTableLike/>
 
-                    <IntroText/>
+                    <FeaturesCarousel/>
 
-                    <FormInfo/>
-
+                    <UnbeatableUX/>
 
                     <SchemaEditorIntro/>
 
-                    <EnterpriseFeatures/>
-                    <EnterpriseArchitectures/>
                     <OpenAITeaser/>
+
+                    <DataTalkIntro/>
 
                     <Panel color={"light"} includePadding={true}>
                         <HeroButtons/>

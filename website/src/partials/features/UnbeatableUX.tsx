@@ -1,7 +1,7 @@
 import React from "react";
 import { Panel } from "../general/Panel";
 
-export function IntroText() {
+export function UnbeatableUX() {
     return (
 
         <Panel color={"primary"}>

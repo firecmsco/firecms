@@ -4,7 +4,6 @@ import { Hero } from "../general/Hero";
 export function EnterpriseHero() {
 
     return <Hero
-        color={"primary"}
         title={
             <>
                 <span className="block lg:inline">Your admin panel</span>

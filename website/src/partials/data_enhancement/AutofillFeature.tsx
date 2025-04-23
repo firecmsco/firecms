@@ -39,7 +39,7 @@ export function AutofillFeature() {
 
                 </>}
                 right={<>
-                    <h2 className={"gradient-text uppercase"}>
+                    <h2 className={""}>
                         Fill in Details for Nike Air Max
                     </h2>
                     <p className="text-xl">

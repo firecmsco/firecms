@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Panel } from "../general/Panel";
-import { CTACaret, CTAOutlinedButtonMixin } from "../styles";
+import { CTACaret, CTAOutlinedButtonWhiteMixin } from "../styles";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
 function ProTeaser() {
@@ -20,7 +20,7 @@ function ProTeaser() {
                 solution for your next project.
             </p>
             <a
-                className={CTAOutlinedButtonMixin}
+                className={CTAOutlinedButtonWhiteMixin}
                 href={useBaseUrl("pro/")}
             >
                 More details

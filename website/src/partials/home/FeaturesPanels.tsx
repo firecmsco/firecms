@@ -15,7 +15,7 @@ function FeaturesPanels() {
 
     return (
         <Panel
-            color={"white"}
+            color={"light"}
             includePadding={false}
             container={false}
         >
@@ -43,19 +43,20 @@ function FeaturesPanels() {
             <div
                 className={"max-w-6xl flex flex-col lg:items-center gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 lg:w-full lg:mx-auto p-4"}>
                 <div
-                    className={clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
+                    className={clsx("bg-white relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
                     {iconStars}
                     <h4 className="text-xl font-bold leading-snug tracking-tight  mt-2  mb-0 text-center">
-                        Consistent Data Management
+                        Automatic Schema Inference
                     </h4>
                     <p className=" text-center">
-                        No matter your data structure, FireCMS
-                        adapts to your needs.
+                        FireCMS will
+                        automatically infer the data structure
+                        and types for you.
                     </p>
                 </div>
 
                 <div
-                    className={clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
+                    className={clsx("bg-white relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
                     {gridIcon}
                     <h4 className="text-xl font-bold leading-snug tracking-tight  mt-2  mb-0 text-center">
                         Sophisticated Editing Tools
@@ -67,7 +68,7 @@ function FeaturesPanels() {
                 </div>
 
                 <div
-                    className={clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
+                    className={clsx("bg-white relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
                     {iconDoor}
                     <h4 className="text-xl font-bold leading-snug tracking-tight  mt-2  mb-0 text-center">
                         Role-Based System
@@ -80,7 +81,7 @@ function FeaturesPanels() {
 
 
                 <div
-                    className={clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
+                    className={clsx("bg-white relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
                     {iconCards}
                     <h4 className="text-xl font-bold leading-snug tracking-tight  mt-2  mb-0 text-center">
                         Flexible Customization
@@ -90,7 +91,7 @@ function FeaturesPanels() {
                     </p>
                 </div>
                 <div
-                    className={clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
+                    className={clsx("bg-white relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
                     {iconArrows}
                     <h4 className="text-xl font-bold leading-snug tracking-tight  mt-2  mb-0 text-center">
                         Subcollection Compatibility
@@ -101,7 +102,7 @@ function FeaturesPanels() {
                 </div>
 
                 <div
-                    className={clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
+                    className={clsx("bg-white relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
 
                     {iconRadar}
 

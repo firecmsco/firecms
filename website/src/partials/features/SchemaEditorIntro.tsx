@@ -9,11 +9,12 @@ export const SchemaEditorIntro = () => {
 
     return (
         <section
-            className="relative">
+            className="relative bg-gray-900">
             <div
                 className={clsx("px-4 sm:px-6 mb-16 bg-gray-700 text-white dark:text-white",
                     "border-0 border-y",
-                    defaultBorderMixin,)}>
+                    defaultBorderMixin
+                )}>
                 <div
                     className={clsx(
                         ContainerMixin,
@@ -22,9 +23,9 @@ export const SchemaEditorIntro = () => {
                         "border-x border-y-0 ",
                         " flex flex-col py-20")}>
 
-                    <div className={"relative max-w-6xl mx-auto"}>
-                        <h3 className="mb-4 uppercase font-mono">
-                            The best data schema editor
+                    <div className={"relative max-w-6xl mx-auto mt-16"}>
+                        <h3 className="mb-4 uppercase">
+                            Simple <b>Data Schema</b>, from file to CMS
                         </h3>
 
                         <div className={"mt-4 mx-auto text-xl pb-20"}>

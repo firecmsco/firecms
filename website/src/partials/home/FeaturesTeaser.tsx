@@ -112,7 +112,7 @@ function FeaturesTeaser() {
                             </div>
 
                             <p className="text-xl md:text-2xl ">
-                                FireCMS offers developers an easy way to adapt the
+                                FireCMS offers an easy way to adapt the
                                 platform to their specific needs while keeping the <b>initial setup simple</b>. Our
                                 practical defaults can be conveniently <b>overridden or expanded</b>.
                             </p>

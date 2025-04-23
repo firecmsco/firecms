@@ -47,7 +47,7 @@ export function FireCMSCloudVersions() {
         <div
             className={clsx("bg-white w-full max-w-xl lg:max-w-none h-full p-6 rounded-lg flex flex-col outline-none ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent")}>
 
-            <h3 className={"text-3xl md:text-4xl font-bold  text-primary uppercase my-2"}>
+            <h3 className={"text-3xl md:text-4xl font-bold   my-2"}>
                 FireCMS Cloud
             </h3>
             <p className={"text-lg mb-4 font-bold h-16"}>
@@ -139,15 +139,15 @@ export function FireCMSCloudVersions() {
     );
 
     return <section
-        className={clsx(defaultBorderMixin, "flex flex-col text-gray-900 items-center justify-center text-lg border-0 border-t bg-gray-50")}>
+        className={clsx(defaultBorderMixin, "flex flex-col text-gray-900 items-center justify-center text-lg border-0 border-t bg-gray-100 z-10")}>
 
-        <div className={clsx(ContainerMixin, ContainerPaddingMixin, "flex flex-col gap-8")}>
+        <div className={clsx(ContainerMixin, ContainerPaddingMixin, defaultBorderMixin, "flex flex-col gap-8 border-r border-l border-t-0 border-b-0")}>
             <div className={"max-w-4xl mx-auto"}>
                 <p className={"max-w-6xl mx-auto mt-0 mb-8"}>
                     <strong>FireCMS Cloud</strong> offers a complete, end-to-end
                     solution for businesses that require the highest level of
                     support and security. With dedicated hosting, advanced features, and
-                    expert support, you'll have everything you need to take your project
+                    expert support, you&#39;ll have everything you need to take your project
                     to the next level.
                 </p>
             </div>

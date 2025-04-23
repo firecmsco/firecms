@@ -196,7 +196,7 @@ module.exports = {
             },
             {
                 name: "keywords",
-                content: "firebase, cms, react, react cms, custom cms, firestore, firebase cms, headless cms, firebase admin, firebase admin sdk, strapi, sanity io, contentful, rowy, forest admin, ghost cms, keystone, wordpress, payload"
+                content: "firebase, cms, gui, react, react cms, custom cms, firestore, firebase cms, headless cms, firebase admin, firebase admin sdk, strapi, sanity io, contentful, rowy, forest admin, ghost cms, keystone, wordpress, payload"
             }
         ],
         colorMode: {
@@ -216,20 +216,39 @@ module.exports = {
                     to: "features",
                     items: [
                         {
-                            label: "Why FireCMS",
-                            to: "/features"
+                            label: "For content editors",
+                            to: "/features",
+                            customPosition: "left"
+                        },
+                        {
+                            label: "For developers",
+                            to: "/developers",
+                            customPosition: "left"
+                        },
+                        {
+                            label: "For startups",
+                            to: "/startups",
+                            customPosition: "left"
+                        },
+                        {
+                            label: "For agencies",
+                            to: "/agencies",
+                            customPosition: "left"
                         },
                         {
                             label: "UI components",
-                            to: "/ui"
+                            to: "/ui",
+                            customPosition: "right"
                         },
                         {
-                            label: "OpenAI GPT integration",
-                            to: "/openai"
+                            label: "AI integration",
+                            to: "/openai",
+                            customPosition: "right"
                         },
                         {
                             label: "The most powerful backend",
-                            to: "/f/backend_extension"
+                            to: "/f/backend_extension",
+                            customPosition: "right"
                         }
                     ],
                     position: "left"
@@ -239,11 +258,11 @@ module.exports = {
                     label: "Pricing",
                     position: "left"
                 },
-                {
-                    label: "Blog",
-                    to: "blog",
-                    position: "left"
-                },
+                // {
+                //     label: "Blog",
+                //     to: "blog",
+                //     position: "left"
+                // },
                 {
                     type: "docSidebar",
                     sidebarId: "docsSidebar",

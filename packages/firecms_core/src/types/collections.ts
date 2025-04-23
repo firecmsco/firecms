@@ -112,7 +112,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * `hidden` in the property definition, will be ignored.
      * `propertiesOrder` has precedence over `hidden`.
      *     - For properties use the property key.
-     *     - For additional columns use the column id.
+     *     - For additional fields use the field key.
      *     - If you have subcollections, you get a column for each subcollection,
      *       with the path (or alias) as the subcollection, prefixed with
      *       `subcollection:`. e.g. `subcollection:orders`.
