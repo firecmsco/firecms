@@ -7,6 +7,7 @@ import { defaultBorderMixin } from "../styles";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
 import { LinedSpace } from "../layout/LinedSpace";
+import { AnimatedGradientBackground } from "../AnimatedGradientBackground";
 
 function HeroHome({}) {
 
@@ -68,14 +69,16 @@ function HeroHome({}) {
         <>
 
             <div
-                className={clsx("w-full relative border-0 -mt-20 ", defaultBorderMixin)}>
+                className={clsx("w-full relative border-0 -mt-20 bg-gray-950", defaultBorderMixin)}>
+
+                <AnimatedGradientBackground/>
 
                 <Panel includeMargin={false}
                        includePadding={false}
                        container={false}
                        color={"transparent"}
                        className={"border-t-0"}>
-                    <div className={"h-20 "}/>
+                    <div className={"h-20"}/>
                     <div className="flex flex-wrap w-full">
                         <div className={clsx("w-full lg:w-1/2 border-0 border-r", defaultBorderMixin)}>
                             <LinedSpace/>

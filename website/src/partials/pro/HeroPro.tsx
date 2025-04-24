@@ -1,8 +1,8 @@
 import React from "react";
 import { Panel } from "../general/Panel";
-import { PagesHeroBackground } from "../general/PagesHeroBackground";
 import clsx from "clsx";
 import { CTAButtonDarkMixin, CTAButtonMixin, CTACaret } from "../styles";
+import { AnimatedGradientBackground } from "../AnimatedGradientBackground";
 
 export function HeroPro({
                             height = "300px",
@@ -13,8 +13,7 @@ export function HeroPro({
     return (
         <div className={"w-full relative -mt-20 bg-gray-900"}>
 
-            <PagesHeroBackground/>
-
+            <AnimatedGradientBackground/>
             <div>
                 <Panel includeMargin={false}
                        includePadding={false}
@@ -66,7 +65,7 @@ export function HeroPro({
                     </a>
                 </div>
                 <p className={"block"}>Access your <a className={"text-white font-semibold"}
-                href={"https://app.firecms.co/subscriptions"}
+                                                      href={"https://app.firecms.co/subscriptions"}
                 > subscriptions here</a></p>
             </Panel>
             <div className={"relative"}>

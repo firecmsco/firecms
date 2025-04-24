@@ -11,7 +11,6 @@ import { QuotesSection } from "../partials/Quotes";
 import { organizationSchema, softwareApplicationSchema } from "../partials/markup";
 import { ImportDataIntro } from "../partials/home/ImportDataIntro";
 // import { clarityScript } from "../partials/clarity_head";
-import { MainHeroBackground } from "../partials/general/MainHeroBackground";
 import { LaunchInSteps } from "../partials/home/LaunchInSteps";
 import { BuiltFor } from "../partials/home/BuiltFor";
 import { SchemaEditorShowcase } from "../partials/home/SchemaEditorShowcase";
@@ -41,10 +40,7 @@ function Home() {
                 {/*</script>*/}
             </Head>
 
-
-            <main className={"max-w-[100vw] overflow-x-hidden bg-gray-950"}>
-
-                <MainHeroBackground/>
+            <main className={"max-w-[100vw] bg-gray-950 relative"}>
 
                 <HeroHome/>
 

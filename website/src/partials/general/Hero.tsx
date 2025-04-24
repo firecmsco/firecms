@@ -1,6 +1,6 @@
 import React from "react";
 import { Panel } from "./Panel";
-import { PagesHeroBackground } from "./PagesHeroBackground";
+import { AnimatedGradientBackground } from "../AnimatedGradientBackground";
 
 export function Hero({
                          title,
@@ -19,9 +19,9 @@ export function Hero({
     return (
         <>
 
-            <PagesHeroBackground/>
+            <div className={"w-full relative bg-gray-950"}>
 
-            <div className={"w-full -mt-20"}>
+                <AnimatedGradientBackground/>
 
                 <Panel includeMargin={false}
                        includePadding={false}

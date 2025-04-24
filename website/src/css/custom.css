@@ -1,17 +1,27 @@
 @import "@firecms/ui/index.css";
 
 
-body {
+html[data-theme=dark] body {
     background-color: #101013;
 }
 
- .main-wrapper {
-    background-color: #f5f5f1;
+body {
+    background-color: #FFFFFF;
+}
+
+.main-wrapper {
+    background-color: #FFFFFF;
 }
 
 html[data-theme=dark] .main-wrapper {
     background-color: #101013;
 }
+
+.main-wrapper {
+    /*margin-top: calc(var(--ifm-navbar-height) * -1);*/
+    /*padding-top: calc(var(--ifm-navbar-height));*/
+}
+
 
 html,
 body {
@@ -197,6 +207,7 @@ tr {
     --ifm-color-primary-lightest: #3e97ff;
     --ifm-code-font-size: 95%;
     --ifm-font-weight-bold: 600;
+    --ifm-navbar-height: 80px;
     /*--ifm-list-left-padding: 0rem;*/
     --ifm-custom-navbar-background-color: rgba(48, 49, 55, 0.33);
     --ifm-border-color: rgba(100, 116, 139, 0.4);
@@ -740,4 +751,149 @@ code.language-tsx .token.tag .token.script .token.script-punctuation, code.langu
 /* SASS, SCSS */
 code.language-sass .token.property, code.language-scss .token.property {
     color: #9cdcfe;
+}
+
+
+/* Container for the gradient effect - positioned absolutely within the parent */
+.gradient-background-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Clip the child blobs */
+    z-index: 0; /* Place behind content (which should have z-10 or higher) */
+}
+
+/* --- NEW: Base styles for all blob elements --- */
+.blob {
+    content: '';
+    position: absolute;
+    width: 60vmin; /* Slightly smaller blobs now there are more */
+    height: 60vmin;
+    border-radius: 50%;
+    filter: blur(60px); /* Adjust blur */
+    opacity: 0.5; /* Base opacity */
+    will-change: transform, opacity;
+    z-index: -1; /* Ensure they are behind the container div itself */
+}
+
+
+/* Blob 1 (Bluish) */
+.blob-1 {
+    background: radial-gradient(circle, #1A4876, transparent 70%);
+    top: -10%;
+    left: -10%;
+    animation: moveBlob1 30s infinite alternate ease-in-out;
+    animation-delay: -2s;
+}
+
+/* Blob 2 (Warm) */
+.blob-2 {
+    background: radial-gradient(circle, #3A2F10, transparent 70%);
+    bottom: -15%;
+    right: -15%;
+    animation: moveBlob2 35s infinite alternate ease-in-out;
+    animation-delay: -10s;
+}
+
+/* --- NEW: Blob 3 (Darker Blue/Greenish) --- */
+.blob-3 {
+    /* Using another color from the original config */
+    background: radial-gradient(circle, #001010, transparent 70%);
+    top: 30%;
+    right: -20%;
+    animation: moveBlob3 32s infinite alternate ease-in-out;
+    animation-delay: -7s;
+}
+
+/* --- NEW: Blob 4 (Darker Reddish) --- */
+.blob-4 {
+    /* Using another color from the original config */
+    background: radial-gradient(circle, #0E0808, transparent 70%);
+    bottom: 25%;
+    left: -15%;
+    animation: moveBlob4 28s infinite alternate ease-in-out;
+    animation-delay: -12s;
+}
+
+
+/* --- UPDATED: Keyframes for each blob --- */
+
+@keyframes moveBlob1 {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.5;
+    }
+    33% {
+        transform: translate(15vmin, -10vmin) scale(1.1);
+        opacity: 0.6;
+    }
+    66% {
+        transform: translate(-10vmin, 15vmin) scale(0.9);
+        opacity: 0.45;
+    }
+    100% {
+        transform: translate(5vmin, 5vmin) scale(1);
+        opacity: 0.55;
+    }
+}
+
+@keyframes moveBlob2 {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.6;
+    }
+    33% {
+        transform: translate(-20vmin, 10vmin) scale(0.85);
+        opacity: 0.7;
+    }
+    66% {
+        transform: translate(10vmin, -15vmin) scale(1.15);
+        opacity: 0.5;
+    }
+    100% {
+        transform: translate(-5vmin, -5vmin) scale(1);
+        opacity: 0.65;
+    }
+}
+
+/* --- NEW: Keyframes for Blob 3 --- */
+@keyframes moveBlob3 {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.4;
+    }
+    33% {
+        transform: translate(-15vmin, -15vmin) scale(1.1);
+        opacity: 0.55;
+    }
+    66% {
+        transform: translate(10vmin, 20vmin) scale(0.8);
+        opacity: 0.35;
+    }
+    100% {
+        transform: translate(5vmin, -10vmin) scale(1);
+        opacity: 0.45;
+    }
+}
+
+/* --- NEW: Keyframes for Blob 4 --- */
+@keyframes moveBlob4 {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.55;
+    }
+    33% {
+        transform: translate(20vmin, 20vmin) scale(0.9);
+        opacity: 0.65;
+    }
+    66% {
+        transform: translate(-10vmin, -15vmin) scale(1.1);
+        opacity: 0.5;
+    }
+    100% {
+        transform: translate(0vmin, 10vmin) scale(1);
+        opacity: 0.6;
+    }
 }
