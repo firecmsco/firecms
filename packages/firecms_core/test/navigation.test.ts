@@ -201,4 +201,39 @@ describe("Resolving paths test", () => {
         expect(result2).toEqual("medico/v2.0.0/joints/cervical_spine/movements");
     });
 
+    it("should correctly resolve nested subcollection path with different id and path", () => {
+        // Define the nested subcollection structure
+        const subSubCollection = buildCollection({
+            id: "sub", // ID used in the input path
+            path: "sub_path", // Actual path segment
+            name: "Sub Sub Collection",
+            properties: {}
+        });
+
+        const localesCollection = buildCollection({
+            id: "product_locales", // ID used in the input path
+            path: "locales", // Actual path segment
+            name: "Locales",
+            properties: {},
+            subcollections: [subSubCollection]
+        });
+
+        const productsCollection = buildCollection({
+            id: "products",
+            path: "products",
+            name: "Products",
+            properties: {},
+            subcollections: [localesCollection]
+        });
+
+        const testCollections = [productsCollection];
+
+        const inputPath = "products/B000P0MDMS/product_locales/vvPRXAzANSce8o24TbIC/sub";
+        const expectedPath = "products/B000P0MDMS/locales/vvPRXAzANSce8o24TbIC/sub_path";
+
+        const resolvedPath = resolveCollectionPathIds(inputPath, testCollections);
+
+        expect(resolvedPath).toEqual(expectedPath);
+    });
+
 });

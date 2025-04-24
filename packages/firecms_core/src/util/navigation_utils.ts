@@ -32,75 +32,90 @@ export function getLastSegment(path: string) {
 }
 
 export function resolveCollectionPathIds(path: string, allCollections: EntityCollection[]): string {
-    const cleanPath = removeInitialAndTrailingSlashes(path);
-    const subpaths = cleanPath.split("/");
-
-    if (subpaths.length % 2 === 0) {
-        throw Error(`resolveCollectionPathIds: Collection paths must have an odd number of segments: ${path}`);
+    let remainingPath = removeInitialAndTrailingSlashes(path);
+    if (!remainingPath) {
+        return "";
     }
 
-    // Check if the path exactly matches a collection path
-    const exactMatch = allCollections.find(col => col.path === cleanPath);
-    if (exactMatch) {
-        return exactMatch.path;
-    }
+    let currentCollections: EntityCollection[] | undefined = allCollections;
+    const resolvedPathParts: string[] = [];
 
-    if (subpaths.length === 1) {
-        // Find collection by ID and return its path
-        const aliasedCollection = allCollections.find((col) => col.id === subpaths[0]);
-        return aliasedCollection?.path ?? subpaths[0];
-    }
+    while (remainingPath.length > 0) {
+        if (!currentCollections || currentCollections.length === 0) {
+            // We have remaining path segments but no more collections to match against
+            console.warn(`resolveCollectionPathIds: Path structure implies subcollections, but none found before segment starting with "${remainingPath}" in original path "${path}". Appending remaining original path.`);
+            resolvedPathParts.push(remainingPath);
+            remainingPath = ""; // Stop processing
+            break;
+        }
 
-    // Try to match a multi-segment collection path
-    let matchingCollection: EntityCollection | undefined;
-    let entityIndex = 1;
+        let foundMatch = false;
+        // Sort potential matches by length descending to prioritize longer matches (e.g., "a/b" over "a")
+        const potentialMatches: { col: EntityCollection; match: string; }[] = currentCollections
+            .flatMap(col => [{
+                col,
+                match: col.path
+            }, {
+                col,
+                match: col.id
+            }])
+            .filter(p => p.match && remainingPath.startsWith(p.match))
+            .sort((a, b) => b.match.length - a.match.length);
 
-    // Check if the path starts with a multi-segment collection path
-    for (const collection of allCollections) {
-        const pathSegments = collection.path.split("/");
-        if (pathSegments.length > 1 &&
-            subpaths.slice(0, pathSegments.length).join("/") === collection.path) {
-            matchingCollection = collection;
-            entityIndex = pathSegments.length;
+        if (potentialMatches.length > 0) {
+            const {
+                col: foundCollection,
+                match: matchString
+            } = potentialMatches[0];
+
+            resolvedPathParts.push(foundCollection.path); // Use the defined path
+            remainingPath = removeInitialSlash(remainingPath.substring(matchString.length));
+
+            // Check if we are at the end of the path
+            if (remainingPath.length === 0) {
+                foundMatch = true;
+                break; // Path ends with a collection segment
+            }
+
+            // The next segment must be an entity ID
+            const idSeparatorIndex = remainingPath.indexOf("/");
+            let entityId: string;
+            if (idSeparatorIndex > -1) {
+                entityId = remainingPath.substring(0, idSeparatorIndex);
+                remainingPath = remainingPath.substring(idSeparatorIndex + 1);
+            } else {
+                // This should not happen if the original path is valid (odd segments)
+                // but handle it defensively: assume the rest is the ID
+                entityId = remainingPath;
+                remainingPath = "";
+                console.warn(`resolveCollectionPathIds: Path seems to end with an entity ID "${entityId}" instead of a collection segment in original path "${path}". This might indicate an invalid input path.`);
+                // Even if it ends here, we still need to push the ID
+            }
+
+            resolvedPathParts.push(entityId); // Append entity ID
+            currentCollections = foundCollection.subcollections; // Move to subcollections
+            foundMatch = true;
+
+            if (!currentCollections && remainingPath.length > 0) {
+                // Warn if the path continues but no subcollections were defined
+                console.warn(`resolveCollectionPathIds: Path continues after entity ID "${entityId}", but no subcollections are defined for the preceding collection "${foundCollection.path}" in path "${path}". Appending remaining original path.`);
+                resolvedPathParts.push(remainingPath); // Append the rest
+                remainingPath = ""; // Stop processing
+                break;
+            }
+
+        }
+
+        if (!foundMatch) {
+            // Collection definition not found for the start of the remaining path
+            console.warn(`resolveCollectionPathIds: Collection definition not found for segment starting with "${remainingPath}" in original path "${path}". Appending remaining original path.`);
+            resolvedPathParts.push(remainingPath); // Append the rest
+            remainingPath = ""; // Stop processing
             break;
         }
     }
 
-    // If no multi-segment match, fall back to single segment matching
-    if (!matchingCollection) {
-        const matchingCollections = allCollections.filter(col =>
-            col.id === subpaths[0] || col.path === subpaths[0]
-        );
-
-        if (!matchingCollections.length) {
-            return cleanPath;
-        }
-
-        matchingCollection = matchingCollections[0];
-    }
-
-    const entityId = subpaths[entityIndex];
-    const remainingPath = subpaths.slice(entityIndex + 1);
-
-    // If we have a subcollection ID, try to resolve it
-    if (remainingPath.length > 0) {
-        const subcollectionId = remainingPath[0];
-        const subcollection = matchingCollection.subcollections?.find(
-            subcol => subcol.id === subcollectionId
-        );
-
-        if (subcollection) {
-            return `${matchingCollection.path}/${entityId}/${subcollection.path}`;
-        }
-    }
-
-    // If there are no remaining path segments, just return the collection path with entity ID
-    if (remainingPath.length === 0) {
-        return `${matchingCollection.path}/${entityId}`;
-    }
-
-    // Default case - couldn't match subcollection
-    return `${matchingCollection.path}/${entityId}/${remainingPath.join("/")}`;
+    return resolvedPathParts.join("/");
 }
 
 /**
