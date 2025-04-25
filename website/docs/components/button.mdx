@@ -43,6 +43,19 @@ import VariantButtonSource from "!!raw-loader!../../samples/components/button/va
 
 <CodeBlock language="tsx">{VariantButtonSource}</CodeBlock>
 
+## Color
+
+The `color` prop sets the color theme of the button. Possible values are `primary`, `secondary`, `text`, `error`, and `neutral`.
+
+import ButtonColorDemo from "../../samples/components/button/button_color";
+import ButtonColorSource from "!!raw-loader!../../samples/components/button/button_color";
+
+<CodeSample>
+    <ButtonColorDemo/>
+</CodeSample>
+
+<CodeBlock language="tsx">{ButtonColorSource}</CodeBlock>
+
 ## Disabled
 
 Setting `disabled` to `true` disables the button, preventing interactions.
@@ -97,9 +110,9 @@ import CustomClassNameSource from "!!raw-loader!../../samples/components/button/
 
 ## Button Component Props
 
-- `variant`: Defines the style variant of the button. Options are `"filled"`, `"outlined"`, `"neutral"`, or `"text"`. Defaults to `"filled"`.
+- `variant`: Defines the style variant of the button. Options are `"filled"`, `"outlined"`, or `"text"`. Defaults to `"filled"`.
 - `disabled`: Disables the button, preventing user interaction. Defaults to `false`.
-- `color`: Sets the color theme of the button. Options are `"primary"`, `"secondary"`, `"text"`, or `"error"`.
+- `color`: Sets the color theme of the button. Options are `"primary"`, `"secondary"`, `"neutral"`, `"text"`, or `"error"`.
 - `size`: Specifies the size of the button. Options are `"small"`, `"medium"`, `"large"`, `"xl"`, or `"2xl"`. Defaults to `"medium"`.
 - `startIcon`: Adds an icon at the start of the button content.
 - `fullWidth`: When `true`, the button will expand to fill its container's width. Defaults to `false`.

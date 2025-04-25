@@ -2,7 +2,6 @@ import { themes as prismThemes } from "prism-react-renderer";
 
 // const fontaine = require("fontaine");
 import path from "path";
-
 import { config } from "dotenv";
 
 import { defineReactCompilerLoaderOption, reactCompilerLoader } from "react-compiler-webpack";
@@ -179,259 +178,277 @@ module.exports = {
             };
         }
     ].filter(Boolean),
-    themeConfig: {
-        image: "img/logo_small.png",
-        description: "Headless CMS based on Firestore/Firebase, React and tailwindcss, and completely open-source",
-        announcementBar: {
-            id: "dataki-announcement",
-            content: "<code>DATAKI</code> is our new <b>AI analytics tool</b> for SQL databases. It is amazing! 🚀 <a href='https://dataki.ai?utm_source=firecms_landing'>Check it out!</a>",
-            backgroundColor: "#FF5B79",
-            textColor: "black",
-            isCloseable: true
-        },
-        metadata: [
-            {
-                name: "twitter:card",
-                content: "summary"
-            },
-            {
-                name: "keywords",
-                content: "firebase, cms, gui, react, react cms, custom cms, firestore, firebase cms, headless cms, firebase admin, firebase admin sdk, strapi, sanity io, contentful, rowy, forest admin, ghost cms, keystone, wordpress, payload"
-            }
-        ],
-        colorMode: {
-            defaultMode: "light",
-            disableSwitch: false
-            // respectPrefersColorScheme: false,
-        },
-        navbar: {
-            title: "FireCMS",
-            logo: {
-                alt: "FireCMS Logo",
-                src: "img/firecms_logo.svg"
-            },
-            items: [
+    themeConfig:
+        {
+            image: "img/logo_small.png",
+            description:
+                "Headless CMS based on Firestore/Firebase, React and tailwindcss, and completely open-source",
+            announcementBar:
                 {
-                    label: "Why FireCMS",
-                    to: "features",
-                    items: [
-                        {
-                            label: "For content editors",
-                            to: "/features",
-                            customPosition: "left"
-                        },
-                        {
-                            label: "For developers",
-                            to: "/developers",
-                            customPosition: "left"
-                        },
-                        {
-                            label: "For startups",
-                            to: "/startups",
-                            customPosition: "left"
-                        },
-                        {
-                            label: "For agencies",
-                            to: "/agencies",
-                            customPosition: "left"
-                        },
-                        {
-                            label: "UI components",
-                            to: "/ui",
-                            customPosition: "right"
-                        },
-                        {
-                            label: "AI integration",
-                            to: "/openai",
-                            customPosition: "right"
-                        },
-                        {
-                            label: "The most powerful backend",
-                            to: "/f/backend_extension",
-                            customPosition: "right"
-                        }
-                    ],
-                    position: "left"
-                },
-                {
-                    to: "pricing",
-                    label: "Pricing",
-                    position: "left"
-                },
-                // {
-                //     label: "Blog",
-                //     to: "blog",
-                //     position: "left"
-                // },
-                {
-                    type: "docSidebar",
-                    sidebarId: "docsSidebar",
-                    label: "Docs",
-                    position: "left"
-                },
-                {
-                    type: "html",
-                    position: "left",
-                    value: "<div class='bg-gray-100 rounded-lg'><a class='gradient-text navbar__item navbar__link' href='/pro'>PRO</a></div>"
-                },
-                {
-                    type: "html",
-                    position: "right",
-                    value: "<div id=\"docsearch\"></div>"
-                },
-                // {
-                //     type: "html",
-                //     position: "right",
-                //     value: `
-                //     <iframe style="transform: translate(0px, 4px);"
-                //             src="https://ghbtns.com/github-btn.html?user=FireCMSco&repo=FireCMS&type=star&count=true&size=large"
-                //             frameBorder="0"
-                //             scrolling="0"
-                //             width="140"
-                //             height="32"
-                //             title="GitHub"/>
-                //     `
-                // },
-                {
-                    type: "docsVersionDropdown",
-                    position: "right",
-                    dropdownActiveClassDisabled: true
-                },
-                {
-                    href: "https://github.com/FireCMSco/firecms",
-                    className: "header-github-link",
-                    "aria-label": "GitHub repository",
-                    position: "right"
-                },
-                {
-                    href: "*",
-                    className: "colorSwitch",
-                    position: "right"
-                },
-                {
-                    to: "https://demo.firecms.co",
-                    label: "Demo",
-                    className: "border-1 border-slate-600 border-slate-700 uppercase rounded border-solid text-white hover:text-slate-100 hover:bg-slate-100 text-center btn mr-3 px-6 py-2",
-                    "aria-label": "Open the demo project",
-                    position: "right"
-                },
-                {
-                    to: "https://app.firecms.co",
-                    label: "Sign in",
-                    className: "btn mr-3 px-6 py-2 text-white uppercase bg-primary hover:text-white hover:bg-blue-700",
-                    "aria-label": "Go to FireCMS Cloud",
-                    position: "right"
+                    id: "dataki-announcement",
+                    content:
+                        "<code>DATAKI</code> is our new <b>AI analytics tool</b> for SQL databases. It is amazing! 🚀 <a href='https://dataki.ai?utm_source=firecms_landing'>Check it out!</a>",
+                    backgroundColor:
+                        "#FF5B79",
+                    textColor:
+                        "black",
+                    isCloseable:
+                        true
                 }
-            ]
-        },
-        footer: {
-            links: [
+            ,
+            metadata: [
                 {
-                    title: "Get in touch",
-                    items: [
-                        {
-                            label: "Contact",
-                            href: "mailto: hello@firecms.co"
-                        },
-                        {
-                            label: "Book a meeting",
-                            href: "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0INW8ihjQ90S4gkdo8_rbL_Zx7gagZShLIpHyW43zDXkQDPole6a1coo1sT2O6Gl05X8lxFDlp?gv=true"
-                        }
-                    ]
-                },
-
-                {
-                    // Label of the section of these links
-                    title: "Links",
-                    items: [
-                        {
-                            to: "https://app.firecms.co/subscriptions",
-                            label: "Manage subscriptions"
-                        },
-                        {
-                            to: "https://app.firecms.co",
-                            label: "FireCMS Cloud"
-                        },
-                        {
-                            label: "Demo",
-                            to: "https://demo.firecms.co"
-                        },
-                        {
-                            label: "FireCMS PRO",
-                            to: "pro"
-                        },
-                        {
-                            label: "llms.txt",
-                            href: "https://firecms.co/llms.txt"
-                        },
-                        {
-                            label: "Blog",
-                            to: "blog"
-                        },
-                        {
-                            label: "Privacy policy",
-                            to: "/policy/privacy_policy"
-                        },
-                        {
-                            label: "Terms and conditions",
-                            to: "/policy/terms_conditions"
-                        },
-                        {
-                            label: "Cookies policy",
-                            to: "/policy/cookies_policy"
-                        }
-                    ]
+                    name: "twitter:card",
+                    content: "summary"
                 },
                 {
-                    title: "Community",
-                    items: [
-                        {
-                            label: "Discord",
-                            href: "https://discord.gg/fxy7xsQm3m"
-                        },
-                        {
-                            label: "Github",
-                            href: "https://github.com/FireCMSco/firecms"
-                        },
-                        {
-                            html: `<iframe src="https://github.com/sponsors/firecmsco/button" title="Sponsor FireCMS" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
-                                `
-                        }
-                        // {
-                        //     html: `<iframe
-                        //                 src="https://ghbtns.com/github-btn.html?user=FireCMSco&repo=FireCMS&type=star&count=true&size=large"
-                        //                 frameBorder="0"
-                        //                 scrolling="0"
-                        //                 width="140"
-                        //                 height="32"
-                        //                 title="GitHub"/> `
-                        // }
-                    ]
+                    name: "keywords",
+                    content: "firebase, cms, gui, react, react cms, custom cms, firestore, firebase cms, headless cms, firebase admin, firebase admin sdk, strapi, sanity io, contentful, rowy, forest admin, ghost cms, keystone, wordpress, payload"
                 }
-                // {
-                //     // title: "Community",
-                //     items: [
-                //         {
-                //             //Renders the html pass-through instead of a simple link
-                //             html: `
-                //           <iframe
-                // src="https://discordapp.com/widget?id=1013768502458470442&theme=dark"
-                // width="300"
-                // height="300"
-                // allowTransparency="true"
-                // frameBorder="0"
-                // sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
-                //         `,
-                //         },
-                //     ]
-                // }
             ],
-            copyright: `We are based in Madrid, Spain, Europe 🇪🇺 - © ${new Date().getFullYear()} - FireCMS S.L.`
-        },
-        prism: {
-            theme: prismThemes.vsDark
+            colorMode:
+                {
+                    defaultMode: "light",
+                    disableSwitch:
+                        false
+                    // respectPrefersColorScheme: false,
+                }
+            ,
+            navbar: {
+                title: "FireCMS",
+                logo:
+                    {
+                        alt: "FireCMS Logo",
+                        src:
+                            "img/firecms_logo.svg"
+                    }
+                ,
+                items: [
+                    {
+                        label: "Why FireCMS",
+                        to: "features",
+                        items: [
+                            {
+                                label: "For content editors",
+                                to: "/features",
+                                customPosition: "left"
+                            },
+                            {
+                                label: "For developers",
+                                to: "/developers",
+                                customPosition: "left"
+                            },
+                            {
+                                label: "For startups",
+                                to: "/startups",
+                                customPosition: "left"
+                            },
+                            {
+                                label: "For agencies",
+                                to: "/agencies",
+                                customPosition: "left"
+                            },
+                            {
+                                label: "UI components",
+                                to: "/ui",
+                                customPosition: "right"
+                            },
+                            {
+                                label: "AI integration",
+                                to: "/openai",
+                                customPosition: "right"
+                            },
+                            {
+                                label: "The most powerful backend",
+                                to: "/f/backend_extension",
+                                customPosition: "right"
+                            }
+                        ],
+                        position: "left"
+                    },
+                    {
+                        to: "pricing",
+                        label: "Pricing",
+                        position: "left"
+                    },
+                    // {
+                    //     label: "Blog",
+                    //     to: "blog",
+                    //     position: "left"
+                    // },
+                    {
+                        type: "docSidebar",
+                        sidebarId: "docsSidebar",
+                        label: "Docs",
+                        position: "left"
+                    },
+                    {
+                        type: "html",
+                        position: "left",
+                        value: "<div class='bg-gray-100 rounded-lg'><a class='gradient-text navbar__item navbar__link' href='/pro'>PRO</a></div>"
+                    },
+                    {
+                        type: "html",
+                        position: "right",
+                        value: "<div id=\"docsearch\"></div>"
+                    },
+                    // {
+                    //     type: "html",
+                    //     position: "right",
+                    //     value: `
+                    //     <iframe style="transform: translate(0px, 4px);"
+                    //             src="https://ghbtns.com/github-btn.html?user=FireCMSco&repo=FireCMS&type=star&count=true&size=large"
+                    //             frameBorder="0"
+                    //             scrolling="0"
+                    //             width="140"
+                    //             height="32"
+                    //             title="GitHub"/>
+                    //     `
+                    // },
+                    {
+                        type: "docsVersionDropdown",
+                        position: "right",
+                        dropdownActiveClassDisabled: true
+                    },
+                    {
+                        href: "https://github.com/FireCMSco/firecms",
+                        className: "header-github-link",
+                        "aria-label": "GitHub repository",
+                        position: "right"
+                    },
+                    {
+                        href: "*",
+                        className: "colorSwitch",
+                        position: "right"
+                    },
+                    {
+                        to: "https://demo.firecms.co",
+                        label: "Demo",
+                        className: "border-1 border-slate-600 border-slate-700 uppercase rounded border-solid text-white hover:text-slate-100 hover:bg-slate-100 text-center btn mr-3 px-6 py-2",
+                        "aria-label": "Open the demo project",
+                        position: "right"
+                    },
+                    {
+                        to: "https://app.firecms.co",
+                        label: "Sign in",
+                        className: "btn mr-3 px-6 py-2 text-white uppercase bg-primary hover:text-white hover:bg-blue-700",
+                        "aria-label": "Go to FireCMS Cloud",
+                        position: "right"
+                    }
+                ]
+            }
+            ,
+            footer: {
+                links: [
+                    {
+                        title: "Get in touch",
+                        items: [
+                            {
+                                label: "Contact",
+                                href: "mailto: hello@firecms.co"
+                            },
+                            {
+                                label: "Book a meeting",
+                                href: "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0INW8ihjQ90S4gkdo8_rbL_Zx7gagZShLIpHyW43zDXkQDPole6a1coo1sT2O6Gl05X8lxFDlp?gv=true"
+                            }
+                        ]
+                    },
+
+                    {
+                        // Label of the section of these links
+                        title: "Links",
+                        items: [
+                            {
+                                to: "https://app.firecms.co/subscriptions",
+                                label: "Manage subscriptions"
+                            },
+                            {
+                                to: "https://app.firecms.co",
+                                label: "FireCMS Cloud"
+                            },
+                            {
+                                label: "Demo",
+                                to: "https://demo.firecms.co"
+                            },
+                            {
+                                label: "FireCMS PRO",
+                                to: "pro"
+                            },
+                            {
+                                label: "llms.txt",
+                                href: "https://firecms.co/llms.txt"
+                            },
+                            {
+                                label: "Blog",
+                                to: "blog"
+                            },
+                            {
+                                label: "Privacy policy",
+                                to: "/policy/privacy_policy"
+                            },
+                            {
+                                label: "Terms and conditions",
+                                to: "/policy/terms_conditions"
+                            },
+                            {
+                                label: "Cookies policy",
+                                to: "/policy/cookies_policy"
+                            }
+                        ]
+                    },
+                    {
+                        title: "Community",
+                        items: [
+                            {
+                                label: "Discord",
+                                href: "https://discord.gg/fxy7xsQm3m"
+                            },
+                            {
+                                label: "Github",
+                                href: "https://github.com/FireCMSco/firecms"
+                            },
+                            {
+                                html: `<iframe src="https://github.com/sponsors/firecmsco/button" title="Sponsor FireCMS" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
+                                `
+                            }
+                            // {
+                            //     html: `<iframe
+                            //                 src="https://ghbtns.com/github-btn.html?user=FireCMSco&repo=FireCMS&type=star&count=true&size=large"
+                            //                 frameBorder="0"
+                            //                 scrolling="0"
+                            //                 width="140"
+                            //                 height="32"
+                            //                 title="GitHub"/> `
+                            // }
+                        ]
+                    }
+                    // {
+                    //     // title: "Community",
+                    //     items: [
+                    //         {
+                    //             //Renders the html pass-through instead of a simple link
+                    //             html: `
+                    //           <iframe
+                    // src="https://discordapp.com/widget?id=1013768502458470442&theme=dark"
+                    // width="300"
+                    // height="300"
+                    // allowTransparency="true"
+                    // frameBorder="0"
+                    // sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+                    //         `,
+                    //         },
+                    //     ]
+                    // }
+                ],
+                copyright:
+                    `We are based in Madrid, Spain, Europe 🇪🇺 - © ${new Date().getFullYear()} - FireCMS S.L.`
+            }
+            ,
+            prism: {
+                theme: prismThemes.vsDark
+            }
         }
-    },
+    ,
     presets: [
         [
             "@docusaurus/preset-classic",
