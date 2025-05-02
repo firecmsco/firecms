@@ -101,11 +101,14 @@ export function CodeBlock({
         setExecutionError(null);
 
         try {
+            const encodedJs = encodeURIComponent(code);
+            const imports = buildAuxScript();
+
             pipeConsoleLog((...args) => {
                 setConsoleOutput((prev) => prev + Array.from(args).join(" ") + "\n");
             });
-            const encodedJs = encodeURIComponent(code);
-            const dataUri = "data:text/javascript;charset=utf-8," + buildAuxScript() + encodedJs;
+
+            const dataUri = "data:text/javascript;charset=utf-8," + imports + encodedJs;
             const promise = import(/* @vite-ignore */dataUri);
             promise.then((module) => {
                 originalConsoleLog("Module loaded", module);

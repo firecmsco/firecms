@@ -23,7 +23,7 @@ export function LoadingButton<P extends React.ElementType = "button">({
             {...props}
         >
             {loading && (
-                <CircularProgress size={"small"}/>
+                <CircularProgress size={props.size === "small" ? "smallest" : "small"}/>
             )}
             {!loading && startIcon}
             {children}
