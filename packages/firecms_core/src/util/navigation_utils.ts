@@ -31,6 +31,62 @@ export function getLastSegment(path: string) {
     return cleanPath;
 }
 
+/**
+ * Resolve subcollection paths using a functional approach
+ * @param baseCollection The parent collection
+ * @param entityId The entity ID in the parent collection
+ * @param remainingPath The remaining path segments to resolve
+ * @returns The fully resolved path
+ */
+function resolveSubcollectionPaths(
+    baseCollection: EntityCollection,
+    entityId: string,
+    remainingPath: string[]
+): string {
+    // Create pairs from the remaining path [collectionId, entityId]
+    const pairs: [string, string | null][] = [];
+    for (let i = 0; i < remainingPath.length; i += 2) {
+        const collectionId = remainingPath[i];
+        const nextEntityId = i + 1 < remainingPath.length ? remainingPath[i + 1] : null;
+        pairs.push([collectionId, nextEntityId]);
+    }
+
+    // Initial state with base path and collection
+    const initial = {
+        path: `${baseCollection.path}/${entityId}`,
+        collection: baseCollection
+    };
+
+    // Reduce through each pair, updating the path and current collection
+    const result = pairs.reduce((acc, [collectionId, entityId]) => {
+        // Find subcollection in current context
+        const subcollection = acc.collection.subcollections?.find(
+            subcol => subcol.id === collectionId
+        );
+
+        let newPath = acc.path;
+        let newCollection = acc.collection;
+
+        if (subcollection) {
+            // Use subcollection path and update context
+            newPath += `/${subcollection.path}`;
+            newCollection = subcollection;
+        } else {
+            // Fallback to ID if subcollection not found
+            newPath += `/${collectionId}`;
+        }
+
+        // Add entity ID if present
+        if (entityId) {
+            newPath += `/${entityId}`;
+        }
+
+        return { path: newPath, collection: newCollection };
+    }, initial);
+
+    return result.path;
+}
+
 export function resolveCollectionPathIds(path: string, allCollections: EntityCollection[]): string {
     const cleanPath = removeInitialAndTrailingSlashes(path);
     const subpaths = cleanPath.split("/");
@@ -90,7 +146,8 @@ export function resolveCollectionPathIds(path: string, allCollections: EntityCol
         );
 
         if (subcollection) {
-            return `${matchingCollection.path}/${entityId}/${subcollection.path}`;
+            // If we found a subcollection, resolve its path
+            return resolveSubcollectionPaths(matchingCollection, entityId, remainingPath);
         }
     }
 
