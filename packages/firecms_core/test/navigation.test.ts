@@ -201,4 +201,71 @@ describe("Resolving paths test", () => {
         expect(result2).toEqual("medico/v2.0.0/joints/cervical_spine/movements");
     });
 
+
+    it("Should handle correctly nested subcollections with a deep number of nesting", () => {
+        const fourCollection = buildCollection({
+            id: "four",
+            path: "four_path",
+            name: "Level Four",
+            properties: {
+                title: buildProperty({
+                    dataType: "string",
+                    name: "Title"
+                })
+            }
+        });
+
+        // Create a deeply nested collection structure
+        const threeCollection = buildCollection({
+            id: "three",
+            path: "three",
+            name: "Level Three",
+            properties: {
+                title: buildProperty({
+                    dataType: "string",
+                    name: "Title"
+                })
+            },
+            subcollections: [fourCollection]
+        });
+
+        const twoCollection = buildCollection({
+            id: "two",
+            path: "two_path",
+            name: "Level Two",
+            properties: {
+                title: buildProperty({
+                    dataType: "string",
+                    name: "Title"
+                })
+            },
+            subcollections: [threeCollection]
+        });
+
+        const oneCollection = buildCollection({
+            id: "one",
+            path: "one",
+            name: "Level One",
+            properties: {
+                title: buildProperty({
+                    dataType: "string",
+                    name: "Title"
+                })
+            },
+            subcollections: [twoCollection]
+        });
+
+        const testCollections = [oneCollection];
+
+        expect(resolveCollectionPathIds("one/KDz0nueQVSowWFXjuOCN/two", testCollections))
+            .toEqual("one/KDz0nueQVSowWFXjuOCN/two_path");
+        expect(resolveCollectionPathIds("one/KDz0nueQVSowWFXjuOCN/two/yQKoQjG4nsntOZVvwmrS/three", testCollections))
+            .toEqual("one/KDz0nueQVSowWFXjuOCN/two_path/yQKoQjG4nsntOZVvwmrS/three");
+        expect(resolveCollectionPathIds("one/KDz0nueQVSowWFXjuOCN/two/yQKoQjG4nsntOZVvwmrS/three/123/four", testCollections))
+            .toEqual("one/KDz0nueQVSowWFXjuOCN/two_path/yQKoQjG4nsntOZVvwmrS/three/123/four_path");
+        expect(resolveCollectionPathIds("one/KDz0nueQVSowWFXjuOCN/two/yQKoQjG4nsntOZVvwmrS/three/123/four/12345/five", testCollections))
+            .toEqual("one/KDz0nueQVSowWFXjuOCN/two_path/yQKoQjG4nsntOZVvwmrS/three/123/four_path/12345/five");
+
+    });
+
 });
