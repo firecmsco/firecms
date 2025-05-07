@@ -1,4 +1,4 @@
-import { DataType } from "@firecms/core";
+import { DataType } from "./cms_types";
 
 export type TypesCount = {
     number?: number,

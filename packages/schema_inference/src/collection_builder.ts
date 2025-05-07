@@ -1,13 +1,4 @@
 import {
-    DataType,
-    EnumValues,
-    mergeDeep,
-    Properties, PropertiesOrBuilders,
-    Property,
-    resolveEnumValues,
-    StringProperty
-} from "@firecms/core";
-import {
     InferencePropertyBuilderProps,
     TypesCount,
     TypesCountRecord,
@@ -17,7 +8,8 @@ import {
 import { buildStringProperty } from "./builders/string_property_builder";
 import { buildValidation } from "./builders/validation_builder";
 import { buildReferenceProperty } from "./builders/reference_property_builder";
-import { extractEnumFromValues } from "./util";
+import { extractEnumFromValues, mergeDeep, resolveEnumValues } from "./util";
+import { DataType, EnumValues, Properties, PropertiesOrBuilders, Property, StringProperty } from "./cms_types";
 
 export type InferenceTypeBuilder = (value: any) => DataType;
 
@@ -377,7 +369,7 @@ function getMostProbableTypeInArray(
     array: any[],
     getType: InferenceTypeBuilder
 ): DataType {
-    let typesCount: TypesCount = {};
+    const typesCount: TypesCount = {};
     array.forEach((value) => {
         increaseTypeCount(getType(value), typesCount, value, getType);
     });
@@ -398,7 +390,7 @@ function checkTypesCountHighVariability(typesCount: TypesCount) {
 
 function formatString(input: string): string {
     const normalized = input
-        .replace(/[_\-]+/g, " ")
+        .replace(/[_-]+/g, " ")
         .replace(/([a-z])([A-Z])/g, "$1 $2")
         .toLowerCase();
 

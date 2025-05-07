@@ -32,9 +32,6 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@firecms/core": [
-        "../firecms_core"
-      ]
     }
   },
   "include": [

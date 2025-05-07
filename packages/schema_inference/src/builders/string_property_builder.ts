@@ -1,7 +1,7 @@
-import { FileType, Property, StringProperty } from "@firecms/core";
 import { InferencePropertyBuilderProps, ValuesCountEntry } from "../types";
 import { findCommonInitialStringInPath } from "../strings";
 import { extractEnumFromValues } from "../util";
+import { FileType, Property, StringProperty } from "../cms_types";
 
 const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"];
 const AUDIO_EXTENSIONS = [".mp3", ".ogg", ".opus", ".aac"];

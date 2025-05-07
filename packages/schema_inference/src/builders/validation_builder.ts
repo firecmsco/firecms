@@ -1,5 +1,5 @@
-import { PropertyValidationSchema } from "@firecms/core";
 import { InferencePropertyBuilderProps } from "../types";
+import { PropertyValidationSchema } from "../cms_types";
 
 export function buildValidation({
                                     totalDocsCount,
