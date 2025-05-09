@@ -127,95 +127,6 @@ export type Property<T extends CMSType = any> =
                                 T extends Record<string, any> ? MapProperty<T> : any;
 
 /**
- * Interface including all common properties of a CMS property
- * @group Entity properties
- */
-export interface BaseProperty<T extends CMSType, CustomProps = any> {
-
-    /**
-     * Datatype of the property
-     */
-    dataType: DataType;
-
-    /**
-     * Property name (e.g. Product)
-     */
-    name?: string;
-
-    /**
-     * Property description, always displayed under the field
-     */
-    description?: string;
-
-    /**
-     * You can use this prop to reuse a property that has been defined
-     * in the top level of the CMS in the prop `fields`.
-     * All the configuration will be taken from the inherited config, and
-     * overwritten by the current property config.
-     */
-    propertyConfig?: string;
-
-    /**
-     * Longer description of a field, displayed under a popover
-     */
-    longDescription?: string;
-
-    /**
-     * Width in pixels of this column in the collection view. If not set
-     * the width is inferred based on the other configurations
-     */
-    columnWidth?: number;
-
-    /**
-     * Do not show this property in the collection view
-     */
-    hideFromCollection?: boolean;
-
-    /**
-     * Is this a read only property. When set to true, it gets rendered as a
-     * preview.
-     */
-    readOnly?: boolean;
-
-    /**
-     * Is this field disabled.
-     * When set to true, it gets rendered as a
-     * disabled field. You can also specify a configuration for defining the
-     * behaviour of disabled properties (including custom messages, clear value on
-     * disabled or hide the field completely)
-     */
-    disabled?: boolean | PropertyDisabledConfig;
-
-    /**
-     * Rules for validating this property
-     */
-    validation?: PropertyValidationSchema;
-
-    /**
-     * Additional props that are passed to the components defined in `field`
-     * or in `preview`.
-     */
-    customProps?: CustomProps;
-
-    /**
-     * This value will be set by default for new entities.
-     */
-    defaultValue?: T | null;
-
-    /**
-     * Should this property be editable. If set to true, the user will be able to modify the property and
-     * save the new config. The saved config will then become the source of truth.
-     */
-    editable?: boolean;
-
-    /**
-     * A number between 0 and 100 that indicates the width of the field in the form view.
-     * It defaults to 100, but you can set it to 50 to have two fields in the same row.
-     */
-    widthPercentage?: number;
-}
-
-/**
  * @group Entity properties
  */
 export interface PropertyDisabledConfig {
@@ -282,19 +193,70 @@ export type Properties<M extends Record<string, any> = any> = {
     [k in keyof M]: Property<M[keyof M]>;
 };
 
-/**
- * @group Entity properties
- */
-export type PropertyOrBuilder<T extends CMSType = CMSType, M extends Record<string, any> = any> =
-    Property<T>;
 
 /**
+ * Interface including all common properties of a CMS property
  * @group Entity properties
  */
-export type PropertiesOrBuilders<M extends Record<string, any> = any> =
-    {
-        [k in keyof M]: PropertyOrBuilder<M[k], M>;
-    };
+export interface BaseProperty<T extends CMSType> {
+
+    /**
+     * Datatype of the property
+     */
+    dataType: DataType;
+
+    /**
+     * Property name (e.g. Product)
+     */
+    name?: string;
+
+    /**
+     * Property description, always displayed under the field
+     */
+    description?: string;
+
+    /**
+     * Longer description of a field, displayed under a popover
+     */
+    longDescription?: string;
+
+    /**
+     * Width in pixels of this column in the collection view. If not set
+     * the width is inferred based on the other configurations
+     */
+    columnWidth?: number;
+
+    /**
+     * Do not show this property in the collection view
+     */
+    hideFromCollection?: boolean;
+
+    /**
+     * Is this a read only property. When set to true, it gets rendered as a
+     * preview.
+     */
+    readOnly?: boolean;
+
+    /**
+     * Is this field disabled.
+     * When set to true, it gets rendered as a
+     * disabled field. You can also specify a configuration for defining the
+     * behaviour of disabled properties (including custom messages, clear value on
+     * disabled or hide the field completely)
+     */
+    disabled?: boolean | PropertyDisabledConfig;
+
+    /**
+     * Rules for validating this property
+     */
+    validation?: PropertyValidationSchema;
+
+    /**
+     * This value will be set by default for new entities.
+     */
+    defaultValue?: T | null;
+
+}
 
 /**
  * @group Entity properties
@@ -414,7 +376,7 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
      * You can leave this field empty only if you are providing a custom field,
      * or using the `oneOf` prop, otherwise an error will be thrown.
      */
-    of?: PropertyOrBuilder<ArrayT> | Property<ArrayT>[];
+    of?: Property<ArrayT>[];
 
     /**
      * Use this field if you would like to have an array of typed objects.
@@ -498,7 +460,7 @@ export interface MapProperty<T extends Record<string, CMSType> = Record<string, 
     /**
      * Record of properties included in this map.
      */
-    properties?: PropertiesOrBuilders<T>;
+    properties?: Properties<T>;
 
     /**
      * Order in which the properties are displayed.

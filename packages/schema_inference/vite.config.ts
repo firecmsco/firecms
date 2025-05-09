@@ -13,7 +13,11 @@ export default defineConfig(() => ({
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
             name: "FireCMS schema inference",
-            fileName: (format) => `index.${format}.js`
+            fileName: (format) => {
+                if (format === "es") return "index.es.js";
+                if (format === "umd") return "index.umd.cjs";
+                return `index.${format}.js`;
+            }
         },
         target: "ESNEXT",
         sourcemap: true,
@@ -23,7 +27,6 @@ export default defineConfig(() => ({
         }
     },
     resolve: {
-        alias: {
-        }
-    },
+        alias: {}
+    }
 }));

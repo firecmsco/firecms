@@ -1,5 +1,4 @@
 import { ValuesCountEntry } from "./types";
-import { DocumentReference } from "@firebase/firestore";
 
 export function findCommonInitialStringInPath(valuesCount?: ValuesCountEntry) {
 
@@ -7,7 +6,7 @@ export function findCommonInitialStringInPath(valuesCount?: ValuesCountEntry) {
 
     function getPath(value: any) {
         if (typeof value === "string") return value;
-        else if (value instanceof DocumentReference) return value.path;
+        else if (value?.type === "document" && value.path) return value.path;
         else return undefined;
     }
 

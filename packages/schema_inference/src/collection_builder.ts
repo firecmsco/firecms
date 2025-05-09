@@ -9,7 +9,7 @@ import { buildStringProperty } from "./builders/string_property_builder";
 import { buildValidation } from "./builders/validation_builder";
 import { buildReferenceProperty } from "./builders/reference_property_builder";
 import { extractEnumFromValues, mergeDeep, resolveEnumValues } from "./util";
-import { DataType, EnumValues, Properties, PropertiesOrBuilders, Property, StringProperty } from "./cms_types";
+import { DataType, EnumValues, Properties, Property, StringProperty } from "./cms_types";
 
 export type InferenceTypeBuilder = (value: any) => DataType;
 
@@ -64,7 +64,7 @@ export function buildPropertyFromData(
 }
 
 export function buildPropertiesOrder(
-    properties: PropertiesOrBuilders,
+    properties: Properties,
     propertiesOrder?: string[],
     priorityKeys?: string[]
 ): string[] {
