@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import {
     CollectionSize,
     Entity,
@@ -119,150 +119,147 @@ export type SelectableTableProps<M extends Record<string, any>> = {
  * @see VirtualTable
  * @group Components
  */
-export const SelectableTable = React.memo<SelectableTableProps<any>>(
-    function SelectableTable<M extends Record<string, any>>
-    ({
-         onValueChange,
-         cellRenderer,
-         onEntityClick,
-         onColumnResize,
-         hoverRow = true,
-         size = "m",
-         inlineEditing = false,
-         tableController:
-             {
-                 data,
-                 dataLoading,
-                 noMoreToLoad,
-                 dataLoadingError,
-                 filterValues,
-                 setFilterValues,
-                 sortBy,
-                 setSortBy,
-                 itemCount,
-                 setItemCount,
-                 pageSize = 50,
-                 paginationEnabled,
-                 checkFilterCombination,
-                 setPopupCell
-             },
-         filterable = true,
-         onScroll,
-         initialScroll,
-         emptyComponent,
-         columns,
-         forceFilter,
-         highlightedRow,
-         endAdornment,
-         AddColumnComponent
-     }: SelectableTableProps<M>) {
+export const SelectableTable = function SelectableTable<M extends Record<string, any>>
+({
+     onValueChange,
+     cellRenderer,
+     onEntityClick,
+     onColumnResize,
+     hoverRow = true,
+     size = "m",
+     inlineEditing = false,
+     tableController:
+         {
+             data,
+             dataLoading,
+             noMoreToLoad,
+             dataLoadingError,
+             filterValues,
+             setFilterValues,
+             sortBy,
+             setSortBy,
+             itemCount,
+             setItemCount,
+             pageSize = 50,
+             paginationEnabled,
+             checkFilterCombination,
+             setPopupCell
+         },
+     filterable = true,
+     onScroll,
+     initialScroll,
+     emptyComponent,
+     columns,
+     forceFilter,
+     highlightedRow,
+     endAdornment,
+     AddColumnComponent
+ }: SelectableTableProps<M>) {
 
-        const ref = useRef<HTMLDivElement>(null);
+    const ref = useRef<HTMLDivElement>(null);
 
-        const [selectedCell, setSelectedCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
+    const [selectedCell, setSelectedCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
 
-        const loadNextPage = () => {
-            if (!paginationEnabled || dataLoading || noMoreToLoad)
-                return;
-            if (itemCount !== undefined)
-                setItemCount?.(itemCount + pageSize);
+    const loadNextPage = () => {
+        if (!paginationEnabled || dataLoading || noMoreToLoad)
+            return;
+        if (itemCount !== undefined)
+            setItemCount?.(itemCount + pageSize);
+    };
+
+    const resetPagination = useCallback(() => {
+        setItemCount?.(pageSize);
+    }, [pageSize]);
+
+    const onRowClick = useCallback(({ rowData }: {
+        rowData: Entity<M>
+    }) => {
+        if (inlineEditing)
+            return;
+        return onEntityClick && onEntityClick(rowData);
+    }, [onEntityClick, inlineEditing]);
+
+    useOutsideAlerter(ref,
+        () => {
+            if (selectedCell) {
+                unselect();
+            }
+        },
+        Boolean(selectedCell));
+
+    const select = useCallback((cell?: SelectedCellProps<M>) => {
+        setSelectedCell(cell);
+    }, []);
+
+    const unselect = useCallback(() => {
+        setSelectedCell(undefined);
+    }, []);
+
+    // on ESC key press
+    useEffect(() => {
+        const escFunction = (event: any) => {
+            if (event.keyCode === 27) {
+                unselect();
+            }
         };
+        document.addEventListener("keydown", escFunction, false);
+        return () => {
+            document.removeEventListener("keydown", escFunction, false);
+        };
+    }, [unselect]);
 
-        const resetPagination = useCallback(() => {
-            setItemCount?.(pageSize);
-        }, [pageSize]);
+    const onFilterUpdate = useCallback((updatedFilterValues?: FilterValues<any>) => {
+        setFilterValues?.({ ...updatedFilterValues, ...forceFilter } as FilterValues<any>);
+    }, [forceFilter]);
 
-        const onRowClick = useCallback(({ rowData }: {
-            rowData: Entity<M>
-        }) => {
-            if (inlineEditing)
-                return;
-            return onEntityClick && onEntityClick(rowData);
-        }, [onEntityClick, inlineEditing]);
+    const contextValue = useMemo(() => ({
+        setPopupCell: setPopupCell as ((cell?: SelectedCellProps<M>) => void),
+        select,
+        onValueChange,
+        size: size ?? "m",
+        selectedCell
+    }), [setPopupCell, select, onValueChange, size, selectedCell]);
 
-        useOutsideAlerter(ref,
-            () => {
-                if (selectedCell) {
-                    unselect();
-                }
-            },
-            Boolean(selectedCell));
+    return (
+        <SelectableTableContext.Provider
+            value={contextValue}>
+            <div className="h-full w-full flex flex-col bg-white dark:bg-surface-950"
+                 ref={ref}>
 
-        // on ESC key press
-        useEffect(() => {
-            const escFunction = (event: any) => {
-                if (event.keyCode === 27) {
-                    unselect();
-                }
-            };
-            document.addEventListener("keydown", escFunction, false);
-            return () => {
-                document.removeEventListener("keydown", escFunction, false);
-            };
-        });
+                <VirtualTable
+                    data={data}
+                    columns={columns}
+                    cellRenderer={cellRenderer}
+                    onRowClick={inlineEditing ? undefined : (onEntityClick ? onRowClick : undefined)}
+                    onEndReached={loadNextPage}
+                    onResetPagination={resetPagination}
+                    error={dataLoadingError}
+                    onColumnResize={onColumnResize}
+                    rowHeight={getRowHeight(size)}
+                    loading={dataLoading}
+                    filter={filterValues}
+                    onFilterUpdate={setFilterValues ? onFilterUpdate : undefined}
+                    sortBy={sortBy}
+                    onSortByUpdate={setSortBy as ((sortBy?: [string, "asc" | "desc"]) => void)}
+                    hoverRow={hoverRow}
+                    initialScroll={initialScroll}
+                    onScroll={onScroll}
+                    checkFilterCombination={checkFilterCombination}
+                    createFilterField={filterable ? createFilterField : undefined}
+                    rowClassName={useCallback((entity: Entity<M>) => {
+                        return highlightedRow?.(entity) ? "bg-surface-100 bg-opacity-75 dark:bg-surface-800 dark:bg-opacity-75" : "";
+                    }, [highlightedRow])}
+                    className="flex-grow"
+                    emptyComponent={emptyComponent}
+                    endAdornment={endAdornment}
+                    AddColumnComponent={AddColumnComponent}
+                />
 
-        const select = useCallback((cell?: SelectedCellProps<M>) => {
-            setSelectedCell(cell);
-        }, []);
+            </div>
+        </SelectableTableContext.Provider>
+    );
 
-        const unselect = useCallback(() => {
-            setSelectedCell(undefined);
-        }, []);
-
-        const onFilterUpdate = useCallback((updatedFilterValues?: FilterValues<any>) => {
-            setFilterValues?.({ ...updatedFilterValues, ...forceFilter } as FilterValues<any>);
-        }, [forceFilter]);
-
-        return (
-            <SelectableTableContext.Provider
-                value={{
-                    setPopupCell: setPopupCell as ((cell?: SelectedCellProps<M>) => void),
-                    select,
-                    onValueChange,
-                    size: size ?? "m",
-                    selectedCell,
-                }}
-            >
-                <div className="h-full w-full flex flex-col bg-white dark:bg-surface-950"
-                     ref={ref}>
-
-                    <VirtualTable
-                        data={data}
-                        columns={columns}
-                        cellRenderer={cellRenderer}
-                        onRowClick={inlineEditing ? undefined : (onEntityClick ? onRowClick : undefined)}
-                        onEndReached={loadNextPage}
-                        onResetPagination={resetPagination}
-                        error={dataLoadingError}
-                        onColumnResize={onColumnResize}
-                        rowHeight={getRowHeight(size)}
-                        loading={dataLoading}
-                        filter={filterValues}
-                        onFilterUpdate={setFilterValues ? onFilterUpdate : undefined}
-                        sortBy={sortBy}
-                        onSortByUpdate={setSortBy as ((sortBy?: [string, "asc" | "desc"]) => void)}
-                        hoverRow={hoverRow}
-                        initialScroll={initialScroll}
-                        onScroll={onScroll}
-                        checkFilterCombination={checkFilterCombination}
-                        createFilterField={filterable ? createFilterField : undefined}
-                        rowClassName={useCallback((entity: Entity<M>) => {
-                            return highlightedRow?.(entity) ? "bg-surface-100 bg-opacity-75 dark:bg-surface-800 dark:bg-opacity-75" : "";
-                        }, [highlightedRow])}
-                        className="flex-grow"
-                        emptyComponent={emptyComponent}
-                        endAdornment={endAdornment}
-                        AddColumnComponent={AddColumnComponent}
-                    />
-
-                </div>
-            </SelectableTableContext.Provider>
-        );
-
-    },
-    () => false,
-    // equal
-);
+};
 
 function createFilterField({
                                id,

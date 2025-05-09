@@ -610,6 +610,8 @@ function FireCMSAppAuthenticated({
         projectConfig,
         collectionConfigController,
         appConfig,
+        fireCMSBackend,
+        onAnalyticsEvent,
         dataTalkSuggestions: dataTalkConfig.rootPromptsSuggestions,
         introMode: introMode ? (projectConfig.creationType === "new" ? "new_project" : "existing_project") : undefined
     });
@@ -627,6 +629,7 @@ function FireCMSAppAuthenticated({
         collectionInference: buildCollectionInference(firebaseApp),
         getData: (path, parentPaths) => getFirestoreDataInPath(firebaseApp, path, parentPaths, 400),
         onAnalyticsEvent,
+        includeIntroView: false
     });
 
     const plugins: FireCMSPlugin<any, any, any>[] = [saasPlugin, exportPlugin, importPlugin, collectionEditorPlugin, dataEnhancementPlugin];

@@ -1,5 +1,6 @@
 import { ApiError, FireCMSCloudUserWithRoles, SubscriptionType } from "../types";
 import { handleApiResponse } from "./common";
+import { EntityCollection } from "@firecms/core";
 
 export type ProjectsApi = ReturnType<typeof buildProjectsApi>;
 
@@ -300,6 +301,19 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         return `${host}/projects/${projectId}/app_config/${revisionId}/${await getBackendAuthToken()}/remoteEntry.js`;
     }
 
+    async function initialCollectionsSetup(projectId: string): Promise<EntityCollection[]> {
+        const firebaseAccessToken = await getBackendAuthToken();
+        return fetch(`${host}/projects/${projectId}/initial_setup`,
+            {
+                method: "POST",
+                headers: buildHeaders({ firebaseAccessToken }),
+                body: JSON.stringify({ projectId })
+            })
+            .then(async (res) => {
+                return handleApiResponse(res, projectId);
+            });
+    }
+
     return {
         createNewFireCMSProject,
         createFirebaseWebapp,
@@ -313,6 +327,8 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         doDelegatedLogin,
         createStripeNewSubscriptionLink,
         createCloudStripeNewSubscriptionLink,
+
+        initialCollectionsSetup,
 
         getStripePortalLink,
         getStripeUpdateLinkForSubscription,

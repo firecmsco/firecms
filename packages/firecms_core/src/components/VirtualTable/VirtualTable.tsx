@@ -170,10 +170,13 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         });
 
         const onColumnResizeInternal = useCallback((params: OnVirtualTableColumnResizeParams) => {
-            if (debug)
-                console.log("onColumnResizeInternal", params);
-            setColumns(columns.map((column) => column.key === params.column.key ? params.column : column));
-        }, [columns]);
+            if (debug) console.log("onColumnResizeInternal", params);
+            setColumns(prevColumns =>
+                prevColumns.map((column) =>
+                    column.key === params.column.key ? params.column : column
+                )
+            );
+        }, []);
 
         const onColumnResizeEndInternal = useCallback((params: OnVirtualTableColumnResizeParams) => {
             if (debug)

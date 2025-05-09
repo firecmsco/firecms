@@ -51,6 +51,8 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
 
     onAnalyticsEvent?: (event: string, params?: object) => void;
 
+    includeIntroView?: boolean;
+
 }
 
 /**
@@ -75,6 +77,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
      collectionInference,
      getData,
      onAnalyticsEvent,
+     includeIntroView = true
  }: CollectionConfigControllerProps<EC, USER>): FireCMSPlugin<any, any, PersistedCollection> {
 
     return {
@@ -96,7 +99,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
         },
         homePage: {
             additionalActions: <NewCollectionButton/>,
-            additionalChildrenStart: <IntroWidget/>,
+            additionalChildrenStart: includeIntroView ? <IntroWidget/> : undefined,
             // additionalChildrenEnd: <RootCollectionSuggestions introMode={introMode}/>,
             CollectionActions: HomePageEditorCollectionAction,
             AdditionalCards: NewCollectionCard,
@@ -110,7 +113,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
     };
 }
 
-export function IntroWidget({}: {}) {
+export function IntroWidget() {
 
     const navigation = useNavigationController();
     if (!navigation.topLevelNavigation)

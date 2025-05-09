@@ -12,15 +12,16 @@ export function GoogleLoginButton({
 }) {
     return (
         <div className={"m-4 w-full"}>
-            <Button className={cls("w-full bg-white text-surface-900 dark:text-surface-900", disabled ? "" : "hover:text-white hover:dark:text-white")}
-                    style={{
-                        height: "40px",
-                        borderRadius: "4px",
-                        fontSize: "14px"
-                    }}
-                    variant="filled"
-                    disabled={disabled}
-                    onClick={onClick}>
+            <Button
+                className={cls("w-full bg-white text-surface-900 dark:text-surface-900", disabled ? "" : "hover:text-surface-800 hover:dark:text-text-surface-800")}
+                style={{
+                    height: "40px",
+                    borderRadius: "4px",
+                    fontSize: "14px"
+                }}
+                variant="filled"
+                disabled={disabled}
+                onClick={onClick}>
                 <div
                     className={cls("flex items-center justify-items-center ")}>
                     <div className="flex flex-col items-center justify-center w-4.5 h-4.5">

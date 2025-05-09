@@ -13,7 +13,7 @@ export function SubscriptionPlanWidget({}: SubscriptionPlanWidgetProps) {
         subscriptionPlan,
         subscriptionData,
         isTrialOver,
-        trialValidUntil
+        trialValidUntil,
     } = useProjectConfig();
 
     const subscriptionsController = useSubscriptionsForUserController();
@@ -26,7 +26,10 @@ export function SubscriptionPlanWidget({}: SubscriptionPlanWidgetProps) {
         return <PastDueAlert subscription={pastDueSubscriptions[0]}/>;
     }
 
+    const weAreOnTheLastTwoWeeks = trialValidUntil && trialValidUntil.getTime() - Date.now() < 14 * 24 * 60 * 60 * 1000;
     if (!subscriptionPlan || subscriptionPlan !== "free") return null;
+    if (!weAreOnTheLastTwoWeeks)
+        return null;
 
     return <div className={"my-2 flex flex-col gap-2"}>
 
