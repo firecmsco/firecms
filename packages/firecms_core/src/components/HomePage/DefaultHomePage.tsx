@@ -179,7 +179,7 @@ export function DefaultHomePage({
 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {thisGroupCollections.map((entry) => (
-                                    <div key={`nav_${entry.group}_${entry.name}`} className="col-span-1">
+                                    <div key={`nav_${entry.group}_${entry.path}_${entry.name}`} className="col-span-1">
                                         <NavigationCardBinding
                                             {...entry}
                                             onClick={() => {

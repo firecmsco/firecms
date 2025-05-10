@@ -310,7 +310,8 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                 body: JSON.stringify({ projectId })
             })
             .then(async (res) => {
-                return handleApiResponse(res, projectId);
+                const data = await handleApiResponse<{ collections: EntityCollection[] }>(res, projectId);
+                return data.collections;
             });
     }
 

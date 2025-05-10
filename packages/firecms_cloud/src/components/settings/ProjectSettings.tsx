@@ -17,6 +17,7 @@ import { useFireCMSBackend, useProjectConfig } from "../../hooks";
 import { ProjectSubscriptionPlans } from "../subscriptions";
 import { SecurityRulesInstructions } from "../SecurityRulesInstructions";
 import { AppCheckSettingsView } from "./AppCheckSettingsView";
+import { AutoSetupCollectionsSettings } from "./AutoSetupCollectionsSettings";
 
 export function ProjectSettings() {
 
@@ -60,6 +61,8 @@ export function ProjectSettings() {
             </div>
 
             <AppCheckSettingsView/>
+
+            <AutoSetupCollectionsSettings/>
 
         </Container>
     );

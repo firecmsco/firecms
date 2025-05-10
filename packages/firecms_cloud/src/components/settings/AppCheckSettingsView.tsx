@@ -67,11 +67,12 @@ export function AppCheckSettingsView() {
 
         <BooleanSwitchWithLabel value={enabled}
                                 position={"start"}
-                                size={"small"}
+                                size={"medium"}
                                 label={"Enable AppCheck"}
                                 onValueChange={(value) => {
                                     setEnabled(value);
                                 }}/>
+
         <Paper className={"p-4 flex flex-col gap-4"}>
 
             <div className={"flex flex-row gap-4"}>

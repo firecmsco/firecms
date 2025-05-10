@@ -2,11 +2,19 @@ import React, { useEffect } from "react";
 import { unslugify, useAuthController, useNavigationController } from "@firecms/core";
 import { AddIcon, Chip, CircularProgress, Collapse, Typography, } from "@firecms/ui";
 import { useCollectionEditorController } from "@firecms/collection_editor";
+import { AutoSetUpCollectionsButton } from "./AutoSetUpCollectionsButton";
+import { useFireCMSBackend, useProjectConfig } from "../hooks";
 
-export function RootCollectionSuggestions({ introMode }: { introMode?: "new_project" | "existing_project" }) {
+export function RootCollectionSuggestions({ introMode, onAnalyticsEvent }: {
+    introMode?: "new_project" | "existing_project" ,
+    onAnalyticsEvent?: (event: string, data?: object) => void;
+}) {
 
     const authController = useAuthController();
     const navigationController = useNavigationController();
+
+    const fireCMSBackend = useFireCMSBackend();
+    const projectConfig = useProjectConfig();
 
     const collectionEditorController = useCollectionEditorController();
     const canCreateCollections = collectionEditorController.configPermissions
@@ -18,8 +26,7 @@ export function RootCollectionSuggestions({ introMode }: { introMode?: "new_proj
     const [rootPathSuggestions, setRootPathSuggestions] = React.useState<string[] | undefined>(undefined);
     useEffect(() => {
         collectionEditorController.getPathSuggestions?.("").then((result) => {
-            const existingPaths = (navigationController.collections ?? []).map(c => c.path);
-            setRootPathSuggestions(result.filter((path) => !existingPaths.includes(path)));
+            setRootPathSuggestions(result);
         });
     }, [collectionEditorController.getPathSuggestions]);
 
@@ -27,7 +34,10 @@ export function RootCollectionSuggestions({ introMode }: { introMode?: "new_proj
         return null;
     }
 
-    const showSuggestions = (rootPathSuggestions ?? []).length > 3 || ((navigationController.collections ?? []).length === 0 && (rootPathSuggestions ?? []).length > 0);
+    const existingPaths = (navigationController.collections ?? []).map(c => c.path);
+    const filteredRootPathSuggestions = (rootPathSuggestions ?? []).filter((path) => !existingPaths.includes(path));
+
+    const showSuggestions = filteredRootPathSuggestions.length > 0;
     const forceShowSuggestions = introMode === "existing_project";
     return <Collapse
         in={forceShowSuggestions || showSuggestions}>
@@ -45,7 +55,21 @@ export function RootCollectionSuggestions({ introMode }: { introMode?: "new_proj
 
             <div
                 className={"flex flex-row gap-1 overflow-scroll no-scrollbar "}>
-                {(rootPathSuggestions ?? []).map((path) => {
+
+                <AutoSetUpCollectionsButton projectsApi={fireCMSBackend.projectsApi}
+                                            projectId={projectConfig.projectId}
+                                            askConfirmation={true}
+                                            small={true}
+                                            disabled={!canCreateCollections}
+                                            onClick={() => onAnalyticsEvent?.("suggestions_cols_setup_click")}
+                                            onSuccess={() => onAnalyticsEvent?.("suggestions_cols_setup_success")}
+                                            onNoCollections={() => onAnalyticsEvent?.("suggestions_cols_setup_no_cols")}
+                                            onError={() => onAnalyticsEvent?.("suggestions_cols_setup_error")}
+                />
+
+                {rootPathSuggestions === undefined && <CircularProgress size={"smallest"}/>}
+
+                {(filteredRootPathSuggestions ?? []).map((path) => {
                     return (
                         <div key={path} className={"flex-shrink-0"}>
                             <Chip
@@ -68,8 +92,8 @@ export function RootCollectionSuggestions({ introMode }: { introMode?: "new_proj
                         </div>
                     );
                 })}
-                {rootPathSuggestions === undefined && <CircularProgress size={"smallest"}/>}
-                {rootPathSuggestions?.length === 0 && <Typography variant={"caption"}>No suggestions</Typography>}
+                {filteredRootPathSuggestions?.length === 0 &&
+                    <Typography variant={"caption"}>No suggestions</Typography>}
             </div>
         </div>
     </Collapse>

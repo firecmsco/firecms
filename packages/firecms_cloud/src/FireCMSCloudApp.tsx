@@ -595,7 +595,6 @@ function FireCMSAppAuthenticated({
     });
 
     const introMode = navigationController.initialised &&
-        // navigationController.collections !== undefined &&
         (navigationController.collections ?? []).length === 0;
 
     const dataTalkConfig = useBuildDataTalkConfig({
