@@ -1,84 +1,86 @@
-## FireCMS Data enhancement plugin
+I'll enhance the README with more detailed documentation, configuration options, and better examples:
 
-This plugin allows you to enhance data in your [FireCMS](https://firecms.co)
-project, using ChatGPT.
+# FireCMS Data Export Plugin
 
-The ChatGPT plugin allows you to use the OpenAI API to generate content using
-the latest GPT models. This plugin is able to understand the structure of your
-data and generate content that fits your schema.
+This plugin enables exporting Firestore collections to CSV or JSON formats directly from your FireCMS interface. It adds an export button to collection views, providing a simple way to back up data or share it with others.
 
-<p align="center">
-    <img src="https://firecms.co/img/data_import.png" width="800px" alt="Data enhancement UI" />
-</p>
+## Installation
 
-In order to be able to use this plugin you need to have a valid subscription.
+```bash
+npm install @firecms/data_export
+# or
+yarn add @firecms/data_export
+```
 
-You can get a subscription in
-the [FireCMS dashboard](https://app.firecms.co/subscriptions).
+## Features
 
-You need to specify the Firebase project id you would like to use the plugin
-with,
-in the website. And that's it!
+- Export collection data to CSV or JSON formats
+- Configure export permissions based on collection size or custom logic
+- Integration with FireCMS analytics events
+- Custom UI for unsupported export scenarios
 
-No need to add any subscription key or anything like that.
+## Basic Usage
 
 ```tsx
 import React from "react";
 import { FirebaseCMSApp } from "@firecms/core";
-import "typeface-rubik";
-import "@fontsource/jetbrains-mono";
+import { useExportPlugin } from "@firecms/data_export";
 
-import { useDataImportPlugin } from "@firecms/data_import_export";
-
-// TODO: Replace with your Firebase config
-const firebaseConfig = {
-    apiKey: "",
-    authDomain: "",
-    projectId: "",
-    storageBucket: "",
-    messagingSenderId: "",
-    appId: ""
-};
+// Basic setup with default options
+const exportPlugin = useExportPlugin();
 
 export default function App() {
-
-    const dataImportPlugin = useDataImportPlugin({
-        // Optional callback for defining which collections should be enhanced
-        getConfigForPath: ({ path }) => {
-            if (path === "books")
-                return true;
-            return false;
-        }
-    });
-
     return <FirebaseCMSApp
         name={"My Online Shop"}
-        plugins={[dataImportPlugin]}
+        plugins={[exportPlugin]}
         authentication={myAuthenticator}
-        collections={[
-            //...
-        ]}
+        collections={myCollections}
         firebaseConfig={firebaseConfig}
     />;
 }
 ```
 
-## How does it work?
+## Advanced Configuration
 
-This plugin uses the OpenAI API to generate content using the latest GPT models.
-This plugin is able to understand the structure of your data and generate
-content that fits your schema.
+You can customize the export behavior with these options:
 
-Some tips in order to get the best results:
+```tsx
+const exportPlugin = useExportPlugin({
+    // Control when exports are allowed
+    exportAllowed: ({ collectionEntitiesCount, path, collection }) => {
+        // Prevent export of large collections
+        if (collectionEntitiesCount > 5000) return false;
+        
+        // Only allow export for specific collections
+        return ["products", "orders"].includes(path);
+    },
+    
+    // Custom view when export is not allowed
+    notAllowedView: <div>Export is not available for this collection</div>,
+    
+    // Track export events
+    onAnalyticsEvent: (event, params) => {
+        console.log("Export event:", event, params);
+    }
+});
+```
 
-- Make sure you select the **right data** type for your fields.
-- The **field names** are used to generate the content and are usually enough to
-  generate good results. If you want to get even better results, you can
-  **add a description** to your fields. This will help the plugin understand the
-  context of your data and generate better results.
-- The **collection name** is important as well.
-- You can establish **relations between fields** and the plugin will pick it up.
-  e.g. if you have a field called `author` and another field called `book`, the
-  plugin will understand that the author is related to the book and will
-  generate content accordingly. You can use this for making **summaries, reviews,
-  translations, SEO content**, etc.
+## Configuration Options
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `exportAllowed` | `(params: ExportAllowedParams) => boolean` | Function to determine if export is allowed for a collection |
+| `notAllowedView` | `React.ReactNode` | Custom component to display when export is not allowed |
+| `onAnalyticsEvent` | `(event: string, params?: any) => void` | Callback for tracking export events |
+
+Where `ExportAllowedParams` includes:
+- `collectionEntitiesCount`: Number of entities in the collection
+- `path`: Path of the collection
+- `collection`: Collection configuration object
+
+
+## Additional Notes
+
+- Exports are performed client-side and may be limited by browser capabilities for very large collections
+- CSV exports maintain data types where possible but complex objects may be simplified
+- JSON exports preserve the complete data structure
