@@ -158,6 +158,22 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
         fieldBuilderEnabled?: <T extends CMSType = CMSType>(props: PluginFieldBuilderParams<T>) => boolean;
     }
 
+    collection?: {
+
+        /**
+         * Use this method to modify a single collection before it is rendered.
+         * @param collection
+         */
+        modifyCollection?: (collection: EntityCollection) => EntityCollection;
+
+        /**
+         * Use this method to modify, add or remove collections.
+         * @param collections
+         */
+        injectCollections?: (collections: EntityCollection[]) => EntityCollection[];
+
+    }
+
 }
 
 /**

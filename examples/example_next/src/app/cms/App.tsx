@@ -197,6 +197,7 @@ export function App() {
     const importPlugin = useImportPlugin();
     const exportPlugin = useExportPlugin();
 
+
     if (firebaseConfigLoading || !firebaseApp) {
         return <CircularProgressCenter/>;
     }

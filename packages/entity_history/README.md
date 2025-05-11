@@ -1,0 +1,124 @@
+# FireCMS Entity History Plugin
+
+This plugin adds a history view to your entities in FireCMS. It allows you to track changes made to entities over time,
+showing who made the change and when.
+
+The document history will be stored in a subcollection called `__history` within the entity's document.
+Each change will be recorded as a new document in this subcollection. 
+
+## Installation
+
+```bash
+npm install @firecms/entity_history
+# or
+yarn add @firecms/entity_history
+```
+
+## Features
+
+- Adds a "History" tab to entity detail views.
+- Displays a log of changes for each entity.
+- Can be enabled globally or on a per-collection basis.
+- Allows customization of user display in the history log.
+
+## Basic Usage
+
+To use the plugin, import `useEntityHistoryPlugin` and add it to your `FirebaseCMSApp` plugins array.
+
+```tsx
+import React from "react";
+import { FirebaseCMSApp } from "@firecms/core";
+import { useEntityHistoryPlugin } from "@firecms/entity_history";
+
+
+export default function App() {
+
+    // Basic setup with default options
+    const entityHistoryPlugin = useEntityHistoryPlugin();
+
+    return <FirebaseCMSApp
+        name={"My Online Shop"}
+        plugins={[entityHistoryPlugin]}
+        authentication={myAuthenticator}
+        collections={myCollections}
+        firebaseConfig={firebaseConfig}
+    />;
+}
+```
+
+By default, the history feature is not enabled for any collection. You need to enable it explicitly in your collection
+configuration:
+
+```tsx
+import { buildCollection } from "@firecms/core";
+
+const productsCollection = buildCollection({
+    name: "Products",
+    path: "products",
+    properties: {
+        name: {
+            name: "Name",
+            dataType: "string"
+        }
+        // ...other properties
+    },
+    history: true // Enable history for this collection
+});
+```
+
+## Advanced Configuration
+
+You can customize the plugin's behavior by passing props to `useEntityHistoryPlugin`.
+If you are using the user management plugin, you can provide a function to resolve user details from a UID.
+You can also pass your own custom `getUser` function to fetch user details.
+
+```tsx
+import { useEntityHistoryPlugin } from "@firecms/entity_history";
+import { User } from "@firecms/core";
+
+export function App() {
+
+    // ...
+
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
+        authController: authController
+    });
+
+    const entityHistoryPlugin = useEntityHistoryPlugin({
+        // Enable history for all collections by default
+        // This can be overridden by setting `history: false` in a specific collection
+        defaultEnabled: true,
+    
+        // Provide a function to resolve user details from a UID
+        getUser: userManagement.getUser
+    });
+    
+    // ...
+}
+```
+
+## Configuration Options
+
+| Option           | Type                            | Description                                                                                                                                      |
+|------------------|---------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| `defaultEnabled` | `boolean`                       | If `true`, the history view will be enabled for all collections by default. Each collection can override this by setting its `history` property. |
+| `getUser`        | `(uid: string) => User \| null` | Optional function to get the user object (display name, photo, etc.) from a user ID to display in the history log.                               |
+
+## Collection Configuration
+
+To enable or disable history for a specific collection, set the `history` property in the collection configuration:
+
+```tsx
+const sampleCollection = buildCollection({
+    // ...
+    history: true // or false
+});
+```
+
+## Additional Notes
+
+- The plugin relies on callbacks to record entity changes. Ensure that your data persistence logic correctly triggers
+  these callbacks.
+- The `getUser` function is crucial for displaying meaningful user information in the history log. If not provided, only
+  user IDs might be shown.

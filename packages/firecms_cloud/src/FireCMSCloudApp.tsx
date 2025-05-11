@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { FirebaseApp } from "@firebase/app";
 import { BrowserRouter, Route } from "react-router-dom";
 
@@ -7,13 +7,11 @@ import {
     CircularProgressCenter,
     DefaultAppBarProps,
     Drawer,
-    EntityCollection,
     ErrorView,
     FireCMS,
     FireCMSPlugin,
     ModeController,
     ModeControllerProvider,
-    NavigationController,
     NavigationRoutes,
     PermissionsBuilder,
     Scaffold,
@@ -29,7 +27,6 @@ import { buildCollectionInference, useFirestoreCollectionsConfigController } fro
 import {
     CollectionEditorPermissionsBuilder,
     CollectionsConfigController,
-    mergeCollections,
     MissingReferenceWidget,
     PersistedCollection,
     useCollectionEditorPlugin
@@ -457,31 +454,6 @@ function NoAccessError({
     </CenteredView>;
 }
 
-function usePathSuggestions(fireCMSBackend: FireCMSBackend, projectConfig: ProjectConfig, navigationController: NavigationController) {
-
-    const {
-        collections
-    } = navigationController;
-    const existingPaths = (collections ?? []).map(col => col.path.trim().toLowerCase());
-
-    const [rootPathSuggestions, setRootPathSuggestions] = React.useState<string[] | undefined>();
-    useEffect(() => {
-        const googleAccessToken = fireCMSBackend.googleCredential?.accessToken;
-        fireCMSBackend.projectsApi.getRootCollections(projectConfig.projectId, googleAccessToken).then((paths) => {
-            setRootPathSuggestions(paths.filter(p => !existingPaths.includes(p.trim().toLowerCase())));
-        })
-    }, []);
-
-    const getPathSuggestions = useCallback((path?: string) => {
-        if (!path && rootPathSuggestions) {
-            return Promise.resolve(rootPathSuggestions);
-        }
-        return Promise.resolve([]);
-    }, [rootPathSuggestions]);
-
-    return { getPathSuggestions };
-}
-
 function FireCMSAppAuthenticated({
                                      fireCMSUser,
                                      firebaseApp,
@@ -577,26 +549,6 @@ function FireCMSAppAuthenticated({
         firebaseApp
     });
 
-    const navigationController = useBuildNavigationController({
-        basePath,
-        baseCollectionPath,
-        authController,
-        collections: projectConfig.isTrialOver ? [] : appConfig?.collections,
-        views: appConfig?.views,
-        userConfigPersistence,
-        dataSourceDelegate: firestoreDelegate,
-        injectCollections: projectConfig.isTrialOver ? undefined : useCallback(
-            (collections: EntityCollection[]) => mergeCollections(
-                collections,
-                collectionConfigController.collections ?? [],
-                appConfig?.modifyCollection
-            ),
-            [collectionConfigController.collections])
-    });
-
-    const introMode = navigationController.initialised &&
-        (navigationController.collections ?? []).length === 0;
-
     const dataTalkConfig = useBuildDataTalkConfig({
         enabled: includeDataTalk,
         firebaseApp: fireCMSBackend.backendFirebaseApp,
@@ -612,19 +564,14 @@ function FireCMSAppAuthenticated({
         fireCMSBackend,
         onAnalyticsEvent,
         dataTalkSuggestions: dataTalkConfig.rootPromptsSuggestions,
-        introMode: introMode ? (projectConfig.creationType === "new" ? "new_project" : "existing_project") : undefined
+        introMode: projectConfig.creationType === "new" ? "new_project" : "existing_project"
     });
-
-    const { getPathSuggestions } = usePathSuggestions(fireCMSBackend, projectConfig, navigationController);
 
     const collectionEditorPlugin = useCollectionEditorPlugin<PersistedCollection, User>({
         collectionConfigController,
         configPermissions,
         reservedGroups: RESERVED_GROUPS,
-        getPathSuggestions,
-        getUser: (uid) => {
-            return userManagement.users.find(u => u.uid === uid) ?? null;
-        },
+        getUser: userManagement.getUser,
         collectionInference: buildCollectionInference(firebaseApp),
         getData: (path, parentPaths) => getFirestoreDataInPath(firebaseApp, path, parentPaths, 400),
         onAnalyticsEvent,
@@ -632,6 +579,17 @@ function FireCMSAppAuthenticated({
     });
 
     const plugins: FireCMSPlugin<any, any, any>[] = [saasPlugin, exportPlugin, importPlugin, collectionEditorPlugin, dataEnhancementPlugin];
+
+    const navigationController = useBuildNavigationController({
+        basePath,
+        baseCollectionPath,
+        authController,
+        collections: projectConfig.isTrialOver ? [] : appConfig?.collections,
+        views: appConfig?.views,
+        userConfigPersistence,
+        dataSourceDelegate: firestoreDelegate,
+        plugins
+    });
 
     return (
         <FireCMSBackEndProvider {...fireCMSBackend}>

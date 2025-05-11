@@ -92,7 +92,6 @@ export type FireCMSProps<USER extends User> = {
      *
      * You can also define an entity view from the UI.
      */
-
     entityViews?: EntityCustomView[];
 
     /**

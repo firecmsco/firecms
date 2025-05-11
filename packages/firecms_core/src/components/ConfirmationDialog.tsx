@@ -1,15 +1,15 @@
 import React from "react";
 
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, LoadingButton, Typography } from "@firecms/ui";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, LoadingButton } from "@firecms/ui";
 
 export function ConfirmationDialog({
-                                             open,
-                                             onAccept,
-                                             onCancel,
-                                             title,
-                                             loading,
-                                             body
-                                         }: {
+                                       open,
+                                       onAccept,
+                                       onCancel,
+                                       title,
+                                       loading,
+                                       body
+                                   }: {
     open: boolean,
     onAccept: () => void,
     onCancel: () => void,
@@ -38,7 +38,7 @@ export function ConfirmationDialog({
                     type="submit"
                     loading={loading}
                     onClick={onAccept}
-                >
+                    autoFocus>
                     Ok
                 </LoadingButton>
             </DialogActions>

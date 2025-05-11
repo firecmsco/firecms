@@ -55,7 +55,7 @@ export function CollectionTableToolbar({
         <Tooltip title={"Table row size"} side={"right"} sideOffset={4}>
             <Select
                 value={size as string}
-                className="w-16 h-10"
+                className="w-16 ml-2"
                 size={"small"}
                 onValueChange={(v) => onSizeChanged(v as CollectionSize)}
                 renderValue={(v) => <div className={"font-medium"}>{v.toUpperCase()}</div>}

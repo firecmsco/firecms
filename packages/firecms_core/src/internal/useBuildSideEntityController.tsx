@@ -33,7 +33,7 @@ export function getEntityViewWidth(props: EntitySidePanelProps<any>, small: bool
         selectedSecondaryForm
     } = resolvedSelectedEntityView(props.collection?.entityViews, customizationController, props.selectedTab);
 
-    const shouldUseSmallLayout = !props.selectedTab || props.selectedTab === JSON_TAB_VALUE || Boolean(selectedSecondaryForm);
+    const shouldUseSmallLayout = !props.selectedTab || props.selectedTab === JSON_TAB_VALUE || props.selectedTab === "__history" || Boolean(selectedSecondaryForm);
 
     let resolvedWidth: string | undefined;
     if (props.width) {

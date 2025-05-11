@@ -23,6 +23,7 @@ export async function buildEntityPropertiesFromData(
         data.forEach((entry) => {
             if (entry) {
                 Object.entries(entry).forEach(([key, value]) => {
+                    if (key.startsWith("_")) return; // Ignore properties starting with _
                     increaseMapTypeCount(typesCount, key, value, getType);
                     increaseValuesCount(valuesCount, key, value, getType);
                 });
@@ -124,9 +125,11 @@ function increaseTypeCount(
                     mapTypesCount = {};
                 }
                 fieldValue.forEach((value) => {
-                    Object.entries(value).forEach(([key, v]) =>
-                        increaseMapTypeCount(mapTypesCount, key, v, getType)
-                    );
+                    if (value && typeof value === "object" && !Array.isArray(value)) { // Ensure value is an object for Object.entries
+                        Object.entries(value).forEach(([key, v]) =>
+                            increaseMapTypeCount(mapTypesCount, key, v, getType)
+                        );
+                    }
                 });
                 arrayTypesCount[arrayType] = mapTypesCount;
             } else {
@@ -146,6 +149,8 @@ function increaseMapTypeCount(
     fieldValue: any,
     getType: InferenceTypeBuilder
 ) {
+    if (key.startsWith("_")) return; // Ignore properties starting with _
+
     let typesCount: TypesCount = typesCountRecord[key];
     if (!typesCount) {
         typesCount = {};
@@ -165,6 +170,8 @@ function increaseValuesCount(
     fieldValue: any,
     getType: InferenceTypeBuilder
 ) {
+    if (key.startsWith("_")) return; // Ignore properties starting with _
+
     const dataType = getType(fieldValue);
 
     let valuesRecord: {
@@ -188,8 +195,8 @@ function increaseValuesCount(
             valuesRecord.map = mapValuesRecord;
         }
         if (fieldValue)
-            Object.entries(fieldValue).forEach(([key, value]) =>
-                increaseValuesCount(mapValuesRecord as ValuesCountRecord, key, value, getType)
+            Object.entries(fieldValue).forEach(([subKey, value]) =>
+                increaseValuesCount(mapValuesRecord as ValuesCountRecord, subKey, value, getType)
             );
     } else if (dataType === "array") {
         if (Array.isArray(fieldValue)) {
@@ -199,7 +206,7 @@ function increaseValuesCount(
             });
         }
     } else {
-        if (fieldValue) {
+        if (fieldValue !== null && fieldValue !== undefined) {
             valuesRecord.values.push(fieldValue);
             valuesRecord.valuesCount.set(fieldValue, (valuesRecord.valuesCount.get(fieldValue) ?? 0) + 1);
         }
@@ -406,6 +413,7 @@ function formatString(input: string): string {
 }
 
 export function inferTypeFromValue(value: any): DataType {
+    if (value === null || value === undefined) return "string";
     if (typeof value === "string") return "string";
     if (typeof value === "number") return "number";
     if (typeof value === "boolean") return "boolean";

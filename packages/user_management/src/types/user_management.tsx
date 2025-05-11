@@ -44,4 +44,10 @@ export type UserManagement<USER extends User = User> = {
     rolesError?: Error;
     usersError?: Error;
 
+    /**
+     * Function to get a user by uid.
+     * @param uid
+     */
+    getUser: (uid: string) => User | null;
+
 };

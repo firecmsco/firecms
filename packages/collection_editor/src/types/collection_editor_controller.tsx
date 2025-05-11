@@ -41,6 +41,4 @@ export interface CollectionEditorController {
 
     configPermissions: CollectionEditorPermissionsBuilder;
 
-    getPathSuggestions?: (path: string) => Promise<string[]>;
-
 }

@@ -79,6 +79,11 @@ module.exports = {
                     "id": "pro/data_import",
                     className: "pro-sidebar-item"
                 },
+                {
+                    "type": "doc",
+                    "id": "pro/entity_history",
+                    className: "pro-sidebar-item"
+                },
                 "self/custom_storage",
                 "self/controllers",
                 "self/migrating_from_v2_to_v3",

@@ -36,3 +36,5 @@ export * from "./ArrayContainer";
 export * from "./ReferenceWidget";
 export * from "./SearchIconsView";
 export * from "./FieldCaption";
+
+export * from "./EntityPreview";

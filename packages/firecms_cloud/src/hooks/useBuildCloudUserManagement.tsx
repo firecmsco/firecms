@@ -170,6 +170,11 @@ export function useBuildCloudUserManagement({
 
     const isAdmin = loggedInUser?.roles.some(r => r.id === "admin");
 
+    const getUser = useCallback((uid: string): User | null => {
+        if (!users) throw Error("Users not loaded");
+        const mgmtUser = users.find(u => u.uid === uid);
+        return mgmtUser ?? null;
+    }, [userIds]);
 
     return {
         allowDefaultRolesCreation: false,
@@ -183,7 +188,8 @@ export function useBuildCloudUserManagement({
         deleteUser: removeUser,
         deleteRole,
         isAdmin,
-        collectionPermissions
+        collectionPermissions,
+        getUser
     }
 }
 

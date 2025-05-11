@@ -24,6 +24,7 @@
     "packages/data_import",
     "packages/data_export",
     "packages/data_import_export",
+    "packages/entity_history",
     "packages/schema_inference",
     "packages/data_enhancement",
     "packages/user_management",

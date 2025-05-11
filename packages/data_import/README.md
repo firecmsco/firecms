@@ -24,10 +24,12 @@ import React from "react";
 import { FirebaseCMSApp } from "@firecms/core";
 import { useImportPlugin } from "@firecms/data_import";
 
-// Basic setup with default options
-const importPlugin = useImportPlugin();
 
 export default function App() {
+
+    // Basic setup with default options
+    const importPlugin = useImportPlugin();
+
     return <FirebaseCMSApp
         name={"My Online Shop"}
         plugins={[importPlugin]}

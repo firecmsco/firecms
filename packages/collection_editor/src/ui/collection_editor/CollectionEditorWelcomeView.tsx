@@ -37,24 +37,17 @@ export function CollectionEditorWelcomeView({
         }
     }, [existingCollectionPaths, path, pathSuggestions]);
 
-    // const {
-    //     values,
-    //     setFieldValue,
-    //     setValues,
-    //     handleChange,
-    //     touched,
-    //     errors,
-    //     setFieldTouched,
-    //     isSubmitting,
-    //     submitCount
-    // } = useFormex<EntityCollection>();
-
     const {
         values,
         setFieldValue,
         setValues,
         submitCount
     } = useFormex<EntityCollection>();
+
+    const noSuggestions = !loadingPathSuggestions && (filteredPathSuggestions ?? [])?.length === 0;
+    if (!noSuggestions) {
+        return null;
+    }
 
     return (
         <div className={"overflow-auto my-auto"}>
@@ -96,12 +89,6 @@ export function CollectionEditorWelcomeView({
                                 {suggestion}
                             </Chip>
                         ))}
-
-                        {!loadingPathSuggestions && (filteredPathSuggestions ?? [])?.length === 0 &&
-                            <Typography variant={"caption"}>
-                                No suggestions
-                            </Typography>
-                        }
 
                     </div>
 
@@ -202,9 +189,6 @@ export function TemplateButton({
                     <Typography variant={"subtitle1"}>
                         {title}
                     </Typography>
-                    {/*<Typography>*/}
-                    {/*    {subtitle}*/}
-                    {/*</Typography>*/}
 
                 </div>
             </Card>

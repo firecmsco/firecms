@@ -27,6 +27,7 @@
       "@firecms/data_enhancement": ["../../packages/data_enhancement/src"],
       "@firecms/collection_editor": ["../../packages/collection_editor/src"],
       "@firecms/collection_editor_firebase": ["../../packages/collection_editor_firebase/src"],
+      "@firecms/entity_history": ["../../packages/entity_history/src"],
       "@firecms/data_import": ["../../packages/data_import/src"],
       "@firecms/data_export": ["../../packages/data_export/src"],
       "@firecms/user_management": ["../../packages/user_management/src"]

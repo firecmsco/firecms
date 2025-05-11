@@ -20,10 +20,17 @@ import { useLocation, useNavigate } from "react-router-dom";
 export function EntitySidePanel(props: EntitySidePanelProps) {
 
     const {
+        allowFullScreen = true,
+        path,
+        entityId,
+        formProps,
+    } = props;
+
+    const {
         blocked,
         setBlocked,
         setBlockedNavigationMessage,
-        close
+        close,
     } = useSideDialogContext();
 
     const navigate = useNavigate();
@@ -43,8 +50,8 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     }
 
     const onUpdate = (params: OnUpdateParams) => {
-        if (props.onUpdate) {
-            props.onUpdate(params);
+        if (onUpdate) {
+            onUpdate(params);
         }
         if (params.status !== "existing") {
             sideEntityController.replace({
@@ -64,21 +71,21 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     }
 
     const parentCollectionIds = useMemo(() => {
-        return navigationController.getParentCollectionIds(props.path);
-    }, [navigationController, props.path]);
+        return navigationController.getParentCollectionIds(path);
+    }, [navigationController, path]);
 
     const collection = useMemo(() => {
         if (props.collection) {
             return props.collection;
         }
 
-        const registryCollection = navigationController.getCollection(props.path);
+        const registryCollection = navigationController.getCollection(path);
         if (registryCollection) {
             return registryCollection;
         }
 
-        console.error("ERROR: No collection found in path `", props.path, "`. Entity id: ", props.entityId);
-        throw Error("ERROR: No collection found in path `" + props.path + "`. Make sure you have defined a collection for this path in the root navigation.");
+        console.error("ERROR: No collection found in path `", path, "`. Entity id: ", entityId);
+        throw Error("ERROR: No collection found in path `" + path + "`. Make sure you have defined a collection for this path in the root navigation.");
     }, [navigationController, props.collection]);
 
     useEffect(() => {
@@ -126,16 +133,16 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                             onClick={onClose}>
                             <CloseIcon size={"small"}/>
                         </IconButton>
-                        <IconButton
+                        {allowFullScreen && <IconButton
                             className="self-center"
                             onClick={() => {
-                                if (props.entityId)
+                                if (entityId)
                                     navigate(location.pathname);
                                 else
                                     navigate(location.pathname + "#new");
                             }}>
                             <OpenInFullIcon size={"small"}/>
-                        </IconButton>
+                        </IconButton>}
                     </>}
                     onTabChange={({
                                       path,
@@ -151,7 +158,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                             collection,
                         });
                     }}
-                    formProps={props.formProps}
+                    formProps={formProps}
                 />
             </ErrorBoundary>
 

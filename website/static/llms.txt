@@ -3455,7 +3455,6 @@ The `collectionEditor` object returned by the `useCollectionEditorPlugin` hook i
 - **`createCollection`**: Function to initiate the creation of a new collection.
 - **`reservedGroups`**: Array of group names that are reserved and cannot be used in collection names.
 - **`extraView`**: Custom view added to the FireCMS navigation for collection management.
-- **`getPathSuggestions`**: Function to provide path suggestions during collection creation.
 - **`defineRolesFor`**: Function to define roles for a given user, typically integrated into your auth controller.
 - **`authenticator`**: Optional. Authenticator callback built from the current configuration of the collection editor.
   It will only allow access to users with the required roles.

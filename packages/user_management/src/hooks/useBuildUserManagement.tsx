@@ -186,6 +186,22 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
             // @ts-ignore
             data.created_on = new Date();
         }
+        // delete the previous user entry if it exists and the uid has changed
+        if (userExists && userExists.uid !== user.uid) {
+            const entity: Entity<any> = {
+                values: {},
+                path: usersPath,
+                id: userExists.uid
+            }
+            await dataSourceDelegate.deleteEntity({ entity })
+                .then(() => {
+                    console.debug("Deleted previous user", userExists);
+                })
+                .catch(e => {
+                    console.error("Error deleting user", e);
+                });
+
+        }
 
         return dataSourceDelegate.saveEntity({
             status: "existing",
@@ -259,7 +275,12 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
     }, [roles, usersWithRoleIds]);
 
     const authenticator: Authenticator<USER> = useCallback(({ user }) => {
+
         if (loading) {
+            return false;
+        }
+        if (user === null) {
+            console.warn("User is null, returning");
             return false;
         }
 
@@ -270,6 +291,18 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
 
         const mgmtUser = users.find(u => u.email?.toLowerCase() === user?.email?.toLowerCase());
         if (mgmtUser) {
+            // check if the uid is updated in the user management system
+            if (mgmtUser.uid !== user.uid) {
+                console.warn("User uid has changed, updating user in user management system");
+                saveUser({
+                    ...mgmtUser,
+                    uid: user.uid
+                }).then(() => {
+                    console.debug("User updated in user management system", mgmtUser);
+                }).catch(e => {
+                    console.error("Error updating user in user management system", e);
+                });
+            }
             console.debug("User found in user management system", mgmtUser);
             return true;
         }
@@ -286,6 +319,13 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
         authController.setUserRoles?.(userRoles ?? []);
     }, [userRoleIds]);
 
+    const getUser = useCallback((uid: string): USER | null => {
+        if (!users) return null;
+        const user = users.find(u => u.uid === uid);
+        return user ?? null;
+    }, [users]);
+
+    console.log("users", users);
     return {
         loading,
         roles,
@@ -305,6 +345,7 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
         ...authController,
         initialLoading: authController.initialLoading || loading,
         userRoles: userRoles,
+        getUser,
         user: authController.user ? {
             ...authController.user,
             roles: userRoles

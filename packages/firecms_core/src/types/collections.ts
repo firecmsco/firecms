@@ -337,6 +337,12 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * If set to true, a tab including the JSON representation of the entity will be included.
      */
     includeJsonView?: boolean;
+
+    /**
+     * If set to true, changes to the entity will be saved in a subcollection.
+     * This prop has no effect if the history plugin is not enabled
+     */
+    history?: boolean;
 }
 
 /**
@@ -520,6 +526,11 @@ export type EntityCustomView<M extends Record<string, any> = any> =
         name: string;
 
         /**
+         * Render this custom view in the tab of the entity view, instead of the name
+         */
+        tabComponent?: React.ReactNode;
+
+        /**
          * If set to true, the actions of the entity (save, discard,delete) will be
          * included in the view. By default the actions are located in the right or bottom,
          * based on the screen size. You can force the actions to be located at the bottom
@@ -531,6 +542,11 @@ export type EntityCustomView<M extends Record<string, any> = any> =
          * Builder for rendering the custom view
          */
         Builder?: React.ComponentType<EntityCustomViewParams<M>>;
+
+        /**
+         * Position of this tab in the entity view. Defaults to `end`.
+         */
+        position?: "start" | "end";
     };
 
 /**

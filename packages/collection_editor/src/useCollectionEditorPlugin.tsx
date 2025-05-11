@@ -41,8 +41,6 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
         icon: React.ReactNode
     };
 
-    getPathSuggestions?: (path?: string) => Promise<string[]>;
-
     collectionInference?: CollectionInference;
 
     getData?: (path: string, parentPaths: string[]) => Promise<object[]>;
@@ -72,7 +70,6 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
      configPermissions,
      reservedGroups,
      extraView,
-     getPathSuggestions,
      getUser,
      collectionInference,
      getData,
@@ -91,7 +88,6 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
                 collectionInference,
                 reservedGroups,
                 extraView,
-                getPathSuggestions,
                 getUser,
                 getData,
                 onAnalyticsEvent,

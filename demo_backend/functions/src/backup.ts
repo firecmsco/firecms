@@ -8,7 +8,7 @@ const firestore = require("@google-cloud/firestore");
  * gcloud firestore export gs://firecms_firestore_backups --project firecms-demo-27150
  * ```
  */
-const bucket = "gs://firecms_firestore_backups/2025-03-11T20:51:40_46328";
+const bucket = "gs://firecms_firestore_backups/2025-05-12T17:58:18_30881";
 
 // export function eraseDatabase() {
 //     const firebase_tools = require("firebase-tools");

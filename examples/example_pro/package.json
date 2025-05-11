@@ -11,6 +11,7 @@
     "@firecms/data_enhancement": "^3.0.0-canary.235",
     "@firecms/data_export": "^3.0.0-canary.235",
     "@firecms/data_import": "^3.0.0-canary.235",
+    "@firecms/entity_history": "^3.0.0-canary.235",
     "@firecms/datatalk": "^3.0.0-canary.235",
     "@firecms/editor": "^3.0.0-canary.235",
     "@firecms/formex": "^3.0.0-canary.235",

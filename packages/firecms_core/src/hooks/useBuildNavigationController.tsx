@@ -9,6 +9,7 @@ import {
     EntityCollection,
     EntityCollectionsBuilder,
     EntityReference,
+    FireCMSPlugin,
     NavigationBlocker,
     NavigationController,
     PermissionsBuilder,
@@ -43,15 +44,7 @@ export type BuildNavigationContextProps<EC extends EntityCollection, USER extend
     viewsOrder?: string[];
     userConfigPersistence?: UserConfigurationPersistence;
     dataSourceDelegate: DataSourceDelegate;
-    /**
-     * Use this method to inject collections to the CMS.
-     * You receive the current collections as a parameter, and you can return
-     * a new list of collections.
-     * @see {@link joinCollectionLists}
-     * @param collections
-     */
-    injectCollections?: (collections: EntityCollection[]) => EntityCollection[];
-
+    plugins?: FireCMSPlugin[];
     /**
      * If true, the navigation logic will not be updated until this flag is false
      */
@@ -68,9 +61,9 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         views: viewsProp,
         adminViews: adminViewsProp,
         viewsOrder,
+        plugins,
         userConfigPersistence,
         dataSourceDelegate,
-        injectCollections,
         disabled
     } = props;
 
@@ -203,7 +196,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         try {
 
             const [resolvedCollections = [], resolvedViews, resolvedAdminViews = []] = await Promise.all([
-                    resolveCollections(collectionsProp, collectionPermissions, authController, dataSourceDelegate, injectCollections),
+                    resolveCollections(collectionsProp, collectionPermissions, authController, dataSourceDelegate, plugins),
                     resolveCMSViews(viewsProp, authController, dataSourceDelegate),
                     resolveCMSViews(adminViewsProp, authController, dataSourceDelegate)
                 ]
@@ -250,8 +243,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         disabled,
         viewsProp,
         adminViewsProp,
-        computeTopNavigation,
-        injectCollections
+        computeTopNavigation
     ]);
 
     useEffect(() => {
@@ -447,11 +439,24 @@ function filterOutNotAllowedCollections(resolvedCollections: EntityCollection[],
         });
 }
 
+function applyPluginModifyCollection(resolvedCollections: EntityCollection[], modifyCollection: (collection: EntityCollection) => EntityCollection) {
+    return resolvedCollections.map((collection: EntityCollection): EntityCollection => {
+        const modifiedCollection = modifyCollection(collection);
+        if (modifiedCollection.subcollections) {
+            return {
+                ...modifiedCollection,
+                subcollections: applyPluginModifyCollection(modifiedCollection.subcollections, modifyCollection)
+            } satisfies EntityCollection;
+        }
+        return modifiedCollection;
+    });
+}
+
 async function resolveCollections(collections: undefined | EntityCollection[] | EntityCollectionsBuilder<any>,
                                   collectionPermissions: PermissionsBuilder | undefined,
                                   authController: AuthController,
                                   dataSource: DataSourceDelegate,
-                                  injectCollections?: (collections: EntityCollection[]) => EntityCollection[]): Promise<EntityCollection[]> {
+                                  plugins: FireCMSPlugin[] | undefined): Promise<EntityCollection[]> {
     let resolvedCollections: EntityCollection[] = [];
     if (typeof collections === "function") {
         resolvedCollections = await collections({
@@ -463,8 +468,16 @@ async function resolveCollections(collections: undefined | EntityCollection[] | 
         resolvedCollections = collections;
     }
 
-    if (injectCollections) {
-        resolvedCollections = injectCollections(resolvedCollections ?? []);
+    if (plugins) {
+        for (const plugin of plugins) {
+            if (plugin.collection?.modifyCollection) {
+                resolvedCollections = applyPluginModifyCollection(resolvedCollections, plugin.collection.modifyCollection);
+            }
+
+            if (plugin.collection?.injectCollections) {
+                resolvedCollections = plugin.collection.injectCollections(resolvedCollections ?? []);
+            }
+        }
     }
 
     resolvedCollections = applyPermissionsFunctionIfEmpty(resolvedCollections, collectionPermissions);

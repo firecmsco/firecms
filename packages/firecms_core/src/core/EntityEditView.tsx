@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Entity, EntityCollection, EntityStatus, FireCMSPlugin, FormContext, User } from "../types";
+import { Entity, EntityCollection, EntityCustomView, EntityStatus, FireCMSPlugin, FormContext, User } from "../types";
 
 import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary } from "../components";
 import {
@@ -182,10 +182,12 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const subcollections = (collection.subcollections ?? []).filter(c => !c.hideFromNavigation);
     const subcollectionsCount = subcollections?.length ?? 0;
-    const customViews = collection.entityViews;
+    const customViews = collection.entityViews ?? [];
     const customViewsCount = customViews?.length ?? 0;
     const includeJsonView = collection.includeJsonView === undefined ? true : collection.includeJsonView;
     const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0 || includeJsonView;
+
+    const plugins = customizationController.plugins;
 
     const {
         resolvedEntityViews,
@@ -384,14 +386,24 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         </Tab>
     );
 
-    const customViewTabs = resolvedEntityViews.map((view) =>
-        <Tab
-            className="text-sm min-w-[120px]"
-            value={view.key}
-            key={`entity_detail_collection_tab_${view.name}`}>
-            {view.name}
-        </Tab>
-    );
+    const customViewTabsStart = resolvedEntityViews.filter(view => view.position === "start")
+        .map((view) =>
+            <Tab
+                className={!view.tabComponent ? "text-sm min-w-[120px]" : undefined}
+                value={view.key}
+                key={`entity_detail_collection_tab_${view.name}`}>
+                {view.tabComponent ?? view.name}
+            </Tab>
+        );
+    const customViewTabsEnd = resolvedEntityViews.filter(view => !view.position || view.position === "end")
+        .map((view) =>
+            <Tab
+                className={!view.tabComponent ? "text-sm min-w-[120px]" : undefined}
+                value={view.key}
+                key={`entity_detail_collection_tab_${view.name}`}>
+                {view.tabComponent ?? view.name}
+            </Tab>
+        );
 
     const shouldShowTopBar = Boolean(barActions) || hasAdditionalViews;
 
@@ -417,10 +429,11 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 {includeJsonView && <Tab
                     disabled={!hasAdditionalViews}
                     value={JSON_TAB_VALUE}
-                    innerClassName={"block"}
                     className={"text-sm"}>
                     <CodeIcon size={"small"}/>
                 </Tab>}
+
+                {customViewTabsStart}
 
                 <Tab
                     disabled={!hasAdditionalViews}
@@ -430,7 +443,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 </Tab>
 
 
-                {customViewTabs}
+                {customViewTabsEnd}
 
                 {subcollectionTabs}
             </Tabs>}
@@ -452,8 +465,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         {subCollectionsViews}
 
     </div>;
-
-    const plugins = customizationController.plugins;
 
     if (plugins) {
         plugins.forEach((plugin: FireCMSPlugin) => {

@@ -141,7 +141,7 @@ function ReferencePreviewExisting<M extends Record<string, any> = any>({
         );
     }
     return <EntityPreview size={size}
-                          previewProperties={previewProperties}
+                          previewKeys={previewProperties}
                           disabled={disabled}
                           entity={usedEntity}
                           collection={collection}

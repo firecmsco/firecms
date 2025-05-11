@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
 import { unslugify, useAuthController, useNavigationController } from "@firecms/core";
-import { AddIcon, Chip, CircularProgress, Collapse, Typography, } from "@firecms/ui";
+import { AddIcon, Chip, CircularProgress, Collapse, StorageIcon, Typography, } from "@firecms/ui";
 import { useCollectionEditorController } from "@firecms/collection_editor";
 import { AutoSetUpCollectionsButton } from "./AutoSetUpCollectionsButton";
 import { useFireCMSBackend, useProjectConfig } from "../hooks";
 
-export function RootCollectionSuggestions({ introMode, onAnalyticsEvent }: {
-    introMode?: "new_project" | "existing_project" ,
+export function RootCollectionSuggestions({
+                                              introMode,
+                                              onAnalyticsEvent
+                                          }: {
+    introMode?: "new_project" | "existing_project",
     onAnalyticsEvent?: (event: string, data?: object) => void;
 }) {
 
@@ -23,19 +26,20 @@ export function RootCollectionSuggestions({ introMode, onAnalyticsEvent }: {
         }).createCollections
         : true;
 
-    const [rootPathSuggestions, setRootPathSuggestions] = React.useState<string[] | undefined>(undefined);
-    useEffect(() => {
-        collectionEditorController.getPathSuggestions?.("").then((result) => {
-            setRootPathSuggestions(result);
-        });
-    }, [collectionEditorController.getPathSuggestions]);
+    const existingPaths = (navigationController.collections ?? []).map(c => c.path);
+    const [rootPathSuggestions, setRootPathSuggestions] = React.useState<string[] | undefined>();
+    const filteredRootPathSuggestions = (rootPathSuggestions ?? []).filter((path) => !existingPaths.includes(path));
 
-    if (!collectionEditorController.getPathSuggestions) {
+    useEffect(() => {
+        const googleAccessToken = fireCMSBackend.googleCredential?.accessToken;
+        fireCMSBackend.projectsApi.getRootCollections(projectConfig.projectId, googleAccessToken).then((paths) => {
+            setRootPathSuggestions(paths.filter(p => !existingPaths.includes(p.trim().toLowerCase())));
+        });
+    }, []);
+
+    if (!rootPathSuggestions || !navigationController.initialised) {
         return null;
     }
-
-    const existingPaths = (navigationController.collections ?? []).map(c => c.path);
-    const filteredRootPathSuggestions = (rootPathSuggestions ?? []).filter((path) => !existingPaths.includes(path));
 
     const showSuggestions = filteredRootPathSuggestions.length > 0;
     const forceShowSuggestions = introMode === "existing_project";
@@ -43,15 +47,11 @@ export function RootCollectionSuggestions({ introMode, onAnalyticsEvent }: {
         in={forceShowSuggestions || showSuggestions}>
 
         <div
-            className={"flex flex-col gap-1 p-2 my-4"}>
+            className={"flex flex-col gap-2 p-2 my-4"}>
 
-            {!introMode && <Typography variant={"body2"} color={"secondary"}>
-                Create a collection <b>automatically</b> from your data:
-            </Typography>}
-
-            {introMode === "existing_project" && <Typography>
-                You will see your <b>database collections</b> here, a few seconds after project creation
-            </Typography>}
+            <Typography variant={"body2"} color={"secondary"} className={"flex items-center gap-2"}>
+                <StorageIcon size="smallest"/> Add your <b>database collections</b> to FireCMS
+            </Typography>
 
             <div
                 className={"flex flex-row gap-1 overflow-scroll no-scrollbar "}>

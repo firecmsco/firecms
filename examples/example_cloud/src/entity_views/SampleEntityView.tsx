@@ -1,14 +1,11 @@
 import React from "react";
-import { Button, Entity, EntityValues, useSnackbarController } from "@firecms/cloud";
+import { Button, EntityCustomViewParams, useSnackbarController } from "@firecms/cloud";
 import { Product } from "../types";
 
 export function SampleEntityView({
-                                       entity,
-                                       modifiedValues
-                                   }: {
-    entity?: Entity<Product>;
-    modifiedValues?: EntityValues<Product>;
-}) {
+                                     entity,
+                                     modifiedValues
+                                 }: EntityCustomViewParams<Product>) {
 
     const snackbarController = useSnackbarController();
 

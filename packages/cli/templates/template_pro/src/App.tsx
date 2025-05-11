@@ -31,11 +31,7 @@ import {
 import { firebaseConfig } from "./firebase_config";
 import { productsCollection } from "./collections/products";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
-import {
-    useBuildUserManagement,
-    userManagementAdminViews,
-    useUserManagementPlugin
-} from "@firecms/user_management";
+import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
 import { useImportPlugin } from "@firecms/data_import";
 import { useExportPlugin } from "@firecms/data_export";
 import { ExampleCMSView } from "./views/ExampleCMSView";
@@ -112,7 +108,6 @@ export function App() {
         firebaseApp
     });
 
-
     /**
      * Controller for managing authentication
      */
@@ -149,16 +144,6 @@ export function App() {
         storageSource
     });
 
-    const navigationController = useBuildNavigationController({
-        disabled: authLoading || collectionConfigController.loading,
-        collections: collectionsBuilder,
-        collectionPermissions: userManagement.collectionPermissions,
-        views,
-        adminViews: userManagementAdminViews,
-        authController,
-        dataSourceDelegate: firestoreDelegate
-    });
-
     /**
      * Data enhancement plugin
      */
@@ -185,6 +170,25 @@ export function App() {
         collectionConfigController
     });
 
+    const plugins = [
+        dataEnhancementPlugin,
+        importPlugin,
+        exportPlugin,
+        userManagementPlugin,
+        collectionEditorPlugin
+    ];
+
+    const navigationController = useBuildNavigationController({
+        disabled: authLoading || collectionConfigController.loading,
+        collections: collectionsBuilder,
+        collectionPermissions: userManagement.collectionPermissions,
+        views,
+        adminViews: userManagementAdminViews,
+        authController,
+        dataSourceDelegate: firestoreDelegate,
+        plugins
+    });
+
     if (firebaseConfigLoading || !firebaseApp) {
         return <CircularProgressCenter/>;
     }
@@ -192,7 +196,6 @@ export function App() {
     if (configError) {
         return <>{configError}</>;
     }
-
 
     return (
         <SnackbarProvider>
@@ -205,13 +208,7 @@ export function App() {
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
-                    plugins={[
-                        dataEnhancementPlugin,
-                        importPlugin,
-                        exportPlugin,
-                        userManagementPlugin,
-                        collectionEditorPlugin
-                    ]}
+                    plugins={plugins}
                 >
                     {({
                           context,

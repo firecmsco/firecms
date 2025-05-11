@@ -1,6 +1,6 @@
-import React from "react";
-import { FireCMSPlugin, useNavigationController } from "@firecms/core";
-import { CollectionsConfigController } from "@firecms/collection_editor";
+import React, { useCallback } from "react";
+import { EntityCollection, FireCMSPlugin, useNavigationController } from "@firecms/core";
+import { CollectionsConfigController, mergeCollections } from "@firecms/collection_editor";
 import { Typography } from "@firecms/ui";
 import { ProjectConfig } from "./useBuildProjectConfig";
 import { TextSearchInfoDialog } from "../components/subscriptions/TextSearchInfoDialog";
@@ -29,18 +29,16 @@ export function useSaasPlugin({
 
     const hasOwnTextSearchImplementation = Boolean(appConfig?.textSearchControllerBuilder);
 
-    const additionalChildrenStart = <>
-        {introMode ? <IntroWidget
-            fireCMSBackend={fireCMSBackend}
-            onAnalyticsEvent={onAnalyticsEvent}
-            introMode={introMode}
-            projectConfig={projectConfig}/> : undefined}
-    </>;
+    const additionalChildrenStart = <IntroWidget
+        fireCMSBackend={fireCMSBackend}
+        onAnalyticsEvent={onAnalyticsEvent}
+        introMode={introMode}
+        projectConfig={projectConfig}/>;
 
     const additionalChildrenEnd = <>
-        {!introMode && <DataTalkSuggestions
+        <DataTalkSuggestions
             suggestions={dataTalkSuggestions}
-            onAnalyticsEvent={onAnalyticsEvent}/>}
+            onAnalyticsEvent={onAnalyticsEvent}/>
         <RootCollectionSuggestions introMode={introMode}
                                    onAnalyticsEvent={onAnalyticsEvent}
         />
@@ -51,6 +49,15 @@ export function useSaasPlugin({
         homePage: {
             additionalChildrenStart,
             additionalChildrenEnd,
+        },
+        collection: {
+            injectCollections: projectConfig.isTrialOver ? undefined : useCallback(
+                (collections: EntityCollection[]) => mergeCollections(
+                    collections,
+                    collectionConfigController.collections ?? [],
+                    appConfig?.modifyCollection
+                ),
+                [collectionConfigController.collections])
         },
         collectionView: {
 
@@ -114,20 +121,26 @@ export function IntroWidget({
     onAnalyticsEvent?: (event: string, data?: object) => void;
 }) {
 
-    const {
-        projectsApi
-    } = fireCMSBackend;
-
     const navigation = useNavigationController();
     if (!navigation.topLevelNavigation)
         throw Error("Navigation not ready in FireCMSHomePage");
+
+    if (!navigation.initialised) {
+        return null;
+    }
+    const hasCollections = navigation.initialised &&
+        (navigation.collections ?? []).length > 0;
+
+    if (hasCollections) {
+        return null;
+    }
 
     return (
         <div className={"mt-8 flex flex-col p-2"}>
             <Typography variant={"h4"} className="mb-4">Welcome</Typography>
             <Typography paragraph={true}>Your admin panel is ready ✌️</Typography>
 
-            {introMode === "existing_project" && <>
+            {hasCollections && introMode === "existing_project" && <>
                 <Typography paragraph={true} className={"mt-4"}>
                     FireCMS Cloud is able to automatically set up collections for you, using the data you have in your
                     database and AI. This might take a few minutes, but it will save you a lot of time.

@@ -7,6 +7,7 @@ import {
     getEntityImagePreviewPropertyKey,
     getEntityPreviewKeys,
     getEntityTitlePropertyKey,
+    getPropertyInPath,
     getValueInPath,
     IconForView,
     resolveCollection
@@ -26,11 +27,13 @@ export type EntityPreviewProps = {
     actions?: React.ReactNode,
     collection?: EntityCollection,
     hover?: boolean;
-    previewProperties?: string[],
+    previewKeys?: string[],
     disabled?: boolean,
     entity: Entity<any>,
     includeId?: boolean,
+    includeTitle?: boolean,
     includeEntityLink?: boolean,
+    includeImage?: boolean,
     onClick?: (e: React.SyntheticEvent) => void;
 };
 
@@ -43,12 +46,14 @@ export function EntityPreview({
                                   disabled,
                                   hover,
                                   collection: collectionProp,
-                                  previewProperties,
+                                  previewKeys,
                                   onClick,
                                   size,
                                   includeId = true,
+                                  includeTitle = true,
                                   includeEntityLink = true,
-                                  entity
+                                  includeImage = true,
+                                  entity,
                               }: EntityPreviewProps) {
 
     const authController = useAuthController();
@@ -72,11 +77,11 @@ export function EntityPreview({
         authController
     }), [collection]);
 
-    const listProperties = useMemo(() => getEntityPreviewKeys(authController, resolvedCollection, customizationController.propertyConfigs, previewProperties, size === "medium" || size === "large" ? 3 : 1),
-        [previewProperties, resolvedCollection, size]);
+    const listProperties = useMemo(() => previewKeys ?? getEntityPreviewKeys(authController, resolvedCollection, customizationController.propertyConfigs, previewKeys, size === "medium" || size === "large" ? 3 : 1),
+        [previewKeys, resolvedCollection, size]);
 
-    const titleProperty = getEntityTitlePropertyKey(resolvedCollection, customizationController.propertyConfigs);
-    const imagePropertyKey = getEntityImagePreviewPropertyKey(resolvedCollection);
+    const titleProperty = includeTitle ? getEntityTitlePropertyKey(resolvedCollection, customizationController.propertyConfigs) : undefined;
+    const imagePropertyKey = includeImage ? getEntityImagePreviewPropertyKey(resolvedCollection) : undefined;
     const imageProperty = imagePropertyKey ? resolvedCollection.properties[imagePropertyKey] : undefined;
     const usedImageProperty = imageProperty && "of" in imageProperty ? imageProperty.of : imageProperty;
     const restProperties = listProperties.filter(p => p !== titleProperty && p !== imagePropertyKey);
@@ -103,9 +108,7 @@ export function EntityPreview({
         </div>
 
 
-        <div className={"flex flex-col grow-1 w-full m-1 shrink-1"} style={{
-            "maxWidth": "calc(100% - 96px)"
-        }}>
+        <div className={"flex flex-col grow w-full m-1 shrink min-w-0"}>
 
             {size !== "small" && includeId && (
                 entity
@@ -135,9 +138,10 @@ export function EntityPreview({
             )}
 
             {restProperties && restProperties.map((key) => {
-                const childProperty = resolvedCollection.properties[key as string];
+                const childProperty = getPropertyInPath(resolvedCollection.properties, key);
                 if (!childProperty) return null;
 
+                const valueInPath = getValueInPath(entity.values, key);
                 return (
                     <div key={"ref_prev_" + key}
                          className={cls("truncate", restProperties.length > 1 ? "my-0.5" : "my-0")}>
@@ -145,7 +149,7 @@ export function EntityPreview({
                             entity
                                 ? <PropertyPreview
                                     propertyKey={key as string}
-                                    value={getValueInPath(entity.values, key)}
+                                    value={valueInPath}
                                     property={childProperty as ResolvedProperty}
                                     size={"small"}/>
                                 : <SkeletonPropertyComponent
@@ -162,7 +166,7 @@ export function EntityPreview({
             <Tooltip title={`See details for ${entity.id}`} className={"shrink-0"}>
                 <IconButton
                     color={"inherit"}
-                    size={"medium"}
+                    size={"small"}
                     className={size !== "small" ? "self-start" : ""}
                     onClick={(e) => {
                         e.stopPropagation();
@@ -177,7 +181,7 @@ export function EntityPreview({
                             updateUrl: true
                         });
                     }}>
-                    <KeyboardTabIcon size={"medium"}/>
+                    <KeyboardTabIcon size={"small"}/>
                 </IconButton>
             </Tooltip>}
 

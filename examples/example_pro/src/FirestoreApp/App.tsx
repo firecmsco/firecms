@@ -48,7 +48,7 @@ import { firebaseConfig, secondaryFirebaseConfig } from "../firebase_config";
 import { ExampleCMSView } from "./views/ExampleCMSView";
 import { testCollection } from "./collections/test_collection";
 import { usersCollection } from "./collections/users_collection";
-import { localeCollectionGroup, productsCollection, productsCollection2 } from "./collections/products_collection";
+import { localeCollectionGroup, productsCollection } from "./collections/products_collection";
 import { blogCollection } from "./collections/blog_collection";
 import { showcaseCollection } from "./collections/showcase_collection";
 
@@ -65,6 +65,7 @@ import { useImportPlugin } from "@firecms/data_import";
 import { DemoImportAction } from "./DemoImportAction";
 import { algoliaSearchControllerBuilder } from "./text_search";
 import ClientUIComponentsShowcase from "./views/ClientUIComponentsShowcase";
+import { useEntityHistoryPlugin } from "@firecms/entity_history";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
 
@@ -308,12 +309,18 @@ export function App() {
     const importPlugin = useImportPlugin();
     const exportPlugin = useExportPlugin();
 
+    const entityHistoryPlugin = useEntityHistoryPlugin({
+        defaultEnabled: true,
+        getUser: userManagement.getUser
+    });
+
     const demoPlugin = useMemo(() => ({
         key: "demo",
         collectionView: {
             CollectionActions: [DemoImportAction]
         }
     }), []);
+
     /**
      * Check if the user is allowed to access the main view
      */
@@ -330,10 +337,20 @@ export function App() {
         storageSource
     });
 
+    const plugins = [
+        userManagementPlugin,
+        dataEnhancementPlugin,
+        exportPlugin,
+        entityHistoryPlugin,
+        demoPlugin,
+        collectionEditorPlugin
+    ];
+
     const navigationController = useBuildNavigationController({
         disabled: authLoading || collectionConfigController.loading,
         // basePath: "cms",
         collections,
+        plugins,
         // collectionPermissions: userManagement.collectionPermissions,
         views,
         adminViews: userManagementAdminViews,
@@ -364,14 +381,7 @@ export function App() {
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
-
-                    plugins={[
-                        userManagementPlugin,
-                        dataEnhancementPlugin,
-                        exportPlugin,
-                        demoPlugin,
-                        collectionEditorPlugin
-                    ]}
+                    plugins={plugins}
                     onAnalyticsEvent={onAnalyticsEvent}
                     propertyConfigs={propertyConfigs}
                 >

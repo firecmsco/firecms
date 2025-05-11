@@ -49,8 +49,6 @@ export interface ConfigControllerProviderProps {
         icon: React.ReactNode
     };
 
-    getPathSuggestions?: (path?: string) => Promise<string[]>;
-
     getUser?: (uid: string) => User | null
 
     getData?: (path: string, parentPaths: string[]) => Promise<object[]>;
@@ -67,7 +65,6 @@ export const ConfigControllerProvider = React.memo(
                                           reservedGroups,
                                           collectionInference,
                                           extraView,
-                                          getPathSuggestions,
                                           getUser,
                                           getData,
                                           onAnalyticsEvent,
@@ -230,7 +227,6 @@ export const ConfigControllerProvider = React.memo(
                         createCollection,
                         editProperty,
                         configPermissions: configPermissions ?? defaultConfigPermissions,
-                        getPathSuggestions,
                     }}>
 
                     {children}
@@ -244,7 +240,6 @@ export const ConfigControllerProvider = React.memo(
                         getData={getData}
                         reservedGroups={reservedGroups}
                         extraView={extraView}
-                        pathSuggestions={getPathSuggestions}
                         getUser={getUser}
                         handleClose={(collection) => {
                             if (currentDialog?.redirect) {

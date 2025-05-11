@@ -57,8 +57,8 @@ export const Icon = React.forwardRef<HTMLSpanElement, IconProps & { iconKey: str
                 ...style
             }}
             className={
-                cls("material-icons",
-                    "block",
+                cls("!block",
+                    "material-icons",
                     color ? colorClassesMapping[color] : "",
                     "select-none",
                     className)}
