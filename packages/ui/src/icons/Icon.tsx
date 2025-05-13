@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { cls } from "../util";
-import "@material-design-icons/font/filled.css";
 
 export type IconColor = "inherit" | "primary" | "secondary" | "disabled" | "error" | "success" | "warning";
 export type IconProps = {
@@ -54,11 +53,11 @@ export const Icon = React.forwardRef<HTMLSpanElement, IconProps & { iconKey: str
             ref={ref} // Attach the ref to the span
             style={{
                 fontSize: `${sizeInPx}px`,
+                verticalAlign: "middle",
                 ...style
             }}
             className={
-                cls("!block",
-                    "material-icons",
+                cls("material-icons",
                     color ? colorClassesMapping[color] : "",
                     "select-none",
                     className)}
