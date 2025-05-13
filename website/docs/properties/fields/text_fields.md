@@ -84,7 +84,7 @@ buildProperty({
 The data type is [`string`](../config/string).
 
 Internally the component used
-is [`MarkdownFieldBinding`](../../api/functions/MarkdownFieldBinding).
+is [`MarkdownEditorFieldBinding`](../../api/functions/MarkdownEditorFieldBinding).
 
 
 ### Url text field

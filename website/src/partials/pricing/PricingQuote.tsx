@@ -47,7 +47,7 @@ export function PricingQuote() {
                     <img loading="lazy"
                          className="w-10 h-10 mt-4 rounded-full object-cover"
                          src={avatar}
-                         alt="Element"/>
+                         alt={author}/>
                     <cite
                         className="not-italic	block mt-4 text-md font-bold uppercase text-center">~ {author}</cite>
                     <cite

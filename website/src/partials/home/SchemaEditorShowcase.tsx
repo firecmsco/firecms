@@ -51,7 +51,7 @@ export const SchemaEditorShowcase = () => {
                             pointerEvents: "none",
                         }}
                         className={"rounded-xl border " + defaultBorderMixin}
-                        width="100%" loop autoPlay muted>
+                        width="100%" loop autoPlay muted playsInline>
                         <source src={schemaEditorVideo} type="video/mp4"/>
                     </video>
                 </div>

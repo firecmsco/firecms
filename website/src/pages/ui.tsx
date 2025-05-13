@@ -16,7 +16,7 @@ const UIPage: React.FC = () => {
                 <meta property="og:title" content="FireCMS UI, batteries included"/>
                 <meta property="og:description"
                       content="A complete UI kit to develop apps in no time"/>
-                <meta property="og:image" content="/img/firecms_logo.svg"/>
+                <meta property="og:image" content="https://firecms.co/img/firecms_logo.svg"/>
                 {/*<script type="text/javascript">*/}
                 {/*    {clarityScript}*/}
                 {/*</script>*/}

@@ -225,7 +225,7 @@ Based on your configuration the form field widgets that are created are:
 - [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding)
   the property has a
   storage configuration.
-- [`MarkdownFieldBinding.`](../../api/functions/MarkdownFieldBinding) the
+- [`MarkdownEditorFieldBinding.`](../../api/functions/MarkdownEditorFieldBinding) the
   property has a
   markdown configuration.
 

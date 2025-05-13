@@ -371,7 +371,7 @@ const userManagement = useBuildUserManagement({
 
 The first beta release of FireCMS v3.0.0.
 Check all the new features and improvements in the [documentation](./what_is_new_v3)
-and the [migration guide](./docs/migrating_from_v2).
+and the [migration guide](./cloud/migrating_from_v2).
 
 ## [2.2.0] - 2023-11-09
 

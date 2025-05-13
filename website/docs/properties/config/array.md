@@ -159,5 +159,4 @@ Based on your configuration the form field widgets that are created are:
 - [`BlockFieldBinding`](../../api/functions/BlockFieldBinding) if the `oneOf` property is specified
 
 Links:
-- [API](../../api/interfaces/arrayproperty)
-
+- [API](../../api/interfaces/ArrayProperty)

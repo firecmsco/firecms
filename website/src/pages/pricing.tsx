@@ -52,14 +52,14 @@ function FeaturesPage() {
                 <meta property="og:title" content="Pricing - FireCMS"/>
                 <meta property="og:description"
                       content="Self-hosted version and free Cloud tier, adaptive pricing for everyone"/>
-                <meta property="og:image" content="/img/firecms_logo.svg"/>
+                <meta property="og:image" content="https://firecms.co/img/firecms_logo.svg"/>
                 {/*<script type="text/javascript">*/}
                 {/*    {clarityScript}*/}
                 {/*</script>*/}
             </Head>
-            <script type="application/ld+json">
-                {JSON.stringify(schemaMarkup)}
-            </script>
+            {/*<script type="application/ld+json">*/}
+            {/*    {JSON.stringify(schemaMarkup)}*/}
+            {/*</script>*/}
 
             <Hero
                 title={

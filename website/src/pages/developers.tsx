@@ -25,7 +25,7 @@ function DevelopersPage() {
                 <meta property="og:title" content="FireCMS for Developers - Firestore/Firebase headless CMS"/>
                 <meta property="og:description"
                       content="FireCMS helps developers rapidly build internal tools, CRUD interfaces, and back-offices without the frontend hassle"/>
-                <meta property="og:image" content="/img/firecms_logo.svg"/>
+                <meta property="og:image" content="https://firecms.co/img/firecms_logo.svg"/>
             </Head>
 
             <div className="flex flex-col min-h-screen">
@@ -81,7 +81,7 @@ function DevelopersPage() {
                                          className=""
                                          src={pricePreview}
                                          width="500"
-                                         alt="Element"
+                                         alt="Price textfield preview"
                                     />
                                 </div>
                             </div>

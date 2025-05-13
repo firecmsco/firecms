@@ -74,11 +74,11 @@ const reviewSchema = quotes.map((quote, index) => ({
 export const QuotesSection: React.FC = () => {
     return (
         <Panel color={"lighter"} includePadding={false} container={false}>
-            <Head>
-                <script type="application/ld+json">
-                    {JSON.stringify(reviewSchema)}
-                </script>
-            </Head>
+            {/*<Head>*/}
+            {/*    <script type="application/ld+json">*/}
+            {/*        {JSON.stringify(reviewSchema)}*/}
+            {/*    </script>*/}
+            {/*</Head>*/}
             <div
                 className="py-16 px-8 flex flex-row gap-4 overflow-auto no-scrollbar">
             {
@@ -106,7 +106,7 @@ export const QuotesSection: React.FC = () => {
                                 <img loading="lazy"
                                      className="w-10 h-10 mt-4 rounded-full object-cover"
                                      src={avatar}
-                                     alt="Element"/>
+                                     alt={author}/>
                                 <cite
                                     className="not-italic	block mt-4 text-sm font-bold uppercase text-center">~ {author}</cite>
                                 <cite

@@ -43,7 +43,7 @@ export function Translations() {
                              className={clsx("rounded-2xl border", defaultBorderMixin)}
                              src={isDarkTheme ? translationDark : translationLight}
                              width="500"
-                             alt="Element"
+                             alt="Manage your translations with FireCMS"
                         />
                     </div>
                 </>}/>

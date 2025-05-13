@@ -29,10 +29,15 @@ import React from "react";
 import { FirebaseCMSApp } from "@firecms/core";
 import { useEntityHistoryPlugin } from "@firecms/entity_history";
 
-// Basic setup with default options
-const entityHistoryPlugin = useEntityHistoryPlugin();
 
 export default function App() {
+
+    // Basic setup with default options
+    const entityHistoryPlugin = useEntityHistoryPlugin({
+        // This can be overridden by setting `history: false` in a specific collection
+        defaultEnabled: true
+    });
+
     return <FirebaseCMSApp
         name={"My Online Shop"}
         plugins={[entityHistoryPlugin]}
@@ -64,34 +69,34 @@ const productsCollection = buildCollection({
 
 ## Advanced Configuration
 
-You can customize the plugin's behavior by passing props to `useEntityHistoryPlugin`:
+You can customize the plugin's behavior by passing props to `useEntityHistoryPlugin`.
+If you are using the user management plugin, you can provide a function to resolve user details from a UID.
+You can also pass your own custom `getUser` function to fetch user details.
 
 ```tsx
 import { useEntityHistoryPlugin } from "@firecms/entity_history";
 import { User } from "@firecms/core";
 
-// Example function to fetch user details
-const myGetUserFunction = (uid: string): User | null => {
-    // Replace with your actual user fetching logic
-    if (uid === "user123") {
-        return {
-            uid: "user123",
-            displayName: "John Doe",
-            email: "john.doe@example.com",
-            photoURL: "url_to_photo"
-        } as User;
-    }
-    return null;
-};
+export function App() {
 
-const entityHistoryPlugin = useEntityHistoryPlugin({
-    // Enable history for all collections by default
-    // This can be overridden by setting `history: false` in a specific collection
-    defaultEnabled: true,
+    // ...
 
-    // Provide a function to resolve user details from a UID
-    getUser: myGetUserFunction
-});
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
+        authController: authController
+    });
+
+    const entityHistoryPlugin = useEntityHistoryPlugin({
+        // Enable history for all collections by default
+        // This can be overridden by setting `history: false` in a specific collection
+        defaultEnabled: true,
+
+        // Provide a function to resolve user details from a UID
+        getUser: userManagement.getUser
+    });
+
+    // ...
+}
 ```
 
 ## Configuration Options

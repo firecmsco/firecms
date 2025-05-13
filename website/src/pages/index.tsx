@@ -28,7 +28,7 @@ function Home() {
                 <meta property="og:title" content="FireCMS - Firestore/Firebase headless CMS"/>
                 <meta property="og:description"
                       content="Headless CMS based on Firestore/Firebase, React and tailwindcss, and completely open-source"/>
-                <meta property="og:image" content="/img/firecms_logo.svg"/>
+                <meta property="og:image" content="https://firecms.co/img/firecms_logo.svg"/>
                 <script type="application/ld+json">
                     {JSON.stringify(softwareApplicationSchema)}
                 </script>

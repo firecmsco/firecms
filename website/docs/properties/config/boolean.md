@@ -26,4 +26,4 @@ The widget that gets created is
 - [`SwitchFieldBinding`](../../api/functions/SwitchFieldBinding)  simple boolean switch
 
 Links:
-- [API](../../api/interfaces/booleanproperty)
+- [API](../../api/interfaces/BooleanProperty)

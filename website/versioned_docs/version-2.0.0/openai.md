@@ -22,7 +22,7 @@ You can add the plugin in a couple of simple steps.
 
 :::note
 Make sure you have a working FireCMS installation. If you don't, you can
-follow the [quickstart](/docs/quickstart).
+follow the [quickstart](./quickstart).
 :::
 
 ```bash

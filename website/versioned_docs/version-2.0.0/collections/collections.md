@@ -6,7 +6,7 @@ sidebar_label: Collections
 
 :::tip
 You can customize your collections based on the **logged-in user**, by defining
-them using a callback, as described in [Navigation](../navigation).
+them using a callback.
 :::
 
 In FireCMS, **collections** represent groups of entities.

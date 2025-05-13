@@ -295,6 +295,10 @@ article {
     padding: 0 !important;
 }
 
+article ol, article ul, article menu {
+    padding: revert;
+}
+
 @media (min-width: 768px) {
     article {
         padding: 32px !important;

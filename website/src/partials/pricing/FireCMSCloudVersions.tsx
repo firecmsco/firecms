@@ -63,7 +63,7 @@ export function FireCMSCloudVersions() {
 
                 <a
                     className={"h-fit text-sm btn btn-sm py-2 px-3 text-white bg-primary  hover:bg-blue-700  hover:text-white uppercase border-solid rounded "}
-                    href="http://app.firecms.co"
+                    href="https://app.firecms.co"
                     rel="noopener noreferrer"
                     target="_blank"
                 >

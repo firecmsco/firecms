@@ -50,7 +50,6 @@ export const softwareApplicationSchema = {
     "name": "FireCMS",
     "operatingSystem": "All",
     "image": "https://firecms.co/img/firecms_logo.svg",
-    "logo": "https://firecms.co/img/firecms_logo.svg",
     "applicationCategory": "WebApplication",
     "description": "FireCMS is a powerful content management system, based on Firebase/MongoDB, React and tailwind",
     "softwareVersion": "3.0",

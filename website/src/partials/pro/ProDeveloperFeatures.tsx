@@ -102,7 +102,7 @@ export function ProDeveloperFeatures() {
 
 const proExampleCode = `<span class="token keyword">function</span> <span class="token function">ProSample</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
 
-    <span class="token comment">// Use your own authentication logic here</span>
+    <span class="token comment">// Use your own authentication logic here (or use the user management plugin)</span>
     <span class="token keyword">const</span> <span class="token literal-property property">myAuthenticator</span><span class="token operator">:</span> Authenticator<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">FirebaseUserWrapper</span></span><span class="token punctuation">></span></span><span class="token plain-text"> = useCallback(async ({
                                                                                        user,
                                                                                        authController

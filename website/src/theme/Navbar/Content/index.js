@@ -66,7 +66,7 @@ export default function NavbarContent() {
                         <img
                             className={"w-8 h-8 mr-4"}
                             src="/img/logo_small.png"
-                            alt="Logo"
+                            alt="FireCMS Logo"
                         />
                     </a>
                     {dropdownItems.map((item, i) => {

@@ -23,7 +23,7 @@ function ProPage() {
                 <meta property="og:title" content="PRO - FireCMS"/>
                 <meta property="og:description"
                       content="FireCMS PRO is the CMS aimed at companies and agencies that need a high degree of customization and support."/>
-                <meta property="og:image" content="/img/firecms_logo.svg"/>
+                <meta property="og:image" content="https://firecms.co/img/firecms_logo.svg"/>
                 {/*<script type="text/javascript">*/}
                 {/*    {clarityScript}*/}
                 {/*</script>*/}

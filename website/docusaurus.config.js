@@ -20,13 +20,13 @@ module.exports = {
     favicon: "img/favicon.ico",
     organizationName: "FireCMS S.L.",
     projectName: "FireCMS",
+    trailingSlash: false,
     customFields: {
         env: process.env.NODE_ENV,
         docSearchApiKey: process.env.REACT_APP_DOC_SEARCH_KEY,
         docSearchAppId: process.env.REACT_APP_DOC_SEARCH_APP_ID
     },
     future: {
-        // experimental_faster: false,
         experimental_faster: {
             swcJsLoader: true,
             swcJsMinimizer: true,
@@ -200,10 +200,6 @@ module.exports = {
                 {
                     name: "twitter:card",
                     content: "summary"
-                },
-                {
-                    name: "keywords",
-                    content: "firebase, cms, gui, react, react cms, custom cms, firestore, firebase cms, headless cms, firebase admin, firebase admin sdk, strapi, sanity io, contentful, rowy, forest admin, ghost cms, keystone, wordpress, payload"
                 }
             ],
             colorMode:
@@ -500,6 +496,14 @@ module.exports = {
                             } else if (item.url.startsWith("https://firecms.co/pro")) {
                                 item.priority = 0.9;
                             } else if (item.url.startsWith("https://firecms.co/ui")) {
+                                item.priority = 0.8;
+                            } else if (item.url.startsWith("https://firecms.co/features")) {
+                                item.priority = 0.8;
+                            } else if (item.url.startsWith("https://firecms.co/agencies")) {
+                                item.priority = 0.8;
+                            } else if (item.url.startsWith("https://firecms.co/developers")) {
+                                item.priority = 0.8;
+                            } else if (item.url.startsWith("https://firecms.co/startups")) {
                                 item.priority = 0.8;
                             } else if (item.url.startsWith("https://firecms.co/docs/api")) {
                                 item.priority = 0.3;

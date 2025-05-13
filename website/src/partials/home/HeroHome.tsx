@@ -21,9 +21,10 @@ function HeroHome({}) {
             }}
             className={clsx("rounded-2xl")}
             width="100%"
-            loop autoPlay muted>
-            <source src={editingDemoDarkVideo}
-                    type="video/mp4"/>
+            loop autoPlay muted playsInline>
+            <source
+                src={editingDemoDarkVideo}
+                type="video/mp4"/>
         </video>
     </div>;
 

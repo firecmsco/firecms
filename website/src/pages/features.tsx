@@ -23,7 +23,7 @@ function FeaturesPage() {
                 <meta property="og:title" content="FireCMS - Firestore/Firebase headless CMS"/>
                 <meta property="og:description"
                       content="FireCMS includes all the features you need to kickstart your project and all the customization options you may need."/>
-                <meta property="og:image" content="/img/firecms_logo.svg"/>
+                <meta property="og:image" content="https://firecms.co/img/firecms_logo.svg"/>
                 {/*<script type="text/javascript">*/}
                 {/*    {clarityScript}*/}
                 {/*</script>*/}

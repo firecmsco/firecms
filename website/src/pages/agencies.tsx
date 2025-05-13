@@ -41,7 +41,7 @@ function Agencies() {
                 <meta property="og:title" content="FireCMS for Agencies - Build Better, Faster"/>
                 <meta property="og:description"
                       content="The open-source Headless CMS and Admin Panel builder for agencies using Firebase or MongoDB. Deliver powerful back-office tools for clients efficiently."/>
-                <meta property="og:image" content="/img/firecms_logo.svg"/>
+                <meta property="og:image" content="https://firecms.co/img/firecms_logo.svg"/>
             </Head>
 
             <div className="flex flex-col min-h-screen">

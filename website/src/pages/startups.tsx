@@ -54,7 +54,7 @@ function StartupsPage() {
                 <meta property="og:title" content="FireCMS for Startups - Move Fast, Scale Smart"/>
                 <meta property="og:description"
                       content="The open-source Headless CMS and Admin Panel builder for startups using Firebase or MongoDB. Build powerful back-office tools 10x faster."/>
-                <meta property="og:image" content="/img/firecms_logo.svg"/>
+                <meta property="og:image" content="https://firecms.co/img/firecms_logo.svg"/>
             </Head>
 
             <div className="flex flex-col min-h-screen">

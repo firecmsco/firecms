@@ -7,9 +7,7 @@ description: In FireCMS, conditional fields allow for dynamic property configura
 
 When defining the properties of a collection, you can choose to use a builder
 [`PropertyBuilder`](../api/type-aliases/PermissionsBuilder), instead of assigning the
-property configuration directly. In the builder you
-receive [`PropertyBuilderProps`](../api/type-aliases/PermissionsBuilderProps)
-and return your property.
+property configuration directly. 
 
 This is useful for changing property configurations like available values on the
 fly, based on other values.

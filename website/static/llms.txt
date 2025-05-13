@@ -4453,7 +4453,7 @@ If you are migrating from previous beta versions of FireCMS PRO, you will need t
 The main components have changed theis composition. Instead of having a single `Scaffold` components with all the configuration,
 you have additionally an `AppBar` and a `Drawer` component.
 
-More information about the main components can be found in the [Main Components](/docs/pro/main_components) section.
+More information about the main components can be found in the [Main Components](/docs/self/main_components) section.
 
 #### User management auth controller
 
@@ -6290,7 +6290,7 @@ buildProperty({
 The data type is [`string`](https://firecms.co/docs/config/string).
 
 Internally the component used
-is [`MarkdownFieldBinding`](https://firecms.co/docs/../api/functions/MarkdownFieldBinding).
+is [`MarkdownEditorFieldBinding`](https://firecms.co/docs/../api/functions/MarkdownEditorFieldBinding).
 
 #### Url text field
 
@@ -7184,7 +7184,7 @@ Based on your configuration the form field widgets that are created are:
 - [`StorageUploadFieldBinding`](https://firecms.co/docs/../api/functions/StorageUploadFieldBinding)
   the property has a
   storage configuration.
-- [`MarkdownFieldBinding.`](https://firecms.co/docs/../api/functions/MarkdownFieldBinding) the
+- [`MarkdownEditorFieldBinding.`](https://firecms.co/docs/../api/functions/MarkdownEditorFieldBinding) the
   property has a
   markdown configuration.
 
