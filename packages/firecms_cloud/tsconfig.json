@@ -61,6 +61,7 @@
       ],
       "@firecms/data_import": ["../../packages/data_import/src"],
       "@firecms/data_export": ["../../packages/data_export/src"],
+      "@firecms/entity_history": ["../../packages/entity_history/src"],
       "@firecms/data_import_export": [
         "../data_import_export/src"
       ],

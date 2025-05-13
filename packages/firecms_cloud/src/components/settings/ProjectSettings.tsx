@@ -1,6 +1,6 @@
 import React, { useDeferredValue, useEffect, useState } from "react";
 
-import { FireCMSLogo, useBrowserTitleAndIcon, useSnackbarController } from "@firecms/core";
+import { FieldCaption, FireCMSLogo, useBrowserTitleAndIcon, useSnackbarController } from "@firecms/core";
 import {
     BooleanSwitch,
     BooleanSwitchWithLabel,
@@ -50,6 +50,18 @@ export function ProjectSettings() {
                         onValueChange={(v) => projectConfig.updateLocalTextSearchEnabled(v)}
                         value={projectConfig.localTextSearchEnabled}
                     />
+                </div>
+                <div className={"col-span-12"}>
+                    <BooleanSwitchWithLabel
+                        position={"start"}
+                        label="Document history enabled for all collections"
+                        onValueChange={(v) => projectConfig.updateHistoryDefaultEnabled(v)}
+                        value={projectConfig.historyDefaultEnabled ?? false}
+                    />
+
+                    <FieldCaption>
+                       When true, all collections will have the history enabled by default. You can override this setting in each collection.
+                    </FieldCaption>
                 </div>
 
                 <ThemeColors/>

@@ -51,6 +51,9 @@ export type ProjectConfig = {
     appCheck?: AppCheckOptions;
     serializedAppCheck: SerializedAppCheckOptions | null;
     updateAppCheck: (appCheck: SerializedAppCheckOptions | null) => Promise<void>;
+
+    historyDefaultEnabled: boolean;
+    updateHistoryDefaultEnabled: (enabled: boolean) => Promise<void>;
 };
 
 interface ProjectConfigParams {
@@ -82,6 +85,7 @@ export function useBuildProjectConfig({
     const [serviceAccountMissing, setServiceAccountMissing] = useState<boolean | undefined>();
     const [clientConfigError, setClientConfigError] = useState<Error | undefined>();
     const [localTextSearchEnabled, setLocalTextSearchEnabled] = useState<boolean>(false);
+    const [historyDefaultEnabled, setHistoryDefaultEnabled] = useState<boolean>(false);
     const [blocked, setBlocked] = useState<boolean>(false);
 
     const [appCheck, setAppCheck] = useState<AppCheckOptions | undefined>();
@@ -156,6 +160,13 @@ export function useBuildProjectConfig({
         return setDoc(doc(firestore, configPath), { local_text_search_enabled: allowed }, { merge: true });
     }, [configPath]);
 
+    const updateHistoryDefaultEnabled = useCallback(async (enabled: boolean): Promise<void> => {
+        if (!backendFirebaseApp) throw Error("useBuildProjectConfig Firebase not initialised");
+        const firestore = getFirestore(backendFirebaseApp);
+        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        return setDoc(doc(firestore, configPath), { history_default_enabled: enabled }, { merge: true });
+    }, [configPath]);
+
     useEffect(() => {
         if (!projectId || !backendFirebaseApp) {
             setClientConfigLoading(false);
@@ -180,6 +191,7 @@ export function useBuildProjectConfig({
                     setSubscriptionPlan(plan);
                     setSubscriptionData(snapshot.get("subscription_data"));
                     setLocalTextSearchEnabled(snapshot.get("local_text_search_enabled") ?? false);
+                    setHistoryDefaultEnabled(snapshot.get("history_default_enabled") ?? false);
                     const trialTimestamp = snapshot.get("trial_valid_until");
                     if (trialTimestamp) {
                         setTrialValidUntil(trialTimestamp.toDate());
@@ -271,6 +283,8 @@ export function useBuildProjectConfig({
         serviceAccountMissing: loadedProjectIdRef.current !== projectId ? undefined : serviceAccountMissing,
         localTextSearchEnabled,
         updateLocalTextSearchEnabled,
+        historyDefaultEnabled,
+        updateHistoryDefaultEnabled,
         primaryColor,
         secondaryColor,
         updatePrimaryColor,

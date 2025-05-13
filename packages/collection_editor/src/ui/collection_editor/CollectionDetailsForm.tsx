@@ -218,6 +218,25 @@ export function CollectionDetailsForm({
                         value={values.openEntityMode ?? "side_panel"}
                         onChange={(value) => setFieldValue("openEntityMode", value)}/>
 
+                    <div className={"col-span-12"}>
+                        <BooleanSwitchWithLabel
+                            position={"start"}
+                            size={"large"}
+                            allowIndeterminate={true}
+                            label={values.history === null ? "Document history revisions enabled if enabled globally" : (
+                                values.history ? "Document history revisions ENABLED" : "Document history revisions NOT enabled"
+                            )}
+                            onValueChange={(v) => setFieldValue("history", v)}
+                            value={values.history ?? null}
+                        />
+                        <FieldCaption>
+                            When enabled, each document in this collection will have a history of changes.
+                            This is useful for auditing purposes. The data is stored in a subcollection of the document
+                            in your database, called <b>__history</b>.
+                        </FieldCaption>
+                    </div>
+
+
                     <div className={"col-span-12 mt-8"}>
                         <ExpandablePanel
                             expanded={advancedPanelExpanded}

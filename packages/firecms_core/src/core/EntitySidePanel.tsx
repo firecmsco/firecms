@@ -50,8 +50,8 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     }
 
     const onUpdate = (params: OnUpdateParams) => {
-        if (onUpdate) {
-            onUpdate(params);
+        if (props.onUpdate) {
+            props.onUpdate(params);
         }
         if (params.status !== "existing") {
             sideEntityController.replace({

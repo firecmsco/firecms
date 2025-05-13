@@ -16,6 +16,7 @@
     "../user_management/src",
     "../formex/src",
     "../datatalk/src",
+    "../entity_history/src",
     "../data_import_export/src"
   ]
 }

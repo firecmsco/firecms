@@ -6,7 +6,7 @@ import { entityHistoryCallbacks } from "./entity_history_callbacks";
 import { HistoryControllerProvider } from "./HistoryControllerProvider";
 
 /**
- *
+ * This plugin adds a history view to the entity side panel.
  */
 export function useEntityHistoryPlugin(props?: EntityHistoryPluginProps): FireCMSPlugin<any, any, any, EntityHistoryPluginProps> {
 

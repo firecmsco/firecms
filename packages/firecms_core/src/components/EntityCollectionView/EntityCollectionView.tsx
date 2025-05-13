@@ -753,6 +753,8 @@ export const EntityCollectionView = React.memo(
             equal(a.additionalFields, b.additionalFields) &&
             equal(a.sideDialogWidth, b.sideDialogWidth) &&
             equal(a.openEntityMode, b.openEntityMode) &&
+            equal(a.exportable, b.exportable) &&
+            equal(a.history, b.history) &&
             equal(a.forceFilter, b.forceFilter);
     }) as React.FunctionComponent<EntityCollectionViewProps<any>>
 

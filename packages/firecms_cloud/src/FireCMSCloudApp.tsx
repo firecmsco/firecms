@@ -72,6 +72,7 @@ import {
 import { DataTalkProvider, DataTalkRoutes, useBuildDataTalkConfig } from "@firecms/datatalk";
 import { useDataTalkMode } from "./hooks/useDataTalkMode";
 import { FireCMSCloudDataTalkDrawer } from "./components/FireCMSCloudDataTalkDrawer";
+import { useEntityHistoryPlugin } from "@firecms/entity_history";
 
 /**
  * This is the default implementation of a FireCMS app using the Firebase services
@@ -521,6 +522,10 @@ function FireCMSAppAuthenticated({
         onAnalyticsEvent,
     });
 
+    const historyPlugin = useEntityHistoryPlugin({
+        defaultEnabled: projectConfig.historyDefaultEnabled,
+    });
+
     const dataEnhancementPlugin = useDataEnhancementPlugin({
         host: fireCMSBackend.backendApiHost,
     });
@@ -578,7 +583,14 @@ function FireCMSAppAuthenticated({
         includeIntroView: false
     });
 
-    const plugins: FireCMSPlugin<any, any, any>[] = [saasPlugin, exportPlugin, importPlugin, collectionEditorPlugin, dataEnhancementPlugin];
+    const plugins: FireCMSPlugin<any, any, any>[] = [
+        saasPlugin,
+        exportPlugin,
+        importPlugin,
+        collectionEditorPlugin,
+        dataEnhancementPlugin,
+        historyPlugin
+    ];
 
     const navigationController = useBuildNavigationController({
         basePath,

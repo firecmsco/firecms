@@ -40,6 +40,7 @@
     "@firecms/data_enhancement": "^3.0.0-canary.237",
     "@firecms/data_export": "^3.0.0-canary.237",
     "@firecms/data_import": "^3.0.0-canary.237",
+    "@firecms/entity_history": "^3.0.0-canary.237",
     "@firecms/datatalk": "^3.0.0-canary.237",
     "@firecms/firebase": "^3.0.0-canary.237",
     "@firecms/formex": "^3.0.0-canary.237",
