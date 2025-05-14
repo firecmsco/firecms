@@ -1,7 +1,7 @@
 {
   "name": "@firecms/ui",
   "type": "module",
-  "version": "3.0.0-canary.237",
+  "version": "3.0.0-canary.238",
   "description": "Awesome Firebase/Firestore-based headless open-source CMS",
   "funding": {
     "url": "https://github.com/sponsors/firecmsco"
