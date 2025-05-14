@@ -93,7 +93,7 @@ or [Agility CMS](https://agilitycms.com/).
 Examples of headless and general purpose CMSs are [Strapi](https://strapi.io/),
 [GraphCMS](https://graphcms.com/) or [Sanity](https://www.sanity.io/)
 
-[FireCMS](https://firecms.co/) is a **headless** and general purpose CMS.
+[FireCMS](https://firecms.co) is a **headless** and general purpose CMS.
 It is a general purpose CMS that can be used to manage content
 for any kind of project, including websites, web apps, mobile apps, desktop
 apps, etc.

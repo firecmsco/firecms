@@ -9,7 +9,7 @@ authors: marian
 
 In the rapidly evolving landscape of content management systems (CMS), choosing the right backend is more critical than
 ever. Developers are faced with a plethora of options, from traditional setups like WordPress to modern headless CMSs
-like Strapi, Contentful, and Sanity. At [FireCMS](https://firecms.co/), we've embraced Firebase as the backbone of our
+like Strapi, Contentful, and Sanity. At [FireCMS](https://firecms.co), we've embraced Firebase as the backbone of our
 CMS, and in this article, we'll delve into the benefits of using Firebase over other CMS backends. We'll also provide
 direct comparisons to alternative CMSs to help you make an informed decision.
 
@@ -132,7 +132,7 @@ To better understand Firebase's advantages, let's compare it directly with other
 
 ## FireCMS: Harnessing Firebase's Potential
 
-With [FireCMS](https://firecms.co/), you get a CMS explicitly designed to leverage Firebase's strengths.
+With [FireCMS](https://firecms.co), you get a CMS explicitly designed to leverage Firebase's strengths.
 
 - **Easy Setup**: Configure your CMS with minimal code using FireCMS's intuitive schema definitions.
 - **Real-time Admin Panel**: Experience instant updates in your admin panel, streamlining content management.
@@ -170,7 +170,7 @@ Relying on a platform can raise concerns about dependency.
 
 Transitioning to Firebase with FireCMS empowers you to build scalable, secure, and high-performance applications.
 
-1. **Explore FireCMS**: Visit [firecms.co](https://firecms.co/) to learn more about features and capabilities.
+1. **Explore FireCMS**: Visit [firecms.co](https://firecms.co) to learn more about features and capabilities.
 2. **Try the Demo**: Experience FireCMS firsthand with our [live demo](https://demo.firecms.co/).
 3. **Join the Community**: Connect with other developers on our [Discord server](https://discord.gg/fxy7xsQm3m).
 

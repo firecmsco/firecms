@@ -487,7 +487,9 @@ module.exports = {
                         const items = await defaultCreateSitemapItems(rest);
 
                         const prioritiedItems = items.map(item => {
-                            if (item.url === "https://firecms.co/") {
+                            if (item.url === "https://firecms.co") {
+                                item.priority = 1.0;
+                            } else if (item.url === "https://firecms.co/") {
                                 item.priority = 1.0;
                             } else if (item.url.startsWith("https://firecms.co/blog")) {
                                 item.priority = 0.6;
