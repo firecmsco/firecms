@@ -24,7 +24,7 @@ export const LabelWithIcon = forwardRef<HTMLDivElement, LabelWithIconProps>(
         return (
             <div
                 ref={ref}
-                className={cls("inline-flex items-center my-0.5",
+                className={cls("align-middle inline-flex items-center my-0.5",
                     small ? "gap-1" : "gap-2",
                     className)}
             >

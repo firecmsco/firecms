@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Entity, EntityCollection, EntityCustomView, EntityStatus, FireCMSPlugin, FormContext, User } from "../types";
+import { Entity, EntityCollection, EntityStatus, FireCMSPlugin, FormContext, User } from "../types";
 
 import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary } from "../components";
 import {
@@ -214,7 +214,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             }
 
             if (!entityId) {
-                console.error("INTERNAL: entityId is not defined");
                 return null;
             }
 
