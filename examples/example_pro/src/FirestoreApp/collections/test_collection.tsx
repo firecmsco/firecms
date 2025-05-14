@@ -12,6 +12,7 @@ import { ProductsSecondaryForm } from "../custom_entity_view/ProductsSecondaryFo
 import { Icon, IconButton, Typography } from "@firecms/ui";
 import React from "react";
 import { PromptConfigSecondaryForm } from "../custom_entity_view/PromptConfigSecondaryForm";
+import { locales } from "./enums";
 
 export const testCallbacks: EntityCallbacks = {
     onFetch({
@@ -98,74 +99,74 @@ export const testCollection = buildCollection<any>({
         //     }
         // }],
         properties: {
-            test_upload: {
-                dataType: "array",
-                name: "Test upload",
-                of: buildProperty({
-                    dataType: "string",
-                    columnWidth: 400,
-                    storage: {
-                        storagePath: "/",
-                    },
-                    name: "Media",
-                })
-            },
-            slug: ({ propertyValue }) => {
-                const slugified = slugify(propertyValue);
-                const regExp = new RegExp(slugified);
-                return {
-                    dataType: "string",
-                    name: "Slug",
-                    Field: CustomField,
-                    customProps: {
-                        slugified
-                    },
-                    validation: {
-                        required: true,
-                        matches: regExp,
-                        matchesMessage: "Text entered must equal slugified string: " + slugified
-                    }
-                };
-            },
+            // test_upload: {
+            //     dataType: "array",
+            //     name: "Test upload",
+            //     of: buildProperty({
+            //         dataType: "string",
+            //         columnWidth: 400,
+            //         storage: {
+            //             storagePath: "/",
+            //         },
+            //         name: "Media",
+            //     })
+            // },
+            // slug: ({ propertyValue }) => {
+            //     const slugified = slugify(propertyValue);
+            //     const regExp = new RegExp(slugified);
+            //     return {
+            //         dataType: "string",
+            //         name: "Slug",
+            //         Field: CustomField,
+            //         customProps: {
+            //             slugified
+            //         },
+            //         validation: {
+            //             required: true,
+            //             matches: regExp,
+            //             matchesMessage: "Text entered must equal slugified string: " + slugified
+            //         }
+            //     };
+            // },
             multiline: {
                 dataType: "string",
                 name: "Multiline",
                 multiline: true,
                 defaultValue: "Hello\nWorld"
             },
-            size: {
-                dataType: "map",
-                minimalistView: true,
-                name: "Size",
-                properties: {
-                    width: {
-                        name: "Width",
-                        dataType: "number",
-                        validation: {
-                            required: true
-                        }
-                    },
-                    height: {
-                        name: "Height",
-                        dataType: "number",
-                        validation: {
-                            required: true
-                        }
-                    }
-                },
-                widthPercentage: 50,
-            },
-            date: {
-                name: "My date",
-                dataType: "date",
-                // disabled: true
-                autoValue: "on_create"
-            },
-            date_update: {
-                name: "My date update",
-                dataType: "date",
-                autoValue: "on_update"
-            },
+            // size: {
+            //     dataType: "map",
+            //     minimalistView: true,
+            //     name: "Size",
+            //     properties: {
+            //         width: {
+            //             name: "Width",
+            //             dataType: "number",
+            //             validation: {
+            //                 required: true
+            //             }
+            //         },
+            //         height: {
+            //             name: "Height",
+            //             dataType: "number",
+            //             validation: {
+            //                 required: true
+            //             }
+            //         }
+            //     },
+            //     widthPercentage: 50,
+            // },
+            // date: {
+            //     name: "My date",
+            //     dataType: "date",
+            //     // disabled: true
+            //     autoValue: "on_create"
+            // },
+            // date_update: {
+            //     name: "My date update",
+            //     dataType: "date",
+            //     autoValue: "on_update"
+            // },
             //
             // test_date: {
             //     name: "Test date",
@@ -178,14 +179,14 @@ export const testCollection = buildCollection<any>({
             //     dataType: "string",
             //     enumValues: locales
             // },
-            // available_locales: {
-            //     name: "Available locales",
-            //     dataType: "array",
-            //     of: {
-            //         dataType: "string",
-            //         enumValues: locales
-            //     }
-            // },
+            available_locales: {
+                name: "Available locales",
+                dataType: "array",
+                of: {
+                    dataType: "string",
+                    enumValues: locales
+                }
+            },
             // entryCondition: conditionProperty("Entry condition"),
             // fulfillmentCondition: conditionProperty("Fulfillment condition"),
             // //...
@@ -523,15 +524,15 @@ export const testCollection = buildCollection<any>({
             //     validation: { required: false },
             //     clearable: true
             // },
-            tags: {
-                name: "Tags",
-                dataType: "array",
-                sortable: false,
-                canAddElements: false,
-                of: {
-                    dataType: "string"
-                }
-            },
+            // tags: {
+            //     name: "Tags",
+            //     dataType: "array",
+            //     sortable: false,
+            //     canAddElements: false,
+            //     of: {
+            //         dataType: "string"
+            //     }
+            // },
             // specSheet: ({
             //                 values,
             //                 entityId
@@ -568,11 +569,11 @@ export const testCollection = buildCollection<any>({
             //         required: true
             //     }
             // },
-            test_custom: {
-                dataType: "string",
-                name: "Test custom",
-                propertyConfig: "test_custom_field"
-            },
+            // test_custom: {
+            //     dataType: "string",
+            //     name: "Test custom",
+            //     propertyConfig: "test_custom_field"
+            // },
             // map: {
             //     dataType: "map",
             //     properties: {
@@ -1049,20 +1050,20 @@ export const testCollection = buildCollection<any>({
             //         acceptedFiles: ["image/*"]
             //     }
             // },
-            created_on: {
-                name: "Created on",
-                dataType: "date",
-                autoValue: "on_create"
-            },
+            // created_on: {
+            //     name: "Created on",
+            //     dataType: "date",
+            //     autoValue: "on_create"
+            // },
             // updated_on: {
             //     name: "Updated on",
             //     dataType: "date",
             //     autoValue: "on_update"
             // }
-            description: {
-                name: "Description",
-                dataType: "string"
-            },
+            // description: {
+            //     name: "Description",
+            //     dataType: "string"
+            // },
             // search_adjacent: {
             //     name: "Search adjacent",
             //     dataType: "boolean"

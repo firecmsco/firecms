@@ -325,7 +325,6 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
         return user ?? null;
     }, [users]);
 
-    console.log("users", users);
     return {
         loading,
         roles,

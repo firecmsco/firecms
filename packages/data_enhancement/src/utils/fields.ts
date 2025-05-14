@@ -4,6 +4,6 @@ export const SUPPORTED_FIELDS_ENHANCEMENT: string[] = [
     "multiline",
     "markdown",
     "email",
-    "select"
-    // "multi_select",
+    "select",
+    "multi_select",
 ];

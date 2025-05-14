@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import equal from "react-fast-compare"
 
 import { CMSType, FieldProps, MarkdownEditorFieldBinding, PluginFieldBuilderParams, } from "@firecms/core";
@@ -95,12 +95,29 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
     const [menuOpen, setMenuOpen] = React.useState(false);
     const [propertyInstructions, setPropertyInstructions] = useState<string>();
 
+    const property = props.property;
+    const topClass = useMemo(() => {
+        if (property.widthPercentage !== undefined) {
+            return "top-4";
+        } else {
+            if (property.dataType === "array" && property.of?.dataType === "string") {
+                return "top-4";
+            }
+            return property.dataType === "string" && property.markdown ? "top-3" : "-top-4";
+        }
+    }, []);
+
+    const rightClass = props.partOfArray ? "right-12" : "right-2";
+
     if (!enabled) {
         return <Field {...props} />
     }
 
-    const property = props.property;
-    const showEnhanceIcon = !props.disabled && (!props.value || (property.dataType === "string" && (property.multiline || property.markdown)));
+    const showEnhanceIcon = !props.disabled && (
+        !props.value
+        || (property.dataType === "string" && (property.multiline || property.markdown))
+        || (property.dataType === "array" && property.of?.dataType === "string")
+    );
 
     const indexOfSuggestion = props.value && typeof props.value === "string" && typeof suggestedValue === "string" && props.value.endsWith(suggestedValue) ?
         props.value.indexOf(suggestedValue) + 1 : undefined;
@@ -142,10 +159,6 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
 
     const allowInstructions = property.dataType === "string" && !property.enumValues;
 
-    const topClass = property.widthPercentage !== undefined
-        ? "top-4"
-        : (property.dataType === "string" && property.markdown ? "top-3" : "-top-4");
-    const rightClass = props.partOfArray ? "right-12" : "right-2";
     return <>
 
         {fieldBinding}
