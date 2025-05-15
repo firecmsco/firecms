@@ -23,7 +23,7 @@ export function EntityHistoryView({
     const dataSource = useDataSource();
     const pathAndId = entity ? entity?.path + "/" + entity?.id : undefined;
 
-    const [revertVersion, setRevertVersion] = useState<Entity | undefined>(undefined);
+    const [revertVersionDialog, setRevertVersionDialog] = useState<Entity | undefined>(undefined);
     const [revisions, setRevisions] = useState<Entity[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
@@ -116,6 +116,9 @@ export function EntityHistoryView({
     }
 
     function doRevert(revertVersion: Entity) {
+        if (!entity) {
+            throw new Error("No entity to revert");
+        }
         const revertValues = {
             ...revertVersion.values,
             __metadata: {
@@ -125,29 +128,38 @@ export function EntityHistoryView({
                 updated_by: authController.user?.uid ?? null,
             }
         };
-        return dataSource.saveEntity({
+        const saveReverted = dataSource.saveEntity({
+            path: entity.path,
+            entityId: entity.id,
+            values: revertValues,
+            collection,
+            status: "existing"
+        });
+        const saveRevertedHistory = dataSource.saveEntity({
             path: revertVersion.path,
             entityId: revertVersion.id,
             values: revertValues,
             collection,
             status: "existing"
-        }).then(() => {
-            formContext.formex.resetForm({
-                values: revertVersion.values
-            });
-            setRevertVersion(undefined);
-            snackbarController.open({
-                message: "Reverted version",
-                type: "info"
-            });
-            }
-        ).catch((error) => {
-            console.error("Error reverting entity:", error);
-            snackbarController.open({
-                message: "Error reverting entity",
-                type: "error"
-            });
         });
+        return Promise.all([saveReverted, saveRevertedHistory])
+            .then(() => {
+                    formContext.formex.resetForm({
+                        values: revertVersion.values
+                    });
+                    setRevertVersionDialog(undefined);
+                    snackbarController.open({
+                        message: "Reverted version",
+                        type: "info"
+                    });
+                }
+            ).catch((error) => {
+                console.error("Error reverting entity:", error);
+                snackbarController.open({
+                    message: "Error reverting entity",
+                    type: "error"
+                });
+            });
 
     }
 
@@ -187,7 +199,7 @@ export function EntityHistoryView({
                                                                 type: "warning"
                                                             });
                                                         } else {
-                                                            setRevertVersion(revision);
+                                                            setRevertVersionDialog(revision);
                                                         }
                                                     }}>
                                                     <HistoryIcon/>
@@ -209,13 +221,13 @@ export function EntityHistoryView({
             )}
         </div>
 
-        <ConfirmationDialog open={Boolean(revertVersion)}
+        <ConfirmationDialog open={Boolean(revertVersionDialog)}
                             onAccept={function (): void {
-                                if (!revertVersion) return;
-                                doRevert(revertVersion);
+                                if (!revertVersionDialog) return;
+                                doRevert(revertVersionDialog);
                             }}
                             onCancel={function (): void {
-                                setRevertVersion(undefined);
+                                setRevertVersionDialog(undefined);
                             }}
                             title={<Typography variant={"subtitle2"}>Revert data to this version?</Typography>}/>
     </div>
