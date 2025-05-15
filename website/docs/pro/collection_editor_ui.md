@@ -197,13 +197,19 @@ function App() {
         return mergeCollections(collections, collectionConfigController.collections ?? []);
     }, [collectionConfigController.collections]);
 
+    const plugins = [
+        collectionEditorPlugin,
+        userManagementPlugin
+    ];
+    
     const navigationController = useBuildNavigationController({
         collections: collectionsBuilder(),
         views: customViews,
         adminViews: userManagementAdminViews,
         collectionPermissions: collectionEditorPlugin.collectionPermissions,
         authController,
-        dataSourceDelegate: firestoreDelegate
+        dataSourceDelegate: firestoreDelegate,
+        plugins
     });
 
     const {
@@ -231,7 +237,6 @@ function App() {
             navigationController={navigationController}
             authController={authController}
             dataSourceDelegate={firestoreDelegate}
-            plugins={[userManagementPlugin, collectionEditorPlugin]}
         >
             {({
                   context,

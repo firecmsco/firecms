@@ -218,7 +218,6 @@ export function App() {
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
-                    plugins={plugins}
                 >
                     {({
                           context,

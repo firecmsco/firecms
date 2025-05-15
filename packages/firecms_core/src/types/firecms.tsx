@@ -128,7 +128,8 @@ export type FireCMSProps<USER extends User> = {
 
     /**
      * Use plugins to modify the behaviour of the CMS.
-     * Currently, in ALPHA, and likely subject to change.
+     * DEPRECATED: use the `plugins` prop in the `useBuildNavigationController` instead.
+     * This prop will work as a fallback for the `plugins` prop in the `useBuildNavigationController`.
      */
     plugins?: FireCMSPlugin<any, any, any>[];
 

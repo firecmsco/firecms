@@ -1,6 +1,7 @@
 import React from "react";
 import { EntityCollection } from "./collections";
 import { EntityReference } from "./entities";
+import { FireCMSPlugin } from "./plugins";
 
 /**
  * Controller that includes the resolved navigation and utility methods and
@@ -151,6 +152,11 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
      * @param {NavigateOptions} [options] - Optional configuration settings for navigation, such as replace behavior or state data.
      */
     navigate: (to: string, options?: NavigateOptions) => void;
+
+    /**
+     * Plugin system allowing to extend the CMS functionality.
+     */
+    plugins?: FireCMSPlugin<any, any, any>[];
 
 }
 

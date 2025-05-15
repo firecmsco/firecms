@@ -24,27 +24,47 @@ yarn add @firecms/entity_history
 
 To use the plugin, import `useEntityHistoryPlugin` and add it to your `FirebaseCMSApp` plugins array.
 
+If you are using the user management plugin, you can provide a function to resolve user details from a UID.
+You can also pass your own custom `getUser` function to fetch user details.
+
 ```tsx
 import React from "react";
-import { FirebaseCMSApp } from "@firecms/core";
+import { FireCMS } from "@firecms/core";
 import { useEntityHistoryPlugin } from "@firecms/entity_history";
-
 
 export default function App() {
 
-    // Basic setup with default options
-    const entityHistoryPlugin = useEntityHistoryPlugin({
-        // This can be overridden by setting `history: false` in a specific collection
-        defaultEnabled: true
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
+        authController: authController
     });
 
-    return <FirebaseCMSApp
-        name={"My Online Shop"}
-        plugins={[entityHistoryPlugin]}
-        authentication={myAuthenticator}
-        collections={myCollections}
-        firebaseConfig={firebaseConfig}
-    />;
+    const entityHistoryPlugin = useEntityHistoryPlugin({
+        // Enable history for all collections by default
+        // This can be overridden by setting `history: false` in a specific collection
+        defaultEnabled: true,
+
+        // Provide a function to resolve user details from a UID
+        getUser: userManagement.getUser
+    });
+
+    const plugins = [entityHistoryPlugin];
+
+    const navigationController = useBuildNavigationController({
+        // ... rest of your config
+        plugins
+    });
+
+    return (
+            <FireCMS
+                navigationController={navigationController}
+                /*... rest of your configuration */
+            >
+              {({ context, loading }) => {
+                  // ... your components
+              }}
+            </FireCMS>
+    );
 }
 ```
 
@@ -67,37 +87,6 @@ const productsCollection = buildCollection({
 });
 ```
 
-## Advanced Configuration
-
-You can customize the plugin's behavior by passing props to `useEntityHistoryPlugin`.
-If you are using the user management plugin, you can provide a function to resolve user details from a UID.
-You can also pass your own custom `getUser` function to fetch user details.
-
-```tsx
-import { useEntityHistoryPlugin } from "@firecms/entity_history";
-import { User } from "@firecms/core";
-
-export function App() {
-
-    // ...
-
-    const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate,
-        authController: authController
-    });
-
-    const entityHistoryPlugin = useEntityHistoryPlugin({
-        // Enable history for all collections by default
-        // This can be overridden by setting `history: false` in a specific collection
-        defaultEnabled: true,
-
-        // Provide a function to resolve user details from a UID
-        getUser: userManagement.getUser
-    });
-
-    // ...
-}
-```
 
 ## Configuration Options
 

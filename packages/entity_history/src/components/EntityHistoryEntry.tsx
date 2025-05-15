@@ -125,9 +125,20 @@ export function EntityHistoryEntry({
 
                 {previewKeys && previewKeys.map((key) => {
                     const childProperty = getPropertyInPath(resolvedCollection.properties, key);
-                    if (!childProperty) return null;
 
                     const valueInPath = getValueInPath(entity.values, key);
+                    const element = childProperty ? (entity
+                            ? <PropertyPreview
+                                propertyKey={key as string}
+                                value={valueInPath}
+                                property={childProperty as ResolvedProperty}
+                                size={"small"}/>
+                            : <SkeletonPropertyComponent
+                                property={childProperty as ResolvedProperty}
+                                size={"small"}/>) :
+                        <Typography variant={"body2"}>
+                            {typeof valueInPath === "string" ? valueInPath : JSON.stringify(valueInPath)}
+                        </Typography>;
                     return (
                         <div key={"ref_prev_" + key}
                              className="flex w-full my-1 items-center">
@@ -138,15 +149,7 @@ export function EntityHistoryEntry({
                             </Typography>
                             <div className="w-4/5">
                                 {
-                                    entity
-                                        ? <PropertyPreview
-                                            propertyKey={key as string}
-                                            value={valueInPath}
-                                            property={childProperty as ResolvedProperty}
-                                            size={"small"}/>
-                                        : <SkeletonPropertyComponent
-                                            property={childProperty as ResolvedProperty}
-                                            size={"small"}/>
+                                    element
                                 }
                             </div>
                         </div>

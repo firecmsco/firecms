@@ -413,6 +413,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         getParentCollectionIds,
         convertIdsToPaths,
         navigate,
+        plugins
     };
 }
 

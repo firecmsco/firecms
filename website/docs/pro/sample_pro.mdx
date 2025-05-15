@@ -61,23 +61,23 @@ You are free to define your collections in code, or use the UI to define them. Y
 the UI of the collections defined in code. You can then merge the collections defined in code with the ones defined in
 the UI.
 ```jsx
-    const collectionsBuilder = useCallback(() => {
-        // Here we define a sample collection in code.
-        const collections = [
-            productsCollection
-            // Your collections here
-        ];
-        // You can merge collections defined in the collection editor (UI) with your own collections
-        return mergeCollections(collections, collectionConfigController.collections ?? []);
-    }, [collectionConfigController.collections]);
+const collectionsBuilder = useCallback(() => {
+    // Here we define a sample collection in code.
+    const collections = [
+        productsCollection
+        // Your collections here
+    ];
+    // You can merge collections defined in the collection editor (UI) with your own collections
+    return mergeCollections(collections, collectionConfigController.collections ?? []);
+}, [collectionConfigController.collections]);
 ```
 
 In order to add the collection editor plugin, you need to include it in the list of plugins passed to the `FireCMS`
 component.
 ```jsx
-    const collectionEditorPlugin = useCollectionEditorPlugin({
-        collectionConfigController
-    });
+const collectionEditorPlugin = useCollectionEditorPlugin({
+    collectionConfigController
+});
 ````
 
 ### Authorization Management

@@ -86,14 +86,22 @@ function App() {
         },
     });
 
+    const plugins = [exportPlugin];
+
+    const navigationController = useBuildNavigationController({
+        // ... rest of your config
+        plugins
+    });
+    
     return (
-        <FireCMS
-            plugins={[
-                exportPlugin,
-                // rest of your plugins
-            ]}
-            /*... rest of your configuration */
-        />
+            <FireCMS
+                navigationController={navigationController}
+                /*... rest of your configuration */
+            >
+              {({ context, loading }) => {
+                  // ... your components
+              }}
+            </FireCMS>
     );
 }
 

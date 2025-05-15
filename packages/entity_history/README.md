@@ -27,7 +27,7 @@ To use the plugin, import `useEntityHistoryPlugin` and add it to your `FirebaseC
 
 ```tsx
 import React from "react";
-import { FirebaseCMSApp } from "@firecms/core";
+import { FireCMS } from "@firecms/core";
 import { useEntityHistoryPlugin } from "@firecms/entity_history";
 
 
@@ -36,7 +36,7 @@ export default function App() {
     // Basic setup with default options
     const entityHistoryPlugin = useEntityHistoryPlugin();
 
-    return <FirebaseCMSApp
+    return <FireCMS
         name={"My Online Shop"}
         plugins={[entityHistoryPlugin]}
         authentication={myAuthenticator}

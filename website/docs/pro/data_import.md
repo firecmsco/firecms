@@ -5,15 +5,16 @@ title: Data Import
 
 ![data_import.png](/img/data_import.png)
 
-The **Data Import Plugin** for FireCMS enables you to import collection data from JSON, CSV, XLSL (Excel) files directly into your 
-FireCMS application. This plugins provide an interface where users can upload files and map the existing data to the 
+The **Data Import Plugin** for FireCMS enables you to import collection data from JSON, CSV, XLSL (Excel) files directly
+into your
+FireCMS application. This plugins provide an interface where users can upload files and map the existing data to the
 collection properties. This makes it very convenient to move data from one service to another and convert data into
 the right data types in the database.
 
 The plugin is able to do automatic conversion of some data types such as dates.
 
 The import feature can be also used within the collection editor plugin. In the collection editor, you can create
-new collections from a data file. It will be able to understand your data structure correctly, and even infer 
+new collections from a data file. It will be able to understand your data structure correctly, and even infer
 types such as as dates or enums (even if they are stored as strings).
 
 ## Installation
@@ -26,7 +27,8 @@ yarn add @firecms/data_import
 
 ## Configuration
 
-Integrate the Data Import Plugin using the `useImportPlugin` hook. You can optionally provide `ImportPluginProps` to customize its behavior.
+Integrate the Data Import Plugin using the `useImportPlugin` hook. You can optionally provide `ImportPluginProps` to
+customize its behavior.
 
 ### ImportPluginProps
 
@@ -58,14 +60,10 @@ export function App() {
 
     return (
             <FireCMS
-                    plugins={[
-                        importPlugin,
-                        // ... rest of your plugins
-                    ]}
-                    /*... rest of your configuration */
+                navigationController={navigationController}
+                /*... rest of your configuration */
             >
               {({ context, loading }) => {
-                
                   // ... your components
               }}
             </FireCMS>
@@ -77,7 +75,8 @@ export default App;
 
 ## Using the Import Functionality
 
-After integration, the import feature is available within your collection views. Users can upload JSON or CSV files to populate the collections.
+After integration, the import feature is available within your collection views. Users can upload JSON or CSV files to
+populate the collections.
 
 ### Steps to Import Data
 
@@ -86,7 +85,6 @@ After integration, the import feature is available within your collection views.
 3. **Upload File**: Select and upload the JSON or CSV file containing the data.
 4. **Data Type Mapping**: Select the data types and how your data should be mapped to the current structure.
 4. **Data Processing**: The plugin processes the file and adds the data to your collection.
-
 
 ## Types
 

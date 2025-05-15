@@ -112,13 +112,16 @@ function App() {
         storageSource
     });
 
+    const plugins = [userManagementPlugin];
+
     const navigationController = useBuildNavigationController({
         collections,
         views,
         adminViews: userManagementAdminViews,
         collectionPermissions: userManagement.collectionPermissions, // Optional, link collection permissions to user management
         authController,
-        dataSourceDelegate: firestoreDelegate
+        dataSourceDelegate: firestoreDelegate,
+        plugins
     });
 
   return (
@@ -126,7 +129,6 @@ function App() {
     <FireCMS
         // ...other configurations
         navigationController={navigationController}
-        plugins={[userManagementPlugin]}
     />
   );
 }

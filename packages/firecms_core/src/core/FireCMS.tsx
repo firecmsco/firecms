@@ -44,7 +44,7 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         authController,
         storageSource,
         dataSourceDelegate,
-        plugins,
+        plugins: pluginsProp,
         onAnalyticsEvent,
         propertyConfigs,
         entityViews,
@@ -52,6 +52,12 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         navigationController,
         apiKey
     } = props;
+
+    if (pluginsProp) {
+        console.warn("The `plugins` prop is deprecated in the FireCMS component. You should pass your plugins to `useBuildNavigationController` instead.");
+    }
+
+    const plugins = navigationController.plugins ?? pluginsProp;
 
     const sideDialogsController = useBuildSideDialogsController();
     const sideEntityController = useBuildSideEntityController(navigationController, sideDialogsController, authController);

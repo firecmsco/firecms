@@ -21,7 +21,7 @@ yarn add @firecms/data_import
 
 ```tsx
 import React from "react";
-import { FirebaseCMSApp } from "@firecms/core";
+import { FireCMS } from "@firecms/core";
 import { useImportPlugin } from "@firecms/data_import";
 
 
@@ -30,7 +30,7 @@ export default function App() {
     // Basic setup with default options
     const importPlugin = useImportPlugin();
 
-    return <FirebaseCMSApp
+    return <FireCMS
         name={"My Online Shop"}
         plugins={[importPlugin]}
         authentication={myAuthenticator}

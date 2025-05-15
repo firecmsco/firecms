@@ -316,22 +316,22 @@ export const testCollection = buildCollection<any>({
             //         return <div>Test</div>;
             //     }
             // }),
-            // body: buildProperty({
-            //     name: "Body",
-            //     validation: { required: false },
-            //     dataType: "map",
-            //     keyValue: true,
-            //     customProps: {
-            //         editable: true
-            //     },
-            //     defaultValue: {
-            //         clientIp: "client.ip",
-            //         clientDeviceType: "client.deviceType",
-            //         clientLanguage: "client.language",
-            //         clientReferral: "client.referral",
-            //         clientUserAgent: "client.userAgent",
-            //     },
-            // }),
+            body: buildProperty({
+                name: "Body",
+                validation: { required: false },
+                dataType: "map",
+                keyValue: true,
+                customProps: {
+                    editable: true
+                },
+                defaultValue: {
+                    clientIp: "client.ip",
+                    clientDeviceType: "client.deviceType",
+                    clientLanguage: "client.language",
+                    clientReferral: "client.referral",
+                    clientUserAgent: "client.userAgent",
+                },
+            }),
             // background: {
             //     dataType: "number",
             //     name: "Colour",

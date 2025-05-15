@@ -24,7 +24,7 @@ No need to add any subscription key or anything like that.
 
 ```tsx
 import React from "react";
-import { FirebaseCMSApp } from "@firecms/core";
+import { FireCMS } from "@firecms/core";
 import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
 
@@ -51,13 +51,18 @@ export default function App() {
         }
     });
 
-    return <FirebaseCMSApp
+    const plugins = [dataEnhancementPlugin];
+    
+    const navigationController = useBuildNavigationController({
+        // ... rest of your config
+        plugins
+    }); 
+    
+    return <FireCMS
         name={"My Online Shop"}
         plugins={[dataEnhancementPlugin]}
         authentication={myAuthenticator}
-        collections={[
-            //...
-        ]}
+        navigationController={navigationController}
         firebaseConfig={firebaseConfig}
     />;
 }

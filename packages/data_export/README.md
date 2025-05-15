@@ -2,7 +2,8 @@ I'll enhance the README with more detailed documentation, configuration options,
 
 # FireCMS Data Export Plugin
 
-This plugin enables exporting Firestore collections to CSV or JSON formats directly from your FireCMS interface. It adds an export button to collection views, providing a simple way to back up data or share it with others.
+This plugin enables exporting Firestore collections to CSV or JSON formats directly from your FireCMS interface. It adds
+an export button to collection views, providing a simple way to back up data or share it with others.
 
 ## Installation
 
@@ -23,7 +24,7 @@ yarn add @firecms/data_export
 
 ```tsx
 import React from "react";
-import { FirebaseCMSApp } from "@firecms/core";
+import { FireCMS } from "@firecms/core";
 import { useExportPlugin } from "@firecms/data_export";
 
 
@@ -31,9 +32,17 @@ export default function App() {
 
     // Basic setup with default options
     const exportPlugin = useExportPlugin();
-    return <FirebaseCMSApp
+    
+    const plugins = [exportPlugin];
+    
+    const navigationController = useBuildNavigationController({
+        // ... rest of your config
+        plugins
+    }); 
+    
+    return <FireCMS
         name={"My Online Shop"}
-        plugins={[exportPlugin]}
+        navigationController={navigationController}
         authentication={myAuthenticator}
         collections={myCollections}
         firebaseConfig={firebaseConfig}
@@ -68,17 +77,17 @@ const exportPlugin = useExportPlugin({
 
 ## Configuration Options
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `exportAllowed` | `(params: ExportAllowedParams) => boolean` | Function to determine if export is allowed for a collection |
-| `notAllowedView` | `React.ReactNode` | Custom component to display when export is not allowed |
-| `onAnalyticsEvent` | `(event: string, params?: any) => void` | Callback for tracking export events |
+| Option             | Type                                       | Description                                                 |
+|--------------------|--------------------------------------------|-------------------------------------------------------------|
+| `exportAllowed`    | `(params: ExportAllowedParams) => boolean` | Function to determine if export is allowed for a collection |
+| `notAllowedView`   | `React.ReactNode`                          | Custom component to display when export is not allowed      |
+| `onAnalyticsEvent` | `(event: string, params?: any) => void`    | Callback for tracking export events                         |
 
 Where `ExportAllowedParams` includes:
+
 - `collectionEntitiesCount`: Number of entities in the collection
 - `path`: Path of the collection
 - `collection`: Collection configuration object
-
 
 ## Additional Notes
 
