@@ -31,6 +31,7 @@ import {
 import { firebaseConfig } from "./firebase_config";
 import { productsCollection } from "./collections/products";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
+import { useEntityHistoryPlugin } from "@firecms/entity_history";
 import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
 import { useImportPlugin } from "@firecms/data_import";
 import { useExportPlugin } from "@firecms/data_export";
@@ -156,6 +157,14 @@ export function App() {
     });
 
     /**
+     * Entity history plugin. This plugin allows you to see the history of changes made to an entity.
+     * It is enabled by default for all collections, but you can disable it for specific collections
+     */
+    const entityHistoryPlugin = useEntityHistoryPlugin({
+        defaultEnabled: true,
+    });
+
+    /**
      * User management plugin
      */
     const userManagementPlugin = useUserManagementPlugin({ userManagement });
@@ -172,6 +181,7 @@ export function App() {
 
     const plugins = [
         dataEnhancementPlugin,
+        entityHistoryPlugin,
         importPlugin,
         exportPlugin,
         userManagementPlugin,
