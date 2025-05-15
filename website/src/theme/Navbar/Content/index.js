@@ -70,8 +70,22 @@ export default function NavbarContent() {
                         />
                     </a>
                     {dropdownItems.map((item, i) => {
-                        const innerLeftItems = item.items.filter((item) => item.customPosition !== "right");
-                        const innerRightItems = item.items.filter((item) => item.customPosition === "right");
+                        const innerLeftItems = item.items.filter((item) => item.customPosition !== "right")
+                            .map((item) => {
+                                const {
+                                    customPosition,
+                                    ...rest
+                                } = item;
+                                return rest;
+                            });
+                        const innerRightItems = item.items.filter((item) => item.customPosition === "right")
+                            .map((item) => {
+                                const {
+                                    customPosition,
+                                    ...rest
+                                } = item;
+                                return rest;
+                            });
                         return (
                             <NavigationDropdown
                                 key={item.to}

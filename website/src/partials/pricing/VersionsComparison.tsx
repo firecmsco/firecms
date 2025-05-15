@@ -251,28 +251,30 @@ export function VersionsComparison() {
 
                     <thead
                         className="text-sm text-gray-800 uppercase font-mono bg-gray-50 font-bold">
-                    <th scope="col"
-                        className="sticky top-20 z-10 border-none rounded-lg md:px-6 py-6 invisible">
-                    </th>
-                    <th scope="col"
-                        style={{ top: "80px"}}
-                        className=" bg-gray-50 sticky top-20 z-10 border-none rounded-lg text-base md:px-4 md:py-4 text-center min-w-36">
-                        Community
-                    </th>
-                    <th scope="col"
-                        style={{ top: "80px"}}
-                        className=" bg-gray-50 sticky top-20 z-10 border-none rounded-lg text-base md:px-4 md:py-4 text-center min-w-36">
-                        Pro
-                    </th>
-                    <th scope="col"
-                        style={{ top: "80px"}}
-                        className=" bg-gray-50 sticky top-20 z-10 border-none rounded-lg text-base md:px-4 md:py-4 text-center min-w-36">
-                        Cloud
-                    </th>
-                    {/*<th scope="col"*/}
+                    <tr>
+                        <th scope="col"
+                            className="sticky top-20 z-10 border-none rounded-lg md:px-6 py-6 invisible">
+                        </th>
+                        <th scope="col"
+                            style={{ top: "80px" }}
+                            className=" bg-gray-50 sticky top-20 z-10 border-none rounded-lg text-base md:px-4 md:py-4 text-center min-w-36">
+                            Community
+                        </th>
+                        <th scope="col"
+                            style={{ top: "80px" }}
+                            className=" bg-gray-50 sticky top-20 z-10 border-none rounded-lg text-base md:px-4 md:py-4 text-center min-w-36">
+                            Pro
+                        </th>
+                        <th scope="col"
+                            style={{ top: "80px" }}
+                            className=" bg-gray-50 sticky top-20 z-10 border-none rounded-lg text-base md:px-4 md:py-4 text-center min-w-36">
+                            Cloud
+                        </th>
+                    </tr>
+                    {/*<tr scope="col"*/}
                     {/*    className="border-none rounded-lg text-base md:px-6 md:py-4 text-center ">*/}
                     {/*    Self-hosted*/}
-                    {/*</th>*/}
+                    {/*</tr>*/}
                     </thead>
 
                     <tbody>
