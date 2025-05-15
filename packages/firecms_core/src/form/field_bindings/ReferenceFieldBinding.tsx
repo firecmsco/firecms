@@ -90,7 +90,7 @@ function ReferenceFieldBindingInternal({
                 icon={getIconForProperty(property, "small")}
                 required={property.validation?.required}
                 title={property.name}
-                className={"h-6 text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
+                className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
 
             {!collection && <ErrorView
                 error={"The specified collection does not exist. Check console"}/>}

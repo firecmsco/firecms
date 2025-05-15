@@ -62,7 +62,7 @@ export function SelectFieldBinding<T extends EnumType>({
                             icon={getIconForProperty(property, "small")}
                             required={property.validation?.required}
                             title={property.name}
-                            className={"h-6 text-text-secondary dark:text-text-secondary-dark ml-3.5 my-0"}
+                            className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5 my-0"}
                         />
                     </PropertyIdCopyTooltip>}
                 endAdornment={

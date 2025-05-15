@@ -310,8 +310,9 @@ export function CollectionPropertiesEditorForm({
     };
 
     const body = (
-        <div className={"grid grid-cols-12 gap-2 h-full bg-surface-50 dark:bg-surface-900"}>
+        <div className={"grid grid-cols-12 gap-2 h-full bg-white dark:bg-surface-950"}>
             <div className={cls(
+                "bg-surface-50 dark:bg-surface-900",
                 "p-4 md:p-8 pb-20 md:pb-20",
                 "col-span-12 lg:col-span-5 h-full overflow-auto",
                 !asDialog && "border-r " + defaultBorderMixin
@@ -401,8 +402,8 @@ export function CollectionPropertiesEditorForm({
 
             {!asDialog &&
                 <div className={"col-span-12 lg:col-span-7 p-4 md:py-8 md:px-4 h-full overflow-auto pb-20 md:pb-20"}>
-                    <Paper
-                        className="sticky top-8 p-4 min-h-full border border-transparent w-full flex flex-col justify-center ">
+                    <div
+                        className="sticky top-8 min-h-full w-full flex flex-col justify-center">
 
                         {selectedPropertyFullId &&
                             selectedProperty &&
@@ -446,7 +447,7 @@ export function CollectionPropertiesEditorForm({
                             <Typography variant={"label"} className="flex items-center justify-center">
                                 {"This property is defined as a property builder in code"}
                             </Typography>}
-                    </Paper>
+                    </div>
                 </div>}
 
             {asDialog && <PropertyFormDialog

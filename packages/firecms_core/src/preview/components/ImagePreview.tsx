@@ -62,7 +62,7 @@ export function ImagePreview({
                     title="Copy url to clipboard" side={"bottom"}>
                     <IconButton
                         variant={"filled"}
-                        size={"small"}
+                        size={"smallest"}
                         onClick={(e) => {
                             e.stopPropagation();
                             e.preventDefault();
@@ -81,7 +81,7 @@ export function ImagePreview({
                         href={url}
                         rel="noopener noreferrer"
                         target="_blank"
-                        size={"small"}
+                        size={"smallest"}
                         onClick={(e: any) => e.stopPropagation()}
                     >
                         <OpenInNewIcon className={"text-surface-700 dark:text-surface-300"}
