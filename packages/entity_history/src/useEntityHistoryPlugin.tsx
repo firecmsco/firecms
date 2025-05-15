@@ -13,10 +13,9 @@ export function useEntityHistoryPlugin(props?: EntityHistoryPluginProps): FireCM
     const { defaultEnabled = false } = props ?? {};
 
     const modifyCollection = useCallback((collection: EntityCollection) => {
-        if (collection.history === true || defaultEnabled) {
+        if (collection.history === true || (defaultEnabled && collection.history !== false)) {
             return {
                 ...collection,
-                history: true,
                 entityViews: [
                     ...(collection.entityViews ?? []),
                     {
