@@ -47,12 +47,12 @@ export default {
                     "500": "#9DA5B0",
                     "600": "#40444A",
                     "700": "#232325",  // dark UI surface
-                    "800": "#18181C",  // main dark bg (matches mux sections/hero)
-                    "900": "#101013"   // nearly black
+                    "800": "#18181C",
+                    "900": "#101013"
                 },
                 "surface-accent": {
                     "50": "#fcfcfc",
-                    "100": "#f1f5f9", // blueish accent for info or attention boxes (Match Mux badges)
+                    "100": "#f1f5f9",
                     "200": "#e3e7ee",
                     "300": "#cfd5e4",
                     "400": "#b3bbc8",
@@ -61,14 +61,7 @@ export default {
                     "700": "#38415c",
                     "800": "#232336",
                     "900": "#161624"
-                },
-                "border": {
-                    DEFAULT: "#D1D3D6",
-                    dark: "#40444A"
-                },
-                "brand-yellow": "#FFB200",
-                "brand-blue": "#3979F6",
-                "brand-pink": "#FF33A1"
+                }
             }
         }
     }
