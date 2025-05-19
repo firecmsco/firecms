@@ -3,8 +3,5 @@
     "search_key": "f084e6dcc154c04295c8124dbb797ff1",
     "api_key": "6a014a04544a84a51e2f78d8246b6244",
     "app_id": "Y6FR1MDSVW"
-  },
-  "mailchimp": {
-    "api_url": "https://us5.api.mailchimp.com/3.0/lists/d356ca5a84"
   }
 }

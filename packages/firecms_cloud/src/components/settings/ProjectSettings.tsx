@@ -74,7 +74,7 @@ export function ProjectSettings() {
 
             <AppCheckSettingsView/>
 
-            <AutoSetupCollectionsSettings/>
+            {/*<AutoSetupCollectionsSettings/>*/}
 
         </Container>
     );
