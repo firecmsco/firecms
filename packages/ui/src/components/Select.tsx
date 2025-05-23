@@ -187,18 +187,8 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                             </SelectPrimitive.Value>
                         </div>
 
-                        {endAdornment && (
-                            <div
-                                className={cls("h-full flex items-center")}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                }}>
-                                {endAdornment}
-                            </div>
-                        )}
                         <SelectPrimitive.Icon asChild>
-                            <KeyboardArrowDownIcon size={"medium"}
+                            <KeyboardArrowDownIcon size={size === "large" ? "medium" : "small"}
                                                    className={cls("transition", open ? "rotate-180" : "", {
                                                        "px-2": size === "large",
                                                        "px-1": size === "medium" || size === "small",
@@ -207,6 +197,16 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                     </div>
                 </SelectPrimitive.Trigger>
 
+                {endAdornment && (
+                    <div
+                        className={cls("h-full flex items-center absolute right-0 pr-12",)}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }}>
+                        {endAdornment}
+                    </div>
+                )}
             </div>
             <SelectPrimitive.Portal>
                 <SelectPrimitive.Content position={position}

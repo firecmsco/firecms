@@ -45,7 +45,7 @@ export function StringPropertyPreview({
         if (!value) return <></>;
         const lines = value.split("\n");
         return value && value.includes("\n")
-            ? <div className={cls("overflow-x-scroll", size === "small" ? "text-sm" : "")}>
+            ? <div className={cls("overflow-x-scroll overflow-hidden", size === "small" ? "text-sm" : "")}>
                 {lines.map((str, index) =>
                     <React.Fragment key={`string_preview_${index}`}>
                         <span>{str}</span>

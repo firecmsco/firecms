@@ -259,7 +259,7 @@ export const MultiSelect = React.forwardRef<
                                             }}
                                         />}
                                         <div className={cls("px-2 h-full flex items-center")}>
-                                            <KeyboardArrowDownIcon size={"small"}
+                                            <KeyboardArrowDownIcon size={size === "large" ? "medium" : "small"}
                                                                    className={cls("transition", isPopoverOpen ? "rotate-180" : "")}/>
                                         </div>
                                     </div>
@@ -270,7 +270,7 @@ export const MultiSelect = React.forwardRef<
                                       {placeholder}
                                     </span>
                                     <div className={cls("px-2 h-full flex items-center")}>
-                                        <KeyboardArrowDownIcon size={"small"}
+                                        <KeyboardArrowDownIcon size={size === "large" ? "medium" : "small"}
                                                                className={cls("transition", isPopoverOpen ? "rotate-180" : "")}/>
                                     </div>
                                 </div>
@@ -379,7 +379,6 @@ export function MultiSelectItem<T extends MultiSelectValue = string>({
         {children}
     </CommandPrimitive.Item>;
 }
-
 
 function InnerCheckBox({ checked }: { checked: boolean }) {
     return <div className={cls(
