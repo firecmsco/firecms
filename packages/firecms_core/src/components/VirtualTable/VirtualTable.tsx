@@ -131,7 +131,8 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         // Set initial scroll position
         useEffect(() => {
             if (tableRef.current && initialScroll) {
-                tableRef.current.scrollTo(0, initialScroll);
+                const { scrollLeft } = tableRef.current;
+                tableRef.current.scrollTo(scrollLeft, initialScroll);
             }
         }, [tableRef, initialScroll]);
 
