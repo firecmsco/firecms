@@ -84,7 +84,7 @@ export function MultiSelectFieldBinding({
             <MultiSelect
                 className={"w-full mt-2"}
                 size={size}
-                value={validValue ? value.map((v) => v.toString()) : []}
+                value={validValue ? value.map((v) => v?.toString()) : []}
                 disabled={disabled}
                 modalPopover={true}
                 label={<LabelWithIconAndTooltip
