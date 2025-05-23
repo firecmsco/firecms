@@ -223,11 +223,11 @@ export function CollectionDetailsForm({
                             position={"start"}
                             size={"large"}
                             allowIndeterminate={true}
-                            label={values.history === null ? "Document history revisions enabled if enabled globally" : (
+                            label={values.history === null || values.history === undefined ? "Document history revisions enabled if enabled globally" : (
                                 values.history ? "Document history revisions ENABLED" : "Document history revisions NOT enabled"
                             )}
                             onValueChange={(v) => setFieldValue("history", v)}
-                            value={values.history ?? null}
+                            value={values.history === undefined ? null : values.history}
                         />
                         <FieldCaption>
                             When enabled, each document in this collection will have a history of changes.
@@ -343,6 +343,20 @@ export function CollectionDetailsForm({
                                         ))}
                                     </Select>
                                 </div>
+
+                                <div className={"col-span-12"}>
+                                    <BooleanSwitchWithLabel
+                                        position={"start"}
+                                        size={"large"}
+                                        label={values.includeJsonView === undefined || values.includeJsonView ? "Include JSON view" : "Do not include JSON view"}
+                                        onValueChange={(v) => setFieldValue("includeJsonView", v)}
+                                        value={values.includeJsonView === undefined ? true : values.includeJsonView}
+                                    />
+                                    <FieldCaption>
+                                        Include the JSON representation of the document.
+                                    </FieldCaption>
+                                </div>
+
                                 <div className={"col-span-12"}>
                                     <Select
                                         name="customId"
