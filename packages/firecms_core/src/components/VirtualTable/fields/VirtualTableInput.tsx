@@ -66,7 +66,6 @@ export function VirtualTableInput(props: {
                 width: "100%",
                 color: "unset",
                 fontWeight: "unset",
-                lineHeight: 1.7142857,
                 fontSize: "unset",
                 fontFamily: "unset",
                 background: "unset",

@@ -749,6 +749,7 @@ export const EntityCollectionView = React.memo(
             equal(a.defaultSize, b.defaultSize) &&
             equal(a.initialFilter, b.initialFilter) &&
             equal(a.initialSort, b.initialSort) &&
+            equal(a.includeJsonView, b.includeJsonView) &&
             equal(a.textSearchEnabled, b.textSearchEnabled) &&
             equal(a.additionalFields, b.additionalFields) &&
             equal(a.sideDialogWidth, b.sideDialogWidth) &&
