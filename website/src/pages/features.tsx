@@ -7,6 +7,7 @@ import ProTeaser from "../partials/home/ProTeaser";
 import { UnbeatableUX } from "../partials/features/UnbeatableUX";
 import { SchemaEditorIntro } from "../partials/features/SchemaEditorIntro";
 import OpenAITeaser from "../partials/features/OpenAITeaser";
+import History from "../partials/features/History";
 import Head from "@docusaurus/Head";
 import { DataTalkIntro } from "../partials/home/DataTalkIntro";
 import { FeaturesCarousel } from "../partials/features/FeaturesCarousel";
@@ -62,6 +63,7 @@ function FeaturesPage() {
 
                     <DataTalkIntro/>
 
+                    <History/>
                     <Panel color={"light"} includePadding={true}>
                         <HeroButtons/>
                     </Panel>

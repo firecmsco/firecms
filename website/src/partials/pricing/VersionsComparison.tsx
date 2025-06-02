@@ -67,6 +67,13 @@ const data = [
         pro: "Yes"
     },
     {
+        feature: "Data history and authoring",
+        tip: "See the history of your data changes and revert if needed",
+        community: "No",
+        cloud: "Yes",
+        pro: "Yes"
+    },
+    {
         feature: "Data export",
         tip: "Easily export your data for backups or migrations",
         community: "No",

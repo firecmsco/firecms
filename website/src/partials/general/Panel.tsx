@@ -19,7 +19,7 @@ export function Panel({
     header?: React.ReactNode,
     children: React.ReactNode,
     footer?: React.ReactNode,
-    color?: "gray" | "dark_gray" | "light_gray" | "white" | "white-to-slate" | "primary" | "secondary" | "light" | "light-to-white" | "lighter" | "transparent",
+    color?: "gray" | "dark_gray" | "light_gray" | "white" | "white-to-slate" | "primary" | "secondary" | "dataki" | "light" | "light-to-white" | "lighter" | "transparent",
     centered?: boolean,
     includeMargin?: boolean,
     includePadding?: boolean,
@@ -38,7 +38,8 @@ export function Panel({
                                 color === "gray" ? "bg-gray-800 text-white dark:text-white" :
                                     color === "dark_gray" ? "bg-gray-900 text-white dark:text-white" :
                                         color === "primary" ? "bg-primary text-white dark:text-white" :
-                                            color === "secondary" ? "bg-secondary text-white dark:text-white" : "";
+                                            color === "dataki" ? "bg-blue-950 text-white dark:text-white" :
+                                                color === "secondary" ? "bg-secondary text-white dark:text-white" : "";
 
     const borderClass = color === "primary" ? "border-solid border-white border-opacity-20 dark:border-opacity-20" : defaultBorderMixin;
 

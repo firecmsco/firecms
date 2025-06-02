@@ -4,7 +4,7 @@ import { Panel } from "../general/Panel";
 export function TechSplash() {
     return <Panel color={"primary"}>
         <div
-            className="relative flex flex-col items-center">
+            className="relative flex flex-col items-center font-bold">
             <p className="text-5xl my-1 text-white uppercase font-mono">
                 Typescript
             </p>

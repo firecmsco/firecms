@@ -5,6 +5,7 @@ import Head from "@docusaurus/Head";
 import HeroHome from "../partials/home/HeroHome";
 import { TechSplash } from "../partials/home/TechSplash";
 import FirebaseTeaser from "../partials/home/OpenSourceDetails";
+import DatakiIntro from "../partials/home/DatakiIntro";
 import FireCMSIntro from "../partials/home/FireCMSIntro";
 import { DeveloperFeatures } from "../partials/features/DeveloperFeatures";
 import { QuotesSection } from "../partials/Quotes";
@@ -60,11 +61,13 @@ function Home() {
 
                 <ImportDataIntro/>
 
-                <DeveloperFeatures/>
-
                 <TechSplash/>
 
+                <DeveloperFeatures/>
+
                 <FirebaseTeaser/>
+
+                <DatakiIntro/>
 
             </main>
 
