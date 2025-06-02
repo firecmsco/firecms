@@ -16,8 +16,6 @@ export default async function Page({ params }: {
         maxPriceFilter: filters.priceMax
     });
 
-    console.log("Products", products);
-
     return <ProductsListView initialProducts={products}
                              initialCategoryFilter={filters.category}/>;
 }

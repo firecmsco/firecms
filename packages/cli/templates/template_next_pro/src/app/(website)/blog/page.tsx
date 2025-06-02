@@ -7,7 +7,5 @@ export default async function Page() {
         limit: 10,
     });
 
-    console.log("Blog entries", blogEntries);
-
     return <BlogListView initialEntries={blogEntries}/>;
 }
