@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { EntityCollection, FireCMSPlugin, useNavigationController } from "@firecms/core";
+import { EntityCollection, FireCMSPlugin, useNavigationController, useSnackbarController } from "@firecms/core";
 import { CollectionsConfigController, mergeCollections } from "@firecms/collection_editor";
 import { Alert, Button, HistoryIcon, Typography } from "@firecms/ui";
 import { ProjectConfig } from "./useBuildProjectConfig";
@@ -30,6 +30,7 @@ export function useSaasPlugin({
     historyDefaultEnabled?: boolean;
 }): FireCMSPlugin {
 
+    const snackbarController = useSnackbarController();
     const [alertDismissed, setAlertDismissed] = React.useState(isHistoryAlertDismissed());
     const hasOwnTextSearchImplementation = Boolean(appConfig?.textSearchControllerBuilder);
 
@@ -45,13 +46,18 @@ export function useSaasPlugin({
             <Button size={"small"} variant={"outlined"} color={"text"}
                     onClick={() => {
                         setAlertDismissed(true);
-                        projectConfig.updateHistoryDefaultEnabled(true);
+                        projectConfig.updateHistoryDefaultEnabled(true).then(() => {
+                            snackbarController.open({
+                                type: "success",
+                                message: "Document history enabled globally",
+                            })
+                        });
                     }}>Enable globally</Button>
         </>}><>🕒 You can now enable
             document history to keep track of your document
             changes.
             <Typography variant={"caption"}>
-               You can enable this feature for all your collections or just for specific ones. Data will be stored
+                You can enable this feature for all your collections or just for specific ones. Data will be stored
                 in your Firestore database as a sub-collection of each document.
             </Typography>
         </>
