@@ -115,7 +115,6 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                                                              endAdornment,
                                                              AddColumnComponent,
                                                              initialScroll = 0,
-                                                             debug
                                                          }: VirtualTableProps<T>) {
 
         const sortByProperty: string | undefined = sortBy ? sortBy[0] : undefined;
@@ -171,7 +170,6 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         });
 
         const onColumnResizeInternal = useCallback((params: OnVirtualTableColumnResizeParams) => {
-            if (debug) console.log("onColumnResizeInternal", params);
             setColumns(prevColumns =>
                 prevColumns.map((column) =>
                     column.key === params.column.key ? params.column : column
@@ -180,8 +178,6 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         }, []);
 
         const onColumnResizeEndInternal = useCallback((params: OnVirtualTableColumnResizeParams) => {
-            if (debug)
-                console.log("onColumnResizeEndInternal", params);
             setColumns(columns.map((column) => column.key === params.column.key ? params.column : column));
             if (onColumnResize) {
                 onColumnResize(params);
@@ -192,14 +188,10 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         const filterRef = useRef<VirtualTableFilterValues<any> | undefined>();
 
         useEffect(() => {
-            if (debug)
-                console.log("Filter updated", filterInput);
             filterRef.current = filterInput;
         }, [filterInput]);
 
         const scrollToTop = useCallback(() => {
-            if (debug)
-                console.log("scrollToTop");
             endReachCallbackThreshold.current = 0;
             if (tableRef.current) {
                 tableRef.current.scrollTo(tableRef.current?.scrollLeft, 0);
@@ -207,9 +199,6 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         }, []);
 
         const onColumnSort = useCallback((key: string) => {
-
-            if (debug)
-                console.log("onColumnSort", key);
 
             const isDesc = sortByProperty === key && currentSort === "desc";
             const isAsc = sortByProperty === key && currentSort === "asc";
@@ -238,12 +227,8 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         }, [checkFilterCombination, currentSort, onFilterUpdate, onResetPagination, onSortByUpdate, scrollToTop, sortByProperty]);
 
         const maxScroll = Math.max((data?.length ?? 0) * rowHeight - bounds.height, 0);
-        if (debug)
-            console.log("maxScroll", maxScroll);
 
         const onEndReachedInternal = useCallback((scrollOffset: number) => {
-            if (debug)
-                console.log("onEndReachedInternal", scrollOffset, endReachCallbackThreshold.current + endOffset);
             if (onEndReached && (data?.length ?? 0) > 0 && scrollOffset > endReachCallbackThreshold.current + endOffset) {
                 endReachCallbackThreshold.current = scrollOffset;
                 onEndReached();
@@ -259,12 +244,6 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             scrollOffset: number,
             scrollUpdateWasRequested: boolean;
         }) => {
-            if (debug)
-                console.log("onScroll", {
-                    scrollDirection,
-                    scrollOffset,
-                    scrollUpdateWasRequested
-                });
             if (onScrollProp) {
                 debouncedScroll({
                     scrollDirection,
@@ -277,8 +256,6 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         }, [maxScroll, onEndReachedInternal]);
 
         const onFilterUpdateInternal = useCallback((column: VirtualTableColumn, filterForProperty?: [VirtualTableWhereFilterOp, any]) => {
-            if (debug)
-                console.log("onFilterUpdateInternal", column, filterForProperty);
 
             endReachCallbackThreshold.current = 0;
             const filter = filterRef.current;
@@ -340,9 +317,6 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             endAdornment,
             AddColumnComponent
         };
-
-        if (debug)
-            console.log("VirtualTable render", virtualListController);
 
         return (
             <div

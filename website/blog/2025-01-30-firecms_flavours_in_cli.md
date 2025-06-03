@@ -74,7 +74,7 @@ Who doesn't like a good comparison table? Here is a quick overview of the featur
 | Custom Authentication & Access Control | ✅ | ❌                               | ✅ |
 | Data Import/Export                     | ❌ | ✅                               | ✅ |
 | User & Role Management                 | ❌ | ✅                               | ✅ |
-| GPT-4 Content Generation               | ❌ | ✅                               | ✅ |
+| AI Content Generation                  | ❌ | ✅                               | ✅ |
 | Schema Editor & Data Inference         | ❌ | ✅                               | ✅ |
 | Advanced Data Import/Export            | ❌ | ❌                               | ✅ |
 | Access to All FireCMS Plugins          | ❌ | ❌                               | ✅ |

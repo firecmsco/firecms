@@ -255,6 +255,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 <ErrorBoundary>
                     {usedFormContext && <Builder
                         collection={collection}
+                        parentCollectionIds={parentCollectionIds}
                         entity={usedEntity}
                         modifiedValues={usedFormContext?.formex?.values ?? usedEntity?.values}
                         formContext={usedFormContext}

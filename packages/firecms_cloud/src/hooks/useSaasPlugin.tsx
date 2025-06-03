@@ -1,13 +1,14 @@
 import React, { useCallback } from "react";
 import { EntityCollection, FireCMSPlugin, useNavigationController } from "@firecms/core";
 import { CollectionsConfigController, mergeCollections } from "@firecms/collection_editor";
-import { Typography } from "@firecms/ui";
+import { Alert, Button, HistoryIcon, Typography } from "@firecms/ui";
 import { ProjectConfig } from "./useBuildProjectConfig";
 import { TextSearchInfoDialog } from "../components/subscriptions/TextSearchInfoDialog";
 import { FireCMSAppConfig, FireCMSBackend } from "../types";
 import { RootCollectionSuggestions } from "../components/RootCollectionSuggestions";
 import { DataTalkSuggestions } from "../components/DataTalkSuggestions";
 import { AutoSetUpCollectionsButton } from "../components/AutoSetUpCollectionsButton";
+import { EnableEntityHistoryView } from "../components/EnableEntityHistoryView";
 
 export function useSaasPlugin({
                                   projectConfig,
@@ -16,7 +17,8 @@ export function useSaasPlugin({
                                   dataTalkSuggestions,
                                   introMode,
                                   fireCMSBackend,
-                                  onAnalyticsEvent
+                                  onAnalyticsEvent,
+                                  historyDefaultEnabled
                               }: {
     projectConfig: ProjectConfig;
     appConfig?: FireCMSAppConfig;
@@ -25,15 +27,41 @@ export function useSaasPlugin({
     introMode?: "new_project" | "existing_project";
     fireCMSBackend: FireCMSBackend;
     onAnalyticsEvent?: (event: string, data?: object) => void;
+    historyDefaultEnabled?: boolean;
 }): FireCMSPlugin {
 
+    const [alertDismissed, setAlertDismissed] = React.useState(isHistoryAlertDismissed());
     const hasOwnTextSearchImplementation = Boolean(appConfig?.textSearchControllerBuilder);
 
-    const additionalChildrenStart = <IntroWidget
-        fireCMSBackend={fireCMSBackend}
-        onAnalyticsEvent={onAnalyticsEvent}
-        introMode={introMode}
-        projectConfig={projectConfig}/>;
+    const showHistoryAlert = !alertDismissed && !projectConfig.historyDefaultEnabled;
+    const additionalChildrenStart = <>
+        {showHistoryAlert && <Alert action={<>
+            <Button size={"small"} variant={"text"} color={"text"}
+                    onClick={() => {
+                        setAlertDismissed(true);
+                        saveHistoryAlertDismissed();
+                        onAnalyticsEvent?.("saas_history_alert_dismissed");
+                    }}>Dismiss</Button>
+            <Button size={"small"} variant={"outlined"} color={"text"}
+                    onClick={() => {
+                        setAlertDismissed(true);
+                        projectConfig.updateHistoryDefaultEnabled(true);
+                    }}>Enable globally</Button>
+        </>}><>🕒 You can now enable
+            document history to keep track of your document
+            changes.
+            <Typography variant={"caption"}>
+               You can enable this feature for all your collections or just for specific ones. Data will be stored
+                in your Firestore database as a sub-collection of each document.
+            </Typography>
+        </>
+        </Alert>}
+        <IntroWidget
+            fireCMSBackend={fireCMSBackend}
+            onAnalyticsEvent={onAnalyticsEvent}
+            introMode={introMode}
+            projectConfig={projectConfig}/>
+    </>;
 
     const additionalChildrenEnd = <>
         <DataTalkSuggestions
@@ -43,6 +71,25 @@ export function useSaasPlugin({
                                    onAnalyticsEvent={onAnalyticsEvent}
         />
     </>;
+
+    const modifyCollection = useCallback((collection: EntityCollection) => {
+        if (collection.history === false && !historyDefaultEnabled) {
+            return {
+                ...collection,
+                entityViews: [
+                    ...(collection.entityViews ?? []),
+                    {
+                        key: "__history",
+                        name: "History",
+                        tabComponent: <HistoryIcon size={"small"}/>,
+                        Builder: EnableEntityHistoryView,
+                        position: "start"
+                    }
+                ],
+            } satisfies EntityCollection;
+        }
+        return collection;
+    }, []);
 
     return {
         key: "saas",
@@ -54,10 +101,11 @@ export function useSaasPlugin({
             injectCollections: projectConfig.isTrialOver ? undefined : useCallback(
                 (collections: EntityCollection[]) => mergeCollections(
                     collections,
-                    collectionConfigController.collections ?? [],
+                    (collectionConfigController.collections ?? []).map(modifyCollection),
                     appConfig?.modifyCollection
                 ),
-                [collectionConfigController.collections])
+                [collectionConfigController.collections]),
+            modifyCollection
         },
         collectionView: {
 
@@ -173,4 +221,13 @@ export function IntroWidget({
 
         </div>
     );
+}
+
+// save locally that the alert was dismissed
+function saveHistoryAlertDismissed() {
+    localStorage.setItem("firecms_saas_alert_history_dismissed", "true");
+}
+
+function isHistoryAlertDismissed(): boolean {
+    return localStorage.getItem("firecms_saas_alert_history_dismissed") === "true";
 }

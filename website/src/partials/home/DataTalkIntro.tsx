@@ -27,21 +27,21 @@ export function DataTalkIntro(): JSX.Element {
                     responseText:
                         "This code counts the number of users who signed up in the previous month.",
                     code: `export default async () => {
-             const firestore = getFirestore();
-             const now = new Date();
-             const lastMonth = new Date();
-             lastMonth.setMonth(lastMonth.getMonth() - 1);
-           
-             const usersRef = collection(firestore, "users");
-             const q = query(
-               usersRef,
-               where("signupDate", ">=", lastMonth),
-               where("signupDate", "<=", now)
-             );
-           
-             const snapshot = await getDocs(q);
-             return snapshot.size;
-           };`,
+ const firestore = getFirestore();
+ const now = new Date();
+ const lastMonth = new Date();
+ lastMonth.setMonth(lastMonth.getMonth() - 1);
+
+ const usersRef = collection(firestore, "users");
+ const q = query(
+   usersRef,
+   where("signupDate", ">=", lastMonth),
+   where("signupDate", "<=", now)
+ );
+
+ const snapshot = await getDocs(q);
+ return snapshot.size;
+};`,
                 },
             ]}/>
         </div>

@@ -10,6 +10,7 @@ export type AutocompleteProps = {
     children: React.ReactNode;
     open: boolean;
     setOpen: (open: boolean) => void;
+    className?: string;
 }
 
 export const useAutoComplete = ({ ref }: {
@@ -42,7 +43,8 @@ export const useAutoComplete = ({ ref }: {
 export function Autocomplete({
                                  children,
                                  open,
-                                 setOpen
+                                 setOpen,
+                                 className
                              }: AutocompleteProps) {
 
     const autocompleteRef = React.useRef<HTMLDivElement>(null);
@@ -50,7 +52,7 @@ export function Autocomplete({
 
     return <Collapse
         in={open}
-        duration={50}
+        duration={30}
         className={cls(
             "absolute top-full left-0 right-0 overflow-visible",
             open ? "shadow" : "",
@@ -60,7 +62,8 @@ export function Autocomplete({
         <div ref={autocompleteRef}
              className={cls(
                  open ? paperMixin : "",
-                 "bg-surface-50 dark:bg-surface-900 py-2"
+                 "bg-surface-50 dark:bg-surface-900",
+                 className,
              )}>
             {children}
         </div>
@@ -71,16 +74,18 @@ export function Autocomplete({
 export type AutocompleteItemProps = {
     children: React.ReactNode,
     onClick?: () => void,
+    className?: string
 };
 
 export function AutocompleteItem({
                                      children,
-                                     onClick
+                                     onClick,
+                                     className
                                  }: AutocompleteItemProps) {
 
     return (
         <div
-            className="flex w-full items-center pr-6 pl-14 h-[48px] cursor-pointer hover:bg-surface-accent-100 dark:hover:bg-surface-accent-800"
+            className={cls("flex w-full items-center h-[48px] cursor-pointer hover:bg-surface-accent-100 dark:hover:bg-surface-accent-800", className)}
             onClick={onClick}>
             {children}
         </div>

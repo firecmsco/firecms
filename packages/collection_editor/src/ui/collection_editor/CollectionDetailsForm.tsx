@@ -195,6 +195,7 @@ export function CollectionDetailsForm({
                             {groupOptions?.map((group, index) => {
                                 return <AutocompleteItem
                                     key={index + "_" + group}
+                                    className={"pr-6 pl-14"}
                                     onClick={() => {
                                         setAutoCompleteOpen(false);
                                         setFieldValue("group", group ?? null);

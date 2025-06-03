@@ -577,6 +577,11 @@ export interface EntityCustomViewParams<M extends Record<string, any> = any> {
      * Use the form context to access the form state and methods
      */
     formContext: FormContext;
+
+    /**
+     * If this is a subcollection, this is the path of the parent collections
+     */
+    parentCollectionIds?: string[];
 }
 
 export type InferCollectionType<S extends EntityCollection> = S extends EntityCollection<infer M> ? M : never;

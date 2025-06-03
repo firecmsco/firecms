@@ -174,11 +174,12 @@ export const testCollection = buildCollection<any>({
             //     mode: "date_time",
             //     clearable: true
             // },
-            // locale: {
-            //     name: "Locales",
-            //     dataType: "string",
-            //     enumValues: locales
-            // },
+            locale: {
+                name: "Locales",
+                dataType: "string",
+                enumValues: locales,
+                clearable: true,
+            },
             available_locales: {
                 name: "Available locales",
                 dataType: "array",

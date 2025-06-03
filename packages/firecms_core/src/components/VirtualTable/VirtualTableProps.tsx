@@ -162,11 +162,6 @@ export interface VirtualTableProps<T extends Record<string, any>> {
      */
     initialScroll?: number;
 
-    /**
-     * Debug mode
-     */
-    debug?: boolean;
-
 }
 
 export type CellRendererParams<T = any> = {

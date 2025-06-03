@@ -17,7 +17,6 @@ import { useFireCMSBackend, useProjectConfig } from "../../hooks";
 import { ProjectSubscriptionPlans } from "../subscriptions";
 import { SecurityRulesInstructions } from "../SecurityRulesInstructions";
 import { AppCheckSettingsView } from "./AppCheckSettingsView";
-import { AutoSetupCollectionsSettings } from "./AutoSetupCollectionsSettings";
 
 export function ProjectSettings() {
 
@@ -37,7 +36,7 @@ export function ProjectSettings() {
 
             <ProjectSubscriptionPlans/>
 
-            <div className={"flex flex-col gap-2"}>
+            <div className={"flex flex-col gap-4"}>
 
                 <Typography variant={"h4"} className="mt-4 mb-2">Settings</Typography>
 
@@ -50,6 +49,13 @@ export function ProjectSettings() {
                         onValueChange={(v) => projectConfig.updateLocalTextSearchEnabled(v)}
                         value={projectConfig.localTextSearchEnabled}
                     />
+
+                    <FieldCaption>
+                        Enable local text search for all collections. This will allow you to search text fields in your
+                        collections using the FireCMS search bar.
+                        Note that this feature can incur in higher read counts, as it will index all text fields in your
+                        collections.
+                    </FieldCaption>
                 </div>
                 <div className={"col-span-12"}>
                     <BooleanSwitchWithLabel
@@ -60,7 +66,9 @@ export function ProjectSettings() {
                     />
 
                     <FieldCaption>
-                       When true, all collections will have the history enabled by default. You can override this setting in each collection.
+                        When true, all collections will have the history enabled by default. You can override this
+                        setting in each collection.
+                        History will be saved in the <code>__history</code> subcollection of each document.
                     </FieldCaption>
                 </div>
 

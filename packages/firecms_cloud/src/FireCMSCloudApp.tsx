@@ -516,14 +516,17 @@ function FireCMSAppAuthenticated({
 
     const exportPlugin = useExportPlugin({
         exportAllowed: () => true,
-        onAnalyticsEvent,
-    });
-    const importPlugin = useImportPlugin({
-        onAnalyticsEvent,
+        onAnalyticsEvent
     });
 
+    const importPlugin = useImportPlugin({
+        onAnalyticsEvent
+    });
+
+    const historyDefaultEnabled = projectConfig.historyDefaultEnabled;
     const historyPlugin = useEntityHistoryPlugin({
-        defaultEnabled: projectConfig.historyDefaultEnabled,
+        defaultEnabled: historyDefaultEnabled,
+        getUser: (uid) => userManagement.users.find((user) => user.firebase_uid === uid) ?? null,
     });
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({
@@ -569,7 +572,8 @@ function FireCMSAppAuthenticated({
         fireCMSBackend,
         onAnalyticsEvent,
         dataTalkSuggestions: dataTalkConfig.rootPromptsSuggestions,
-        introMode: projectConfig.creationType === "new" ? "new_project" : "existing_project"
+        introMode: projectConfig.creationType === "new" ? "new_project" : "existing_project",
+        historyDefaultEnabled
     });
 
     const collectionEditorPlugin = useCollectionEditorPlugin<PersistedCollection, User>({

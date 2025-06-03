@@ -81,7 +81,7 @@ export function FireCMSCloudVersions() {
                     <li className={"list-disc ml-2"}><Tip tip={"Create as many data collections as you need."}>Unlimited collections</Tip></li>
                     <li className={"list-disc ml-2"}><Tip tip={"Easily migrate or backup your data."}>Data import and export</Tip></li>
                     <li className={"list-disc ml-2"}><Tip tip={"Personalize the appearance of your CMS to match your brand."}>Theme and logo customization</Tip></li>
-                    <li className={"list-disc ml-2"}><Tip tip={"Leverage AI to generate smart content."}>GPT-4 content generation</Tip></li>
+                    <li className={"list-disc ml-2"}><Tip tip={"Leverage the latest AI models to generate smart content."}>AI content generation</Tip></li>
                     <li className={"list-disc ml-2"}><Tip tip={"Utilize additional databases for extended functionality."}>Secondary databases</Tip></li>
                     <li className={"list-disc ml-2"}><Tip tip={"Ensure application security with AppCheck integration."}>AppCheck</Tip></li>
                     <li className={"list-disc ml-2"}><Tip tip={"Fine-tune user permissions and roles for your team."}>User and role management</Tip></li>
