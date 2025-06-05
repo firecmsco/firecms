@@ -4,14 +4,30 @@ import equal from "react-fast-compare"
 import {
     AdditionalFieldDelegate,
     CMSType,
-    ErrorBoundary,
     isPropertyBuilder,
     PropertiesOrBuilders,
     PropertyOrBuilder
 } from "@firecms/core";
 import { AutorenewIcon, defaultBorderMixin, DragHandleIcon, IconButton, RemoveIcon, Tooltip } from "@firecms/ui";
 import { NonEditablePropertyPreview, PropertyFieldPreview } from "./PropertyFieldPreview";
-import { DragDropContext, Draggable, DraggableProvided, Droppable } from "@hello-pangea/dnd";
+import {
+    closestCenter,
+    DndContext,
+    DragEndEvent,
+    KeyboardSensor,
+    PointerSensor,
+    useSensor,
+    useSensors
+} from "@dnd-kit/core";
+import {
+    SortableContext,
+    sortableKeyboardCoordinates,
+    useSortable,
+    verticalListSortingStrategy
+} from "@dnd-kit/sortable";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+
+import { CSS } from "@dnd-kit/utilities";
 import { getFullId, getFullIdPath } from "./util";
 import { editableProperty } from "../../utils/entities";
 
@@ -48,103 +64,109 @@ export const PropertyTree = React.memo(
 
         const propertiesOrder = propertiesOrderProp ?? Object.keys(properties);
 
-        const onDragEnd = (result: any) => {
-            // dropped outside the list
-            if (!result.destination) {
+        const sensors = useSensors(
+            useSensor(PointerSensor, {
+                activationConstraint: {
+                    distance: 5,
+                }
+            }),
+            useSensor(KeyboardSensor, {
+                coordinateGetter: sortableKeyboardCoordinates,
+            })
+        );
+
+        const handleDragEnd = (event: DragEndEvent) => {
+            const {
+                active,
+                over
+            } = event;
+
+            if (!over || active.id === over.id) {
                 return;
             }
-            const startIndex = result.source.index;
-            const endIndex = result.destination.index;
 
-            const newPropertiesOrder = Array.from(propertiesOrder);
-            const [removed] = newPropertiesOrder.splice(startIndex, 1);
-            newPropertiesOrder.splice(endIndex, 0, removed);
-            if (onPropertyMove)
-                onPropertyMove(newPropertiesOrder, namespace);
-        }
+            const activeId = String(active.id);
+            const overId = String(over.id);
+
+            // Extract property keys from the full IDs
+            const activeKey = activeId.includes(".") ? activeId.split(".").pop() : activeId;
+            const overKey = overId.includes(".") ? overId.split(".").pop() : overId;
+
+            if (!activeKey || !overKey) return;
+
+            const oldIndex = propertiesOrder.indexOf(activeKey);
+            const newIndex = propertiesOrder.indexOf(overKey);
+
+            if (oldIndex !== -1 && newIndex !== -1) {
+                const newPropertiesOrder = [...propertiesOrder];
+                const [removed] = newPropertiesOrder.splice(oldIndex, 1);
+                newPropertiesOrder.splice(newIndex, 0, removed);
+
+                if (onPropertyMove) {
+                    onPropertyMove(newPropertiesOrder, namespace);
+                }
+            }
+        };
+
+        const items = propertiesOrder.map(key => getFullId(key, namespace));
 
         return (
-            <>
+            <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+                modifiers={[restrictToVerticalAxis]}
+            >
+                <SortableContext
+                    items={items}
+                    strategy={verticalListSortingStrategy}
+                >
+                    <div className={className}>
 
-                <DragDropContext onDragEnd={onDragEnd}>
-                    <Droppable droppableId={`droppable_${namespace}`}>
-                        {(droppableProvided, droppableSnapshot) => (
-                            <div
-                                {...droppableProvided.droppableProps}
-                                ref={droppableProvided.innerRef}
-                                className={className}>
-                                {propertiesOrder && propertiesOrder
-                                    .map((propertyKey: string, index: number) => {
-                                        const property = properties[propertyKey] as PropertyOrBuilder;
-                                        const additionalField = additionalFields?.find(field => field.key === propertyKey);
+                        {propertiesOrder && propertiesOrder
+                            .map((propertyKey: string, index: number) => {
+                                const property = properties[propertyKey] as PropertyOrBuilder;
+                                const additionalField = additionalFields?.find(field => field.key === propertyKey);
 
-                                        if (!property && !additionalField) {
-                                            console.warn(`Property ${propertyKey} not found in properties or additionalFields`);
-                                            return null;
-                                        }
-                                        return (
-                                            <Draggable
-                                                key={`array_field_${namespace}_${propertyKey}}`}
-                                                draggableId={`array_field_${namespace}_${propertyKey}}`}
-                                                index={index}>
-                                                {(provided, snapshot) => {
-                                                    return (
-                                                        <ErrorBoundary>
-                                                            <PropertyTreeEntry
-                                                                propertyKey={propertyKey as string}
-                                                                propertyOrBuilder={property}
-                                                                additionalField={additionalField}
-                                                                provided={provided}
-                                                                errors={errors}
-                                                                namespace={namespace}
-                                                                inferredPropertyKeys={inferredPropertyKeys}
-                                                                onPropertyMove={onPropertyMove}
-                                                                onPropertyRemove={onPropertyRemove}
-                                                                onPropertyClick={snapshot.isDragging ? undefined : onPropertyClick}
-                                                                selectedPropertyKey={selectedPropertyKey}
-                                                                collectionEditable={collectionEditable}
-                                                            />
-                                                        </ErrorBoundary>
-                                                    );
-                                                }}
-                                            </Draggable>);
-                                    }).filter(Boolean)}
+                                if (!property && !additionalField) {
+                                    console.warn(`Property ${propertyKey} not found in properties or additionalFields`);
+                                    return null;
+                                }
 
-                                {droppableProvided.placeholder}
+                                const id = getFullId(propertyKey, namespace);
 
-                            </div>
-                        )}
-                    </Droppable>
-                </DragDropContext>
-
-            </>
+                                return (
+                                    <PropertyTreeEntry
+                                        key={id}
+                                        id={id}
+                                        propertyKey={propertyKey}
+                                        propertyOrBuilder={property}
+                                        additionalField={additionalField}
+                                        errors={errors}
+                                        namespace={namespace}
+                                        inferredPropertyKeys={inferredPropertyKeys}
+                                        onPropertyMove={onPropertyMove}
+                                        onPropertyRemove={onPropertyRemove}
+                                        onPropertyClick={onPropertyClick}
+                                        selectedPropertyKey={selectedPropertyKey}
+                                        collectionEditable={collectionEditable}
+                                    />
+                                );
+                            }).filter(Boolean)}
+                    </div>
+                </SortableContext>
+            </DndContext>
         );
     },
-    (prevProps, nextProps) => {
-
-        const isSelected = nextProps.selectedPropertyKey?.startsWith(nextProps.namespace ?? "");
-        const wasSelected = prevProps.selectedPropertyKey?.startsWith(prevProps.namespace ?? "");
-        if (isSelected || wasSelected)
-            return false;
-
-        return equal(prevProps.properties, nextProps.properties) &&
-            prevProps.propertiesOrder === nextProps.propertiesOrder &&
-            equal(prevProps.additionalFields, nextProps.additionalFields) &&
-            equal(prevProps.errors, nextProps.errors) &&
-            equal(prevProps.onPropertyClick, nextProps.onPropertyClick) &&
-            // equal(prevProps.onPropertyMove, nextProps.onPropertyMove) &&
-            // equal(prevProps.onPropertyRemove, nextProps.onPropertyRemove) &&
-            prevProps.namespace === nextProps.namespace &&
-            prevProps.collectionEditable === nextProps.collectionEditable;
-    }
+    equal
 );
 
 export function PropertyTreeEntry({
+                                      id,
                                       propertyKey,
                                       namespace,
                                       propertyOrBuilder,
                                       additionalField,
-                                      provided,
                                       selectedPropertyKey,
                                       errors,
                                       onPropertyClick,
@@ -153,12 +175,12 @@ export function PropertyTreeEntry({
                                       inferredPropertyKeys,
                                       collectionEditable
                                   }: {
+    id: string;
     propertyKey: string;
     namespace?: string;
     propertyOrBuilder: PropertyOrBuilder;
     additionalField?: AdditionalFieldDelegate<any>;
     selectedPropertyKey?: string;
-    provided: DraggableProvided;
     errors: Record<string, any>;
     onPropertyClick?: (propertyKey: string, namespace?: string) => void;
     onPropertyMove?: (propertiesOrder: string[], namespace?: string) => void;
@@ -167,8 +189,27 @@ export function PropertyTreeEntry({
     collectionEditable: boolean;
 }) {
 
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging
+    } = useSortable({
+        id
+    });
+
+    const style = {
+        // Key change: use Translate instead of Transform to prevent stretching
+        transform: CSS.Translate.toString(transform),
+        transition,
+        zIndex: isDragging ? 10 : undefined,
+        position: "relative" as const,
+    };
+
     const isPropertyInferred = inferredPropertyKeys?.includes(namespace ? `${namespace}.${propertyKey}` : propertyKey);
-    const fullId = getFullId(propertyKey, namespace);
+    const fullId = id;
     const fullIdPath = getFullIdPath(propertyKey, namespace);
     const hasError = fullIdPath in errors;
 
@@ -190,65 +231,68 @@ export function PropertyTreeEntry({
         }
     }
 
-    // const hasError = fullId ? getIn(errors, idToPropertiesPath(fullId)) : false;
     const selected = selectedPropertyKey === fullId;
     const editable = propertyOrBuilder && ((collectionEditable && !isPropertyBuilder(propertyOrBuilder)) || editableProperty(propertyOrBuilder));
 
     return (
         <div
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
+            ref={setNodeRef}
+            style={style}
             className="relative -ml-8"
         >
-            {subtree && <div
-                className={"absolute border-l " + defaultBorderMixin}
-                style={{
-                    left: "32px",
-                    top: "64px",
-                    bottom: "16px"
-                }}/>}
+            <div className="relative">
+                {subtree && <div
+                    className={"absolute border-l " + defaultBorderMixin}
+                    style={{
+                        left: "32px",
+                        top: "64px",
+                        bottom: "16px"
+                    }}/>}
 
-            {!isPropertyBuilder(propertyOrBuilder) && !additionalField && editable
-                ? <PropertyFieldPreview
-                    property={propertyOrBuilder}
-                    onClick={onPropertyClick ? () => onPropertyClick(propertyKey, namespace) : undefined}
-                    includeName={true}
-                    selected={selected}
-                    hasError={hasError}/>
-                : <NonEditablePropertyPreview name={propertyKey}
-                                              property={propertyOrBuilder}
-                                              onClick={onPropertyClick ? () => onPropertyClick(propertyKey, namespace) : undefined}
-                                              selected={selected}/>}
+                <div>
+                    {!isPropertyBuilder(propertyOrBuilder) && !additionalField && editable
+                        ? <PropertyFieldPreview
+                            property={propertyOrBuilder}
+                            onClick={onPropertyClick ? () => onPropertyClick(propertyKey, namespace) : undefined}
+                            includeName={true}
+                            selected={selected}
+                            hasError={hasError}/>
+                        : <NonEditablePropertyPreview name={propertyKey}
+                                                      property={propertyOrBuilder}
+                                                      onClick={onPropertyClick ? () => onPropertyClick(propertyKey, namespace) : undefined}
+                                                      selected={selected}/>}
+                </div>
 
-            <div className="absolute top-2 right-2 flex flex-row ">
+                <div className="absolute top-2 right-2 flex flex-row">
+                    {isPropertyInferred && <Tooltip title={"Inferred property"}>
+                        <AutorenewIcon size="small" className={"p-2"}/>
+                    </Tooltip>}
 
-                {isPropertyInferred && <Tooltip title={"Inferred property"}>
-                    <AutorenewIcon size="small" className={"p-2"}/>
-                </Tooltip>}
+                    {onPropertyRemove && !isPropertyInferred && <Tooltip title={"Remove"}
+                                                                         asChild={true}>
+                        <IconButton size="small"
+                                    color="inherit"
+                                    onClick={() => onPropertyRemove(propertyKey, namespace)}>
+                            <RemoveIcon size={"small"}/>
+                        </IconButton>
+                    </Tooltip>}
 
-                {onPropertyRemove && <Tooltip title={"Remove"}
-                                              asChild={true}>
-                    <IconButton size="small"
-                                color="inherit"
-                                onClick={() => onPropertyRemove(propertyKey, namespace)}>
-                        <RemoveIcon size={"small"}/>
-                    </IconButton>
-                </Tooltip>}
+                    {onPropertyMove && <Tooltip title={"Move"}
+                                                asChild={true}>
+                        <IconButton
+                            component={"span"}
+                            size="small"
+                            {...attributes}
+                            {...listeners}
+                        >
+                            <DragHandleIcon size={"small"}/>
+                        </IconButton>
+                    </Tooltip>}
 
-                {onPropertyMove && <Tooltip title={"Move"}
-                                            asChild={true}>
-                    <IconButton
-                        component={"span"}
-                        size="small"
-                    >
-                        <DragHandleIcon size={"small"}/>
-                    </IconButton>
-                </Tooltip>}
+                </div>
+
+                {subtree && <div className={"ml-16"}>{subtree}</div>}
             </div>
-
-            {subtree && <div className={"ml-16"}>{subtree}</div>}
         </div>
     );
-
 }

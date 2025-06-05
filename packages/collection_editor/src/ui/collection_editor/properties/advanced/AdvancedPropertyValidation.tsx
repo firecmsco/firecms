@@ -19,6 +19,7 @@ export function AdvancedPropertyValidation({ disabled }: {
                     {({ field, form }: FormexFieldProps) => {
                         return <SwitchControl
                             label={"Hide from collection"}
+                            size={"medium"}
                             disabled={disabled}
                             form={form}
                             tooltip={"Hide this field from the collection view. It will still be visible in the form view"}
@@ -33,6 +34,7 @@ export function AdvancedPropertyValidation({ disabled }: {
                     {({ field, form }: FormexFieldProps) => {
                         return <SwitchControl
                             label={"Read only"}
+                            size={"medium"}
                             disabled={disabled}
                             tooltip={"Is this a read only field. Display only as a preview"}
                             form={form}

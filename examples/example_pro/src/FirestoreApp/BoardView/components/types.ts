@@ -1,19 +1,18 @@
 import { CSSProperties } from "react";
-import { DraggableProvided } from "@hello-pangea/dnd";
 
 export interface Item<T extends object = object> {
-  id: string;
-  content: T;
+    id: string;
+    content: T;
 }
 
 export interface ItemMap<T extends object = object> {
-  [key: string]: Item<T>[];
+    [key: string]: Item<T>[];
 }
 
 export interface ItemViewProps<T extends object> {
     item: Item<T>;
     isDragging: boolean;
-    provided: DraggableProvided;
+    provided?: any; // Now optional and type-agnostic
     isClone?: boolean;
     isGroupedOver?: boolean;
     style?: CSSProperties;

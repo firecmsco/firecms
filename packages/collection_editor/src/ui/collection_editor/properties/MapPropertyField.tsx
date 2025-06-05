@@ -107,7 +107,7 @@ export function MapPropertyField({ disabled, getData, allowDataInference, proper
             <div className={"col-span-12"}>
                 <BooleanSwitchWithLabel
                     position={"start"}
-                    size={"small"}
+                    size={"medium"}
                     label="Spread children as columns"
                     onValueChange={(v) => setFieldValue("spreadChildren", v)}
                     value={values.spreadChildren ?? false}

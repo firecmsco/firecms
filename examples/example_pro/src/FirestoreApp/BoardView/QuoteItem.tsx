@@ -1,21 +1,18 @@
 import React, { CSSProperties, FC } from "react";
-import { DraggableProvided } from "@hello-pangea/dnd";
 import type { ItemViewProps } from "./components/types";
 import { Quote } from "./data";
 import { cls, defaultBorderMixin } from "@firecms/ui";
 
 const getBackgroundColor = (
     isDragging: boolean,
-    isGroupedOver: boolean
+    isGroupedOver?: boolean
 ): string => {
     if (isDragging) {
         return "bg-surface-100 dark:bg-surface-800";
     }
-
     if (isGroupedOver) {
         return "bg-surface-200";
     }
-
     return "bg-white dark:bg-surface-900 hover:bg-surface-100 dark:hover:bg-surface-800";
 };
 
@@ -23,24 +20,18 @@ const getBorderColor = (
     isDragging: boolean
 ): string => isDragging ? "border-surface-700 ring-2 ring-primary" : "border-transparent";
 
-const getStyle = (provided: DraggableProvided, style?: CSSProperties) => {
-    return style ? { ...provided.draggableProps.style, ...style } : provided.draggableProps.style;
-};
+const getStyle = (style?: CSSProperties) => style ?? {};
 
 const QuoteItemView: FC<ItemViewProps<Quote>> = ({
                                                      item,
                                                      isDragging,
                                                      isGroupedOver,
-                                                     provided,
                                                      style,
                                                      isClone,
                                                      index
                                                  }) => (
     <div
-        ref={provided.innerRef}
-        {...provided.draggableProps}
-        {...provided.dragHandleProps}
-        style={getStyle(provided, style)}
+        style={getStyle(style)}
         className={"py-1"}
         data-is-dragging={isDragging}
         data-testid={item.id}

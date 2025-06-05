@@ -1,158 +1,104 @@
-import React, { CSSProperties, ReactElement } from "react";
-import type {
-    DraggableProvided,
-    DraggableStateSnapshot,
-    DroppableProvided,
-    DroppableStateSnapshot
-} from "@hello-pangea/dnd";
-import { Draggable, Droppable } from "@hello-pangea/dnd";
+// examples/example_pro/src/FirestoreApp/BoardView/components/SortableList.tsx
+import React from "react";
+import { useDroppable } from "@dnd-kit/core";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { cls } from "@firecms/ui";
-import { ColumnTitle } from "./ColumnTitle";
 import type { Item, ItemViewProps } from "./types";
 
-const getBackgroundColor = (isDraggingOver: boolean, isDraggingFrom: boolean): string => {
-    if (isDraggingOver) return "bg-surface-accent-200 dark:bg-surface-800";
-    if (isDraggingFrom) return "bg-surface-accent-100 dark:bg-surface-900";
-    return "bg-surface-50 dark:bg-surface-950";
+interface SortableListProps {
+    columnId: string;
+    items: Item[];
+    ItemComponent: React.ComponentType<ItemViewProps<object>>;
+    isDragging: boolean; // Overall drag operation active
+    isDragOverColumn: boolean; // Is this specific column being hovered during drag
+}
+
+const SortableList: React.FC<SortableListProps> = ({
+                                                       columnId,
+                                                       items,
+                                                       ItemComponent,
+                                                       isDragging,
+                                                       isDragOverColumn,
+                                                   }) => {
+    const {
+        setNodeRef,
+        // isOver, // We will now use isDragOverColumn for primary styling logic
+    } = useDroppable({
+        id: columnId,
+        data: { type: "ITEM-LIST" }
+    });
+
+    return (
+        <div
+            ref={setNodeRef}
+            className={cls(
+                "flex flex-col p-4 transition-opacity duration-100 transition-bg ease-linear w-full overflow-y-auto flex-1 rounded-md",
+                isDragging && isDragOverColumn
+                    ? "bg-surface-accent-200 dark:bg-surface-800" // Highlight when this column is the active drop target
+                    : isDragging
+                        ? "bg-surface-50 dark:bg-surface-950 hover:bg-surface-accent-100 dark:hover:bg-surface-800" // Hover effect for non-target columns ONLY during drag
+                        : "bg-surface-50 dark:bg-surface-950" // Default, no hover when not dragging
+            )}
+            style={{ minHeight: 80 }}
+        >
+            {items.map((item, index) => (
+                <SortableItem
+                    key={item.id}
+                    item={item}
+                    index={index}
+                    columnId={columnId}
+                    ItemComponent={ItemComponent}
+                />
+            ))}
+        </div>
+    );
 };
 
-interface SortableListProps {
-    listId?: string;
-    listType?: string;
-    items: Item[];
-    title?: string;
-    isDropDisabled?: boolean;
-    isCombineEnabled?: boolean;
-    isDragging?: boolean;
-    className?: string;
-    style?: CSSProperties;
-    useClone?: boolean;
+// SortableItem remains unchanged from your provided code
+interface SortableItemProps {
+    item: Item;
+    index: number;
+    columnId: string;
     ItemComponent: React.ComponentType<ItemViewProps<object>>;
 }
 
-export interface ItemListProps<T extends object> {
-    items: Item<T>[];
-    ItemComponent: React.ComponentType<ItemViewProps<T>>;
-}
-
-function InnerItemList<T extends object>(props: ItemListProps<T>): ReactElement {
-    return (
-        <>
-            {props.items.map((item: Item<T>, index: number) => (
-                <Draggable key={item.id} draggableId={item.id} index={index}>
-                    {(
-                        dragProvided: DraggableProvided,
-                        dragSnapshot: DraggableStateSnapshot
-                    ) => (
-                        <props.ItemComponent
-                            key={item.id}
-                            item={item}
-                            isDragging={dragSnapshot.isDragging}
-                            isGroupedOver={Boolean(dragSnapshot.combineTargetFor)}
-                            provided={dragProvided}
-                        />
-                    )}
-                </Draggable>
-            ))}
-        </>
-    );
-}
-
-const InnerItemListMemo = React.memo(InnerItemList) as typeof InnerItemList;
-
-interface InnerListProps<T extends object> {
-    dropProvided: DroppableProvided;
-    items: Item<T>[];
-    title: string | undefined | null;
-    ItemComponent: React.ComponentType<ItemViewProps<T>>;
-}
-
-function InnerList<T extends object>(props: InnerListProps<T>) {
+const SortableItem: React.FC<SortableItemProps> = ({
+                                                       item,
+                                                       index,
+                                                       columnId,
+                                                       ItemComponent,
+                                                   }) => {
     const {
-        items,
-        dropProvided,
-        ItemComponent
-    } = props;
-    const title = props.title ? <ColumnTitle>{props.title}</ColumnTitle> : null;
+        setNodeRef,
+        attributes,
+        listeners,
+        isDragging: isItemBeingDragged, // Renamed for clarity
+        transform,
+        transition,
+    } = useSortable({
+        id: item.id,
+        data: {
+            type: "ITEM",
+            columnId
+        }
+    });
+
+    const sortableStyle = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        zIndex: isItemBeingDragged ? 2 : 1,
+        opacity: isItemBeingDragged ? 0 : 1,
+    };
 
     return (
-        <div className={"h-full"}>
-            {title}
-
-            <div ref={dropProvided.innerRef}
-                 className={cls("min-h-full pb-4",)}>
-                <InnerItemListMemo items={items}
-                                   ItemComponent={ItemComponent}
-                />
-                {dropProvided.placeholder}
-            </div>
+        <div ref={setNodeRef} style={sortableStyle} {...attributes} {...listeners}>
+            <ItemComponent
+                item={item}
+                isDragging={isItemBeingDragged}
+                index={index}
+            />
         </div>
     );
-}
-
-export default function SortableList(props: SortableListProps): ReactElement {
-    const {
-        isDropDisabled,
-        isCombineEnabled,
-        isDragging,
-        listId = "LIST",
-        listType,
-        style,
-        className,
-        items,
-        title,
-        useClone,
-        ItemComponent
-    } = props;
-
-    return (
-        <Droppable
-            droppableId={listId}
-            type={listType}
-            isDropDisabled={isDropDisabled}
-            isCombineEnabled={isCombineEnabled}
-            renderClone={
-                useClone
-                    ? (provided, snapshot, descriptor) => (
-                        <ItemComponent
-                            item={items[descriptor.source.index]}
-                            provided={provided}
-                            isDragging={snapshot.isDragging}
-                            isClone
-                        />
-                    )
-                    : undefined
-            }
-        >
-            {(
-                dropProvided: DroppableProvided,
-                dropSnapshot: DroppableStateSnapshot
-            ) => (
-                <div
-
-                    style={style}
-                    // isDropDisabled={Boolean(isDropDisabled)}
-                    {...dropProvided.droppableProps}
-                    className={cls("flex flex-col p-4 transition-opacity duration-100 transition-bg ease-linear w-64",
-                        "h-full w-full overflow-y-auto flex-1",
-                        "rounded-md",
-                        isDropDisabled ? "opacity-50" : "opacity-100",
-                        className,
-                        getBackgroundColor(
-                            dropSnapshot.isDraggingOver,
-                            Boolean(dropSnapshot.draggingFromThisWith)
-                        )
-                    )}>
-                    <InnerList
-                        items={items}
-                        title={title}
-                        dropProvided={dropProvided}
-                        ItemComponent={ItemComponent}
-                    />
-
-                </div>
-            )
-            }
-        </Droppable>
-    );
-}
+};
+export default SortableList;

@@ -1,7 +1,6 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 
 import {
-    ArrayProperty,
     FieldProps,
     PropertyOrBuilder,
     ResolvedArrayProperty,
@@ -14,7 +13,23 @@ import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 
 import { getIconForProperty, isReadOnly, resolveProperty } from "../../util";
 import { useAuthController, useSnackbarController, useStorageSource } from "../../hooks";
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import {
+    closestCenter,
+    DndContext,
+    DragEndEvent,
+    DragStartEvent,
+    KeyboardSensor,
+    PointerSensor,
+    useSensor,
+    useSensors
+} from "@dnd-kit/core";
+import {
+    horizontalListSortingStrategy,
+    SortableContext,
+    sortableKeyboardCoordinates,
+    useSortable
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { StorageFieldItem, useStorageUploadController } from "../../util/useStorageUploadController";
 import { StorageUploadProgress } from "../components/StorageUploadProgress";
 import { StorageItemPreview } from "../components/StorageItemPreview";
@@ -36,13 +51,6 @@ const rejectDropClasses = "transition-colors duration-200 ease-[cubic-bezier(0,0
 
 type StorageUploadFieldProps = FieldProps<string | string[]>;
 
-/**
- * Field that allows to upload files to Google Cloud Storage.
- *
- * This is one of the internal components that get mapped natively inside forms
- * and tables to the specified properties.
- * @group Form fields
- */
 export function StorageUploadFieldBinding({
                                               propertyKey,
                                               value,
@@ -132,13 +140,104 @@ export function StorageUploadFieldBinding({
     );
 }
 
+interface SortableStorageItemProps {
+    id: number;
+    entry: StorageFieldItem;
+    property: ResolvedStringProperty;
+    name: string;
+    metadata?: Record<string, unknown>;
+    storagePathBuilder: (file: File) => string;
+    onFileUploadComplete: (uploadedPath: string, entry: StorageFieldItem, fileMetadata?: any) => Promise<void>;
+    onClear: (clearedStoragePathOrDownloadUrl: string) => void;
+    disabled: boolean;
+    isSortable: boolean; // Kept for consistency, though dnd-kit handles sortability via context
+}
+
+function SortableStorageItem({
+                                 id,
+                                 entry,
+                                 property,
+                                 name,
+                                 metadata,
+                                 storagePathBuilder,
+                                 onFileUploadComplete,
+                                 onClear,
+                                 disabled,
+                                 isSortable // This prop might be redundant if SortableContext is always used for multiple items
+                             }: SortableStorageItemProps) {
+
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging
+    } = useSortable({ id });
+
+    const style: React.CSSProperties = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        zIndex: isDragging ? 100 : undefined, // Higher z-index when dragging
+        opacity: isDragging ? 0.8 : 1 // Slight opacity for dragged item
+    };
+
+    const getImageSizeNumber = (previewSize: PreviewSize): number => {
+        switch (previewSize) {
+            case "small":
+                return 40;
+            case "medium":
+                return 118; // As per original logic for multiple items
+            case "large":
+                return 220; // As per original logic for single item
+            default:
+                return 118;
+        }
+    };
+
+    let child: React.ReactNode;
+    if (entry.storagePathOrDownloadUrl) {
+        child = (
+            <StorageItemPreview
+                name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
+                property={property}
+                disabled={disabled}
+                value={entry.storagePathOrDownloadUrl}
+                onRemove={() => onClear(entry.storagePathOrDownloadUrl!)}
+                size={entry.size}/>
+        );
+    } else if (entry.file) {
+        child = (
+            <StorageUploadProgress
+                entry={entry}
+                metadata={metadata}
+                storagePath={storagePathBuilder(entry.file)}
+                onFileUploadComplete={onFileUploadComplete}
+                imageSize={getImageSizeNumber(entry.size)}
+                simple={false}
+            />
+        );
+    }
+
+    return (
+        <div
+            ref={setNodeRef}
+            style={style}
+            {...attributes}
+            {...listeners}
+            className={cls("rounded-md m-1")} // Added margin for spacing between items
+            tabIndex={-1}
+        >
+            {child}
+        </div>
+    );
+}
+
 function FileDropComponent({
                                storage,
                                disabled,
-                               isDraggingOver,
                                onFilesAdded,
                                multipleFilesSupported,
-                               droppableProvided,
                                autoFocus,
                                internalValue,
                                property,
@@ -146,26 +245,24 @@ function FileDropComponent({
                                metadata,
                                storagePathBuilder,
                                onFileUploadComplete,
-                               size,
                                name,
-                               helpText
+                               helpText,
+                               isDndItemDragging // New prop to disable dropzone when internal D&D is active
                            }: {
     storage: StorageConfig,
     disabled: boolean,
-    isDraggingOver: boolean,
-    droppableProvided: any,
-    onFilesAdded: (acceptedFiles: File[]) => void,
+    onFilesAdded: (acceptedFiles: File[]) => Promise<void>, // useStorageUploadController returns Promise<void>
     multipleFilesSupported: boolean,
     autoFocus: boolean,
     internalValue: StorageFieldItem[],
     property: ResolvedStringProperty,
     onClear: (clearedStoragePathOrDownloadUrl: string) => void,
-    metadata: any,
+    metadata?: any,
     storagePathBuilder: (file: File) => string,
     onFileUploadComplete: (uploadedPath: string, entry: StorageFieldItem, fileMetadata?: any) => Promise<void>,
-    size: PreviewSize,
     name: string,
-    helpText: string
+    helpText: string,
+    isDndItemDragging?: boolean
 }) {
 
     const snackbarContext = useSnackbarController();
@@ -173,16 +270,19 @@ function FileDropComponent({
     const {
         getRootProps,
         getInputProps,
-        isDragActive,
+        isDragActive, // This is for files dragged from OS
         isDragAccept,
         isDragReject
     } = useDropzone({
-            accept: storage.acceptedFiles ? storage.acceptedFiles.map(e => ({ [e]: [] })).reduce((a, b) => ({ ...a, ...b }), {}) : undefined,
-            disabled: disabled || isDraggingOver,
+            accept: storage.acceptedFiles ? storage.acceptedFiles.reduce((acc, ext) => ({
+                ...acc,
+                [ext]: []
+            }), {}) : undefined,
+            disabled: disabled || isDndItemDragging, // Disable if form field is disabled OR an internal item is being dragged
             noDragEventsBubbling: true,
             maxSize: storage.maxSize,
             onDrop: onFilesAdded,
-            onDropRejected: (fileRejections, event) => {
+            onDropRejected: (fileRejections) => {
                 for (const fileRejection of fileRejections) {
                     for (const error of fileRejection.errors) {
                         console.error("Error uploading file: ", error);
@@ -211,79 +311,44 @@ function FileDropComponent({
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                 disabled ? "text-surface-accent-600 dark:text-surface-accent-500" : "",
                 dropZoneClasses,
-                multipleFilesSupported && internalValue.length ? "" : "flex",
+                multipleFilesSupported && internalValue.length === 0 && "flex", // Keep flex for empty state centering
                 {
                     [nonActiveDropClasses]: !isDragActive,
-                    [activeDropClasses]: isDragActive,
-                    [rejectDropClasses]: isDragReject,
-                    [acceptDropClasses]: isDragAccept,
-                    [disabledClasses]: disabled
+                    [activeDropClasses]: isDragActive, // OS file drag active
+                    [rejectDropClasses]: isDragReject, // OS file drag reject
+                    [acceptDropClasses]: isDragAccept, // OS file drag accept
+                    [disabledClasses]: disabled || isDndItemDragging // Visually disable if internal drag
                 })}
         >
             <div
-                {...droppableProvided.droppableProps}
-                ref={droppableProvided.innerRef}
                 className={cls("flex items-center p-1 no-scrollbar",
-                    multipleFilesSupported && internalValue.length ? "overflow-auto" : "",
-                    multipleFilesSupported && internalValue.length ? "min-h-[180px]" : "min-h-[250px]"
+                    multipleFilesSupported && internalValue.length ? "flex-row overflow-x-auto" : "flex-col", // flex-col for single or empty
+                    internalValue.length === 0 && "min-h-[250px] justify-center", // Centering for empty dropzone
+                    multipleFilesSupported && internalValue.length > 0 && "min-h-[180px]", // Min height for multiple items
+                    !multipleFilesSupported && internalValue.length > 0 && "min-h-[250px]" // Min height for single item
                 )}
             >
-
                 <input
                     autoFocus={autoFocus}
                     {...getInputProps()} />
 
-                {internalValue.map((entry, index) => {
-                    let child: any;
-                    if (entry.storagePathOrDownloadUrl) {
-                        child = (
-                            <StorageItemPreview
-                                name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
-                                property={property}
-                                disabled={disabled}
-                                value={entry.storagePathOrDownloadUrl}
-                                onRemove={onClear}
-                                size={entry.size}/>
-                        );
-                    } else if (entry.file) {
-                        child = (
-                            <StorageUploadProgress
-                                entry={entry}
-                                metadata={metadata}
-                                storagePath={storagePathBuilder(entry.file)}
-                                onFileUploadComplete={onFileUploadComplete}
-                                imageSize={size === "large" ? 220 : 118}
-                                simple={false}
-                            />
-                        );
-                    }
+                {internalValue.map((entry) => (
+                    <SortableStorageItem
+                        key={entry.id}
+                        id={entry.id}
+                        entry={entry}
+                        property={property}
+                        name={name}
+                        metadata={metadata}
+                        storagePathBuilder={storagePathBuilder}
+                        onFileUploadComplete={onFileUploadComplete}
+                        onClear={onClear}
+                        disabled={disabled}
+                        isSortable={multipleFilesSupported}
+                    />
+                ))}
 
-                    return (
-                        <Draggable
-                            key={`array_field_${name}_${entry.id}`}
-                            draggableId={`array_field_${name}_${entry.id}`}
-                            index={index}>
-                            {(provided, snapshot) => (
-                                <div
-                                    tabIndex={-1}
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    className={cls("rounded-md")}
-                                    style={{
-                                        ...provided.draggableProps.style
-                                    }}
-                                >
-                                    {child}
-                                </div>
-                            )}
-                        </Draggable>
-                    );
-                })
-                }
-
-                {droppableProvided.placeholder}
-
+                {/* Placeholder for empty dropzone text is handled by the outer Typography */}
             </div>
 
             <div
@@ -294,7 +359,6 @@ function FileDropComponent({
                     {helpText}
                 </Typography>
             </div>
-
         </div>
     );
 }
@@ -309,7 +373,7 @@ export interface StorageUploadProps {
     autoFocus: boolean;
     disabled: boolean;
     storage: StorageConfig;
-    onFilesAdded: (acceptedFiles: File[]) => void;
+    onFilesAdded: (acceptedFiles: File[]) => Promise<void>; // Updated from useStorageUploadController
     storagePathBuilder: (file: File) => string;
     onFileUploadComplete: (uploadedPath: string, entry: StorageFieldItem, fileMetadata?: any) => Promise<void>;
 }
@@ -317,7 +381,7 @@ export interface StorageUploadProps {
 export function StorageUpload({
                                   property,
                                   name,
-                                  value,
+                                  value, // This is internalValue from useStorageUploadController
                                   setInternalValue,
                                   onChange,
                                   multipleFilesSupported,
@@ -344,10 +408,10 @@ export function StorageUpload({
     }
 
     const metadata: Record<string, unknown> | undefined = storage?.metadata;
-    const size = multipleFilesSupported ? "medium" : "large";
+    const [isDndItemDragging, setIsDndItemDragging] = useState(false);
 
     const moveItem = useCallback((fromIndex: number, toIndex: number) => {
-        if (!multipleFilesSupported) return;
+        if (!multipleFilesSupported || fromIndex === toIndex) return;
         const newValue = [...value];
         const item = newValue[fromIndex];
         newValue.splice(fromIndex, 1);
@@ -359,84 +423,88 @@ export function StorageUpload({
         onChange(fieldValue);
     }, [multipleFilesSupported, onChange, setInternalValue, value]);
 
-    const onDragEnd = useCallback((result: any) => {
-        // dropped outside the list
-        if (!result.destination) {
-            return;
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 5, // Start dragging after 5px movement
+            },
+        }),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
+
+    const handleDragStart = useCallback((event: DragStartEvent) => {
+        setIsDndItemDragging(true);
+    }, []);
+
+    const handleDragEnd = useCallback((event: DragEndEvent) => {
+        setIsDndItemDragging(false);
+        const {
+            active,
+            over
+        } = event;
+        if (over && active.id !== over.id) {
+            const oldIndex = value.findIndex(item => item.id === active.id);
+            const newIndex = value.findIndex(item => item.id === over.id);
+            if (oldIndex !== -1 && newIndex !== -1) {
+                moveItem(oldIndex, newIndex);
+            }
         }
-
-        moveItem(result.source.index, result.destination.index);
-
-    }, [moveItem])
+    }, [value, moveItem]);
 
     const onClear = useCallback((clearedStoragePathOrDownloadUrl: string) => {
+        let newValue: StorageFieldItem[];
         if (multipleFilesSupported) {
-            const newValue: StorageFieldItem[] = value.filter(v => v.storagePathOrDownloadUrl !== clearedStoragePathOrDownloadUrl);
+            newValue = value.filter(v => v.storagePathOrDownloadUrl !== clearedStoragePathOrDownloadUrl);
             onChange(newValue.filter(v => !!v.storagePathOrDownloadUrl).map(v => v.storagePathOrDownloadUrl as string));
-            setInternalValue(newValue);
         } else {
+            newValue = [];
             onChange(null);
-            setInternalValue([]);
         }
-    }, [value, multipleFilesSupported, onChange]);
+        setInternalValue(newValue);
+    }, [value, multipleFilesSupported, onChange, setInternalValue]);
 
     const helpText = multipleFilesSupported
-        ? "Drag 'n' drop some files here, or click to select files"
+        ? "Drag 'n' drop some files here, or click to select files. Drag to reorder."
         : "Drag 'n' drop a file here, or click to select one";
 
     const renderProperty: ResolvedStringProperty = multipleFilesSupported
-        ? (property as ArrayProperty<string[]>).of as ResolvedStringProperty
+        ? (property as ResolvedArrayProperty<string[]>).of as ResolvedStringProperty
         : property as ResolvedStringProperty;
 
-    return (
-        <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable
-                droppableId={`droppable_${name}`}
-                direction="horizontal"
-                renderClone={(provided, snapshot, rubric) => {
-                    const entry = value[rubric.source.index];
-                    return (
-                        <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            style={
-                                provided.draggableProps.style
-                            }
-                            className="rounded"
-                        >
-                            <StorageItemPreview
-                                name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
-                                placeholder={true}
-                                property={renderProperty}
-                                disabled={true}
-                                value={entry.storagePathOrDownloadUrl as string}
-                                onRemove={onClear}
-                                size={entry.size}/>
-                        </div>
-                    );
-                }}
-            >
-                {(provided, snapshot) => {
-                    return <FileDropComponent storage={storage}
-                                              disabled={disabled}
-                                              isDraggingOver={snapshot.isDraggingOver}
-                                              droppableProvided={provided}
-                                              onFilesAdded={onFilesAdded}
-                                              multipleFilesSupported={multipleFilesSupported}
-                                              autoFocus={autoFocus}
-                                              internalValue={value}
-                                              property={renderProperty}
-                                              onClear={onClear}
-                                              metadata={metadata}
-                                              storagePathBuilder={storagePathBuilder}
-                                              onFileUploadComplete={onFileUploadComplete}
-                                              size={size}
-                                              name={name}
-                                              helpText={helpText}/>
-                }}
-            </Droppable>
-        </DragDropContext>
-    );
+    const fileDropProps = {
+        storage,
+        disabled,
+        onFilesAdded,
+        multipleFilesSupported,
+        autoFocus,
+        internalValue: value, // Pass current internalValue
+        property: renderProperty,
+        onClear,
+        metadata,
+        storagePathBuilder,
+        onFileUploadComplete,
+        name,
+        helpText,
+        isDndItemDragging // Pass this down
+    };
 
+    if (multipleFilesSupported) {
+        return (
+            <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragStart={handleDragStart}
+                onDragEnd={handleDragEnd}
+            >
+                <SortableContext items={value.map(v => v.id)} strategy={horizontalListSortingStrategy}>
+                    <FileDropComponent {...fileDropProps} />
+                </SortableContext>
+            </DndContext>
+        );
+    } else {
+        // For single file, no D&D context is needed
+        return <FileDropComponent {...fileDropProps} isDndItemDragging={false}/>;
+    }
 }

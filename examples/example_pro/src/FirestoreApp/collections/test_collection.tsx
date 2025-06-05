@@ -525,15 +525,15 @@ export const testCollection = buildCollection<any>({
             //     validation: { required: false },
             //     clearable: true
             // },
-            // tags: {
-            //     name: "Tags",
-            //     dataType: "array",
-            //     sortable: false,
-            //     canAddElements: false,
-            //     of: {
-            //         dataType: "string"
-            //     }
-            // },
+            tags: {
+                name: "Tags",
+                dataType: "array",
+                // sortable: false,
+                // canAddElements: false,
+                of: {
+                    dataType: "string"
+                }
+            },
             // specSheet: ({
             //                 values,
             //                 entityId
@@ -673,31 +673,31 @@ export const testCollection = buildCollection<any>({
             //         }
             //     ]
             // },
-            // impacts: {
-            //     name: "Impacts",
-            //     validation: { required: true },
-            //     dataType: "array",
-            //     of: buildProperty({
-            //         dataType: "map",
-            //         properties: {
-            //             name: {
-            //                 name: "Name",
-            //                 validation: { required: true },
-            //                 dataType: "string"
-            //             },
-            //             point1: {
-            //                 name: "Point-1",
-            //                 validation: { required: true },
-            //                 dataType: "number"
-            //             },
-            //             point2: {
-            //                 name: "Point-2",
-            //                 validation: { required: true },
-            //                 dataType: "number"
-            //             }
-            //         }
-            //     })
-            // },
+            impacts: {
+                name: "Impacts",
+                validation: { required: true },
+                dataType: "array",
+                of: buildProperty({
+                    dataType: "map",
+                    properties: {
+                        name: {
+                            name: "Name",
+                            validation: { required: true },
+                            dataType: "string"
+                        },
+                        point1: {
+                            name: "Point-1",
+                            validation: { required: true },
+                            dataType: "number"
+                        },
+                        point2: {
+                            name: "Point-2",
+                            validation: { required: true },
+                            dataType: "number"
+                        }
+                    }
+                })
+            },
             // products: buildProperty(({ values }) => ({
             //     name: "Products",
             //     dataType: "array",
@@ -821,20 +821,20 @@ export const testCollection = buildCollection<any>({
             //         properties: properties
             //     });
             // },
-            // gallery: {
-            //     name: 'Gallery',
-            //     dataType: 'array',
-            //     of: {
-            //         dataType: 'string',
-            //         storage: {
-            //             storagePath: 'images',
-            //             acceptedFiles: ['image/*'],
-            //             metadata: {
-            //                 cacheControl: 'max-age=1000000',
-            //             },
-            //         },
-            //     },
-            // },
+            gallery: {
+                name: 'Gallery',
+                dataType: 'array',
+                of: {
+                    dataType: 'string',
+                    storage: {
+                        storagePath: 'images',
+                        acceptedFiles: ['image/*'],
+                        metadata: {
+                            cacheControl: 'max-age=1000000',
+                        },
+                    },
+                },
+            },
 
             // title: ({ values, entityId }) => {
             //     if (values?.available_locales && Array.isArray(values.available_locales)) {

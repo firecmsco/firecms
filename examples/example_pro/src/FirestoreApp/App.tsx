@@ -66,6 +66,7 @@ import { DemoImportAction } from "./DemoImportAction";
 import { algoliaSearchControllerBuilder } from "./text_search";
 import ClientUIComponentsShowcase from "./views/ClientUIComponentsShowcase";
 import { useEntityHistoryPlugin } from "@firecms/entity_history";
+import { TestBoardView } from "./BoardView/TestBoardView";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
 
@@ -262,12 +263,12 @@ export function App() {
         //     description: "This is an example of an additional view that is defined by the user",
         //     view: <TypographyDemo/>
         // },
-        // {
-        //     path: "board_test",
-        //     name: "Board test",
-        //     group: "Content",
-        //     view: <TestBoardView/>
-        // },
+        {
+            path: "board_test",
+            name: "Board test",
+            group: "Content",
+            view: <TestBoardView/>
+        },
         {
             path: "editor_demo",
             name: "The FireCMS editor",
