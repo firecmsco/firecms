@@ -12,31 +12,64 @@ export function isObject(item: any) {
     return item && typeof item === "object" && !Array.isArray(item);
 }
 
-export function mergeDeep<T extends Record<any, any>, U extends Record<any, any>>(target: T, source: U, ignoreUndefined: boolean = false): T & U {
-    const targetIsObject = isObject(target);
-    const output = targetIsObject ? { ...target } : target;
-    if (targetIsObject && isObject(source)) {
-        Object.keys(source).forEach(key => {
-            const sourceElement = source[key];
-            // Skip undefined values when ignoreUndefined is true
-            if (ignoreUndefined && sourceElement === undefined) {
-                return;
-            }
-            if (sourceElement instanceof Date) {
-                // Assign a new Date instance with the same time value
-                Object.assign(output, { [key]: new Date(sourceElement.getTime()) });
-            } else if (isObject(sourceElement)) {
-                if (!(key in target))
-                    Object.assign(output, { [key]: sourceElement });
-                else
-                    (output as any)[key] = mergeDeep((target as any)[key], sourceElement);
-            } else {
-                Object.assign(output, { [key]: sourceElement });
-            }
-        });
+export function mergeDeep<T extends Record<any, any>, U extends Record<any, any>>(
+    target: T,
+    source: U,
+    ignoreUndefined: boolean = false
+): T & U {
+    // If target is not a true object (e.g., null, array, primitive), return target itself.
+    if (!isObject(target)) {
+        return target as T & U;
     }
-    return output as T;
+
+    // Create a shallow copy of the target to avoid modifying the original object.
+    const output = { ...target };
+
+    // If source is not a true object, there's nothing to merge from it.
+    // Return the shallow copy of target.
+    if (!isObject(source)) {
+        return output as T & U;
+    }
+
+    // Iterate over keys in the source object.
+    for (const key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+            const sourceValue = source[key];
+            const outputValue = (output as any)[key]; // Current value in our merged object (originating from target)
+
+            // Skip if source value is undefined and ignoreUndefined is true.
+            // This handles both not adding new undefined properties and not overwriting existing properties with undefined.
+            if (ignoreUndefined && sourceValue === undefined) {
+                continue;
+            }
+
+            if ((sourceValue as any) instanceof Date) {
+                // If source value is a Date, create a new Date instance.
+                (output as any)[key] = new Date(sourceValue.getTime());
+            } else if (Array.isArray(sourceValue)) {
+                // If source value is an array, create a shallow copy of the array.
+                (output as any)[key] = [...sourceValue];
+            } else if (isObject(sourceValue)) {
+                // If source value is an object:
+                if (isObject(outputValue)) {
+                    // If the corresponding value in output (from target) is also an object, recurse.
+                    // Ensure the ignoreUndefined flag is passed down.
+                    (output as any)[key] = mergeDeep(outputValue, sourceValue, ignoreUndefined);
+                } else {
+                    // If output's value (from target) is not an object (e.g., null, primitive, or key didn't exist in original target),
+                    // overwrite with the source object.
+                    (output as any)[key] = sourceValue;
+                }
+            } else {
+                // If source value is a primitive, null, or undefined (and not ignored).
+                (output as any)[key] = sourceValue;
+            }
+        }
+    }
+
+    return output as T & U;
 }
+
 
 export function getValueInPath(o: object | undefined, path: string): any {
     if (!o) return undefined;

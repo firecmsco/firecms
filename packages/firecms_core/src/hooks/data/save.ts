@@ -100,11 +100,6 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, USE
         updatedValues = values;
     }
 
-    console.debug("Saving entity", {
-        entityId,
-        updatedValues,
-        collection
-    });
     return dataSource.saveEntity({
         collection,
         path: resolvedPath,
@@ -142,7 +137,6 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, USE
             onSaveSuccess(entity);
     })
         .catch((e) => {
-            console.error("!!!", e);
             if (callbacks?.onSaveFailure) {
 
                 const resolvedCollection = resolveCollection<M>({
