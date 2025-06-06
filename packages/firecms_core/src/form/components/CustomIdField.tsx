@@ -103,7 +103,9 @@ export function CustomIdField<M extends Record<string, any>>({
                     size={"large"}
                     error={error}
                     fullWidth={true}
-                    onValueChange={(v) => onChange(v as string)}
+                    onValueChange={(v) => {
+                        onChange(v as string);
+                    }}
                     {...fieldProps}
                     renderValue={(option) => {
                         const enumConfig = enumValues.find(e => e.id === option);

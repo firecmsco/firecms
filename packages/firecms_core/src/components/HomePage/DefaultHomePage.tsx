@@ -114,6 +114,7 @@ export function DefaultHomePage({
                     );
                 })}
         </>;
+
         additionalPluginChildrenStart = <div className={"flex flex-col gap-2"}>
             {customizationController.plugins.filter(plugin => plugin.homePage?.additionalChildrenStart)
                 .map((plugin, i) => {

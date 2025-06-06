@@ -472,11 +472,12 @@ export function useFirestoreDelegate({
             });
 
             let documentReference: DocumentReference;
-            if (entityId)
+            if (entityId) {
+                console.log("Saving entity with id", entityId);
                 documentReference = doc(collectionReference, entityId);
-            else
+            } else {
                 documentReference = doc(collectionReference);
-
+            }
             return setDoc(documentReference, values, { merge: true })
                 .then(() => ({
                     id: documentReference.id,

@@ -38,33 +38,35 @@ export type SelectProps<T extends SelectValue = string> = {
     padding?: boolean,
     invisible?: boolean,
     children?: React.ReactNode;
+    dataType?: "string" | "number" | "boolean";
 };
 
 export const Select = forwardRef<HTMLDivElement, SelectProps>(({
-                                                                                inputRef,
-                                                                                open,
-                                                                                name,
-                                                                                fullWidth = false,
-                                                                                id,
-                                                                                onOpenChange,
-                                                                                value,
-                                                                                onChange,
-                                                                                onValueChange,
-                                                                                className,
-                                                                                inputClassName,
-                                                                                placeholder,
-                                                                                renderValue,
-                                                                                label,
-                                                                                size = "large",
-                                                                                error,
-                                                                                disabled,
-                                                                                padding = true,
-                                                                                position = "item-aligned",
-                                                                                endAdornment,
-                                                                                invisible,
-                                                                                children,
-                                                                                ...props
-                                                                            }, ref) => {
+                                                                   inputRef,
+                                                                   open,
+                                                                   name,
+                                                                   fullWidth = false,
+                                                                   id,
+                                                                   onOpenChange,
+                                                                   value,
+                                                                   onChange,
+                                                                   onValueChange,
+                                                                   className,
+                                                                   inputClassName,
+                                                                   placeholder,
+                                                                   renderValue,
+                                                                   label,
+                                                                   size = "large",
+                                                                   error,
+                                                                   disabled,
+                                                                   padding = true,
+                                                                   position = "item-aligned",
+                                                                   endAdornment,
+                                                                   invisible,
+                                                                   children,
+                                                                   dataType = "string",
+                                                                   ...props
+                                                               }, ref) => {
 
     const [openInternal, setOpenInternal] = useState(open ?? false);
 
@@ -73,11 +75,14 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
     }, [open]);
 
     const onValueChangeInternal = useCallback((newValue: string) => {
-        // Convert string value to appropriate type
+
         let typedValue: SelectValue = newValue;
-        if (newValue === "true") typedValue = true;
-        else if (newValue === "false") typedValue = false;
-        else if (!isNaN(Number(newValue)) && newValue.trim() !== '') typedValue = Number(newValue);
+        if (dataType === "boolean") {
+            if (newValue === "true") typedValue = true;
+            else if (newValue === "false") typedValue = false;
+        } else if (dataType === "number") {
+            if (!isNaN(Number(newValue)) && newValue.trim() !== "") typedValue = Number(newValue);
+        }
 
         onValueChange?.(typedValue as any);
         if (onChange) {

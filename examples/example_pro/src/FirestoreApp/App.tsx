@@ -46,7 +46,7 @@ import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlug
 import { firebaseConfig, secondaryFirebaseConfig } from "../firebase_config";
 // import { publicRecaptchaKey } from "../appcheck_config";
 import { ExampleCMSView } from "./views/ExampleCMSView";
-import { testCollection } from "./collections/test_collection";
+import { dataUkSubCollection, testCollection } from "./collections/test_collection";
 import { usersCollection } from "./collections/users_collection";
 import { localeCollectionGroup, productsCollection } from "./collections/products_collection";
 import { blogCollection } from "./collections/blog_collection";
@@ -239,6 +239,7 @@ export function App() {
         ];
         if (process.env.NODE_ENV !== "production") {
             sourceCollections.push(testCollection);
+            sourceCollections.push(dataUkSubCollection);
         }
 
         // return sourceCollections;

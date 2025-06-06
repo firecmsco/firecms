@@ -1,11 +1,10 @@
 import {
-    buildCollection,
+    buildCollection, buildEnumValues,
     buildProperty,
     EntityCallbacks,
     EntityOnFetchProps,
     FieldProps,
     resolveNavigationFrom,
-    slugify,
     TextFieldBinding
 } from "@firecms/core";
 import { ProductsSecondaryForm } from "../custom_entity_view/ProductsSecondaryForm";
@@ -178,7 +177,7 @@ export const testCollection = buildCollection<any>({
                 name: "Locales",
                 dataType: "string",
                 enumValues: locales,
-                clearable: true,
+                clearable: true
             },
             available_locales: {
                 name: "Available locales",
@@ -330,8 +329,8 @@ export const testCollection = buildCollection<any>({
                     clientDeviceType: "client.deviceType",
                     clientLanguage: "client.language",
                     clientReferral: "client.referral",
-                    clientUserAgent: "client.userAgent",
-                },
+                    clientUserAgent: "client.userAgent"
+                }
             }),
             // background: {
             //     dataType: "number",
@@ -822,19 +821,19 @@ export const testCollection = buildCollection<any>({
             //     });
             // },
             gallery: {
-                name: 'Gallery',
-                dataType: 'array',
+                name: "Gallery",
+                dataType: "array",
                 of: {
-                    dataType: 'string',
+                    dataType: "string",
                     storage: {
-                        storagePath: 'images',
-                        acceptedFiles: ['image/*'],
+                        storagePath: "images",
+                        acceptedFiles: ["image/*"],
                         metadata: {
-                            cacheControl: 'max-age=1000000',
-                        },
-                    },
-                },
-            },
+                            cacheControl: "max-age=1000000"
+                        }
+                    }
+                }
+            }
 
             // title: ({ values, entityId }) => {
             //     if (values?.available_locales && Array.isArray(values.available_locales)) {
@@ -1113,3 +1112,125 @@ export const testCollection = buildCollection<any>({
         //     ]
     })
 ;
+
+export const customCardInfoIds = buildEnumValues({
+    "paragraph": {
+        id: "paragraph",
+        label: "paragraph"
+    },
+    "1": {
+        id: 1,
+        label: "01"
+    },
+    "2": {
+        id: 2,
+        label: "02"
+    }
+});
+
+export const dataUkSubCollection = buildCollection({
+    id: "dataUk",
+    path: "dataUk",
+    name: "dataUk",
+    singularName: "dataUk",
+    customId: customCardInfoIds,
+    // callbacks: reuseIdCallbacks,
+    textSearchEnabled: true,
+    properties: {
+        question: {
+            name: "question",
+            dataType: "string"
+        },
+        "a1": {
+            name: "a1",
+            dataType: "map",
+            properties: {
+                isCorrect: {
+                    name: "isCorrect",
+                    dataType: "boolean"
+                },
+                text: {
+                    name: "text",
+                    dataType: "string"
+                }
+            }
+        },
+        "a2": {
+            name: "a2",
+            dataType: "map",
+            properties: {
+                isCorrect: {
+                    name: "isCorrect",
+                    dataType: "boolean"
+                },
+                text: {
+                    name: "text",
+                    dataType: "string"
+                }
+            }
+        },
+        "a3": {
+            name: "a3",
+            dataType: "map",
+            properties: {
+                isCorrect: {
+                    name: "isCorrect",
+                    dataType: "boolean"
+                },
+                text: {
+                    name: "text",
+                    dataType: "string"
+                }
+            }
+        },
+        "a4": {
+            name: "a4",
+            dataType: "map",
+            properties: {
+                isCorrect: {
+                    name: "isCorrect",
+                    dataType: "boolean"
+                },
+                text: {
+                    name: "text",
+                    dataType: "string"
+                }
+            }
+        },
+        "a5": {
+            name: "a5",
+            dataType: "map",
+            properties: {
+                isCorrect: {
+                    name: "isCorrect",
+                    dataType: "boolean"
+                },
+                text: {
+                    name: "isCorrect",
+                    dataType: "string"
+                }
+            }
+        },
+
+        text: {
+            name: "text",
+            dataType: "string"
+        },
+        id: {
+            name: "id",
+            dataType: "string"
+        },
+        createdAt: {
+            name: "createdAt",
+            validation: { required: true },
+            dataType: "date",
+            autoValue: "on_create"
+        },
+        updatedAt: {
+            name: "updatedAt",
+            validation: { required: true },
+            dataType: "date",
+            autoValue: "on_update"
+        }
+    }
+});
