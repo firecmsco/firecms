@@ -1,6 +1,6 @@
 {
   "name": "@firecms/editor",
-  "version": "3.0.0-canary.244",
+  "version": "3.0.0-canary.245",
   "description": "Notion-style WYSIWYG editor for FireCMS",
   "type": "module",
   "main": "dist/index.cjs",
@@ -29,7 +29,7 @@
     "react-dom": ">=18.0.0"
   },
   "dependencies": {
-    "@firecms/ui": "^3.0.0-canary.244",
+    "@firecms/ui": "^3.0.0-canary.245",
     "@radix-ui/react-slot": "^1.1.1",
     "@tiptap/core": "2.11.5",
     "@tiptap/extension-blockquote": "2.11.5",
