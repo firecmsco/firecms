@@ -46,6 +46,7 @@ export function useSaasPlugin({
             <Button size={"small"} variant={"outlined"} color={"text"}
                     onClick={() => {
                         setAlertDismissed(true);
+                        onAnalyticsEvent?.("saas_history_alert_enabled");
                         projectConfig.updateHistoryDefaultEnabled(true).then(() => {
                             snackbarController.open({
                                 type: "success",
