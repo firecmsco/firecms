@@ -17,7 +17,6 @@ import { Formex, useCreateFormex } from "@firecms/formex";
 import { useDraggable } from "./useDraggable";
 import { CustomFieldValidator, getYupEntitySchema } from "../../../../form/validation";
 import { useWindowSize } from "./useWindowSize";
-import { ElementResizeListener } from "./ElementResizeListener";
 import { getPropertyInPath, isReadOnly, resolveCollection } from "../../../../util";
 import { Button, CloseIcon, DialogActions, IconButton, Typography } from "@firecms/ui";
 import { PropertyFieldBinding, yupToFormErrors } from "../../../../form";
@@ -71,7 +70,7 @@ export function PopupFormFieldLoading<M extends Record<string, any>>({
                 collection: inputCollection
             }).then(setEntity);
         }
-    }, [entityId, inputCollection]);
+    }, [entityId, inputCollection, dataSource, path]);
 
     if (!entity) return null;
     return <PopupFormFieldInternal {...{
@@ -152,8 +151,8 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         draggableBoundingRect: DOMRect,
         currentWindowSize: { width: number, height: number }
     ) => {
-        if (!draggableBoundingRect || draggableBoundingRect.width === 0) { // Or height === 0
-            return pos; // Not ready to normalize
+        if (!draggableBoundingRect || draggableBoundingRect.width === 0 || draggableBoundingRect.height === 0) {
+            return pos;
         }
         return {
             x: Math.max(0, Math.min(pos.x, currentWindowSize.width - draggableBoundingRect.width)),
@@ -166,18 +165,16 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         y: number
     }) => {
         const draggableBoundingRect = draggableRef.current?.getBoundingClientRect();
-        // Ensure cellRect and draggableBoundingRect are valid and have dimensions
         if (!cellRect || !draggableBoundingRect || draggableBoundingRect.width === 0 || draggableBoundingRect.height === 0) {
             return;
         }
-
         const basePosition = newPositionCandidate ?? getInitialLocation();
         const newNormalizedPosition = normalizePosition(basePosition, draggableBoundingRect, windowSize);
 
         if (!popupLocation || newNormalizedPosition.x !== popupLocation.x || newNormalizedPosition.y !== popupLocation.y) {
             setPopupLocation(newNormalizedPosition);
         }
-    }, [cellRect, getInitialLocation, normalizePosition, popupLocation, windowSize]); // draggableRef.current is used, ensure useCallback dependencies are correct
+    }, [cellRect, getInitialLocation, normalizePosition, popupLocation, windowSize]);
 
     useDraggable({
         containerRef: draggableRef,
@@ -196,19 +193,25 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
     useLayoutEffect(
         () => {
+            if (!cellRect || initialPositionSet.current) return;
+            // Ensure draggableRef is available and has dimensions before initial positioning
             const draggableBoundingRect = draggableRef.current?.getBoundingClientRect();
-            if (!cellRect || !draggableBoundingRect || initialPositionSet.current) return;
+            if (!draggableBoundingRect || draggableBoundingRect.width === 0 || draggableBoundingRect.height === 0) {
+                // If not ready, perhaps wait or log. For now, just return.
+                // This might need a retry mechanism or ensure content is rendered first.
+                return;
+            }
             updatePopupLocation();
             initialPositionSet.current = true;
         },
-        [cellRect, updatePopupLocation, initialPositionSet.current]
+        [cellRect, updatePopupLocation] // Removed initialPositionSet.current from deps as it's a ref
     );
 
     useLayoutEffect(
         () => {
             updatePopupLocation(popupLocation);
         },
-        [windowSize, cellRect]
+        [windowSize, cellRect, updatePopupLocation, popupLocation]
     );
 
     const validationSchema = useMemo(() => {
@@ -222,8 +225,27 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     }, [collection, entityId, propertyKey, customFieldValidator]);
 
     const adaptResize = useCallback(() => {
+        // When the popup resizes, we want to re-evaluate its position
+        // based on its current location and new dimensions.
         return updatePopupLocation(popupLocation);
     }, [popupLocation, updatePopupLocation]);
+
+    // Setup ResizeObserver
+    useEffect(() => {
+        const element = draggableRef.current;
+        if (!element) return;
+
+        const observer = new ResizeObserver(() => {
+            adaptResize();
+        });
+
+        observer.observe(element);
+
+        return () => {
+            observer.unobserve(element);
+            observer.disconnect();
+        };
+    }, [adaptResize, draggableRef]);
 
     const saveValue = async (values: M) => {
         setSavingError(null);
@@ -376,7 +398,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             } cursor-grab overflow-visible`}
             ref={draggableRef}>
 
-            <ElementResizeListener onResize={adaptResize}/>
+            {/* ElementResizeListener removed from here */}
 
             <div
                 className="overflow-hidden">
