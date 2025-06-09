@@ -5,6 +5,7 @@ import useMeasure from "react-use-measure";
 import { cls, DoNotDisturbOnIcon, Tooltip } from "@firecms/ui";
 import { ErrorBoundary } from "../../../components";
 import { getRowHeight, TableSize } from "../../common/table_height";
+import { ErrorTooltip } from "../../ErrorTooltip";
 
 interface EntityTableCellProps {
     children: React.ReactNode;
@@ -183,7 +184,7 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
                     ? "border-primary"
                     : "border-transparent";
 
-        return (
+        const result = <>
             <div
                 className={cls(
                     "transition-colors duration-100 ease-in-out",
@@ -241,7 +242,17 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
                     </div>}
 
             </div>
-        );
+        </>;
+        if (showError) {
+            return (
+                <ErrorTooltip
+                    align={"start"}
+                    title={error?.message ?? "Error"}>
+                    {result}
+                </ErrorTooltip>
+            );
+        }
+        return result;
     }, (a, b) => {
         return a.error === b.error &&
             a.value === b.value &&
