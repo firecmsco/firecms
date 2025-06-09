@@ -49,7 +49,7 @@ export function HomePageEditorCollectionAction({
         <div>
             {permissions.deleteCollections &&
                 <Menu
-                    trigger={<IconButton>
+                    trigger={<IconButton size={"small"}>
                         <MoreVertIcon size={"small"}/>
                     </IconButton>}
                 >
@@ -70,6 +70,7 @@ export function HomePageEditorCollectionAction({
 
             {permissions.editCollections &&
                 <IconButton
+                    size={"small"}
                     onClick={(event) => {
                         onEditCollectionClicked();
                     }}>

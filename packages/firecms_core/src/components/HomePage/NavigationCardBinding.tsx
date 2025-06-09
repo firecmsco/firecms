@@ -7,6 +7,7 @@ import { useUserConfigurationPersistence } from "../../hooks/useUserConfiguratio
 import { IconButton, StarIcon } from "@firecms/ui";
 import { NavigationCard } from "./NavigationCard";
 import { SmallNavigationCard } from "./SmallNavigationCard";
+import React from "react";
 
 /**
  * This is the component used in the home page to render a card for each
@@ -47,6 +48,7 @@ export function NavigationCardBinding({
         ? [
             <IconButton
                 key={"favourite"}
+                size={"small"}
                 onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -61,7 +63,7 @@ export function NavigationCardBinding({
                     }
                 }}>
                 <StarIcon
-                    size={18}
+                    size={"small"}
                     className={favourite ? "text-secondary" : "text-surface-400 dark:text-surface-500"}/>
             </IconButton>
         ]
