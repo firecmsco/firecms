@@ -127,7 +127,8 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
 
     /**
      * If enabled, content is loaded in batches. If `false` all entities in the
-     * collection are loaded.
+     * collection are loaded. This means that when reaching the end of the
+     * collection, the CMS will load more entities.
      * You can specify a number to specify the pagination size (50 by default)
      * Defaults to `true`
      */

@@ -346,8 +346,10 @@ initialSort: ["price", "asc"]
 
 - **`Actions`**: Builder for rendering additional components such as buttons in the collection toolbar. The builder
   takes an object with props `entityCollection` and `selectedEntities` if any are set by the end user.
-- **`pagination`**: If enabled, content is loaded in batches. If `false` all entities in the collection are loaded. You
-  can specify a number to specify the pagination size (50 by default). Defaults to `true`.
+- **`pagination`**: If enabled, content is loaded in batches. If `false` all entities in the
+  collection are loaded. This means that when reaching the end of the collection, the CMS will load more entities.
+  You can specify a number to specify the pagination size (50 by default)
+  Defaults to `true`
 - **`additionalFields`**: You can add additional fields to both the collection view and the form view by implementing an
   additional field delegate.
 - **`textSearchEnabled`**: Flag to indicate if a search bar should be displayed on top of the collection table.
@@ -368,7 +370,7 @@ initialSort: ["price", "asc"]
 - **`callbacks`**: This interface defines all the callbacks that can be used when an entity is being created, updated,
   or deleted. Useful for adding your own logic or blocking the operation's execution. [More information](./callbacks).
 - **`entityViews`**: Array of builders for rendering additional panels in an entity view. Useful if you need to render custom
-  views for your entities. [More information](./entity_views).
+  views for your entities. [More information](./collections/entity_views).
 - **`alwaysApplyDefaultValues`**: If set to true, the default values of the properties will be applied
   to the entity every time the entity is updated (not only when created).
   Defaults to false.
