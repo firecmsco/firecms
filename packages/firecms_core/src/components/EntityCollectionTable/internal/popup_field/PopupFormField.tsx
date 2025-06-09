@@ -147,33 +147,37 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         };
     }, [cellRect, windowSize.height, windowSize.width]);
 
-    const normalizePosition = useCallback(({
-                                               x,
-                                               y
-                                           }: { x: number, y: number }) => {
-
-        const draggableBoundingRect = draggableRef.current?.getBoundingClientRect();
-        if (!draggableBoundingRect)
-            throw Error("normalizePosition called before draggableBoundingRect is set");
-
+    const normalizePosition = useCallback((
+        pos: { x: number, y: number },
+        draggableBoundingRect: DOMRect,
+        currentWindowSize: { width: number, height: number }
+    ) => {
+        if (!draggableBoundingRect || draggableBoundingRect.width === 0) { // Or height === 0
+            return pos; // Not ready to normalize
+        }
         return {
-            x: Math.max(0, Math.min(x, windowSize.width - draggableBoundingRect.width)),
-            y: Math.max(0, Math.min(y, windowSize.height - draggableBoundingRect.height))
+            x: Math.max(0, Math.min(pos.x, currentWindowSize.width - draggableBoundingRect.width)),
+            y: Math.max(0, Math.min(pos.y, currentWindowSize.height - draggableBoundingRect.height))
         };
-    }, [windowSize]);
+    }, []);
 
-    const updatePopupLocation = useCallback((position?: {
+    const updatePopupLocation = useCallback((newPositionCandidate?: {
         x: number,
         y: number
     }) => {
-
         const draggableBoundingRect = draggableRef.current?.getBoundingClientRect();
-        if (!cellRect || !draggableBoundingRect) return;
-        // const newPosition = normalizePosition(position ?? getInitialLocation());
-        const newPosition = position ?? normalizePosition(getInitialLocation());
-        if (!popupLocation || newPosition.x !== popupLocation.x || newPosition.y !== popupLocation.y)
-            setPopupLocation(newPosition);
-    }, [cellRect, getInitialLocation, normalizePosition, popupLocation]);
+        // Ensure cellRect and draggableBoundingRect are valid and have dimensions
+        if (!cellRect || !draggableBoundingRect || draggableBoundingRect.width === 0 || draggableBoundingRect.height === 0) {
+            return;
+        }
+
+        const basePosition = newPositionCandidate ?? getInitialLocation();
+        const newNormalizedPosition = normalizePosition(basePosition, draggableBoundingRect, windowSize);
+
+        if (!popupLocation || newNormalizedPosition.x !== popupLocation.x || newNormalizedPosition.y !== popupLocation.y) {
+            setPopupLocation(newNormalizedPosition);
+        }
+    }, [cellRect, getInitialLocation, normalizePosition, popupLocation, windowSize]); // draggableRef.current is used, ensure useCallback dependencies are correct
 
     useDraggable({
         containerRef: draggableRef,

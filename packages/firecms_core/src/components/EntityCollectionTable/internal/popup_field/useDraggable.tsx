@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 
 interface DraggableProps {
     containerRef: React.RefObject<HTMLDivElement>,
     innerRef: React.RefObject<HTMLDivElement>,
-    // ref: React.RefObject<HTMLDivElement>,
     x?: number;
     y?: number;
     onMove: (params: { x: number, y: number }) => void,
@@ -22,7 +21,7 @@ export function useDraggable({
 
     const listeningRef = React.useRef(false);
 
-    const onMouseDown = (event: any) => {
+    const onMouseDown = useCallback((event: any) => {
         if (event.button !== 0 || !containerRef.current || event.defaultPrevented || event.innerClicked) {
             return;
         }
@@ -39,16 +38,17 @@ export function useDraggable({
         document.addEventListener("selectstart", onSelect);
         listeningRef.current = true;
         // event.stopPropagation();
-    };
-    const onMouseDownInner = (event: any) => {
+    }, [containerRef, onMove]);
+
+    const onMouseDownInner = useCallback((event: any) => {
         // @ts-ignore
         event.innerClicked = true;
-    };
+    }, [])
 
-    const onSelect = (event: any) => {
+    const onSelect = useCallback((event: any) => {
         event.preventDefault()
         event.stopPropagation();
-    };
+    }, [])
 
     const onMouseUp = (event: any) => {
         document.removeEventListener("mousemove", onMouseMove);
@@ -92,6 +92,6 @@ export function useDraggable({
             if (innerCurrent)
                 innerCurrent.removeEventListener("mousedown", onMouseDownInner);
         };
-    });
+    }, [containerRef, innerRef, onMouseDownInner, onMouseDown]);
 
 }
