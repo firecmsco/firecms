@@ -425,6 +425,7 @@ export const EntityCollectionView = React.memo(
                     Builder: ({ entity }) => (
                         <Button color={"primary"}
                                 variant={"outlined"}
+                                className={"max-w-full truncate justify-start"}
                                 startIcon={<KeyboardTabIcon size={"small"}/>}
                                 onClick={(event: any) => {
                                     event.stopPropagation();
