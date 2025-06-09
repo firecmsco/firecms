@@ -337,6 +337,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 entity={entity}
                 path={path}
                 collection={collection}/>
+            <div className="h-16"/>
         </div>
     </div> : null;
 
