@@ -212,7 +212,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                     {allowInstructions && <div className={"p-4"}>
                         <TextField label={"Ask AI to write"}
                                    size={"small"}
-                                   className={"w-[400px] max-w-full"}
+                                   className={"w-[400px] max-w-full text-text-primary dark:text-text-primary-dark"}
                                    value={propertyInstructions ?? ""}
                                    onKeyDown={(e) => {
                                        if (e.key === "Enter") {
