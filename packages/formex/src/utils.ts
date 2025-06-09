@@ -1,5 +1,3 @@
-import * as React from "react";
-
 /** @private is the value an empty array? */
 export const isEmptyArray = (value?: any) =>
     Array.isArray(value) && value.length === 0;
@@ -16,48 +14,9 @@ export const isObject = (obj: any): obj is Object =>
 export const isInteger = (obj: any): boolean =>
     String(Math.floor(Number(obj))) === obj;
 
-/** @private is the given object a string? */
-export const isString = (obj: any): obj is string =>
-    Object.prototype.toString.call(obj) === "[object String]";
-
 /** @private is the given object a NaN? */
 // eslint-disable-next-line no-self-compare
 export const isNaN = (obj: any): boolean => obj !== obj;
-
-/** @private Does a React component have exactly 0 children? */
-export const isEmptyChildren = (children: any): boolean =>
-    React.Children.count(children) === 0;
-
-/** @private is the given object/value a promise? */
-export const isPromise = (value: any): value is PromiseLike<any> =>
-    isObject(value) && isFunction(value.then);
-
-/** @private is the given object/value a type of synthetic event? */
-export const isInputEvent = (value: any): value is React.SyntheticEvent<any> =>
-    value && isObject(value) && isObject(value.target);
-
-/**
- * Same as document.activeElement but wraps in a try-catch block. In IE it is
- * not safe to call document.activeElement if there is nothing focused.
- *
- * The activeElement will be null only if the document or document body is not
- * yet defined.
- *
- * @param {?Document} doc Defaults to current document.
- * @return {Element | null}
- * @see https://github.com/facebook/fbjs/blob/master/packages/fbjs/src/core/dom/getActiveElement.js
- */
-export function getActiveElement(doc?: Document): Element | null {
-    doc = doc || (typeof document !== "undefined" ? document : undefined);
-    if (typeof doc === "undefined") {
-        return null;
-    }
-    try {
-        return doc.activeElement || doc.body;
-    } catch (e) {
-        return doc.body;
-    }
-}
 
 /**
  * Deeply get a value from an object via its path.
@@ -118,38 +77,6 @@ export function setIn(obj: any, path: string, value: any): any {
     }
 
     return res;
-}
-
-/**
- * Recursively a set the same value for all keys and arrays nested object, cloning
- * @param object
- * @param value
- * @param visited
- * @param response
- */
-export function setNestedObjectValues<T>(
-    object: any,
-    value: any,
-    visited: any = new WeakMap(),
-    response: any = {}
-): T {
-    for (const k of Object.keys(object)) {
-        const val = object[k];
-        if (isObject(val)) {
-            if (!visited.get(val)) {
-                visited.set(val, true);
-                // In order to keep array values consistent for both dot path  and
-                // bracket syntax, we need to check if this is an array so that
-                // this will output  { friends: [true] } and not { friends: { "0": true } }
-                response[k] = Array.isArray(val) ? [] : {};
-                setNestedObjectValues(val, value, visited, response[k]);
-            }
-        } else {
-            response[k] = value;
-        }
-    }
-
-    return response;
 }
 
 export function clone(value: any) {

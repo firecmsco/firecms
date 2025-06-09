@@ -21,6 +21,7 @@ export function MapFieldBinding({
                                     error,
                                     disabled,
                                     property,
+                                    partOfArray,
                                     minimalistView: minimalistViewProp,
                                     includeDescription,
                                     autoFocus,
@@ -51,7 +52,8 @@ export function MapFieldBinding({
     }
 
     const mapFormView = <>
-            <div className={cls("py-1 flex flex-col space-y-2", minimalistView && property.widthPercentage !== undefined ? "mt-8" : undefined)}>
+            <div
+                className={cls("py-1 flex flex-col space-y-2", minimalistView && property.widthPercentage !== undefined ? "mt-8" : undefined)}>
                 {Object.entries(mapProperties)
                     .filter(([_, property]) => !isHidden(property))
                     .map(([entryKey, childProperty], index) => {
@@ -81,8 +83,7 @@ export function MapFieldBinding({
                                             {...fieldBindingProps}/>
                                     </ErrorBoundary>
                                 </div>
-                            )
-                                ;
+                            )                                ;
                         }
                     )
                 }
@@ -117,7 +118,7 @@ export function MapFieldBinding({
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError ?? false}
-                             error={error ? (typeof error === "string" ? error : "A property of this map has an error") : undefined}
+                             error={error && !partOfArray ? (typeof error === "string" ? error : "A property of this map has an error") : undefined}
                              disabled={disabled}
                              property={property}/>
 

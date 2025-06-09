@@ -214,7 +214,6 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
 
     const customFieldProps: any = property.customProps;
     const value = formexFieldProps.field.value;
-    // const initialValue = formexFieldProps.meta.initialValue;
     const error = getIn(formexFieldProps.form.errors, propertyKey);
     const touched = getIn(formexFieldProps.form.touched, propertyKey);
 

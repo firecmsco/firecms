@@ -6,7 +6,7 @@ import { ArrayContainer, ArrayEntryParams, ErrorView } from "../../components";
 import { getIconForProperty, getReferenceFrom } from "../../util";
 
 import { useNavigationController, useReferenceDialog } from "../../hooks";
-import { Button, cls, ExpandablePanel, fieldBackgroundMixin, Typography } from "@firecms/ui";
+import { Button, cls, EditIcon, ExpandablePanel, fieldBackgroundMixin, Typography } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
@@ -127,11 +127,12 @@ export function ArrayOfReferencesFieldBinding({
             />
 
             <Button
-                className="my-4 justify-center text-left"
+                className="ml-3.5 my-4 justify-center text-left"
                 variant="text"
                 color="primary"
                 disabled={isSubmitting}
                 onClick={onEntryClick}>
+                <EditIcon size={"small"}/>
                 Edit {property.name}
             </Button>
         </div>}
