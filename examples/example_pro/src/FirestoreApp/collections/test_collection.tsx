@@ -1,5 +1,6 @@
 import {
-    buildCollection, buildEnumValues,
+    buildCollection,
+    buildEnumValues,
     buildProperty,
     EntityCallbacks,
     EntityOnFetchProps,
@@ -77,6 +78,12 @@ export const testCollection = buildCollection<any>({
         customId: true,
         name: "Test entities",
         alwaysApplyDefaultValues: true,
+        permissions: {
+            // edit: false,
+            // create: false,
+            // delete: false,
+            // read: true
+        },
         entityViews: [
             {
                 key: "sec",
@@ -98,6 +105,49 @@ export const testCollection = buildCollection<any>({
         //     }
         // }],
         properties: {
+            basic: {
+                dataType: "string",
+                name: "Basic",
+                validation: {
+                    unique: true,
+                }
+            },
+            basic_number: {
+                dataType: "number",
+                name: "Basic number",
+                validation: {
+                    min: 0,
+                    max: 100
+                }
+            },
+            // answers: ({ entityId }) => {
+            //     return {
+            //         name: "answers",
+            //         dataType: "array",
+            //         readOnly: entityId === "paragraph" ? true : false,
+            //         validation: {
+            //             min: 4,
+            //             max: 4,
+            //             required: entityId === "paragraph" ? false : true
+            //         },
+            //         of: {
+            //             name: "answer",
+            //             dataType: "map",
+            //             properties: {
+            //                 isCorrect: {
+            //                     name: "isCorrect",
+            //                     dataType: "boolean",
+            //                     validation: { required: entityId === "paragraph" ? false : true }
+            //                 },
+            //                 text: {
+            //                     name: "text",
+            //                     dataType: "string",
+            //                     validation: { required: entityId === "paragraph" ? false : true }
+            //                 }
+            //             }
+            //         }
+            //     }
+            // },
             // test_upload: {
             //     dataType: "array",
             //     name: "Test upload",
@@ -131,30 +181,8 @@ export const testCollection = buildCollection<any>({
                 dataType: "string",
                 name: "Multiline",
                 multiline: true,
-                defaultValue: "Hello\nWorld"
+                defaultValue: "Hello\nWorld",
             },
-            // size: {
-            //     dataType: "map",
-            //     minimalistView: true,
-            //     name: "Size",
-            //     properties: {
-            //         width: {
-            //             name: "Width",
-            //             dataType: "number",
-            //             validation: {
-            //                 required: true
-            //             }
-            //         },
-            //         height: {
-            //             name: "Height",
-            //             dataType: "number",
-            //             validation: {
-            //                 required: true
-            //             }
-            //         }
-            //     },
-            //     widthPercentage: 50,
-            // },
             // date: {
             //     name: "My date",
             //     dataType: "date",
@@ -332,6 +360,29 @@ export const testCollection = buildCollection<any>({
                     clientUserAgent: "client.userAgent"
                 }
             }),
+
+            size: {
+                dataType: "map",
+                minimalistView: true,
+                name: "Size",
+                properties: {
+                    width: {
+                        name: "Width",
+                        dataType: "number",
+                        validation: {
+                            required: true
+                        }
+                    },
+                    height: {
+                        name: "Height",
+                        dataType: "number",
+                        validation: {
+                            required: true
+                        }
+                    }
+                },
+                widthPercentage: 50
+            },
             // background: {
             //     dataType: "number",
             //     name: "Colour",
@@ -618,15 +669,16 @@ export const testCollection = buildCollection<any>({
             //     dataType: "reference",
             //     path: "test_entity"
             // },
-            // self_refs: {
-            //     dataType: "array",
-            //     of: {
-            //         dataType: "reference",
-            //         name: "Self refs",
-            //         path: "test_entity"
-            //         // previewProperties: ["name","url_image"]
-            //     }
-            // },
+            self_refs: {
+                dataType: "array",
+                name: "Self references",
+                of: {
+                    dataType: "reference",
+                    name: "Self refs",
+                    path: "test_entity"
+                    // previewProperties: ["name","url_image"]
+                }
+            },
             // url_image: {
             //     dataType: "string",
             //     name: "URL image",
