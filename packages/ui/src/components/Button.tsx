@@ -72,7 +72,7 @@ const ButtonInner = React.forwardRef<
             "py-2 px-4": size === "medium",
             "py-2.5 px-5": size === "large",
             "py-3 px-6": size === "xl",
-            "py-4 px-10": size === "2xl",
+            "py-4 px-10": size === "2xl"
         }
     );
 
@@ -95,6 +95,8 @@ const ButtonInner = React.forwardRef<
                 onClick={props.onClick}
                 className={cls(startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}
                 disabled={disabled}
+                data-variant={variant}
+                data-size={size}
                 {...props as React.ButtonHTMLAttributes<HTMLButtonElement>}>
             {startIcon}
             {children}

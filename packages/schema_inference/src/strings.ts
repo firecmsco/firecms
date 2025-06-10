@@ -6,8 +6,9 @@ export function findCommonInitialStringInPath(valuesCount?: ValuesCountEntry) {
 
     function getPath(value: any) {
         if (typeof value === "string") return value;
-        else if (value?.type === "document" && value.path) return value.path;
-        else return undefined;
+        else if (value.path) return value.path;
+        console.warn("findCommonInitialStringInPath: value is not a string or document with path", value);
+        return undefined;
     }
 
     const strings: string[] = valuesCount.values.map((v) => getPath(v)).filter(v => !!v) as string[];
