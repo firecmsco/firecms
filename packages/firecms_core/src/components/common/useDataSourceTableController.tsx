@@ -134,7 +134,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     } = parseFilterAndSort(window.location.search);
 
     const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? (updateUrl ? initialFilterUrl : undefined) ?? initialFilter ?? undefined);
-    const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>(initialSortUrl ?? initialSortInternal);
+    const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>((updateUrl ? initialSortUrl : undefined) ?? initialSortInternal);
 
     useUpdateUrl(filterValues, sortBy, searchString, updateUrl);
 
