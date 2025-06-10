@@ -1118,11 +1118,11 @@ export const customCardInfoIds = buildEnumValues({
         id: "paragraph",
         label: "paragraph"
     },
-    "1": {
+    1: {
         id: 1,
         label: "01"
     },
-    "2": {
+    2: {
         id: 2,
         label: "02"
     }
