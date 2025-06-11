@@ -27,7 +27,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 
 import { NavigationCardBinding } from "./NavigationCardBinding";
-import { TopNavigationEntry } from "../../types";
+import { NavigationEntry } from "../../types";
 import { cls } from "@firecms/ui";
 
 const animateLayoutChanges: AnimateLayoutChanges = (args) =>
@@ -46,7 +46,7 @@ const dropAnimation: DropAnimation = {
 /* ----------------------------------------------------------------------------
    Sortable single card
 ---------------------------------------------------------------------------- */
-export function SortableNavigationCard({ entry }: { entry: TopNavigationEntry }) {
+export function SortableNavigationCard({ entry }: { entry: NavigationEntry }) {
     const {
         setNodeRef,
         listeners,
@@ -112,7 +112,7 @@ export function NavigationGroupDroppable({
             ref={setNodeRef}
             className={
                 cls(isOverContainer
-                    ? "p-2 pb-4 bg-surface-accent-200 dark:bg-surface-accent-800 rounded-lg"
+                    ? "p-2 bg-surface-accent-200 dark:bg-surface-accent-800 rounded-lg"
                     : undefined, "transition-all duration-200 ease-in-out"
                 )}
         >
@@ -124,22 +124,43 @@ export function NavigationGroupDroppable({
     );
 }
 
-export function useHomePageDnd(initial: Record<string, TopNavigationEntry[]>) {
+export function useHomePageDnd({
+                                   items: itemsProp,
+                                   setItems,
+                                   disabled
 
-    const [items, setItems] = useState<Record<string, TopNavigationEntry[]>>(initial);
+                               }: {
+    items: { name: string, entries: NavigationEntry[] }[],
+    setItems: (items: { name: string, entries: NavigationEntry[] }[]) => void,
+    disabled: boolean
+}) {
+
     const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+    const items = useMemo(() => {
+        return itemsProp.reduce((acc, group) => {
+            // @ts-ignore
+            acc[group.name] = group.entries;
+            return acc;
+        }, {} as Record<string, NavigationEntry[]>);
+    }, [itemsProp]);
     const containers = Object.keys(items);
 
     /* sensors */
+    // Always call useSensor hooks
+    const mouseSensorInstance = useSensor(MouseSensor, { activationConstraint: { distance: 5 } });
+    const touchSensorInstance = useSensor(TouchSensor, {
+        activationConstraint: {
+            delay: 150,
+            tolerance: 5
+        }
+    });
+    const keyboardSensorInstance = useSensor(KeyboardSensor);
+
+    // Conditionally pass sensor instances to useSensors
     const sensors = useSensors(
-        useSensor(MouseSensor, { activationConstraint: { distance: 5 } }),
-        useSensor(TouchSensor, {
-            activationConstraint: {
-                delay: 150,
-                tolerance: 5
-            }
-        }),
-        useSensor(KeyboardSensor)
+        ...(disabled
+            ? []
+            : [mouseSensorInstance, touchSensorInstance, keyboardSensorInstance])
     );
 
     const lastOverId = useRef<UniqueIdentifier | null>(null);
@@ -153,6 +174,8 @@ export function useHomePageDnd(initial: Record<string, TopNavigationEntry[]>) {
     }, [items]);
 
     const collisionDetection: CollisionDetection = useCallback((args) => {
+        // If search is active, disable collision detection
+        if (disabled) return [];
 
         if (activeId && activeId in items) {
             return closestCenter({
@@ -185,9 +208,10 @@ export function useHomePageDnd(initial: Record<string, TopNavigationEntry[]>) {
 
         if (recentlyMovedToNewContainer.current) lastOverId.current = activeId;
         return lastOverId.current ? [{ id: lastOverId.current }] : [];
-    }, [activeId, items]);
+    }, [activeId, items, disabled]);
 
     const onDragStart = ({ active }: { active: any }) => {
+        if (disabled) return;
         setActiveId(active.id);
     };
 
@@ -195,6 +219,7 @@ export function useHomePageDnd(initial: Record<string, TopNavigationEntry[]>) {
                             active,
                             over
                         }: { active: any, over: any }) => {
+        if (disabled) return;
         const overId = over?.id;
         if (!overId || active.id in items) return;
 
@@ -203,26 +228,34 @@ export function useHomePageDnd(initial: Record<string, TopNavigationEntry[]>) {
         if (!activeContainer || !overContainer) return;
 
         if (activeContainer !== overContainer) {
-            setItems(all => {
-                const activeItems = all[activeContainer];
-                const overItems = all[overContainer];
-                const activeItem = activeItems.find(e => e.url === active.id)!;
-                const overIndex = overItems.findIndex(e => e.url === overId);
+            const activeItems = items[activeContainer];
+            const overItems = items[overContainer];
+            const activeItem = activeItems.find(e => e.url === active.id)!;
+            const overIndex = overItems.findIndex(e => e.url === overId);
 
-                const newIndex = overIndex >= 0 ? overIndex : overItems.length;
+            const newIndex = overIndex >= 0 ? overIndex : overItems.length;
 
-                recentlyMovedToNewContainer.current = true;
+            recentlyMovedToNewContainer.current = true;
 
-                return {
-                    ...all,
-                    [activeContainer]: activeItems.filter(e => e.url !== active.id),
-                    [overContainer]: [
-                        ...overItems.slice(0, newIndex),
-                        activeItem,
-                        ...overItems.slice(newIndex)
-                    ]
-                };
-            });
+            setItems(itemsProp.map(group => {
+                    if (group.name === activeContainer) {
+                        return {
+                            ...group,
+                            entries: group.entries.filter(e => e.url !== active.id)
+                        };
+                    } else if (group.name === overContainer) {
+                        return {
+                            ...group,
+                            entries: [
+                                ...group.entries.slice(0, newIndex),
+                                activeItem,
+                                ...group.entries.slice(newIndex)
+                            ]
+                        };
+                    }
+                    return group;
+                }
+            ));
         }
     };
 
@@ -230,6 +263,10 @@ export function useHomePageDnd(initial: Record<string, TopNavigationEntry[]>) {
                            active,
                            over
                        }: { active: any, over: any }) => {
+        if (disabled) {
+            setActiveId(null);
+            return;
+        }
         const activeId = active.id;
         const overId = over?.id;
 
@@ -247,13 +284,21 @@ export function useHomePageDnd(initial: Record<string, TopNavigationEntry[]>) {
                     // Create new group name (can be made more sophisticated)
                     const newGroupName = "New Group";
 
-                    setItems(all => {
-                        return {
-                            ...all,
-                            [activeContainer]: all[activeContainer].filter(e => e.url !== activeId),
-                            [newGroupName]: [...(all[newGroupName] || []), activeItem]
-                        };
-                    });
+                    setItems(itemsProp.map(group => {
+                            if (group.name === activeContainer) {
+                                return {
+                                    ...group,
+                                    entries: group.entries.filter(e => e.url !== activeId)
+                                };
+                            } else if (group.name === newGroupName) {
+                                return {
+                                    ...group,
+                                    entries: [...(group.entries || []), activeItem]
+                                };
+                            }
+                            return group;
+                        }
+                    ));
                 }
             }
             setActiveId(null);
@@ -273,13 +318,19 @@ export function useHomePageDnd(initial: Record<string, TopNavigationEntry[]>) {
             const activeIndex = items[activeContainer].findIndex(e => e.url === active.id);
             const overIndex = items[overContainer].findIndex(e => e.url === overId);
             if (activeIndex !== overIndex) {
-                setItems(all => ({
-                    ...all,
-                    [overContainer]: arrayMove(
-                        all[overContainer],
-                        activeIndex,
-                        overIndex
-                    )
+
+                setItems(itemsProp.map(group => {
+                    if (group.name === overContainer) {
+                        return {
+                            ...group,
+                            entries: arrayMove(
+                                group.entries,
+                                activeIndex,
+                                overIndex
+                            )
+                        };
+                    }
+                    return group;
                 }));
             }
         }
@@ -288,9 +339,9 @@ export function useHomePageDnd(initial: Record<string, TopNavigationEntry[]>) {
 
     /* active entry for the overlay ------------------------------------------- */
     const activeEntry = useMemo(() => {
-        if (!activeId) return null;
+        if (disabled || !activeId) return null;
         return Object.values(items).flat().find(e => e.url === activeId) || null;
-    }, [activeId, items]);
+    }, [activeId, items, disabled]);
 
     return {
         sensors,
@@ -305,13 +356,13 @@ export function useHomePageDnd(initial: Record<string, TopNavigationEntry[]>) {
     };
 }
 
-// Add this component to HomePageDnD.tsx
-export function NewGroupDropZone() {
+export function NewGroupDropZone({ disabled }: { disabled: boolean }) {
     const {
         setNodeRef,
         isOver
     } = useDroppable({
-        id: "new-group-drop-zone"
+        id: "new-group-drop-zone",
+        disabled: disabled // Disable droppable when search is active
     });
 
     // Only render this when dragging is happening
@@ -319,7 +370,7 @@ export function NewGroupDropZone() {
 
     useDndMonitor({
         onDragStart() {
-            setIsVisible(true);
+            if (!disabled) setIsVisible(true);
         },
         onDragEnd() {
             setIsVisible(false);
@@ -329,7 +380,7 @@ export function NewGroupDropZone() {
         }
     });
 
-    if (!isVisible) return null;
+    if (!isVisible || disabled) return null; // Do not render if search is active
 
     return (
         <div
@@ -342,9 +393,9 @@ export function NewGroupDropZone() {
             )}
         >
             <div className="text-center p-4">
-        <span className="block font-medium text-sm">
-          Drop here to create a new group
-        </span>
+            <span className="block font-medium text-sm">
+              Drop here to create a new group
+            </span>
             </div>
         </div>
     );

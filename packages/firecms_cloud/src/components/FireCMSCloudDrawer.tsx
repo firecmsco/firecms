@@ -3,7 +3,7 @@ import {
     DrawerLogo,
     DrawerNavigationItem,
     IconForView,
-    TopNavigationResult,
+    NavigationResult,
     useApp,
     useAuthController,
     useNavigationController
@@ -41,7 +41,7 @@ export function FireCMSCloudDrawer() {
     const {
         navigationEntries,
         groups
-    }: TopNavigationResult = navigation.topLevelNavigation;
+    }: NavigationResult = navigation.topLevelNavigation;
 
     const buildGroupHeader = useCallback((group?: string) => {
         if (!drawerOpen) return <div className="w-full"/>;

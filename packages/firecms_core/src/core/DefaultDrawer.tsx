@@ -3,7 +3,7 @@ import React, { useCallback } from "react";
 import { useLargeLayout, useNavigationController } from "../hooks";
 
 import { Link, useNavigate } from "react-router-dom";
-import { CMSAnalyticsEvent, TopNavigationEntry, TopNavigationResult } from "../types";
+import { CMSAnalyticsEvent, NavigationEntry, NavigationResult } from "../types";
 import { IconForView } from "../util";
 import { cls, IconButton, Menu, MenuItem, MoreVertIcon, Tooltip, Typography } from "@firecms/ui";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
@@ -45,7 +45,7 @@ export function DefaultDrawer({
     const {
         navigationEntries,
         groups
-    }: TopNavigationResult = navigation.topLevelNavigation;
+    }: NavigationResult = navigation.topLevelNavigation;
 
     const adminViews = navigationEntries.filter(e => e.type === "admin") ?? [];
     const groupsWithoutAdmin = groups.filter(g => g !== "Admin");
@@ -63,7 +63,7 @@ export function DefaultDrawer({
         </div>;
     }, [drawerOpen]);
 
-    const onClick = (view: TopNavigationEntry) => {
+    const onClick = (view: NavigationEntry) => {
         const eventName: CMSAnalyticsEvent = view.type === "collection"
             ? "drawer_navigate_to_collection"
             : (view.type === "view" ? "drawer_navigate_to_view" : "unmapped_event");

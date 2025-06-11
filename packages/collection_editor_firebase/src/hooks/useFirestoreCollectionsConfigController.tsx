@@ -11,10 +11,12 @@ import {
 } from "@firecms/collection_editor";
 import {
     applyPermissionsFunctionIfEmpty,
+    NavigationGroupEntry,
     PermissionsBuilder,
     Property,
     PropertyConfig,
     removeFunctions,
+    removeInitialAndTrailingSlashes,
     removeUndefined,
     User
 } from "@firecms/core";
@@ -33,8 +35,16 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection,
     firebaseApp?: FirebaseApp;
 
     /**
-     * Firestore document where the configuration is saved. e.g. "projects/my_project"
-     * Must be a 2 path string.
+     * Path where the configuration is stored.
+     * This must be a 2 segment path, like `__FIRECMS/config/`.
+     * Defaults to `__FIRECMS/config/`
+     */
+    generalConfigPath?: string;
+
+    /**
+     * Path where the collections configuration is stored.
+     * This must be a 3 segment path, like `__FIRECMS/config/collections`.
+     * Defaults to `__FIRECMS/config/collections`
      */
     configPath?: string;
 
@@ -58,11 +68,16 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection,
  * @param configPath
  */
 export function useFirestoreCollectionsConfigController<EC extends PersistedCollection, USER extends User = User>({
-                                                                                                                          firebaseApp,
-                                                                                                                          configPath = "__FIRECMS/config/collections",
-                                                                                                                          permissions,
-                                                                                                                          propertyConfigs
-                                                                                                                      }: CollectionConfigControllerProps<EC, USER>): CollectionsConfigController {
+                                                                                                                      firebaseApp,
+                                                                                                                      generalConfigPath = "__FIRECMS/config",
+                                                                                                                      configPath,
+                                                                                                                      permissions,
+                                                                                                                      propertyConfigs
+                                                                                                                  }: CollectionConfigControllerProps<EC, USER>): CollectionsConfigController {
+
+    const collectionsConfigPath = configPath
+        ?? (generalConfigPath ? removeInitialAndTrailingSlashes(generalConfigPath) + "/collections" : undefined)
+        ?? "__FIRECMS/config/collections";
 
     const propertyConfigsMap = useMemo(() => {
         const map: Record<string, any> = {};
@@ -75,14 +90,17 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
     const [collectionsLoading, setCollectionsLoading] = React.useState<boolean>(true);
     const [persistedCollections, setPersistedCollections] = React.useState<PersistedCollection[] | undefined>();
 
+    const [configLoading, setConfigLoading] = React.useState<boolean>(true);
+    const [navigationEntries, setNavigationEntries] = React.useState<NavigationGroupEntry[]>([]);
+
     const [collectionsError, setCollectionsError] = React.useState<Error | undefined>();
 
     useEffect(() => {
-        if (!firebaseApp || !configPath) return;
+        if (!firebaseApp || !collectionsConfigPath) return;
 
         const firestore = getFirestore(firebaseApp);
 
-        return onSnapshot(collection(firestore, configPath),
+        return onSnapshot(collection(firestore, collectionsConfigPath),
             {
                 next: (snapshot) => {
                     setCollectionsError(undefined);
@@ -101,20 +119,55 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
                 }
             }
         );
-    }, [configPath, firebaseApp]);
+    }, [collectionsConfigPath, firebaseApp]);
+
+    useEffect(() => {
+        if (!firebaseApp || !generalConfigPath) return;
+
+        const firestore = getFirestore(firebaseApp);
+        const ref = doc(firestore, generalConfigPath);
+
+        return onSnapshot(ref, (snapshot) => {
+            const data = snapshot.data();
+            if (data?.homePage?.navigationEntries) {
+                const entries = data.homePage.navigationEntries as NavigationGroupEntry[];
+                setNavigationEntries(entries);
+            } else {
+                setNavigationEntries([]);
+            }
+            setConfigLoading(false);
+        }, (e) => {
+            console.error("Error loading homepage groups", e);
+            setConfigLoading(false);
+        });
+    }, [generalConfigPath, firebaseApp]);
 
     const deleteCollection = useCallback(({
                                               id,
                                               parentCollectionIds
                                           }: DeleteCollectionParams): Promise<void> => {
 
-        if (!firebaseApp || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        if (!firebaseApp || !collectionsConfigPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         const firestore = getFirestore(firebaseApp);
         const collectionPath = buildCollectionId(id, parentCollectionIds);
         console.debug("Deleting collection", collectionPath);
-        const ref = doc(firestore, configPath, collectionPath);
+        const ref = doc(firestore, collectionsConfigPath, collectionPath);
         return deleteDoc(ref);
-    }, [configPath, firebaseApp]);
+    }, [collectionsConfigPath, firebaseApp]);
+
+    const saveNavigationEntries = useCallback((navigationEntries: NavigationGroupEntry[]): Promise<void> => {
+        if (!firebaseApp) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        if (!generalConfigPath) {
+            console.warn("No generalConfigPath provided in useFirestoreConfigurationPersistence, cannot save homepage navigation entries order");
+            return Promise.resolve();
+        }
+        const firestore = getFirestore(firebaseApp);
+        const ref = doc(firestore, generalConfigPath);
+        console.debug("Saving homepage navigation entries order", navigationEntries);
+        return runTransaction(firestore, async (transaction) => {
+            transaction.set(ref, { homePage: { navigationEntries: navigationEntries } }, { merge: true });
+        });
+    }, [generalConfigPath, firebaseApp]);
 
     const saveCollection = useCallback(<M extends Record<string, any>>({
                                                                            id,
@@ -122,7 +175,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
                                                                            previousId,
                                                                            parentCollectionIds
                                                                        }: SaveCollectionParams<M>): Promise<void> => {
-        if (!firebaseApp || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        if (!firebaseApp || !collectionsConfigPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         const firestore = getFirestore(firebaseApp);
         if (!id)
             throw Error("Trying to save a collection with no id");
@@ -133,7 +186,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         const cleanedCollection = prepareCollectionForPersistence(collectionData, propertyConfigsMap);
         const strippedPath = buildCollectionId(id, parentCollectionIds);
         const previousStrippedId = previousId ? buildCollectionId(previousId, parentCollectionIds) : undefined;
-        const ref = doc(firestore, configPath, strippedPath);
+        const ref = doc(firestore, collectionsConfigPath, strippedPath);
         console.debug("Saving collection", {
             id,
             collectionData,
@@ -144,11 +197,11 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         return runTransaction(firestore, async (transaction) => {
             transaction.set(ref, cleanedCollection, { merge: true });
             if (previousStrippedId && previousStrippedId !== strippedPath) {
-                const previousRef = doc(firestore, configPath, previousStrippedId);
+                const previousRef = doc(firestore, collectionsConfigPath, previousStrippedId);
                 transaction.delete(previousRef);
             }
         });
-    }, [configPath, firebaseApp, propertyConfigsMap]);
+    }, [collectionsConfigPath, firebaseApp, propertyConfigsMap]);
 
     const updateCollection = useCallback(<M extends Record<string, any>>({
                                                                              id,
@@ -156,12 +209,12 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
                                                                              previousId,
                                                                              parentCollectionIds
                                                                          }: UpdateCollectionParams<M>): Promise<void> => {
-        if (!firebaseApp || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        if (!firebaseApp || !collectionsConfigPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         const firestore = getFirestore(firebaseApp);
         const cleanedCollection = prepareCollectionForPersistence(collectionData, propertyConfigsMap);
         const strippedPath = buildCollectionId(id, parentCollectionIds);
         const previousStrippedPath = previousId ? buildCollectionId(previousId, parentCollectionIds) : undefined;
-        const ref = doc(firestore, configPath, strippedPath);
+        const ref = doc(firestore, collectionsConfigPath, strippedPath);
 
         console.debug("Updating collection", {
             id,
@@ -174,11 +227,11 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         return runTransaction(firestore, async (transaction) => {
             transaction.set(ref, cleanedCollection, { merge: true });
             if (previousStrippedPath && previousStrippedPath !== strippedPath) {
-                const previousRef = doc(firestore, configPath, previousStrippedPath);
+                const previousRef = doc(firestore, collectionsConfigPath, previousStrippedPath);
                 transaction.delete(previousRef);
             }
         });
-    }, [configPath, firebaseApp, propertyConfigsMap]);
+    }, [collectionsConfigPath, firebaseApp, propertyConfigsMap]);
 
     const collections = persistedCollections !== undefined ? applyPermissionsFunctionIfEmpty(persistedCollections, permissions as PermissionsBuilder<any, any>) : undefined;
 
@@ -205,10 +258,10 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         namespace?: string
     }): Promise<void> => {
 
-        if (!firebaseApp || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        if (!firebaseApp || !collectionsConfigPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         const firestore = getFirestore(firebaseApp);
         const collectionPath = buildCollectionId(path, parentCollectionIds);
-        const ref = doc(firestore, configPath, collectionPath);
+        const ref = doc(firestore, collectionsConfigPath, collectionPath);
         return runTransaction(firestore, async (transaction) => {
             const data = {
                 [namespaceToPropertiesPath(namespace) + "." + propertyKey]: setUndefinedToDelete(removeFunctions(removeUndefined(property))),
@@ -227,7 +280,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
             transaction.update(ref, data);
         });
 
-    }, [configPath, firebaseApp]);
+    }, [collectionsConfigPath, firebaseApp]);
 
     const deleteProperty = useCallback(({
                                             path,
@@ -243,10 +296,10 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         namespace?: string
     }): Promise<void> => {
 
-        if (!firebaseApp || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        if (!firebaseApp || !collectionsConfigPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         const firestore = getFirestore(firebaseApp);
         const collectionPath = buildCollectionId(path, parentCollectionIds);
-        const ref = doc(firestore, configPath, collectionPath);
+        const ref = doc(firestore, collectionsConfigPath, collectionPath);
         return runTransaction(firestore, async (transaction) => {
             const data: any = setUndefinedToDelete({
                 [namespaceToPropertiesPath(namespace) + "." + propertyKey]: undefined,
@@ -263,16 +316,18 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
             });
             transaction.update(ref, data);
         });
-    }, [configPath, firebaseApp]);
+    }, [collectionsConfigPath, firebaseApp]);
 
     return {
-        loading: collectionsLoading,
+        loading: collectionsLoading || configLoading,
         collections,
         getCollection,
         saveCollection,
         updateCollection,
         deleteCollection,
         saveProperty,
-        deleteProperty
+        deleteProperty,
+        navigationEntries,
+        saveNavigationEntries
     }
 }

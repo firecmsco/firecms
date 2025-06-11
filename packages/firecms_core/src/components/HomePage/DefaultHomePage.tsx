@@ -1,18 +1,17 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Fuse from "fuse.js";
 import { Container, SearchBar } from "@firecms/ui";
 import { useCustomizationController, useFireCMSContext, useNavigationController } from "../../hooks";
-import { PluginHomePageAdditionalCardsProps, TopNavigationEntry } from "../../types";
+import { NavigationEntry, PluginHomePageAdditionalCardsProps } from "../../types";
 import { toArray } from "../../util/arrays";
 import { FavouritesView } from "./FavouritesView";
 import { useRestoreScroll } from "../../internal/useRestoreScroll";
 import { NavigationGroup } from "./NavigationGroup";
-import { NewGroupDropZone } from "./HomePageDnD";
-
-/* dnd helpers */
-import { NavigationGroupDroppable, SortableNavigationCard, useHomePageDnd } from "./HomePageDnD";
+import { NavigationGroupDroppable, NewGroupDropZone, SortableNavigationCard, useHomePageDnd } from "./HomePageDnD";
 import { DndContext, DragOverlay, MeasuringStrategy } from "@dnd-kit/core";
 import { NavigationCardBinding } from "./NavigationCardBinding";
+
+const DEFAULT_GROUP_NAME = "Views";
 
 export function DefaultHomePage({
                                     additionalActions,
@@ -31,17 +30,19 @@ export function DefaultHomePage({
         throw Error("Navigation not ready");
 
     const {
+        allowDragAndDrop,
         navigationEntries,
-        groups
+        groups,
+        onNavigationEntriesUpdate
     } = navigationController.topLevelNavigation;
 
     /* search */
-    const fuse = useRef<Fuse<TopNavigationEntry> | null>(null);
+    const fuse = useRef<Fuse<NavigationEntry> | null>(null);
     const [filteredUrls, setFilteredUrls] = useState<string[] | null>(null);
     const performingSearch = Boolean(filteredUrls);
     const filtered = filteredUrls
         ? filteredUrls.map(u => navigationEntries.find(e => e.url === u))
-            .filter(Boolean) as TopNavigationEntry[]
+            .filter(Boolean) as NavigationEntry[]
         : navigationEntries;
 
     useEffect(() => {
@@ -64,17 +65,36 @@ export function DefaultHomePage({
     if (filtered.some(e => !e.group) || filtered.length === 0)
         allGroups.push(undefined);
 
-    /* build initial { group -> entries[] } map */
-    const initial = useMemo(() => {
-        const m: Record<string, TopNavigationEntry[]> = {};
-        allGroups.forEach(g => {
-            const key = g ?? "ungrouped";
-            m[key] = filtered.filter(e => (e.group ?? "ungrouped") === key);
-        });
-        return m;
-    }, [allGroups, filtered]);
+    console.log("All groups", { groups, allGroups, baseGroups });
 
-    /* ------------- dnd state & handlers ---------------- */
+
+    const convertToItems = useCallback((entries: NavigationEntry[]) => {
+        const items: { name: string, entries: NavigationEntry[] }[] = [];
+        allGroups.forEach(g => {
+            const key = g ?? DEFAULT_GROUP_NAME;
+            const entriesForGroup = entries.filter(e => (e.group ?? DEFAULT_GROUP_NAME) === key);
+            if (entriesForGroup.length > 0) {
+                items.push({
+                    name: key,
+                    entries: entriesForGroup
+                });
+            }
+        });
+        return items;
+    }, []);
+
+    const [items, setItems] = useState<{ name: string, entries: NavigationEntry[] }[]>(convertToItems(filtered));
+
+    const updateItems = (newItems: { name: string, entries: NavigationEntry[] }[]) => {
+        setItems(newItems);
+        // map entries to their paths
+        const navigationEntriesOrder: { name: string, entries: string[] }[] = newItems.map(item => ({
+            name: item.name,
+            entries: item.entries.map(e => e.path)
+        }));
+        onNavigationEntriesUpdate(navigationEntriesOrder);
+    };
+
     const {
         sensors,
         collisionDetection,
@@ -84,15 +104,17 @@ export function DefaultHomePage({
         dropAnimation,
         entriesByGroup,
         activeEntry
-    } = useHomePageDnd(initial);
+    } = useHomePageDnd({
+        items: performingSearch ? convertToItems(filtered) : items,
+        setItems: updateItems,
+        disabled: !allowDragAndDrop || performingSearch
+    });
 
-    /* scroll restore */
     const {
         containerRef,
         direction
     } = useRestoreScroll();
 
-    /* --------------------- JSX ------------------------ */
     return (
         <div ref={containerRef} className="py-2 overflow-auto h-full w-full">
 
@@ -132,7 +154,7 @@ export function DefaultHomePage({
                                 AdditionalCards.push(...toArray(p.homePage.AdditionalCards));
                         });
                         const actionProps = {
-                            group: groupKey === "ungrouped" ? undefined : groupKey,
+                            group: groupKey === DEFAULT_GROUP_NAME ? undefined : groupKey,
                             context
                         } as PluginHomePageAdditionalCardsProps;
 
@@ -143,7 +165,7 @@ export function DefaultHomePage({
                         return (
                             <NavigationGroup
                                 key={groupKey}
-                                group={groupKey === "ungrouped" ? undefined : groupKey}>
+                                group={groupKey === DEFAULT_GROUP_NAME ? undefined : groupKey}>
 
                                 <NavigationGroupDroppable
                                     id={groupKey}
@@ -168,7 +190,7 @@ export function DefaultHomePage({
                     })}
 
 
-                    <NewGroupDropZone />
+                    <NewGroupDropZone disabled={performingSearch}/>
 
                     <DragOverlay adjustScale dropAnimation={dropAnimation}>
                         {activeEntry ? <NavigationCardBinding {...activeEntry} /> : null}

@@ -54,6 +54,7 @@ export function PropertyFieldPreview({
             </div>
             <Paper
                 className={cls(
+                    "m-1",
                     "border",
                     "pl-2 w-full flex flex-row gap-4 items-center",
                     cardMixin,

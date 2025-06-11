@@ -50,7 +50,8 @@ export function SampleProductsView({
 
                 </div>
 
-                <Button onClick={onClick} color="primary">
+                <Button
+                    onClick={onClick} color="primary">
                     Your action
                 </Button>
 

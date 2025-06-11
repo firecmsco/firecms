@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useNavigationController } from "../../hooks";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
-import { TopNavigationEntry } from "../../types";
+import { NavigationEntry } from "../../types";
 import { Chip, Collapse, StarIcon } from "@firecms/ui";
 
-function NavigationChip({ entry }: { entry: TopNavigationEntry }) {
+function NavigationChip({ entry }: { entry: NavigationEntry }) {
 
     const navigate = useNavigate();
     const userConfigurationPersistence = useUserConfigurationPersistence();
@@ -48,7 +48,7 @@ export function FavouritesView({ hidden }: { hidden: boolean }) {
 
     const favouriteCollections = (userConfigurationPersistence?.favouritePaths ?? [])
         .map((path) => navigationController.topLevelNavigation?.navigationEntries.find((entry) => entry.path === path))
-        .filter(Boolean) as TopNavigationEntry[];
+        .filter(Boolean) as NavigationEntry[];
 
     return <Collapse in={favouriteCollections.length > 0}>
         <div className="flex flex-row flex-wrap gap-2 pb-2 min-h-[32px]">

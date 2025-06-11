@@ -762,7 +762,7 @@ export function WidgetSelectViewItem({
 
     return <Card
         onClick={onClick}
-        className={"flex flex-row items-center px-4 py-2"}>
+        className={"flex flex-row items-center px-4 py-2 m-1"}>
         <div
             className={cls(
                 "flex flex-row items-center text-base min-h-[48px]",

@@ -96,9 +96,11 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
         homePage: {
             additionalActions: <NewCollectionButton/>,
             additionalChildrenStart: includeIntroView ? <IntroWidget/> : undefined,
-            // additionalChildrenEnd: <RootCollectionSuggestions introMode={introMode}/>,
             CollectionActions: HomePageEditorCollectionAction,
             AdditionalCards: NewCollectionCard,
+            allowDragAndDrop: true,
+            navigationEntries: collectionConfigController.navigationEntries,
+            onNavigationEntriesUpdate: collectionConfigController.saveNavigationEntries,
         },
         collectionView: {
             CollectionActionsStart: EditorCollectionActionStart,

@@ -138,6 +138,7 @@ export function App() {
     const collectionConfigController = useFirestoreCollectionsConfigController({
         firebaseApp
     });
+
     // Example of adding a custom field
     const propertyConfigs: Record<string, PropertyConfig> = {
         // markdown: {

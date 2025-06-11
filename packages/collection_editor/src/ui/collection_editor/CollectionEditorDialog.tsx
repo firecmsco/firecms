@@ -17,7 +17,7 @@ import {
     randomString,
     removeInitialAndTrailingSlashes,
     removeUndefined,
-    TopNavigationResult,
+    NavigationResult,
     useAuthController,
     useCustomizationController,
     useNavigationController,
@@ -184,7 +184,7 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
 
     const {
         groups
-    }: TopNavigationResult = topLevelNavigation;
+    }: NavigationResult = topLevelNavigation;
 
     const initialCollection = collection
         ? {

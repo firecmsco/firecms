@@ -36,7 +36,7 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
      * level of the navigation (e.g. in the home page or the navigation
      * drawer)
      */
-    topLevelNavigation?: TopNavigationResult;
+    topLevelNavigation?: NavigationResult;
 
     /**
      * Is the navigation loading (the configuration persistence has not
@@ -229,7 +229,12 @@ export interface CMSView {
 
 }
 
-export interface TopNavigationEntry {
+export interface NavigationGroupEntry {
+    name: string;
+    entries: string[];
+}
+
+export interface NavigationEntry {
     url: string;
     name: string;
     path: string;
@@ -240,7 +245,13 @@ export interface TopNavigationEntry {
     group: string;
 }
 
-export type TopNavigationResult = {
-    navigationEntries: TopNavigationEntry[],
-    groups: string[]
+export type NavigationResult = {
+
+    allowDragAndDrop: boolean;
+
+    navigationEntries: NavigationEntry[],
+
+    groups: string[],
+
+    onNavigationEntriesUpdate: (entries: NavigationGroupEntry[]) => void;
 };

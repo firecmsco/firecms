@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare"
+import { useBlocker, useNavigate } from "react-router-dom";
 
 import {
     AuthController,
@@ -12,9 +13,10 @@ import {
     FireCMSPlugin,
     NavigationBlocker,
     NavigationController,
+    NavigationEntry,
+    NavigationGroupEntry,
+    NavigationResult,
     PermissionsBuilder,
-    TopNavigationEntry,
-    TopNavigationResult,
     User,
     UserConfigurationPersistence
 } from "../types";
@@ -28,7 +30,6 @@ import {
     resolvePermissions
 } from "../util";
 import { getParentReferencesFromPath } from "../util/parent_references_from_path";
-import { useBlocker, useNavigate } from "react-router-dom";
 
 const DEFAULT_BASE_PATH = "/";
 const DEFAULT_COLLECTION_PATH = "/c";
@@ -75,7 +76,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
     const [initialised, setInitialised] = useState<boolean>(false);
 
-    const [topLevelNavigation, setTopLevelNavigation] = useState<TopNavigationResult | undefined>(undefined);
+    const [topLevelNavigation, setTopLevelNavigation] = useState<NavigationResult | undefined>(undefined);
     const [navigationLoading, setNavigationLoading] = useState<boolean>(true);
     const [navigationLoadingError, setNavigationLoadingError] = useState<Error | undefined>(undefined);
 
@@ -92,8 +93,57 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
     const buildUrlCollectionPath = useCallback((path: string): string => `${removeInitialAndTrailingSlashes(baseCollectionPath)}/${encodePath(path)}`,
         [baseCollectionPath]);
 
-    const computeTopNavigation = useCallback((collections: EntityCollection[], views: CMSView[], adminViews: CMSView[], viewsOrder?: string[]): TopNavigationResult => {
-        let navigationEntries: TopNavigationEntry[] = [
+    const mergedPluginNavigationEntries = plugins?.reduce((acc, plugin) => {
+        //         navigationEntries?: NavigationGroupEntry[];
+        if (plugin.homePage?.navigationEntries) {
+            plugin.homePage.navigationEntries.forEach((entry) => {
+                const {
+                    name,
+                    entries
+                } = entry;
+                const existingGroup = acc.find(entry => entry.name === name);
+                if (existingGroup) {
+                    existingGroup.entries.push(...entries);
+                } else {
+                    acc.push({
+                        name,
+                        entries: [...entries]
+                    });
+                }
+            });
+
+        }
+        return acc;
+    }, [] as NavigationGroupEntry[]);
+
+    // record of path to group, where group is the name of the group
+    const pluginNavigationGroupsMap: Record<string, string> = (mergedPluginNavigationEntries ?? []).reduce((acc, entry) => {
+        entry.entries.forEach(e => {
+            acc[e] = entry.name;
+        });
+        return acc;
+    }, {} as Record<string, string>);
+
+    const allPluginGroups = plugins?.flatMap(plugin => plugin.homePage?.navigationEntries ? plugin.homePage.navigationEntries.map(e => e.name) : []) ?? [];
+    const pluginGroups = [...new Set(allPluginGroups)];
+
+    const onNavigationEntriesOrderUpdate = useCallback((entries: NavigationGroupEntry[]) => {
+        if (!plugins) {
+            return;
+        }
+        if (plugins.some(plugin => plugin.homePage?.onNavigationEntriesUpdate)) {
+            plugins.forEach(plugin => {
+                if (plugin.homePage?.onNavigationEntriesUpdate) {
+                    plugin.homePage.onNavigationEntriesUpdate(entries);
+                }
+            });
+        }
+
+    }, [plugins]);
+
+    const computeTopNavigation = useCallback((collections: EntityCollection[], views: CMSView[], adminViews: CMSView[], viewsOrder?: string[]): NavigationResult => {
+
+        let navigationEntries: NavigationEntry[] = [
             ...(collections ?? []).map(collection => (!collection.hideFromNavigation
                 ? ({
                     url: buildUrlCollectionPath(collection.id ?? collection.path),
@@ -103,9 +153,9 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
                     collection,
                     description: collection.description?.trim(),
                     group: getGroup(collection)
-                } satisfies TopNavigationEntry)
+                } satisfies NavigationEntry)
                 : undefined))
-                .filter(Boolean) as TopNavigationEntry[],
+                .filter(Boolean) as NavigationEntry[],
             ...(views ?? []).map(view =>
                 !view.hideFromNavigation
                     ? ({
@@ -116,9 +166,9 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
                         view,
                         description: view.description?.trim(),
                         group: getGroup(view)
-                    } satisfies TopNavigationEntry)
+                    } satisfies NavigationEntry)
                     : undefined)
-                .filter(Boolean) as TopNavigationEntry[],
+                .filter(Boolean) as NavigationEntry[],
             ...(adminViews ?? []).map(view =>
                 !view.hideFromNavigation
                     ? ({
@@ -129,9 +179,9 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
                         view,
                         description: view.description?.trim(),
                         group: "Admin"
-                    } satisfies TopNavigationEntry)
+                    } satisfies NavigationEntry)
                     : undefined)
-                .filter(Boolean) as TopNavigationEntry[]
+                .filter(Boolean) as NavigationEntry[]
         ];
 
         // Sort by group, entries with group "Admin" will go last, and second to last will be the group "Views"
@@ -175,17 +225,43 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             });
         }
 
-        const groups: string[] = Object.values(navigationEntries)
-            .map(e => e.group)
-            .filter(Boolean)
-            .filter((value, index, array) => array.indexOf(value) === index) as string[];
+        const groups: string[] = [
+            ...(pluginGroups ?? []),
+            ...navigationEntries
+                .map(e => e.group)
+                .filter(Boolean)
+                .filter(group => !(pluginGroups ?? []).includes(group))
+                .filter((value, index, array) => array.indexOf(value) === index)
+        ] as string[];
 
-        return {
+        // we need to reassign the navigation groups to the entries based on pluginNavigationGroupsMap
+        navigationEntries = navigationEntries.map(entry => {
+            const group = pluginNavigationGroupsMap[entry.path] ?? entry.group;
+            return {
+                ...entry,
+                group: group ?? "Views" // default to "Views" if no group is found
+            };
+        });
+
+        console.debug("Computed top level navigation", {
             navigationEntries,
-            groups
+            mergedPluginNavigationEntries,
+            pluginNavigationGroupsMap
+        })
+        return {
+            allowDragAndDrop: plugins?.some(plugin => plugin.homePage?.allowDragAndDrop) ?? false,
+            navigationEntries,
+            groups,
+            onNavigationEntriesUpdate: onNavigationEntriesOrderUpdate
         };
-    }, [buildCMSUrlPath, buildUrlCollectionPath]);
+    }, [buildCMSUrlPath, buildUrlCollectionPath, pluginGroups, onNavigationEntriesOrderUpdate, pluginNavigationGroupsMap]);
 
+    const allPluginNavigationEntries = (plugins?.flatMap(plugin => plugin.homePage?.navigationEntries ? plugin.homePage?.navigationEntries.map((g) => g.entries) : []))?.flat() ?? [];
+    const dedupPluginNavigationEntriesOrder = ([...new Set(allPluginNavigationEntries)]);
+    console.debug("Deduplicated plugin navigation entries order", {
+        allPluginNavigationEntries,
+        dedupPluginNavigationEntriesOrder
+    });
     const refreshNavigation = useCallback(async () => {
 
         if (disabled || authController.initialLoading)
@@ -221,7 +297,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
                 shouldUpdateTopLevelNav = true;
             }
 
-            const computedTopLevelNav = computeTopNavigation(resolvedCollections, resolvedViews, resolvedAdminViews, viewsOrder);
+            const computedTopLevelNav = computeTopNavigation(resolvedCollections, resolvedViews, resolvedAdminViews, viewsOrder ?? dedupPluginNavigationEntriesOrder);
             if (shouldUpdateTopLevelNav && !equal(topLevelNavigation, computedTopLevelNav)) {
                 setTopLevelNavigation(computedTopLevelNav);
             }
@@ -243,7 +319,8 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         disabled,
         viewsProp,
         adminViewsProp,
-        computeTopNavigation
+        computeTopNavigation,
+        dedupPluginNavigationEntriesOrder
     ]);
 
     useEffect(() => {

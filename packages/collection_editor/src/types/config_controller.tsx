@@ -1,4 +1,4 @@
-import { CMSType, Property } from "@firecms/core";
+import { CMSType, NavigationGroupEntry, Property } from "@firecms/core";
 import { PersistedCollection } from "./persisted_collection";
 
 /**
@@ -20,6 +20,9 @@ export interface CollectionsConfigController {
     deleteProperty: (params: DeletePropertyParams) => Promise<void>;
 
     deleteCollection: (props: DeleteCollectionParams) => Promise<void>;
+
+    navigationEntries: NavigationGroupEntry[];
+    saveNavigationEntries: (entries: NavigationGroupEntry[]) => Promise<void>;
 
 }
 

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 import { useCustomizationController, useFireCMSContext } from "../../hooks";
-import { PluginHomePageActionsProps, TopNavigationEntry } from "../../types";
+import { PluginHomePageActionsProps, NavigationEntry } from "../../types";
 import { IconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
 import { IconButton, StarIcon } from "@firecms/ui";
@@ -31,7 +31,7 @@ export function NavigationCardBinding({
                                           description,
                                           onClick,
                                           type
-                                      }: TopNavigationEntry & {
+                                      }: NavigationEntry & {
     onClick?: () => void
 }) {
 
