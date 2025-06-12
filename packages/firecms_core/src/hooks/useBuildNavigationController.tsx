@@ -34,6 +34,10 @@ import { getParentReferencesFromPath } from "../util/parent_references_from_path
 const DEFAULT_BASE_PATH = "/";
 const DEFAULT_COLLECTION_PATH = "/c";
 
+// Define these constants here or import from a shared location
+const NAVIGATION_DEFAULT_GROUP_NAME = "Views";
+const NAVIGATION_ADMIN_GROUP_NAME = "Admin";
+
 export type BuildNavigationContextProps<EC extends EntityCollection, USER extends User> = {
     basePath?: string,
     baseCollectionPath?: string,
@@ -73,6 +77,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
     const collectionsRef = useRef<EntityCollection[] | undefined>();
     const viewsRef = useRef<CMSView[] | undefined>();
     const adminViewsRef = useRef<CMSView[] | undefined>();
+    const pluginsNavigationEntriesRef = useRef<string[] | undefined>();
 
     const [initialised, setInitialised] = useState<boolean>(false);
 
@@ -116,14 +121,6 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         return acc;
     }, [] as NavigationGroupEntry[]);
 
-    // record of path to group, where group is the name of the group
-    const pluginNavigationGroupsMap: Record<string, string> = (mergedPluginNavigationEntries ?? []).reduce((acc, entry) => {
-        entry.entries.forEach(e => {
-            acc[e] = entry.name;
-        });
-        return acc;
-    }, {} as Record<string, string>);
-
     const allPluginGroups = plugins?.flatMap(plugin => plugin.homePage?.navigationEntries ? plugin.homePage.navigationEntries.map(e => e.name) : []) ?? [];
     const pluginGroups = [...new Set(allPluginGroups)];
 
@@ -142,126 +139,137 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
     }, [plugins]);
 
     const computeTopNavigation = useCallback((collections: EntityCollection[], views: CMSView[], adminViews: CMSView[], viewsOrder?: string[]): NavigationResult => {
-
         let navigationEntries: NavigationEntry[] = [
-            ...(collections ?? []).map(collection => (!collection.hideFromNavigation
-                ? ({
-                    url: buildUrlCollectionPath(collection.id ?? collection.path),
+            ...(collections ?? []).reduce((acc, collection) => {
+                if (collection.hideFromNavigation) return acc;
+
+                const pathKey = collection.id ?? collection.path;
+                let groupName = getGroup(collection); // Initial group
+
+                // Check for plugin-defined group
+                if (mergedPluginNavigationEntries) {
+                    for (const pluginGroupDef of mergedPluginNavigationEntries) {
+                        if (pluginGroupDef.entries.includes(pathKey)) {
+                            groupName = pluginGroupDef.name;
+                            break;
+                        }
+                    }
+                }
+
+                acc.push({
+                    id: `collection:${pathKey}`,
+                    url: buildUrlCollectionPath(pathKey),
                     type: "collection",
                     name: collection.name.trim(),
-                    path: collection.id ?? collection.path,
+                    path: pathKey,
                     collection,
                     description: collection.description?.trim(),
-                    group: getGroup(collection)
-                } satisfies NavigationEntry)
-                : undefined))
-                .filter(Boolean) as NavigationEntry[],
-            ...(views ?? []).map(view =>
-                !view.hideFromNavigation
-                    ? ({
-                        url: buildCMSUrlPath(Array.isArray(view.path) ? view.path[0] : view.path),
-                        name: view.name.trim(),
-                        type: "view",
-                        path: view.path,
-                        view,
-                        description: view.description?.trim(),
-                        group: getGroup(view)
-                    } satisfies NavigationEntry)
-                    : undefined)
-                .filter(Boolean) as NavigationEntry[],
-            ...(adminViews ?? []).map(view =>
-                !view.hideFromNavigation
-                    ? ({
-                        url: buildCMSUrlPath(Array.isArray(view.path) ? view.path[0] : view.path),
-                        name: view.name.trim(),
-                        type: "admin",
-                        path: view.path,
-                        view,
-                        description: view.description?.trim(),
-                        group: "Admin"
-                    } satisfies NavigationEntry)
-                    : undefined)
-                .filter(Boolean) as NavigationEntry[]
+                    group: groupName ?? NAVIGATION_DEFAULT_GROUP_NAME
+                });
+                return acc;
+            }, [] as NavigationEntry[]),
+
+            ...(views ?? []).reduce((acc, view) => {
+                if (view.hideFromNavigation) return acc;
+
+                const pathKey = Array.isArray(view.path) ? view.path[0] : view.path;
+                let groupName = getGroup(view); // Initial group
+
+                if (mergedPluginNavigationEntries) {
+                    for (const pluginGroupDef of mergedPluginNavigationEntries) {
+                        if (pluginGroupDef.entries.includes(pathKey)) {
+                            groupName = pluginGroupDef.name;
+                            break;
+                        }
+                    }
+                }
+
+                acc.push({
+                    id: `view:${pathKey}`,
+                    url: buildCMSUrlPath(pathKey),
+                    name: view.name.trim(),
+                    type: "view",
+                    path: view.path,
+                    view,
+                    description: view.description?.trim(),
+                    group: groupName ?? NAVIGATION_DEFAULT_GROUP_NAME
+                });
+                return acc;
+            }, [] as NavigationEntry[]),
+
+            ...(adminViews ?? []).reduce((acc, view) => {
+                if (view.hideFromNavigation) return acc;
+
+                const pathKey = Array.isArray(view.path) ? view.path[0] : view.path;
+                let groupName = NAVIGATION_ADMIN_GROUP_NAME; // Initial group for admin views
+
+                if (mergedPluginNavigationEntries) {
+                    for (const pluginGroupDef of mergedPluginNavigationEntries) {
+                        if (pluginGroupDef.entries.includes(pathKey)) {
+                            groupName = pluginGroupDef.name;
+                            break;
+                        }
+                    }
+                }
+                acc.push({
+                    id: `admin:${pathKey}`,
+                    url: buildCMSUrlPath(pathKey),
+                    name: view.name.trim(),
+                    type: "admin",
+                    path: view.path,
+                    view,
+                    description: view.description?.trim(),
+                    group: groupName
+                });
+                return acc;
+            }, [] as NavigationEntry[])
         ];
 
-        // Sort by group, entries with group "Admin" will go last, and second to last will be the group "Views"
-        navigationEntries = navigationEntries.sort((a, b) => {
-            if (a.group !== "Views" && a.group !== "Admin" && (b.group === "Views" || b.group === "Admin")) {
-                return -1;
-            }
-            if (b.group !== "Views" && b.group !== "Admin" && (a.group === "Views" || a.group === "Admin")) {
-                return 1;
-            }
-            if (a.group === "Admin" && b.group !== "Admin") {
-                return 1;
-            }
-            if (a.group !== "Admin" && b.group === "Admin") {
-                return -1;
-            }
-            if (a.group === "Views" && b.group !== "Views") {
-                return -1;
-            }
-            if (a.group !== "Views" && b.group === "Views") {
-                return 1;
-            }
-            return 0;
+        const groupOrderValue = (groupName?: string): number => {
+            if (groupName === NAVIGATION_ADMIN_GROUP_NAME) return 2;
+            if (groupName === NAVIGATION_DEFAULT_GROUP_NAME) return 1;
+            return 0; // Other groups
+        };
 
+        navigationEntries = navigationEntries.sort((a, b) => {
+            return groupOrderValue(a.group) - groupOrderValue(b.group);
         });
 
         if (viewsOrder) {
             navigationEntries = navigationEntries.sort((a, b) => {
-                const aIndex = viewsOrder.indexOf(a.path);
-                const bIndex = viewsOrder.indexOf(b.path);
-                if (aIndex === -1 && bIndex === -1) {
-                    return 0;
-                }
-                if (aIndex === -1) {
-                    return 1;
-                }
-                if (bIndex === -1) {
-                    return -1;
-                }
+                const getSortPath = (navEntry: NavigationEntry) => typeof navEntry.path === "string" ? navEntry.path : navEntry.path[0];
+                const aIndex = viewsOrder.indexOf(getSortPath(a));
+                const bIndex = viewsOrder.indexOf(getSortPath(b));
+                if (aIndex === -1 && bIndex === -1) return 0;
+                if (aIndex === -1) return 1;
+                if (bIndex === -1) return -1;
                 return aIndex - bIndex;
             });
         }
 
-        const groups: string[] = [
+        const collectedGroupsFromEntries = navigationEntries
+            .map(e => e.group)
+            .filter(Boolean) as string[];
+
+        const allDefinedGroups = [
             ...(pluginGroups ?? []),
-            ...navigationEntries
-                .map(e => e.group)
-                .filter(Boolean)
-                .filter(group => !(pluginGroups ?? []).includes(group))
-                .filter((value, index, array) => array.indexOf(value) === index)
-        ] as string[];
+            ...collectedGroupsFromEntries
+        ];
 
-        // we need to reassign the navigation groups to the entries based on pluginNavigationGroupsMap
-        navigationEntries = navigationEntries.map(entry => {
-            const group = pluginNavigationGroupsMap[entry.path] ?? entry.group;
-            return {
-                ...entry,
-                group: group ?? "Views" // default to "Views" if no group is found
-            };
-        });
+        const uniqueGroups = [...new Set(allDefinedGroups)]
+            .sort((a, b) => groupOrderValue(a) - groupOrderValue(b));
 
-        console.debug("Computed top level navigation", {
-            navigationEntries,
-            mergedPluginNavigationEntries,
-            pluginNavigationGroupsMap
-        })
         return {
             allowDragAndDrop: plugins?.some(plugin => plugin.homePage?.allowDragAndDrop) ?? false,
             navigationEntries,
-            groups,
+            groups: uniqueGroups,
             onNavigationEntriesUpdate: onNavigationEntriesOrderUpdate
         };
-    }, [buildCMSUrlPath, buildUrlCollectionPath, pluginGroups, onNavigationEntriesOrderUpdate, pluginNavigationGroupsMap]);
+    }, [buildCMSUrlPath, buildUrlCollectionPath, pluginGroups, onNavigationEntriesOrderUpdate, mergedPluginNavigationEntries]);
 
     const allPluginNavigationEntries = (plugins?.flatMap(plugin => plugin.homePage?.navigationEntries ? plugin.homePage?.navigationEntries.map((g) => g.entries) : []))?.flat() ?? [];
     const dedupPluginNavigationEntriesOrder = ([...new Set(allPluginNavigationEntries)]);
-    console.debug("Deduplicated plugin navigation entries order", {
-        allPluginNavigationEntries,
-        dedupPluginNavigationEntriesOrder
-    });
+
     const refreshNavigation = useCallback(async () => {
 
         if (disabled || authController.initialLoading)
@@ -294,6 +302,10 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             }
             if (!equal(adminViewsRef.current, resolvedAdminViews)) {
                 adminViewsRef.current = resolvedAdminViews;
+                shouldUpdateTopLevelNav = true;
+            }
+            if (!equal(pluginsNavigationEntriesRef.current, dedupPluginNavigationEntriesOrder)) {
+                pluginsNavigationEntriesRef.current = dedupPluginNavigationEntriesOrder;
                 shouldUpdateTopLevelNav = true;
             }
 
@@ -580,9 +592,9 @@ async function resolveCMSViews(baseViews: CMSView[] | CMSViewsBuilder | undefine
 function getGroup(collectionOrView: EntityCollection<any, any> | CMSView) {
     const trimmed = collectionOrView.group?.trim();
     if (!trimmed || trimmed === "") {
-        return "Views";
+        return NAVIGATION_DEFAULT_GROUP_NAME;
     }
-    return trimmed ?? "Views";
+    return trimmed ?? NAVIGATION_DEFAULT_GROUP_NAME;
 }
 
 function areCollectionListsEqual(a: EntityCollection[], b: EntityCollection[]) {

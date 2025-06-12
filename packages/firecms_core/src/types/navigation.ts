@@ -235,6 +235,7 @@ export interface NavigationGroupEntry {
 }
 
 export interface NavigationEntry {
+    id: string; // Unique identifier for DND and React keys
     url: string;
     name: string;
     path: string;

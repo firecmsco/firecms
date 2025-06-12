@@ -90,9 +90,9 @@ export function DefaultDrawer({
                             {buildGroupHeader(group)}
                             {Object.values(navigationEntries)
                                 .filter(e => e.group === group)
-                                .map((view, index) =>
+                                .map((view) =>
                                     <DrawerNavigationItem
-                                        key={`navigation_${index}`}
+                                        key={view.id} // Changed from index to view.id
                                         icon={<IconForView collectionOrView={view.collection ?? view.view}
                                                            size={"small"}/>}
                                         tooltipsOpen={tooltipsOpen}
@@ -128,13 +128,13 @@ export function DefaultDrawer({
                             </div>}
                         </IconButton>}
                 >
-                    {adminViews.map((entry, index) =>
+                    {adminViews.map((entry) =>
                         <MenuItem
                             onClick={(event) => {
                                 event.preventDefault();
-                                navigate(entry.path);
+                                navigate(entry.url); // Consistent use of entry.url for navigation
                             }}
-                            key={`navigation_${index}`}>
+                            key={entry.id}> // Changed from index to entry.id
                             {<IconForView collectionOrView={entry.view}/>}
                             {entry.name}
                         </MenuItem>)}
