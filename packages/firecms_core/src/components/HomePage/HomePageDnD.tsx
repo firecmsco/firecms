@@ -37,9 +37,16 @@ const animateLayoutChanges: AnimateLayoutChanges = (args) =>
     });
 
 const dropAnimation: DropAnimation = {
-    duration: 200,
+    duration: 300,
+    easing: "cubic-bezier(0.18, 0.67, 0.6, 1.22)",
     sideEffects: defaultDropAnimationSideEffects({
-        styles: { active: { opacity: "0.5" } }
+        styles: {
+            active: {
+                opacity: "0.95",
+                transform: "scale(1.03)",
+                boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.2)",
+            }
+        }
     })
 };
 
@@ -124,11 +131,40 @@ export function NavigationGroupDroppable({
     );
 }
 
+export function SortableNavigationGroup({
+                                            groupName,
+                                            children
+                                        }: { groupName: string, children: React.ReactNode }) {
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging // This is key
+    } = useSortable({
+        id: groupName,
+        animateLayoutChanges
+    });
+
+    const style: React.CSSProperties = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0 : 1, // Hide original when dragging
+    };
+
+    return (
+        <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+            {children}
+        </div>
+    );
+}
+
+// Modify useHomePageDnd
 export function useHomePageDnd({
-                                   items: itemsProp,
+                                   items,
                                    setItems,
                                    disabled
-
                                }: {
     items: { name: string, entries: NavigationEntry[] }[],
     setItems: (items: { name: string, entries: NavigationEntry[] }[]) => void,
@@ -136,18 +172,13 @@ export function useHomePageDnd({
 }) {
 
     const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
-    const items = useMemo(() => {
-        return itemsProp.reduce((acc, group) => {
-            // @ts-ignore
-            acc[group.name] = group.entries;
-            return acc;
-        }, {} as Record<string, NavigationEntry[]>);
-    }, [itemsProp]);
-    const containers = Object.keys(items);
+    const [activeIsGroup, setActiveIsGroup] = useState(false);
+    const [draggingGroupId, setDraggingGroupId] = useState<UniqueIdentifier | null>(null); // New state for dragged group ID
 
-    /* sensors */
-    // Always call useSensor hooks
-    const mouseSensorInstance = useSensor(MouseSensor, { activationConstraint: { distance: 5 } });
+    const containers = useMemo(() => items.map(group => group.name), [items]);
+
+    // ... (sensors remain the same) ...
+    const mouseSensorInstance = useSensor(MouseSensor, { activationConstraint: { distance: 10 } });
     const touchSensorInstance = useSensor(TouchSensor, {
         activationConstraint: {
             delay: 150,
@@ -156,7 +187,6 @@ export function useHomePageDnd({
     });
     const keyboardSensorInstance = useSensor(KeyboardSensor);
 
-    // Conditionally pass sensor instances to useSensors
     const sensors = useSensors(
         ...(disabled
             ? []
@@ -166,97 +196,154 @@ export function useHomePageDnd({
     const lastOverId = useRef<UniqueIdentifier | null>(null);
     const recentlyMovedToNewContainer = useRef(false);
 
-    const findContainer = useCallback((id: UniqueIdentifier) => {
-        if (id in items) return id;
-        return Object.keys(items).find(key =>
-            items[key].some(e => e.url === id)
-        );
+    // ... (findContainer remains the same) ...
+    const findContainer = useCallback((id: UniqueIdentifier): string | undefined => {
+        if (!id) return undefined;
+        const groupByName = items.find(group => group.name === id);
+        if (groupByName) return groupByName.name;
+
+        for (const group of items) {
+            if (group.entries.some(e => e.url === id)) {
+                return group.name;
+            }
+        }
+        return undefined;
     }, [items]);
 
+    // ... (collisionDetection remains largely the same, ensure it uses activeId correctly) ...
     const collisionDetection: CollisionDetection = useCallback((args) => {
-        // If search is active, disable collision detection
-        if (disabled) return [];
+        if (disabled || !activeId) return [];
 
-        if (activeId && activeId in items) {
+        // activeIsGroup state is set onDragStart, use it directly
+        // const isDraggingGroup = items.some(g => g.name === activeId);
+        const isDraggingGroup = activeIsGroup;
+
+        if (isDraggingGroup) {
             return closestCenter({
                 ...args,
-                droppableContainers: args.droppableContainers.filter(c => c.id in items)
+                droppableContainers: args.droppableContainers.filter(c =>
+                    items.some(g => g.name === c.id) && c.id !== activeId
+                )
             });
-        }
+        } else {
+            // ... (item collision logic remains the same)
+            const pointerCollisions = pointerWithin(args);
+            if (pointerCollisions.length > 0) {
+                const newGroupZoneCollision = pointerCollisions.find(c => c.id === "new-group-drop-zone");
+                if (newGroupZoneCollision) return [newGroupZoneCollision];
 
-        /* pointer collisions first */
-        const pointer = pointerWithin(args);
-        const collisions = pointer.length ? pointer : rectIntersection(args);
-        let overId = getFirstCollision(collisions, "id");
-
-        if (overId != null) {
-            if (overId in items) {
-                /* We're over a container – choose closest item inside */
-                const containerItems = items[overId];
-                if (containerItems.length) {
-                    overId = closestCenter({
-                        ...args,
-                        droppableContainers: args.droppableContainers.filter(
-                            c => containerItems.some(e => e.url === c.id)
-                        )
-                    })[0]?.id;
+                const containerCollision = pointerCollisions.find(c => items.some(g => g.name === c.id));
+                if (containerCollision) {
+                    const containerItems = items.find(g => g.name === containerCollision.id)?.entries ?? [];
+                    if (containerItems.length > 0) {
+                        const closestItemInContainer = closestCenter({
+                            ...args,
+                            droppableContainers: args.droppableContainers.filter(
+                                dc => containerItems.some(e => e.url === dc.id)
+                            )
+                        });
+                        if (closestItemInContainer.length > 0) return closestItemInContainer;
+                    }
+                    return [containerCollision];
                 }
+                const firstCollision = getFirstCollision(pointerCollisions, "id");
+                if (firstCollision) return [{ id: firstCollision }];
             }
-            lastOverId.current = overId;
-            return [{ id: overId }];
+
+            const rectCollisions = rectIntersection(args);
+            const newGroupZoneRectCollision = rectCollisions.find(c => c.id === "new-group-drop-zone");
+            if (newGroupZoneRectCollision) return [newGroupZoneRectCollision];
+
+            let overId = getFirstCollision(rectCollisions, "id");
+            if (overId != null) {
+                const overIsContainer = items.some(g => g.name === overId);
+                if (overIsContainer) {
+                    const containerItems = items.find(g => g.name === overId)?.entries ?? [];
+                    if (containerItems.length) {
+                        const closestItem = closestCenter({
+                            ...args,
+                            droppableContainers: args.droppableContainers.filter(
+                                c => containerItems.some(e => e.url === c.id)
+                            )
+                        })[0]?.id;
+                        if (closestItem) overId = closestItem;
+                    }
+                }
+                lastOverId.current = overId;
+                return [{ id: overId }];
+            }
         }
 
-        if (recentlyMovedToNewContainer.current) lastOverId.current = activeId;
-        return lastOverId.current ? [{ id: lastOverId.current }] : [];
-    }, [activeId, items, disabled]);
+        if (recentlyMovedToNewContainer.current && lastOverId.current && !isDraggingGroup) return [{ id: lastOverId.current }];
+        return [];
+    }, [activeId, items, disabled, recentlyMovedToNewContainer, activeIsGroup]);
 
     const onDragStart = ({ active }: { active: any }) => {
         if (disabled) return;
+        const isGroup = items.some(g => g.name === active.id);
         setActiveId(active.id);
+        setActiveIsGroup(isGroup);
+        if (isGroup) {
+            setDraggingGroupId(active.id);
+        }
+        recentlyMovedToNewContainer.current = false;
     };
 
+    // ... (onDragOver remains the same) ...
     const onDragOver = ({
                             active,
                             over
                         }: { active: any, over: any }) => {
-        if (disabled) return;
-        const overId = over?.id;
-        if (!overId || active.id in items) return;
+        if (disabled || !over || activeIsGroup) return;
 
-        const activeContainer = findContainer(active.id);
-        const overContainer = findContainer(overId);
-        if (!activeContainer || !overContainer) return;
+        const currentActiveId = active.id;
+        const overId = over.id;
 
-        if (activeContainer !== overContainer) {
-            const activeItems = items[activeContainer];
-            const overItems = items[overContainer];
-            const activeItem = activeItems.find(e => e.url === active.id)!;
-            const overIndex = overItems.findIndex(e => e.url === overId);
+        if (currentActiveId === overId || items.some(g => g.name === currentActiveId)) return;
 
-            const newIndex = overIndex >= 0 ? overIndex : overItems.length;
+        const activeContainerName = findContainer(currentActiveId);
+        const overContainerName = findContainer(overId);
 
-            recentlyMovedToNewContainer.current = true;
-
-            setItems(itemsProp.map(group => {
-                    if (group.name === activeContainer) {
-                        return {
-                            ...group,
-                            entries: group.entries.filter(e => e.url !== active.id)
-                        };
-                    } else if (group.name === overContainer) {
-                        return {
-                            ...group,
-                            entries: [
-                                ...group.entries.slice(0, newIndex),
-                                activeItem,
-                                ...group.entries.slice(newIndex)
-                            ]
-                        };
-                    }
-                    return group;
-                }
-            ));
+        if (!activeContainerName || !overContainerName || activeContainerName === overContainerName) {
+            recentlyMovedToNewContainer.current = false;
+            return;
         }
+
+        recentlyMovedToNewContainer.current = true;
+        const newItemsState = [...items];
+
+        const sourceGroupIndex = newItemsState.findIndex(g => g.name === activeContainerName);
+        const targetGroupIndex = newItemsState.findIndex(g => g.name === overContainerName);
+
+        if (sourceGroupIndex === -1 || targetGroupIndex === -1) return;
+
+        const sourceGroup = {
+            ...newItemsState[sourceGroupIndex],
+            entries: [...newItemsState[sourceGroupIndex].entries]
+        };
+        const targetGroup = {
+            ...newItemsState[targetGroupIndex],
+            entries: [...newItemsState[targetGroupIndex].entries]
+        };
+
+        const activeItemIndex = sourceGroup.entries.findIndex(e => e.url === currentActiveId);
+        if (activeItemIndex === -1) return;
+
+        const [movedItem] = sourceGroup.entries.splice(activeItemIndex, 1);
+
+        const overIsActualItem = targetGroup.entries.some(e => e.url === overId);
+        const overItemIndex = overIsActualItem ? targetGroup.entries.findIndex(e => e.url === overId) : -1;
+
+        const newIndexInTarget = overItemIndex >= 0 ? overItemIndex : targetGroup.entries.length;
+        targetGroup.entries.splice(newIndexInTarget, 0, movedItem);
+
+        newItemsState[sourceGroupIndex] = sourceGroup;
+        newItemsState[targetGroupIndex] = targetGroup;
+
+        setItems(newItemsState.map(g => ({
+            ...g,
+            entries: g.entries.filter(Boolean)
+        })));
     };
 
     const onDragEnd = ({
@@ -265,83 +352,152 @@ export function useHomePageDnd({
                        }: { active: any, over: any }) => {
         if (disabled) {
             setActiveId(null);
+            setActiveIsGroup(false);
+            setDraggingGroupId(null); // Clear dragging group ID
             return;
         }
-        const activeId = active.id;
+        const currentActiveId = active.id;
         const overId = over?.id;
 
         if (!overId) {
             setActiveId(null);
+            setActiveIsGroup(false);
+            setDraggingGroupId(null);
             return;
         }
 
-        // Handle drop into new group zone
-        if (overId === "new-group-drop-zone") {
-            const activeContainer = findContainer(activeId);
-            if (activeContainer) {
-                const activeItem = items[activeContainer].find(e => e.url === activeId);
-                if (activeItem) {
-                    // Create new group name (can be made more sophisticated)
-                    const newGroupName = "New Group";
+        if (activeIsGroup) {
+            if (currentActiveId !== overId) {
+                const activeGroupIndex = items.findIndex(g => g.name === currentActiveId);
+                const overGroupIndex = items.findIndex(g => g.name === overId);
 
-                    setItems(itemsProp.map(group => {
-                            if (group.name === activeContainer) {
+                if (activeGroupIndex !== -1 && overGroupIndex !== -1) {
+                    setItems(arrayMove(items, activeGroupIndex, overGroupIndex));
+                }
+            }
+        } else {
+            // ... (item drag end logic remains the same) ...
+            const activeContainerName = findContainer(currentActiveId);
+
+            if (overId === "new-group-drop-zone") {
+                if (activeContainerName) {
+                    const sourceGroupIndex = items.findIndex(g => g.name === activeContainerName);
+                    if (sourceGroupIndex === -1) {
+                        setActiveId(null);
+                        setActiveIsGroup(false);
+                        setDraggingGroupId(null);
+                        return;
+                    }
+
+                    const sourceGroup = items[sourceGroupIndex];
+                    const activeItem = sourceGroup.entries.find(e => e.url === currentActiveId);
+
+                    if (activeItem) {
+                        let newGroupName = "New Group";
+                        let counter = 1;
+                        while (items.some(g => g.name === newGroupName) || containers.includes(newGroupName)) {
+                            newGroupName = `New Group ${counter++}`;
+                        }
+
+                        const updatedItems = items.map((group, index) => {
+                            if (index === sourceGroupIndex) {
                                 return {
                                     ...group,
-                                    entries: group.entries.filter(e => e.url !== activeId)
-                                };
-                            } else if (group.name === newGroupName) {
-                                return {
-                                    ...group,
-                                    entries: [...(group.entries || []), activeItem]
+                                    entries: group.entries.filter(e => e.url !== currentActiveId)
                                 };
                             }
                             return group;
-                        }
-                    ));
-                }
-            }
-            setActiveId(null);
-            return;
-        }
-
-        // Existing code for normal drops
-        const activeContainer = findContainer(activeId);
-        const overContainer = findContainer(overId);
-        if (!activeContainer || !overContainer) {
-            setActiveId(null);
-            return;
-        }
-
-        // The rest of the existing function...
-        if (activeContainer === overContainer) {
-            const activeIndex = items[activeContainer].findIndex(e => e.url === active.id);
-            const overIndex = items[overContainer].findIndex(e => e.url === overId);
-            if (activeIndex !== overIndex) {
-
-                setItems(itemsProp.map(group => {
-                    if (group.name === overContainer) {
-                        return {
-                            ...group,
-                            entries: arrayMove(
-                                group.entries,
-                                activeIndex,
-                                overIndex
-                            )
-                        };
+                        });
+                        const finalItems = updatedItems.filter(g => g.entries.length > 0 || g.name === sourceGroup.name || g.name === newGroupName);
+                        finalItems.push({
+                            name: newGroupName,
+                            entries: [activeItem]
+                        });
+                        setItems(finalItems);
                     }
-                    return group;
-                }));
+                }
+                setActiveId(null);
+                setActiveIsGroup(false);
+                setDraggingGroupId(null);
+                return;
             }
+
+            const overContainerName = findContainer(overId);
+            if (!activeContainerName || !overContainerName) {
+                setActiveId(null);
+                setActiveIsGroup(false);
+                setDraggingGroupId(null);
+                return;
+            }
+
+            const newItemsState = [...items];
+            const sourceGroupIndex = newItemsState.findIndex(g => g.name === activeContainerName);
+            const targetGroupIndex = newItemsState.findIndex(g => g.name === overContainerName);
+
+            if (sourceGroupIndex === -1 || targetGroupIndex === -1) {
+                setActiveId(null);
+                setActiveIsGroup(false);
+                setDraggingGroupId(null);
+                return;
+            }
+
+            const sourceGroup = {
+                ...newItemsState[sourceGroupIndex],
+                entries: [...newItemsState[sourceGroupIndex].entries]
+            };
+            const activeItemIndex = sourceGroup.entries.findIndex(e => e.url === currentActiveId);
+            if (activeItemIndex === -1) {
+                setActiveId(null);
+                setActiveIsGroup(false);
+                setDraggingGroupId(null);
+                return;
+            }
+
+            const [movedItem] = sourceGroup.entries.splice(activeItemIndex, 1);
+            newItemsState[sourceGroupIndex] = sourceGroup;
+
+            if (activeContainerName === overContainerName) {
+                const overItemIndex = sourceGroup.entries.findIndex(e => e.url === overId);
+                if (activeItemIndex !== overItemIndex && overItemIndex !== -1) {
+                    sourceGroup.entries.splice(overItemIndex, 0, movedItem);
+                } else if (overItemIndex === -1) {
+                    sourceGroup.entries.push(movedItem);
+                }
+            } else {
+                const targetGroup = {
+                    ...newItemsState[targetGroupIndex],
+                    entries: [...newItemsState[targetGroupIndex].entries]
+                };
+                const overIsActualItem = targetGroup.entries.some(e => e.url === overId);
+                const overItemIndex = overIsActualItem ? targetGroup.entries.findIndex(e => e.url === overId) : -1;
+                const newIndexInTarget = overItemIndex >= 0 ? overItemIndex : targetGroup.entries.length;
+
+                if (!targetGroup.entries.find(e => e.url === movedItem.url)) {
+                    targetGroup.entries.splice(newIndexInTarget, 0, movedItem);
+                }
+                newItemsState[targetGroupIndex] = targetGroup;
+            }
+            setItems(newItemsState.map(g => ({
+                ...g,
+                entries: g.entries.filter(Boolean)
+            })));
         }
         setActiveId(null);
+        setActiveIsGroup(false);
+        setDraggingGroupId(null); // Clear dragging group ID
+        recentlyMovedToNewContainer.current = false;
     };
 
-    /* active entry for the overlay ------------------------------------------- */
-    const activeEntry = useMemo(() => {
-        if (disabled || !activeId) return null;
-        return Object.values(items).flat().find(e => e.url === activeId) || null;
-    }, [activeId, items, disabled]);
+    // ... (activeItemForOverlay and activeGroupData remain the same) ...
+    const activeItemForOverlay = useMemo(() => {
+        if (disabled || !activeId || activeIsGroup) return null;
+        return items.flatMap(g => g.entries).find(e => e.url === activeId) || null;
+    }, [activeId, items, disabled, activeIsGroup]);
+
+    const activeGroupData = useMemo(() => {
+        if (disabled || !activeId || !activeIsGroup) return null; // Only return data if a group is active
+        return items.find(g => g.name === activeId) || null;
+    }, [activeId, items, disabled, activeIsGroup]);
 
     return {
         sensors,
@@ -349,9 +505,10 @@ export function useHomePageDnd({
         onDragStart,
         onDragOver,
         onDragEnd,
-        dropAnimation,
-        entriesByGroup: items,
-        activeEntry,
+        dropAnimation, // Use updated dropAnimation
+        activeItemForOverlay,
+        activeGroupData,
+        draggingGroupId, // Return this
         containers
     };
 }
