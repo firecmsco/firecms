@@ -163,7 +163,7 @@ export function CollectionDetailsForm({
                         </FieldCaption>
                     </div>
 
-                    <div className={cls("col-span-12 ", isSubcollection ? "" : "sm:col-span-8")}>
+                    <div className={cls("col-span-12 ")}>
                         <Field name={"path"}
                                as={DebouncedTextField}
                                label={"Path"}
@@ -179,40 +179,40 @@ export function CollectionDetailsForm({
 
                     </div>
 
-                    {!isSubcollection && <div className={"col-span-12 sm:col-span-4 relative"}>
+                    {/*{!isSubcollection && <div className={"col-span-12 sm:col-span-4 relative"}>*/}
 
-                        <TextField error={showErrors && Boolean(errors.group)}
-                                   disabled={isSubmitting}
-                                   value={values.group ?? ""}
-                                   autoComplete="off"
-                                   onChange={(event) => setFieldValue("group", event.target.value)}
-                                   name={"group"}
-                                   inputRef={groupRef}
-                                   label="Group"/>
-                        <Autocomplete
-                            open={autoCompleteOpen && (groupOptions ?? []).length > 0}
-                            setOpen={setAutoCompleteOpen}>
-                            {groupOptions?.map((group, index) => {
-                                return <AutocompleteItem
-                                    key={index + "_" + group}
-                                    className={"pr-6 pl-14"}
-                                    onClick={() => {
-                                        setAutoCompleteOpen(false);
-                                        setFieldValue("group", group ?? null);
-                                    }}
-                                >
-                                    <div className={"flex-grow"}>
-                                        {group}
-                                    </div>
-                                </AutocompleteItem>;
-                            })}
-                        </Autocomplete>
-                        <FieldCaption>
-                            {showErrors && Boolean(errors.group) ? errors.group : "Group in the home page"}
-                        </FieldCaption>
+                    {/*    <TextField error={showErrors && Boolean(errors.group)}*/}
+                    {/*               disabled={isSubmitting}*/}
+                    {/*               value={values.group ?? ""}*/}
+                    {/*               autoComplete="off"*/}
+                    {/*               onChange={(event) => setFieldValue("group", event.target.value)}*/}
+                    {/*               name={"group"}*/}
+                    {/*               inputRef={groupRef}*/}
+                    {/*               label="Group"/>*/}
+                    {/*    <Autocomplete*/}
+                    {/*        open={autoCompleteOpen && (groupOptions ?? []).length > 0}*/}
+                    {/*        setOpen={setAutoCompleteOpen}>*/}
+                    {/*        {groupOptions?.map((group, index) => {*/}
+                    {/*            return <AutocompleteItem*/}
+                    {/*                key={index + "_" + group}*/}
+                    {/*                className={"pr-6 pl-14"}*/}
+                    {/*                onClick={() => {*/}
+                    {/*                    setAutoCompleteOpen(false);*/}
+                    {/*                    setFieldValue("group", group ?? null);*/}
+                    {/*                }}*/}
+                    {/*            >*/}
+                    {/*                <div className={"flex-grow"}>*/}
+                    {/*                    {group}*/}
+                    {/*                </div>*/}
+                    {/*            </AutocompleteItem>;*/}
+                    {/*        })}*/}
+                    {/*    </Autocomplete>*/}
+                    {/*    <FieldCaption>*/}
+                    {/*        {showErrors && Boolean(errors.group) ? errors.group : "Group in the home page"}*/}
+                    {/*    </FieldCaption>*/}
 
 
-                    </div>}
+                    {/*</div>}*/}
 
                     <LayoutModeSwitch
                         className={"col-span-12"}

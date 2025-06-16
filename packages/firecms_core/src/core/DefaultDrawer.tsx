@@ -92,7 +92,7 @@ export function DefaultDrawer({
                                 .filter(e => e.group === group)
                                 .map((view) =>
                                     <DrawerNavigationItem
-                                        key={view.id} // Changed from index to view.id
+                                        key={view.id}
                                         icon={<IconForView collectionOrView={view.collection ?? view.view}
                                                            size={"small"}/>}
                                         tooltipsOpen={tooltipsOpen}
@@ -134,7 +134,7 @@ export function DefaultDrawer({
                                 event.preventDefault();
                                 navigate(entry.url); // Consistent use of entry.url for navigation
                             }}
-                            key={entry.id}> // Changed from index to entry.id
+                            key={entry.id}>
                             {<IconForView collectionOrView={entry.view}/>}
                             {entry.name}
                         </MenuItem>)}

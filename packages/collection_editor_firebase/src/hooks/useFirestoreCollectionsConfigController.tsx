@@ -11,7 +11,7 @@ import {
 } from "@firecms/collection_editor";
 import {
     applyPermissionsFunctionIfEmpty,
-    NavigationGroupEntry,
+    NavigationGroupMapping,
     PermissionsBuilder,
     Property,
     PropertyConfig,
@@ -91,7 +91,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
     const [persistedCollections, setPersistedCollections] = React.useState<PersistedCollection[] | undefined>();
 
     const [configLoading, setConfigLoading] = React.useState<boolean>(true);
-    const [navigationEntries, setNavigationEntries] = React.useState<NavigationGroupEntry[]>([]);
+    const [navigationEntries, setNavigationEntries] = React.useState<NavigationGroupMapping[]>([]);
 
     const [collectionsError, setCollectionsError] = React.useState<Error | undefined>();
 
@@ -130,7 +130,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         return onSnapshot(ref, (snapshot) => {
             const data = snapshot.data();
             if (data?.homePage?.navigationEntries) {
-                const entries = data.homePage.navigationEntries as NavigationGroupEntry[];
+                const entries = data.homePage.navigationEntries as NavigationGroupMapping[];
                 setNavigationEntries(entries);
             } else {
                 setNavigationEntries([]);
@@ -155,7 +155,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         return deleteDoc(ref);
     }, [collectionsConfigPath, firebaseApp]);
 
-    const saveNavigationEntries = useCallback((navigationEntries: NavigationGroupEntry[]): Promise<void> => {
+    const saveNavigationEntries = useCallback((navigationEntries: NavigationGroupMapping[]): Promise<void> => {
         if (!firebaseApp) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         if (!generalConfigPath) {
             console.warn("No generalConfigPath provided in useFirestoreConfigurationPersistence, cannot save homepage navigation entries order");

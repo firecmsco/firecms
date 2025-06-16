@@ -229,13 +229,22 @@ export interface CMSView {
 
 }
 
-export interface NavigationGroupEntry {
+/**
+ * Used to group navigation entries in the main navigation.
+ */
+export interface NavigationGroupMapping {
+    /**
+     * Name of the group, used to display the group header in the UI
+     */
     name: string;
+    /**
+     * List of collection ids or view paths that belong to this group.
+     */
     entries: string[];
 }
 
 export interface NavigationEntry {
-    id: string; // Unique identifier for DND and React keys
+    id: string;
     url: string;
     name: string;
     path: string;
@@ -254,5 +263,6 @@ export type NavigationResult = {
 
     groups: string[],
 
-    onNavigationEntriesUpdate: (entries: NavigationGroupEntry[]) => void;
+    onNavigationEntriesUpdate: (entries: NavigationGroupMapping[]) => void;
 };
+

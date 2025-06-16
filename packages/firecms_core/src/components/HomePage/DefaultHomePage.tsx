@@ -5,7 +5,7 @@ import { useCustomizationController, useFireCMSContext, useNavigationController 
 import {
     CMSAnalyticsEvent,
     NavigationEntry,
-    NavigationGroupEntry,
+    NavigationGroupMapping,
     PluginGenericProps,
     PluginHomePageAdditionalCardsProps
 } from "../../types";
@@ -24,6 +24,7 @@ import { DndContext, DragOverlay, MeasuringStrategy } from "@dnd-kit/core";
 import { NavigationCardBinding } from "./NavigationCardBinding";
 import { rectSortingStrategy, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis, restrictToWindowEdges } from "@dnd-kit/modifiers";
+import { RenameGroupDialog } from "./RenameGroupDialog";
 
 export const DEFAULT_GROUP_NAME = "Views";
 export const ADMIN_GROUP_NAME = "Admin"; // Define admin group name
@@ -93,8 +94,7 @@ export function DefaultHomePage({
                 entries: entriesByGroup[name] || []
             })).filter(g => g.entries.length > 0);
         } else {
-            // Use the explicit order from groupOrderFromNavController
-            // This ensures groupOrderFromNavController dictates the exact order
+
             allProcessedItems = groupOrderFromNavController.map(groupName => ({
                 name: groupName,
                 entries: entriesByGroup[groupName] || []
@@ -143,17 +143,17 @@ export function DefaultHomePage({
                 : newItemsOrUpdater;
 
             // Convert draggable items to the persistence format
-            const draggableGroupsForPersistence: NavigationGroupEntry[] = newDraggableItems.map(group => ({
+            const draggableGroupsForPersistence: NavigationGroupMapping[] = newDraggableItems.map(group => ({
                 name: group.name,
                 entries: group.entries.map(e => e.path) // Persist paths for entries
             }));
 
-            let allGroupsForPersistence: NavigationGroupEntry[];
+            let allGroupsForPersistence: NavigationGroupMapping[];
 
             // Combine draggable groups with the static admin group (if it exists)
             // The Admin group is typically last in display order.
             if (adminGroupData) {
-                const adminGroupForPersistence: NavigationGroupEntry = {
+                const adminGroupForPersistence: NavigationGroupMapping = {
                     name: adminGroupData.name, // This is ADMIN_GROUP_NAME
                     entries: adminGroupData.entries.map(e => e.path)
                 };
@@ -183,11 +183,50 @@ export function DefaultHomePage({
         containers,
         dndKitActiveNode,
         onDragCancel,
-        isDraggingCardOnly
+        isDraggingCardOnly,
+        dialogOpenForGroup,
+        setDialogOpenForGroup,
+        handleRenameGroup,
+        isHoveringNewGroupDropZone,
+        setIsHoveringNewGroupDropZone
     } = useHomePageDnd({
         items: items,
         setItems: updateItems,
-        disabled: !allowDragAndDrop || performingSearch
+        disabled: !allowDragAndDrop || performingSearch,
+        onCardMovedBetweenGroups: (card, sourceGroup, targetGroup) => {
+
+            // This is important: We need to update the navigation entries in the plugin system
+            // when cards are moved between groups
+            const sourceGroupEntries = items.find(g => g.name === sourceGroup)?.entries || [];
+            const targetGroupEntries = items.find(g => g.name === targetGroup)?.entries || [];
+
+            // Create updated groups that reflect the move that just happened
+            const updatedGroups = items.map(group => {
+                if (group.name === sourceGroup) {
+                    return {
+                        name: sourceGroup,
+                        entries: sourceGroupEntries.map(e => e.path)
+                    };
+                } else if (group.name === targetGroup) {
+                    return {
+                        name: targetGroup,
+                        entries: targetGroupEntries.map(e => e.path)
+                    };
+                } else {
+                    return {
+                        name: group.name,
+                        entries: group.entries.map(e => e.path)
+                    };
+                }
+            });
+
+            console.log("Updating navigation entries after card move", {
+                sourceGroup,
+                targetGroup,
+                card,
+            })
+
+        }
     });
 
     const {
@@ -259,6 +298,7 @@ export function DefaultHomePage({
                 <FavouritesView hidden={performingSearch}/>
 
                 {additionalChildrenStart}
+
                 {additionalPluginChildrenStart}
 
                 <DndContext
@@ -273,19 +313,18 @@ export function DefaultHomePage({
                     onDragStart={onDragStart}
                     onDragOver={onDragOver}
                     onDragEnd={onDragEnd}
-                    onDragCancel={onDragCancel} // Pass onDragCancel
-                    modifiers={dndModifiers}   // Pass conditional modifiers
+                    onDragCancel={onDragCancel}
+                    modifiers={dndModifiers}
                 >
                     {/* SortableContext now only includes non-admin groups */}
                     <SortableContext
                         key={JSON.stringify(containers)}
-                        items={containers} // `containers` from useHomePageDnd is based on `items` (non-admin)
+                        items={containers}
                         strategy={verticalListSortingStrategy}
                     >
                         {items.map((groupData) => {
                             const groupKey = groupData.name;
                             const entriesInGroup = groupData.entries;
-                            const isAnyGroupBeingDragged = !!draggingGroupId;
 
                             const AdditionalCards: React.ComponentType<PluginHomePageAdditionalCardsProps>[] = [];
                             customizationController.plugins?.forEach(p => {
@@ -307,14 +346,13 @@ export function DefaultHomePage({
                                 <SortableNavigationGroup key={groupKey} groupName={groupKey}>
                                     <NavigationGroup
                                         group={groupKey === DEFAULT_GROUP_NAME ? undefined : groupKey}
-                                        // Minimise the original group in the list if it's the one being dragged as a group.
-                                        // This makes its placeholder (opacity 0) take up collapsed space.
                                         minimised={draggingGroupId === groupKey && !isDraggingCardOnly}
+                                        isPotentialCardDropTarget={isDraggingCardOnly}
                                     >
                                         <NavigationGroupDroppable
                                             id={groupKey}
                                             itemIds={entriesInGroup.map(e => e.url)}
-                                            isPotentialCardDropTarget={isDraggingCardOnly} // Pass to droppable if it needs to change style too
+                                            isPotentialCardDropTarget={isDraggingCardOnly}
                                         >
                                             <SortableContext items={entriesInGroup.map(e => e.url)}
                                                              strategy={rectSortingStrategy}>
@@ -335,7 +373,8 @@ export function DefaultHomePage({
                                                                     event = "unmapped_event";
                                                                 }
                                                                 context.analyticsController?.onAnalyticsEvent?.(event, { path: entry.path });
-                                                            }}/>
+                                                            }}
+                                                        />
                                                     ))}
                                                     {/* AdditionalCards for draggable groups */}
                                                     {!performingSearch && groupKey.toLowerCase() !== ADMIN_GROUP_NAME.toLowerCase() &&
@@ -351,7 +390,7 @@ export function DefaultHomePage({
                         })}
                     </SortableContext>
 
-                    <NewGroupDropZone disabled={dndDisabled}/>
+                    <NewGroupDropZone disabled={dndDisabled} setIsHovering={setIsHoveringNewGroupDropZone}/>
 
                     <DragOverlay adjustScale={false}
                                  dropAnimation={dropAnimation}
@@ -373,7 +412,10 @@ export function DefaultHomePage({
                                 </NavigationGroup>
                             </div>
                         ) : activeItemForOverlay ? (
-                            <NavigationCardBinding {...activeItemForOverlay} />
+                            <NavigationCardBinding
+                                {...activeItemForOverlay}
+                                shrink={isHoveringNewGroupDropZone}
+                            />
                         ) : null}
                     </DragOverlay>
                 </DndContext>
@@ -405,8 +447,6 @@ export function DefaultHomePage({
                                     }}
                                 />
                             ))}
-                            {/* AdditionalCards for admin group - typically none, but logic included for completeness */}
-                            {/* Admin group should not have additional cards based on original logic */}
                         </div>
                     </NavigationGroup>
                 )}
@@ -415,6 +455,20 @@ export function DefaultHomePage({
                 {additionalPluginChildrenEnd}
                 {additionalChildrenEnd}
             </Container>
+
+            {/* Render the RenameGroupDialog */}
+            {dialogOpenForGroup && (
+                <RenameGroupDialog
+                    open={!!dialogOpenForGroup}
+                    initialName={dialogOpenForGroup} // The name of the newly created group
+                    existingGroupNames={items.map(g => g.name).filter(name => name !== dialogOpenForGroup)}
+                    onClose={() => setDialogOpenForGroup(null)}
+                    onRename={(newName) => {
+                        handleRenameGroup(dialogOpenForGroup, newName);
+                        setDialogOpenForGroup(null); // Close dialog after rename
+                    }}
+                />
+            )}
         </div>
     );
 }

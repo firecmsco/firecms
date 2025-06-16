@@ -7,7 +7,7 @@ import { FieldProps, FormContext } from "./fields";
 import { CMSType, Property } from "./properties";
 import { EntityStatus } from "./entities";
 import { ResolvedProperty } from "./resolved_entities";
-import { NavigationGroupEntry } from "./navigation";
+import { NavigationGroupMapping } from "./navigation";
 
 /**
  * Interface used to define plugins for FireCMS.
@@ -90,14 +90,14 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
          */
         allowDragAndDrop?: boolean;
 
-        navigationEntries?: NavigationGroupEntry[];
+        navigationEntries?: NavigationGroupMapping[];
 
         /**
          * This method will be called when the entries are updated in the home page.
          * group => navigationEntriesOrder (path)
          * @param entries
          */
-        onNavigationEntriesUpdate?: (entries: NavigationGroupEntry[]) => void;
+        onNavigationEntriesUpdate?: (entries: NavigationGroupMapping[]) => void;
 
     }
 

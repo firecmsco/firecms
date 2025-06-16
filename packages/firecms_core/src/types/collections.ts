@@ -76,6 +76,9 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * Optional field used to group top level navigation entries under a~
      * navigation view. If you set this value in a subcollection it has no
      * effect.
+     * @deprecated This prop is deprecated and will be removed in the future.
+     * You can apply grouping by using the `navigationGroupMappings` prop in the
+     * {@link useBuildNavigationController} hook instead.
      */
     group?: string;
 

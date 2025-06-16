@@ -30,9 +30,11 @@ export function NavigationCardBinding({
                                           name,
                                           description,
                                           onClick,
-                                          type
+                                          type,
+                                          shrink // <-- add shrink prop
                                       }: NavigationEntry & {
-    onClick?: () => void
+    onClick?: () => void,
+    shrink?: boolean // <-- add shrink prop type
 }) {
 
     const userConfigurationPersistence = useUserConfigurationPersistence();
@@ -93,7 +95,7 @@ export function NavigationCardBinding({
     if (type === "admin") {
         return <SmallNavigationCard icon={collectionIcon}
                                     name={name}
-                                    url={url}/>
+                                    url={url}/>;
     }
 
     return <NavigationCard
@@ -109,5 +111,7 @@ export function NavigationCardBinding({
                     [path, ...(userConfigurationPersistence.recentlyVisitedPaths ?? []).filter(p => p !== path)]
                 );
             }
-        }}/>;
+        }}
+        shrink={shrink}
+    />;
 }

@@ -1,10 +1,9 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import {
     Active,
-    closestCorners,
     closestCenter,
+    closestCorners,
     CollisionDetection,
-    defaultDropAnimationSideEffects,
     DropAnimation,
     getFirstCollision,
     KeyboardSensor,
@@ -69,7 +68,7 @@ const cloneSerializableNavigationEntry = (entry: NavigationEntry): NavigationEnt
         ...(entry.group && { group: entry.group }),
         ...(entry.description && { description: entry.description }),
         ...(entry.collection && { collection: entry.collection }), // Preserve collection for icons/actions
-        ...(entry.view && { view: entry.view }), // Preserve view for icons/actions
+        ...(entry.view && { view: entry.view }) // Preserve view for icons/actions
         // Add any other specific, serializable properties from NavigationEntry that are needed.
         // Avoid spreading the whole entry if it might contain non-serializable data.
         // For example, if entry has other known data fields like 'customData':
@@ -89,10 +88,10 @@ const cloneItemsForDnd = (items: { name: string, entries: NavigationEntry[] }[])
     }));
 };
 
-/* ----------------------------------------------------------------------------
-   Sortable single card
----------------------------------------------------------------------------- */
-export function SortableNavigationCard({ entry, onClick }: { entry: NavigationEntry, onClick?: () => void }) {
+export function SortableNavigationCard({
+                                           entry,
+                                           onClick
+                                       }: { entry: NavigationEntry, onClick?: () => void }) {
     const {
         setNodeRef,
         listeners,
@@ -116,7 +115,7 @@ export function SortableNavigationCard({ entry, onClick }: { entry: NavigationEn
 
     return (
         <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-            <NavigationCardBinding {...entry} onClick={onClick} />
+            <NavigationCardBinding {...entry} onClick={onClick}/>
         </div>
     );
 }
@@ -132,37 +131,13 @@ export function NavigationGroupDroppable({
     children: React.ReactNode;
     isPotentialCardDropTarget?: boolean
 }) {
-    /* basic droppable behaviour */
     const { setNodeRef } = useDroppable({ id });
-
-    /* keep local “isOverContainer” state */
-    const [isOverContainer, setIsOverContainer] = useState(false);
-
-    /* react to every drag-over event in the whole DndContext */
-    useDndMonitor({
-        onDragOver({ over }) {
-            if (!over) {
-                setIsOverContainer(false);
-                return;
-            }
-            /* highlight if pointer is over the container OR an item inside it */
-            setIsOverContainer(
-                over.id === id || itemIds.includes(over.id as UniqueIdentifier)
-            );
-        },
-        onDragEnd() {
-            setIsOverContainer(false);
-        },
-        onDragCancel() {
-            setIsOverContainer(false);
-        }
-    });
 
     return (
         <div
             ref={setNodeRef}
             className={
-                cls(isPotentialCardDropTarget // Apply style if a card is being dragged
+                cls(isPotentialCardDropTarget
                     ? "p-2 bg-surface-accent-200 dark:bg-surface-accent-800 rounded-lg"
                     : undefined, "transition-all duration-200 ease-in-out"
                 )}
@@ -211,21 +186,25 @@ export function SortableNavigationGroup({
 export function useHomePageDnd({
                                    items: dndItems,
                                    setItems: setDndItems,
-                                   disabled
+                                   disabled,
+                                   onCardMovedBetweenGroups
                                }: {
     items: { name: string, entries: NavigationEntry[] }[],
     setItems: (newItemsOrUpdater: { name: string, entries: NavigationEntry[] }[] | ((currentItems: {
         name: string,
         entries: NavigationEntry[]
     }[]) => { name: string, entries: NavigationEntry[] }[])) => void,
-    disabled: boolean
+    disabled: boolean,
+    onCardMovedBetweenGroups?: (card: NavigationEntry, fromGroup: string, toGroup: string) => void
 }) {
 
     const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
     const [activeIsGroup, setActiveIsGroup] = useState(false);
     const [currentDraggingGroupId, setCurrentDraggingGroupId] = useState<UniqueIdentifier | null>(null);
     const [dndKitActiveNode, setDndKitActiveNode] = useState<Active | null>(null);
-    const [isDraggingCardOnly, setIsDraggingCardOnly] = useState(false); // New state
+    const [isDraggingCardOnly, setIsDraggingCardOnly] = useState(false);
+    const [dialogOpenForGroup, setDialogOpenForGroup] = useState<string | null>(null);
+    const [isHoveringNewGroupDropZone, setIsHoveringNewGroupDropZone] = useState(false);
 
     const dndContainers = useMemo(() => dndItems.map(group => group.name), [dndItems]);
 
@@ -246,6 +225,8 @@ export function useHomePageDnd({
 
     const lastOverId = useRef<UniqueIdentifier | null>(null);
     const recentlyMovedToNewContainer = useRef(false);
+    // Track last cross-group move for callback
+    const lastCrossGroupMove = useRef<{ card: NavigationEntry, fromGroup: string, toGroup: string } | null>(null);
 
     const findDndContainer = useCallback((id: UniqueIdentifier): string | undefined => {
         if (!id) return undefined;
@@ -332,7 +313,7 @@ export function useHomePageDnd({
         active.data.current.type = isGroup ? "group" : "item";
         setActiveId(active.id);
         setActiveIsGroup(isGroup);
-        setIsDraggingCardOnly(!isGroup); // Set true if a card is dragged, false if a group
+        setIsDraggingCardOnly(!isGroup);
         if (isGroup) {
             setCurrentDraggingGroupId(active.id);
         }
@@ -343,9 +324,12 @@ export function useHomePageDnd({
                                 active,
                                 over
                             }: { active: Active, over: any }) => {
-        if (disabled || !over) return;
+        if (disabled || !over) {
+            return;
+        }
         const currentActiveId = active.id;
         const currentOverId = over.id;
+
         if (currentActiveId === currentOverId) return;
 
         if (activeIsGroup) return; // Group dragging over logic is simpler, handled by SortableContext
@@ -368,21 +352,13 @@ export function useHomePageDnd({
                 const activeItemIndexInSource = sourceGroup.entries.findIndex(e => e.url === currentActiveId);
                 if (activeItemIndexInSource === -1) return currentItems;
                 const [movedItem] = sourceGroup.entries.splice(activeItemIndexInSource, 1);
-                const overIsActualItemInTarget = targetGroup.entries.some(e => e.url === currentOverId);
-                let newIndexInTarget = targetGroup.entries.length;
-                if (overIsActualItemInTarget) {
-                    const overItemIndex = targetGroup.entries.findIndex(e => e.url === currentOverId);
-                    if (over.rect && active.rect.current.translated) {
-                        const draggedItemCenterY = active.rect.current.translated.top + active.rect.current.translated.height / 2;
-                        const overItemCenterY = over.rect.top + over.rect.height / 2;
-                        newIndexInTarget = draggedItemCenterY > overItemCenterY ? overItemIndex + 1 : overItemIndex;
-                    } else {
-                        newIndexInTarget = overItemIndex;
-                    }
-                } else if (currentOverId === overElementContainerName) {
-                    newIndexInTarget = targetGroup.entries.length;
-                }
-                targetGroup.entries.splice(newIndexInTarget, 0, movedItem);
+                targetGroup.entries.push(movedItem);
+                // Track for callback in drag end
+                lastCrossGroupMove.current = {
+                    card: movedItem,
+                    fromGroup: activeElementContainerName,
+                    toGroup: overElementContainerName
+                };
                 return newItemsState.map(g => ({
                     ...g,
                     entries: g.entries.filter(Boolean)
@@ -390,6 +366,7 @@ export function useHomePageDnd({
             });
         } else if (activeElementContainerName === overElementContainerName) {
             recentlyMovedToNewContainer.current = false;
+            lastCrossGroupMove.current = null;
         }
     };
 
@@ -402,8 +379,9 @@ export function useHomePageDnd({
             setActiveId(null);
             setActiveIsGroup(false);
             setCurrentDraggingGroupId(null);
-            setIsDraggingCardOnly(false); // Reset on invalid drop
+            setIsDraggingCardOnly(false);
             recentlyMovedToNewContainer.current = false;
+            lastCrossGroupMove.current = null;
             return;
         }
 
@@ -422,27 +400,49 @@ export function useHomePageDnd({
             const activeContainerName = findDndContainer(currentActiveId);
             if (currentOverId === "new-group-drop-zone") {
                 if (activeContainerName) {
+                    let createdGroupName: string | null = null;
                     setDndItems(currentItems => {
                         const newItemsState = cloneItemsForDnd(currentItems);
                         const sourceGroupIndex = newItemsState.findIndex(g => g.name === activeContainerName);
                         if (sourceGroupIndex === -1) return currentItems;
+
                         const sourceGroup = newItemsState[sourceGroupIndex];
                         const activeItemIndex = sourceGroup.entries.findIndex(e => e.url === currentActiveId);
                         if (activeItemIndex === -1) return currentItems;
+
                         const [draggedItem] = sourceGroup.entries.splice(activeItemIndex, 1);
-                        let newGroupName = "New Group";
-                        let groupNameCounter = 1;
-                        const currentContainerNames = newItemsState.map(g => g.name);
-                        while (newItemsState.some(g => g.name === newGroupName) || currentContainerNames.includes(newGroupName)) {
-                            newGroupName = `New Group ${groupNameCounter++}`;
+
+                        if (sourceGroup.entries.length === 0) {
+                            newItemsState.splice(sourceGroupIndex, 1);
                         }
-                        const finalItems = newItemsState.filter(g => g.entries.length > 0 || dndContainers.includes(g.name) || g.name === sourceGroup.name);
-                        finalItems.push({
-                            name: newGroupName,
+
+                        let newGroupNameAttempt = "New Group";
+                        let groupNameCounter = 1;
+                        while (newItemsState.some(g => g.name === newGroupNameAttempt)) {
+                            newGroupNameAttempt = `New Group ${groupNameCounter++}`;
+                        }
+                        createdGroupName = newGroupNameAttempt;
+
+                        newItemsState.push({
+                            name: createdGroupName,
                             entries: [draggedItem]
                         });
-                        return finalItems;
+
+                        // Add callback for new group creation
+                        if (onCardMovedBetweenGroups) {
+                            lastCrossGroupMove.current = {
+                                card: draggedItem,
+                                fromGroup: activeContainerName,
+                                toGroup: createdGroupName
+                            };
+                        }
+
+                        return newItemsState;
                     });
+                    if (createdGroupName) {
+                        console.log("[HomePageDnD] Attempting to open dialog for new group:", createdGroupName);
+                        setDialogOpenForGroup(createdGroupName);
+                    }
                 }
             } else {
                 const overContainerName = findDndContainer(currentOverId);
@@ -470,15 +470,25 @@ export function useHomePageDnd({
                         return currentDndItems;
                     });
                 }
-                // Cross-container item drop is handled by onDragOver's state update
             }
         }
+
         setDndKitActiveNode(null);
         setActiveId(null);
         setActiveIsGroup(false);
         setCurrentDraggingGroupId(null);
         setIsDraggingCardOnly(false); // Reset isDraggingCardOnly
         recentlyMovedToNewContainer.current = false;
+
+        // Execute the callback after state updates are performed
+        if (!activeIsGroup && lastCrossGroupMove.current && onCardMovedBetweenGroups) {
+            onCardMovedBetweenGroups(
+                lastCrossGroupMove.current.card,
+                lastCrossGroupMove.current.fromGroup,
+                lastCrossGroupMove.current.toGroup
+            );
+            lastCrossGroupMove.current = null;
+        }
     };
 
     const handleDragCancel = () => {
@@ -500,6 +510,26 @@ export function useHomePageDnd({
         return dndItems.find(g => g.name === activeId) || null;
     }, [activeId, dndItems, disabled, activeIsGroup]);
 
+    const handleRenameGroup = (oldName: string, newName: string) => {
+        setDndItems(currentItems => {
+            const groupIndex = currentItems.findIndex(g => g.name === oldName);
+            if (groupIndex === -1) return currentItems;
+
+            if (currentItems.some(g => g.name === newName && g.name !== oldName)) {
+                // This case should ideally be prevented by the dialog's validation
+                console.warn(`Group name "${newName}" already exists.`);
+                return currentItems;
+            }
+
+            const updatedItems = [...currentItems];
+            updatedItems[groupIndex] = {
+                ...updatedItems[groupIndex],
+                name: newName
+            };
+            return updatedItems;
+        });
+    };
+
     return {
         sensors: dndSensors,
         collisionDetection: dndCollisionDetection,
@@ -513,11 +543,19 @@ export function useHomePageDnd({
         draggingGroupId: currentDraggingGroupId,
         containers: dndContainers,
         dndKitActiveNode,
-        isDraggingCardOnly // Expose new state
+        isDraggingCardOnly,
+        dialogOpenForGroup,
+        setDialogOpenForGroup,
+        handleRenameGroup,
+        isHoveringNewGroupDropZone,
+        setIsHoveringNewGroupDropZone
     };
 }
 
-export function NewGroupDropZone({ disabled }: { disabled: boolean }) {
+export function NewGroupDropZone({
+                                     disabled,
+                                     setIsHovering
+                                 }: { disabled: boolean, setIsHovering: (v: boolean) => void }) {
     const {
         setNodeRef,
         isOver
@@ -545,12 +583,15 @@ export function NewGroupDropZone({ disabled }: { disabled: boolean }) {
             setIsVisible(false);
         }
     });
+    React.useEffect(() => {
+        setIsHovering(isOver && isVisible);
+    }, [isOver, isVisible, setIsHovering]);
     if (!isVisible || disabled) return null;
     return (
         <div
             ref={setNodeRef}
             className={cls(
-                "fixed right-8 top-1/2 -translate-y-1/2 w-[200px] h-[200px] border border-dashed rounded-lg flex items-center justify-center transition-all",
+                "fixed right-8 top-1/2 -translate-y-1/2 w-[200px] h-[120px] border border-dashed rounded-lg flex items-center justify-center transition-all",
                 isOver
                     ? "bg-surface-accent-100 dark:bg-surface-accent-800 border-surface-300 dark:border-surface-600"
                     : "bg-surface-50 dark:bg-surface-900 border-surface-200 dark:border-surface-700"
@@ -565,6 +606,3 @@ export function NewGroupDropZone({ disabled }: { disabled: boolean }) {
     );
 }
 
-/* ----------------------------------------------------------------------------
-   Drag Overlay (implementation already imported at the top)
----------------------------------------------------------------------------- */
