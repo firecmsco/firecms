@@ -23,7 +23,7 @@ export function NavigationGroup({
 
     return (
         <div className={cls(
-            !isPotentialCardDropTarget ? "my-8" : "my-4",
+            !isPotentialCardDropTarget ? "my-10" : "my-6",
             "transition-all duration-200 ease-in-out"
         )}
         >

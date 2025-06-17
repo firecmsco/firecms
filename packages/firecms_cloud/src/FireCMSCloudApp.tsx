@@ -354,6 +354,7 @@ export function FireCMSClientWithController({
 
     const configController = useFirestoreCollectionsConfigController({
         firebaseApp: fireCMSBackend.backendFirebaseApp,
+        generalConfigPath: `projects/${projectId}`,
         configPath: `projects/${projectId}/collections`,
         permissions,
         propertyConfigs: appConfig?.propertyConfigs
