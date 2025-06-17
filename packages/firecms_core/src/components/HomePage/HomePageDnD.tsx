@@ -152,8 +152,9 @@ export function NavigationGroupDroppable({
 
 export function SortableNavigationGroup({
                                             groupName,
-                                            children
-                                        }: { groupName: string, children: React.ReactNode }) {
+                                            children,
+                                            disabled
+                                        }: { groupName: string, children: React.ReactNode, disabled?: boolean }) { // Add disabled prop
     const {
         attributes,
         listeners,
@@ -163,7 +164,8 @@ export function SortableNavigationGroup({
         isDragging
     } = useSortable({
         id: groupName,
-        animateLayoutChanges
+        animateLayoutChanges,
+        disabled
     });
 
     // Memoize the style object to prevent unnecessary re-renders
@@ -605,4 +607,3 @@ export function NewGroupDropZone({
         </div>
     );
 }
-

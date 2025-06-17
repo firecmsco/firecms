@@ -343,11 +343,17 @@ export function DefaultHomePage({
                                 return null;
 
                             return (
-                                <SortableNavigationGroup key={groupKey} groupName={groupKey}>
+                                <SortableNavigationGroup key={groupKey} groupName={groupKey} disabled={dndDisabled}>
                                     <NavigationGroup
                                         group={groupKey === DEFAULT_GROUP_NAME ? undefined : groupKey}
                                         minimised={draggingGroupId === groupKey && !isDraggingCardOnly}
                                         isPotentialCardDropTarget={isDraggingCardOnly}
+                                        dndDisabled={dndDisabled} // Pass dndDisabled
+                                        onEditGroup={(groupName) => {
+                                            if (dndDisabled) return; // Prevent editing if D&D is disabled
+                                            console.log("Attempting to open dialog for group:", groupName);
+                                            setDialogOpenForGroup(groupName);
+                                        }}
                                     >
                                         <NavigationGroupDroppable
                                             id={groupKey}

@@ -345,7 +345,7 @@ export function App() {
         exportPlugin,
         entityHistoryPlugin,
         demoPlugin,
-        // collectionEditorPlugin
+        collectionEditorPlugin
     ];
 
     const navigationController = useBuildNavigationController({
