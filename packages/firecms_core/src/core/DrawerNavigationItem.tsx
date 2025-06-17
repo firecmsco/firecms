@@ -38,7 +38,7 @@ export function DrawerNavigationItem({
                 "flex flex-row items-center mr-8",
                 // "transition-all ease-in-out delay-100 duration-300",
                 // drawerOpen ? "w-full" : "w-18",
-                drawerOpen ? "pl-4 h-12" : "pl-4 h-11",
+                drawerOpen ? "pl-4 h-10" : "pl-4 h-9",
                 "font-semibold text-xs",
                 isActive ? "bg-surface-accent-200 bg-opacity-60 dark:bg-surface-800 dark:bg-opacity-50" : ""
             )}
