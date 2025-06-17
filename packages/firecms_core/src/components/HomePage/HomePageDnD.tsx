@@ -188,7 +188,7 @@ export function useHomePageDnd({
                                    items: dndItems,
                                    setItems: setDndItems,
                                    disabled,
-                                   onCardMovedBetweenGroups,
+                                   onCardMoved,
                                    onGroupMoved,
                                    onNewGroupDrop
                                }: {
@@ -198,7 +198,7 @@ export function useHomePageDnd({
         entries: NavigationEntry[]
     }[]) => { name: string, entries: NavigationEntry[] }[])) => void,
     disabled: boolean,
-    onCardMovedBetweenGroups?: (card: NavigationEntry) => void,
+    onCardMoved?: (card: NavigationEntry) => void,
     onGroupMoved?: (groupName: string, oldIndex: number, newIndex: number) => void,
     onNewGroupDrop?: () => void
 }) {
@@ -460,7 +460,7 @@ export function useHomePageDnd({
                     });
                 }
 
-                onCardMovedBetweenGroups?.(
+                onCardMoved?.(
                     dndItems.flatMap(g => g.entries).find(e => e.url === currentActiveId)!
                 );
             }

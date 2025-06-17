@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Fuse from "fuse.js";
 import { Container, SearchBar } from "@firecms/ui";
 import { useCustomizationController, useFireCMSContext, useNavigationController } from "../../hooks";
@@ -165,6 +165,7 @@ export function DefaultHomePage({
 
             // Call onNavigationEntriesUpdate with the complete list of groups
             onNavigationEntriesUpdate(allGroupsForPersistence);
+            console.debug("Updated navigation entries", allGroupsForPersistence);
 
             return newDraggableItems; // Update the local state for draggable items
         });
@@ -196,7 +197,7 @@ export function DefaultHomePage({
         onGroupMoved: (group, sourceGroup, targetGroup) => {
             context.analyticsController?.onAnalyticsEvent?.("home_move_group", { name: group });
         },
-        onCardMovedBetweenGroups: (card) => {
+        onCardMoved: (card) => {
             context.analyticsController?.onAnalyticsEvent?.("home_move_card", { id: card.id });
         },
         onNewGroupDrop: () => {
@@ -255,6 +256,15 @@ export function DefaultHomePage({
         </div>;
     }
 
+    const additionalCardsFromPlugins = useMemo(() => {
+        const cards: React.ComponentType<PluginHomePageAdditionalCardsProps>[] = [];
+        customizationController.plugins?.forEach(p => {
+            if (p.homePage?.AdditionalCards)
+                cards.push(...toArray(p.homePage.AdditionalCards));
+        });
+        return cards;
+    }, []);
+
     return (
         <div ref={containerRef} className="py-2 overflow-auto h-full w-full">
             <Container maxWidth="6xl">
@@ -301,11 +311,7 @@ export function DefaultHomePage({
                             const groupKey = groupData.name;
                             const entriesInGroup = groupData.entries;
 
-                            const AdditionalCards: React.ComponentType<PluginHomePageAdditionalCardsProps>[] = [];
-                            customizationController.plugins?.forEach(p => {
-                                if (p.homePage?.AdditionalCards)
-                                    AdditionalCards.push(...toArray(p.homePage.AdditionalCards));
-                            });
+                            const AdditionalCards = additionalCardsFromPlugins;
                             const actionProps = {
                                 group: groupKey === DEFAULT_GROUP_NAME ? undefined : groupKey,
                                 context
