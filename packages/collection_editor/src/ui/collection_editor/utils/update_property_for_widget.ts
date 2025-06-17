@@ -208,6 +208,15 @@ export function updatePropertyFromWidget(propertyData: any,
                 editable: propertyData.editable !== undefined ? propertyData.editable : true
             } satisfies Property
         );
+    } else if (selectedWidgetId === "reference_as_string") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            {
+                dataType: "string",
+                propertyConfig: "reference_as_string",
+                editable: propertyData.editable !== undefined ? propertyData.editable : true
+            } satisfies Property
+        );
     } else if (selectedWidgetId === "multi_references") {
         updatedProperty = mergeDeep(
             propertyData,

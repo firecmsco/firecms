@@ -62,6 +62,7 @@ export type PropertyConfigId =
     "group" |
     "key_value" |
     "reference" |
+    "reference_as_string" |
     "multi_references" |
     "switch" |
     "date_time" |

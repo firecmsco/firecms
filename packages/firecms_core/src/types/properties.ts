@@ -413,6 +413,14 @@ export interface StringProperty extends BaseProperty<string> {
      * Add an icon to clear the value and set it to `null`. Defaults to `false`
      */
     clearable?: boolean;
+
+    /**
+     * You can use this property (a string) to behave as a reference to another
+     * collection. The stored value is the ID of the entity in the
+     * collection, and the `path` prop is used to
+     * define the collection this reference points to.
+     */
+    reference?: ReferenceProperty;
 }
 
 /**

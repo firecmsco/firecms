@@ -97,6 +97,20 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
                                              previewType={stringProperty.url}/>;
             } else if (stringProperty.markdown) {
                 content = <Markdown source={value} size={"small"}/>;
+            } else if (stringProperty.reference) {
+                if (typeof stringProperty.reference.path === "string") {
+                    content = <ReferencePreview
+                        disabled={!stringProperty.reference.path}
+                        previewProperties={stringProperty.reference.previewProperties}
+                        includeId={stringProperty.reference.includeId}
+                        includeEntityLink={stringProperty.reference.includeEntityLink}
+                        size={props.size}
+                        reference={new EntityReference(value, stringProperty.reference.path)}
+                    />;
+                } else {
+                    content = <EmptyValue/>;
+                }
+
             } else {
                 content = <StringPropertyPreview {...props}
                                                  property={stringProperty}

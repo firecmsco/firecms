@@ -7,12 +7,14 @@ export function ReferencePropertyField({
                                            existing,
                                            multiple,
                                            disabled,
-                                           showErrors
+                                           showErrors,
+                                           asString
                                        }: {
     existing: boolean,
     multiple: boolean,
     disabled: boolean,
-    showErrors: boolean
+    showErrors: boolean,
+    asString?: boolean
 }) {
 
     const {
@@ -28,7 +30,7 @@ export function ReferencePropertyField({
             <CircularProgress/>
         </div>;
 
-    const pathPath = multiple ? "of.path" : "path";
+    const pathPath = asString ? "reference.path" : (multiple ? "of.path" : "path") ;
     const pathValue: string | undefined = getIn(values, pathPath);
     const pathError: string | undefined = showErrors && getIn(errors, pathPath);
 

@@ -461,6 +461,13 @@ function PropertyEditFormFields({
                                     existing={existing}
                                     multiple={false}
                                     disabled={disabled}/>;
+    } else if (selectedFieldConfigId === "reference_as_string") {
+        childComponent =
+            <ReferencePropertyField showErrors={showErrors}
+                                    existing={existing}
+                                    asString={true}
+                                    multiple={false}
+                                    disabled={disabled}/>;
     } else if (selectedFieldConfigId === "date_time") {
         childComponent = <DateTimePropertyField disabled={disabled}/>;
     } else if (selectedFieldConfigId === "multi_references") {
@@ -605,6 +612,7 @@ const WIDGET_TYPE_MAP: Record<PropertyConfigId, string> = {
     file_upload: "File",
     multi_file_upload: "File",
     reference: "Reference",
+    reference_as_string: "Text",
     multi_references: "Reference",
     date_time: "Date",
     group: "Group",

@@ -10,6 +10,7 @@ import {
     MapFieldBinding,
     MarkdownEditorFieldBinding,
     MultiSelectFieldBinding,
+    ReferenceAsStringFieldBinding,
     ReferenceFieldBinding,
     RepeatFieldBinding,
     SelectFieldBinding,
@@ -211,10 +212,21 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
             Field: StorageUploadFieldBinding
         }
     },
+    reference_as_string: {
+        key: "reference_as_string",
+        name: "Reference (as string)",
+        description: "The value refers to a different collection (it is saved as a string)",
+        Icon: LinkIcon,
+        color: "#154fb3",
+        property: {
+            dataType: "string",
+            Field: ReferenceAsStringFieldBinding
+        }
+    },
     reference: {
         key: "reference",
         name: "Reference",
-        description: "The value refers to a different collection",
+        description: "The value refers to a different collection (it is saved as a reference)",
         Icon: LinkIcon,
         color: "#ff0042",
         property: {
@@ -348,6 +360,8 @@ export function getDefaultFieldId(property: Property | ResolvedProperty) {
             return "email";
         } else if (property.enumValues) {
             return "select";
+        } else if (property.reference) {
+            return "reference_as_string";
         } else {
             return "text_field";
         }

@@ -59,7 +59,7 @@ export const onBooksUpdateIndexAlgolia = functions
 export const scheduledFirestoreImport = functions
     .region("europe-west3")
     .pubsub
-    .schedule("every 1 hours")
+    .schedule("every 30 minutes")
     .onRun((context) => {
         return importDatabaseBackup();
     });

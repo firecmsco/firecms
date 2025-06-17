@@ -1,6 +1,5 @@
 import {
     buildCollection,
-    buildEnumValues,
     buildProperty,
     EntityCallbacks,
     EntityOnFetchProps,
@@ -120,6 +119,20 @@ export const testCollection = buildCollection<any>({
                     max: 100
                 }
             },
+            ref_as_string: {
+                dataType: "string",
+                name: "Reference as string",
+                reference: {
+                    dataType: "reference",
+                    path: "products",
+                }
+            },
+            ref: {
+                dataType: "reference",
+                name: "Reference",
+                path: "products",
+            },
+
             // answers: ({ entityId }) => {
             //     return {
             //         name: "answers",

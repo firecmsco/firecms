@@ -29,31 +29,6 @@ export type DataType<T extends CMSType = CMSType> =
 export type EntityStatus = "new" | "existing" | "copy";
 
 /**
- * Representation of an entity fetched from the datasource
- * @group Models
- */
-export interface Entity<M extends object = any> {
-
-    /**
-     * ID of the entity
-     */
-    id: string;
-
-    /**
-     * A string representing the path of the referenced document (relative
-     * to the root of the database).
-     */
-    path: string;
-
-    /**
-     * Current values
-     */
-    values: EntityValues<M>;
-
-    databaseId?: string;
-}
-
-/**
  * This type represents a record of key value pairs as described in an
  * entity collection.
  * @group Models
@@ -361,6 +336,14 @@ export interface StringProperty extends BaseProperty<string> {
      * Add an icon to clear the value and set it to `null`. Defaults to `false`
      */
     clearable?: boolean;
+
+    /**
+     * You can use this property (a string) to behave as a reference to another
+     * collection. The stored value is the ID of the entity in the
+     * collection, and the `path` prop is used to
+     * define the collection this reference points to.
+     */
+    reference?: ReferenceProperty;
 }
 
 /**

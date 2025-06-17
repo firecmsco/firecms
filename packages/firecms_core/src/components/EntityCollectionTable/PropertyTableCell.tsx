@@ -4,10 +4,12 @@ import {
     CMSType,
     Entity,
     EntityReference,
+    ReferenceProperty,
     ResolvedArrayProperty,
     ResolvedNumberProperty,
     ResolvedProperty,
-    ResolvedStringProperty
+    ResolvedStringProperty,
+    StringProperty
 } from "../../types";
 
 import { VirtualTableInput } from "../VirtualTable/fields/VirtualTableInput";
@@ -251,7 +253,27 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
 
         if (!customField && (!customPreview || selected)) {
             const isAStorageProperty = isStorageProperty(property);
-            if (isAStorageProperty) {
+            if (property.dataType === "string" && (property as StringProperty).reference?.path) {
+                const stringProperty = property as StringProperty;
+                const path = stringProperty.reference?.path as string;
+                const referenceProperty = stringProperty.reference as ReferenceProperty;
+                const referenceValue = internalValue ? new EntityReference(internalValue, path) : undefined;
+                innerComponent =
+                    <TableReferenceField name={propertyKey as string}
+                                         internalValue={referenceValue}
+                                         updateValue={(v) => updateValue(v ? (v as EntityReference).id : null)}
+                                         disabled={disabled}
+                                         size={size}
+                                         path={path}
+                                         multiselect={false}
+                                         previewProperties={referenceProperty.previewProperties}
+                                         includeId={referenceProperty.includeId}
+                                         includeEntityLink={referenceProperty.includeEntityLink}
+                                         title={stringProperty.name}
+                                         forceFilter={referenceProperty.forceFilter}
+                    />;
+                allowScroll = false;
+            } else if (isAStorageProperty) {
                 innerComponent = <TableStorageUpload error={validationError ?? error}
                                                      disabled={disabled}
                                                      focused={selected}
@@ -310,7 +332,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                                          updateValue={updateValue}
                     />;
                     fullHeight = true;
-                } else if (stringProperty.markdown || !stringProperty.storage) {
+                } else if (stringProperty.markdown || !stringProperty.storage || !stringProperty.reference) {
                     const multiline = Boolean(stringProperty.multiline) || Boolean(stringProperty.markdown);
                     innerComponent = <VirtualTableInput error={validationError ?? error}
                                                         disabled={disabled}

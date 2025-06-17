@@ -14,6 +14,7 @@ export const supportedFieldsIds: PropertyConfigId[] = [
     "file_upload",
     "multi_file_upload",
     "reference",
+    "reference_as_string",
     "multi_references",
     "switch",
     "date_time",
