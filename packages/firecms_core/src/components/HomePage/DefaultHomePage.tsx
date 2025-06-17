@@ -22,12 +22,12 @@ import {
 } from "./HomePageDnD";
 import { DndContext, DragOverlay, MeasuringStrategy } from "@dnd-kit/core";
 import { NavigationCardBinding } from "./NavigationCardBinding";
-import { rectSortingStrategy, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis, restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { RenameGroupDialog } from "./RenameGroupDialog";
 
 export const DEFAULT_GROUP_NAME = "Views";
-export const ADMIN_GROUP_NAME = "Admin"; // Define admin group name
+export const ADMIN_GROUP_NAME = "Admin";
 
 export function DefaultHomePage({
                                     additionalActions,
@@ -38,10 +38,10 @@ export function DefaultHomePage({
     additionalChildrenStart?: React.ReactNode;
     additionalChildrenEnd?: React.ReactNode;
 }) {
-
     const context = useFireCMSContext();
     const customizationController = useCustomizationController();
     const navigationController = useNavigationController();
+
     if (!navigationController.topLevelNavigation)
         throw Error("Navigation not ready");
 
@@ -57,7 +57,7 @@ export function DefaultHomePage({
     const performingSearch = Boolean(filteredUrls);
 
     const filteredNavigationEntries = filteredUrls
-        ? rawNavigationEntries.filter(e => filteredUrls.includes(e.url))
+        ? rawNavigationEntries.filter((e) => filteredUrls.includes(e.url))
         : rawNavigationEntries;
 
     useEffect(() => {
@@ -67,99 +67,119 @@ export function DefaultHomePage({
     }, [rawNavigationEntries]);
 
     const updateSearch = useCallback((v?: string) => {
-        if (!v) return setFilteredUrls(null);
-        const r = fuse.current?.search(v);
-        setFilteredUrls(r ? r.map(x => x.item.url) : []);
+        if (!v?.trim()) return setFilteredUrls(null);
+        const r = fuse.current?.search(v.trim());
+        setFilteredUrls(r ? r.map((x) => x.item.url) : []);
     }, []);
 
-    // State for draggable items (excluding Admin)
-    const [items, setItems] = useState<{ name: string, entries: NavigationEntry[] }[]>([]);
-    // State for the Admin group
-    const [adminGroupData, setAdminGroupData] = useState<{ name: string, entries: NavigationEntry[] } | null>(null);
+    /* ───────────────────────────────────────────────────────────────
+       Build groups (all items) + isolate Admin
+       ─────────────────────────────────────────────────────────────── */
+    const [items, setItems] = useState<
+        { name: string; entries: NavigationEntry[] }[]
+    >([]);
+    const [adminGroupData, setAdminGroupData] = useState<{
+        name: string;
+        entries: NavigationEntry[];
+    } | null>(null);
 
     useEffect(() => {
-        let allProcessedItems: { name: string, entries: NavigationEntry[] }[];
-        const sourceEntries = performingSearch ? filteredNavigationEntries : rawNavigationEntries;
+        const src = performingSearch
+            ? filteredNavigationEntries
+            : rawNavigationEntries;
+
         const entriesByGroup: Record<string, NavigationEntry[]> = {};
-        sourceEntries.forEach(entry => {
-            const groupName = entry.type === "admin" ? ADMIN_GROUP_NAME : (entry.group ?? DEFAULT_GROUP_NAME);
-            if (!entriesByGroup[groupName]) entriesByGroup[groupName] = [];
-            entriesByGroup[groupName].push(entry);
+        src.forEach((e) => {
+            const g =
+                e.type === "admin"
+                    ? ADMIN_GROUP_NAME
+                    : e.group ?? DEFAULT_GROUP_NAME;
+            (entriesByGroup[g] ??= []).push(e);
         });
 
+        let allProcessed: { name: string; entries: NavigationEntry[] }[];
+
         if (performingSearch) {
-            const orderedGroupNames = Array.from(new Set(sourceEntries.map(e => e.group ?? DEFAULT_GROUP_NAME)));
-            allProcessedItems = orderedGroupNames.map(name => ({
-                name,
-                entries: entriesByGroup[name] || []
-            })).filter(g => g.entries.length > 0);
+            const ordered = [
+                ...new Set(src.map((e) => e.group ?? DEFAULT_GROUP_NAME))
+            ];
+            allProcessed = ordered
+                .map((name) => ({
+                    name,
+                    entries: entriesByGroup[name] || []
+                }))
+                .filter((g) => g.entries.length);
         } else {
-
-            allProcessedItems = groupOrderFromNavController.map(groupName => ({
-                name: groupName,
-                entries: entriesByGroup[groupName] || []
+            allProcessed = groupOrderFromNavController.map((g) => ({
+                name: g,
+                entries: entriesByGroup[g] || []
             }));
-
-            // Add any additional groups that are not in groupOrderFromNavController
-            Object.keys(entriesByGroup).forEach(groupName => {
-                if (!groupOrderFromNavController.includes(groupName)) {
-                    allProcessedItems.push({
-                        name: groupName,
-                        entries: entriesByGroup[groupName]
+            Object.keys(entriesByGroup).forEach((g) => {
+                if (!groupOrderFromNavController.includes(g))
+                    allProcessed.push({
+                        name: g,
+                        entries: entriesByGroup[g]
                     });
-                }
             });
-
-            // Filter out empty groups, unless they're explicitly included in groupOrderFromNavController
-            allProcessedItems = allProcessedItems.filter(g => {
-                return g.entries.length > 0 || groupOrderFromNavController.includes(g.name);
-            });
+            allProcessed = allProcessed.filter(
+                (g) =>
+                    g.entries.length ||
+                    groupOrderFromNavController.includes(g.name)
+            );
         }
 
-        // Separate Admin group
-        const adminGroup = allProcessedItems.find(group => group.name === ADMIN_GROUP_NAME);
-        if (adminGroup) {
-            setAdminGroupData(adminGroup);
-            // Filter out Admin group from the list of draggable items
-            setItems(allProcessedItems.filter(group => group.name !== ADMIN_GROUP_NAME));
+        const admin = allProcessed.find((g) => g.name === ADMIN_GROUP_NAME);
+        if (admin) {
+            setAdminGroupData(admin);
+            setItems(allProcessed.filter((g) => g.name !== ADMIN_GROUP_NAME));
         } else {
-            setAdminGroupData(null); // No Admin group found
-            setItems(allProcessedItems); // All items are draggable
+            setAdminGroupData(null);
+            setItems(allProcessed);
         }
+    }, [
+        performingSearch,
+        filteredNavigationEntries,
+        rawNavigationEntries,
+        groupOrderFromNavController
+    ]);
 
-    }, [performingSearch, filteredNavigationEntries, rawNavigationEntries, groupOrderFromNavController]);
-
+    /* ───────────────────────────────────────────────────────────────
+       Local update vs. persistence helpers
+       ─────────────────────────────────────────────────────────────── */
     const updateItems = (
-        newItemsOrUpdater:
+        updater:
             | { name: string; entries: NavigationEntry[] }[]
             | ((
-            previous: { name: string; entries: NavigationEntry[] }[]
+            prev: { name: string; entries: NavigationEntry[] }[]
         ) => { name: string; entries: NavigationEntry[] }[])
     ) => {
-        setItems(newItemsOrUpdater); // pure local update, no persistence here
+        setItems(updater); // local only
     };
 
     const persistNavigationGroups = (
         latest: { name: string; entries: NavigationEntry[] }[]
     ) => {
-        const draggableGroups: NavigationGroupMapping[] = latest.map((g) => ({
+        const draggable: NavigationGroupMapping[] = latest.map((g) => ({
             name: g.name,
             entries: g.entries.map((e) => e.path)
         }));
 
-        const allGroups: NavigationGroupMapping[] = adminGroupData
+        const all: NavigationGroupMapping[] = adminGroupData
             ? [
-                ...draggableGroups,
+                ...draggable,
                 {
                     name: adminGroupData.name,
                     entries: adminGroupData.entries.map((e) => e.path)
                 }
             ]
-            : draggableGroups;
+            : draggable;
 
-        onNavigationEntriesUpdate(allGroups);
+        onNavigationEntriesUpdate(all);
     };
 
+    /* ───────────────────────────────────────────────────────────────
+       Hook for DnD
+       ─────────────────────────────────────────────────────────────── */
     const {
         sensors,
         collisionDetection,
@@ -180,19 +200,22 @@ export function DefaultHomePage({
         isHoveringNewGroupDropZone,
         setIsHoveringNewGroupDropZone
     } = useHomePageDnd({
-        items: items,
+        items,
         setItems: updateItems,
         disabled: !allowDragAndDrop || performingSearch,
-        onPersist: persistNavigationGroups,
-        onGroupMoved: (group, sourceGroup, targetGroup) => {
-            context.analyticsController?.onAnalyticsEvent?.("home_move_group", { name: group });
-        },
-        onCardMoved: (card) => {
-            context.analyticsController?.onAnalyticsEvent?.("home_move_card", { id: card.id });
-        },
-        onNewGroupDrop: () => {
-            context.analyticsController?.onAnalyticsEvent?.("home_drop_new_group");
-        }
+        onPersist: persistNavigationGroups, // ——► persistence here
+        onGroupMoved: (g) =>
+            context.analyticsController?.onAnalyticsEvent?.("home_move_group", {
+                name: g
+            }),
+        onCardMovedBetweenGroups: (card) =>
+            context.analyticsController?.onAnalyticsEvent?.("home_move_card", {
+                id: card.id
+            }),
+        onNewGroupDrop: () =>
+            context.analyticsController?.onAnalyticsEvent?.(
+                "home_drop_new_group"
+            )
     });
 
     const {
@@ -202,80 +225,94 @@ export function DefaultHomePage({
 
     const dndDisabled = !allowDragAndDrop || performingSearch;
 
-    // Define modifiers based on the type of the active draggable node
-    const dndModifiers = React.useMemo(() => {
-        if (dndKitActiveNode?.data.current?.type === "group") {
+    const dndModifiers = useMemo(() => {
+        if (dndKitActiveNode?.data.current?.type === "group")
             return [restrictToVerticalAxis, restrictToWindowEdges];
-        }
-        return [restrictToWindowEdges]; // Default for items (cards)
+        return [restrictToWindowEdges];
     }, [dndKitActiveNode]);
 
+    /* ───────────────────────────────────────────────────────────────
+       Plugin extras
+       ─────────────────────────────────────────────────────────────── */
     let additionalPluginChildrenStart: React.ReactNode | undefined;
     let additionalPluginChildrenEnd: React.ReactNode | undefined;
     let additionalPluginSections: React.ReactNode | undefined;
+
     if (customizationController.plugins) {
-        const sectionProps: PluginGenericProps = {
-            context
-        };
-        additionalPluginSections = <>
-            {customizationController.plugins.filter(plugin => plugin.homePage?.includeSection)
-                .map((plugin, i) => {
-                    const section = plugin.homePage!.includeSection!(sectionProps)
-                    return (
-                        <NavigationGroup
-                            group={section.title}
-                            key={`plugin_section_${plugin.key}`}>
-                            {section.children}
-                        </NavigationGroup>
-                    );
-                })}
-        </>;
+        const sectionProps: PluginGenericProps = { context };
 
-        additionalPluginChildrenStart = <div className={"flex flex-col gap-2"}>
-            {customizationController.plugins.filter(plugin => plugin.homePage?.additionalChildrenStart)
-                .map((plugin, i) => {
-                    return <div key={`plugin_children_start_${i}`}>{plugin.homePage!.additionalChildrenStart}</div>;
-                })}
-        </div>;
+        additionalPluginSections = (
+            <>
+                {customizationController.plugins
+                    .filter((p) => p.homePage?.includeSection)
+                    .map((plugin) => {
+                        const section = plugin.homePage!.includeSection!(
+                            sectionProps
+                        );
+                        return (
+                            <NavigationGroup
+                                group={section.title}
+                                key={`plugin_section_${plugin.key}`}
+                            >
+                                {section.children}
+                            </NavigationGroup>
+                        );
+                    })}
+            </>
+        );
 
-        additionalPluginChildrenEnd = <div className={"flex flex-col gap-2"}>
-            {customizationController.plugins.filter(plugin => plugin.homePage?.additionalChildrenEnd)
-                .map((plugin, i) => {
-                    return <div key={`plugin_children_end_${i}`}>{plugin.homePage!.additionalChildrenEnd}</div>;
-                })}
-        </div>;
+        additionalPluginChildrenStart = (
+            <div className="flex flex-col gap-2">
+                {customizationController.plugins
+                    .filter((p) => p.homePage?.additionalChildrenStart)
+                    .map((plugin, i) => (
+                        <div key={`plugin_children_start_${i}`}>
+                            {plugin.homePage!.additionalChildrenStart}
+                        </div>
+                    ))}
+            </div>
+        );
+
+        additionalPluginChildrenEnd = (
+            <div className="flex flex-col gap-2">
+                {customizationController.plugins
+                    .filter((p) => p.homePage?.additionalChildrenEnd)
+                    .map((plugin, i) => (
+                        <div key={`plugin_children_end_${i}`}>
+                            {plugin.homePage!.additionalChildrenEnd}
+                        </div>
+                    ))}
+            </div>
+        );
     }
 
-    const additionalCardsFromPlugins = useMemo(() => {
-        const cards: React.ComponentType<PluginHomePageAdditionalCardsProps>[] = [];
-        customizationController.plugins?.forEach(p => {
-            if (p.homePage?.AdditionalCards)
-                cards.push(...toArray(p.homePage.AdditionalCards));
-        });
-        return cards;
-    }, []);
-
+    /* ───────────────────────────────────────────────────────────────
+       Render
+       ─────────────────────────────────────────────────────────────── */
     return (
         <div ref={containerRef} className="py-2 overflow-auto h-full w-full">
             <Container maxWidth="6xl">
+                {/* search & actions */}
                 <div
                     className="w-full sticky py-4 transition-all duration-400 ease-in-out top-0 z-10 flex flex-row gap-4"
-                    style={{ top: direction === "down" ? -84 : 0 }}>
+                    style={{ top: direction === "down" ? -84 : 0 }}
+                >
                     <SearchBar
                         onTextSearch={updateSearch}
                         placeholder="Search collections"
                         autoFocus
                         innerClassName="w-full"
-                        className="w-full flex-grow"/>
+                        className="w-full flex-grow"
+                    />
                     {additionalActions}
                 </div>
 
                 <FavouritesView hidden={performingSearch}/>
 
                 {additionalChildrenStart}
-
                 {additionalPluginChildrenStart}
 
+                {/* ─────── DND context ─────── */}
                 <DndContext
                     sensors={sensors}
                     collisionDetection={collisionDetection}
@@ -291,7 +328,6 @@ export function DefaultHomePage({
                     onDragCancel={onDragCancel}
                     modifiers={dndModifiers}
                 >
-                    {/* SortableContext now only includes non-admin groups */}
                     <SortableContext
                         key={JSON.stringify(containers)}
                         items={containers}
@@ -301,65 +337,114 @@ export function DefaultHomePage({
                             const groupKey = groupData.name;
                             const entriesInGroup = groupData.entries;
 
-                            const AdditionalCards = additionalCardsFromPlugins;
-                            const actionProps = {
-                                group: groupKey === DEFAULT_GROUP_NAME ? undefined : groupKey,
-                                context
-                            } as PluginHomePageAdditionalCardsProps;
+                            const AdditionalCards: React.ComponentType<PluginHomePageAdditionalCardsProps>[] =
+                                [];
+                            customizationController.plugins?.forEach((p) => {
+                                if (p.homePage?.AdditionalCards)
+                                    AdditionalCards.push(
+                                        ...toArray(p.homePage.AdditionalCards)
+                                    );
+                            });
 
-                            if (entriesInGroup.length === 0 &&
+                            const actionProps: PluginHomePageAdditionalCardsProps = {
+                                group:
+                                    groupKey === DEFAULT_GROUP_NAME
+                                        ? undefined
+                                        : groupKey,
+                                context
+                            };
+
+                            if (
+                                entriesInGroup.length === 0 &&
                                 (AdditionalCards.length === 0 || performingSearch) &&
                                 !groupOrderFromNavController.includes(groupKey)
                             )
                                 return null;
 
                             return (
-                                <SortableNavigationGroup key={groupKey} groupName={groupKey} disabled={dndDisabled}>
+                                <SortableNavigationGroup
+                                    key={groupKey}
+                                    groupName={groupKey}
+                                    disabled={dndDisabled}
+                                >
                                     <NavigationGroup
-                                        group={groupKey === DEFAULT_GROUP_NAME ? undefined : groupKey}
-                                        minimised={draggingGroupId === groupKey && !isDraggingCardOnly}
-                                        isPotentialCardDropTarget={isDraggingCardOnly}
-                                        dndDisabled={dndDisabled} // Pass dndDisabled
-                                        onEditGroup={(groupName) => {
-                                            if (dndDisabled) return; // Prevent editing if D&D is disabled
-                                            console.log("Attempting to open dialog for group:", groupName);
-                                            setDialogOpenForGroup(groupName);
+                                        group={
+                                            groupKey === DEFAULT_GROUP_NAME
+                                                ? undefined
+                                                : groupKey
+                                        }
+                                        minimised={
+                                            draggingGroupId === groupKey &&
+                                            !isDraggingCardOnly
+                                        }
+                                        isPotentialCardDropTarget={
+                                            isDraggingCardOnly
+                                        }
+                                        dndDisabled={dndDisabled}
+                                        onEditGroup={() => {
+                                            if (dndDisabled) return;
+                                            setDialogOpenForGroup(groupKey);
                                         }}
                                     >
                                         <NavigationGroupDroppable
                                             id={groupKey}
-                                            itemIds={entriesInGroup.map(e => e.url)}
-                                            isPotentialCardDropTarget={isDraggingCardOnly}
+                                            itemIds={entriesInGroup.map(
+                                                (e) => e.url
+                                            )}
+                                            isPotentialCardDropTarget={
+                                                isDraggingCardOnly
+                                            }
                                         >
-                                            <SortableContext items={entriesInGroup.map(e => e.url)}
-                                                             strategy={rectSortingStrategy}>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
-                                                    {entriesInGroup.map(entry => (
+                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
+                                                {entriesInGroup.map(
+                                                    (entry) => (
                                                         <SortableNavigationCard
                                                             key={entry.url}
                                                             entry={entry}
                                                             onClick={() => {
-                                                                let event: CMSAnalyticsEvent;
-                                                                if (entry.type === "collection") {
-                                                                    event = "home_navigate_to_collection";
-                                                                } else if (entry.type === "view") {
-                                                                    event = "home_navigate_to_view";
-                                                                } else if (entry.type === "admin") {
-                                                                    event = "home_navigate_to_admin_view";
-                                                                } else {
-                                                                    event = "unmapped_event";
-                                                                }
-                                                                context.analyticsController?.onAnalyticsEvent?.(event, { path: entry.path });
+                                                                let event: CMSAnalyticsEvent =
+                                                                    "unmapped_event";
+                                                                if (
+                                                                    entry.type ===
+                                                                    "collection"
+                                                                )
+                                                                    event =
+                                                                        "home_navigate_to_collection";
+                                                                else if (
+                                                                    entry.type ===
+                                                                    "view"
+                                                                )
+                                                                    event =
+                                                                        "home_navigate_to_view";
+                                                                else if (
+                                                                    entry.type ===
+                                                                    "admin"
+                                                                )
+                                                                    event =
+                                                                        "home_navigate_to_admin_view";
+
+                                                                context.analyticsController?.onAnalyticsEvent?.(
+                                                                    event,
+                                                                    {
+                                                                        path: entry.path
+                                                                    }
+                                                                );
                                                             }}
                                                         />
-                                                    ))}
-                                                    {/* AdditionalCards for draggable groups */}
-                                                    {!performingSearch && groupKey.toLowerCase() !== ADMIN_GROUP_NAME.toLowerCase() &&
-                                                        AdditionalCards.map((C, i) => (
-                                                            <C key={`extra_draggable_${groupKey}_${i}`} {...actionProps} />
-                                                        ))}
-                                                </div>
-                                            </SortableContext>
+                                                    )
+                                                )}
+                                                {!performingSearch &&
+                                                    groupKey.toLowerCase() !==
+                                                    ADMIN_GROUP_NAME.toLowerCase() &&
+                                                    AdditionalCards.map(
+                                                        (C, i) => (
+                                                            <C
+                                                                key={`extra_${groupKey}_${i}`}
+                                                                {...actionProps}
+                                                            />
+                                                        )
+                                                    )}
+                                            </div>
                                         </NavigationGroupDroppable>
                                     </NavigationGroup>
                                 </SortableNavigationGroup>
@@ -367,12 +452,14 @@ export function DefaultHomePage({
                         })}
                     </SortableContext>
 
-                    <NewGroupDropZone disabled={dndDisabled} setIsHovering={setIsHoveringNewGroupDropZone}/>
+                    <NewGroupDropZone
+                        disabled={dndDisabled}
+                        setIsHovering={setIsHoveringNewGroupDropZone}
+                    />
 
-                    <DragOverlay adjustScale={false}
-                                 dropAnimation={dropAnimation}
-                    >
-                        {activeGroupData && draggingGroupId === activeGroupData.name ? (
+                    <DragOverlay adjustScale={false} dropAnimation={dropAnimation}>
+                        {activeGroupData &&
+                        draggingGroupId === activeGroupData.name ? (
                             <div
                                 className="rounded-lg bg-transparent"
                                 style={{
@@ -381,12 +468,15 @@ export function DefaultHomePage({
                                 }}
                             >
                                 <NavigationGroup
-                                    group={activeGroupData.name === DEFAULT_GROUP_NAME ? undefined : activeGroupData.name}
+                                    group={
+                                        activeGroupData.name ===
+                                        DEFAULT_GROUP_NAME
+                                            ? undefined
+                                            : activeGroupData.name
+                                    }
                                     isPreview={false}
-                                    minimised={true}
-                                >
-                                    {/* When minimised=true, this children content is ignored by NavigationGroup */}
-                                </NavigationGroup>
+                                    minimised
+                                />
                             </div>
                         ) : activeItemForOverlay ? (
                             <NavigationCardBinding
@@ -397,30 +487,29 @@ export function DefaultHomePage({
                     </DragOverlay>
                 </DndContext>
 
-                {/* Render Admin Group Separately and Last, if it exists and not searching */}
-                {adminGroupData && !performingSearch && (
-                    <NavigationGroup
-                        group={adminGroupData.name} // Should be ADMIN_GROUP_NAME
-                        minimised={false} // Admin group is never minimised by dragging other groups
-                    >
+                {!performingSearch && adminGroupData && (
+                    <NavigationGroup group={adminGroupData.name}>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
-                            {adminGroupData.entries.map(entry => (
-                                // These are not sortable
+                            {adminGroupData.entries.map((entry) => (
                                 <NavigationCardBinding
                                     key={entry.url}
                                     {...entry}
                                     onClick={() => {
-                                        let event: CMSAnalyticsEvent;
-                                        if (entry.type === "collection") {
-                                            event = "home_navigate_to_collection";
-                                        } else if (entry.type === "view") {
+                                        let event: CMSAnalyticsEvent =
+                                            "unmapped_event";
+                                        if (entry.type === "collection")
+                                            event =
+                                                "home_navigate_to_collection";
+                                        else if (entry.type === "view")
                                             event = "home_navigate_to_view";
-                                        } else if (entry.type === "admin") {
-                                            event = "home_navigate_to_admin_view";
-                                        } else {
-                                            event = "unmapped_event";
-                                        }
-                                        context.analyticsController?.onAnalyticsEvent?.(event, { path: entry.path });
+                                        else if (entry.type === "admin")
+                                            event =
+                                                "home_navigate_to_admin_view";
+
+                                        context.analyticsController?.onAnalyticsEvent?.(
+                                            event,
+                                            { path: entry.path }
+                                        );
                                     }}
                                 />
                             ))}
@@ -433,16 +522,17 @@ export function DefaultHomePage({
                 {additionalChildrenEnd}
             </Container>
 
-            {/* Render the RenameGroupDialog */}
             {dialogOpenForGroup && (
                 <RenameGroupDialog
-                    open={!!dialogOpenForGroup}
-                    initialName={dialogOpenForGroup} // The name of the newly created group
-                    existingGroupNames={items.map(g => g.name).filter(name => name !== dialogOpenForGroup)}
+                    open
+                    initialName={dialogOpenForGroup}
+                    existingGroupNames={items
+                        .map((g) => g.name)
+                        .filter((n) => n !== dialogOpenForGroup)}
                     onClose={() => setDialogOpenForGroup(null)}
                     onRename={(newName) => {
                         handleRenameGroup(dialogOpenForGroup, newName);
-                        setDialogOpenForGroup(null); // Close dialog after rename
+                        setDialogOpenForGroup(null);
                     }}
                 />
             )}

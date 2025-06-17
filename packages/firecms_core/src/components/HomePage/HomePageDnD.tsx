@@ -46,6 +46,8 @@ const cloneSerializableNavigationEntry = (entry: NavigationEntry): NavigationEnt
         url: entry.url,
         name: entry.name,
         type: entry.type,
+        collection: entry.collection ? { ...entry.collection } : undefined,
+        view: entry.view ? { ...entry.view } : undefined,
         ...(entry.group && { group: entry.group }),
         ...(entry.description && { description: entry.description })
     };
@@ -58,6 +60,10 @@ const cloneItemsForDnd = (items: { name: string; entries: NavigationEntry[] }[])
         entries: g.entries.map(cloneSerializableNavigationEntry)
     }));
 
+/* ─────────────────────────────────────────────────────────── */
+/* Sortable card & group                                       */
+
+/* ─────────────────────────────────────────────────────────── */
 export function SortableNavigationCard({
                                            entry,
                                            onClick
@@ -163,14 +169,18 @@ export function SortableNavigationGroup({
     );
 }
 
+/* ─────────────────────────────────────────────────────────── */
+/* Main DnD hook                                               */
+
+/* ─────────────────────────────────────────────────────────── */
 export function useHomePageDnd({
                                    items: dndItems,
                                    setItems: setDndItems,
                                    disabled,
-                                   onCardMoved,
+                                   onCardMovedBetweenGroups,
                                    onGroupMoved,
                                    onNewGroupDrop,
-                                   onPersist // ⇢ onPersist
+                                   onPersist
                                }: {
     items: { name: string; entries: NavigationEntry[] }[];
     setItems: (
@@ -181,13 +191,12 @@ export function useHomePageDnd({
         ) => { name: string; entries: NavigationEntry[] }[])
     ) => void;
     disabled: boolean;
-    onCardMoved?: (card: NavigationEntry) => void;
+    onCardMovedBetweenGroups?: (card: NavigationEntry) => void;
     onGroupMoved?: (groupName: string, oldIndex: number, newIndex: number) => void;
     onNewGroupDrop?: () => void;
-    onPersist?: (
-        latest: { name: string; entries: NavigationEntry[] }[]
-    ) => void; // ⇢ onPersist
+    onPersist?: (latest: { name: string; entries: NavigationEntry[] }[]) => void;
 }) {
+    /* ---------------- local state ---------------- */
     const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
     const [activeIsGroup, setActiveIsGroup] = useState(false);
     const [currentDraggingGroupId, setCurrentDraggingGroupId] =
@@ -195,105 +204,108 @@ export function useHomePageDnd({
     const [dndKitActiveNode, setDndKitActiveNode] = useState<Active | null>(null);
     const [isDraggingCardOnly, setIsDraggingCardOnly] = useState(false);
     const [dialogOpenForGroup, setDialogOpenForGroup] = useState<string | null>(null);
-    const [isHoveringNewGroupDropZone, setIsHoveringNewGroupDropZone] = useState(false);
+    const [isHoveringNewGroupDropZone, setIsHoveringNewGroupDropZone] =
+        useState(false);
 
+    /* store interim state for cross-group moves */
     const interimItemsRef = useRef<
         { name: string; entries: NavigationEntry[] }[] | null
-    >(null); // ⇢ onPersist helper
+    >(null);
     useEffect(() => {
         interimItemsRef.current = dndItems;
     }, [dndItems]);
 
-    const dndContainers = useMemo(
-        () => dndItems.map((group) => group.name),
-        [dndItems]
-    );
-
-    const mouseSensorInstance = useSensor(MouseSensor, {
-        activationConstraint: { distance: 10 }
-    });
-    const touchSensorInstance = useSensor(TouchSensor, {
+    /* ---------------- sensors ---------------- */
+    const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } });
+    const touchSensor = useSensor(TouchSensor, {
         activationConstraint: {
             delay: 150,
             tolerance: 5
         }
     });
-    const keyboardSensorInstance = useSensor(KeyboardSensor);
-
-    const dndSensors = useSensors(
-        ...(disabled ? [] : [mouseSensorInstance, touchSensorInstance, keyboardSensorInstance])
+    const keyboardSensor = useSensor(KeyboardSensor);
+    const sensors = useSensors(
+        ...(disabled ? [] : [mouseSensor, touchSensor, keyboardSensor])
     );
 
-    const lastOverId = useRef<UniqueIdentifier | null>(null);
-    const recentlyMovedToNewContainer = useRef(false);
+    /* ---------------- helpers ---------------- */
+    const dndContainers = useMemo(
+        () => dndItems.map((g) => g.name),
+        [dndItems]
+    );
 
     const findDndContainer = useCallback(
         (id: UniqueIdentifier): string | undefined => {
             if (!id) return undefined;
-            const groupByName = dndItems.find((group) => group.name === id);
-            if (groupByName) return groupByName.name;
-            for (const group of dndItems) {
-                if (group.entries.some((e) => e.url === id)) {
-                    return group.name;
-                }
+            const group = dndItems.find((g) => g.name === id);
+            if (group) return group.name;
+            for (const g of dndItems) {
+                if (g.entries.some((e) => e.url === id)) return g.name;
             }
             return undefined;
         },
         [dndItems]
     );
 
-    // --- collision detection (unchanged) ----------------------------------
-    const dndCollisionDetection: CollisionDetection = useCallback(
+    /* ---------------- collision detection ---------------- */
+    const lastOverId = useRef<UniqueIdentifier | null>(null);
+    const recentlyMovedToNewContainer = useRef(false);
+
+    const collisionDetection: CollisionDetection = useCallback(
         (args) => {
             if (disabled || !activeId) return [];
-            const isDraggingGroup = activeIsGroup;
-            if (isDraggingGroup) {
-                const groupDroppables = args.droppableContainers.filter((c) =>
+            if (activeIsGroup) {
+                const groups = args.droppableContainers.filter((c) =>
                     dndItems.some((g) => g.name === c.id)
                 );
-                if (!groupDroppables.length) return [];
+                if (!groups.length) return [];
                 return closestCenter({
                     ...args,
-                    droppableContainers: groupDroppables
+                    droppableContainers: groups
                 });
             }
-            // cards
-            const pointerCollisions = pointerWithin(args);
-            if (pointerCollisions.length) {
-                const zone = pointerCollisions.find((c) => c.id === "new-group-drop-zone");
+
+            const pointer = pointerWithin(args);
+            if (pointer.length) {
+                const zone = pointer.find((c) => c.id === "new-group-drop-zone");
                 if (zone) return [zone];
-                const container = pointerCollisions.find((c) =>
+
+                const container = pointer.find((c) =>
                     dndItems.some((g) => g.name === c.id)
                 );
                 if (container) {
-                    const itemsIn = dndItems.find((g) => g.name === container.id)?.entries ?? [];
-                    if (itemsIn.length) {
-                        const closestItem = closestCorners({
+                    const itemsIn = dndItems.find((g) => g.name === container.id)
+                        ?.entries;
+                    if (itemsIn?.length) {
+                        const closest = closestCorners({
                             ...args,
-                            droppableContainers: args.droppableContainers.filter((dc) =>
-                                itemsIn.some((e) => e.url === dc.id)
+                            droppableContainers: args.droppableContainers.filter(
+                                (c) => itemsIn.some((e) => e.url === c.id)
                             )
                         });
-                        if (closestItem.length) return closestItem;
+                        if (closest.length) return closest;
                     }
                     return [container];
                 }
-                const first = getFirstCollision(pointerCollisions, "id");
+                const first = getFirstCollision(pointer, "id");
                 if (first) return [{ id: first }];
             }
-            const rectCollisions = rectIntersection(args);
-            const zoneRect = rectCollisions.find((c) => c.id === "new-group-drop-zone");
+
+            const rects = rectIntersection(args);
+            const zoneRect = rects.find((c) => c.id === "new-group-drop-zone");
             if (zoneRect) return [zoneRect];
-            let overId = getFirstCollision(rectCollisions, "id");
+
+            let overId = getFirstCollision(rects, "id");
             if (overId != null) {
                 const overIsContainer = dndItems.some((g) => g.name === overId);
                 if (overIsContainer) {
-                    const itemsIn = dndItems.find((g) => g.name === overId)?.entries ?? [];
-                    if (itemsIn.length) {
+                    const itemsIn = dndItems.find((g) => g.name === overId)
+                        ?.entries;
+                    if (itemsIn?.length) {
                         const closestItem = closestCorners({
                             ...args,
-                            droppableContainers: args.droppableContainers.filter((c) =>
-                                itemsIn.some((e) => e.url === c.id)
+                            droppableContainers: args.droppableContainers.filter(
+                                (c) => itemsIn.some((e) => e.url === c.id)
                             )
                         })[0]?.id;
                         if (closestItem) overId = closestItem;
@@ -302,20 +314,28 @@ export function useHomePageDnd({
                 lastOverId.current = overId;
                 return [{ id: overId }];
             }
-            if (recentlyMovedToNewContainer.current && lastOverId.current && !isDraggingGroup)
+
+            if (
+                recentlyMovedToNewContainer.current &&
+                lastOverId.current &&
+                !activeIsGroup
+            )
                 return [{ id: lastOverId.current }];
+
             return [];
         },
-        [activeId, dndItems, disabled, recentlyMovedToNewContainer, activeIsGroup]
+        [activeId, dndItems, disabled, activeIsGroup]
     );
-    // ----------------------------------------------------------------------
 
+    /* ---------------- drag handlers ---------------- */
     const handleDragStart = ({ active }: { active: Active }) => {
         setDndKitActiveNode(active);
         if (disabled) return;
+
         const isGroup = dndItems.some((g) => g.name === active.id);
         if (!active.data.current) active.data.current = {};
         active.data.current.type = isGroup ? "group" : "item";
+
         setActiveId(active.id);
         setActiveIsGroup(isGroup);
         setIsDraggingCardOnly(!isGroup);
@@ -329,31 +349,30 @@ export function useHomePageDnd({
                             }: { active: Active; over: any }) => {
         if (disabled || !over) return;
 
-        const currentActiveId = active.id;
-        const currentOverId = over.id;
-        if (currentActiveId === currentOverId) return;
+        const activeIdNow = active.id;
+        const overIdNow = over.id;
+        if (activeIdNow === overIdNow) return;
         if (activeIsGroup) return;
 
-        const activeContainer = findDndContainer(currentActiveId);
-        const overContainer = findDndContainer(currentOverId);
-        if (!activeContainer) return;
+        const activeCont = findDndContainer(activeIdNow);
+        const overCont = findDndContainer(overIdNow);
+        if (!activeCont) return;
 
-        // card moved to another container
-        if (overContainer && activeContainer !== overContainer) {
+        if (overCont && activeCont !== overCont) {
             recentlyMovedToNewContainer.current = true;
             const newState = cloneItemsForDnd(dndItems);
-            const srcIdx = newState.findIndex((g) => g.name === activeContainer);
-            const tgtIdx = newState.findIndex((g) => g.name === overContainer);
+            const srcIdx = newState.findIndex((g) => g.name === activeCont);
+            const tgtIdx = newState.findIndex((g) => g.name === overCont);
             if (srcIdx === -1 || tgtIdx === -1) return;
             const src = newState[srcIdx];
             const tgt = newState[tgtIdx];
-            const idxInSrc = src.entries.findIndex((e) => e.url === currentActiveId);
+            const idxInSrc = src.entries.findIndex((e) => e.url === activeIdNow);
             if (idxInSrc === -1) return;
             const [moved] = src.entries.splice(idxInSrc, 1);
             tgt.entries.push(moved);
-            interimItemsRef.current = newState; // ⇢ keep for onPersist
+            interimItemsRef.current = newState;
             setDndItems(newState);
-        } else if (activeContainer === overContainer) {
+        } else if (activeCont === overCont) {
             recentlyMovedToNewContainer.current = false;
         }
     };
@@ -367,61 +386,80 @@ export function useHomePageDnd({
             return;
         }
 
-        const currentActiveId = active.id;
-        const currentOverId = over.id;
+        const activeIdNow = active.id;
+        const overIdNow = over.id;
 
+        /* ─── group reorder ─── */
         if (activeIsGroup) {
-            if (currentActiveId !== currentOverId && dndItems.some((g) => g.name === currentOverId)) {
-                const from = dndItems.findIndex((g) => g.name === currentActiveId);
-                const to = dndItems.findIndex((g) => g.name === currentOverId);
+            if (
+                activeIdNow !== overIdNow &&
+                dndItems.some((g) => g.name === overIdNow)
+            ) {
+                const from = dndItems.findIndex((g) => g.name === activeIdNow);
+                const to = dndItems.findIndex((g) => g.name === overIdNow);
                 if (from !== -1 && to !== -1) {
                     const newState = arrayMove(dndItems, from, to);
                     setDndItems(newState);
-                    onPersist?.(newState); // ⇢ onPersist
-                    onGroupMoved?.(currentActiveId as string, from, to);
+                    onPersist?.(newState);
+                    onGroupMoved?.(activeIdNow as string, from, to);
                 }
             }
-        } else {
-            const activeContainer = findDndContainer(currentActiveId);
+        }
+        /* ─── card move ─── */
+        else {
+            const activeCont = findDndContainer(activeIdNow);
 
-            if (currentOverId === "new-group-drop-zone") {
-                if (activeContainer) {
+            /* drop on new-group zone */
+            if (overIdNow === "new-group-drop-zone") {
+                if (activeCont) {
                     const newState = cloneItemsForDnd(dndItems);
-                    const srcIdx = newState.findIndex((g) => g.name === activeContainer);
+                    const srcIdx = newState.findIndex((g) => g.name === activeCont);
                     if (srcIdx !== -1) {
                         const src = newState[srcIdx];
-                        const idxInSrc = src.entries.findIndex((e) => e.url === currentActiveId);
+                        const idxInSrc = src.entries.findIndex(
+                            (e) => e.url === activeIdNow
+                        );
                         if (idxInSrc !== -1) {
                             const [dragged] = src.entries.splice(idxInSrc, 1);
                             if (src.entries.length === 0) newState.splice(srcIdx, 1);
 
                             let tentative = "New Group";
-                            let c = 1;
+                            let counter = 1;
                             while (newState.some((g) => g.name === tentative))
-                                tentative = `New Group ${c++}`;
+                                tentative = `New Group ${counter++}`;
+
                             newState.push({
                                 name: tentative,
                                 entries: [dragged]
                             });
-
                             setDndItems(newState);
-                            onPersist?.(newState); // ⇢ onPersist
+                            onPersist?.(newState);
                             setDialogOpenForGroup(tentative);
                             onNewGroupDrop?.();
                         }
                     }
                 }
-            } else {
-                const overContainer = findDndContainer(currentOverId);
-                if (activeContainer === overContainer) {
-                    const grpIdx = dndItems.findIndex((g) => g.name === activeContainer);
+            }
+            /* reorder inside same container */
+            else {
+                const overCont = findDndContainer(overIdNow);
+                if (activeCont === overCont) {
+                    const grpIdx = dndItems.findIndex((g) => g.name === activeCont);
                     if (grpIdx !== -1) {
                         const group = dndItems[grpIdx];
-                        const oldIdx = group.entries.findIndex((e) => e.url === currentActiveId);
-                        let newIdx = group.entries.findIndex((e) => e.url === currentOverId);
-                        if (newIdx === -1 && currentOverId === activeContainer)
+                        const oldIdx = group.entries.findIndex(
+                            (e) => e.url === activeIdNow
+                        );
+                        let newIdx = group.entries.findIndex(
+                            (e) => e.url === overIdNow
+                        );
+                        if (newIdx === -1 && overIdNow === activeCont)
                             newIdx = group.entries.length - 1;
-                        if (oldIdx !== -1 && newIdx !== -1 && oldIdx !== newIdx) {
+                        if (
+                            oldIdx !== -1 &&
+                            newIdx !== -1 &&
+                            oldIdx !== newIdx
+                        ) {
                             const reordered = arrayMove(group.entries, oldIdx, newIdx);
                             const newState = [...dndItems];
                             newState[grpIdx] = {
@@ -429,16 +467,20 @@ export function useHomePageDnd({
                                 entries: reordered
                             };
                             setDndItems(newState);
-                            onPersist?.(newState); // ⇢ onPersist
+                            onPersist?.(newState);
                         }
                     }
-                } else if (recentlyMovedToNewContainer.current && interimItemsRef.current) {
-                    // card moved to different group during drag-over
-                    onPersist?.(interimItemsRef.current); // ⇢ onPersist
+                } else if (
+                    recentlyMovedToNewContainer.current &&
+                    interimItemsRef.current
+                ) {
+                    onPersist?.(interimItemsRef.current);
                 }
 
-                onCardMoved?.(
-                    dndItems.flatMap((g) => g.entries).find((e) => e.url === currentActiveId)!
+                onCardMovedBetweenGroups?.(
+                    dndItems
+                        .flatMap((g) => g.entries)
+                        .find((e) => e.url === activeIdNow)!
                 );
             }
         }
@@ -457,9 +499,31 @@ export function useHomePageDnd({
 
     const handleDragCancel = () => resetDragState();
 
+    /* ---------------- group rename ---------------- */
+    const handleRenameGroup = (oldName: string, newName: string) => {
+        setDndItems((current) => {
+            const idx = current.findIndex((g) => g.name === oldName);
+            if (idx === -1) return current;
+            if (current.some((g) => g.name === newName && g.name !== oldName))
+                return current;
+
+            const updated = [...current];
+            updated[idx] = {
+                ...updated[idx],
+                name: newName
+            };
+            onPersist?.(updated); // <- ensure rename is saved
+            return updated;
+        });
+    };
+
+    /* ---------------- public API ---------------- */
     const activeItemForOverlay = useMemo(() => {
         if (disabled || !activeId || activeIsGroup) return null;
-        return dndItems.flatMap((g) => g.entries).find((e) => e.url === activeId) || null;
+        return (
+            dndItems.flatMap((g) => g.entries).find((e) => e.url === activeId) ||
+            null
+        );
     }, [activeId, dndItems, disabled, activeIsGroup]);
 
     const activeGroupData = useMemo(() => {
@@ -467,23 +531,9 @@ export function useHomePageDnd({
         return dndItems.find((g) => g.name === activeId) || null;
     }, [activeId, dndItems, disabled, activeIsGroup]);
 
-    const handleRenameGroup = (oldName: string, newName: string) => {
-        setDndItems((current) => {
-            const idx = current.findIndex((g) => g.name === oldName);
-            if (idx === -1 || current.some((g) => g.name === newName && g.name !== oldName))
-                return current;
-            const updated = [...current];
-            updated[idx] = {
-                ...updated[idx],
-                name: newName
-            };
-            return updated;
-        });
-    };
-
     return {
-        sensors: dndSensors,
-        collisionDetection: dndCollisionDetection,
+        sensors,
+        collisionDetection,
         onDragStart: handleDragStart,
         onDragOver: handleDragOver,
         onDragEnd: handleDragEnd,
@@ -503,7 +553,10 @@ export function useHomePageDnd({
     };
 }
 
-// NewGroupDropZone component is unchanged
+/* ─────────────────────────────────────────────────────────── */
+/* New-group drop-zone component                               */
+
+/* ─────────────────────────────────────────────────────────── */
 export function NewGroupDropZone({
                                      disabled,
                                      setIsHovering
@@ -519,12 +572,12 @@ export function NewGroupDropZone({
         disabled
     });
     const [isVisible, setIsVisible] = useState(false);
+
     useDndMonitor({
         onDragStart({ active }) {
-            if (!disabled) {
-                const activeType = active.data.current?.type;
-                setIsVisible(activeType === "item");
-            }
+            if (disabled) return;
+            const tp = active.data.current?.type;
+            setIsVisible(tp === "item");
         },
         onDragEnd() {
             setIsVisible(false);
@@ -533,6 +586,7 @@ export function NewGroupDropZone({
             setIsVisible(false);
         }
     });
+
     useEffect(() => {
         setIsHovering(isOver && isVisible);
     }, [isOver, isVisible, setIsHovering]);
