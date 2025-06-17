@@ -131,44 +131,33 @@ export function DefaultHomePage({
 
     const updateItems = (
         newItemsOrUpdater:
-            | { name: string, entries: NavigationEntry[] }[]
-            | ((currentDraggableItems: { name: string, entries: NavigationEntry[] }[]) => { // Changed prevState to currentDraggableItems
-            name: string,
-            entries: NavigationEntry[]
-        }[])
+            | { name: string; entries: NavigationEntry[] }[]
+            | ((
+            previous: { name: string; entries: NavigationEntry[] }[]
+        ) => { name: string; entries: NavigationEntry[] }[])
     ) => {
-        setItems(currentDraggableItems => {
-            const newDraggableItems = typeof newItemsOrUpdater === "function"
-                ? newItemsOrUpdater(currentDraggableItems)
-                : newItemsOrUpdater;
+        setItems(newItemsOrUpdater); // pure local update, no persistence here
+    };
 
-            // Convert draggable items to the persistence format
-            const draggableGroupsForPersistence: NavigationGroupMapping[] = newDraggableItems.map(group => ({
-                name: group.name,
-                entries: group.entries.map(e => e.path) // Persist paths for entries
-            }));
+    const persistNavigationGroups = (
+        latest: { name: string; entries: NavigationEntry[] }[]
+    ) => {
+        const draggableGroups: NavigationGroupMapping[] = latest.map((g) => ({
+            name: g.name,
+            entries: g.entries.map((e) => e.path)
+        }));
 
-            let allGroupsForPersistence: NavigationGroupMapping[];
+        const allGroups: NavigationGroupMapping[] = adminGroupData
+            ? [
+                ...draggableGroups,
+                {
+                    name: adminGroupData.name,
+                    entries: adminGroupData.entries.map((e) => e.path)
+                }
+            ]
+            : draggableGroups;
 
-            // Combine draggable groups with the static admin group (if it exists)
-            // The Admin group is typically last in display order.
-            if (adminGroupData) {
-                const adminGroupForPersistence: NavigationGroupMapping = {
-                    name: adminGroupData.name, // This is ADMIN_GROUP_NAME
-                    entries: adminGroupData.entries.map(e => e.path)
-                };
-                allGroupsForPersistence = [...draggableGroupsForPersistence, adminGroupForPersistence];
-            } else {
-                // No admin group, all items are draggable and were included in newDraggableItems
-                allGroupsForPersistence = draggableGroupsForPersistence;
-            }
-
-            // Call onNavigationEntriesUpdate with the complete list of groups
-            onNavigationEntriesUpdate(allGroupsForPersistence);
-            console.debug("Updated navigation entries", allGroupsForPersistence);
-
-            return newDraggableItems; // Update the local state for draggable items
-        });
+        onNavigationEntriesUpdate(allGroups);
     };
 
     const {
@@ -194,6 +183,7 @@ export function DefaultHomePage({
         items: items,
         setItems: updateItems,
         disabled: !allowDragAndDrop || performingSearch,
+        onPersist: persistNavigationGroups,
         onGroupMoved: (group, sourceGroup, targetGroup) => {
             context.analyticsController?.onAnalyticsEvent?.("home_move_group", { name: group });
         },
