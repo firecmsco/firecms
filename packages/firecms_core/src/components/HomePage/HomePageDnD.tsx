@@ -184,12 +184,13 @@ export function SortableNavigationGroup({
     );
 }
 
-// Modify useHomePageDnd
 export function useHomePageDnd({
                                    items: dndItems,
                                    setItems: setDndItems,
                                    disabled,
-                                   onCardMovedBetweenGroups
+                                   onCardMovedBetweenGroups,
+                                   onGroupMoved,
+                                   onNewGroupDrop
                                }: {
     items: { name: string, entries: NavigationEntry[] }[],
     setItems: (newItemsOrUpdater: { name: string, entries: NavigationEntry[] }[] | ((currentItems: {
@@ -197,7 +198,9 @@ export function useHomePageDnd({
         entries: NavigationEntry[]
     }[]) => { name: string, entries: NavigationEntry[] }[])) => void,
     disabled: boolean,
-    onCardMovedBetweenGroups?: (card: NavigationEntry, fromGroup: string, toGroup: string) => void
+    onCardMovedBetweenGroups?: (card: NavigationEntry) => void,
+    onGroupMoved?: (groupName: string, oldIndex: number, newIndex: number) => void,
+    onNewGroupDrop?: () => void
 }) {
 
     const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
@@ -227,8 +230,6 @@ export function useHomePageDnd({
 
     const lastOverId = useRef<UniqueIdentifier | null>(null);
     const recentlyMovedToNewContainer = useRef(false);
-    // Track last cross-group move for callback
-    const lastCrossGroupMove = useRef<{ card: NavigationEntry, fromGroup: string, toGroup: string } | null>(null);
 
     const findDndContainer = useCallback((id: UniqueIdentifier): string | undefined => {
         if (!id) return undefined;
@@ -255,7 +256,7 @@ export function useHomePageDnd({
 
             return closestCenter({ // Changed from closestCorners to closestCenter
                 ...args,
-                droppableContainers: groupDroppables // Pass all group droppables, including the active one's original position
+                droppableContainers: groupDroppables
             });
         } else {
             const pointerCollisions = pointerWithin(args);
@@ -355,12 +356,6 @@ export function useHomePageDnd({
                 if (activeItemIndexInSource === -1) return currentItems;
                 const [movedItem] = sourceGroup.entries.splice(activeItemIndexInSource, 1);
                 targetGroup.entries.push(movedItem);
-                // Track for callback in drag end
-                lastCrossGroupMove.current = {
-                    card: movedItem,
-                    fromGroup: activeElementContainerName,
-                    toGroup: overElementContainerName
-                };
                 return newItemsState.map(g => ({
                     ...g,
                     entries: g.entries.filter(Boolean)
@@ -368,7 +363,6 @@ export function useHomePageDnd({
             });
         } else if (activeElementContainerName === overElementContainerName) {
             recentlyMovedToNewContainer.current = false;
-            lastCrossGroupMove.current = null;
         }
     };
 
@@ -383,7 +377,6 @@ export function useHomePageDnd({
             setCurrentDraggingGroupId(null);
             setIsDraggingCardOnly(false);
             recentlyMovedToNewContainer.current = false;
-            lastCrossGroupMove.current = null;
             return;
         }
 
@@ -396,9 +389,12 @@ export function useHomePageDnd({
                 const overGroupIndex = dndItems.findIndex(g => g.name === currentOverId);
                 if (activeGroupIndex !== -1 && overGroupIndex !== -1) {
                     setDndItems(currentItems => arrayMove(currentItems, activeGroupIndex, overGroupIndex));
+                    if (onGroupMoved && typeof currentActiveId === "string") {
+                        onGroupMoved(currentActiveId, activeGroupIndex, overGroupIndex);
+                    }
                 }
             }
-        } else { // Dragging an item
+        } else {
             const activeContainerName = findDndContainer(currentActiveId);
             if (currentOverId === "new-group-drop-zone") {
                 if (activeContainerName) {
@@ -430,26 +426,17 @@ export function useHomePageDnd({
                             entries: [draggedItem]
                         });
 
-                        // Add callback for new group creation
-                        if (onCardMovedBetweenGroups) {
-                            lastCrossGroupMove.current = {
-                                card: draggedItem,
-                                fromGroup: activeContainerName,
-                                toGroup: createdGroupName
-                            };
-                        }
-
                         return newItemsState;
                     });
                     if (createdGroupName) {
                         console.log("[HomePageDnD] Attempting to open dialog for new group:", createdGroupName);
                         setDialogOpenForGroup(createdGroupName);
+                        onNewGroupDrop?.();
                     }
                 }
             } else {
                 const overContainerName = findDndContainer(currentOverId);
-                if (!activeContainerName || !overContainerName) { /* Reset or error */
-                } else if (activeContainerName === overContainerName) {
+                if (activeContainerName === overContainerName) {
                     setDndItems(currentDndItems => {
                         const groupIndex = currentDndItems.findIndex(g => g.name === activeContainerName);
                         if (groupIndex === -1) return currentDndItems;
@@ -472,6 +459,10 @@ export function useHomePageDnd({
                         return currentDndItems;
                     });
                 }
+
+                onCardMovedBetweenGroups?.(
+                    dndItems.flatMap(g => g.entries).find(e => e.url === currentActiveId)!
+                );
             }
         }
 
@@ -482,15 +473,6 @@ export function useHomePageDnd({
         setIsDraggingCardOnly(false); // Reset isDraggingCardOnly
         recentlyMovedToNewContainer.current = false;
 
-        // Execute the callback after state updates are performed
-        if (!activeIsGroup && lastCrossGroupMove.current && onCardMovedBetweenGroups) {
-            onCardMovedBetweenGroups(
-                lastCrossGroupMove.current.card,
-                lastCrossGroupMove.current.fromGroup,
-                lastCrossGroupMove.current.toGroup
-            );
-            lastCrossGroupMove.current = null;
-        }
     };
 
     const handleDragCancel = () => {

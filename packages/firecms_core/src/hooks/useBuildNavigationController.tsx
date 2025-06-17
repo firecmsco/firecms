@@ -174,8 +174,6 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             plugins: plugins
         });
 
-        console.debug("Computed navigation group mappings", finalNavigationGroupMappings);
-
         const allPluginNavigationEntries = finalNavigationGroupMappings.map((g) => g.entries).flat() ?? [];
         const navigationEntriesOrder = ([...new Set(allPluginNavigationEntries)]);
 

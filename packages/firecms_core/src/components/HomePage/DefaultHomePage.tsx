@@ -193,39 +193,14 @@ export function DefaultHomePage({
         items: items,
         setItems: updateItems,
         disabled: !allowDragAndDrop || performingSearch,
-        onCardMovedBetweenGroups: (card, sourceGroup, targetGroup) => {
-
-            // This is important: We need to update the navigation entries in the plugin system
-            // when cards are moved between groups
-            const sourceGroupEntries = items.find(g => g.name === sourceGroup)?.entries || [];
-            const targetGroupEntries = items.find(g => g.name === targetGroup)?.entries || [];
-
-            // Create updated groups that reflect the move that just happened
-            const updatedGroups = items.map(group => {
-                if (group.name === sourceGroup) {
-                    return {
-                        name: sourceGroup,
-                        entries: sourceGroupEntries.map(e => e.path)
-                    };
-                } else if (group.name === targetGroup) {
-                    return {
-                        name: targetGroup,
-                        entries: targetGroupEntries.map(e => e.path)
-                    };
-                } else {
-                    return {
-                        name: group.name,
-                        entries: group.entries.map(e => e.path)
-                    };
-                }
-            });
-
-            console.log("Updating navigation entries after card move", {
-                sourceGroup,
-                targetGroup,
-                card,
-            })
-
+        onGroupMoved: (group, sourceGroup, targetGroup) => {
+            context.analyticsController?.onAnalyticsEvent?.("home_move_group", { name: group });
+        },
+        onCardMovedBetweenGroups: (card) => {
+            context.analyticsController?.onAnalyticsEvent?.("home_move_card", { id: card.id });
+        },
+        onNewGroupDrop: () => {
+            context.analyticsController?.onAnalyticsEvent?.("home_drop_new_group");
         }
     });
 

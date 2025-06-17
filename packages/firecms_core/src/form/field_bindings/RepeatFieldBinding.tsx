@@ -79,7 +79,6 @@ export function RepeatFieldBinding<T extends Array<any>>({
             minimalistView: false,
             autoFocus: internalId === lastAddedId,
         };
-        console.debug("Building entry for", index, fieldProps);
         return <ErrorBoundary>
             <PropertyFieldBinding {...fieldProps} index={index}/>
         </ErrorBoundary>;
