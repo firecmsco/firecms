@@ -26,11 +26,20 @@ export const mergeCollections = (baseCollections: EntityCollection[],
     const result = joinCollectionLists(baseCollections, backendCollections, [], modifyCollection);
 
     // sort the collections so they are in the same order as the base collections
-    result.sort((a, b) => baseCollections.findIndex(c => c.id === a.id) - baseCollections.findIndex(c => c.id === b.id));
-    console.debug("Collections result", {
-        baseCollections,
-        backendCollections,
-        result
+    result.sort((a, b) => {
+        const indexA = baseCollections.findIndex(c => c.id === a.id);
+        const indexB = baseCollections.findIndex(c => c.id === b.id);
+
+        if (indexA === -1 && indexB === -1) {
+            return 0; // Keep original order for items not in baseCollections
+        }
+        if (indexA === -1) {
+            return 1; // a is not in base, so it goes to the end
+        }
+        if (indexB === -1) {
+            return -1; // b is not in base, so it goes to the end
+        }
+        return indexA - indexB;
     });
 
     return result;
