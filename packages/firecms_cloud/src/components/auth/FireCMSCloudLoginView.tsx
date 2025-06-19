@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { BooleanSwitchWithLabel, Typography } from "@firecms/ui";
 import { ErrorView, FireCMSLogo } from "@firecms/core";
@@ -29,6 +29,16 @@ export function FireCMSCloudLoginView({
 
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(false);
+    const [fadeIn, setFadeIn] = useState(false);
+
+    useEffect(() => {
+        // Trigger the fade-in effect on component mount
+        const timer = setTimeout(() => {
+            setFadeIn(true);
+        }, 50); // Small delay to ensure transition works properly
+
+        return () => clearTimeout(timer);
+    }, []);
 
     function buildErrorView() {
         let errorView: any;
@@ -42,9 +52,14 @@ export function FireCMSCloudLoginView({
         return errorView;
     }
 
+    const fadeStyle = {
+        opacity: fadeIn ? 1 : 0,
+        transition: 'opacity 0.6s ease-in-out'
+    };
+
     return (
 
-        <div className="flex flex-col items-center justify-center min-w-full p-2">
+        <div className="flex flex-col items-center justify-center min-w-full p-2" style={fadeStyle}>
             {includeLogo && <div className={"m-4"} style={{
                 width: "260px",
                 height: "260px"

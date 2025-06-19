@@ -130,6 +130,17 @@ export function FirebaseLoginView({
 
     const [phoneLoginSelected, setPhoneLoginSelected] = useState(false);
 
+    const [fadeIn, setFadeIn] = useState(false);
+
+    useEffect(() => {
+        // Trigger the fade-in effect on component mount
+        const timer = setTimeout(() => {
+            setFadeIn(true);
+        }, 50); // Small delay to ensure transition works properly
+
+        return () => clearTimeout(timer);
+    }, []);
+
     const resolvedSignInOptions: FirebaseSignInProvider[] = signInOptions.map((o) => {
         if (typeof o === "object") {
             return o.provider;
@@ -238,10 +249,16 @@ export function FirebaseLoginView({
         }
     }
 
+    const fadeStyle = {
+        opacity: fadeIn ? 1 : 0,
+        transition: 'opacity 0.6s ease-in-out'
+    };
+
     return (
 
         <div
-            className={cls("flex flex-col items-center justify-center min-w-full p-4", className)}>
+            className={cls("flex flex-col items-center justify-center min-w-full p-4", className)}
+            style={fadeStyle}>
             <div id="recaptcha"></div>
             <div
                 className="flex flex-col items-center w-full max-w-[500px]">
