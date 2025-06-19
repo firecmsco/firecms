@@ -3,6 +3,8 @@ import {
     ConfirmationDialog,
     Entity,
     EntityCustomViewParams,
+    EntityView,
+    ErrorBoundary,
     useAuthController,
     useDataSource,
     useSnackbarController
@@ -183,11 +185,13 @@ export function EntityHistoryView({
 
             {revisions.map((revision, index) => {
                 const previewKeys = revision.values?.["__metadata"]?.["changed_fields"];
+                const previousValues: object | undefined = revision.values?.["__metadata"]?.["previous_values"];
                 return <div key={index} className="flex flex-cols gap-2 w-full">
                     <EntityHistoryEntry size={"large"}
                                         entity={revision}
                                         collection={collection}
                                         previewKeys={previewKeys}
+                                        previousValues={previousValues}
                                         actions={
                                             <Tooltip title={"Revert to this version"}
                                                      className={"m-2 grow-0 self-start"}>
@@ -221,14 +225,20 @@ export function EntityHistoryView({
             )}
         </div>
 
-        <ConfirmationDialog open={Boolean(revertVersionDialog)}
-                            onAccept={function (): void {
-                                if (!revertVersionDialog) return;
-                                doRevert(revertVersionDialog);
-                            }}
-                            onCancel={function (): void {
-                                setRevertVersionDialog(undefined);
-                            }}
-                            title={<Typography variant={"subtitle2"}>Revert data to this version?</Typography>}/>
+        <ErrorBoundary>
+            <ConfirmationDialog open={Boolean(revertVersionDialog)}
+                                onAccept={function (): void {
+                                    if (!revertVersionDialog) return;
+                                    doRevert(revertVersionDialog);
+                                }}
+                                onCancel={function (): void {
+                                    setRevertVersionDialog(undefined);
+                                }}
+                                title={<Typography variant={"subtitle2"}>Revert data to this version?</Typography>}
+                                body={revertVersionDialog ?
+                                    <EntityView entity={revertVersionDialog}
+                                                collection={collection}
+                                                path={entity?.path}/> : null}/>
+        </ErrorBoundary>
     </div>
 }

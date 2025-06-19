@@ -11,6 +11,7 @@ export const entityHistoryCallbacks: EntityCallbacks = {
             values: {
                 ...props.values,
                 __metadata: {
+                    previous_values: props.previousValues,
                     changed_fields: changedFields,
                     updated_on: new Date(),
                     updated_by: uid,

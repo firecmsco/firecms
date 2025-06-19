@@ -1,12 +1,23 @@
 import * as React from "react";
 
-import { Chip, cls, defaultBorderMixin, IconButton, KeyboardTabIcon, Tooltip, Typography } from "@firecms/ui";
+import {
+    Chip,
+    cls,
+    defaultBorderMixin,
+    DescriptionIcon,
+    IconButton, KeyboardBackspaceIcon,
+    KeyboardTabIcon,
+    Tooltip,
+    Typography
+} from "@firecms/ui";
 import {
     Entity,
     EntityCollection,
+    EntityValues,
     getPropertyInPath,
     getValueInPath,
     PreviewSize,
+    Property,
     PropertyPreview,
     resolveCollection,
     ResolvedProperty,
@@ -25,10 +36,46 @@ export type EntityPreviewProps = {
     collection?: EntityCollection,
     hover?: boolean;
     previewKeys?: string[],
-    disabled?: boolean,
     entity: Entity<any>,
+    previousValues?: EntityValues<any>;
     onClick?: (e: React.SyntheticEvent) => void;
 };
+
+function PreviousValueView({
+                               previousValueInPath,
+                               childProperty,
+                               key
+                           }: {
+    previousValueInPath: any,
+    childProperty: Property,
+    key: string
+}) {
+    if (typeof previousValueInPath === "string" || typeof previousValueInPath === "number") {
+        return <Typography variant={"caption"} color={"secondary"} className="line-through">
+            {previousValueInPath}
+        </Typography>;
+    } else if (typeof previousValueInPath === "boolean") {
+        return <Typography variant={"caption"} color={"secondary"} className="line-through">
+            {previousValueInPath ? "true" : "false"}
+        </Typography>;
+
+    } else {
+        return <Tooltip
+            side={"left"}
+            title={<div className={"flex flex-col gap-2"}>
+                <Typography variant={"caption"} color={"secondary"}>
+                    Previous value
+                </Typography>
+                <PropertyPreview
+                    propertyKey={key as string}
+                    value={previousValueInPath}
+                    property={childProperty as ResolvedProperty}
+                    size={"small"}/>
+            </div>}>
+            <KeyboardBackspaceIcon size={"smallest"} color={"disabled"} className={"mb-1"}/>
+        </Tooltip>
+    }
+}
 
 /**
  * This view is used to display a preview of an entity.
@@ -36,13 +83,13 @@ export type EntityPreviewProps = {
  */
 export function EntityHistoryEntry({
                                        actions,
-                                       disabled,
                                        hover,
                                        collection: collectionProp,
                                        previewKeys,
                                        onClick,
                                        size,
-                                       entity
+                                       entity,
+                                       previousValues
                                    }: EntityPreviewProps) {
 
     const authController = useAuthController();
@@ -127,6 +174,8 @@ export function EntityHistoryEntry({
                     const childProperty = getPropertyInPath(resolvedCollection.properties, key);
 
                     const valueInPath = getValueInPath(entity.values, key);
+                    const previousValueInPath = previousValues ? getValueInPath(previousValues, key) : undefined;
+
                     const element = childProperty ? (entity
                             ? <PropertyPreview
                                 propertyKey={key as string}
@@ -148,9 +197,12 @@ export function EntityHistoryEntry({
                                 {key}
                             </Typography>
                             <div className="w-4/5">
-                                {
-                                    element
+                                {previousValueInPath !== undefined && previousValueInPath !== valueInPath &&
+                                    <PreviousValueView previousValueInPath={previousValueInPath}
+                                                       childProperty={childProperty as ResolvedProperty}
+                                                       key={key}/>
                                 }
+                                {element}
                             </div>
                         </div>
                     );
