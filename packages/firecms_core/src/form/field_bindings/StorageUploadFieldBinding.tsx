@@ -157,13 +157,11 @@ function SortableStorageItem({
                                  id,
                                  entry,
                                  property,
-                                 name,
                                  metadata,
                                  storagePathBuilder,
                                  onFileUploadComplete,
                                  onClear,
                                  disabled,
-                                 isSortable // This prop might be redundant if SortableContext is always used for multiple items
                              }: SortableStorageItemProps) {
 
     const {
@@ -178,8 +176,7 @@ function SortableStorageItem({
     const style: React.CSSProperties = {
         transform: CSS.Transform.toString(transform),
         transition,
-        zIndex: isDragging ? 100 : undefined, // Higher z-index when dragging
-        opacity: isDragging ? 0.8 : 1 // Slight opacity for dragged item
+        zIndex: isDragging ? 100 : undefined
     };
 
     const getImageSizeNumber = (previewSize: PreviewSize): number => {
@@ -187,9 +184,9 @@ function SortableStorageItem({
             case "small":
                 return 40;
             case "medium":
-                return 118; // As per original logic for multiple items
+                return 118;
             case "large":
-                return 220; // As per original logic for single item
+                return 220;
             default:
                 return 118;
         }
@@ -225,7 +222,7 @@ function SortableStorageItem({
             style={style}
             {...attributes}
             {...listeners}
-            className={cls("rounded-md m-1")} // Added margin for spacing between items
+            className={cls("rounded-md m-1")}
             tabIndex={-1}
         >
             {child}
@@ -247,11 +244,11 @@ function FileDropComponent({
                                onFileUploadComplete,
                                name,
                                helpText,
-                               isDndItemDragging // New prop to disable dropzone when internal D&D is active
+                               isDndItemDragging
                            }: {
     storage: StorageConfig,
     disabled: boolean,
-    onFilesAdded: (acceptedFiles: File[]) => Promise<void>, // useStorageUploadController returns Promise<void>
+    onFilesAdded: (acceptedFiles: File[]) => Promise<void>,
     multipleFilesSupported: boolean,
     autoFocus: boolean,
     internalValue: StorageFieldItem[],
@@ -278,7 +275,7 @@ function FileDropComponent({
                 ...acc,
                 [ext]: []
             }), {}) : undefined,
-            disabled: disabled || isDndItemDragging, // Disable if form field is disabled OR an internal item is being dragged
+            disabled: disabled || isDndItemDragging,
             noDragEventsBubbling: true,
             maxSize: storage.maxSize,
             onDrop: onFilesAdded,
@@ -311,7 +308,7 @@ function FileDropComponent({
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                 disabled ? "text-surface-accent-600 dark:text-surface-accent-500" : "",
                 dropZoneClasses,
-                multipleFilesSupported && internalValue.length === 0 && "flex", // Keep flex for empty state centering
+                multipleFilesSupported && internalValue.length ? "" : "flex",
                 {
                     [nonActiveDropClasses]: !isDragActive,
                     [activeDropClasses]: isDragActive, // OS file drag active
@@ -321,11 +318,9 @@ function FileDropComponent({
                 })}
         >
             <div
-                className={cls("flex items-center p-1 no-scrollbar",
-                    multipleFilesSupported && internalValue.length ? "flex-row overflow-x-auto" : "flex-col", // flex-col for single or empty
-                    internalValue.length === 0 && "min-h-[250px] justify-center", // Centering for empty dropzone
-                    multipleFilesSupported && internalValue.length > 0 && "min-h-[180px]", // Min height for multiple items
-                    !multipleFilesSupported && internalValue.length > 0 && "min-h-[250px]" // Min height for single item
+                className={cls("flex items-center p-1 px-4 no-scrollbar",
+                    multipleFilesSupported && internalValue.length ? "overflow-auto" : "",
+                    multipleFilesSupported && internalValue.length ? "min-h-[180px]" : "min-h-[250px]"
                 )}
             >
                 <input

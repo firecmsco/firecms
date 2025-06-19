@@ -30,7 +30,7 @@ export function StorageItemPreview({
 
     return (
         <div className={cls(paperMixin,
-            "relative m-4 border-box flex items-center justify-center",
+            "relative border-box flex items-center justify-center",
             size === "large" ? "min-w-[220px] min-h-[220px] max-w-[220px]" : "min-w-[118px] min-h-[118px] max-w-[118px]",
             className)}>
 

@@ -79,7 +79,7 @@ export function StorageUploadProgress({
     }, [entry.file, entry.fileName, upload]);
 
     if (simple) {
-        return <div className={`m-4 w-${imageSize} h-${imageSize}`}>
+        return <div className={`w-${imageSize} h-${imageSize}`}>
 
             {loading && <Skeleton className={`w-${imageSize} h-${imageSize}`}/>}
 
@@ -88,11 +88,11 @@ export function StorageUploadProgress({
     return (
 
         <div className={cls(paperMixin,
-            "relative m-4 border-box flex items-center justify-center",
+            "p-4 relative border-box flex items-center justify-center",
             `min-w-[${imageSize}px] min-h-[${imageSize}px]`)}>
 
             {loading &&
-                <Skeleton className="m-4 w-full h-full"/>}
+                <Skeleton className="w-full h-full"/>}
 
             {error && <ErrorView title={"Error uploading file"}
                                  error={error}/>}
