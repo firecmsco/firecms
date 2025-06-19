@@ -264,12 +264,12 @@ export function App() {
         //     description: "This is an example of an additional view that is defined by the user",
         //     view: <TypographyDemo/>
         // },
-        {
-            path: "board_test",
-            name: "Board test",
-            group: "Content",
-            view: <TestBoardView/>
-        },
+        // {
+        //     path: "board_test",
+        //     name: "Board test",
+        //     group: "Content",
+        //     view: <TestBoardView/>
+        // },
         {
             path: "editor_demo",
             name: "The FireCMS editor",

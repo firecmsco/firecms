@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { EntityCollection, FieldCaption, IconForView, SearchIconsView, singular, toSnakeCase, } from "@firecms/core";
 import {
-    Autocomplete,
-    AutocompleteItem,
     BooleanSwitchWithLabel,
     Chip,
     CloseIcon,
@@ -442,7 +440,7 @@ export function CollectionDetailsForm({
                     fullWidth
                 >
                     <div className={"p-4 overflow-auto min-h-[200px]"}>
-                        <SearchIconsView selectedIcon={values.icon}
+                        <SearchIconsView selectedIcon={typeof values.icon === "string" ? values.icon : undefined}
                                          onIconSelected={(icon: string) => {
                                              setIconDialogOpen(false);
                                              setFieldValue("icon", icon);

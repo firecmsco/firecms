@@ -103,28 +103,29 @@ export function CollectionEditorWelcomeView({
                     <div className={"flex gap-4"}>
                         <TemplateButton title={"Products"}
                                         subtitle={"A collection of products with images, prices and stock"}
-                                        icon={<Icon size={"small"} iconKey={productsCollectionTemplate.icon!}/>}
+                                        icon={<Icon size={"small"}
+                                                    iconKey={productsCollectionTemplate.icon! as string}/>}
                                         onClick={() => {
                                             setValues(productsCollectionTemplate);
                                             onContinue();
                                         }}/>
                         <TemplateButton title={"Users"}
                                         subtitle={"A collection of users with emails, names and roles"}
-                                        icon={<Icon size={"small"} iconKey={usersCollectionTemplate.icon!}/>}
+                                        icon={<Icon size={"small"} iconKey={usersCollectionTemplate.icon! as string}/>}
                                         onClick={() => {
                                             setValues(usersCollectionTemplate);
                                             onContinue();
                                         }}/>
                         <TemplateButton title={"Blog posts"}
                                         subtitle={"A collection of blog posts with images, authors and complex content"}
-                                        icon={<Icon size={"small"} iconKey={blogCollectionTemplate.icon!}/>}
+                                        icon={<Icon size={"small"} iconKey={blogCollectionTemplate.icon! as string}/>}
                                         onClick={() => {
                                             setValues(blogCollectionTemplate);
                                             onContinue();
                                         }}/>
                         <TemplateButton title={"Pages"}
                                         subtitle={"A collection of pages with images, authors and complex content"}
-                                        icon={<Icon size={"small"} iconKey={pagesCollectionTemplate.icon!}/>}
+                                        icon={<Icon size={"small"} iconKey={pagesCollectionTemplate.icon! as string}/>}
                                         onClick={() => {
                                             setValues(pagesCollectionTemplate);
                                             onContinue();
