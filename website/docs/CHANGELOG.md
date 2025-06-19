@@ -2,6 +2,24 @@
 id: changelog
 title: Changelog
 ---
+## [3.0.0-beta.14] - 2025-04-17
+
+- **JSON View Toggle**: Added toggle in collections editor view for accessing raw JSON data.
+- **UI Consistency**: Improved UI consistency for select and multiselect components.
+- **Form Improvements**: Enhanced popup form field resizing and boundary handling.
+- **Entity History Plugin**: Added history tracking functionality to FireCMS Cloud and FireCMS PRO.
+- **Fixes**:
+  - Fixed text overflow in entity titles
+  - Fixed errors displayed incorrectly in array of maps
+  - Fixed truncating buttons
+  - Fixed read-only entities getting obscured by bottom bar
+  - Fixed overlay text color in dark mode
+  - Fixed errors not being cleared on collection editor
+  - Fixed mergeDeep to handle null cases correctly
+  - Fixed scroll resetting x-axis on pagination
+  - Added back table cell error indication
+- **Drag and Drop**: Replaced `@hello-pangea/dnd` with `@dnd-kit` for better performance and flexibility.
+
 ## [3.0.0-beta.13] - 2025-04-11
 
 - **JSON Preview**: Added JSON preview tab to entities, providing a raw data view. Can be disabled with `disableJsonTab` prop.

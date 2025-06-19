@@ -228,23 +228,32 @@ export const testCollection = buildCollection<any>({
                     enumValues: locales
                 }
             },
-            // entryCondition: conditionProperty("Entry condition"),
-            // fulfillmentCondition: conditionProperty("Fulfillment condition"),
-            // //...
-            // images: {
-            //     dataType: "array",
-            //     name: "Images",
-            //     of: {
-            //         dataType: "string",
-            //         storage: {
-            //             storagePath: "images",
-            //             acceptedFiles: ["image/*"],
-            //             metadata: {
-            //                 cacheControl: "max-age=1000000"
-            //             }
-            //         }
-            //     }
-            // },
+            image:{
+                dataType: "string",
+                name: "Image",
+                storage: {
+                    storagePath: "images",
+                    acceptedFiles: ["image/*"],
+                    metadata: {
+                        cacheControl: "max-age=1000000"
+                    }
+                },
+                // validation: { required: true }
+            },
+            images: {
+                dataType: "array",
+                name: "Images",
+                of: {
+                    dataType: "string",
+                    storage: {
+                        storagePath: "images",
+                        acceptedFiles: ["image/*"],
+                        metadata: {
+                            cacheControl: "max-age=1000000"
+                        }
+                    }
+                }
+            },
             // readOnly: {
             //     dataType: "string",
             //     readOnly: true,
