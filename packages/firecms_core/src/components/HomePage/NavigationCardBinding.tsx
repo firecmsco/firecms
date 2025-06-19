@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 import { useCustomizationController, useFireCMSContext } from "../../hooks";
-import { PluginHomePageActionsProps, NavigationEntry } from "../../types";
+import { NavigationEntry, PluginHomePageActionsProps } from "../../types";
 import { IconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
 import { IconButton, StarIcon } from "@firecms/ui";
@@ -31,7 +31,7 @@ export function NavigationCardBinding({
                                           description,
                                           onClick,
                                           type,
-                                          shrink // <-- add shrink prop
+                                          shrink
                                       }: NavigationEntry & {
     onClick?: () => void,
     shrink?: boolean // <-- add shrink prop type

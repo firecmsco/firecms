@@ -70,7 +70,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * e.g. 'account_tree' or 'person'.
      * Find all the icons in https://firecms.co/docs/icons
      */
-    icon?: string;
+    icon?: string | React.ReactNode;
 
     /**
      * Optional field used to group top level navigation entries under a~

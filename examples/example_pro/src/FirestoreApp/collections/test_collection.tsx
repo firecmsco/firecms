@@ -228,7 +228,7 @@ export const testCollection = buildCollection<any>({
                     enumValues: locales
                 }
             },
-            image:{
+            image: {
                 dataType: "string",
                 name: "Image",
                 storage: {

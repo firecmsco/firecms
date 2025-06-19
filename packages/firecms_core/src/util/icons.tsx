@@ -4,17 +4,28 @@ import { coolIconKeys, Icon, IconColor, iconKeys } from "@firecms/ui";
 import { slugify } from "./strings";
 import equal from "react-fast-compare"
 
-export function getIcon(iconKey?: string,
+export function getIcon(iconKey?: string | React.ReactNode,
                         className?: string,
                         color?: IconColor,
                         size?: "smallest" | "small" | "medium" | "large" | number,): React.ReactElement | undefined {
-    if (!iconKey) return undefined;
-    iconKey = slugify(iconKey);
-    if (!(iconKey in iconKeysMap)) {
-        return undefined;
+
+    if (React.isValidElement(iconKey)) {
+        return iconKey;
     }
-    return iconKey in iconKeysMap ?
-        <Icon iconKey={iconKey} size={size} className={className} color={color}/> : undefined;
+
+    if (!iconKey) return undefined;
+    if (typeof iconKey === "string") {
+
+        const usedIconKey = slugify(iconKey);
+        if (!(usedIconKey in iconKeysMap)) {
+            return undefined;
+        }
+        return usedIconKey in iconKeysMap ?
+            <Icon iconKey={usedIconKey} size={size} className={className} color={color}/> : undefined;
+    }
+
+    console.warn("Invalid icon key provided:", iconKey);
+    return undefined;
 }
 
 export type IconViewProps = {
@@ -22,7 +33,7 @@ export type IconViewProps = {
     name: string;
     singularName?: string;
     group?: string;
-    icon?: string;
+    icon?: string | React.ReactNode;
 }
 
 export const IconForView = React.memo(
