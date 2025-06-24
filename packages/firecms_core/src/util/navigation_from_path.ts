@@ -11,6 +11,7 @@ export interface NavigationViewEntityInternal<M extends Record<string, any>> {
     type: "entity";
     entityId: string;
     path: string;
+    fullIdPath: string;
     fullPath: string;
     parentCollection: EntityCollection<M>;
 }
@@ -19,6 +20,7 @@ export interface NavigationViewCollectionInternal<M extends Record<string, any>>
     type: "collection";
     id: string;
     path: string;
+    fullIdPath: string;
     fullPath: string;
     collection: EntityCollection<M>;
 }
@@ -26,6 +28,7 @@ export interface NavigationViewCollectionInternal<M extends Record<string, any>>
 export interface NavigationViewEntityCustomInternal<M extends Record<string, any>> {
     type: "custom_view";
     path: string;
+    fullIdPath: string;
     fullPath: string;
     entityId: string;
     view: EntityCustomView<M>;
@@ -35,13 +38,15 @@ export function getNavigationEntriesFromPath(props: {
     path: string,
     collections: EntityCollection[] | undefined,
     currentFullPath?: string,
+    currentFullIdPath?: string,
     contextEntityViews?: EntityCustomView<any>[]
 }): NavigationViewInternal [] {
 
     const {
         path,
         collections = [],
-        currentFullPath
+        currentFullPath,
+        currentFullIdPath
     } = props;
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
@@ -58,16 +63,18 @@ export function getNavigationEntriesFromPath(props: {
         }
 
         if (collection) {
-            const pathOrAlias = collection.id ?? collection.path;
             const collectionPath = currentFullPath && currentFullPath.length > 0
-                ? (currentFullPath + "/" + pathOrAlias)
-                : pathOrAlias;
-
+                ? (currentFullPath + "/" + collection.path)
+                : collection.path;
+            const fullIdPath = currentFullIdPath && currentFullIdPath.length > 0
+                ? (currentFullIdPath + "/" + collection.id)
+                : collection.id;
             result.push({
                 type: "collection",
                 id: collection.id,
                 path: collectionPath,
                 fullPath: collectionPath,
+                fullIdPath,
                 collection
             });
             const restOfThePath = removeInitialAndTrailingSlashes(removeInitialAndTrailingSlashes(path).replace(subpathCombination, ""));
@@ -79,6 +86,7 @@ export function getNavigationEntriesFromPath(props: {
                     type: "entity",
                     entityId,
                     path: collectionPath,
+                    fullIdPath,
                     fullPath: fullPath,
                     parentCollection: collection
                 });
@@ -97,6 +105,7 @@ export function getNavigationEntriesFromPath(props: {
                             type: "custom_view",
                             path: collectionPath,
                             entityId: entityId,
+                            fullIdPath,
                             fullPath: fullPath + "/" + customView.key,
                             view: customView
                         });
@@ -105,6 +114,7 @@ export function getNavigationEntriesFromPath(props: {
                             path: newPath,
                             collections: collection.subcollections,
                             currentFullPath: fullPath,
+                            currentFullIdPath: fullIdPath,
                             contextEntityViews: props.contextEntityViews
                         }));
                     }

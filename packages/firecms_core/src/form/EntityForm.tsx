@@ -57,6 +57,7 @@ export type OnUpdateParams = {
 
 export type EntityFormProps<M extends Record<string, any>> = {
     path: string;
+    fullIdPath?: string;
     collection: EntityCollection<M>;
     entityId?: string;
     entity?: Entity<M>;
@@ -96,6 +97,7 @@ export type EntityFormProps<M extends Record<string, any>> = {
 
 export function EntityForm<M extends Record<string, any>>({
                                                               path,
+                                                              fullIdPath,
                                                               entityId: entityIdProp,
                                                               collection,
                                                               onValuesModified,
@@ -118,6 +120,7 @@ export function EntityForm<M extends Record<string, any>>({
                                                               showEntityPath = true,
                                                               children
                                                           }: EntityFormProps<M>) {
+
 
     if (collection.customId && collection.formAutoSave) {
         console.warn(`The collection ${collection.path} has customId and formAutoSave enabled. This is not supported and formAutoSave will be ignored`);
@@ -665,9 +668,12 @@ export function EntityForm<M extends Record<string, any>>({
         throw Error("INTERNAL: Collection and path must be defined in form context");
     }
 
+
     const dialogActions = <EntityFormActionsComponent
         collection={resolvedCollection}
         path={path}
+        fullPath={path}
+        fullIdPath={fullIdPath}
         entity={entity}
         layout={forceActionsAtTheBottom ? "bottom" : "side"}
         savingError={savingError}

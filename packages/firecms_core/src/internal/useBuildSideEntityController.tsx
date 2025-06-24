@@ -215,6 +215,7 @@ export const useBuildSideEntityController = (navigation: NavigationController,
 
 export function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], newFlag: boolean): EntitySidePanelProps<any>[] {
 
+
     const navigationViewsForPath: NavigationViewInternal<any>[] = getNavigationEntriesFromPath({
         path,
         collections
@@ -222,18 +223,20 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
 
     let sidePanel: EntitySidePanelProps<any> | undefined = undefined;
     let lastCollectionPath = "";
+    let lastCollectionId: string | undefined = undefined;
     for (let i = 0; i < navigationViewsForPath.length; i++) {
         const navigationEntry = navigationViewsForPath[i];
 
         if (navigationEntry.type === "collection") {
             lastCollectionPath = navigationEntry.path;
+            lastCollectionId = navigationEntry.collection.id;
         }
 
         const previousEntry = navigationViewsForPath[i - 1];
         if (navigationEntry.type === "entity") {
             sidePanel = {
                 path: navigationEntry.path,
-                // fullIdPath: navigationEntry.path,
+                fullIdPath: navigationEntry.fullIdPath,
                 entityId: navigationEntry.entityId,
                 copy: false,
                 width: navigationEntry.parentCollection?.sideDialogWidth
@@ -255,7 +258,7 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
     if (newFlag) {
         sidePanel = {
             path: lastCollectionPath,
-            // fullIdPath: lastCollectionPath,
+            fullIdPath: lastCollectionId,
             copy: false
         }
     }
@@ -273,7 +276,7 @@ const propsToSidePanel = (props: EntitySidePanelProps,
 
     const collectionPath = removeInitialAndTrailingSlashes(props.path);
 
-    const newPath = props.entityId
+    const urlPath = props.entityId
         ? buildUrlCollectionPath(`${collectionPath}/${props.entityId}${props.selectedTab ? "/" + props.selectedTab : ""}#${SIDE_URL_HASH}`)
         : buildUrlCollectionPath(`${collectionPath}#${NEW_URL_HASH}`);
 
@@ -286,7 +289,7 @@ const propsToSidePanel = (props: EntitySidePanelProps,
     return {
         key: `${props.path}/${props.entityId}`,
         component: <EntitySidePanel {...resolvedPanelProps}/>,
-        urlPath: newPath,
+        urlPath: urlPath,
         parentUrlPath: buildUrlCollectionPath(collectionPath),
         width: entityViewWidth,
         onClose: props.onClose,

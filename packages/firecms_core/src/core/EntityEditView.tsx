@@ -41,9 +41,13 @@ export type OnTabChangeParams<M extends Record<string, any>> = {
     entityId?: string;
     selectedTab?: string;
     collection: EntityCollection<M>;
+
 };
 
 export interface EntityEditViewProps<M extends Record<string, any>> {
+    /**
+     * The database path of the entity, e.g. "users" or "products".
+     */
     path: string;
     /**
      * The navigation path to the entity.
@@ -279,8 +283,15 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const subCollectionsViews = subcollections && subcollections.map((subcollection) => {
         const subcollectionId = subcollection.id ?? subcollection.path;
-        const newFullPath = usedEntity ? `${path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollectionId)}` : undefined;
+        const newFullPath = usedEntity ? `${path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollection.path)}` : undefined;
         const newFullIdPath = fullIdPath ? `${fullIdPath}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollectionId)}` : undefined;
+        console.debug("Rendering subcollection", {
+            subcollectionId,
+            fullIdPath,
+            newFullPath,
+            newFullIdPath,
+            selectedTab
+        });
 
         if (selectedTab !== subcollectionId) return null;
         return (
@@ -342,6 +353,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     </div> : null;
 
     const entityView = <EntityForm<M>
+        fullIdPath={fullIdPath}
         collection={collection}
         path={path}
         entityId={entityId ?? usedEntity?.id}

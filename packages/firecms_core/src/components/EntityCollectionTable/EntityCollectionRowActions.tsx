@@ -33,6 +33,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                                                                                   entity,
                                                                                   collection,
                                                                                   fullPath,
+                                                                                  fullIdPath,
                                                                                   width,
                                                                                   frozen,
                                                                                   isSelected,
@@ -50,6 +51,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                                                                                   entity: Entity<any>,
                                                                                   collection?: EntityCollection<any>,
                                                                                   fullPath?: string,
+                                                                                  fullIdPath?: string,
                                                                                   width: number,
                                                                                   frozen?: boolean,
                                                                                   size: CollectionSize,
@@ -107,6 +109,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                                     action.onClick({
                                         entity,
                                         fullPath,
+                                        fullIdPath,
                                         collection,
                                         context,
                                         selectionController,
@@ -136,6 +139,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                                         action.onClick({
                                             entity,
                                             fullPath,
+                                            fullIdPath,
                                             collection,
                                             context,
                                             selectionController,

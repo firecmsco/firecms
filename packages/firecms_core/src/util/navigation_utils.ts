@@ -201,8 +201,8 @@ export function navigateToEntity({
 
         sideEntityController.open({
             entityId,
-            path: fullIdPath ?? path,
-            // fullIdPath,
+            path,
+            fullIdPath,
             copy,
             selectedTab,
             collection,

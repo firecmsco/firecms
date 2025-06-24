@@ -256,7 +256,6 @@ export const EntityCollectionView = React.memo(
         }, [unselectNavigatedEntity, sideEntityController]);
 
         const onNewClick = useCallback(() => {
-
             const collection = collectionRef.current;
             analyticsController.onAnalyticsEvent?.("new_entity_click", {
                 path: fullPath
@@ -539,7 +538,8 @@ export const EntityCollectionView = React.memo(
                     highlightEntity={setHighlightedEntity}
                     unhighlightEntity={unselectNavigatedEntity}
                     collection={collection}
-                    fullPath={fullIdPath ?? fullPath}
+                    fullPath={fullPath}
+                    fullIdPath={fullIdPath}
                     actions={actions}
                     hideId={collection?.hideIdFromCollection}
                     onCollectionChange={updateLastDeleteTimestamp}

@@ -79,7 +79,8 @@ export function FireCMSRoute() {
             key={`collection_view_${collection.id ?? collection.path}`}
             isSubCollection={false}
             parentCollectionIds={[]}
-            fullPath={collection.id}
+            fullPath={collection.path}
+            fullIdPath={collection.id}
             updateUrl={true}
             {...collection}
             Actions={toArray(collection.Actions)}/>
@@ -100,7 +101,7 @@ export function FireCMSRoute() {
                 fullIdPath={collection.id}
                 isSubCollection={false}
                 parentCollectionIds={[]}
-                fullPath={collection.id}
+                fullPath={collection.path}
                 updateUrl={true}
                 {...collection}
                 Actions={toArray(collection.Actions)}/>;
@@ -200,7 +201,6 @@ function EntityFullScreenRoute({
     const collection = isNew ? lastCollectionEntry!.collection : lastEntityEntry!.parentCollection;
     const fullIdPath = isNew ? lastCollectionEntry!.path : lastEntityEntry!.path;
     const collectionPath = navigation.resolveIdsFrom(fullIdPath);
-
     return <>
         <EntityEditView
             key={collection.id + "_" + (isNew ? "new" : (isCopy ? entityId + "_copy" : entityId))}

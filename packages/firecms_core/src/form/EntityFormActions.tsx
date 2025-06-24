@@ -5,6 +5,8 @@ import { FormexController } from "@firecms/formex";
 import { useFireCMSContext, useSideEntityController } from "../hooks";
 
 export interface EntityFormActionsProps {
+    fullPath: string;
+    fullIdPath?: string;
     collection: ResolvedEntityCollection;
     path: string;
     entity?: Entity;
@@ -19,6 +21,8 @@ export interface EntityFormActionsProps {
 }
 
 export function EntityFormActions({
+                                      fullPath,
+                                      fullIdPath,
                                       collection,
                                       entity,
                                       layout,
@@ -35,6 +39,8 @@ export function EntityFormActions({
 
     return layout === "bottom"
         ? buildBottomActions({
+            fullPath,
+            fullIdPath,
             savingError,
             entity,
             collection,
@@ -47,6 +53,8 @@ export function EntityFormActions({
             openEntityMode
         })
         : buildSideActions({
+            fullPath,
+            fullIdPath,
             savingError,
             entity,
             collection,
@@ -61,6 +69,8 @@ export function EntityFormActions({
 }
 
 type ActionsViewProps<M extends object> = {
+    fullPath: string,
+    fullIdPath?: string,
     savingError: Error | undefined,
     entity: Entity<M> | undefined,
     formActions?: EntityAction[],
@@ -77,6 +87,8 @@ type ActionsViewProps<M extends object> = {
 function buildBottomActions<M extends object>({
                                                   savingError,
                                                   entity,
+                                                  fullPath,
+                                                  fullIdPath,
                                                   formActions,
                                                   collection,
                                                   context,
@@ -104,7 +116,8 @@ function buildBottomActions<M extends object>({
                         if (entity)
                             action.onClick({
                                 entity,
-                                fullPath: collection.path,
+                                fullPath: fullPath ?? collection.path,
+                                fullIdPath: fullIdPath ?? collection.id,
                                 collection: collection,
                                 context,
                                 sideEntityController,

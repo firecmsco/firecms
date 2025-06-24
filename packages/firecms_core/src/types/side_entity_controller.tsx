@@ -16,6 +16,11 @@ export interface EntitySidePanelProps<M extends Record<string, any> = any> {
     path: string;
 
     /**
+     * Full CMS path of the entity, including the collection and sub-collections.
+     */
+    fullIdPath?: string;
+
+    /**
      * ID of the entity, if not set, it means we are creating a new entity
      */
     entityId?: string;

@@ -72,7 +72,7 @@ const CustomField = (fieldProps: FieldProps) => {
 
 export const testCollection = buildCollection<any>({
         callbacks: testCallbacks,
-        id: "test_entity",
+        id: "test_entity_id",
         path: "test_entity",
         customId: true,
         name: "Test entities",
@@ -83,6 +83,34 @@ export const testCollection = buildCollection<any>({
             // delete: false,
             // read: true
         },
+        subcollections: [
+            {
+                id: "sub_collection/with/slash",
+                name: "Sub collection with slash",
+                path: "path/with/slash",
+                properties: {
+                    sub_prop: {
+                        dataType: "string",
+                        name: "Sub prop",
+                    }
+                },
+                subcollections: [
+
+                    {
+                        id: "sub_sub_collection/with/slash",
+                        name: "Sub sub collection with slash",
+                        path: "sub_sub_path/with/slash",
+                        properties: {
+                            sub_prop: {
+                                dataType: "string",
+                                name: "Sub prop",
+                                Field: CustomField,
+                            }
+                        }
+                    }
+                ]
+            }
+        ],
         entityViews: [
             {
                 key: "sec",

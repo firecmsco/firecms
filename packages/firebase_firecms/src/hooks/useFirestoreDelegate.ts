@@ -533,8 +533,6 @@ export function useFirestoreDelegate({
             const databaseId = collection?.databaseId;
             const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
 
-            console.debug("Check unique field entity", path, name, value, entityId);
-
             if (value === undefined || value === null) {
                 return Promise.resolve(true);
             }

@@ -23,6 +23,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
         allowFullScreen = true,
         path,
         entityId,
+        fullIdPath,
         formProps,
     } = props;
 
@@ -57,6 +58,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
             sideEntityController.replace({
                 path: params.path,
                 entityId: params.entityId,
+                fullIdPath: props.fullIdPath,
                 selectedTab: params.selectedTab,
                 updateUrl: true,
                 collection: params.collection,
@@ -110,6 +112,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
             <ErrorBoundary>
                 <EntityEditView
                     {...props}
+                    fullIdPath={fullIdPath}
                     layout={"side_panel"}
                     collection={collection}
                     parentCollectionIds={parentCollectionIds}
@@ -133,7 +136,6 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                         </IconButton>}
                     </>}
                     onTabChange={({
-                                      path,
                                       entityId,
                                       selectedTab,
                                       collection,
@@ -141,6 +143,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                         sideEntityController.replace({
                             path,
                             entityId,
+                            fullIdPath: props.fullIdPath,
                             selectedTab,
                             updateUrl: true,
                             collection,
