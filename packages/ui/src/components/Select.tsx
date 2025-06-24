@@ -24,6 +24,7 @@ export type SelectProps<T extends SelectValue = string> = {
     value?: T,
     className?: string,
     inputClassName?: string,
+    viewportClassName?: string,
     onChange?: React.EventHandler<ChangeEvent<HTMLSelectElement>>,
     onValueChange?: (updatedValue: T) => void,
     placeholder?: React.ReactNode,
@@ -53,6 +54,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                                                                    onValueChange,
                                                                    className,
                                                                    inputClassName,
+                                                                   viewportClassName,
                                                                    placeholder,
                                                                    renderValue,
                                                                    label,
@@ -216,7 +218,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
             <SelectPrimitive.Portal>
                 <SelectPrimitive.Content position={position}
                                          className={cls(focusedDisabled, "z-50 relative overflow-hidden border bg-white dark:bg-surface-900 p-2 rounded-lg", defaultBorderMixin)}>
-                    <SelectPrimitive.Viewport className={"p-1"}
+                    <SelectPrimitive.Viewport className={cls("p-1", viewportClassName)}
                                               style={{ maxHeight: "var(--radix-select-content-available-height)" }}>
                         {children}
                     </SelectPrimitive.Viewport>
