@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-canary.254",
+  "version": "3.0.0-canary.255",
   "type": "module",
   "name": "@firecms/schema_inference",
   "access": "public",
