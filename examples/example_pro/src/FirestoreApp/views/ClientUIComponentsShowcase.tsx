@@ -253,6 +253,11 @@ export default function ClientUIComponentsShowcase({
                                        setChecked(!checked)
                                    }}
                                    size="small"/>
+                    <BooleanSwitch value={checked}
+                                   onValueChange={() => {
+                                       setChecked(!checked)
+                                   }}
+                                   size="smallest"/>
                 </div>
             </Card>
 

@@ -73,8 +73,8 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
                     "min-h-[42px]": size === "medium",
                     "min-h-[64px]": size === "large",
                 },
-                size === "small" ? "pl-2" : "pl-4",
-                size === "small" ? "pr-4" : "pr-6",
+                size === "small" || size === "smallest" ? "pl-2" : "pl-4",
+                size === "small" || size === "smallest" ? "pr-4" : "pr-6",
                 position === "end" ? "flex-row-reverse" : "flex-row",
                 fullWidth ? "w-full" : "",
                 className
@@ -103,7 +103,7 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
             <div className={cls(
                 "flex-grow",
                 position === "end" ? "mr-4" : "ml-4",
-                size === "small" ? "text-sm" : "text-base"
+                size === "small" || size === "smallest" ? "text-sm" : "text-base"
             )}>
                 {label}
             </div>
