@@ -20,6 +20,10 @@ export type DialogProps = {
     onEscapeKeyDown?: (e: KeyboardEvent) => void;
     onPointerDownOutside?: (e: Event) => void;
     onInteractOutside?: (e: Event) => void;
+    /**
+     * If `true`, the dialog will not focus the first focusable element when opened.
+     */
+    disableInitialFocus?: boolean;
 };
 
 const widthClasses = {
@@ -52,7 +56,8 @@ export const Dialog = ({
                            onOpenAutoFocus,
                            onEscapeKeyDown,
                            onPointerDownOutside,
-                           onInteractOutside
+                           onInteractOutside,
+                           disableInitialFocus = true
                        }: DialogProps) => {
     const [displayed, setDisplayed] = useState(false);
 
@@ -89,7 +94,12 @@ export const Dialog = ({
 
                     <DialogPrimitive.Content
                         onEscapeKeyDown={onEscapeKeyDown}
-                        onOpenAutoFocus={onOpenAutoFocus}
+                        onOpenAutoFocus={(e) => {
+                            if (disableInitialFocus) {
+                                e.preventDefault();
+                            }
+                            onOpenAutoFocus?.(e);
+                        }}
                         onPointerDownOutside={onPointerDownOutside}
                         onInteractOutside={onInteractOutside}
                         className={cls("h-full outline-none flex justify-center items-center z-40 opacity-100 transition-all duration-200 ease-in-out")}
@@ -120,4 +130,3 @@ export const Dialog = ({
         </DialogPrimitive.Root>
     );
 };
-
