@@ -31,7 +31,7 @@ export const editEntityAction: EntityAction = {
             addRecentId(collection.id, entity.id);
         }
 
-        const path = collection?.collectionGroup ? collection.path : (fullPath ?? collection?.path ?? entity.path);
+        const path = collection?.collectionGroup ? entity.path : (fullPath ?? collection?.path ?? entity.path);
         const newFullIdPath = collection?.collectionGroup ? collection.id : (fullIdPath ?? collection?.id ?? entity.path);
         const defaultSelectedView = resolveDefaultSelectedView(
             collection ? collection.defaultSelectedView : undefined,
