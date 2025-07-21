@@ -89,7 +89,7 @@ export function UpgradeCloudSubscriptionView({
 
         </div>
         {error &&
-            <Alert color="error" className={"my-4"}>{error.message}</Alert>
+            <Alert color="error" outerClassName={"my-4"}>{error.message}</Alert>
         }
 
     </div>;

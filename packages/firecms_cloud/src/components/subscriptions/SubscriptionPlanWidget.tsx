@@ -65,7 +65,7 @@ function PastDueAlert({ subscription }: { subscription: Subscription }) {
 
     return <Alert
         color={"error"}
-        className={"my-4"}
+        outerClassName={"my-4"}
         action={url
             ? <Button
                 component={"a"}

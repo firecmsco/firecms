@@ -628,7 +628,7 @@ export function EntityForm<M extends Record<string, any>>({
                     variant={"h4"}>
                     {title ?? collection.singularName ?? collection.name}
                 </Typography>
-                {showEntityPath && <Alert color={"base"} className={"w-full"} size={"small"}>
+                {showEntityPath && <Alert color={"base"} outerClassName={"w-full"} size={"small"}>
                     <code
                         className={"text-xs select-all text-text-secondary dark:text-text-secondary-dark"}>
                         {entity?.path ?? path}/{entityId}

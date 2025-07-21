@@ -4,7 +4,7 @@ import { Alert } from "@firecms/ui";
 export default function CustomStyleAlertDemo() {
     return (
         <Alert
-            className="custom-class"
+            outerClassName="custom-class"
             style={{
                 borderLeft: "4px solid #4ade80",
                 color: "#fff",

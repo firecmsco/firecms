@@ -8,6 +8,7 @@ export interface AlertProps {
     size?: "small" | "medium" | "large";
     action?: React.ReactNode;
     className?: string;
+    outerClassName?: string;
     style?: React.CSSProperties;
 }
 
@@ -44,6 +45,7 @@ export const Alert: React.FC<AlertProps> = ({
                                                 color = "info",
                                                 size = "medium",
                                                 action,
+                                                outerClassName,
                                                 className,
                                                 style
                                             }) => {
@@ -58,11 +60,12 @@ export const Alert: React.FC<AlertProps> = ({
                 "font-medium",
                 "rounded-md flex items-center gap-2",
                 classes,
-                className)}>
-            <div className={"flex-grow"}>{children}</div>
+                outerClassName)}>
+            <div className={cls("flex-grow", className)}>{children}</div>
             {onDismiss && (
-                <button className="text-surface-accent-400 hover:text-surface-accent-600 dark:text-surface-accent-500 dark:hover:text-surface-accent-400"
-                        onClick={onDismiss}>
+                <button
+                    className="text-surface-accent-400 hover:text-surface-accent-600 dark:text-surface-accent-500 dark:hover:text-surface-accent-400"
+                    onClick={onDismiss}>
                     &times;
                 </button>
             )}

@@ -55,6 +55,35 @@ yarn
 yarn dev
 ```
 
+or
+
+```bash
+cd my-cms
+npm install
+npm run dev
+```
+
 This will install the dependencies and start the development server.
 
+### Changing the base URL of FireCMS
 
+FireCMS uses React Router to handle the routing of the application.
+You can change the base URL of FireCMS by modifying the `basename` property of the `BrowserRouter` component in the `src/main.tsx` file.
+For example, if you want to change the base URL to `/admin`, you can do it like this:
+
+```tsx
+import React from "react"
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+
+import "./index.css"
+import App from "./App";
+
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+    <React.StrictMode>
+        <BrowserRouter basename={"/admin"}>
+            <App/>
+        </BrowserRouter>
+    </React.StrictMode>
+)
+```

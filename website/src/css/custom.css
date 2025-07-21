@@ -272,11 +272,9 @@ html[data-theme='dark'] {
     --ifm-border-color: rgba(100, 116, 139, 0.4);
     --ifm-toc-border-color: var(--ifm-border-color);
     --ifm-custom-navbar-background-color: rgba(48, 49, 55, 0.20);
-    /*--ifm-background-color: #ececec;*/
-    --ifm-background-color: #090b15;
+    --ifm-background-color: trasparent;
     --ifm-background-surface-color: #232328;
     --ifm-color-emphasis-100: #232328;
-    /*--ifm-background-surface-color: #242526;*/
 }
 
 /*table tr:nth-child(2n) {*/
