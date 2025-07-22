@@ -9,7 +9,7 @@ export function UITeaser() {
     return <Panel
         // color={"gray"}
         color={"lighter"}
-        className={"dark:bg-gray-800 text-gray-900 dark:text-white"}
+        className={"dark:bg-gray-900 text-gray-900 dark:text-white"}
         includePadding={false}
         container={false}
         header={<LinedSpace size={"large"} position={"bottom"}/>}

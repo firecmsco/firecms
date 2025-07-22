@@ -36,7 +36,7 @@ export function Panel({
                         color === "lighter" ? "bg-gray-100 text-text-primary" :
                             color === "light_gray" ? "bg-gray-700 text-white dark:text-white" :
                                 color === "gray" ? "bg-gray-800 text-white dark:text-white" :
-                                    color === "dark_gray" ? "bg-gray-900 text-white dark:text-white" :
+                                    color === "dark_gray" ? "bg-gray-950 text-white dark:text-white" :
                                         color === "primary" ? "bg-primary text-white dark:text-white" :
                                             color === "dataki" ? "bg-blue-950 text-white dark:text-white" :
                                                 color === "secondary" ? "bg-secondary text-white dark:text-white" : "";

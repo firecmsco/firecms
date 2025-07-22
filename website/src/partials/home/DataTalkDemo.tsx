@@ -75,7 +75,7 @@ export function DataTalkDemo({ exchanges }: {
 
     return (
 
-        <div className={"mt-8 mb-12 bg-gray-800 rounded-xl p-6 border " + defaultBorderMixin}>
+        <div className={"mt-8 mb-12 bg-gray-900 rounded-xl p-6 border " + defaultBorderMixin}>
             <div
                 className="container mx-auto flex-1 flex flex-col gap-4 overflow-y-auto"
                 style={{ height: 500 }}

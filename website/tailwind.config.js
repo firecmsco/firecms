@@ -39,16 +39,17 @@ export default {
                     "disabled-dark": "rgba(255,255,255,0.43)"   // slightly muted
                 },
                 "gray": {
-                    "50": "#fafafa",   // lightest surface for sections (matches mux page)
+                    "50": "#fafafa",   // lightest surface for sections
                     "100": "#f5f5f1",  // your putty (great for light backgrounds/strips)
                     "200": "#ededed",  // barely darker, for subtle offset
                     "300": "#E7E7EB",  // section border/line
-                    "400": "#DDDEE3",
-                    "500": "#9DA5B0",
-                    "600": "#40444A",
-                    "700": "#232325",  // dark UI surface
-                    "800": "#18181C",
-                    "900": "#101013"
+                    "400": "#A0A0A9",
+                    "500": "#87878F",
+                    "600": "#6B6B74",
+                    "700": "#414148",
+                    "800": "#242430",
+                    "900": "#18181C",
+                    "950": "#101013"
                 },
                 "surface-accent": {
                     "50": "#fcfcfc",
@@ -60,7 +61,8 @@ export default {
                     "600": "#606375",
                     "700": "#38415c",
                     "800": "#232336",
-                    "900": "#161624"
+                    "900": "#161624",
+                    "950": "#020617"
                 }
             }
         }
