@@ -116,7 +116,7 @@ export const productsCollection = buildCollection<Product>({
     singularName: "Product",
     group: "Demo collections",
     icon: "shopping_cart",
-    openEntityMode: "full_screen",
+    // openEntityMode: "full_screen",
     description: "List of the products currently sold in our shop",
     textSearchEnabled: true,
     permissions: ({ authController }) => ({

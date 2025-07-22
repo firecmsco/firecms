@@ -471,6 +471,9 @@ module.exports = {
                         type: "all"
                     }
                 },
+                googleTagManager: {
+                    containerId: "GTM-P4JRQ5R6",
+                },
                 gtag: {
                     trackingID: process.env.REACT_APP_GTAG_ID ?? "G-D4DQQCW88S"
                 },

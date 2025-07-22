@@ -20,8 +20,8 @@ export function DemoImportAction({}: CollectionActionsProps) {
 
         <Tooltip title={"Import"}
                  asChild={true}>
-            <IconButton color={"primary"} onClick={() => setOpen(true)}>
-                <UploadIcon/>
+            <IconButton color={"primary"} size={"small"} onClick={() => setOpen(true)}>
+                <UploadIcon size={"small"}/>
             </IconButton>
         </Tooltip>
 

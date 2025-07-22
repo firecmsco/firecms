@@ -18,6 +18,7 @@ export const blogCollection = buildCollection<BlogEntry>({
     name: "Blog",
     singularName: "Blog entry",
     group: "Demo collections",
+    openEntityMode: "full_screen",
     icon: "Article",
     description: "A blog entry with a quirky humorist tone. Each entry should have at least 5 text pieces of around 100 words each and a quote at least. The quote can be anywhere.",
     textSearchEnabled: true,

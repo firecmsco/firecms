@@ -121,8 +121,10 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
 
         <Tooltip title={"Import"}
                  asChild={true}>
-            <IconButton color={"primary"} onClick={handleClickOpen}>
-                <UploadIcon/>
+            <IconButton
+                size={"small"}
+                color={"primary"} onClick={handleClickOpen}>
+                <UploadIcon size={"small"}/>
             </IconButton>
         </Tooltip>
 

@@ -61,8 +61,11 @@ export function BasicExportAction({
 
         <Tooltip title={"Export"}
                  asChild={true}>
-            <IconButton color={"primary"} onClick={handleClickOpen}>
-                <DownloadIcon/>
+            <IconButton
+                size={"small"}
+                color={"primary"} onClick={handleClickOpen}>
+                <DownloadIcon
+                    size={"small"}/>
             </IconButton>
         </Tooltip>
 

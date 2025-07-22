@@ -406,7 +406,9 @@ export function App() {
                                 error={userManagement.usersError}/></CenteredView>;
                         }
 
-                        return <Scaffold logo={logo}>
+                        return <Scaffold
+                            // logo={logo}
+                        >
                             <AppBar
                                 title={"My demo app"}
                                 endAdornment={githubLink}/>

@@ -28,6 +28,7 @@ export function EditorCollectionAction({
         asChild={true}
         title={canEditCollection ? "Edit collection" : "You don't have permissions to edit this collection"}>
         <IconButton
+            size={"small"}
             color={"primary"}
             disabled={!canEditCollection}
             onClick={canEditCollection
@@ -39,7 +40,7 @@ export function EditorCollectionAction({
                     existingEntities: tableController?.data ?? []
                 })
                 : undefined}>
-            <SettingsIcon/>
+            <SettingsIcon size={"small"}/>
         </IconButton>
     </Tooltip>;
 

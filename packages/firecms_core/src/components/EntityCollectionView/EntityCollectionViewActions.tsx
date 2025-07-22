@@ -71,7 +71,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
             ? <Button
                 variant={"text"}
                 disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}
-                startIcon={<DeleteIcon/>}
+                startIcon={<DeleteIcon size={"small"}/>}
                 onClick={onMultipleDeleteClick}
                 color={"primary"}
                 className="lg:w-20"
@@ -79,10 +79,11 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                 ({selectedEntities?.length})
             </Button>
             : <IconButton
+                size={"small"}
                 color={"primary"}
                 disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}
                 onClick={onMultipleDeleteClick}>
-                <DeleteIcon/>
+                <DeleteIcon size={"small"}/>
             </IconButton>;
         multipleDeleteButton =
             <Tooltip

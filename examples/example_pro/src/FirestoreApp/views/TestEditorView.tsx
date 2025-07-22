@@ -62,7 +62,7 @@ export function TestEditorView() {
 }
 
 const defaultEditorContent = `
-![](https://firebasestorage.googleapis.com/v0/b/firecms-demo-27150.appspot.com/o/editor_test%2Flogo_192.png?alt=media&token=8e1f2d8f-2fd3-406c-942d-3b9a848e2cff)
+![](https://firebasestorage.googleapis.com/v0/b/firecms-demo-27150.appspot.com/o/firecms_logo_192.png?alt=media&token=aac5bda6-0e3e-4a43-822c-970ebb1bb08d)
 # Introducing the FireCMS editor
 
 > The [FireCMS editor](https://firecms.co/) is a Notion-style WYSIWYG editor built with [Tiptap](https://tiptap.dev/).
