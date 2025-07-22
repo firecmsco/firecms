@@ -47,10 +47,10 @@ export function HeroPro({
             </div>
             <Panel color={"secondary"}>
                 <p className={"text-gray-900 uppercase font-mono font-bold"}>
-                    No more limits. No more compromises.
+                    No more limits. One month completely free.
                 </p>
                 <h2 className={"mt-0 uppercase font-mono"}>
-                    Try self-hosted FireCMS PRO one month completely for <b>free</b>
+                    The Comprehensive Self-Hosted CMS for Professional-Grade Projects
                 </h2>
                 <div className={"flex flex-row gap-4 mt-8"}>
                     <div
@@ -83,18 +83,12 @@ export function HeroPro({
 
                      }}></div>
                 <Panel color={"transparent"} includePadding={false}
-                       innerClassName={"py-8 md:py-12 p-4 md:p-8"}>
+                       innerClassName={"py-16 md:py-24 p-4 md:p-8"}>
                     <div className="font-mono uppercase m-0 text-xl md:text-2xl">
-                        <p className="max-w-7xl text-2xl md:text-5xl font-bold tracking-tight text-white"
-                           style={{
-                               lineHeight: 1.35,
-                           }}>
+                        <p className="max-w-7xl text-2xl md:text-5xl font-bold tracking-tight text-white">
                             The most customizable headless CMS. Ever.
                         </p>
-                        <p className="max-w-7xl text-2xl md:text-5xl font-bold tracking-tight text-white"
-                           style={{
-                               lineHeight: 1.35,
-                           }}>
+                        <p className="max-w-7xl text-2xl md:text-5xl font-bold tracking-tight text-white">
                             The perfect solution for your team or clients, built on top of Firebase,
                             MongoDB or any other backend.
                         </p>

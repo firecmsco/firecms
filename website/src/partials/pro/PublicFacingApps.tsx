@@ -11,7 +11,7 @@ export function PublicFacingApps() {
     return <Panel color={"light"} className={"overflow-hidden"}>
 
         {/* Two column layout*/}
-        <div className="">
+        <div className="my-16">
 
             <div className={"max-w-6xl mx-auto"}>
                 <h3 className={"mb-3 uppercase font-mono"}>
