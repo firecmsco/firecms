@@ -47,7 +47,6 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     /**
      * Relative path of this view to its parent.
      * If this view is in the root the path is equal to the absolute one.
-     * This path also determines the URL in FireCMS, unless an alias is specified
      */
     path: string;
 
