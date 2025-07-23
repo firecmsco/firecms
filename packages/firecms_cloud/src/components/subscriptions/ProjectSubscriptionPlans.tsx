@@ -102,8 +102,8 @@ export function ProjectSubscriptionPlans() {
                             <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>
                                 Secondary databases
                             </li>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>GPT-4
-                                content generation
+                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>AI
+                                content generation with OpenAI and Google
                             </li>
                             <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"}/>
                                 Unlimited data export
