@@ -37,6 +37,12 @@ export type EntityAction<M extends object = any, USER extends User = User> = {
     onClick: (props: EntityActionClickProps<M, USER>) => Promise<void> | void;
 
     /**
+     * Optional callback in case you want to disable the action
+     * @param props
+     */
+    isEnabled?: (props: EntityActionClickProps<M, USER>) => boolean;
+
+    /**
      * Show this action collapsed in the menu of the collection view.
      * Defaults to true
      * If false, the action will be shown in the menu
@@ -51,7 +57,7 @@ export type EntityAction<M extends object = any, USER extends User = User> = {
 }
 
 export type EntityActionClickProps<M extends object, USER extends User = User> = {
-    entity: Entity<M>;
+    entity?: Entity<M>;
     context: FireCMSContext<USER>;
     fullPath?: string;
     fullIdPath?: string;
@@ -60,8 +66,9 @@ export type EntityActionClickProps<M extends object, USER extends User = User> =
     highlightEntity?: (entity: Entity<any>) => void;
     unhighlightEntity?: (entity: Entity<any>) => void;
     onCollectionChange?: () => void;
+    navigateBack?: () => void;
     /**
-     * If this actions is being called from a side dialog
+     * Present if this actions is being called from a side dialog only
      */
     sideEntityController?: SideEntityController;
 

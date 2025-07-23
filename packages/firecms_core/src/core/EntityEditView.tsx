@@ -285,13 +285,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         const subcollectionId = subcollection.id ?? subcollection.path;
         const newFullPath = usedEntity ? `${path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollection.path)}` : undefined;
         const newFullIdPath = fullIdPath ? `${fullIdPath}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollectionId)}` : undefined;
-        console.debug("Rendering subcollection", {
-            subcollectionId,
-            fullIdPath,
-            newFullPath,
-            newFullIdPath,
-            selectedTab
-        });
 
         if (selectedTab !== subcollectionId) return null;
         return (

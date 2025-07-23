@@ -3,7 +3,16 @@ import { Entity, EntityAction, FireCMSContext, ResolvedEntityCollection, SideEnt
 
 import { copyEntityAction, deleteEntityAction } from "../components";
 import { canCreateEntity, canDeleteEntity, mergeEntityActions } from "../util";
-import { Button, cls, defaultBorderMixin, DialogActions, IconButton, LoadingButton, Typography } from "@firecms/ui";
+import {
+    Button,
+    cls,
+    defaultBorderMixin,
+    DialogActions,
+    IconButton,
+    LoadingButton,
+    Tooltip,
+    Typography
+} from "@firecms/ui";
 import { useAuthController, useFireCMSContext, useSideEntityController } from "../hooks";
 import { EntityFormActionsProps } from "../form/EntityFormActions";
 import { SideDialogController, useSideDialogContext } from "./SideDialogs";
@@ -19,7 +28,8 @@ export function EntityEditViewFormActions({
                                               status,
                                               pluginActions,
                                               openEntityMode,
-                                              showDefaultActions = true
+                                              showDefaultActions = true,
+                                              navigateBack
                                           }: EntityFormActionsProps) {
 
     const authController = useAuthController();
@@ -57,6 +67,7 @@ export function EntityEditViewFormActions({
             sideDialogContext,
             pluginActions,
             openEntityMode,
+            navigateBack
         })
         : buildSideActions({
             savingError,
@@ -71,6 +82,7 @@ export function EntityEditViewFormActions({
             status,
             pluginActions,
             openEntityMode,
+            navigateBack
         });
 }
 
@@ -87,6 +99,7 @@ type ActionsViewProps<M extends object> = {
     sideDialogContext: SideDialogController,
     pluginActions?: React.ReactNode[],
     openEntityMode: "side_panel" | "full_screen";
+    navigateBack: () => void;
 };
 
 function buildBottomActions<M extends object>({
@@ -102,6 +115,7 @@ function buildBottomActions<M extends object>({
                                                   sideDialogContext,
                                                   pluginActions,
                                                   openEntityMode,
+                                                  navigateBack,
                                               }: ActionsViewProps<M>) {
 
     const canClose = openEntityMode === "side_panel";
@@ -111,28 +125,41 @@ function buildBottomActions<M extends object>({
                 <Typography color={"error"}>{savingError.message}</Typography>
             </div>
         }
-        {entity && formActions.length > 0 && <div className="flex-grow flex overflow-auto no-scrollbar">
-            {formActions.map(action => (
-                <IconButton
-                    key={action.name}
-                    color="primary"
-                    onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-                        event.stopPropagation();
-                        if (entity)
-                            action.onClick({
-                                entity,
-                                fullPath: collection.path,
-                                collection: collection,
-                                context,
-                                sideEntityController,
-                                openEntityMode: openEntityMode
-                            });
-                    }}>
-                    {action.icon}
-                </IconButton>
-            ))}
+
+        {formActions.length > 0 && <div className="flex-grow flex overflow-auto no-scrollbar">
+            {formActions.map(action => {
+                const props = {
+                    entity,
+                    fullPath: collection.path,
+                    collection: collection,
+                    context,
+                    sideEntityController,
+                    openEntityMode,
+                    navigateBack
+                };
+                const isEnabled = !action.isEnabled || action.isEnabled(props);
+                return (
+                    <Tooltip
+                        key={action.key}
+                        title={action.name}>
+                        <IconButton
+                            color="primary"
+                            disabled={!isEnabled}
+                            onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                                event.stopPropagation();
+                                if (entity) {
+                                    action.onClick(props);
+                                }
+                            }}>
+                            {action.icon}
+                        </IconButton>
+                    </Tooltip>
+                );
+            })}
         </div>}
+
         {pluginActions}
+
         <Button variant="text" disabled={disabled || isSubmitting} type="reset">
             {status === "existing" ? "Discard" : "Clear"}
         </Button>
@@ -171,7 +198,9 @@ function buildSideActions<M extends object>({
                                                 disabled,
                                                 status,
                                                 sideDialogContext,
-                                                pluginActions
+                                                pluginActions,
+                                                openEntityMode,
+                                                navigateBack
                                             }: ActionsViewProps<M>) {
 
     return <div
@@ -184,11 +213,44 @@ function buildSideActions<M extends object>({
             {status === "copy" && "Create copy"}
             {status === "new" && "Create"}
         </LoadingButton>
+
         <Button fullWidth={true} variant="text" disabled={disabled || isSubmitting} type="reset">
             {status === "existing" ? "Discard" : "Clear"}
         </Button>
 
         {pluginActions}
+
+        {formActions.length > 0 && <div className="flex flex-row flex-wrap mt-2">
+            {formActions.map(action => {
+                const props = {
+                    entity,
+                    fullPath: collection.path,
+                    collection: collection,
+                    context,
+                    sideEntityController,
+                    openEntityMode,
+                    navigateBack
+                };
+                const isEnabled = !action.isEnabled || action.isEnabled(props);
+                return (
+                    <Tooltip
+                        key={action.key}
+                        title={action.name}>
+                        <IconButton
+                            color="primary"
+                            disabled={!isEnabled}
+                            onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                                event.stopPropagation();
+                                if (entity) {
+                                    action.onClick(props);
+                                }
+                            }}>
+                            {action.icon}
+                        </IconButton>
+                    </Tooltip>
+                );
+            })}
+        </div>}
 
         {savingError &&
             <div className="text-right">

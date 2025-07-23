@@ -7,6 +7,7 @@ import { categories, currencies, locales } from "./enums";
 import CustomColorTextField from "../custom_field/CustomColorTextField";
 import { ProductDetailPreview } from "../custom_entity_view/ProductDetailPreview";
 import { ProductsSecondaryForm } from "../custom_entity_view/ProductsSecondaryForm";
+import { SyncIcon } from "@firecms/ui";
 
 export const localeCollection = buildCollection<Locale>({
     id: "product_locales",
@@ -141,6 +142,20 @@ export const productsCollection = buildCollection<Product>({
             Builder: ProductsSecondaryForm
         }
     ],
+    entityActions: [{
+        key: "sync_price",
+        name: "Sync price",
+        icon: <SyncIcon/>,
+        onClick: async ({
+                            entity,
+                            context
+                        }) => {
+            context.snackbarController.open({
+                type: "info",
+                message: `Syncing price for locale ${entity?.id}`,
+            })
+        }
+    }],
     additionalFields: [productAdditionalField],
     properties: {
         name: {

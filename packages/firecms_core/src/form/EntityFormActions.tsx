@@ -18,6 +18,7 @@ export interface EntityFormActionsProps {
     pluginActions: React.ReactNode[];
     openEntityMode: "side_panel" | "full_screen";
     showDefaultActions?: boolean;
+    navigateBack: () => void;
 }
 
 export function EntityFormActions({
@@ -31,7 +32,8 @@ export function EntityFormActions({
                                       disabled,
                                       status,
                                       pluginActions,
-                                      openEntityMode
+                                      openEntityMode,
+                                      navigateBack
                                   }: EntityFormActionsProps) {
 
     const context = useFireCMSContext();
@@ -50,7 +52,8 @@ export function EntityFormActions({
             disabled,
             status,
             pluginActions,
-            openEntityMode
+            openEntityMode,
+            navigateBack,
         })
         : buildSideActions({
             fullPath,
@@ -64,7 +67,8 @@ export function EntityFormActions({
             disabled,
             status,
             pluginActions,
-            openEntityMode
+            openEntityMode,
+            navigateBack
         });
 }
 
@@ -82,6 +86,7 @@ type ActionsViewProps<M extends object> = {
     status: "new" | "existing" | "copy",
     pluginActions?: React.ReactNode[],
     openEntityMode: "side_panel" | "full_screen";
+    navigateBack: () => void;
 };
 
 function buildBottomActions<M extends object>({
@@ -97,7 +102,8 @@ function buildBottomActions<M extends object>({
                                                   disabled,
                                                   status,
                                                   pluginActions,
-                                                  openEntityMode
+                                                  openEntityMode,
+                                                  navigateBack
                                               }: ActionsViewProps<M>) {
 
     return <DialogActions position={"absolute"}>
@@ -121,7 +127,8 @@ function buildBottomActions<M extends object>({
                                 collection: collection,
                                 context,
                                 sideEntityController,
-                                openEntityMode: openEntityMode
+                                openEntityMode: openEntityMode,
+                                navigateBack
                             });
                     }}>
                     {action.icon}
@@ -146,6 +153,9 @@ function buildSideActions<M extends object>({
                                                 savingError,
                                                 entity,
                                                 formActions,
+                                                fullPath,
+                                                fullIdPath,
+                                                openEntityMode,
                                                 collection,
                                                 context,
                                                 sideEntityController,

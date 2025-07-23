@@ -18,7 +18,7 @@ export const usersCollection = buildCollection({
                         }) => {
             context.snackbarController.open({
                 type: "info",
-                message: `Sending email to ${entity.values.email}`,
+                message: `Sending email to ${entity?.values.email}`,
             })
         }
     },],

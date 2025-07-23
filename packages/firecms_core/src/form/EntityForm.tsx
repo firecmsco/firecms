@@ -33,6 +33,7 @@ import {
     useCustomizationController,
     useDataSource,
     useFireCMSContext,
+    useSideEntityController,
     useSnackbarController
 } from "../hooks";
 import { Alert, CheckIcon, Chip, cls, EditIcon, NotesIcon, paperMixin, Tooltip, Typography } from "@firecms/ui";
@@ -121,10 +122,21 @@ export function EntityForm<M extends Record<string, any>>({
                                                               children
                                                           }: EntityFormProps<M>) {
 
-
     if (collection.customId && collection.formAutoSave) {
         console.warn(`The collection ${collection.path} has customId and formAutoSave enabled. This is not supported and formAutoSave will be ignored`);
     }
+
+
+    const sideEntityController = useSideEntityController();
+
+    const navigateBack = useCallback(() => {
+        if (openEntityMode === "side_panel") {
+            // If we are in side panel mode, we close the side panel
+            sideEntityController.close();
+        } else {
+            window.history.back();
+        }
+    }, []);
 
     const authController = useAuthController();
     const [status, setStatus] = useState<EntityStatus>(initialStatus);
@@ -628,6 +640,12 @@ export function EntityForm<M extends Record<string, any>>({
                     variant={"h4"}>
                     {title ?? collection.singularName ?? collection.name}
                 </Typography>
+
+                {!entity?.values && initialStatus === "existing" &&
+                    <Alert color={"warning"} size={"small"} outerClassName={"w-full mb-4 text-xs"}>
+                        This entity does not exist in the database
+                    </Alert>}
+
                 {showEntityPath && <Alert color={"base"} outerClassName={"w-full"} size={"small"}>
                     <code
                         className={"text-xs select-all text-text-secondary dark:text-text-secondary-dark"}>
@@ -637,6 +655,10 @@ export function EntityForm<M extends Record<string, any>>({
             </div>}
 
             {children}
+
+            {initialEntityId && !entity && initialStatus !== "new" && <Alert color={"info"} size={"small"}>
+                This entity does not exist in the database
+            </Alert>}
 
             {!Builder && !collection.hideIdFromForm &&
                 <CustomIdField customId={collection.customId}
@@ -668,7 +690,6 @@ export function EntityForm<M extends Record<string, any>>({
         throw Error("INTERNAL: Collection and path must be defined in form context");
     }
 
-
     const dialogActions = <EntityFormActionsComponent
         collection={resolvedCollection}
         path={path}
@@ -683,6 +704,7 @@ export function EntityForm<M extends Record<string, any>>({
         pluginActions={pluginActions ?? []}
         openEntityMode={openEntityMode}
         showDefaultActions={showDefaultActions}
+        navigateBack={navigateBack}
     />;
 
     return (
