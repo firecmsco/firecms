@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import {
     collection,
     doc,
@@ -45,8 +45,12 @@ export function useBuildDataTalkConfig({
     const [sessions, setSessions] = useState<Session[]>([]);
     const [samplePrompts, setSamplePrompts] = useState<string[]>([]);
 
+    const samplePromptsRequested = useRef(false);
+
     useEffect(() => {
         if (!enabled) return;
+        if (samplePromptsRequested.current) return; // Prevent multiple requests
+        samplePromptsRequested.current = true;
         getAuthToken().then((firebaseToken) => {
             getDataTalkSamplePrompts(firebaseToken, apiEndpoint).then(setSamplePrompts);
         });

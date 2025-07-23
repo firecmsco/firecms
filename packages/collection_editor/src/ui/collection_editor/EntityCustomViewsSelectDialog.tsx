@@ -27,7 +27,8 @@ export function EntityCustomViewsSelectDialog({
             })}
             {(entityViews ?? []).length === 0 &&
                 <Typography variant={"body2"}>
-                    No custom views defined
+                    No custom views defined. Define your custom views in the customization settings, before using this
+                    dialog.
                 </Typography>
             }
         </DialogContent>
