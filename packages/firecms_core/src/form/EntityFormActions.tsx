@@ -1,5 +1,12 @@
 import React from "react";
-import { Entity, EntityAction, FireCMSContext, ResolvedEntityCollection, SideEntityController } from "../types";
+import {
+    Entity,
+    EntityAction,
+    FireCMSContext,
+    FormContext,
+    ResolvedEntityCollection,
+    SideEntityController
+} from "../types";
 import { Button, cls, defaultBorderMixin, DialogActions, IconButton, LoadingButton, Typography } from "@firecms/ui";
 import { FormexController } from "@firecms/formex";
 import { useFireCMSContext, useSideEntityController } from "../hooks";
@@ -19,6 +26,7 @@ export interface EntityFormActionsProps {
     openEntityMode: "side_panel" | "full_screen";
     showDefaultActions?: boolean;
     navigateBack: () => void;
+    formContext: FormContext
 }
 
 export function EntityFormActions({
@@ -33,7 +41,8 @@ export function EntityFormActions({
                                       status,
                                       pluginActions,
                                       openEntityMode,
-                                      navigateBack
+                                      navigateBack,
+                                      formContext
                                   }: EntityFormActionsProps) {
 
     const context = useFireCMSContext();
@@ -54,6 +63,7 @@ export function EntityFormActions({
             pluginActions,
             openEntityMode,
             navigateBack,
+            formContext
         })
         : buildSideActions({
             fullPath,
@@ -68,7 +78,8 @@ export function EntityFormActions({
             status,
             pluginActions,
             openEntityMode,
-            navigateBack
+            navigateBack,
+            formContext
         });
 }
 
@@ -87,6 +98,7 @@ type ActionsViewProps<M extends object> = {
     pluginActions?: React.ReactNode[],
     openEntityMode: "side_panel" | "full_screen";
     navigateBack: () => void;
+    formContext: FormContext
 };
 
 function buildBottomActions<M extends object>({
@@ -103,7 +115,8 @@ function buildBottomActions<M extends object>({
                                                   status,
                                                   pluginActions,
                                                   openEntityMode,
-                                                  navigateBack
+                                                  navigateBack,
+                                                  formContext
                                               }: ActionsViewProps<M>) {
 
     return <DialogActions position={"absolute"}>
@@ -128,7 +141,8 @@ function buildBottomActions<M extends object>({
                                 context,
                                 sideEntityController,
                                 openEntityMode: openEntityMode,
-                                navigateBack
+                                navigateBack,
+                                formContext
                             });
                     }}>
                     {action.icon}

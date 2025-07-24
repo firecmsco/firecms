@@ -1,5 +1,12 @@
 import React, { useMemo } from "react";
-import { Entity, EntityAction, FireCMSContext, ResolvedEntityCollection, SideEntityController } from "../types";
+import {
+    Entity,
+    EntityAction,
+    FireCMSContext,
+    FormContext,
+    ResolvedEntityCollection,
+    SideEntityController
+} from "../types";
 
 import { copyEntityAction, deleteEntityAction } from "../components";
 import { canCreateEntity, canDeleteEntity, mergeEntityActions } from "../util";
@@ -29,7 +36,8 @@ export function EntityEditViewFormActions({
                                               pluginActions,
                                               openEntityMode,
                                               showDefaultActions = true,
-                                              navigateBack
+                                              navigateBack,
+                                              formContext
                                           }: EntityFormActionsProps) {
 
     const authController = useAuthController();
@@ -67,7 +75,8 @@ export function EntityEditViewFormActions({
             sideDialogContext,
             pluginActions,
             openEntityMode,
-            navigateBack
+            navigateBack,
+            formContext
         })
         : buildSideActions({
             savingError,
@@ -82,7 +91,8 @@ export function EntityEditViewFormActions({
             status,
             pluginActions,
             openEntityMode,
-            navigateBack
+            navigateBack,
+            formContext
         });
 }
 
@@ -100,6 +110,7 @@ type ActionsViewProps<M extends object> = {
     pluginActions?: React.ReactNode[],
     openEntityMode: "side_panel" | "full_screen";
     navigateBack: () => void;
+    formContext: FormContext
 };
 
 function buildBottomActions<M extends object>({
@@ -116,6 +127,7 @@ function buildBottomActions<M extends object>({
                                                   pluginActions,
                                                   openEntityMode,
                                                   navigateBack,
+                                                  formContext
                                               }: ActionsViewProps<M>) {
 
     const canClose = openEntityMode === "side_panel";
@@ -135,7 +147,8 @@ function buildBottomActions<M extends object>({
                     context,
                     sideEntityController,
                     openEntityMode,
-                    navigateBack
+                    navigateBack,
+                    formContext
                 };
                 const isEnabled = !action.isEnabled || action.isEnabled(props);
                 return (
@@ -200,7 +213,8 @@ function buildSideActions<M extends object>({
                                                 sideDialogContext,
                                                 pluginActions,
                                                 openEntityMode,
-                                                navigateBack
+                                                navigateBack,
+                                                formContext
                                             }: ActionsViewProps<M>) {
 
     return <div
@@ -229,7 +243,8 @@ function buildSideActions<M extends object>({
                     context,
                     sideEntityController,
                     openEntityMode,
-                    navigateBack
+                    navigateBack,
+                    formContext
                 };
                 const isEnabled = !action.isEnabled || action.isEnabled(props);
                 return (

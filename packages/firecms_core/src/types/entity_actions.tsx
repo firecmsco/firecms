@@ -4,6 +4,7 @@ import { Entity } from "./entities";
 import { EntityCollection, SelectionController } from "./collections";
 import { User } from "./user";
 import { SideEntityController } from "./side_entity_controller";
+import { FormContext } from "./fields";
 
 /**
  * An entity action is a custom action that can be performed on an entity.
@@ -59,6 +60,7 @@ export type EntityAction<M extends object = any, USER extends User = User> = {
 export type EntityActionClickProps<M extends object, USER extends User = User> = {
     entity?: Entity<M>;
     context: FireCMSContext<USER>;
+
     fullPath?: string;
     fullIdPath?: string;
     collection?: EntityCollection<M>;
@@ -67,6 +69,13 @@ export type EntityActionClickProps<M extends object, USER extends User = User> =
     unhighlightEntity?: (entity: Entity<any>) => void;
     onCollectionChange?: () => void;
     navigateBack?: () => void;
+
+    /**
+     * Optional form context, present if the action is being called from a form.
+     * This allows you to access the form state and methods, including modifying the form values.
+     */
+    formContext?: FormContext;
+
     /**
      * Present if this actions is being called from a side dialog only
      */

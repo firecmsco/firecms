@@ -145,7 +145,7 @@ export const productsCollection = buildCollection<Product>({
     entityActions: [{
         key: "sync_price",
         name: "Sync price",
-        icon: <SyncIcon/>,
+        icon: <SyncIcon size={"small"}/>,
         onClick: async ({
                             entity,
                             context

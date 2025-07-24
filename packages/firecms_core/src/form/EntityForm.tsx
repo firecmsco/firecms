@@ -707,6 +707,7 @@ export function EntityForm<M extends Record<string, any>>({
         openEntityMode={openEntityMode}
         showDefaultActions={showDefaultActions}
         navigateBack={navigateBack}
+        formContext={formContext}
     />;
 
     return (
