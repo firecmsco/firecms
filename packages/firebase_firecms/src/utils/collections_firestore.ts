@@ -101,11 +101,14 @@ export function prepareCollectionForPersistence<M extends {
     if (newCollection.entityViews) {
         newCollection.entityViews = newCollection.entityViews.filter(view => typeof view === "string");
     }
+    if (newCollection.entityActions) {
+        newCollection.entityActions = newCollection.entityActions.filter(action => typeof action === "string");
+    }
+
     delete newCollection.editable;
     delete newCollection.additionalFields;
     delete newCollection.callbacks;
     delete newCollection.Actions;
-    delete newCollection.entityActions;
     delete newCollection.selectionController;
     delete newCollection.subcollections;
     delete newCollection.exportable;
@@ -134,3 +137,4 @@ function cleanPropertyConfigs(properties: PropertiesOrBuilders<any>, propertyCon
 function removeDuplicates<T>(array: T[]): T[] {
     return [...new Set(array)];
 }
+

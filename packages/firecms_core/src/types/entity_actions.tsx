@@ -18,7 +18,10 @@ export type EntityAction<M extends object = any, USER extends User = User> = {
 
     /**
      * Key of the action. You only need to provide this if you want to
-     * override the default actions.
+     * override the default actions, or if you are not passing the action
+     * directly to the `entityActions` prop of a collection.
+     * You can define your actions at the app level, in which case you
+     * must provide a key.
      * The default actions are:
      * - edit
      * - delete

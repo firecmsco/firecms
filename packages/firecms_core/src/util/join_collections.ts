@@ -100,13 +100,15 @@ export function mergeCollection(target: EntityCollection,
     const sourcePropertiesOrder = getCollectionKeys(source);
     const mergedPropertiesOrder = [...new Set([...sourcePropertiesOrder, ...targetPropertiesOrder])];
     const mergedEntityViews = [...new Set([...(target.entityViews ?? []), ...(source.entityViews ?? [])])];
+    const mergedEntityActions = [...new Set([...(target.entityActions ?? []), ...(source.entityActions ?? [])])];
 
     let resultCollection: EntityCollection = {
         ...mergedCollection,
         subcollections: subcollectionsMerged,
         properties: sortProperties(propertiesMerged, mergedPropertiesOrder),
         propertiesOrder: mergedPropertiesOrder,
-        entityViews: mergedEntityViews
+        entityViews: mergedEntityViews,
+        entityActions: mergedEntityActions,
     };
     if (modifyCollection) {
         const modifiedCollection = modifyCollection({

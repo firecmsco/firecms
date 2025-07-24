@@ -12,6 +12,7 @@ import { EntityLinkBuilder } from "./entity_link_builder";
 import { UserConfigurationPersistence } from "./local_config_persistence";
 import { FireCMSPlugin } from "./plugins";
 import { CMSAnalyticsEvent } from "./analytics";
+import { EntityAction } from "./entity_actions";
 
 /**
  * Use this callback to build entity collections dynamically.
@@ -93,6 +94,14 @@ export type FireCMSProps<USER extends User> = {
      * You can also define an entity view from the UI.
      */
     entityViews?: EntityCustomView[];
+
+    /**
+     * List of actions that can be performed on entities.
+     * These actions are displayed in the entity view and in the collection view.
+     * You can later reuse these actions in the `entityActions` prop of a collection,
+     * by specifying the `key` of the action.
+     */
+    entityActions?: EntityAction[];
 
     /**
      * Format of the dates in the CMS.

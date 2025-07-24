@@ -5,17 +5,16 @@ import "@fontsource/comic-neue"; // Defaults to weight 400
 import "@fontsource/noto-serif"; // Defaults to weight 400
 import "@fontsource/jetbrains-mono";
 
-import logo from "./images/demo_logo.png";
-
 import { getAnalytics, logEvent } from "@firebase/analytics";
 
-import { CenteredView, GitHubIcon, IconButton, Tooltip } from "@firecms/ui";
+import { BarChartIcon, CenteredView, GitHubIcon, IconButton, Tooltip } from "@firecms/ui";
 import {
     AppBar,
     Authenticator,
     CircularProgressCenter,
     CMSView,
     Drawer,
+    EntityAction,
     EntityCollection,
     EntityCollectionsBuilder,
     ErrorView,
@@ -66,7 +65,6 @@ import { DemoImportAction } from "./DemoImportAction";
 import { algoliaSearchControllerBuilder } from "./text_search";
 import ClientUIComponentsShowcase from "./views/ClientUIComponentsShowcase";
 import { useEntityHistoryPlugin } from "@firecms/entity_history";
-import { TestBoardView } from "./BoardView/TestBoardView";
 
 const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
 
@@ -360,6 +358,23 @@ export function App() {
         dataSourceDelegate: firestoreDelegate
     });
 
+    const entityActions: EntityAction[] = useMemo(() => [
+        {
+            key: "demo_action",
+            name: "My demo action",
+            icon: <BarChartIcon size={"small"}/>,
+            onClick: async ({
+                                entity,
+                                context
+                            }) => {
+                context.snackbarController.open({
+                    type: "info",
+                    message: `Demo action for ${entity?.id}`,
+                })
+            }
+        }
+    ], []);
+
     if (firebaseConfigLoading || secondaryFirebaseConfigLoading || !firebaseApp) {
         return <CircularProgressCenter/>;
     }
@@ -371,6 +386,7 @@ export function App() {
     // if (appCheckResult.error) {
     //     return <CenteredView>{appCheckResult.error}</CenteredView>;
     // }
+
 
     return (
         <SnackbarProvider>
@@ -385,6 +401,7 @@ export function App() {
                     storageSource={storageSource}
                     onAnalyticsEvent={onAnalyticsEvent}
                     propertyConfigs={propertyConfigs}
+                    entityActions={entityActions}
                 >
                     {({
                           context,

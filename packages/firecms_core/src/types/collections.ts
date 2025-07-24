@@ -196,8 +196,11 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      *     }
      * }
      * ```
+     *
+     * You can also pass the action as a string that represents the `key`, in which case it will
+     * use the action defined in the main configuration under `entityActions`.
      */
-    entityActions?: EntityAction<M, USER>[];
+    entityActions?: (EntityAction<M, USER> | string)[];
 
     /**
      * Pass your own selection controller if you want to control selected

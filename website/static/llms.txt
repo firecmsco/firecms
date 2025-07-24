@@ -1210,7 +1210,7 @@ or
 yarn create firecms-app
 ```
 
-and select the `**FireCMS PRO with Next.js frontend**` template.
+and select the **`FireCMS PRO with Next.js frontend`** template.
 
 Then follow the instructions on the screen to create your project.
 

@@ -4,6 +4,7 @@ import { FireCMSPlugin } from "./plugins";
 import { EntityCustomView } from "./collections";
 import { Locale } from "./locales";
 import { PropertyConfig } from "./property_config";
+import { EntityAction } from "./entity_actions";
 
 export type CustomizationController = {
 
@@ -25,6 +26,14 @@ export type CustomizationController = {
      * You can also define an entity view from the UI.
      */
     entityViews?: EntityCustomView[];
+
+    /**
+     * List of actions that can be performed on entities.
+     * These actions are displayed in the entity view and in the collection view.
+     * You can later reuse these actions in the `entityActions` prop of a collection,
+     * by specifying the `key` of the action.
+     */
+    entityActions?: EntityAction<any, any>[];
 
     /**
      * Format of the dates in the CMS.

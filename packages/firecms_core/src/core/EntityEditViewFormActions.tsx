@@ -9,7 +9,7 @@ import {
 } from "../types";
 
 import { copyEntityAction, deleteEntityAction } from "../components";
-import { canCreateEntity, canDeleteEntity, mergeEntityActions } from "../util";
+import { canCreateEntity, canDeleteEntity, mergeEntityActions, resolveEntityAction } from "../util";
 import {
     Button,
     cls,
@@ -20,7 +20,7 @@ import {
     Tooltip,
     Typography
 } from "@firecms/ui";
-import { useAuthController, useFireCMSContext, useSideEntityController } from "../hooks";
+import { useAuthController, useCustomizationController, useFireCMSContext, useSideEntityController } from "../hooks";
 import { EntityFormActionsProps } from "../form/EntityFormActions";
 import { SideDialogController, useSideDialogContext } from "./SideDialogs";
 
@@ -44,9 +44,12 @@ export function EntityEditViewFormActions({
     const context = useFireCMSContext();
     const sideEntityController = useSideEntityController();
     const sideDialogContext = useSideDialogContext();
+    const customizationController = useCustomizationController();
 
     const entityActions = useMemo((): EntityAction[] => {
-        const customEntityActions = collection.entityActions
+        const customEntityActions = (collection.entityActions ?? [])
+            .map(action => resolveEntityAction(action, customizationController.entityActions))
+            .filter(Boolean) as EntityAction[];
         const createEnabled = canCreateEntity(collection, authController, path, null);
         const deleteEnabled = entity ? canDeleteEntity(collection, authController, path, entity) : false;
         const actions: EntityAction[] = [];
@@ -57,7 +60,7 @@ export function EntityEditViewFormActions({
         if (customEntityActions)
             return mergeEntityActions(actions, customEntityActions);
         return actions;
-    }, [authController, collection, path]);
+    }, [authController, collection, path, customizationController.entityActions?.length]);
 
     const formActions = showDefaultActions ? entityActions.filter(a => a.includeInForm === undefined || a.includeInForm) : [];
 

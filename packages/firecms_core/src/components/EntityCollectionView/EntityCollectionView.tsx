@@ -31,6 +31,7 @@ import {
     mergeEntityActions,
     navigateToEntity,
     resolveCollection,
+    resolveEntityAction,
     resolveProperty
 } from "../../util";
 import { ReferencePreview } from "../../preview";
@@ -150,7 +151,6 @@ export const EntityCollectionView = React.memo(
                                                                      ...collectionProp
                                                                  }: EntityCollectionViewProps<M>
     ) {
-
 
         const context = useFireCMSContext();
         const navigation = useNavigationController();
@@ -521,10 +521,13 @@ export const EntityCollectionView = React.memo(
         }) => {
 
             const isSelected = Boolean(usedSelectionController.selectedEntities.find(e => e.id == entity.id && e.path == entity.path));
+            const customEntityActions = (collection.entityActions ?? [])
+                .map(action => resolveEntityAction(action, customizationController.entityActions))
+                .filter(Boolean) as EntityAction[];
 
             const actions = getActionsForEntity({
                 entity,
-                customEntityActions: collection.entityActions
+                customEntityActions
             });
 
             return (
