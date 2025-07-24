@@ -334,7 +334,7 @@ function encodeFilterAndSort(filterValues?: FilterValues<string>, sortBy?: [stri
                 }
                 if (encodedValue !== undefined) {
                     entries[encodeURIComponent(`${key}_op`)] = encodeURIComponent(op);
-                    entries[encodeURIComponent(`${key}_value`)] = encodeURIComponent(encodedValue.toString());
+                    entries[encodeURIComponent(`${key}_value`)] = encodedValue ? encodeURIComponent(encodedValue.toString()) : "null";
                 }
             }
         });
