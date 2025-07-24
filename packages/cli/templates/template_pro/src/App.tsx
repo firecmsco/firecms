@@ -36,7 +36,7 @@ import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlug
 import { useImportPlugin } from "@firecms/data_import";
 import { useExportPlugin } from "@firecms/data_export";
 import { ExampleCMSView } from "./views/ExampleCMSView";
-import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
+import { buildCollectionInference, useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
 
 export function App() {
@@ -176,7 +176,8 @@ export function App() {
     const exportPlugin = useExportPlugin();
 
     const collectionEditorPlugin = useCollectionEditorPlugin({
-        collectionConfigController
+        collectionConfigController,
+        collectionInference: buildCollectionInference(firebaseApp),
     });
 
     const plugins = [

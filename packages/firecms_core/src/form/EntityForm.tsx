@@ -32,7 +32,7 @@ import {
     useAuthController,
     useCustomizationController,
     useDataSource,
-    useFireCMSContext,
+    useFireCMSContext, useNavigationController,
     useSideEntityController,
     useSnackbarController
 } from "../hooks";
@@ -128,6 +128,7 @@ export function EntityForm<M extends Record<string, any>>({
 
 
     const sideEntityController = useSideEntityController();
+    const navigationController = useNavigationController();
 
     const navigateBack = useCallback(() => {
         if (openEntityMode === "side_panel") {
@@ -448,14 +449,16 @@ export function EntityForm<M extends Record<string, any>>({
     const plugins = customizationController.plugins;
 
     const actionsDisabled = disabled || formex.isSubmitting || (status === "existing" && !formex.dirty) || Boolean(disabledProp);
+    const parentCollectionIds = navigationController.getParentCollectionIds(path);
+
     if (plugins && collection) {
         const actionProps: PluginFormActionProps = {
             entityId,
+            parentCollectionIds,
             path,
             status,
-            collection: collection,
+            collection,
             context,
-            currentEntityId: entityId,
             formContext,
             openEntityMode,
             disabled: actionsDisabled,

@@ -76,7 +76,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
         return navigationController.getParentCollectionIds(path);
     }, [navigationController, path]);
 
-    const collection = props.collection ?? navigationController.getCollection(path);
+    const collection = navigationController.getCollection(fullIdPath ?? path) ?? props.collection;
 
     useEffect(() => {
         function beforeunload(e: any) {

@@ -1,15 +1,15 @@
-import { CollectionActionsProps, useAuthController, useNavigationController } from "@firecms/core";
+import { PluginFormActionProps, useAuthController, useNavigationController } from "@firecms/core";
 import { IconButton, SettingsIcon, Tooltip, } from "@firecms/ui";
 
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { PersistedCollection } from "../types/persisted_collection";
 
-export function EditorCollectionAction({
-                                           path: fullPath,
-                                           parentCollectionIds,
-                                           collection,
-                                           tableController
-                                       }: CollectionActionsProps) {
+export function EditorEntityAction({
+                                       path: fullPath,
+                                       parentCollectionIds,
+                                       collection,
+                                       formContext
+                                   }: PluginFormActionProps) {
 
     const authController = useAuthController();
     const navigationController = useNavigationController();
@@ -24,20 +24,20 @@ export function EditorCollectionAction({
         }).editCollections
         : true;
 
+    const isDirty = formContext?.formex.dirty ?? false;
+
     const editorButton = <Tooltip
         asChild={true}
-        title={canEditCollection ? "Edit collection" : "You don't have permissions to edit this collection"}>
+        title={canEditCollection ? (isDirty ? "You need to save the document before changing the schema" : "Edit schema for this form") : "You don't have permissions to edit this collection"}>
         <IconButton
-            size={"small"}
             color={"primary"}
-            disabled={!canEditCollection}
+            disabled={!canEditCollection || isDirty}
             onClick={canEditCollection
                 ? () => collectionEditorController?.editCollection({
                     id: collection.id,
                     fullPath,
                     parentCollectionIds,
                     parentCollection: parentCollection as PersistedCollection,
-                    existingEntities: tableController?.data ?? []
                 })
                 : undefined}>
             <SettingsIcon size={"small"}/>

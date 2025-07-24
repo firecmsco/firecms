@@ -8,7 +8,7 @@ import {
     DefaultAppBarProps,
     Locale,
     ModifyCollectionProps,
-    PropertyConfig
+    PropertyConfig, EntityAction
 } from "@firecms/core";
 import { FirebaseApp } from "@firebase/app";
 import { AppCheckOptions, FirestoreIndexesBuilder, FirestoreTextSearchControllerBuilder } from "@firecms/firebase";
@@ -57,6 +57,14 @@ export type FireCMSAppConfig = {
      * You can also define an entity view from the UI.
      */
     entityViews?: EntityCustomView[];
+
+    /**
+     * List of actions that can be performed on entities.
+     * These actions are displayed in the entity view and in the collection view.
+     * You can later reuse these actions in the `entityActions` prop of a collection,
+     * by specifying the `key` of the action.
+     */
+    entityActions?: EntityAction[];
 
     /**
      * Experimental feature to open the drawer automatically when

@@ -1,5 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Entity, EntityCollection, EntityStatus, FireCMSPlugin, FormContext, User } from "../types";
+import {
+    Entity,
+    EntityCollection,
+    EntityStatus,
+    FireCMSPlugin,
+    FormContext,
+    PluginFormActionProps,
+    User
+} from "../types";
 
 import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary } from "../components";
 import {
@@ -162,12 +170,33 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             setUsedEntity(entity);
     }, [entity]);
 
-    // Instead of using a ref (which does not trigger re-render), we use state for the form context.
     const [formContext, setFormContext] = useState<FormContext<M> | undefined>(undefined);
 
     const largeLayout = useLargeLayout();
 
     const customizationController = useCustomizationController();
+    const plugins = customizationController.plugins;
+    const pluginActionsTop: React.ReactNode[] = [];
+
+    if (plugins && collection) {
+        const actionProps: PluginFormActionProps = {
+            entityId,
+            parentCollectionIds,
+            path,
+            status,
+            collection,
+            context,
+            formContext,
+            openEntityMode: layout,
+            disabled: false
+        };
+        pluginActionsTop.push(...plugins.map((plugin) => (
+            plugin.form?.ActionsTop
+                ? <plugin.form.ActionsTop
+                    key={`actions_${plugin.key}`} {...actionProps} />
+                : null
+        )).filter(Boolean));
+    }
 
     const defaultSelectedView = useMemo(() => resolveDefaultSelectedView(
         collection ? collection.defaultSelectedView : undefined,
@@ -190,8 +219,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     const customViewsCount = customViews?.length ?? 0;
     const includeJsonView = collection.includeJsonView === undefined ? true : collection.includeJsonView;
     const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0 || includeJsonView;
-
-    const plugins = customizationController.plugins;
 
     const {
         resolvedEntityViews,
@@ -416,17 +443,20 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     let result = <div className="relative flex flex-col h-full w-full bg-white dark:bg-surface-900">
 
         {shouldShowTopBar && <div
-            className={cls("h-14 flex overflow-visible overflow-x-scroll w-full no-scrollbar h-14 border-b pl-2 pr-2 pt-1 flex items-end bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+            className={cls("h-14 items-center flex overflow-visible overflow-x-scroll w-full no-scrollbar h-14 border-b pl-2 pr-2 pt-1 flex bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
 
             {barActions}
 
             <div className={"flex-grow"}/>
+
+            {pluginActionsTop}
 
             {globalLoading && <div className="self-center">
                 <CircularProgress size={"small"}/>
             </div>}
 
             {hasAdditionalViews && <Tabs
+                className={"self-end"}
                 value={selectedTab}
                 onValueChange={(value) => {
                     onSideTabClick(value);

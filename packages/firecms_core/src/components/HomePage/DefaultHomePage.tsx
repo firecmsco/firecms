@@ -39,8 +39,6 @@ export function DefaultHomePage({
     additionalChildrenEnd?: React.ReactNode;
 }) {
 
-    console.log("Rendering DefaultHomePage");
-
     const context = useFireCMSContext();
     const customizationController = useCustomizationController();
     const navigationController = useNavigationController();

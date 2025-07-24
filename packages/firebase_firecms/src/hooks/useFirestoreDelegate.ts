@@ -463,7 +463,7 @@ export function useFirestoreDelegate({
             const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
 
             const collectionReference: CollectionReference = collectionClause(firestore, path);
-            // const cleanedValues = cmsToFirestoreModel(values, firestore);
+
             console.debug("Saving entity", {
                 path,
                 entityId,
