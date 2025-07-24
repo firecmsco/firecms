@@ -38,6 +38,9 @@ export function DefaultHomePage({
     additionalChildrenStart?: React.ReactNode;
     additionalChildrenEnd?: React.ReactNode;
 }) {
+
+    console.log("Rendering DefaultHomePage");
+
     const context = useFireCMSContext();
     const customizationController = useCustomizationController();
     const navigationController = useNavigationController();
@@ -56,9 +59,12 @@ export function DefaultHomePage({
     const [filteredUrls, setFilteredUrls] = useState<string[] | null>(null);
     const performingSearch = Boolean(filteredUrls);
 
-    const filteredNavigationEntries = filteredUrls
-        ? rawNavigationEntries.filter((e) => filteredUrls.includes(e.url))
-        : rawNavigationEntries;
+    // Memoize filtered navigation entries to prevent unnecessary recalculations
+    const filteredNavigationEntries = useMemo(() => {
+        return filteredUrls
+            ? rawNavigationEntries.filter((e) => filteredUrls.includes(e.url))
+            : rawNavigationEntries;
+    }, [filteredUrls, rawNavigationEntries]);
 
     useEffect(() => {
         fuse.current = new Fuse(rawNavigationEntries, {
@@ -67,9 +73,12 @@ export function DefaultHomePage({
     }, [rawNavigationEntries]);
 
     const updateSearch = useCallback((v?: string) => {
-        if (!v?.trim()) return setFilteredUrls(null);
-        const r = fuse.current?.search(v.trim());
-        setFilteredUrls(r ? r.map((x) => x.item.url) : []);
+        if (!v?.trim()) {
+            setFilteredUrls(null);
+            return;
+        }
+        const results = fuse.current?.search(v.trim());
+        setFilteredUrls(results ? results.map((x) => x.item.url) : []);
     }, []);
 
     /* ───────────────────────────────────────────────────────────────
@@ -83,12 +92,11 @@ export function DefaultHomePage({
         entries: NavigationEntry[];
     } | null>(null);
 
-    useEffect(() => {
-        const src = performingSearch
-            ? filteredNavigationEntries
-            : rawNavigationEntries;
-
+    // Memoize the processed groups to avoid unnecessary recalculations
+    const processedGroups = useMemo(() => {
+        const src = filteredNavigationEntries;
         const entriesByGroup: Record<string, NavigationEntry[]> = {};
+
         src.forEach((e) => {
             const g =
                 e.type === "admin"
@@ -129,19 +137,17 @@ export function DefaultHomePage({
         }
 
         const admin = allProcessed.find((g) => g.name === ADMIN_GROUP_NAME);
-        if (admin) {
-            setAdminGroupData(admin);
-            setItems(allProcessed.filter((g) => g.name !== ADMIN_GROUP_NAME));
-        } else {
-            setAdminGroupData(null);
-            setItems(allProcessed);
-        }
-    }, [
-        performingSearch,
-        filteredNavigationEntries,
-        rawNavigationEntries,
-        groupOrderFromNavController
-    ]);
+        return {
+            adminGroupData: admin || null,
+            items: allProcessed.filter((g) => g.name !== ADMIN_GROUP_NAME)
+        };
+    }, [filteredNavigationEntries, performingSearch, groupOrderFromNavController]);
+
+    // Update state only when processedGroups actually changes
+    useEffect(() => {
+        setAdminGroupData(processedGroups.adminGroupData);
+        setItems(processedGroups.items);
+    }, [processedGroups]);
 
     /* ───────────────────────────────────────────────────────────────
        Local update vs. persistence helpers
@@ -177,7 +183,7 @@ export function DefaultHomePage({
         onNavigationEntriesUpdate(all);
     };
 
-    /* ───────────────────────────────────────────────────────────────
+    /* ─────────────────────────────────────────────────────���─────────
        Hook for DnD
        ─────────────────────────────────────────────────────────────── */
     const {
@@ -225,11 +231,9 @@ export function DefaultHomePage({
 
     const dndDisabled = !allowDragAndDrop || performingSearch;
 
-    const dndModifiers = useMemo(() => {
-        if (dndKitActiveNode?.data.current?.type === "group")
-            return [restrictToVerticalAxis, restrictToWindowEdges];
-        return [restrictToWindowEdges];
-    }, [dndKitActiveNode]);
+    const dndModifiers = dndKitActiveNode?.data.current?.type === "group"
+        ? [restrictToVerticalAxis, restrictToWindowEdges]
+        : [restrictToWindowEdges];
 
     /* ───────────────────────────────────────────────────────────────
        Plugin extras
@@ -288,7 +292,7 @@ export function DefaultHomePage({
 
     /* ───────────────────────────────────────────────────────────────
        Render
-       ─────────────────────────────────────────────────────────────── */
+       ─────────���───────────────────────────────────────────────────── */
     return (
         <div ref={containerRef} className="py-2 overflow-auto h-full w-full">
             <Container maxWidth="6xl">
