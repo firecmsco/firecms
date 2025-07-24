@@ -504,8 +504,6 @@ export function EntityForm<M extends Record<string, any>>({
         }
     }, [formex.dirty]);
 
-    console.debug("EntityForm", { formex, initialDirtyValues });
-
     const deferredValues = useDeferredValue(formex.values);
     const modified = formex.dirty;
 

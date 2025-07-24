@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import {
     Entity,
     EntityAction,
+    EntityActionClickProps,
     FireCMSContext,
     FormContext,
     ResolvedEntityCollection,
@@ -12,6 +13,7 @@ import { copyEntityAction, deleteEntityAction } from "../components";
 import { canCreateEntity, canDeleteEntity, mergeEntityActions, resolveEntityAction } from "../util";
 import {
     Button,
+    CircularProgress,
     cls,
     defaultBorderMixin,
     DialogActions,
@@ -20,7 +22,13 @@ import {
     Tooltip,
     Typography
 } from "@firecms/ui";
-import { useAuthController, useCustomizationController, useFireCMSContext, useSideEntityController } from "../hooks";
+import {
+    useAuthController,
+    useCustomizationController,
+    useFireCMSContext,
+    useSideEntityController,
+    useSnackbarController
+} from "../hooks";
 import { EntityFormActionsProps } from "../form/EntityFormActions";
 import { SideDialogController, useSideDialogContext } from "./SideDialogs";
 
@@ -143,7 +151,9 @@ function buildBottomActions<M extends object>({
 
         {formActions.length > 0 && <div className="flex-grow flex overflow-auto no-scrollbar">
             {formActions.map(action => {
+
                 const props = {
+                    view: "form",
                     entity,
                     fullPath: collection.path,
                     collection: collection,
@@ -152,24 +162,16 @@ function buildBottomActions<M extends object>({
                     openEntityMode,
                     navigateBack,
                     formContext
-                };
+                } satisfies EntityActionClickProps<any>;
+
                 const isEnabled = !action.isEnabled || action.isEnabled(props);
                 return (
-                    <Tooltip
+                    <EntityActionButton
                         key={action.key}
-                        title={action.name}>
-                        <IconButton
-                            color="primary"
-                            disabled={!isEnabled}
-                            onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-                                event.stopPropagation();
-                                if (entity) {
-                                    action.onClick(props);
-                                }
-                            }}>
-                            {action.icon}
-                        </IconButton>
-                    </Tooltip>
+                        action={action}
+                        enabled={isEnabled}
+                        props={props}
+                    />
                 );
             })}
         </div>}
@@ -240,6 +242,7 @@ function buildSideActions<M extends object>({
         {formActions.length > 0 && <div className="flex flex-row flex-wrap mt-2">
             {formActions.map(action => {
                 const props = {
+                    view: "form",
                     entity,
                     fullPath: collection.path,
                     collection: collection,
@@ -248,24 +251,10 @@ function buildSideActions<M extends object>({
                     openEntityMode,
                     navigateBack,
                     formContext
-                };
+                } satisfies EntityActionClickProps<any>;
                 const isEnabled = !action.isEnabled || action.isEnabled(props);
                 return (
-                    <Tooltip
-                        key={action.key}
-                        title={action.name}>
-                        <IconButton
-                            color="primary"
-                            disabled={!isEnabled}
-                            onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-                                event.stopPropagation();
-                                if (entity) {
-                                    action.onClick(props);
-                                }
-                            }}>
-                            {action.icon}
-                        </IconButton>
-                    </Tooltip>
+                    <EntityActionButton key={action.key} action={action} enabled={isEnabled} props={props}/>
                 );
             })}
         </div>}
@@ -276,4 +265,59 @@ function buildSideActions<M extends object>({
             </div>
         }
     </div>;
+}
+
+function EntityActionButton({
+                                action,
+                                enabled,
+                                props
+                            }: {
+    action: EntityAction,
+    enabled: boolean,
+    props: EntityActionClickProps<any, any>
+}) {
+    const snackbarController = useSnackbarController();
+    const [loading, setLoading] = React.useState(false);
+    return <Tooltip
+        title={action.name}>
+        <IconButton
+            color="primary"
+            disabled={!enabled}
+            onClick={(event) => {
+                console.debug("Executing action", action.key, props);
+                try {
+                    event.stopPropagation();
+                    if (props.entity) {
+                        const onClick = action.onClick(props);
+                        // If the action returns a promise, we can handle it
+                        if (onClick instanceof Promise) {
+                            setLoading(true);
+                            onClick
+                                .catch((error) => {
+                                    console.error("Error executing action", action.key, error);
+                                    snackbarController.open({
+                                        message: `Error executing action: ${error.message}`,
+                                        type: "error"
+                                    })
+                                })
+                                .finally(() => setLoading(false));
+                        } else {
+                            snackbarController.open({
+                                message: `Action ${action.name} executed successfully`,
+                                type: "success"
+                            });
+                        }
+
+                    }
+                } catch (e: any) {
+                    console.error("Error executing action", action.key, e);
+                    snackbarController.open({
+                        message: `Error executing action: ${e.message}`,
+                        type: "error"
+                    });
+                }
+            }}>
+            {loading ? <CircularProgress size={"smallest"}/> : action.icon}
+        </IconButton>
+    </Tooltip>;
 }

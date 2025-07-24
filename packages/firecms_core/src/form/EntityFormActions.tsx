@@ -134,6 +134,7 @@ function buildBottomActions<M extends object>({
                         event.stopPropagation();
                         if (entity)
                             action.onClick({
+                                view: "form",
                                 entity,
                                 fullPath: fullPath ?? collection.path,
                                 fullIdPath: fullIdPath ?? collection.id,

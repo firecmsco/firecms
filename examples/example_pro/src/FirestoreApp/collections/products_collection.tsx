@@ -148,12 +148,49 @@ export const productsCollection = buildCollection<Product>({
         icon: <SyncIcon size={"small"}/>,
         onClick: async ({
                             entity,
-                            context
+                            context,
+                            formContext,
+                            view
                         }) => {
+
+            const currentPrice = formContext?.values?.price ?? entity?.values?.price;
+            console.log("Syncing price for entity", entity?.id, "with price", currentPrice);
+            if (!currentPrice) {
+                throw new Error("DEMO: You must set a price before syncing");
+            }
+
             context.snackbarController.open({
                 type: "info",
                 message: `Syncing price for locale ${entity?.id}`,
             })
+
+            // wait 2 seconds to simulate a sync operation
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            // adjust the price randomly by -10% to +10% and round it to 2 decimal places
+            const adjustmentFactor = 1 + (Math.random() * 0.2 - 0.1); // -10% to +10%
+            const adjustedPrice = Math.round(currentPrice * adjustmentFactor * 100) / 100; // round to 2 decimal places
+
+            if (view === "form" && formContext) {
+                formContext.setFieldValue("price", adjustedPrice);
+            } else if (view === "collection" && entity) {
+                // update the entity with the new price
+                await context.dataSource.saveEntity({
+                    entityId: entity.id,
+                    path: entity.path,
+                    status: "existing",
+                    values: {
+                        ...entity.values,
+                        price: adjustedPrice
+                    }
+                });
+            }
+
+            context.snackbarController.open({
+                type: "success",
+                message: `Price synced successfully for locale ${entity?.id}, new price is ${adjustedPrice}`
+            });
+
         }
     }],
     additionalFields: [productAdditionalField],

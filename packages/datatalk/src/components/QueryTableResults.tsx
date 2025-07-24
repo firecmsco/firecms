@@ -14,6 +14,7 @@ import {
     OnCellValueChange,
     PropertiesOrBuilders,
     resolveCollection,
+    resolveEntityAction,
     useAuthController,
     useCustomizationController,
     useNavigationController,
@@ -156,9 +157,13 @@ export function QueryTableResults({
         frozen?: boolean
     }) => {
 
+        const customEntityActions = (resolvedCollection?.entityActions ?? [])
+            .map(action => resolveEntityAction(action, customizationController.entityActions))
+            .filter(Boolean) as EntityAction[];
+
         const actions = getActionsForEntity({
             entity,
-            customEntityActions: resolvedCollection?.entityActions
+            customEntityActions
         });
 
         const path = entity.path.split("/").slice(0, -1).join("/");

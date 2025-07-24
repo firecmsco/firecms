@@ -67,11 +67,6 @@ export type EntityActionClickProps<M extends object, USER extends User = User> =
     fullPath?: string;
     fullIdPath?: string;
     collection?: EntityCollection<M>;
-    selectionController?: SelectionController;
-    highlightEntity?: (entity: Entity<any>) => void;
-    unhighlightEntity?: (entity: Entity<any>) => void;
-    onCollectionChange?: () => void;
-    navigateBack?: () => void;
 
     /**
      * Optional form context, present if the action is being called from a form.
@@ -84,5 +79,41 @@ export type EntityActionClickProps<M extends object, USER extends User = User> =
      */
     sideEntityController?: SideEntityController;
 
+    /**
+     * Is the action being called from the collection view or from the entity form view?
+     */
+    view: "collection" | "form";
+
+    /**
+     * If the action is rendered in the form, is it open in a side panel or full screen?
+     */
     openEntityMode: "side_panel" | "full_screen";
+
+    /**
+     * Optional selection controller, present if the action is being called from a collection view
+     */
+    selectionController?: SelectionController;
+
+    /**
+     * Optional highlight function to highlight the entity in the collection view
+     * @param entity
+     */
+    highlightEntity?: (entity: Entity<any>) => void;
+
+    /**
+     * Optional unhighlight function to remove the highlight from the entity in the collection view
+     * @param entity
+     */
+    unhighlightEntity?: (entity: Entity<any>) => void;
+
+    /**
+     * Optional function to navigate back (e.g. when deleting an entity or navigating from a form)
+     */
+    navigateBack?: () => void;
+
+    /**
+     * Callback to be called when the collection changes, e.g. after an entity is deleted or created.
+     */
+    onCollectionChange?: () => void;
+
 };
