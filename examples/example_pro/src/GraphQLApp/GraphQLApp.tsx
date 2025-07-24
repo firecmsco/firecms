@@ -32,7 +32,7 @@ import { useImportPlugin } from "@firecms/data_import";
 import { useExportPlugin } from "@firecms/data_export";
 import { userManagementAdminViews } from "@firecms/user_management";
 import { booksCollection } from "./books_collection";
-import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
+import { buildCollectionInference, useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
 import { WebSocketDataSource } from "./datasource/WebSocketDataSource";
 
@@ -130,7 +130,8 @@ function GraphQLApp() {
     const exportPlugin = useExportPlugin();
 
     const collectionEditorPlugin = useCollectionEditorPlugin({
-        collectionConfigController
+        collectionConfigController,
+        collectionInference: buildCollectionInference(firebaseApp),
     });
 
     if (firebaseConfigLoading || !firebaseApp) {

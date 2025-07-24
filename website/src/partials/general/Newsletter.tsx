@@ -10,7 +10,7 @@ export const Newsletter = () => {
     const [error, setError] = useState(false);
     const [policyAccepted, setPolicyAccepted] = useState(false);
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: any) => {
         event.preventDefault();
         console.log("Submitting", email);
         setSubmitClicked(true);

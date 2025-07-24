@@ -12,6 +12,10 @@ of the user in the collection.
 If you need to add custom actions, you can do so by defining them in the
 `entityActions` prop of the collection.
 
+You can also define entity actions globally, and they will be available in all collections.
+This is useful for actions that are not specific to a single collection, like a "Share" action.
+When defining a global entity action, you must provide a unique `key` property.
+
 The actions will be shown in the menu of the collection view by default
 and in the form view if `includeInForm` is set to true.
 
@@ -20,6 +24,8 @@ modifying data, accessing storage, opening dialogs, etc.
 
 In the `icon` prop, you can pass a React element to show an icon next to the action name.
 We recommend using any of the [FireCMS icons](/docs/icons), which are available in the `@firecms/ui` package.
+
+### Defining actions at the collection level
 
 ```tsx
 
@@ -52,11 +58,46 @@ export const productsCollection = buildCollection<Product>({
 });
 ```
 
+### Defining actions globally
+
+You can define entity actions globally by passing them to the `FireCMS` component if you are self-hosting,
+or in the `FireCMSAppConfig` if you are using FireCMS Cloud.
+
+```tsx
+// Self-hosted
+<FireCMS
+    entityActions={[{
+        key: "share",
+        name: "Share",
+        icon: <ShareIcon/>,
+        onClick: ({ entity, context }) => {
+            // Your share logic here
+        }
+    }]}
+    {...otherProps}
+/>
+```
+
+```tsx
+// FireCMS Cloud
+const appConfig: FireCMSAppConfig = {
+    entityActions: [{
+        key: "share",
+        name: "Share",
+        icon: <ShareIcon/>,
+        onClick: ({ entity, context }) => {
+            // Your share logic here
+        }
+    }],
+    // ...other config
+};
+```
+
 #### EntityAction
 
 * `name`: Name of the action
 * `key`?: Key of the action. You only need to provide this if you want to
-  override the default actions.
+  override the default actions, or if you are defining the action globally.
   The default actions are:
     - edit
     - delete
@@ -74,12 +115,17 @@ export const productsCollection = buildCollection<Product>({
 * `entity`: Entity being edited
 * `context`: FireCMSContext, used for accessing all the controllers
 * `fullPath`?: string
+* `fullIdPath`?: string
 * `collection`?: EntityCollection
+* `formContext`?: FormContext, present if the action is being called from a form.
 * `selectionController`?: SelectionController, used for accessing the selected entities or modifying the selection
 * `highlightEntity`?: (entity: Entity) => void
 * `unhighlightEntity`?: (entity: Entity) => void
 * `onCollectionChange`?: () => void
 * `sideEntityController`?: SideEntityController
+* `view`: "collection" | "form"
+* `openEntityMode`: "side_panel" | "full_screen"
+* `navigateBack`?: () => void
 
 ## Example
 
@@ -129,6 +175,3 @@ export const productsCollection = buildCollection<Product>({
     ],
 });
 ```
-
-
-

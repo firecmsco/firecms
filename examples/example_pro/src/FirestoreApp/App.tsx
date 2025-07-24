@@ -58,7 +58,7 @@ import { booksCollection } from "./collections/books_collection";
 import { FirebaseApp } from "@firebase/app";
 import { TestEditorView } from "./views/TestEditorView";
 import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
-import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
+import { buildCollectionInference, useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { useExportPlugin } from "@firecms/data_export";
 import { useImportPlugin } from "@firecms/data_import";
 import { DemoImportAction } from "./DemoImportAction";
@@ -303,7 +303,8 @@ export function App() {
     const userManagementPlugin = useUserManagementPlugin({ userManagement: userManagement });
 
     const collectionEditorPlugin = useCollectionEditorPlugin({
-        collectionConfigController
+        collectionConfigController,
+        collectionInference: buildCollectionInference(firebaseApp),
     });
 
     const importPlugin = useImportPlugin();

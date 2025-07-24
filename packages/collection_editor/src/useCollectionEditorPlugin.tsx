@@ -14,6 +14,7 @@ import { AddIcon, Button, Paper, Typography } from "@firecms/ui";
 import { useCollectionEditorController } from "./useCollectionEditorController";
 import { EditorCollectionActionStart } from "./ui/EditorCollectionActionStart";
 import { NewCollectionCard } from "./ui/NewCollectionCard";
+import { EditorEntityAction } from "./ui/EditorEntityAction";
 
 export interface CollectionConfigControllerProps<EC extends PersistedCollection = PersistedCollection, USER extends User = User> {
 
@@ -107,6 +108,9 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
             CollectionActions: EditorCollectionAction,
             HeaderAction: CollectionViewHeaderAction,
             AddColumnComponent: PropertyAddColumnComponent
+        },
+        form: {
+            ActionsTop: EditorEntityAction,
         }
     };
 }
