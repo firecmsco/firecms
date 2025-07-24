@@ -218,9 +218,7 @@ export function useHomePageDnd({
         }
     });
     const keyboardSensor = useSensor(KeyboardSensor);
-    const sensors = useSensors(
-        ...(disabled ? [] : [mouseSensor, touchSensor, keyboardSensor])
-    );
+    const sensors = useSensors(mouseSensor, touchSensor, keyboardSensor);
 
     /* ---------------- helpers ---------------- */
     const dndContainers = dndItems.map((g) => g.name);
