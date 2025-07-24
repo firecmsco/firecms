@@ -148,7 +148,7 @@ async function buildIdMap(directoryPath, idMap) {
                 await buildIdMap(fullPath, idMap);
             } else {
                 const ext = path.extname(entry.name).toLowerCase();
-                if (ext === ".mdx" || ext === ".md") {
+                if ((ext === ".mdx" || ext === ".md") && entry.name !== "CHANGELOG.md") {
                     const mdxContent = fs.readFileSync(fullPath, "utf-8");
                     const parsed = matter(mdxContent);
                     const frontmatter = parsed.data;

@@ -166,7 +166,15 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
             props?: FORM_PROPS;
         }
 
+        /**
+         * Add custom actions to the default ones ("Save", "Discard"...)
+         */
         Actions?: React.ComponentType<PluginFormActionProps<any, EC>>;
+
+        /**
+         * Add custom actions to the top of the form
+         */
+        ActionsTop?: React.ComponentType<PluginFormActionProps<any, EC>>;
 
         fieldBuilder?: <T extends CMSType = CMSType>(props: PluginFieldBuilderParams<T, any, EC>) => React.ComponentType<FieldProps<T>> | null;
 
@@ -221,12 +229,12 @@ export interface PluginHomePageActionsProps<EP extends object = object, M extend
 export interface PluginFormActionProps<USER extends User = User, EC extends EntityCollection = EntityCollection> {
     entityId?: string;
     path: string;
+    parentCollectionIds: string[];
     status: EntityStatus;
     collection: EC;
     disabled: boolean;
     formContext?: FormContext<any>;
     context: FireCMSContext<USER>;
-    currentEntityId?: string;
     openEntityMode: "side_panel" | "full_screen";
 }
 

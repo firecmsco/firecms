@@ -32,8 +32,8 @@ export function DeveloperFeatures() {
                        className={clsx("text-center text-secondary uppercase font-mono font-bold border-0 border-b", ContainerInnerPaddingMixin, defaultBorderMixin)}>
                        For developers
                    </p>}>
-                <div className="max-w-5xl mx-auto py-16 p-4">
-                    <div className="mb-8">
+                <div className="max-w-5xl mx-auto py-16 p-4 ">
+                    <div className="mb-16">
                         <TwoColumns
                             animation={false}
                             left={

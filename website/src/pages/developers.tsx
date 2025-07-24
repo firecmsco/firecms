@@ -62,7 +62,7 @@ function DevelopersPage() {
                         }
                     />
 
-                    <Panel color={"gray"} includeMargin={false} includePadding={false}>
+                    <Panel color={"dark_gray"} includeMargin={false} includePadding={false}>
 
                         <TwoColumns
                             reverseSmall={true}
@@ -329,7 +329,7 @@ const productsCollection = buildCollection({
 
                     <Panel color={"dark_gray"} includePadding={true}>
                         <h2 className="text-3xl font-bold mb-8 text-center">Simple deployment to FireCMS Cloud</h2>
-                        <div className={"mt-8 mb-12 bg-gray-800 rounded-xl p-6 border " + defaultBorderMixin}>
+                        <div className={"mt-8 mb-12 bg-gray-900 rounded-xl p-6 border " + defaultBorderMixin}>
                             <div className="flex items-center mb-3">
                                 <div className="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
                                 <div className="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>

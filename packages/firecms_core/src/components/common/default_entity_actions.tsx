@@ -5,10 +5,11 @@ import { addRecentId } from "../EntityCollectionView/utils";
 import { navigateToEntity, resolveDefaultSelectedView } from "../../util";
 
 export const editEntityAction: EntityAction = {
-    icon: <EditIcon/>,
+    icon: <EditIcon size={"small"}/>,
     key: "edit",
     name: "Edit",
     collapsed: false,
+    isEnabled: ({ entity }) => Boolean(entity),
     onClick({
                 entity,
                 collection,
@@ -19,6 +20,10 @@ export const editEntityAction: EntityAction = {
                 unhighlightEntity,
                 openEntityMode
             }): Promise<void> {
+
+        if (!entity) {
+            throw new Error("INTERNAL: editEntityAction: Entity is undefined");
+        }
 
         highlightEntity?.(entity);
 
@@ -57,9 +62,10 @@ export const editEntityAction: EntityAction = {
 }
 
 export const copyEntityAction: EntityAction = {
-    icon: <FileCopyIcon/>,
+    icon: <FileCopyIcon size={"small"}/>,
     name: "Copy",
     key: "copy",
+    isEnabled: ({ entity }) => Boolean(entity),
     onClick({
                 entity,
                 collection,
@@ -69,6 +75,9 @@ export const copyEntityAction: EntityAction = {
                 unhighlightEntity,
                 openEntityMode
             }): Promise<void> {
+        if (!entity) {
+            throw new Error("INTERNAL: copyEntityAction: Entity is undefined");
+        }
         highlightEntity?.(entity);
         context.analyticsController?.onAnalyticsEvent?.("copy_entity_click", {
             path: entity.path,
@@ -94,9 +103,10 @@ export const copyEntityAction: EntityAction = {
 }
 
 export const deleteEntityAction: EntityAction = {
-    icon: <DeleteIcon/>,
+    icon: <DeleteIcon size={"small"}/>,
     name: "Delete",
     key: "delete",
+    isEnabled: ({ entity }) => Boolean(entity),
     onClick({
                 entity,
                 fullPath,
@@ -104,8 +114,11 @@ export const deleteEntityAction: EntityAction = {
                 context,
                 selectionController,
                 onCollectionChange,
-                sideEntityController
+                navigateBack
             }): Promise<void> {
+        if (!entity) {
+            throw new Error("INTERNAL: deleteEntityAction: Entity is undefined");
+        }
         const { closeDialog } = context.dialogsController.open({
             key: "delete_entity_dialog_" + entity.id,
             Component: ({ open }) => {
@@ -123,7 +136,7 @@ export const deleteEntityAction: EntityAction = {
                         });
                         selectionController?.setSelectedEntities(selectionController.selectedEntities.filter(e => e.id !== entity.id));
                         onCollectionChange?.();
-                        sideEntityController?.close();
+                        navigateBack?.();
                     }}
                     onClose={closeDialog}/>;
             }

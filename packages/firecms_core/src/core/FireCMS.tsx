@@ -48,6 +48,7 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         onAnalyticsEvent,
         propertyConfigs,
         entityViews,
+        entityActions,
         components,
         navigationController,
         apiKey
@@ -72,6 +73,7 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         entityLinkBuilder,
         plugins,
         entityViews: entityViews ?? [],
+        entityActions: entityActions ?? [],
         propertyConfigs: propertyConfigs ?? {},
         components
     };

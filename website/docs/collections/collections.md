@@ -293,6 +293,7 @@ to `false` in the collection configuration.
 - **`entityActions`**: You can define additional actions that can be performed on the entities in this collection. These
   actions can be displayed in the collection view or in the entity view. You can use the `onClick` method to implement
   your own logic. In the `context` prop, you can access all the controllers of FireCMS.
+  You can also define entity actions globally. See [Entity Actions](./entity_actions) for more details.
 
 ```tsx
 const archiveEntityAction: EntityAction = {

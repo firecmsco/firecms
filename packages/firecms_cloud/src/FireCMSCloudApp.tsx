@@ -617,6 +617,7 @@ function FireCMSAppAuthenticated({
                             navigationController={navigationController}
                             dateTimeFormat={appConfig?.dateTimeFormat}
                             entityViews={appConfig?.entityViews}
+                            entityActions={appConfig?.entityActions}
                             locale={appConfig?.locale}
                             propertyConfigs={propertyConfigsMap}
                             authController={authController}

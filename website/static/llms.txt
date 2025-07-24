@@ -2,12 +2,12 @@
 
 > This is the documentation for FireCMS, a headless CMS for Firebase/MongoDB. It is a powerful tool to manage your data,
 > with a focus on developer experience and extensibility.
-> Easy to get started, easy to customize and easy to extend.FireCMS is great both for existing projects, since it will
+> Easy to get started, easy to customize and easy to extend.FireCMS is great both for existing projects, since it will 
 > adapt to any database structure you have, as well as for new ones.
 
 ## Getting started
 
-<video class="intro_video" loop autoPlay muted>
+<video className="intro_video" loop autoPlay muted>
     <source src="/img/full_screen_dark.mp4" type="video/mp4"/>
 </video>
 
@@ -27,7 +27,7 @@ FireCMS imposes **no data structure restrictions**, allowing seamless integratio
 FireCMS **3.0** is the latest version of FireCMS. It can be used in different ways:
 - As a managed service in the Cloud: [**FireCMS Cloud**](https://app.firecms.co). In this version you can create and
 manage your content in a user-friendly interface, and use it as a no-code tool, or extend its functionality with code.
-- You also have self-hosted options in the [**PRO**](/docs/pro) plan. In this version you need to deploy FireCMS to
+- You also have self-hosted options in the [**PRO**](/pro) plan and community plan. In this versions, you need to deploy FireCMS to
 your server, and you have full control over the code, with many customization options.
 
 #### Navigation
@@ -44,7 +44,7 @@ for more information.
 
 You have two main ways of creating the top-level views in FireCMS, either creating **entity collections** that get
 mapped to CMS views, or create your own top-level **React views**:
-- Check all the possible configurations for defining [**collections**](https://firecms.co/docs/collections/collections)
+- Check all the possible configurations for defining [**collections**](https://firecms.co/docs/collections)
 - Otherwise, you can define your own [**custom top-level views**](https://firecms.co/docs/custom_top_level_views.mdx).
 
 ## ✨ What's new in FireCMS 3.0
@@ -52,7 +52,7 @@ mapped to CMS views, or create your own top-level **React views**:
 The new version of FireCMS is a major release that brings a lot of new features
 and improvements. This page will guide you through the most important changes 🔥
 
-FireCMS 3.0 comes in two flavors: **FireCMS Cloud** and **FireCMS PRO**.
+FireCMS 3.0 comes in three flavors: **FireCMS Cloud**, **FireCMS Community** and **FireCMS PRO**.
 
 ### FireCMS Cloud
 
@@ -72,7 +72,7 @@ to modify the schemas. We have done a lot of work to **prevent polluting your da
 FireCMS' configuration.
 
 Having a backend also allows us to provide a better experience by offering additional features
-such as data enhancement through OpenAPI GPT-4.
+such as data enhancement through OpenAI and Google's latest models.
 
 ### FireCMS PRO
 
@@ -86,6 +86,21 @@ to your needs. You can achieve the highest level of customization of all previou
 FireCMS PRO is perfect for agencies that are looking to provide a CMS to their clients.
 If you are an agency, feel free to [reach out to us](https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0INW8ihjQ90S4gkdo8_rbL_Zx7gagZShLIpHyW43zDXkQDPole6a1coo1sT2O6Gl05X8lxFDlp?gv=true)
 to get a demo of FireCMS PRO.
+
+### FireCMS Community
+
+FireCMS Community is a free and open source version of FireCMS that you can
+host yourself. This means that you have full control over your data, and you can
+customize the CMS to your needs.
+
+MIT licensed and completely free, FireCMS Community is a great option for
+small projects that just need a CMS. It does not include all the bells and whistles
+of FireCMS Cloud or FireCMS PRO, but it is still a powerful alternative, due to
+its customizability and flexibility.
+
+This version has all the functionality of FireCMS 2.0 but with many of the improvements
+of the latest version, so it is great if you are looking to update and benefit from the
+UI updates and performance improvements.
 
 ### New UI collection schema editor
 
@@ -200,11 +215,13 @@ from [FireCMS Cloud](https://app.firecms.co).
 This guide is for developers who want to add custom code to their FireCMS project.
 :::
 
-In order to add custom code to your FireCMS project, you need:
+In order to add custom code to your FireCMS Cloud project, you need:
 - A **Firebase** project
-- A **FireCMS** project
+- A **FireCMS Cloud** project
 
-You can create both projects from FireCMS Cloud.
+You can create both projects from FireCMS Cloud, or connect an existing Firebase
+project to a new FireCMS Cloud project.
+
 <DocsCloudCTA/>
 
 Once you have both projects created you can initialize your codebase by running:
@@ -247,7 +264,7 @@ have already created in the Cloud version... Awesome!
 
 If you want to deploy to FireCMS Cloud your module must export a
 `FireCMSAppConfig` object. You can find more information about this object
-in the [App config section](https://firecms.co/docs/cloud/app_config) reference.
+in the [App config section](https://firecms.co/docs/app_config) reference.
 
 :::important
 Vite uses the default url `http://127.0.0.1:5173` for the development server
@@ -464,7 +481,7 @@ firecms deploy --project=your-project-id
 
 ### Deployment
 
-FireCMS Cloud projects can only be deployed to FireCMS Cloud.
+FireCMS Cloud projects can only be deployed to FireCMS Cloud. 
 
 If you need a self-hosted version of FireCMS, you can use the PRO plan, or use the community version.
 Since the APIs are the same for all versions, you can easily switch between them.
@@ -598,12 +615,12 @@ export default defineConfig({
 
 :::important
 You **only** need to create a service account manually for FireCMS Cloud projects, in case you don't want
-to grant FireCMS admin permissions. In the app, you can create new or link to existing projects
+to grant FireCMS admin permissions. In the app, you can create a new project or link existing projects
 without the need to create a service account manually.
 :::
 
 One possible way to create a FireCMS Cloud project and link it to your **existing** Firebase/GCP project is by creating
-a service account, assigning the necessary permissions, and linking it to your project.
+a service account, assigning the necessary permissions, and assigning it to your project.
 
 In order to do so please follow these steps:
 
@@ -1127,8 +1144,32 @@ yarn
 yarn dev
 ```
 
+or
+
+```bash
+cd my-cms
+npm install
+npm run dev
+```
+
 This will install the dependencies and start the development server.
 
+#### Changing the base URL of FireCMS
+
+FireCMS uses React Router to handle the routing of the application.
+You can change the base URL of FireCMS by modifying the `basename` property of the `BrowserRouter` component in the `src/main.tsx` file.
+For example, if you want to change the base URL to `/admin`, you can do it like this:
+
+```tsx
+
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+    <React.StrictMode>
+        <BrowserRouter basename={"/admin"}>
+            <App/>
+        </BrowserRouter>
+    </React.StrictMode>
+)
+```
 
 ## Quickstart + Next.JS frontend
 
@@ -1169,7 +1210,7 @@ or
 yarn create firecms-app
 ```
 
-and select the `**FireCMS PRO with Next.js frontend**` template.
+and select the **`FireCMS PRO with Next.js frontend`** template.
 
 Then follow the instructions on the screen to create your project.
 
@@ -1682,23 +1723,23 @@ You are free to define your collections in code, or use the UI to define them. Y
 the UI of the collections defined in code. You can then merge the collections defined in code with the ones defined in
 the UI.
 ```jsx
-    const collectionsBuilder = useCallback(() => {
-        // Here we define a sample collection in code.
-        const collections = [
-            productsCollection
-            // Your collections here
-        ];
-        // You can merge collections defined in the collection editor (UI) with your own collections
-        return mergeCollections(collections, collectionConfigController.collections ?? []);
-    }, [collectionConfigController.collections]);
+const collectionsBuilder = useCallback(() => {
+    // Here we define a sample collection in code.
+    const collections = [
+        productsCollection
+        // Your collections here
+    ];
+    // You can merge collections defined in the collection editor (UI) with your own collections
+    return mergeCollections(collections, collectionConfigController.collections ?? []);
+}, [collectionConfigController.collections]);
 ```
 
 In order to add the collection editor plugin, you need to include it in the list of plugins passed to the `FireCMS`
 component.
 ```jsx
-    const collectionEditorPlugin = useCollectionEditorPlugin({
-        collectionConfigController
-    });
+const collectionEditorPlugin = useCollectionEditorPlugin({
+    collectionConfigController
+});
 ````
 
 #### Authorization Management
@@ -1904,7 +1945,7 @@ the routing, but you are free to replace it with your own routing system.
     );
 ```
 
-Find more details about the main components in the [Main Components](main_components) section.
+Find more details about the main components in the [Main Components](https://firecms.co/docs/self/main_components) section.
 
 ## Main Components
 
@@ -2067,7 +2108,7 @@ return <NavigationRoutes homePage={<>My custom home page</>}>
 </NavigationRoutes>
 ```
 
-Note that you can also define custom views by defining them in `useBuildNavigationController`, with the
+Note that you can also define custom views by defining them in `useBuildNavigationController`, with the 
 added benefit that they will be automatically included in the default drawer.
 
 #### SideDialogs
@@ -2075,7 +2116,7 @@ added benefit that they will be automatically included in the default drawer.
 The `SideDialogs` component is a container for side dialogs. Side dialogs are typically used to display forms or
 additional information in a side panel.
 
-You can access the `useSideDialogsController` hook to open and close side dialogs programmatically from your
+You can access the `useSideDialogsController` hook to open and close side dialogs programmatically from your 
 custom components.
 
 ### Utilities
@@ -2343,8 +2384,8 @@ If you need to customize any other aspect of FireCMS, please [let us know](https
 
 ## Self-Hosted Deployment
 
-FireCMS works as a **headless CMS** on top of Firebase. It builds as a **single page application** that can be deployed
-to any static hosting provider. It does not require any server-side code.
+FireCMS works as a **headless CMS** on top of Firebase. It builds as a **single page application** that can be deployed 
+to any static hosting provider. It does not require any server-side code. 
 
 We recommend deploying to Firebase Hosting, as it is in the same ecosystem, and FireCMS will even
 pick up the Firebase config from the environment.
@@ -2564,7 +2605,7 @@ service cloud.firestore {
       allow read: if false;
       allow write: if false;
     }
-
+    
     // allow every read to products collection but write only to authenticated users
     match /databases/{database}/documents {
         match /products/{id=**} {
@@ -2572,7 +2613,7 @@ service cloud.firestore {
           allow write: if request.auth != null;
         }
     }
-
+    
     // allow users to modify only their own user document
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
@@ -2919,8 +2960,6 @@ Below are the parameters you can configure:
 - **firebaseApp**: The Firebase app to use for user management.
 - **usersPath**: Path in Firestore where user configurations are stored. Default is `__FIRECMS/config/users`.
 - **rolesPath**: Path in Firestore where role configurations are stored. Default is `__FIRECMS/config/roles`.
-- **usersLimit**: Maximum number of users that can be created.
-- **canEditRoles**: Determines if the logged-in user can edit roles. Default is `true`.
 - **allowDefaultRolesCreation**: If there are no roles in the database, show a button to create default roles. Default is `true`.
 
 #### Hook Usage
@@ -2933,7 +2972,6 @@ const userManagement = useBuildUserManagement({
     dataSourceDelegate: firestoreDelegate,
     usersPath: "__FIRECMS/config/users",
     rolesPath: "__FIRECMS/config/roles",
-    canEditRoles: true,
     allowDefaultRolesCreation: true,
 });
 ```
@@ -2957,8 +2995,6 @@ function App() {
         dataSourceDelegate: firestoreDelegate,
         usersPath: "__FIRECMS/config/users",
         rolesPath: "__FIRECMS/config/roles",
-        usersLimit: 100,
-        canEditRoles: true,
         allowDefaultRolesCreation: true,
         includeCollectionConfigPermissions: true,
     });
@@ -2975,13 +3011,16 @@ function App() {
         storageSource
     });
 
+    const plugins = [userManagementPlugin];
+
     const navigationController = useBuildNavigationController({
         collections,
         views,
         adminViews: userManagementAdminViews,
         collectionPermissions: userManagement.collectionPermissions, // Optional, link collection permissions to user management
         authController,
-        dataSourceDelegate: firestoreDelegate
+        dataSourceDelegate: firestoreDelegate,
+        plugins
     });
 
   return (
@@ -2989,7 +3028,6 @@ function App() {
     <FireCMS
         // ...other configurations
         navigationController={navigationController}
-        plugins={[userManagementPlugin]}
     />
   );
 }
@@ -3088,8 +3126,6 @@ The `userManagement` object returned by the `useUserManagement` hook includes th
 - **`roles`**: Array of role objects. Contains the roles available in the system.
 - **`saveRole`**: Function to persist a role. Takes a `role` object and returns a promise resolving when the role is saved.
 - **`deleteRole`**: Function to delete a role. Takes a `role` object and returns a promise resolving when the role is deleted.
-- **`usersLimit`**: Optional. Maximum number of users that can be created.
-- **`canEditRoles`**: Optional. Determines if the logged-in user can edit roles. Boolean value.
 - **`isAdmin`**: Optional. Boolean to check if the logged-in user is an Admin.
 - **`allowDefaultRolesCreation`**: Optional. Include a button to create default roles, in case there are no roles in the system. Boolean value.
 - **`includeCollectionConfigPermissions`**: Optional. Include the collection config permissions in the user management system. Boolean value.
@@ -3109,7 +3145,7 @@ Firestore collections. The Collection Editor UI Plugin provides an interface for
 collections, with support for customizable permissions and configuration options.
 
 Typically, collections in FireCMS are defined in code, and passed as a prop to the `NavigationController` on
-initialization. The Collection Editor UI Plugin allows you to manage collections directly in the application, providing
+initialization. The Collection Editor UI Plugin allows you to manage collections directly in the application, providing 
 a more user-friendly and flexible way to organize and configure your Firestore collections.
 
 In this document, we will cover how to set up and use this plugin in your FireCMS application.
@@ -3277,13 +3313,19 @@ function App() {
         return mergeCollections(collections, collectionConfigController.collections ?? []);
     }, [collectionConfigController.collections]);
 
+    const plugins = [
+        collectionEditorPlugin,
+        userManagementPlugin
+    ];
+    
     const navigationController = useBuildNavigationController({
         collections: collectionsBuilder(),
         views: customViews,
         adminViews: userManagementAdminViews,
         collectionPermissions: collectionEditorPlugin.collectionPermissions,
         authController,
-        dataSourceDelegate: firestoreDelegate
+        dataSourceDelegate: firestoreDelegate,
+        plugins
     });
 
     const {
@@ -3311,7 +3353,6 @@ function App() {
             navigationController={navigationController}
             authController={authController}
             dataSourceDelegate={firestoreDelegate}
-            plugins={[userManagementPlugin, collectionEditorPlugin]}
         >
             {({
                   context,
@@ -3740,7 +3781,7 @@ The main hook to utilize the plugin's functionality is `useExportPlugin`. Here's
 ```jsx
 
 function App() {
-
+    
     const exportPlugin = useExportPlugin({
         exportAllowed: ({
                             collectionEntitiesCount,
@@ -3756,14 +3797,22 @@ function App() {
         },
     });
 
+    const plugins = [exportPlugin];
+
+    const navigationController = useBuildNavigationController({
+        // ... rest of your config
+        plugins
+    });
+    
     return (
-        <FireCMS
-            plugins={[
-                exportPlugin,
-                // rest of your plugins
-            ]}
-            /*... rest of your configuration */
-        />
+            <FireCMS
+                navigationController={navigationController}
+                /*... rest of your configuration */
+            >
+              {({ context, loading }) => {
+                  // ... your components
+              }}
+            </FireCMS>
     );
 }
 
@@ -3843,7 +3892,8 @@ export type ExportAllowedParams = {
 
 ![data_import.png](/img/data_import.png)
 
-The **Data Import Plugin** for FireCMS enables you to import collection data from JSON, CSV, XLSL (Excel) files directly into your
+The **Data Import Plugin** for FireCMS enables you to import collection data from JSON, CSV, XLSL (Excel) files directly
+into your
 FireCMS application. This plugins provide an interface where users can upload files and map the existing data to the
 collection properties. This makes it very convenient to move data from one service to another and convert data into
 the right data types in the database.
@@ -3864,7 +3914,8 @@ yarn add @firecms/data_import
 
 ### Configuration
 
-Integrate the Data Import Plugin using the `useImportPlugin` hook. You can optionally provide `ImportPluginProps` to customize its behavior.
+Integrate the Data Import Plugin using the `useImportPlugin` hook. You can optionally provide `ImportPluginProps` to
+customize its behavior.
 
 #### ImportPluginProps
 
@@ -3891,14 +3942,10 @@ export function App() {
 
     return (
             <FireCMS
-                    plugins={[
-                        importPlugin,
-                        // ... rest of your plugins
-                    ]}
-                    /*... rest of your configuration */
+                navigationController={navigationController}
+                /*... rest of your configuration */
             >
               {({ context, loading }) => {
-
                   // ... your components
               }}
             </FireCMS>
@@ -3910,7 +3957,8 @@ export default App;
 
 ### Using the Import Functionality
 
-After integration, the import feature is available within your collection views. Users can upload JSON or CSV files to populate the collections.
+After integration, the import feature is available within your collection views. Users can upload JSON or CSV files to
+populate the collections.
 
 #### Steps to Import Data
 
@@ -3937,10 +3985,10 @@ export type ImportPluginProps = {
 Provides context for determining import permissions.
 
 ```typescript
-export type ImportAllowedParams = {
-    collectionEntitiesCount: number;
-    path: string;
-    collection: EntityCollection;
+export type ImportAllowedParams = { 
+    collectionEntitiesCount: number; 
+    path: string; 
+    collection: EntityCollection; 
 };
 ```
 
@@ -3956,6 +4004,111 @@ const importPlugin = useImportPlugin({
 });
 ```
 
+
+## Entity History
+
+This plugin adds a history view to your entities in FireCMS. It allows you to track changes made to entities over time, showing who made the change and when.
+
+### Installation
+
+```bash
+npm install @firecms/entity_history
+## or
+yarn add @firecms/entity_history
+```
+
+### Features
+
+-   Adds a "History" tab to entity detail views.
+-   Displays a log of changes for each entity.
+-   Can be enabled globally or on a per-collection basis.
+-   Allows customization of user display in the history log.
+
+### Basic Usage
+
+To use the plugin, import `useEntityHistoryPlugin` and add it to your `FirebaseCMSApp` plugins array.
+
+If you are using the user management plugin, you can provide a function to resolve user details from a UID.
+You can also pass your own custom `getUser` function to fetch user details.
+
+```tsx
+
+export default function App() {
+
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
+        authController: authController
+    });
+
+    const entityHistoryPlugin = useEntityHistoryPlugin({
+        // Enable history for all collections by default
+        // This can be overridden by setting `history: false` in a specific collection
+        defaultEnabled: true,
+
+        // Provide a function to resolve user details from a UID
+        getUser: userManagement.getUser
+    });
+
+    const plugins = [entityHistoryPlugin];
+
+    const navigationController = useBuildNavigationController({
+        // ... rest of your config
+        plugins
+    });
+
+    return (
+            <FireCMS
+                navigationController={navigationController}
+                /*... rest of your configuration */
+            >
+              {({ context, loading }) => {
+                  // ... your components
+              }}
+            </FireCMS>
+    );
+}
+```
+
+By default, the history feature is not enabled for any collection. You need to enable it explicitly in your collection configuration:
+
+```tsx
+
+const productsCollection = buildCollection({
+    name: "Products",
+    path: "products",
+    properties: {
+        name: {
+            name: "Name",
+            dataType: "string"
+        }
+        // ...other properties
+    },
+    history: true // Enable history for this collection
+});
+```
+
+### Configuration Options
+
+| Option           | Type                                | Description                                                                                                                               |
+| ---------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `defaultEnabled` | `boolean`                           | If `true`, the history view will be enabled for all collections by default. Each collection can override this by setting its `history` property. |
+| `getUser`        | `(uid: string) => User \| null` | Optional function to get the user object (display name, photo, etc.) from a user ID to display in the history log.                        |
+
+### Collection Configuration
+
+To enable or disable history for a specific collection, set the `history` property in the collection configuration:
+
+```tsx
+const sampleCollection = buildCollection({
+    // ...
+    history: true // or false
+});
+```
+
+### Additional Notes
+
+-   The plugin relies on callbacks to record entity changes. Ensure that your data persistence logic correctly triggers these callbacks.
+-   The `getUser` function is crucial for displaying meaningful user information in the history log. If not provided, only user IDs might be shown.
 
 ## Defining Custom Storage in FireCMS
 
@@ -4705,7 +4858,7 @@ can define an enum string property and the values will be merged from both defin
 :::note
 FireCMS provides around 20 different fields (such as text fields, selects, and complex ones like reference or
 sortable array fields). If your use case is not covered by one of the provided fields, you can create your
-own [custom field](https://firecms.co/docs/properties/custom_fields).
+own [custom field](https://firecms.co/docs/properties/custom_fields.mdx).
 :::
 
 :::tip
@@ -4918,7 +5071,7 @@ to `false` in the collection configuration.
   in [Properties](https://firecms.co/docs/properties/properties_intro).
 - **`propertiesOrder`**: Order in which the properties are displayed.
     - For properties, use the property key.
-    - For additional columns, use the column id.
+    - For additional field, use the field key.
     - If you have subcollections, you get a column for each subcollection, with the path (or alias) as the
       subcollection, prefixed with `subcollection:`. E.g., `subcollection:orders`.
     - If you are using a collection group, you will also have an additional `collectionGroupParent` column.
@@ -4976,6 +5129,11 @@ initialFilter: {
     age: [">=", 18]
 }
 ```
+```tsx
+initialFilter: {
+    related_user: ["==", new EntityReference("sdc43dsw2", "users")]
+}
+```
 
 - **`forceFilter`**: Force a filter in this view. If applied, the rest of the filters will be disabled. Filters applied
   with this prop cannot be changed.
@@ -4983,6 +5141,11 @@ initialFilter: {
 ```tsx
 forceFilter: {
     age: [">=", 18]
+}
+```
+```tsx
+forceFilter: {
+    related_user: ["==", new EntityReference("sdc43dsw2", "users")]
 }
 ```
 
@@ -4995,8 +5158,10 @@ initialSort: ["price", "asc"]
 
 - **`Actions`**: Builder for rendering additional components such as buttons in the collection toolbar. The builder
   takes an object with props `entityCollection` and `selectedEntities` if any are set by the end user.
-- **`pagination`**: If enabled, content is loaded in batches. If `false` all entities in the collection are loaded. You
-  can specify a number to specify the pagination size (50 by default). Defaults to `true`.
+- **`pagination`**: If enabled, content is loaded in batches. If `false` all entities in the
+  collection are loaded. This means that when reaching the end of the collection, the CMS will load more entities.
+  You can specify a number to specify the pagination size (50 by default)
+  Defaults to `true`
 - **`additionalFields`**: You can add additional fields to both the collection view and the form view by implementing an
   additional field delegate.
 - **`textSearchEnabled`**: Flag to indicate if a search bar should be displayed on top of the collection table.
@@ -5016,8 +5181,11 @@ initialSort: ["price", "asc"]
   can also use this collection as a reference target.
 - **`callbacks`**: This interface defines all the callbacks that can be used when an entity is being created, updated,
   or deleted. Useful for adding your own logic or blocking the operation's execution. [More information](https://firecms.co/docs/callbacks).
-- **`views`**: Array of builders for rendering additional panels in an entity view. Useful if you need to render custom
-  views for your entities. [More information](https://firecms.co/docs/entity_views).
+- **`entityViews`**: Array of builders for rendering additional panels in an entity view. Useful if you need to render custom
+  views for your entities. [More information](https://firecms.co/docs/collections/entity_views).
+- **`alwaysApplyDefaultValues`**: If set to true, the default values of the properties will be applied
+  to the entity every time the entity is updated (not only when created).
+  Defaults to false.
 
 ## Entity callbacks
 
@@ -5597,7 +5765,7 @@ account and manage the indexing of your documents.
 
 You can achieve this by implementing a Google Cloud Function that listens to
 Firestore changes and updates the Algolia index.
-There is also a [Firebase extension](https://extensions.dev/extensions/algolia/firestore-algolia-search)
+There is also a [Firebase extension](https://extensions.dev/extensions/algolia/firestore-algolia-search) 
 for the very same purpose.
 
 The examples below show how to use Algolia as an external search provider, using the `algoliasearch` library version 5.
@@ -5623,33 +5791,17 @@ const algoliaSearchController = buildExternalSearchController({
                        path,
                        searchString
                    }) => {
-        if (path === "products")
+        if (path === "products") {
             return performAlgoliaTextSearch(client, "products", searchString);
+        }
         return undefined;
     }
 });
 
-export default function App() {
-
-    const productCollection = buildCollection({
-        path: "products",
-        name: "Products",
-        textSearchEnabled: true,
-        properties: {
-            name: {
-                dataType: "string",
-                name: "Name",
-                validation: { required: true }
-            }
-        }
-    });
-
-    return <FireCMSCloudApp
-        name={"My Online Shop"}
-        collections={[productCollection]}
-        textSearchController={algoliaSearchController}
-        firebaseConfig={firebaseConfig}
-    />;
+const appConfig: FireCMSAppConfig = {
+    version: "1",
+    textSearchControllerBuilder: algoliaSearchController,
+    // ...
 }
 ```
 
@@ -5696,7 +5848,7 @@ provider, such as Algolia. This is the recommended approach.
 
 You can use local text search in FireCMS Cloud, or in self-hosted versions.
 
-For FireCMS Cloud, you just need to enable it with the UI.
+For FireCMS Cloud, you just need to enable it in the UI.
 
 For self-hosted versions, you can enable it by setting the `localTextSearchEnabled` in `useFirestoreDelegate`.
 Then you need to mark each collection with `textSearchEnabled: true`.
@@ -6061,7 +6213,7 @@ match /{path=**}/locales/{document=**} {
 ```
 
 When doing a collection group query, the path will be something like
-`/products/{productId}/locales/{localeId}`. But the query will go to all
+`/products/{productId}/locales/{localeId}`. But the query will go to all 
 the collections called `locales` in your database. That is why you might need
 to add a rule like the one above.
 :::
@@ -6198,7 +6350,7 @@ export const productsCollection = buildCollection<Product>({
 ## Properties
 
 Properties define each **field** in a form or column in a collection included in an
-entity collection.
+entity collection. 
 
 You can build properties by creating the object directly or by
 using the helper method `buildProperty` (just the identity function that uses
@@ -6676,8 +6828,8 @@ is [`SwitchFieldBinding`](https://firecms.co/docs/../api/functions/SwitchFieldBi
 
 Use the date/time fields to allow users to set dates, saved as Firestore timestamps.
 
-You can choose between using dates or date/time fields.
-Also you can create read-only fields that get updated automatically when
+You can choose between using dates or date/time fields. 
+Also you can create read-only fields that get updated automatically when 
 entities are created or updated
 
 The data type is [`date`](https://firecms.co/docs/config/date).
@@ -6736,11 +6888,11 @@ buildProperty({
 ## References
 
 Use reference fields when you need to establish relations between collections.
-For example, you may have a product that is related to one category, or one
+For example, you may have a product that is related to one category, or one 
 that has multiple purchases.
 
 When you set up a FireCMS app, you define collections under paths (or path
-aliases), and those are the paths that you use to configure reference
+aliases), and those are the paths that you use to configure reference 
 properties.
 
 #### Single reference field
@@ -6778,7 +6930,7 @@ buildProperty({
 ```
 
 The data type is [`array`](https://firecms.co/docs/config/array) with a reference
-property as the `of` prop.
+property as the `of` prop. 
 
 Internally the component used
 is [`ArrayOfReferencesFieldBinding`](https://firecms.co/docs/../api/functions/ArrayOfReferencesFieldBinding).
@@ -6869,7 +7021,9 @@ buildProperty({
         dataType: "string",
         previewAsTag: true
     },
-    expanded: true
+    expanded: true,
+    sortable: true, // default is true
+    canAddElements: true, // default is true
 });
 ```
 
@@ -6967,7 +7121,7 @@ Each property in the CMS has its own API, but they all share some **common props
   the value and additional utility props such as if there is an error. You
   can customize it by passing custom props that are received in the
   component. More details about how to
-  implement [custom fields](https://firecms.co/docs/custom_fields)
+  implement [custom fields](https://firecms.co/docs/custom_fields.mdx)
 
 * `Preview`
   Configure how a property is displayed as a preview, e.g. in the collection
@@ -6982,7 +7136,7 @@ Each property in the CMS has its own API, but they all share some **common props
 * `defaultValue`
   This value will be set by default for new entities.
 
-
+  
 
 
 ## String
@@ -7014,10 +7168,26 @@ indicate that this string refers to a path in Google Cloud Storage.
   reference. Note that you can also use the asterisk notation, so `image/*`
   accepts any image file, and so on.
 * `metadata` Specific metadata set in your uploaded file.
-* `fileName` You can specify a fileName callback if you need to
-  customize the name of the file
-* `storagePath` You can specify a storage path callback if you need to
-  customize the path where it is stored.
+* `fileName` You can use this prop to customize the uploaded filename.
+  You can use a function as a callback or a string where you
+  specify some placeholders that get replaced with the corresponding values.
+  - `{file}` - Full file name
+  - `{file.name}` - Name of the file without extension
+  - `{file.ext}` - Extension of the file
+  - `{rand}` - Random value used to avoid name collisions
+  - `{entityId}` - ID of the entity
+  - `{propertyKey}` - ID of this property
+  - `{path}` - Path of this entity
+* `storagePath` Absolute path in your bucket.
+  You can use a function as a callback or a string where you
+  specify some placeholders that get replaced with the corresponding values.
+  - `{file}` - Full file name
+  - `{file.name}` - Name of the file without extension
+  - `{file.ext}` - Extension of the file
+  - `{rand}` - Random value used to avoid name collisions
+  - `{entityId}` - ID of the entity
+  - `{propertyKey}` - ID of this property
+  - `{path}` - Path of this entity
 * `storeUrl` When set to `true`, this flag indicates that the download
   URL of the file will be saved in Firestore instead of the Cloud
   storage path. Note that the generated URL may use a token that, if
@@ -7282,7 +7452,7 @@ The widget that gets created is
 - [`SwitchFieldBinding`](https://firecms.co/docs/../api/functions/SwitchFieldBinding)  simple boolean switch
 
 Links:
-- [API](https://firecms.co/docs/../api/interfaces/booleanproperty)
+- [API](https://firecms.co/docs/../api/interfaces/BooleanProperty)
 
 ## Reference
 
@@ -7471,6 +7641,51 @@ const contentProperty = buildProperty({
 });
 ```
 
+#### `sortable`
+
+Controls whether elements in this array can be reordered. Defaults to `true`.
+This property has no effect if `disabled` is set to `true`.
+
+Example:
+```tsx
+
+const tagsProperty = buildProperty({
+  name: "Tags",
+  dataType: "array",
+  of: {
+    dataType: "string",
+    previewAsTag: true
+  },
+  sortable: false // disable reordering
+});
+```
+
+#### `canAddElements`
+
+Controls whether elements can be added to the array. Defaults to `true`.
+This property has no effect if `disabled` is set to `true`.
+
+Example:
+```tsx
+
+const readOnlyTagsProperty = buildProperty({
+  name: "Tags",
+  dataType: "array",
+  of: {
+    dataType: "string"
+  },
+  canAddElements: false // prevent adding new tags
+});
+```
+
+#### `expanded`
+
+Determines whether the field should be initially expanded. Defaults to `true`.
+
+#### `minimalistView`
+
+When set to `true`, displays the child properties directly without being wrapped in an extendable panel.
+
 #### `validation`
 
 * `required` Should this field be compulsory.
@@ -7488,8 +7703,7 @@ Based on your configuration the form field widgets that are created are:
 - [`BlockFieldBinding`](https://firecms.co/docs/../api/functions/BlockFieldBinding) if the `oneOf` property is specified
 
 Links:
-- [API](https://firecms.co/docs/../api/interfaces/arrayproperty)
-
+- [API](https://firecms.co/docs/../api/interfaces/ArrayProperty)
 
 ## Map
 
@@ -7538,6 +7752,14 @@ Should the map be expanded by default in the form view. Defaults to `false`.
 Render this map as a key-value table that allows to use
 arbitrary keys. You don't need to define the properties in this case.
 
+#### `expanded`
+
+Determines whether the field should be initially expanded. Defaults to `true`.
+
+#### `minimalistView`
+
+When set to `true`, displays the child properties directly without being wrapped in an extendable panel.
+
 #### `validation`
 
 * `required` Should this field be compulsory.
@@ -7561,9 +7783,7 @@ Links:
 
 When defining the properties of a collection, you can choose to use a builder
 [`PropertyBuilder`](https://firecms.co/docs/api/type-aliases/PermissionsBuilder), instead of assigning the
-property configuration directly. In the builder you
-receive [`PropertyBuilderProps`](https://firecms.co/docs/api/type-aliases/PermissionsBuilderProps)
-and return your property.
+property configuration directly. 
 
 This is useful for changing property configurations like available values on the
 fly, based on other values.
@@ -7675,10 +7895,21 @@ export const userSchema: EntityCollection = buildCollection<User>({
 
 ## Custom fields
 
+
 Custom fields allow you to customize the field that it is displayed in the
 form, related to a specific property. These fields use your own logic to
 render the corresponding view, and are responsible for updating the underlying
 property value.
+
+<video style={{
+    maxWidth: "100%",
+    width: "640px",
+    margin: "32px 0px 32px",
+    alignSelf: "center"
+}}
+       loop autoPlay muted>
+    <source src="/img/custom_fields_dark.mp4" type="video/mp4"/>
+</video>
 
 If you need a custom field for your property you can do it by passing a React
 component to the `propertyConfig` prop of a property `config`. The React component must
@@ -7947,10 +8178,14 @@ In FireCMS PRO, you can define the `propertyConfigs` in the `FireCMS` component:
 
 ## Top level views
 
-If you need to develop a custom view that does not map directly to a Firestore
+If you need to develop a custom view that does not map directly to a datasource
 collection you can implement it as a React component. This is useful for
 implementing custom dashboards, data visualizations, or any other custom
 functionality you need.
+
+The top level views can be customized based on the logged in user, so you can
+implement custom views for different user roles, or even hide them completely
+for unauthenticated users.
 
 You can use all the components and hooks provided by FireCMS.
 Check the [components gallery](https://firecms.co/docs/components) for more information.
@@ -7970,35 +8205,70 @@ For custom views you can define the following props:
 
 * `path` string
 
-  CMS Path you can reach this view from.
-  If you include multiple paths, only the first one will be included in the
-  main menu
+CMS Path you can reach this view from.
+If you include multiple paths, only the first one will be included in the
+main menu
 
 * `name`: string
 
-  Name of this view
+Name of this view
 
 * `description`?: string
 
-  Optional description of this view. You can use Markdown
+Optional description of this view. You can use Markdown
 
 * `hideFromNavigation`?: boolean
 
-  Should this view be hidden from the main navigation panel.
-  It will still be accessible if you reach the specified path
+Should this view be hidden from the main navigation panel.
+It will still be accessible if you reach the specified path
 
 * `view`: React.ReactNode
 
-  Component to be rendered. This can be any React component, and can use any
-  of the provided hooks
+Component to be rendered. This can be any React component, and can use any
+of the provided hooks
 
 * `group`?: string
 
-  Optional field used to group top level navigation entries under a
-  navigation view.
+Optional field used to group top level navigation entries under a
+navigation view.
 
-#### Example:
-A quick example for a custom view:
+#### Example self-hosted FireCMS
+
+For self-hosted FireCMS, you can define your custom top level views by adding them in your `useBuildNavigationController` component.
+You can pass them as an array of `CMSView` objects or a callback function that returns an array of `CMSView` objects.
+In the callback, you can use the `user` object to conditionally show or hide views based on the user role, as well
+as access the `authentication` and `navigation` hooks.
+
+```tsx
+
+// rest of you main app code
+
+    const customViews: CMSView[] = useMemo([{
+        path: "additional",
+        name: "Additional view",
+        description: "This is an example of an additional view that is defined by the user",
+        // This can be any React component
+        view: <ExampleCMSView/>
+    }], []);
+
+    const navigationController = useBuildNavigationController({
+        views: ({ user }) =>{
+            if(!user) {
+                return [];
+            }
+            return customViews;
+        },
+        collections,
+        authController,
+        dataSourceDelegate: firestoreDelegate
+    });
+```
+
+#### Example FireCMS Cloud
+
+In FireCMS Cloud, you can define your custom top level views by adding them to your `FireCMSAppConfig`. You can
+use a callback or add them directly to the `views` property. The callback includes the logged in `user`, so you can
+use it to conditionally show or hide views based on the user role.
 
 ```tsx
 import { buildCollection, CMSView } from "@firecms/core";
@@ -8015,7 +8285,7 @@ const customViews: CMSView[] = [{
     view: <ExampleCMSView/>
 }];
 
-const productCollection = buildCollection({
+const productCollection = buildCollection<any>({
     name: "Product",
     id: "products",
     path: "products",
@@ -8033,7 +8303,7 @@ const appConfig: FireCMSAppConfig = {
     collections: ({ user }) => [
         productCollection
     ],
-    views: customViews
+    views: ({ user }) => customViews
 };
 
 export default function App() {
@@ -8046,8 +8316,10 @@ export default function App() {
 
 ```
 
-Your custom view is implemented as any regular React component that uses
-some hooks provided by the CMS:
+#### Example Additional view
+
+Your custom view is implemented as any regular React component.
+You can use any of the provided hooks, including authentication, navigation, datasource, storage, app stage, etc.
 
 ```tsx
 import React from "react";
@@ -8424,7 +8696,7 @@ export function ExampleCMSView() {
 
 ## useReferenceDialog
 
-:::note
+:::note 
 Please note that in order to use this hook you **must** be in a
 component (you can't use them directly from a callback function).
 :::
@@ -8559,8 +8831,7 @@ was stored. Then you can convert that storagePath into a download URL
 
 ## useModeController
 
-Hook to retrieve the current mode (`light` | `dark`), and `setMode`
-or `toggle` functions to change it.
+Hook to retrieve the current mode (`light` | `dark` | `system`), and `setMode`.
 
 Consider that in order to use this hook you need to have a parent
 `FireCMS` component in the tree.
@@ -8571,7 +8842,6 @@ Consider that in order to use this hook you need to have a parent
 {
     mode: "light" | "dark";
     setMode: (mode: "light" | "dark") => void;
-    toggleMode: () => void;
 }
 ```
 
@@ -9621,11 +9891,14 @@ FireCMS allows you to pass a function that returns a list of collections to the
 import { buildCollection, EntityCollectionsBuilder } from "@firecms/core";
 import { Unit, unitsCollection } from "./unit_collection";
 
-const collectionBuilder: EntityCollectionsBuilder = async ({ dataSource }) => {
+const collectionBuilder: EntityCollectionsBuilder = async ({
+                                                               dataSource,
+                                                               user
+                                                           }) => {
     const units = await dataSource.fetchCollection<Unit>({
         path: "units",
     });
-    const lessonCollections = units.map(unit => buildCollection({
+    const lessonCollections = units.map(unit => buildCollection<Unit>({
         name: unit.values.name,
         id: `units/${unit.id}/lessons`,
         path: `units/${unit.id}/lessons`,
@@ -9634,6 +9907,10 @@ const collectionBuilder: EntityCollectionsBuilder = async ({ dataSource }) => {
         properties: {
             name: {
                 name: "Name",
+                dataType: "string"
+            },
+            description: {
+                name: "Description",
                 dataType: "string"
             }
         }
@@ -10074,7 +10351,7 @@ import { Alert } from "@firecms/ui";
 export default function CustomStyleAlertDemo() {
     return (
         <Alert
-            className="custom-class"
+            outerClassName="custom-class"
             style={{
                 borderLeft: "4px solid #4ade80",
                 color: "#fff",
@@ -10399,11 +10676,46 @@ export default function VariantButtonDemo() {
             <Button variant="filled">
                 Filled Button
             </Button>
+            <Button color="neutral">
+                Neutral Button
+            </Button>
             <Button variant="outlined">
                 Outlined Button
             </Button>
             <Button variant="text">
                 Text Button
+            </Button>
+        </div>
+    );
+}
+
+```
+
+### Color
+
+The `color` prop sets the color theme of the button. Possible values are `primary`, `secondary`, `text`, `error`, and `neutral`.
+
+```tsx
+import React from "react";
+import { Button } from "@firecms/ui";
+
+export default function ButtonColorDemo() {
+    return (
+        <div className={"flex flex-row gap-4 items-center justify-center"}>
+            <Button color="primary">
+                Primary
+            </Button>
+            <Button color="secondary">
+                Secondary
+            </Button>
+            <Button color="text">
+                Text
+            </Button>
+            <Button color="error">
+                Error
+            </Button>
+            <Button color="neutral">
+                Neutral
             </Button>
         </div>
     );
@@ -10491,9 +10803,9 @@ export default function CustomClassNameButtonDemo() {
 
 ### Button Component Props
 
-- `variant`: Defines the style variant of the button. Options are `"filled"`, `"outlined"`, `"neutral"`, or `"text"`. Defaults to `"filled"`.
+- `variant`: Defines the style variant of the button. Options are `"filled"`, `"outlined"`, or `"text"`. Defaults to `"filled"`.
 - `disabled`: Disables the button, preventing user interaction. Defaults to `false`.
-- `color`: Sets the color theme of the button. Options are `"primary"`, `"secondary"`, `"text"`, or `"error"`.
+- `color`: Sets the color theme of the button. Options are `"primary"`, `"secondary"`, `"neutral"`, `"text"`, or `"error"`.
 - `size`: Specifies the size of the button. Options are `"small"`, `"medium"`, `"large"`, `"xl"`, or `"2xl"`. Defaults to `"medium"`.
 - `startIcon`: Adds an icon at the start of the button content.
 - `fullWidth`: When `true`, the button will expand to fill its container's width. Defaults to `false`.
@@ -11408,7 +11720,7 @@ export default function ExpandablePanelInvisibleDemo() {
 
 ## File Upload
 
-File Upload component is designed to easily handle the drag and drop of files as well as file selection through the dialog window. It supports features like file type restriction, maximum file size, custom titles, and descriptions.
+File Upload component is designed to easily handle the drag and drop of files as well as file selection through the dialog window. It supports features like file type restriction, maximum file size, custom titles, and descriptions. 
 
 ### Usage
 
@@ -13251,6 +13563,7 @@ export default function TextFieldMultilineDemo() {
         />
     );
 }
+
 ```
 
 ### Text Field Sizes
@@ -13356,7 +13669,7 @@ import { TextareaAutosize } from '@firecms/ui';
 
 export default function TextareaAutosizeBasicDemo() {
     return (
-        <TextareaAutosize
+        <TextareaAutosize 
             placeholder="Type your text here..."
         />
     );
@@ -13379,7 +13692,7 @@ export default function TextareaAutosizeControlledDemo() {
     };
 
     return (
-        <TextareaAutosize
+        <TextareaAutosize 
             value={value}
             onChange={handleChange}
             placeholder="Type your text here..."
@@ -13398,7 +13711,7 @@ import { TextareaAutosize } from "@firecms/ui";
 
 export default function TextareaAutosizeRowsDemo() {
     return (
-        <TextareaAutosize
+        <TextareaAutosize 
             placeholder="Type your text here..."
             minRows={3}
             maxRows={6}
@@ -13406,502 +13719,3 @@ export default function TextareaAutosizeRowsDemo() {
     );
 }
 ```
-## Changelog
-### [3.0.0-beta.12] - 2025-12-
-
-- **Full-screen entity views**: You can now open entities in a full-screen view. This is useful when you want to focus on
-  the entity you are editing. You can enable this feature by setting the `openEntityMode` prop to `full_screen` in the collection
-  view. The default mode continues to be `side_panel`. There has been a big navigation revamp to accomodate all the new use cases.
-- **Scroll preservation**. When you open an entity in a full-screen view, the scroll position of the collection view is preserved.
-- **Drafts saved locally**: Drafts are now saved locally in the browser. This means that if you close the browser and open it again,
-  the draft will still be there. This will help prevent losing data if you accidentally close the browser, or you navigate away.
-- The state of filters ans sorting is now preserved in the URL.
-- You can now override custom entity actions. Just provide an action with one of the keys `edit`, `copy` or `delete` in
-  the `entityActions` prop in the collection view. This will override the default actions for the entity.
-
-### [3.0.0-beta.11] - 2024-12-13
-
-- New Next.js template for FireCMS PRO. You can now create a new project with the PRO template using the CLI.
-- [BREAKING] Removed `userRoles` from AuthController. You can now access the `roles` prop in the user object directly
-- [BREAKING] Many FireCMS UI sizes have been adjusted for better consistency. This will affect you only if you are using
-  custom components.
-    - `smallest` or `tiny` have been renamed to `small`.
-    - `small` has been renamed to `medium`.
-    - `medium` has been renamed to `large`.
-- [BREAKING] For self-hosted versions, there has been a change in the API for the data management controllers. The
-  `authController` is now passed to the User Management controller, instead of the other way around. The
-  `userManagementController` can be used as an auth controller, but with all the added logic for user management.
-
-❌ Code before:
-
-```typescript
-    /**
- * Controller in charge of user management
- */
-const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate
-    });
-
-/**
- * Controller for managing authentication
- */
-const authController: FirebaseAuthController = useFirebaseAuthController({
-    firebaseApp,
-    signInOptions,
-    loading: userManagement.loading,
-    defineRolesFor: userManagement.defineRolesFor
-});
-```
-
-✅ Code after:
-
-```typescript
-    /**
- * Controller for managing authentication
- */
-const authController: FirebaseAuthController = useFirebaseAuthController({
-        firebaseApp,
-        signInOptions
-    });
-
-/**
- * Controller in charge of user management
- */
-const userManagement = useBuildUserManagement({
-    dataSourceDelegate: firestoreDelegate,
-    authController
-});
-```
-
-- Added many "use client" directives to UI components.
-- Fixed issues in collection editor code dialog.
-- Updated web styles and integrated improvements in Docusaurus.
-- Enhanced styling for empty references and minor design tweaks.
-- Continued work in progress on Editor custom components.
-- Reintroduced dark primary color variant for better theme options.
-- Minor web updates for improved aesthetics and functionality.
-- Fixed a bug where the Editor was not saving false values.
-- Replaced all instances of gray and slate colors with more unified `surface` and `surface-accent` colors for UI
-  consistency.
-- Added Avatar component fallback and integrated ESLint configuration into templates.
-- Enhanced error handling in forms and improved cloud error messages.
-- Refactored user management logic for better code organization.
-- Improved the handling of boolean switch properties in configurations.
-- Introduced state management for children in ArrayContainer.
-- Added a recipe for slug creation, improving URL handling and SEO.
-- Fixed crash issues in repeat fields for subproperties and addressed various minor styling and functionality bugs.
-- Made improvements to heatmap responsiveness (HMR fixes).
-- Refactored text search functionalities for better efficiency and added relevant documentation.
-- Fixed issues with number input fields blocking scroll and replaced date picker with native HTML date input for
-  consistency.
-- If you are using the `Select` component, you don't need to provide a `renderValue` function anymore. The component
-  will handle it automatically.
-- Custom preview properties are now rendered if the value is undefined.
-- Fixed for Cloud version refreshing navigation too often.
-- Fix for local search not working when returning to a collection.
-- Fix for bug when selecting a read only entity.
-- Fixed selection bug in collection groups for entities sharing id.
-- Reference previews now take into account arrays of images for the preview image.
-
-### [3.0.0-beta.10] - 2024-07-10
-
-- Fixed issues with wrong licenses.
-- Resolved TipTap dependencies.
-- Addressed various minor styling updates across the web.
-- Moved body CSS from default imports to individual files for better modularity.
-- Implemented several web updates, including select style fixes and dialog title adjustments for text search.
-- Updated the collection editor property select view and improved widget selection layout.
-- Applied AppBar tweaks to enhance behavior on mobile devices.
-- Improved console outputs and cleaned up miscellaneous code segments.
-- Enhanced UI with the addition of a Slider component and updated related documentation.
-- Replaced entity edit icon with a pencil for clarity.
-- Updated dependencies and refined project management with a license check feature.
-- Improved Formex handling of number inputs and fixed DateTimeField export in Next.js.
-- Added API key generation and project selection capabilities.
-- Introduced a past-due warning message and improvements in collection and subcollection data handling.
-- Provided better error handling and layout consistency in the application.
-
-### [3.0.0-beta.9] - 2024-07-10
-
-- **NEW MARKDOWN EDITOR**: The markdown editor has been completely revamped. It now supports a live preview, and a much
-  improved editing experience. It now includes a slash menu you can access by typing `/` in the editor. Also a new
-  toolbar with buttons for common markdown operations. The new editor also includes an AI auto-complete feature, that
-  suggests markdown elements as you type, and displays the generated markdown in real time, and highlighted.
-- Additional fields are also now displayed in the entity side dialog.
-- Import/export is now broken into 2 separate plugins.
-- Packages now are not minified, leaving that responsibility to the client bundler.
-- Added max size field in the collection editor for files.
-- Improved error handling of wrong file uploads.
-- Improving error when opening a non accessible entity in the side view.
-- Select component tweaks and removed `multiple` prop.
-- New `MultiSelect` component with a much improved UX.
-- Introduced AppCheck directly in FireCMS Cloud.
-- Added MongoDB support for FireCMS PRO.
-- Multiple fixes in the user management plugin for PRO projects.
-- Updated react-router dependencies.
-- Improved customization, you can now define the styles for each typography entry, including font size, typography...
-- Improved home page search, now using fuse.js
-- Fix for missing index and wrong keys in array of maps with property builder.
-- Fix for drag handle position in editor.
-- Renamed `partOfBlock` to `minimalistView` in field props.
-- It is now possible to define preview properties at the collection level.
-- Updated references styling.
-- Tooltips have been revamped to use less divs.
-- Fix for data enhancement plugin position.
-- Fix for how you can override the data source for specific collections.
-- You can now also define a different database other than `(default)` in the data source.
-- User Management plugin now saves users with the email as key, instead of a random value.
-- Fix for side panels adjusting to the right size when window changes size.
-- Some drawer styling updates.
-- `RepeatFieldBinding` can now use unresolved array properties.
-
-### [3.0.0-beta.8] - 2024-07-10
-
-- Fix for excessive re-renders in the form view.
-- You can now use `PropertyFieldBinding` components in your custom entity views, and they will be treated as regular
-  fields.
-- For additional entity views, you can now preserve the bottom actions bar, with the prop `includeActions`.
-- For map properties, if they are not required, the value might me `undefined`, but if a child property has a value,
-  validation will be triggered for all children.
-- Fix for data maps not getting traversed correctly with null value.
-- CLI pro template now supports creating web app config.
-- Fix for collection editor data inference for enums.
-- Small Sheet styling improvement.
-- Fixed local search loading issue with cached data.
-- Small visual fix for IDs.
-- AppCheck updates.
-- Fixed inconsistent opening of reference preview side dialogs.
-- Fixed icons for image previews.
-- Navigating to home URL when logging out.
-- Added `previewUrl` prop in storage options (#639).
-- Fixed XLSX security issue CVE-2024-22363 (#654).
-- Fix for the removal of keys in KeyValue fields.
-- Added large size for boolean switches.
-- Updated eslint to the latest version and config.
-- Types fix for `removePropsIfExisting`.
-- Fix for video drag bug in array fields.
-- Added option to ask for password reset, in PRO login view
-- Allowing null default values for properties.
-- Added count to array field bindings.
-- Fixed default values in nested maps in arrays.
-- Resolving entity collection path with the one coming from the entity, not the view config.
-- Small fix for logo image.
-- Fixed conditional fields not updating correctly.
-- Hide new user button if `disabledSignupScreen`.
-- Improved docs navigation bar styling.
-- Allowing maps to be completely undefined.
-- Disabled add button in collection groups.
-- Big entity refactor, custom views are now under the formex provider.
-- CLI fix for not logged in users.
-- Fix for datamaps not getting traversed correctly with null values.
-- Scaffold prop updates.
-
-### [3.0.0-beta.7] - 2024-06-18
-
-- Renamed the `cn` utility class to `cls`, while keeping `cn` available with a deprecation warning.
-- Added Menubar documentation and missing skeleton docs.
-- Corrected properties order type to allow subcollections.
-- New UI section added to the landing page.
-- Improved saving and closing dialog flow.
-- Allow hiding IDs and entity links in references and previews.
-- Removed some CSS transitions.
-- Allow hiding the color mode toggle.
-- Added JSON view example.
-- Changed virtual table to use size in pixels.
-- Some design updates for better user experience.
-- Added back collection group column with parent IDs.
-- Improved empty results output.
-- Added sample prompts and suggestions for DataTalk.
-- Enhanced side entity view, dynamically calculated based on collection property depth.
-- Fixed mergeDeep types.
-- Fixed issue with exporting non-existing properties defined in `propertiesOrder`.
-- Fixed PRO template issues without Cloud projects.
-- Improved handling for enum values with value 0.
-
-### [3.0.0-beta.6] - 2024-04-23
-
-- Added AppCheck to every FireCMS variant.
-- Various fixes for datasource delegate.
-- Fix in saving cleaned data.
-- Cloud new user roles creation issue fixed.
-- Error message display issue in table cells fixed.
-- Subcollections updating issue fixed.
-- Import/export analytics and related data mapping conversions updated.
-- Updated and improved handling of user roles and permissions.
-- Enhanced the handling of service account files and project creation using SA.
-- Updated the behavior of unindexed queries.
-- User management connection to demo removed.
-- Dependency updates to mitigate security issues.
-- Exposing additional methods from data inference for better customization.
-- Pro template updates for improved UI/UX.
-- Updated documentation for collections and user management.
-
-### [3.0.0-beta.5] - 2024-04-01
-
-- [BREAKING] The main component for FireCMS Cloud has been renamed from `FireCMSApp` to `FireCMSCloudApp`. Please update
-  your imports accordingly.
-- Fixes related to the CLI. You can now install the CLI globally with `npm install -g @firecms/cli`.
-
-### [3.0.0-beta.4] - 2024-03-27
-
-- [BREAKING] The package name for FireCMS Cloud has changed from `firecms` to `@firecms/cloud`. This is done
-  to avoid conflicts with the main FireCMS package. If you are using FireCMS Cloud, you will need to update your
-  imports.
-- [BREAKING] If you are importing the tailwind configuration, you can now find the import at:
-  `import fireCMSConfig from "@firecms/ui/tailwind.config.js";`
-- [BREAKING] In that case, you also need to add `@tailwindcss/typography` to your dev dependencies.
-- [BREAKING] You need to update your `vite.config.js` and replace the package name in the federated configuration:
-    ```javascript
-    import { defineConfig } from "vite"
-    import react from "@vitejs/plugin-react"
-    import federation from "@originjs/vite-plugin-federation"
-
-    // https://vitejs.dev/config/
-    export default defineConfig({
-        esbuild: {
-            logOverride: { "this-is-undefined-in-esm": "silent" }
-        },
-        plugins: [
-            react(),
-            federation({
-                name: "remote_app",
-                filename: "remoteEntry.js",
-                exposes: {
-                    "./config": "./src/index"
-                },
-                shared: ["react", "react-dom", "@firecms/cloud", "@firecms/core", "@firecms/firebase", "@firecms/ui"]
-            })
-        ],
-        build: {
-            modulePreload: false,
-            target: "ESNEXT",
-            cssCodeSplit: false,
-        }
-    })
-    ```
-- Minor performance improvements and bug fixes.
-- Enhanced filtering and sorting capability for indexed fields.
-- Extended StorageSource to support custom `bucketUrl`.
-- Cleanup for navigation controller generics and Markdown prose classes.
-- Addressed User Management saving issues and renamed Cloud template.
-- Fixed ReferenceWidget.tsx rerenders.
-- Fixed homepage new collection button issue.
-- Fixed CLI templates path.
-- Roles integrated into AuthController.
-- Small change to plugins API.
-- Added user details to navigation bar dropdown.
-- Dependencies updated.
-- Entity view preview and title refactor.
-- Kanban board work in progress.
-- Fix for new radix empty select values.
-- Fixes for undefined properties in arrays and editor.
-- Additional parameters added in auth controllers.
-- Navigation cards refactor and Plugin API cleanup.
-- Fix for importing data with non-string IDs.
-- Documentation: Added recipe for managing entity callbacks.
-- Web updates and CLI fix for yarn.
-
-### [3.0.0-beta.3] - 2024-02-21
-
-- Fix for importing data in subcollections.
-- Code reordering.
-- Removed minification. Changed EntityReference type checks.
-- Editor image upload updates.
-- Cosmetic.
-- Moved tailwind.config.js editor plugin.
-- Removed callbacks in side navigation views, prevents bug.
-- PRO template fix.
-- PRO Login view cleanup.
-
-### [3.0.0-beta.2] - 2024-02-21
-
-- Added Formex package to handle forms across the platform. Formex is an in-house
-  form management library with a similar API to Formik, but with better performance,
-  and much more lightweight.
-- Enhanced onboarding process for new users.
-- Fixed data import issues for new collections.
-- Tweaked SaaS onboarding for better user experience.
-- Implemented regexp validation for input fields.
-- Improved login error feedback.
-- Extracted navigation controller for better manageability.
-- Updated styles for consistency.
-- Updated Vite and dependencies for performance and security.
-- Refactored user and role forms to use Formex.
-- Fixed table header forms and collection editor issues.
-- Addressed incorrect JSON import problems.
-- Removed Formik, enhancing form management with Formex.
-- Made minor HTML nesting and debounce fixes.
-- Fixed array container menu and multiline input bugs.
-- Migrated Tailwind configuration to lib for easier management.
-- Adjusted Sentry configuration for error reporting.
-- Fix for subcollections edit view showing empty.
-- Fixes for block and group properties in editor saving multiple entries when editing an existing sub property.
-
-### [3.0.0-beta.1] - 2024-02-01
-
-The first beta release of FireCMS v3.0.0.
-Check all the new features and improvements in the [documentation](https://firecms.co/docs/what_is_new_v3)
-and the [migration guide](https://firecms.co/docs/docs/migrating_from_v2).
-
-### [2.2.0] - 2023-11-09
-
-- Fix for missing subcollection links.
-- New email and password login flow
-- Removed add button in collection group
-- Export fixes
-- Fix for collections search
-
-### [2.1.0] - 2023-09-12
-
-- [BREAKING] The logic to verify valid filter combinations has been moved to the `DataSource` interface.
-  This improves the ability to customize the data source and allows for more complex filters.
-  This change will only affect you if you have implemented a custom data source. You will need to
-  add a `isFilterCombinationValid` method to your data source.
-- [BREAKING] The prop `filterCombinations` has been removed from the `EntityCollection` component.
-  This is now handled by the data source. If you need to allow multiple filters, you can use the
-  new `FireStoreIndexesBuilder` callback. Check
-  the [documentation](https://firecms.co/docs/collections/multiple_filters)
-  for more information.
-- You can now use nested `spreadChildren` in map properties, allowing to show arbitrary
-  nested structures as single columns in the collection view.
-- The collection count value is now updated with filters applied.
-- Fix for csv export not working when underlying data is invalid.
-- Fix for bug of collection search returning a single result.
-- Fix for reference fields breaking with incorrect values.
-
-### [2.0.5] - 2023-07-11
-
-- Default value for string properties is now `null` instead of `""`.
-- Fix for changing text search controller not updating as a dependency.
-- Fix for setting a unique field using a reference, which was
-  generating an invalid query in Firestore.
-
-### [2.0.4] - 2023-06-15
-
-- Fix for `forceFilter` not being applied correctly in reference views.
-- Fix for nullable enum validation config.
-
-### [2.0.3] - 2023-06-15
-
-- Fix for form resetting values when saving.
-
-### [2.0.2] - 2023-06-14
-
-- Replaced `flexsearch` with `js-search`. Their imports are too messed up.
-- Fix for form assigning wrong ids
--
-
-### [2.0.1] - 2023-06-12
-
-- Fix for block entries not generating the correct default value when adding a new entry. This was causing
-  a bug when the child property is an array, like in the blog example.
-- Added the `formAutoSave` to collections. This removes the buttons from the form and automatically saves
-  the entity when there are changes or the user leaves the form.
-- You can now access the `formContext` from collection views, allowing you to access the current entity
-  being edited, modify values and `save`.
-
-### [2.0.0] - 2023-06-07
-
-- You can use a callback to define the default view of an entity now.
-- Fix when opening entities from a custom view, that also uses subcollections.
-
-### [2.0.0-rc.2] - 2023-06-05
-
-- `@mui/x-date-pickers` dependency reverted to `^5.0.0`
-- Assigned default values to every property now, based on the property type.
-  e.g. boolean properties will have a default value of `false`, maps to `{}`,
-  and most other properties to `null`.
-- Removed empty space for hidden properties in the entity side dialog.
-
-### [2.0.0-rc.1] - 2023-05-31
-
-- Added arbitrary key-value fields with the prop `keyValue` in map properties
-- `@mui/x-date-pickers` dependency updated (you may need to bump your version
-  to 6.5.0)
-- Some enhancements to the `EntityCollectionTable` component, referring to
-  values being updated in the background. Also correct debouncing for
-  table fields.
-
-### [2.0.0-beta.7] - 2023-05-23
-
-- Added support for collection groups
-- [BREAKING] The `countEntities` function in the data source now takes an
-  object instead of a string as parameter. This will only affect you if you
-  have built a custom component using that function.
-- Added string url previews to fields
-- Fix for geopoints not being serialized correctly when saving.
-
-### [2.0.0-beta.6] - 2023-05-11
-
-- Fix for Typescript types not being exported correctly and giving errors
-  when using the library with the quickstart.
-- Fix for error messages not showing up correctly in new text inputs.
-- Fix for flexsearch import causing crash using webpack
-
-### [2.0.0-beta.5] - 2023-04-28
-
-- Updated fields Look and Feel. Text fields are now custom, not the ones
-  provided by Material UI. This allows for more customization, less code, and
-  better performance.
-- Fixed login view not centered
-- Fixed popup field selection and drag and drop bug
-- Fix for skip login field
-- HTML now rendered correctly in markdown previews
-- Fix for `read` permission not being applied correctly.
-- Fix for not centered empty view state in collections
-
-### [2.0.0-beta.4] - 2023-03-30
-
-- Fixed table header bug
-- Added search bar in home page
-- Added favourites and recent collections view in home page.
-- Fix for some deeply nested property builders in arrays
-- Added `autoOpenDrawer` prop, allowing to open the drawer automatically when
-  hovering the menu.
-- Allow choosing which custom view or subcollection is opened by default,
-  with the `defaultSelectedView` prop. Thanks to @SeeringPhil for the PR!
-- Renamed `builder` to `Builder` in collection custom views for consistency.
-
-### [2.0.0-beta.3] - 2023-03-21
-
-- Fixed bug regarding custom selection controllers.
-- Fix for default value not being set in array properties.
-- Enabled Firebase App Check. Thanks to @sengerts for the PR!
-- Added copy function to array views. Thanks to @guustmc for the PR!
-- The entity side dialog is now wider by default.
-- Small improvements to block properties. Now the first type is selected by
-  default.
-- Fixed additional ordering added when multiple filter applied, which created a
-  bug.
-  Thanks to @juanleondev for the PR!
-- Renamed `ReferenceSelectionView` to `ReferenceSelectionInner`
-- Added reference filters
-- Fixed delay of table update when deleting an entity
-- You can now change the value of any property within a custom field.
-
-### [2.0.0-beta.2] - 2023-01-30
-
-- Fixed bug where collection actions were getting their internal state reset.
-- Improved preview of files that are not images, videos, or audio files.
-- Form optimizations
-- Fix for reference dialog not clearing selection
-- Fix for multiple error snackbar, when there is an error uploading a file.
-- Fix for missing highlight when closing side dialog.
-- Fix for delayed data update when changing filters.
-- Internal refactoring of the `EntityCollectionTable` component.
-- [BREAKING] In the component `EntityCollectionTable`, the prop `ActionsBuilder`
-  has been replaced with `actions`.
-
-### [2.0.0-beta.1] - 2023-01-18
-
-This is the first beta release of FireCMS v2.0.0.
-While still in beta, we consider this version stable enough to be used in
-production.
-
-> All changes related to V2 alpha are currently bundled in these documents:
-> - [What's new in version 2.0.0](https://firecms.co/docs/new_in_v2)
-> - [Migration guide from version 1.x to 2.0.0](https://firecms.co/docs/migrating_from_v1)
-
-> The changelog for 1.0.0 versions and previous versions can be
-> found [here](https://firecms.co/docs/1.0.0/changelog)
-

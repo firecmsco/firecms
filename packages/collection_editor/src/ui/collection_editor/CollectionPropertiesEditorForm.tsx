@@ -24,7 +24,6 @@ import {
     DebouncedTextField,
     defaultBorderMixin,
     IconButton,
-    Paper,
     Tooltip,
     Typography,
 } from "@firecms/ui";
@@ -45,7 +44,7 @@ type CollectionEditorFormProps = {
     extraIcon: React.ReactNode;
     getUser?: (uid: string) => User | null;
     getData?: () => Promise<object[]>;
-    doCollectionInference: (collection: PersistedCollection) => Promise<Partial<EntityCollection> | null> | undefined;
+    doCollectionInference?: (collection: PersistedCollection) => Promise<Partial<EntityCollection> | null> | undefined;
     propertyConfigs: Record<string, PropertyConfig>;
     collectionEditable: boolean;
 };
@@ -108,6 +107,8 @@ export function CollectionPropertiesEditorForm({
                 return;
 
             setInferringProperties(true);
+
+            console.debug("CollectionEditor: inferring properties from data", doCollectionInference, values);
             // @ts-ignore
             doCollectionInference(values)
                 .then((newCollection) => {

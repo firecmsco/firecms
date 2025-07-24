@@ -39,8 +39,8 @@ export function OpenAIInstructionsActions() {
 
     return (
         <>
-            <IconButton onClick={() => setOpen(true)}>
-                <AutoFixHighIcon/>
+            <IconButton onClick={() => setOpen(true)} size={"small"}>
+                <AutoFixHighIcon size={"small"}/>
             </IconButton>
             <Dialog
                 open={open}

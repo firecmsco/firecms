@@ -133,8 +133,13 @@ export const FireCMSEditor = ({
         }
     }, [deferredHighlight?.from, deferredHighlight?.to]);
 
+    const firstUpdateRef = React.useRef(true);
     const onEditorUpdate = (editor: Editor) => {
         editorRef.current = editor;
+        if (firstUpdateRef.current) {
+            firstUpdateRef.current = false;
+            return; // Skip the first update to avoid unnecessary content change calls
+        }
         if (onMarkdownContentChange) {
             const markdown = editorRef.current.storage.markdown.getMarkdown();
             onMarkdownContentChange?.(addLineBreakAfterImages(markdown));

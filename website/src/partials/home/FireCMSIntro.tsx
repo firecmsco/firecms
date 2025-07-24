@@ -20,7 +20,7 @@ function FireCMSIntro() {
                includePadding={false}
                includeMargin={false}>
 
-            <div className="mt-16 mx-auto flex row items-center justify-center gap-2">
+            <div className="mt-32 mx-auto flex row items-center justify-center gap-2">
 
                 <span
                     className="text-sm font-semibold bg-gray-700 text-white px-2 py-1 rounded">MIT licensed</span>

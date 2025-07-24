@@ -1,10 +1,34 @@
 import React, { useMemo } from "react";
-import { Entity, EntityAction, FireCMSContext, ResolvedEntityCollection, SideEntityController } from "../types";
+import {
+    Entity,
+    EntityAction,
+    EntityActionClickProps,
+    FireCMSContext,
+    FormContext,
+    ResolvedEntityCollection,
+    SideEntityController
+} from "../types";
 
 import { copyEntityAction, deleteEntityAction } from "../components";
-import { canCreateEntity, canDeleteEntity, mergeEntityActions } from "../util";
-import { Button, cls, defaultBorderMixin, DialogActions, IconButton, LoadingButton, Typography } from "@firecms/ui";
-import { useAuthController, useFireCMSContext, useSideEntityController } from "../hooks";
+import { canCreateEntity, canDeleteEntity, mergeEntityActions, resolveEntityAction } from "../util";
+import {
+    Button,
+    CircularProgress,
+    cls,
+    defaultBorderMixin,
+    DialogActions,
+    IconButton,
+    LoadingButton,
+    Tooltip,
+    Typography
+} from "@firecms/ui";
+import {
+    useAuthController,
+    useCustomizationController,
+    useFireCMSContext,
+    useSideEntityController,
+    useSnackbarController
+} from "../hooks";
 import { EntityFormActionsProps } from "../form/EntityFormActions";
 import { SideDialogController, useSideDialogContext } from "./SideDialogs";
 
@@ -19,16 +43,21 @@ export function EntityEditViewFormActions({
                                               status,
                                               pluginActions,
                                               openEntityMode,
-                                              showDefaultActions = true
+                                              showDefaultActions = true,
+                                              navigateBack,
+                                              formContext
                                           }: EntityFormActionsProps) {
 
     const authController = useAuthController();
     const context = useFireCMSContext();
     const sideEntityController = useSideEntityController();
     const sideDialogContext = useSideDialogContext();
+    const customizationController = useCustomizationController();
 
     const entityActions = useMemo((): EntityAction[] => {
-        const customEntityActions = collection.entityActions
+        const customEntityActions = (collection.entityActions ?? [])
+            .map(action => resolveEntityAction(action, customizationController.entityActions))
+            .filter(Boolean) as EntityAction[];
         const createEnabled = canCreateEntity(collection, authController, path, null);
         const deleteEnabled = entity ? canDeleteEntity(collection, authController, path, entity) : false;
         const actions: EntityAction[] = [];
@@ -39,7 +68,7 @@ export function EntityEditViewFormActions({
         if (customEntityActions)
             return mergeEntityActions(actions, customEntityActions);
         return actions;
-    }, [authController, collection, path]);
+    }, [authController, collection, path, customizationController.entityActions?.length]);
 
     const formActions = showDefaultActions ? entityActions.filter(a => a.includeInForm === undefined || a.includeInForm) : [];
 
@@ -57,6 +86,8 @@ export function EntityEditViewFormActions({
             sideDialogContext,
             pluginActions,
             openEntityMode,
+            navigateBack,
+            formContext
         })
         : buildSideActions({
             savingError,
@@ -71,6 +102,8 @@ export function EntityEditViewFormActions({
             status,
             pluginActions,
             openEntityMode,
+            navigateBack,
+            formContext
         });
 }
 
@@ -87,6 +120,8 @@ type ActionsViewProps<M extends object> = {
     sideDialogContext: SideDialogController,
     pluginActions?: React.ReactNode[],
     openEntityMode: "side_panel" | "full_screen";
+    navigateBack: () => void;
+    formContext: FormContext
 };
 
 function buildBottomActions<M extends object>({
@@ -102,6 +137,8 @@ function buildBottomActions<M extends object>({
                                                   sideDialogContext,
                                                   pluginActions,
                                                   openEntityMode,
+                                                  navigateBack,
+                                                  formContext
                                               }: ActionsViewProps<M>) {
 
     const canClose = openEntityMode === "side_panel";
@@ -111,28 +148,36 @@ function buildBottomActions<M extends object>({
                 <Typography color={"error"}>{savingError.message}</Typography>
             </div>
         }
-        {entity && formActions.length > 0 && <div className="flex-grow flex overflow-auto no-scrollbar">
-            {formActions.map(action => (
-                <IconButton
-                    key={action.name}
-                    color="primary"
-                    onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-                        event.stopPropagation();
-                        if (entity)
-                            action.onClick({
-                                entity,
-                                fullPath: collection.path,
-                                collection: collection,
-                                context,
-                                sideEntityController,
-                                openEntityMode: openEntityMode
-                            });
-                    }}>
-                    {action.icon}
-                </IconButton>
-            ))}
+
+        {formActions.length > 0 && <div className="flex-grow flex overflow-auto no-scrollbar">
+            {formActions.map(action => {
+
+                const props = {
+                    view: "form",
+                    entity,
+                    fullPath: collection.path,
+                    collection: collection,
+                    context,
+                    sideEntityController,
+                    openEntityMode,
+                    navigateBack,
+                    formContext
+                } satisfies EntityActionClickProps<any>;
+
+                const isEnabled = !action.isEnabled || action.isEnabled(props);
+                return (
+                    <EntityActionButton
+                        key={action.key}
+                        action={action}
+                        enabled={isEnabled}
+                        props={props}
+                    />
+                );
+            })}
         </div>}
+
         {pluginActions}
+
         <Button variant="text" disabled={disabled || isSubmitting} type="reset">
             {status === "existing" ? "Discard" : "Clear"}
         </Button>
@@ -171,7 +216,10 @@ function buildSideActions<M extends object>({
                                                 disabled,
                                                 status,
                                                 sideDialogContext,
-                                                pluginActions
+                                                pluginActions,
+                                                openEntityMode,
+                                                navigateBack,
+                                                formContext
                                             }: ActionsViewProps<M>) {
 
     return <div
@@ -184,11 +232,32 @@ function buildSideActions<M extends object>({
             {status === "copy" && "Create copy"}
             {status === "new" && "Create"}
         </LoadingButton>
+
         <Button fullWidth={true} variant="text" disabled={disabled || isSubmitting} type="reset">
             {status === "existing" ? "Discard" : "Clear"}
         </Button>
 
         {pluginActions}
+
+        {formActions.length > 0 && <div className="flex flex-row flex-wrap mt-2">
+            {formActions.map(action => {
+                const props = {
+                    view: "form",
+                    entity,
+                    fullPath: collection.path,
+                    collection: collection,
+                    context,
+                    sideEntityController,
+                    openEntityMode,
+                    navigateBack,
+                    formContext
+                } satisfies EntityActionClickProps<any>;
+                const isEnabled = !action.isEnabled || action.isEnabled(props);
+                return (
+                    <EntityActionButton key={action.key} action={action} enabled={isEnabled} props={props}/>
+                );
+            })}
+        </div>}
 
         {savingError &&
             <div className="text-right">
@@ -196,4 +265,59 @@ function buildSideActions<M extends object>({
             </div>
         }
     </div>;
+}
+
+function EntityActionButton({
+                                action,
+                                enabled,
+                                props
+                            }: {
+    action: EntityAction,
+    enabled: boolean,
+    props: EntityActionClickProps<any, any>
+}) {
+    const snackbarController = useSnackbarController();
+    const [loading, setLoading] = React.useState(false);
+    return <Tooltip
+        title={action.name}>
+        <IconButton
+            color="primary"
+            disabled={!enabled}
+            onClick={(event) => {
+                console.debug("Executing action", action.key, props);
+                try {
+                    event.stopPropagation();
+                    if (props.entity) {
+                        const onClick = action.onClick(props);
+                        // If the action returns a promise, we can handle it
+                        if (onClick instanceof Promise) {
+                            setLoading(true);
+                            onClick
+                                .catch((error) => {
+                                    console.error("Error executing action", action.key, error);
+                                    snackbarController.open({
+                                        message: `Error executing action: ${error.message}`,
+                                        type: "error"
+                                    })
+                                })
+                                .finally(() => setLoading(false));
+                        } else {
+                            snackbarController.open({
+                                message: `Action ${action.name} executed successfully`,
+                                type: "success"
+                            });
+                        }
+
+                    }
+                } catch (e: any) {
+                    console.error("Error executing action", action.key, e);
+                    snackbarController.open({
+                        message: `Error executing action: ${e.message}`,
+                        type: "error"
+                    });
+                }
+            }}>
+            {loading ? <CircularProgress size={"smallest"}/> : action.icon}
+        </IconButton>
+    </Tooltip>;
 }

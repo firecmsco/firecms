@@ -5,8 +5,9 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "dev": "run-s copyChangelog && docusaurus start",
-    "build": "REACT_GENERATE_API=true && NODE_OPTIONS=--max-old-space-size=24048 && run-s copyChangelog && docusaurus build",
+    "build": "REACT_GENERATE_API=true && NODE_OPTIONS=--max-old-space-size=24048 && run-s genLLMsTxt && run-s copyChangelog && docusaurus build",
     "preview": "run-s build && docusaurus serve",
+    "genLLMsTxt": "node scripts/generate_llms_txt.js",
     "genAPI": "typedoc --plugin typedoc-plugin-markdown --hideGenerator --hideInPageTOC --out docs/api",
     "copyChangelog": "echo '---' > ./docs/CHANGELOG.md && echo 'id: changelog' >> ./docs/CHANGELOG.md && echo 'title: Changelog' >> ./docs/CHANGELOG.md && echo '---' >> ./docs/CHANGELOG.md && cat ../CHANGELOG.md >> ./docs/CHANGELOG.md ",
     "swizzle": "docusaurus swizzle --danger",
@@ -15,7 +16,7 @@
     "clear": "docusaurus clear"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "dependencies": {
     "@docsearch/js": "3.7.0",

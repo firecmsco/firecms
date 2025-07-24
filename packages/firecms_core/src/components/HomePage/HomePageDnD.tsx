@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
     Active,
     closestCenter,
@@ -84,14 +84,11 @@ export function SortableNavigationCard({
             animateLayoutChanges
         });
 
-    const style = useMemo(
-        () => ({
-            transform: transform ? CSS.Transform.toString(transform) : undefined,
-            transition,
-            opacity: isDragging ? 0 : 1
-        }),
-        [transform, transition, isDragging]
-    );
+    const style = {
+        transform: transform ? CSS.Transform.toString(transform) : undefined,
+        transition,
+        opacity: isDragging ? 0 : 1
+    };
 
     return (
         <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
@@ -153,14 +150,11 @@ export function SortableNavigationGroup({
             disabled
         });
 
-    const style = useMemo(
-        () => ({
-            transform: transform ? CSS.Transform.toString(transform) : undefined,
-            transition,
-            opacity: isDragging ? 0 : 1
-        }),
-        [transform, transition, isDragging]
-    );
+    const style = {
+        transform: transform ? CSS.Transform.toString(transform) : undefined,
+        transition,
+        opacity: isDragging ? 0 : 1
+    };
 
     return (
         <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
@@ -224,15 +218,10 @@ export function useHomePageDnd({
         }
     });
     const keyboardSensor = useSensor(KeyboardSensor);
-    const sensors = useSensors(
-        ...(disabled ? [] : [mouseSensor, touchSensor, keyboardSensor])
-    );
+    const sensors = useSensors(mouseSensor, touchSensor, keyboardSensor);
 
     /* ---------------- helpers ---------------- */
-    const dndContainers = useMemo(
-        () => dndItems.map((g) => g.name),
-        [dndItems]
-    );
+    const dndContainers = dndItems.map((g) => g.name);
 
     const findDndContainer = useCallback(
         (id: UniqueIdentifier): string | undefined => {
@@ -518,18 +507,15 @@ export function useHomePageDnd({
     };
 
     /* ---------------- public API ---------------- */
-    const activeItemForOverlay = useMemo(() => {
-        if (disabled || !activeId || activeIsGroup) return null;
-        return (
-            dndItems.flatMap((g) => g.entries).find((e) => e.url === activeId) ||
-            null
-        );
-    }, [activeId, dndItems, disabled, activeIsGroup]);
+    const activeItemForOverlay =
+        disabled || !activeId || activeIsGroup
+            ? null
+            : dndItems.flatMap((g) => g.entries).find((e) => e.url === activeId) || null;
 
-    const activeGroupData = useMemo(() => {
-        if (disabled || !activeId || !activeIsGroup) return null;
-        return dndItems.find((g) => g.name === activeId) || null;
-    }, [activeId, dndItems, disabled, activeIsGroup]);
+    const activeGroupData =
+        disabled || !activeId || !activeIsGroup
+            ? null
+            : dndItems.find((g) => g.name === activeId) || null;
 
     return {
         sensors,

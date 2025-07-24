@@ -46,11 +46,13 @@ export function MarkdownEditorFieldBinding({
     const entityId = context.entityId;
     const path = context.path;
 
-    // const fieldVersion = useRef(0);
     const [fieldVersion, setFieldVersion] = useState(0);
-    const internalValue = useRef(value);
+    const internalValue = useRef<string | null>(value);
 
     const onContentChange = useCallback((content: string) => {
+        if (content === value || (value === null && content === "")) {
+            return;
+        }
         internalValue.current = content;
         setValue(content);
     }, [setValue]);

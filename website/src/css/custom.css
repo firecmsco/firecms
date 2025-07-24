@@ -767,12 +767,11 @@ code.language-sass .token.property, code.language-scss .token.property {
     z-index: 0; /* Place behind content (which should have z-10 or higher) */
 }
 
-/* --- NEW: Base styles for all blob elements --- */
 .blob {
     content: '';
     position: absolute;
-    width: 60vmin; /* Slightly smaller blobs now there are more */
-    height: 60vmin;
+    width: 90vmin;
+    height: 90vmin;
     border-radius: 50%;
     filter: blur(60px); /* Adjust blur */
     opacity: 0.5; /* Base opacity */
@@ -786,37 +785,37 @@ code.language-sass .token.property, code.language-scss .token.property {
     background: radial-gradient(circle, #1A4876, transparent 70%);
     top: -10%;
     left: -10%;
-    animation: moveBlob1 30s infinite alternate ease-in-out;
-    animation-delay: -2s;
+    animation: moveBlob1 20s infinite alternate ease-in-out;
+    animation-delay: -1s;
 }
 
 /* Blob 2 (Warm) */
 .blob-2 {
-    background: radial-gradient(circle, #3A2F10, transparent 70%);
+    background: radial-gradient(circle, #2c1d08, transparent 70%);
     bottom: -15%;
     right: -15%;
-    animation: moveBlob2 35s infinite alternate ease-in-out;
-    animation-delay: -10s;
+    animation: moveBlob2 24s infinite alternate ease-in-out;
+    animation-delay: -5s;
 }
 
 /* --- NEW: Blob 3 (Darker Blue/Greenish) --- */
 .blob-3 {
     /* Using another color from the original config */
-    background: radial-gradient(circle, #001010, transparent 70%);
+    background: radial-gradient(circle, #013030, transparent 70%);
     top: 30%;
     right: -20%;
-    animation: moveBlob3 32s infinite alternate ease-in-out;
-    animation-delay: -7s;
+    animation: moveBlob3 24s infinite alternate ease-in-out;
+    animation-delay: -3s;
 }
 
 /* --- NEW: Blob 4 (Darker Reddish) --- */
 .blob-4 {
     /* Using another color from the original config */
-    background: radial-gradient(circle, #0E0808, transparent 70%);
+    background: radial-gradient(circle, #251515, transparent 70%);
     bottom: 25%;
     left: -15%;
     animation: moveBlob4 28s infinite alternate ease-in-out;
-    animation-delay: -12s;
+    animation-delay: -5s;
 }
 
 

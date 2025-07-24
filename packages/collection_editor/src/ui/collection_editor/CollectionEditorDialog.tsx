@@ -9,6 +9,7 @@ import {
     isPropertyBuilder,
     MapProperty,
     mergeDeep,
+    NavigationResult,
     Properties,
     PropertiesOrBuilders,
     Property,
@@ -17,7 +18,6 @@ import {
     randomString,
     removeInitialAndTrailingSlashes,
     removeUndefined,
-    NavigationResult,
     useAuthController,
     useCustomizationController,
     useNavigationController,
@@ -57,6 +57,7 @@ import { cleanPropertiesFromImport } from "./import/clean_import_data";
 import { PersistedCollection } from "../../types/persisted_collection";
 import { Formex, FormexController, useCreateFormex } from "@firecms/formex";
 import { getFullIdPath } from "./util";
+import { EntityActionsEditTab } from "./EntityActionsEditTab";
 
 export interface CollectionEditorDialogProps {
     open: boolean;
@@ -140,7 +141,8 @@ type EditorView = "welcome"
     | "properties"
     | "loading"
     | "extra_view"
-    | "subcollections";
+    | "subcollections"
+    | "custom_actions";
 
 export function CollectionEditor(props: CollectionEditorDialogProps & {
     handleCancel: () => void,
@@ -325,10 +327,10 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
     };
 
-    const doCollectionInference = (collection: PersistedCollection<any>) => {
+    const doCollectionInference = collectionInference ? (collection: PersistedCollection<any>) => {
         if (!collectionInference) return undefined;
         return collectionInference?.(collection.path, collection.collectionGroup ?? false, parentPaths ?? []);
-    };
+    } : undefined;
 
     const inferCollectionFromData = async (newCollection: PersistedCollection<M>) => {
 
@@ -569,6 +571,9 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                     <Tab value={"subcollections"}>
                         Additional views
                     </Tab>
+                    <Tab value={"custom_actions"}>
+                        Custom actions
+                    </Tab>
                 </Tabs>}
 
                 <form noValidate
@@ -644,6 +649,9 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                         }}>Reset to code</Button>
                             </div>}
                         </CollectionDetailsForm>}
+
+                    {currentView === "custom_actions" && collection &&
+                        <EntityActionsEditTab collection={collection}/>}
 
                     {currentView === "subcollections" && collection &&
                         <SubcollectionsEditTab

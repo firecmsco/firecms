@@ -107,6 +107,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                                 onClick={(event: MouseEvent) => {
                                     event.stopPropagation();
                                     action.onClick({
+                                        view: "collection",
                                         entity,
                                         fullPath,
                                         fullIdPath,
@@ -137,6 +138,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         action.onClick({
+                                            view: "collection",
                                             entity,
                                             fullPath,
                                             fullIdPath,
