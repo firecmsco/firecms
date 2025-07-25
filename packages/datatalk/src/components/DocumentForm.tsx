@@ -111,7 +111,7 @@
 // export type EntityFormSaveParams<M extends Record<string, any>> = {
 //     collection: ResolvedEntityCollection<M>,
 //     path: string,
-//     entityId: string | undefined,
+//     entityId: string | number | undefined,
 //     values: EntityValues<M>,
 //     previousValues?: EntityValues<M>,
 //     closeAfterSave: boolean,

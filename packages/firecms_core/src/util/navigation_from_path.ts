@@ -9,7 +9,7 @@ export type NavigationViewInternal<M extends Record<string, any> = any> =
 
 export interface NavigationViewEntityInternal<M extends Record<string, any>> {
     type: "entity";
-    entityId: string;
+    entityId: string | number;
     path: string;
     fullIdPath: string;
     fullPath: string;
@@ -30,7 +30,7 @@ export interface NavigationViewEntityCustomInternal<M extends Record<string, any
     path: string;
     fullIdPath: string;
     fullPath: string;
-    entityId: string;
+    entityId: string | number;
     view: EntityCustomView<M>;
 }
 

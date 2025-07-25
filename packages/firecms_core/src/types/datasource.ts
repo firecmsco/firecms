@@ -8,7 +8,7 @@ import { FireCMSContext } from "./firecms_context";
  */
 export interface FetchEntityProps<M extends Record<string, any> = any> {
     path: string;
-    entityId: string;
+    entityId: string | number;
     databaseId?: string;
     collection?: EntityCollection<M, any>
 }
@@ -53,7 +53,7 @@ export type ListenCollectionProps<M extends Record<string, any> = any> =
 export interface SaveEntityProps<M extends Record<string, any> = any> {
     path: string;
     values: Partial<EntityValues<M>>;
-    entityId?: string; // can be empty for new entities
+    entityId?: string | number; // can be empty for new entities
     previousValues?: Partial<EntityValues<M>>;
     collection?: EntityCollection<M> | ResolvedEntityCollection<M>;
     status: EntityStatus;
@@ -202,7 +202,7 @@ export interface DataSource {
         path: string,
         name: string,
         value: any,
-        entityId?: string,
+        entityId?: string | number,
         collection?: EntityCollection
     ): Promise<boolean>;
 
@@ -366,7 +366,7 @@ export interface DataSourceDelegate {
      * @param collection
      * @return `true` if there are no other fields besides the given entity
      */
-    checkUniqueField(path: string, name: string, value: any, entityId?: string, collection?: EntityCollection): Promise<boolean>;
+    checkUniqueField(path: string, name: string, value: any, entityId?: string | number, collection?: EntityCollection): Promise<boolean>;
 
     /**
      * Generate an id for a new entity

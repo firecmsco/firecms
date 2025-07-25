@@ -155,7 +155,7 @@ export function useFirestoreDelegate({
     }, [firebaseApp]);
 
     const getAndBuildEntity = useCallback(<M extends Record<string, any>>(path: string,
-                                                                          entityId: string,
+                                                                          entityId: string | number,
                                                                           databaseId?: string
     ): Promise<Entity<M> | undefined> => {
         if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
@@ -524,7 +524,7 @@ export function useFirestoreDelegate({
             path: string,
             name: string,
             value: any,
-            entityId?: string,
+            entityId?: string | number,
             collection?: EntityCollection<any>
         ): Promise<boolean> => {
 

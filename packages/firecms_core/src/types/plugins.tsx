@@ -227,7 +227,7 @@ export interface PluginHomePageActionsProps<EP extends object = object, M extend
 }
 
 export interface PluginFormActionProps<USER extends User = User, EC extends EntityCollection = EntityCollection> {
-    entityId?: string;
+    entityId?: string | number;
     path: string;
     parentCollectionIds: string[];
     status: EntityStatus;

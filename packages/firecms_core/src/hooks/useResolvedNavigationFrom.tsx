@@ -19,7 +19,7 @@ export type ResolvedNavigationEntry<M extends Record<string, any>> =
 export interface ResolvedNavigationEntity<M extends Record<string, any>> {
     type: "entity";
     entity: Entity<M>;
-    entityId: string;
+    entityId: string | number;
     path: string;
     parentCollection: EntityCollection<M>;
 }

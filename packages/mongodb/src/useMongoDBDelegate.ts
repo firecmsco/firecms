@@ -355,7 +355,7 @@ export function useMongoDBDelegate({
         path: string,
         name: string,
         value: any,
-        entityId?: string
+        entityId?: string | number
     ): Promise<boolean> => {
         throw Error("checkUniqueField not implemented");
     }, []);

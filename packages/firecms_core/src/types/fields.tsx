@@ -155,7 +155,7 @@ export interface FormContext<M extends Record<string, any> = any> {
     /**
      * Entity id, it can be null if it's a new entity
      */
-    entityId: string;
+    entityId: string | number;
 
     /**
      * Path this entity is located at

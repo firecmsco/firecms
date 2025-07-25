@@ -66,7 +66,7 @@ function ReferenceAsStringFieldBindingInternal({
     }
 
     const onSingleEntitySelected = useCallback((e: Entity<any> | null) => {
-        setValue(e ? e.id : null);
+        setValue(e ? String(e.id) : null); // TODO: the string casting might be wrong
     }, [setValue]);
 
     const referenceDialogController = useReferenceDialog({

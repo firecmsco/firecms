@@ -604,7 +604,7 @@ export type DefaultSelectedViewBuilder = (params: DefaultSelectedViewParams) => 
  */
 export type DefaultSelectedViewParams = {
     status?: EntityStatus;
-    entityId?: string;
+    entityId?: string | number;
 };
 /**
  * You can use this controller to control the table view of a collection.
@@ -645,5 +645,5 @@ export type SelectedCellProps<M extends Record<string, any>> = {
     width: number;
     height: number;
     entityPath: string;
-    entityId: string;
+    entityId: string | number;
 };

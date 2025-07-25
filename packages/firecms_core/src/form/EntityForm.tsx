@@ -32,7 +32,8 @@ import {
     useAuthController,
     useCustomizationController,
     useDataSource,
-    useFireCMSContext, useNavigationController,
+    useFireCMSContext,
+    useNavigationController,
     useSideEntityController,
     useSnackbarController
 } from "../hooks";
@@ -51,7 +52,7 @@ export type OnUpdateParams = {
     entity: Entity<any>,
     status: EntityStatus,
     path: string,
-    entityId?: string;
+    entityId?: string | number;
     selectedTab?: string;
     collection: EntityCollection<any>
 };
@@ -60,10 +61,10 @@ export type EntityFormProps<M extends Record<string, any>> = {
     path: string;
     fullIdPath?: string;
     collection: EntityCollection<M>;
-    entityId?: string;
+    entityId?: string | number;
     entity?: Entity<M>;
     databaseId?: string;
-    onIdChange?: (id: string) => void;
+    onIdChange?: (id: string | number) => void;
     onValuesModified?: (modified: boolean) => void;
     onSaved?: (params: OnUpdateParams) => void;
     initialDirtyValues?: Partial<M>; // dirty cached entity in memory
@@ -126,7 +127,6 @@ export function EntityForm<M extends Record<string, any>>({
         console.warn(`The collection ${collection.path} has customId and formAutoSave enabled. This is not supported and formAutoSave will be ignored`);
     }
 
-
     const sideEntityController = useSideEntityController();
     const navigationController = useNavigationController();
 
@@ -171,7 +171,7 @@ export function EntityForm<M extends Record<string, any>>({
     const mustSetCustomId: boolean = (status === "new" || status === "copy") &&
         (Boolean(collection.customId) && collection.customId !== "optional");
 
-    const initialEntityId: string | undefined = useMemo((): string | undefined => {
+    const initialEntityId: string | number | undefined = useMemo(() => {
         if (status === "new" || status === "copy") {
             if (mustSetCustomId) {
                 return undefined;
@@ -183,7 +183,7 @@ export function EntityForm<M extends Record<string, any>>({
         }
     }, [entityIdProp, status]);
 
-    const [entityId, setEntityId] = useState<string | undefined>(initialEntityId);
+    const [entityId, setEntityId] = useState<string | number | undefined>(initialEntityId);
     const [entityIdError, setEntityIdError] = useState<boolean>(false);
     const [savingError, setSavingError] = useState<Error | undefined>();
 
@@ -343,7 +343,7 @@ export function EntityForm<M extends Record<string, any>>({
                         }: {
         collection: EntityCollection<M>,
         path: string,
-        entityId: string | undefined,
+        entityId: string | number | undefined,
         values: M,
         previousValues?: M,
     }) => {
@@ -366,7 +366,7 @@ export function EntityForm<M extends Record<string, any>>({
     type EntityFormSaveParams<M extends Record<string, any>> = {
         collection: ResolvedEntityCollection<M>,
         path: string,
-        entityId: string | undefined,
+        entityId: string | number | undefined,
         values: EntityValues<M>,
         previousValues?: EntityValues<M>,
         autoSave: boolean

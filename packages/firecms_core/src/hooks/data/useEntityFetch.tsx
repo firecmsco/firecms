@@ -9,7 +9,7 @@ import { useFireCMSContext } from "../useFireCMSContext";
  */
 export interface EntityFetchProps<M extends Record<string, any>, USER extends User = User> {
     path: string;
-    entityId?: string;
+    entityId?: string | number;
     databaseId?: string;
     collection: EntityCollection<M, USER>;
     useCache?: boolean;

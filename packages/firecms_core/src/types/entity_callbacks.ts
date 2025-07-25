@@ -65,7 +65,7 @@ export type EntityCallbacks<M extends Record<string, any> = any, USER extends Us
      *
      * @param idUpdateProps
      */
-    onIdUpdate?(idUpdateProps: EntityIdUpdateProps<M>): string | Promise<string>;
+    onIdUpdate?(idUpdateProps: EntityIdUpdateProps<M>): string | number | Promise<string | number>;
 
 }
 
@@ -104,7 +104,7 @@ export interface EntityOnFetchProps<M extends Record<string, any> = any, USER ex
 export type EntityOnPreSaveProps<M extends Record<string, any> = any, USER extends User = User> =
     Omit<EntityOnSaveProps<M, USER>, "entityId">
     & {
-    entityId?: string;
+    entityId?: string | number;
 }
 /**
  * Parameters passed to hooks before an entity is saved
@@ -113,7 +113,7 @@ export type EntityOnPreSaveProps<M extends Record<string, any> = any, USER exten
 export type EntityOnSaveFailureProps<M extends Record<string, any> = any, USER extends User = User> =
     Omit<EntityOnSaveProps<M, USER>, "entityId">
     & {
-    entityId?: string;
+    entityId?: string | number;
 }
 
 /**
@@ -141,7 +141,7 @@ export interface EntityOnSaveProps<M extends Record<string, any> = any, USER ext
     /**
      * ID of the entity
      */
-    entityId: string;
+    entityId: string | number;
 
     /**
      * Values being saved
@@ -183,7 +183,7 @@ export interface EntityOnDeleteProps<M extends Record<string, any> = any, USER e
     /**
      * Deleted entity id
      */
-    entityId: string;
+    entityId: string | number;
 
     /**
      * Deleted entity
@@ -215,7 +215,7 @@ export interface EntityIdUpdateProps<M extends Record<string, any> = any> {
     /**
      * Current entity id
      */
-    entityId?: string;
+    entityId?: string | number;
 
     /**
      * Entity values

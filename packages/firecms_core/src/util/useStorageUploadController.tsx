@@ -47,7 +47,7 @@ export function useStorageUploadController<M extends object>({
                                                                  onChange
                                                              }:
                                                              {
-                                                                 entityId: string,
+                                                                 entityId: string | number,
                                                                  entityValues: EntityValues<M>,
                                                                  value: string | string[] | null;
                                                                  path?: string,

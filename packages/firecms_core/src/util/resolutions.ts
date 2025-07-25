@@ -45,7 +45,7 @@ export const resolveCollection = <M extends Record<string, any>, >
  }: {
     collection: EntityCollection<M> | ResolvedEntityCollection<M>;
     path: string,
-    entityId?: string,
+    entityId?: string | number,
     values?: Partial<EntityValues<M>>,
     previousValues?: Partial<EntityValues<M>>,
     userConfigPersistence?: UserConfigurationPersistence;
@@ -112,7 +112,7 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
     values?: Partial<M>,
     previousValues?: Partial<M>,
     path?: string,
-    entityId?: string,
+    entityId?: string | number,
     index?: number,
     fromBuilder?: boolean;
     propertyConfigs?: Record<string, PropertyConfig<any>>;
@@ -235,7 +235,7 @@ export function getArrayResolvedProperties<M>({
     values?: Partial<M>;
     previousValues?: Partial<M>;
     path?: string;
-    entityId?: string;
+    entityId?: string | number;
     index?: number;
     fromBuilder?: boolean;
     propertyConfigs?: Record<string, PropertyConfig>;
@@ -266,7 +266,7 @@ export function resolveArrayProperty<T extends any[], M>({
     values?: Partial<M>,
     previousValues?: Partial<M>,
     path?: string,
-    entityId?: string,
+    entityId?: string | number,
     index?: number,
     fromBuilder?: boolean;
     propertyConfigs?: Record<string, PropertyConfig>;
@@ -374,7 +374,7 @@ export function resolveProperties<M extends Record<string, any>>({
     values?: Partial<M>,
     previousValues?: Partial<M>,
     path?: string,
-    entityId?: string,
+    entityId?: string | number,
     index?: number,
     fromBuilder?: boolean;
     propertyConfigs?: Record<string, PropertyConfig>;

@@ -1,6 +1,6 @@
 // Types that match FireCMS core interfaces exactly
 export interface Entity<M extends Record<string, any> = any> {
-  id: string;
+  id: string | number;
   path: string;
   values: M;
   databaseId?: string;
@@ -78,7 +78,7 @@ export interface ListenEntityProps<M extends Record<string, any> = any> {
 
 // WebSocket message types (backend specific)
 export interface WebSocketMessage {
-  type: 'subscribe_collection' | 'subscribe_entity' | 'unsubscribe' | 'collection_update' | 'entity_update' | 'error';
+  type: "subscribe_collection" | "subscribe_entity" | "unsubscribe" | "collection_update" | "entity_update" | "error";
   payload?: any;
   subscriptionId?: string;
   entities?: Entity[];
@@ -87,19 +87,19 @@ export interface WebSocketMessage {
 }
 
 export interface CollectionUpdateMessage extends WebSocketMessage {
-  type: 'collection_update';
+  type: "collection_update";
   subscriptionId: string;
   entities: Entity[];
 }
 
 export interface EntityUpdateMessage extends WebSocketMessage {
-  type: 'entity_update';
+  type: "entity_update";
   subscriptionId: string;
   entity: Entity | null;
 }
 
 export interface ErrorMessage {
-  type: 'error';
+  type: "error";
   subscriptionId?: string;
   error: string;
 }

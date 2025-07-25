@@ -31,20 +31,20 @@ export type CustomFieldValidator = (props: {
     name: string,
     value: any,
     property: ResolvedProperty,
-    entityId?: string,
+    entityId?: string | number,
     parentProperty?: ResolvedMapProperty | ResolvedArrayProperty,
 }) => Promise<boolean>;
 
 interface PropertyContext<T extends CMSType> {
     property: ResolvedProperty<T>,
     parentProperty?: ResolvedMapProperty | ResolvedArrayProperty,
-    entityId: string,
+    entityId: string | number,
     customFieldValidator?: CustomFieldValidator,
     name?: any
 }
 
 export function getYupEntitySchema<M extends Record<string, any>>(
-    entityId: string,
+    entityId: string | number,
     properties: ResolvedProperties<M>,
     customFieldValidator?: CustomFieldValidator): ObjectSchema<any> {
     const objectSchema: any = {};

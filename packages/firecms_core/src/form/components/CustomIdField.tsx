@@ -31,7 +31,7 @@ export function CustomIdField<M extends Record<string, any>>({
                                                                  loading
                                                              }: {
     customId?: boolean | EnumValues | "optional"
-    entityId?: string
+    entityId?: string | number
     status: EntityStatus,
     onChange: (id?: string) => void,
     error: boolean,
@@ -63,14 +63,14 @@ export function CustomIdField<M extends Record<string, any>>({
         label: idSetAutomatically ? "ID is set automatically" : "ID",
         disabled: disabled || loading,
         name: "id",
-        value: (entity && status === "existing" ? entity.id : entityId) ?? "",
+        value: String(entity && status === "existing" ? entity.id : entityId) ?? "",
         endAdornment: loading ? <CircularProgress size={"small"}/> : (entity
                 ? (
                     <>
 
                         <Tooltip title={"Copy"}
                                  asChild={true}>
-                            <IconButton onClick={(e) => copy(entity.id)}
+                            <IconButton onClick={(e) => copy(String(entity.id))}
                                         aria-label="copy-id">
                                 <ContentCopyIcon size={"small"}/>
                             </IconButton>

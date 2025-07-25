@@ -39,14 +39,14 @@ export type OnUpdateParams = {
     entity: Entity<any>,
     status: EntityStatus,
     path: string,
-    entityId?: string;
+    entityId?: string | number;
     selectedTab?: string;
     collection: EntityCollection<any>
 };
 
 export type OnTabChangeParams<M extends Record<string, any>> = {
     path: string;
-    entityId?: string;
+    entityId?: string | number;
     selectedTab?: string;
     collection: EntityCollection<M>;
 
@@ -62,7 +62,7 @@ export interface EntityEditViewProps<M extends Record<string, any>> {
      */
     fullIdPath?: string;
     collection: EntityCollection<M>;
-    entityId?: string;
+    entityId?: string | number;
     databaseId?: string;
     copy?: boolean;
     selectedTab?: string;

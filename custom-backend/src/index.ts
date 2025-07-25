@@ -76,6 +76,7 @@ app.post("/api/entities/fetch", async (req, res) => {
 app.post("/api/entities/save", async (req, res) => {
     try {
         const request: SaveEntityProps = req.body;
+        console.log("Saving entity with request:", request);
         const entity = await dataSourceDelegate.saveEntity(request);
         res.json({ entity });
     } catch (error: any) {

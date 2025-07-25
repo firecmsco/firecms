@@ -46,7 +46,7 @@ export type UniqueFieldValidator = (props: {
     name: string,
     value: any,
     property: ResolvedProperty,
-    entityId?: string
+    entityId?: string | number
 }) => Promise<boolean>;
 
 /**

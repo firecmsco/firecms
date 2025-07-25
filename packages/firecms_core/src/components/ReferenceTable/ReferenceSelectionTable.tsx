@@ -48,7 +48,7 @@ export interface ReferenceSelectionInnerProps<M extends Record<string, any>> {
      * If you are opening the dialog for the first time, you can select some
      * entity ids to be displayed first.
      */
-    selectedEntityIds?: string[];
+    selectedEntityIds?: (string | number)[];
 
     /**
      * If `multiselect` is set to `false`, you will get the selected entity

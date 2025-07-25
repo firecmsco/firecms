@@ -340,7 +340,7 @@ export function DataEnhancementControllerProvider({
 
 const ENTITIES_COUNT = 1;
 
-async function getOtherEntities(collection: EntityCollection, dataSource: DataSource, path: string, entityId: string): Promise<Entity<any>[]> {
+async function getOtherEntities(collection: EntityCollection, dataSource: DataSource, path: string, entityId: string | number): Promise<Entity<any>[]> {
     const fetchedDocs = await dataSource.fetchCollection({
         path,
         collection,

@@ -39,7 +39,7 @@ export function FireCMSRoute() {
             breadcrumbs: navigationEntries.map(entry => {
                 if (entry.type === "entity") {
                     return ({
-                        title: entry.entityId,
+                        title: String(entry.entityId),
                         url: navigation.buildUrlCollectionPath(entry.fullPath)
                     });
                 } else if (entry.type === "custom_view") {

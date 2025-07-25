@@ -172,7 +172,7 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
     }, [firebaseApp]);
 
     // Implementing additional methods required by DataSourceDelegate
-    const checkUniqueField = useCallback(async (path: string, name: string, value: any, entityId?: string): Promise<boolean> => {
+    const checkUniqueField = useCallback(async (path: string, name: string, value: any, entityId?: string | number): Promise<boolean> => {
         if (!firebaseApp) {
             throw new Error("Firebase app not provided");
         }

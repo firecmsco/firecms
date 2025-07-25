@@ -282,7 +282,7 @@ export function useBuildDataSource({
             path: string,
             name: string,
             value: any,
-            entityId?: string,
+            entityId?: string | number,
             collection?: EntityCollection
         ): Promise<boolean> => {
             const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;

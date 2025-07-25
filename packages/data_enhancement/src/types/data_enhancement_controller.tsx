@@ -2,7 +2,7 @@ import { EntityValues } from "@firecms/core";
 import { EditorAIController } from "@firecms/editor";
 
 export type EnhanceParams<M extends object> = {
-    entityId: string;
+    entityId: string | number;
     propertyKey?: string;
     propertyInstructions?: string;
     values: EntityValues<M>;
@@ -26,7 +26,7 @@ export type DataEnhancementController = {
 }
 
 export type EnhancedDataResult = {
-    entityId?: string;
+    entityId?: string | number;
     suggestions: {
         [key: string]: string[];
     };
@@ -55,7 +55,7 @@ export type DataEnhancementRequest = {
 };
 
 export type InputEntity = {
-    entityId: string;
+    entityId: string | number;
     values: Record<string, any>;
 };
 

@@ -837,7 +837,7 @@ function EntityIdHeaderWidget({
     const navigation = useNavigationController();
     const [openPopup, setOpenPopup] = React.useState(false);
     const [searchString, setSearchString] = React.useState("");
-    const [recentIds, setRecentIds] = React.useState<string[]>(getRecentIds(collection.id));
+    const [recentIds, setRecentIds] = React.useState<(string | number)[]>(getRecentIds(collection.id));
     const sideEntityController = useSideEntityController();
 
     const openEntityMode = collection?.openEntityMode ?? DEFAULT_ENTITY_OPEN_MODE;

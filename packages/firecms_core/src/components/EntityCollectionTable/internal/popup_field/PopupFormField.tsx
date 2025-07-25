@@ -26,7 +26,7 @@ import { OnCellValueChangeParams } from "../../../common";
 interface PopupFormFieldProps<M extends Record<string, any>> {
     customFieldValidator?: CustomFieldValidator;
     path: string;
-    entityId: string;
+    entityId: string | number;
     tableKey: string;
     propertyKey?: Extract<keyof M, string>;
     collection?: EntityCollection<any>;

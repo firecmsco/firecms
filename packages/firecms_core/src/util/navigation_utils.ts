@@ -79,7 +79,7 @@ export function resolveCollectionPathIds(path: string, allCollections: EntityCol
 
             // The next segment must be an entity ID
             const idSeparatorIndex = remainingPath.indexOf("/");
-            let entityId: string;
+            let entityId: string | number;
             if (idSeparatorIndex > -1) {
                 entityId = remainingPath.substring(0, idSeparatorIndex);
                 remainingPath = remainingPath.substring(idSeparatorIndex + 1);
@@ -187,7 +187,7 @@ export function navigateToEntity({
                                  {
                                      openEntityMode: "side_panel" | "full_screen";
                                      collection?: EntityCollection;
-                                     entityId?: string;
+                                     entityId?: string | number;
                                      selectedTab?: string;
                                      copy?: boolean;
                                      path: string;

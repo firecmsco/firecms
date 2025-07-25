@@ -270,7 +270,7 @@ export type PropertyBuilderProps<M extends Record<string, any> = any> =
         /**
          * Entity ID
          */
-        entityId?: string;
+        entityId?: string | number;
 
         /**
          * Controller to manage authentication
@@ -865,7 +865,7 @@ export interface UploadedFileContext {
     /**
      * Entity ID
      */
-    entityId?: string;
+    entityId?: string | number;
 
     /**
      * Entity path. E.g. `products/PID/locales`

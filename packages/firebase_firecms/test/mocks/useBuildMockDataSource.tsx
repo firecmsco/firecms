@@ -9,7 +9,7 @@ import {
 
 export function useBuildMockDataSource(): DataSource {
     return {
-        checkUniqueField(path: string, name: string, value: any, entityId?: string): Promise<boolean> {
+        checkUniqueField(path: string, name: string, value: any, entityId?: string | number): Promise<boolean> {
             return Promise.resolve(false);
         },
 

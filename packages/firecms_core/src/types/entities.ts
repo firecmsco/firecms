@@ -13,7 +13,7 @@ export interface Entity<M extends object = any> {
     /**
      * ID of the entity
      */
-    id: string;
+    id: string | number;
 
     /**
      * A string representing the path of the referenced document (relative
@@ -43,14 +43,14 @@ export class EntityReference {
     /**
      * ID of the entity
      */
-    readonly id: string;
+    readonly id: string | number;
     /**
      * A string representing the path of the referenced document (relative
      * to the root of the database).
      */
     readonly path: string;
 
-    constructor(id: string, path: string) {
+    constructor(id: string | number, path: string) {
         this.id = id;
         this.path = path;
     }

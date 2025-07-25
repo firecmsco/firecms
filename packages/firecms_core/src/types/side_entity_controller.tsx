@@ -23,7 +23,7 @@ export interface EntitySidePanelProps<M extends Record<string, any> = any> {
     /**
      * ID of the entity, if not set, it means we are creating a new entity
      */
-    entityId?: string;
+    entityId?: string | number;
 
     /**
      * Set this flag to true if you want to make a copy of an existing entity
