@@ -14,7 +14,7 @@ export interface PostgresDataSourceConfig {
 }
 
 export interface WebSocketMessage {
-    type: "subscribe_collection" | "subscribe_entity" | "unsubscribe" | "collection_update" | "entity_update" | "error";
+    type: string;
     payload?: any;
     subscriptionId?: string;
     entities?: Entity[];
@@ -52,13 +52,17 @@ export class PostgresDataSourceClient {
     private headers: Record<string, string>;
     private ws: WebSocket | null = null;
     private subscriptions = new Map<string, (data: any) => void>();
+    private pendingRequests = new Map<string, { resolve: Function; reject: Function }>();
     private reconnectAttempts = 0;
     private maxReconnectAttempts = 5;
+    private isConnected = false;
+    private messageQueue: any[] = [];
 
     constructor(config: PostgresDataSourceConfig) {
         this.baseUrl = config.baseUrl.replace(/\/$/, "");
         this.websocketUrl = config.websocketUrl || config.baseUrl.replace("http", "ws");
         this.headers = config.headers || {};
+        this.initWebSocket();
     }
 
     // Initialize WebSocket connection
@@ -70,7 +74,9 @@ export class PostgresDataSourceClient {
 
             this.ws.onopen = () => {
                 console.log("Connected to PostgreSQL backend");
+                this.isConnected = true;
                 this.reconnectAttempts = 0;
+                this.processMessageQueue();
             };
 
             this.ws.onmessage = (event) => {
@@ -84,11 +90,13 @@ export class PostgresDataSourceClient {
 
             this.ws.onclose = () => {
                 console.log("Disconnected from PostgreSQL backend");
+                this.isConnected = false;
                 this.attemptReconnect();
             };
 
             this.ws.onerror = (error) => {
                 console.error("WebSocket error:", error);
+                this.isConnected = false;
             };
         } catch (error) {
             console.error("Failed to initialize WebSocket:", error);
@@ -107,90 +115,122 @@ export class PostgresDataSourceClient {
         }
     }
 
+    private processMessageQueue() {
+        while (this.messageQueue.length > 0 && this.isConnected) {
+            const message = this.messageQueue.shift();
+            this.sendMessage(message);
+        }
+    }
+
+    private sendMessage(message: any) {
+        if (this.isConnected && this.ws?.readyState === WebSocket.OPEN) {
+            this.ws.send(JSON.stringify(message));
+        } else {
+            this.messageQueue.push(message);
+            if (!this.isConnected) {
+                this.initWebSocket();
+            }
+        }
+    }
+
     private handleWebSocketMessage(message: WebSocketMessage) {
-        const callback = this.subscriptions.get(message.subscriptionId!);
-        if (!callback) return;
+        // Handle subscription updates
+        if (message.subscriptionId && this.subscriptions.has(message.subscriptionId)) {
+            const callback = this.subscriptions.get(message.subscriptionId)!;
 
-        switch (message.type) {
-            case "collection_update": {
-                const collectionMsg = message as CollectionUpdateMessage;
-                callback(this.sanitizeAndConvert(collectionMsg.entities));
-                break;
+            switch (message.type) {
+                case "collection_update": {
+                    const collectionMsg = message as CollectionUpdateMessage;
+                    callback(this.sanitizeAndConvert(collectionMsg.entities));
+                    break;
+                }
+                case "entity_update": {
+                    const entityMsg = message as EntityUpdateMessage;
+                    callback(this.sanitizeAndConvert(entityMsg.entity));
+                    break;
+                }
+                case "error": {
+                    console.error("WebSocket subscription error:", message.error);
+                    break;
+                }
             }
-            case "entity_update": {
-                const entityMsg = message as EntityUpdateMessage;
-                callback(this.sanitizeAndConvert(entityMsg.entity));
-                break;
-            }
-            case "error": {
-                console.error("WebSocket error:", message.error);
-                break;
+            return;
+        }
+
+        // Handle operation responses
+        const requestId = this.generateRequestId(message.type);
+        if (this.pendingRequests.has(requestId)) {
+            const { resolve, reject } = this.pendingRequests.get(requestId)!;
+            this.pendingRequests.delete(requestId);
+
+            if (message.type.endsWith("_SUCCESS")) {
+                resolve(this.sanitizeAndConvert(message.payload));
+            } else if (message.type === "ERROR") {
+                reject(new ApiError(message.payload?.message || "Unknown error", message.payload?.error, message.payload?.code));
             }
         }
     }
 
-    private async makeRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-        const url = `${this.baseUrl}${endpoint}`;
+    private generateRequestId(messageType: string): string {
+        // Map response types back to request types for matching
+        const typeMapping: Record<string, string> = {
+            "FETCH_COLLECTION_SUCCESS": "FETCH_COLLECTION",
+            "FETCH_ENTITY_SUCCESS": "FETCH_ENTITY",
+            "SAVE_ENTITY_SUCCESS": "SAVE_ENTITY",
+            "DELETE_ENTITY_SUCCESS": "DELETE_ENTITY",
+            "CHECK_UNIQUE_FIELD_SUCCESS": "CHECK_UNIQUE_FIELD",
+            "GENERATE_ENTITY_ID_SUCCESS": "GENERATE_ENTITY_ID",
+            "COUNT_ENTITIES_SUCCESS": "COUNT_ENTITIES"
+        };
+        return typeMapping[messageType] || messageType;
+    }
 
-        const response = await fetch(url, {
-            ...options,
-            headers: {
-                "Content-Type": "application/json",
-                ...this.headers,
-                ...options.headers
-            }
+    private async sendRequest<T>(type: string, payload: any): Promise<T> {
+        return new Promise((resolve, reject) => {
+            const requestId = type;
+            this.pendingRequests.set(requestId, { resolve, reject });
+
+            this.sendMessage({
+                type,
+                payload: this.sanitizeAndConvert(payload)
+            });
+
+            // Set timeout for request
+            setTimeout(() => {
+                if (this.pendingRequests.has(requestId)) {
+                    this.pendingRequests.delete(requestId);
+                    reject(new ApiError("Request timeout", "TIMEOUT", "REQUEST_TIMEOUT"));
+                }
+            }, 30000); // 30 second timeout
         });
-
-        const json = await response.json();
-
-        if (!response.ok || json.error) {
-            const message = json.message;
-            const code = json.code || "API_ERROR";
-            const error = json.error || "API_ERROR";
-            throw new ApiError(message, error, code);
-        }
-
-        return this.sanitizeAndConvert(json);
     }
 
-    // API methods that match FireCMS interface
+    // API methods that match FireCMS interface - now using WebSockets
     async fetchCollection<M extends Record<string, any>>(
         request: FetchCollectionProps<M>
     ): Promise<Entity<M>[]> {
-        const response = await this.makeRequest<{ entities: Entity<M>[] }>("/api/collections/fetch", {
-            method: "POST",
-            body: JSON.stringify(request)
-        });
+        const response = await this.sendRequest<{ entities: Entity<M>[] }>("FETCH_COLLECTION", request);
         return response.entities;
     }
 
     async fetchEntity<M extends Record<string, any>>(
         request: FetchEntityProps<M>
     ): Promise<Entity<M> | undefined> {
-        const response = await this.makeRequest<{ entity: Entity<M> | null }>("/api/entities/fetch", {
-            method: "POST",
-            body: JSON.stringify(request)
-        });
+        const response = await this.sendRequest<{ entity: Entity<M> | null }>("FETCH_ENTITY", request);
         return response.entity || undefined;
     }
 
     async saveEntity<M extends Record<string, any>>(
         request: SaveEntityProps<M>
     ): Promise<Entity<M>> {
-        const response = await this.makeRequest<{ entity: Entity<M> }>("/api/entities/save", {
-            method: "POST",
-            body: JSON.stringify(this.sanitizeAndConvert(request))
-        });
+        const response = await this.sendRequest<{ entity: Entity<M> }>("SAVE_ENTITY", request);
         return response.entity;
     }
 
     async deleteEntity<M extends Record<string, any>>(
         request: DeleteEntityProps<M>
     ): Promise<void> {
-        await this.makeRequest("/api/entities/delete", {
-            method: "DELETE",
-            body: JSON.stringify(request)
-        });
+        await this.sendRequest<{ success: boolean }>("DELETE_ENTITY", request);
     }
 
     async checkUniqueField(
@@ -200,26 +240,27 @@ export class PostgresDataSourceClient {
         entityId?: string,
         collection?: EntityCollection
     ): Promise<boolean> {
-        const response = await this.makeRequest<{ isUnique: boolean }>("/api/entities/check-unique", {
-            method: "POST",
-            body: JSON.stringify({
-                path,
-                name,
-                value,
-                entityId,
-                collection
-            })
+        const response = await this.sendRequest<{ isUnique: boolean }>("CHECK_UNIQUE_FIELD", {
+            path,
+            name,
+            value,
+            entityId,
+            collection
         });
         return response.isUnique;
+    }
+
+    generateEntityId(path: string, collection?: EntityCollection): Promise<string> {
+        return this.sendRequest<{ id: string }>("GENERATE_ENTITY_ID", {
+            path,
+            collection
+        }).then(response => response.id);
     }
 
     async countEntities<M extends Record<string, any>>(
         request: FetchCollectionProps<M>
     ): Promise<number> {
-        const response = await this.makeRequest<{ count: number }>("/api/collections/count", {
-            method: "POST",
-            body: JSON.stringify(request)
-        });
+        const response = await this.sendRequest<{ count: number }>("COUNT_ENTITIES", request);
         return response.count;
     }
 
@@ -231,33 +272,41 @@ export class PostgresDataSourceClient {
     ): () => void {
         const subscriptionId = this.generateSubscriptionId();
 
-        this.initWebSocket();
         this.subscriptions.set(subscriptionId, onUpdate);
 
         // Send subscription request via WebSocket
         const sendSubscription = () => {
-            if (this.ws?.readyState === WebSocket.OPEN) {
-                this.ws.send(JSON.stringify({
-                    type: "subscribe_collection",
-                    payload: {
-                        ...request,
-                        subscriptionId
-                    }
-                }));
-            } else {
-                setTimeout(sendSubscription, 100);
-            }
+            this.sendMessage({
+                type: "subscribe_collection",
+                payload: {
+                    ...request,
+                    subscriptionId
+                }
+            });
         };
-        sendSubscription();
+
+        if (this.isConnected) {
+            sendSubscription();
+        } else {
+            // Queue the subscription for when connection is established
+            this.messageQueue.push({
+                type: "subscribe_collection",
+                payload: {
+                    ...request,
+                    subscriptionId
+                }
+            });
+            this.initWebSocket();
+        }
 
         // Return unsubscribe function
         return () => {
             this.subscriptions.delete(subscriptionId);
-            if (this.ws?.readyState === WebSocket.OPEN) {
-                this.ws.send(JSON.stringify({
+            if (this.isConnected) {
+                this.sendMessage({
                     type: "unsubscribe",
                     subscriptionId
-                }));
+                });
             }
         };
     }
@@ -269,33 +318,41 @@ export class PostgresDataSourceClient {
     ): () => void {
         const subscriptionId = this.generateSubscriptionId();
 
-        this.initWebSocket();
         this.subscriptions.set(subscriptionId, onUpdate);
 
         // Send subscription request via WebSocket
         const sendSubscription = () => {
-            if (this.ws?.readyState === WebSocket.OPEN) {
-                this.ws.send(JSON.stringify({
-                    type: "subscribe_entity",
-                    payload: {
-                        ...request,
-                        subscriptionId
-                    }
-                }));
-            } else {
-                setTimeout(sendSubscription, 100);
-            }
+            this.sendMessage({
+                type: "subscribe_entity",
+                payload: {
+                    ...request,
+                    subscriptionId
+                }
+            });
         };
-        sendSubscription();
+
+        if (this.isConnected) {
+            sendSubscription();
+        } else {
+            // Queue the subscription for when connection is established
+            this.messageQueue.push({
+                type: "subscribe_entity",
+                payload: {
+                    ...request,
+                    subscriptionId
+                }
+            });
+            this.initWebSocket();
+        }
 
         // Return unsubscribe function
         return () => {
             this.subscriptions.delete(subscriptionId);
-            if (this.ws?.readyState === WebSocket.OPEN) {
-                this.ws.send(JSON.stringify({
+            if (this.isConnected) {
+                this.sendMessage({
                     type: "unsubscribe",
                     subscriptionId
-                }));
+                });
             }
         };
     }

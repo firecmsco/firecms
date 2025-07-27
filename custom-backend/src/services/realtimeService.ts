@@ -15,13 +15,22 @@ import { PgTable } from "drizzle-orm/pg-core";
 export class RealtimeService extends EventEmitter {
     private clients = new Map<string, WebSocket>();
     private entityService: EntityService;
-    // Store subscriptions in memory instead of database
+    // Enhanced subscriptions storage with full request parameters
     private subscriptions = new Map<string, {
         clientId: string;
         type: "collection" | "entity";
         path: string;
         entityId?: string;
-        filter?: any;
+        // Store full collection request parameters for proper refetching
+        collectionRequest?: {
+            filter?: any;
+            orderBy?: string;
+            order?: "desc" | "asc";
+            limit?: number;
+            startAfter?: any;
+            databaseId?: string;
+            searchString?: string;
+        };
     }>();
 
     constructor(private db: Database, tables: Record<string, PgTable>) {
@@ -82,12 +91,20 @@ export class RealtimeService extends EventEmitter {
         const subscriptionId = request.subscriptionId;
 
         try {
-            // Store subscription in memory
+            // Store subscription with full request parameters
             this.subscriptions.set(subscriptionId, {
                 clientId,
                 type: "collection",
                 path: request.path,
-                filter: request.filter
+                collectionRequest: {
+                    filter: request.filter,
+                    orderBy: request.orderBy,
+                    order: request.order,
+                    limit: request.limit,
+                    startAfter: request.startAfter,
+                    databaseId: request.collection?.databaseId,
+                    searchString: request.searchString
+                }
             });
 
             // Send initial data
@@ -137,7 +154,7 @@ export class RealtimeService extends EventEmitter {
         this.subscriptions.delete(subscriptionId);
     }
 
-    // Called when an entity is updated to notify subscribers
+    // Enhanced notification method that properly handles collection updates
     async notifyEntityUpdate(path: string, entityId: string, entity: Entity | null, databaseId?: string) {
         // Find all relevant subscriptions
         const relevantSubscriptions = Array.from(this.subscriptions.entries()).filter(([_, sub]) => {
@@ -154,12 +171,29 @@ export class RealtimeService extends EventEmitter {
             try {
                 if (subscription.type === "entity") {
                     this.sendEntityUpdate(subscription.clientId, subscriptionId, entity);
-                } else if (subscription.type === "collection") {
-                    // Refetch the collection for collection subscribers
-                    const entities = await this.entityService.fetchCollection(path, {
-                        filter: subscription.filter,
-                        databaseId
-                    });
+                } else if (subscription.type === "collection" && subscription.collectionRequest) {
+                    // Use stored collection request parameters for accurate refetching
+                    const collectionRequest = subscription.collectionRequest;
+
+                    // Handle search string separately if present
+                    let entities;
+                    if (collectionRequest.searchString) {
+                        entities = await this.entityService.searchEntities(
+                            path,
+                            collectionRequest.searchString,
+                            collectionRequest.databaseId
+                        );
+                    } else {
+                        entities = await this.entityService.fetchCollection(path, {
+                            filter: collectionRequest.filter,
+                            orderBy: collectionRequest.orderBy,
+                            order: collectionRequest.order,
+                            limit: collectionRequest.limit,
+                            startAfter: collectionRequest.startAfter,
+                            databaseId: collectionRequest.databaseId
+                        });
+                    }
+
                     this.sendCollectionUpdate(subscription.clientId, subscriptionId, entities);
                 }
             } catch (error) {

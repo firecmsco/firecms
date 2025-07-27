@@ -27,7 +27,7 @@ const dataSourceDelegate = new PostgresDataSourceDelegate(db, realtimeService, t
 app.use(cors());
 app.use(express.json({ limit: "10mb" }));
 
-// Health check
+// Health check - only HTTP endpoint we keep
 app.get("/health", (req, res) => {
     res.json({
         status: "ok",
@@ -35,131 +35,7 @@ app.get("/health", (req, res) => {
     });
 });
 
-// REST API Routes
-
-// Fetch collection
-app.post("/api/collections/fetch", async (req, res) => {
-    try {
-        const request: FetchCollectionProps = req.body;
-        const entities = await dataSourceDelegate.fetchCollection(request);
-        res.json({ entities });
-    } catch (error: any) {
-        console.error("Error fetching collection:", error);
-        res.status(500).json({
-            error: "Failed to fetch collection",
-            code: "FETCH_COLLECTION_ERROR",
-            message: error.message
-        });
-    }
-});
-
-// Fetch entity
-app.post("/api/entities/fetch", async (req, res) => {
-    try {
-        const request: FetchEntityProps = req.body;
-        const entity = await dataSourceDelegate.fetchEntity(request);
-        res.json({ entity });
-    } catch (error: any) {
-        console.error("Error fetching entity:", error);
-        res.status(500).json({
-            error: "Failed to fetch entity",
-            code: "FETCH_ENTITY_ERROR",
-            message: error.message
-        });
-    }
-});
-
-// Save entity
-app.post("/api/entities/save", async (req, res) => {
-    try {
-        const request: SaveEntityProps = req.body;
-        console.log("Saving entity with request:", request);
-        const entity = await dataSourceDelegate.saveEntity(request);
-        res.json({ entity });
-    } catch (error: any) {
-        console.error("Error saving entity:", error);
-        res.status(500).json({
-            error: "Failed to save entity",
-            code: "SAVE_ENTITY_ERROR",
-            message: error.message
-        });
-    }
-});
-
-// Delete entity
-app.delete("/api/entities/delete", async (req, res) => {
-    try {
-        const request: DeleteEntityProps = req.body;
-        await dataSourceDelegate.deleteEntity(request);
-        res.json({ success: true });
-    } catch (error: any) {
-        console.error("Error deleting entity:", error);
-        res.status(500).json({
-            error: "Failed to delete entity",
-            code: "DELETE_ENTITY_ERROR",
-            message: error.message
-        });
-    }
-});
-
-// Check unique field
-app.post("/api/entities/check-unique", async (req, res) => {
-    try {
-        const {
-            path,
-            name,
-            value,
-            entityId,
-            collection
-        } = req.body;
-        const isUnique = await dataSourceDelegate.checkUniqueField(path, name, value, entityId, collection);
-        res.json({ isUnique });
-    } catch (error: any) {
-        console.error("Error checking unique field:", error);
-        res.status(500).json({
-            error: "Failed to check unique field",
-            code: "CHECK_UNIQUE_FIELD_ERROR",
-            message: error.message
-        });
-    }
-});
-
-// Generate entity ID
-app.post("/api/entities/generate-id", async (req, res) => {
-    try {
-        const {
-            path,
-            collection
-        } = req.body;
-        const id = dataSourceDelegate.generateEntityId(path, collection);
-        res.json({ id });
-    } catch (error: any) {
-        console.error("Error generating entity ID:", error);
-        res.status(500).json({
-            error: "Failed to generate entity ID",
-            code: "GENERATE_ENTITY_ID_ERROR",
-            message: error.message
-        });
-    }
-});
-
-// Count entities
-app.post("/api/collections/count", async (req, res) => {
-    try {
-        const request: FetchCollectionProps = req.body;
-        const count = await dataSourceDelegate.countEntities!(request);
-        res.json({ count });
-    } catch (error: any) {
-        console.error("Error counting entities:", error);
-        res.status(500).json({
-            error: "Failed to count entities",
-            code: "COUNT_ENTITIES_ERROR",
-            message: error.message
-        });
-    }
-});
-
-// WebSocket connection handling
+// WebSocket connection handling - now handles all operations
 wss.on("connection", (ws, req) => {
     const clientId = `client_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     console.log(`WebSocket client connected: ${clientId}`);
@@ -168,6 +44,85 @@ wss.on("connection", (ws, req) => {
 
     ws.on("close", () => {
         console.log(`WebSocket client disconnected: ${clientId}`);
+    });
+
+    // Message handling
+    ws.on("message", async (message) => {
+        try {
+            const { type, payload } = JSON.parse(message.toString());
+
+            switch (type) {
+                case "FETCH_COLLECTION":
+                    {
+                        const request: FetchCollectionProps = payload;
+                        const entities = await dataSourceDelegate.fetchCollection(request);
+                        ws.send(JSON.stringify({ type: "FETCH_COLLECTION_SUCCESS", payload: { entities } }));
+                    }
+                    break;
+
+                case "FETCH_ENTITY":
+                    {
+                        const request: FetchEntityProps = payload;
+                        const entity = await dataSourceDelegate.fetchEntity(request);
+                        ws.send(JSON.stringify({ type: "FETCH_ENTITY_SUCCESS", payload: { entity } }));
+                    }
+                    break;
+
+                case "SAVE_ENTITY":
+                    {
+                        const request: SaveEntityProps = payload;
+                        console.log("Saving entity with request:", request);
+                        const entity = await dataSourceDelegate.saveEntity(request);
+                        ws.send(JSON.stringify({ type: "SAVE_ENTITY_SUCCESS", payload: { entity } }));
+                    }
+                    break;
+
+                case "DELETE_ENTITY":
+                    {
+                        const request: DeleteEntityProps = payload;
+                        await dataSourceDelegate.deleteEntity(request);
+                        ws.send(JSON.stringify({ type: "DELETE_ENTITY_SUCCESS", payload: { success: true } }));
+                    }
+                    break;
+
+                case "CHECK_UNIQUE_FIELD":
+                    {
+                        const { path, name, value, entityId, collection } = payload;
+                        const isUnique = await dataSourceDelegate.checkUniqueField(path, name, value, entityId, collection);
+                        ws.send(JSON.stringify({ type: "CHECK_UNIQUE_FIELD_SUCCESS", payload: { isUnique } }));
+                    }
+                    break;
+
+                case "GENERATE_ENTITY_ID":
+                    {
+                        const { path, collection } = payload;
+                        const id = dataSourceDelegate.generateEntityId(path, collection);
+                        ws.send(JSON.stringify({ type: "GENERATE_ENTITY_ID_SUCCESS", payload: { id } }));
+                    }
+                    break;
+
+                case "COUNT_ENTITIES":
+                    {
+                        const request: FetchCollectionProps = payload;
+                        const count = await dataSourceDelegate.countEntities!(request);
+                        ws.send(JSON.stringify({ type: "COUNT_ENTITIES_SUCCESS", payload: { count } }));
+                    }
+                    break;
+
+                default:
+                    console.error("Unknown message type:", type);
+            }
+        } catch (error) {
+            console.error("Error handling message:", error);
+            ws.send(JSON.stringify({
+                type: "ERROR",
+                payload: {
+                    error: "Internal server error",
+                    code: "INTERNAL_SERVER_ERROR",
+                    message: error.message
+                }
+            }));
+        }
     });
 });
 
@@ -185,7 +140,7 @@ const PORT = process.env.PORT || 3001;
 
 server.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
-    console.log("📡 WebSocket server ready for real-time connections");
+    console.log("📡 WebSocket server ready for all operations");
     console.log("🗄️  PostgreSQL backend with Drizzle ORM initialized");
     console.log("🔄 Real-time sync enabled via WebSockets");
     console.log(`📚 ${collectionRegistry.getAll().length} collections registered`);
