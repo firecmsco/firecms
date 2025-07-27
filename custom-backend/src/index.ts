@@ -7,12 +7,7 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import { EntityService } from "./db/entityService";
 import { RealtimeService } from "./services/realtimeService";
 import { PostgresDataSourceDelegate } from "./services/dataSourceDelegate";
-import {
-    DeleteEntityProps,
-    FetchCollectionProps,
-    FetchEntityProps,
-    SaveEntityProps
-} from "./types";
+import { DeleteEntityProps, FetchCollectionProps, FetchEntityProps, SaveEntityProps } from "./types";
 import { tables } from "./example";
 import { collectionRegistry } from "./collections/registry";
 
@@ -52,7 +47,8 @@ app.post("/api/collections/fetch", async (req, res) => {
         console.error("Error fetching collection:", error);
         res.status(500).json({
             error: "Failed to fetch collection",
-            details: error.message
+            code: "FETCH_COLLECTION_ERROR",
+            message: error.message
         });
     }
 });
@@ -67,7 +63,8 @@ app.post("/api/entities/fetch", async (req, res) => {
         console.error("Error fetching entity:", error);
         res.status(500).json({
             error: "Failed to fetch entity",
-            details: error.message
+            code: "FETCH_ENTITY_ERROR",
+            message: error.message
         });
     }
 });
@@ -83,7 +80,8 @@ app.post("/api/entities/save", async (req, res) => {
         console.error("Error saving entity:", error);
         res.status(500).json({
             error: "Failed to save entity",
-            details: error.message
+            code: "SAVE_ENTITY_ERROR",
+            message: error.message
         });
     }
 });
@@ -98,7 +96,8 @@ app.delete("/api/entities/delete", async (req, res) => {
         console.error("Error deleting entity:", error);
         res.status(500).json({
             error: "Failed to delete entity",
-            details: error.message
+            code: "DELETE_ENTITY_ERROR",
+            message: error.message
         });
     }
 });
@@ -119,7 +118,8 @@ app.post("/api/entities/check-unique", async (req, res) => {
         console.error("Error checking unique field:", error);
         res.status(500).json({
             error: "Failed to check unique field",
-            details: error.message
+            code: "CHECK_UNIQUE_FIELD_ERROR",
+            message: error.message
         });
     }
 });
@@ -137,7 +137,8 @@ app.post("/api/entities/generate-id", async (req, res) => {
         console.error("Error generating entity ID:", error);
         res.status(500).json({
             error: "Failed to generate entity ID",
-            details: error.message
+            code: "GENERATE_ENTITY_ID_ERROR",
+            message: error.message
         });
     }
 });
@@ -152,7 +153,8 @@ app.post("/api/collections/count", async (req, res) => {
         console.error("Error counting entities:", error);
         res.status(500).json({
             error: "Failed to count entities",
-            details: error.message
+            code: "COUNT_ENTITIES_ERROR",
+            message: error.message
         });
     }
 });
@@ -174,7 +176,8 @@ app.use((error: Error, _req: express.Request, res: express.Response, _next: expr
     console.error("Unhandled error:", error);
     res.status(500).json({
         error: "Internal server error",
-        details: error.message
+        code: "INTERNAL_SERVER_ERROR",
+        message: error.message
     });
 });
 

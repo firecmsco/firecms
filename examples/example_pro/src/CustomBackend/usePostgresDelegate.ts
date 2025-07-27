@@ -169,16 +169,6 @@ export function usePostgresDelegate({
             return client.checkUniqueField(path, name, value, entityId, collection);
         }, [client]),
 
-        generateEntityId: useCallback((_path: string, _collection?: EntityCollection): string => {
-            // For immediate ID generation, we'll use a local method
-            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            let result = "";
-            for (let i = 0; i < 20; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return result;
-        }, []),
-
         countEntities: useCallback(async <M extends Record<string, any>>(
             props: FetchCollectionProps<M>
         ): Promise<number> => {

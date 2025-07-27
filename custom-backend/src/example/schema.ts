@@ -80,7 +80,7 @@ export const media = pgTable("media", {
 export const offers = pgTable("offers", {
     id: integer("id").primaryKey(),
     offerId: varchar("offer_id").notNull(),
-    customerId: integer("customer_id").notNull(),
+    customerId: integer("customer_id").notNull().references(() => customers.id, { onDelete: "cascade" }),
     machineryId: integer("machinery_id").notNull(),
     offerDate: timestamp("offer_date", { withTimezone: true }).notNull(),
     expirationDate: timestamp("expiration_date", { withTimezone: true }),

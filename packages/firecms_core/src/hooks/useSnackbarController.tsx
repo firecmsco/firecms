@@ -48,6 +48,7 @@ export const useSnackbarController = () => {
 
     const open = useCallback((props: {
         type: SnackbarMessageType;
+        title?: string;
         message: React.ReactNode;
         autoHideDuration?: number;
     }) => {
@@ -57,7 +58,10 @@ export const useSnackbarController = () => {
             autoHideDuration
         } = props;
         enqueueSnackbar({
-            message,
+            message: props.title ? <div className={"flex flex-col"}>
+                <strong>{props.title}</strong>
+                {message}
+            </div> : message,
             variant: type,
             autoHideDuration
         })

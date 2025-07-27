@@ -328,7 +328,8 @@ export function EntityForm<M extends Record<string, any>>({
     const onSaveFailure = useCallback((e: Error) => {
         snackbarController.open({
             type: "error",
-            message: "Error saving: " + e?.message
+            title: "Error saving entity",
+            message: e?.message
         });
         console.error("Error saving entity", path, entityId);
         console.error(e);
@@ -673,7 +674,7 @@ export function EntityForm<M extends Record<string, any>>({
                                entity={entity}/>
             }
 
-            {entityId && formContext && <>
+            {(!mustSetCustomId || entityId) && formContext && <>
                 <div className="mt-12 flex flex-col gap-8" ref={formRef}>
                     {formFields()}
                     <ErrorFocus containerRef={formRef}/>

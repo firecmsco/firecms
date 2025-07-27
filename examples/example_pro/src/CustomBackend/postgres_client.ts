@@ -34,6 +34,18 @@ export interface EntityUpdateMessage extends WebSocketMessage {
     entity: Entity | null;
 }
 
+export class ApiError extends Error {
+    public code?: string;
+    public error?: string;
+
+    constructor(message: string, error?: string, code?: string) {
+        super(message);
+        this.name = "ApiError";
+        this.code = code;
+        this.error = error;
+    }
+}
+
 export class PostgresDataSourceClient {
     private baseUrl: string;
     private websocketUrl: string;
@@ -129,11 +141,15 @@ export class PostgresDataSourceClient {
             }
         });
 
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        const json = await response.json();
+
+        if (!response.ok || json.error) {
+            const message = json.message;
+            const code = json.code || "API_ERROR";
+            const error = json.error || "API_ERROR";
+            throw new ApiError(message, error, code);
         }
 
-        const json = await response.json();
         return this.sanitizeAndConvert(json);
     }
 
@@ -293,11 +309,11 @@ export class PostgresDataSourceClient {
             return null;
         }
 
-        if (typeof obj === 'number' && isNaN(obj)) {
+        if (typeof obj === "number" && isNaN(obj)) {
             return null;
         }
 
-        if (typeof obj === 'string' && obj.toLowerCase() === 'nan') {
+        if (typeof obj === "string" && obj.toLowerCase() === "nan") {
             return null;
         }
 
@@ -305,7 +321,7 @@ export class PostgresDataSourceClient {
             return obj.map(v => this.sanitizeAndConvert(v));
         }
 
-        if (typeof obj === 'object' && !(obj instanceof Date)) {
+        if (typeof obj === "object" && !(obj instanceof Date)) {
             const newObj: Record<string, any> = {};
             for (const key in obj) {
                 if (Object.prototype.hasOwnProperty.call(obj, key)) {

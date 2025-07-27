@@ -66,7 +66,8 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
     const onDeleteFailure = useCallback((entity: Entity<any>, e: Error) => {
         snackbarController.open({
             type: "error",
-            message: "Error deleting: " + e?.message
+            title: "Error deleting",
+            message: e?.message
         });
 
         console.error("Error deleting entity");
@@ -76,7 +77,8 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
     const onPreDeleteHookError = useCallback((entity: Entity<any>, e: Error) => {
         snackbarController.open({
             type: "error",
-            message: "Error before deleting: " + e?.message
+            title: "Error before deleting",
+            message: e?.message
         });
         console.error(e);
     }, [resolvedCollection.name]);
@@ -84,7 +86,8 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
     const onDeleteSuccessHookError = useCallback((entity: Entity<any>, e: Error) => {
         snackbarController.open({
             type: "error",
-            message: "Error after deleting: " + e?.message
+            title: "Error after deleting",
+            message: e?.message
         });
         console.error(e);
     }, [resolvedCollection.name]);

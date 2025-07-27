@@ -289,9 +289,9 @@ export function useBuildDataSource({
             return usedDelegate.checkUniqueField(path, name, value, entityId, collection);
         }, [delegate.checkUniqueField]),
 
-        generateEntityId: useCallback((path: string, collection: EntityCollection): string => {
+        generateEntityId: useCallback((path: string, collection: EntityCollection) => {
             const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
-            return usedDelegate.generateEntityId(path, collection);
+            return usedDelegate.generateEntityId?.(path, collection) ?? undefined;
         }, [delegate.generateEntityId]),
 
         countEntities: delegate.countEntities ? async ({
