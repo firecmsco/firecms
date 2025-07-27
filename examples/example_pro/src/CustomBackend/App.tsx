@@ -26,6 +26,7 @@ import {
     useFirebaseStorageSource,
     useInitialiseFirebase
 } from "@firecms/firebase";
+import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 
 // Import our PostgreSQL delegate and shared collections
 import { usePostgresDelegate } from "./usePostgresDelegate";
@@ -79,6 +80,8 @@ function CustomBackendSample() {
 
     const authController = firebaseAuthController;
 
+    const dataEnhancementPlugin = useDataEnhancementPlugin();
+
     const {
         authLoading,
         canAccessMainView,
@@ -96,6 +99,7 @@ function CustomBackendSample() {
     }, []);
 
     const navigationController = useBuildNavigationController({
+        plugins: [dataEnhancementPlugin],
         collections: collectionsBuilder,
         authController,
         dataSourceDelegate: postgresDelegate // Use PostgreSQL delegate

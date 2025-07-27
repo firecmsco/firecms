@@ -251,12 +251,13 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     });
 
     // hack to fix Firestore listeners firing with incomplete data
-    const data = useDebouncedData(orderedData, {
-        filterValues,
-        sortBy,
-        searchString,
-        lastDeleteTimestamp
-    });
+    // const data = useDebouncedData(orderedData, {
+    //     filterValues,
+    //     sortBy,
+    //     searchString,
+    //     lastDeleteTimestamp
+    // });
+    const data = orderedData;
 
     return {
         data,

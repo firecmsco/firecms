@@ -134,23 +134,33 @@ export class PostgresDataSourceClient {
     }
 
     private handleWebSocketMessage(message: WebSocketMessage) {
+        // Add comprehensive debug logging
+        console.log("🔍 [WebSocket Client] Received raw message:", message);
+        console.log("🔍 [WebSocket Client] Message type:", message.type);
+        console.log("🔍 [WebSocket Client] Message payload:", message.payload);
+        console.log("🔍 [WebSocket Client] Subscription ID:", message.subscriptionId);
+
         // Handle subscription updates
         if (message.subscriptionId && this.subscriptions.has(message.subscriptionId)) {
             const callback = this.subscriptions.get(message.subscriptionId)!;
+            console.log("🔄 [WebSocket Client] Processing subscription update for:", message.subscriptionId);
 
             switch (message.type) {
                 case "collection_update": {
                     const collectionMsg = message as CollectionUpdateMessage;
+                    console.log("📋 [WebSocket Client] Collection update - entities count:", collectionMsg.entities.length);
+                    console.log("📋 [WebSocket Client] Collection update - entities:", collectionMsg.entities);
                     callback(this.sanitizeAndConvert(collectionMsg.entities));
                     break;
                 }
                 case "entity_update": {
                     const entityMsg = message as EntityUpdateMessage;
+                    console.log("📄 [WebSocket Client] Entity update:", entityMsg.entity);
                     callback(this.sanitizeAndConvert(entityMsg.entity));
                     break;
                 }
                 case "error": {
-                    console.error("WebSocket subscription error:", message.error);
+                    console.error("❌ [WebSocket Client] Subscription error:", message.error);
                     break;
                 }
             }
@@ -159,15 +169,23 @@ export class PostgresDataSourceClient {
 
         // Handle operation responses
         const requestId = this.generateRequestId(message.type);
+        console.log("🎯 [WebSocket Client] Looking for pending request with ID:", requestId);
+        console.log("🎯 [WebSocket Client] Pending requests:", Array.from(this.pendingRequests.keys()));
+
         if (this.pendingRequests.has(requestId)) {
             const { resolve, reject } = this.pendingRequests.get(requestId)!;
             this.pendingRequests.delete(requestId);
+            console.log("✅ [WebSocket Client] Found matching pending request, resolving:", requestId);
 
             if (message.type.endsWith("_SUCCESS")) {
+                console.log("✅ [WebSocket Client] Success response for:", requestId, message.payload);
                 resolve(this.sanitizeAndConvert(message.payload));
             } else if (message.type === "ERROR") {
+                console.error("❌ [WebSocket Client] Error response for:", requestId, message.payload);
                 reject(new ApiError(message.payload?.message || "Unknown error", message.payload?.error, message.payload?.code));
             }
+        } else {
+            console.warn("⚠️ [WebSocket Client] No matching pending request found for:", requestId);
         }
     }
 
@@ -248,13 +266,6 @@ export class PostgresDataSourceClient {
             collection
         });
         return response.isUnique;
-    }
-
-    generateEntityId(path: string, collection?: EntityCollection): Promise<string> {
-        return this.sendRequest<{ id: string }>("GENERATE_ENTITY_ID", {
-            path,
-            collection
-        }).then(response => response.id);
     }
 
     async countEntities<M extends Record<string, any>>(

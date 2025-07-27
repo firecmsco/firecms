@@ -372,7 +372,7 @@ export interface DataSourceDelegate {
     /**
      * Generate an id for a new entity
      */
-    generateEntityId?(path: string, collection?: EntityCollection): string;
+    generateEntityId?(path: string, collection?: EntityCollection): string | undefined;
 
     /**
      * Count the number of entities in a collection

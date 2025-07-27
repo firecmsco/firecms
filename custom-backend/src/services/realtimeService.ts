@@ -16,7 +16,7 @@ export class RealtimeService extends EventEmitter {
     private clients = new Map<string, WebSocket>();
     private entityService: EntityService;
     // Enhanced subscriptions storage with full request parameters
-    private subscriptions = new Map<string, {
+    private _subscriptions = new Map<string, {
         clientId: string;
         type: "collection" | "entity";
         path: string;
@@ -33,9 +33,48 @@ export class RealtimeService extends EventEmitter {
         };
     }>();
 
+    // Add callback storage for DataSourceDelegate subscriptions
+    private subscriptionCallbacks = new Map<string, (data: any) => void>();
+
     constructor(private db: Database, tables: Record<string, PgTable>) {
         super();
         this.entityService = new EntityService(db, tables);
+    }
+
+    // Make subscriptions accessible for DataSourceDelegate
+    get subscriptions() {
+        return this._subscriptions;
+    }
+
+    // Add public method to register DataSourceDelegate subscriptions
+    registerDataSourceSubscription(subscriptionId: string, subscription: {
+        clientId: string;
+        type: "collection" | "entity";
+        path: string;
+        entityId?: string;
+        collectionRequest?: {
+            filter?: any;
+            orderBy?: string;
+            order?: "desc" | "asc";
+            limit?: number;
+            startAfter?: any;
+            databaseId?: string;
+            searchString?: string;
+        };
+    }) {
+        console.log("📋 [RealtimeService] Registering DataSource subscription:", subscriptionId);
+        this._subscriptions.set(subscriptionId, subscription);
+    }
+
+    // Add callback management methods
+    addSubscriptionCallback(subscriptionId: string, callback: (data: any) => void) {
+        console.log("📋 [RealtimeService] Adding callback for subscription:", subscriptionId);
+        this.subscriptionCallbacks.set(subscriptionId, callback);
+    }
+
+    removeSubscriptionCallback(subscriptionId: string) {
+        console.log("📋 [RealtimeService] Removing callback for subscription:", subscriptionId);
+        this.subscriptionCallbacks.delete(subscriptionId);
     }
 
     addClient(clientId: string, ws: WebSocket) {
@@ -60,13 +99,18 @@ export class RealtimeService extends EventEmitter {
         });
     }
 
+    // Public method to handle messages from external sources (like main WebSocket handler)
+    async handleClientMessage(clientId: string, message: WebSocketMessage) {
+        await this.handleMessage(clientId, message);
+    }
+
     async removeClient(clientId: string) {
         this.clients.delete(clientId);
 
         // Remove all subscriptions for this client from memory
-        for (const [subscriptionId, subscription] of this.subscriptions.entries()) {
+        for (const [subscriptionId, subscription] of this._subscriptions.entries()) {
             if (subscription.clientId === clientId) {
-                this.subscriptions.delete(subscriptionId);
+                this._subscriptions.delete(subscriptionId);
             }
         }
     }
@@ -83,7 +127,7 @@ export class RealtimeService extends EventEmitter {
                 await this.handleUnsubscribe(clientId, message.subscriptionId!);
                 break;
             default:
-                this.sendError(clientId, "Unknown message type", message.subscriptionId);
+                this.sendError(clientId, "Unknown message type " + message.type, message.subscriptionId);
         }
     }
 
@@ -92,7 +136,7 @@ export class RealtimeService extends EventEmitter {
 
         try {
             // Store subscription with full request parameters
-            this.subscriptions.set(subscriptionId, {
+            this._subscriptions.set(subscriptionId, {
                 clientId,
                 type: "collection",
                 path: request.path,
@@ -129,7 +173,7 @@ export class RealtimeService extends EventEmitter {
 
         try {
             // Store subscription in memory
-            this.subscriptions.set(subscriptionId, {
+            this._subscriptions.set(subscriptionId, {
                 clientId,
                 type: "entity",
                 path: request.path,
@@ -151,31 +195,47 @@ export class RealtimeService extends EventEmitter {
     }
 
     private async handleUnsubscribe(clientId: string, subscriptionId: string) {
-        this.subscriptions.delete(subscriptionId);
+        this._subscriptions.delete(subscriptionId);
     }
 
     // Enhanced notification method that properly handles collection updates
     async notifyEntityUpdate(path: string, entityId: string, entity: Entity | null, databaseId?: string) {
-        // Find all relevant subscriptions
-        const relevantSubscriptions = Array.from(this.subscriptions.entries()).filter(([_, sub]) => {
-            if (sub.type === "entity" && sub.path === path && sub.entityId === entityId) {
-                return true;
+        console.log("🔔 [RealtimeService] notifyEntityUpdate called for path:", path, "entityId:", entityId, "isDelete:", entity === null);
+
+        // Find all relevant WebSocket subscriptions for this path
+        const webSocketSubscriptions = Array.from(this._subscriptions.entries()).filter(([_, sub]) => {
+            const isPathMatch = sub.path === path;
+            const isClientActive = sub.clientId !== "datasource" && this.clients.has(sub.clientId);
+
+            if (!isPathMatch || !isClientActive) return false;
+
+            // For entity subscriptions, check if the entityId matches
+            if (sub.type === "entity") {
+                return sub.entityId === entityId;
             }
-            if (sub.type === "collection" && sub.path === path) {
+            // For collection subscriptions, it's always relevant if the path matches
+            if (sub.type === "collection") {
                 return true;
             }
             return false;
         });
 
-        for (const [subscriptionId, subscription] of relevantSubscriptions) {
-            try {
-                if (subscription.type === "entity") {
-                    this.sendEntityUpdate(subscription.clientId, subscriptionId, entity);
-                } else if (subscription.type === "collection" && subscription.collectionRequest) {
-                    // Use stored collection request parameters for accurate refetching
-                    const collectionRequest = subscription.collectionRequest;
+        console.log(`📡 [RealtimeService] Found ${webSocketSubscriptions.length} active WebSocket subscriptions for path: ${path}`);
 
-                    // Handle search string separately if present
+        for (const [subscriptionId, subscription] of webSocketSubscriptions) {
+            try {
+                console.log(`🔄 [RealtimeService] Processing subscription: ${subscriptionId} of type: ${subscription.type}`);
+
+                if (subscription.type === "entity") {
+                    // Send entity update directly
+                    this.sendEntityUpdate(subscription.clientId, subscriptionId, entity);
+                    console.log(`📄 [RealtimeService] Sent entity_update to ${subscriptionId}`);
+
+                } else if (subscription.type === "collection" && subscription.collectionRequest) {
+                    // Refetch the collection with its specific filters and send update
+                    const collectionRequest = subscription.collectionRequest;
+                    console.log("📋 [RealtimeService] Refetching collection for subscription:", subscriptionId, "with request:", collectionRequest);
+
                     let entities;
                     if (collectionRequest.searchString) {
                         entities = await this.entityService.searchEntities(
@@ -194,12 +254,16 @@ export class RealtimeService extends EventEmitter {
                         });
                     }
 
+                    console.log(`📬 [RealtimeService] Sending collection_update with ${entities.length} entities to ${subscriptionId}`);
                     this.sendCollectionUpdate(subscription.clientId, subscriptionId, entities);
                 }
             } catch (error) {
-                console.error("Error notifying subscriber:", error);
+                console.error(`❌ [RealtimeService] Error processing subscription ${subscriptionId}:`, error);
+                this.sendError(subscription.clientId, `Failed to process update for subscription ${subscriptionId}`, subscriptionId);
             }
         }
+
+        console.log("🔔 [RealtimeService] notifyEntityUpdate completed for path:", path);
     }
 
     private sendCollectionUpdate(clientId: string, subscriptionId: string, entities: Entity[]) {

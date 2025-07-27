@@ -154,16 +154,3 @@ export const usersSessions = pgTable("users_sessions", {
     expiresAt: timestamp("expires_at", { withTimezone: true }).notNull()
 });
 
-// Type exports
-export type Customer = typeof customers.$inferSelect;
-export type NewCustomer = typeof customers.$inferInsert;
-export type Machinery = typeof machinery.$inferSelect;
-export type NewMachinery = typeof machinery.$inferInsert;
-export type Rental = typeof rentals.$inferSelect;
-export type NewRental = typeof rentals.$inferInsert;
-export type Offer = typeof offers.$inferSelect;
-export type NewOffer = typeof offers.$inferInsert;
-export type MaintenanceHistory = typeof maintenanceHistory.$inferSelect;
-export type NewMaintenanceHistory = typeof maintenanceHistory.$inferInsert;
-export type PaymentHistory = typeof paymentHistory.$inferSelect;
-export type NewPaymentHistory = typeof paymentHistory.$inferInsert;

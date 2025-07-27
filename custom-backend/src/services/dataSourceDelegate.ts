@@ -7,8 +7,6 @@ import {
     EntityCollection,
     FetchCollectionRequest,
     FetchEntityRequest,
-    ListenCollectionRequest,
-    ListenEntityRequest,
     SaveEntityRequest
 } from "../types";
 import { PgTable } from "drizzle-orm/pg-core";
@@ -19,11 +17,7 @@ export interface DataSourceDelegate {
 
     fetchCollection<M extends Record<string, any>>(props: FetchCollectionRequest<M>): Promise<Entity<M>[]>;
 
-    listenCollection?<M extends Record<string, any>>(props: ListenCollectionRequest<M>): () => void;
-
     fetchEntity<M extends Record<string, any>>(props: FetchEntityRequest<M>): Promise<Entity<M> | undefined>;
-
-    listenEntity?<M extends Record<string, any>>(props: ListenEntityRequest<M>): () => void;
 
     saveEntity<M extends Record<string, any>>(props: SaveEntityRequest<M>): Promise<Entity<M>>;
 
@@ -89,60 +83,6 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
         });
     }
 
-    listenCollection<M extends Record<string, any>>({
-                                                        path,
-                                                        collection,
-                                                        filter,
-                                                        limit,
-                                                        startAfter,
-                                                        orderBy,
-                                                        searchString,
-                                                        order,
-                                                        onUpdate,
-                                                        onError
-                                                    }: ListenCollectionRequest<M>): () => void {
-
-        const subscriptionId = this.generateSubscriptionId();
-
-        // For now, use polling instead of real WebSocket integration
-        // You can enhance this later to use actual WebSocket subscriptions
-        const pollInterval = setInterval(async () => {
-            try {
-                const entities = await this.fetchCollection({
-                    path,
-                    collection,
-                    filter,
-                    limit,
-                    startAfter,
-                    orderBy,
-                    searchString,
-                    order
-                });
-                onUpdate(entities);
-            } catch (error) {
-                if (onError) onError(error as Error);
-            }
-        }, 2000); // Poll every 2 seconds
-
-        // Initial fetch
-        this.fetchCollection({
-            path,
-            collection,
-            filter,
-            limit,
-            startAfter,
-            orderBy,
-            searchString,
-            order
-        }).then(onUpdate).catch(error => {
-            if (onError) onError(error);
-        });
-
-        return () => {
-            clearInterval(pollInterval);
-        };
-    }
-
     async fetchEntity<M extends Record<string, any>>({
                                                          path,
                                                          entityId,
@@ -154,48 +94,6 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
             entityId,
             databaseId || collection?.databaseId
         );
-    }
-
-    listenEntity<M extends Record<string, any>>({
-                                                    path,
-                                                    entityId,
-                                                    collection,
-                                                    onUpdate,
-                                                    onError
-                                                }: ListenEntityRequest<M>): () => void {
-
-        // Polling-based approach for entity updates
-        const pollInterval = setInterval(async () => {
-            try {
-                const entity = await this.fetchEntity({
-                    path,
-                    entityId,
-                    collection
-                });
-                if (entity) {
-                    onUpdate(entity);
-                }
-            } catch (error) {
-                if (onError) onError(error as Error);
-            }
-        }, 2000);
-
-        // Initial fetch
-        this.fetchEntity({
-            path,
-            entityId,
-            collection
-        })
-            .then(entity => {
-                if (entity) onUpdate(entity);
-            })
-            .catch(error => {
-                if (onError) onError(error);
-            });
-
-        return () => {
-            clearInterval(pollInterval);
-        };
     }
 
     async saveEntity<M extends Record<string, any>>({
@@ -216,7 +114,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
         // Notify real-time subscribers
         await this.realtimeService.notifyEntityUpdate(
             path,
-            savedEntity.id,
+            savedEntity.id.toString(),
             savedEntity,
             collection?.databaseId
         );
@@ -229,19 +127,25 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
                                                           collection
                                                       }: DeleteEntityRequest<M>): Promise<void> {
 
+        console.log("🗑️ [DataSourceDelegate] Starting delete for entity:", entity.id, "in path:", entity.path);
+
         await this.entityService.deleteEntity(
             entity.path,
             entity.id,
             entity.databaseId || collection?.databaseId
         );
 
-        // Notify real-time subscribers
+        console.log("🗑️ [DataSourceDelegate] Entity deleted from database, now notifying real-time subscribers");
+
+        // Use the EXACT SAME notification system as saveEntity - this is the key!
         await this.realtimeService.notifyEntityUpdate(
             entity.path,
-            entity.id,
-            null,
+            entity.id.toString(),
+            null, // null indicates deletion
             entity.databaseId || collection?.databaseId
         );
+
+        console.log("🗑️ [DataSourceDelegate] Real-time notification sent for deletion");
     }
 
     async checkUniqueField(

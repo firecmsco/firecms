@@ -55,35 +55,30 @@ export interface DeleteEntityProps<M extends Record<string, any> = any> {
   collection?: EntityCollection<M>;
 }
 
-export interface ListenCollectionProps<M extends Record<string, any> = any> {
-  path: string;
-  collection?: EntityCollection<M>;
-  filter?: FilterValues<Extract<keyof M, string>>;
-  limit?: number;
-  startAfter?: any;
-  orderBy?: string;
-  searchString?: string;
-  order?: "desc" | "asc";
+// Request/Response types for the data source delegate
+export interface FetchCollectionRequest<M extends Record<string, any> = any> extends FetchCollectionProps<M> {}
+export interface FetchEntityRequest<M extends Record<string, any> = any> extends FetchEntityProps<M> {}
+export interface SaveEntityRequest<M extends Record<string, any> = any> extends SaveEntityProps<M> {}
+export interface DeleteEntityRequest<M extends Record<string, any> = any> extends DeleteEntityProps<M> {}
+
+// Subscription types
+export interface ListenCollectionRequest<M extends Record<string, any> = any> extends FetchCollectionProps<M> {
+  subscriptionId: string;
   onUpdate: (entities: Entity<M>[]) => void;
   onError?: (error: Error) => void;
 }
 
-export interface ListenEntityProps<M extends Record<string, any> = any> {
-  path: string;
-  entityId: string;
-  collection?: EntityCollection<M>;
-  onUpdate: (entity: Entity<M>) => void;
+export interface ListenEntityRequest<M extends Record<string, any> = any> extends FetchEntityProps<M> {
+  subscriptionId: string;
+  onUpdate: (entity: Entity<M> | null) => void;
   onError?: (error: Error) => void;
 }
 
-// WebSocket message types (backend specific)
+// WebSocket message types
 export interface WebSocketMessage {
-  type: "subscribe_collection" | "subscribe_entity" | "unsubscribe" | "collection_update" | "entity_update" | "error";
+  type: string;
   payload?: any;
   subscriptionId?: string;
-  entities?: Entity[];
-  entity?: Entity | null;
-  error?: string;
 }
 
 export interface CollectionUpdateMessage extends WebSocketMessage {
@@ -96,10 +91,4 @@ export interface EntityUpdateMessage extends WebSocketMessage {
   type: "entity_update";
   subscriptionId: string;
   entity: Entity | null;
-}
-
-export interface ErrorMessage {
-  type: "error";
-  subscriptionId?: string;
-  error: string;
 }

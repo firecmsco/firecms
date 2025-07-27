@@ -69,8 +69,11 @@ export class EntityService {
         }
 
         const idFieldName = collection.idField;
-        const idFieldConfig = collection.properties[idFieldName];
+        if (!idFieldName) {
+            throw new Error(`ID field not configured for collection '${path}'`);
+        }
 
+        const idFieldConfig = collection.properties[idFieldName];
         if (!idFieldConfig) {
             throw new Error(`ID field '${idFieldName}' not found in properties for collection '${path}'`);
         }
@@ -81,8 +84,12 @@ export class EntityService {
         };
     }
 
-    private parseIdValue(idValue: string, idType: string): any {
+    private parseIdValue(idValue: string | number, idType: string): any {
         if (idType === "number") {
+            if (typeof idValue === "number") {
+                return idValue;
+            }
+
             const parsed = parseInt(idValue);
             if (isNaN(parsed)) {
                 throw new Error(`Invalid numeric ID: ${idValue}`);
@@ -270,7 +277,7 @@ export class EntityService {
         }
     }
 
-    async deleteEntity(path: string, entityId: string, _databaseId?: string): Promise<void> {
+    async deleteEntity(path: string, entityId: string | number, _databaseId?: string): Promise<void> {
         const table = this.getTableForPath(path);
         const idInfo = this.getIdFieldInfo(path);
         const idField = (table as any)[idInfo.fieldName];

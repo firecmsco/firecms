@@ -118,9 +118,9 @@ export function usePostgresDelegate({
         listenEntity: useCallback(<M extends Record<string, any>>({
             path,
             entityId,
-            collection,
             onUpdate,
-            onError
+            onError,
+            collection
         }: ListenEntityProps<M>): () => void => {
             return client.listenEntity(
                 {
@@ -175,10 +175,7 @@ export function usePostgresDelegate({
             return client.countEntities(props);
         }, [client]),
 
-        isFilterCombinationValid: useCallback((_props: Omit<FilterCombinationValidProps, "collection"> & {
-            databaseId?: string
-        }): boolean => {
-            // PostgreSQL with JSONB supports most filter combinations
+        isFilterCombinationValid: useCallback((props: FilterCombinationValidProps) => {
             return true;
         }, []),
 

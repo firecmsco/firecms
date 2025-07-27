@@ -1,11 +1,8 @@
 import {
-    ArrayProperty,
     EntityValues,
-    PropertyOrBuilder,
     ResolvedArrayProperty,
     ResolvedStringProperty,
     StorageConfig,
-    StringProperty,
     UploadedFileContext
 } from "../types";
 import { randomString } from "./strings";
@@ -14,7 +11,7 @@ interface ResolveFilenameStringParams<M extends object> {
     input: string | ((context: UploadedFileContext) => (Promise<string> | string));
     storage: StorageConfig;
     values: EntityValues<M>;
-    entityId: string | number;
+    entityId?: string | number;
     path?: string;
     property: ResolvedStringProperty | ResolvedArrayProperty<string[]>,
     file: File;
@@ -66,7 +63,7 @@ interface ResolveStoragePathStringParams<M extends object> {
     input: string | ((context: UploadedFileContext) => string);
     storage: StorageConfig;
     values: EntityValues<M>;
-    entityId: string | number;
+    entityId?: string | number;
     path?: string;
     property: ResolvedStringProperty | ResolvedArrayProperty<string[]>;
     file: File;
@@ -116,7 +113,7 @@ export function resolveStoragePathString<M extends object>(
 interface Placeholders {
     file: File;
     input: string;
-    entityId: string | number;
+    entityId?: string | number;
     propertyKey: string;
     path?: string;
 }
@@ -129,11 +126,14 @@ function replacePlaceholders({
                                  path
                              }: Placeholders) {
     const ext = file.name.split(".").pop();
-    let result = input.replace("{entityId}", String(entityId))
+    let result = input
         .replace("{propertyKey}", propertyKey)
         .replace("{rand}", randomString())
         .replace("{file}", file.name)
         .replace("{file.type}", file.type);
+    if (entityId) {
+        result = result.replace("{entityId}", String(entityId));
+    }
     if (path) {
         result = result.replace("{path}", path);
     }
