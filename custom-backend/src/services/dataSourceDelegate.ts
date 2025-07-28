@@ -1,39 +1,40 @@
 import { EntityService } from "../db/entityService";
 import { RealtimeService } from "./realtimeService";
 import { Database } from "../db/connection";
+
+import { PgTable } from "drizzle-orm/pg-core";
 import {
-    DeleteEntityRequest,
+    DeleteEntityProps,
     Entity,
     EntityCollection,
-    FetchCollectionRequest,
-    FetchEntityRequest,
-    ListenCollectionRequest,
-    ListenEntityRequest,
-    SaveEntityRequest
-} from "../types";
-import { PgTable } from "drizzle-orm/pg-core";
+    FetchCollectionProps,
+    FetchEntityProps,
+    ListenCollectionProps,
+    ListenEntityProps,
+    SaveEntityProps
+} from "@firecms/core";
 
 export interface DataSourceDelegate {
     key: string;
     initialised?: boolean;
 
-    fetchCollection<M extends Record<string, any>>(props: FetchCollectionRequest<M>): Promise<Entity<M>[]>;
+    fetchCollection<M extends Record<string, any>>(props: FetchCollectionProps<M>): Promise<Entity<M>[]>;
 
-    listenCollection?<M extends Record<string, any>>(props: ListenCollectionRequest<M>): () => void;
+    listenCollection?<M extends Record<string, any>>(props: ListenCollectionProps<M>): () => void;
 
-    fetchEntity<M extends Record<string, any>>(props: FetchEntityRequest<M>): Promise<Entity<M> | undefined>;
+    fetchEntity<M extends Record<string, any>>(props: FetchEntityProps<M>): Promise<Entity<M> | undefined>;
 
-    listenEntity?<M extends Record<string, any>>(props: ListenEntityRequest<M>): () => void;
+    listenEntity?<M extends Record<string, any>>(props: ListenEntityProps<M>): () => void;
 
-    saveEntity<M extends Record<string, any>>(props: SaveEntityRequest<M>): Promise<Entity<M>>;
+    saveEntity<M extends Record<string, any>>(props: SaveEntityProps<M>): Promise<Entity<M>>;
 
-    deleteEntity<M extends Record<string, any>>(props: DeleteEntityRequest<M>): Promise<void>;
+    deleteEntity<M extends Record<string, any>>(props: DeleteEntityProps<M>): Promise<void>;
 
     checkUniqueField(path: string, name: string, value: any, entityId?: string, collection?: EntityCollection): Promise<boolean>;
 
     generateEntityId(path: string, collection?: EntityCollection): string;
 
-    countEntities?<M extends Record<string, any>>(props: FetchCollectionRequest<M>): Promise<number>;
+    countEntities?<M extends Record<string, any>>(props: FetchCollectionProps<M>): Promise<number>;
 
     isFilterCombinationValid?(props: any): boolean;
 
@@ -69,7 +70,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
                                                              orderBy,
                                                              searchString,
                                                              order
-                                                         }: FetchCollectionRequest<M>): Promise<Entity<M>[]> {
+                                                         }: FetchCollectionProps<M>): Promise<Entity<M>[]> {
 
         if (searchString) {
             return this.entityService.searchEntities<M>(
@@ -100,7 +101,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
                                                         order,
                                                         onUpdate,
                                                         onError
-                                                    }: ListenCollectionRequest<M>): () => void {
+                                                    }: ListenCollectionProps<M>): () => void {
 
         const subscriptionId = this.generateSubscriptionId();
 
@@ -173,7 +174,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
                                                          entityId,
                                                          databaseId,
                                                          collection
-                                                     }: FetchEntityRequest<M>): Promise<Entity<M> | undefined> {
+                                                     }: FetchEntityProps<M>): Promise<Entity<M> | undefined> {
         return this.entityService.fetchEntity<M>(
             path,
             entityId,
@@ -187,7 +188,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
                                                     collection,
                                                     onUpdate,
                                                     onError
-                                                }: ListenEntityRequest<M>): () => void {
+                                                }: ListenEntityProps<M>): () => void {
 
         const subscriptionId = this.generateSubscriptionId();
         console.log("🔄 [DataSourceDelegate] Setting up ENTITY subscription:", subscriptionId);
@@ -195,7 +196,8 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
         // Create a wrapper callback that logs and calls the original callback
         const callbackWrapper = (entity: Entity<M> | null) => {
             console.log("🔄 [DataSourceDelegate] Received entity update for path:", path, "ID:", entityId);
-            onUpdate(entity);
+            if (entity)
+                onUpdate(entity);
         };
 
         // Register the subscription with the RealtimeService
@@ -210,7 +212,11 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
         this.realtimeService.addSubscriptionCallback(subscriptionId, callbackWrapper);
 
         // Fetch initial data
-        this.fetchEntity({ path, entityId, collection })
+        this.fetchEntity({
+            path,
+            entityId,
+            collection
+        })
             .then(entity => {
                 if (entity) onUpdate(entity);
             })
@@ -232,7 +238,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
                                                         values,
                                                         collection,
                                                         status
-                                                    }: SaveEntityRequest<M>): Promise<Entity<M>> {
+                                                    }: SaveEntityProps<M>): Promise<Entity<M>> {
 
         const savedEntity = await this.entityService.saveEntity<M>(
             path,
@@ -255,7 +261,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
     async deleteEntity<M extends Record<string, any>>({
                                                           entity,
                                                           collection
-                                                      }: DeleteEntityRequest<M>): Promise<void> {
+                                                      }: DeleteEntityProps<M>): Promise<void> {
 
         console.log("🗑️ [DataSourceDelegate] Starting delete for entity:", entity.id, "in path:", entity.path);
 
@@ -301,7 +307,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
     async countEntities<M extends Record<string, any>>({
                                                            path,
                                                            collection
-                                                       }: FetchCollectionRequest<M>): Promise<number> {
+                                                       }: FetchCollectionProps<M>): Promise<number> {
         return this.entityService.countEntities(path, collection?.databaseId);
     }
 

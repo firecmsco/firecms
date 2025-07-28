@@ -2,15 +2,16 @@ import { WebSocket } from "ws";
 import { EventEmitter } from "events";
 import { EntityService } from "../db/entityService";
 import { Database } from "../db/connection";
-import {
-    CollectionUpdateMessage,
-    Entity,
-    EntityUpdateMessage,
-    ListenCollectionRequest,
-    ListenEntityRequest,
-    WebSocketMessage
-} from "../types";
+
 import { PgTable } from "drizzle-orm/pg-core";
+import { CollectionUpdateMessage, EntityUpdateMessage, WebSocketMessage } from "../types";
+import { Entity, ListenCollectionProps, ListenEntityProps } from "@firecms/core";
+
+type RealTimeListenCollectionProps = ListenCollectionProps & {
+    subscriptionId: string
+};
+
+type RealTimeListenEntityProps = ListenEntityProps & { subscriptionId: string };
 
 export class RealtimeService extends EventEmitter {
     private clients = new Map<string, WebSocket>();
@@ -109,10 +110,10 @@ export class RealtimeService extends EventEmitter {
     private async handleMessage(clientId: string, message: WebSocketMessage) {
         switch (message.type) {
             case "subscribe_collection":
-                await this.handleCollectionSubscription(clientId, message.payload as ListenCollectionRequest);
+                await this.handleCollectionSubscription(clientId, message.payload as RealTimeListenCollectionProps);
                 break;
             case "subscribe_entity":
-                await this.handleEntitySubscription(clientId, message.payload as ListenEntityRequest);
+                await this.handleEntitySubscription(clientId, message.payload as RealTimeListenEntityProps);
                 break;
             case "unsubscribe":
                 await this.handleUnsubscribe(clientId, message.subscriptionId!);
@@ -122,7 +123,7 @@ export class RealtimeService extends EventEmitter {
         }
     }
 
-    private async handleCollectionSubscription(clientId: string, request: ListenCollectionRequest) {
+    private async handleCollectionSubscription(clientId: string, request: RealTimeListenCollectionProps) {
         const subscriptionId = request.subscriptionId;
 
         try {
@@ -159,7 +160,7 @@ export class RealtimeService extends EventEmitter {
         }
     }
 
-    private async handleEntitySubscription(clientId: string, request: ListenEntityRequest) {
+    private async handleEntitySubscription(clientId: string, request: RealTimeListenEntityProps) {
         const subscriptionId = request.subscriptionId;
 
         try {

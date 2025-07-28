@@ -42,14 +42,14 @@ export class EntityReference {
     /**
      * ID of the entity
      */
-    readonly id: string;
+    readonly id: string | number;
     /**
      * A string representing the path of the referenced document (relative
      * to the root of the database).
      */
     readonly path: string;
 
-    constructor(id: string, path: string) {
+    constructor(id: string | number, path: string) {
         this.id = id;
         this.path = path;
     }

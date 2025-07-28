@@ -1,24 +1,4 @@
-// Types that match FireCMS core interfaces exactly
-export interface Entity<M extends Record<string, any> = any> {
-  id: string | number;
-  path: string;
-  values: M;
-  databaseId?: string;
-}
-
-export interface EntityCollection<M extends Record<string, any> = any> {
-  id?: string;
-  path?: string;
-  schema?: any;
-  databaseId?: string;
-  collectionGroup?: boolean;
-}
-
-export type EntityStatus = "new" | "existing" | "modified" | "copy";
-
-export type WhereFilterOp =
-  | "==" | "!=" | ">" | ">=" | "<" | "<="
-  | "in" | "not-in" | "array-contains" | "array-contains-any";
+import { Entity, EntityCollection, EntityStatus, WhereFilterOp } from "@firecms/core";
 
 export type FilterValues<T extends string> = Partial<Record<T, [WhereFilterOp, any]>>;
 
@@ -55,11 +35,6 @@ export interface DeleteEntityProps<M extends Record<string, any> = any> {
   collection?: EntityCollection<M>;
 }
 
-// Request/Response types for the data source delegate
-export interface FetchCollectionRequest<M extends Record<string, any> = any> extends FetchCollectionProps<M> {}
-export interface FetchEntityRequest<M extends Record<string, any> = any> extends FetchEntityProps<M> {}
-export interface SaveEntityRequest<M extends Record<string, any> = any> extends SaveEntityProps<M> {}
-export interface DeleteEntityRequest<M extends Record<string, any> = any> extends DeleteEntityProps<M> {}
 
 // Subscription types
 export interface ListenCollectionRequest<M extends Record<string, any> = any> extends FetchCollectionProps<M> {
