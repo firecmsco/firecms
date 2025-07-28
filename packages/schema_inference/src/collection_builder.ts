@@ -9,9 +9,9 @@ import { buildStringProperty } from "./builders/string_property_builder";
 import { buildValidation } from "./builders/validation_builder";
 import { buildReferenceProperty } from "./builders/reference_property_builder";
 import { extractEnumFromValues, mergeDeep, resolveEnumValues } from "./util";
-import { DataType, EnumValues, Properties, Property, StringProperty } from "./cms_types";
+import { type, EnumValues, Properties, Property, StringProperty } from "./cms_types";
 
-export type InferenceTypeBuilder = (value: any) => DataType;
+export type InferenceTypeBuilder = (value: any) => type;
 
 export async function buildEntityPropertiesFromData(
     data: object[],
@@ -42,7 +42,7 @@ export function buildPropertyFromData(
     const valuesCount: ValuesCountRecord = {};
     if (data) {
         data.forEach((entry) => {
-            increaseTypeCount(property.dataType, typesCount, entry, getType);
+            increaseTypeCount(property.type, typesCount, entry, getType);
             increaseValuesCount(valuesCount, "inferred_prop", entry, getType);
         });
     }
@@ -57,7 +57,7 @@ export function buildPropertyFromData(
     const generatedProperty = buildPropertyFromCount(
         "inferred_prop",
         data.length,
-        property.dataType,
+        property.type,
         typesCount,
         valuesCount["inferred_prop"]
     );
@@ -95,7 +95,7 @@ export function buildPropertiesOrder(
  * @param getType
  */
 function increaseTypeCount(
-    type: DataType,
+    type: type,
     typesCount: TypesCount,
     fieldValue: any,
     getType: InferenceTypeBuilder
@@ -172,7 +172,7 @@ function increaseValuesCount(
 ) {
     if (key.startsWith("_")) return; // Ignore properties starting with _
 
-    const dataType = getType(fieldValue);
+    const type = getType(fieldValue);
 
     let valuesRecord: {
         values: any[];
@@ -188,7 +188,7 @@ function increaseValuesCount(
         typeValuesRecord[key] = valuesRecord;
     }
 
-    if (dataType === "map") {
+    if (type === "map") {
         let mapValuesRecord: ValuesCountRecord | undefined = valuesRecord.map;
         if (!mapValuesRecord) {
             mapValuesRecord = {};
@@ -198,7 +198,7 @@ function increaseValuesCount(
             Object.entries(fieldValue).forEach(([subKey, value]) =>
                 increaseValuesCount(mapValuesRecord as ValuesCountRecord, subKey, value, getType)
             );
-    } else if (dataType === "array") {
+    } else if (type === "array") {
         if (Array.isArray(fieldValue)) {
             fieldValue.forEach((value) => {
                 valuesRecord.values.push(value);
@@ -238,9 +238,9 @@ function getHighestRecordCount(record: TypesCountRecord): number {
         .reduce((a, b) => Math.max(a, b), 0);
 }
 
-function getMostProbableType(typesCount: TypesCount): DataType {
+function getMostProbableType(typesCount: TypesCount): type {
     let highestCount = -1;
-    let probableType: DataType = "string"; // default
+    let probableType: type = "string"; // default
     Object.entries(typesCount).forEach(([type, count]) => {
         let countValue;
         if (type === "map") {
@@ -252,7 +252,7 @@ function getMostProbableType(typesCount: TypesCount): DataType {
         }
         if (countValue > highestCount) {
             highestCount = countValue;
-            probableType = type as DataType;
+            probableType = type as type;
         }
     });
     return probableType;
@@ -261,7 +261,7 @@ function getMostProbableType(typesCount: TypesCount): DataType {
 function buildPropertyFromCount(
     key: string,
     totalDocsCount: number,
-    mostProbableType: DataType,
+    mostProbableType: type,
     typesCount: TypesCount,
     valuesResult?: ValuesCountEntry
 ): Property {
@@ -276,7 +276,7 @@ function buildPropertyFromCount(
         const highVariability = checkTypesCountHighVariability(typesCount);
         if (highVariability) {
             result = {
-                dataType: "map",
+                type: "map",
                 name: title,
                 keyValue: true,
                 properties: {}
@@ -288,7 +288,7 @@ function buildPropertyFromCount(
             valuesResult ? valuesResult.mapValues : undefined
         );
         result = {
-            dataType: "map",
+            type: "map",
             name: title,
             properties
         };
@@ -303,7 +303,7 @@ function buildPropertyFromCount(
             valuesResult
         );
         result = {
-            dataType: "array",
+            type: "array",
             name: title,
             of
         };
@@ -321,7 +321,7 @@ function buildPropertyFromCount(
             result = buildReferenceProperty(propertyProps);
         } else {
             result = {
-                dataType: mostProbableType
+                type: mostProbableType
             } as Property;
         }
 
@@ -375,7 +375,7 @@ function countMaxDocumentsUnder(typesCount: TypesCount) {
 function getMostProbableTypeInArray(
     array: any[],
     getType: InferenceTypeBuilder
-): DataType {
+): type {
     const typesCount: TypesCount = {};
     array.forEach((value) => {
         increaseTypeCount(getType(value), typesCount, value, getType);
@@ -412,7 +412,7 @@ function formatString(input: string): string {
     return formatted;
 }
 
-export function inferTypeFromValue(value: any): DataType {
+export function inferTypeFromValue(value: any): type {
     if (value === null || value === undefined) return "string";
     if (typeof value === "string") return "string";
     if (typeof value === "number") return "number";

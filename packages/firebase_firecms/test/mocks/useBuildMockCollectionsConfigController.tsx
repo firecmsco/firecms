@@ -45,7 +45,7 @@ export const productsCollection: PersistedCollection = {
     textSearchEnabled: true,
     properties: {
         name: {
-            dataType: "string",
+            type: "string",
             name: "Name",
             description: "Name of this product",
             clearable: true,
@@ -55,7 +55,7 @@ export const productsCollection: PersistedCollection = {
             editable: true,
         },
         main_image: {
-            dataType: "string",
+            type: "string",
             name: "Image",
             storage: {
                 storagePath: "images",
@@ -75,7 +75,7 @@ export const productsCollection: PersistedCollection = {
             editable: true,
         },
         category: {
-            dataType: "string",
+            type: "string",
             name: "Category",
             clearable: true,
             enumValues: {
@@ -89,14 +89,14 @@ export const productsCollection: PersistedCollection = {
             editable: true,
         },
         available: {
-            dataType: "boolean",
+            type: "boolean",
             name: "Available",
             columnWidth: 100,
             description: "Is this product available in the website",
             editable: true,
         },
         price: {
-            dataType: "number",
+            type: "number",
             name: "Price",
             validation: {
                 requiredMessage: "You must set a price between 0 and 1000",
@@ -106,7 +106,7 @@ export const productsCollection: PersistedCollection = {
             editable: true,
         },
         currency: {
-            dataType: "string",
+            type: "string",
             name: "Currency",
             validation: {
                 required: true
@@ -114,14 +114,14 @@ export const productsCollection: PersistedCollection = {
             editable: true,
         },
         public: {
-            dataType: "boolean",
+            type: "boolean",
             name: "Public",
             description: "Should this product be visible in the website",
             editable: true,
             // longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros."
         },
         brand: {
-            dataType: "string",
+            type: "string",
             name: "Brand",
             validation: {
                 required: true
@@ -130,24 +130,24 @@ export const productsCollection: PersistedCollection = {
             editable: true,
         },
         description: {
-            dataType: "string",
+            type: "string",
             name: "Description",
             description: "Example of a markdown field",
             markdown: true,
             editable: true,
         },
         amazon_link: {
-            dataType: "string",
+            type: "string",
             name: "Amazon link",
             url: true,
             editable: true,
         },
         images: {
-            dataType: "array",
+            type: "array",
             name: "Images",
             hideFromCollection: true,
             of: {
-                dataType: "string",
+                type: "string",
                 storage: {
                     storagePath: "images",
                     acceptedFiles: ["image/*"],
@@ -160,11 +160,11 @@ export const productsCollection: PersistedCollection = {
             editable: true,
         },
         related_products: {
-            dataType: "array",
+            type: "array",
             name: "Related products",
             description: "Reference to self",
             of: {
-                dataType: "reference",
+                type: "reference",
                 path: "ppp"
             },
             editable: true,
@@ -172,37 +172,37 @@ export const productsCollection: PersistedCollection = {
         publisher: {
             name: "Publisher",
             description: "This is an example of a map property",
-            dataType: "map",
+            type: "map",
             properties: {
                 name: {
                     name: "Name",
-                    dataType: "string"
+                    type: "string"
                 },
                 external_id: {
                     name: "External id",
-                    dataType: "string"
+                    type: "string"
                 }
             },
             editable: true,
         },
         uppercase_name: {
             name: "Uppercase Name",
-            dataType: "string",
+            type: "string",
             readOnly: true,
             description: "This field gets updated with a preSave callback",
             editable: true,
         },
         added_on: {
-            dataType: "date",
+            type: "date",
             name: "Added on",
             autoValue: "on_create",
             editable: true,
         },
         tags: {
-            dataType: "array",
+            type: "array",
             name: "Tags",
             of: {
-                dataType: "string",
+                type: "string",
             },
             editable: true,
         }

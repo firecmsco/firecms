@@ -9,21 +9,21 @@ export const showcaseCollection = buildCollection({
     name: "Showcase",
     properties: {
         name: buildProperty({
-            dataType: "string",
+            type: "string",
             name: "Name",
             validation: {
                 // ...
             }
         }),
         age: buildProperty({
-            dataType: "number",
+            type: "number",
             name: "Age",
             validation: {
                 // ...
             }
         }),
         description: buildProperty({
-            dataType: "string",
+            type: "string",
             name: "Description",
             multiline: true,
             validation: {
@@ -31,7 +31,7 @@ export const showcaseCollection = buildCollection({
             }
         }),
         text: buildProperty({
-            dataType: "string",
+            type: "string",
             name: "Blog text",
             markdown: true,
             validation: {
@@ -39,7 +39,7 @@ export const showcaseCollection = buildCollection({
             }
         }),
         amazon_link: buildProperty({
-            dataType: "string",
+            type: "string",
             name: "Amazon link",
             url: true,
             validation: {
@@ -48,7 +48,7 @@ export const showcaseCollection = buildCollection({
         }),
 
         count: buildProperty({
-            dataType: "number",
+            type: "number",
             name: "Count",
             validation: {
                 min: 0,
@@ -60,14 +60,14 @@ export const showcaseCollection = buildCollection({
         dynamic: buildProperty(({ values }) => {
             const newVar = Math.max(0, Math.min(values.count ?? 0, 10));
             return {
-                dataType: "map",
+                type: "map",
                 name: "Dynamic",
                 description: "Modify the count to update this field",
                 properties: Array(newVar)
                     .fill(0)
                     .map((_, index) => {
                         return buildProperty({
-                            dataType: "string",
+                            type: "string",
                             name: "Dynamic " + index,
                         });
                     })
@@ -80,7 +80,7 @@ export const showcaseCollection = buildCollection({
             };
         }),
         user_email: buildProperty({
-            dataType: "string",
+            type: "string",
             name: "User email",
             email: true,
             validation: {
@@ -88,7 +88,7 @@ export const showcaseCollection = buildCollection({
             }
         }),
         category: buildProperty({
-            dataType: "string",
+            type: "string",
             name: "Category",
             enumValues: {
                 art_design_books: "Art and design books",
@@ -100,9 +100,9 @@ export const showcaseCollection = buildCollection({
         }),
         locale: buildProperty({
             name: "Available locales",
-            dataType: "array",
+            type: "array",
             of: {
-                dataType: "string",
+                type: "string",
                 enumValues: {
                     es: "Spanish",
                     en: "English",
@@ -116,27 +116,27 @@ export const showcaseCollection = buildCollection({
             defaultValue: ["es"]
         }),
         expiry: buildProperty({
-            dataType: "date",
+            type: "date",
             name: "Expiry date",
             mode: "date"
         }),
         arrival_time: buildProperty({
-            dataType: "date",
+            type: "date",
             name: "Arrival time",
             mode: "date_time"
         }),
         created_at: buildProperty({
-            dataType: "date",
+            type: "date",
             name: "Created at",
             autoValue: "on_create"
         }),
         updated_on: buildProperty({
-            dataType: "date",
+            type: "date",
             name: "Updated at",
             autoValue: "on_update"
         }),
         main_image: buildProperty({
-            dataType: "string",
+            type: "string",
             name: "Main image",
             storage: {
                 storagePath: "images",
@@ -151,10 +151,10 @@ export const showcaseCollection = buildCollection({
             }
         }),
         images: buildProperty({
-            dataType: "array",
+            type: "array",
             name: "Images",
             of: {
-                dataType: "string",
+                type: "string",
                 storage: {
                     storagePath: "images",
                     acceptedFiles: ["image/*"],
@@ -167,59 +167,59 @@ export const showcaseCollection = buildCollection({
         }),
         address: buildProperty({
             name: "Address",
-            dataType: "map",
+            type: "map",
             properties: {
                 street: {
                     name: "Street",
-                    dataType: "string"
+                    type: "string"
                 },
                 postal_code: {
                     name: "Postal code",
-                    dataType: "number"
+                    type: "number"
                 }
             },
             expanded: true
         }),
         client: buildProperty({
-            dataType: "reference",
+            type: "reference",
             path: "users",
             name: "Related client"
         }),
         related_products: buildProperty({
-            dataType: "array",
+            type: "array",
             name: "Related products",
             of: {
-                dataType: "reference",
+                type: "reference",
                 path: "products"
             }
         }),
         tags: buildProperty({
-            dataType: "array",
+            type: "array",
             name: "Tags",
             of: {
-                dataType: "string",
+                type: "string",
                 previewAsTag: true
             },
             expanded: true
         }),
         selectable: buildProperty({
             name: "Selectable",
-            dataType: "boolean"
+            type: "boolean"
         }),
         metadata: buildProperty({
             name: "Metadata",
-            dataType: "map",
+            type: "map",
             keyValue: true
         }),
         content: buildProperty({
             name: "Content",
-            dataType: "array",
+            type: "array",
             oneOf: {
                 typeField: "type",
                 valueField: "value",
                 properties: {
                     images: {
-                        dataType: "string",
+                        type: "string",
                         name: "Image",
                         storage: {
                             storagePath: "images",
@@ -227,15 +227,15 @@ export const showcaseCollection = buildCollection({
                         }
                     },
                     text: {
-                        dataType: "string",
+                        type: "string",
                         name: "Text",
                         markdown: true
                     },
                     products: {
                         name: "Products",
-                        dataType: "array",
+                        type: "array",
                         of: {
-                            dataType: "reference",
+                            type: "reference",
                             path: "products"
                         }
                     }

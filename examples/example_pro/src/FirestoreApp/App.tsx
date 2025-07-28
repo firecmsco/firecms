@@ -143,7 +143,7 @@ export function App() {
         //     key: "markdown",
         //     name: "Custom markdown field",
         //     property: {
-        //         dataType: "string",
+        //         type: "string",
         //         Field: CustomColorTextField
         //     }
         // },
@@ -151,15 +151,15 @@ export function App() {
             key: "markdown_custom",
             name: "Markdown field",
             property: {
-                dataType: "map",
+                type: "map",
                 properties: {
                     type: {
-                        dataType: "string",
+                        type: "string",
                         defaultValue: "markdown",
                         Field: () => null
                     },
                     markdown_text: {
-                        dataType: "string",
+                        type: "string",
                         markdown: true
                     }
                 }
@@ -169,7 +169,7 @@ export function App() {
             key: "test_custom_field",
             name: "Test custom field",
             property: {
-                dataType: "string",
+                type: "string",
                 Field: CustomColorTextField
             }
         }

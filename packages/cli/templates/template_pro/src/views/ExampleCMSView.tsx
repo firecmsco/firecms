@@ -55,11 +55,11 @@ export function ExampleCMSView() {
             name: {
                 name: "Name",
                 validation: { required: true },
-                dataType: "string"
+                type: "string"
             },
             very_custom_field: {
                 name: "Very custom field",
-                dataType: "string"
+                type: "string"
             }
         }
     });

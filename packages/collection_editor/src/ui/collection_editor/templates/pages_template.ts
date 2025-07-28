@@ -9,12 +9,12 @@ export const pagesCollectionTemplate: EntityCollection = {
     description: "List of website pages that can be edited here",
     properties: {
         title: {
-            dataType: "string",
+            type: "string",
             name: "Page Title",
             validation: { required: true }
         },
         slug: {
-            dataType: "string",
+            type: "string",
             name: "URL Slug",
             validation: {
                 required: true,
@@ -24,20 +24,20 @@ export const pagesCollectionTemplate: EntityCollection = {
             }
         },
         hero_section: {
-            dataType: "map",
+            type: "map",
             name: "Hero Section",
             properties: {
                 headline: {
-                    dataType: "string",
+                    type: "string",
                     name: "Headline",
                     validation: { required: true }
                 },
                 subhead: {
-                    dataType: "string",
+                    type: "string",
                     name: "Subheadline"
                 },
                 background_image: {
-                    dataType: "string",
+                    type: "string",
                     name: "Background Image",
                     storage: {
                         storagePath: "page_hero/images",
@@ -45,37 +45,37 @@ export const pagesCollectionTemplate: EntityCollection = {
                     }
                 },
                 call_to_action: {
-                    dataType: "string",
+                    type: "string",
                     name: "Call to Action"
                 },
                 call_to_action_link: {
-                    dataType: "string",
+                    type: "string",
                     name: "CTA Link",
                     url: true
                 }
             }
         },
         content: {
-            dataType: "array",
+            type: "array",
             name: "Content",
             oneOf: {
                 properties: {
                     section: {
-                        dataType: "map",
+                        type: "map",
                         name: "Section",
                         properties: {
                             title: {
-                                dataType: "string",
+                                type: "string",
                                 name: "Section Title",
                                 validation: { required: true }
                             },
                             content: {
-                                dataType: "string",
+                                type: "string",
                                 name: "Section Content",
                                 markdown: true
                             },
                             image: {
-                                dataType: "string",
+                                type: "string",
                                 name: "Section Image",
                                 storage: {
                                     storagePath: "page_sections/images",
@@ -83,14 +83,14 @@ export const pagesCollectionTemplate: EntityCollection = {
                                 }
                             },
                             link: {
-                                dataType: "string",
+                                type: "string",
                                 name: "Section Link",
                                 url: true
                             }
                         }
                     },
                     image: {
-                        dataType: "string",
+                        type: "string",
                         name: "Image",
                         storage: {
                             storagePath: "page_sections/images",
@@ -98,18 +98,18 @@ export const pagesCollectionTemplate: EntityCollection = {
                         }
                     },
                     slider: {
-                        dataType: "array",
+                        type: "array",
                         name: "Slider",
                         of: {
-                            dataType: "map",
+                            type: "map",
                             properties: {
                                 title: {
-                                    dataType: "string",
+                                    type: "string",
                                     name: "Title",
                                     validation: { required: true }
                                 },
                                 image: {
-                                    dataType: "string",
+                                    type: "string",
                                     storage: {
                                         storagePath: "page_sections/images",
                                         acceptedFiles: ["image/*"]
@@ -122,59 +122,59 @@ export const pagesCollectionTemplate: EntityCollection = {
             }
         },
         sidebar: {
-            dataType: "map",
+            type: "map",
             name: "Sidebar",
             properties: {
                 title: {
-                    dataType: "string",
+                    type: "string",
                     name: "Sidebar Title",
                     validation: { required: false }
                 },
                 content: {
-                    dataType: "string",
+                    type: "string",
                     name: "Sidebar Content",
                     markdown: true
                 }
             }
         },
         seo_metadata: {
-            dataType: "map",
+            type: "map",
             name: "SEO Metadata",
             properties: {
                 meta_title: {
-                    dataType: "string",
+                    type: "string",
                     name: "Meta Title"
                 },
                 meta_description: {
-                    dataType: "string",
+                    type: "string",
                     name: "Meta Description"
                 },
                 focus_keywords: {
-                    dataType: "array",
+                    type: "array",
                     name: "Focus Keywords",
                     of: {
-                        dataType: "string"
+                        type: "string"
                     }
                 }
             }
         },
         footer_override: {
-            dataType: "string",
+            type: "string",
             name: "Footer Override",
             markdown: true
         },
         publish_date: {
-            dataType: "date",
+            type: "date",
             name: "Publish Date",
             validation: { required: true }
         },
         last_updated: {
-            dataType: "date",
+            type: "date",
             name: "Last Updated",
             autoValue: "on_update"
         },
         is_published: {
-            dataType: "boolean",
+            type: "boolean",
             name: "Is Published",
             columnWidth: 100,
             description: "Should this page be live on the site?"

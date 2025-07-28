@@ -151,7 +151,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, M extends Rec
                     console.warn("Property:", property);
                     return (
                         <div className={"w-full"}>
-                            {`Currently the field ${resolvedProperty.dataType} is not supported`}
+                            {`Currently the field ${resolvedProperty.type} is not supported`}
                         </div>
                     );
                 }
@@ -288,9 +288,9 @@ const shouldPropertyReRender = (property: PropertyOrBuilder | ResolvedProperty, 
     }
     const defAProperty = property as Property | ResolvedProperty;
     const rerenderThisProperty = Boolean(defAProperty.Field) || ("fromBuilder" in defAProperty && defAProperty.fromBuilder);
-    if (defAProperty.dataType === "map" && defAProperty.properties) {
+    if (defAProperty.type === "map" && defAProperty.properties) {
         return rerenderThisProperty || Object.values(defAProperty.properties).some((childProperty) => shouldPropertyReRender(childProperty, plugins));
-    } else if (defAProperty.dataType === "array" && "resolvedProperties" in defAProperty) {
+    } else if (defAProperty.type === "array" && "resolvedProperties" in defAProperty) {
         // @ts-ignore
         return rerenderThisProperty || defAProperty.resolvedProperties?.some((childProperty) => childProperty && shouldPropertyReRender(childProperty, plugins));
     } else {

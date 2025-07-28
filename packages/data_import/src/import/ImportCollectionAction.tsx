@@ -303,7 +303,7 @@ function PropertyTreeSelect({
                                  }) => {
             return <SelectItem value={propertyKey}
                                key={propertyKey}
-                               disabled={property.dataType === "map"}>
+                               disabled={property.type === "map"}>
                 <PropertySelectEntry propertyKey={propertyKey}
                                      property={property}
                                      level={level}/>
@@ -326,7 +326,7 @@ function getPropertiesAndLevel(key: string, property: Property, level: number): 
         level,
         propertyKey: key
     });
-    if (property.dataType === "map" && property.properties) {
+    if (property.type === "map" && property.properties) {
         Object.entries(property.properties).forEach(([childKey, value]) => {
             properties.push(...getPropertiesAndLevel(`${key}.${childKey}`, value as Property, level + 1));
         });

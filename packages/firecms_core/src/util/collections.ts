@@ -16,7 +16,7 @@ export function sortProperties<M extends Record<string, any>>(properties: Proper
             .map((key) => {
                 if (properties[key as keyof M]) {
                     const property = properties[key] as PropertyOrBuilder;
-                    if (!isPropertyBuilder(property) && property?.dataType === "map" && property.properties) {
+                    if (!isPropertyBuilder(property) && property?.type === "map" && property.properties) {
                         return ({
                             [key]: {
                                 ...property,

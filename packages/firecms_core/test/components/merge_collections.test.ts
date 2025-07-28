@@ -4,7 +4,7 @@ import { EntityCollection, PropertyBuilder } from "../../src/types";
 import { mergeCollection } from "../../src";
 
 const priceBuilder: PropertyBuilder = ({ values }: any) => ({
-    dataType: "number",
+    type: "number",
     name: "Price",
     validation: {
         requiredMessage: "You must set a price between 0 and 1000",
@@ -25,13 +25,13 @@ export const baseProductCollection: EntityCollection = {
     singularName: "Product",
     properties: {
         name: {
-            dataType: "string",
+            type: "string",
             name: "Name",
             multiline: true,
             validation: { required: true }
         },
         currency: {
-            dataType: "string",
+            type: "string",
             name: "Currency",
             enumValues: [
                 { id: "DOL", label: "Dollars" },
@@ -48,13 +48,13 @@ export const persistedProductCollection: EntityCollection = {
     singularName: "Product persisted",
     properties: {
         name: {
-            dataType: "string",
+            type: "string",
             name: "Name updated",
             multiline: true,
             validation: { required: true }
         },
         currency: {
-            dataType: "string",
+            type: "string",
             name: "Currency",
             enumValues: [
                 { id: "EUR", label: "Euros" },
@@ -64,15 +64,15 @@ export const persistedProductCollection: EntityCollection = {
         publisher: {
             name: "Publisher",
             description: "This is an example of a map property",
-            dataType: "map",
+            type: "map",
             properties: {
                 external_id: {
                     name: "External id",
-                    dataType: "string"
+                    type: "string"
                 },
                 name: {
                     name: "Name",
-                    dataType: "string"
+                    type: "string"
                 },
             },
             propertiesOrder: ["name", "external_id"]
@@ -91,13 +91,13 @@ it("Merge collections", () => {
             singularName: "Product persisted",
             properties: {
                 name: {
-                    dataType: "string",
+                    type: "string",
                     name: "Name updated",
                     multiline: true,
                     validation: { required: true }
                 },
                 currency: {
-                    dataType: "string",
+                    type: "string",
                     name: "Currency",
                     enumValues: [
                         { id: "EUR", label: "Euros" },
@@ -107,15 +107,15 @@ it("Merge collections", () => {
                 publisher: {
                     name: "Publisher",
                     description: "This is an example of a map property",
-                    dataType: "map",
+                    type: "map",
                     properties: {
                         name: {
                             name: "Name",
-                            dataType: "string"
+                            type: "string"
                         },
                         external_id: {
                             name: "External id",
-                            dataType: "string"
+                            type: "string"
                         }
                     },
                     propertiesOrder: ["name", "external_id"]

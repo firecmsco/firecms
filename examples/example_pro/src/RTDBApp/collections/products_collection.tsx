@@ -9,7 +9,7 @@ export const productsCollection = buildCollection<any>({
     icon: "ShoppingCart",
     properties: {
         name: {
-            dataType: "string",
+            type: "string",
             name: "Name",
             description: "Name of this product",
             clearable: true,
@@ -18,7 +18,7 @@ export const productsCollection = buildCollection<any>({
             }
         },
         category: {
-            dataType: "string",
+            type: "string",
             name: "Category",
             clearable: true,
             enumValues: {
@@ -31,37 +31,37 @@ export const productsCollection = buildCollection<any>({
             }
         },
         price: {
-            dataType: "number",
+            type: "number",
             name: "Price",
         },
         brand: {
-            dataType: "string",
+            type: "string",
             name: "Brand",
             validation: {
                 required: true
             }
         },
         description: {
-            dataType: "string",
+            type: "string",
             name: "Description",
             description: "Example of a markdown field",
             markdown: true
         },
         metadata: {
-            dataType: "map",
+            type: "map",
             name: "Metadata",
             description: "This is a field that allows arbitrary key-value input",
             keyValue: true
         },
         tags: {
-            dataType: "array",
+            type: "array",
             name: "Tags",
             of: {
-                dataType: "string"
+                type: "string"
             }
         },
         added_on: {
-            dataType: "date",
+            type: "date",
             name: "Added on",
             autoValue: "on_create"
         }

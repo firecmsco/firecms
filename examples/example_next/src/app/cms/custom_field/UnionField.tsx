@@ -23,27 +23,27 @@ export function UnionField({
         if (type === "string") {
             return {
                 ...property as ResolvedStringProperty,
-                dataType: "string"
+                type: "string"
             }
         } else if (type === "number") {
             return {
                 ...property as ResolvedNumberProperty,
-                dataType: "number"
+                type: "number"
             }
         } else if (type === "string[]") {
             return {
                 ...property as ResolvedArrayProperty,
-                dataType: "array",
+                type: "array",
                 of: {
-                    dataType: "string"
+                    type: "string"
                 }
             };
         } else if (type === "number[]") {
             return {
                 ...property as ResolvedArrayProperty,
-                dataType: "array",
+                type: "array",
                 of: {
-                    dataType: "number"
+                    type: "number"
                 }
             }
         } else {

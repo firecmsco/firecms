@@ -1,6 +1,6 @@
 import {
     CMSType,
-    DataType,
+    type,
     Entity,
     EntityReference,
     EntityStatus,
@@ -18,11 +18,11 @@ import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "./common";
 export function isReadOnly(property: Property<any> | ResolvedProperty<any>): boolean {
     if (property.readOnly)
         return true;
-    if (property.dataType === "date") {
+    if (property.type === "date") {
         if (property.autoValue)
             return true;
     }
-    if (property.dataType === "reference") {
+    if (property.type === "reference") {
         return !property.path;
     }
     return false;
@@ -52,27 +52,27 @@ export function getDefaultValueFor(property?: PropertyOrBuilder) {
     if (isPropertyBuilder(property)) return undefined;
     if (property.defaultValue || property.defaultValue === null) {
         return property.defaultValue;
-    } else if (property.dataType === "map" && property.properties) {
+    } else if (property.type === "map" && property.properties) {
         const defaultValuesFor = getDefaultValuesFor(property.properties as Properties);
         if (Object.keys(defaultValuesFor).length === 0) return undefined;
         return defaultValuesFor;
     } else {
-        return getDefaultValueForDataType(property.dataType);
+        return getDefaultValueFortype(property.type);
     }
 }
 
-export function getDefaultValueForDataType(dataType: DataType) {
-    if (dataType === "string") {
+export function getDefaultValueFortype(type: type) {
+    if (type === "string") {
         return null;
-    } else if (dataType === "number") {
+    } else if (type === "number") {
         return null;
-    } else if (dataType === "boolean") {
+    } else if (type === "boolean") {
         return false;
-    } else if (dataType === "date") {
+    } else if (type === "date") {
         return null;
-    } else if (dataType === "array") {
+    } else if (type === "array") {
         return [];
-    } else if (dataType === "map") {
+    } else if (type === "map") {
         return {};
     } else {
         return null;
@@ -101,7 +101,7 @@ export function updateDateAutoValues<M extends Record<string, any>>({
         inputValues,
         properties,
         (inputValue, property) => {
-            if (property.dataType === "date") {
+            if (property.type === "date") {
                 let resultDate;
                 if (status === "existing" && property.autoValue === "on_update") {
                     resultDate = timestampNowValue;
@@ -169,9 +169,9 @@ export function traverseValueProperty(inputValue: any,
                                       operation: (value: any, property: Property) => any): any {
 
     let value;
-    if (property.dataType === "map" && property.properties) {
+    if (property.type === "map" && property.properties) {
         value = traverseValuesProperties(inputValue, property.properties as ResolvedProperties, operation);
-    } else if (property.dataType === "array") {
+    } else if (property.type === "array") {
         if (property.of && Array.isArray(inputValue)) {
             value = inputValue.map((e) => traverseValueProperty(e, property.of as Property, operation));
         } else if (property.oneOf && Array.isArray(inputValue)) {

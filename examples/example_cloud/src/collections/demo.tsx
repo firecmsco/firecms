@@ -9,7 +9,7 @@ export const demoCollection = buildCollection({
 
         // string property with validation
         name: {
-            dataType: "string",
+            type: "string",
             name: "Name",
             validation: {
                 required: true
@@ -18,13 +18,13 @@ export const demoCollection = buildCollection({
 
         // simple boolean
         available: buildProperty({
-            dataType: "boolean",
+            type: "boolean",
             name: "Available"
         }),
 
         // you can define this property dynamically, and modify it based on the values of other properties
         price: ({ values }) => ({
-            dataType: "number",
+            type: "number",
             title: "Price",
             validation: {
                 requiredMessage: "You must set a price between 0 and 1000",
@@ -40,14 +40,14 @@ export const demoCollection = buildCollection({
 
         // multiline
         description: {
-            dataType: "string",
+            type: "string",
             name: "Description",
             multiline: true,
         },
 
         // markdown
         text: {
-            dataType: "string",
+            type: "string",
             name: "Blog text",
             markdown: true,
         },
@@ -55,15 +55,15 @@ export const demoCollection = buildCollection({
         // array of strings
         ingredients: {
             name: "Ingredients",
-            dataType: "array",
+            type: "array",
             of: {
-                dataType: "string",
+                type: "string",
             }
         },
 
         // url
         amazon_link: {
-            dataType: "string",
+            type: "string",
             name: "Amazon link",
             url: true,
             validation: {
@@ -74,14 +74,14 @@ export const demoCollection = buildCollection({
 
         // email
         user_email: {
-            dataType: "string",
+            type: "string",
             name: "User email",
             email: true
         },
 
         // single selection
         category: {
-            dataType: "string",
+            type: "string",
             name: "Category",
             enumValues: {
                 art_design_books: "Art and design books",
@@ -95,9 +95,9 @@ export const demoCollection = buildCollection({
         // multiple selection
         locale: {
             name: "Available locales",
-            dataType: "array",
+            type: "array",
             of: {
-                dataType: "string",
+                type: "string",
                 enumValues: {
                     es: "Spanish",
                     en: "English",
@@ -115,35 +115,35 @@ export const demoCollection = buildCollection({
 
         // date
         expiry: {
-            dataType: "date",
+            type: "date",
             name: "Expiry date",
             mode: "date"
         },
 
         // date and time
         arrival_time: {
-            dataType: "date",
+            type: "date",
             name: "Arrival time",
             mode: "date_time"
         },
 
         // auto update on create
         created_at: {
-            dataType: "date",
+            type: "date",
             name: "Created at",
             autoValue: "on_create"
         },
 
         // auto update on update
         updated_on: {
-            dataType: "date",
+            type: "date",
             name: "Updated at",
             autoValue: "on_update"
         },
 
         // storing a single image
         main_image: {
-            dataType: "string",
+            type: "string",
             name: "Main image",
             storage: {
                 storagePath: "images",
@@ -159,10 +159,10 @@ export const demoCollection = buildCollection({
 
         // storing multiple images
         images: {
-            dataType: "array",
+            type: "array",
             name: "Images",
             of: {
-                dataType: "string",
+                type: "string",
                 storage: {
                     storagePath: "images",
                     acceptedFiles: [
@@ -179,15 +179,15 @@ export const demoCollection = buildCollection({
         // group of properties
         address: {
             name: "Address",
-            dataType: "map",
+            type: "map",
             properties: {
                 street: {
                     name: "Street",
-                    dataType: "string"
+                    type: "string"
                 },
                 postal_code: {
                     name: "Postal code",
-                    dataType: "number"
+                    type: "number"
                 }
             },
             expanded: true
@@ -195,17 +195,17 @@ export const demoCollection = buildCollection({
 
         // reference to another collection
         client: {
-            dataType: "reference",
+            type: "reference",
             path: "users",
             name: "Related client"
         },
 
         // multiple references to another collection
         related_products: {
-            dataType: "array",
+            type: "array",
             name: "Related products",
             of: {
-                dataType: "reference",
+                type: "reference",
                 path: "products"
             }
         },
@@ -213,13 +213,13 @@ export const demoCollection = buildCollection({
         // block of content with dynamic properties
         content: {
             name: "Content",
-            dataType: "array",
+            type: "array",
             oneOf: {
                 typeField: "type",
                 valueField: "value",
                 properties: {
                     images: {
-                        dataType: "string",
+                        type: "string",
                         name: "Image",
                         storage: {
                             storagePath: "images",
@@ -229,15 +229,15 @@ export const demoCollection = buildCollection({
                         }
                     },
                     text: {
-                        dataType: "string",
+                        type: "string",
                         name: "Text",
                         markdown: true
                     },
                     products: {
                         name: "Products",
-                        dataType: "array",
+                        type: "array",
                         of: {
-                            dataType: "reference",
+                            type: "reference",
                             path: "products"
                         }
                     }

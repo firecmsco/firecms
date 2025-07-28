@@ -10,7 +10,7 @@ import { AuthController } from "./auth";
 /**
  * @group Entity properties
  */
-export type DataType<T extends CMSType = CMSType> =
+export type type<T extends CMSType = CMSType> =
     T extends string ? "string" :
         T extends number ? "number" :
             T extends boolean ? "boolean" :
@@ -67,9 +67,9 @@ export type Property<T extends CMSType = any> =
 export interface BaseProperty<T extends CMSType, CustomProps = any> {
 
     /**
-     * Datatype of the property
+     * type of the property
      */
-    dataType: DataType;
+    type: type;
 
     /**
      * Property name (e.g. Product)
@@ -315,7 +315,7 @@ export type PropertiesOrBuilders<M extends Record<string, any> = any> =
  */
 export interface NumberProperty extends BaseProperty<number> {
 
-    dataType: "number";
+    type: "number";
 
     /**
      * You can use the enum values providing a map of possible
@@ -340,7 +340,7 @@ export interface NumberProperty extends BaseProperty<number> {
  */
 export interface BooleanProperty extends BaseProperty<boolean> {
 
-    dataType: "boolean";
+    type: "boolean";
 
     /**
      * Rules for validating this property
@@ -354,7 +354,7 @@ export interface BooleanProperty extends BaseProperty<boolean> {
  */
 export interface StringProperty extends BaseProperty<string> {
 
-    dataType: "string";
+    type: "string";
 
     /**
      * Is this string property long enough so it should be displayed in
@@ -428,7 +428,7 @@ export interface StringProperty extends BaseProperty<string> {
  */
 export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = any> extends BaseProperty<T> {
 
-    dataType: "array";
+    type: "array";
 
     /**
      * The property of this array.
@@ -515,7 +515,7 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
  */
 export interface MapProperty<T extends Record<string, CMSType> = Record<string, CMSType>> extends BaseProperty<T> {
 
-    dataType: "map";
+    type: "map";
 
     /**
      * Record of properties included in this map.
@@ -580,7 +580,7 @@ export interface MapProperty<T extends Record<string, CMSType> = Record<string, 
  */
 export interface DateProperty extends BaseProperty<Date> {
 
-    dataType: "date";
+    type: "date";
 
     /**
      * Set the granularity of the field to a date or date + time.
@@ -614,7 +614,7 @@ export interface DateProperty extends BaseProperty<Date> {
 // TODO: currently this is the only unsupported field
 export interface GeopointProperty extends BaseProperty<GeoPoint> {
 
-    dataType: "geopoint";
+    type: "geopoint";
 
     /**
      * Rules for validating this property
@@ -628,7 +628,7 @@ export interface GeopointProperty extends BaseProperty<GeoPoint> {
  */
 export interface ReferenceProperty extends BaseProperty<EntityReference> {
 
-    dataType: "reference";
+    type: "reference";
 
     /**
      * Absolute collection path of the collection this reference points to.

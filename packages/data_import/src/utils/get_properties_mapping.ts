@@ -1,13 +1,13 @@
-// import { DataType, getPropertyInPath, Properties, Property } from "@firecms/core";
-// import { DataTypeMapping } from "../types";
+// import { type, getPropertyInPath, Properties, Property } from "@firecms/core";
+// import { typeMapping } from "../types";
 //
 // export function getPropertiesMapping(originProperties: Properties,
 //                                      newProperties: Properties,
-//                                      headersMapping: Record<string, string | null>): Record<string, DataTypeMapping> {
+//                                      headersMapping: Record<string, string | null>): Record<string, typeMapping> {
 //
-//     function updateMapping(properties: Record<string, Property>, namespace?: string): Record<string, DataTypeMapping> {
+//     function updateMapping(properties: Record<string, Property>, namespace?: string): Record<string, typeMapping> {
 //
-//         const dataMapping: Record<string, DataTypeMapping> = {};
+//         const dataMapping: Record<string, typeMapping> = {};
 //
 //         Object.keys(properties).forEach((key) => {
 //
@@ -19,7 +19,7 @@
 //             const inferredProperty = mappedKey ? getPropertyInPath(originProperties, mappedKey) as Property : null;
 //
 //             if (property) {
-//                 if (property.dataType === "map" && property.properties) {
+//                 if (property.type === "map" && property.properties) {
 //                     const nestedMapping = updateMapping(property.properties as Record<string, Property>, currentKey);
 //                     Object.keys(nestedMapping).forEach((nestedKey) => {
 //                         dataMapping[`${currentKey}.${nestedKey}`] = nestedMapping[nestedKey];
@@ -29,17 +29,17 @@
 //
 //                 if (inferredProperty) {
 //
-//                     const from = inferredProperty.dataType;
-//                     const to = property.dataType;
-//                     let fromSubtype: DataType | undefined;
-//                     let toSubtype: DataType | undefined;
+//                     const from = inferredProperty.type;
+//                     const to = property.type;
+//                     let fromSubtype: type | undefined;
+//                     let toSubtype: type | undefined;
 //
-//                     if (property.dataType === "array" && property.of) {
-//                         toSubtype = (property.of as Property).dataType;
+//                     if (property.type === "array" && property.of) {
+//                         toSubtype = (property.of as Property).type;
 //                     }
 //
-//                     if (inferredProperty?.dataType === "array" && inferredProperty?.of) {
-//                         fromSubtype = (inferredProperty.of as Property).dataType;
+//                     if (inferredProperty?.type === "array" && inferredProperty?.of) {
+//                         fromSubtype = (inferredProperty.of as Property).type;
 //                     }
 //
 //                     if (from !== to || fromSubtype !== toSubtype) {

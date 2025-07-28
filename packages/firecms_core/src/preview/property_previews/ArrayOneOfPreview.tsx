@@ -28,7 +28,7 @@ export function ArrayOneOfPreview({
         authController
     });
 
-    if (property?.dataType !== "array")
+    if (property?.type !== "array")
         throw Error("Picked wrong preview component ArrayPreview");
 
     if (!property?.oneOf) {

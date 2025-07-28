@@ -17,11 +17,11 @@ export const localeCollection = buildCollection<Locale>({
         name: {
             name: "Title",
             validation: { required: true },
-            dataType: "string"
+            type: "string"
         },
         description: {
             name: "Description",
-            dataType: "string",
+            type: "string",
             markdown: true
         }
     }

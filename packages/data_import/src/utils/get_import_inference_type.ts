@@ -1,6 +1,6 @@
-import { DataType } from "@firecms/core";
+import { type } from "@firecms/core";
 
-export function getInferenceType(value: any): DataType {
+export function getInferenceType(value: any): type {
     if (typeof value === "number")
         return "number";
     else if (typeof value === "string")

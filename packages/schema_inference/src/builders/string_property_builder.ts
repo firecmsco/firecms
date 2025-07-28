@@ -15,7 +15,7 @@ export function buildStringProperty({
                                     }: InferencePropertyBuilderProps): Property {
 
     let stringProperty: Property = {
-        dataType: "string",
+        type: "string",
 
     };
 

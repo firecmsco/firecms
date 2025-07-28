@@ -39,7 +39,7 @@ export type SelectProps<T extends SelectValue = string> = {
     padding?: boolean,
     invisible?: boolean,
     children?: React.ReactNode;
-    dataType?: "string" | "number" | "boolean";
+    type?: "string" | "number" | "boolean";
 };
 
 export const Select = forwardRef<HTMLDivElement, SelectProps>(({
@@ -66,7 +66,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                                                                    endAdornment,
                                                                    invisible,
                                                                    children,
-                                                                   dataType = "string",
+                                                                   type = "string",
                                                                    ...props
                                                                }, ref) => {
 
@@ -79,10 +79,10 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
     const onValueChangeInternal = useCallback((newValue: string) => {
 
         let typedValue: SelectValue = newValue;
-        if (dataType === "boolean") {
+        if (type === "boolean") {
             if (newValue === "true") typedValue = true;
             else if (newValue === "false") typedValue = false;
-        } else if (dataType === "number") {
+        } else if (type === "number") {
             if (!isNaN(Number(newValue)) && newValue.trim() !== "") typedValue = Number(newValue);
         }
 

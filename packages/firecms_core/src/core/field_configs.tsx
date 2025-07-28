@@ -53,7 +53,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: ShortTextIcon,
         color: "#2d7ff9",
         property: {
-            dataType: "string",
+            type: "string",
             Field: TextFieldBinding
         }
     },
@@ -64,7 +64,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: SubjectIcon,
         color: "#2d7ff9",
         property: {
-            dataType: "string",
+            type: "string",
             multiline: true,
             Field: TextFieldBinding
         }
@@ -76,7 +76,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: FormatQuoteIcon,
         color: "#2d7ff9",
         property: {
-            dataType: "string",
+            type: "string",
             markdown: true,
             Field: MarkdownEditorFieldBinding
         }
@@ -88,7 +88,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: HttpIcon,
         color: "#154fb3",
         property: {
-            dataType: "string",
+            type: "string",
             url: true,
             Field: TextFieldBinding
         }
@@ -100,7 +100,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: MailIcon,
         color: "#154fb3",
         property: {
-            dataType: "string",
+            type: "string",
             email: true,
             Field: TextFieldBinding
         }
@@ -112,7 +112,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: FlagIcon,
         color: "#20d9d2",
         property: {
-            dataType: "boolean",
+            type: "boolean",
             Field: SwitchFieldBinding
         }
     },
@@ -123,7 +123,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: ListIcon,
         color: "#4223c9",
         property: {
-            dataType: "string",
+            type: "string",
             enumValues: [],
             Field: SelectFieldBinding
         }
@@ -135,9 +135,9 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: ListAltIcon,
         color: "#4223c9",
         property: {
-            dataType: "array",
+            type: "array",
             of: {
-                dataType: "string",
+                type: "string",
                 enumValues: [],
             },
             Field: MultiSelectFieldBinding
@@ -150,7 +150,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: NumbersIcon,
         color: "#bec920",
         property: {
-            dataType: "number",
+            type: "number",
             Field: TextFieldBinding
         }
     },
@@ -161,7 +161,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: FormatListNumberedIcon,
         color: "#bec920",
         property: {
-            dataType: "number",
+            type: "number",
             enumValues: [],
             Field: SelectFieldBinding
         }
@@ -173,9 +173,9 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: FormatListNumberedIcon,
         color: "#bec920",
         property: {
-            dataType: "array",
+            type: "array",
             of: {
-                dataType: "number",
+                type: "number",
                 enumValues: [],
             },
             Field: MultiSelectFieldBinding
@@ -188,7 +188,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: UploadFileIcon,
         color: "#f92d9a",
         property: {
-            dataType: "string",
+            type: "string",
             storage: {
                 storagePath: "{path}"
             },
@@ -202,9 +202,9 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: DriveFolderUploadIcon,
         color: "#f92d9a",
         property: {
-            dataType: "array",
+            type: "array",
             of: {
-                dataType: "string",
+                type: "string",
                 storage: {
                     storagePath: "{path}"
                 }
@@ -219,7 +219,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: LinkIcon,
         color: "#154fb3",
         property: {
-            dataType: "string",
+            type: "string",
             Field: ReferenceAsStringFieldBinding
         }
     },
@@ -230,7 +230,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: LinkIcon,
         color: "#ff0042",
         property: {
-            dataType: "reference",
+            type: "reference",
             Field: ReferenceFieldBinding
         }
     },
@@ -241,9 +241,9 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: AddLinkIcon,
         color: "#ff0042",
         property: {
-            dataType: "array",
+            type: "array",
             of: {
-                dataType: "reference",
+                type: "reference",
             },
             Field: ArrayOfReferencesFieldBinding
         }
@@ -255,7 +255,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: ScheduleIcon,
         color: "#8b46ff",
         property: {
-            dataType: "date",
+            type: "date",
             Field: DateTimeFieldBinding
         }
     },
@@ -266,7 +266,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: BallotIcon,
         color: "#ff9408",
         property: {
-            dataType: "map",
+            type: "map",
             properties: {},
             Field: MapFieldBinding
         }
@@ -278,7 +278,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: BallotIcon,
         color: "#ff9408",
         property: {
-            dataType: "map",
+            type: "map",
             keyValue: true,
             Field: KeyValueFieldBinding
         }
@@ -290,9 +290,9 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: RepeatIcon,
         color: "#ff9408",
         property: {
-            dataType: "array",
+            type: "array",
             of: {
-                dataType: "string",
+                type: "string",
             },
             Field: RepeatFieldBinding
         }
@@ -304,7 +304,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: RepeatIcon,
         color: "#ff9408",
         property: {
-            dataType: "array",
+            type: "array",
             of: [],
             Field: ArrayCustomShapedFieldBinding
         }
@@ -316,7 +316,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
         Icon: ViewStreamIcon,
         color: "#ff9408",
         property: {
-            dataType: "array",
+            type: "array",
             oneOf: {
                 properties: {},
             },
@@ -347,7 +347,7 @@ export function getFieldConfig(property: Property | ResolvedProperty, propertyCo
 }
 
 export function getDefaultFieldId(property: Property | ResolvedProperty) {
-    if (property.dataType === "string") {
+    if (property.type === "string") {
         if (property.multiline) {
             return "multiline";
         } else if (property.markdown) {
@@ -365,16 +365,16 @@ export function getDefaultFieldId(property: Property | ResolvedProperty) {
         } else {
             return "text_field";
         }
-    } else if (property.dataType === "number") {
+    } else if (property.type === "number") {
         if (property.enumValues) {
             return "number_select";
         }
         return "number_input";
-    } else if (property.dataType === "map") {
+    } else if (property.type === "map") {
         if (property.keyValue)
             return "key_value";
         return "group";
-    } else if (property.dataType === "array") {
+    } else if (property.type === "array") {
         const of = (property as ArrayProperty).of;
         const oneOf = (property as ArrayProperty).oneOf;
         if (oneOf) {
@@ -383,22 +383,22 @@ export function getDefaultFieldId(property: Property | ResolvedProperty) {
             return "custom_array";
         } else if (isPropertyBuilder(of)) {
             return "repeat";
-        } else if (of?.dataType === "string" && of.enumValues) {
+        } else if (of?.type === "string" && of.enumValues) {
             return "multi_select";
-        } else if (of?.dataType === "number" && of.enumValues) {
+        } else if (of?.type === "number" && of.enumValues) {
             return "multi_number_select";
-        } else if (of?.dataType === "string" && of.storage) {
+        } else if (of?.type === "string" && of.storage) {
             return "multi_file_upload";
-        } else if (of?.dataType === "reference") {
+        } else if (of?.type === "reference") {
             return "multi_references";
         } else {
             return "repeat";
         }
-    } else if (property.dataType === "boolean") {
+    } else if (property.type === "boolean") {
         return "switch";
-    } else if (property.dataType === "date") {
+    } else if (property.type === "date") {
         return "date_time";
-    } else if (property.dataType === "reference") {
+    } else if (property.type === "reference") {
         return "reference";
     }
 

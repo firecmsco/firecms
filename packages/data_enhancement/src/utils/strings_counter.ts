@@ -8,11 +8,11 @@ export function countStringCharacters(values: EntityValues<any>, properties: Res
         const property: ResolvedProperty = properties[key];
 
         if (property && !property.disabled) {
-            if (property.dataType === "string" || property.dataType === "number") {
+            if (property.type === "string" || property.type === "number") {
                 count += String(value).length;
-            } else if (property.dataType === "array" && Array.isArray(value) && property.of?.dataType === "string") {
+            } else if (property.type === "array" && Array.isArray(value) && property.of?.type === "string") {
                 count += (value as string[]).reduce((acc, curr) => acc + (curr?.length ?? 0), 0);
-            } else if (property.dataType === "map" && property.properties && typeof value === "object") {
+            } else if (property.type === "map" && property.properties && typeof value === "object") {
                 count += countStringCharacters(value, property.properties);
             }
         }

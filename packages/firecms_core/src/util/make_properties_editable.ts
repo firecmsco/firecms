@@ -6,7 +6,7 @@ export function makePropertiesEditable(properties: Properties) {
         const property = properties[key];
         if (property) {
             property.editable = true;
-            if (property.dataType === "map" && property.properties) {
+            if (property.type === "map" && property.properties) {
                 makePropertiesEditable(property.properties as Properties);
             }
         }
@@ -16,7 +16,7 @@ export function makePropertiesEditable(properties: Properties) {
 
 export function makePropertiesNonEditable(properties: PropertiesOrBuilders): PropertiesOrBuilders {
     return Object.entries(properties).reduce((acc, [key, property]) => {
-        if (!isPropertyBuilder(property) && property.dataType === "map" && property.properties) {
+        if (!isPropertyBuilder(property) && property.type === "map" && property.properties) {
             const updated = {
                 ...property,
                 properties: makePropertiesNonEditable(property.properties as PropertiesOrBuilders)

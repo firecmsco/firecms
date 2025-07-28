@@ -32,7 +32,7 @@ export function ArrayPropertyPreview({
         throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${propertyKey}`);
     }
 
-    if (property.dataType !== "array")
+    if (property.type !== "array")
         throw Error("Picked wrong preview component ArrayPreview");
 
     const values = value;

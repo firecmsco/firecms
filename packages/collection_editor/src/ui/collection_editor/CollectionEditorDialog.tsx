@@ -828,7 +828,7 @@ function applyPropertiesConfig(property: PropertyOrBuilder, propertyConfigs: Rec
                 internalProperty = mergeDeep(propertyConfig.property, internalProperty);
             }
 
-            if (!isPropertyBuilder(internalProperty) && internalProperty.dataType === "map" && internalProperty.properties) {
+            if (!isPropertyBuilder(internalProperty) && internalProperty.type === "map" && internalProperty.properties) {
                 const properties: Record<string, PropertyOrBuilder> = {};
                 Object.keys(internalProperty.properties).forEach((key) => {
                     properties[key] = applyPropertiesConfig(((internalProperty as MapProperty).properties as Properties)[key] as Property, propertyConfigs);

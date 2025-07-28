@@ -134,7 +134,7 @@ function mergePropertyOrBuilder(target: PropertyOrBuilder, source: PropertyOrBui
         const mergedProperty = mergeDeep(target, source);
         const targetEditable = Boolean(target.editable);
         const sourceEditable = Boolean(source.editable);
-        if (source.dataType === "map" && source.properties) {
+        if (source.type === "map" && source.properties) {
             const targetProperties = ("properties" in target ? target.properties : {}) as PropertiesOrBuilders;
             const sourceProperties = ("properties" in source ? source.properties : {}) as PropertiesOrBuilders;
             const targetPropertiesOrder = "propertiesOrder" in target && target.propertiesOrder ? target.propertiesOrder : Object.keys(targetProperties);

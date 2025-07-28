@@ -10,17 +10,17 @@ export function SecondaryForm({
             <PropertyFieldBinding context={formContext}
                                   propertyKey={"myTestMap"}
                                   property={{
-                                      dataType: "map",
+                                      type: "map",
                                       name: "My test map",
                                       properties: {
                                           name: {
                                               name: "Name",
-                                              dataType: "string",
+                                              type: "string",
                                               validation: { required: true }
                                           },
                                           age: {
                                               name: "Age",
-                                              dataType: "number",
+                                              type: "number",
                                           }
                                       }
                                   }}/>

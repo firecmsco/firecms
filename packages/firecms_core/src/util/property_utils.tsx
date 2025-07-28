@@ -25,12 +25,12 @@ export function isReferenceProperty(
         authController
     });
     if (!resolvedProperty) return null;
-    if (resolvedProperty.dataType === "reference") {
+    if (resolvedProperty.type === "reference") {
         return true;
     }
-    if (resolvedProperty.dataType === "array") {
+    if (resolvedProperty.type === "array") {
         if (Array.isArray(resolvedProperty.of)) return false;
-        else return resolvedProperty.of?.dataType === "reference"
+        else return resolvedProperty.of?.type === "reference"
     }
     return false;
 }
@@ -82,7 +82,7 @@ export function getPropertyInPath<M extends Record<string, any>>(properties: Pro
         if (path.includes(".")) {
             const pathSegments = path.split(".");
             const childProperty = properties[pathSegments[0]];
-            if (typeof childProperty === "object" && childProperty.dataType === "map" && childProperty.properties) {
+            if (typeof childProperty === "object" && childProperty.type === "map" && childProperty.properties) {
                 return getPropertyInPath(childProperty.properties, pathSegments.slice(1).join("."))
             }
         }
@@ -98,7 +98,7 @@ export function getResolvedPropertyInPath(properties: Record<string, ResolvedPro
         if (path.includes(".")) {
             const pathSegments = path.split(".");
             const childProperty = properties[pathSegments[0]];
-            if (childProperty.dataType === "map" && childProperty.properties) {
+            if (childProperty.type === "map" && childProperty.properties) {
                 return getResolvedPropertyInPath(childProperty.properties, pathSegments.slice(1).join("."))
             }
         }
@@ -122,7 +122,7 @@ export function getPropertiesWithPropertiesOrder<M extends Record<string, any>>(
     const result: PropertiesOrBuilders<any> = {};
     propertiesOrder.filter(Boolean).forEach(path => {
         const property = getPropertyInPath(properties, path);
-        if (typeof property === "object" && property.dataType === "map" && property.properties) {
+        if (typeof property === "object" && property.type === "map" && property.properties) {
             result[path] = {
                 ...property,
                 properties: getPropertiesWithPropertiesOrder(property.properties, property.propertiesOrder ?? [])

@@ -68,21 +68,21 @@ export function mapPropertyToYup<T extends CMSType>(propertyContext: PropertyCon
         throw Error("Trying to create a yup mapping from a property builder. Please use resolved properties only");
     }
 
-    if (property.dataType === "string") {
+    if (property.type === "string") {
         return getYupStringSchema(propertyContext as PropertyContext<string>);
-    } else if (property.dataType === "number") {
+    } else if (property.type === "number") {
         return getYupNumberSchema(propertyContext as PropertyContext<number>);
-    } else if (property.dataType === "boolean") {
+    } else if (property.type === "boolean") {
         return getYupBooleanSchema(propertyContext as PropertyContext<boolean>);
-    } else if (property.dataType === "map") {
+    } else if (property.type === "map") {
         return getYupMapObjectSchema(propertyContext as PropertyContext<object>);
-    } else if (property.dataType === "array") {
+    } else if (property.type === "array") {
         return getYupArraySchema(propertyContext as PropertyContext<any[]>);
-    } else if (property.dataType === "date") {
+    } else if (property.type === "date") {
         return getYupDateSchema(propertyContext as PropertyContext<Date>);
-    } else if (property.dataType === "geopoint") {
+    } else if (property.type === "geopoint") {
         return getYupGeoPointSchema(propertyContext as PropertyContext<GeoPoint>);
-    } else if (property.dataType === "reference") {
+    } else if (property.type === "reference") {
         return getYupReferenceSchema(propertyContext as PropertyContext<EntityReference>);
     }
     console.error("Unsupported data type in yup mapping", property)
@@ -332,7 +332,7 @@ function getYupBooleanSchema({
 function hasUniqueInArrayModifier(property: ResolvedProperty): boolean | [string, ResolvedProperty][] {
     if (property.validation?.uniqueInArray) {
         return true;
-    } else if (property.dataType === "map" && property.properties) {
+    } else if (property.type === "map" && property.properties) {
         return Object.entries(property.properties)
             .filter(([key, childProperty]) => childProperty.validation?.uniqueInArray);
     }

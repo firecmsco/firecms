@@ -279,12 +279,12 @@ function createFilterField({
 
     const { resolvedProperty } = column.custom;
 
-    const isArray = resolvedProperty?.dataType === "array";
+    const isArray = resolvedProperty?.type === "array";
     const baseProperty: ResolvedProperty = isArray ? resolvedProperty.of : resolvedProperty;
     if (!baseProperty) {
         return null;
     }
-    if (baseProperty.dataType === "reference") {
+    if (baseProperty.type === "reference") {
         return <ReferenceFilterField value={filterValue}
                                      setValue={setFilterValue}
                                      name={id as string}
@@ -295,24 +295,24 @@ function createFilterField({
                                      previewProperties={baseProperty?.previewProperties}
                                      hidden={hidden}
                                      setHidden={setHidden}/>;
-    } else if (baseProperty.dataType === "number" || baseProperty.dataType === "string") {
+    } else if (baseProperty.type === "number" || baseProperty.type === "string") {
         const name = baseProperty.name;
         const enumValues = baseProperty.enumValues ? enumToObjectEntries(baseProperty.enumValues) : undefined;
         return <StringNumberFilterField value={filterValue}
                                         setValue={setFilterValue}
                                         name={id as string}
-                                        dataType={baseProperty.dataType}
+                                        type={baseProperty.type}
                                         isArray={isArray}
                                         enumValues={enumValues}
                                         title={name}/>;
-    } else if (baseProperty.dataType === "boolean") {
+    } else if (baseProperty.type === "boolean") {
         const name = baseProperty.name;
         return <BooleanFilterField value={filterValue}
                                    setValue={setFilterValue}
                                    name={id as string}
                                    title={name}/>;
 
-    } else if (baseProperty.dataType === "date") {
+    } else if (baseProperty.type === "date") {
         const title = baseProperty.name;
         return <DateTimeFilterField value={filterValue}
                                     setValue={setFilterValue}
@@ -323,19 +323,19 @@ function createFilterField({
     }
 
     return (
-        <div>{`Currently the filter field ${resolvedProperty.dataType} is not supported`}</div>
+        <div>{`Currently the filter field ${resolvedProperty.type} is not supported`}</div>
     );
 }
 
 function filterableProperty(property: ResolvedProperty, partOfArray = false): boolean {
     if (partOfArray) {
-        return ["string", "number", "date", "reference"].includes(property.dataType);
+        return ["string", "number", "date", "reference"].includes(property.type);
     }
-    if (property.dataType === "array") {
+    if (property.type === "array") {
         if (property.of)
             return filterableProperty(property.of, true);
         else
             return false;
     }
-    return ["string", "number", "boolean", "date", "reference", "array"].includes(property.dataType);
+    return ["string", "number", "boolean", "date", "reference", "array"].includes(property.type);
 }

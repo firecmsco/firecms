@@ -16,12 +16,12 @@ export const localeCollection = buildCollection({
         name: {
             name: "Title",
             validation: { required: true },
-            dataType: "string"
+            type: "string"
         },
         selectable: {
             name: "Selectable",
             description: "Is this locale selectable",
-            dataType: "boolean"
+            type: "boolean"
         }
     }
 });

@@ -58,7 +58,7 @@ const productsCollection = buildCollection({
     properties: {
         name: {
             name: "Name",
-            dataType: "string"
+            type: "string"
         }
         // ...other properties
     },

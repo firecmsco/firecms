@@ -68,32 +68,32 @@ export const testCollection = buildCollection<any>({
         // }],
         properties: {
             title: {
-                dataType: 'map',
+                type: 'map',
                 name: 'Title',
                 propertyConfig: 'markdown_custom',
             },
             // date: {
             //     name: "on create",
-            //     dataType: "date",
+            //     type: "date",
             //     // autoValue: "on_create"
             // },
             //
             // test_date: {
             //     name: "Test date",
-            //     dataType: "date",
+            //     type: "date",
             //     mode: "date_time",
             //     clearable: true
             // },
             // locale: {
             //     name: "Locales",
-            //     dataType: "string",
+            //     type: "string",
             //     enumValues: locales
             // },
             // available_locales: {
             //     name: "Available locales",
-            //     dataType: "array",
+            //     type: "array",
             //     of: {
-            //         dataType: "string",
+            //         type: "string",
             //         enumValues: locales
             //     }
             // },
@@ -101,10 +101,10 @@ export const testCollection = buildCollection<any>({
             // fulfillmentCondition: conditionProperty("Fulfillment condition"),
             // //...
             // images: {
-            //     dataType: "array",
+            //     type: "array",
             //     name: "Images",
             //     of: {
-            //         dataType: "string",
+            //         type: "string",
             //         storage: {
             //             storagePath: "images",
             //             acceptedFiles: ["image/*"],
@@ -115,21 +115,21 @@ export const testCollection = buildCollection<any>({
             //     }
             // },
             // readOnly: {
-            //     dataType: "string",
+            //     type: "string",
             //     readOnly: true,
             //     name: "Read only"
             // },
             // contactDetails: {
             //     hideFromCollection: true,
-            //     dataType: "array",
+            //     type: "array",
             //     name: "Contact details",
             //     of: {
-            //         dataType: "map",
+            //         type: "map",
             //         name: "Contact info",
             //         previewProperties: ["data"],
             //         properties: {
             //             id: {
-            //                 dataType: "string",
+            //                 type: "string",
             //                 name: "ID (auto)",
             //                 // readOnly: true,
             //                 // Field: () => null,
@@ -139,7 +139,7 @@ export const testCollection = buildCollection<any>({
             //     },
             // },
             // type: {
-            //     dataType: "string",
+            //     type: "string",
             //     disabled: true,
             //     name: "Type",
             //     enumValues: [
@@ -157,11 +157,11 @@ export const testCollection = buildCollection<any>({
             //     switch (values.type) {
             //         case "seat":
             //             return buildProperty({
-            //                 dataType: "map",
+            //                 type: "map",
             //                 name: "Seat config",
             //                 properties: {
             //                     category: {
-            //                         dataType: "string",
+            //                         type: "string",
             //                         name: "Category",
             //                         enumValues: [
             //                             {
@@ -182,15 +182,15 @@ export const testCollection = buildCollection<any>({
             //             });
             //         case "cabin":
             //             return buildProperty({
-            //                 dataType: "map",
+            //                 type: "map",
             //                 name: "Cabin config",
             //                 properties: {
             //                     capacity: {
-            //                         dataType: "number",
+            //                         type: "number",
             //                         name: "Cabin capacity"
             //                     },
             //                     specialNeeds: {
-            //                         dataType: "boolean",
+            //                         type: "boolean",
             //                         name: "Special Needs"
             //                     }
             //                 }
@@ -198,14 +198,14 @@ export const testCollection = buildCollection<any>({
             //
             //         default:
             //             return {
-            //                 dataType: "map",
+            //                 type: "map",
             //                 disabled: true
             //             };
             //     }
             // },
             // isAdmin: {
             //     name: "Admin",
-            //     dataType: "boolean",
+            //     type: "boolean",
             //     defaultValue: false
             // },
             // users: ({ values }) => {
@@ -213,24 +213,24 @@ export const testCollection = buildCollection<any>({
             //         return null;
             //     return ({
             //         name: "Clients",
-            //         dataType: "array",
-            //         of: { dataType: "reference", path: "users", previewProperties: ["name"] }
+            //         type: "array",
+            //         of: { type: "reference", path: "users", previewProperties: ["name"] }
             //     });
             // },
             // size: {
-            //     dataType: "map",
+            //     type: "map",
             //     name: "Size",
             //     properties: {
             //         width: {
             //             name: "Width",
-            //             dataType: "number",
+            //             type: "number",
             //             validation: {
             //                 required: true
             //             }
             //         },
             //         height: {
             //             name: "Height",
-            //             dataType: "number",
+            //             type: "number",
             //             validation: {
             //                 required: true
             //             }
@@ -239,7 +239,7 @@ export const testCollection = buildCollection<any>({
             //     Field: OptionalMap
             // },
             // rerender: () => ({
-            //     dataType: "map",
+            //     type: "map",
             //     hideFromCollection: true,
             //     Field: () => {
             //         console.log("Rerendering");
@@ -249,7 +249,7 @@ export const testCollection = buildCollection<any>({
             // body: buildProperty({
             //     name: "Body",
             //     validation: { required: false },
-            //     dataType: "map",
+            //     type: "map",
             //     keyValue: true,
             //     customProps: {
             //         editable: true
@@ -263,7 +263,7 @@ export const testCollection = buildCollection<any>({
             //     },
             // }),
             // background: {
-            //     dataType: "number",
+            //     type: "number",
             //     name: "Colour",
             //     enumValues:
             //         [
@@ -286,7 +286,7 @@ export const testCollection = buildCollection<any>({
             // },
             // upload: {
             //     name: "Upload",
-            //     dataType: "string",
+            //     type: "string",
             //     storage: {
             //         storagePath: "test",
             //         acceptedFiles: ["application/*"],
@@ -296,7 +296,7 @@ export const testCollection = buildCollection<any>({
             //     name: "File",
             //     description: "The uploaded file of the document.",
             //     hideFromCollection: false,
-            //     dataType: "string",
+            //     type: "string",
             //     validation: {
             //         required: false,
             //     },
@@ -313,13 +313,13 @@ export const testCollection = buildCollection<any>({
             // mainSaturation: {
             //     name: "Main saturation",
             //     description: "Saturation applied to all colors when there is no saturation on color applied",
-            //     dataType: "array",
+            //     type: "array",
             //     of: {
-            //         dataType: "map",
+            //         type: "map",
             //         properties: {
             //             type: {
             //                 name: "Type",
-            //                 dataType: "string",
+            //                 type: "string",
             //                 enumValues: {
             //                     oneNum: "Saturation without range",
             //                     fromTo: "Saturation available range"
@@ -331,7 +331,7 @@ export const testCollection = buildCollection<any>({
             //                 if (propertyValue?.type === "oneNum") {
             //                     return ({
             //                         name: "Saturation",
-            //                         dataType: "number",
+            //                         type: "number",
             //                         validation: {
             //                             min: 0,
             //                             max: 100
@@ -340,11 +340,11 @@ export const testCollection = buildCollection<any>({
             //                 } else if (propertyValue?.type === "fromTo") {
             //                     return ({
             //                             name: "Saturation available range",
-            //                             dataType: "map",
+            //                             type: "map",
             //                             properties: {
             //                                 from: {
             //                                     name: "From",
-            //                                     dataType: "number",
+            //                                     type: "number",
             //                                     validation: {
             //                                         min: 0,
             //                                         max: 100
@@ -352,7 +352,7 @@ export const testCollection = buildCollection<any>({
             //                                 },
             //                                 to: {
             //                                     name: "To",
-            //                                     dataType: "number",
+            //                                     type: "number",
             //                                     clearable: true,
             //                                     validation: {
             //                                         min: 0,
@@ -364,7 +364,7 @@ export const testCollection = buildCollection<any>({
             //                     )
             //                 } else {
             //                     return {
-            //                         dataType: "string",
+            //                         type: "string",
             //                         name: "Type",
             //                         disabled: { hidden: true }
             //                     };
@@ -375,27 +375,27 @@ export const testCollection = buildCollection<any>({
             // },
             // map: {
             //     name: "Map",
-            //     dataType: "map",
+            //     type: "map",
             //     properties: {
             //         nested_1: {
             //             name: "Nested 1",
-            //             dataType: "map",
+            //             type: "map",
             //             properties: {
             //                 nested_2: {
             //                     name: "Nested 2",
-            //                     dataType: "map",
+            //                     type: "map",
             //                     properties: {
             //                         nested_3: {
             //                             name: "Nested 3",
-            //                             dataType: "map",
+            //                             type: "map",
             //                             properties: {
             //                                 name: {
             //                                     name: "Name",
-            //                                     dataType: "string"
+            //                                     type: "string"
             //                                 },
             //                                 num: {
             //                                     name: "Num",
-            //                                     dataType: "number"
+            //                                     type: "number"
             //                                 }
             //                             }
             //                         }
@@ -407,10 +407,10 @@ export const testCollection = buildCollection<any>({
             // },
             // array_enum: {
             //     name: "Array enum",
-            //     dataType: "array",
+            //     type: "array",
             //     of: {
             //         name: "My enum",
-            //         dataType: "string",
+            //         type: "string",
             //         enumValues: {
             //             value1: "My Value 1",
             //             value2: "Your Value 2",
@@ -434,7 +434,7 @@ export const testCollection = buildCollection<any>({
             // },
             // enum: {
             //     name: "My enum",
-            //     dataType: "string",
+            //     type: "string",
             //     enumValues: {
             //         value1: "My Value 1",
             //         value2: "Your Value 2",
@@ -456,9 +456,9 @@ export const testCollection = buildCollection<any>({
             // },
             // tags: {
             //     name: "Tags",
-            //     dataType: "array",
+            //     type: "array",
             //     of: {
-            //         dataType: "string"
+            //         type: "string"
             //     }
             // },
             // specSheet: ({
@@ -466,9 +466,9 @@ export const testCollection = buildCollection<any>({
             //                 entityId
             //             }) => ({
             //     name: "Specs sheet",
-            //     dataType: "array",
+            //     type: "array",
             //     of: {
-            //         dataType: "string",
+            //         type: "string",
             //         storage: {
             //             mediaType: "image",
             //             storagePath: "products/" + entityId + "/pdf",
@@ -481,16 +481,16 @@ export const testCollection = buildCollection<any>({
             // }),
             //
             // name: {
-            //     dataType: "string",
+            //     type: "string",
             //     name: "Name"
             // },
             // key_value: {
-            //     dataType: "map",
+            //     type: "map",
             //     name: "Key value",
             //     keyValue: true
             // },
             // test_string: {
-            //     dataType: "string",
+            //     type: "string",
             //     name: "Test string",
             //     disabled: { hidden: true },
             //     validation: {
@@ -498,23 +498,23 @@ export const testCollection = buildCollection<any>({
             //     }
             // },
             // test_custom: {
-            //     dataType: "string",
+            //     type: "string",
             //     name: "Test custom",
             //     fieldConfig: "test_custom_field"
             // },
             // map: {
-            //     dataType: "map",
+            //     type: "map",
             //     properties: {
             //         sample: {
             //             name: "Sample",
-            //             dataType: "string",
+            //             type: "string",
             //             validation: {
             //                 required: true
             //             }
             //         },
             //         num: {
             //             name: "Num",
-            //             dataType: "number",
+            //             type: "number",
             //             validation: {
             //                 required: true,
             //                 min: 5
@@ -523,7 +523,7 @@ export const testCollection = buildCollection<any>({
             //     }
             // },
             // test_enum: buildProperty({
-            //     dataType: "string",
+            //     type: "string",
             //     name: "Currency",
             //     enumValues: [
             //         {
@@ -543,20 +543,20 @@ export const testCollection = buildCollection<any>({
             // }),
             // self_ref: {
             //     name: "Self ref",
-            //     dataType: "reference",
+            //     type: "reference",
             //     path: "test_entity"
             // },
             // self_refs: {
-            //     dataType: "array",
+            //     type: "array",
             //     of: {
-            //         dataType: "reference",
+            //         type: "reference",
             //         name: "Self refs",
             //         path: "test_entity"
             //         // previewProperties: ["name","url_image"]
             //     }
             // },
             // url_image: {
-            //     dataType: "string",
+            //     type: "string",
             //     name: "URL image",
             //     storage: {
             //         storagePath: "images",
@@ -573,16 +573,16 @@ export const testCollection = buildCollection<any>({
             // },
             // myArray: {
             //     name: "some array",
-            //     dataType: "array",
+            //     type: "array",
             //     of: {
-            //         dataType: "map",
+            //         type: "map",
             //         properties: {
             //             prop1: {
-            //                 dataType: "string",
+            //                 type: "string",
             //                 name: "prop1"
             //             },
             //             prop2: {
-            //                 dataType: "number",
+            //                 type: "number",
             //                 name: "prop2"
             //             }
             //         },
@@ -603,33 +603,33 @@ export const testCollection = buildCollection<any>({
             // impacts: {
             //     name: "Impacts",
             //     validation: { required: true },
-            //     dataType: "array",
+            //     type: "array",
             //     of: buildProperty({
-            //         dataType: "map",
+            //         type: "map",
             //         properties: {
             //             name: {
             //                 name: "Name",
             //                 validation: { required: true },
-            //                 dataType: "string"
+            //                 type: "string"
             //             },
             //             point1: {
             //                 name: "Point-1",
             //                 validation: { required: true },
-            //                 dataType: "number"
+            //                 type: "number"
             //             },
             //             point2: {
             //                 name: "Point-2",
             //                 validation: { required: true },
-            //                 dataType: "number"
+            //                 type: "number"
             //             }
             //         }
             //     })
             // },
             // products: buildProperty(({ values }) => ({
             //     name: "Products",
-            //     dataType: "array",
+            //     type: "array",
             //     of: {
-            //         dataType: "reference",
+            //         type: "reference",
             //         path: "products",
             //         forceFilter: {
             //             tags: ["array-contains", "test"]
@@ -639,31 +639,31 @@ export const testCollection = buildCollection<any>({
             // movement: buildProperty(({ values }) => {
             //     return {
             //         name: "Locale",
-            //         dataType: "reference",
+            //         type: "reference",
             //         path: !values.product ? false : values.product.path + "/" + values.product.id + "/locales"
             //     };
             // }),
             // form: {
-            //     dataType: "array",
+            //     type: "array",
             //     name: "Form",
             //     of: formPropertyEntry
             // },
             // child_ref: {
             //     name: "Child reference",
-            //     dataType: "reference",
+            //     type: "reference",
             //     path: "ppp/B000P0MDMS/locales"
             // },
             // address: buildProperty({
             //     name: "Address",
-            //     dataType: "map",
+            //     type: "map",
             //     properties: {
             //         street: {
             //             name: "Street",
-            //             dataType: "string"
+            //             type: "string"
             //         },
             //         postal_code: {
             //             name: "Postal code",
-            //             dataType: "number"
+            //             type: "number"
             //         }
             //     },
             //     spreadChildren: true,
@@ -671,7 +671,7 @@ export const testCollection = buildCollection<any>({
             // }),
             // name_number: {
             //     name: "Name starts with number",
-            //     dataType: "string",
+            //     type: "string",
             //     validation:{
             //         // required: true,
             //         matches: /\d.*/,
@@ -679,38 +679,38 @@ export const testCollection = buildCollection<any>({
             //     }
             // },
             // shaped_array: {
-            //     dataType: "array",
+            //     type: "array",
             //     of: [
             //         {
-            //             dataType: "string",
+            //             type: "string",
             //             name: "Name"
             //         },
             //         {
-            //             dataType: "number",
+            //             type: "number",
             //             name: "age"
             //         },
             //     ]
             // },
             // function_array: {
-            //     dataType: "array",
+            //     type: "array",
             //     name: "Function array",
             //     of: ({ propertyValue, index }) => {
             //         return ({
-            //             dataType: "string",
+            //             type: "string",
             //             name: "Name"
             //         });
             //     }
             // },
             // map_array_ref: {
             //     name: 'Map',
-            //     dataType: 'map',
+            //     type: 'map',
             //     expanded: false,
             //     properties: {
             //         child: {
             //             name: "Products",
-            //             dataType: 'array',
+            //             type: 'array',
             //             of: {
-            //                 dataType: "reference",
+            //                 type: "reference",
             //                 path: "products",
             //                 previewProperties: ["name", "main_image"]
             //             },
@@ -720,7 +720,7 @@ export const testCollection = buildCollection<any>({
             // source: ({ values, previousValues }) => {
             //     const properties = buildProperties<any>({
             //         type: {
-            //             dataType: "string",
+            //             type: "string",
             //             enumValues: {
             //                 "facebook": "FacebookId",
             //                 "apple": "Apple"
@@ -732,27 +732,27 @@ export const testCollection = buildCollection<any>({
             //         if ((values.source as any).type === "facebook") {
             //             properties["facebookId"] = buildProperty({
             //                 name: "Facebook id",
-            //                 dataType: "string"
+            //                 type: "string"
             //             });
             //         } else if ((values.source as any).type === "apple") {
             //             properties["appleId"] = buildProperty({
             //                 name: "Apple id",
-            //                 dataType: "number"
+            //                 type: "number"
             //             });
             //         }
             //     }
             //
             //     return ({
-            //         dataType: "map",
+            //         type: "map",
             //         name: "Source",
             //         properties: properties
             //     });
             // },
             // gallery: {
             //     name: 'Gallery',
-            //     dataType: 'array',
+            //     type: 'array',
             //     of: {
-            //         dataType: 'string',
+            //         type: 'string',
             //         storage: {
             //             storagePath: 'images',
             //             acceptedFiles: ['image/*'],
@@ -767,7 +767,7 @@ export const testCollection = buildCollection<any>({
             //     if (values?.available_locales && Array.isArray(values.available_locales)) {
             //         if (values.available_locales.includes("de"))
             //             return ({
-            //                 dataType: "string",
+            //                 type: "string",
             //                 name: "Title disabled",
             //                 disabled: {
             //                     hidden: true,
@@ -779,15 +779,15 @@ export const testCollection = buildCollection<any>({
             //             return null;
             //     }
             //     return ({
-            //         dataType: "string",
+            //         type: "string",
             //         name: "Title"
             //     });
             // },
             // number_enum: {
-            //     dataType: "array",
+            //     type: "array",
             //     name: "Licences",
             //     of: {
-            //         dataType: "number",
+            //         type: "number",
             //         enumValues: {
             //             0: "start",
             //             1: "standard",
@@ -796,7 +796,7 @@ export const testCollection = buildCollection<any>({
             //     }
             // },
             // simple_enum: {
-            //     dataType: "string",
+            //     type: "string",
             //     name: "Simple enum",
             //     enumValues: {
             //         "facebook": "FacebookId",
@@ -804,7 +804,7 @@ export const testCollection = buildCollection<any>({
             //     }
             // },
             // simple_enum_2: {
-            //     dataType: "string",
+            //     type: "string",
             //     name: "Simple enum 2",
             //     enumValues: [
             //         { id: "facebook", label: "FacebookId" },
@@ -815,7 +815,7 @@ export const testCollection = buildCollection<any>({
             // content: {
             //     name: "Content",
             //     description: "Example of a complex array with multiple properties as children",
-            //     dataType: "array",
+            //     type: "array",
             //     columnWidth: 450,
             //     oneOf: {
             //         typeField: "type",
@@ -823,18 +823,18 @@ export const testCollection = buildCollection<any>({
             //         properties: {
             //             name: {
             //                 name: "Title",
-            //                 dataType: "string"
+            //                 type: "string"
             //             },
             //             text: {
-            //                 dataType: "string",
+            //                 type: "string",
             //                 name: "Text",
             //                 markdown: true
             //             },
             //             products: {
-            //                 dataType: "array",
+            //                 type: "array",
             //                 name: "Product",
             //                 of: {
-            //                     dataType: "reference",
+            //                     type: "reference",
             //                     path: "products"
             //                 }
             //             }
@@ -843,52 +843,52 @@ export const testCollection = buildCollection<any>({
             // },
             // string_array: {
             //     name: "String array",
-            //     dataType: "array",
+            //     type: "array",
             //     of: {
-            //         dataType: "string"
+            //         type: "string"
             //     }
             // },
             // empty_string: {
             //     name: "Empty String",
-            //     dataType: "string",
+            //     type: "string",
             //     validation: {
             //         unique: true
             //     }
             // },
             // disabled_product: {
             //     name: "Disabled product",
-            //     dataType: "reference",
+            //     type: "reference",
             //     path: "products",
             //     disabled: true,
             //     previewProperties: ["name", "main_image"]
             // },
             // products: {
             //     name: "Products",
-            //     dataType: "array",
+            //     type: "array",
             //     of: {
-            //         dataType: "reference",
+            //         type: "reference",
             //         path: "products",
             //         previewProperties: ["name", "main_image"]
             //     }
             // },
             // mark: {
             //     name: "Mark",
-            //     dataType: "string",
+            //     type: "string",
             //     markdown: true
             // },
             // custom_shaped_array: {
             //     name: "My shaped array",
-            //     dataType: "array",
+            //     type: "array",
             //     Field: CustomShapedArrayField,
             //     Preview: CustomShapedArrayPreview,
             //     customProps: {
             //         properties: [
             //             buildProperty({
-            //                 dataType: "string",
+            //                 type: "string",
             //                 name: "Name"
             //             }),
             //             buildProperty({
-            //                 dataType: "number",
+            //                 type: "number",
             //                 name: "Age"
             //             })
             //         ]
@@ -897,24 +897,24 @@ export const testCollection = buildCollection<any>({
             // actions: {
             //     name: "Actions",
             //     description: "Possible user actions",
-            //     dataType: "array",
+            //     type: "array",
             //     of: {
-            //         dataType: "map",
+            //         type: "map",
             //         properties: {
             //             name: {
             //                 name: "Name",
             //                 description: "Text that will be shown on the button",
-            //                 dataType: "string"
+            //                 type: "string"
             //             },
             //             description: {
             //                 name: "Description",
-            //                 dataType: "string"
+            //                 type: "string"
             //             },
             //             type: {
             //                 name: "Type",
             //                 description: "Action type that determines the user flow",
             //                 validation: {  uniqueInArray: true },
-            //                 dataType: "string",
+            //                 type: "string",
             //                 enumValues: {
             //                     complete: "Complete",
             //                     continue: "Continue"
@@ -922,7 +922,7 @@ export const testCollection = buildCollection<any>({
             //             },
             //             hidden_field: {
             //                 name: "Hidden",
-            //                 dataType: "string",
+            //                 type: "string",
             //                 disabled: {
             //                     hidden: true
             //                 }
@@ -933,9 +933,9 @@ export const testCollection = buildCollection<any>({
             // },
             // imageUrls: {
             //     name: "Images",
-            //     dataType: "array",
+            //     type: "array",
             //     of: {
-            //         dataType: "string",
+            //         type: "string",
             //         storage: {
             //             storagePath: (context) => {
             //                 return "images";
@@ -949,21 +949,21 @@ export const testCollection = buildCollection<any>({
             // },
             // status: {
             //     name: "Status",
-            //     dataType: "number",
+            //     type: "number",
             //     enumValues: relaxedStatus
             // },
             // available_dates: {
-            //     dataType: "array",
+            //     type: "array",
             //     name: "Available Dates",
             //     of: {
-            //         dataType: "date"
+            //         type: "date"
             //     }
             // },
             // images: {
             //     name: "Images",
-            //     dataType: "array",
+            //     type: "array",
             //     of: {
-            //         dataType: "string",
+            //         type: "string",
             //         storage: {
             //             storagePath: "images",
             //             acceptedFiles: ["image/*"]
@@ -972,7 +972,7 @@ export const testCollection = buildCollection<any>({
             // },
             // image: {
             //     name: "Image",
-            //     dataType: "string",
+            //     type: "string",
             //     storage: {
             //         storagePath: "test",
             //         acceptedFiles: ["image/*"]
@@ -980,26 +980,26 @@ export const testCollection = buildCollection<any>({
             // },
             // created_on: {
             //     name: "Created on",
-            //     dataType: "date",
+            //     type: "date",
             //     autoValue: "on_create"
             // },
             // updated_on: {
             //     name: "Updated on",
-            //     dataType: "date",
+            //     type: "date",
             //     autoValue: "on_update"
             // }
             // description: {
             //     name: "Description",
-            //     dataType: "string",
+            //     type: "string",
             //     multiline: true
             // },
             // search_adjacent: {
             //     name: "Search adjacent",
-            //     dataType: "boolean"
+            //     type: "boolean"
             // },
             // difficulty: {
             //     name: "Difficulty",
-            //     dataType: "number"
+            //     type: "number"
             // },
             // range: {
             //     name: "Range",
@@ -1007,16 +1007,16 @@ export const testCollection = buildCollection<any>({
             //         min: 0,
             //         max: 3
             //     },
-            //     dataType: "number"
+            //     type: "number"
             // },
             // read_only: {
-            //     dataType: "string",
+            //     type: "string",
             //     name: "Read only",
             //     readOnly: true
             // },
             // pdf: buildProperty({
             //     name: "Pdf",
-            //     dataType: "string",
+            //     type: "string",
             //     storage: {
             //         storagePath: "test",
             //         acceptedFiles: ['application/pdf'],

@@ -22,13 +22,13 @@ export const productsCollection = buildCollection({
     ],
     properties: {
         name: buildProperty({
-            dataType: "string",
+            type: "string",
             name: "Name",
             multiline: true,
             validation: { required: true }
         }),
         main_image: buildProperty({
-            dataType: "string",
+            type: "string",
             name: "Image",
             storage: {
                 storagePath: "images",
@@ -43,12 +43,12 @@ export const productsCollection = buildCollection({
             }
         }),
         available: buildProperty({
-            dataType: "boolean",
+            type: "boolean",
             name: "Available",
             columnWidth: 100
         }),
         price: ({ values }) => ({
-            dataType: "number",
+            type: "number",
             title: "Price",
             validation: {
                 requiredMessage: "You must set a price between 0 and 1000",
@@ -62,7 +62,7 @@ export const productsCollection = buildCollection({
             description: "Price with range validation"
         }),
         currency: buildProperty({
-            dataType: "string",
+            type: "string",
             name: "Currency",
             enumValues: {
                 EUR: "Euros",
@@ -74,34 +74,34 @@ export const productsCollection = buildCollection({
             defaultValue: "EUR"
         }),
         public: buildProperty({
-            dataType: "boolean",
+            type: "boolean",
             name: "Public",
             description: "Should this product be visible in the website",
             longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros."
         }),
         brand: buildProperty({
-            dataType: "string",
+            type: "string",
             name: "Brand",
             validation: {
                 required: true
             }
         }),
         description: buildProperty({
-            dataType: "string",
+            type: "string",
             name: "Description",
             description: "Example of a markdown field",
             markdown: true
         }),
         amazon_link: buildProperty({
-            dataType: "string",
+            type: "string",
             name: "Amazon link",
             url: true
         }),
         images: buildProperty({
-            dataType: "array",
+            type: "array",
             name: "Images",
             of: {
-                dataType: "string",
+                type: "string",
                 storage: {
                     storagePath: "images",
                     acceptedFiles: ["image/*"],
@@ -113,27 +113,27 @@ export const productsCollection = buildCollection({
             description: "This fields allows uploading multiple images at once"
         }),
         related_products: buildProperty({
-            dataType: "array",
+            type: "array",
             name: "Related products",
             description: "Reference to self",
             of: {
-                dataType: "reference",
+                type: "reference",
                 path: "products"
             }
         }),
         publisher: buildProperty({
             name: "Publisher",
             description: "This is an example of a map property",
-            dataType: "map",
+            type: "map",
             properties: {
                 name: {
                     title: "Name",
-                    dataType: "string",
+                    type: "string",
                     defaultValue: "Default publisher"
                 },
                 external_id: {
                     title: "External id",
-                    dataType: "string"
+                    type: "string"
                 }
             }
         }),
@@ -142,21 +142,21 @@ export const productsCollection = buildCollection({
             description:
                 "This is an example of a disabled field that gets updated trough a Cloud Function, try changing a locale 'selectable' value",
             longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
-            dataType: "array",
+            type: "array",
             readOnly: true,
             of: {
-                dataType: "string",
+                type: "string",
                 enumValues: locales
             }
         }),
         uppercase_name: buildProperty({
             name: "Uppercase Name",
-            dataType: "string",
+            type: "string",
             readOnly: true,
             description: "This field gets updated with a preSave callback"
         }),
         added_on: buildProperty({
-            dataType: "date",
+            type: "date",
             name: "Added on",
             autoValue: "on_create"
         })
@@ -175,16 +175,16 @@ const localeCollection = buildCollection({
         title: buildProperty({
             title: "Title",
             validation: { required: true },
-            dataType: "string"
+            type: "string"
         }),
         selectable: buildProperty({
             title: "Selectable",
             description: "Is this locale selectable",
-            dataType: "boolean"
+            type: "boolean"
         }),
         video: buildProperty({
             title: "Video",
-            dataType: "string",
+            type: "string",
             validation: { required: false },
             storage: {
                 storagePath: "videos",
@@ -202,7 +202,7 @@ const pricesCollection = buildCollection({
         value: buildProperty({
             title: "Value",
             validation: { required: true },
-            dataType: "number"
+            type: "number"
         })
     }
 });
@@ -244,42 +244,42 @@ export const usersCollection = buildCollection({
     properties: {
         first_name: buildProperty({
             title: "First name",
-            dataType: "string"
+            type: "string"
         }),
         last_name: buildProperty({
             title: "Last name",
-            dataType: "string"
+            type: "string"
         }),
         email: buildProperty({
             title: "Email",
-            dataType: "string",
+            type: "string",
             email: true
         }),
         phone: buildProperty({
             title: "Phone",
-            dataType: "string"
+            type: "string"
         }),
         liked_products: buildProperty({
-            dataType: "array",
+            type: "array",
             title: "Liked products",
             description: "Products this user has liked",
             of: {
-                dataType: "reference",
+                type: "reference",
                 path: "products"
             }
         }),
         picture: buildProperty({
             title: "Picture",
-            dataType: "map",
+            type: "map",
             properties: {
                 thumbnail: {
                     title: "Thumbnail",
-                    dataType: "string",
+                    type: "string",
                     url: true
                 },
                 large: {
                     title: "Large",
-                    dataType: "string",
+                    type: "string",
                     url: true
                 }
             },

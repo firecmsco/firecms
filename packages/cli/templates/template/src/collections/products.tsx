@@ -35,7 +35,7 @@ export const productsCollection = buildCollection<Product>({
         name: {
             name: "Name",
             validation: { required: true },
-            dataType: "string"
+            type: "string"
         },
         price: {
             name: "Price",
@@ -46,12 +46,12 @@ export const productsCollection = buildCollection<Product>({
                 max: 1000
             },
             description: "Price with range validation",
-            dataType: "number"
+            type: "number"
         },
         status: {
             name: "Status",
             validation: { required: true },
-            dataType: "string",
+            type: "string",
             description: "Should this product be visible in the website",
             longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
             enumValues: {
@@ -61,7 +61,7 @@ export const productsCollection = buildCollection<Product>({
         },
         published: ({ values }) => buildProperty({
             name: "Published",
-            dataType: "boolean",
+            type: "boolean",
             columnWidth: 100,
             disabled: values.status === "public"
                 ? false
@@ -72,17 +72,17 @@ export const productsCollection = buildCollection<Product>({
 
         }),
         related_products: {
-            dataType: "array",
+            type: "array",
             name: "Related products",
             description: "Reference to self",
             of: {
-                dataType: "reference",
+                type: "reference",
                 path: "products"
             }
         },
         main_image: buildProperty({ // The `buildProperty` method is a utility function used for type checking
             name: "Image",
-            dataType: "string",
+            type: "string",
             storage: {
                 storagePath: "images",
                 acceptedFiles: ["image/*"]
@@ -92,9 +92,9 @@ export const productsCollection = buildCollection<Product>({
             name: "Tags",
             description: "Example of generic array",
             validation: { required: true },
-            dataType: "array",
+            type: "array",
             of: {
-                dataType: "string"
+                type: "string"
             }
         },
         description: {
@@ -102,15 +102,15 @@ export const productsCollection = buildCollection<Product>({
             description: "This is the description of the product",
             multiline: true,
             longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
-            dataType: "string",
+            type: "string",
             columnWidth: 300
         },
         categories: {
             name: "Categories",
             validation: { required: true },
-            dataType: "array",
+            type: "array",
             of: {
-                dataType: "string",
+                type: "string",
                 enumValues: {
                     electronics: "Electronics",
                     books: "Books",
@@ -124,26 +124,26 @@ export const productsCollection = buildCollection<Product>({
         publisher: {
             name: "Publisher",
             description: "This is an example of a map property",
-            dataType: "map",
+            type: "map",
             properties: {
                 name: {
                     name: "Name",
-                    dataType: "string"
+                    type: "string"
                 },
                 external_id: {
                     name: "External id",
-                    dataType: "string"
+                    type: "string"
                 }
             }
         },
         metadata: {
             name: "Metadata",
-            dataType: "map",
+            type: "map",
             keyValue: true
         },
         expires_on: {
             name: "Expires on",
-            dataType: "date"
+            type: "date"
         }
     }
 });

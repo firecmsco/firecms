@@ -59,14 +59,14 @@ export function useStorageUploadController<M extends object>({
                                                              }) {
 
     const authController = useAuthController();
-    const storage: StorageConfig | undefined = property.dataType === "string"
+    const storage: StorageConfig | undefined = property.type === "string"
         ? property.storage
-        : property.dataType === "array" &&
-        (property.of as Property).dataType === "string"
+        : property.type === "array" &&
+        (property.of as Property).type === "string"
             ? (property.of as StringProperty).storage
             : undefined;
 
-    const multipleFilesSupported = property.dataType === "array";
+    const multipleFilesSupported = property.type === "array";
 
     if (!storage)
         throw Error("Storage meta must be specified");

@@ -53,7 +53,7 @@ export function RepeatPropertyField({
                     name={"of"}
                     value={ofProperty}
                     // validate={(property: Property) => {
-                    //     return property?.dataType ? undefined : "You need to specify a repeat field";
+                    //     return property?.type ? undefined : "You need to specify a repeat field";
                     // }}
                 >
                     {({}) => (

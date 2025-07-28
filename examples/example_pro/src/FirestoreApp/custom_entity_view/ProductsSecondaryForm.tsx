@@ -19,7 +19,7 @@ export function ProductsSecondaryForm({
                     <PropertyFieldBinding context={formContext}
                                           propertyKey={"name"}
                                           property={{
-                                              dataType: "string",
+                                              type: "string",
                                               name: "Name",
                                           }}/>
                 </FormEntry>
@@ -28,10 +28,10 @@ export function ProductsSecondaryForm({
                     <PropertyFieldBinding context={formContext}
                                           propertyKey={"tags"}
                                           property={{
-                                              dataType: "array",
+                                              type: "array",
                                               name: "Tags",
                                               of: {
-                                                  dataType: "string"
+                                                  type: "string"
                                               }
                                           }}/>
                 </FormEntry>
@@ -40,7 +40,7 @@ export function ProductsSecondaryForm({
                     <PropertyFieldBinding context={formContext}
                                           propertyKey={"added_on"}
                                           property={{
-                                              dataType: "date",
+                                              type: "date",
                                               name: "Added on",
                                               autoValue: "on_create"
                                           }}/>

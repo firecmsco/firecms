@@ -11,14 +11,14 @@ This is a sample schema that includes a lot of different sample properties:
   name: "Showcase",
   properties: {
     name: {
-      dataType: "string",
+      type: "string",
       name: "Name",
       validation: {
         required: true
       }
     },
     age: {
-      dataType: "number",
+      type: "number",
       name: "Age",
       validation: {
         min: 18,
@@ -26,24 +26,24 @@ This is a sample schema that includes a lot of different sample properties:
       }
     },
     description: {
-      dataType: "string",
+      type: "string",
       name: "Description",
       multiline: true,
     },
     text: {
-      dataType: "string",
+      type: "string",
       name: "Blog text",
       markdown: true,
     },
     ingredients: {
       name: "Ingredients",
-      dataType: "array",
+      type: "array",
       of: {
-        dataType: "string",
+        type: "string",
       }
     },
     amazon_link: {
-      dataType: "string",
+      type: "string",
       name: "Amazon link",
       url: true,
       validation: {
@@ -52,12 +52,12 @@ This is a sample schema that includes a lot of different sample properties:
       }
     },
     user_email: {
-      dataType: "string",
+      type: "string",
       name: "User email",
       email: true
     },
     category: {
-      dataType: "string",
+      type: "string",
       name: "Category",
       enumValues: {
         art_design_books: "Art and design books",
@@ -69,9 +69,9 @@ This is a sample schema that includes a lot of different sample properties:
     },
     locale: {
       name: "Available locales",
-      dataType: "array",
+      type: "array",
       of: {
-        dataType: "string",
+        type: "string",
         enumValues: {
           es: "Spanish",
           en: "English",
@@ -87,27 +87,27 @@ This is a sample schema that includes a lot of different sample properties:
       ]
     },
     expiry: {
-      dataType: "date",
+      type: "date",
       name: "Expiry date",
       mode: "date"
     },
     arrival_time: {
-      dataType: "date",
+      type: "date",
       name: "Arrival time",
       mode: "date_time"
     },
     created_at: {
-      dataType: "date",
+      type: "date",
       name: "Created at",
       autoValue: "on_create"
     },
     updated_on: {
-      dataType: "date",
+      type: "date",
       name: "Updated at",
       autoValue: "on_update"
     },
     main_image: {
-      dataType: "string",
+      type: "string",
       name: "Main image",
       storage: {
         storagePath: "images",
@@ -121,10 +121,10 @@ This is a sample schema that includes a lot of different sample properties:
       }
     },
     images: {
-      dataType: "array",
+      type: "array",
       name: "Images",
       of: {
-        dataType: "string",
+        type: "string",
         storage: {
           storagePath: "images",
           acceptedFiles: [
@@ -139,54 +139,54 @@ This is a sample schema that includes a lot of different sample properties:
     },
     address: {
       name: "Address",
-      dataType: "map",
+      type: "map",
       properties: {
         street: {
           name: "Street",
-          dataType: "string"
+          type: "string"
         },
         postal_code: {
           name: "Postal code",
-          dataType: "number"
+          type: "number"
         }
       },
       expanded: true
     },
     client: {
-      dataType: "reference",
+      type: "reference",
       path: "users",
       name: "Related client"
     },
     related_products: {
-      dataType: "array",
+      type: "array",
       name: "Related products",
       of: {
-        dataType: "reference",
+        type: "reference",
         path: "products"
       }
     },
     tags: {
-      dataType: "array",
+      type: "array",
       name: "Tags",
       of: {
-        dataType: "string",
+        type: "string",
         previewAsTag: true
       },
       expanded: true
     },
     selectable: {
       name: "Selectable",
-      dataType: "boolean"
+      type: "boolean"
     },
     content: {
       name: "Content",
-      dataType: "array",
+      type: "array",
       oneOf: {
         typeField: "type",
         valueField: "value",
         properties: {
           images: {
-            dataType: "string",
+            type: "string",
             name: "Image",
             storage: {
               storagePath: "images",
@@ -196,15 +196,15 @@ This is a sample schema that includes a lot of different sample properties:
             }
           },
           text: {
-            dataType: "string",
+            type: "string",
             name: "Text",
             markdown: true
           },
           products: {
             name: "Products",
-            dataType: "array",
+            type: "array",
             of: {
-              dataType: "reference",
+              type: "reference",
               path: "products"
             }
           }

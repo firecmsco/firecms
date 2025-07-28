@@ -29,7 +29,7 @@ export function SkeletonPropertyComponent({
     }
 
     let content: React.ReactNode | any;
-    if (property.dataType === "string") {
+    if (property.type === "string") {
         const stringProperty = property as ResolvedStringProperty;
         if (stringProperty.url) {
             content = renderUrlComponent(stringProperty, size);
@@ -38,16 +38,16 @@ export function SkeletonPropertyComponent({
         } else {
             content = renderSkeletonText();
         }
-    } else if (property.dataType === "array") {
+    } else if (property.type === "array") {
         const arrayProperty = property as ResolvedArrayProperty;
 
         if (arrayProperty.of) {
             if (Array.isArray(arrayProperty.of)) {
                 content = <>{arrayProperty.of.map((p, i) => renderGenericArrayCell(p, i))} </>;
             } else {
-                if (arrayProperty.of.dataType === "map" && arrayProperty.of.properties) {
+                if (arrayProperty.of.type === "map" && arrayProperty.of.properties) {
                     content = renderArrayOfMaps(arrayProperty.of.properties, size, arrayProperty.of.previewKeys);
-                } else if (arrayProperty.of.dataType === "string") {
+                } else if (arrayProperty.of.type === "string") {
                     if (arrayProperty.of.enumValues) {
                         content = renderArrayEnumTableCell();
                     } else if (arrayProperty.of.storage) {
@@ -61,13 +61,13 @@ export function SkeletonPropertyComponent({
             }
         }
 
-    } else if (property.dataType === "map") {
+    } else if (property.type === "map") {
         content = renderMap(property as ResolvedMapProperty, size);
-    } else if (property.dataType === "date") {
+    } else if (property.type === "date") {
         content = renderSkeletonText();
-    } else if (property.dataType === "reference") {
+    } else if (property.type === "reference") {
         content = renderReference();
-    } else if (property.dataType === "boolean") {
+    } else if (property.type === "boolean") {
         content = renderSkeletonText();
     } else {
         content = renderSkeletonText();

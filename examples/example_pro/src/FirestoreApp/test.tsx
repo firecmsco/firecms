@@ -55,11 +55,11 @@ const productCollection = buildCollection<Product>({
         name: {
             name: "Name",
             validation: { required: true },
-            dataType: "string"
+            type: "string"
         },
         uppercase_name: {
             name: "Uppercase Name",
-            dataType: "string",
+            type: "string",
             disabled: true,
             description: "This field gets updated with a preSave callback"
         }

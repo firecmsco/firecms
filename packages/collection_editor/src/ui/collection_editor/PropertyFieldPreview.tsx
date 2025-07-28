@@ -92,7 +92,7 @@ export function PropertyFieldPreview({
                             <Typography variant="body2"
                                         component="span"
                                         color="disabled">
-                                {property.dataType}
+                                {property.type}
                             </Typography>
                         </ErrorBoundary>
 
@@ -168,7 +168,7 @@ export function NonEditablePropertyPreview({
                             <Typography variant="body2"
                                         component="span"
                                         color="disabled">
-                                {property.dataType}
+                                {property.type}
                             </Typography>
                         </ErrorBoundary>}
 

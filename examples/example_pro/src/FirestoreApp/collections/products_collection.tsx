@@ -28,23 +28,23 @@ export const localeCollection = buildCollection<Locale>({
         name: {
             name: "Name",
             validation: { required: true },
-            dataType: "string"
+            type: "string"
         },
         description: {
             name: "Description",
             validation: { required: true },
-            dataType: "string",
+            type: "string",
             markdown: true
         },
         selectable: {
             name: "Selectable",
             description: "Is this locale selectable",
             longDescription: "Changing this value triggers a cloud function that updates the parent product",
-            dataType: "boolean"
+            type: "boolean"
         },
         video: {
             name: "Video",
-            dataType: "string",
+            type: "string",
             validation: { required: false },
             storage: {
                 storagePath: "videos",
@@ -196,7 +196,7 @@ export const productsCollection = buildCollection<Product>({
     additionalFields: [productAdditionalField],
     properties: {
         name: {
-            dataType: "string",
+            type: "string",
             name: "Name",
             description: "Name of this product",
             clearable: true,
@@ -205,7 +205,7 @@ export const productsCollection = buildCollection<Product>({
             }
         },
         main_image: {
-            dataType: "string",
+            type: "string",
             name: "Image",
             storage: {
                 storagePath: "images",
@@ -221,19 +221,19 @@ export const productsCollection = buildCollection<Product>({
             description: "Upload field for images",
         },
         category: {
-            dataType: "string",
+            type: "string",
             name: "Category",
             clearable: true,
             enumValues: categories
         },
         available: {
-            dataType: "boolean",
+            type: "boolean",
             name: "Available",
             columnWidth: 100,
             description: "Is this product available in the website"
         },
         price: ({ values }) => ({
-            dataType: "number",
+            type: "number",
             name: "Price",
             validation: {
                 required: values.available,
@@ -250,7 +250,7 @@ export const productsCollection = buildCollection<Product>({
             widthPercentage: 50
         }),
         currency: {
-            dataType: "string",
+            type: "string",
             name: "Currency",
             enumValues: currencies,
             widthPercentage: 50,
@@ -259,13 +259,13 @@ export const productsCollection = buildCollection<Product>({
             }
         },
         public: {
-            dataType: "boolean",
+            type: "boolean",
             name: "Public",
             description: "Should this product be visible in the website"
             // longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros."
         },
         brand: {
-            dataType: "string",
+            type: "string",
             name: "Brand",
             validation: {
                 required: true
@@ -277,22 +277,22 @@ export const productsCollection = buildCollection<Product>({
             }
         },
         description: {
-            dataType: "string",
+            type: "string",
             name: "Description",
             description: "Example of a markdown field",
             markdown: true
         },
         amazon_link: {
-            dataType: "string",
+            type: "string",
             name: "Amazon link",
             url: true
         },
         images: {
-            dataType: "array",
+            type: "array",
             name: "Images",
             hideFromCollection: true,
             of: {
-                dataType: "string",
+                type: "string",
                 storage: {
                     storagePath: "images",
                     acceptedFiles: ["image/*"],
@@ -304,11 +304,11 @@ export const productsCollection = buildCollection<Product>({
             description: "This fields allows uploading multiple images at once"
         },
         related_products: {
-            dataType: "array",
+            type: "array",
             name: "Related products",
             description: "Reference to self",
             of: {
-                dataType: "reference",
+                type: "reference",
                 path: "products",
                 forceFilter: {
                     "selectable": ["==", true]
@@ -318,15 +318,15 @@ export const productsCollection = buildCollection<Product>({
         publisher: {
             name: "Publisher",
             description: "This is an example of a map property",
-            dataType: "map",
+            type: "map",
             properties: {
                 name: {
                     name: "Name",
-                    dataType: "string"
+                    type: "string"
                 },
                 external_id: {
                     name: "External id",
-                    dataType: "string"
+                    type: "string"
                 }
             }
         },
@@ -335,35 +335,35 @@ export const productsCollection = buildCollection<Product>({
             description:
                 "This is an example of a disabled field that gets updated trough a Cloud Function, try changing a locale 'selectable' value",
             longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
-            dataType: "array",
+            type: "array",
             readOnly: true,
             of: {
-                dataType: "string",
+                type: "string",
                 enumValues: locales
             },
             defaultValue: ["es"]
         },
         metadata: {
             name: "Metadata",
-            dataType: "map",
+            type: "map",
             keyValue: true
         },
         uppercase_name: {
             name: "Uppercase Name",
-            dataType: "string",
+            type: "string",
             readOnly: true,
             description: "This field gets updated with a preSave callback"
         },
         added_on: {
-            dataType: "date",
+            type: "date",
             name: "Added on",
             autoValue: "on_create"
         },
         tags: {
-            dataType: "array",
+            type: "array",
             name: "Tags",
             of: {
-                dataType: "string"
+                type: "string"
 
             }
         }
@@ -378,7 +378,7 @@ export const productsSimpleCollection = buildCollection<any>({
     icon: "ShoppingCart",
     properties: {
         name: {
-            dataType: "string",
+            type: "string",
             name: "Name",
             description: "Name of this product",
             clearable: true,
@@ -387,43 +387,43 @@ export const productsSimpleCollection = buildCollection<any>({
             }
         },
         category: {
-            dataType: "string",
+            type: "string",
             name: "Category",
             clearable: true,
             enumValues: categories
         },
         price: {
-            dataType: "number",
+            type: "number",
             name: "Price"
         },
         brand: {
-            dataType: "string",
+            type: "string",
             name: "Brand",
             validation: {
                 required: true
             }
         },
         description: {
-            dataType: "string",
+            type: "string",
             name: "Description",
             description: "Example of a markdown field",
             markdown: true
         },
         metadata: {
-            dataType: "map",
+            type: "map",
             name: "Metadata",
             description: "This is a field that allows arbitrary key-value input"
 
         },
         tags: {
-            dataType: "array",
+            type: "array",
             name: "Tags",
             of: {
-                dataType: "string"
+                type: "string"
             }
         },
         added_on: {
-            dataType: "date",
+            type: "date",
             name: "Added on",
             autoValue: "on_create"
         }
@@ -457,14 +457,14 @@ export const productsCollection2 = buildCollection({
                 name: {
                     name: "Name",
                     validation: { required: true },
-                    dataType: "string"
+                    type: "string"
                 }
             }
         })
     ],
     properties: {
         name: {
-            dataType: "string",
+            type: "string",
             name: "Name",
             description: "Name of this product",
             clearable: true,

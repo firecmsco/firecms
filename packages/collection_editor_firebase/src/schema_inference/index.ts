@@ -1,6 +1,6 @@
 import { buildEntityPropertiesFromData, buildPropertiesOrder } from "@firecms/schema_inference";
 import { DocumentReference, Firestore, Timestamp } from "@firebase/firestore";
-import { DataType, EntityCollection, GeoPoint, removeInitialAndTrailingSlashes, unslugify } from "@firecms/core";
+import { type, EntityCollection, GeoPoint, removeInitialAndTrailingSlashes, unslugify } from "@firecms/core";
 import { getDocuments } from "./firestore";
 
 /**
@@ -35,7 +35,7 @@ export async function getPropertiesFromData(data: object[]) {
     return buildEntityPropertiesFromData(data, getType);
 }
 
-function getType(value: any): DataType {
+function getType(value: any): type {
     if (typeof value === "number")
         return "number";
     else if (typeof value === "string")

@@ -1,7 +1,7 @@
 import { BaseProperty, EntityReference } from "@firecms/core";
 
 interface SQLReferenceProperty extends BaseProperty<EntityReference> {
-    dataType: "reference";
+    type: "reference";
 
     /**
      * Name of the table this reference points to.

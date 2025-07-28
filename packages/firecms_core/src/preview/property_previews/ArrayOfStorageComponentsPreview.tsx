@@ -32,7 +32,7 @@ export function ArrayOfStorageComponentsPreview({
         throw Error("Using array properties instead of single one in `of` in ArrayProperty");
     }
 
-    if (property.dataType !== "array" || !property.of || property.of.dataType !== "string")
+    if (property.type !== "array" || !property.of || property.of.type !== "string")
         throw Error("Picked wrong preview component ArrayOfStorageComponentsPreview");
 
     const childSize: PreviewSize = size === "medium" ? "medium" : "small";

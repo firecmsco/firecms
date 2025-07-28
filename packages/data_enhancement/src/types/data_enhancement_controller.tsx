@@ -62,7 +62,7 @@ export type InputEntity = {
 export type InputProperty = {
     name?: string;
     description?: string;
-    dataType: string;
+    type: string;
     fieldConfigId: string;
     enumValues?: string[];
     disabled?: boolean;

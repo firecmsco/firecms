@@ -64,6 +64,7 @@ export class EntityService {
 
     private getIdFieldInfo(path: string) {
         const collection = collectionRegistry.get(path);
+        console.log("getIdFieldInfo", { path, collection });
         if (!collection) {
             throw new Error(`Collection not found for path: ${path}`);
         }
@@ -109,6 +110,7 @@ export class EntityService {
     ): Promise<FireCMSEntity<M> | undefined> {
         const table = this.getTableForPath(path);
         const idInfo = this.getIdFieldInfo(path);
+        console.log("idInfo", { path, idInfo });
         const idField = (table as any)[idInfo.fieldName];
         const parsedId = this.parseIdValue(entityId, idInfo.type);
 

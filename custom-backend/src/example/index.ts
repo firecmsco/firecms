@@ -4,7 +4,6 @@ import { collectionRegistry } from "../collections/registry";
 
 backendCollections.forEach(collection => collectionRegistry.register(collection));
 
-// Filter out enums and only export actual table objects
 export const tables = {
     customers: schema.customers,
     machinery: schema.machinery,

@@ -12,7 +12,7 @@ export function ArrayPropertyEnumPreview({
                                              size
                                          }: PropertyPreviewProps<string[] | number[]>) {
 
-    if (property.dataType !== "array")
+    if (property.type !== "array")
         throw Error("Picked wrong preview component ArrayEnumPreview");
 
     const ofProperty = property.of as ResolvedStringProperty | ResolvedNumberProperty;

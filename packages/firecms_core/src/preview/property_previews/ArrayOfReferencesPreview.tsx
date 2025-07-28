@@ -26,7 +26,7 @@ export function ArrayOfReferencesPreview({
         throw Error("Using array properties instead of single one in `of` in ArrayProperty");
     }
 
-    if (property?.dataType !== "array" || !property.of || property.of.dataType !== "reference")
+    if (property?.type !== "array" || !property.of || property.of.type !== "reference")
         throw Error("Picked wrong preview component ArrayOfReferencesPreview");
 
     const childSize: PreviewSize = size === "medium" ? "medium" : "small";

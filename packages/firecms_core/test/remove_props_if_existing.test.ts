@@ -30,16 +30,16 @@ describe("removePropsIfExisting", () => {
             key: "ttt",
             name: "ttt",
             properties: {
-                en: { dataType: "string", name: "English", editable: true },
-                es: { dataType: "string", name: "Español" }
+                en: { type: "string", name: "English", editable: true },
+                es: { type: "string", name: "Español" }
             }
         };
         const comparison = {
             key: "ttt",
             name: "ttt",
             properties: {
-                en: { dataType: "string", name: "English333111", editable: true },
-                es: { dataType: "string", name: "Español" }
+                en: { type: "string", name: "English333111", editable: true },
+                es: { type: "string", name: "Español" }
             }
         };
         expect(removePropsIfExisting(source, comparison)).toEqual({

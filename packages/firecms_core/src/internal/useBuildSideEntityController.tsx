@@ -83,12 +83,12 @@ function calculateCollectionDesiredWidth(collection: EntityCollection<any>, auth
 }
 
 function getNestedPropertiesDepth(property: ResolvedProperty, accumulator: number = 0): number {
-    if (property.dataType === "map" && property.properties) {
+    if (property.type === "map" && property.properties) {
         const values = Object.values(property.properties).flatMap((property) => getNestedPropertiesDepth(property, accumulator + 1));
         return Math.max(...values);
-    } else if (property.dataType === "array" && property.oneOf) {
+    } else if (property.type === "array" && property.oneOf) {
         return accumulator + 3;
-    } else if (property.dataType === "array" && property.of) {
+    } else if (property.type === "array" && property.of) {
         if (Array.isArray(property.of)) {
             return Math.max(...property.of.map((p) => getNestedPropertiesDepth(p, accumulator + 1)));
         } else {

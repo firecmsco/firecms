@@ -15,7 +15,7 @@ export const cryptoCollection = buildCollection({
     properties: {
         image: {
             name: "Image",
-            dataType: "string",
+            type: "string",
             storage: {
                 storagePath: "alpaca",
                 acceptedFiles: ["image/*"],
@@ -27,15 +27,15 @@ export const cryptoCollection = buildCollection({
         },
         name: {
             name: "Name",
-            dataType: "string"
+            type: "string"
         },
         usd: {
             name: "Price (USD)",
-            dataType: "number"
+            type: "number"
         },
         updated_on: {
             name: "Updated on",
-            dataType: "date"
+            type: "date"
         }
     }
 });

@@ -47,14 +47,14 @@ export function getEntityImagePreviewPropertyKey<M extends object>(collection: R
     // find first storage property of type image
     for (const key in collection.properties) {
         const property = collection.properties[key];
-        if (property.dataType === "string" && property.storage?.acceptedFiles?.includes("image/*")) {
+        if (property.type === "string" && property.storage?.acceptedFiles?.includes("image/*")) {
             return key;
         }
     }
     // alternatively, look for the first array of images
     for (const key in collection.properties) {
         const property = collection.properties[key];
-        if (property.dataType === "array" && property.of?.dataType === "string" && property.of.storage?.acceptedFiles?.includes("image/*")) {
+        if (property.type === "array" && property.of?.type === "string" && property.of.storage?.acceptedFiles?.includes("image/*")) {
             return key;
         }
     }

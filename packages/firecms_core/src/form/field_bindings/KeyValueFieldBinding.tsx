@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DataType, FieldProps, GeoPoint } from "../../types";
+import { type, FieldProps, GeoPoint } from "../../types";
 
 import { ArrayContainer } from "../../components";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
@@ -19,13 +19,13 @@ import {
     TextField,
     Typography
 } from "@firecms/ui";
-import { getDefaultValueForDataType, getIconForProperty } from "../../util";
+import { getDefaultValueFortype, getIconForProperty } from "../../util";
 import { useCustomizationController } from "../../hooks";
 import { getIn } from "@firecms/formex";
 
 type MapEditViewRowState = [number, {
     key: string,
-    dataType: DataType
+    type: type
 }];
 
 /**
@@ -106,7 +106,7 @@ function MapEditView<T extends Record<string, any>>({
     const [internalState, setInternalState] = React.useState<MapEditViewRowState[]>(
         Object.keys(initialValue ?? {}).map((key) => [getRandomId(), {
             key,
-            dataType: getDataType(initialValue?.[key]) ?? "string"
+            type: gettype(initialValue?.[key]) ?? "string"
         }])
     );
 
@@ -119,7 +119,7 @@ function MapEditView<T extends Record<string, any>>({
         keysToAdd.forEach((key) => {
             newRowIds.push([getRandomId(), {
                 key,
-                dataType: getDataType(value?.[key]) ?? "string"
+                type: gettype(value?.[key]) ?? "string"
             }]);
         });
         keysToRemove.forEach((key) => {
@@ -129,7 +129,7 @@ function MapEditView<T extends Record<string, any>>({
         setInternalState(newRowIds);
     }, [value]);
 
-    const updateDataType = (rowId: number, dataType: DataType) => {
+    const updatetype = (rowId: number, type: type) => {
         if (!rowId) {
             console.warn("No key selected for data type update");
             return;
@@ -138,14 +138,14 @@ function MapEditView<T extends Record<string, any>>({
             if (row[0] === rowId) {
                 return [row[0], {
                     key: row[1].key,
-                    dataType
+                    type
                 }];
             }
             return row;
         }));
         setValue({
             ...(value ?? {} as T),
-            [internalState.find((row) => row[0] === rowId)?.[1].key ?? ""]: getDefaultValueForDataType(dataType)
+            [internalState.find((row) => row[0] === rowId)?.[1].key ?? ""]: getDefaultValueFortype(type)
         })
     };
 
@@ -153,7 +153,7 @@ function MapEditView<T extends Record<string, any>>({
         {internalState
             .map(([rowId, {
                     key: fieldKey,
-                    dataType
+                    type
                 }], index) => {
                     const entryValue = fieldKey ? value?.[fieldKey] : "";
                     const onFieldKeyChange = (newKey: string) => {
@@ -162,7 +162,7 @@ function MapEditView<T extends Record<string, any>>({
                             if (currentRowId[0] === rowId) {
                                 return [rowId, {
                                     key: newKey ?? "",
-                                    dataType: currentRowId[1].dataType
+                                    type: currentRowId[1].type
                                 }];
                             }
                             return currentRowId;
@@ -207,9 +207,9 @@ function MapEditView<T extends Record<string, any>>({
                                            onFieldKeyChange={onFieldKeyChange}
                                            setValue={setValue}
                                            entryValue={entryValue}
-                                           dataType={dataType}
+                                           type={type}
                                            disabled={disabled}
-                                           updateDataType={updateDataType}/>;
+                                           updatetype={updatetype}/>;
                 }
             )}
 
@@ -227,7 +227,7 @@ function MapEditView<T extends Record<string, any>>({
                     });
                     setInternalState([...internalState, [getRandomId(), {
                         key: "",
-                        dataType: "string"
+                        type: "string"
                     }]]);
                 }
                 }>
@@ -245,8 +245,8 @@ function MapKeyValueRow<T extends Record<string, any>>({
                                                            onDeleteClick,
                                                            setValue,
                                                            entryValue,
-                                                           dataType,
-                                                           updateDataType,
+                                                           type,
+                                                           updatetype,
                                                            disabled
                                                        }: {
     rowId: number,
@@ -256,24 +256,24 @@ function MapKeyValueRow<T extends Record<string, any>>({
     onDeleteClick: () => void,
     setValue: (value: (T | null)) => void,
     entryValue: any,
-    dataType: DataType,
+    type: type,
     disabled?: boolean,
-    updateDataType: (rowId: number, dataType: DataType) => void
+    updatetype: (rowId: number, type: type) => void
 }) {
 
     const { locale } = useCustomizationController();
 
-    function buildInput(entryValue: any, fieldKey: string, dataType: DataType) {
-        if (dataType === "string" || dataType === "number") {
+    function buildInput(entryValue: any, fieldKey: string, type: type) {
+        if (type === "string" || type === "number") {
             return <TextField
-                key={dataType}
+                key={type}
                 placeholder={"value"}
                 value={entryValue}
-                type={dataType === "number" ? "number" : "text"}
+                type={type === "number" ? "number" : "text"}
                 size={"medium"}
                 disabled={disabled || !fieldKey}
                 onChange={(event) => {
-                    if (dataType === "number") {
+                    if (type === "number") {
                         const numberValue = event.target.value ? parseFloat(event.target.value) : undefined;
                         if (numberValue && isNaN(numberValue)) {
                             setValue({
@@ -298,7 +298,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                         });
                     }
                 }}/>;
-        } else if (dataType === "date") {
+        } else if (type === "date") {
             return <DateTimeField value={entryValue}
                                   size={"medium"}
                                   locale={locale}
@@ -309,7 +309,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                                           [fieldKey]: date
                                       });
                                   }}/>;
-        } else if (dataType === "boolean") {
+        } else if (type === "boolean") {
             return <BooleanSwitchWithLabel value={entryValue}
                                            size={"medium"}
                                            position={"start"}
@@ -320,7 +320,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                                                    [fieldKey]: newValue
                                                });
                                            }}/>;
-        } else if (dataType === "array") {
+        } else if (type === "array") {
             return <div
                 className={cls(defaultBorderMixin, "ml-2 pl-2 border-l border-solid")}>
                 <ArrayContainer value={entryValue}
@@ -356,7 +356,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                                     />
                                 }}/>
             </div>;
-        } else if (dataType === "map") {
+        } else if (type === "map") {
             return <div
                 className={cls(defaultBorderMixin, "ml-2 pl-2 border-l border-solid")}>
                 <MapEditView value={entryValue}
@@ -371,13 +371,13 @@ function MapKeyValueRow<T extends Record<string, any>>({
         } else {
             return <Typography
                 variant={"caption"}>
-                {`Data type ${dataType} not supported yet`}
+                {`Data type ${type} not supported yet`}
             </Typography>;
         }
     }
 
-    function doUpdateDataType(dataType: DataType) {
-        updateDataType(rowId, dataType);
+    function doUpdatetype(type: type) {
+        updatetype(rowId, type);
     }
 
     return (<>
@@ -396,7 +396,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                 </div>
 
                 <div className="flex-grow">
-                    {(dataType !== "map" && dataType !== "array") && buildInput(entryValue, fieldKey, dataType)}
+                    {(type !== "map" && type !== "array") && buildInput(entryValue, fieldKey, type)}
                 </div>
                 <div className={"flex flex-col"}>
                     <Menu
@@ -405,17 +405,17 @@ function MapKeyValueRow<T extends Record<string, any>>({
                         </IconButton>}
                     >
                         <MenuItem dense
-                                  onClick={() => doUpdateDataType("string")}>string</MenuItem>
+                                  onClick={() => doUpdatetype("string")}>string</MenuItem>
                         <MenuItem dense
-                                  onClick={() => doUpdateDataType("number")}>number</MenuItem>
+                                  onClick={() => doUpdatetype("number")}>number</MenuItem>
                         <MenuItem dense
-                                  onClick={() => doUpdateDataType("boolean")}>boolean</MenuItem>
+                                  onClick={() => doUpdatetype("boolean")}>boolean</MenuItem>
                         <MenuItem dense
-                                  onClick={() => doUpdateDataType("date")}>date</MenuItem>
+                                  onClick={() => doUpdatetype("date")}>date</MenuItem>
                         <MenuItem dense
-                                  onClick={() => doUpdateDataType("map")}>map</MenuItem>
+                                  onClick={() => doUpdatetype("map")}>map</MenuItem>
                         <MenuItem dense
-                                  onClick={() => doUpdateDataType("array")}>array</MenuItem>
+                                  onClick={() => doUpdatetype("array")}>array</MenuItem>
                     </Menu>
 
                     <IconButton aria-label="delete"
@@ -426,7 +426,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                 </div>
             </Typography>
 
-            {(dataType === "map" || dataType === "array") && buildInput(entryValue, fieldKey, dataType)}
+            {(type === "map" || type === "array") && buildInput(entryValue, fieldKey, type)}
 
         </>
 
@@ -447,19 +447,19 @@ function ArrayKeyValueRow<T>({
 }) {
 
     const { locale } = useCustomizationController();
-    const [selectedDataType, setSelectedDataType] = useState<DataType>(getDataType(value) ?? "string");
+    const [selectedtype, setSelectedtype] = useState<type>(gettype(value) ?? "string");
 
-    function doUpdateDataType(dataType: DataType) {
-        setSelectedDataType(dataType);
+    function doUpdatetype(type: type) {
+        setSelectedtype(type);
     }
 
-    function buildInput(entryValue: any, dataType: DataType) {
-        if (dataType === "string" || dataType === "number") {
+    function buildInput(entryValue: any, type: type) {
+        if (type === "string" || type === "number") {
             return <TextField value={entryValue}
-                              type={dataType === "number" ? "number" : "text"}
+                              type={type === "number" ? "number" : "text"}
                               size={"medium"}
                               onChange={(event) => {
-                                  if (dataType === "number") {
+                                  if (type === "number") {
                                       const numberValue = event.target.value ? parseFloat(event.target.value) : undefined;
                                       if (numberValue && isNaN(numberValue)) {
                                           setValue(null);
@@ -472,25 +472,25 @@ function ArrayKeyValueRow<T>({
                                       setValue(event.target.value as T);
                                   }
                               }}/>;
-        } else if (dataType === "date") {
+        } else if (type === "date") {
             return <DateTimeField value={entryValue}
                                   size={"medium"}
                                   locale={locale}
                                   onChange={(date) => {
                                       setValue(date as T);
                                   }}/>;
-        } else if (dataType === "boolean") {
+        } else if (type === "boolean") {
             return <BooleanSwitchWithLabel value={entryValue}
                                            size={"small"}
                                            position={"start"}
                                            onValueChange={(v) => {
                                                setValue(v as T);
                                            }}/>;
-        } else if (dataType === "array") {
+        } else if (type === "array") {
             return <Typography variant={"caption"}>
                 Arrays of arrays are not supported.
             </Typography>;
-        } else if (dataType === "map") {
+        } else if (type === "map") {
             return <div className={cls(defaultBorderMixin, "ml-2 pl-2 border-l border-solid")}>
                 <MapEditView value={entryValue}
                              setValue={(updatedValue) => {
@@ -500,7 +500,7 @@ function ArrayKeyValueRow<T>({
         } else {
             return <Typography
                 variant={"caption"}>
-                {`Data type ${dataType} not supported yet`}
+                {`Data type ${type} not supported yet`}
             </Typography>;
         }
     }
@@ -511,7 +511,7 @@ function ArrayKeyValueRow<T>({
                         className="font-mono flex min-h-12 flex-row gap-1 items-center">
 
                 <div className="flex-grow">
-                    {selectedDataType !== "map" && buildInput(value, selectedDataType)}
+                    {selectedtype !== "map" && buildInput(value, selectedtype)}
                 </div>
 
                 <Menu
@@ -520,20 +520,20 @@ function ArrayKeyValueRow<T>({
                         <ArrowDropDownIcon/>
                     </IconButton>}>
                     <MenuItem dense
-                              onClick={() => doUpdateDataType("string")}>string</MenuItem>
+                              onClick={() => doUpdatetype("string")}>string</MenuItem>
                     <MenuItem dense
-                              onClick={() => doUpdateDataType("number")}>number</MenuItem>
+                              onClick={() => doUpdatetype("number")}>number</MenuItem>
                     <MenuItem dense
-                              onClick={() => doUpdateDataType("boolean")}>boolean</MenuItem>
+                              onClick={() => doUpdatetype("boolean")}>boolean</MenuItem>
                     <MenuItem dense
-                              onClick={() => doUpdateDataType("map")}>map</MenuItem>
+                              onClick={() => doUpdatetype("map")}>map</MenuItem>
                     <MenuItem dense
-                              onClick={() => doUpdateDataType("date")}>date</MenuItem>
+                              onClick={() => doUpdatetype("date")}>date</MenuItem>
                 </Menu>
 
             </Typography>
 
-            {selectedDataType === "map" && buildInput(value, selectedDataType)}
+            {selectedtype === "map" && buildInput(value, selectedtype)}
 
         </>
 
@@ -544,7 +544,7 @@ function getRandomId() {
     return Math.floor(Math.random() * Math.floor(Number.MAX_SAFE_INTEGER));
 }
 
-function getDataType(value: any): DataType | undefined {
+function gettype(value: any): type | undefined {
     if (typeof value === "string" || value === null) {
         return "string";
     } else if (typeof value === "number") {

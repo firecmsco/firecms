@@ -9,14 +9,14 @@ export function PromptConfigSecondaryForm({
         <Container className={"my-16 flex flex-col gap-4 w-full"}>
             <PropertyFieldBinding context={formContext}
                                   property={{
-                                      dataType: "string",
+                                      type: "string",
                                       name: "Prompt",
                                       multiline: true
                                   }}
                                   propertyKey={"prompt"}/>
             <PropertyFieldBinding context={formContext}
                                   property={{
-                                      dataType: "string",
+                                      type: "string",
                                       name: "Restrictions",
                                       multiline: true
                                   }}

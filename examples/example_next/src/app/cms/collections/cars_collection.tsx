@@ -14,7 +14,7 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
                 validation: {
                     required: true
                 },
-                dataType: "string",
+                type: "string",
                 enumValues: [
                     {
                         label: "Alfa Romero",
@@ -119,7 +119,7 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
                     }
                 ],
                 name: "Aspiration",
-                dataType: "string",
+                type: "string",
                 validation: {
                     required: true
                 }
@@ -129,11 +129,11 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
                     required: true
                 },
                 name: "Bore",
-                dataType: "number"
+                type: "number"
             },
             city_mileage: {
                 name: "City Mileage",
-                dataType: "number",
+                type: "number",
                 validation: {
                     required: true
                 }
@@ -143,11 +143,11 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
                 validation: {
                     required: true
                 },
-                dataType: "number"
+                type: "number"
             },
             cylinder_count: {
                 name: "Cylinder Count",
-                dataType: "string",
+                type: "string",
                 enumValues: [
                     {
                         id: "eight",
@@ -204,11 +204,11 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
                         label: "Wagon"
                     }
                 ],
-                dataType: "string",
+                type: "string",
                 name: "Design"
             },
             door_panel: {
-                dataType: "string",
+                type: "string",
                 validation: {
                     required: true
                 },
@@ -238,11 +238,11 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
                         label: "Rear"
                     }
                 ],
-                dataType: "string",
+                type: "string",
                 name: "Engine Location"
             },
             engine_size: {
-                dataType: "number",
+                type: "number",
                 validation: {
                     required: true
                 },
@@ -250,7 +250,7 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
             },
             engine_type: {
                 name: "Engine Type",
-                dataType: "string",
+                type: "string",
                 enumValues: [
                     {
                         label: "Dohc",
@@ -316,7 +316,7 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
                         label: "Spfi"
                     }
                 ],
-                dataType: "string",
+                type: "string",
                 validation: {
                     required: true
                 },
@@ -334,13 +334,13 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
                         label: "Gas"
                     }
                 ],
-                dataType: "string",
+                type: "string",
                 validation: {
                     required: true
                 }
             },
             highway_mileage: {
-                dataType: "number",
+                type: "number",
                 name: "Highway Mileage",
                 validation: {
                     required: true
@@ -348,7 +348,7 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
             },
             horse_power: {
                 name: "Horse Power",
-                dataType: "number",
+                type: "number",
                 validation: {
                     required: true
                 }
@@ -358,17 +358,17 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
                 validation: {
                     required: true
                 },
-                dataType: "number"
+                type: "number"
             },
             stroke: {
-                dataType: "number",
+                type: "number",
                 name: "Stroke",
                 validation: {
                     required: true
                 }
             },
             top_rpm: {
-                dataType: "number",
+                type: "number",
                 validation: {
                     required: true
                 },
@@ -393,7 +393,7 @@ export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCo
                         id: "rwd"
                     }
                 ],
-                dataType: "string"
+                type: "string"
             }
         },
         subcollections: []

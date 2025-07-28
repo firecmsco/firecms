@@ -74,7 +74,7 @@ export function SelectFieldBinding<T extends EnumType>({
                 }
                 onValueChange={(updatedValue: string) => {
                     const newValue = updatedValue
-                        ? (property.dataType === "number" ? parseFloat(updatedValue) : updatedValue)
+                        ? (property.type === "number" ? parseFloat(updatedValue) : updatedValue)
                         : null;
                     return setValue(newValue as T);
                 }}

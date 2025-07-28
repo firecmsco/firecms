@@ -68,7 +68,7 @@ export const productsCollection = buildCollection<Product>({
     ],
     properties: {
         name: {
-            dataType: "string",
+            type: "string",
             name: "Name",
             description: "Name of this product",
             clearable: true,
@@ -77,16 +77,16 @@ export const productsCollection = buildCollection<Product>({
             }
         },
         category: {
-            dataType: "string",
+            type: "string",
             name: "Category",
             clearable: true,
             enumValues: categories
         },
         images: {
-            dataType: "array",
+            type: "array",
             name: "Images",
             of: {
-                dataType: "string",
+                type: "string",
                 storage: {
                     storagePath: "images",
                     acceptedFiles: ["image/*"],
@@ -98,13 +98,13 @@ export const productsCollection = buildCollection<Product>({
             description: "This fields allows uploading multiple images at once"
         },
         available: {
-            dataType: "boolean",
+            type: "boolean",
             name: "Available",
             columnWidth: 100,
             description: "Is this product available in the website"
         },
         price: ({ values }) => ({
-            dataType: "number",
+            type: "number",
             name: "Price",
             validation: {
                 required: true,
@@ -118,7 +118,7 @@ export const productsCollection = buildCollection<Product>({
             }
         }),
         currency: {
-            dataType: "string",
+            type: "string",
             name: "Currency",
             enumValues: [
                 {
@@ -137,61 +137,61 @@ export const productsCollection = buildCollection<Product>({
             }
         },
         public: {
-            dataType: "boolean",
+            type: "boolean",
             name: "Public",
             description: "Should this product be visible in the website"
         },
         brand: {
-            dataType: "string",
+            type: "string",
             name: "Brand",
             validation: {
                 required: true
             }
         },
         description: {
-            dataType: "string",
+            type: "string",
             name: "Description",
             markdown: true
         },
         amazon_link: {
-            dataType: "string",
+            type: "string",
             name: "Amazon link",
             url: true
         },
         related_products: {
-            dataType: "array",
+            type: "array",
             name: "Related products",
             description: "Reference to self",
             of: {
-                dataType: "reference",
+                type: "reference",
                 path: "products"
             }
         },
         publisher: {
             name: "Publisher",
             description: "This is an example of a map property",
-            dataType: "map",
+            type: "map",
             properties: {
                 name: {
                     name: "Name",
-                    dataType: "string"
+                    type: "string"
                 },
                 external_id: {
                     name: "External id",
-                    dataType: "string"
+                    type: "string"
                 }
             }
         },
         added_on: {
-            dataType: "date",
+            type: "date",
             name: "Added on",
             autoValue: "on_create"
         },
         tags: {
-            dataType: "array",
+            type: "array",
             name: "Tags",
             of: {
-                dataType: "string"
+                type: "string"
             }
         }
     }

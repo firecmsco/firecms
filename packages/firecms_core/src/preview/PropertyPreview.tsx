@@ -74,7 +74,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
             });
     } else if (value === undefined || value === null) {
         content = <EmptyValue/>;
-    } else if (property.dataType === "string") {
+    } else if (property.type === "string") {
         const stringProperty = property as ResolvedStringProperty;
         if (typeof value === "string") {
             if (stringProperty.storage) {
@@ -117,9 +117,9 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
                                                  value={value}/>;
             }
         } else {
-            content = buildWrongValueType(propertyKey, property.dataType, value);
+            content = buildWrongValueType(propertyKey, property.type, value);
         }
-    } else if (property.dataType === "array") {
+    } else if (property.type === "array") {
         if (value instanceof Array) {
             const arrayProperty = property as ResolvedArrayProperty;
             if (!arrayProperty.of && !arrayProperty.oneOf) {
@@ -131,11 +131,11 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
                     content = <ArrayPropertyPreview {...props}
                                                     value={value}
                                                     property={property as ResolvedArrayProperty}/>;
-                } else if (arrayProperty.of.dataType === "reference") {
+                } else if (arrayProperty.of.type === "reference") {
                     content = <ArrayOfReferencesPreview {...props}
                                                         value={value}
                                                         property={property as ResolvedArrayProperty}/>;
-                } else if (arrayProperty.of.dataType === "string") {
+                } else if (arrayProperty.of.type === "string") {
                     if (arrayProperty.of.enumValues) {
                         content = <ArrayPropertyEnumPreview
                             {...props}
@@ -152,7 +152,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
                             value={value as string[]}
                             property={property as ResolvedArrayProperty}/>;
                     }
-                } else if (arrayProperty.of.dataType === "number" && arrayProperty.of.enumValues) {
+                } else if (arrayProperty.of.type === "number" && arrayProperty.of.enumValues) {
                     content = <ArrayPropertyEnumPreview
                         {...props}
                         value={value as string[]}
@@ -168,23 +168,23 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
                                              property={property as ResolvedArrayProperty}/>;
             }
         } else {
-            content = buildWrongValueType(propertyKey, property.dataType, value);
+            content = buildWrongValueType(propertyKey, property.type, value);
         }
-    } else if (property.dataType === "map") {
+    } else if (property.type === "map") {
         if (typeof value === "object") {
             content =
                 <MapPropertyPreview {...props}
                                     property={property as ResolvedMapProperty}/>;
         } else {
-            content = buildWrongValueType(propertyKey, property.dataType, value);
+            content = buildWrongValueType(propertyKey, property.type, value);
         }
-    } else if (property.dataType === "date") {
+    } else if (property.type === "date") {
         if (value instanceof Date) {
             content = <DatePreview date={value}/>;
         } else {
-            content = buildWrongValueType(propertyKey, property.dataType, value);
+            content = buildWrongValueType(propertyKey, property.type, value);
         }
-    } else if (property.dataType === "reference") {
+    } else if (property.type === "reference") {
         if (typeof property.path === "string") {
             if (typeof value === "object" && "isEntityReference" in value && value.isEntityReference()) {
                 content = <ReferencePreview
@@ -196,25 +196,25 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
                     reference={value as EntityReference}
                 />;
             } else {
-                content = buildWrongValueType(propertyKey, property.dataType, value);
+                content = buildWrongValueType(propertyKey, property.type, value);
             }
         } else {
             content = <EmptyValue/>;
         }
 
-    } else if (property.dataType === "boolean") {
+    } else if (property.type === "boolean") {
         if (typeof value === "boolean") {
             content = <BooleanPreview value={value} size={size} property={property}/>;
         } else {
-            content = buildWrongValueType(propertyKey, property.dataType, value);
+            content = buildWrongValueType(propertyKey, property.type, value);
         }
-    } else if (property.dataType === "number") {
+    } else if (property.type === "number") {
         if (typeof value === "number") {
             content = <NumberPropertyPreview {...props}
                                              value={value}
                                              property={property as ResolvedNumberProperty}/>;
         } else {
-            content = buildWrongValueType(propertyKey, property.dataType, value);
+            content = buildWrongValueType(propertyKey, property.type, value);
         }
     } else {
         content = JSON.stringify(value);
@@ -225,8 +225,8 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
         : content;
 }, equal);
 
-function buildWrongValueType(name: string | undefined, dataType: string, value: any) {
-    console.warn(`Unexpected value for property ${name}, of type ${dataType}`, value);
+function buildWrongValueType(name: string | undefined, type: string, value: any) {
+    console.warn(`Unexpected value for property ${name}, of type ${type}`, value);
     return (
         <ErrorView title={"Unexpected value"}
                    error={`${JSON.stringify(value)}`}/>

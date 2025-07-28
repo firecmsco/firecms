@@ -69,10 +69,10 @@ export function DataNewPropertiesMapping({
                                 const property = mappedKey ? getPropertyInPath(destinationProperties, mappedKey) as Property : null;
 
                                 const originProperty = getPropertyInPath(originProperties, importKey) as Property | undefined;
-                                const originDataType = originProperty
-                                    ? (originProperty.dataType === "array" && typeof originProperty.of === "object"
-                                        ? `${originProperty.dataType} - ${(originProperty.of as Property).dataType}`
-                                        : originProperty.dataType)
+                                const origintype = originProperty
+                                    ? (originProperty.type === "array" && typeof originProperty.of === "object"
+                                        ? `${originProperty.type} - ${(originProperty.of as Property).type}`
+                                        : originProperty.type)
                                     : undefined;
                                 return <TableRow key={importKey} style={{ height: "90px" }}>
                                     <TableCell style={{ width: "20%" }}>
@@ -80,7 +80,7 @@ export function DataNewPropertiesMapping({
                                         {originProperty && <Typography
                                             variant={"caption"}
                                             color={"secondary"}
-                                        >{originDataType}</Typography>}
+                                        >{origintype}</Typography>}
                                     </TableCell>
                                     <TableCell>
                                         <ChevronRightIcon/>
@@ -125,7 +125,7 @@ export function DataNewPropertiesMapping({
                                     if (typeof property !== "object" || property === null) {
                                         return null;
                                     }
-                                    if (!["number", "string", "boolean", "map"].includes(property.dataType)) {
+                                    if (!["number", "string", "boolean", "map"].includes(property.type)) {
                                         return null;
                                     }
                                     return <TableRow key={key} style={{ height: "70px" }}>
@@ -157,7 +157,7 @@ export function DataNewPropertiesMapping({
 function getAllPropertyKeys(properties: PropertiesOrBuilders, currentKey?: string): string[] {
     return Object.entries(properties).reduce((acc, [key, property]) => {
         const accumulatedKey = currentKey ? `${currentKey}.${key}` : key;
-        if (typeof property !== "function" && property.dataType === "map" && property.properties) {
+        if (typeof property !== "function" && property.type === "map" && property.properties) {
             const childProperties = getAllPropertyKeys(property.properties, accumulatedKey);
             return [...acc, ...childProperties];
         }
@@ -203,18 +203,18 @@ function DefaultValuesField({
                                 onValueChange,
                                 defaultValue
                             }: { property: Property, onValueChange: (value: any) => void, defaultValue?: any }) {
-    if (property.dataType === "string") {
+    if (property.type === "string") {
         return <TextField size={"medium"}
                           placeholder={"Default value"}
                           value={defaultValue ?? ""}
                           onChange={(event) => onValueChange(event.target.value)}/>;
-    } else if (property.dataType === "number") {
+    } else if (property.type === "number") {
         return <TextField size={"medium"}
                           type={"number"}
                           value={defaultValue ?? ""}
                           placeholder={"Default value"}
                           onChange={(event) => onValueChange(event.target.value)}/>;
-    } else if (property.dataType === "boolean") {
+    } else if (property.type === "boolean") {
         return <BooleanSwitchWithLabel
             value={defaultValue ?? null}
             allowIndeterminate={true}
@@ -226,7 +226,7 @@ function DefaultValuesField({
                     ? "Set value to true"
                     : "Set value to false"}
         />
-    } else if (property.dataType === "date") {
+    } else if (property.type === "date") {
         return <DateTimeField
             mode={property.mode ?? "date"}
             size={"medium"}

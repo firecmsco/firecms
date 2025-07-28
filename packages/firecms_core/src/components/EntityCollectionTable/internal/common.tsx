@@ -1,13 +1,13 @@
 import { EntityCollection, Property, ResolvedArrayProperty, ResolvedProperty } from "../../../types";
 
 export function getTableCellAlignment(property: Property | ResolvedProperty): "right" | "left" | "center" {
-    if (property.dataType === "boolean") {
+    if (property.type === "boolean") {
         return "center";
-    } else if (property.dataType === "number") {
+    } else if (property.type === "number") {
         if (property.enumValues)
             return "left";
         return "right";
-    } else if (property.dataType === "date") {
+    } else if (property.type === "date") {
         return "right";
     } else {
         return "left";
@@ -20,7 +20,7 @@ export function getTablePropertyColumnWidth(property: ResolvedProperty): number 
         return property.columnWidth;
     }
 
-    if (property.dataType === "string") {
+    if (property.type === "string") {
         if (property.url) {
             return 280;
         } else if (property.storage) {
@@ -36,7 +36,7 @@ export function getTablePropertyColumnWidth(property: ResolvedProperty): number 
         } else {
             return 200;
         }
-    } else if (property.dataType === "array") {
+    } else if (property.type === "array") {
         const arrayProperty = property as ResolvedArrayProperty;
         if (arrayProperty.of) {
             if (Array.isArray(property.of)) {
@@ -47,18 +47,18 @@ export function getTablePropertyColumnWidth(property: ResolvedProperty): number 
         } else {
             return 300;
         }
-    } else if (property.dataType === "number") {
+    } else if (property.type === "number") {
         if (property.enumValues) {
             return 200;
         }
         return 140;
-    } else if (property.dataType === "map") {
+    } else if (property.type === "map") {
         return 360;
-    } else if (property.dataType === "date") {
+    } else if (property.type === "date") {
         return 200;
-    } else if (property.dataType === "reference") {
+    } else if (property.type === "reference") {
         return 220;
-    } else if (property.dataType === "boolean") {
+    } else if (property.type === "boolean") {
         return 140;
     } else {
         return 200;

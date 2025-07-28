@@ -12,11 +12,11 @@ export const blogCollectionTemplate:EntityCollection = {
         name: {
             name: "Name",
             validation: { required: true },
-            dataType: "string"
+            type: "string"
         },
         header_image: {
             name: "Header image",
-            dataType: "string",
+            type: "string",
             storage: {
                 storagePath: "images",
                 acceptedFiles: ["image/*"],
@@ -29,26 +29,26 @@ export const blogCollectionTemplate:EntityCollection = {
             name: "Content",
             description: "Content blocks for the blog entry",
             validation: { required: true },
-            dataType: "array",
+            type: "array",
             oneOf: {
                 typeField: "type",
                 valueField: "value",
                 properties: {
                     text: {
-                        dataType: "string",
+                        type: "string",
                         name: "Text",
                         markdown: true
                     },
                     quote: {
-                        dataType: "string",
+                        type: "string",
                         name: "Quote",
                         multiline: true
                     },
                     images: {
                         name: "Images",
-                        dataType: "array",
+                        type: "array",
                         of: {
-                            dataType: "string",
+                            type: "string",
                             storage: {
                                 storagePath: "images",
                                 acceptedFiles: ["image/*"],
@@ -61,9 +61,9 @@ export const blogCollectionTemplate:EntityCollection = {
                     },
                     products: {
                         name: "Products",
-                        dataType: "array",
+                        type: "array",
                         of: {
-                            dataType: "reference",
+                            type: "reference",
                             path: "products",
                             previewProperties: ["name", "main_image"]
                         }
@@ -74,13 +74,13 @@ export const blogCollectionTemplate:EntityCollection = {
         },
         created_on: {
             name: "Created on",
-            dataType: "date",
+            type: "date",
             autoValue: "on_create"
         },
         status: {
             name: "Status",
             validation: { required: true },
-            dataType: "string",
+            type: "string",
             enumValues: {
                 published: {
                     id: "published",
@@ -92,19 +92,19 @@ export const blogCollectionTemplate:EntityCollection = {
         },
         publish_date: {
             name: "Publish date",
-            dataType: "date",
+            type: "date",
             clearable: true
         },
         reviewed: {
             name: "Reviewed",
-            dataType: "boolean"
+            type: "boolean"
         },
         tags: {
             name: "Tags",
             description: "Example of generic array",
-            dataType: "array",
+            type: "array",
             of: {
-                dataType: "string",
+                type: "string",
                 previewAsTag: true
             }
         }

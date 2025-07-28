@@ -147,7 +147,7 @@ function StorageUpload({
             throw Error("Using array properties instead of single one in `of` in ArrayProperty");
         }
         if (arrayProperty.of) {
-            if (arrayProperty.of.dataType !== "string") {
+            if (arrayProperty.of.type !== "string") {
                 throw Error("Storage field using array must be of data type string");
             }
         } else {

@@ -5,13 +5,13 @@ import { DataTableCell } from "./DataTableCell";
 import { FileDownloadIcon, IconButton, Paper, Typography } from "@firecms/ui";
 import { downloadDataAsCsv } from "@firecms/data_export";
 
-export type DataType = "string" | "number" | "date" | "object" | "array";
+export type type = "string" | "number" | "date" | "object" | "array";
 
 export type TableColumn = {
     key: string,
     name: string,
     width?: number,
-    dataType?: DataType
+    type?: type
 };
 
 export type DataTableProps = {
@@ -54,7 +54,7 @@ export function DataTable({
         return {
             key: col.key,
             title: col.name,
-            width: col.width ?? getColumnWidth(col.dataType),
+            width: col.width ?? getColumnWidth(col.type),
             resizable: true,
         };
     });
@@ -93,8 +93,8 @@ export function DataTable({
 
 };
 
-function getColumnWidth(dataType?: DataType) {
-    switch (dataType) {
+function getColumnWidth(type?: type) {
+    switch (type) {
         case "object":
             return 300;
         case "string":
@@ -120,7 +120,7 @@ function extractColumns(newData: object[]): TableColumn[] {
 
     const columns = Object.keys(sampleData[0]).map((key) => {
         const sampleValues = sampleData.map((row) => (row as any)[key]);
-        const type = determineDataType(sampleValues);
+        const type = determinetype(sampleValues);
 
         return {
             key,
@@ -132,11 +132,11 @@ function extractColumns(newData: object[]): TableColumn[] {
     return columns;
 }
 
-function determineDataType(values: any[]): DataType {
-    const typeCounts: { [key in DataType]?: number } = {};
+function determinetype(values: any[]): type {
+    const typeCounts: { [key in type]?: number } = {};
 
     values.forEach((value) => {
-        let type: DataType;
+        let type: type;
 
         if (typeof value === "string") {
             // Check if the string is a date
@@ -160,8 +160,8 @@ function determineDataType(values: any[]): DataType {
 
     // Find the most frequent type
     const mostFrequentType = Object.keys(typeCounts).reduce((a, b) =>
-        typeCounts[a as DataType]! > typeCounts[b as DataType]! ? a : b
+        typeCounts[a as type]! > typeCounts[b as type]! ? a : b
     );
 
-    return mostFrequentType as DataType;
+    return mostFrequentType as type;
 }

@@ -51,15 +51,15 @@ export interface PropertyTableCellProps<T extends CMSType> {
 }
 
 function isStorageProperty(property: ResolvedProperty) {
-    if (property.dataType === "string" && property.markdown)
+    if (property.type === "string" && property.markdown)
         return false;
-    if (property.dataType === "string" && (property as ResolvedStringProperty).storage)
+    if (property.type === "string" && (property as ResolvedStringProperty).storage)
         return true;
-    if (property.dataType === "array") {
+    if (property.type === "array") {
         if (Array.isArray(property.of)) {
             return false;
         } else {
-            return ((property as ResolvedArrayProperty).of as ResolvedProperty)?.dataType === "string" &&
+            return ((property as ResolvedArrayProperty).of as ResolvedProperty)?.type === "string" &&
                 ((property as ResolvedArrayProperty).of as ResolvedStringProperty)?.storage
         }
     }
@@ -253,7 +253,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
 
         if (!customField && (!customPreview || selected)) {
             const isAStorageProperty = isStorageProperty(property);
-            if (property.dataType === "string" && (property as StringProperty).reference?.path) {
+            if (property.type === "string" && (property as StringProperty).reference?.path) {
                 const stringProperty = property as StringProperty;
                 const path = stringProperty.reference?.path as string;
                 const referenceProperty = stringProperty.reference as ReferenceProperty;
@@ -291,7 +291,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 showExpandIcon = true;
                 fullHeight = true;
                 removePadding = true;
-            } else if (selected && property.dataType === "number") {
+            } else if (selected && property.type === "number") {
                 const numberProperty = property as ResolvedNumberProperty;
                 if (numberProperty.enumValues) {
                     innerComponent = <VirtualTableSelect name={propertyKey as string}
@@ -317,7 +317,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                     />;
                     allowScroll = true;
                 }
-            } else if (selected && property.dataType === "string") {
+            } else if (selected && property.type === "string") {
                 const stringProperty = property as ResolvedStringProperty;
                 if (stringProperty.enumValues) {
                     innerComponent = <VirtualTableSelect name={propertyKey as string}
@@ -343,14 +343,14 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                     />;
                     allowScroll = true;
                 }
-            } else if (property.dataType === "boolean") {
+            } else if (property.type === "boolean") {
                 innerComponent = <VirtualTableSwitch error={validationError ?? error}
                                                      disabled={disabled}
                                                      focused={selected}
                                                      internalValue={internalValue as boolean}
                                                      updateValue={updateValue}
                 />;
-            } else if (property.dataType === "date") {
+            } else if (property.type === "date") {
                 innerComponent = <VirtualTableDateField name={propertyKey as string}
                                                         error={validationError ?? error}
                                                         disabled={disabled}
@@ -362,7 +362,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 fullHeight = true;
                 hideOverflow = false;
                 allowScroll = false;
-            } else if (property.dataType === "reference") {
+            } else if (property.type === "reference") {
                 if (typeof property.path === "string") {
                     innerComponent =
                         <TableReferenceField name={propertyKey as string}
@@ -380,14 +380,14 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                         />;
                 }
                 allowScroll = false;
-            } else if (property.dataType === "array") {
+            } else if (property.type === "array") {
                 const arrayProperty = (property as ResolvedArrayProperty);
 
                 if (!arrayProperty.of && !arrayProperty.oneOf) {
                     throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${propertyKey}`);
                 }
                 if (arrayProperty.of && !Array.isArray(arrayProperty.of)) {
-                    if (arrayProperty.of.dataType === "string" || arrayProperty.of.dataType === "number") {
+                    if (arrayProperty.of.type === "string" || arrayProperty.of.type === "number") {
                         if (selected && arrayProperty.of.enumValues) {
                             innerComponent =
                                 <VirtualTableSelect name={propertyKey as string}
@@ -395,7 +395,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                                     disabled={disabled}
                                                     focused={selected}
                                                     small={getPreviewSizeFrom(size) !== "medium"}
-                                                    valueType={arrayProperty.of.dataType}
+                                                    valueType={arrayProperty.of.type}
                                                     enumValues={arrayProperty.of.enumValues}
                                                     error={validationError ?? error}
                                                     internalValue={internalValue as string | number}
@@ -405,7 +405,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                             fullHeight = true;
                             hideOverflow = false;
                         }
-                    } else if (arrayProperty.of.dataType === "reference") {
+                    } else if (arrayProperty.of.type === "reference") {
                         if (typeof arrayProperty.of.path === "string") {
                             innerComponent =
                                 <TableReferenceField

@@ -33,7 +33,7 @@ export function TextFieldBinding<T extends string | number>({
 
     let multiline: boolean | undefined;
     let url: boolean | PreviewType | undefined;
-    if (property.dataType === "string") {
+    if (property.type === "string") {
         multiline = property.multiline;
         url = property.url;
     }
@@ -67,7 +67,7 @@ export function TextFieldBinding<T extends string | number>({
 
     const isMultiline = Boolean(multiline);
 
-    const inputType = property.dataType === "number" ? "number" : undefined;
+    const inputType = property.type === "number" ? "number" : undefined;
     return (<>
             <PropertyIdCopyTooltip propertyKey={propertyKey}>
                 <TextField

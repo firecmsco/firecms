@@ -184,14 +184,14 @@ export const PropertyForm = React.memo(
                     }
                 }
 
-                if (values.dataType === "string") {
+                if (values.type === "string") {
                     if (values.validation?.matches && !isValidRegExp(values.validation?.matches.toString())) {
                         errors.validation = {
                             matches: "Invalid regular expression"
                         }
                     }
                 }
-                if (values.dataType === "reference" && !values.path) {
+                if (values.type === "reference" && !values.path) {
                     errors.path = "You must specify a target collection for the field";
                 }
                 if (values.propertyConfig === "repeat") {
@@ -354,7 +354,7 @@ function PropertyEditFormFields({
 
     const [selectOpen, setSelectOpen] = useState(autoOpenTypeSelect);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    const [selectedFieldConfigId, setSelectedFieldConfigId] = useState<string | undefined>(values?.dataType ? getFieldId(values) : undefined);
+    const [selectedFieldConfigId, setSelectedFieldConfigId] = useState<string | undefined>(values?.type ? getFieldId(values) : undefined);
 
     const deferredValues = useDeferredValue(values);
     const nameFieldRef = useRef<HTMLInputElement>(null);
@@ -649,7 +649,7 @@ function WidgetSelectView({
     const allSupportedFields = Object.entries(supportedFields).concat(Object.entries(propertyConfigs));
 
     const displayedWidgets = (inArray
-        ? allSupportedFields.filter(([_, propertyConfig]) => !isPropertyBuilder(propertyConfig.property) && propertyConfig.property?.dataType !== "array")
+        ? allSupportedFields.filter(([_, propertyConfig]) => !isPropertyBuilder(propertyConfig.property) && propertyConfig.property?.type !== "array")
         : allSupportedFields)
         .map(([key, propertyConfig]) => ({
             [key]: propertyConfig
@@ -766,7 +766,7 @@ export function WidgetSelectViewItem({
                                          existing
                                      }: PropertySelectItemProps) {
     const baseProperty = propertyConfig.property;
-    const shouldWarnChangingDataType = existing && !isPropertyBuilder(baseProperty) && baseProperty.dataType !== initialProperty?.dataType;
+    const shouldWarnChangingtype = existing && !isPropertyBuilder(baseProperty) && baseProperty.type !== initialProperty?.type;
 
     return <Card
         onClick={onClick}
@@ -776,16 +776,16 @@ export function WidgetSelectViewItem({
                 "flex flex-row items-center text-base min-h-[48px]",
             )}>
             <div className={"mr-8"}>
-                <PropertyConfigBadge propertyConfig={propertyConfig} disabled={shouldWarnChangingDataType}/>
+                <PropertyConfigBadge propertyConfig={propertyConfig} disabled={shouldWarnChangingtype}/>
             </div>
             <div>
                 <div className={"flex flex-row gap-2 items-center"}>
-                    {shouldWarnChangingDataType && <Tooltip
+                    {shouldWarnChangingtype && <Tooltip
                         title={"This widget uses a different data type than the initially selected widget. This can cause errors with existing data."}>
                         <WarningIcon size="smallest" className={"w-4"}/>
                     </Tooltip>}
                     <Typography
-                        color={shouldWarnChangingDataType ? "secondary" : undefined}>{propertyConfig.name}</Typography>
+                        color={shouldWarnChangingtype ? "secondary" : undefined}>{propertyConfig.name}</Typography>
                 </div>
 
                 <Typography variant={"caption"}

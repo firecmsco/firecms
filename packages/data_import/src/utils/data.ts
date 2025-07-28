@@ -86,7 +86,7 @@ export function processValueMapping(authController: AuthController, value: any, 
     })
     if (usedProperty === null) return value;
     const from = inferTypeFromValue(value);
-    const to = usedProperty.dataType;
+    const to = usedProperty.type;
 
     if (from === "array" && to === "array" && Array.isArray(value) && usedProperty.of && !isPropertyBuilder(usedProperty.of as PropertyOrBuilder)) {
         return value.map(v => processValueMapping(authController, v, usedProperty.of as Property));

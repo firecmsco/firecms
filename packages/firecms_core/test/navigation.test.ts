@@ -148,7 +148,7 @@ describe("Resolving paths test", () => {
             name: "Translations",
             properties: {
                 name: buildProperty({
-                    dataType: "string",
+                    type: "string",
                     name: "Name"
                 })
             }
@@ -162,7 +162,7 @@ describe("Resolving paths test", () => {
             properties: {
                 reference_value_min: buildProperty({
                     name: "Reference value min",
-                    dataType: "number"
+                    type: "number"
                 })
             },
             subcollections: [jointLocaleCollection]
@@ -176,7 +176,7 @@ describe("Resolving paths test", () => {
             properties: {
                 latin_name: buildProperty({
                     name: "Latin name",
-                    dataType: "string"
+                    type: "string"
                 })
             },
             subcollections: [jointMovementsCollection, jointLocaleCollection]

@@ -25,50 +25,50 @@ export const usersCollection = buildCollection({
     properties: {
         first_name: {
             name: "First name",
-            dataType: "string"
+            type: "string"
         },
         last_name: {
             name: "Last name",
-            dataType: "string"
+            type: "string"
         },
         email: {
             name: "Email",
-            dataType: "string",
+            type: "string",
             email: true
         },
         phone: {
             name: "Phone",
-            dataType: "string"
+            type: "string"
         },
         related_users: {
-            dataType: "array",
+            type: "array",
             name: "Related users",
             of: {
-                dataType: "reference",
+                type: "reference",
                 path: "users"
             }
         },
         liked_products: {
-            dataType: "array",
+            type: "array",
             name: "Liked products",
             description: "Products this user has liked",
             of: {
-                dataType: "reference",
+                type: "reference",
                 path: "products"
             }
         },
         picture: {
             name: "Picture",
-            dataType: "map",
+            type: "map",
             properties: {
                 large: {
                     name: "Large",
-                    dataType: "string",
+                    type: "string",
                     url: "image"
                 },
                 thumbnail: {
                     name: "Thumbnail",
-                    dataType: "string",
+                    type: "string",
                     url: "image"
                 }
             },

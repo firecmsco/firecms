@@ -7,9 +7,9 @@ export function editableProperty(property: PropertyOrBuilder | PropertyOrBuilder
         return false;
     else {
         const eProperty = property as Property;
-        if (eProperty.dataType === "array" && typeof eProperty.of === "function")
+        if (eProperty.type === "array" && typeof eProperty.of === "function")
             return false;
-        else if (eProperty.dataType === "array" && Array.isArray(eProperty.of))
+        else if (eProperty.type === "array" && Array.isArray(eProperty.of))
             return false;
         return Boolean(eProperty.editable);
     }
@@ -22,7 +22,7 @@ export function removeNonEditableProperties(properties: PropertiesOrBuilders<any
             const property = propertyOrBuilder as Property;
             if (!editableProperty(property)) {
                 return undefined;
-            } else if (property.dataType === "map" && property.properties) {
+            } else if (property.type === "map" && property.properties) {
                 return {
                     [key]: {
                         ...property,

@@ -16,7 +16,7 @@ import { EnumValueConfig } from "../../../types";
 
 interface StringNumberFilterFieldProps {
     name: string,
-    dataType: "string" | "number";
+    type: "string" | "number";
     value?: [op: VirtualTableWhereFilterOp, fieldValue: any];
     setValue: (value?: [op: VirtualTableWhereFilterOp, newValue: any]) => void;
     isArray?: boolean;
@@ -43,7 +43,7 @@ export function StringNumberFilterField({
                                             name,
                                             value,
                                             setValue,
-                                            dataType,
+                                            type,
                                             isArray,
                                             enumValues,
                                             title
@@ -115,10 +115,10 @@ export function StringNumberFilterField({
             <div className="flex-grow ml-2 flex flex-col gap-2">
 
                 {!enumValues && <TextField
-                    type={dataType === "number" ? "number" : undefined}
+                    type={type === "number" ? "number" : undefined}
                     value={internalValue !== undefined && internalValue != null ? String(internalValue) : ""}
                     onChange={(evt) => {
-                        const val = dataType === "number"
+                        const val = type === "number"
                             ? parseFloat(evt.target.value)
                             : evt.target.value;
                         updateFilter(operation, val);
@@ -136,7 +136,7 @@ export function StringNumberFilterField({
                         value={typeof internalValue === "string" ? internalValue : ""}
                         onValueChange={(value) => {
                             if (value !== "")
-                                updateFilter(operation, dataType === "number" ? parseInt(value as string) : value as string)
+                                updateFilter(operation, type === "number" ? parseInt(value as string) : value as string)
                         }}
                         endAdornment={internalValue && <IconButton
                             className="absolute right-2 top-3"
@@ -172,7 +172,7 @@ export function StringNumberFilterField({
                         position={"item-aligned"}
                         value={Array.isArray(internalValue) ? internalValue.map(e => String(e)) : []}
                         onValueChange={(value) => {
-                            updateFilter(operation, dataType === "number" ? value.map(v => parseInt(v)) : value)
+                            updateFilter(operation, type === "number" ? value.map(v => parseInt(v)) : value)
                         }}
                         multiple={multiple}
                         endAdornment={internalValue && <IconButton

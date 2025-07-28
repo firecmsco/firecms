@@ -18,7 +18,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                                                                                             size
                                                                                         }: PropertyPreviewProps<T>) {
 
-    if (property.dataType !== "map") {
+    if (property.type !== "map") {
         throw Error("Picked wrong preview component MapPropertyPreview");
     }
 
@@ -58,7 +58,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
             {mapPropertyKeys &&
                 mapPropertyKeys.map((key, index) => {
                     const childProperty = mapProperty.properties![key];
-                    const isArrayOrMap = childProperty.dataType === "map" || childProperty === "array";
+                    const isArrayOrMap = childProperty.type === "map" || childProperty === "array";
                     return (
                         <div
                             key={`map_preview_table_${key}}`}

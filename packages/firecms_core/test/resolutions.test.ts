@@ -11,13 +11,13 @@ const testCollection = buildCollection({
         mainSaturation: {
             name: "Main saturation",
             description: "Saturation applied to all colors when there is no saturation on color applied",
-            dataType: "array",
+            type: "array",
             of: {
-                dataType: "map",
+                type: "map",
                 properties: {
                     type: {
                         name: "Type",
-                        dataType: "string",
+                        type: "string",
                         enumValues: {
                             oneNum: "Saturation without range",
                             fromTo: "Saturation available range",
@@ -34,7 +34,7 @@ const testCollection = buildCollection({
                         if (parentValue === "oneNum") {
                             return ({
                                 name: "Saturation",
-                                dataType: "number",
+                                type: "number",
                                 validation: {
                                     min: 0,
                                     max: 100
@@ -43,11 +43,11 @@ const testCollection = buildCollection({
                         } else if (parentValue === "fromTo") {
                             return ({
                                     name: "Saturation available range",
-                                    dataType: "map",
+                                    type: "map",
                                     properties: {
                                         from: {
                                             name: "From",
-                                            dataType: "number",
+                                            type: "number",
                                             validation: {
                                                 min: 0,
                                                 max: 100
@@ -55,7 +55,7 @@ const testCollection = buildCollection({
                                         },
                                         to: {
                                             name: "To",
-                                            dataType: "number",
+                                            type: "number",
                                             clearable: true,
                                             validation: {
                                                 min: 0,
@@ -67,7 +67,7 @@ const testCollection = buildCollection({
                             )
                         } else {
                             return {
-                                dataType: "string",
+                                type: "string",
                                 name: "Type",
                                 disabled: { hidden: true }
                             };

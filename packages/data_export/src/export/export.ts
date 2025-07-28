@@ -147,7 +147,7 @@ function getExportHeaders<M extends Record<string, any>>(properties: ResolvedPro
  */
 function getHeaders(property: ResolvedProperty, propertyKey: string, prefix = ""): Header[] {
     const currentKey = prefix ? `${prefix}.${propertyKey}` : propertyKey;
-    if (property.dataType === "map" && property.properties) {
+    if (property.type === "map" && property.properties) {
         return Object.entries(property.properties)
             .map(([childKey, p]) => getHeaders(p, childKey, currentKey))
             .flat();
@@ -166,13 +166,13 @@ function processValueForExport(inputValue: any,
 ): any {
 
     let value;
-    if (property.dataType === "map" && property.properties) {
+    if (property.type === "map" && property.properties) {
         value = processValuesForExport(inputValue, property.properties as ResolvedProperties, exportType, dateExportType);
-    } else if (property.dataType === "array") {
+    } else if (property.type === "array") {
         if (property.of && Array.isArray(inputValue)) {
             if (Array.isArray(property.of)) {
                 value = property.of.map((p, i) => processValueForExport(inputValue[i], p, exportType, dateExportType));
-            } else if (property.of.dataType === "map") {
+            } else if (property.of.type === "map") {
                 value = exportType === "csv"
                     ? inputValue.map((e) => JSON.stringify(e))
                     : inputValue.map((e) => processValueForExport(e, property.of as ResolvedProperty, exportType, dateExportType));
@@ -183,10 +183,10 @@ function processValueForExport(inputValue: any,
         } else {
             value = inputValue;
         }
-    } else if (property.dataType === "reference" && inputValue && inputValue.isEntityReference && inputValue.isEntityReference()) {
+    } else if (property.type === "reference" && inputValue && inputValue.isEntityReference && inputValue.isEntityReference()) {
         const ref = inputValue ? inputValue as EntityReference : undefined;
         value = ref ? ref.pathWithId : null;
-    } else if (property.dataType === "date" && inputValue instanceof Date) {
+    } else if (property.type === "date" && inputValue instanceof Date) {
         value = inputValue ? (dateExportType === "timestamp" ? inputValue.getTime() : inputValue.toISOString()) : null;
     } else {
         value = inputValue;

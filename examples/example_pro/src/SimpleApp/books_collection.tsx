@@ -31,51 +31,51 @@ export const booksCollection = buildCollection({
         title: {
             name: "Title",
             validation: { required: true },
-            dataType: "string"
+            type: "string"
         },
         authors: {
             name: "Authors",
-            dataType: "string"
+            type: "string"
         },
         description: {
             name: "Description",
-            dataType: "string",
+            type: "string",
             multiline: true
         },
         spanish_description: {
             name: "Spanish description",
-            dataType: "string",
+            type: "string",
             multiline: true
         },
         thumbnail: {
             name: "Thumbnail",
-            dataType: "string",
+            type: "string",
             url: "image"
         },
         category: {
             name: "Category",
-            dataType: "string",
+            type: "string",
             enumValues: categories
         },
         tags: {
             name: "Tags",
-            dataType: "array",
+            type: "array",
             of: {
-                dataType: "string"
+                type: "string"
             }
         },
         published_year: {
             name: "Published Year",
-            dataType: "number",
+            type: "number",
             validation: { integer: true, min: 0 }
         },
         num_pages: {
             name: "Num pages",
-            dataType: "number"
+            type: "number"
         },
         created_at: {
             name: "Created at",
-            dataType: "date",
+            type: "date",
             autoValue: "on_create"
         }
     }

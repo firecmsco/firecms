@@ -12,7 +12,7 @@ export function cleanPropertiesFromImport(properties: Properties, parentSlug = "
         const slug = slugify(key);
         const fullSlug = parentSlug ? `${parentSlug}.${slug}` : slug;
 
-        if (property.dataType === "map" && property.properties) {
+        if (property.type === "map" && property.properties) {
             const slugifiedResult = cleanPropertiesFromImport(property.properties as Properties, fullSlug);
             return {
                 headersMapping: { ...acc.headersMapping, [key]: fullSlug },

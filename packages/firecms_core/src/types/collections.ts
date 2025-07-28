@@ -28,6 +28,12 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     id: string;
 
     /**
+     * Field used to identify the entity in this collection.
+     * If not specified, the default `id` field will be used.
+     */
+    idField?: keyof M;
+
+    /**
      * Name of the collection, typically plural.
      * E.g. `Products`, `Blog`
      */

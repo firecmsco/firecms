@@ -28,7 +28,7 @@ export function ArrayOfStringsPreview({
     if (Array.isArray(property.of)) {
         throw Error("Using array properties instead of single one in `of` in ArrayProperty");
     }
-    if (!property.of || property.dataType !== "array" || property.of.dataType !== "string")
+    if (!property.of || property.type !== "array" || property.of.type !== "string")
         throw Error("Picked wrong preview component ArrayOfStringsPreview");
 
     if (value && !Array.isArray(value)) {

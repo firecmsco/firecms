@@ -229,7 +229,7 @@ function PropertySelect({
 
     const [selectOpen, setSelectOpen] = useState(false);
 
-    return <Tooltip title={property && widget ? `${widget?.name} - ${property.dataType}` : undefined}
+    return <Tooltip title={property && widget ? `${widget?.name} - ${property.type}` : undefined}
                     open={selectOpen ? false : undefined}>
         <Select
             open={selectOpen}

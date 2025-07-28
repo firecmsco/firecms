@@ -34,7 +34,7 @@ export const EnhanceTextFieldBinding = React.memo(function EnhanceTextFieldBindi
 }) {
 
     let multiline: boolean | undefined = false;
-    if (property.dataType === "string") {
+    if (property.type === "string") {
         multiline = (property.multiline || property.markdown) ?? false;
     }
 
@@ -44,13 +44,13 @@ export const EnhanceTextFieldBinding = React.memo(function EnhanceTextFieldBindi
         setValue
     });
 
-    const internalValue: T = value ?? (property.dataType === "string" ? "" : value === 0 ? 0 : "");
+    const internalValue: T = value ?? (property.type === "string" ? "" : value === 0 ? 0 : "");
 
     return (
         <>
             <PropertyIdCopyTooltip propertyKey={propertyKey}>
                 <AdvancedTextField
-                    inputType={(property.dataType === "number" ? "number" : "text") as InputType<T>}
+                    inputType={(property.type === "number" ? "number" : "text") as InputType<T>}
                     label={<LabelWithIconAndTooltip
                         propertyKey={propertyKey}
                         icon={getIconForProperty(property)}

@@ -216,7 +216,7 @@ export function PropertyTreeEntry({
     let subtree;
     if (typeof propertyOrBuilder === "object") {
         const property = propertyOrBuilder;
-        if (property.dataType === "map" && property.properties) {
+        if (property.type === "map" && property.properties) {
             subtree = <PropertyTree
                 selectedPropertyKey={selectedPropertyKey}
                 namespace={fullId}

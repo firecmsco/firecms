@@ -15,18 +15,18 @@ import {
 import { BooleanSwitchWithLabel, Paper, Select, SelectItem } from "@firecms/ui";
 
 export const conditionProperty = (name: string): MapProperty => ({
-    dataType: "map",
+    type: "map",
     name: name,
     properties: {
         name: {
-            dataType: "string",
+            type: "string",
             name: "Name",
             validation: {
                 required: true
             }
         },
         operator: {
-            dataType: "string",
+            type: "string",
             name: "Operator",
             enumValues: {
                 "==": "==",
@@ -41,12 +41,12 @@ export const conditionProperty = (name: string): MapProperty => ({
         },
         value: {
             name: "Value",
-            dataType: "string",
+            type: "string",
             // @ts-ignore
             Field: UnionField
         },
         and: {
-            dataType: "map",
+            type: "map",
             name: "And",
             Field: ConditionalField,
             customProps: {
@@ -54,7 +54,7 @@ export const conditionProperty = (name: string): MapProperty => ({
             }
         },
         or: {
-            dataType: "map",
+            type: "map",
             name: "Or",
             Field: ConditionalField,
             customProps: {
@@ -117,27 +117,27 @@ function UnionField({
         if (type === "string") {
             return {
                 ...property as ResolvedStringProperty,
-                dataType: "string"
+                type: "string"
             }
         } else if (type === "number") {
             return {
                 ...property as ResolvedNumberProperty,
-                dataType: "number"
+                type: "number"
             }
         } else if (type === "string[]") {
             return {
                 ...property as ResolvedArrayProperty,
-                dataType: "array",
+                type: "array",
                 of: {
-                    dataType: "string"
+                    type: "string"
                 }
             };
         } else if (type === "number[]") {
             return {
                 ...property as ResolvedArrayProperty,
-                dataType: "array",
+                type: "array",
                 of: {
-                    dataType: "number"
+                    type: "number"
                 }
             }
         } else {

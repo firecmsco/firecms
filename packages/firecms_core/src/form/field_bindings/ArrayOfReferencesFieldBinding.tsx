@@ -35,7 +35,7 @@ export function ArrayOfReferencesFieldBinding({
     const minimalistView = minimalistViewProp || property.minimalistView;
 
     const ofProperty = property.of as ResolvedProperty;
-    if (ofProperty.dataType !== "reference") {
+    if (ofProperty.type !== "reference") {
         throw Error("ArrayOfReferencesField expected a property containing references");
     }
 

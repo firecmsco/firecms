@@ -51,9 +51,9 @@ export type ResolvedProperties<M extends Record<string, any> = any> = {
  * @group Entity properties
  */
 export type ResolvedStringProperty =
-    Omit<StringProperty, "enumValues" | "dataType"> &
+    Omit<StringProperty, "enumValues" | "type"> &
     {
-        dataType: "string";
+        type: "string";
         resolved: true;
         enumValues?: EnumValueConfig[];
         fromBuilder: boolean;
@@ -63,9 +63,9 @@ export type ResolvedStringProperty =
  * @group Entity properties
  */
 export type ResolvedNumberProperty =
-    Omit<NumberProperty, "enumValues" | "dataType"> &
+    Omit<NumberProperty, "enumValues" | "type"> &
     {
-        dataType: "number";
+        type: "number";
         resolved: true;
         enumValues?: EnumValueConfig[];
         fromBuilder: boolean;
@@ -75,9 +75,9 @@ export type ResolvedNumberProperty =
  * @group Entity properties
  */
 export type ResolvedBooleanProperty =
-    Omit<BooleanProperty, "dataType"> &
+    Omit<BooleanProperty, "type"> &
     {
-        dataType: "boolean";
+        type: "boolean";
         resolved: true;
         fromBuilder: boolean;
     }
@@ -86,9 +86,9 @@ export type ResolvedBooleanProperty =
  * @group Entity properties
  */
 export type ResolvedTimestampProperty =
-    Omit<DateProperty, "dataType"> &
+    Omit<DateProperty, "type"> &
     {
-        dataType: "date";
+        type: "date";
         resolved: true;
         fromBuilder: boolean;
     }
@@ -97,9 +97,9 @@ export type ResolvedTimestampProperty =
  * @group Entity properties
  */
 export type ResolvedGeopointProperty =
-    Omit<GeopointProperty, "dataType"> &
+    Omit<GeopointProperty, "type"> &
     {
-        dataType: "geopoint";
+        type: "geopoint";
         resolved: true;
         fromBuilder: boolean;
     }
@@ -108,9 +108,9 @@ export type ResolvedGeopointProperty =
  * @group Entity properties
  */
 export type ResolvedReferenceProperty =
-    Omit<ReferenceProperty, "dataType"> &
+    Omit<ReferenceProperty, "type"> &
     {
-        dataType: "reference";
+        type: "reference";
         resolved: true;
         fromBuilder: boolean;
     }
@@ -120,9 +120,9 @@ export type ResolvedReferenceProperty =
  */
 export type ResolvedArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = CMSType>
     =
-    Omit<ArrayProperty, "of" | "oneOf" | "dataType"> &
+    Omit<ArrayProperty, "of" | "oneOf" | "type"> &
     {
-        dataType: "array";
+        type: "array";
         resolved: true;
         of?: ResolvedProperty<any> | ResolvedProperty<any>[],
         oneOf?: {
@@ -138,9 +138,9 @@ export type ResolvedArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMS
  * @group Entity properties
  */
 export type ResolvedMapProperty<T extends Record<string, any> = any> =
-    Omit<MapProperty, "properties" | "dataType" | "propertiesOrder"> &
+    Omit<MapProperty, "properties" | "type" | "propertiesOrder"> &
     {
-        dataType: "map";
+        type: "map";
         resolved: true;
         properties?: ResolvedProperties<T>;
         propertiesOrder?: Extract<keyof T, string>[];

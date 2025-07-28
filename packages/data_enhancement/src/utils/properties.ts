@@ -30,7 +30,7 @@ function getSimpleProperty(property: Property): InputProperty {
     return {
         name: property.name,
         description: property.description,
-        dataType: property.dataType,
+        type: property.type,
         fieldConfigId: fieldId,
         enumValues: "enumValues" in property && property.enumValues
             ? getSimpleEnumValues(property.enumValues)
@@ -41,13 +41,13 @@ function getSimpleProperty(property: Property): InputProperty {
 
 function getSimplifiedProperty(property: PropertyOrBuilder, path: string, value?: any): Record<string, InputProperty> {
     if (isPropertyBuilder(property)) return {};
-    if (property.dataType === "array") {
+    if (property.type === "array") {
 
         if (property.of && !isPropertyBuilder(property.of as PropertyOrBuilder)) {
             const arrayParentProperty: InputProperty = {
                 name: property.name,
                 description: property.description,
-                dataType: property.dataType,
+                type: property.type,
                 fieldConfigId: "repeat",
                 disabled: Boolean(property.disabled || property.readOnly),
                 of: getSimpleProperty(property.of as Property)
@@ -65,7 +65,7 @@ function getSimplifiedProperty(property: PropertyOrBuilder, path: string, value?
             //
             // const existingValuesCount = Array.isArray(value) ? value.length : 0;
             //
-            // const newValuesCount = property.of && !isPropertyBuilder<any, any>(property.of) && (property.of as Property).dataType === "map" ? 1 : 3;
+            // const newValuesCount = property.of && !isPropertyBuilder<any, any>(property.of) && (property.of as Property).type === "map" ? 1 : 3;
             // result = {
             //     ...result,
             //     // ...Array.from(Array(newValuesCount))
@@ -79,7 +79,7 @@ function getSimplifiedProperty(property: PropertyOrBuilder, path: string, value?
             const arrayParentProperty: InputProperty = {
                 name: property.name,
                 description: property.description,
-                dataType: property.dataType,
+                type: property.type,
                 fieldConfigId: "block",
                 disabled: Boolean(property.disabled || property.readOnly),
                 oneOf: {
@@ -112,7 +112,7 @@ function getSimplifiedProperty(property: PropertyOrBuilder, path: string, value?
                 };
             }).reduce((a, b) => ({ ...a, ...b }), { [path]: arrayParentProperty });
         }
-    } else if (property.dataType === "map") {
+    } else if (property.type === "map") {
         if (property.properties) {
             const mapProperties: Record<string, InputProperty> = Object.entries(property.properties)
                 .map(([key, childProperty]) => {
@@ -126,7 +126,7 @@ function getSimplifiedProperty(property: PropertyOrBuilder, path: string, value?
             const mapParentProperty: InputProperty = {
                 name: property.name,
                 description: property.description,
-                dataType: property.dataType,
+                type: property.type,
                 fieldConfigId: "group",
                 disabled: Boolean(property.disabled || property.readOnly)
             };
@@ -138,7 +138,7 @@ function getSimplifiedProperty(property: PropertyOrBuilder, path: string, value?
     } else {
         const fieldId = getFieldId(property);
         if (!fieldId) {
-            console.warn(`No fieldId found for property ${path} with dataType ${property.dataType}`);
+            console.warn(`No fieldId found for property ${path} with type ${property.type}`);
             return {};
         }
         return {

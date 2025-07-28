@@ -32,11 +32,11 @@ export const blogCollection = buildCollection<BlogEntry>({
         name: buildProperty({
             name: "Name",
             validation: { required: true },
-            dataType: "string"
+            type: "string"
         }),
         header_image: buildProperty({
             name: "Header image",
-            dataType: "string",
+            type: "string",
             storage: {
                 storagePath: "images",
                 acceptedFiles: ["image/*"],
@@ -49,27 +49,27 @@ export const blogCollection = buildCollection<BlogEntry>({
             name: "Content",
             description: "Example of a complex array with multiple properties as children",
             validation: { required: true },
-            dataType: "array",
+            type: "array",
             columnWidth: 400,
             oneOf: {
                 typeField: "type",
                 valueField: "value",
                 properties: {
                     text: {
-                        dataType: "string",
+                        type: "string",
                         name: "Text",
                         markdown: true
                     },
                     quote: {
-                        dataType: "string",
+                        type: "string",
                         name: "Quote",
                         multiline: true
                     },
                     images: {
                         name: "Images",
-                        dataType: "array",
+                        type: "array",
                         of: buildProperty<string>({
-                            dataType: "string",
+                            type: "string",
                             storage: {
                                 storagePath: "images",
                                 acceptedFiles: ["image/*"],
@@ -82,9 +82,9 @@ export const blogCollection = buildCollection<BlogEntry>({
                     },
                     products: {
                         name: "Products",
-                        dataType: "array",
+                        type: "array",
                         of: {
-                            dataType: "reference",
+                            type: "reference",
                             path: "products",
                             previewProperties: ["name", "main_image"]
                         }
@@ -94,13 +94,13 @@ export const blogCollection = buildCollection<BlogEntry>({
         }),
         created_on: {
             name: "Created on",
-            dataType: "date",
+            type: "date",
             autoValue: "on_create"
         },
         status: buildProperty(({ values }) => ({
             name: "Status",
             validation: { required: true },
-            dataType: "string",
+            type: "string",
             columnWidth: 140,
             enumValues: {
                 published: {
@@ -114,19 +114,19 @@ export const blogCollection = buildCollection<BlogEntry>({
         })),
         publish_date: buildProperty({
             name: "Publish date",
-            dataType: "date",
+            type: "date",
             clearable: true
         }),
         reviewed: buildProperty({
             name: "Reviewed",
-            dataType: "boolean"
+            type: "boolean"
         }),
         tags: {
             name: "Tags",
             description: "Example of generic array",
-            dataType: "array",
+            type: "array",
             of: {
-                dataType: "string",
+                type: "string",
                 previewAsTag: true
             },
             defaultValue: ["default tag"]

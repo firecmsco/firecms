@@ -84,7 +84,7 @@ export const resolveCollection = <M extends Record<string, any>, >
 
     const properties: Properties = mergeDeep(resolvedProperties, storedProperties);
     const cleanedProperties = Object.entries(properties)
-        .filter(([_, property]) => Boolean(property?.dataType))
+        .filter(([_, property]) => Boolean(property?.type))
         .map(([id, property]) => ({ [id]: property }))
         .reduce((a, b) => ({ ...a, ...b }), {});
 
@@ -154,7 +154,7 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
         });
     } else {
         const property = propertyOrBuilder as Property<T>;
-        if (property.dataType === "map" && property.properties) {
+        if (property.type === "map" && property.properties) {
             const properties = resolveProperties({
                 ignoreMissingFields,
                 ...props,
@@ -166,14 +166,14 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
                 fromBuilder,
                 properties
             } as ResolvedProperty<T>;
-        } else if (property.dataType === "array") {
+        } else if (property.type === "array") {
             resolvedProperty = resolveArrayProperty({
                 property,
                 fromBuilder,
                 ignoreMissingFields,
                 ...props
             }) as ResolvedProperty<any>;
-        } else if ((property.dataType === "string" || property.dataType === "number") && property.enumValues) {
+        } else if ((property.type === "string" || property.type === "number") && property.enumValues) {
             resolvedProperty = resolvePropertyEnum(property, fromBuilder) as ResolvedProperty<any>;
         }
     }
@@ -347,7 +347,7 @@ export function resolveArrayProperty<T extends any[], M>({
             resolvedProperties
         } as ResolvedArrayProperty;
     } else if (!property.Field) {
-        throw Error("The array property needs to declare an 'of' or a 'oneOf' property, or provide a custom `Field`")
+        throw Error(`The array property (${propertyKey}) needs to declare an 'of' or a 'oneOf' property, or provide a custom \`Field\` component`);
     } else {
         return {
             ...property,

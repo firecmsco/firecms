@@ -100,10 +100,10 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
         if (property.widthPercentage !== undefined) {
             return "top-4";
         } else {
-            if (property.dataType === "array" && property.of?.dataType === "string") {
+            if (property.type === "array" && property.of?.type === "string") {
                 return "top-4";
             }
-            return property.dataType === "string" && property.markdown ? "top-3" : "-top-4";
+            return property.type === "string" && property.markdown ? "top-3" : "-top-4";
         }
     }, []);
 
@@ -115,8 +115,8 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
 
     const showEnhanceIcon = !props.disabled && (
         !props.value
-        || (property.dataType === "string" && (property.multiline || property.markdown))
-        || (property.dataType === "array" && property.of?.dataType === "string")
+        || (property.type === "string" && (property.multiline || property.markdown))
+        || (property.type === "array" && property.of?.type === "string")
     );
 
     const indexOfSuggestion = props.value && typeof props.value === "string" && typeof suggestedValue === "string" && props.value.endsWith(suggestedValue) ?
@@ -128,7 +128,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
     } : undefined;
 
     let fieldBinding: React.ReactElement;
-    if (property.dataType === "string" && property.markdown) {
+    if (property.type === "string" && property.markdown) {
         fieldBinding = <MarkdownEditorFieldBinding {...props as FieldProps<any>}
                                                    customProps={{
                                                        highlight: highlightRange,
@@ -136,7 +136,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                                                            aiController: editorAIController,
                                                        }
                                                    }}/>;
-    } else if (property.dataType === "string" && !property.enumValues) {
+    } else if (property.type === "string" && !property.enumValues) {
         fieldBinding = <EnhanceTextFieldBinding {...props as FieldProps<any>}
                                                 highlight={suggestedValue as string}/>;
     } else {
@@ -157,7 +157,7 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
         }).finally(() => setDataLoading(false));
     };
 
-    const allowInstructions = property.dataType === "string" && !property.enumValues;
+    const allowInstructions = property.type === "string" && !property.enumValues;
 
     return <>
 

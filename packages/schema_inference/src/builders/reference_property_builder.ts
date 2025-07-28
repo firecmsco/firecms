@@ -8,7 +8,7 @@ export function buildReferenceProperty({
                                     }: InferencePropertyBuilderProps): Property {
 
     const property: Property = {
-        dataType: "reference",
+        type: "reference",
         path: findCommonInitialStringInPath(valuesResult) ?? "!!!FIX_ME!!!",
         editable: true
     };

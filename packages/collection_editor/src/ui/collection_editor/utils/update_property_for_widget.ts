@@ -19,7 +19,7 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "string",
+                type: "string",
                 propertyConfig: "text_field",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 storage: undefined,
@@ -34,7 +34,7 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "string",
+                type: "string",
                 propertyConfig: "multiline",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 multiline: true,
@@ -49,7 +49,7 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "string",
+                type: "string",
                 propertyConfig: "markdown",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 storage: undefined,
@@ -63,7 +63,7 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "string",
+                type: "string",
                 propertyConfig: "url",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 storage: undefined,
@@ -78,7 +78,7 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "string",
+                type: "string",
                 propertyConfig: "email",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 storage: undefined,
@@ -93,7 +93,7 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "string",
+                type: "string",
                 propertyConfig: "select",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 storage: undefined,
@@ -108,11 +108,11 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "array",
+                type: "array",
                 propertyConfig: "multi_select",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 of: {
-                    dataType: "string",
+                    type: "string",
                     enumValues: propertyData.of?.enumValues ?? []
                 }
             } satisfies ArrayProperty
@@ -121,7 +121,7 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "number",
+                type: "number",
                 propertyConfig: "number_input",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 enumValues: undefined
@@ -131,7 +131,7 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "number",
+                type: "number",
                 propertyConfig: "number_select",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 enumValues: propertyData.enumValues ?? []
@@ -141,11 +141,11 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "array",
+                type: "array",
                 propertyConfig: "multi_number_select",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 of: {
-                    dataType: "number",
+                    type: "number",
                     enumValues: propertyData.of?.enumValues ?? []
                 }
             } satisfies ArrayProperty
@@ -154,7 +154,7 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "string",
+                type: "string",
                 propertyConfig: "file_upload",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 storage: {
@@ -166,11 +166,11 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "array",
+                type: "array",
                 propertyConfig: "multi_file_upload",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 of: {
-                    dataType: "string",
+                    type: "string",
                     storage: propertyData.of?.storage ?? {
                         storagePath: "/"
                     }
@@ -181,7 +181,7 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "map",
+                type: "map",
                 propertyConfig: "group",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 keyValue: false,
@@ -192,7 +192,7 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "map",
+                type: "map",
                 propertyConfig: "key_value",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 keyValue: true,
@@ -203,7 +203,7 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "reference",
+                type: "reference",
                 propertyConfig: "reference",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true
             } satisfies Property
@@ -212,7 +212,7 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "string",
+                type: "string",
                 propertyConfig: "reference_as_string",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true
             } satisfies Property
@@ -221,11 +221,11 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "array",
+                type: "array",
                 propertyConfig: "multi_references",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 of: {
-                    dataType: "reference"
+                    type: "reference"
                 }
             } satisfies ArrayProperty
         );
@@ -233,7 +233,7 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "boolean",
+                type: "boolean",
                 propertyConfig: "switch",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true
             } satisfies BooleanProperty
@@ -242,7 +242,7 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "date",
+                type: "date",
                 propertyConfig: "date_time",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 mode: "date_time"
@@ -252,7 +252,7 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "array",
+                type: "array",
                 propertyConfig: "repeat",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true
             } satisfies ArrayProperty
@@ -261,7 +261,7 @@ export function updatePropertyFromWidget(propertyData: any,
         updatedProperty = mergeDeep(
             propertyData,
             {
-                dataType: "array",
+                type: "array",
                 propertyConfig: "block",
                 editable: propertyData.editable !== undefined ? propertyData.editable : true,
                 oneOf: {

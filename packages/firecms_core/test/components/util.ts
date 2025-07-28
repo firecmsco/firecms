@@ -12,7 +12,7 @@ export const productCollection: EntityCollection = {
     ],
     properties: {
         name: {
-            dataType: "string",
+            type: "string",
             name: "Name",
             multiline: true,
             validation: { required: true }
@@ -20,21 +20,21 @@ export const productCollection: EntityCollection = {
         publisher: {
             name: "Publisher",
             description: "This is an example of a map property",
-            dataType: "map",
+            type: "map",
             properties: {
                 name: {
                     name: "Name",
-                    dataType: "string"
+                    type: "string"
                 },
                 external_id: {
                     name: "External id",
-                    dataType: "string"
+                    type: "string"
                 }
             },
             propertiesOrder: ["name", "external_id"]
         },
         main_image: {
-            dataType: "string",
+            type: "string",
             name: "Image",
             storage: {
                 storagePath: "images",
@@ -49,12 +49,12 @@ export const productCollection: EntityCollection = {
             }
         },
         available: {
-            dataType: "boolean",
+            type: "boolean",
             name: "Available",
             columnWidth: 100
         },
         price: ({ values }: any) => ({
-            dataType: "number",
+            type: "number",
             name: "Price",
             validation: {
                 requiredMessage: "You must set a price between 0 and 1000",

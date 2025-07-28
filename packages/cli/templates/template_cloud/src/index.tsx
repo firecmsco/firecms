@@ -11,7 +11,7 @@ const appConfig: FireCMSAppConfig = {
         name: "String with color",
         key: "color",
         property: {
-            dataType: "string",
+            type: "string",
             name: "Main color",
             Preview: ({ value }) => {
                 return <div style={{

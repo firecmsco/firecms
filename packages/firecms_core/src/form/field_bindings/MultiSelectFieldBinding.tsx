@@ -36,7 +36,7 @@ export function MultiSelectFieldBinding({
         throw Error("Using array properties instead of single one in `of` in ArrayProperty");
     }
 
-    if (of.dataType !== "string" && of.dataType !== "number") {
+    if (of.type !== "string" && of.type !== "number") {
         throw Error("Field misconfiguration: array field of type string or number");
     }
 
@@ -95,7 +95,7 @@ export function MultiSelectFieldBinding({
                     className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
                 onValueChange={(updatedValue: string[]) => {
                     let newValue: EnumType[] | null;
-                    if (of && (of as ResolvedProperty)?.dataType === "number") {
+                    if (of && (of as ResolvedProperty)?.type === "number") {
                         newValue = updatedValue ? (updatedValue as string[]).map((e) => parseFloat(e)) : [];
                     } else {
                         newValue = updatedValue;

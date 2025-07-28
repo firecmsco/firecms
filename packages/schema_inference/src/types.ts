@@ -1,4 +1,4 @@
-import { DataType } from "./cms_types";
+import { type } from "./cms_types";
 
 export type TypesCount = {
     number?: number,
@@ -11,7 +11,7 @@ export type TypesCount = {
     reference?: number
 };
 
-export type TypesCountRecord<K extends keyof DataType = any> = {
+export type TypesCountRecord<K extends keyof type = any> = {
     [P in K]: TypesCount
 };
 

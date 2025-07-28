@@ -29,7 +29,7 @@ export const productsCollection = buildCollection<Product>({
     ],
     properties: {
         name: {
-            dataType: "string",
+            type: "string",
             name: "Name",
             description: "Name of this product",
             clearable: true,
@@ -38,7 +38,7 @@ export const productsCollection = buildCollection<Product>({
             }
         },
         category: {
-            dataType: "string",
+            type: "string",
             name: "Category",
             clearable: true,
             enumValues: {
@@ -50,11 +50,11 @@ export const productsCollection = buildCollection<Product>({
             }
         },
         images: {
-            dataType: "array",
+            type: "array",
             name: "Images",
             hideFromCollection: true,
             of: {
-                dataType: "string",
+                type: "string",
                 storage: {
                     storagePath: "images",
                     acceptedFiles: ["image/*"],
@@ -66,13 +66,13 @@ export const productsCollection = buildCollection<Product>({
             description: "This fields allows uploading multiple images at once"
         },
         available: {
-            dataType: "boolean",
+            type: "boolean",
             name: "Available",
             columnWidth: 100,
             description: "Is this product available in the website"
         },
         price: ({ values }) => ({
-            dataType: "number",
+            type: "number",
             name: "Price",
             validation: {
                 required: true,
@@ -86,7 +86,7 @@ export const productsCollection = buildCollection<Product>({
             }
         }),
         currency: {
-            dataType: "string",
+            type: "string",
             name: "Currency",
             enumValues: [
                 {
@@ -105,63 +105,63 @@ export const productsCollection = buildCollection<Product>({
             }
         },
         public: {
-            dataType: "boolean",
+            type: "boolean",
             name: "Public",
             description: "Should this product be visible in the website"
             // longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros."
         },
         brand: {
-            dataType: "string",
+            type: "string",
             name: "Brand",
             validation: {
                 required: true
             }
         },
         description: {
-            dataType: "string",
+            type: "string",
             name: "Description",
             description: "Example of a markdown field",
             markdown: true
         },
         amazon_link: {
-            dataType: "string",
+            type: "string",
             name: "Amazon link",
             url: true
         },
         related_products: {
-            dataType: "array",
+            type: "array",
             name: "Related products",
             description: "Reference to self",
             of: {
-                dataType: "reference",
+                type: "reference",
                 path: "products"
             }
         },
         publisher: {
             name: "Publisher",
             description: "This is an example of a map property",
-            dataType: "map",
+            type: "map",
             properties: {
                 name: {
                     name: "Name",
-                    dataType: "string"
+                    type: "string"
                 },
                 external_id: {
                     name: "External id",
-                    dataType: "string"
+                    type: "string"
                 }
             }
         },
         added_on: {
-            dataType: "date",
+            type: "date",
             name: "Added on",
             autoValue: "on_create"
         },
         tags: {
-            dataType: "array",
+            type: "array",
             name: "Tags",
             of: {
-                dataType: "string"
+                type: "string"
             }
         }
     }

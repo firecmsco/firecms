@@ -30,7 +30,7 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEn
                 return [null];
             if (property.disabled && typeof property.disabled === "object" && property.disabled.hidden)
                 return [null];
-            if (property.dataType === "map" && property.spreadChildren && property.properties) {
+            if (property.type === "map" && property.spreadChildren && property.properties) {
                 return getColumnKeysForProperty(property, key);
             }
             return [{
@@ -93,7 +93,7 @@ function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: R
 }
 
 export function getColumnKeysForProperty(property: ResolvedProperty, key: string, disabled?: boolean): PropertyColumnConfig[] {
-    if (property.dataType === "map" && property.spreadChildren && property.properties) {
+    if (property.type === "map" && property.spreadChildren && property.properties) {
         return Object.entries(property.properties)
             .flatMap(([childKey, childProperty]) => getColumnKeysForProperty(
                 childProperty,

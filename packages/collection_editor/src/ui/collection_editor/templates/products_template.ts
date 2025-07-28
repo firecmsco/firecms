@@ -9,7 +9,7 @@ export const productsCollectionTemplate: EntityCollection = {
     description: "List of the products currently sold in your shop",
     properties: makePropertiesEditable({
         name: {
-            dataType: "string",
+            type: "string",
             name: "Name",
             description: "Name of this product",
             validation: {
@@ -17,20 +17,20 @@ export const productsCollectionTemplate: EntityCollection = {
             }
         },
         brand: {
-            dataType: "string",
+            type: "string",
             name: "Brand",
             validation: {
                 required: true
             }
         },
         description: {
-            dataType: "string",
+            type: "string",
             name: "Description",
             description: "Description of this product, supports markdown",
             markdown: true
         },
         main_image: {
-            dataType: "string",
+            type: "string",
             name: "Image",
             storage: {
                 storagePath: "images",
@@ -39,13 +39,13 @@ export const productsCollectionTemplate: EntityCollection = {
             description: "Upload field for images"
         },
         available: {
-            dataType: "boolean",
+            type: "boolean",
             name: "Available",
             columnWidth: 100,
             description: "Is this product available in the website"
         },
         price: {
-            dataType: "number",
+            type: "number",
             name: "Price",
             validation: {
                 requiredMessage: "You must set a positive price",
@@ -53,11 +53,11 @@ export const productsCollectionTemplate: EntityCollection = {
             }
         },
         images: {
-            dataType: "array",
+            type: "array",
             name: "Images",
             hideFromCollection: true,
             of: {
-                dataType: "string",
+                type: "string",
                 storage: {
                     storagePath: "images",
                     acceptedFiles: ["image/*"]
@@ -65,22 +65,22 @@ export const productsCollectionTemplate: EntityCollection = {
             }
         },
         related_products: {
-            dataType: "array",
+            type: "array",
             name: "Related products",
             description: "Products related to this one",
             of: {
-                dataType: "reference",
+                type: "reference",
                 path: "products"
             }
         },
         metadata: {
             name: "Metadata",
             description: "This is an example of a map property",
-            dataType: "map",
+            type: "map",
             keyValue: true
         },
         added_on: {
-            dataType: "date",
+            type: "date",
             name: "Added on",
             autoValue: "on_create"
         }
