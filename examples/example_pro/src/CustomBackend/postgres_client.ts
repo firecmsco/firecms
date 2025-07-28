@@ -17,6 +17,7 @@ export interface WebSocketMessage {
     type: string;
     payload?: any;
     subscriptionId?: string;
+    requestId?: string;
     entities?: Entity[];
     entity?: Entity | null;
     error?: string;
@@ -139,6 +140,7 @@ export class PostgresDataSourceClient {
         console.log("🔍 [WebSocket Client] Message type:", message.type);
         console.log("🔍 [WebSocket Client] Message payload:", message.payload);
         console.log("🔍 [WebSocket Client] Subscription ID:", message.subscriptionId);
+        console.log("🔍 [WebSocket Client] Request ID:", message.requestId);
 
         // Handle subscription updates
         if (message.subscriptionId && this.subscriptions.has(message.subscriptionId)) {
@@ -167,25 +169,24 @@ export class PostgresDataSourceClient {
             return;
         }
 
-        // Handle operation responses
-        const requestId = this.generateRequestId(message.type);
-        console.log("🎯 [WebSocket Client] Looking for pending request with ID:", requestId);
-        console.log("🎯 [WebSocket Client] Pending requests:", Array.from(this.pendingRequests.keys()));
-
-        if (this.pendingRequests.has(requestId)) {
-            const { resolve, reject } = this.pendingRequests.get(requestId)!;
-            this.pendingRequests.delete(requestId);
-            console.log("✅ [WebSocket Client] Found matching pending request, resolving:", requestId);
+        // Handle operation responses using requestId
+        if (message.requestId && this.pendingRequests.has(message.requestId)) {
+            const {
+                resolve,
+                reject
+            } = this.pendingRequests.get(message.requestId)!;
+            this.pendingRequests.delete(message.requestId);
+            console.log("✅ [WebSocket Client] Found matching pending request, resolving:", message.requestId);
 
             if (message.type.endsWith("_SUCCESS")) {
-                console.log("✅ [WebSocket Client] Success response for:", requestId, message.payload);
+                console.log("✅ [WebSocket Client] Success response for:", message.requestId, message.payload);
                 resolve(this.sanitizeAndConvert(message.payload));
             } else if (message.type === "ERROR") {
-                console.error("❌ [WebSocket Client] Error response for:", requestId, message.payload);
+                console.error("❌ [WebSocket Client] Error response for:", message.requestId, message.payload);
                 reject(new ApiError(message.payload?.message || "Unknown error", message.payload?.error, message.payload?.code));
             }
         } else {
-            console.warn("⚠️ [WebSocket Client] No matching pending request found for:", requestId);
+            console.warn("⚠️ [WebSocket Client] No matching pending request found for requestId:", message.requestId);
         }
     }
 
@@ -205,11 +206,15 @@ export class PostgresDataSourceClient {
 
     private async sendRequest<T>(type: string, payload: any): Promise<T> {
         return new Promise((resolve, reject) => {
-            const requestId = type;
-            this.pendingRequests.set(requestId, { resolve, reject });
+            const requestId = `${type}_${this.generateSubscriptionId()}`; // Create a unique requestId
+            this.pendingRequests.set(requestId, {
+                resolve,
+                reject
+            });
 
             this.sendMessage({
                 type,
+                requestId, // Send requestId with the message
                 payload: this.sanitizeAndConvert(payload)
             });
 

@@ -234,6 +234,12 @@ export function useBuildDataSource({
                     })
                 : delegateValues;
 
+            console.log("!!!", {
+                delegateValues,
+                updatedValues,
+                properties,
+            })
+
             return usedDelegate.saveEntity({
                 path,
                 collection,

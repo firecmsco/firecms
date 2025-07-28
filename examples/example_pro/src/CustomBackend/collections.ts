@@ -84,7 +84,7 @@ export const machineryCollection = buildCollection({
         },
         serialNumber: {
             name: "Serial Number",
-            validation: { required: true, unique: true },
+            validation: { required: true, },
             dataType: "string"
         },
         acquisitionDate: {
@@ -96,15 +96,18 @@ export const machineryCollection = buildCollection({
             validation: { required: true },
             dataType: "string",
             enumValues: {
-                available: "Available",
-                rented: "Rented",
-                maintenance: "Under Maintenance",
-                retired: "Retired"
+                "Available": "Available",
+                "Rented": "Rented",
+                "Under Maintenance": "Under Maintenance",
+                "Retired": "Retired"
             }
         },
         dailyRate: {
             name: "Daily Rental Rate",
-            validation: { required: true, min: 0 },
+            validation: {
+                required: true,
+                min: 0
+            },
             dataType: "number"
         },
         specifications: {
@@ -147,7 +150,17 @@ export const machineryCollection = buildCollection({
                     acceptedFiles: ["image/*"]
                 }
             }
-        }
+        },
+        createdAt: {
+            name: "Created At",
+            dataType: "date",
+            autoValue: "on_create"
+        },
+        updatedAt: {
+            name: "Updated At",
+            dataType: "date",
+            autoValue: "on_update"
+        },
     }
 });
 
@@ -163,9 +176,10 @@ export const rentalsCollection = buildCollection({
     properties: {
         rentalId: {
             name: "Rental ID",
-            validation: { required: true, unique: true },
+            validation: { required: true, },
             dataType: "string"
         },
+
         customerId: {
             name: "Customer",
             dataType: "reference",
@@ -201,7 +215,10 @@ export const rentalsCollection = buildCollection({
         },
         totalPrice: {
             name: "Total Price",
-            validation: { required: true, min: 0 },
+            validation: {
+                required: true,
+                min: 0
+            },
             dataType: "number"
         },
         paymentStatus: {
@@ -209,10 +226,10 @@ export const rentalsCollection = buildCollection({
             validation: { required: true },
             dataType: "string",
             enumValues: {
-                pending: "Pending",
-                paid: "Paid",
-                partial: "Partially Paid",
-                overdue: "Overdue"
+                "Pending": "Pending",
+                "Paid": "Paid",
+                "Partially Paid": "Partially Paid",
+                "Overdue": "Overdue"
             }
         },
         contractDocumentUrl: {
@@ -238,7 +255,7 @@ export const offersCollection = buildCollection({
     properties: {
         offerId: {
             name: "Offer ID",
-            validation: { required: true, unique: true },
+            validation: { required: true, },
             dataType: "string"
         },
         customerId: {
@@ -264,7 +281,10 @@ export const offersCollection = buildCollection({
         },
         price: {
             name: "Offer Price",
-            validation: { required: true, min: 0 },
+            validation: {
+                required: true,
+                min: 0
+            },
             dataType: "number"
         },
         status: {
@@ -272,12 +292,16 @@ export const offersCollection = buildCollection({
             validation: { required: true },
             dataType: "string",
             enumValues: {
-                draft: "Draft",
-                sent: "Sent",
-                accepted: "Accepted",
-                rejected: "Rejected",
-                expired: "Expired"
+                "Pending": "Pending",
+                "Accepted": "Accepted",
+                "Rejected": "Rejected",
+                "Expired": "Expired"
             }
+        },
+        createdAt: {
+            name: "Created At",
+            dataType: "date",
+            autoValue: "on_create"
         },
         relatedRentalId: {
             name: "Related Rental",
@@ -345,7 +369,10 @@ export const paymentHistoryCollection = buildCollection({
         },
         amount: {
             name: "Amount",
-            validation: { required: true, min: 0 },
+            validation: {
+                required: true,
+                min: 0
+            },
             dataType: "number"
         },
         paymentMethod: {

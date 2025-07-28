@@ -56,7 +56,7 @@ export const backendCollections: BackendCollection[] = [
             status: {
                 type: "string",
                 required: true,
-                enum: ["available", "rented", "maintenance", "retired"]
+                enum: ["Available", "Rented", "Under Maintenance", "Out of Service"]
             },
             dailyRate: {
                 type: "number",
@@ -103,7 +103,7 @@ export const backendCollections: BackendCollection[] = [
             status: {
                 type: "string",
                 required: true,
-                enum: ["active", "completed", "cancelled", "overdue"]
+                enum: ["Active", "Completed", "Overdue", "Cancelled"]
             },
             totalPrice: {
                 type: "number",
@@ -113,7 +113,7 @@ export const backendCollections: BackendCollection[] = [
             paymentStatus: {
                 type: "string",
                 required: true,
-                enum: ["pending", "paid", "partial", "overdue"]
+                enum: ["Paid", "Unpaid", "Partially Paid"]
             },
             contractDocumentUrl: { type: "string" }
         }
@@ -156,7 +156,7 @@ export const backendCollections: BackendCollection[] = [
             status: {
                 type: "string",
                 required: true,
-                enum: ["draft", "sent", "accepted", "rejected", "expired"]
+                enum: ["Pending", "Accepted", "Rejected", "Expired"]
             },
             relatedRentalId: {
                 type: "reference",

@@ -80,15 +80,6 @@ export class RealtimeService extends EventEmitter {
     addClient(clientId: string, ws: WebSocket) {
         this.clients.set(clientId, ws);
 
-        ws.on("message", async (data) => {
-            try {
-                const message: WebSocketMessage = JSON.parse(data.toString());
-                await this.handleMessage(clientId, message);
-            } catch (error) {
-                this.sendError(clientId, "Invalid message format", undefined);
-            }
-        });
-
         ws.on("close", () => {
             this.removeClient(clientId);
         });

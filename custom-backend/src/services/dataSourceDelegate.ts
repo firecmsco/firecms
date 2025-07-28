@@ -7,6 +7,8 @@ import {
     EntityCollection,
     FetchCollectionRequest,
     FetchEntityRequest,
+    ListenCollectionRequest,
+    ListenEntityRequest,
     SaveEntityRequest
 } from "../types";
 import { PgTable } from "drizzle-orm/pg-core";
@@ -17,7 +19,11 @@ export interface DataSourceDelegate {
 
     fetchCollection<M extends Record<string, any>>(props: FetchCollectionRequest<M>): Promise<Entity<M>[]>;
 
+    listenCollection?<M extends Record<string, any>>(props: ListenCollectionRequest<M>): () => void;
+
     fetchEntity<M extends Record<string, any>>(props: FetchEntityRequest<M>): Promise<Entity<M> | undefined>;
+
+    listenEntity?<M extends Record<string, any>>(props: ListenEntityRequest<M>): () => void;
 
     saveEntity<M extends Record<string, any>>(props: SaveEntityRequest<M>): Promise<Entity<M>>;
 
@@ -83,6 +89,85 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
         });
     }
 
+    listenCollection<M extends Record<string, any>>({
+                                                        path,
+                                                        collection,
+                                                        filter,
+                                                        limit,
+                                                        startAfter,
+                                                        orderBy,
+                                                        searchString,
+                                                        order,
+                                                        onUpdate,
+                                                        onError
+                                                    }: ListenCollectionRequest<M>): () => void {
+
+        const subscriptionId = this.generateSubscriptionId();
+
+        console.log("🔄 [DataSourceDelegate] Setting up collection subscription:", subscriptionId);
+        console.log("🔄 [DataSourceDelegate] Collection path:", path);
+
+        // Create a wrapper callback that logs and calls the original callback
+        const callbackWrapper = (entities: Entity<M>[]) => {
+            console.log("🔄 [DataSourceDelegate] Received collection update for path:", path);
+            console.log("🔄 [DataSourceDelegate] Updated entities count:", entities.length);
+            console.log("🔄 [DataSourceDelegate] Updated entity IDs:", entities.map(e => e.id));
+            console.log("🔄 [DataSourceDelegate] Calling onUpdate callback...");
+            onUpdate(entities);
+            console.log("🔄 [DataSourceDelegate] onUpdate callback completed");
+        };
+
+        // Store the subscription in RealtimeService properly using the new public method
+        this.realtimeService.registerDataSourceSubscription(subscriptionId, {
+            clientId: "datasource",
+            type: "collection" as const,
+            path,
+            collectionRequest: {
+                filter,
+                orderBy,
+                order,
+                limit,
+                startAfter,
+                databaseId: collection?.databaseId,
+                searchString
+            }
+        });
+
+        // Store the callback for this subscription
+        this.realtimeService.addSubscriptionCallback(subscriptionId, callbackWrapper);
+
+        console.log("🔄 [DataSourceDelegate] Subscription registered with RealtimeService");
+        console.log("🔄 [DataSourceDelegate] Total subscriptions:", this.realtimeService.subscriptions.size);
+
+        // Send initial data immediately
+        this.fetchCollection({
+            path,
+            collection,
+            filter,
+            limit,
+            startAfter,
+            orderBy,
+            searchString,
+            order
+        }).then(entities => {
+            console.log("🔄 [DataSourceDelegate] Initial data fetched for subscription:", subscriptionId);
+            console.log("🔄 [DataSourceDelegate] Initial entities count:", entities.length);
+            callbackWrapper(entities);
+        }).catch(error => {
+            console.error("🔄 [DataSourceDelegate] Error fetching initial data:", error);
+            if (onError) onError(error);
+        });
+
+        console.log("🔄 [DataSourceDelegate] Collection subscription setup complete:", subscriptionId);
+
+        return () => {
+            console.log("🔄 [DataSourceDelegate] Unsubscribing from collection:", subscriptionId);
+            this.realtimeService.removeSubscriptionCallback(subscriptionId);
+            this.realtimeService.subscriptions.delete(subscriptionId);
+            console.log("🔄 [DataSourceDelegate] Unsubscription complete");
+        };
+    }
+
     async fetchEntity<M extends Record<string, any>>({
                                                          path,
                                                          entityId,
@@ -94,6 +179,51 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
             entityId,
             databaseId || collection?.databaseId
         );
+    }
+
+    listenEntity<M extends Record<string, any>>({
+                                                    path,
+                                                    entityId,
+                                                    collection,
+                                                    onUpdate,
+                                                    onError
+                                                }: ListenEntityRequest<M>): () => void {
+
+        const subscriptionId = this.generateSubscriptionId();
+        console.log("🔄 [DataSourceDelegate] Setting up ENTITY subscription:", subscriptionId);
+
+        // Create a wrapper callback that logs and calls the original callback
+        const callbackWrapper = (entity: Entity<M> | null) => {
+            console.log("🔄 [DataSourceDelegate] Received entity update for path:", path, "ID:", entityId);
+            onUpdate(entity);
+        };
+
+        // Register the subscription with the RealtimeService
+        this.realtimeService.registerDataSourceSubscription(subscriptionId, {
+            clientId: "datasource",
+            type: "entity" as const,
+            path,
+            entityId
+        });
+
+        // Store the callback for this subscription
+        this.realtimeService.addSubscriptionCallback(subscriptionId, callbackWrapper);
+
+        // Fetch initial data
+        this.fetchEntity({ path, entityId, collection })
+            .then(entity => {
+                if (entity) onUpdate(entity);
+            })
+            .catch(error => {
+                if (onError) onError(error as Error);
+            });
+
+        // Return the unsubscribe function
+        return () => {
+            console.log("🔄 [DataSourceDelegate] Unsubscribing from entity:", subscriptionId);
+            this.realtimeService.removeSubscriptionCallback(subscriptionId);
+            this.realtimeService.subscriptions.delete(subscriptionId);
+        };
     }
 
     async saveEntity<M extends Record<string, any>>({

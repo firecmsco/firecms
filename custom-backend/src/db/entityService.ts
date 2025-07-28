@@ -121,6 +121,7 @@ export class EntityService {
         if (result.length === 0) return undefined;
 
         const entity = result[0];
+        console.log("Fetched entity:", entity);
         return {
             id: (entity as any)[idInfo.fieldName].toString(),
             path: path,
@@ -213,6 +214,9 @@ export class EntityService {
 
         const results = await query;
 
+
+        console.log("Fetched collection:", results);
+
         return results.map((entity: any) => ({
             id: entity[idInfo.fieldName].toString(),
             path: path,
@@ -230,23 +234,21 @@ export class EntityService {
         const table = this.getTableForPath(path);
         const idInfo = this.getIdFieldInfo(path);
         const idField = (table as any)[idInfo.fieldName];
-        const now = new Date();
 
-        const updatedValues = sanitizeAndConvertDates(values);
+        const entityData = sanitizeAndConvertDates(values);
 
-        // Add timestamps to the data
-        const entityData = {
-            ...updatedValues,
-            updatedAt: now
-        };
+        console.log("Saving entity", entityData);
 
         if (entityId) {
             // Update existing entity
             const parsedId = this.parseIdValue(entityId, idInfo.type);
-            await this.db
+            const updateQuery = this.db
                 .update(table)
                 .set(entityData)
                 .where(eq(idField, parsedId));
+
+            console.log("🔍 [EntityService] Update SQL:", updateQuery.toSQL());
+            await updateQuery;
 
             return {
                 id: entityId,
@@ -255,18 +257,17 @@ export class EntityService {
                 databaseId
             };
         } else {
-            // Insert new entity
-            const insertData = {
-                ...entityData,
-                createdAt: now
-            };
-
-            const result = await this.db
+            const insertQuery = this.db
                 .insert(table)
-                .values(insertData)
+                .values(entityData)
                 .returning({ id: idField });
 
-            const newId = result[0].id.toString();
+            console.log("🔍 [EntityService] Insert SQL:", insertQuery.toSQL());
+            console.log("🔍 [EntityService] Entity data being inserted:", JSON.stringify(entityData, null, 2));
+
+            const result = await insertQuery;
+
+            const newId = result[0].id;
 
             return {
                 id: newId,
