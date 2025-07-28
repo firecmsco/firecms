@@ -1,16 +1,17 @@
-import { useCallback, useRef, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { PostgresDataSourceClient } from "./postgres_client";
 import {
     DataSourceDelegate,
+    DeleteEntityProps,
     Entity,
     EntityCollection,
+    EntityReference,
     FetchCollectionProps,
     FetchEntityProps,
+    FilterCombinationValidProps,
     ListenCollectionProps,
     ListenEntityProps,
-    SaveEntityProps,
-    DeleteEntityProps,
-    FilterCombinationValidProps
+    SaveEntityProps
 } from "@firecms/core";
 
 export interface PostgresDataSourceProps {
@@ -28,10 +29,10 @@ export interface PostgresDelegate extends DataSourceDelegate {
  * This is a drop-in replacement for useFirestoreDelegate
  */
 export function usePostgresDelegate({
-    baseUrl,
-    websocketUrl,
-    headers
-}: PostgresDataSourceProps): PostgresDelegate {
+                                        baseUrl,
+                                        websocketUrl,
+                                        headers
+                                    }: PostgresDataSourceProps): PostgresDelegate {
 
     const clientRef = useRef<PostgresDataSourceClient>();
 
@@ -54,15 +55,15 @@ export function usePostgresDelegate({
 
         // Required methods matching FireCMS DataSourceDelegate interface
         fetchCollection: useCallback(async <M extends Record<string, any>>({
-            path,
-            filter,
-            limit,
-            startAfter,
-            searchString,
-            orderBy,
-            order,
-            collection
-        }: FetchCollectionProps<M>): Promise<Entity<M>[]> => {
+                                                                               path,
+                                                                               filter,
+                                                                               limit,
+                                                                               startAfter,
+                                                                               searchString,
+                                                                               orderBy,
+                                                                               order,
+                                                                               collection
+                                                                           }: FetchCollectionProps<M>): Promise<Entity<M>[]> => {
             return client.fetchCollection({
                 path,
                 collection,
@@ -76,17 +77,17 @@ export function usePostgresDelegate({
         }, [client]),
 
         listenCollection: useCallback(<M extends Record<string, any>>({
-            path,
-            filter,
-            limit,
-            startAfter,
-            searchString,
-            orderBy,
-            order,
-            onUpdate,
-            onError,
-            collection
-        }: ListenCollectionProps<M>): () => void => {
+                                                                          path,
+                                                                          filter,
+                                                                          limit,
+                                                                          startAfter,
+                                                                          searchString,
+                                                                          orderBy,
+                                                                          order,
+                                                                          onUpdate,
+                                                                          onError,
+                                                                          collection
+                                                                      }: ListenCollectionProps<M>): () => void => {
             return client.listenCollection(
                 {
                     path,
@@ -98,16 +99,16 @@ export function usePostgresDelegate({
                     searchString,
                     order
                 },
-                onUpdate,
+                (data) => onUpdate(data.map(delegateToCMSModel)),
                 onError
             );
         }, [client]),
 
         fetchEntity: useCallback(async <M extends Record<string, any>>({
-            path,
-            entityId,
-            collection
-        }: FetchEntityProps<M>): Promise<Entity<M> | undefined> => {
+                                                                           path,
+                                                                           entityId,
+                                                                           collection
+                                                                       }: FetchEntityProps<M>): Promise<Entity<M> | undefined> => {
             return client.fetchEntity({
                 path,
                 entityId,
@@ -116,12 +117,12 @@ export function usePostgresDelegate({
         }, [client]),
 
         listenEntity: useCallback(<M extends Record<string, any>>({
-            path,
-            entityId,
-            onUpdate,
-            onError,
-            collection
-        }: ListenEntityProps<M>): () => void => {
+                                                                      path,
+                                                                      entityId,
+                                                                      onUpdate,
+                                                                      onError,
+                                                                      collection
+                                                                  }: ListenEntityProps<M>): () => void => {
             return client.listenEntity(
                 {
                     path,
@@ -134,12 +135,12 @@ export function usePostgresDelegate({
         }, [client]),
 
         saveEntity: useCallback(async <M extends Record<string, any>>({
-            path,
-            entityId,
-            values,
-            collection,
-            status
-        }: SaveEntityProps<M>): Promise<Entity<M>> => {
+                                                                          path,
+                                                                          entityId,
+                                                                          values,
+                                                                          collection,
+                                                                          status
+                                                                      }: SaveEntityProps<M>): Promise<Entity<M>> => {
             return client.saveEntity({
                 path,
                 entityId,
@@ -150,9 +151,9 @@ export function usePostgresDelegate({
         }, [client]),
 
         deleteEntity: useCallback(async <M extends Record<string, any>>({
-            entity,
-            collection
-        }: DeleteEntityProps<M>): Promise<void> => {
+                                                                            entity,
+                                                                            collection
+                                                                        }: DeleteEntityProps<M>): Promise<void> => {
             return client.deleteEntity({
                 entity,
                 collection
@@ -210,6 +211,19 @@ function delegateToCMSModel(data: any): any {
 
     if (data instanceof Date) return data;
 
+    // Check if this is a reference object that should be converted to EntityReference
+    if (typeof data === "object" &&
+        !Array.isArray(data) &&
+        Object.prototype.hasOwnProperty.call(data, "id") &&
+        Object.prototype.hasOwnProperty.call(data, "path") &&
+        Object.prototype.hasOwnProperty.call(data, "type") &&
+        data.type === "reference" &&
+        typeof data.id !== "undefined" &&
+        typeof data.path === "string") {
+        // Convert reference object to EntityReference instance
+        return new EntityReference(data.id, data.path);
+    }
+
     if (Array.isArray(data)) {
         return data.map(item => delegateToCMSModel(item));
     }
@@ -230,6 +244,15 @@ function cmsToDelegateModel(data: any): any {
     if (data === null) return data;
 
     if (data instanceof Date) return data;
+
+    // Convert EntityReference instances back to reference objects for the backend
+    if (data instanceof EntityReference) {
+        return {
+            id: data.id,
+            path: data.path,
+            type: "reference"
+        };
+    }
 
     if (Array.isArray(data)) {
         return data.map(item => cmsToDelegateModel(item));

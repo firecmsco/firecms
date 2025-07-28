@@ -162,7 +162,7 @@ export function useFirestoreDelegate({
 
         const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
 
-        return getDoc(doc(firestore, path, entityId))
+        return getDoc(doc(firestore, path, String(entityId)))
             .then((docSnapshot) => {
                 if (!docSnapshot.exists()) {
                     return undefined;
@@ -185,7 +185,7 @@ export function useFirestoreDelegate({
         const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
 
         return onSnapshot(
-            doc(firestore, path, entityId),
+            doc(firestore, path, String(entityId)),
             {
                 next: (docSnapshot) => {
                     onUpdate(createEntityFromDocument(docSnapshot, databaseId));
@@ -236,7 +236,7 @@ export function useFirestoreDelegate({
             }
 
             const entities: Entity<M>[] = [];
-            const addedEntitiesSet = new Set<string>();
+            const addedEntitiesSet = new Set<string | number>();
             subscriptions = (ids ?? [])
                 .map((entityId) => {
                         return listenEntity({
@@ -244,7 +244,7 @@ export function useFirestoreDelegate({
                             entityId,
                             onUpdate: (entity: Entity<any>) => {
                                 if (entity.values) {
-                                    if (!addedEntitiesSet.has(entity.id)) {
+                                    if (entity.id && !addedEntitiesSet.has(entity.id)) {
                                         addedEntitiesSet.add(entity.id);
                                         entities.push(entity);
                                         onUpdate(entities);
@@ -474,7 +474,7 @@ export function useFirestoreDelegate({
             let documentReference: DocumentReference;
             if (entityId) {
                 console.log("Saving entity with id", entityId);
-                documentReference = doc(collectionReference, entityId);
+                documentReference = doc(collectionReference, String(entityId));
             } else {
                 documentReference = doc(collectionReference);
             }
@@ -507,7 +507,7 @@ export function useFirestoreDelegate({
             const databaseId = entity.databaseId;
             const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
 
-            return deleteDoc(doc(firestore, entity.path, entity.id));
+            return deleteDoc(doc(firestore, entity.path, String(entity.id)));
         }, [firebaseApp]),
 
         /**

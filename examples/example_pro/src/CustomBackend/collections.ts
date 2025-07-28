@@ -44,7 +44,6 @@ export const allCollections: EntityCollection[] = [
                 type: "string",
                 validation: {
                     required: true,
-                    unique: true
                 },
 
             },
@@ -94,9 +93,7 @@ export const allCollections: EntityCollection[] = [
                 type: "string",
                 validation: {
                     required: true,
-                    unique: true
-                },
-
+                }
             },
             customerId: {
                 type: "reference",
@@ -160,9 +157,7 @@ export const allCollections: EntityCollection[] = [
                 type: "string",
                 validation: {
                     required: true,
-                    unique: true
-                },
-
+                }
             },
             customerId: {
                 type: "reference",

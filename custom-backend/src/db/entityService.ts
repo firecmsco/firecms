@@ -1,8 +1,8 @@
 import { and, asc, desc, eq, ilike, or, sql } from "drizzle-orm";
-import { Entity as FireCMSEntity, FilterValues, WhereFilterOp } from "../types";
 import { PgTable } from "drizzle-orm/pg-core";
 import { collectionRegistry } from "../collections/registry";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
+import { Entity, FilterValues, WhereFilterOp } from "@firecms/core";
 
 function sanitizeAndConvertDates(obj: any): any {
     if (obj === null || obj === undefined) {
@@ -47,6 +47,143 @@ function sanitizeAndConvertDates(obj: any): any {
     return obj;
 }
 
+// Transform references for database storage (reference objects to IDs)
+function transformReferencesToIds(entity: any, properties: Record<string, any>): any {
+    if (!entity || !properties) return entity;
+
+    console.log("🔄 [transformReferencesToIds] Starting transformation");
+    console.log("🔄 [transformReferencesToIds] Entity keys:", Object.keys(entity));
+    console.log("🔄 [transformReferencesToIds] Properties keys:", Object.keys(properties));
+
+    const result: Record<string, any> = {};
+
+    for (const [key, value] of Object.entries(entity)) {
+        const property = properties[key];
+        if (!property) {
+            console.log(`🔄 [transformReferencesToIds] No property config found for key: ${key}`);
+            result[key] = value;
+            continue;
+        }
+
+        console.log(`🔄 [transformReferencesToIds] Processing ${key}:`, {
+            value,
+            propertyType: property.dataType || property.type,
+            hasPath: !!property.path
+        });
+
+        result[key] = transformPropertyToId(value, property);
+    }
+
+    console.log("🔄 [transformReferencesToIds] Final result:", result);
+    return result;
+}
+
+function transformPropertyToId(value: any, property: any): any {
+    if (value === null || value === undefined) {
+        return value;
+    }
+
+    const propertyType = property.dataType || property.type;
+    console.log(`🔄 [transformPropertyToId] Property type: ${propertyType}, value:`, value);
+
+    switch (propertyType) {
+        case "reference":
+            // Transform reference object to ID
+            if (typeof value === "object" && value.id !== undefined) {
+                console.log(`🔄 [transformPropertyToId] Transforming reference ${value.id} from path ${value.path}`);
+                return value.id;
+            }
+            console.log(`🔄 [transformPropertyToId] Reference value is not an object or has no id:`, value);
+            return value;
+
+        case "array":
+            if (Array.isArray(value) && property.of) {
+                return value.map(item => transformPropertyToId(item, property.of));
+            }
+            return value;
+
+        case "map":
+            if (typeof value === "object" && property.properties) {
+                const result: Record<string, any> = {};
+                for (const [subKey, subValue] of Object.entries(value)) {
+                    const subProperty = property.properties[subKey];
+                    if (subProperty) {
+                        result[subKey] = transformPropertyToId(subValue, subProperty);
+                    } else {
+                        result[subKey] = subValue;
+                    }
+                }
+                return result;
+            }
+            return value;
+
+        default:
+            return value;
+    }
+}
+
+// Transform IDs back to reference objects for frontend
+function transformIdsToReferences(entity: any, properties: Record<string, any>): any {
+    if (!entity || !properties) return entity;
+
+    const result: Record<string, any> = {};
+
+    for (const [key, value] of Object.entries(entity)) {
+        const property = properties[key];
+        if (!property) {
+            result[key] = value;
+            continue;
+        }
+
+        result[key] = transformPropertyFromId(value, property);
+    }
+
+    return result;
+}
+
+function transformPropertyFromId(value: any, property: any): any {
+    if (value === null || value === undefined) {
+        return value;
+    }
+
+    switch (property.dataType || property.type) {
+        case "reference":
+            // Transform ID back to reference object with type information
+            if (typeof value === "string" || typeof value === "number") {
+                return {
+                    id: value.toString(),
+                    path: property.path,
+                    type: "reference"
+                };
+            }
+            return value;
+
+        case "array":
+            if (Array.isArray(value) && property.of) {
+                return value.map(item => transformPropertyFromId(item, property.of));
+            }
+            return value;
+
+        case "map":
+            if (typeof value === "object" && property.properties) {
+                const result: Record<string, any> = {};
+                for (const [subKey, subValue] of Object.entries(value)) {
+                    const subProperty = property.properties[subKey];
+                    if (subProperty) {
+                        result[subKey] = transformPropertyFromId(subValue, subProperty);
+                    } else {
+                        result[subKey] = subValue;
+                    }
+                }
+                return result;
+            }
+            return value;
+
+        default:
+            return value;
+    }
+}
+
 export class EntityService {
     constructor(private db: NodePgDatabase<any>, private tables: Record<string, PgTable<any>>) {
     }
@@ -64,7 +201,6 @@ export class EntityService {
 
     private getIdFieldInfo(path: string) {
         const collection = collectionRegistry.get(path);
-        console.log("getIdFieldInfo", { path, collection });
         if (!collection) {
             throw new Error(`Collection not found for path: ${path}`);
         }
@@ -107,7 +243,7 @@ export class EntityService {
         path: string,
         entityId: string,
         databaseId?: string
-    ): Promise<FireCMSEntity<M> | undefined> {
+    ): Promise<Entity<M> | undefined> {
         const table = this.getTableForPath(path);
         const idInfo = this.getIdFieldInfo(path);
         console.log("idInfo", { path, idInfo });
@@ -122,12 +258,19 @@ export class EntityService {
 
         if (result.length === 0) return undefined;
 
-        const entity = result[0];
-        console.log("Fetched entity:", entity);
+        const raw = result[0];
+        const collection = collectionRegistry.get(path);
+
+        // Transform IDs back to reference objects and apply type conversion
+        let values = raw;
+        if (collection) {
+            values = transformIdsToReferences(raw, collection.properties);
+        }
+
         return {
-            id: (entity as any)[idInfo.fieldName].toString(),
+            id: (raw as any)[idInfo.fieldName].toString(),
             path: path,
-            values: entity as M,
+            values: values as M,
             databaseId
         };
     }
@@ -142,7 +285,7 @@ export class EntityService {
             startAfter?: any;
             databaseId?: string;
         } = {}
-    ): Promise<FireCMSEntity<M>[]> {
+    ): Promise<Entity<M>[]> {
         const table = this.getTableForPath(path);
         const idInfo = this.getIdFieldInfo(path);
         const idField = (table as any)[idInfo.fieldName];
@@ -215,16 +358,24 @@ export class EntityService {
         }
 
         const results = await query;
-
+        const collection = collectionRegistry.get(path);
 
         console.log("Fetched collection:", results);
 
-        return results.map((entity: any) => ({
-            id: entity[idInfo.fieldName].toString(),
-            path: path,
-            values: entity as M,
-            databaseId: options.databaseId
-        }));
+        return results.map((entity: any) => {
+            // Transform IDs back to reference objects
+            let values = entity;
+            if (collection) {
+                values = transformIdsToReferences(entity, collection.properties);
+            }
+
+            return {
+                id: entity[idInfo.fieldName].toString(),
+                path: path,
+                values: values as M,
+                databaseId: options.databaseId
+            };
+        });
     }
 
     async saveEntity<M extends Record<string, any>>(
@@ -232,14 +383,20 @@ export class EntityService {
         values: Partial<M>,
         entityId?: string,
         databaseId?: string
-    ): Promise<FireCMSEntity<M>> {
+    ): Promise<Entity<M>> {
         const table = this.getTableForPath(path);
         const idInfo = this.getIdFieldInfo(path);
         const idField = (table as any)[idInfo.fieldName];
+        const collection = collectionRegistry.get(path);
 
-        const entityData = sanitizeAndConvertDates(values);
+        // Transform references to IDs, map field names, then sanitize
+        let processedData = values;
+        if (collection) {
+            processedData = transformReferencesToIds(values, collection.properties);
+        }
+        const entityData = sanitizeAndConvertDates(processedData);
 
-        console.log("Saving entity", entityData);
+        console.log("Saving entity after reference transformation:", entityData);
 
         if (entityId) {
             // Update existing entity
@@ -252,12 +409,9 @@ export class EntityService {
             console.log("🔍 [EntityService] Update SQL:", updateQuery.toSQL());
             await updateQuery;
 
-            return {
-                id: entityId,
-                path,
-                values: values as M,
-                databaseId
-            };
+            // Fetch the updated entity to return with proper reference objects
+            const updatedEntity = await this.fetchEntity<M>(path, entityId, databaseId);
+            return updatedEntity!;
         } else {
             const insertQuery = this.db
                 .insert(table)
@@ -268,15 +422,11 @@ export class EntityService {
             console.log("🔍 [EntityService] Entity data being inserted:", JSON.stringify(entityData, null, 2));
 
             const result = await insertQuery;
-
             const newId = result[0].id;
 
-            return {
-                id: newId,
-                path,
-                values: values as M,
-                databaseId
-            };
+            // Fetch the newly created entity to return with proper reference objects
+            const newEntity = await this.fetchEntity<M>(path, newId.toString(), databaseId);
+            return newEntity!;
         }
     }
 
@@ -344,7 +494,7 @@ export class EntityService {
         path: string,
         searchString: string,
         databaseId?: string
-    ): Promise<FireCMSEntity<M>[]> {
+    ): Promise<Entity<M>[]> {
         const table = this.getTableForPath(path);
         const collection = collectionRegistry.get(path);
         const idInfo = this.getIdFieldInfo(path);
@@ -385,11 +535,19 @@ export class EntityService {
             .orderBy(desc(idField))
             .limit(50);
 
-        return results.map((entity: any) => ({
-            id: entity[idInfo.fieldName].toString(),
-            path: path,
-            values: entity as M,
-            databaseId
-        }));
+        return results.map((entity: any) => {
+            // Transform IDs back to reference objects
+            let values = entity;
+            if (collection) {
+                values = transformIdsToReferences(entity, collection.properties);
+            }
+
+            return {
+                id: entity[idInfo.fieldName].toString(),
+                path: path,
+                values: values as M,
+                databaseId
+            };
+        });
     }
 }

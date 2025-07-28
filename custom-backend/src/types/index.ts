@@ -1,6 +1,4 @@
-import { Entity, EntityCollection, EntityStatus, WhereFilterOp } from "@firecms/core";
-
-export type FilterValues<T extends string> = Partial<Record<T, [WhereFilterOp, any]>>;
+import { Entity, EntityCollection, EntityStatus, FilterValues, WhereFilterOp } from "@firecms/core";
 
 // These should match exactly with FireCMS core types
 export interface FetchCollectionProps<M extends Record<string, any> = any> {

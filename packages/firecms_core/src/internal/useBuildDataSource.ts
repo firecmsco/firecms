@@ -250,7 +250,7 @@ export function useBuildDataSource({
                 return {
                     id: res.id,
                     path: res.path,
-                    values: usedDelegate.delegateToCMSModel(updatedValues)
+                    values: usedDelegate.delegateToCMSModel(updatedValues),
                 } as Entity<M>;
             });
         }, [delegate.saveEntity, navigationController.getCollection]),

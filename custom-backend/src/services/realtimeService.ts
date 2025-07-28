@@ -194,29 +194,38 @@ export class RealtimeService extends EventEmitter {
     async notifyEntityUpdate(path: string, entityId: string, entity: Entity | null, databaseId?: string) {
         console.log("🔔 [RealtimeService] notifyEntityUpdate called for path:", path, "entityId:", entityId, "isDelete:", entity === null);
 
-        // Find all relevant WebSocket subscriptions for this path
-        const webSocketSubscriptions = Array.from(this._subscriptions.entries()).filter(([_, sub]) => {
+        // Find all relevant subscriptions (both WebSocket and DataSource callbacks)
+        const allSubscriptions = Array.from(this._subscriptions.entries()).filter(([_, sub]) => {
             const isPathMatch = sub.path === path;
-            const isClientActive = sub.clientId !== "datasource" && this.clients.has(sub.clientId);
-
-            if (!isPathMatch || !isClientActive) return false;
 
             // For entity subscriptions, check if the entityId matches
             if (sub.type === "entity") {
-                return sub.entityId === entityId;
+                return isPathMatch && sub.entityId === entityId;
             }
             // For collection subscriptions, it's always relevant if the path matches
             if (sub.type === "collection") {
-                return true;
+                return isPathMatch;
             }
             return false;
         });
 
-        console.log(`📡 [RealtimeService] Found ${webSocketSubscriptions.length} active WebSocket subscriptions for path: ${path}`);
+        console.log(`📡 [RealtimeService] Found ${allSubscriptions.length} total subscriptions for path: ${path}`);
 
+        // Separate WebSocket subscriptions from DataSource callback subscriptions
+        const webSocketSubscriptions = allSubscriptions.filter(([_, sub]) =>
+            sub.clientId !== "datasource" && this.clients.has(sub.clientId)
+        );
+
+        const dataSourceSubscriptions = allSubscriptions.filter(([subscriptionId, sub]) =>
+            sub.clientId === "datasource" && this.subscriptionCallbacks.has(subscriptionId)
+        );
+
+        console.log(`📡 [RealtimeService] WebSocket subscriptions: ${webSocketSubscriptions.length}, DataSource subscriptions: ${dataSourceSubscriptions.length}`);
+
+        // Handle WebSocket subscriptions
         for (const [subscriptionId, subscription] of webSocketSubscriptions) {
             try {
-                console.log(`🔄 [RealtimeService] Processing subscription: ${subscriptionId} of type: ${subscription.type}`);
+                console.log(`🔄 [RealtimeService] Processing WebSocket subscription: ${subscriptionId} of type: ${subscription.type}`);
 
                 if (subscription.type === "entity") {
                     // Send entity update directly
@@ -250,8 +259,55 @@ export class RealtimeService extends EventEmitter {
                     this.sendCollectionUpdate(subscription.clientId, subscriptionId, entities);
                 }
             } catch (error) {
-                console.error(`❌ [RealtimeService] Error processing subscription ${subscriptionId}:`, error);
+                console.error(`❌ [RealtimeService] Error processing WebSocket subscription ${subscriptionId}:`, error);
                 this.sendError(subscription.clientId, `Failed to process update for subscription ${subscriptionId}`, subscriptionId);
+            }
+        }
+
+        // Handle DataSource callback subscriptions
+        for (const [subscriptionId, subscription] of dataSourceSubscriptions) {
+            try {
+                console.log(`🔄 [RealtimeService] Processing DataSource subscription: ${subscriptionId} of type: ${subscription.type}`);
+
+                const callback = this.subscriptionCallbacks.get(subscriptionId);
+                if (!callback) {
+                    console.log(`⚠️ [RealtimeService] No callback found for DataSource subscription: ${subscriptionId}`);
+                    continue;
+                }
+
+                if (subscription.type === "entity") {
+                    // Call the callback directly with the entity
+                    callback(entity);
+                    console.log(`📄 [RealtimeService] Called DataSource callback for entity ${subscriptionId}`);
+
+                } else if (subscription.type === "collection" && subscription.collectionRequest) {
+                    // Refetch the collection and call the callback
+                    const collectionRequest = subscription.collectionRequest;
+                    console.log("📋 [RealtimeService] Refetching collection for DataSource subscription:", subscriptionId);
+
+                    let entities;
+                    if (collectionRequest.searchString) {
+                        entities = await this.entityService.searchEntities(
+                            path,
+                            collectionRequest.searchString,
+                            collectionRequest.databaseId
+                        );
+                    } else {
+                        entities = await this.entityService.fetchCollection(path, {
+                            filter: collectionRequest.filter,
+                            orderBy: collectionRequest.orderBy,
+                            order: collectionRequest.order,
+                            limit: collectionRequest.limit,
+                            startAfter: collectionRequest.startAfter,
+                            databaseId: collectionRequest.databaseId
+                        });
+                    }
+
+                    console.log(`📬 [RealtimeService] Calling DataSource callback with ${entities.length} entities for ${subscriptionId}`);
+                    callback(entities);
+                }
+            } catch (error) {
+                console.error(`❌ [RealtimeService] Error processing DataSource subscription ${subscriptionId}:`, error);
             }
         }
 
