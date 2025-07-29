@@ -29,7 +29,7 @@ export const RolesView = React.memo(
 
                 <div className="flex items-center mt-12">
                     <Typography gutterBottom variant="h4"
-                                className="flex-grow"
+                                className="grow"
                                 component="h4">
                         Roles
                     </Typography>

@@ -22,7 +22,7 @@ export const CenteredView = React.forwardRef<HTMLDivElement, CenteredViewProps>(
 
     return (
         <div ref={ref}
-             className={cls("flex flex-col flex-grow", fullScreen ? "h-screen" : "h-full", outerClassName)}
+             className={cls("flex flex-col grow", fullScreen ? "h-screen" : "h-full", outerClassName)}
              {...rest}>
             <Container className={cls("m-auto", className)} maxWidth={maxWidth}>
                 {children}

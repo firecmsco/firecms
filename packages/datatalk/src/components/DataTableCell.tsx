@@ -168,7 +168,7 @@ export const DataTableCell = React.memo<DataTableCellProps>(
                     "transition-colors duration-100 ease-in-out",
                     `flex relative h-full rounded-md p-${p} border-4  border-opacity-75`,
                     onHover && !disabled ? "bg-surface-50 dark:bg-surface-900" : "",
-                    saved ? "bg-surface-100 bg-opacity-75 dark:bg-surface-800 dark:bg-opacity-75" : "",
+                    saved ? "bg-surface-100 bg-opacity-75 dark:bg-surface-800/75" : "",
                     hideOverflow ? "overflow-hidden" : "",
                     isSelected ? "bg-surface-50 dark:bg-surface-900" : "",
                     borderClass

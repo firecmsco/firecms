@@ -18,7 +18,7 @@ export function LayoutModeSwitch({
                 <Card
                     onClick={() => onChange("side_panel")}
                     className={cls(
-                        "my-2 rounded-md mx-0 p-4 focus:outline-none transition ease-in-out duration-150 flex flex-row gap-4 items-center",
+                        "my-2 rounded-md mx-0 p-4 focus:outline-hidden transition ease-in-out duration-150 flex flex-row gap-4 items-center",
                         "text-surface-700 dark:text-surface-accent-300",
                         "hover:text-primary-dark dark:hover:text-primary focus:ring-primary hover:ring-1 hover:ring-primary",
                         value === "side_panel" ? "border-primary dark:border-primary" : "border-surface-400 dark:border-surface-600",
@@ -35,7 +35,7 @@ export function LayoutModeSwitch({
                 <Card
                     onClick={() => onChange("full_screen")}
                     className={cls(
-                        "my-2 rounded-md mx-0 p-4 focus:outline-none transition ease-in-out duration-150 flex flex-row gap-4 items-center",
+                        "my-2 rounded-md mx-0 p-4 focus:outline-hidden transition ease-in-out duration-150 flex flex-row gap-4 items-center",
                         "text-surface-700 dark:text-surface-accent-300",
                         "hover:text-primary-dark dark:hover:text-primary focus:ring-primary hover:ring-1 hover:ring-primary",
                         value === "full_screen" ? "border-primary dark:border-primary" : "border-surface-400 dark:border-surface-600",

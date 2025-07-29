@@ -47,7 +47,7 @@ export function UsageExamples() {
     return <Panel ref={ref}
                   container={false}
                   includePadding={false}
-                  className={clsx("relative flex flex-col items-center justify-center bg-gradient-to-b from-white to-gray-200")}>
+                  className={clsx("relative flex flex-col items-center justify-center bg-linear-to-b from-white to-gray-200")}>
 
         <LinedSpace position={"bottom"} size={"larger"}/>
 

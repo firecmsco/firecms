@@ -29,10 +29,10 @@ export const VirtualTableRow = React.memo<VirtualTableRowProps<any>>(
         return (
             <div
                 className={cls(
-                    "flex min-w-full text-sm border-b border-surface-200 dark:border-surface-800 border-opacity-40 dark:border-opacity-40",
+                    "flex min-w-full text-sm border-b border-surface-200/40 dark:border-surface-800/40",
                     rowClassName ? rowClassName(rowData) : "",
                     {
-                        "hover:bg-opacity-95": hoverRow,
+                        "hover:border-surface-200/95 hover:border-surface-800/95": hoverRow,
                         "cursor-pointer": onRowClick
                     }
                 )}

@@ -64,7 +64,7 @@ export const blockquote = Blockquote.configure({
 
 export const codeBlock = CodeBlock.configure({
     HTMLAttributes: {
-        class: cls("rounded bg-blue-50 dark:bg-surface-700 border p-5 font-mono font-medium", defaultBorderMixin),
+        class: cls("rounded-xs bg-blue-50 dark:bg-surface-700 border p-5 font-mono font-medium", defaultBorderMixin),
     },
 });
 

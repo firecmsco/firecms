@@ -304,7 +304,7 @@ export function DefaultHomePage({
                         placeholder="Search collections"
                         autoFocus
                         innerClassName="w-full"
-                        className="w-full flex-grow"
+                        className="w-full grow"
                     />
                     {additionalActions}
                 </div>

@@ -105,7 +105,7 @@ function VideoPreview({
             maxHeight: "100%"
         }}
         {...videoProps}
-        className={cls("max-w-100% rounded", { "pointer-events-none": !interactive })}>
+        className={cls("max-w-100% rounded-xs", { "pointer-events-none": !interactive })}>
         <source src={src}/>
     </video>;
 }

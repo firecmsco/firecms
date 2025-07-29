@@ -177,7 +177,7 @@ export function LoginButton({
                     <div className="flex flex-col items-center justify-center w-8">
                         {icon}
                     </div>
-                    <div className="flex-grow pl-2 text-center">
+                    <div className="grow pl-2 text-center">
                         {text}
                     </div>
                 </div>

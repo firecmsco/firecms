@@ -67,7 +67,7 @@ export function FileUpload({
         className={cls(
             fieldBackgroundMixin,
             "flex gap-2",
-            "p-4 box-border relative items-center border-2 border-solid border-transparent outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid",
+            "p-4 box-border relative items-center border-2 border-solid border-transparent outline-hidden rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid",
             {
                 "h-44": size === "large",
                 "h-28": size === "medium",
@@ -87,7 +87,7 @@ export function FileUpload({
         {children}
 
         <div
-            className="flex-grow h-28 box-border flex flex-col items-center justify-center text-center">
+            className="grow h-28 box-border flex flex-col items-center justify-center text-center">
             <Typography align={"center"}
                         variant={"label"}
                         className={"flex flex-row gap-2 justify-center"}>

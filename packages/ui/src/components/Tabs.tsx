@@ -52,12 +52,12 @@ export function Tab({
                                       disabled
                                           ? "text-surface-accent-400 dark:text-surface-accent-500"
                                           : cls("text-surface-accent-700 dark:text-surface-accent-300",
-                                              "data-[state=active]:text-surface-accent-900 data-[state=active]:dark:text-white",
+                                              "data-[state=active]:text-surface-accent-900 dark:data-[state=active]:text-white",
                                               "hover:text-surface-accent-800 dark:hover:text-surface-accent-200"),
                                       className)}>
         <div className={cls("line-clamp-1",
-            "uppercase inline-block p-2 px-4 rounded",
-            "hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-800",
+            "uppercase inline-block p-2 px-4 rounded-xs",
+            "hover:bg-surface-accent-200/75 dark:hover:bg-surface-accent-800",
             innerClassName)}>
             {children}
         </div>

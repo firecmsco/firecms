@@ -48,7 +48,7 @@ export function ProductDetailPreview({
                                 onClick={() => setSelectedImage(image)}
                                 className={cls("border hover:border-surface-900 rounded-lg overflow-hidden transition-colors dark:hover:border-surface-50", defaultBorderMixin)}>
                                 <StorageImage storagePath={image}
-                                              className="aspect-[5/6] object-contain bg-white"
+                                              className="aspect-5/6 object-contain bg-white"
                                               style={{
                                                   height: 120,
                                                   width: 100
@@ -64,7 +64,7 @@ export function ProductDetailPreview({
                                 height: 600,
                                 width: 900
                             }}
-                            className="bg-white aspect-[2/3] object-contain border border-surface-200 w-full rounded-lg overflow-hidden dark:border-surface-800"
+                            className="bg-white aspect-2/3 object-contain border border-surface-200 w-full rounded-lg overflow-hidden dark:border-surface-800"
                             storagePath={selectedImage}/>}
                     </div>
                 </div>

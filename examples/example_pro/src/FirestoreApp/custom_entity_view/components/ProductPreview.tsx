@@ -47,7 +47,7 @@ export function ProductPreview({ productValues }: {
 
     return (
         <Card className={"m-4 max-w-[340px] p-8 border"}>
-            <div className={"flex-grow flex-shrink-1 flex-basis-[296px] p-8 max-h-[296px]"}>
+            <div className={"grow flex-shrink-1 flex-basis-[296px] p-8 max-h-[296px]"}>
                 <StorageImage storagePath={productValues.main_image}/>
             </div>
             <Typography gutterBottom

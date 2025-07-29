@@ -31,7 +31,7 @@ export const UsersView = function UsersView({ children }: { children?: React.Rea
             <div
                 className="flex items-center mt-12">
                 <Typography gutterBottom variant="h4"
-                            className="flex-grow"
+                            className="grow"
                             component="h4">
                     Users
                 </Typography>

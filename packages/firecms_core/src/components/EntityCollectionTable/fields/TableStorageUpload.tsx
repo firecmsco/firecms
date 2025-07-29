@@ -12,7 +12,7 @@ import { StorageUploadProgress } from "../../../form/components/StorageUploadPro
 import { cls, EditIcon, IconButton, Typography } from "@firecms/ui";
 import { EntityTableCellActions } from "../internal/EntityTableCellActions";
 
-const dropZoneClasses = "max-w-full box-border relative pt-[2px] items-center border border-transparent outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
+const dropZoneClasses = "max-w-full box-border relative pt-[2px] items-center border border-transparent outline-hidden rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
 const activeDropClasses = "pt-0 border-2 border-solid"
 const acceptDropClasses = "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-2 border-solid border-green-500 bg-green-50 dark:bg-green-900"
 const rejectDropClasses = "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-2 border-solid border-red-500 bg-red-50 dark:bg-red-900"
@@ -250,7 +250,7 @@ function StorageUpload({
             })}
 
             {!internalValue && <div
-                className="flex-grow m-2 max-w-[200px]"
+                className="grow m-2 max-w-[200px]"
                 onClick={open}>
                 <Typography
                     className="text-surface-400 dark:text-surface-600"

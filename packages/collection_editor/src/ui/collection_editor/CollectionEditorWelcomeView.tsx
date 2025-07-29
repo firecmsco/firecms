@@ -55,7 +55,7 @@ export function CollectionEditorWelcomeView({
 
                 <div
                     className="flex flex-row py-2 pt-3 items-center">
-                    <Typography variant={"h4"} className={"flex-grow"}>
+                    <Typography variant={"h4"} className={"grow"}>
                         New collection
                     </Typography>
                 </div>
@@ -178,7 +178,7 @@ export function TemplateButton({
             <Card
                 onClick={onClick}
                 className={cls(
-                    "my-2 rounded-md border mx-0 p-6 px-4 focus:outline-none transition ease-in-out duration-150 flex flex-row gap-4 items-center",
+                    "my-2 rounded-md border mx-0 p-6 px-4 focus:outline-hidden transition ease-in-out duration-150 flex flex-row gap-4 items-center",
                     "text-surface-700 dark:text-surface-accent-300",
                     "hover:border-primary-dark hover:text-primary-dark dark:hover:text-primary focus:ring-primary hover:ring-1 hover:ring-primary",
                     "border-surface-400 dark:border-surface-600 "

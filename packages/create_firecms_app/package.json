@@ -30,7 +30,7 @@
   "devDependencies": {
     "@types/node": "^20.17.14",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.8.3"
   },
   "files": [
     "bin/"

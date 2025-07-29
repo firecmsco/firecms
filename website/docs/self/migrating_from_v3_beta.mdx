@@ -67,21 +67,20 @@ necessary to do so.
 You also will need to import the default FireCMS styles in your project. You can do this by adding the following import to your `index.css` file:
 
 ```css
-@import "@firecms/ui/index.css";
+@import "@firecms/ui/index.css" layer(base);
 ```
 
 Your `index.css` file should look like this:
 
 ```css
-@import "@firecms/ui/index.css";
+@import "@firecms/ui/index.css" layer(base);
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-    --fcms-primary: #0070F4;
-    --fcms-primary-bg: #0061e610;
-    --fcms-secondary: #FF5B79;
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
 }
 ```
 
@@ -132,7 +131,6 @@ This is a sample `package.json` with the new config:
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.19",
     "npm-run-all": "^4.1.5",
-    "postcss": "^8.4.38",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.4.3",
     "vite": "^5.2.6"

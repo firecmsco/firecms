@@ -56,19 +56,22 @@
     "release": "git push origin main:release"
   },
   "devDependencies": {
-    "@eslint/js": "^9.16.0",
+    "@eslint/js": "^9.24.0",
     "@types/eslint__js": "^8.42.3",
     "@typescript-eslint/eslint-plugin": "^8.17.0",
-    "eslint": "^9.16.0",
+    "eslint": "^9.24.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-n": "^17.14.0",
     "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.1.0",
-    "globals": "^15.13.0",
-    "lerna": "^8.1.9",
+    "globals": "^15.15.0",
+    "lerna": "^8.2.1",
     "npm-run-all": "^4.1.5",
-    "typescript": "^5.7.2",
-    "typescript-eslint": "^8.17.0"
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.29.0"
+  },
+  "dependencies": {
+    "tailwindcss": "^4.1.3"
   }
 }

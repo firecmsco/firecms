@@ -455,7 +455,7 @@ const CommandList = forwardRef((props: {
 
     return (
         <div
-            className={cls("text-surface-900 dark:text-white z-50 max-h-[280px] h-auto w-72 overflow-y-auto rounded-md border bg-white dark:bg-surface-900 px-1 py-2 shadow transition-all", defaultBorderMixin)}>
+            className={cls("text-surface-900 dark:text-white z-50 max-h-[280px] h-auto w-72 overflow-y-auto rounded-md border bg-white dark:bg-surface-900 px-1 py-2 shadow-2xs transition-all", defaultBorderMixin)}>
             {props.items.length ? (
                 props.items.map((item, index) => (
                     <button
@@ -467,7 +467,7 @@ const CommandList = forwardRef((props: {
                         onClick={() => selectItem(item)}
                         tabIndex={index === selectedIndex ? 0 : -1}
                         aria-selected={index === selectedIndex}
-                        className={cls("flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm hover:bg-blue-50 hover:dark:bg-surface-700 aria-selected:bg-blue-50 aria-selected:dark:bg-surface-700",
+                        className={cls("flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm hover:bg-blue-50 dark:hover:bg-surface-700 aria-selected:bg-blue-50 dark:aria-selected:bg-surface-700",
                             index === selectedIndex ? "bg-blue-100 dark:bg-surface-accent-950" : "")}
                         key={item.title}
                     >

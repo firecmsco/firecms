@@ -51,7 +51,7 @@ export function MessageLayout({
     }, [ref]);
 
     return <div ref={ref}
-                className="flex flex-col gap-2 bg-white dark:bg-surface-800 dark:bg-opacity-20 rounded-lg p-4 shadow-sm">
+                className="flex flex-col gap-2 bg-white dark:bg-surface-800/20 rounded-lg p-4 shadow-2xs">
         <div className="flex items-start gap-3 justify-center">
             <Menu trigger={<Avatar className="w-10 h-10 shrink-0">
                 {message?.user === "USER" ? <PersonIcon/> : <AutoFixHighIcon/>}
