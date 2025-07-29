@@ -179,7 +179,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         const firestore = getFirestore(firebaseApp);
         if (!id)
             throw Error("Trying to save a collection with no id");
-        if (!collectionData.path)
+        if (!collectionData.dbPath)
             throw Error("Trying to save a collection with no path");
         if (!collectionData.name)
             throw Error("Trying to save a collection with no name");
@@ -237,7 +237,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
 
     const getCollection = useCallback((id: string) => {
         if (!collections) throw Error("Collections not initialised");
-        const collection = collections.find(c => c.id === id);
+        const collection = collections.find(c => c.slug === id);
         if (!collection) throw Error(`Collection with id ${id} not found`);
         return collection;
     }, [collections]);

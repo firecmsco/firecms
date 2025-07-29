@@ -1,8 +1,8 @@
 import { buildCollection } from "@firecms/core";
 
 export const productsCollection = buildCollection<any>({
-    id: "products",
-    path: "products",
+    slug: "products",
+    dbPath: "products",
     name: "Products",
     singularName: "Product",
     group: "E-commerce",
@@ -42,7 +42,7 @@ export const productsCollection = buildCollection<any>({
             name: "Related products",
             of: {
                 type: "reference",
-                path: "products"
+                slug: "products"
             }
         },
         price: {

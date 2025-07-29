@@ -2,6 +2,7 @@ import { Entity, EntityStatus, EntityValues } from "./entities";
 import { EntityCollection, FilterValues } from "./collections";
 import { ResolvedEntityCollection } from "./resolved_entities";
 import { FireCMSContext } from "./firecms_context";
+import { NavigationController } from "./navigation";
 
 /**
  * @group Datasource
@@ -244,11 +245,29 @@ export type FilterCombinationValidProps = {
     sortBy?: [string, "asc" | "desc"];
 };
 
-export type SaveEntityDelegateProps<M extends Record<string, any> = any> = SaveEntityProps<M>;
+export type SaveEntityDelegateProps<M extends Record<string, any> = any> = SaveEntityProps<M> & {
+    navigationController?: NavigationController
+};
 
-export type FetchCollectionDelegateProps<M extends Record<string, any> = any> = FetchCollectionProps<M>;
+export type FetchCollectionDelegateProps<M extends Record<string, any> = any> = FetchCollectionProps<M> & {
+    navigationController?: NavigationController
+};
 
-export type ListenCollectionDelegateProps<M extends Record<string, any> = any> = ListenCollectionProps<M>;
+export type ListenCollectionDelegateProps<M extends Record<string, any> = any> = ListenCollectionProps<M> & {
+    navigationController?: NavigationController
+};
+
+export type ListenEntityDelegateProps<M extends Record<string, any> = any> = ListenEntityProps<M> & {
+    navigationController?: NavigationController
+};
+
+export type FetchEntityDelegateProps<M extends Record<string, any> = any> = FetchEntityProps<M> & {
+    navigationController?: NavigationController
+}
+
+export type DeleteEntityDelegateProps<M extends Record<string, any> = any> = DeleteEntityProps<M> & {
+    navigationController?: NavigationController
+}
 
 export interface DataSourceDelegate {
 
@@ -319,7 +338,7 @@ export interface DataSourceDelegate {
     fetchEntity<M extends Record<string, any> = any>({
                                                          path,
                                                          entityId,
-                                                     }: FetchEntityProps<M>): Promise<Entity<M> | undefined>;
+                                                     }: FetchEntityDelegateProps<M>): Promise<Entity<M> | undefined>;
 
     /**
      * Get realtime updates on one entity.
@@ -335,7 +354,7 @@ export interface DataSourceDelegate {
                                                            entityId,
                                                            onUpdate,
                                                            onError
-                                                       }: ListenEntityProps<M>): () => void;
+                                                       }: ListenEntityDelegateProps<M>): () => void;
 
     /**
      * Save entity to the specified path
@@ -356,7 +375,7 @@ export interface DataSourceDelegate {
      * @param entity
      * @return was the whole deletion flow successful
      */
-    deleteEntity<M extends Record<string, any> = any>({ entity }: DeleteEntityProps<M>): Promise<void>;
+    deleteEntity<M extends Record<string, any> = any>({ entity }: DeleteEntityDelegateProps<M>): Promise<void>;
 
     /**
      * Check if the given property is unique in the given collection
@@ -384,7 +403,8 @@ export interface DataSourceDelegate {
      * @param props
      */
     isFilterCombinationValid?(props: Omit<FilterCombinationValidProps, "collection"> & {
-        databaseId?: string
+        databaseId?: string,
+        navigationController?: NavigationController
     }): boolean;
 
     /**

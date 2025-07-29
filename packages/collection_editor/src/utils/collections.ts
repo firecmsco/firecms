@@ -27,8 +27,8 @@ export const mergeCollections = (baseCollections: EntityCollection[],
 
     // sort the collections so they are in the same order as the base collections
     result.sort((a, b) => {
-        const indexA = baseCollections.findIndex(c => c.id === a.id);
-        const indexB = baseCollections.findIndex(c => c.id === b.id);
+        const indexA = baseCollections.findIndex(c => c.slug === a.slug);
+        const indexB = baseCollections.findIndex(c => c.slug === b.slug);
 
         if (indexA === -1 && indexB === -1) {
             return 0; // Keep original order for items not in baseCollections

@@ -103,7 +103,7 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
 
     const resolvedCollection = resolveCollection({
         collection,
-        path,
+        path: path,
         propertyConfigs: customizationController.propertyConfigs,
         authController
     });

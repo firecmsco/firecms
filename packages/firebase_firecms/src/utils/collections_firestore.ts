@@ -70,7 +70,7 @@ export const docToCollection = (doc: DocumentSnapshot): PersistedCollection => {
     return {
         ...data,
         properties: sortedProperties,
-        id: data.id ?? data.alias ?? data.path
+        slug: data.id ?? data.alias ?? data.slug
     } as PersistedCollection;
 }
 

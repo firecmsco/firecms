@@ -39,7 +39,7 @@ export function ArrayOfReferencesPreview({
                         return <div className="mt-1 mb-1 w-full"
                                     key={`preview_array_ref_${propertyKey}_${index}`}>
                             <ReferencePreview
-                                disabled={!ofProperty.path}
+                                disabled={!ofProperty.slug}
                                 previewProperties={ofProperty.previewProperties}
                                 size={childSize}
                                 reference={reference}

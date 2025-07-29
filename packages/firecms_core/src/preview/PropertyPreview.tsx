@@ -98,14 +98,14 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
             } else if (stringProperty.markdown) {
                 content = <Markdown source={value} size={"small"}/>;
             } else if (stringProperty.reference) {
-                if (typeof stringProperty.reference.path === "string") {
+                if (typeof stringProperty.reference.slug === "string") {
                     content = <ReferencePreview
-                        disabled={!stringProperty.reference.path}
+                        disabled={!stringProperty.reference.slug}
                         previewProperties={stringProperty.reference.previewProperties}
                         includeId={stringProperty.reference.includeId}
                         includeEntityLink={stringProperty.reference.includeEntityLink}
                         size={props.size}
-                        reference={new EntityReference(value, stringProperty.reference.path)}
+                        reference={new EntityReference(value, stringProperty.reference.slug)}
                     />;
                 } else {
                     content = <EmptyValue/>;
@@ -185,10 +185,10 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
             content = buildWrongValueType(propertyKey, property.type, value);
         }
     } else if (property.type === "reference") {
-        if (typeof property.path === "string") {
+        if (typeof property.slug === "string") {
             if (typeof value === "object" && "isEntityReference" in value && value.isEntityReference()) {
                 content = <ReferencePreview
-                    disabled={!property.path}
+                    disabled={!property.slug}
                     previewProperties={property.previewProperties}
                     includeId={property.includeId}
                     includeEntityLink={property.includeEntityLink}

@@ -347,7 +347,7 @@ export function useMongoDBDelegate({
     }): Promise<number> => {
         if (!app?.currentUser) throw Error("useMongoDataSource app not initialised");
         const mdb = app.currentUser.mongoClient(cluster);
-        const mongoCollection = mdb.db(database).collection(props.path);
+        const mongoCollection = mdb.db(database).collection(props.slug);
         return mongoCollection.count();
     }, [app.currentUser, cluster, database]);
 
@@ -503,8 +503,8 @@ function convertFromMongoValue(value: unknown): any {
         if (value instanceof Date) {
             return value;
         }
-        if ("path" in value && "id" in value && typeof value.path === "string") {
-            return new EntityReference((value.id as any).toString(), value.path);
+        if ("path" in value && "id" in value && typeof value.slug === "string") {
+            return new EntityReference((value.id as any).toString(), value.slug);
         }
         return convertFromMongoValues(value);
     }
@@ -523,7 +523,7 @@ function valueToMongoValue(value: any): any {
     if (value.isEntityReference && value.isEntityReference()) {
         return {
             id: new BSON.ObjectId(value.id),
-            path: value.path
+            path: value.slug
         };
     }
     if (typeof value !== "object") return value;

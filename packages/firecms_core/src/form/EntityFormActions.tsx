@@ -12,10 +12,8 @@ import { FormexController } from "@firecms/formex";
 import { useFireCMSContext, useSideEntityController } from "../hooks";
 
 export interface EntityFormActionsProps {
-    fullPath: string;
-    fullIdPath?: string;
-    collection: ResolvedEntityCollection;
     path: string;
+    collection: ResolvedEntityCollection;
     entity?: Entity;
     layout: "bottom" | "side";
     savingError?: Error;
@@ -30,8 +28,7 @@ export interface EntityFormActionsProps {
 }
 
 export function EntityFormActions({
-                                      fullPath,
-                                      fullIdPath,
+                                      path,
                                       collection,
                                       entity,
                                       layout,
@@ -50,8 +47,7 @@ export function EntityFormActions({
 
     return layout === "bottom"
         ? buildBottomActions({
-            fullPath,
-            fullIdPath,
+            path,
             savingError,
             entity,
             collection,
@@ -66,8 +62,7 @@ export function EntityFormActions({
             formContext
         })
         : buildSideActions({
-            fullPath,
-            fullIdPath,
+            path,
             savingError,
             entity,
             collection,
@@ -84,8 +79,7 @@ export function EntityFormActions({
 }
 
 type ActionsViewProps<M extends object> = {
-    fullPath: string,
-    fullIdPath?: string,
+    path: string,
     savingError: Error | undefined,
     entity: Entity<M> | undefined,
     formActions?: EntityAction[],
@@ -104,8 +98,7 @@ type ActionsViewProps<M extends object> = {
 function buildBottomActions<M extends object>({
                                                   savingError,
                                                   entity,
-                                                  fullPath,
-                                                  fullIdPath,
+                                                  path,
                                                   formActions,
                                                   collection,
                                                   context,
@@ -136,8 +129,7 @@ function buildBottomActions<M extends object>({
                             action.onClick({
                                 view: "form",
                                 entity,
-                                fullPath: fullPath ?? collection.path,
-                                fullIdPath: fullIdPath ?? collection.id,
+                                path: path ?? collection.slug,
                                 collection: collection,
                                 context,
                                 sideEntityController,
@@ -168,8 +160,7 @@ function buildSideActions<M extends object>({
                                                 savingError,
                                                 entity,
                                                 formActions,
-                                                fullPath,
-                                                fullIdPath,
+                                                path,
                                                 openEntityMode,
                                                 collection,
                                                 context,

@@ -42,7 +42,7 @@ export function useFirebaseStorageSource({
                 metadata
             });
             return uploadBytes(ref(storage, `${path}/${usedFilename}`), file, metadata).then(snapshot => ({
-                path: snapshot.ref.fullPath
+                path: snapshot.ref.path
             }));
         },
 

@@ -78,7 +78,7 @@ export function App() {
     // // Here you define your custom top-level views
     const views: CMSView[] = useMemo(() => ([
         {
-            path: "additional",
+            slug: "additional",
             name: "Additional",
             group: "Custom views",
             description: "This is an example of an additional view that is defined by the user",
@@ -91,14 +91,14 @@ export function App() {
         //     view: <TestBoardView/>
         // },
         {
-            path: "editor_test",
+            slug: "editor_test",
             name: "The FireCMS editor",
             description: "This view showcases a custom advanced editor",
             group: "Custom views",
             view: <TestEditorView/>
         },
         {
-            path: "ui_components",
+            slug: "ui_components",
             description: "This view showcases some of the UI components available in FireCMS",
             name: "UI components showcase",
             group: "Custom views",
@@ -140,7 +140,7 @@ export function App() {
      */
     const userManagement = useBuildUserManagement({
         dataSourceDelegate: firestoreDelegate,
-        authController
+        authController,
     });
 
     /**

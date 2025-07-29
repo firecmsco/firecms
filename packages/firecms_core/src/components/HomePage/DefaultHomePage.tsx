@@ -165,7 +165,7 @@ export function DefaultHomePage({
     ) => {
         const draggable: NavigationGroupMapping[] = latest.map((g) => ({
             name: g.name,
-            entries: g.entries.map((e) => e.path)
+            entries: g.entries.map((e) => e.slug)
         }));
 
         const all: NavigationGroupMapping[] = adminGroupData
@@ -173,7 +173,7 @@ export function DefaultHomePage({
                 ...draggable,
                 {
                     name: adminGroupData.name,
-                    entries: adminGroupData.entries.map((e) => e.path)
+                    entries: adminGroupData.entries.map((e) => e.slug)
                 }
             ]
             : draggable;
@@ -428,7 +428,7 @@ export function DefaultHomePage({
                                                                 context.analyticsController?.onAnalyticsEvent?.(
                                                                     event,
                                                                     {
-                                                                        path: entry.path
+                                                                        path: entry.slug
                                                                     }
                                                                 );
                                                             }}
@@ -510,7 +510,7 @@ export function DefaultHomePage({
 
                                         context.analyticsController?.onAnalyticsEvent?.(
                                             event,
-                                            { path: entry.path }
+                                            { path: entry.slug }
                                         );
                                     }}
                                 />

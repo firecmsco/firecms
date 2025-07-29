@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useCollectionsConfigController } from "../useCollectionsConfigController";
 
 export function HomePageEditorCollectionAction({
-                                                   path,
+                                                   slug,
                                                    collection
                                                }: PluginHomePageActionsProps) {
 
@@ -27,7 +27,7 @@ export function HomePageEditorCollectionAction({
 
     const onEditCollectionClicked = () => {
         collectionEditorController?.editCollection({
-            id: collection.id,
+            id: collection.slug,
             parentCollectionIds: []
         });
     };
@@ -35,7 +35,7 @@ export function HomePageEditorCollectionAction({
     const [deleteRequested, setDeleteRequested] = useState(false);
 
     const deleteCollection = () => {
-        configController?.deleteCollection({ id: collection.id }).then(() => {
+        configController?.deleteCollection({ id: collection.slug }).then(() => {
             setDeleteRequested(false);
             snackbarController.open({
                 message: "Collection deleted",

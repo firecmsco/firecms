@@ -57,7 +57,7 @@ export function convertDataToEntity(authController: AuthController,
     return {
         id,
         values,
-        path
+        path: path
     };
 }
 

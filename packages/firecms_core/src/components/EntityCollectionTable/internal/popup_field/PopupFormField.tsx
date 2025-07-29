@@ -118,7 +118,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     const collection: ResolvedEntityCollection<M> | undefined = inputCollection
         ? resolveCollection<M>({
             collection: inputCollection,
-            path,
+            path: path,
             values: entity?.values,
             entityId,
             propertyConfigs: customizationController.propertyConfigs,

@@ -67,14 +67,12 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, USE
 
     const customizationController = context.customizationController;
 
-    const resolvedPath = context.navigation.resolveIdsFrom(path);
-
     const callbacks = collection.callbacks;
     if (callbacks?.onPreSave) {
         try {
             const resolvedCollection = resolveCollection<M>({
                 collection,
-                path,
+                path: path,
                 values: previousValues as EntityValues<M>,
                 entityId,
                 propertyConfigs: customizationController.propertyConfigs,
@@ -83,7 +81,6 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, USE
             updatedValues = await callbacks.onPreSave({
                 collection: resolvedCollection,
                 path,
-                resolvedPath,
                 entityId,
                 values,
                 previousValues,
@@ -102,7 +99,7 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, USE
 
     return dataSource.saveEntity({
         collection,
-        path: resolvedPath,
+        path,
         entityId,
         values: updatedValues,
         previousValues,
@@ -121,7 +118,6 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, USE
                 callbacks.onSaveSuccess({
                     collection: resolvedCollection,
                     path,
-                    resolvedPath,
                     entityId: entity.id,
                     values: updatedValues,
                     previousValues,
@@ -150,7 +146,6 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, USE
                 callbacks.onSaveFailure({
                     collection: resolvedCollection,
                     path,
-                    resolvedPath,
                     entityId,
                     values: updatedValues,
                     previousValues,

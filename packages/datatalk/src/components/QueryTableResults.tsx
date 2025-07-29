@@ -90,7 +90,7 @@ export function QueryTableResults({
     const resolvedCollection = useMemo(() => {
         return collection && path ? resolveCollection<any>({
                 collection,
-                path,
+                path: path,
                 propertyConfigs: customizationController.propertyConfigs,
                 authController
             })
@@ -116,7 +116,7 @@ export function QueryTableResults({
 
         const firestore = getFirestore();
         const firebaseValues = cmsToFirestoreModel(updatedValues, firestore);
-        const documentReference: DocumentReference = doc(firestore, entity.path);
+        const documentReference: DocumentReference = doc(firestore, entity.slug);
         return setDoc(documentReference, firebaseValues, { merge: true })
             .then((res) => {
                 onValueUpdated();
@@ -175,7 +175,7 @@ export function QueryTableResults({
                 selectionEnabled={false}
                 size={size}
                 collection={resolvedCollection ?? undefined}
-                fullPath={path}
+                path={path}
                 actions={actions}
                 hideId={resolvedCollection?.hideIdFromCollection}
                 openEntityMode={"side_panel"}

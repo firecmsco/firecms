@@ -1,8 +1,8 @@
 import { EntityCollection, makePropertiesEditable } from "@firecms/core";
 
 export const usersCollectionTemplate: EntityCollection = {
-    id: "users",
-    path: "users",
+    slug: "users",
+    dbPath: "users",
     name: "Users",
     singularName: "User",
     description: "Registered users in the app/web",
@@ -30,7 +30,7 @@ export const usersCollectionTemplate: EntityCollection = {
             type: "array",
             of: {
                 type: "reference",
-                path: "products"
+                slug: "products"
             }
         },
         photoURL: {

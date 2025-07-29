@@ -21,7 +21,7 @@ function applyModifyFunction(modifyCollection: ((props: ModifyCollectionProps) =
         const resCollection = modified ?? collection;
         if (resCollection.subcollections) {
             resCollection.subcollections = resCollection.subcollections.map((subcollection) => {
-                return applyModifyFunction(modifyCollection, subcollection, [...parentPaths, collection.path]);
+                return applyModifyFunction(modifyCollection, subcollection, [...parentPaths, collection.slug]);
             });
         }
         return resCollection;
@@ -42,8 +42,8 @@ export function joinCollectionLists(targetCollections: EntityCollection[],
     const updatedCollections = (sourceCollections ?? [])
         .map((sourceCol) => {
             const targetCol = targetCollections?.find((collection) => {
-                return collection.id === sourceCol.id;
-                // return collection.path === codedCollection.path || collection.id && codedCollection.id;
+                return collection.slug === sourceCol.slug;
+                // return collection.slug === codedCollection.slug || collection.id && codedCollection.id;
             });
             if (!targetCol) {
                 return applyModifyFunction(modifyCollection, sourceCol, parentPaths);
@@ -52,11 +52,11 @@ export function joinCollectionLists(targetCollections: EntityCollection[],
             }
         });
 
-    const sourceCollectionIds = updatedCollections.map(c => c.id);
+    const sourceCollectionSlugs = updatedCollections.map(c => c.slug);
     // fetched collections that are not in the source collections
     const resultStoredCollections = targetCollections
         .filter((col) => {
-            return !sourceCollectionIds.includes(col.id);
+            return !sourceCollectionSlugs.includes(col.slug);
         })
         .map((col) => {
             if (modifyCollection) {
@@ -78,11 +78,10 @@ export function mergeCollection(target: EntityCollection,
                                 modifyCollection?: (props: ModifyCollectionProps) => EntityCollection | void
 ): EntityCollection {
 
-
     const subcollectionsMerged = joinCollectionLists(
         target?.subcollections ?? [],
         source?.subcollections ?? [],
-        [...parentPaths, target.path],
+        [...parentPaths, target.slug],
         modifyCollection
     );
 

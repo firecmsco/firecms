@@ -22,7 +22,7 @@ export type DataSourceTableControllerProps<M extends Record<string, any> = any> 
     /**
      * Full path where the data of this table is located
      */
-    fullPath: string;
+    path: string;
     /**
      * The collection that is represented by this config.
      */
@@ -56,7 +56,7 @@ export type DataSourceTableControllerProps<M extends Record<string, any> = any> 
  * Note that you can build your own hook returning a {@link EntityTableController}
  * if you would like to display different data.
  *
- * @param fullPath
+ * @param path
  * @param collection
  * @param scrollRestoration
  * @param entitiesDisplayedFirst
@@ -66,7 +66,7 @@ export type DataSourceTableControllerProps<M extends Record<string, any> = any> 
  */
 export function useDataSourceTableController<M extends Record<string, any> = any, USER extends User = User>(
     {
-        fullPath,
+        path,
         collection,
         scrollRestoration,
         entitiesDisplayedFirst,
@@ -85,7 +85,6 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
     const navigation = useNavigationController();
     const dataSource = useDataSource(collection);
-    const resolvedPath = useMemo(() => navigation.resolveIdsFrom(fullPath), [fullPath, navigation.resolveIdsFrom]);
 
     const forceFilter = forceFilterFromProps ?? forceFilterFromCollection;
     const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);
@@ -98,7 +97,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
         if (!dataSource.isFilterCombinationValid)
             return true;
         return dataSource.isFilterCombinationValid({
-            path: resolvedPath,
+            path,
             collection,
             filterValues,
             sortBy
@@ -112,7 +111,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     }) => {
         if (scrollRestoration) {
             scrollRestoration.updateCollectionScroll({
-                fullPath: resolvedPath,
+                path,
                 scrollOffset,
                 data: rawData,
                 filters: filterValues
@@ -138,13 +137,13 @@ export function useDataSourceTableController<M extends Record<string, any> = any
 
     useUpdateUrl(filterValues, sortBy, searchString, updateUrl);
 
-    const collectionScroll = scrollRestoration?.getCollectionScroll(fullPath, filterValues);
+    const collectionScroll = scrollRestoration?.getCollectionScroll(path, filterValues);
     const initialItemCount = collectionScroll?.data.length ?? pageSize;
 
     useEffect(() => {
         if (scrollRestoration) {
             scrollRestoration.updateCollectionScroll({
-                fullPath: resolvedPath,
+                path,
                 scrollOffset: collectionScroll?.scrollOffset ?? 0,
                 data: rawData,
                 filters: filterValues
@@ -190,7 +189,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
                         entities.map((entity) =>
                             collection.callbacks!.onFetch!({
                                 collection,
-                                path: resolvedPath,
+                                path,
                                 entity,
                                 context
                             })));
@@ -216,7 +215,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
 
         if (dataSource.listenCollection) {
             return dataSource.listenCollection<M>({
-                path: resolvedPath,
+                path,
                 collection,
                 onUpdate: onEntitiesUpdate,
                 onError,
@@ -229,7 +228,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
             });
         } else {
             dataSource.fetchCollection<M>({
-                path: resolvedPath,
+                path,
                 collection,
                 searchString,
                 filter: filterValues,
@@ -243,7 +242,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
             return () => {
             };
         }
-    }, [resolvedPath, itemCount, currentSort, sortByProperty, filterValues, searchString]);
+    }, [path, itemCount, currentSort, sortByProperty, filterValues, searchString]);
 
     const orderedData = useDataOrder({
         data: rawData,

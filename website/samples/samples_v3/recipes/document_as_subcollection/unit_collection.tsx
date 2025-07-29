@@ -9,8 +9,8 @@ export const unitsCollection = buildCollection<Unit>({
     name: "Units",
     singularName: "Unit",
     group: "Main",
-    id: "units",
-    path: "units",
+    slug: "units",
+    dbPath: "units",
     customId: true,
     icon: "LocalLibrary",
     callbacks: {

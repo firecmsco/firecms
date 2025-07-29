@@ -108,7 +108,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
     const analyticsController = useAnalyticsController();
     const customizationController = useCustomizationController();
 
-    const fullPath = navigation.resolveIdsFrom(pathInput);
+    const path = navigation.resolveDatabasePathsFrom(pathInput);
 
     const dataSource = useDataSource(collection);
 
@@ -119,7 +119,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
         const selectedEntities = selectionController.selectedEntities;
 
         analyticsController.onAnalyticsEvent?.("reference_selection_toggle", {
-            path: fullPath,
+            path,
             entityId: entity.id
         });
         if (selectedEntities) {
@@ -150,7 +150,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
             Promise.all(
                 selectedEntityIds.map((entityId) =>
                     dataSource.fetchEntity({
-                        path: fullPath,
+                        path,
                         entityId,
                         collection
                     })))
@@ -168,11 +168,11 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
         return () => {
             unmounted = true;
         };
-    }, [dataSource, fullPath, selectedEntityIdsProp, collection, selectionController.setSelectedEntities]);
+    }, [dataSource, path, selectedEntityIdsProp, collection, selectionController.setSelectedEntities]);
 
     const onClear = () => {
         analyticsController.onAnalyticsEvent?.("reference_selection_clear", {
-            path: fullPath
+            path
         });
         selectionController.setSelectedEntities([]);
         if (!multiselect && onSingleEntitySelected) {
@@ -185,7 +185,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
     const onEntityClick = (entity: Entity<any>) => {
         if (!multiselect && onSingleEntitySelected) {
             analyticsController.onAnalyticsEvent?.("reference_selected_single", {
-                path: fullPath,
+                path,
                 entityId: entity.id
             });
             onSingleEntitySelected(entity);
@@ -198,10 +198,10 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
     // create a new entity from within the reference dialog
     const onNewClick = () => {
         analyticsController.onAnalyticsEvent?.("reference_selection_new_entity", {
-            path: fullPath
+            path
         });
         sideEntityController.open({
-            path: fullPath,
+            path: path,
             collection,
             updateUrl: true,
             onUpdate: ({ entity }) => {
@@ -233,7 +233,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
             isSelected={isSelected}
             selectionEnabled={multiselect}
             hideId={collection?.hideIdFromCollection}
-            fullPath={fullPath}
+            path={path}
             selectionController={selectionController}
             openEntityMode={"side_panel"}
         />;
@@ -252,16 +252,16 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
 
     const resolvedCollection = useMemo(() => resolveCollection({
         collection: collection,
-        path: fullPath,
+        path: path,
         values: {},
         propertyConfigs: customizationController.propertyConfigs,
         authController
-    }), [collection, customizationController.propertyConfigs, fullPath]);
+    }), [collection, customizationController.propertyConfigs, path]);
 
     const displayedColumnIds = useColumnIds(resolvedCollection, false);
 
     const tableController = useDataSourceTableController<M>({
-        fullPath,
+        path,
         collection,
         entitiesDisplayedFirst,
         forceFilter,
@@ -276,7 +276,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
     } =
         useTableSearchHelper({
             collection,
-            fullPath,
+            path,
         });
 
     return (
@@ -310,7 +310,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
                         selectionController={selectionController}
                         actions={<ReferenceDialogActions
                             collection={collection}
-                            path={fullPath}
+                            path={path}
                             onNewClick={onNewClick}
                             onClear={onClear}/>
                         }

@@ -13,8 +13,7 @@ export const editEntityAction: EntityAction = {
     onClick({
                 entity,
                 collection,
-                fullPath,
-                fullIdPath,
+                path,
                 context,
                 highlightEntity,
                 unhighlightEntity,
@@ -33,11 +32,10 @@ export const editEntityAction: EntityAction = {
         });
 
         if (collection) {
-            addRecentId(collection.id, entity.id);
+            addRecentId(collection.slug, entity.id);
         }
 
-        const path = collection?.collectionGroup ? entity.path : (fullPath ?? collection?.path ?? entity.path);
-        const newFullIdPath = collection?.collectionGroup ? collection.id : (fullIdPath ?? collection?.id ?? entity.path);
+        const newFullIdPath = collection?.collectionGroup ? collection.slug : (path ?? collection?.slug ?? entity.path);
         const defaultSelectedView = resolveDefaultSelectedView(
             collection ? collection.defaultSelectedView : undefined,
             {
@@ -49,8 +47,7 @@ export const editEntityAction: EntityAction = {
             openEntityMode,
             collection,
             entityId: entity.id,
-            path,
-            fullIdPath: newFullIdPath,
+            path: newFullIdPath,
             sideEntityController: context.sideEntityController,
             onClose: () => unhighlightEntity?.(entity),
             navigation: context.navigation,
@@ -70,7 +67,7 @@ export const copyEntityAction: EntityAction = {
                 entity,
                 collection,
                 context,
-                fullPath,
+                path,
                 highlightEntity,
                 unhighlightEntity,
                 openEntityMode
@@ -84,14 +81,12 @@ export const copyEntityAction: EntityAction = {
             entityId: entity.id
         });
 
-        const path = collection?.collectionGroup ? collection.path : (fullPath ?? collection?.path ?? entity.path);
-        const fullIdPath = collection?.collectionGroup ? collection.id : (fullPath ?? collection?.id ?? entity.path);
+        const usedPath = collection?.collectionGroup ? collection.slug : (path ?? collection?.slug ?? entity.path);
         navigateToEntity({
             openEntityMode,
             collection,
             entityId: entity.id,
-            path,
-            fullIdPath,
+            path: usedPath,
             copy: true,
             sideEntityController: context.sideEntityController,
             onClose: () => unhighlightEntity?.(entity),
@@ -109,7 +104,7 @@ export const deleteEntityAction: EntityAction = {
     isEnabled: ({ entity }) => Boolean(entity),
     onClick({
                 entity,
-                fullPath,
+                path,
                 collection,
                 context,
                 selectionController,
@@ -122,17 +117,17 @@ export const deleteEntityAction: EntityAction = {
         const { closeDialog } = context.dialogsController.open({
             key: "delete_entity_dialog_" + entity.id,
             Component: ({ open }) => {
-                if (!collection || !fullPath)
+                if (!collection || !path)
                     throw new Error("deleteEntityAction: Collection is undefined");
                 return <DeleteEntityDialog
                     entityOrEntitiesToDelete={entity}
-                    path={fullPath}
+                    path={path}
                     collection={collection}
                     callbacks={collection.callbacks}
                     open={open}
                     onEntityDelete={() => {
                         context.analyticsController?.onAnalyticsEvent?.("single_entity_deleted", {
-                            path: fullPath
+                            path
                         });
                         selectionController?.setSelectedEntities(selectionController.selectedEntities.filter(e => e.id !== entity.id));
                         onCollectionChange?.();

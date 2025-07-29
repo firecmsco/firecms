@@ -96,7 +96,7 @@ export function RolesDetailsForm({
                 .catch((e) => {
                     const errors: Record<string, string> = {};
                     e.inner.forEach((error: any) => {
-                        errors[error.path] = error.message;
+                        errors[error.slug] = error.message;
                     });
                     return errors;
                 });
@@ -278,29 +278,29 @@ export function RolesDetailsForm({
                                                         align="center">
                                                         <Checkbox
                                                             disabled={isAdmin || defaultCreate || !editable}
-                                                            checked={(isAdmin || defaultCreate || getIn(values, `collectionPermissions.${col.id}.create`)) ?? false}
-                                                            onCheckedChange={(checked) => setFieldValue(`collectionPermissions.${col.id}.create`, checked)}/>
+                                                            checked={(isAdmin || defaultCreate || getIn(values, `collectionPermissions.${col.slug}.create`)) ?? false}
+                                                            onCheckedChange={(checked) => setFieldValue(`collectionPermissions.${col.slug}.create`, checked)}/>
                                                     </TableCell>
                                                     <TableCell
                                                         align="center">
                                                         <Checkbox
                                                             disabled={isAdmin || defaultRead || !editable}
-                                                            checked={(isAdmin || defaultRead || getIn(values, `collectionPermissions.${col.id}.read`)) ?? false}
-                                                            onCheckedChange={(checked) => setFieldValue(`collectionPermissions.${col.id}.read`, checked)}/>
+                                                            checked={(isAdmin || defaultRead || getIn(values, `collectionPermissions.${col.slug}.read`)) ?? false}
+                                                            onCheckedChange={(checked) => setFieldValue(`collectionPermissions.${col.slug}.read`, checked)}/>
                                                     </TableCell>
                                                     <TableCell
                                                         align="center">
                                                         <Checkbox
                                                             disabled={isAdmin || defaultEdit || !editable}
-                                                            checked={(isAdmin || defaultEdit || getIn(values, `collectionPermissions.${col.id}.edit`)) ?? false}
-                                                            onCheckedChange={(checked) => setFieldValue(`collectionPermissions.${col.id}.edit`, checked)}/>
+                                                            checked={(isAdmin || defaultEdit || getIn(values, `collectionPermissions.${col.slug}.edit`)) ?? false}
+                                                            onCheckedChange={(checked) => setFieldValue(`collectionPermissions.${col.slug}.edit`, checked)}/>
                                                     </TableCell>
                                                     <TableCell
                                                         align="center">
                                                         <Checkbox
                                                             disabled={isAdmin || defaultDelete || !editable}
-                                                            checked={(isAdmin || defaultDelete || getIn(values, `collectionPermissions.${col.id}.delete`)) ?? false}
-                                                            onCheckedChange={(checked) => setFieldValue(`collectionPermissions.${col.id}.delete`, checked)}/>
+                                                            checked={(isAdmin || defaultDelete || getIn(values, `collectionPermissions.${col.slug}.delete`)) ?? false}
+                                                            onCheckedChange={(checked) => setFieldValue(`collectionPermissions.${col.slug}.delete`, checked)}/>
                                                     </TableCell>
 
                                                     <TableCell
@@ -310,10 +310,10 @@ export function RolesDetailsForm({
                                                             <Button
                                                                 className={"color-inherit"}
                                                                 onClick={() => {
-                                                                    setFieldValue(`collectionPermissions.${col.id}.create`, true);
-                                                                    setFieldValue(`collectionPermissions.${col.id}.read`, true);
-                                                                    setFieldValue(`collectionPermissions.${col.id}.edit`, true);
-                                                                    setFieldValue(`collectionPermissions.${col.id}.delete`, true);
+                                                                    setFieldValue(`collectionPermissions.${col.slug}.create`, true);
+                                                                    setFieldValue(`collectionPermissions.${col.slug}.read`, true);
+                                                                    setFieldValue(`collectionPermissions.${col.slug}.edit`, true);
+                                                                    setFieldValue(`collectionPermissions.${col.slug}.delete`, true);
                                                                 }}
                                                                 disabled={isAdmin || !editable}
                                                                 variant={"text"}>

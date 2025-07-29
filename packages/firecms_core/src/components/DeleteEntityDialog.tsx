@@ -50,7 +50,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
 
     const resolvedCollection = useMemo(() => resolveCollection<M>({
         collection,
-        path,
+        path: path,
         propertyConfigs: customizationController.propertyConfigs,
         authController
     }), [collection, path]);

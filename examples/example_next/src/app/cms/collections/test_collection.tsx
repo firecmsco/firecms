@@ -49,8 +49,8 @@ export const testCallbacks: EntityCallbacks = {
 
 export const testCollection = buildCollection<any>({
         callbacks: testCallbacks,
-        id: "test_entity",
-        path: "test_entity",
+        slug: "test_entity",
+        dbPath: "test_entity",
         customId: true,
         name: "Test entities",
         entityViews: [{

@@ -22,7 +22,7 @@ import {
 } from "../types";
 import {
     applyPermissionsFunctionIfEmpty,
-    getCollectionByPathOrId,
+    getCollectionBySlugWithin,
     mergeDeep,
     removeFunctions,
     removeInitialAndTrailingSlashes,
@@ -181,7 +181,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             ...(collections ?? []).reduce((acc, collection) => {
                 if (collection.hideFromNavigation) return acc;
 
-                const pathKey = collection.id ?? collection.path;
+                const pathKey = collection.slug;
                 let groupName = getGroup(collection); // Initial group
 
                 if (finalNavigationGroupMappings) {
@@ -198,7 +198,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
                     url: buildUrlCollectionPath(pathKey),
                     type: "collection",
                     name: collection.name.trim(),
-                    path: pathKey,
+                    slug: pathKey,
                     collection,
                     description: collection.description?.trim(),
                     group: groupName ?? NAVIGATION_DEFAULT_GROUP_NAME
@@ -206,52 +206,52 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
                 return acc;
             }, [] as NavigationEntry[]),
 
-            ...(views ?? []).reduce((acc, view) => {
-                if (view.hideFromNavigation) return acc;
-
-                const pathKey = Array.isArray(view.path) ? view.path[0] : view.path;
-                let groupName = getGroup(view); // Initial group
-
-                if (finalNavigationGroupMappings) {
-                    for (const pluginGroupDef of finalNavigationGroupMappings) {
-                        if (pluginGroupDef.entries.includes(pathKey)) {
-                            groupName = pluginGroupDef.name;
-                            break;
-                        }
-                    }
-                }
-
-                acc.push({
-                    id: `view:${pathKey}`,
-                    url: buildCMSUrlPath(pathKey),
-                    name: view.name.trim(),
-                    type: "view",
-                    path: view.path,
-                    view,
-                    description: view.description?.trim(),
-                    group: groupName ?? NAVIGATION_DEFAULT_GROUP_NAME
-                });
-                return acc;
-            }, [] as NavigationEntry[]),
-
-            ...(adminViews ?? []).reduce((acc, view) => {
-                if (view.hideFromNavigation) return acc;
-
-                const pathKey = Array.isArray(view.path) ? view.path[0] : view.path;
-                const groupName = NAVIGATION_ADMIN_GROUP_NAME;
-
-                acc.push({
-                    id: `admin:${pathKey}`,
-                    url: buildCMSUrlPath(pathKey),
-                    name: view.name.trim(),
-                    type: "admin",
-                    path: view.path,
-                    view,
-                    description: view.description?.trim(),
-                    group: groupName
-                });
-                return acc;
-            }, [] as NavigationEntry[])
+            // ...(views ?? []).reduce((acc, view) => {
+            //     if (view.hideFromNavigation) return acc;
+            //
+            //     const pathKey = Array.isArray(view.slug) ? view.slug[0] : view.slug;
+            //     let groupName = getGroup(view); // Initial group
+            //
+            //     if (finalNavigationGroupMappings) {
+            //         for (const pluginGroupDef of finalNavigationGroupMappings) {
+            //             if (pluginGroupDef.entries.includes(pathKey)) {
+            //                 groupName = pluginGroupDef.name;
+            //                 break;
+            //             }
+            //         }
+            //     }
+            //
+            //     acc.push({
+            //         id: `view:${pathKey}`,
+            //         url: buildCMSUrlPath(pathKey),
+            //         name: view.name.trim(),
+            //         type: "view",
+            //         slug: view.slug,
+            //         view,
+            //         description: view.description?.trim(),
+            //         group: groupName ?? NAVIGATION_DEFAULT_GROUP_NAME
+            //     });
+            //     return acc;
+            // }, [] as NavigationEntry[]),
+            //
+            // ...(adminViews ?? []).reduce((acc, view) => {
+            //     if (view.hideFromNavigation) return acc;
+            //
+            //     const pathKey = Array.isArray(view.slug) ? view.slug[0] : view.slug;
+            //     const groupName = NAVIGATION_ADMIN_GROUP_NAME;
+            //
+            //     acc.push({
+            //         id: `admin:${pathKey}`,
+            //         url: buildCMSUrlPath(pathKey),
+            //         name: view.name.trim(),
+            //         type: "admin",
+            //         slug: view.slug,
+            //         view,
+            //         description: view.description?.trim(),
+            //         group: groupName
+            //     });
+            //     return acc;
+            // }, [] as NavigationEntry[])
         ];
 
         const groupOrderValue = (groupName?: string): number => {
@@ -266,7 +266,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         const usedViewsOrder = viewsOrder ?? navigationEntriesOrder;
         if (usedViewsOrder) {
             navigationEntries = navigationEntries.sort((a, b) => {
-                const getSortPath = (navEntry: NavigationEntry) => typeof navEntry.path === "string" ? navEntry.path : navEntry.path[0];
+                const getSortPath = (navEntry: NavigationEntry) => typeof navEntry.slug === "string" ? navEntry.slug : navEntry.slug[0];
                 const aIndex = usedViewsOrder.indexOf(getSortPath(a));
                 const bIndex = usedViewsOrder.indexOf(getSortPath(b));
                 if (aIndex === -1 && bIndex === -1) return 0;
@@ -375,7 +375,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         if (!collections)
             return undefined;
 
-        const baseCollection = getCollectionByPathOrId(removeInitialAndTrailingSlashes(idOrPath), collections);
+        const baseCollection = getCollectionBySlugWithin(removeInitialAndTrailingSlashes(idOrPath), collections);
 
         const userOverride = includeUserOverride ? userConfigPersistence?.getCollectionConfig(idOrPath) : undefined;
         const overriddenCollection = baseCollection ? mergeDeep(baseCollection, userOverride ?? {}) : undefined;
@@ -400,11 +400,11 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
     }, [userConfigPersistence]);
 
-    const getCollectionById = useCallback((id: string): EC | undefined => {
+    const getCollectionBySlug = useCallback((slug: string): EC | undefined => {
         const collections = collectionsRef.current;
         if (collections === undefined)
             throw Error("getCollectionById: Collections have not been initialised yet");
-        const collection: EntityCollection | undefined = collections.find(c => c.id === id);
+        const collection: EntityCollection | undefined = collections.find(c => c.slug === slug);
         if (!collection)
             return undefined;
         return collection as EC;
@@ -419,7 +419,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
         for (let i = 0; i < pathSegments.length; i++) {
             const pathSegment = pathSegments[i];
-            const collection: EntityCollection | undefined = currentCollections!.find(c => c.id === pathSegment || c.path === pathSegment);
+            const collection: EntityCollection | undefined = currentCollections!.find(c => c.slug === pathSegment);
             if (!collection)
                 return undefined;
             currentCollections = collection.subcollections;
@@ -440,7 +440,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
         for (let i = 0; i < ids.length; i++) {
             const id = ids[i];
-            const collection: EntityCollection | undefined = currentCollections!.find(c => c.id === id);
+            const collection: EntityCollection | undefined = currentCollections!.find(c => c.slug === id);
             if (!collection)
                 return undefined;
             currentCollections = collection.subcollections;
@@ -488,7 +488,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         }
 
         // for each odd path segment, get the collection
-        return result.map(r => getCollectionFromPaths(r)?.id).filter(Boolean) as string[];
+        return result.map(r => getCollectionFromPaths(r)?.slug).filter(Boolean) as string[];
     }, [getAllParentReferencesForPath])
 
     const convertIdsToPaths = useCallback((ids: string[]): string[] => {
@@ -497,10 +497,10 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         const paths: string[] = [];
         for (let i = 0; i < ids.length; i++) {
             const id = ids[i];
-            const collection: EntityCollection | undefined = currentCollections!.find(c => c.id === id);
+            const collection: EntityCollection | undefined = currentCollections!.find(c => c.slug === id);
             if (!collection)
                 throw Error(`Collection with id ${id} not found`);
-            paths.push(collection.path);
+            paths.push(collection.dbPath);
             currentCollections = collection.subcollections;
         }
         return paths;
@@ -517,13 +517,13 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         baseCollectionPath,
         initialised,
         getCollection,
-        getCollectionById,
+        getCollectionById: getCollectionBySlug,
         getCollectionFromPaths,
         getCollectionFromIds,
         isUrlCollectionPath,
         urlPathToDataPath,
         buildUrlCollectionPath,
-        resolveIdsFrom,
+        resolveDatabasePathsFrom: resolveIdsFrom,
         topLevelNavigation,
         refreshNavigation,
         getParentReferencesFromPath: getAllParentReferencesForPath,
@@ -542,10 +542,9 @@ function encodePath(input: string) {
 
 function filterOutNotAllowedCollections(resolvedCollections: EntityCollection[], authController: AuthController<User>): EntityCollection[] {
     return resolvedCollections
-        .filter((c) => Boolean(c.path))
         .filter((c) => {
             if (!c.permissions) return true;
-            const resolvedPermissions = resolvePermissions(c, authController, c.path, null);
+            const resolvedPermissions = resolvePermissions(c, authController, c.slug, null);
             return resolvedPermissions?.read !== false;
         })
         .map((c) => {
@@ -631,8 +630,8 @@ function areCollectionListsEqual(a: EntityCollection[], b: EntityCollection[]) {
     }
     const aCopy = [...a];
     const bCopy = [...b];
-    const aSorted = aCopy.sort((x, y) => x.id.localeCompare(y.id));
-    const bSorted = bCopy.sort((x, y) => x.id.localeCompare(y.id));
+    const aSorted = aCopy.sort((x, y) => x.slug.localeCompare(y.slug));
+    const bSorted = bCopy.sort((x, y) => x.slug.localeCompare(y.slug));
     return aSorted.every((value, index) => areCollectionsEqual(value, bSorted[index]));
 }
 
@@ -746,7 +745,7 @@ function computeNavigationGroups({
         // Add collections
         (collections ?? []).forEach(collection => {
             const name = getGroup(collection);
-            const entry = collection.id ?? collection.path;
+            const entry = collection.slug;
             if (!groupMap[name]) groupMap[name] = [];
             groupMap[name].push(entry);
         });
@@ -754,7 +753,7 @@ function computeNavigationGroups({
         // Add views
         (views ?? []).forEach(view => {
             const name = getGroup(view);
-            const entry = Array.isArray(view.path) ? view.path[0] : view.path;
+            const entry = Array.isArray(view.slug) ? view.slug[0] : view.slug;
             if (!groupMap[name]) groupMap[name] = [];
             groupMap[name].push(entry);
         });

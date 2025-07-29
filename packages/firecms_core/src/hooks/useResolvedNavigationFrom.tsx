@@ -80,12 +80,12 @@ export function resolveNavigationFrom<M extends Record<string, any>, USER extend
             if (entry.type === "collection") {
                 return Promise.resolve(entry);
             } else if (entry.type === "entity") {
-                const collection = navigation.getCollection(entry.path);
+                const collection = navigation.getCollection(entry.slug);
                 if (!collection) {
-                    throw Error(`No collection defined in the navigation for the entity with path ${entry.path}`);
+                    throw Error(`No collection defined in the navigation for the entity with path ${entry.slug}`);
                 }
                 return dataSource.fetchEntity({
-                    path: entry.path,
+                    path: entry.slug,
                     entityId: entry.entityId,
                     collection
                 })

@@ -35,8 +35,8 @@ export function useBuildMockCollectionsConfigController(): CollectionsConfigCont
 
 export const productsCollection: PersistedCollection = {
     ownerId: "",
-    path: "products",
-    id: "ppp",
+    dbPath: "products",
+    slug: "ppp",
     name: "Products",
     singularName: "Product",
     group: "Main",
@@ -165,7 +165,7 @@ export const productsCollection: PersistedCollection = {
             description: "Reference to self",
             of: {
                 type: "reference",
-                path: "ppp"
+                slug: "ppp"
             },
             editable: true,
         },

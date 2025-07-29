@@ -32,7 +32,7 @@ describe("getValueInPath", () => {
     });
 
     it("should return undefined if the path does not exist", () => {
-        expect(getValueInPath(obj, "undefined.path")).toBeUndefined();
+        expect(getValueInPath(obj, "undefined.slug")).toBeUndefined();
     });
 
     it("should return undefined if the object is undefined", () => {

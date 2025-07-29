@@ -9,8 +9,8 @@ const locales: EnumValues = {
 };
 
 export const productsCollection = buildCollection({
-    id: "products",
-    path: "products",
+    slug: "products",
+    dbPath: "products",
     name: "Products",
     singularName: "Product",
     entityViews: [
@@ -166,8 +166,8 @@ export const productsCollection = buildCollection({
 
 
 const localeCollection = buildCollection({
-    id: "locales",
-    path: "locales",
+    slug: "locales",
+    dbPath: "locales",
     customId: locales,
     name: "Locales",
     singularName: "Locale",
@@ -195,8 +195,8 @@ const localeCollection = buildCollection({
 });
 
 const pricesCollection = buildCollection({
-    id: "product_price",
-    path: "prices",
+    slug: "product_price",
+    dbPath: "prices",
     name: "Prices",
     properties: {
         value: buildProperty({
@@ -234,8 +234,8 @@ const productCallbacks: EntityCallbacks<any> = {
 };
 
 export const usersCollection = buildCollection({
-    id: "users",
-    path: "users",
+    slug: "users",
+    dbPath: "users",
     name: "Users",
     singularName: "User",
     group: "Main",
@@ -293,33 +293,34 @@ export const siteConfig = {
     collections: [
         buildCollection({
             ...productsCollection,
-            path: "products",
+            dbPath: "products",
             callbacks: productCallbacks,
             singularName: "Products",
             subcollections: [localeCollection]
         }),
         buildCollection({
             ...productsCollection,
-            path: "sites/es/products",
+            slug: "p",
+            dbPath: "sites/es/products",
             callbacks: productCallbacks,
             singularName: "Products",
             subcollections: [localeCollection, pricesCollection]
         }),
         buildCollection({
             ...productsCollection,
-            path: "products/id/subcollection_inline",
+            dbPath: "products/id/subcollection_inline",
             callbacks: productCallbacks,
             singularName: "Products",
             subcollections: [localeCollection]
         }),
         buildCollection({
             ...usersCollection,
-            path: "users",
-            id: "u",
+            dbPath: "users",
+            slug: "u",
             singularName: "Users",
             subcollections: [buildCollection({
                 ...productsCollection,
-                id: "p"
+                slug: "p"
             })]
         })
     ],

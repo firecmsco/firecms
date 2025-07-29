@@ -32,8 +32,7 @@ import { hasEntityInCache } from "../../util/entity_cache";
 export const EntityCollectionRowActions = function EntityCollectionRowActions({
                                                                                   entity,
                                                                                   collection,
-                                                                                  fullPath,
-                                                                                  fullIdPath,
+                                                                                  path,
                                                                                   width,
                                                                                   frozen,
                                                                                   isSelected,
@@ -50,8 +49,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                                                                               {
                                                                                   entity: Entity<any>,
                                                                                   collection?: EntityCollection<any>,
-                                                                                  fullPath?: string,
-                                                                                  fullIdPath?: string,
+                                                                                  path?: string,
                                                                                   width: number,
                                                                                   frozen?: boolean,
                                                                                   size: CollectionSize,
@@ -79,7 +77,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
 
     const collapsedActions = actions.filter(a => a.collapsed || a.collapsed === undefined);
     const uncollapsedActions = actions.filter(a => a.collapsed === false);
-    const hasDraft = hasEntityInCache(fullPath + "/" + entity.id);
+    const hasDraft = hasEntityInCache(path + "/" + entity.id);
     return (
         <div
             className={cls(
@@ -109,8 +107,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                                     action.onClick({
                                         view: "collection",
                                         entity,
-                                        fullPath,
-                                        fullIdPath,
+                                        path,
                                         collection,
                                         context,
                                         selectionController,
@@ -140,8 +137,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                                         action.onClick({
                                             view: "collection",
                                             entity,
-                                            fullPath,
-                                            fullIdPath,
+                                            path,
                                             collection,
                                             context,
                                             selectionController,

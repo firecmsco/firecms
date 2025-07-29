@@ -7,8 +7,8 @@ export type Page = {
 
 export const pagesCollection = buildCollection<Page>({
     name: "Pages",
-    id: "pages",
-    path: "pages",
+    slug: "pages",
+    dbPath: "pages",
     callbacks: {
         onPreSave: ({
                         values,

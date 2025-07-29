@@ -114,8 +114,7 @@ const appConfig: FireCMSAppConfig = {
 
 * `entity`: Entity being edited
 * `context`: FireCMSContext, used for accessing all the controllers
-* `fullPath`?: string
-* `fullIdPath`?: string
+* `path`?: string
 * `collection`?: EntityCollection
 * `formContext`?: FormContext, present if the action is being called from a form.
 * `selectionController`?: SelectionController, used for accessing the selected entities or modifying the selection

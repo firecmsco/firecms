@@ -47,15 +47,15 @@ export class EntityReference {
      * A string representing the path of the referenced document (relative
      * to the root of the database).
      */
-    readonly path: string;
+    readonly slug: string;
 
     constructor(id: string | number, path: string) {
         this.id = id;
-        this.path = path;
+        this.slug = path;
     }
 
     get pathWithId() {
-        return `${this.path}/${this.id}`;
+        return `${this.slug}/${this.id}`;
     }
 
     isEntityReference() {

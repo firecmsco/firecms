@@ -53,18 +53,18 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
         const cmsViews: React.ReactNode[] = [];
         if (navigation.views) {
             navigation.views.forEach((cmsView) => {
-                if (Array.isArray(cmsView.path))
-                    cmsViews.push(...cmsView.path.map(path => buildCMSViewRoute(path, cmsView)));
+                if (Array.isArray(cmsView.slug))
+                    cmsViews.push(...cmsView.slug.map(path => buildCMSViewRoute(path, cmsView)));
                 else
-                    cmsViews.push(buildCMSViewRoute(cmsView.path, cmsView));
+                    cmsViews.push(buildCMSViewRoute(cmsView.slug, cmsView));
             });
         }
         if (navigation.adminViews) {
             navigation.adminViews.forEach((cmsView) => {
-                if (Array.isArray(cmsView.path))
-                    cmsViews.push(...cmsView.path.map(path => buildCMSViewRoute(path, cmsView)));
+                if (Array.isArray(cmsView.slug))
+                    cmsViews.push(...cmsView.slug.map(path => buildCMSViewRoute(path, cmsView)));
                 else
-                    cmsViews.push(buildCMSViewRoute(cmsView.path, cmsView));
+                    cmsViews.push(buildCMSViewRoute(cmsView.slug, cmsView));
             });
         }
 

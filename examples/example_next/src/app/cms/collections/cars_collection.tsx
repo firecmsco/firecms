@@ -1,9 +1,9 @@
 import { DataSourceDelegate, EntityCollection } from "@firecms/core";
 
 export const carsCollection = (dataSourceDelegate: DataSourceDelegate): EntityCollection => ({
-        id: "cars",
+        slug: "cars",
         name: "Cars",
-        path: "cars",
+        dbPath: "cars",
         editable: true,
         icon: "broken_image",
         overrides: {

@@ -58,8 +58,8 @@ export function getEntityViewWidth(props: EntitySidePanelProps<any>, small: bool
 const collectionViewWidthCache: { [key: string]: string } = {};
 
 function calculateCollectionDesiredWidth(collection: EntityCollection<any>, authController: AuthController): string {
-    if (collectionViewWidthCache[collection.id]) {
-        return collectionViewWidthCache[collection.id];
+    if (collectionViewWidthCache[collection.slug]) {
+        return collectionViewWidthCache[collection.slug];
     }
     const resolvedCollection = resolveCollection({
         collection,
@@ -78,7 +78,7 @@ function calculateCollectionDesiredWidth(collection: EntityCollection<any>, auth
             result = 768 + 32 * (maxDepth - 2) + "px";
         }
     }
-    collectionViewWidthCache[collection.id] = result;
+    collectionViewWidthCache[collection.slug] = result;
     return result;
 }
 
@@ -122,9 +122,9 @@ export const useBuildSideEntityController = (navigation: NavigationController,
                 for (let i = 0; i < panelsFromUrl.length; i++) {
                     const props = panelsFromUrl[i];
                     if (i === 0)
-                        sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController, authController));
+                        sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveDatabasePathsFrom, smallLayout, customizationController, authController));
                     else
-                        sideDialogsController.open(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController, authController))
+                        sideDialogsController.open(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveDatabasePathsFrom, smallLayout, customizationController, authController))
                 }
             }
             initialised.current = true;
@@ -144,7 +144,7 @@ export const useBuildSideEntityController = (navigation: NavigationController,
                     return;
                 }
                 const lastPanel = panelsFromUrl[panelsFromUrl.length - 1];
-                const panelProps = propsToSidePanel(lastPanel, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController, authController);
+                const panelProps = propsToSidePanel(lastPanel, navigation.buildUrlCollectionPath, navigation.resolveDatabasePathsFrom, smallLayout, customizationController, authController);
                 const lastCurrentPanel = currentPanelKeys.length > 0 ? currentPanelKeys[currentPanelKeys.length - 1] : undefined;
                 if (!lastCurrentPanel || lastCurrentPanel !== panelProps.key) {
                     sideDialogsController.replace(panelProps);
@@ -157,7 +157,7 @@ export const useBuildSideEntityController = (navigation: NavigationController,
     useEffect(() => {
         const updatedSidePanels = sideDialogsController.sidePanels.map(sidePanelProps => {
             if (sidePanelProps.additional) {
-                return propsToSidePanel(sidePanelProps.additional, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController, authController);
+                return propsToSidePanel(sidePanelProps.additional, navigation.buildUrlCollectionPath, navigation.resolveDatabasePathsFrom, smallLayout, customizationController, authController);
             }
             return sidePanelProps;
         });
@@ -188,13 +188,13 @@ export const useBuildSideEntityController = (navigation: NavigationController,
                     ...props
                 },
                 navigation.buildUrlCollectionPath,
-                navigation.resolveIdsFrom,
+                navigation.resolveDatabasePathsFrom,
                 smallLayout,
                 customizationController,
                 authController
             ));
 
-    }, [sideDialogsController, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, authController.user]);
+    }, [sideDialogsController, navigation.buildUrlCollectionPath, navigation.resolveDatabasePathsFrom, smallLayout, authController.user]);
 
     const replace = useCallback((props: EntitySidePanelProps<any>) => {
 
@@ -202,9 +202,9 @@ export const useBuildSideEntityController = (navigation: NavigationController,
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
 
-        sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, smallLayout, customizationController, authController));
+        sideDialogsController.replace(propsToSidePanel(props, navigation.buildUrlCollectionPath, navigation.resolveDatabasePathsFrom, smallLayout, customizationController, authController));
 
-    }, [navigation.buildUrlCollectionPath, navigation.resolveIdsFrom, sideDialogsController, smallLayout, authController.user]);
+    }, [navigation.buildUrlCollectionPath, navigation.resolveDatabasePathsFrom, sideDialogsController, smallLayout, authController.user]);
 
     return {
         close,
@@ -228,15 +228,14 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
         const navigationEntry = navigationViewsForPath[i];
 
         if (navigationEntry.type === "collection") {
-            lastCollectionPath = navigationEntry.path;
-            lastCollectionId = navigationEntry.collection.id;
+            lastCollectionPath = navigationEntry.slug;
+            lastCollectionId = navigationEntry.collection.slug;
         }
 
         const previousEntry = navigationViewsForPath[i - 1];
         if (navigationEntry.type === "entity") {
             sidePanel = {
-                path: navigationEntry.path,
-                fullIdPath: navigationEntry.fullIdPath,
+                path: navigationEntry.slug,
                 entityId: navigationEntry.entityId,
                 copy: false,
                 width: navigationEntry.parentCollection?.sideDialogWidth
@@ -249,7 +248,7 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
         } else if (navigationEntry.type === "collection") {
             if (previousEntry?.type === "entity") {
                 if (sidePanel)
-                    sidePanel.selectedTab = navigationEntry.collection.id ?? navigationEntry.collection.path;
+                    sidePanel.selectedTab = navigationEntry.collection.slug;
             }
         }
 
@@ -258,7 +257,6 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
     if (newFlag) {
         sidePanel = {
             path: lastCollectionPath,
-            fullIdPath: lastCollectionId,
             copy: false
         }
     }

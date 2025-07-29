@@ -115,10 +115,10 @@ function collectionToCode(collection: EntityCollection): object {
     }
 
     return {
-        id: collection.id,
+        id: collection.slug,
         name: collection.name,
         singularName: collection.singularName,
-        path: collection.path,
+        path: collection.dbPath,
         description: collection.description,
         editable: true,
         collectionGroup: collection.collectionGroup,

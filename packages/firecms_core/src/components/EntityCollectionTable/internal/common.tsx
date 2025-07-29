@@ -66,5 +66,5 @@ export function getTablePropertyColumnWidth(property: ResolvedProperty): number 
 }
 
 export function getSubcollectionColumnId(collection: EntityCollection) {
-    return `subcollection:${collection.id ?? collection.path}`;
+    return `subcollection:${collection.slug}`;
 }

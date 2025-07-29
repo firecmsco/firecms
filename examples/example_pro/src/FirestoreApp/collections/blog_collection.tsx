@@ -13,8 +13,8 @@ export type BlogEntry = {
 }
 
 export const blogCollection = buildCollection<BlogEntry>({
-    id: "blog",
-    path: "blog",
+    slug: "blog",
+    dbPath: "blog",
     name: "Blog",
     singularName: "Blog entry",
     group: "Demo collections",

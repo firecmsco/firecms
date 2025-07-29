@@ -2,8 +2,8 @@ import { buildCollection } from "@firecms/core";
 import { EmailIcon } from "@firecms/ui";
 
 export const usersCollection = buildCollection({
-    id: "users",
-    path: "users",
+    slug: "users",
+    dbPath: "users",
     name: "Users",
     singularName: "User",
     description: "Registered users",

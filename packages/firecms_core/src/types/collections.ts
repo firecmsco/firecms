@@ -25,13 +25,13 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * while `path` will still be used in the datasource.
      * Note that you can use this value in reference properties too.
      */
-    id: string;
+    slug: string;
 
     /**
      * Field used to identify the entity in this collection.
      * If not specified, the default `id` field will be used.
      */
-    idField?: keyof M;
+    idField?: Extract<keyof M, string>;
 
     /**
      * Name of the collection, typically plural.
@@ -54,7 +54,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * Relative path of this view to its parent.
      * If this view is in the root the path is equal to the absolute one.
      */
-    path: string;
+    dbPath: string;
 
     /**
      * Optional database id of this collection. If not specified, the default
@@ -102,7 +102,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * as the title in entity related views and references.
      * If not specified, the first property simple text property will be used.
      */
-    titleProperty?: keyof M;
+    titleProperty?: Extract<keyof M, string>;
 
     /**
      * When editing an entity, you can choose to open the entity in a side dialog

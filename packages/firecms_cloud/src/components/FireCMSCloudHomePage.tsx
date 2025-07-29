@@ -49,10 +49,10 @@ export function FireCMSCloudHomePage() {
             <NavigationGroup group={"ADMIN"}>
                 <div className={"grid grid-cols-12 gap-2"}>
                     {ADMIN_VIEWS_CONFIG.map((view) => <div className={"col-span-12 sm:col-span-6 lg:col-span-4"}
-                                                           key={`nav_${view.path}`}>
+                                                           key={`nav_${view.slug}`}>
                         <SmallNavigationCard
                             name={view.name}
-                            url={view.path}
+                            url={view.slug}
                             icon={<IconForView collectionOrView={view}
                                                className={"text-surface-400 dark:text-surface-600"}/>}/>
                     </div>)}

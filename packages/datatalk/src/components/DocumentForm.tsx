@@ -133,7 +133,7 @@
 // export const EntityForm = React.memo<EntityFormProps<any>>(EntityFormInternal,
 //     (a: EntityFormProps<any>, b: EntityFormProps<any>) => {
 //         return a.status === b.status &&
-//             a.path === b.path &&
+//             a.slug === b.slug &&
 //             equal(a.entity?.values, b.entity?.values);
 //     }) as typeof EntityFormInternal;
 //
@@ -285,7 +285,7 @@
 //
 //                     const errors: Record<string, string> = {};
 //                     e.inner.forEach((error: any) => {
-//                         errors[error.path] = error.message;
+//                         errors[error.slug] = error.message;
 //                     });
 //                     return yupToFormErrors(e);
 //                 });
@@ -655,7 +655,7 @@
 //                                 if (entity)
 //                                     action.onClick({
 //                                         entity,
-//                                         fullPath: resolvedCollection.path,
+//                                         path: resolvedCollection.slug,
 //                                         collection: resolvedCollection,
 //                                         context,
 //                                         sideEntityController,
@@ -711,11 +711,11 @@
 //     let errors: Record<string, any> = {};
 //     if (yupError.inner) {
 //         if (yupError.inner.length === 0) {
-//             return setIn(errors, yupError.path!, yupError.message);
+//             return setIn(errors, yupError.slug!, yupError.message);
 //         }
 //         for (const err of yupError.inner) {
-//             if (!getIn(errors, err.path!)) {
-//                 errors = setIn(errors, err.path!, err.message);
+//             if (!getIn(errors, err.slug!)) {
+//                 errors = setIn(errors, err.slug!, err.message);
 //             }
 //         }
 //     }

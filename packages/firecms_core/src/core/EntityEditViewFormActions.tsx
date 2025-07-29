@@ -155,7 +155,7 @@ function buildBottomActions<M extends object>({
                 const props = {
                     view: "form",
                     entity,
-                    fullPath: collection.path,
+                    path: collection.slug,
                     collection: collection,
                     context,
                     sideEntityController,
@@ -244,7 +244,7 @@ function buildSideActions<M extends object>({
                 const props = {
                     view: "form",
                     entity,
-                    fullPath: collection.path,
+                    path: collection.slug,
                     collection: collection,
                     context,
                     sideEntityController,

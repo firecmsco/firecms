@@ -54,10 +54,7 @@ export function resolveCollectionPathIds(path: string, allCollections: EntityCol
         const potentialMatches: { col: EntityCollection; match: string; }[] = currentCollections
             .flatMap(col => [{
                 col,
-                match: col.path
-            }, {
-                col,
-                match: col.id
+                match: col.slug
             }])
             .filter(p => p.match && remainingPath.startsWith(p.match))
             .sort((a, b) => b.match.length - a.match.length);
@@ -68,7 +65,7 @@ export function resolveCollectionPathIds(path: string, allCollections: EntityCol
                 match: matchString
             } = potentialMatches[0];
 
-            resolvedPathParts.push(foundCollection.path); // Use the defined path
+            resolvedPathParts.push(foundCollection.dbPath); // Use the defined path
             remainingPath = removeInitialSlash(remainingPath.substring(matchString.length));
 
             // Check if we are at the end of the path
@@ -98,7 +95,7 @@ export function resolveCollectionPathIds(path: string, allCollections: EntityCol
 
             if (!currentCollections && remainingPath.length > 0) {
                 // Warn if the path continues but no subcollections were defined
-                console.warn(`resolveCollectionPathIds: Path continues after entity ID "${entityId}", but no subcollections are defined for the preceding collection "${foundCollection.path}" in path "${path}". Appending remaining original path.`);
+                console.warn(`resolveCollectionPathIds: Path continues after entity ID "${entityId}", but no subcollections are defined for the preceding collection "${foundCollection.slug}" in path "${path}". Appending remaining original path.`);
                 resolvedPathParts.push(remainingPath); // Append the rest
                 remainingPath = ""; // Stop processing
                 break;
@@ -124,20 +121,25 @@ export function resolveCollectionPathIds(path: string, allCollections: EntityCol
  * @param pathOrId
  * @param collections
  */
-export function getCollectionByPathOrId(pathOrId: string, collections: EntityCollection[]): EntityCollection | undefined {
+export function getCollectionBySlugWithin(pathOrId: string, collections: EntityCollection[]): EntityCollection | undefined {
 
     const subpaths = removeInitialAndTrailingSlashes(pathOrId).split("/");
     if (subpaths.length % 2 === 0) {
-        throw Error(`getCollectionByPathOrId: Collection paths must have an odd number of segments: ${pathOrId}`);
+        throw Error(`getCollectionBySlug: Collection paths must have an odd number of segments: ${pathOrId}`);
     }
 
     const subpathCombinations = getCollectionPathsCombinations(subpaths);
+    console.log("getCollectionBySlug", {
+        pathOrId,
+        subpaths,
+        subpathCombinations
+    });
     let result: EntityCollection | undefined;
     for (let i = 0; i < subpathCombinations.length; i++) {
         const subpathCombination = subpathCombinations[i];
         const navigationEntry = collections && collections
-            .sort((a, b) => (a.id ?? "").localeCompare(b.id ?? ""))
-            .find((entry) => entry.id === subpathCombination || entry.path === subpathCombination);
+            .sort((a, b) => (a.slug ?? "").localeCompare(b.slug ?? ""))
+            .find((entry) => entry.slug === subpathCombination);
 
         if (navigationEntry) {
 
@@ -146,7 +148,7 @@ export function getCollectionByPathOrId(pathOrId: string, collections: EntityCol
             } else if (navigationEntry.subcollections) {
                 const newPath = pathOrId.replace(subpathCombination, "").split("/").slice(2).join("/");
                 if (newPath.length > 0)
-                    result = getCollectionByPathOrId(newPath, navigationEntry.subcollections);
+                    result = getCollectionBySlugWithin(newPath, navigationEntry.subcollections);
             }
         }
         if (result) break;
@@ -177,7 +179,6 @@ export function navigateToEntity({
                                      entityId,
                                      copy,
                                      path,
-                                     fullIdPath,
                                      selectedTab,
                                      sideEntityController,
                                      onClose,
@@ -191,7 +192,6 @@ export function navigateToEntity({
                                      selectedTab?: string;
                                      copy?: boolean;
                                      path: string;
-                                     fullIdPath?: string;
                                      sideEntityController: SideEntityController;
                                      onClose?: () => void;
                                      navigation: NavigationController
@@ -201,8 +201,7 @@ export function navigateToEntity({
 
         sideEntityController.open({
             entityId,
-            path,
-            fullIdPath,
+            path: path,
             copy,
             selectedTab,
             collection,
@@ -211,7 +210,7 @@ export function navigateToEntity({
         });
 
     } else {
-        let to = navigation.buildUrlCollectionPath(entityId ? `${fullIdPath ?? path}/${entityId}` : fullIdPath ?? path);
+        let to = navigation.buildUrlCollectionPath(entityId ? `${path ?? path}/${entityId}` : path ?? path);
         if (entityId && selectedTab) {
             to += `/${selectedTab}`;
         }

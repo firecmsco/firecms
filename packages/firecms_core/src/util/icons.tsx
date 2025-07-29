@@ -29,7 +29,7 @@ export function getIcon(iconKey?: string | React.ReactNode,
 }
 
 export type IconViewProps = {
-    path: string;
+    slug: string;
     name: string;
     singularName?: string;
     group?: string;
@@ -53,22 +53,22 @@ export const IconForView = React.memo(
         if (collectionOrView?.icon && icon)
             return icon;
 
-        let slugName = slugify(("singularName" in collectionOrView ? collectionOrView.singularName : undefined) ?? collectionOrView.name);
+        let pathname = slugify(("singularName" in collectionOrView ? collectionOrView.singularName : undefined) ?? collectionOrView.name);
 
         let key: string | undefined;
-        if (slugName in iconKeysMap)
-            key = slugName;
+        if (pathname in iconKeysMap)
+            key = pathname;
 
         if (!key) {
-            slugName = slugify(collectionOrView.path);
-            if (slugName in iconKeysMap)
-                key = slugName;
+            pathname = slugify(collectionOrView.slug);
+            if (pathname in iconKeysMap)
+                key = pathname;
         }
 
         const iconsCount = coolIconKeys.length;
 
         if (!key)
-            key = coolIconKeys[hashString(collectionOrView.path) % iconsCount];
+            key = coolIconKeys[hashString(collectionOrView.slug) % iconsCount];
 
         return <Icon iconKey={key} size={size} className={className} color={color}/>;
     }, (prevProps, nextProps) => {

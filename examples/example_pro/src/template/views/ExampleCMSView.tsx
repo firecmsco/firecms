@@ -48,8 +48,8 @@ export function ExampleCMSView() {
     });
 
     const customProductCollection = buildCollection({
-        id: "custom_product",
-        path: "custom_product",
+        slug: "custom_product",
+        dbPath: "custom_product",
         name: "Custom products",
         properties: {
             name: {

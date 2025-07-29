@@ -78,7 +78,7 @@ export function DataEnhancementControllerProvider({
 
     const resolvedCollection = resolveCollection({
         collection,
-        path,
+        path: path,
         entityId: formContext?.entityId,
         values: formContext?.values,
         propertyConfigs: customizationController.propertyConfigs,
@@ -228,7 +228,7 @@ export function DataEnhancementControllerProvider({
             return Promise.reject(new Error("Not logged in"));
         }
 
-        const resolvedPath = navigationController.resolveIdsFrom(path);
+        const resolvedPath = navigationController.resolveDatabasePathsFrom(path);
         const firebaseToken = await authController.getAuthToken();
 
         if (props.propertyKey) {
@@ -342,7 +342,7 @@ const ENTITIES_COUNT = 1;
 
 async function getOtherEntities(collection: EntityCollection, dataSource: DataSource, path: string, entityId: string | number): Promise<Entity<any>[]> {
     const fetchedDocs = await dataSource.fetchCollection({
-        path,
+        path: path,
         collection,
         filter: { __name__: [">", entityId] },
         orderBy: "__name__",
@@ -351,7 +351,7 @@ async function getOtherEntities(collection: EntityCollection, dataSource: DataSo
     });
     if (fetchedDocs.length < ENTITIES_COUNT) {
         fetchedDocs.push(...await dataSource.fetchCollection({
-            path,
+            path: path,
             collection,
             filter: { __name__: ["<", entityId] },
             orderBy: "__name__",

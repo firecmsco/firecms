@@ -4,12 +4,12 @@ import { useCollectionEditorController } from "../useCollectionEditorController"
 import { PersistedCollection } from "../types/persisted_collection";
 
 export function PropertyAddColumnComponent({
-                                               fullPath,
+                                               path,
                                                parentCollectionIds,
                                                collection,
                                                tableController
                                            }: {
-    fullPath: string,
+    path: string,
     parentCollectionIds: string[],
     collection: PersistedCollection;
     tableController: EntityTableController;
@@ -33,7 +33,7 @@ export function PropertyAddColumnComponent({
                 // className={onHover ? "bg-white dark:bg-surface-950" : undefined}
                 onClick={() => {
                     collectionEditorController.editProperty({
-                        editedCollectionId: collection.id,
+                        editedCollectionId: collection.slug,
                         parentCollectionIds,
                         currentPropertiesOrder: getDefaultPropertiesOrder(collection),
                         collection,

@@ -29,7 +29,7 @@ export function EntityView<M extends Record<string, any>>(
     const customizationController: CustomizationController = useCustomizationController();
     const resolvedCollection: ResolvedEntityCollection<M> = useMemo(() => resolveCollection<M>({
         collection,
-        path,
+        path: path,
         entityId: entity.id,
         values: entity.values,
         propertyConfigs: customizationController.propertyConfigs,

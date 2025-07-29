@@ -5,7 +5,7 @@ import { FireCMSAppConfig, FireCMSCloudApp } from "@firecms/cloud";
 const projectId = "YOUR_PROJECT_ID";
 
 const customViews: CMSView[] = [{
-    path: "additional",
+    slug: "additional",
     name: "Additional view",
     description: "This is an example of an additional view that is defined by the user",
     // This can be any React component
@@ -14,8 +14,8 @@ const customViews: CMSView[] = [{
 
 const productCollection = buildCollection<any>({
     name: "Product",
-    id: "products",
-    path: "products",
+    slug: "products",
+    dbPath: "products",
     properties: {
         name: {
             name: "Name",

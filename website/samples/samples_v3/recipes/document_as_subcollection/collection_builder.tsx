@@ -10,8 +10,8 @@ const collectionBuilder: EntityCollectionsBuilder = async ({
     });
     const lessonCollections = units.map(unit => buildCollection<Unit>({
         name: unit.values.name,
-        id: `units/${unit.id}/lessons`,
-        path: `units/${unit.id}/lessons`,
+        slug: `units/${unit.id}/lessons`,
+        dbPath: `units/${unit.id}/lessons`,
         description: unit.values.description,
         group: "Units",
         properties: {

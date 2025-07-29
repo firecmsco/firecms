@@ -269,7 +269,7 @@ export class EntityService {
 
         return {
             id: (raw as any)[idInfo.fieldName].toString(),
-            path: path,
+            path,
             values: values as M,
             databaseId
         };

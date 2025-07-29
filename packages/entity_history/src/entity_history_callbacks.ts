@@ -7,7 +7,7 @@ export const entityHistoryCallbacks: EntityCallbacks = {
         const changedFields = props.previousValues ? findChangedFields(props.previousValues, props.values) : null;
         const uid = props.context.authController.user?.uid;
         props.context.dataSource.saveEntity({
-            path: props.path + "/" + props.entityId + "/__history",
+            path: props.slug + "/" + props.entityId + "/__history",
             values: {
                 ...props.values,
                 __metadata: {
@@ -19,7 +19,7 @@ export const entityHistoryCallbacks: EntityCallbacks = {
             },
             status: "new"
         }).then(() => {
-            console.debug("History saved for", props.path, props.entityId);
+            console.debug("History saved for", props.slug, props.entityId);
         });
     }
 }

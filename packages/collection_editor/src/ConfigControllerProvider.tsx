@@ -79,7 +79,7 @@ export const ConfigControllerProvider = React.memo(
             isNewCollection: boolean,
             parentCollection?: PersistedCollection,
             editedCollectionId?: string,
-            fullPath?: string,
+            path?: string,
             parentCollectionIds: string[],
             initialValues?: {
                 path?: string,
@@ -97,7 +97,7 @@ export const ConfigControllerProvider = React.memo(
             parentCollection?: PersistedCollection,
             currentPropertiesOrder?: string[],
             editedCollectionId: string,
-            fullPath?: string,
+            path?: string,
             parentCollectionIds: string[],
             collectionEditable: boolean;
             existingEntities?: Entity<any>[]
@@ -111,25 +111,25 @@ export const ConfigControllerProvider = React.memo(
 
         const editCollection = ({
                                     id,
-                                    fullPath,
+                                    path,
                                     parentCollectionIds,
                                     parentCollection,
                                     existingEntities
                                 }: {
             id?: string,
-            fullPath?: string,
+            path?: string,
             parentCollectionIds: string[],
             parentCollection?: PersistedCollection,
             existingEntities?: Entity<any>[]
         }) => {
-            console.debug("Edit collection", id, fullPath, parentCollectionIds, parentCollection);
+            console.debug("Edit collection", id, path, parentCollectionIds, parentCollection);
             onAnalyticsEvent?.("edit_collection", {
                 id,
-                fullPath
+                path
             });
             setCurrentDialog({
                 editedCollectionId: id,
-                fullPath,
+                path,
                 parentCollectionIds,
                 isNewCollection: false,
                 parentCollection,
@@ -244,7 +244,7 @@ export const ConfigControllerProvider = React.memo(
                         handleClose={(collection) => {
                             if (currentDialog?.redirect) {
                                 if (collection && currentDialog?.isNewCollection && !currentDialog.parentCollectionIds.length) {
-                                    const url = navigation.buildUrlCollectionPath(collection.id ?? collection.path);
+                                    const url = navigation.buildUrlCollectionPath(collection.slug);
                                     navigate(url);
                                 }
                             }
@@ -263,7 +263,7 @@ export const ConfigControllerProvider = React.memo(
                         getData={getData && currentPropertyDialog?.editedCollectionId
                             ? () => {
                                 console.debug("get data for property", currentPropertyDialog?.editedCollectionId);
-                                const resolvedPath = navigation.resolveIdsFrom(currentPropertyDialog.editedCollectionId!)
+                                const resolvedPath = navigation.resolveDatabasePathsFrom(currentPropertyDialog.editedCollectionId!)
                                 return getData(resolvedPath, []);
                             }
                             : undefined}

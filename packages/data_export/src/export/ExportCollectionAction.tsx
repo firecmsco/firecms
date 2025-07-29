@@ -62,7 +62,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
     const dataSource = useDataSource();
     const navigationController = useNavigationController();
 
-    const path = navigationController.resolveIdsFrom(inputPath);
+    const path = navigationController.resolveDatabasePathsFrom(inputPath);
 
     const canExport = !exportAllowed || exportAllowed({
         collectionEntitiesCount,
@@ -72,7 +72,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
 
     const collection: ResolvedEntityCollection<M> = React.useMemo(() => resolveCollection({
         collection: inputCollection,
-        path,
+        path: path,
         propertyConfigs: customizationController.propertyConfigs,
         authController,
     }), [inputCollection, path]);
@@ -130,11 +130,11 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                                           exportConfig: ExportConfig<any> | undefined) => {
 
         onAnalyticsEvent?.("export_collection", {
-            collection: collection.path
+            collection: collection.slug
         });
         setDataLoading(true);
         dataSource.fetchCollection<M>({
-            path,
+            path: path,
             collection
         })
             .then(async (data) => {
@@ -166,7 +166,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                     dateExportType
                 });
                 onAnalyticsEvent?.("export_collection_success", {
-                    collection: collection.path
+                    collection: collection.slug
                 });
             })
             .catch((e) => {

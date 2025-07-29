@@ -134,11 +134,6 @@ export interface EntityOnSaveProps<M extends Record<string, any> = any, USER ext
     path: string;
 
     /**
-     * Full path where this entity is being saved, with alias resolved
-     */
-    resolvedPath: string;
-
-    /**
      * ID of the entity
      */
     entityId: string | number;

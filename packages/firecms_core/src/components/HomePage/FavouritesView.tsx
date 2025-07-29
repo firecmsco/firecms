@@ -12,22 +12,22 @@ function NavigationChip({ entry }: { entry: NavigationEntry }) {
     if (!userConfigurationPersistence)
         return null;
 
-    const favourite = userConfigurationPersistence.favouritePaths.includes(entry.path);
+    const favourite = userConfigurationPersistence.favouritePaths.includes(entry.slug);
     const onIconClick = (e: React.SyntheticEvent) => {
         e.preventDefault();
         e.stopPropagation();
         if (favourite) {
             userConfigurationPersistence.setFavouritePaths(
-                userConfigurationPersistence.favouritePaths.filter(p => p !== entry.path)
+                userConfigurationPersistence.favouritePaths.filter(p => p !== entry.slug)
             );
         } else {
             userConfigurationPersistence.setFavouritePaths(
-                [...userConfigurationPersistence.favouritePaths, entry.path]
+                [...userConfigurationPersistence.favouritePaths, entry.slug]
             );
         }
     };
     return <Chip
-        key={entry.path}
+        key={entry.slug}
         onClick={() => navigate(entry.url)}
         icon={<StarIcon
             onClick={onIconClick}
@@ -47,12 +47,12 @@ export function FavouritesView({ hidden }: { hidden: boolean }) {
         return null;
 
     const favouriteCollections = (userConfigurationPersistence?.favouritePaths ?? [])
-        .map((path) => navigationController.topLevelNavigation?.navigationEntries.find((entry) => entry.path === path))
+        .map((path) => navigationController.topLevelNavigation?.navigationEntries.find((entry) => entry.slug === path))
         .filter(Boolean) as NavigationEntry[];
 
     return <Collapse in={favouriteCollections.length > 0}>
         <div className="flex flex-row flex-wrap gap-2 pb-2 min-h-[32px]">
-            {favouriteCollections.map((entry) => <NavigationChip key={entry.path}
+            {favouriteCollections.map((entry) => <NavigationChip key={entry.slug}
                                                                  entry={entry}/>)}
         </div>
     </Collapse>;

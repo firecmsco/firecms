@@ -57,8 +57,6 @@ import CustomColorTextField from "./custom_field/CustomColorTextField";
 import { booksCollection } from "./collections/books_collection";
 import { FirebaseApp } from "@firebase/app";
 import { TestEditorView } from "./views/TestEditorView";
-import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
-import { buildCollectionInference, useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
 import { useExportPlugin } from "@firecms/data_export";
 import { useImportPlugin } from "@firecms/data_import";
 import { DemoImportAction } from "./DemoImportAction";
@@ -133,9 +131,9 @@ export function App() {
     //     }
     // });
 
-    const collectionConfigController = useFirestoreCollectionsConfigController({
-        firebaseApp
-    });
+    // const collectionConfigController = useFirestoreCollectionsConfigController({
+    //     firebaseApp
+    // });
 
     // Example of adding a custom field
     const propertyConfigs: Record<string, PropertyConfig> = {
@@ -240,12 +238,14 @@ export function App() {
             sourceCollections.push(testCollection);
         }
 
-        // return sourceCollections;
-        return mergeCollections(
-            sourceCollections,
-            collectionConfigController.collections ?? []
-        );
-    }, [collectionConfigController.collections, secondaryFirestoreDelegate]);
+        return sourceCollections;
+        // return mergeCollections(
+        //     sourceCollections,
+        //     collectionConfigController.collections ?? []
+        // );
+    }, [
+        // collectionConfigController.collections,
+        secondaryFirestoreDelegate]);
 
     const views: CMSView[] = useMemo(() => ([
         {
@@ -302,10 +302,10 @@ export function App() {
 
     const userManagementPlugin = useUserManagementPlugin({ userManagement: userManagement });
 
-    const collectionEditorPlugin = useCollectionEditorPlugin({
-        collectionConfigController,
-        collectionInference: buildCollectionInference(firebaseApp),
-    });
+    // const collectionEditorPlugin = useCollectionEditorPlugin({
+    //     collectionConfigController,
+    //     collectionInference: buildCollectionInference(firebaseApp),
+    // });
 
     const importPlugin = useImportPlugin();
     const exportPlugin = useExportPlugin();
@@ -344,11 +344,13 @@ export function App() {
         exportPlugin,
         entityHistoryPlugin,
         demoPlugin,
-        collectionEditorPlugin
+        // collectionEditorPlugin
     ];
 
     const navigationController = useBuildNavigationController({
-        disabled: authLoading || collectionConfigController.loading,
+        disabled: authLoading
+            // || collectionConfigController.loading
+        ,
         // basePath: "cms",
         collections,
         plugins,
@@ -387,7 +389,6 @@ export function App() {
     // if (appCheckResult.error) {
     //     return <CenteredView>{appCheckResult.error}</CenteredView>;
     // }
-
 
     return (
         <SnackbarProvider>

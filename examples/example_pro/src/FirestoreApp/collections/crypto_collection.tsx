@@ -2,8 +2,8 @@ import { buildCollection } from "@firecms/core";
 
 export const cryptoCollection = buildCollection({
     name: "Crypto",
-    id: "crypto",
-    path: "crypto",
+    slug: "crypto",
+    dbPath: "crypto",
     icon: "AttachMoney",
     description: "This collection is updated in real time every minute. The UI will update automatically.",
     permissions: {

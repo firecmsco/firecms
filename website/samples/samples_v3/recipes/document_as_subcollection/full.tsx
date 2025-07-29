@@ -10,8 +10,8 @@ const unitsCollection = buildCollection<Unit>({
     name: "Units",
     singularName: "Unit",
     group: "Main",
-    id: "units",
-    path: "units",
+    slug: "units",
+    dbPath: "units",
     customId: true,
     icon: "LocalLibrary",
     callbacks: {
@@ -47,8 +47,8 @@ const appConfig: FireCMSAppConfig = {
         });
         const lessonCollections = units.map(unit => buildCollection({
             name: unit.values.name,
-            id: `units/${unit.id}/lessons`,
-            path: `units/${unit.id}/lessons`,
+            slug: `units/${unit.id}/lessons`,
+            dbPath: `units/${unit.id}/lessons`,
             description: unit.values.description,
             group: "Units",
             properties: {

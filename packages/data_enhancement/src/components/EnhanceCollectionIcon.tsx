@@ -5,7 +5,7 @@ import { AutoFixHighIcon, Tooltip } from "@firecms/ui";
 
 export function EnhanceCollectionIcon({
                                           extraProps,
-                                          path,
+                                          slug,
                                           collection
                                       }: PluginHomePageActionsProps<{
     getConfigForPath?: (props: { path: string, collection: EntityCollection }) => boolean;
@@ -17,13 +17,13 @@ export function EnhanceCollectionIcon({
             return;
         }
         const config = extraProps.getConfigForPath({
-            path,
+            slug: slug,
             collection
         })
         if (config) {
             setShowIcon(true);
         }
-    }, [collection, extraProps?.getConfigForPath, path]);
+    }, [collection, extraProps?.getConfigForPath, slug]);
 
     if (showIcon)
         return <Tooltip

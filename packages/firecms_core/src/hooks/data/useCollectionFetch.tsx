@@ -73,7 +73,7 @@ export function useCollectionFetch<M extends Record<string, any>, USER extends U
     const dataSource = useDataSource(collection);
     const navigationController = useNavigationController();
 
-    const path = navigationController.resolveIdsFrom(inputPath);
+    const path = navigationController.resolveDatabasePathsFrom(inputPath);
 
     const sortByProperty = sortBy ? sortBy[0] : undefined;
     const currentSort = sortBy ? sortBy[1] : undefined;
@@ -123,7 +123,7 @@ export function useCollectionFetch<M extends Record<string, any>, USER extends U
 
         if (dataSource.listenCollection) {
             return dataSource.listenCollection<M>({
-                path,
+                path: path,
                 collection,
                 onUpdate: onEntitiesUpdate,
                 onError,
@@ -136,7 +136,7 @@ export function useCollectionFetch<M extends Record<string, any>, USER extends U
             });
         } else {
             dataSource.fetchCollection<M>({
-                path,
+                path: path,
                 collection,
                 searchString,
                 filter: filterValues,

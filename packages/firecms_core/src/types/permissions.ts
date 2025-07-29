@@ -44,7 +44,7 @@ export interface PermissionsBuilderProps<EC extends EntityCollection = EntityCol
     /**
      * Path of the collection e.g. 'products/12345/locales'
      */
-    path: string;
+    slug: string;
 
     /**
      * Path segments of the collection e.g. ['products', 'locales']

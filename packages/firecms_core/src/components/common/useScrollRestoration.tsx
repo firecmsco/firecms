@@ -4,14 +4,14 @@ const collectionScrollCache = new Map<string, { scrollOffset: number, data: Enti
 
 export type ScrollRestorationController = {
 
-    getCollectionScroll: (fullPath: string,
+    getCollectionScroll: (path: string,
                           filters?: FilterValues<any>) => {
         scrollOffset: number,
         data: Entity<any>[]
     } | undefined;
 
     updateCollectionScroll: (props: {
-        fullPath: string,
+        path: string,
         scrollOffset: number,
         filters?: FilterValues<any>;
         data: Entity<any>[]
@@ -22,28 +22,28 @@ export type ScrollRestorationController = {
 export function useScrollRestoration(): ScrollRestorationController {
 
     const updateCollectionScroll = ({
-                                        fullPath,
+                                        path,
                                         filters,
                                         scrollOffset,
                                         data
                                     }: {
-        fullPath: string;
+        path: string;
         filters?: FilterValues<any>;
         sort?: [string, "asc" | "desc"];
         scrollOffset: number;
         data: Entity<any>[]
     }) => {
         collectionScrollCache.set(
-            createCacheKey(fullPath, filters),
+            createCacheKey(path, filters),
             {
                 scrollOffset,
                 data
             })
     }
 
-    const getCollectionScroll = (fullPath: string,
+    const getCollectionScroll = (path: string,
                                  filters?: FilterValues<any>) => {
-        return collectionScrollCache.get(createCacheKey(fullPath, filters));
+        return collectionScrollCache.get(createCacheKey(path, filters));
     }
 
     return {
@@ -52,10 +52,10 @@ export function useScrollRestoration(): ScrollRestorationController {
     }
 }
 
-function createCacheKey(fullPath: string, filters?: FilterValues<any>) {
+function createCacheKey(path: string, filters?: FilterValues<any>) {
 
     if (!filters) {
-        return fullPath;
+        return path;
     }
 
     // codify the filters into a url friendly string
@@ -64,5 +64,5 @@ function createCacheKey(fullPath: string, filters?: FilterValues<any>) {
         return `${key}=${value}`;
     }).join("&") : "";
 
-    return `${fullPath}?${filtersString}`;
+    return `${path}?${filtersString}`;
 }

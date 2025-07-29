@@ -42,7 +42,7 @@ const dropAnimationConfig: DropAnimation = {};
 const cloneSerializableNavigationEntry = (entry: NavigationEntry): NavigationEntry => {
     const clonedEntry: Partial<NavigationEntry> = {
         id: entry.id,
-        path: entry.path,
+        slug: entry.slug,
         url: entry.url,
         name: entry.name,
         type: entry.type,

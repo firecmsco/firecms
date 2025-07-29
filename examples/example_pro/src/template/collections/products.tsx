@@ -6,8 +6,8 @@ import { ProductDetailPreview } from "./entity_views/ProductDetailPreview";
 export const productsCollection = buildCollection<Product>({
     name: "Products",
     singularName: "Product",
-    id: "products",
-    path: "products",
+    slug: "products",
+    dbPath: "products",
     group: "E-commerce",
     icon: "shopping_cart",
     description: "List of the products currently sold in our shop",
@@ -134,7 +134,7 @@ export const productsCollection = buildCollection<Product>({
             description: "Reference to self",
             of: {
                 type: "reference",
-                path: "products"
+                slug: "products"
             }
         },
         publisher: {

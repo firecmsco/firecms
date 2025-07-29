@@ -13,8 +13,8 @@ import {
 import { Button, GitHubIcon, IconButton, Paper, Tooltip, Typography, } from "@firecms/ui";
 
 const usersCollection = buildCollection({
-    path: "users",
-    id: "users",
+    dbPath: "users",
+    slug: "users",
     name: "Users",
     singularName: "User",
     group: "Main",
@@ -107,8 +107,8 @@ export function ExampleCMSView() {
     });
 
     const customProductCollection = buildCollection({
-        id: "custom_product",
-        path: "custom_product",
+        slug: "custom_product",
+        dbPath: "custom_product",
         name: "Custom products",
         properties: {
             name: {
@@ -208,7 +208,7 @@ export function ExampleCMSView() {
                         <Paper
                             className={"h-[400px]"}>
                             <EntityCollectionView {...usersCollection}
-                                                  fullPath={"users"}
+                                                  path={"users"}
                                                   selectionController={selectionController}/>
                         </Paper>
                     </div>

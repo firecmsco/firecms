@@ -30,7 +30,7 @@ export function ReferencePropertyField({
             <CircularProgress/>
         </div>;
 
-    const pathPath = asString ? "reference.path" : (multiple ? "of.path" : "path") ;
+    const pathPath = asString ? "reference.slug" : (multiple ? "of.slug" : "path") ;
     const pathValue: string | undefined = getIn(values, pathPath);
     const pathError: string | undefined = showErrors && getIn(errors, pathPath);
 
@@ -96,7 +96,7 @@ export function CollectionsSelect({
                 onChange={handleChange}
                 label={"Target collection"}
                 renderValue={(selected) => {
-                    const selectedCollection = collections.find(collection => collection.id === selected || collection.path === selected);
+                    const selectedCollection = collections.find(collection => collection.slug === selected || collection.dbPath === selected);
                     if (!selectedCollection) return null;
                     return (
                         <div className="flex flex-row">
@@ -117,8 +117,8 @@ export function CollectionsSelect({
                             collections.filter(collection => collection.group === group)
                                 .map((collection) => {
                                     return <SelectItem
-                                        key={`${collection.id ?? collection.path}-${group}`}
-                                        value={collection.id ?? collection.path}>
+                                        key={`${collection.slug ?? collection.dbPath}-${group}`}
+                                        value={collection.slug ?? collection.dbPath}>
                                         <div className="flex flex-row">
                                             <IconForView collectionOrView={collection}/>
                                             <Typography
@@ -137,8 +137,8 @@ export function CollectionsSelect({
                 {ungroupedCollections && <SelectGroup label={"Views"}>
                     {ungroupedCollections
                         .map((collection) => {
-                            return <SelectItem key={collection.id ?? collection.path}
-                                               value={collection.id ?? collection.path}>
+                            return <SelectItem key={collection.slug ?? collection.dbPath}
+                                               value={collection.slug ?? collection.dbPath}>
                                 <div className="flex flex-row">
                                     <IconForView collectionOrView={collection}/>
                                     <Typography

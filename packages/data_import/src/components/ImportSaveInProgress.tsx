@@ -105,7 +105,7 @@ function saveDataBatch(dataSource: DataSource,
     const batch = data.slice(offset, offset + batchSize);
     return Promise.all(batch.map(d =>
         dataSource.saveEntity({
-            path,
+            path: path,
             values: d.values,
             entityId: d.id,
             collection,

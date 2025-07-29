@@ -24,7 +24,7 @@ export async function getInferredEntityCollectionFromData(collectionPath: string
     const propertiesOrder = buildPropertiesOrder(properties);
     const lastPathSegment = cleanPath.includes("/") ? cleanPath.split("/").slice(-1)[0] : cleanPath;
     return {
-        path: cleanPath,
+        dbPath: cleanPath,
         name: unslugify(lastPathSegment),
         properties,
         propertiesOrder

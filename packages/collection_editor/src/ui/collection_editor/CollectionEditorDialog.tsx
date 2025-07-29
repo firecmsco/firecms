@@ -64,11 +64,11 @@ export interface CollectionEditorDialogProps {
     isNewCollection: boolean;
     initialValues?: {
         group?: string,
-        path?: string,
+        slug?: string,
         name?: string,
     }
     editedCollectionId?: string;
-    fullPath?: string; // full path of this particular collection, like `products/123/locales`
+    path?: string; // full path of this particular collection, like `products/123/locales`
     parentCollectionIds?: string[]; // path ids of the parent collection, like [`products`]
     handleClose: (collection?: EntityCollection) => void;
     configController: CollectionsConfigController;
@@ -158,10 +158,10 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
     } = navigation;
 
     const initialValuesProp = props.initialValues;
-    const includeTemplates = !initialValuesProp?.path && (props.parentCollectionIds ?? []).length === 0;
+    const includeTemplates = !initialValuesProp?.slug && (props.parentCollectionIds ?? []).length === 0;
     const collectionsInThisLevel = (props.parentCollection ? props.parentCollection.subcollections : collections) ?? [];
-    const existingPaths = collectionsInThisLevel.map(col => col.path.trim().toLowerCase());
-    const existingIds = collectionsInThisLevel.map(col => col.id?.trim().toLowerCase()).filter(Boolean) as string[];
+    const existingPaths = collectionsInThisLevel.map(col => col.dbPath.trim().toLowerCase());
+    const existingIds = collectionsInThisLevel.map(col => col.slug?.trim().toLowerCase()).filter(Boolean) as string[];
     const [collection, setCollection] = React.useState<PersistedCollection<any> | undefined>();
     const [initialLoadingCompleted, setInitialLoadingCompleted] = React.useState(false);
 
@@ -191,15 +191,15 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
     const initialCollection = collection
         ? {
             ...collection,
-            id: collection.id ?? collection.path ?? randomString(16)
+            slug: collection.slug ?? randomString(16)
         }
         : undefined;
 
     const initialValues: PersistedCollection<any> = initialCollection
         ? applyPropertyConfigs(initialCollection, propertyConfigs)
         : {
-            id: initialValuesProp?.path ?? randomString(16),
-            path: initialValuesProp?.path ?? "",
+            slug: initialValuesProp?.slug ?? randomString(16),
+            dbPath: initialValuesProp?.slug ?? "",
             name: initialValuesProp?.name ?? "",
             group: initialValuesProp?.group ?? "",
             properties: {} as PropertiesOrBuilders,
@@ -234,7 +234,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                                                      configController,
                                                                      editedCollectionId,
                                                                      parentCollectionIds,
-                                                                     fullPath,
+                                                                     path,
                                                                      collectionInference,
                                                                      handleClose,
                                                                      reservedGroups,
@@ -281,7 +281,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     const [error, setError] = React.useState<Error | undefined>();
 
     const saveCollection = (updatedCollection: PersistedCollection<M>): Promise<boolean> => {
-        const id = updatedCollection.id || updatedCollection.path;
+        const id = updatedCollection.slug;
 
         return configController.saveCollection({
             id,
@@ -329,7 +329,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
     const doCollectionInference = collectionInference ? (collection: PersistedCollection<any>) => {
         if (!collectionInference) return undefined;
-        return collectionInference?.(collection.path, collection.collectionGroup ?? false, parentPaths ?? []);
+        return collectionInference?.(collection.dbPath, collection.collectionGroup ?? false, parentPaths ?? []);
     } : undefined;
 
     const inferCollectionFromData = async (newCollection: PersistedCollection<M>) => {
@@ -450,7 +450,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                 schema.validateSync(col, { abortEarly: false });
             } catch (e: any) {
                 e.inner.forEach((err: any) => {
-                    errors[err.path] = err.message;
+                    errors[err.slug] = err.message;
                 });
             }
         }
@@ -458,11 +458,11 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             errors = { ...errors, ...propertyErrorsRef.current };
         }
         if (currentView === "details") {
-            const pathError = validatePath(col.path, isNewCollection, existingPaths, col.id);
+            const pathError = validatePath(col.dbPath, isNewCollection, existingPaths, col.slug);
             if (pathError) {
-                errors.path = pathError;
+                errors.slug = pathError;
             }
-            const idError = validateId(col.id, isNewCollection, existingPaths, existingIds);
+            const idError = validateId(col.slug, isNewCollection, existingPaths, existingIds);
             if (idError) {
                 errors.id = idError;
             }
@@ -486,12 +486,12 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     } = formController;
 
     // TODO: getting data is only working in root collections with this code
-    const path = values.path;
-    const updatedFullPath = fullPath?.includes("/") ? fullPath?.split("/").slice(0, -1).join("/") + "/" + path : path; // TODO: this path is wrong
-    const pathError = validatePath(path, isNewCollection, existingPaths, values.id);
+    const usedPath = values.dbPath;
+    const updatedFullPath = path?.includes("/") ? path?.split("/").slice(0, -1).join("/") + "/" + usedPath : usedPath; // TODO: this path is wrong
+    const pathError = validatePath(usedPath, isNewCollection, existingPaths, values.slug);
 
     const parentPaths = !pathError && parentCollectionIds ? navigation.convertIdsToPaths(parentCollectionIds) : undefined;
-    const resolvedPath = !pathError ? navigation.resolveIdsFrom(updatedFullPath) : undefined;
+    const resolvedPath = !pathError ? navigation.resolveDatabasePathsFrom(updatedFullPath) : undefined;
     const getDataWithPath = resolvedPath && getData ? async () => {
         const data = await getData(resolvedPath, parentPaths ?? []);
         if (existingEntities) {
@@ -525,7 +525,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             });
     }
 
-    const validValues = Boolean(values.name) && Boolean(values.id);
+    const validValues = Boolean(values.name) && Boolean(values.slug);
 
     const onImportMappingComplete = () => {
         const updatedProperties = { ...values.properties };
@@ -545,7 +545,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
     const deleteCollection = () => {
         if (!collection) return;
-        configController?.deleteCollection({ id: collection.id }).then(() => {
+        configController?.deleteCollection({ id: collection.slug }).then(() => {
             setDeleteRequested(false);
             handleCancel();
             snackbarController.open({
@@ -586,13 +586,13 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                         <CircularProgressCenter/>}
 
                     {currentView === "extra_view" &&
-                        path &&
+                        usedPath &&
                         extraView?.View &&
-                        <extraView.View path={path}/>}
+                        <extraView.View path={usedPath}/>}
 
                     {currentView === "welcome" &&
                         <CollectionEditorWelcomeView
-                            path={path}
+                            path={usedPath}
                             onContinue={(importData, propertiesOrder) => {
                                 // console.log("Import data", importData, propertiesOrder)
                                 if (importData) {
@@ -619,7 +619,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                     {currentView === "import_data_saving" && importConfig &&
                         <ImportSaveInProgress importConfig={importConfig}
                                               collection={values}
-                                              path={path}
+                                              path={usedPath}
                                               onImportSuccess={async (importedCollection) => {
                                                   snackbarController.open({
                                                       type: "info",

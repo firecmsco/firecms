@@ -5,7 +5,7 @@ import { useCollectionEditorController } from "../useCollectionEditorController"
 import { PersistedCollection } from "../types/persisted_collection";
 
 export function EditorEntityAction({
-                                       path: fullPath,
+                                       path,
                                        parentCollectionIds,
                                        collection,
                                        formContext
@@ -34,8 +34,8 @@ export function EditorEntityAction({
             disabled={!canEditCollection || isDirty}
             onClick={canEditCollection
                 ? () => collectionEditorController?.editCollection({
-                    id: collection.id,
-                    fullPath,
+                    id: collection.slug,
+                    path,
                     parentCollectionIds,
                     parentCollection: parentCollection as PersistedCollection,
                 })

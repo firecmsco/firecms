@@ -40,24 +40,24 @@ export function FireCMSRoute() {
                 if (entry.type === "entity") {
                     return ({
                         title: String(entry.entityId),
-                        url: navigation.buildUrlCollectionPath(entry.fullPath)
+                        url: navigation.buildUrlCollectionPath(entry.path)
                     });
                 } else if (entry.type === "custom_view") {
                     return ({
                         title: entry.view.name,
-                        url: navigation.buildUrlCollectionPath(entry.fullPath)
+                        url: navigation.buildUrlCollectionPath(entry.path)
                     });
                 } else if (entry.type === "collection") {
                     return ({
                         title: entry.collection.name,
-                        url: navigation.buildUrlCollectionPath(entry.fullPath)
+                        url: navigation.buildUrlCollectionPath(entry.path)
                     });
                 } else {
                     throw new Error("Unexpected navigation entry type");
                 }
             })
         });
-    }, [navigationEntries.map(entry => entry.path).join(",")]);
+    }, [navigationEntries.map(entry => entry.slug).join(",")]);
 
     if (isNew) {
         return <EntityFullScreenRoute
@@ -72,15 +72,14 @@ export function FireCMSRoute() {
         let collection: EntityCollection<any> | undefined;
         collection = navigation.getCollectionById(navigationEntries[0].id);
         if (!collection)
-            collection = navigation.getCollection(navigationEntries[0].path);
+            collection = navigation.getCollection(navigationEntries[0].slug);
         if (!collection)
             return null;
         return <EntityCollectionView
-            key={`collection_view_${collection.id ?? collection.path}`}
+            key={`collection_view_${collection.slug}`}
             isSubCollection={false}
             parentCollectionIds={[]}
-            fullPath={collection.path}
-            fullIdPath={collection.id}
+            path={collection.slug}
             updateUrl={true}
             {...collection}
             Actions={toArray(collection.Actions)}/>
@@ -93,15 +92,14 @@ export function FireCMSRoute() {
             const firstEntry = navigationEntries[0] as NavigationViewCollectionInternal<any>;
             collection = navigation.getCollectionById(firstEntry.id);
             if (!collection)
-                collection = navigation.getCollection(firstEntry.path);
+                collection = navigation.getCollection(firstEntry.slug);
             if (!collection)
                 return null;
             return <EntityCollectionView
-                key={`collection_view_${collection.id ?? collection.path}`}
-                fullIdPath={collection.id}
+                key={`collection_view_${collection.slug}`}
                 isSubCollection={false}
                 parentCollectionIds={[]}
-                fullPath={collection.path}
+                path={collection.slug}
                 updateUrl={true}
                 {...collection}
                 Actions={toArray(collection.Actions)}/>;
@@ -124,7 +122,7 @@ function getSelectedTabFromUrl(isNew: boolean, lastCustomView: NavigationViewCol
         if (lastCustomView.type === "custom_view") {
             return lastCustomView.view.key;
         } else if (lastCustomView.type === "collection") {
-            return lastCustomView.id ?? lastCustomView.path;
+            return lastCustomView.id ?? lastCustomView.slug;
         }
     }
     return undefined;
@@ -199,13 +197,12 @@ function EntityFullScreenRoute({
     }
 
     const collection = isNew ? lastCollectionEntry!.collection : lastEntityEntry!.parentCollection;
-    const fullIdPath = isNew ? lastCollectionEntry!.path : lastEntityEntry!.path;
-    const collectionPath = navigation.resolveIdsFrom(fullIdPath);
+    const fullIdPath = isNew ? lastCollectionEntry!.slug : lastEntityEntry!.slug;
+    const collectionPath = navigation.resolveDatabasePathsFrom(fullIdPath);
     return <>
         <EntityEditView
-            key={collection.id + "_" + (isNew ? "new" : (isCopy ? entityId + "_copy" : entityId))}
+            key={collection.slug + "_" + (isNew ? "new" : (isCopy ? entityId + "_copy" : entityId))}
             entityId={isNew ? undefined : entityId}
-            fullIdPath={fullIdPath}
             collection={collection}
             layout={"full_screen"}
             path={collectionPath}

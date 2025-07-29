@@ -167,11 +167,11 @@ export function CollectionDetailsForm({
                                label={"Path"}
                                disabled={!isNewCollection}
                                required
-                               error={showErrors && Boolean(errors.path)}/>
+                               error={showErrors && Boolean(errors.slug)}/>
 
-                        <FieldCaption error={touched.path && Boolean(errors.path)}>
-                            {touched.path && Boolean(errors.path)
-                                ? errors.path
+                        <FieldCaption error={touched.slug && Boolean(errors.slug)}>
+                            {touched.slug && Boolean(errors.slug)
+                                ? errors.slug
                                 : isSubcollection ? "Relative path to the parent (no need to include the parent path)" : "Path that this collection is stored in, in the database"}
                         </FieldCaption>
 

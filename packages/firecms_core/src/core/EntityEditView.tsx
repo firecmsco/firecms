@@ -5,7 +5,7 @@ import {
     EntityStatus,
     FireCMSPlugin,
     FormContext,
-    PluginFormActionProps,
+    PluginFormActionProps, ResolvedEntityCollection,
     User
 } from "../types";
 
@@ -52,16 +52,12 @@ export type OnTabChangeParams<M extends Record<string, any>> = {
 
 };
 
-export interface EntityEditViewProps<M extends Record<string, any>> {
+export interface EntityEditViewProps<M extends Record<string, any> = any> {
     /**
-     * The database path of the entity, e.g. "users" or "products".
+     * The CMS path of the entity, e.g. "users" or "products".
      */
     path: string;
-    /**
-     * The navigation path to the entity.
-     */
-    fullIdPath?: string;
-    collection: EntityCollection<M>;
+    collection: EntityCollection<M> | ResolvedEntityCollection<M>;
     entityId?: string | number;
     databaseId?: string;
     copy?: boolean;
@@ -135,7 +131,6 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
 
 export function EntityEditViewInner<M extends Record<string, any>>({
                                                                        path,
-                                                                       fullIdPath,
                                                                        entityId,
                                                                        selectedTab: selectedTabProp,
                                                                        collection,
@@ -182,7 +177,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         const actionProps: PluginFormActionProps = {
             entityId,
             parentCollectionIds,
-            path,
+            path: path,
             status,
             collection,
             context,
@@ -263,14 +258,14 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 },
                 collection: resolveCollection<M>({
                     collection,
-                    path,
+                    path: path,
                     entityId,
                     values: usedEntity?.values ?? {},
                     previousValues: usedEntity?.values ?? {},
                     propertyConfigs: customizationController.propertyConfigs,
                     authController
                 }),
-                path,
+                path: path,
                 entity: usedEntity,
                 savingError: undefined,
                 formex: formexStub
@@ -309,9 +304,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     </div>;
 
     const subCollectionsViews = subcollections && subcollections.map((subcollection) => {
-        const subcollectionId = subcollection.id ?? subcollection.path;
-        const newFullPath = usedEntity ? `${path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollection.path)}` : undefined;
-        const newFullIdPath = fullIdPath ? `${fullIdPath}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollectionId)}` : undefined;
+        const subcollectionId = subcollection.slug;
+        const newFullPath = usedEntity ? `${path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollection.slug)}` : undefined;
 
         if (selectedTab !== subcollectionId) return null;
         return (
@@ -325,9 +319,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 {!globalLoading &&
                     (usedEntity && newFullPath
                         ? <EntityCollectionView
-                            fullPath={newFullPath}
-                            fullIdPath={newFullIdPath}
-                            parentCollectionIds={[...parentCollectionIds, collection.id]}
+                            path={newFullPath}
+                            parentCollectionIds={[...parentCollectionIds, collection.slug]}
                             isSubCollection={true}
                             updateUrl={false}
                             {...subcollection}
@@ -348,7 +341,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         setSelectedTab(value);
         if (status === "existing") {
             onTabChange?.({
-                path: fullIdPath ?? path,
+                path: path,
                 entityId,
                 selectedTab: value === MAIN_TAB_VALUE ? undefined : value,
                 collection
@@ -373,7 +366,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     </div> : null;
 
     const entityView = <EntityForm<M>
-        fullIdPath={fullIdPath}
         collection={collection}
         path={path}
         entityId={entityId ?? usedEntity?.id}
@@ -413,7 +405,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     const subcollectionTabs = subcollections && subcollections.map((subcollection) =>
         <Tab
             className="text-sm min-w-[120px]"
-            value={subcollection.id}
+            value={subcollection.slug}
             key={`entity_detail_collection_tab_${subcollection.name}`}>
             {subcollection.name}
         </Tab>

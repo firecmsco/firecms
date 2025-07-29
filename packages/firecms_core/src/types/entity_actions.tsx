@@ -64,8 +64,7 @@ export type EntityActionClickProps<M extends object, USER extends User = User> =
     entity?: Entity<M>;
     context: FireCMSContext<USER>;
 
-    fullPath?: string;
-    fullIdPath?: string;
+    path?: string;
     collection?: EntityCollection<M>;
 
     /**

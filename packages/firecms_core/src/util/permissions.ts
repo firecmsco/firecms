@@ -11,7 +11,7 @@ const DEFAULT_PERMISSIONS = {
 export function resolvePermissions<M extends Record<string, any>, USER extends User>
 (collection: EntityCollection<M>,
  authController: AuthController<USER>,
- path: string,
+ slug: string,
  entity: Entity<M> | null): Permissions | undefined {
 
     const permission = collection.permissions;
@@ -20,10 +20,10 @@ export function resolvePermissions<M extends Record<string, any>, USER extends U
     } else if (typeof permission === "object") {
         return permission as Permissions;
     } else if (typeof permission === "function") {
-        const pathSegments = fullPathToCollectionSegments(path);
+        const pathSegments = fullPathToCollectionSegments(slug);
         return permission({
             entity,
-            path,
+            slug: slug,
             user: authController.user,
             authController,
             collection,

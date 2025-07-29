@@ -1,8 +1,8 @@
 import { buildCollection } from "@firecms/core";
 
 export const usersCollection = buildCollection({
-    id: "users",
-    path: "users",
+    slug: "users",
+    dbPath: "users",
     name: "Users",
     singularName: "User",
     group: "E-commerce",

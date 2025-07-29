@@ -2,9 +2,9 @@ import { EntityCollection } from "@firecms/core";
 
 export const allCollections: EntityCollection[] = [
     {
-        id: "customers",
+        slug: "customers",
         name: "Customers",
-        path: "customers",
+        dbPath: "customers",
         idField: "id",
         properties: {
             id: {
@@ -25,9 +25,9 @@ export const allCollections: EntityCollection[] = [
         }
     },
     {
-        id: "machinery",
+        slug: "machinery",
         name: "Machinery",
-        path: "machinery",
+        dbPath: "machinery",
         idField: "id",
         properties: {
             id: {
@@ -80,9 +80,9 @@ export const allCollections: EntityCollection[] = [
         }
     },
     {
-        id: "rentals",
+        slug: "rentals",
         name: "Rentals",
-        path: "rentals",
+        dbPath: "rentals",
         idField: "id",
         properties: {
             id: {
@@ -97,12 +97,12 @@ export const allCollections: EntityCollection[] = [
             },
             customerId: {
                 type: "reference",
-                path: "customers",
+                slug: "customers",
                 validation: { required: true }
             },
             machineryId: {
                 type: "reference",
-                path: "machinery",
+                slug: "machinery",
                 validation: { required: true }
             },
             startDate: {
@@ -144,9 +144,9 @@ export const allCollections: EntityCollection[] = [
         }
     },
     {
-        id: "offers",
+        slug: "offers",
         name: "Offers",
-        path: "offers",
+        dbPath: "offers",
         idField: "id",
         properties: {
             id: {
@@ -161,12 +161,12 @@ export const allCollections: EntityCollection[] = [
             },
             customerId: {
                 type: "reference",
-                path: "customers",
+                slug: "customers",
                 validation: { required: true }
             },
             machineryId: {
                 type: "reference",
-                path: "machinery",
+                slug: "machinery",
                 validation: { required: true }
             },
             offerDate: {
@@ -194,14 +194,14 @@ export const allCollections: EntityCollection[] = [
             },
             relatedRentalId: {
                 type: "reference",
-                path: "rentals"
+                slug: "rentals"
             }
         }
     },
     {
-        id: "maintenance_history",
+        slug: "maintenance_history",
         name: "Maintenance History",
-        path: "maintenance_history",
+        dbPath: "maintenance_history",
         idField: "id",
         properties: {
             id: {
@@ -210,7 +210,7 @@ export const allCollections: EntityCollection[] = [
             },
             machineryId: {
                 type: "reference",
-                path: "machinery",
+                slug: "machinery",
                 validation: { required: true }
             },
             date: {
@@ -230,9 +230,9 @@ export const allCollections: EntityCollection[] = [
         }
     },
     {
-        id: "payment_history",
+        slug: "payment_history",
         name: "Payment History",
-        path: "payment_history",
+        dbPath: "payment_history",
         idField: "id",
         properties: {
             id: {
@@ -241,7 +241,7 @@ export const allCollections: EntityCollection[] = [
             },
             rentalId: {
                 type: "reference",
-                path: "rentals",
+                slug: "rentals",
                 validation: { required: true }
             },
             date: {
@@ -268,9 +268,9 @@ export const allCollections: EntityCollection[] = [
         }
     },
     {
-        id: "media",
+        slug: "media",
         name: "Media",
-        path: "media",
+        dbPath: "media",
         idField: "id",
         properties: {
             id: {

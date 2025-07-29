@@ -5,7 +5,7 @@ import { useCollectionEditorController } from "../useCollectionEditorController"
 import { PersistedCollection } from "../types/persisted_collection";
 
 export function EditorCollectionAction({
-                                           path: fullPath,
+                                           path,
                                            parentCollectionIds,
                                            collection,
                                            tableController
@@ -33,8 +33,8 @@ export function EditorCollectionAction({
             disabled={!canEditCollection}
             onClick={canEditCollection
                 ? () => collectionEditorController?.editCollection({
-                    id: collection.id,
-                    fullPath,
+                    id: collection.slug,
+                    path,
                     parentCollectionIds,
                     parentCollection: parentCollection as PersistedCollection,
                     existingEntities: tableController?.data ?? []

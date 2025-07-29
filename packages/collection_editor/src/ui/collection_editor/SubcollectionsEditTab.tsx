@@ -82,7 +82,7 @@ export function SubcollectionsEditTab({
                             {subcollections && subcollections.length > 0 && <Table>
                                 <TableBody>
                                     {subcollections.map((subcollection) => (
-                                        <TableRow key={subcollection.path}
+                                        <TableRow key={subcollection.slug}
                                                   onClick={() => setCurrentDialog({
                                                       isNewCollection: false,
                                                       editedCollectionId: subcollection.id
@@ -215,7 +215,7 @@ export function SubcollectionsEditTab({
                                     onAccept={() => {
                                               const props = {
                                                   id: subcollectionToDelete,
-                                                  parentCollectionIds: [...(parentCollectionIds ?? []), collection.id]
+                                                  parentCollectionIds: [...(parentCollectionIds ?? []), collection.slug]
                                               };
                                               console.debug("Deleting subcollection", props)
                                               configController.deleteCollection(props).then(() => {
@@ -250,7 +250,7 @@ export function SubcollectionsEditTab({
                 {...currentDialog}
                 getUser={getUser}
                 handleClose={(updatedCollection) => {
-                    if (updatedCollection && !subcollections.map(e => e.id).includes(updatedCollection.id)) {
+                    if (updatedCollection && !subcollections.map(e => e.id).includes(updatedCollection.slug)) {
                         setSubcollections([...subcollections, updatedCollection]);
                     }
                     setCurrentDialog(undefined);

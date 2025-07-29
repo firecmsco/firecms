@@ -120,7 +120,7 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
      * The ids (typically used in urls) will be replaced with relative paths (typically used in database paths)
      * @param pathWithAliases
      */
-    resolveIdsFrom: (pathWithAliases: string) => string;
+    resolveDatabasePathsFrom: (path: string) => string;
 
     /**
      * Call this method to recalculate the navigation
@@ -187,7 +187,7 @@ export interface CMSView {
     /**
      * CMS Path you can reach this view from.
      */
-    path: string;
+    slug: string;
 
     /**
      * Name of this view
@@ -247,7 +247,7 @@ export interface NavigationEntry {
     id: string;
     url: string;
     name: string;
-    path: string;
+    slug: string;
     type: "collection" | "view" | "admin";
     collection?: EntityCollection;
     view?: CMSView;

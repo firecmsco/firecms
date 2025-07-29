@@ -37,7 +37,7 @@ export function resolveUserRolePermissions<USER extends User>
         };
 
         return roles
-            .map(role => resolveCollectionRole(role, collection.id))
+            .map(role => resolveCollectionRole(role, collection.slug))
             .reduce(mergePermissions, basePermissions);
     }
 }

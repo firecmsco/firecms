@@ -7,6 +7,7 @@ import {
     Authenticator,
     DataSourceDelegate,
     Entity,
+    NavigationController,
     PermissionsBuilder,
     removeUndefined,
     Role,
@@ -70,7 +71,7 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
      usersPath = "__FIRECMS/config/users",
      rolesPath = "__FIRECMS/config/roles",
      allowDefaultRolesCreation,
-     includeCollectionConfigPermissions
+     includeCollectionConfigPermissions,
  }: UserManagementParams<CONTROLLER>): UserManagement<USER> & CONTROLLER {
 
     if (!authController) {

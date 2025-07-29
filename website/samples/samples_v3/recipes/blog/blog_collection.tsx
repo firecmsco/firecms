@@ -4,8 +4,8 @@ import { BlogEntry } from "./types";
 
 export const blogCollection = buildCollection<BlogEntry>({
     name: "Blog entry",
-    id: "blog",
-    path: "blog",
+    slug: "blog",
+    dbPath: "blog",
     entityViews: [{
         key: "preview",
         name: "Preview",

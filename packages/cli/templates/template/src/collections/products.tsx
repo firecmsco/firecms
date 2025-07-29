@@ -21,8 +21,8 @@ export type Product = {
 export const productsCollection = buildCollection<Product>({
     name: "Products",
     singularName: "Product",
-    id: "products",
-    path: "products",
+    slug: "products",
+    dbPath: "products",
     icon: "LocalGroceryStore",
     group: "E-commerce",
     permissions: ({ authController, user }) => ({
@@ -77,7 +77,7 @@ export const productsCollection = buildCollection<Product>({
             description: "Reference to self",
             of: {
                 type: "reference",
-                path: "products"
+                slug: "products"
             }
         },
         main_image: buildProperty({ // The `buildProperty` method is a utility function used for type checking

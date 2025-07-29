@@ -26,7 +26,7 @@ export function RootCollectionSuggestions({
         }).createCollections
         : true;
 
-    const existingPaths = (navigationController.collections ?? []).map(c => c.path);
+    const existingPaths = (navigationController.collections ?? []).map(c => c.dbPath);
     const [rootPathSuggestions, setRootPathSuggestions] = React.useState<string[] | undefined>();
     const filteredRootPathSuggestions = (rootPathSuggestions ?? []).filter((path) => !existingPaths.includes(path));
 

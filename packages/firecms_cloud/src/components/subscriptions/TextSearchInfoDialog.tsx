@@ -38,10 +38,10 @@ export function TextSearchInfoDialog({
 
     function enableTextSearchForCollection() {
         return collectionConfigController.updateCollection({
-            id: collection.id,
+            id: collection.slug,
             parentCollectionIds,
             collectionData: {
-                id: collection.id,
+                slug: collection.slug,
                 textSearchEnabled: true
             }
         })

@@ -8,7 +8,7 @@ import { useCollectionsConfigController } from "../useCollectionsConfigControlle
 import { PersistedCollection } from "../types/persisted_collection";
 
 export function EditorCollectionActionStart({
-                                           path: fullPath,
+                                           path,
                                            parentCollectionIds,
                                            collection,
                                            tableController
@@ -39,7 +39,7 @@ export function EditorCollectionActionStart({
                     variant={"outlined"}
                     onClick={() => configController
                         ?.saveCollection({
-                            id: collection.id,
+                            id: collection.slug,
                             parentCollectionIds,
                             collectionData: mergeDeep(collection as PersistedCollection,
                                 {

@@ -18,7 +18,7 @@ import { cls } from "@firecms/ui";
  * @group Form fields
  */
 export function ReferenceAsStringFieldBinding(props: FieldProps<string>) {
-    if (typeof props.property.reference?.path !== "string") {
+    if (typeof props.property.reference?.slug !== "string") {
         return <ReadOnlyFieldBinding {...props}/>;
     }
 
@@ -38,7 +38,7 @@ function ReferenceAsStringFieldBindingInternal({
                                                    includeDescription,
                                                    size = "medium"
                                                }: FieldProps<string>) {
-    if (!property.reference?.path) {
+    if (!property.reference?.slug) {
         throw new Error("Property path is required for ReferenceAsStringFieldBinding");
     }
 
@@ -49,7 +49,7 @@ function ReferenceAsStringFieldBindingInternal({
     });
 
     const navigationController = useNavigationController();
-    const path = property.reference.path;
+    const path = property.reference.slug;
     const collection: EntityCollection | undefined = useMemo(() => {
         return path ? navigationController.getCollection(path) : undefined;
     }, [path]);
@@ -71,7 +71,7 @@ function ReferenceAsStringFieldBindingInternal({
 
     const referenceDialogController = useReferenceDialog({
             multiselect: false,
-            path: path,
+            path,
             collection,
             onSingleEntitySelected,
             selectedEntityIds: value ? [value] : undefined,

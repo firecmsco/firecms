@@ -25,7 +25,7 @@ export function EnableEntityHistoryView({
             onClick={() => {
                 setLoading(true);
                 configController.saveCollection({
-                    id: collection.id,
+                    id: collection.slug,
                     collectionData: {
                         ...collection,
                         history: true,

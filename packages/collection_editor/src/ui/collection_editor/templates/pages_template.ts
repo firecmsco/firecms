@@ -1,8 +1,8 @@
 import { EntityCollection } from "@firecms/core";
 
 export const pagesCollectionTemplate: EntityCollection = {
-    id: "pages",
-    path: "pages",
+    slug: "pages",
+    dbPath: "pages",
     name: "Pages",
     singularName: "Page",
     icon: "insert_drive_file",

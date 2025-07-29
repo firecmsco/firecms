@@ -3,8 +3,8 @@ import { buildCollection, buildProperty, resolveCollection } from "../src/util";
 import * as util from "util";
 
 const testCollection = buildCollection({
-    id: "test_entity",
-    path: "test_entity",
+    slug: "test_entity",
+    dbPath: "test_entity",
     customId: false,
     name: "Test entities",
     properties: {

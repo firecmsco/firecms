@@ -89,7 +89,7 @@ export function UserDetailsForm({
                     return {};
                 }).catch((e) => {
                     return e.inner.reduce((acc: any, error: any) => {
-                        acc[error.path] = error.message;
+                        acc[error.slug] = error.message;
                         return acc;
                     }, {});
                 });

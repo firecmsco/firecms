@@ -142,7 +142,7 @@ export class PostgresDataSourceDelegate implements DataSourceDelegate {
 
         // Send initial data immediately
         this.fetchCollection({
-            path,
+            path: path,
             collection,
             filter,
             limit,

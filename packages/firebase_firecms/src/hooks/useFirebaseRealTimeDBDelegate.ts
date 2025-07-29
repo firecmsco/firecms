@@ -56,7 +56,7 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
         if (snapshot.exists()) {
             return Object.entries(snapshot.val()).map(([id, values]) => ({
                 id,
-                path,
+                path: path,
                 values: values as M,
             }));
         }
@@ -78,7 +78,7 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
             if (snapshot.exists()) {
                 const result: Entity<M>[] = Object.entries(snapshot.val()).map(([id, values]) => ({
                     id,
-                    path,
+                    path: path,
                     values: values as M,
                 }));
                 onUpdate(result);
@@ -103,7 +103,7 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
         if (snapshot.exists()) {
             return {
                 id: entityId,
-                path,
+                path: path,
                 values: snapshot.val() as M
             };
         }
@@ -155,7 +155,7 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
         await set(ref(database, `${path}/${finalId}`), values);
         return {
             id: finalId,
-            path,
+            path: path,
             values: values as M
         };
     }, [firebaseApp]);
@@ -172,14 +172,14 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
     }, [firebaseApp]);
 
     // Implementing additional methods required by DataSourceDelegate
-    const checkUniqueField = useCallback(async (path: string, name: string, value: any, entityId?: string | number): Promise<boolean> => {
+    const checkUniqueField = useCallback(async (slug: string, name: string, value: any, entityId?: string | number): Promise<boolean> => {
         if (!firebaseApp) {
             throw new Error("Firebase app not provided");
         }
         const database = getDatabase(firebaseApp);
 
         // Simplified example; the Realtime Database does not support querying with "not equal" conditions
-        const dbRef = query(ref(database, path), orderByChild(name), startAt(value), limitToFirst(1));
+        const dbRef = query(ref(database, slug), orderByChild(name), startAt(value), limitToFirst(1));
         const snapshot = await get(dbRef);
 
         if (!snapshot.exists()) {
@@ -270,7 +270,7 @@ export function cmsToRTDBModel(data: any, database: Database): any {
     } else if (Array.isArray(data)) {
         return data.filter(v => v !== undefined).map(v => cmsToRTDBModel(v, database));
     } else if (data.isEntityReference && data.isEntityReference()) {
-        return ref(database, `${data.path}/${data.id}`);
+        return ref(database, `${data.slug}/${data.id}`);
     } else if (data instanceof Date) {
         // For dates, convert to ISO string or timestamp.
         return data.toISOString();

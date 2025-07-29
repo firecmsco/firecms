@@ -23,7 +23,7 @@ import React from "react";
 
  */
 export function NavigationCardBinding({
-                                          path,
+                                          slug,
                                           collection,
                                           view,
                                           url,
@@ -44,7 +44,7 @@ export function NavigationCardBinding({
     const context = useFireCMSContext();
     const customizationController = useCustomizationController();
 
-    const favourite = (userConfigurationPersistence?.favouritePaths ?? []).includes(path);
+    const favourite = (userConfigurationPersistence?.favouritePaths ?? []).includes(slug);
 
     const actionsArray: React.ReactNode[] = userConfigurationPersistence
         ? [
@@ -56,11 +56,11 @@ export function NavigationCardBinding({
                     e.stopPropagation();
                     if (favourite) {
                         userConfigurationPersistence.setFavouritePaths(
-                            userConfigurationPersistence.favouritePaths.filter(p => p !== path)
+                            userConfigurationPersistence.favouritePaths.filter(p => p !== slug)
                         );
                     } else {
                         userConfigurationPersistence.setFavouritePaths(
-                            [...userConfigurationPersistence.favouritePaths, path]
+                            [...userConfigurationPersistence.favouritePaths, slug]
                         );
                     }
                 }}>
@@ -73,7 +73,7 @@ export function NavigationCardBinding({
 
     if (customizationController.plugins && collection) {
         const actionProps: PluginHomePageActionsProps = {
-            path,
+            slug: slug,
             collection,
             context
         };
@@ -108,7 +108,7 @@ export function NavigationCardBinding({
             navigate(url);
             if (userConfigurationPersistence) {
                 userConfigurationPersistence.setRecentlyVisitedPaths(
-                    [path, ...(userConfigurationPersistence.recentlyVisitedPaths ?? []).filter(p => p !== path)]
+                    [slug, ...(userConfigurationPersistence.recentlyVisitedPaths ?? []).filter(p => p !== slug)]
                 );
             }
         }}

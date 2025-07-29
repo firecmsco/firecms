@@ -45,7 +45,7 @@ jest.mock("@tiptap/extension-document", () => ({
 import { expect, it } from "@jest/globals";
 import { siteConfig } from "./test_site_config";
 import { EntityCollection } from "../src/types";
-import { buildCollection, buildProperty, getCollectionByPathOrId, resolveCollectionPathIds } from "../src";
+import { buildCollection, buildProperty, getCollectionBySlugWithin, resolveCollectionPathIds } from "../src";
 import { getNavigationEntriesFromPath } from "../src/util/navigation_from_path";
 
 const collections = siteConfig.collections as EntityCollection[];
@@ -53,39 +53,39 @@ const collections = siteConfig.collections as EntityCollection[];
 describe("Resolving paths test", () => {
     it("collection view matches ok", () => {
 
-        const collectionViewFromPath = getCollectionByPathOrId("products", collections);
+        const collectionViewFromPath = getCollectionBySlugWithin("products", collections);
         expect(
-            collectionViewFromPath && collectionViewFromPath.path
+            collectionViewFromPath && collectionViewFromPath.dbPath
         ).toEqual("products");
 
-        const collectionViewFromPath1 = getCollectionByPathOrId("products/pid/locales", collections);
+        const collectionViewFromPath1 = getCollectionBySlugWithin("products/pid/locales", collections);
         expect(
-            collectionViewFromPath1 && collectionViewFromPath1.path
+            collectionViewFromPath1 && collectionViewFromPath1.dbPath
         ).toEqual("locales");
 
-        const collectionViewFromPath2 = getCollectionByPathOrId("sites/es/products", collections);
+        const collectionViewFromPath2 = getCollectionBySlugWithin("p", collections);
         expect(
-            collectionViewFromPath2 && collectionViewFromPath2.path
+            collectionViewFromPath2 && collectionViewFromPath2.dbPath
         ).toEqual("sites/es/products");
 
-        const collectionViewFromPath3 = getCollectionByPathOrId("sites/es/products/pid/locales", collections);
+        const collectionViewFromPath3 = getCollectionBySlugWithin("sites/es/products/pid/locales", collections);
         expect(
-            collectionViewFromPath3 && collectionViewFromPath3.path
+            collectionViewFromPath3 && collectionViewFromPath3.dbPath
         ).toEqual("locales");
 
         expect(
-            () => getCollectionByPathOrId("products/pid", collections)
+            () => getCollectionBySlugWithin("products/pid", collections)
         ).toThrow(
             "Collection paths must have an odd number of segments: products/pid"
         );
 
         expect(
-            getCollectionByPathOrId("products", [])
+            getCollectionBySlugWithin("products", [])
         ).toEqual(undefined);
 
-        const collectionViewFromPath10 = getCollectionByPathOrId("products/id/subcollection_inline", collections);
+        const collectionViewFromPath10 = getCollectionBySlugWithin("products/id/subcollection_inline", collections);
         expect(
-            collectionViewFromPath10 && collectionViewFromPath10.path
+            collectionViewFromPath10 && collectionViewFromPath10.dbPath
         ).toEqual("products/id/subcollection_inline");
 
     });
@@ -143,8 +143,8 @@ describe("Resolving paths test", () => {
     it("should correctly resolve subcollection with different id and path", () => {
         // Simplified locale collection
         const jointLocaleCollection = buildCollection({
-            id: "medico_v2_0_0_joint_locales",
-            path: "locales",
+            slug: "medico_v2_0_0_joint_locales",
+            dbPath: "locales",
             name: "Translations",
             properties: {
                 name: buildProperty({
@@ -156,8 +156,8 @@ describe("Resolving paths test", () => {
 
         // Simplified joint movements collection
         const jointMovementsCollection = buildCollection({
-            id: "medico_v2_0_0_joint_movements",
-            path: "movements",
+            slug: "medico_v2_0_0_joint_movements",
+            dbPath: "movements",
             name: "Joint movements",
             properties: {
                 reference_value_min: buildProperty({
@@ -170,8 +170,8 @@ describe("Resolving paths test", () => {
 
         // Simplified joints collection
         const jointsCollection = buildCollection({
-            id: "medico_v2_0_0_joints",
-            path: "medico/v2.0.0/joints",
+            slug: "medico_v2_0_0_joints",
+            dbPath: "medico/v2.0.0/joints",
             name: "Joint",
             properties: {
                 latin_name: buildProperty({
@@ -204,23 +204,23 @@ describe("Resolving paths test", () => {
     it("should correctly resolve nested subcollection path with different id and path", () => {
         // Define the nested subcollection structure
         const subSubCollection = buildCollection({
-            id: "sub", // ID used in the input path
-            path: "sub_path", // Actual path segment
+            slug: "sub", // ID used in the input path
+            dbPath: "sub_path", // Actual path segment
             name: "Sub Sub Collection",
             properties: {}
         });
 
         const localesCollection = buildCollection({
-            id: "product_locales", // ID used in the input path
-            path: "locales", // Actual path segment
+            slug: "product_locales", // ID used in the input path
+            dbPath: "locales", // Actual path segment
             name: "Locales",
             properties: {},
             subcollections: [subSubCollection]
         });
 
         const productsCollection = buildCollection({
-            id: "products",
-            path: "products",
+            slug: "products",
+            dbPath: "products",
             name: "Products",
             properties: {},
             subcollections: [localesCollection]

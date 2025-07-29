@@ -1,8 +1,8 @@
 import { buildCollection, buildProperty } from "@firecms/core";
 
 export const showcaseCollection = buildCollection({
-    id: "showcase",
-    path: "showcase",
+    slug: "showcase",
+    dbPath: "showcase",
     description: "Collection to showcase different field types",
     customId: false,
     icon: "bento",

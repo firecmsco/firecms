@@ -6,25 +6,25 @@ describe("buildSidePanelsFromUrl", () => {
 
     const mockCollections: EntityCollection[] = [
         {
-            id: "products",
+            slug: "products",
             name: "Products",
-            path: "products",
+            dbPath: "products",
             properties: {},
             entityViews: [{
                 key: "custom_view",
                 name: "Custom view",
             }],
             subcollections: [{
-                id: "locales",
+                slug: "locales",
                 name: "Locales",
-                path: "locales",
+                dbPath: "locales",
                 properties: {}
             }]
         },
         {
-            id: "experiences",
+            slug: "experiences",
             name: "Experiences",
-            path: "users/J4WyZHd3DhgcWRdJaBodSkSAVuN2/experiences",
+            dbPath: "users/J4WyZHd3DhgcWRdJaBodSkSAVuN2/experiences",
             entityViews: [{
                 key: "editor",
                 name: "Editor",

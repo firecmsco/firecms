@@ -12,10 +12,10 @@ export function CustomCMSRoute({ cmsView }: {
         breadcrumbs.set({
             breadcrumbs: [{
                 title: cmsView.name,
-                url: cmsView.path
+                url: cmsView.slug
             }]
         });
-    }, [cmsView.path]);
+    }, [cmsView.slug]);
 
     return cmsView.view;
 }

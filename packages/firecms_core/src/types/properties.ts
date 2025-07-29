@@ -715,7 +715,7 @@ export interface ReferenceProperty extends BaseProperty<EntityReference> {
      * property.
      * Note that you can also use a collection alias.
      */
-    path?: string;
+    slug?: string;
 
     /**
      * Allow selection of entities that pass the given filter only.

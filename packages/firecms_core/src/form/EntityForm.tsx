@@ -59,7 +59,6 @@ export type OnUpdateParams = {
 
 export type EntityFormProps<M extends Record<string, any>> = {
     path: string;
-    fullIdPath?: string;
     collection: EntityCollection<M>;
     entityId?: string | number;
     entity?: Entity<M>;
@@ -99,7 +98,6 @@ export type EntityFormProps<M extends Record<string, any>> = {
 
 export function EntityForm<M extends Record<string, any>>({
                                                               path,
-                                                              fullIdPath,
                                                               entityId: entityIdProp,
                                                               collection,
                                                               onValuesModified,
@@ -124,7 +122,7 @@ export function EntityForm<M extends Record<string, any>>({
                                                           }: EntityFormProps<M>) {
 
     if (collection.customId && collection.formAutoSave) {
-        console.warn(`The collection ${collection.path} has customId and formAutoSave enabled. This is not supported and formAutoSave will be ignored`);
+        console.warn(`The collection ${collection.slug} has customId and formAutoSave enabled. This is not supported and formAutoSave will be ignored`);
     }
 
     const sideEntityController = useSideEntityController();
@@ -269,7 +267,7 @@ export function EntityForm<M extends Record<string, any>>({
 
     const resolvedCollection = useMemo(() => resolveCollection<M>({
         collection,
-        path,
+        path: path,
         entityId,
         values: formex.values,
         previousValues: formex.initialValues,
@@ -349,7 +347,7 @@ export function EntityForm<M extends Record<string, any>>({
         previousValues?: M,
     }) => {
         return saveEntityWithCallbacks({
-            path,
+            path: path,
             entityId,
             values,
             previousValues,
@@ -456,7 +454,7 @@ export function EntityForm<M extends Record<string, any>>({
         const actionProps: PluginFormActionProps = {
             entityId,
             parentCollectionIds,
-            path,
+            path: path,
             status,
             collection,
             context,
@@ -697,8 +695,6 @@ export function EntityForm<M extends Record<string, any>>({
     const dialogActions = <EntityFormActionsComponent
         collection={resolvedCollection}
         path={path}
-        fullPath={path}
-        fullIdPath={fullIdPath}
         entity={entity}
         layout={forceActionsAtTheBottom ? "bottom" : "side"}
         savingError={savingError}
@@ -763,7 +759,7 @@ function getInitialEntityValues<M extends object>(
 ): Partial<EntityValues<M>> {
     const resolvedCollection = resolveCollection({
         collection,
-        path,
+        path: path,
         values: entity?.values,
         propertyConfigs,
         authController

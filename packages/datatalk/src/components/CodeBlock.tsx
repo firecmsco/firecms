@@ -134,7 +134,7 @@ export function CodeBlock({
                             const priorityKeys = extractStringLiterals(code);
                             return displayQuerySnapshotData(codeResult, priorityKeys);
                         } else if (codeResult instanceof firestoreLibrary.DocumentReference) {
-                            return setExecutionResult("Document added successfully with reference: " + codeResult.path);
+                            return setExecutionResult("Document added successfully with reference: " + codeResult.slug);
                         } else if (codeResult instanceof firestoreLibrary.DocumentSnapshot) {
                             const res = JSON.stringify(codeResult.data(), null, 2);
                             originalConsoleLog("Document data", res);

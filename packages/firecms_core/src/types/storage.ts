@@ -49,10 +49,10 @@ export declare interface DownloadMetadata {
     /**
      * The full path of this object.
      */
-    fullPath: string;
+    path: string;
     /**
      * The short name of this object, which is the last component of the full path.
-     * For example, if fullPath is 'full/path/image.png', name is 'image.png'.
+     * For example, if path is 'full/path/image.png', name is 'image.png'.
      */
     name: string;
     /**
@@ -172,10 +172,10 @@ export declare interface StorageReference {
     /**
      * The full path of this object.
      */
-    fullPath: string;
+    path: string;
     /**
      * The short name of this object, which is the last component of the full path.
-     * For example, if fullPath is 'full/path/image.png', name is 'image.png'.
+     * For example, if path is 'full/path/image.png', name is 'image.png'.
      */
     name: string;
 

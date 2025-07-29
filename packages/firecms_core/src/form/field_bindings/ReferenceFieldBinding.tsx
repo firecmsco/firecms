@@ -20,7 +20,7 @@ import { cls } from "@firecms/ui";
  */
 export function ReferenceFieldBinding(props: FieldProps) {
 
-    if (typeof props.property.path !== "string") {
+    if (typeof props.property.slug !== "string") {
         return <ReadOnlyFieldBinding {...props}/>
     }
 
@@ -43,7 +43,7 @@ function ReferenceFieldBindingInternal({
                                            includeDescription,
                                            size = "medium"
                                        }: FieldProps<EntityReference>) {
-    if (!property.path) {
+    if (!property.slug) {
         throw new Error("Property path is required for ReferenceFieldBinding");
     }
 
@@ -57,11 +57,11 @@ function ReferenceFieldBindingInternal({
 
     const navigationController = useNavigationController();
     const collection: EntityCollection | undefined = useMemo(() => {
-        return property.path ? navigationController.getCollection(property.path) : undefined;
-    }, [property.path]);
+        return property.slug ? navigationController.getCollection(property.slug) : undefined;
+    }, [property.slug]);
 
     if (!collection) {
-        throw Error(`Couldn't find the corresponding collection for the path: ${property.path}`);
+        throw Error(`Couldn't find the corresponding collection for the path: ${property.slug}`);
     }
 
     const onSingleEntitySelected = useCallback((e: Entity<any> | null) => {
@@ -70,7 +70,7 @@ function ReferenceFieldBindingInternal({
 
     const referenceDialogController = useReferenceDialog({
             multiselect: false,
-            path: property.path,
+            path: property.slug,
             collection,
             onSingleEntitySelected,
             selectedEntityIds: validValue ? [value.id] : undefined,
@@ -98,7 +98,7 @@ function ReferenceFieldBindingInternal({
             {collection && <>
 
                 {value && <ReferencePreview
-                    disabled={!property.path}
+                    disabled={!property.slug}
                     previewProperties={property.previewProperties}
                     hover={!disabled}
                     size={size}

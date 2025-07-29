@@ -3,14 +3,14 @@ import { RolesView, UsersView } from "./components";
 
 export const userManagementAdminViews: CMSView[] = [
     {
-        path: "users",
+        slug: "users",
         name: "CMS Users",
         group: "Admin",
         icon: "face",
         view: <UsersView/>
     },
     {
-        path: "roles",
+        slug: "roles",
         name: "Roles",
         group: "Admin",
         icon: "gpp_good",

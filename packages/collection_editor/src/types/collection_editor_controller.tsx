@@ -11,7 +11,7 @@ export interface CollectionEditorController {
 
     editCollection: (props: {
         id?: string,
-        fullPath?: string,
+        path?: string,
         parentCollectionIds: string[],
         parentCollection?: PersistedCollection,
         existingEntities?: Entity<any>[]

@@ -1,8 +1,8 @@
 import { EntityCollection, makePropertiesEditable } from "@firecms/core";
 
 export const productsCollectionTemplate: EntityCollection = {
-    id: "products",
-    path: "products",
+    slug: "products",
+    dbPath: "products",
     name: "Products",
     singularName: "Product",
     icon: "shopping_cart",
@@ -70,7 +70,7 @@ export const productsCollectionTemplate: EntityCollection = {
             description: "Products related to this one",
             of: {
                 type: "reference",
-                path: "products"
+                slug: "products"
             }
         },
         metadata: {

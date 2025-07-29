@@ -72,8 +72,8 @@ const CustomField = (fieldProps: FieldProps) => {
 
 export const testCollection = buildCollection<any>({
         callbacks: testCallbacks,
-        id: "test_entity_id",
-        path: "test_entity",
+        slug: "test_entity_id",
+        dbPath: "test_entity",
         customId: true,
         name: "Test entities",
         alwaysApplyDefaultValues: true,
@@ -85,9 +85,9 @@ export const testCollection = buildCollection<any>({
         },
         subcollections: [
             {
-                id: "sub_collection/with/slash",
+                slug: "sub_collection/with/slash",
                 name: "Sub collection with slash",
-                path: "path/with/slash",
+                dbPath: "path/with/slash",
                 properties: {
                     sub_prop: {
                         type: "string",
@@ -97,9 +97,9 @@ export const testCollection = buildCollection<any>({
                 subcollections: [
 
                     {
-                        id: "sub_sub_collection/with/slash",
+                        slug: "sub_sub_collection/with/slash",
                         name: "Sub sub collection with slash",
-                        path: "sub_sub_path/with/slash",
+                        dbPath: "sub_sub_path/with/slash",
                         properties: {
                             sub_prop: {
                                 type: "string",
@@ -152,13 +152,13 @@ export const testCollection = buildCollection<any>({
                 name: "Reference as string",
                 reference: {
                     type: "reference",
-                    path: "products",
+                    slug: "products",
                 }
             },
             ref: {
                 type: "reference",
                 name: "Reference",
-                path: "products",
+                slug: "products",
             },
 
             // answers: ({ entityId }) => {
@@ -725,7 +725,7 @@ export const testCollection = buildCollection<any>({
                 of: {
                     type: "reference",
                     name: "Self refs",
-                    path: "test_entity"
+                    slug: "test_entity"
                     // previewProperties: ["name","url_image"]
                 }
             },

@@ -10,8 +10,8 @@ import { ProductsSecondaryForm } from "../custom_entity_view/ProductsSecondaryFo
 import { SyncIcon } from "@firecms/ui";
 
 export const localeCollection = buildCollection<Locale>({
-    id: "product_locales",
-    path: "locales",
+    slug: "product_locales",
+    dbPath: "locales",
     icon: "Translate",
     customId: locales,
     name: "Locales",
@@ -110,8 +110,8 @@ export const productCallbacks: EntityCallbacks<Product> = {
 };
 
 export const productsCollection = buildCollection<Product>({
-    path: "products",
-    id: "products",
+    dbPath: "products",
+    slug: "ppp",
     callbacks: productCallbacks,
     name: "Products",
     singularName: "Product",
@@ -309,7 +309,7 @@ export const productsCollection = buildCollection<Product>({
             description: "Reference to self",
             of: {
                 type: "reference",
-                path: "products",
+                slug: "products",
                 forceFilter: {
                     "selectable": ["==", true]
                 },
@@ -371,8 +371,8 @@ export const productsCollection = buildCollection<Product>({
 
 });
 export const productsSimpleCollection = buildCollection<any>({
-    id: "products",
-    path: "products",
+    slug: "products",
+    dbPath: "products",
     name: "Products",
     singularName: "Product",
     icon: "ShoppingCart",
@@ -433,14 +433,14 @@ export const productsSimpleCollection = buildCollection<any>({
 });
 
 export const productsCollection2 = buildCollection({
-    path: "products",
+    dbPath: "products",
     name: "Products 2",
-    id: "products_2",
+    slug: "products_2",
     // openEntityMode: "full_screen",
     subcollections: [
         buildCollection({
-            id: "product_locales_2",
-            path: "locales",
+            slug: "product_locales_2",
+            dbPath: "locales",
             icon: "Translate",
             customId: locales,
             name: "Locales",

@@ -141,7 +141,7 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
         HeaderAction?: React.ComponentType<{
             property: ResolvedProperty,
             propertyKey: string,
-            fullPath: string,
+            path: string,
             parentCollectionIds: string[],
             onHover: boolean,
             collection: EC;
@@ -153,7 +153,7 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
          * TODO: Only the first plugin that defines this callback will be used, at the moment.
          */
         AddColumnComponent?: React.ComponentType<{
-            fullPath: string,
+            path: string,
             parentCollectionIds: string[],
             collection: EC;
             tableController: EntityTableController;
@@ -210,7 +210,7 @@ export interface PluginHomePageActionsProps<EP extends object = object, M extend
      * Collection path of this entity. This is the full path, like
      * `users/1234/addresses`
      */
-    path: string;
+    slug: string;
 
     /**
      * The collection configuration

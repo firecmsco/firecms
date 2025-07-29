@@ -3,9 +3,9 @@ import { CopyEntityButton } from "./copy_button";
 import { Product, productsCollection, properties } from "./simple_product_collection";
 
 export const productsCollectionCopy = buildCollection<Product>({
-    id: "products_copied",
+    slug: "products_copied",
     name: "Products copy target",
-    path: "products_copied",
+    dbPath: "products_copied",
     properties,
     Actions: ({ path, collection }: CollectionActionsProps<Product>) =>
         <CopyEntityButton

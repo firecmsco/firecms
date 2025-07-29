@@ -8,7 +8,7 @@ export function CollectionViewHeaderAction({
                                                propertyKey,
                                                onHover,
                                                property,
-                                               fullPath,
+                                               path,
                                                parentCollectionIds,
                                                collection,
                                                tableController
@@ -16,7 +16,7 @@ export function CollectionViewHeaderAction({
     property: ResolvedProperty,
     propertyKey: string,
     onHover: boolean,
-    fullPath: string,
+    path: string,
     parentCollectionIds: string[],
     collection: PersistedCollection;
     tableController: EntityTableController;
@@ -34,7 +34,7 @@ export function CollectionViewHeaderAction({
                     collectionEditorController.editProperty({
                         propertyKey,
                         property,
-                        editedCollectionId: collection.id,
+                        editedCollectionId: collection.slug,
                         parentCollectionIds,
                         collection,
                         existingEntities: tableController.data ?? []

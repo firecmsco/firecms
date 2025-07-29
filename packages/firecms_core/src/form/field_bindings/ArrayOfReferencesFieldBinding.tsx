@@ -50,11 +50,11 @@ export function ArrayOfReferencesFieldBinding({
 
     const navigationController = useNavigationController();
     const collection: EntityCollection | undefined = useMemo(() => {
-        return ofProperty.path ? navigationController.getCollection(ofProperty.path) : undefined;
-    }, [ofProperty.path]);
+        return ofProperty.slug ? navigationController.getCollection(ofProperty.slug) : undefined;
+    }, [ofProperty.slug]);
 
     if (!collection) {
-        throw Error(`Couldn't find the corresponding collection for the path: ${ofProperty.path}`);
+        throw Error(`Couldn't find the corresponding collection for the path: ${ofProperty.slug}`);
     }
 
     const onMultipleEntitiesSelected = useCallback((entities: Entity<any>[]) => {
@@ -63,7 +63,7 @@ export function ArrayOfReferencesFieldBinding({
 
     const referenceDialogController = useReferenceDialog({
             multiselect: true,
-            path: ofProperty.path,
+            path: ofProperty.slug,
             collection,
             onMultipleEntitiesSelected,
             selectedEntityIds,
@@ -88,7 +88,7 @@ export function ArrayOfReferencesFieldBinding({
         return (
             <ReferencePreview
                 key={internalId}
-                disabled={!ofProperty.path}
+                disabled={!ofProperty.slug}
                 previewProperties={ofProperty.previewProperties}
                 size={"medium"}
                 onClick={onEntryClick}
@@ -98,7 +98,7 @@ export function ArrayOfReferencesFieldBinding({
                 includeEntityLink={ofProperty.includeEntityLink}
             />
         );
-    }, [ofProperty.path, ofProperty.previewProperties, value]);
+    }, [ofProperty.slug, ofProperty.previewProperties, value]);
 
     const title = (<>
         <LabelWithIconAndTooltip

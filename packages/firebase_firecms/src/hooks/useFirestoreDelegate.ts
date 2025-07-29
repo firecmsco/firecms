@@ -5,12 +5,13 @@ import {
     EntityCollection,
     EntityReference,
     FetchCollectionDelegateProps,
-    FetchEntityProps,
+    FetchEntityDelegateProps,
     FilterCombination,
     FilterValues,
     GeoPoint,
     ListenCollectionDelegateProps,
-    ListenEntityProps,
+    ListenEntityDelegateProps,
+    NavigationController,
     ResolvedEntityCollection,
     SaveEntityDelegateProps,
     WhereFilterOp
@@ -177,15 +178,17 @@ export function useFirestoreDelegate({
             entityId,
             collection,
             onUpdate,
-            onError
-        }: ListenEntityProps<M>): () => void => {
+            onError,
+            navigationController
+        }: ListenEntityDelegateProps<M>): () => void => {
         if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
 
         const databaseId = collection?.databaseId;
         const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
+        const resolvedPath = navigationController?.resolveDatabasePathsFrom(path) ?? path;
 
         return onSnapshot(
-            doc(firestore, path, String(entityId)),
+            doc(firestore, resolvedPath, String(entityId)),
             {
                 next: (docSnapshot) => {
                     onUpdate(createEntityFromDocument(docSnapshot, databaseId));
@@ -199,12 +202,14 @@ export function useFirestoreDelegate({
                                                                               path,
                                                                               databaseId,
                                                                               searchString,
-                                                                              onUpdate
+                                                                              onUpdate,
+                                                                              navigationController
                                                                           }: {
         path: string,
         databaseId?: string,
         searchString: string;
-        onUpdate: (entities: Entity<M>[]) => void
+        onUpdate: (entities: Entity<M>[]) => void,
+        navigationController?: NavigationController
     }): () => void => {
 
         if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
@@ -242,6 +247,7 @@ export function useFirestoreDelegate({
                         return listenEntity({
                             path,
                             entityId,
+                            navigationController,
                             onUpdate: (entity: Entity<any>) => {
                                 if (entity.values) {
                                     if (entity.id && !addedEntitiesSet.has(entity.id)) {
@@ -320,11 +326,15 @@ export function useFirestoreDelegate({
                                                                                orderBy,
                                                                                order,
                                                                                collection,
+                                                                               navigationController
                                                                            }: FetchCollectionDelegateProps<M>
         ): Promise<Entity<M>[]> => {
 
             const isCollectionGroup = collection?.collectionGroup ?? false;
             const databaseId = collection?.databaseId;
+
+            const resolvedPath = navigationController?.resolveDatabasePathsFrom(path) ?? path;
+
             console.debug("Fetching collection", {
                 path,
                 limit,
@@ -334,7 +344,7 @@ export function useFirestoreDelegate({
                 order,
                 isCollectionGroup
             });
-            const query = buildQuery(path, filter, orderBy, order, startAfter, limit, isCollectionGroup, databaseId);
+            const query = buildQuery(resolvedPath, filter, orderBy, order, startAfter, limit, isCollectionGroup, databaseId);
 
             const snapshot = await getDocs(query);
             return snapshot.docs.map((doc) => createEntityFromDocument(doc, databaseId));
@@ -367,7 +377,8 @@ export function useFirestoreDelegate({
                 order,
                 onUpdate,
                 onError,
-                collection
+                collection,
+                navigationController
             }: ListenCollectionDelegateProps<M>
         ): () => void => {
 
@@ -394,11 +405,14 @@ export function useFirestoreDelegate({
                     path,
                     searchString,
                     onUpdate,
-                    databaseId
+                    databaseId,
+                    navigationController
                 });
             }
 
-            const query = buildQuery(path, filter, orderBy, order, startAfter, limit, isCollectionGroup, databaseId);
+            const resolvedPath = navigationController?.resolveDatabasePathsFrom(path) ?? path;
+            console.debug("Resolved path for listening", { navigationController, path, resolvedPath });
+            const query = buildQuery(resolvedPath, filter, orderBy, order, startAfter, limit, isCollectionGroup, databaseId);
             return onSnapshot(query,
                 {
                     next: (snapshot) => {
@@ -421,9 +435,13 @@ export function useFirestoreDelegate({
         fetchEntity: useCallback(<M extends Record<string, any>>({
                                                                      path,
                                                                      entityId,
-                                                                     collection
-                                                                 }: FetchEntityProps<M>
-        ): Promise<Entity<M> | undefined> => getAndBuildEntity(path, entityId, collection?.databaseId), [getAndBuildEntity]),
+                                                                     collection,
+                                                                     navigationController
+                                                                 }: FetchEntityDelegateProps<M>
+        ): Promise<Entity<M> | undefined> => {
+            const resolvedPath = navigationController?.resolveDatabasePathsFrom(path) ?? path;
+            return getAndBuildEntity(resolvedPath, entityId, collection?.databaseId);
+        }, [getAndBuildEntity]),
 
         /**
          *
@@ -454,16 +472,17 @@ export function useFirestoreDelegate({
                 entityId,
                 values,
                 collection,
-                status
+                status,
+                navigationController
             }: SaveEntityDelegateProps<M>): Promise<Entity<M>> => {
 
             if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
 
             const databaseId = collection?.databaseId;
             const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
+            const resolvedPath = navigationController?.resolveDatabasePathsFrom(path) ?? path;
 
-            const collectionReference: CollectionReference = collectionClause(firestore, path);
-            // const cleanedValues = cmsToFirestoreModel(values, firestore);
+            const collectionReference: CollectionReference = collectionClause(firestore, resolvedPath);
             console.debug("Saving entity", {
                 path,
                 entityId,
@@ -553,12 +572,14 @@ export function useFirestoreDelegate({
                                               filter,
                                               order,
                                               orderBy,
-                                              collection
+                                              collection,
+                                              navigationController
                                           }: FetchCollectionDelegateProps): Promise<number> => {
             if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
             const isCollectionGroup = collection?.collectionGroup ?? false;
             const databaseId = collection?.databaseId;
-            const query = buildQuery(path, filter, orderBy, order, undefined, undefined, isCollectionGroup, databaseId);
+            const resolvedPath = navigationController?.resolveDatabasePathsFrom(path) ?? path;
+            const query = buildQuery(resolvedPath, filter, orderBy, order, undefined, undefined, isCollectionGroup, databaseId);
             const snapshot = await getCountFromServer(query);
             return snapshot.data().count;
         }, [firebaseApp]),
@@ -567,12 +588,14 @@ export function useFirestoreDelegate({
                                                    path,
                                                    collection,
                                                    filterValues,
-                                                   sortBy
+                                                   sortBy,
+                                                   navigationController
                                                }: {
             path: string,
             collection: EntityCollection<any>,
             filterValues: FilterValues<any>,
-            sortBy?: [string, "asc" | "desc"]
+            sortBy?: [string, "asc" | "desc"],
+            navigationController: NavigationController
         }): boolean => {
 
             if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
@@ -580,9 +603,10 @@ export function useFirestoreDelegate({
             // If no indexes are defined, we assume the query is valid.
             // If there is no index in Firestore, and error message will be shown
             if (firestoreIndexesBuilder === undefined) return true;
+            const resolvedPath = navigationController?.resolveDatabasePathsFrom(path) ?? path;
 
             const indexes = firestoreIndexesBuilder?.({
-                path,
+                path: resolvedPath,
                 collection
             });
 
@@ -626,7 +650,7 @@ const createEntityFromDocument = <M extends Record<string, any>>(
     const path = getCMSPathFromFirestorePath(docSnap.ref.path);
     return {
         id: docSnap.id,
-        path,
+        path: path,
         values,
         databaseId
     };
@@ -707,7 +731,7 @@ export function cmsToFirestoreModel(data: any, firestore: Firestore, inArray = f
     } else if (Array.isArray(data)) {
         return data.filter(v => v !== undefined).map(v => cmsToFirestoreModel(v, firestore, true));
     } else if (data.isEntityReference && data.isEntityReference()) {
-        return doc(firestore, data.path, data.id);
+        return doc(firestore, data.slug, data.id);
     } else if (data instanceof GeoPoint) {
         return new FirestoreGeoPoint(data.latitude, data.longitude);
     } else if (data instanceof Date) {
@@ -757,13 +781,13 @@ function buildTextSearchControllerWithLocalSearch({
     const textSearchController = textSearchControllerBuilder!({ firebaseApp });
     return {
         init: async (props: {
-            path: string,
+            slug: string,
             databaseId?: string,
             collection?: EntityCollection | ResolvedEntityCollection
         }) => {
             const b = await textSearchController.init(props);
             if (b) {
-                console.debug("External Text search controller supports path", props.path);
+                console.debug("External Text search controller supports path", props.slug);
                 return true;
             }
             if (localTextSearchEnabled)

@@ -10,26 +10,23 @@ export type NavigationViewInternal<M extends Record<string, any> = any> =
 export interface NavigationViewEntityInternal<M extends Record<string, any>> {
     type: "entity";
     entityId: string | number;
+    slug: string;
     path: string;
-    fullIdPath: string;
-    fullPath: string;
     parentCollection: EntityCollection<M>;
 }
 
 export interface NavigationViewCollectionInternal<M extends Record<string, any>> {
     type: "collection";
     id: string;
+    slug: string;
     path: string;
-    fullIdPath: string;
-    fullPath: string;
     collection: EntityCollection<M>;
 }
 
 export interface NavigationViewEntityCustomInternal<M extends Record<string, any>> {
     type: "custom_view";
+    slug: string;
     path: string;
-    fullIdPath: string;
-    fullPath: string;
     entityId: string | number;
     view: EntityCustomView<M>;
 }
@@ -38,7 +35,6 @@ export function getNavigationEntriesFromPath(props: {
     path: string,
     collections: EntityCollection[] | undefined,
     currentFullPath?: string,
-    currentFullIdPath?: string,
     contextEntityViews?: EntityCustomView<any>[]
 }): NavigationViewInternal [] {
 
@@ -46,7 +42,6 @@ export function getNavigationEntriesFromPath(props: {
         path,
         collections = [],
         currentFullPath,
-        currentFullIdPath
     } = props;
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
@@ -56,38 +51,29 @@ export function getNavigationEntriesFromPath(props: {
     for (let i = 0; i < subpathCombinations.length; i++) {
         const subpathCombination = subpathCombinations[i];
 
-        let collection: EntityCollection<any> | undefined;
-        collection = collections && collections.find((entry) => entry.id === subpathCombination);
-        if (!collection) {
-            collection = collections && collections.find((entry) => entry.path === subpathCombination);
-        }
+        const collection = collections && collections.find((entry) => entry.slug === subpathCombination);
 
         if (collection) {
             const collectionPath = currentFullPath && currentFullPath.length > 0
-                ? (currentFullPath + "/" + collection.path)
-                : collection.path;
-            const fullIdPath = currentFullIdPath && currentFullIdPath.length > 0
-                ? (currentFullIdPath + "/" + collection.id)
-                : collection.id;
+                ? (currentFullPath + "/" + collection.slug)
+                : collection.slug;
             result.push({
                 type: "collection",
-                id: collection.id,
+                id: collection.slug,
+                slug: collectionPath,
                 path: collectionPath,
-                fullPath: collectionPath,
-                fullIdPath,
                 collection
             });
             const restOfThePath = removeInitialAndTrailingSlashes(removeInitialAndTrailingSlashes(path).replace(subpathCombination, ""));
             const nextSegments = restOfThePath.length > 0 ? restOfThePath.split("/") : [];
             if (nextSegments.length > 0) {
                 const entityId = nextSegments[0];
-                const fullPath = collectionPath + "/" + entityId;
+                const path = collectionPath + "/" + entityId;
                 result.push({
                     type: "entity",
                     entityId,
-                    path: collectionPath,
-                    fullIdPath,
-                    fullPath: fullPath,
+                    slug: collectionPath,
+                    path,
                     parentCollection: collection
                 });
                 if (nextSegments.length > 1) {
@@ -103,18 +89,16 @@ export function getNavigationEntriesFromPath(props: {
                     if (customView) {
                         result.push({
                             type: "custom_view",
-                            path: collectionPath,
+                            slug: collectionPath,
                             entityId: entityId,
-                            fullIdPath,
-                            fullPath: fullPath + "/" + customView.key,
+                            path: path + "/" + customView.key,
                             view: customView
                         });
                     } else if (collection.subcollections) {
                         result.push(...getNavigationEntriesFromPath({
                             path: newPath,
                             collections: collection.subcollections,
-                            currentFullPath: fullPath,
-                            currentFullIdPath: fullIdPath,
+                            currentFullPath: path,
                             contextEntityViews: props.contextEntityViews
                         }));
                     }

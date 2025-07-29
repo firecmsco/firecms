@@ -3,8 +3,8 @@ import { AutoAwesomeIcon } from "@firecms/ui";
 import React from "react";
 
 export const showcaseCollection = buildCollection({
-    id: "id_showcase",
-    path: "showcase",
+    slug: "id_showcase",
+    dbPath: "showcase",
     description: "Collection to showcase different field types",
     customId: false,
     icon: "bento",
@@ -23,8 +23,8 @@ export const showcaseCollection = buildCollection({
     //     }
     // ],
     subcollections: [{
-        id: "id_subcollection",
-        path: "subcollection",
+        slug: "id_subcollection",
+        dbPath: "subcollection",
         name: "Subcollection",
         properties: {
             name: {

@@ -3,8 +3,8 @@ import { BlogEntry } from "@/app/common/types";
 import { CMSBlogPreview } from "@/app/cms/collections/components/CMSBlogPreview";
 
 export const blogCollection = buildCollection<BlogEntry>({
-    id: "blog",
-    path: "blog",
+    slug: "blog",
+    dbPath: "blog",
     name: "Blog",
     singularName: "Blog entry",
     icon: "article",
@@ -76,7 +76,7 @@ export const blogCollection = buildCollection<BlogEntry>({
                         type: "array",
                         of: {
                             type: "reference",
-                            path: "products",
+                            slug: "products",
                             previewProperties: ["name", "main_image"]
                         }
                     }

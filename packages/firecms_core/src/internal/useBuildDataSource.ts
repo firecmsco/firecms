@@ -73,7 +73,8 @@ export function useBuildDataSource({
                 searchString,
                 orderBy,
                 order,
-                collection
+                collection,
+                navigationController,
             });
         }, [delegate]),
 
@@ -126,8 +127,9 @@ export function useBuildDataSource({
                     onUpdate,
                     onError,
                     collection,
+                    navigationController
                 });
-            }, [delegate, navigationController.getCollection])
+            }, [delegate, navigationController.getCollection, navigationController])
             : undefined,
 
         /**
@@ -147,7 +149,8 @@ export function useBuildDataSource({
             return usedDelegate.fetchEntity({
                 path,
                 entityId,
-                collection
+                collection,
+                navigationController
             });
         }, [delegate.fetchEntity]),
 
@@ -180,7 +183,8 @@ export function useBuildDataSource({
                     entityId,
                     onUpdate,
                     onError,
-                    collection
+                    collection,
+                    navigationController,
                 })
             }, [delegate.listenEntity]) : undefined,
 
@@ -234,18 +238,13 @@ export function useBuildDataSource({
                     })
                 : delegateValues;
 
-            console.log("!!!", {
-                delegateValues,
-                updatedValues,
-                properties,
-            })
-
             return usedDelegate.saveEntity({
                 path,
                 collection,
                 entityId,
                 values: updatedValues,
-                status
+                status,
+                navigationController,
             }).then((res) => {
                 return {
                     id: res.id,
@@ -270,7 +269,8 @@ export function useBuildDataSource({
             const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
             return usedDelegate.deleteEntity({
                 entity,
-                collection
+                collection,
+                navigationController
             });
         }, [delegate.deleteEntity]),
 
@@ -319,7 +319,8 @@ export function useBuildDataSource({
                 filter,
                 orderBy,
                 order,
-                collection
+                collection,
+                navigationController
             });
         } : undefined,
 
@@ -341,7 +342,8 @@ export function useBuildDataSource({
                     path,
                     databaseId,
                     filterValues,
-                    sortBy
+                    sortBy,
+                    navigationController
                 }
             )
         }, [delegate.isFilterCombinationValid]),

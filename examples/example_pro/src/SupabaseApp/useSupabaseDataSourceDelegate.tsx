@@ -71,7 +71,7 @@ export function useSupabaseDelegate({ supabase }: SupabaseDataSourceProps): Supa
 
     const getAndBuildEntity = useCallback(async <M extends Record<string, any>>(
         path: string,
-        entityId: string,
+        entityId: string | number,
         databaseId?: string
     ): Promise<Entity<M> | undefined> => {
         const {
@@ -350,7 +350,7 @@ const createEntityFromDocument = <M extends Record<string, any>>(
 ): Entity<M> => {
     return {
         id: data.id,
-        path: path,
+        path,
         values: data,
         databaseId
     };

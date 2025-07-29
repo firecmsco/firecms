@@ -5,13 +5,13 @@ import { useCustomizationController, useDataSource, useFireCMSContext } from "..
 
 export interface UseTableSearchHelperParams<M extends Record<string, any>> {
     collection: EntityCollection<M>;
-    fullPath: string;
+    path: string;
     parentCollectionIds?: string[];
 }
 
 export function useTableSearchHelper<M extends Record<string, any>>({
                                                                         collection,
-                                                                        fullPath,
+                                                                        path,
                                                                         parentCollectionIds
                                                                     }: UseTableSearchHelperParams<M>) {
 
@@ -27,7 +27,7 @@ export function useTableSearchHelper<M extends Record<string, any>>({
 
     const props = {
         context,
-        path: fullPath,
+        path,
         databaseId: collection.databaseId,
         collection,
         parentCollectionIds
@@ -53,7 +53,7 @@ export function useTableSearchHelper<M extends Record<string, any>>({
                         if (p.collectionView?.onTextSearchClick)
                             promises.push(p.collectionView.onTextSearchClick({
                                 context,
-                                path: fullPath,
+                                path,
                                 collection,
                                 parentCollectionIds
                             }));
@@ -72,7 +72,7 @@ export function useTableSearchHelper<M extends Record<string, any>>({
                 if (p.collectionView?.showTextSearchBar) {
                     textSearchEnabled = p.collectionView.showTextSearchBar({
                         context,
-                        path: fullPath,
+                        path,
                         collection,
                         parentCollectionIds
                     });

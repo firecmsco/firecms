@@ -2,10 +2,10 @@ import { buildCollection, buildProperty } from "@firecms/core";
 
 // This is a demo collection with many of the available properties
 export const demoCollection = buildCollection({
-    id: "demo",
+    slug: "demo",
     name: "Demo collection",
     description: "This is a demo collection with many of the **available properties**",
-    path: "demo",
+    dbPath: "demo",
     properties: {
 
         // string property with validation
