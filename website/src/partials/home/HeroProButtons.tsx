@@ -20,7 +20,7 @@ function HeroProButtons() {
     return <div className={"m-auto mt-8 mb-8 flex md:flex-row flex-col-reverse items-center gap-4 px-4 justify-center"}>
         <a
             aria-label="Join our Discord"
-            className={"btn shadow-none py-4 text-white dark:hover:bg-gray-900 hover:bg-gray-200 uppercase border border-solid w-full md:w-auto rounded"}
+            className={"btn shadow-none py-4 text-white dark:hover:bg-gray-900 hover:bg-gray-200 uppercase border border-solid w-full md:w-auto rounded-sm"}
             href={"https://discord.gg/fxy7xsQm3m"}
         >
             {discordIcon}

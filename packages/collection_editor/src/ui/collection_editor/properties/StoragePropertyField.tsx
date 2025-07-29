@@ -106,7 +106,7 @@ export function StoragePropertyField({
                                     <MultiSelectItem key={value} value={value} className={"flex items-center gap-2"}>
                                         {/*<Checkbox*/}
                                         {/*    checked={allFileTypesSelected || fileTypesValue.indexOf(value) > -1}/>*/}
-                                        <div className={"flex-grow"}>
+                                        <div className={"grow"}>
                                             {label}
                                         </div>
                                         <Button size={"small"}

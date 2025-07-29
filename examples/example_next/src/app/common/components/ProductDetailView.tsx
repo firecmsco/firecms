@@ -47,7 +47,7 @@ export function ProductDetailView({
                                 }}
                                 key={`image_${index}`}>
                                 <img src={image}
-                                     className="aspect-[5/6] object-contain bg-white rounded"
+                                     className="aspect-5/6 object-contain bg-white rounded-sm"
                                      style={{
                                          height: 120,
                                          width: 100
@@ -63,14 +63,14 @@ export function ProductDetailView({
                                 height: 600,
                                 width: 900
                             }}
-                            className="bg-white aspect-[2/3] object-contain w-full rounded-lg overflow-hidden"
+                            className="bg-white aspect-2/3 object-contain w-full rounded-lg overflow-hidden"
                             src={selectedImage}/>}
                     </div>
                 </div>
                 <div className="grid gap-4 md:gap-10 items-start h-full content-center">
                     <div className="grid gap-4">
                         <div className="flex items-start">
-                            <h1 className="flex-grow font-headers text-3xl lg:text-4xl">{product.name ?? "Product name"} </h1>
+                            <h1 className="grow font-headers text-3xl lg:text-4xl">{product.name ?? "Product name"} </h1>
                             <div className="font-headers text-4xl font-medium ml-auto">
                                 {getCurrencySymbol(product.currency)}{product.price}
                             </div>

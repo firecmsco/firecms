@@ -17,7 +17,7 @@ function PrivacyPolicy() {
             <Head>
                 <title>Privacy policy - FireCMS</title>
             </Head>
-            <main className="flex-grow container mx-auto px-4 py-8"
+            <main className="grow container mx-auto px-4 py-8"
                   ref={divRef}>
 
             </main>

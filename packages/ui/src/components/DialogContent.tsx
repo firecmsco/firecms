@@ -14,12 +14,12 @@ export function DialogContent({
 }) {
 
     if (fullHeight)
-        return <div className={"flex-grow flex flex-col h-full relative"}>
+        return <div className={"grow flex flex-col h-full relative"}>
             {children}
         </div>;
 
     return <div
-        className={cls("flex-grow",
+        className={cls("grow",
             { "my-6 mx-6": includeMargin },
             className)}>
         {children}

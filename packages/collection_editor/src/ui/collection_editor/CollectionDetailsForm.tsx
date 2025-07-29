@@ -123,7 +123,7 @@ export function CollectionDetailsForm({
                 <div>
                     <div
                         className="flex flex-row gap-2 py-2 pt-3 items-center">
-                        <Typography variant={!isNewCollection ? "h5" : "h4"} className={"flex-grow"}>
+                        <Typography variant={!isNewCollection ? "h5" : "h4"} className={"grow"}>
                             {isNewCollection ? "New collection" : `${values?.name} collection`}
                         </Typography>
                         <DefaultDatabaseField databaseId={values.databaseId}

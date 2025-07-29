@@ -133,7 +133,7 @@ export const NodeSelector = ({
                         item.command(editor);
                         onOpenChange(false);
                     }}
-                    className="flex cursor-pointer items-center justify-between rounded px-2 py-1 text-sm hover:bg-blue-50 hover:dark:bg-surface-700 text-surface-900 dark:text-white"
+                    className="flex cursor-pointer items-center justify-between rounded-xs px-2 py-1 text-sm hover:bg-blue-50 dark:hover:bg-surface-700 text-surface-900 dark:text-white"
                 >
                     <div className="flex items-center space-x-2">
                         <item.icon size="smallest"/>

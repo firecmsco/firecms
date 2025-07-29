@@ -81,7 +81,7 @@ export const Newsletter = () => {
                                     className="w-full py-2 flex flex-col md:flex-row justify-between gap-2">
                                     <input
                                         disabled={loading || completed}
-                                        className={"appearance-none outline-none text-xl flex-1 px-4 py-4 bg-gray-900 rounded w-full leading-tight focus:border-primary "
+                                        className={"appearance-none outline-hidden text-xl flex-1 px-4 py-4 bg-gray-900 rounded-sm w-full leading-tight focus:border-primary "
                                             + (!validEmail && submitClicked ? "border-solid border-red-600" : "border-none")}
                                         id="email" type="email"
                                         placeholder="Enter your email"

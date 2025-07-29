@@ -66,7 +66,7 @@ export function VirtualTableNumberInput(props: {
     return (
         <input
             ref={ref}
-            className={cls("w-full text-right p-0 m-0 bg-transparent border-none resize-none outline-none font-normal leading-normal text-unset", focusedDisabled)}
+            className={cls("w-full text-right p-0 m-0 bg-transparent border-none resize-none outline-hidden font-normal leading-normal text-unset", focusedDisabled)}
             style={{
                 textAlign: align
             }}

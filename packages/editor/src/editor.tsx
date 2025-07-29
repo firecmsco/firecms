@@ -213,7 +213,7 @@ export const FireCMSEditor = ({
                 editorProps={{
                     editable: () => !disabled,
                     attributes: {
-                        class: cls(proseClass, "prose-headings:font-title font-default focus:outline-none max-w-full p-12")
+                        class: cls(proseClass, "prose-headings:font-title font-default focus:outline-hidden max-w-full p-12")
                     }
                 }}
                 onCreate={({ editor }) => {
@@ -229,7 +229,7 @@ export const FireCMSEditor = ({
                     tippyOptions={{
                         placement: "top"
                     }}
-                    className={cls("flex w-fit max-w-[90vw] h-10 overflow-hidden rounded border bg-white dark:bg-surface-900 shadow", defaultBorderMixin)}
+                    className={cls("flex w-fit max-w-[90vw] h-10 overflow-hidden rounded-xs border bg-white dark:bg-surface-900 shadow-2xs", defaultBorderMixin)}
                 >
                     <NodeSelector portalContainer={ref.current} open={openNode} onOpenChange={setOpenNode}/>
                     <Separator orientation="vertical"/>

@@ -47,7 +47,7 @@ export function ToggleButton({
             onClick={onClick}
             className={"cursor-pointer max-w-sm p-6 border border-solid rounded-lg flex flex-row gap-4 items-center bg-gray-50 "
                 + (selected
-                    ? "border-transparent shadow-xl text-gray-700  outline-none ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent"
+                    ? "border-transparent shadow-xl text-gray-700  outline-hidden ring-2 ring-primary/75 ring-offset-2 ring-offset-transparent"
                     : "border-gray-200 text-gray-600")}
         >
             {icon}

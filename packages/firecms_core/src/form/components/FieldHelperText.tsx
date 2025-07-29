@@ -37,7 +37,7 @@ export function FieldHelperText({
     return <div className={"flex ml-3.5 mt-1"}>
         <Typography variant={"caption"}
                     color={disabled ? "disabled" : "secondary"}
-                    className={"flex-grow"}>
+                    className={"grow"}>
             {disabledTooltip || property.description}
         </Typography>
 

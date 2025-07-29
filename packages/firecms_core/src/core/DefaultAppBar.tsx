@@ -125,7 +125,7 @@ export const DefaultAppBar = function DefaultAppBar({
 
             {navigation && <div className="mr-2 hidden lg:block">
                 <Link
-                    className="visited:text-inherit visited:dark:text-inherit block"
+                    className="visited:text-inherit dark:visited:text-inherit block"
                     to={navigation?.basePath ?? "/"}
                 >
                     <div className={"flex flex-row gap-4"}>
@@ -154,7 +154,7 @@ export const DefaultAppBar = function DefaultAppBar({
                             </Typography>
                             <Link
                                 key={index}
-                                className="visited:text-inherit visited:dark:text-inherit block"
+                                className="visited:text-inherit dark:visited:text-inherit block"
                                 to={breadcrumb.url}
                             >
                                 <Typography variant={"caption"} color={"secondary"}>
@@ -168,7 +168,7 @@ export const DefaultAppBar = function DefaultAppBar({
 
             {startAdornment}
 
-            <div className={"flex-grow"}/>
+            <div className={"grow"}/>
 
             {endAdornment &&
                 <ErrorBoundary>

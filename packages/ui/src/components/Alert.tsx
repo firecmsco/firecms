@@ -61,7 +61,7 @@ export const Alert: React.FC<AlertProps> = ({
                 "rounded-md flex items-center gap-2",
                 classes,
                 outerClassName)}>
-            <div className={cls("flex-grow", className)}>{children}</div>
+            <div className={cls("grow", className)}>{children}</div>
             {onDismiss && (
                 <button
                     className="text-surface-accent-400 hover:text-surface-accent-600 dark:text-surface-accent-500 dark:hover:text-surface-accent-400"

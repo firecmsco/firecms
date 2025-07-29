@@ -21,11 +21,11 @@ export function SmallNavigationCard({
                 tabIndex={0}
                 className={cls(cardMixin,
                     cardClickableMixin,
-                    "cursor-pointer flex flex-row items-center px-4 py-2 text-inherit dark:text-inherit visited:text-inherit visited:dark:text-inherit hover:text-inherit hover:dark:text-inherit ")}
+                    "cursor-pointer flex flex-row items-center px-4 py-2 text-inherit dark:text-inherit visited:text-inherit dark:visited:text-inherit hover:text-inherit dark:hover:text-inherit ")}
                 to={url}
             >
 
-                <div className="flex flex-row items-center flex-grow gap-2 ">
+                <div className="flex flex-row items-center grow gap-2 ">
                     {icon}
 
                     <Typography gutterBottom variant="h5"

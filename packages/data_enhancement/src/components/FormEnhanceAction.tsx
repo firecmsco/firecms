@@ -147,7 +147,7 @@ export function FormEnhanceAction({
                         enhance(samplePrompt.prompt);
                     }}
                 >
-                    <div className={"pl-9 flex-grow text-text-secondary dark:text-text-secondary-dark"}>
+                    <div className={"pl-9 grow text-text-secondary dark:text-text-secondary-dark"}>
                         {samplePrompt.prompt}
                     </div>
 
@@ -176,7 +176,7 @@ export function FormEnhanceAction({
                 )}>
 
                 <TextareaAutosize
-                    className={cls("p-4 rounded-lg resize-none bg-surface-100 dark:bg-surface-800 mx-2 w-full flex-grow outline-none", focusedDisabled)}
+                    className={cls("p-4 rounded-lg resize-none bg-surface-100 dark:bg-surface-800 mx-2 w-full grow outline-hidden", focusedDisabled)}
                     value={instructions}
                     autoFocus={status === "new"}
                     disabled={loading || noIdSet}

@@ -118,16 +118,14 @@ export function useBuildProjectConfig({
     // update css variables when colors change in :root
     useEffect(() => {
         if (primaryColor) {
-            document.documentElement.style.setProperty("--fcms-primary", primaryColor);
-            document.documentElement.style.setProperty("--fcms-primary-bg", hexToRgbaWithOpacity(primaryColor, 10));
+            document.documentElement.style.setProperty("--color-primary", primaryColor);
         } else {
-            document.documentElement.style.setProperty("--fcms-primary", darkenColor(DEFAULT_PRIMARY_COLOR, 10));
-            document.documentElement.style.setProperty("--fcms-primary-bg", hexToRgbaWithOpacity(DEFAULT_PRIMARY_COLOR, 10));
+            document.documentElement.style.setProperty("--color-primary", darkenColor(DEFAULT_PRIMARY_COLOR, 10));
         }
         if (secondaryColor) {
-            document.documentElement.style.setProperty("--fcms-secondary", secondaryColor);
+            document.documentElement.style.setProperty("--color-secondary", secondaryColor);
         } else {
-            document.documentElement.style.setProperty("--fcms-secondary", DEFAULT_SECONDARY_COLOR);
+            document.documentElement.style.setProperty("--color-secondary", DEFAULT_SECONDARY_COLOR);
         }
 
     }, [primaryColor, secondaryColor]);

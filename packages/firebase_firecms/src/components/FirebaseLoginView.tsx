@@ -360,7 +360,7 @@ export function LoginButton({
                         className="flex flex-col w-8 items-center justify-items-center">
                         {icon}
                     </div>
-                    <div className="flex-grow pl-2 text-center">{text}</div>
+                    <div className="grow pl-2 text-center">{text}</div>
                 </div>
             </Button>
         </div>

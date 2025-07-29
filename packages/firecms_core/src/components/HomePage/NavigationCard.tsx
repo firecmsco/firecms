@@ -33,7 +33,7 @@ export const NavigationCard = React.memo(function NavigationCard({
 
             <div className="flex flex-col items-start h-full">
                 <div
-                    className="flex-grow w-full">
+                    className="grow w-full">
 
                     <div
                         className="h-10 flex items-center w-full justify-between text-surface-300 dark:text-surface-600">

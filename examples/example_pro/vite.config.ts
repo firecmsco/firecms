@@ -3,6 +3,7 @@ import path from "path";
 import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
 import svgr from "vite-plugin-svgr";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
     esbuild: {
@@ -17,7 +18,8 @@ export default defineConfig({
     optimizeDeps: { include: ["react/jsx-runtime"] },
     plugins: [
         svgr(),
-        react({})
+        react({}),
+        tailwindcss(),
     ],
     resolve: {
         alias: {

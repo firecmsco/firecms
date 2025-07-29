@@ -117,8 +117,8 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                 style={inputStyle}
                 className={cls(
                     invisible ? focusedInvisibleMixin : "",
-                    "rounded-md resize-none w-full outline-none p-[32px] text-base bg-transparent min-h-[64px] px-3 pt-8",
-                    disabled && "outline-none opacity-50 text-surface-accent-600 dark:text-surface-accent-500",
+                    "rounded-md resize-none w-full outline-hidden p-[32px] text-base bg-transparent min-h-[64px] px-3 pt-8",
+                    disabled && "outline-hidden opacity-50 text-surface-accent-600 dark:text-surface-accent-500",
                     inputClassName
                 )}
             />
@@ -129,7 +129,7 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                 disabled={disabled}
                 style={inputStyle}
                 className={cls(
-                    "w-full outline-none bg-transparent leading-normal px-3",
+                    "w-full outline-hidden bg-transparent leading-normal px-3",
                     "rounded-md",
                     "focused:text-text-primary focused:dark:text-text-primary-dark",
                     invisible ? focusedInvisibleMixin : "",
@@ -147,7 +147,7 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                         : "py-2",
                     endAdornment ? "pr-10" : "pr-3",
                     disabled &&
-                    "outline-none opacity-50 dark:opacity-50 text-surface-accent-800 dark:text-white",
+                    "outline-hidden opacity-50 dark:opacity-50 text-surface-accent-800 dark:text-white",
                     inputClassName
                 )}
                 placeholder={focused || hasValue || !label ? placeholder : undefined}

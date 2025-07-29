@@ -42,7 +42,7 @@ export function PropertyFieldPreview({
     const disabled = !editableProperty(property);
 
     const borderColorClass = hasError
-        ? "border-red-500 dark:border-red-500 border-opacity-100 dark:border-opacity-100 ring-0 dark:ring-0"
+        ? "border-red-500 dark:border-red-500 ring-0 dark:ring-0"
         : (selected ? "border-primary" : "border-transparent");
 
     return <ErrorBoundary>
@@ -60,7 +60,7 @@ export function PropertyFieldPreview({
                     cardMixin,
                     onClick ? cardClickableMixin : "",
                     selected ? cardSelectedMixin : "",
-                    "flex-grow p-4 border transition-colors duration-200",
+                    "grow p-4 border transition-colors duration-200",
                     borderColorClass
                 )}
             >
@@ -71,7 +71,7 @@ export function PropertyFieldPreview({
                         <ErrorBoundary>
                             <Typography variant="body1"
                                         component="span"
-                                        className="flex-grow pr-2">
+                                        className="grow pr-2">
                                 {property.name
                                     ? property.name
                                     : "\u00a0"
@@ -81,7 +81,7 @@ export function PropertyFieldPreview({
 
                     <div className="flex flex-row items-center">
                         <ErrorBoundary>
-                            <Typography className="flex-grow pr-2"
+                            <Typography className="grow pr-2"
                                         variant={includeName ? "body2" : "subtitle1"}
                                         component="span"
                                         color="secondary">
@@ -131,7 +131,7 @@ export function NonEditablePropertyPreview({
             <div className={"relative m-4"}>
                 {propertyConfig && <PropertyConfigBadge propertyConfig={propertyConfig}/>}
                 {!propertyConfig && <div
-                    className={"h-8 w-8 p-1 rounded-full shadow text-white bg-surface-500"}>
+                    className={"h-8 w-8 p-1 rounded-full shadow-2xs text-white bg-surface-500"}>
                     <FunctionsIcon color={"inherit"} size={"medium"}/>
                 </div>}
                 <DoNotDisturbOnIcon color={"disabled"} size={"small"} className={"absolute -right-2 -top-2"}/>
@@ -142,14 +142,14 @@ export function NonEditablePropertyPreview({
                     cardMixin,
                     onClick ? cardClickableMixin : "",
                     selected ? cardSelectedMixin : "",
-                    "flex-grow p-4 border transition-colors duration-200",
+                    "grow p-4 border transition-colors duration-200",
                     selected ? "border-primary" : "border-transparent")}
             >
 
                 <div className="w-full flex flex-col">
                     <Typography variant="body1"
                                 component="span"
-                                className="flex-grow pr-2">
+                                className="grow pr-2">
                         {property?.name
                             ? property.name
                             : name
@@ -157,7 +157,7 @@ export function NonEditablePropertyPreview({
                     </Typography>
 
                     <div className="flex flex-row items-center">
-                        {propertyConfig && <Typography className="flex-grow pr-2"
+                        {propertyConfig && <Typography className="grow pr-2"
                                                        variant={"body2"}
                                                        component="span"
                                                        color="secondary">
@@ -191,7 +191,7 @@ export function NonEditablePropertyPreview({
                     </div>
 
                     {/*<div className="flex flex-row text-xs">*/}
-                    {/*    <Typography className="flex-grow pr-2"*/}
+                    {/*    <Typography className="grow pr-2"*/}
                     {/*                variant="body2"*/}
                     {/*                component="span"*/}
                     {/*                color="secondary">*/}

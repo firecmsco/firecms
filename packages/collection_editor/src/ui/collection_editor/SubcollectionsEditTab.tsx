@@ -73,7 +73,7 @@ export function SubcollectionsEditTab({
             <Container maxWidth={"2xl"} className={"flex flex-col gap-4 p-8 m-auto"}>
                 <div className={"flex  flex-col gap-16"}>
 
-                    <div className={"flex-grow flex flex-col gap-4 items-start"}>
+                    <div className={"grow flex flex-col gap-4 items-start"}>
                         <Typography variant={"h5"}>
                             Subcollections of {values.name}
                         </Typography>
@@ -89,7 +89,7 @@ export function SubcollectionsEditTab({
                                                   })}>
                                             <TableCell
                                                 align="left">
-                                                <Typography variant={"subtitle2"} className={"flex-grow"}>
+                                                <Typography variant={"subtitle2"} className={"grow"}>
                                                     {subcollection.name}
                                                 </Typography>
                                             </TableCell>
@@ -128,7 +128,7 @@ export function SubcollectionsEditTab({
 
                     </div>
 
-                    <div className={"flex-grow  flex flex-col gap-4 items-start"}>
+                    <div className={"grow  flex flex-col gap-4 items-start"}>
                         <Typography variant={"h5"}>
                             Custom views
                         </Typography>
@@ -152,7 +152,7 @@ export function SubcollectionsEditTab({
                                             <TableRow key={view.key}>
                                                 <TableCell
                                                     align="left">
-                                                    <Typography variant={"subtitle2"} className={"flex-grow"}>
+                                                    <Typography variant={"subtitle2"} className={"grow"}>
                                                         {view.name}
                                                     </Typography>
                                                 </TableCell>
@@ -177,10 +177,10 @@ export function SubcollectionsEditTab({
                                             <TableRow key={view.key}>
                                                 <TableCell
                                                     align="left">
-                                                    <Typography variant={"subtitle2"} className={"flex-grow"}>
+                                                    <Typography variant={"subtitle2"} className={"grow"}>
                                                         {view.name}
                                                     </Typography>
-                                                    <Typography variant={"caption"} className={"flex-grow"}>
+                                                    <Typography variant={"caption"} className={"grow"}>
                                                         This view is defined in code with
                                                         key <code>{view.key}</code>
                                                     </Typography>

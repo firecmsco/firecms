@@ -783,7 +783,6 @@ For reference, the `package.json` file of a new FireCMS Cloud project looks like
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.19",
     "npm-run-all": "^4.1.5",
-    "postcss": "^8.4.38",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.4.3",
     "vite": "^5.2.6"
@@ -1576,15 +1575,14 @@ export function FireCMSApp() {
 Create a file called `index.css` in the `./src/cms` folder with the following content:
 
 ```css
-@import "@firecms/ui/index.css";
+@import "@firecms/ui/index.css" layer(base);
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-    --fcms-primary: #0070F4;
-    --fcms-primary-bg: #0061e610;
-    --fcms-secondary: #FF5B79;
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
 }
 
 a {
@@ -2172,16 +2170,16 @@ FireCMS UI uses a primary color and a secondary color. You can customize these c
 in your `index.css` file:
 
 ```css
-@import "@firecms/ui/index.css";
+@import "@firecms/ui/index.css" layer(base);
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-    --fcms-primary: #0070F4;
-    --fcms-primary-bg: #0061e610;
-    --fcms-secondary: #FF5B79;
+    --color-primary: #0070F4;
+    --color-primary-bg: #0061e610;
+    --color-secondary: #FF5B79;
 }
 
 body {
@@ -2190,7 +2188,7 @@ body {
 ```
 
 These are the default values but you can change them to match your brand.
-The `--fcms-primary-bg` variable is used when hovering over primary elements, like cards ( it is usually mostly transparent)
+The `--color-primary-bg` variable is used when hovering over primary elements, like cards ( it is usually mostly transparent)
 
 Just like in the previous section, feel free to take a look at the original
 [`index.css`](https://github.com/firecmsco/firecms/blob/main/packages/ui/src/index.css) file in the `@firecms/ui` package.
@@ -2218,9 +2216,9 @@ export default {
     theme: {
         extend: {
             colors: {
-                "primary": "var(--fcms-primary)",
-                "primary-bg": "var(--fcms-primary-bg)",
-                "secondary": "var(--fcms-secondary)",
+                "primary": "var(--color-primary)",
+                "primary-bg": "var(--color-primary-bg)",
+                "secondary": "var(--color-secondary)",
                 "field": {
                     "disabled": "rgb(224 224 226)",
                     "disabled-dark": "rgb(35 35 37)"
@@ -4662,21 +4660,21 @@ necessary to do so.
 You also will need to import the default FireCMS styles in your project. You can do this by adding the following import to your `index.css` file:
 
 ```css
-@import "@firecms/ui/index.css";
+@import "@firecms/ui/index.css" layer(base);
 ```
 
 Your `index.css` file should look like this:
 
 ```css
-@import "@firecms/ui/index.css";
+@import "@firecms/ui/index.css" layer(base);
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-    --fcms-primary: #0070F4;
-    --fcms-primary-bg: #0061e610;
-    --fcms-secondary: #FF5B79;
+    --color-primary: #0070F4;
+    --color-primary-bg: #0061e610;
+    --color-secondary: #FF5B79;
 }
 ```
 
@@ -4725,7 +4723,6 @@ This is a sample `package.json` with the new config:
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.19",
     "npm-run-all": "^4.1.5",
-    "postcss": "^8.4.38",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.4.3",
     "vite": "^5.2.6"

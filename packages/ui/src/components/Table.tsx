@@ -36,7 +36,7 @@ export const TableBody = ({
                               ...rest
                           }: TableBodyProps) => (
     <tbody
-        className={cls("bg-white dark:bg-surface-950 text-sm divide-y divide-surface-100 dark:divide-surface-700 dark:divide-opacity-70", className)}
+        className={cls("bg-white dark:bg-surface-950 text-sm divide-y divide-surface-100 dark:divide-surface-700/70", className)}
         {...rest}
     >
     {children}

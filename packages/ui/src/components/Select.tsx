@@ -142,7 +142,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                             "px-3": size === "medium",
                             "px-2": size === "small" || size === "smallest",
                         } : "",
-                        "outline-none focus:outline-none",
+                        "outline-hidden focus:outline-hidden",
                         "select-none rounded-md text-sm",
                         error ? "text-red-500 dark:text-red-600" : "focus:text-text-primary dark:focus:text-text-primary-dark",
                         error ? "border border-red-500 dark:border-red-600" : "",
@@ -161,7 +161,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                         <div
                             ref={ref}
                             className={cls(
-                                "flex-grow max-w-full flex flex-row gap-2 items-center",
+                                "grow max-w-full flex flex-row gap-2 items-center",
                                 "overflow-visible",
                                 {
                                     "min-h-[28px]": size === "smallest",
@@ -254,10 +254,10 @@ export function SelectItem<T extends SelectValue = string>({
             "w-full",
             "relative flex items-center p-2 rounded-md text-sm text-surface-accent-700 dark:text-surface-accent-300",
             "focus:z-10",
-            "data-[state=checked]:bg-surface-accent-100 data-[state=checked]:dark:bg-surface-accent-800 focus:bg-surface-accent-100 dark:focus:bg-surface-950",
-            "data-[state=checked]:focus:bg-surface-accent-200 data-[state=checked]:dark:focus:bg-surface-950",
+            "data-[state=checked]:bg-surface-accent-100 dark:data-[state=checked]:bg-surface-accent-800 focus:bg-surface-accent-100 dark:focus:bg-surface-950",
+            "data-[state=checked]:focus:bg-surface-accent-200 dark:data-[state=checked]:focus:bg-surface-950",
             disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
-            "[&>*]:w-full",
+            "*:w-full",
             "overflow-visible",
             className
         )}>

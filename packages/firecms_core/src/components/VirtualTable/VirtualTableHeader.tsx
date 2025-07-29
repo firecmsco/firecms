@@ -87,7 +87,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                 <div
                     className={cls("flex py-0 px-3 h-full text-xs uppercase font-semibold relative select-none items-center bg-surface-50 dark:bg-surface-900",
                         "text-text-secondary hover:text-text-primary dark:text-text-secondary-dark dark:hover:text-text-primary-dark",
-                        "hover:bg-surface-100 dark:hover:bg-surface-800 hover:bg-opacity-50 dark:hover:bg-opacity-50",
+                        "hover:bg-surface-100/50 dark:hover:bg-surface-800/50",
                         column.frozen ? "sticky left-0 z-10" : "relative z-0"
                     )}
                     style={{
@@ -102,7 +102,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                     onMouseLeave={() => setOnHover(false)}
                 >
 
-                    <div className="overflow-hidden flex-grow">
+                    <div className="overflow-hidden grow">
                         <div
                             className={`flex items-center justify-${column.headerAlign} flex-row`}>
 

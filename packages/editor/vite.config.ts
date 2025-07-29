@@ -8,7 +8,12 @@ const ReactCompilerConfig = {
     target: "18"
 };
 
-const isExternal = (id: string) => !id.startsWith(".") && !path.isAbsolute(id);
+const isExternal = (id: string) => {
+    if(id.startsWith("@tiptap")) {
+        return true;
+    }
+    return !id.startsWith(".") && !path.isAbsolute(id);
+};
 
 export default defineConfig(() => ({
     esbuild: {

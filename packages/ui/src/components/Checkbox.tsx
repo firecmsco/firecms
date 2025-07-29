@@ -16,10 +16,10 @@ export interface CheckboxProps {
 }
 
 const sizeClasses = {
-    large: "w-6 h-6 rounded flex items-center justify-center",
-    medium: "w-5 h-5 rounded flex items-center justify-center",
-    small: "w-4 h-4 rounded flex items-center justify-center",
-    smallest: "w-4 h-4 rounded flex items-center justify-center"
+    large: "w-6 h-6 rounded-xs flex items-center justify-center",
+    medium: "w-5 h-5 rounded-xs flex items-center justify-center",
+    small: "w-4 h-4 rounded-xs flex items-center justify-center",
+    smallest: "w-4 h-4 rounded-xs flex items-center justify-center"
 };
 
 const outerSizeClasses = {
@@ -70,8 +70,8 @@ export const Checkbox = ({
             <div className={cls(
                 padding ? paddingClasses[size] : "",
                 outerSizeClasses[size],
-                "inline-flex items-center justify-center text-sm font-medium focus:outline-none transition-colors ease-in-out duration-150",
-                onCheckedChange ? "rounded-full hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-700 dark:hover:bg-opacity-75" : "",
+                "inline-flex items-center justify-center text-sm font-medium focus:outline-hidden transition-colors ease-in-out duration-150",
+                onCheckedChange ? "rounded-full hover:bg-surface-accent-200/75 dark:hover:bg-surface-accent-700/75" : "",
                 onCheckedChange ? "cursor-pointer" : "cursor-default"
             )}>
                 <div

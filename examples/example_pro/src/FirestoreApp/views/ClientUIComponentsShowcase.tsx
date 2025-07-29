@@ -79,7 +79,7 @@ export default function ClientUIComponentsShowcase({
     const [badgeDisplayed, setBadgeDisplayed] = useState(true);
     const [textFieldValue, setTextFieldValue] = useState<string>("");
     const [sliderValue, setSliderValue] = useState<number[]>([4]);
-    const cardClasses = "relative p-4 mb-6 flex flex-col gap-2 break-inside-avoid dark:bg-surface-900 dark:bg-opacity-50";
+    const cardClasses = "relative p-4 mb-6 flex flex-col gap-2 break-inside-avoid dark:bg-surface-900/50";
 
     return <div className={"max-w-6xl mx-auto "}>
         <MenubarDemo/>

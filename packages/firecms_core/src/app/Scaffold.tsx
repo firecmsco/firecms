@@ -121,12 +121,12 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                     </DrawerWrapper>
 
                     <main
-                        className="flex flex-col flex-grow overflow-auto">
+                        className="flex flex-col grow overflow-auto">
 
                         {hasAppBar && <DrawerHeader/>}
 
                         <div
-                            className={cls(defaultBorderMixin, "flex-grow overflow-auto m-0 ", {
+                            className={cls(defaultBorderMixin, "grow overflow-auto m-0 ", {
                                 "lg:mt-4": !hasAppBar,
                                 "mt-1 lg:m-0 lg:mx-4 lg:mb-4 lg:rounded-lg lg:border lg:border-solid": padding,
                                 "border-t": hasAppBar && !padding,
@@ -178,7 +178,7 @@ function DrawerWrapper(props: {
                      sideOffset={12}
                      asChild={true}>
                 <div
-                    className="ml-2 fixed top-1 left-2 sm:top-2 sm:left-2 !bg-surface-50 dark:!bg-surface-900 rounded-full w-fit z-20">
+                    className="ml-2 fixed top-1 left-2 sm:top-2 sm:left-2 bg-surface-50! dark:bg-surface-900! rounded-full w-fit z-20">
                     <IconButton
                         color="inherit"
                         aria-label="Open menu"
@@ -228,7 +228,7 @@ function DrawerWrapper(props: {
                    open={props.open}
                    onOpenChange={props.setDrawerOpen}
                    title={"Navigation drawer"}
-                   overlayClassName={"bg-white bg-opacity-80"}
+                   overlayClassName={"bg-white/80"}
             >
                 {innerDrawer}
             </Sheet>

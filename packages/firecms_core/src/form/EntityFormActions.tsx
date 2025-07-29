@@ -118,7 +118,7 @@ function buildBottomActions<M extends object>({
                 <Typography color={"error"}>{savingError.message}</Typography>
             </div>
         }
-        {entity && (formActions ?? []).length > 0 && <div className="flex-grow flex overflow-auto no-scrollbar">
+        {entity && (formActions ?? []).length > 0 && <div className="grow flex overflow-auto no-scrollbar">
             {(formActions ?? []).map(action => (
                 <IconButton
                     key={action.name}

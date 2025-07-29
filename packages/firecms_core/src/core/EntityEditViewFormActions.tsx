@@ -149,7 +149,7 @@ function buildBottomActions<M extends object>({
             </div>
         }
 
-        {formActions.length > 0 && <div className="flex-grow flex overflow-auto no-scrollbar">
+        {formActions.length > 0 && <div className="grow flex overflow-auto no-scrollbar">
             {formActions.map(action => {
 
                 const props = {

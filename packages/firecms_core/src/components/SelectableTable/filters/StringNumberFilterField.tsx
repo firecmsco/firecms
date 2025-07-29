@@ -112,7 +112,7 @@ export function StringNumberFilterField({
                 </Select>
             </div>
 
-            <div className="flex-grow ml-2 flex flex-col gap-2">
+            <div className="grow ml-2 flex flex-col gap-2">
 
                 {!enumValues && <TextField
                     type={type === "number" ? "number" : undefined}

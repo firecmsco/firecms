@@ -232,7 +232,7 @@ function FeedbackLabel({
     setSelected: (value: FeedbackSlug | null) => void
 }) {
     return <Label border={true}
-                  className={value === selected ? "bg-surface-300 dark:bg-surface-700 hover:bg-surface-300 hover:dark:bg-surface-700" : ""}
+                  className={value === selected ? "bg-surface-300 dark:bg-surface-700 hover:bg-surface-300 dark:hover:bg-surface-700" : ""}
                   onClick={() => {
                       setSelected(value);
                   }}>{title}</Label>;

@@ -146,7 +146,7 @@ export function RolesDetailsForm({
                     <DialogTitle variant={"h4"} gutterBottom={false}>
                         Role
                     </DialogTitle>
-                    <DialogContent className="flex-grow">
+                    <DialogContent className="grow">
 
                         <div className={"grid grid-cols-12 gap-8"}>
 

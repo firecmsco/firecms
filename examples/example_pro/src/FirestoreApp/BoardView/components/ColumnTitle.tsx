@@ -9,7 +9,7 @@ export const ColumnTitle = ({
     return (
         <h4
             className={
-                cls("py-2 px-4 transition-colors duration-200 flex-grow select-none relative outline-none focus:outline focus:outline-2 focus:outline-offset-2",
+                cls("py-2 px-4 transition-colors duration-200 grow select-none relative outline-hidden focus:outline focus:outline-2 focus:outline-offset-2",
                     "text-sm font-semibold text-surface-800 dark:text-surface-200",
                     className)
             }

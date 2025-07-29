@@ -10,12 +10,12 @@ export default function TableCustomHeadingDemo() {
                 <TableCell header scope="col" className="custom-header-cell">Stock</TableCell>
             </TableHeader>
             <TableBody className="bg-slate-100 dark:bg-slate-900">
-                <TableRow className="hover:bg-slate-200 hover:dark:bg-slate-800" onClick={() => console.log("Clicked")}>
+                <TableRow className="hover:bg-slate-200 dark:hover:bg-slate-800" onClick={() => console.log("Clicked")}>
                     <TableCell>Apple</TableCell>
                     <TableCell className="bg-slate-200 dark:bg-slate-700">$1.00</TableCell>
                     <TableCell>In Stock</TableCell>
                 </TableRow>
-                <TableRow className="hover:bg-slate-200 hover:dark:bg-slate-800" onClick={() => console.log("Clicked")}>
+                <TableRow className="hover:bg-slate-200 dark:hover:bg-slate-800" onClick={() => console.log("Clicked")}>
                     <TableCell>Banana</TableCell>
                     <TableCell className="bg-slate-200 dark:bg-slate-700">$0.50</TableCell>
                     <TableCell>Out of Stock</TableCell>

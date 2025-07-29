@@ -21,7 +21,7 @@ export function EnterpriseTeaser() {
                             project with the help of our consulting team.
                         </div>
                         <a href={useBaseUrl("enterprise")}
-                           className={"btn mx-auto sm:mb-0  py-4 bg-black text-white  hover:text-white uppercase border border-solid w-full sm:w-auto rounded"}>
+                           className={"btn mx-auto sm:mb-0  py-4 bg-black text-white  hover:text-white uppercase border border-solid w-full sm:w-auto rounded-sm"}>
                             About the enterprise plan
                         </a>
                     </div>

@@ -50,7 +50,7 @@ export function EntityJsonPreview({ values }: { values: object }) {
                         ...style,
                         backgroundColor: "inherit"
                     }}
-                    className="max-w-6xl mx-auto p-8 rounded text-sm"
+                    className="max-w-6xl mx-auto p-8 rounded-xs text-sm"
                 >
           {tokens.map((line, i) => (
               <div key={i} {...getLineProps({ line })} className="text-wrap">

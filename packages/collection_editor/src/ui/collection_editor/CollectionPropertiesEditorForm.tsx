@@ -321,7 +321,7 @@ export function CollectionPropertiesEditorForm({
 
                 <div className="flex my-2">
 
-                    <div className="flex-grow mb-4">
+                    <div className="grow mb-4">
 
                         <Field
                             name={"name"}

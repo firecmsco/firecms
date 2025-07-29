@@ -247,9 +247,9 @@ export const SelectableTable = function SelectableTable<M extends Record<string,
                     checkFilterCombination={checkFilterCombination}
                     createFilterField={filterable ? createFilterField : undefined}
                     rowClassName={useCallback((entity: Entity<M>) => {
-                        return highlightedRow?.(entity) ? "bg-surface-100 bg-opacity-75 dark:bg-surface-800 dark:bg-opacity-75" : "";
+                        return highlightedRow?.(entity) ? "bg-surface-100/75 dark:bg-surface-800/75" : "";
                     }, [highlightedRow])}
-                    className="flex-grow"
+                    className="grow"
                     emptyComponent={emptyComponent}
                     endAdornment={endAdornment}
                     AddColumnComponent={AddColumnComponent}

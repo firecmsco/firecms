@@ -46,8 +46,8 @@ export function EntityView<M extends Record<string, any>>(
                         <span className="pl-2 text-sm text-surface-600">Id</span>
                     </div>
                     <div
-                        className="flex-grow p-2 ml-2 w-3/4 text-surface-900 dark:text-white min-h-[56px] flex items-center">
-                        <span className="flex-grow mr-2">{entity.id}</span>
+                        className="grow p-2 ml-2 w-3/4 text-surface-900 dark:text-white min-h-[56px] flex items-center">
+                        <span className="grow mr-2">{entity.id}</span>
                         {customizationController?.entityLinkBuilder &&
                             <a href={customizationController.entityLinkBuilder({ entity })}
                                rel="noopener noreferrer"
@@ -70,7 +70,7 @@ export function EntityView<M extends Record<string, any>>(
                                     <span className="pl-2 text-sm text-surface-600">{property.name}</span>
                                 </div>
                                 <div
-                                    className="flex-grow p-2 ml-2 w-3/4 text-surface-900 dark:text-white min-h-[56px] flex items-center">
+                                    className="grow p-2 ml-2 w-3/4 text-surface-900 dark:text-white min-h-[56px] flex items-center">
                                     <PropertyPreview
                                         propertyKey={key}
                                         value={value}
