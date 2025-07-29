@@ -146,3 +146,9 @@ export type ResolvedMapProperty<T extends Record<string, any> = any> =
         propertiesOrder?: Extract<keyof T, string>[];
         fromBuilder: boolean;
     }
+
+export type ResolvedRelationshipProperty<> = Omit<ReferenceProperty, "type"> & {
+    type: "relationship";
+    resolved: true;
+    fromBuilder: boolean;
+};

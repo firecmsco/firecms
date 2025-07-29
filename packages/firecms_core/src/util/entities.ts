@@ -1,6 +1,6 @@
 import {
     CMSType,
-    type,
+    DataType,
     Entity,
     EntityReference,
     EntityStatus,
@@ -61,7 +61,7 @@ export function getDefaultValueFor(property?: PropertyOrBuilder) {
     }
 }
 
-export function getDefaultValueFortype(type: type) {
+export function getDefaultValueFortype(type: DataType) {
     if (type === "string") {
         return null;
     } else if (type === "number") {

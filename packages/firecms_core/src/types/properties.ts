@@ -1,7 +1,7 @@
 import React from "react";
 import { FieldProps } from "./fields";
 import { PropertyPreviewProps } from "../preview";
-import { EntityReference, EntityValues, GeoPoint, Vector } from "./entities";
+import { EntityReference, EntityRelationship, EntityValues, GeoPoint, Vector } from "./entities";
 import { ResolvedArrayProperty, ResolvedStringProperty } from "./resolved_entities";
 import { FilterValues } from "./collections";
 import { ChipColorKey, ChipColorScheme } from "@firecms/ui";
@@ -10,16 +10,17 @@ import { AuthController } from "./auth";
 /**
  * @group Entity properties
  */
-export type type<T extends CMSType = CMSType> =
+export type DataType<T extends CMSType = CMSType> =
     T extends string ? "string" :
         T extends number ? "number" :
             T extends boolean ? "boolean" :
                 T extends Date ? "date" :
                     T extends GeoPoint ? "geopoint" :
                         T extends Vector ? "vector" :
-                            T extends EntityReference ? "reference" :
-                                T extends Array<any> ? "array" :
-                                    T extends Record<string, any> ? "map" : never;
+                            T extends EntityRelationship ? "relationship" :
+                                T extends EntityReference ? "reference" :
+                                    T extends Array<any> ? "array" :
+                                        T extends Record<string, any> ? "map" : never;
 
 /**
  * @group Entity properties
@@ -31,6 +32,7 @@ export type CMSType =
     | Date
     | GeoPoint
     | EntityReference
+    | EntityRelationship
     | Record<string, any>
     | CMSType[];
 
@@ -44,6 +46,7 @@ export type AnyProperty =
     DateProperty |
     GeopointProperty |
     ReferenceProperty |
+    RelationshipProperty |
     ArrayProperty |
     MapProperty;
 
@@ -58,7 +61,8 @@ export type Property<T extends CMSType = any> =
                     T extends GeoPoint ? GeopointProperty :
                         T extends EntityReference ? ReferenceProperty :
                             T extends Array<CMSType> ? ArrayProperty<T> :
-                                T extends Record<string, any> ? MapProperty<T> : AnyProperty;
+                                T extends EntityRelationship ? RelationshipProperty :
+                                    T extends Record<string, any> ? MapProperty<T> : AnyProperty;
 
 /**
  * Interface including all common properties of a CMS property
@@ -69,7 +73,7 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
     /**
      * type of the property
      */
-    type: type;
+    type: DataType;
 
     /**
      * Property name (e.g. Product)
@@ -621,6 +625,77 @@ export interface GeopointProperty extends BaseProperty<GeoPoint> {
      */
     validation?: PropertyValidationSchema,
 
+}
+
+/**
+ * Defines a relationship between tables in a SQL database.
+ * This property assumes relationships join on the primary keys defined
+ * at the collection level.
+ *
+ * - If `hasMany` is `false` or undefined, it renders a **reference field**.
+ * - If `hasMany` is `true`, it renders a **sub-collection view**.
+ *
+ * @group Entity properties
+ */
+export interface RelationshipProperty<T extends EntityRelationship = any> extends BaseProperty<T> {
+
+    type: "relationship";
+
+    /**
+     * The path or table name of the target collection.
+     * @example "posts"
+     */
+    target: string;
+
+    /**
+     * If `true`, the relationship is "to-many" (one-to-many or many-to-many)
+     * and renders as a sub-collection.
+     * If `false` or undefined, it's a "to-one" relationship and renders as a
+     * reference selection field.
+     * @default false
+     */
+    hasMany?: boolean;
+
+    /**
+     * The foreign key column(s) on the **source table** (this entity's table).
+     * Use a string for a single column or an array for a composite key.
+     * This is used for **one-to-one** relationships (`hasMany: false`).
+     */
+    sourceForeignKey?: string | string[];
+
+    /**
+     * The foreign key column(s) on the **target table**.
+     * Use a string for a single column or an array for a composite key.
+     * This is used for **one-to-many** relationships (`hasMany: true` and no `through` property).
+     */
+    targetForeignKey?: string | string[];
+
+    /**
+     * Configuration for a **many-to-many** relationship via a junction table.
+     * Required for many-to-many relationships (`hasMany: true` with a junction table).
+     */
+    through?: {
+        /**
+         * The name of the junction table.
+         * @example "posts_to_tags"
+         */
+        junctionTable: string;
+
+        /**
+         * The foreign key column(s) in the junction table referencing the **source table**.
+         */
+        sourceForeignKey: string | string[];
+
+        /**
+         * The foreign key column(s) in the junction table referencing the **target table**.
+         */
+        targetForeignKey: string | string[];
+    };
+
+    /**
+     * Properties of the target collection to display in previews or sub-collection columns.
+     */
+    previewProperties?: string[];
 }
 
 /**

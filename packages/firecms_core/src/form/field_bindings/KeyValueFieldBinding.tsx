@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { type, FieldProps, GeoPoint } from "../../types";
+import { DataType, FieldProps, GeoPoint } from "../../types";
 
 import { ArrayContainer } from "../../components";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
@@ -25,7 +25,7 @@ import { getIn } from "@firecms/formex";
 
 type MapEditViewRowState = [number, {
     key: string,
-    type: type
+    type: DataType
 }];
 
 /**
@@ -129,7 +129,7 @@ function MapEditView<T extends Record<string, any>>({
         setInternalState(newRowIds);
     }, [value]);
 
-    const updatetype = (rowId: number, type: type) => {
+    const updatetype = (rowId: number, type: DataType) => {
         if (!rowId) {
             console.warn("No key selected for data type update");
             return;
@@ -256,14 +256,14 @@ function MapKeyValueRow<T extends Record<string, any>>({
     onDeleteClick: () => void,
     setValue: (value: (T | null)) => void,
     entryValue: any,
-    type: type,
+    type: DataType,
     disabled?: boolean,
-    updatetype: (rowId: number, type: type) => void
+    updatetype: (rowId: number, type: DataType) => void
 }) {
 
     const { locale } = useCustomizationController();
 
-    function buildInput(entryValue: any, fieldKey: string, type: type) {
+    function buildInput(entryValue: any, fieldKey: string, type: DataType) {
         if (type === "string" || type === "number") {
             return <TextField
                 key={type}
@@ -376,7 +376,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
         }
     }
 
-    function doUpdatetype(type: type) {
+    function doUpdatetype(type: DataType) {
         updatetype(rowId, type);
     }
 
@@ -447,13 +447,13 @@ function ArrayKeyValueRow<T>({
 }) {
 
     const { locale } = useCustomizationController();
-    const [selectedtype, setSelectedtype] = useState<type>(gettype(value) ?? "string");
+    const [selectedtype, setSelectedtype] = useState<DataType>(gettype(value) ?? "string");
 
-    function doUpdatetype(type: type) {
+    function doUpdatetype(type: DataType) {
         setSelectedtype(type);
     }
 
-    function buildInput(entryValue: any, type: type) {
+    function buildInput(entryValue: any, type: DataType) {
         if (type === "string" || type === "number") {
             return <TextField value={entryValue}
                               type={type === "number" ? "number" : "text"}
@@ -544,7 +544,7 @@ function getRandomId() {
     return Math.floor(Math.random() * Math.floor(Number.MAX_SAFE_INTEGER));
 }
 
-function gettype(value: any): type | undefined {
+function gettype(value: any): DataType | undefined {
     if (typeof value === "string" || value === null) {
         return "string";
     } else if (typeof value === "number") {
