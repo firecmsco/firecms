@@ -9,7 +9,6 @@ import NavbarSearch from "@theme/Navbar/Search";
 import NavigationDropdown from "../../../NavigationDropdown";
 
 function useNavbarItems() {
-    // TODO temporary casting until ThemeConfig type is improved
     return useThemeConfig().navbar.items;
 }
 
@@ -109,8 +108,6 @@ export default function NavbarContent() {
                 </>
             }
             right={
-                // TODO stop hardcoding items?
-                // Ask the user to add the respective navbar items => more flexible
                 <>
                     <NavbarItems items={rightItems}/>
                     {!searchBarItem && (

@@ -3,7 +3,7 @@ import { CTACaret, CTAOutlinedButtonMixin } from "../styles";
 import { Panel } from "../general/Panel";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
-export function CLIInstructions() {
+export function CLIInstructions({analyticsLabel}:{analyticsLabel: string}): JSX.Element {
 
     return <Panel color={"light"}
                   includeMargin={false}
@@ -60,6 +60,16 @@ export function CLIInstructions() {
             <a href={"https://app.firecms.co"}
                target={"_blank"}
                rel={"noopener noreferrer"}
+               onClick={() => {
+                   // @ts-ignore
+                   if (window.gtag) {
+                       // @ts-ignore
+                       window.gtag("event", "go_to_app", {
+                           event_category: analyticsLabel,
+                           event_label: "cli_instructions"
+                       });
+                   }
+               }}
             >Projects in FireCMS Cloud are initiated within the app.</a>
         </div>
         {/*<p className={"font-mono uppercase font-bold mb-2 mt-6"}>FireCMS PRO</p>*/}

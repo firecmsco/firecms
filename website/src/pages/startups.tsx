@@ -353,7 +353,7 @@ function StartupsPage() {
 
                     {/* HeroButtons */}
                     <Panel color={"light"} includePadding={true}>
-                        <HeroButtons/>
+                        <HeroButtons analyticsLabel={"startups"}/>
                     </Panel>
 
                     {/* ProTeaser */}

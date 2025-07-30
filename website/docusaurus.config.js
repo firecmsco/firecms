@@ -178,6 +178,9 @@ module.exports = {
             };
         }
     ].filter(Boolean),
+    // clientModules: [
+    //     require.resolve("./src/clientModules/analytics.js")
+    // ],
     themeConfig:
         {
             image: "img/logo_small.png",
@@ -212,13 +215,11 @@ module.exports = {
             ,
             navbar: {
                 title: "FireCMS",
-                logo:
-                    {
-                        alt: "FireCMS Logo",
-                        src:
-                            "img/firecms_logo.svg"
-                    }
-                ,
+                logo: {
+                    alt: "FireCMS Logo",
+                    src:
+                        "img/firecms_logo.svg"
+                },
                 items: [
                     {
                         label: "Why FireCMS",
@@ -310,7 +311,10 @@ module.exports = {
                         href: "https://github.com/FireCMSco/firecms",
                         className: "header-github-link",
                         "aria-label": "GitHub repository",
-                        position: "right"
+                        position: "right",
+                        customProps: {
+                            eventName: "go_to_github"
+                        },
                     },
                     {
                         href: "*",
@@ -322,6 +326,9 @@ module.exports = {
                         label: "Demo",
                         className: "border-1 border-slate-600 border-slate-700 uppercase rounded border-solid text-white hover:text-slate-100 hover:bg-slate-100 text-center btn mr-3 px-6 py-2",
                         "aria-label": "Open the demo project",
+                        customProps: {
+                            eventName: "go_to_demo"
+                        },
                         position: "right"
                     },
                     {
@@ -329,6 +336,10 @@ module.exports = {
                         label: "Sign in",
                         className: "btn mr-3 px-6 py-2 text-white uppercase bg-primary hover:text-white hover:bg-blue-700",
                         "aria-label": "Go to FireCMS Cloud",
+                        "id": "sign-in-btn",
+                        customProps: {
+                            eventName: "go_to_app"
+                        },
                         position: "right"
                     }
                 ]
@@ -470,9 +481,6 @@ module.exports = {
                     feedOptions: {
                         type: "all"
                     }
-                },
-                googleTagManager: {
-                    containerId: "GTM-P4JRQ5R6",
                 },
                 gtag: {
                     trackingID: process.env.REACT_APP_GTAG_ID ?? "G-D4DQQCW88S"

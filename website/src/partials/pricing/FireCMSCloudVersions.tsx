@@ -66,6 +66,16 @@ export function FireCMSCloudVersions() {
                     href="https://app.firecms.co"
                     rel="noopener noreferrer"
                     target="_blank"
+                    onClick={() => {
+                        // @ts-ignore
+                        if (window.gtag) {
+                            // @ts-ignore
+                            window.gtag("event", "go_to_app", {
+                                event_category: "pricing",
+                                event_label: "cloud_versions"
+                            });
+                        }
+                    }}
                 >
                     One month free trial
                     <CTACaret/>

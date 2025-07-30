@@ -339,7 +339,19 @@ export function VersionsComparison() {
                             <a className={CTAButtonMixin + " w-full"}
                                rel="noopener noreferrer"
                                target="_blank"
-                               href={"https://app.firecms.co"}>
+                               href={"https://app.firecms.co"}
+                               onClick={() => {
+                                   // @ts-ignore
+                                   if (window.gtag) {
+                                       // @ts-ignore
+                                       window.gtag("event", "go_to_app", {
+                                           event_category: "pricing",
+                                           event_label: "versions_comparison_cloud_cta"
+                                       });
+                                   }
+                               }}
+
+                            >
                                 FireCMS Cloud
                             </a>
                         </th>

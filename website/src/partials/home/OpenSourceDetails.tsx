@@ -22,7 +22,7 @@ function OpenSourceDetails() {
                     your complete project with all the capabilities of
                     Firebase and Google Cloud, or MongoDB Atlas.
                 </p>
-                <HeroButtons/>
+                <HeroButtons analyticsLabel={"open_source_details"}/>
             </div>
 
 

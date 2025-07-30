@@ -19,7 +19,7 @@ export function Hero({
     return (
         <>
 
-            <div className={"w-full relative bg-gray-950"}>
+            <div className={"w-full relative bg-gray-950 -mt-20"}>
 
                 <AnimatedGradientBackground/>
 

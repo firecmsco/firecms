@@ -15,7 +15,7 @@ function HeroHome({}) {
         <>
 
             <div
-                className={clsx("w-full relative border-0 -mt-20 bg-gradient-to-br from-950 to-gray-900", defaultBorderMixin)}>
+                className={clsx("-mt-20 bg-gray-950 w-full relative border-0  bg-gradient-to-br from-950 to-gray-900", defaultBorderMixin)}>
 
                 <AnimatedGradientBackground/>
 
@@ -23,10 +23,10 @@ function HeroHome({}) {
                        includePadding={false}
                        container={false}
                        color={"transparent"}
-                       className={"border-t-0"}>
+                       className={"border-t-0 "}>
                     <div className={"h-20"}/>
-                    <div className="flex flex-wrap w-full">
-                        <div className={clsx("w-full border-0 border-r", defaultBorderMixin)}>
+                    <div className="flex flex-col w-full">
+                        <div>
                             <LinedSpace/>
 
                             <h1 className={clsx("m-0 mt-16 md:mt-24 text-center block text-5xl md:text-6xl font-bold tracking-tight leading-none uppercase text-white",
@@ -63,7 +63,7 @@ function HeroHome({}) {
                                 Instantly create a flexible admin panel on top of your data
                             </h2>
 
-                            <HeroButtons/>
+                            <HeroButtons analyticsLabel={"home"}/>
 
 
                         </div>

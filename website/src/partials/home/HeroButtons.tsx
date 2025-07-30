@@ -1,7 +1,7 @@
 import React from "react";
 import { CTAButtonDarkMixin, CTAButtonMixin, CTACaret } from "../styles";
 
-function HeroButtons() {
+function HeroButtons({ analyticsLabel }: { analyticsLabel: string }) {
 
     const discordIcon = <svg width="40" height="30" viewBox="0 0 71 55"
                              fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -25,13 +25,37 @@ function HeroButtons() {
                 aria-label="Join our Discord"
                 className={"btn shadow-none py-4 text-white dark:hover:bg-gray-900 hover:bg-gray-200 uppercase border border-solid w-full lg:w-auto rounded"}
                 href={"https://discord.gg/fxy7xsQm3m"}
+                rel="noopener noreferrer"
+                target="_blank"
+                onClick={() => {
+                    // @ts-ignore
+                    if (window.gtag) {
+                        // @ts-ignore
+                        window.gtag("event", "go_to_discord", {
+                            event_category: analyticsLabel,
+                            event_label: "hero_buttons"
+                        });
+                    }
+                }}
             >
                 {discordIcon}
             </a>
 
             <a
                 className={CTAButtonDarkMixin + " w-full lg:w-auto "}
+                rel="noopener noreferrer"
+                target="_blank"
                 href={"https://demo.firecms.co"}
+                onClick={() => {
+                    // @ts-ignore
+                    if (window.gtag) {
+                        // @ts-ignore
+                        window.gtag("event", "go_to_demo", {
+                            event_category: analyticsLabel,
+                            event_label: "hero_buttons"
+                        });
+                    }
+                }}
             >
                 Check the demo
             </a>
@@ -41,6 +65,16 @@ function HeroButtons() {
                 href={"https://app.firecms.co"}
                 rel="noopener noreferrer"
                 target="_blank"
+                onClick={() => {
+                    // @ts-ignore
+                    if (window.gtag) {
+                        // @ts-ignore
+                        window.gtag("event", "go_to_app", {
+                            event_category: analyticsLabel,
+                            event_label: "hero_buttons"
+                        });
+                    }
+                }}
             >
                 Try FireCMS Cloud
                 <CTACaret/>

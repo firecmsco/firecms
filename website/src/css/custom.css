@@ -785,7 +785,7 @@ code.language-sass .token.property, code.language-scss .token.property {
     background: radial-gradient(circle, #1A4876, transparent 70%);
     top: -10%;
     left: -10%;
-    animation: moveBlob1 20s infinite alternate ease-in-out;
+    animation: moveBlob1 10s infinite alternate ease-in-out;
     animation-delay: -1s;
 }
 
@@ -794,7 +794,7 @@ code.language-sass .token.property, code.language-scss .token.property {
     background: radial-gradient(circle, #2c1d08, transparent 70%);
     bottom: -15%;
     right: -15%;
-    animation: moveBlob2 24s infinite alternate ease-in-out;
+    animation: moveBlob2 12s infinite alternate ease-in-out;
     animation-delay: -5s;
 }
 
@@ -804,7 +804,7 @@ code.language-sass .token.property, code.language-scss .token.property {
     background: radial-gradient(circle, #013030, transparent 70%);
     top: 30%;
     right: -20%;
-    animation: moveBlob3 24s infinite alternate ease-in-out;
+    animation: moveBlob3 16s infinite alternate ease-in-out;
     animation-delay: -3s;
 }
 
@@ -814,7 +814,7 @@ code.language-sass .token.property, code.language-scss .token.property {
     background: radial-gradient(circle, #251515, transparent 70%);
     bottom: 25%;
     left: -15%;
-    animation: moveBlob4 28s infinite alternate ease-in-out;
+    animation: moveBlob4 14s infinite alternate ease-in-out;
     animation-delay: -5s;
 }
 

@@ -47,7 +47,7 @@ export function LaunchInSteps() {
                             <div className="mb-4 text-6xl font-bold text-primary">1</div>
                             <h3 className="text-xl font-semibold mb-2">Connect Your Project</h3>
                             <p className="text-sm text-gray-text-dark leading-relaxed">
-                                We will setup a Service Account for you and connect it to your project.
+                                We will setup a <b>Service Account</b> for you and connect it to your project.
                             </p>
                         </div>
                         <div
@@ -55,7 +55,7 @@ export function LaunchInSteps() {
                             <div className="mb-4 text-6xl font-bold text-primary">2</div>
                             <h3 className="text-xl font-semibold mb-2">Define Your Data Models</h3>
                             <p className="text-sm text-gray-text-dark leading-relaxed">
-                                Let FireCMS infer your data structure automatically or define it manually.
+                                Let FireCMS <b>infer your data structure</b> automatically or define it manually.
                             </p>
                         </div>
                         <div
@@ -63,7 +63,7 @@ export function LaunchInSteps() {
                             <div className="mb-4 text-6xl font-bold text-primary">3</div>
                             <h3 className="text-xl font-semibold mb-2">Go Live Instantly</h3>
                             <p className="text-sm text-gray-text-dark leading-relaxed">
-                                Access your fully functional, production-ready admin panel or CMS.
+                                Access your fully functional, <b>production-ready</b> admin panel or CMS.
                             </p>
                         </div>
                     </div>
