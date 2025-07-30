@@ -56,7 +56,7 @@ export function DateTimeFieldBinding({
                         icon={getIconForProperty(property, "small")}
                         required={property.validation?.required}
                         className={showError ? "text-red-500 dark:text-red-500" : "text-text-secondary dark:text-text-secondary-dark"}
-                        title={property.name}/>}
+                        title={property.name ?? propertyKey}/>}
                 />
             </PropertyIdCopyTooltip>
 

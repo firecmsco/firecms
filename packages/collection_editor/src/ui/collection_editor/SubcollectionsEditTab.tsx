@@ -85,7 +85,7 @@ export function SubcollectionsEditTab({
                                         <TableRow key={subcollection.slug}
                                                   onClick={() => setCurrentDialog({
                                                       isNewCollection: false,
-                                                      editedCollectionId: subcollection.id
+                                                      editedCollectionId: subcollection.slug
                                                   })}>
                                             <TableCell
                                                 align="left">
@@ -101,7 +101,7 @@ export function SubcollectionsEditTab({
                                                                 onClick={(e) => {
                                                                     e.preventDefault();
                                                                     e.stopPropagation();
-                                                                    setSubcollectionToDelete(subcollection.id);
+                                                                    setSubcollectionToDelete(subcollection.slug);
                                                                 }}
                                                                 color="inherit">
                                                         <DeleteIcon size={"small"}/>
@@ -220,7 +220,7 @@ export function SubcollectionsEditTab({
                                               console.debug("Deleting subcollection", props)
                                               configController.deleteCollection(props).then(() => {
                                                   setSubcollectionToDelete(undefined);
-                                                  setSubcollections(subcollections?.filter(e => e.id !== subcollectionToDelete))
+                                                  setSubcollections(subcollections?.filter(e => e.slug !== subcollectionToDelete))
                                               });
                                           }}
                                     onCancel={() => setSubcollectionToDelete(undefined)}
@@ -245,12 +245,12 @@ export function SubcollectionsEditTab({
                 configController={configController}
                 parentCollection={collection}
                 collectionInference={collectionInference}
-                parentCollectionIds={[...parentCollectionIds ?? [], values.id]}
+                parentCollectionIds={[...parentCollectionIds ?? [], values.slug]}
                 isNewCollection={false}
                 {...currentDialog}
                 getUser={getUser}
                 handleClose={(updatedCollection) => {
-                    if (updatedCollection && !subcollections.map(e => e.id).includes(updatedCollection.slug)) {
+                    if (updatedCollection && !subcollections.map(e => e.slug).includes(updatedCollection.slug)) {
                         setSubcollections([...subcollections, updatedCollection]);
                     }
                     setCurrentDialog(undefined);

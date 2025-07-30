@@ -1,26 +1,19 @@
-export interface BackendCollection {
-    id: string;
-    name: string;
-    path: string;
-    properties: Record<string, any>;
-    databaseId?: string;
-    idField?: string;
-}
+import { EntityCollection } from "@firecms/core";
 
 class CollectionRegistry {
-    private collections = new Map<string, BackendCollection>();
-    private collectionsArray: BackendCollection[] = [];
+    private collections = new Map<string, EntityCollection>();
+    private collectionsArray: EntityCollection[] = [];
 
-    register(collection: BackendCollection) {
-        this.collections.set(collection.path, collection);
+    register(collection: EntityCollection) {
+        this.collections.set(collection.slug, collection);
         this.collectionsArray.push(collection);
     }
 
-    get(path: string): BackendCollection | undefined {
+    get(path: string): EntityCollection | undefined {
         return this.collections.get(path);
     }
 
-    getAll(): BackendCollection[] {
+    getAll(): EntityCollection[] {
         return this.collectionsArray;
     }
 }

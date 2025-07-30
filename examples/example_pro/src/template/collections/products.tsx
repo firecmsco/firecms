@@ -134,7 +134,7 @@ export const productsCollection = buildCollection<Product>({
             description: "Reference to self",
             of: {
                 type: "reference",
-                slug: "products"
+                path: "products"
             }
         },
         publisher: {

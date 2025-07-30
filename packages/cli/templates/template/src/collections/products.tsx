@@ -77,7 +77,7 @@ export const productsCollection = buildCollection<Product>({
             description: "Reference to self",
             of: {
                 type: "reference",
-                slug: "products"
+                path: "products"
             }
         },
         main_image: buildProperty({ // The `buildProperty` method is a utility function used for type checking

@@ -76,7 +76,7 @@ export const blogCollection = buildCollection<BlogEntry>({
                         type: "array",
                         of: {
                             type: "reference",
-                            slug: "products",
+                            path: "products",
                             previewProperties: ["name", "main_image"]
                         }
                     }

@@ -50,11 +50,11 @@ export function ArrayOfReferencesFieldBinding({
 
     const navigationController = useNavigationController();
     const collection: EntityCollection | undefined = useMemo(() => {
-        return ofProperty.slug ? navigationController.getCollection(ofProperty.slug) : undefined;
-    }, [ofProperty.slug]);
+        return ofProperty.path ? navigationController.getCollection(ofProperty.path) : undefined;
+    }, [ofProperty.path]);
 
     if (!collection) {
-        throw Error(`Couldn't find the corresponding collection for the path: ${ofProperty.slug}`);
+        throw Error(`Couldn't find the corresponding collection for the path: ${ofProperty.path}`);
     }
 
     const onMultipleEntitiesSelected = useCallback((entities: Entity<any>[]) => {
@@ -63,7 +63,7 @@ export function ArrayOfReferencesFieldBinding({
 
     const referenceDialogController = useReferenceDialog({
             multiselect: true,
-            path: ofProperty.slug,
+            path: ofProperty.path,
             collection,
             onMultipleEntitiesSelected,
             selectedEntityIds,
@@ -88,7 +88,7 @@ export function ArrayOfReferencesFieldBinding({
         return (
             <ReferencePreview
                 key={internalId}
-                disabled={!ofProperty.slug}
+                disabled={!ofProperty.path}
                 previewProperties={ofProperty.previewProperties}
                 size={"medium"}
                 onClick={onEntryClick}
@@ -98,14 +98,14 @@ export function ArrayOfReferencesFieldBinding({
                 includeEntityLink={ofProperty.includeEntityLink}
             />
         );
-    }, [ofProperty.slug, ofProperty.previewProperties, value]);
+    }, [ofProperty.path, ofProperty.previewProperties, value]);
 
     const title = (<>
         <LabelWithIconAndTooltip
             propertyKey={propertyKey}
             icon={getIconForProperty(property, "small")}
             required={property.validation?.required}
-            title={property.name}
+            title={property.name ?? propertyKey}
             className={"h-8 flex grow text-text-secondary dark:text-text-secondary-dark"}/>
         {Array.isArray(value) && <Typography variant={"caption"} className={"px-4"}>({value.length})</Typography>}
     </>);

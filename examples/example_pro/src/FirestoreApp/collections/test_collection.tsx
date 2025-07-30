@@ -152,13 +152,13 @@ export const testCollection = buildCollection<any>({
                 name: "Reference as string",
                 reference: {
                     type: "reference",
-                    slug: "products",
+                    path: "products",
                 }
             },
             ref: {
                 type: "reference",
                 name: "Reference",
-                slug: "products",
+                path: "products",
             },
 
             // answers: ({ entityId }) => {
@@ -725,7 +725,7 @@ export const testCollection = buildCollection<any>({
                 of: {
                     type: "reference",
                     name: "Self refs",
-                    slug: "test_entity"
+                    path: "test_entity"
                     // previewProperties: ["name","url_image"]
                 }
             },

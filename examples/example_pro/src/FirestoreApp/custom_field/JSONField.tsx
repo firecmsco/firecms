@@ -24,7 +24,7 @@ export function JSONField({
     return (
         <>
             <ExpandablePanel initiallyExpanded={true}
-                             title={property.name}
+                             title={property.name ?? propertyKey}
                              innerClassName={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2"}>
                 <span>{error}</span>
                 <JsonView

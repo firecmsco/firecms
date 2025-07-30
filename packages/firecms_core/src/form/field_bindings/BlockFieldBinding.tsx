@@ -76,7 +76,7 @@ export function BlockFieldBinding<T extends Array<any>>({
             propertyKey={propertyKey}
             icon={getIconForProperty(property, "small")}
             required={property.validation?.required}
-            title={property.name}
+            title={property.name ?? propertyKey}
             className={"text-text-secondary dark:text-text-secondary-dark"}/>
     );
 

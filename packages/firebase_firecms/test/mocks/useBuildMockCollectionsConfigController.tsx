@@ -165,7 +165,7 @@ export const productsCollection: PersistedCollection = {
             description: "Reference to self",
             of: {
                 type: "reference",
-                slug: "ppp"
+                path: "ppp"
             },
             editable: true,
         },

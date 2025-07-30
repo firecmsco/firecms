@@ -69,7 +69,7 @@ export function UnionField({
             <LabelWithIcon
                 icon={getIconForProperty(property as ResolvedProperty, "small")}
                 required={property.validation?.required}
-                title={property.name}
+                title={property.name ?? propertyKey}
                 className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}
             />
             <Paper key={`form_control_${props.propertyKey}_${type}`} className={"flex flex-col gap-2 p-2"}>

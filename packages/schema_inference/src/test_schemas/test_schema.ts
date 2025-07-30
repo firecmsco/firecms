@@ -9,13 +9,13 @@ import usage from "./pop_products.json" assert {
         integrity: "sha384-ABC123"
         };
 import * as util from "util";
-import { type } from "../cms_types";
+import { DataType } from "../cms_types";
 
 buildEntityPropertiesFromData(usage, getType)
     .then((res) => console.log(util.inspect(res, { showHidden: false, depth: null, colors: true })));
 
 
-function getType(value: any): type {
+function getType(value: any): DataType {
     if (typeof value === "number")
         return "number";
     else if (typeof value === "string")

@@ -253,9 +253,9 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
 
         if (!customField && (!customPreview || selected)) {
             const isAStorageProperty = isStorageProperty(property);
-            if (property.type === "string" && (property as StringProperty).reference?.slug) {
+            if (property.type === "string" && (property as StringProperty).reference?.path) {
                 const stringProperty = property as StringProperty;
-                const path = stringProperty.reference?.slug as string;
+                const path = stringProperty.reference?.path as string;
                 const referenceProperty = stringProperty.reference as ReferenceProperty;
                 const referenceValue = internalValue ? new EntityReference(internalValue, path) : undefined;
                 innerComponent =
@@ -363,19 +363,19 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                 hideOverflow = false;
                 allowScroll = false;
             } else if (property.type === "reference") {
-                if (typeof property.slug === "string") {
+                if (typeof property.path === "string") {
                     innerComponent =
                         <TableReferenceField name={propertyKey as string}
                                              internalValue={internalValue as EntityReference}
                                              updateValue={updateValue}
                                              disabled={disabled}
                                              size={size}
-                                             path={property.slug}
+                                             path={property.path}
                                              multiselect={false}
                                              previewProperties={property.previewProperties}
                                              includeId={property.includeId}
                                              includeEntityLink={property.includeEntityLink}
-                                             title={property.name}
+                                             title={property.name ?? propertyKey}
                                              forceFilter={property.forceFilter}
                         />;
                 }

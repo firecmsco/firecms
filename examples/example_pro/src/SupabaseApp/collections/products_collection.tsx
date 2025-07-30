@@ -63,7 +63,7 @@ export const productsCollection = buildCollection<any>({
             name: "Related products",
             of: {
                 type: "reference",
-                slug: "products"
+                path: "products"
             }
         },
         price: {

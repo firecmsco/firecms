@@ -70,7 +70,7 @@ export const productsCollectionTemplate: EntityCollection = {
             description: "Products related to this one",
             of: {
                 type: "reference",
-                slug: "products"
+                path: "products"
             }
         },
         metadata: {

@@ -9,9 +9,9 @@ import { buildStringProperty } from "./builders/string_property_builder";
 import { buildValidation } from "./builders/validation_builder";
 import { buildReferenceProperty } from "./builders/reference_property_builder";
 import { extractEnumFromValues, mergeDeep, resolveEnumValues } from "./util";
-import { type, EnumValues, Properties, Property, StringProperty } from "./cms_types";
+import { DataType, EnumValues, Properties, Property, StringProperty } from "./cms_types";
 
-export type InferenceTypeBuilder = (value: any) => type;
+export type InferenceTypeBuilder = (value: any) => DataType;
 
 export async function buildEntityPropertiesFromData(
     data: object[],
@@ -95,7 +95,7 @@ export function buildPropertiesOrder(
  * @param getType
  */
 function increaseTypeCount(
-    type: type,
+    type: DataType,
     typesCount: TypesCount,
     fieldValue: any,
     getType: InferenceTypeBuilder
@@ -238,9 +238,9 @@ function getHighestRecordCount(record: TypesCountRecord): number {
         .reduce((a, b) => Math.max(a, b), 0);
 }
 
-function getMostProbableType(typesCount: TypesCount): type {
+function getMostProbableType(typesCount: TypesCount): DataType {
     let highestCount = -1;
-    let probableType: type = "string"; // default
+    let probableType: DataType = "string"; // default
     Object.entries(typesCount).forEach(([type, count]) => {
         let countValue;
         if (type === "map") {
@@ -252,7 +252,7 @@ function getMostProbableType(typesCount: TypesCount): type {
         }
         if (countValue > highestCount) {
             highestCount = countValue;
-            probableType = type as type;
+            probableType = type as DataType;
         }
     });
     return probableType;
@@ -261,7 +261,7 @@ function getMostProbableType(typesCount: TypesCount): type {
 function buildPropertyFromCount(
     key: string,
     totalDocsCount: number,
-    mostProbableType: type,
+    mostProbableType: DataType,
     typesCount: TypesCount,
     valuesResult?: ValuesCountEntry
 ): Property {
@@ -375,7 +375,7 @@ function countMaxDocumentsUnder(typesCount: TypesCount) {
 function getMostProbableTypeInArray(
     array: any[],
     getType: InferenceTypeBuilder
-): type {
+): DataType {
     const typesCount: TypesCount = {};
     array.forEach((value) => {
         increaseTypeCount(getType(value), typesCount, value, getType);
@@ -412,7 +412,7 @@ function formatString(input: string): string {
     return formatted;
 }
 
-export function inferTypeFromValue(value: any): type {
+export function inferTypeFromValue(value: any): DataType {
     if (value === null || value === undefined) return "string";
     if (typeof value === "string") return "string";
     if (typeof value === "number") return "number";

@@ -38,7 +38,7 @@ export function ReadOnlyFieldBinding({
                 propertyKey={propertyKey}
                 icon={getIconForProperty(property, "small")}
                 required={property.validation?.required}
-                title={property.name}
+                title={property.name ?? propertyKey}
                 className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
             }
 

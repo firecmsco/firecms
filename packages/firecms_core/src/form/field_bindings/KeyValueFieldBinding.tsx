@@ -66,7 +66,7 @@ export function KeyValueFieldBinding({
         propertyKey={propertyKey}
         icon={getIconForProperty(property, "small")}
         required={property.validation?.required}
-        title={property.name}
+        title={property.name ?? propertyKey}
         className={"text-text-secondary dark:text-text-secondary-dark"}/>;
 
     return (

@@ -104,7 +104,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
             propertyKey={propertyKey}
             icon={getIconForProperty(property, "small")}
             required={property.validation?.required}
-            title={property.name}
+            title={property.name ?? propertyKey}
             className={"h-8 flex grow text-text-secondary dark:text-text-secondary-dark"}/>
         {Array.isArray(value) && <Typography variant={"caption"} className={"px-4"}>({value.length})</Typography>}
     </>);

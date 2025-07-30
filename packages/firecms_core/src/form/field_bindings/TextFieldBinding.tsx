@@ -79,7 +79,7 @@ export function TextFieldBinding<T extends string | number>({
                     label={<LabelWithIcon
                         icon={getIconForProperty(property, "small")}
                         required={property.validation?.required}
-                        title={property.name}/>}
+                        title={property.name ?? propertyKey}/>}
                     type={inputType}
                     multiline={isMultiline}
                     disabled={disabled}

@@ -129,11 +129,6 @@ export function getCollectionBySlugWithin(pathOrId: string, collections: EntityC
     }
 
     const subpathCombinations = getCollectionPathsCombinations(subpaths);
-    console.log("getCollectionBySlug", {
-        pathOrId,
-        subpaths,
-        subpathCombinations
-    });
     let result: EntityCollection | undefined;
     for (let i = 0; i < subpathCombinations.length; i++) {
         const subpathCombination = subpathCombinations[i];

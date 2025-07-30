@@ -30,7 +30,7 @@ export const usersCollectionTemplate: EntityCollection = {
             type: "array",
             of: {
                 type: "reference",
-                slug: "products"
+                path: "products"
             }
         },
         photoURL: {

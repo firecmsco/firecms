@@ -713,9 +713,8 @@ export interface ReferenceProperty extends BaseProperty<EntityReference> {
      * You can leave this prop undefined if the path is not yet know, e.g.
      * you are using a property builder and the path depends on a different
      * property.
-     * Note that you can also use a collection alias.
      */
-    slug?: string;
+    path?: string;
 
     /**
      * Allow selection of entities that pass the given filter only.

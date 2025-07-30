@@ -191,7 +191,7 @@ export const PropertyForm = React.memo(
                         }
                     }
                 }
-                if (values.type === "reference" && !values.slug) {
+                if (values.type === "reference" && !values.path) {
                     errors.slug = "You must specify a target collection for the field";
                 }
                 if (values.propertyConfig === "repeat") {

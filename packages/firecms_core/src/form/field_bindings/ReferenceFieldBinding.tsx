@@ -43,7 +43,7 @@ function ReferenceFieldBindingInternal({
                                            includeDescription,
                                            size = "medium"
                                        }: FieldProps<EntityReference>) {
-    if (!property.slug) {
+    if (!property.path) {
         throw new Error("Property path is required for ReferenceFieldBinding");
     }
 
@@ -57,11 +57,11 @@ function ReferenceFieldBindingInternal({
 
     const navigationController = useNavigationController();
     const collection: EntityCollection | undefined = useMemo(() => {
-        return property.slug ? navigationController.getCollection(property.slug) : undefined;
-    }, [property.slug]);
+        return property.path ? navigationController.getCollection(property.path) : undefined;
+    }, [property.path]);
 
     if (!collection) {
-        throw Error(`Couldn't find the corresponding collection for the path: ${property.slug}`);
+        throw Error(`Couldn't find the corresponding collection for the path: ${property.path}`);
     }
 
     const onSingleEntitySelected = useCallback((e: Entity<any> | null) => {
@@ -70,7 +70,7 @@ function ReferenceFieldBindingInternal({
 
     const referenceDialogController = useReferenceDialog({
             multiselect: false,
-            path: property.slug,
+            path: property.path,
             collection,
             onSingleEntitySelected,
             selectedEntityIds: validValue ? [value.id] : undefined,
@@ -89,7 +89,7 @@ function ReferenceFieldBindingInternal({
                 propertyKey={propertyKey}
                 icon={getIconForProperty(property, "small")}
                 required={property.validation?.required}
-                title={property.name}
+                title={property.name ?? propertyKey}
                 className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
 
             {!collection && <ErrorView
@@ -98,7 +98,7 @@ function ReferenceFieldBindingInternal({
             {collection && <>
 
                 {value && <ReferencePreview
-                    disabled={!property.slug}
+                    disabled={!property.path}
                     previewProperties={property.previewProperties}
                     hover={!disabled}
                     size={size}

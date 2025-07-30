@@ -17,7 +17,7 @@ export function EnhanceCollectionIcon({
             return;
         }
         const config = extraProps.getConfigForPath({
-            slug: slug,
+            path: slug,
             collection
         })
         if (config) {

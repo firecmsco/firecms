@@ -5,22 +5,24 @@ export type CMSType =
     | Date
     | GeoPoint
     | EntityReference
+    | EntityRelationship
     | Record<string, any>
     | CMSType[];
 
 /**
  * @group Entity properties
  */
-export type type<T extends CMSType = CMSType> =
+export type DataType<T extends CMSType = CMSType> =
     T extends string ? "string" :
         T extends number ? "number" :
             T extends boolean ? "boolean" :
                 T extends Date ? "date" :
                     T extends GeoPoint ? "geopoint" :
                         T extends Vector ? "vector" :
-                            T extends EntityReference ? "reference" :
-                                T extends Array<any> ? "array" :
-                                    T extends Record<string, any> ? "map" : never;
+                            T extends EntityRelationship ? "relationship" :
+                                T extends EntityReference ? "reference" :
+                                    T extends Array<any> ? "array" :
+                                        T extends Record<string, any> ? "map" : never;
 
 /**
  * New or existing status
@@ -34,6 +36,27 @@ export type EntityStatus = "new" | "existing" | "copy";
  * @group Models
  */
 export type EntityValues<M extends object> = M;
+
+export class EntityRelationship {
+    /**
+     * The collection of related entity references.
+     * For "to-one" relationships, this array will contain 0 or 1 element.
+     * For "to-many" relationships, it can contain multiple elements.
+     */
+    readonly references: EntityReference[];
+
+    constructor(references: EntityReference | EntityReference[]) {
+        this.references = Array.isArray(references) ? references : [references];
+    }
+
+    /**
+     * A type guard to identify instances of EntityRelationship.
+     * @returns {boolean}
+     */
+    isEntityRelationship(): this is EntityRelationship {
+        return true;
+    }
+}
 
 /**
  * Class used to create a reference to an entity in a different path
@@ -168,7 +191,6 @@ export type Properties<M extends Record<string, any> = any> = {
     [k in keyof M]: Property<M[keyof M]>;
 };
 
-
 /**
  * Interface including all common properties of a CMS property
  * @group Entity properties
@@ -178,7 +200,7 @@ export interface BaseProperty<T extends CMSType> {
     /**
      * type of the property
      */
-    type: type;
+    type: DataType;
 
     /**
      * Property name (e.g. Product)

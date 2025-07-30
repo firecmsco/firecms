@@ -289,7 +289,7 @@ function createFilterField({
                                      setValue={setFilterValue}
                                      name={id as string}
                                      isArray={isArray}
-                                     path={baseProperty.slug}
+                                     path={baseProperty.path}
                                      title={resolvedProperty?.name}
                                      includeId={baseProperty.includeId}
                                      previewProperties={baseProperty?.previewProperties}
