@@ -203,7 +203,11 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
 
     async function getStripePortalLink(): Promise<string> {
         const firebaseAccessToken = await getBackendAuthToken();
-        return fetch(`${host}/customer/stripe_portal_link?return_url=${encodeURIComponent(window.location.href)}`,
+        const returnUrl = new URL(window.location.href);
+        returnUrl.searchParams.set("subscription_success", "true");
+        returnUrl.searchParams.set("session_id", "{CHECKOUT_SESSION_ID}");
+
+        return fetch(`${host}/customer/stripe_portal_link?return_url=${encodeURIComponent(returnUrl.toString())}`,
             {
                 method: "GET",
                 headers: buildHeaders({ firebaseAccessToken }),
@@ -277,6 +281,24 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
             });
     }
 
+    async function verifyStripeCheckoutSession(sessionId: string): Promise<{
+        verified: boolean,
+    }> {
+        const firebaseAccessToken = await getBackendAuthToken();
+        return fetch(`${host}/customer/verify-checkout-session?session_id=${sessionId}`,
+            {
+                method: "POST",
+                headers: buildHeaders({ firebaseAccessToken }),
+            })
+            .then(async (res) => {
+                const data = await res.json();
+                if (!res.ok) {
+                    throw new Error(data?.error ?? "Error verifying checkout session");
+                }
+                return data as { verified: boolean };
+            });
+    }
+
     async function createCloudStripeNewSubscriptionLink(props: {
         projectId: string,
         currency: string
@@ -327,6 +349,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         getRootCollections,
         doDelegatedLogin,
         createStripeNewSubscriptionLink,
+        verifyStripeCheckoutSession,
         createCloudStripeNewSubscriptionLink,
 
         initialCollectionsSetup,
