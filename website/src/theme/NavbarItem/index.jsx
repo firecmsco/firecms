@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NavbarItem from "@theme-original/NavbarItem";
 import { useLocation } from "@docusaurus/router";
 
@@ -9,8 +9,27 @@ export default function NavbarItemWrapper(props) {
     } = props;
 
     const location = useLocation();
+    const linkUrl = restProps.href || restProps.to;
+    const [finalLink, setFinalLink] = useState(linkUrl);
 
-    // This function will be called on every click.
+    useEffect(() => {
+        if (linkUrl && location.search) {
+            try {
+                const url = new URL(linkUrl); // This will throw for relative paths
+                const params = new URLSearchParams(location.search);
+                params.forEach((value, key) => {
+                    url.searchParams.append(key, value);
+                });
+                setFinalLink(url.toString());
+            } catch (e) {
+                // Not a valid absolute URL, do nothing.
+                setFinalLink(linkUrl);
+            }
+        } else {
+            setFinalLink(linkUrl);
+        }
+    }, [linkUrl, location.search]);
+
     const handleClick = () => {
         if (typeof window.gtag === "function" && customProps?.eventName) {
             window.gtag("event", customProps.eventName, {
@@ -21,9 +40,16 @@ export default function NavbarItemWrapper(props) {
         }
     };
 
+    const newProps = { ...restProps };
+    if (restProps.href) {
+        newProps.href = finalLink;
+    } else if (restProps.to) {
+        newProps.to = finalLink;
+    }
+
+    newProps.onClick = customProps?.eventName ? handleClick : props.onClick;
+
     return (
-        <NavbarItem {...restProps}
-                    onClick={customProps?.eventName ? handleClick : undefined}
-        />
+        <NavbarItem {...newProps} />
     );
 }

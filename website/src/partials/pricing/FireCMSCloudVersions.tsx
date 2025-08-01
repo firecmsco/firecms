@@ -3,6 +3,7 @@ import { ContainerMixin, ContainerPaddingMixin, CTACaret, defaultBorderMixin } f
 import clsx from "clsx";
 import { LinedSpace } from "../layout/LinedSpace";
 import { Tip } from "./Tip";
+import { AppLink } from "../../AppLink";
 
 export function FireCMSCloudVersions() {
 
@@ -61,7 +62,7 @@ export function FireCMSCloudVersions() {
 
             <div className={"flex flex-row gap-4 my-6"}>
 
-                <a
+                <AppLink
                     className={"h-fit text-sm btn btn-sm py-2 px-3 text-white bg-primary  hover:bg-blue-700  hover:text-white uppercase border-solid rounded "}
                     href="https://app.firecms.co"
                     rel="noopener noreferrer"
@@ -79,7 +80,7 @@ export function FireCMSCloudVersions() {
                 >
                     One month free trial
                     <CTACaret/>
-                </a>
+                </AppLink>
             </div>
 
             <div className={"grow"}>

@@ -8,6 +8,7 @@ import { LinedSpace } from "../layout/LinedSpace";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
 import { Tip } from "./Tip";
+import { AppLink } from "../../AppLink";
 
 const data = [
     {
@@ -336,7 +337,7 @@ export function VersionsComparison() {
                             className={" table-cell p-0 border-none"}
                             colSpan={1}
                         >
-                            <a className={CTAButtonMixin + " w-full"}
+                            <AppLink className={CTAButtonMixin + " w-full"}
                                rel="noopener noreferrer"
                                target="_blank"
                                href={"https://app.firecms.co"}
@@ -353,7 +354,7 @@ export function VersionsComparison() {
 
                             >
                                 FireCMS Cloud
-                            </a>
+                            </AppLink>
                         </th>
                         {/*<a*/}
                         {/*    className={CTAOutlinedButtonMixin + " table-cell md:px-6"}*/}

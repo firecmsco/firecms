@@ -1,5 +1,6 @@
 import React from "react";
 import { CTAButtonDarkMixin, CTAButtonMixin, CTACaret } from "../styles";
+import { AppLink } from "../../AppLink";
 
 function HeroButtons({ analyticsLabel }: { analyticsLabel: string }) {
 
@@ -60,7 +61,7 @@ function HeroButtons({ analyticsLabel }: { analyticsLabel: string }) {
                 Check the demo
             </a>
 
-            <a
+            <AppLink
                 className={CTAButtonMixin + " w-full lg:w-auto "}
                 href={"https://app.firecms.co"}
                 rel="noopener noreferrer"
@@ -78,7 +79,7 @@ function HeroButtons({ analyticsLabel }: { analyticsLabel: string }) {
             >
                 Try FireCMS Cloud
                 <CTACaret/>
-            </a>
+            </AppLink>
         </div>
         {/*<b className={"text-primary"}>Check the new FireCMS Cloud version!</b>*/}
     </div>;

@@ -2,6 +2,7 @@ import React from "react";
 import { CTACaret, CTAOutlinedButtonMixin } from "../styles";
 import { Panel } from "../general/Panel";
 import useBaseUrl from "@docusaurus/useBaseUrl";
+import { AppLink } from "../../AppLink";
 
 export function CLIInstructions({analyticsLabel}:{analyticsLabel: string}): JSX.Element {
 
@@ -57,7 +58,7 @@ export function CLIInstructions({analyticsLabel}:{analyticsLabel: string}): JSX.
             {/*</a>*/}
         </div>
         <div className={"mt-2"}>
-            <a href={"https://app.firecms.co"}
+            <AppLink href={"https://app.firecms.co"}
                target={"_blank"}
                rel={"noopener noreferrer"}
                onClick={() => {
@@ -70,7 +71,7 @@ export function CLIInstructions({analyticsLabel}:{analyticsLabel: string}): JSX.
                        });
                    }
                }}
-            >Projects in FireCMS Cloud are initiated within the app.</a>
+            >Projects in FireCMS Cloud are initiated within the app.</AppLink>
         </div>
         {/*<p className={"font-mono uppercase font-bold mb-2 mt-6"}>FireCMS PRO</p>*/}
         {/*<div className={"flex gap-4 items-center flex-col md:flex-row"}>*/}

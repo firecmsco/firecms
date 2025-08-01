@@ -3,6 +3,7 @@ import { Panel } from "../general/Panel";
 import clsx from "clsx";
 import { CTAButtonDarkMixin, CTAButtonMixin, CTACaret } from "../styles";
 import { AnimatedGradientBackground } from "../AnimatedGradientBackground";
+import { AppLink } from "../../AppLink";
 
 export function HeroPro({
                             height = "300px",
@@ -64,9 +65,9 @@ export function HeroPro({
                         See the docs
                     </a>
                 </div>
-                <p className={"block"}>Access your <a className={"text-white font-semibold"}
-                                                      href={"https://app.firecms.co/subscriptions"}
-                > subscriptions here</a></p>
+                <p className={"block"}>Access your <AppLink className={"text-white font-semibold"}
+                                                            href={"https://app.firecms.co/subscriptions"}
+                > subscriptions here</AppLink></p>
             </Panel>
             <div className={"relative"}>
                 <div className="h-full w-full mix-blend-multiply"
