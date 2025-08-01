@@ -203,11 +203,8 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
 
     async function getStripePortalLink(): Promise<string> {
         const firebaseAccessToken = await getBackendAuthToken();
-        const returnUrl = new URL(window.location.href);
-        returnUrl.searchParams.set("subscription_success", "true");
-        returnUrl.searchParams.set("session_id", "{CHECKOUT_SESSION_ID}");
 
-        return fetch(`${host}/customer/stripe_portal_link?return_url=${encodeURIComponent(returnUrl.toString())}`,
+        return fetch(`${host}/customer/stripe_portal_link?return_url=${window.location.href}`,
             {
                 method: "GET",
                 headers: buildHeaders({ firebaseAccessToken }),
@@ -266,7 +263,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         type: SubscriptionType
     }): Promise<string> {
         const firebaseAccessToken = await getBackendAuthToken();
-        return fetch(`${host}/customer/create-checkout-session?return_url=${encodeURIComponent(window.location.href)}`,
+        return fetch(`${host}/customer/create-checkout-session?return_url=${window.location.href}`,
             {
                 method: "POST",
                 headers: buildHeaders({ firebaseAccessToken }),
@@ -281,29 +278,12 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
             });
     }
 
-    async function verifyStripeCheckoutSession(sessionId: string): Promise<{
-        verified: boolean,
-    }> {
-        const firebaseAccessToken = await getBackendAuthToken();
-        return fetch(`${host}/customer/verify-checkout-session?session_id=${sessionId}`,
-            {
-                method: "POST",
-                headers: buildHeaders({ firebaseAccessToken }),
-            })
-            .then(async (res) => {
-                const data = await res.json();
-                if (!res.ok) {
-                    throw new Error(data?.error ?? "Error verifying checkout session");
-                }
-                return data as { verified: boolean };
-            });
-    }
-
     async function createCloudStripeNewSubscriptionLink(props: {
         projectId: string,
         currency: string
     }): Promise<string> {
         const firebaseAccessToken = await getBackendAuthToken();
+
         return fetch(`${host}/customer/cloud-checkout-session?return_url=${encodeURIComponent(window.location.href)}`,
             {
                 method: "POST",
@@ -315,6 +295,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                 if (!res.ok) {
                     throw new Error(data?.error ?? "Error creating checkout session");
                 }
+                console.debug("createCloudStripeNewSubscriptionLink response", data);
                 return data.url as string;
             });
     }
@@ -349,7 +330,6 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         getRootCollections,
         doDelegatedLogin,
         createStripeNewSubscriptionLink,
-        verifyStripeCheckoutSession,
         createCloudStripeNewSubscriptionLink,
 
         initialCollectionsSetup,

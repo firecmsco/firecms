@@ -601,7 +601,7 @@ function FireCMSAppAuthenticated({
         basePath,
         baseCollectionPath,
         authController,
-        collections: projectConfig.isTrialOver ? [] : appConfig?.collections,
+        collections: appConfig?.collections,
         views: appConfig?.views,
         userConfigPersistence,
         dataSourceDelegate: firestoreDelegate,
