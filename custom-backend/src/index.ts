@@ -2,13 +2,13 @@ import express from "express";
 import cors from "cors";
 import { WebSocketServer } from "ws";
 import { createServer } from "http";
-import { pool } from "./db/connection";
+import { pool } from "./lib/db/connection";
 import { drizzle } from "drizzle-orm/node-postgres";
-import { RealtimeService } from "./services/realtimeService";
-import { PostgresDataSourceDelegate } from "./services/dataSourceDelegate";
-import { DeleteEntityProps, FetchCollectionProps, FetchEntityProps, SaveEntityProps } from "./types";
+import { RealtimeService } from "./lib/services/realtimeService";
+import { PostgresDataSourceDelegate } from "./lib/services/dataSourceDelegate";
+import { DeleteEntityProps, FetchCollectionProps, FetchEntityProps, SaveEntityProps } from "./lib/types";
 import { tables } from "./example";
-import { collectionRegistry } from "./collections/registry";
+import { collectionRegistry } from "./lib/collections/registry";
 
 const app = express();
 const server = createServer(app);

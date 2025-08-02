@@ -1,6 +1,6 @@
 import * as schema from "./schema";
 import { backendCollections } from "./collections";
-import { collectionRegistry } from "../collections/registry";
+import { collectionRegistry } from "../lib/collections/registry";
 
 backendCollections.forEach(collection => collectionRegistry.register(collection));
 

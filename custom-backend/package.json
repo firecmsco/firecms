@@ -7,6 +7,8 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
+    "generate:schema": "tsx custom-backend/src/lib/generate-drizzle-schema.ts",
+    "generate:schema:watch": "tsx custom-backend/src/lib/generate-drizzle-schema.ts --watch",
     "db:generate": "drizzle-kit generate:pg",
     "db:migrate": "tsx src/scripts/migrate.ts",
     "db:studio": "drizzle-kit studio",
