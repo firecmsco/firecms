@@ -105,10 +105,10 @@ export const machineryCollection: EntityCollection = {
             validation: { required: true },
             type: "string",
             enumValues: {
-                "Available": "Available",
-                "Rented": "Rented",
-                "Under Maintenance": "Under Maintenance",
-                "Retired": "Retired"
+                "available": "Available",
+                "rented": "Rented",
+                "under_maintenance": "Under Maintenance",
+                "retired": "Retired"
             }
         },
         dailyRate: {
@@ -240,10 +240,10 @@ export const rentalsCollection: EntityCollection = {
             validation: { required: true },
             type: "string",
             enumValues: {
-                "Pending": "Pending",
-                "Paid": "Paid",
-                "Partially Paid": "Partially Paid",
-                "Overdue": "Overdue"
+                "pending": "Pending",
+                "paid": "Paid",
+                "partially_paid": "Partially Paid",
+                "overdue": "Overdue"
             }
         },
         contractDocumentUrl: {
@@ -311,10 +311,12 @@ export const offersCollection: EntityCollection = {
             validation: { required: true },
             type: "string",
             enumValues: {
-                "Pending": "Pending",
-                "Accepted": "Accepted",
-                "Rejected": "Rejected",
-                "Expired": "Expired"
+                "draft": "Draft",
+                "sent": "Sent",
+                "accepted": "Accepted",
+                "rejected": "Rejected",
+                "expired": "Expired",
+                "cancelled": "Cancelled"
             }
         },
         createdAt: {
@@ -473,7 +475,7 @@ export const mediaCollection: EntityCollection = {
 };
 
 // Export all collections for easy import
-export const backendCollections = [
+export const allCollections = [
     customersCollection,
     machineryCollection,
     rentalsCollection,

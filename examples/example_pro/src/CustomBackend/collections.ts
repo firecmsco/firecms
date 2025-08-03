@@ -1,7 +1,6 @@
-// Collections for machinery rental company based on existing database structure
-import { buildCollection } from "@firecms/core";
+import { EntityCollection } from "@firecms/core";
 
-export const customersCollection = buildCollection({
+export const customersCollection: EntityCollection = {
     name: "Customers",
     singularName: "Customer",
     slug: "customers",
@@ -10,7 +9,12 @@ export const customersCollection = buildCollection({
     group: "Customer Management",
     textSearchEnabled: true,
     description: "Customer database for machinery rental",
+    idField: "id",
     properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
         name: {
             name: "Company Name",
             validation: { required: true },
@@ -57,9 +61,9 @@ export const customersCollection = buildCollection({
             }
         }
     }
-});
+};
 
-export const machineryCollection = buildCollection({
+export const machineryCollection: EntityCollection = {
     name: "Machinery",
     singularName: "Machine",
     slug: "machinery",
@@ -68,7 +72,12 @@ export const machineryCollection = buildCollection({
     group: "Inventory",
     textSearchEnabled: true,
     description: "Machinery inventory for rental",
+    idField: "id",
     properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
         name: {
             name: "Machine Name",
             validation: { required: true },
@@ -96,10 +105,10 @@ export const machineryCollection = buildCollection({
             validation: { required: true },
             type: "string",
             enumValues: {
-                "Available": "Available",
-                "Rented": "Rented",
-                "Under Maintenance": "Under Maintenance",
-                "Retired": "Retired"
+                "available": "Available",
+                "rented": "Rented",
+                "under_maintenance": "Under Maintenance",
+                "retired": "Retired"
             }
         },
         dailyRate: {
@@ -162,9 +171,9 @@ export const machineryCollection = buildCollection({
             autoValue: "on_update"
         },
     }
-});
+};
 
-export const rentalsCollection = buildCollection({
+export const rentalsCollection: EntityCollection = {
     name: "Rentals",
     singularName: "Rental",
     slug: "rentals",
@@ -173,7 +182,12 @@ export const rentalsCollection = buildCollection({
     group: "Operations",
     textSearchEnabled: true,
     description: "Active and historical machinery rentals",
+    idField: "id",
     properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
         rentalId: {
             name: "Rental ID",
             validation: { required: true, },
@@ -226,10 +240,10 @@ export const rentalsCollection = buildCollection({
             validation: { required: true },
             type: "string",
             enumValues: {
-                "Pending": "Pending",
-                "Paid": "Paid",
-                "Partially Paid": "Partially Paid",
-                "Overdue": "Overdue"
+                "pending": "Pending",
+                "paid": "Paid",
+                "partially_paid": "Partially Paid",
+                "overdue": "Overdue"
             }
         },
         contractDocumentUrl: {
@@ -241,9 +255,9 @@ export const rentalsCollection = buildCollection({
             }
         }
     }
-});
+};
 
-export const offersCollection = buildCollection({
+export const offersCollection: EntityCollection = {
     name: "Offers",
     singularName: "Offer",
     slug: "offers",
@@ -252,7 +266,12 @@ export const offersCollection = buildCollection({
     group: "Sales",
     textSearchEnabled: true,
     description: "Customer offers and quotes",
+    idField: "id",
     properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
         offerId: {
             name: "Offer ID",
             validation: { required: true, },
@@ -292,10 +311,12 @@ export const offersCollection = buildCollection({
             validation: { required: true },
             type: "string",
             enumValues: {
-                "Pending": "Pending",
-                "Accepted": "Accepted",
-                "Rejected": "Rejected",
-                "Expired": "Expired"
+                "draft": "Draft",
+                "sent": "Sent",
+                "accepted": "Accepted",
+                "rejected": "Rejected",
+                "expired": "Expired",
+                "cancelled": "Cancelled"
             }
         },
         createdAt: {
@@ -309,9 +330,9 @@ export const offersCollection = buildCollection({
             path: "rentals"
         }
     }
-});
+};
 
-export const maintenanceHistoryCollection = buildCollection({
+export const maintenanceHistoryCollection: EntityCollection = {
     name: "Maintenance History",
     singularName: "Maintenance Record",
     slug: "maintenance_history",
@@ -320,7 +341,12 @@ export const maintenanceHistoryCollection = buildCollection({
     group: "Maintenance",
     textSearchEnabled: true,
     description: "Machinery maintenance records",
+    idField: "id",
     properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
         machineryId: {
             name: "Machinery",
             type: "reference",
@@ -344,9 +370,9 @@ export const maintenanceHistoryCollection = buildCollection({
             validation: { min: 0 }
         }
     }
-});
+};
 
-export const paymentHistoryCollection = buildCollection({
+export const paymentHistoryCollection: EntityCollection = {
     name: "Payment History",
     singularName: "Payment",
     slug: "payment_history",
@@ -355,7 +381,12 @@ export const paymentHistoryCollection = buildCollection({
     group: "Finance",
     textSearchEnabled: true,
     description: "Payment records for rentals",
+    idField: "id",
     properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
         rentalId: {
             name: "Rental",
             type: "reference",
@@ -387,9 +418,9 @@ export const paymentHistoryCollection = buildCollection({
             }
         }
     }
-});
+};
 
-export const mediaCollection = buildCollection({
+export const mediaCollection: EntityCollection = {
     name: "Media",
     singularName: "Media File",
     slug: "media",
@@ -398,7 +429,12 @@ export const mediaCollection = buildCollection({
     group: "Assets",
     textSearchEnabled: true,
     description: "Media files and images",
+    idField: "id",
     properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
         alt: {
             name: "Alt Text",
             validation: { required: true },
@@ -436,7 +472,7 @@ export const mediaCollection = buildCollection({
             type: "number"
         }
     }
-});
+};
 
 // Export all collections for easy import
 export const allCollections = [
