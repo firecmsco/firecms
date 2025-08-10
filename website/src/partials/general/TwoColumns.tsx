@@ -35,13 +35,13 @@ export function TwoColumns({
             <div
                 className={"max-w-full flex flex-col lg:grid lg:grid-cols-12 lg:gap-10 " + flexDirection}>
                 <div
-                    className={"max-w-7xl lg:max-w-none lg:w-full mx-auto flex justify-center flex-col h-full py-6 " + leftColumn}
+                    className={"lg:max-w-7xl max-w-full lg:w-full mx-auto flex justify-center flex-col h-full py-6 " + leftColumn}
                 >
                     {left}
                 </div>
 
                 <div
-                    className={"max-w-7xl lg:max-w-none lg:w-full mx-auto lg:order-1 flex justify-center flex-col h-full py-6 " + rightColumn}
+                    className={"lg:max-w-7xl max-w-full lg:w-full mx-auto lg:order-1 flex justify-center flex-col h-full py-6 " + rightColumn}
                 >
                     {right}
                 </div>

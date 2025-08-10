@@ -8,13 +8,7 @@ import { useColorMode } from "@docusaurus/theme-common";
 import { TwoColumns } from "../general/TwoColumns";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
-import {
-    ContainerInnerPaddingMixin,
-    CTAButtonDarkMixin,
-    CTAButtonMixin,
-    CTAButtonMixinLight, CTAOutlinedButtonWhiteMixin,
-    defaultBorderMixin
-} from "../styles";
+import { ContainerInnerPaddingMixin, CTAOutlinedButtonWhiteMixin, defaultBorderMixin } from "../styles";
 import CodeBlock from "@theme/CodeBlock";
 import Link from "@docusaurus/Link";
 
@@ -32,40 +26,40 @@ export function DeveloperFeatures() {
                        className={clsx("text-center text-secondary uppercase font-mono font-bold border-0 border-b", ContainerInnerPaddingMixin, defaultBorderMixin)}>
                        For developers
                    </p>}>
-                <div className="max-w-5xl mx-auto py-16 p-4 ">
-                    <div className="mb-16">
+                <div className="lg:max-w-5xl mx-auto py-16 p-4 max-w-full">
+                    <div className="mb-16 max-w-full">
                         <TwoColumns
                             animation={false}
                             left={
-                                <div className="p-4">
+                                <div className="pb-8">
                                     <h3 className="text-2xl font-mono uppercase mb-3">Type-Safe Schema Definitions</h3>
                                     <p className="text-gray-300 leading-relaxed mb-4">
                                         Define your data models in TypeScript for complete type safety. Your schemas
                                         become the single source of truth for both your admin panel and application.
                                     </p>
                                     <CodeBlock language="typescript"
-                                               className={"bg-gray-900 text-gray-200"}>
+                                               className={"bg-gray-900 text-gray-200 overflow-x-auto max-w-full"}>
                                         {`const productCollection = buildCollection({
-      name: "Products",
-      path: "products",
-      properties: {
-        name: {
-          dataType: "string",
-          name: "Name",
-          validation: { required: true }
-        },
-        price: {
-          dataType: "number",
-          name: "Price",
-          validation: { required: true, min: 0 }
-        }
-      }
-    });`}
+  name: "Products",
+  path: "products",
+  properties: {
+    name: {
+      dataType: "string",
+      name: "Name",
+      validation: { required: true }
+    },
+    price: {
+      dataType: "number",
+      name: "Price",
+      validation: { required: true, min: 0 }
+    }
+  }
+});`}
                                     </CodeBlock>
                                 </div>
                             }
                             right={
-                                <div className="p-4">
+                                <>
                                     <h3 className="text-2xl font-mono uppercase mb-3">Custom React Components</h3>
                                     <p className="text-gray-300 leading-relaxed mb-4">
                                         Extend the CMS with your own React components. Create custom property fields,
@@ -84,7 +78,7 @@ export function DeveloperFeatures() {
                                                 type="video/mp4"/>
                                         </video>
                                     </div>
-                                </div>
+                                </>
                             }
                         />
                     </div>

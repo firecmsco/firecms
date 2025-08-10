@@ -11,7 +11,7 @@ export const CTAButtonMixinLight = "btn px-10 py-4 md:px-12 text-text-primary bg
 export const ContainerMixin = "relative max-w-full w-[84rem] mx-auto";
 export const ContainerSmallMixin = "relative max-w-5xl mx-auto p-4";
 export const ContainerPaddingMixin = "py-12 md:py-16 p-4 md:p-8";
-export const ContainerInnerPaddingMixin = "px-8 py-8 md:px-8 md:py-12";
+export const ContainerInnerPaddingMixin = "px-4 py-4 md:px-8 md:py-12";
 
 export const defaultBorderMixin = "border-solid border-slate-500 border-opacity-40 dark:border-slate-500 dark:border-opacity-40";
 
