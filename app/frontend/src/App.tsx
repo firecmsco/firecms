@@ -28,8 +28,8 @@ import {
 } from "@firecms/firebase";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 
-// Import our PostgreSQL delegate and shared collections
-import { usePostgresDelegate } from "./usePostgresDelegate";
+// Import the new PostgreSQL package
+import { usePostgresDataSource } from "@firecms/postgresql";
 import { allCollections } from "./collections";
 
 export const firebaseConfig = {
@@ -43,7 +43,7 @@ export const firebaseConfig = {
     measurementId: "G-8HRE8MVXZJ"
 };
 
-function CustomBackendSample() {
+export function App() {
 
     const {
         firebaseApp,
@@ -62,7 +62,7 @@ function CustomBackendSample() {
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
     // Replace Firestore delegate with PostgreSQL delegate
-    const postgresDelegate = usePostgresDelegate({
+    const postgresDelegate = usePostgresDataSource({
         baseUrl: "http://localhost:3001",
         websocketUrl: "ws://localhost:3001"
     });
@@ -151,5 +151,3 @@ function CustomBackendSample() {
     );
 
 }
-
-export default CustomBackendSample;

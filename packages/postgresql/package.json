@@ -1,0 +1,64 @@
+{
+  "name": "@firecms/postgresql",
+  "type": "module",
+  "version": "3.0.0-canary.258",
+  "description": "PostgreSQL data source client for FireCMS",
+  "funding": {
+    "url": "https://github.com/sponsors/firecmsco"
+  },
+  "author": "FireCMS",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/firecmsco/firecms.git",
+    "directory": "packages/postgresql"
+  },
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
+  "source": "src/index.ts",
+  "engines": {
+    "node": ">=14"
+  },
+  "keywords": [
+    "firebase",
+    "cms",
+    "admin",
+    "admin panel",
+    "postgresql",
+    "database",
+    "firecms",
+    "client"
+  ],
+  "scripts": {
+    "watch": "vite build --watch",
+    "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+    "prepublishOnly": "run-s build",
+    "createTag": "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags",
+    "test:lint": "eslint \"src/**\" --quiet",
+    "test": "jest",
+    "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "@firecms/core": "^3.0.0-canary.258"
+  },
+  "peerDependencies": {
+    "react": ">=17.0.0",
+    "react-dom": ">=17.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "typescript": "^5.0.0",
+    "vite": "^5.0.0"
+  }
+}
+

@@ -20,7 +20,7 @@ export interface FetchEntityProps<M extends Record<string, any> = any> {
 export type ListenEntityProps<M extends Record<string, any> = any> =
     FetchEntityProps<M>
     & {
-    onUpdate: (entity: Entity<M>) => void,
+    onUpdate: (entity: Entity<M> | null) => void,
     onError?: (error: Error) => void,
 }
 
