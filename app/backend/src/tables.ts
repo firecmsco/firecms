@@ -1,5 +1,5 @@
 import * as schema from "./schema";
-import { allCollections } from "./collections";
+import { allCollections } from "app-shared";
 import { collectionRegistry } from "@firecms/backend";
 
 allCollections.forEach(collection => collectionRegistry.register(collection));

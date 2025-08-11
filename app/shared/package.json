@@ -1,0 +1,21 @@
+{
+  "name": "app-shared",
+  "version": "1.0.0",
+  "description": "Shared collections and types for FireCMS app example",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "watch": "tsc --watch"
+  },
+  "dependencies": {
+    "@firecms/core": "^3.0.0-canary.258"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
+

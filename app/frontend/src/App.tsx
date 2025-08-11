@@ -30,7 +30,7 @@ import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 
 // Import the new PostgreSQL package
 import { usePostgresDataSource } from "@firecms/postgresql";
-import { allCollections } from "./collections";
+import { allCollections } from "app-shared";
 
 export const firebaseConfig = {
     apiKey: "AIzaSyBzt-JvcXvpDrdNU7jYX3fC3v0EAHjTKEw",
