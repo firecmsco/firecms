@@ -1,0 +1,8 @@
+{
+  "short_name": "FireCMS",
+  "name": "FireCMS demo app",
+  "start_url": ".",
+  "display": "fullscreen",
+  "theme_color": "#0070f4",
+  "background_color": "#ffffff"
+}

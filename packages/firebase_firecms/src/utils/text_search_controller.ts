@@ -22,7 +22,7 @@ export function buildExternalSearchController({
             path: string,
             collection?: EntityCollection | ResolvedEntityCollection
         }) => {
-            return Promise.resolve(isPathSupported(props.slug));
+            return Promise.resolve(isPathSupported(props.path));
         }
 
         return {

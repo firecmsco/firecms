@@ -1,0 +1,78 @@
+{
+  "name": "firecms-example-pro",
+  "version": "3.0.0-canary.258",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@apollo/client": "^3.12.6",
+    "@firecms/collection_editor": "^3.0.0-canary.258",
+    "@firecms/collection_editor_firebase": "^3.0.0-canary.258",
+    "@firecms/core": "^3.0.0-canary.258",
+    "@firecms/data_enhancement": "^3.0.0-canary.258",
+    "@firecms/data_export": "^3.0.0-canary.258",
+    "@firecms/data_import": "^3.0.0-canary.258",
+    "@firecms/datatalk": "^3.0.0-canary.258",
+    "@firecms/editor": "^3.0.0-canary.258",
+    "@firecms/entity_history": "^3.0.0-canary.258",
+    "@firecms/formex": "^3.0.0-canary.258",
+    "@firecms/schema_inference": "^3.0.0-canary.258",
+    "@firecms/ui": "^3.0.0-canary.258",
+    "@firecms/user_management": "^3.0.0-canary.258",
+    "@fontsource/comic-neue": "^5.2.5",
+    "@fontsource/jetbrains-mono": "^5.2.5",
+    "@fontsource/noto-serif": "^5.2.6",
+    "@supabase/supabase-js": "^2.49.4",
+    "algoliasearch": "^5.19.0",
+    "bson-objectid": "^2.0.4",
+    "firebase": "^10.14.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-router": "^6.30.0",
+    "react-router-dom": "^6.30.0",
+    "react18-json-view": "^0.2.9",
+    "reconnecting-websocket": "^4.4.0",
+    "typeface-rubik": "^1.1.13"
+  },
+  "scripts": {
+    "login": "firecms login",
+    "logout": "firecms logout",
+    "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+    "dev": "vite --mode development",
+    "build": "vite build && tsc",
+    "preview": "vite build && vite preview",
+    "deploy": "vite build && firebase deploy --only hosting:firecms-demo-27150"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.16",
+    "@tailwindcss/vite": "^4.1.3",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.6",
+    "@typescript-eslint/eslint-plugin": "^8.21.0",
+    "@typescript-eslint/parser": "^8.21.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.24.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-n": "^17.15.1",
+    "eslint-plugin-promise": "^7.2.1",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.18",
+    "realm-web": "^2.0.1",
+    "tailwindcss": "^4.1.3",
+    "typescript": "^5.8.3",
+    "vite": "^5.4.17",
+    "vite-plugin-svgr": "^4.3.0"
+  }
+}

@@ -781,13 +781,13 @@ function buildTextSearchControllerWithLocalSearch({
     const textSearchController = textSearchControllerBuilder!({ firebaseApp });
     return {
         init: async (props: {
-            slug: string,
+            path: string,
             databaseId?: string,
             collection?: EntityCollection | ResolvedEntityCollection
         }) => {
             const b = await textSearchController.init(props);
             if (b) {
-                console.debug("External Text search controller supports path", props.slug);
+                console.debug("External Text search controller supports path", props.path);
                 return true;
             }
             if (localTextSearchEnabled)
