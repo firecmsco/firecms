@@ -782,7 +782,7 @@ code.language-sass .token.property, code.language-scss .token.property {
 
 /* Blob 1 (Bluish) */
 .blob-1 {
-    background: radial-gradient(circle, #1A4876, transparent 70%);
+    background: radial-gradient(circle, #0b273e, transparent 70%);
     top: -10%;
     left: -10%;
     animation: moveBlob1 10s infinite alternate ease-in-out;

@@ -1,3 +1,5 @@
+import React from 'react';
+
 export function AnimatedGradientBackground() {
     return <div className="gradient-background-container -z-10">
         <div className="blob blob-1"></div>

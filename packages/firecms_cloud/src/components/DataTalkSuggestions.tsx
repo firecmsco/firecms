@@ -31,7 +31,7 @@ export function DataTalkSuggestions({
                     className={"flex-1"}
                     border={true}
                     onClick={() => {
-                        onAnalyticsEvent?.("datatalk::home_suggestion_clicked", {
+                        onAnalyticsEvent?.("datatalk:home_suggestion_clicked", {
                             suggestion
                         });
                         return navigate(navigation.homeUrl + "/datatalk?prompt=" + suggestion);
