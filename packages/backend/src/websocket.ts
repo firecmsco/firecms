@@ -34,7 +34,7 @@ export function createPostgresWebSocket(server: Server, db: NodePgDatabase, tabl
 
                 console.log("🚀 [WebSocket Server] Received message from client:", clientId);
                 console.log("🚀 [WebSocket Server] Message type:", type);
-                console.log("🚀 [WebSocket Server] Message payload:", payload);
+                console.debug("🚀 [WebSocket Server] Message payload:", payload);
 
                 switch (type) {
                     case "FETCH_COLLECTION": {

@@ -473,6 +473,552 @@ export const mediaCollection: EntityCollection = {
     }
 };
 
+// New collections showcasing relationship properties
+
+export const authorsCollection: EntityCollection = {
+    name: "Authors",
+    singularName: "Author",
+    slug: "authors",
+    dbPath: "authors",
+    icon: "Person",
+    group: "Content Management",
+    textSearchEnabled: true,
+    description: "Blog authors and writers",
+    idField: "id",
+    properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
+        name: {
+            name: "Full Name",
+            validation: { required: true },
+            type: "string"
+        },
+        email: {
+            name: "Email",
+            email: true,
+            validation: { required: true },
+            type: "string"
+        },
+        bio: {
+            name: "Biography",
+            type: "string",
+            multiline: true
+        },
+        profileImage: {
+            name: "Profile Image",
+            type: "string",
+            storage: {
+                storagePath: "authors/profiles",
+                acceptedFiles: ["image/*"]
+            }
+        },
+        joinDate: {
+            name: "Join Date",
+            type: "date",
+            autoValue: "on_create"
+        },
+        // One-to-many relationship: Author has many posts
+        posts: {
+            name: "Posts",
+            type: "relationship",
+            target: "posts",
+            hasMany: true,
+            targetForeignKey: "authorId",
+            widget: "subcollection",
+            previewProperties: ["title", "status", "publishedAt"]
+        }
+    }
+};
+
+export const categoriesCollection: EntityCollection = {
+    name: "Categories",
+    singularName: "Category",
+    slug: "categories",
+    dbPath: "categories",
+    icon: "Category",
+    group: "Content Management",
+    textSearchEnabled: true,
+    description: "Blog post categories",
+    idField: "id",
+    properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
+        name: {
+            name: "Category Name",
+            validation: { required: true },
+            type: "string"
+        },
+        slug: {
+            name: "URL Slug",
+            validation: { required: true },
+            type: "string"
+        },
+        description: {
+            name: "Description",
+            type: "string",
+            multiline: true
+        },
+        color: {
+            name: "Color",
+            type: "string"
+        },
+        // Self-referential relationship: Category can have a parent category
+        parentCategory: {
+            name: "Parent Category",
+            type: "relationship",
+            target: "categories",
+            hasMany: false,
+            sourceForeignKey: "parentCategoryId",
+            widget: "select",
+            previewProperties: ["name"]
+        },
+        // One-to-many relationship: Category has many subcategories
+        subcategories: {
+            name: "Subcategories",
+            type: "relationship",
+            target: "categories",
+            hasMany: true,
+            targetForeignKey: "parentCategoryId",
+            widget: "subcollection",
+            previewProperties: ["name", "slug"]
+        },
+        // One-to-many relationship: Category has many posts
+        posts: {
+            name: "Posts",
+            type: "relationship",
+            target: "posts",
+            hasMany: true,
+            targetForeignKey: "categoryId",
+            widget: "subcollection",
+            previewProperties: ["title", "status", "publishedAt"]
+        }
+    }
+};
+
+export const tagsCollection: EntityCollection = {
+    name: "Tags",
+    singularName: "Tag",
+    slug: "tags",
+    dbPath: "tags",
+    icon: "LocalOffer",
+    group: "Content Management",
+    textSearchEnabled: true,
+    description: "Blog post tags",
+    idField: "id",
+    properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
+        name: {
+            name: "Tag Name",
+            validation: { required: true },
+            type: "string"
+        },
+        slug: {
+            name: "URL Slug",
+            validation: { required: true },
+            type: "string"
+        },
+        description: {
+            name: "Description",
+            type: "string"
+        },
+        color: {
+            name: "Color",
+            type: "string"
+        },
+        // Many-to-many relationship: Tag belongs to many posts
+        posts: {
+            name: "Posts",
+            type: "relationship",
+            target: "posts",
+            hasMany: true,
+            through: {
+                junctionTable: "posts_tags",
+                sourceForeignKey: "tagId",
+                targetForeignKey: "postId"
+            },
+            widget: "subcollection",
+            previewProperties: ["title", "status", "publishedAt"]
+        }
+    }
+};
+
+export const postsCollection: EntityCollection = {
+    name: "Posts",
+    singularName: "Post",
+    slug: "posts",
+    dbPath: "posts",
+    icon: "Article",
+    group: "Content Management",
+    textSearchEnabled: true,
+    description: "Blog posts and articles",
+    idField: "id",
+    properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
+        title: {
+            name: "Title",
+            validation: { required: true },
+            type: "string"
+        },
+        slug: {
+            name: "URL Slug",
+            validation: { required: true },
+            type: "string"
+        },
+        content: {
+            name: "Content",
+            type: "string",
+            multiline: true
+        },
+        excerpt: {
+            name: "Excerpt",
+            type: "string",
+            multiline: true
+        },
+        featuredImage: {
+            name: "Featured Image",
+            type: "string",
+            storage: {
+                storagePath: "posts/featured",
+                acceptedFiles: ["image/*"]
+            }
+        },
+        status: {
+            name: "Status",
+            validation: { required: true },
+            type: "string",
+            enumValues: {
+                "draft": "Draft",
+                "published": "Published",
+                "archived": "Archived"
+            }
+        },
+        publishedAt: {
+            name: "Published At",
+            type: "date"
+        },
+        // Many-to-one relationship: Post belongs to one author
+        author: {
+            name: "Author",
+            type: "relationship",
+            target: "authors",
+            hasMany: false,
+            sourceForeignKey: "authorId",
+            widget: "select",
+            previewProperties: ["name", "email"]
+        },
+        // Many-to-one relationship: Post belongs to one category
+        category: {
+            name: "Category",
+            type: "relationship",
+            target: "categories",
+            hasMany: false,
+            sourceForeignKey: "categoryId",
+            widget: "select",
+            previewProperties: ["name", "slug"]
+        },
+        // Many-to-many relationship: Post has many tags
+        tags: {
+            name: "Tags",
+            type: "relationship",
+            target: "tags",
+            hasMany: true,
+            through: {
+                junctionTable: "posts_tags",
+                sourceForeignKey: "postId",
+                targetForeignKey: "tagId"
+            },
+            widget: "select",
+            previewProperties: ["name", "slug"]
+        },
+        // One-to-many relationship: Post has many comments
+        comments: {
+            name: "Comments",
+            type: "relationship",
+            target: "comments",
+            hasMany: true,
+            targetForeignKey: "postId",
+            widget: "subcollection",
+            previewProperties: ["authorName", "content", "createdAt"]
+        },
+        createdAt: {
+            name: "Created At",
+            type: "date",
+            autoValue: "on_create"
+        },
+        updatedAt: {
+            name: "Updated At",
+            type: "date",
+            autoValue: "on_update"
+        }
+    }
+};
+
+export const commentsCollection: EntityCollection = {
+    name: "Comments",
+    singularName: "Comment",
+    slug: "comments",
+    dbPath: "comments",
+    icon: "Comment",
+    group: "Content Management",
+    textSearchEnabled: true,
+    description: "Blog post comments",
+    idField: "id",
+    properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
+        content: {
+            name: "Comment Content",
+            validation: { required: true },
+            type: "string",
+            multiline: true
+        },
+        authorName: {
+            name: "Author Name",
+            validation: { required: true },
+            type: "string"
+        },
+        authorEmail: {
+            name: "Author Email",
+            email: true,
+            validation: { required: true },
+            type: "string"
+        },
+        status: {
+            name: "Status",
+            validation: { required: true },
+            type: "string",
+            enumValues: {
+                "pending": "Pending",
+                "approved": "Approved",
+                "spam": "Spam",
+                "rejected": "Rejected"
+            }
+        },
+        // Many-to-one relationship: Comment belongs to one post
+        post: {
+            name: "Post",
+            type: "relationship",
+            target: "posts",
+            hasMany: false,
+            sourceForeignKey: "postId",
+            widget: "select",
+            previewProperties: ["title", "status"]
+        },
+        // Self-referential relationship: Comment can have a parent comment (for replies)
+        parentComment: {
+            name: "Parent Comment",
+            type: "relationship",
+            target: "comments",
+            hasMany: false,
+            sourceForeignKey: "parentCommentId",
+            widget: "select",
+            previewProperties: ["authorName", "content"]
+        },
+        // One-to-many relationship: Comment can have many replies
+        replies: {
+            name: "Replies",
+            type: "relationship",
+            target: "comments",
+            hasMany: true,
+            targetForeignKey: "parentCommentId",
+            widget: "subcollection",
+            previewProperties: ["authorName", "content", "createdAt"]
+        },
+        createdAt: {
+            name: "Created At",
+            type: "date",
+            autoValue: "on_create"
+        }
+    }
+};
+
+export const userProfilesCollection: EntityCollection = {
+    name: "User Profiles",
+    singularName: "User Profile",
+    slug: "user_profiles",
+    dbPath: "user_profiles",
+    icon: "AccountCircle",
+    group: "User Management",
+    textSearchEnabled: true,
+    description: "Extended user profile information",
+    idField: "id",
+    properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
+        userId: {
+            name: "User ID",
+            validation: { required: true },
+            type: "string"
+        },
+        firstName: {
+            name: "First Name",
+            validation: { required: true },
+            type: "string"
+        },
+        lastName: {
+            name: "Last Name",
+            validation: { required: true },
+            type: "string"
+        },
+        avatar: {
+            name: "Avatar",
+            type: "string",
+            storage: {
+                storagePath: "users/avatars",
+                acceptedFiles: ["image/*"]
+            }
+        },
+        bio: {
+            name: "Biography",
+            type: "string",
+            multiline: true
+        },
+        dateOfBirth: {
+            name: "Date of Birth",
+            type: "date"
+        },
+        // One-to-one relationship: User Profile has one address
+        address: {
+            name: "Address",
+            type: "relationship",
+            target: "user_addresses",
+            hasMany: false,
+            sourceForeignKey: "addressId",
+            widget: "select",
+            previewProperties: ["street", "city", "country"]
+        },
+        // One-to-many relationship: User Profile has many social media accounts
+        socialAccounts: {
+            name: "Social Media Accounts",
+            type: "relationship",
+            target: "social_accounts",
+            hasMany: true,
+            targetForeignKey: "userProfileId",
+            widget: "subcollection",
+            previewProperties: ["platform", "username"]
+        }
+    }
+};
+
+export const userAddressesCollection: EntityCollection = {
+    name: "User Addresses",
+    singularName: "User Address",
+    slug: "user_addresses",
+    dbPath: "user_addresses",
+    icon: "LocationOn",
+    group: "User Management",
+    textSearchEnabled: true,
+    description: "User address information",
+    idField: "id",
+    properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
+        street: {
+            name: "Street Address",
+            validation: { required: true },
+            type: "string"
+        },
+        city: {
+            name: "City",
+            validation: { required: true },
+            type: "string"
+        },
+        state: {
+            name: "State/Province",
+            type: "string"
+        },
+        zipCode: {
+            name: "ZIP/Postal Code",
+            type: "string"
+        },
+        country: {
+            name: "Country",
+            validation: { required: true },
+            type: "string"
+        },
+        // One-to-one relationship: Address belongs to one user profile
+        userProfile: {
+            name: "User Profile",
+            type: "relationship",
+            target: "user_profiles",
+            hasMany: false,
+            targetForeignKey: "addressId",
+            widget: "select",
+            previewProperties: ["firstName", "lastName"]
+        }
+    }
+};
+
+export const socialAccountsCollection: EntityCollection = {
+    name: "Social Accounts",
+    singularName: "Social Account",
+    slug: "social_accounts",
+    dbPath: "social_accounts",
+    icon: "Share",
+    group: "User Management",
+    textSearchEnabled: true,
+    description: "User social media accounts",
+    idField: "id",
+    properties: {
+        id: {
+            type: "number",
+            validation: { required: true }
+        },
+        platform: {
+            name: "Platform",
+            validation: { required: true },
+            type: "string",
+            enumValues: {
+                "twitter": "Twitter/X",
+                "facebook": "Facebook",
+                "instagram": "Instagram",
+                "linkedin": "LinkedIn",
+                "github": "GitHub",
+                "youtube": "YouTube"
+            }
+        },
+        username: {
+            name: "Username",
+            validation: { required: true },
+            type: "string"
+        },
+        url: {
+            name: "Profile URL",
+            type: "string"
+        },
+        isVerified: {
+            name: "Is Verified",
+            type: "boolean"
+        },
+        // Many-to-one relationship: Social Account belongs to one user profile
+        userProfile: {
+            name: "User Profile",
+            type: "relationship",
+            target: "user_profiles",
+            hasMany: false,
+            sourceForeignKey: "userProfileId",
+            widget: "select",
+            previewProperties: ["firstName", "lastName"]
+        }
+    }
+};
+
 // Export all collections for easy import
 export const collections = [
     customersCollection,
@@ -481,5 +1027,14 @@ export const collections = [
     offersCollection,
     maintenanceHistoryCollection,
     paymentHistoryCollection,
-    mediaCollection
+    mediaCollection,
+    // New collections with relationship properties
+    authorsCollection,
+    categoriesCollection,
+    tagsCollection,
+    postsCollection,
+    commentsCollection,
+    userProfilesCollection,
+    userAddressesCollection,
+    socialAccountsCollection
 ];

@@ -5,7 +5,7 @@ import { createServer } from "http";
 import { collectionRegistry, createPostgresDatabaseConnection, createPostgresWebSocket } from "@firecms/backend";
 
 import * as tables from "./schema.generated";
-import { collections } from "app-shared";
+import { collections } from "shared";
 
 import * as dotenv from "dotenv";
 

@@ -3,14 +3,15 @@
   "version": "1.0.0",
   "description": "Custom PostgreSQL backend for FireCMS with real-time sync",
   "main": "dist/index.js",
+  "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "generate:schema": "tsx ../../packages/backend/src/generate-drizzle-schema.ts ../shared/collections/collections.ts",
     "generate:schema:watch": "tsx ../../packages/backend/src/generate-drizzle-schema.ts ../shared/collections/collections.ts --watch",
-    "db:generate": "drizzle-kit generate:pg",
-    "db:migrate": "tsx src/scripts/migrate.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
@@ -30,7 +31,6 @@
     "@types/node": "^20.10.5",
     "@types/ws": "^8.5.10",
     "drizzle-kit": "^0.31.4",
-    "tsx": "^4.6.2",
     "typescript": "^5.3.3"
   }
 }

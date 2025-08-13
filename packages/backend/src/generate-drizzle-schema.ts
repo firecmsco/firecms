@@ -13,6 +13,52 @@ import {
 // --- Helper Functions ---
 
 /**
+ * Formats text with ANSI escape codes for terminal display
+ * @param text The text to format
+ * @param options Formatting options
+ * @returns Formatted string with ANSI codes
+ */
+const formatTerminalText = (text: string, options: {
+    bold?: boolean;
+    backgroundColor?: 'blue' | 'green' | 'red' | 'yellow' | 'cyan' | 'magenta';
+    textColor?: 'white' | 'black' | 'red' | 'green' | 'yellow' | 'blue' | 'magenta' | 'cyan';
+} = {}): string => {
+    let codes = '';
+
+    if (options.bold) codes += '\x1b[1m';
+
+    // Background colors
+    if (options.backgroundColor) {
+        const bgColors = {
+            blue: '\x1b[44m',
+            green: '\x1b[42m',
+            red: '\x1b[41m',
+            yellow: '\x1b[43m',
+            cyan: '\x1b[46m',
+            magenta: '\x1b[45m'
+        };
+        codes += bgColors[options.backgroundColor];
+    }
+
+    // Text colors
+    if (options.textColor) {
+        const textColors = {
+            white: '\x1b[37m',
+            black: '\x1b[30m',
+            red: '\x1b[31m',
+            green: '\x1b[32m',
+            yellow: '\x1b[33m',
+            blue: '\x1b[34m',
+            magenta: '\x1b[35m',
+            cyan: '\x1b[36m'
+        };
+        codes += textColors[options.textColor];
+    }
+
+    return `${codes}${text}\x1b[0m`;
+};
+
+/**
  * Converts a camelCase or PascalCase string to snake_case.
  * @param str The string to convert.
  * @returns The snake_cased string.
@@ -292,6 +338,8 @@ const generateSchema = async (collections: EntityCollection[], outputPath?: stri
     const finalOutputPath = outputPath || path.resolve(process.cwd(), "src/schema.generated.ts");
     await fs.writeFile(finalOutputPath, schemaContent);
     console.log("✅ Drizzle schema generated successfully at", finalOutputPath);
+    // suggest running `pnpm db:generate` with bold and colored background for the command only
+    console.log(`You can now run ${formatTerminalText('pnpm db:generate', { bold: true, backgroundColor: 'blue', textColor: 'black' })} to generate the SQL migration files.`);
 };
 
 // --- Execution and Watch Logic ---

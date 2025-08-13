@@ -38,7 +38,7 @@ export default defineConfig({
             "@firecms/collection_editor": path.resolve(__dirname, "../../packages/collection_editor/src"),
             "@firecms/collection_editor_firebase": path.resolve(__dirname, "../../packages/collection_editor_firebase/src"),
             "@firecms/user_management": path.resolve(__dirname, "../../packages/user_management/src"),
-            "app-shared": path.resolve(__dirname, "../shared")
+            "shared": path.resolve(__dirname, "../shared")
         }
     }
 })

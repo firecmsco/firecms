@@ -639,7 +639,7 @@ export interface RelationshipProperty<T extends EntityRelationship = any> extend
     type: "relationship";
 
     /**
-     * The path or table name of the target collection.
+     * The path (slug) or table name of the target collection.
      * @example "posts"
      */
     target: string;
