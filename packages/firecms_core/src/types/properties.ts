@@ -632,9 +632,6 @@ export interface GeopointProperty extends BaseProperty<GeoPoint> {
  * This property assumes relationships join on the primary keys defined
  * at the collection level.
  *
- * - If `hasMany` is `false` or undefined, it renders a **reference field**.
- * - If `hasMany` is `true`, it renders a **sub-collection view**.
- *
  * @group Entity properties
  */
 export interface RelationshipProperty<T extends EntityRelationship = any> extends BaseProperty<T> {
@@ -655,6 +652,14 @@ export interface RelationshipProperty<T extends EntityRelationship = any> extend
      * @default false
      */
     hasMany?: boolean;
+
+    /**
+     * Controls how the relationship is rendered in the UI.
+     * - 'select': Renders a dropdown for to-one, or a multi-select for to-many. Ideal for linking existing entities.
+     * - 'subcollection': Renders an inline table view. Ideal for creating/editing related entities directly.
+     * @default 'select' for hasMany:false, 'subcollection' for hasMany:true
+     */
+    widget?: "select" | "subcollection";
 
     /**
      * The foreign key column(s) on the **source table** (this entity's table).
