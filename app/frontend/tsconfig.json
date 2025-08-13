@@ -30,8 +30,9 @@
       "@firecms/entity_history": ["../../packages/entity_history/src"],
       "@firecms/data_import": ["../../packages/data_import/src"],
       "@firecms/data_export": ["../../packages/data_export/src"],
-      "@firecms/user_management": ["../../packages/user_management/src"]
+      "@firecms/user_management": ["../../packages/user_management/src"],
+      "app-shared": ["../shared"]
     }
   },
-  "include": ["./src"]
+  "include": ["./src", "../shared"]
 }

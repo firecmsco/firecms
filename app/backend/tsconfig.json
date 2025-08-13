@@ -20,10 +20,12 @@
       ],
       "@firecms/backend": [
         "../../packages/backend/src"
+      ],
+      "app-shared": [
+        "../shared"
       ]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../shared/**/*"],
   "exclude": ["node_modules", "dist"]
 }
-
