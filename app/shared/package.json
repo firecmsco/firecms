@@ -4,6 +4,12 @@
   "description": "Shared collections and types for FireCMS app example",
   "private": true,
   "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
@@ -18,4 +24,3 @@
     "typescript": "^5.0.0"
   }
 }
-

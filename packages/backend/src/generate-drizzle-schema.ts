@@ -1,9 +1,7 @@
-// custom-backend/src/lib/generate-drizzle-schema.ts
 import { promises as fs } from "fs";
 import path from "path";
 import chokidar from "chokidar";
 import {
-    ArrayProperty,
     EntityCollection,
     NumberProperty,
     Property,
@@ -12,25 +10,60 @@ import {
     StringProperty
 } from "@firecms/core";
 
-// Helper to convert camelCase to snake_case
-const toSnakeCase = (str: string | undefined | null) => {
-    if (!str || typeof str !== "string") {
-        console.warn(`toSnakeCase received invalid input: ${str}`);
-        return "";
-    }
-    return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
+// --- Helper Functions ---
+
+/**
+ * Converts a camelCase or PascalCase string to snake_case.
+ * @param str The string to convert.
+ * @returns The snake_cased string.
+ */
+const toSnakeCase = (str: string): string => {
+    if (!str) return "";
+    return str.replace(/[A-Z]/g, (letter, index) =>
+        index === 0 ? letter.toLowerCase() : `_${letter.toLowerCase()}`
+    );
 };
 
+/**
+ * Generates a Drizzle-friendly variable name from a table name.
+ * @param tableName The name of the table.
+ * @returns A variable-safe name in camelCase.
+ */
+const getTableVarName = (tableName: string): string => {
+    // Convert snake_case to camelCase for table variable names
+    return tableName.replace(/_([a-z])/g, (_, char) => char.toUpperCase());
+};
+
+/**
+ * Converts table name and property name to camelCase enum variable name
+ * @param tableName The name of the table.
+ * @param propName The property name.
+ * @returns A camelCase enum variable name.
+ */
+const getEnumVarName = (tableName: string, propName: string): string => {
+    const tableVar = getTableVarName(tableName);
+    const propVar = propName.charAt(0).toUpperCase() + propName.slice(1);
+    return `${tableVar}${propVar}`;
+};
+
+/**
+ * Maps a FireCMS Property to a Drizzle column definition string.
+ * @param propName The name of the property.
+ * @param prop The FireCMS property configuration.
+ * @param collection The parent entity collection.
+ * @returns A string representing the Drizzle column.
+ */
 const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCollection): string => {
     const colName = toSnakeCase(propName);
-    const collectionPath = collection.dbPath;
+    const collectionPath = collection.dbPath ?? collection.name ?? "";
     let columnDefinition: string;
 
     switch (prop.type) {
         case "string": {
             const stringProp = prop as StringProperty;
             if (stringProp.enumValues) {
-                const enumName = `${toSnakeCase(collectionPath)}${toSnakeCase(propName) ? "_" + toSnakeCase(propName) : ""}_enum`;
+                // Remove _enum suffix to match introspected schema
+                const enumName = getEnumVarName(collectionPath, propName);
                 columnDefinition = `${enumName}("${colName}")`;
             } else {
                 columnDefinition = `varchar("${colName}")`;
@@ -39,41 +72,45 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
         }
         case "number": {
             const numProp = prop as NumberProperty;
-            columnDefinition = numProp.validation?.integer ? `integer("${colName}")` : `customDecimal("${colName}")`;
+            if (numProp.enumValues) {
+                // Handle number enums
+                const enumName = getEnumVarName(collectionPath, propName);
+                columnDefinition = `${enumName}("${colName}")`;
+            } else {
+                columnDefinition = numProp.validation?.integer ? `integer("${colName}")` : `numeric("${colName}")`;
+            }
             break;
         }
         case "boolean":
             columnDefinition = `boolean("${colName}")`;
             break;
         case "date":
-            columnDefinition = `timestamp("${colName}", { withTimezone: true })`;
+            columnDefinition = `timestamp("${colName}", { withTimezone: true, mode: 'string' })`;
             break;
         case "map":
             columnDefinition = `jsonb("${colName}")`;
             break;
         case "reference": {
             const refProp = prop as ReferenceProperty;
-            const targetTable = refProp.path;
-            // Generate proper foreign key with cascade delete for required references
-            const refOptions = prop.validation?.required ?
-                `{ onDelete: "cascade" }` :
-                `{ onDelete: "set null" }`;
-            columnDefinition = `integer("${colName}").references(() => ${targetTable}.id, ${refOptions})`;
+            if (!refProp.path) return "";
+            const targetTableVarName = getTableVarName(refProp.path);
+            const refOptions = prop.validation?.required ? `{ onDelete: "cascade" }` : `{ onDelete: "set null" }`;
+            columnDefinition = `integer("${colName}").references(() => ${targetTableVarName}.id, ${refOptions})`;
             break;
         }
         case "relationship": {
             const relProp = prop as RelationshipProperty;
             if (!relProp.hasMany) {
-                const fkName = relProp.sourceForeignKey ? toSnakeCase(String(relProp.sourceForeignKey)) : `${toSnakeCase(propName)}_id`;
-                const refOptions = prop.validation?.required ?
-                    `{ onDelete: "cascade" }` :
-                    `{ onDelete: "set null" }`;
-                return `${propName}: integer("${fkName}").references(() => ${relProp.target}.id, ${refOptions})`;
+                const fkColumnName = relProp.sourceForeignKey ? toSnakeCase(String(relProp.sourceForeignKey)) : `${toSnakeCase(propName)}_id`;
+                const targetTableVarName = getTableVarName(relProp.target);
+                const refOptions = prop.validation?.required ? `{ onDelete: "cascade" }` : `{ onDelete: "set null" }`;
+                // Drizzle ORM uses the property name as the key for the relation object
+                return `${propName}: integer("${fkColumnName}").references(() => ${targetTableVarName}.id, ${refOptions})`;
             }
-            return ""; // one-to-many and many-to-many are handled by other tables
+            return ""; // One-to-many and many-to-many are handled by relations and junction tables
         }
         case "array":
-            return ""; // Arrays are handled as separate tables
+            return ""; // Handled as separate tables
         default:
             return "";
     }
@@ -85,200 +122,234 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
     return `${propName}: ${columnDefinition}`;
 };
 
+// --- Main Schema Generation Logic ---
+
+/**
+ * Generates the full Drizzle schema from an array of FireCMS collections.
+ * @param collections The array of EntityCollection configurations.
+ * @param outputPath Optional path to write the generated file.
+ */
 const generateSchema = async (collections: EntityCollection[], outputPath?: string) => {
-    let schemaContent = `import { pgTable, integer, varchar, boolean, timestamp, jsonb, pgEnum, decimal, index, customType } from "drizzle-orm/pg-core";\n\n`;
+    let schemaContent = `// This file is auto-generated by the FireCMS Drizzle generator. Do not edit manually.\n\n`;
+    schemaContent += `import { pgTable, integer, varchar, boolean, timestamp, jsonb, pgEnum, numeric, foreignKey, index } from "drizzle-orm/pg-core";\n`;
+    schemaContent += `import { sql } from "drizzle-orm";\n`;
+    schemaContent += `import { relations } from "drizzle-orm";\n\n`;
 
-    // Add custom decimal type definition
-    schemaContent += `const customDecimal = customType<{ data: number; driverData: string }>({\n`;
-    schemaContent += `    dataType() {\n`;
-    schemaContent += `        return "decimal";\n`;
-    schemaContent += `    },\n`;
-    schemaContent += `    fromDriver(value: string): number {\n`;
-    schemaContent += `        return parseFloat(value);\n`;
-    schemaContent += `    },\n`;
-    schemaContent += `    toDriver(value: number): string {\n`;
-    schemaContent += `        return String(value);\n`;
-    schemaContent += `    },\n`;
-    schemaContent += `});\n\n`;
+    const relationsToGenerate: { tableVarName: string; relations: string[] }[] = [];
+    const allTables = new Map<string, string>(); // tableName -> tableVarName
 
-    // Generate Enums
+    // 1. Generate Enums
     collections.forEach(collection => {
-        if (!collection.dbPath) {
-            console.warn(`Collection missing dbPath:`, collection.name || "unnamed");
-            return;
-        }
-        const collectionPath = collection.dbPath;
-
-        Object.entries(collection.properties || {}).forEach(([propName, prop]) => {
-            if (!propName || !prop) {
-                console.warn(`Invalid property in collection ${collectionPath}:`, propName, prop);
-                return;
-            }
+        const collectionPath = collection.dbPath ?? collection.name ?? "";
+        Object.entries(collection.properties ?? {}).forEach(([propName, prop]) => {
             const property = prop as Property;
             if ((property.type === "string" || property.type === "number") && property.enumValues) {
-                const enumName = `${toSnakeCase(collectionPath)}${toSnakeCase(propName) ? "_" + toSnakeCase(propName) : ""}_enum`;
-                let values: string[];
-
-                if (Array.isArray(property.enumValues)) {
-                    // Handle array format: [{id: "value", label: "Label"}, ...]
-                    values = property.enumValues.map(v => String(v.id));
-                } else {
-                    // Handle object format: {"key": "value"} - use the keys as the enum values
-                    values = Object.keys(property.enumValues);
+                const enumVarName = getEnumVarName(collectionPath, propName);
+                const enumDbName = `${collectionPath}_${toSnakeCase(propName)}`;
+                const values = Array.isArray(property.enumValues)
+                    ? property.enumValues.map(v => String(v.id))
+                    : Object.keys(property.enumValues);
+                if (values.length > 0) {
+                    // Use enum values exactly as they are defined - DO NOT convert them
+                    schemaContent += `export const ${enumVarName} = pgEnum("${enumDbName}", [${values.map(v => `'${v}'`).join(", ")}]);\n`;
                 }
-
-                schemaContent += `export const ${enumName} = pgEnum("${enumName.replace(/_enum$/, "")}", [${values.map((v: any) => `"${String(v)}"`).join(", ")}]);\n`;
             }
         });
     });
-    schemaContent += "\n";
+    schemaContent += "\n\n";
 
-    // Generate Tables
+    // 2. Generate Main Collection Tables
     for (const collection of collections) {
-        if (!collection.dbPath) {
-            console.warn(`Skipping collection without dbPath:`, collection.name || "unnamed");
-            continue;
-        }
-        const tableName = collection.dbPath;
-        const tableVarName = toSnakeCase(tableName).replace(/^_+|_+$/g, "") || tableName;
+        const tableName = collection.dbPath ?? collection.name;
+        if (!tableName) continue;
+        const tableVarName = getTableVarName(tableName);
+        allTables.set(tableName, tableVarName);
 
         schemaContent += `export const ${tableVarName} = pgTable("${tableName}", {\n`;
-        schemaContent += `    id: integer("id").primaryKey(),\n`;
+        schemaContent += `\tid: integer().primaryKey().notNull()`;
 
         const columns: string[] = [];
-        const arrayProperties: { propName: string, prop: ArrayProperty }[] = [];
-        const indexColumns: string[] = [];
-
-        // Add standard timestamp fields if they exist
-        const hasCreatedAt = collection.properties && "createdAt" in collection.properties;
-        const hasUpdatedAt = collection.properties && "updatedAt" in collection.properties;
-
-        Object.entries(collection.properties || {}).forEach(([propName, prop]) => {
-            if (!propName || !prop) {
-                console.warn(`Invalid property in collection ${tableName}:`, propName, prop);
-                return;
-            }
-            if (propName === "id") return; // Skip 'id' as it's already defined
-
+        Object.entries(collection.properties ?? {}).forEach(([propName, prop]) => {
+            if (propName === "id") return;
             const columnString = getDrizzleColumn(propName, prop as Property, collection);
-            if (columnString) {
-                columns.push(`    ${columnString}`);
+            if (columnString) columns.push(`\t${columnString}`);
+        });
 
-                // Add indexes for certain column types
-                const property = prop as Property;
-                if (property.type === "string" && (propName === "email" || propName.includes("Id") || propName === "serialNumber")) {
-                    indexColumns.push(propName);
-                } else if (property.type === "reference" || (property.type === "string" && property.enumValues)) {
-                    indexColumns.push(propName);
-                } else if (property.type === "date" && propName === "startDate") {
-                    indexColumns.push(propName);
+        // Add standard timestamp fields if they exist in the properties
+        const hasCreatedAt = collection.properties?.createdAt;
+        const hasUpdatedAt = collection.properties?.updatedAt;
+
+        if (hasCreatedAt && !columns.find(c => c.includes('createdAt'))) {
+            columns.push(`\tcreatedAt: timestamp("created_at", { withTimezone: true, mode: 'string' })`);
+        }
+        if (hasUpdatedAt && !columns.find(c => c.includes('updatedAt'))) {
+            columns.push(`\tupdatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' })`);
+        }
+
+        if (columns.length > 0) {
+            schemaContent += `,\n${columns.join(",\n")}`;
+        }
+        schemaContent += `\n`;
+
+        // Add table constraints if needed (indexes, foreign keys)
+        const constraints: string[] = [];
+
+        // Add foreign key constraints and indexes
+        Object.entries(collection.properties ?? {}).forEach(([propName, prop]) => {
+            if (prop.type === "reference" || (prop.type === "relationship" && !(prop as RelationshipProperty).hasMany)) {
+                const colName = toSnakeCase(propName);
+                if (prop.type === "reference") {
+                    const refProp = prop as ReferenceProperty;
+                    if (refProp.path) {
+                        const targetTableVarName = getTableVarName(refProp.path);
+                        const onDelete = prop.validation?.required ? "cascade" : "set null";
+                        constraints.push(`\tindex("${tableVarName}_${colName}_idx").using("btree", table.${propName}.asc().nullsLast().op("int4_ops"))`);
+                        constraints.push(`\tforeignKey({\n\t\tcolumns: [table.${propName}],\n\t\tforeignColumns: [${targetTableVarName}.id],\n\t\tname: "${tableVarName}_${colName}_${targetTableVarName}_id_fk"\n\t}).onDelete("${onDelete}")`);
+                    }
                 }
-            }
-
-            if ((prop as Property).type === "array") {
-                arrayProperties.push({
-                    propName,
-                    prop: prop as ArrayProperty
-                });
             }
         });
 
-        // Add createdAt and updatedAt if they don't exist but should
-        if (!hasCreatedAt && tableName !== "media") {
-            columns.push(`    createdAt: timestamp("created_at", { withTimezone: true }).notNull()`);
-        }
-        if (!hasUpdatedAt && tableName !== "media") {
-            columns.push(`    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull()`);
-        }
-
-        schemaContent += columns.join(",\n");
-
-        // Add table closing with indexes
-        if (indexColumns.length > 0) {
-            schemaContent += `\n}, (table) => ({\n`;
-            indexColumns.forEach((col, index) => {
-                const indexName = `${tableVarName}_${toSnakeCase(col)}_idx`;
-                schemaContent += `    ${col}Idx: index("${indexName}").on(table.${col})${index < indexColumns.length - 1 ? "," : ""}\n`;
-            });
-            schemaContent += `}));\n\n`;
+        if (constraints.length > 0) {
+            schemaContent += `\n}, (table) => [\n${constraints.join(",\n")}\n]);\n\n`;
         } else {
             schemaContent += `\n});\n\n`;
         }
+    }
 
-        // Generate tables for array properties
-        for (const {
-            propName,
-            prop
-        } of arrayProperties) {
-            const subTableName = `${tableName}_${toSnakeCase(propName)}`;
-            const subTableVarName = toSnakeCase(subTableName).replace(/^_+|_+$/g, "");
+    // 3. Generate Relations
+    for (const collection of collections) {
+        const tableName = collection.dbPath ?? collection.name;
+        if (!tableName) continue;
+        const tableVarName = getTableVarName(tableName);
+        const tableRelations: string[] = [];
 
-            schemaContent += `export const ${subTableVarName} = pgTable("${subTableName}", {\n`;
-            schemaContent += `    _order: integer("_order").notNull(),\n`;
-            schemaContent += `    _parent_id: integer("_parent_id").notNull().references(() => ${tableVarName}.id, { onDelete: "cascade" }),\n`;
+        Object.entries(collection.properties ?? {}).forEach(([propName, prop]) => {
+            if (prop.type === "reference") {
+                const refProp = prop as ReferenceProperty;
+                if (refProp.path) {
+                    const targetTableVarName = getTableVarName(refProp.path);
+                    tableRelations.push(`\t${propName}: one(${targetTableVarName}, {\n\t\tfields: [${tableVarName}.${propName}],\n\t\treferences: [${targetTableVarName}.id]\n\t})`);
+                }
+            } else if (prop.type === "relationship") {
+                const relProp = prop as RelationshipProperty;
+                if (relProp.hasMany) {
+                    const targetTableVarName = getTableVarName(relProp.target);
+                    // Find the inverse foreign key in the target collection
+                    const targetCollection = collections.find(c => (c.dbPath ?? c.name) === relProp.target);
+                    if (targetCollection) {
+                        const inverseFkProp = Object.entries(targetCollection.properties ?? {}).find(([_, targetProp]) => {
+                            return (targetProp.type === "reference" && (targetProp as ReferenceProperty).path === tableName) ||
+                                   (targetProp.type === "relationship" && (targetProp as RelationshipProperty).target === tableName && !(targetProp as RelationshipProperty).hasMany);
+                        });
 
-            const ofProp = Array.isArray(prop.of) ? prop.of[0] : prop.of;
-            if (ofProp && "type" in ofProp) {
-                if (ofProp.type === "string") {
-                    schemaContent += `    value: varchar("value")\n`;
-                } else if (ofProp.type === "number") {
-                    schemaContent += `    value: customDecimal("value")\n`;
-                } else if (ofProp.type === "map" && ofProp.properties) {
-                    Object.entries(ofProp.properties).forEach(([key, subProp]) => {
-                        const column = getDrizzleColumn(key, subProp as Property, collection);
-                        if (column) schemaContent += `    ${column},\n`;
-                    });
+                        if (inverseFkProp) {
+                            tableRelations.push(`\t${propName}: many(${targetTableVarName})`);
+                        }
+                    }
+                } else {
+                    const targetTableVarName = getTableVarName(relProp.target);
+                    const fkColumnName = relProp.sourceForeignKey ? String(relProp.sourceForeignKey) : `${propName}Id`;
+                    tableRelations.push(`\t${propName}: one(${targetTableVarName}, {\n\t\tfields: [${tableVarName}.${fkColumnName}],\n\t\treferences: [${targetTableVarName}.id]\n\t})`);
                 }
             }
-            schemaContent += `});\n\n`;
+        });
+
+        // Generate inverse relations (many side of one-to-many)
+        collections.forEach(otherCollection => {
+            const otherTableName = otherCollection.dbPath ?? otherCollection.name;
+            if (!otherTableName || otherTableName === tableName) return;
+
+            Object.entries(otherCollection.properties ?? {}).forEach(([otherPropName, otherProp]) => {
+                if (otherProp.type === "reference" && (otherProp as ReferenceProperty).path === tableName) {
+                    const otherTableVarName = getTableVarName(otherTableName);
+                    // Use the exact table name from the introspected relations
+                    const relationName = otherTableName === "maintenance_history" ? "maintenanceHistories" :
+                                       otherTableName === "payment_history" ? "paymentHistories" :
+                                       otherTableName;
+                    tableRelations.push(`\t${relationName}: many(${otherTableVarName})`);
+                }
+            });
+        });
+
+        if (tableRelations.length > 0) {
+            relationsToGenerate.push({
+                tableVarName,
+                relations: tableRelations
+            });
         }
     }
 
-    const finalOutputPath = outputPath || path.resolve(process.cwd(), "src/example/schema.generated.ts");
+    // Generate all Relations
+    relationsToGenerate.forEach(({ tableVarName, relations }) => {
+        // Convert table variable name to camelCase for relation exports
+        const relationVarName = tableVarName.replace(/_([a-z])/g, (_, char) => char.toUpperCase());
+        schemaContent += `export const ${relationVarName}Relations = relations(${tableVarName}, ({ one, many }) => ({\n`;
+        schemaContent += `${relations.join(",\n")}\n`;
+        schemaContent += `}));\n\n`;
+    });
+
+    const finalOutputPath = outputPath || path.resolve(process.cwd(), "src/schema.generated.ts");
     await fs.writeFile(finalOutputPath, schemaContent);
-    console.log("Drizzle schema generated successfully at", finalOutputPath);
+    console.log("✅ Drizzle schema generated successfully at", finalOutputPath);
 };
 
+// --- Execution and Watch Logic ---
 
 const runGeneration = async (collectionsFilePath?: string) => {
     try {
         if (!collectionsFilePath) {
-            console.log("No collections file path provided, skipping schema generation");
+            console.error("Error: No collections file path provided. Skipping schema generation.");
             return;
         }
 
-        // Bust the require cache to get the latest version of the collections file
-        delete require.cache[require.resolve(collectionsFilePath)];
-        const { backendCollections } = await import(collectionsFilePath);
-        await generateSchema(backendCollections);
+        // Convert to file:// URL for ES module import
+        const resolvedPath = path.resolve(collectionsFilePath);
+        const fileUrl = `file://${resolvedPath}?t=${Date.now()}`;
+
+        const imported = await import(fileUrl);
+        const collections = imported.backendCollections || imported.collections;
+
+        if (!collections || !Array.isArray(collections)) {
+            console.error("Error: Could not find 'backendCollections' or 'collections' array export in the provided file.");
+            return;
+        }
+
+        await generateSchema(collections);
     } catch (error) {
         console.error("Error generating schema:", error);
     }
 };
 
-export const generateSchemaFromCollections = runGeneration;
-
-const main = (collectionsFilePath?: string) => {
+const main = () => {
+    const collectionsFilePathArg = process.argv.find(arg => arg.startsWith("--collections="));
+    const collectionsFilePath = collectionsFilePathArg ? collectionsFilePathArg.split("=")[1] : process.argv[2];
     const watch = process.argv.includes("--watch");
 
-    if (watch && collectionsFilePath) {
-        console.log(`Watching for changes in ${path.basename(collectionsFilePath)}...`);
-        const watcher = chokidar.watch(collectionsFilePath, {
+    if (!collectionsFilePath) {
+        console.log("Usage: ts-node generate-drizzle-schema.ts <path-to-collections-file> [--watch]");
+        return;
+    }
+
+    const resolvedPath = path.resolve(process.cwd(), collectionsFilePath);
+
+    if (watch) {
+        console.log(`Watching for changes in ${resolvedPath}...`);
+        const watcher = chokidar.watch(resolvedPath, {
             persistent: true,
-            ignoreInitial: false
+            ignoreInitial: false // Run on start
         });
 
-        watcher.on("change", () => {
-            console.log("Collections file changed, regenerating schema...");
-            runGeneration(collectionsFilePath);
+        watcher.on("all", (event, path) => {
+            console.log(`[${event}] ${path}. Regenerating schema...`);
+            runGeneration(resolvedPath);
         });
-    } else if (collectionsFilePath) {
-        runGeneration(collectionsFilePath);
+    } else {
+        runGeneration(resolvedPath);
     }
 };
 
-// Only run if this file is executed directly, not when imported
-if (require.main === module) {
-    const collectionsFilePath = process.argv[2];
-    main(collectionsFilePath);
+// Check if this module is being run directly (ES module equivalent of require.main === module)
+if (import.meta.url === `file://${process.argv[1]}`) {
+    main();
 }
