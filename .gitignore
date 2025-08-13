@@ -25,7 +25,6 @@ firebase-debug.log*
 
 .idea
 
-.npmrc
 .eslintcache
 
 report.**.json
