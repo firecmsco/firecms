@@ -190,9 +190,7 @@ export class EntityService {
 
     // Map collection paths to actual database tables
     private getTableForPath(path: string) {
-        const collection = collectionRegistry.get(path);
-        const tableId = collection?.databaseId ?? path;
-        const table = this.tables[tableId];
+        const table = this.tables[path];
         if (!table) {
             throw new Error(`Unknown collection path: ${path}`);
         }
@@ -246,7 +244,10 @@ export class EntityService {
     ): Promise<Entity<M> | undefined> {
         const table = this.getTableForPath(path);
         const idInfo = this.getIdFieldInfo(path);
-        console.log("idInfo", { path, idInfo });
+        console.log("idInfo", {
+            path,
+            idInfo
+        });
         const idField = (table as any)[idInfo.fieldName];
         const parsedId = this.parseIdValue(entityId, idInfo.type);
 

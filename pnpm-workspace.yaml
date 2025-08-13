@@ -1,8 +1,7 @@
 packages:
   - 'packages/*'
   - 'app/*'
-  - 'examples/*'
-  - 'saas'
-  - 'website'
-  - 'firebase_demo_backend'
+#  - 'examples/*'
+#  - 'saas'
+#  - 'website'
 

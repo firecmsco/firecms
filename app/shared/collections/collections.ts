@@ -193,7 +193,6 @@ export const rentalsCollection: EntityCollection = {
             validation: { required: true, },
             type: "string"
         },
-
         customerId: {
             name: "Customer",
             type: "reference",
@@ -475,7 +474,7 @@ export const mediaCollection: EntityCollection = {
 };
 
 // Export all collections for easy import
-export const allCollections = [
+export const collections = [
     customersCollection,
     machineryCollection,
     rentalsCollection,

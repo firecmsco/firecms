@@ -3,17 +3,25 @@ import cors from "cors";
 import path from "path";
 import { createServer } from "http";
 import { collectionRegistry, createPostgresDatabaseConnection, createPostgresWebSocket } from "@firecms/backend";
-import { tables } from "./tables";
+
+import * as tables from "./schema.generated";
+import { collections } from "app-shared";
 
 import * as dotenv from "dotenv";
 
 // Load environment from app root level
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
+collections.forEach(collection => collectionRegistry.register(collection));
+
 const app = express();
 const server = createServer(app);
 
-const db = createPostgresDatabaseConnection(process.env.DATABASE_URL as string);
+const databaseUrl = process.env.DATABASE_URL;
+if (!databaseUrl) {
+    throw new Error("DATABASE_URL environment variable is not set");
+}
+const db = createPostgresDatabaseConnection(databaseUrl);
 
 // Middleware
 app.use(cors());
@@ -42,7 +50,6 @@ app.get("/health", (req, res) => {
         collections: collectionRegistry.getAll().length
     });
 });
-
 
 createPostgresWebSocket(server, db, tables);
 

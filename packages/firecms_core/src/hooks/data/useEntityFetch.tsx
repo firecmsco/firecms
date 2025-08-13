@@ -60,7 +60,7 @@ export function useEntityFetch<M extends Record<string, any>, USER extends User>
 
         setDataLoading(true);
 
-        const onEntityUpdate = async (updatedEntity: Entity<M> | undefined) => {
+        const onEntityUpdate = async (updatedEntity?: Entity<M> | null) => {
             if (collection.callbacks?.onFetch && updatedEntity) {
                 try {
                     updatedEntity = await collection.callbacks.onFetch({

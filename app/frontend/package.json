@@ -9,7 +9,7 @@
     "@firecms/collection_editor_firebase": "^3.0.0-canary.258",
     "@firecms/core": "^3.0.0-canary.258",
     "@firecms/postgresql": "3.0.0-canary.258",
-    "app-shared": "file:../shared",
+    "app-shared": "1.0.0",
     "@firecms/data_enhancement": "^3.0.0-canary.258",
     "@firecms/data_export": "^3.0.0-canary.258",
     "@firecms/data_import": "^3.0.0-canary.258",
