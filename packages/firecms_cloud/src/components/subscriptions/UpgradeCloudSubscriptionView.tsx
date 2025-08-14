@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Alert, LoadingButton, RocketLaunchIcon } from "@firecms/ui";
 import { ProductPrice, ProductWithPrices } from "../../types";
-import { SubscribeCloudParams } from "../../hooks";
+import { useSubscriptionsForUserController } from "../../hooks";
 import { CurrencyPriceSelect } from "./CurrencyPriceSelect";
 
 function getDefaultCurrency(productPrice: ProductPrice) {
@@ -12,17 +12,19 @@ export function UpgradeCloudSubscriptionView({
                                                  product,
                                                  includePriceSelect = true,
                                                  largePriceLabel = false,
-                                                 subscribeCloud,
                                                  projectId
                                              }: {
     product: ProductWithPrices,
     projectId?: string,
     includePriceSelect?: boolean,
     largePriceLabel?: boolean,
-    subscribeCloud: (params: SubscribeCloudParams) => Promise<void>
 }) {
 
     const [error, setError] = useState<Error>();
+
+    const {
+        subscribeCloud,
+    } = useSubscriptionsForUserController();
 
     const productPrices: ProductPrice[] = product.prices.filter((p) => Boolean(p.recurring && p.currency_options));
 

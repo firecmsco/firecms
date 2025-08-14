@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useBrowserTitleAndIcon } from "@firecms/core";
-import { AutoAwesomeIcon, Card, Chip, CircularProgress, cls, Typography, } from "@firecms/ui";
+import { AutoAwesomeIcon, Button, Card, Chip, CircularProgress, cls, Tooltip, Typography, } from "@firecms/ui";
 import { useSubscriptionsForUserController } from "../../hooks/useSubscriptionsForUserController";
 import { UpgradeCloudSubscriptionView } from "./UpgradeCloudSubscriptionView";
 import { getPriceString, getSubscriptionStatusText } from "../settings/common";
@@ -23,8 +23,6 @@ export function ProjectSubscriptionPlans() {
 
     const {
         products,
-        subscribeCloud,
-        activeSubscriptions,
         getSubscriptionsForProject
     } = useSubscriptionsForUserController();
 
@@ -66,8 +64,7 @@ export function ProjectSubscriptionPlans() {
 
                     {subscriptionPlan !== "cloud_plus" && plusProduct && <UpgradeCloudSubscriptionView
                         product={plusProduct}
-                        projectId={projectId}
-                        subscribeCloud={subscribeCloud}/>}
+                        projectId={projectId}/>}
 
                     {isSubscribed && plusSubscription &&
                         <CurrentCloudSubscriptionView subscription={plusSubscription}/>}
@@ -144,39 +141,60 @@ function CurrentCloudSubscriptionView({
         }
     }, [subscription.canceled_at]);
 
+    const [stripeUpdatePaymentUrl, setStripeUpdatePaymentUrl] = useState<string | undefined>(undefined);
+
+    useEffect(() => {
+        if (subscription.id) {
+            projectsApi.getStripeUpdateLinkForPaymentMethod(subscription.id)
+                .then(setStripeUpdatePaymentUrl);
+        }
+    }, []);
+
     return (
         <div
             key={subscription.id}
             className="mt-2 mb-2"
         >
-            <div>
-                <>
+            <div className={"flex flex-col gap-2"}>
+                <div>
                     The subscription is <Chip
                     className={"inline"}
                     size={"small"}
                     colorScheme={statusText === "Active" ? "greenDark" : "orangeDark"}>
                     {statusText} </Chip>.
-                </>
 
-                {subscription.current_period_end && <> The next payment is
-                    on {subscription.current_period_end.toDate().toLocaleDateString()}. </>}
+                    {subscription.current_period_end && <> The next payment is
+                        on {subscription.current_period_end.toDate().toLocaleDateString()}. </>}
 
-                <>
-                    The current price is <Chip
-                    size={"small"}>{getPriceString(subscription.price)}
-                </Chip>per user.
-                </>
+                    <>
+                        The current price is <Chip
+                        size={"small"}>{getPriceString(subscription.price)}
+                    </Chip>per user.
+                    </>
 
-                {subscription.cancel_at && <> This subscription was <b>cancelled</b> and
-                    will be active
-                    until {subscription.cancel_at.toDate().toLocaleDateString()}. </>}
+                    {subscription.cancel_at && <> This subscription was <b>cancelled</b> and
+                        will be active
+                        until {subscription.cancel_at.toDate().toLocaleDateString()}. </>}
 
-                {!subscription.canceled_at && <a
-                    className={" " + subscription.canceled_at ? undefined : "text-text-secondary dark:text-text-secondary-dark"}
-                    href={cancelLinkUrl}
-                    target="_blank" rel="noreferrer">{
-                    " Manage subscription"
-                }</a>}
+                    {!subscription.canceled_at && <a
+                        className={" " + subscription.canceled_at ? undefined : "text-text-secondary dark:text-text-secondary-dark"}
+                        href={cancelLinkUrl}
+                        target="_blank" rel="noreferrer">{
+                        " Manage subscription"
+                    }</a>}
+
+                </div>
+
+                {stripeUpdatePaymentUrl && <Button component={"a"}
+                                                   variant={"filled"}
+                                                   color={"neutral"}
+                                                   size={"small"}
+                                                   href={stripeUpdatePaymentUrl}
+                                                   target="_blank"
+                                                   rel="noreferrer">
+                    Update payment method
+                </Button>}
+
             </div>
 
         </div>
