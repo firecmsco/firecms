@@ -21,7 +21,7 @@ function ProFeaturesPanels() {
         {
             icon: iconRadar,
             title: "Dedicated Support",
-            description: "Receive dedicated support with a personal account manager. Address questions or issues quickly and stay focused on delivering your best work."
+            description: "Receive dedicated support with a personal account manager. Address questions or issues quickly and stay focused on delivering your best work. You can prioritize your feature requests and get timely responses."
         },
         {
             icon: iconStars,

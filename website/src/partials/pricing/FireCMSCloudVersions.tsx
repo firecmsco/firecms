@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ContainerMixin, ContainerPaddingMixin, CTACaret, defaultBorderMixin } from "../styles";
 import clsx from "clsx";
 import { LinedSpace } from "../layout/LinedSpace";
@@ -9,28 +9,81 @@ export function FireCMSCloudVersions() {
 
     // Currency state (eur | usd)
     const [currency, setCurrency] = useState<"eur" | "usd">("eur");
+    // Currency actually displayed (lags during animation)
+    const [displayCurrency, setDisplayCurrency] = useState<typeof currency>(currency);
+    const [fading, setFading] = useState(false);
+
+    // Refs for timers to ensure proper cleanup
+    const midTimerRef = useRef<number | null>(null);
+    const endTimerRef = useRef<number | null>(null);
+    const prefersReducedMotion = useRef(false);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            prefersReducedMotion.current = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        }
+    }, []);
+
+    useEffect(() => {
+        // Clear any existing timers
+        if (midTimerRef.current) window.clearTimeout(midTimerRef.current);
+        if (endTimerRef.current) window.clearTimeout(endTimerRef.current);
+
+        if (currency === displayCurrency) {
+            // Nothing to animate
+            setFading(false);
+            return undefined; // explicit
+        }
+
+        if (prefersReducedMotion.current) {
+            setDisplayCurrency(currency);
+            setFading(false);
+            return undefined; // explicit
+        }
+
+        setFading(true);
+        // Fade out then swap
+        midTimerRef.current = window.setTimeout(() => {
+            setDisplayCurrency(currency);
+        }, 140);
+        // Fade back in
+        endTimerRef.current = window.setTimeout(() => {
+            setFading(false);
+        }, 200);
+
+        return () => {
+            if (midTimerRef.current) window.clearTimeout(midTimerRef.current);
+            if (endTimerRef.current) window.clearTimeout(endTimerRef.current);
+        };
+    }, [currency]);
 
     // Fixed price map; adjust USD values if official pricing differs.
     const priceMap = {
         cloud: {
             eur: 9.99,
             usd: 11.99
-        }, // €9.99 ~= $10.99
+        },
         pro: {
             eur: 149.99,
             usd: 199.99
-        }, // €149.99 ~= $159.99
+        },
         free: {
             eur: 0,
             usd: 0
         }
     } as const;
 
-    const symbol = currency === "eur" ? "€" : "$";
+    const symbol = displayCurrency === "eur" ? "€" : "$";
 
     function format(amount: number) {
         return amount === 0 ? `${symbol}0` : `${symbol}${amount.toFixed(2)}`;
     }
+
+    const priceAnim = (extra?: string) => clsx(
+        "inline-block transition-all motion-reduce:transition-none duration-200 ease-out will-change-transform will-change-opacity",
+        fading ? "opacity-0 motion-safe:-translate-y-1 motion-safe:scale-95 motion-safe:blur-[1px]" : "opacity-100 motion-safe:translate-y-0 motion-safe:scale-100 motion-safe:blur-0",
+        extra
+    );
 
     const communityTier = (
         <div
@@ -45,7 +98,7 @@ export function FireCMSCloudVersions() {
             </p>
 
             <div className={"my-4 text-gray-700 w-full"}>
-                <span className={"text-3xl font-bold "}>{format(priceMap.free[currency])} user/month</span>
+                <span className={priceAnim("text-3xl font-bold")}>{format(priceMap.free[displayCurrency])} user/month</span>
             </div>
 
             <div className={"grow mt-4"}>
@@ -82,7 +135,7 @@ export function FireCMSCloudVersions() {
 
             <div className={" mt-4 w-full"}>
                 {/*<span className={"text-2xl block font-bold line-through"}>€11.99 user/month</span>*/}
-                <span className={"text-3xl font-bold text-primary"}>{format(priceMap.cloud[currency])} user/month</span>
+                <span className={priceAnim("text-3xl font-bold text-primary")}>{format(priceMap.cloud[displayCurrency])} user/month</span>
             </div>
 
             <div className={"flex flex-row gap-4 my-6"}>
@@ -136,7 +189,7 @@ export function FireCMSCloudVersions() {
                 Perfect for startups, enterprise or agencies.
             </p>
             <div className={"mt-4  text-gray-800 w-full"}>
-                <span className={"text-3xl font-bold "}>{format(priceMap.pro[currency])} project/month</span>
+                <span className={priceAnim("text-3xl font-bold")}>{format(priceMap.pro[displayCurrency])} project/month</span>
             </div>
             <div className={"w-fit my-6 flex flex-row gap-2"}>
                 <div
@@ -155,9 +208,9 @@ export function FireCMSCloudVersions() {
 
             <div className={"grow"}>
                 <ul className={"pl-4"}>
+                    <li className={"list-disc ml-2"}><Tip tip={"Easily design and infer data schemas for your project."}>Self-hosted</Tip></li>
                     <li className={"list-disc ml-2"}><Tip tip={"Easily design and infer data schemas for your project."}>Schema editor and data inference</Tip></li>
                     <li className={"list-disc ml-2"}><Tip tip={"Manage complex data migrations with advanced tools."}>Advanced data import and export</Tip></li>
-                    <li className={"list-disc ml-2"}><Tip tip={"Manage complex data migrations with advanced tools."}>Data import and export</Tip></li>
                     <li className={"list-disc ml-2"}><Tip tip={"Edit content seamlessly with an intuitive Notion-like interface."}>Notion-style editor</Tip></li>
                     <li className={"list-disc ml-2"}><Tip tip={"Instantly search through your data with powerful query capabilities."}>Local text search</Tip></li>
                     <li className={"list-disc ml-2"}><Tip tip={"Fine-tune user permissions and roles for your team."}>User and role management</Tip></li>
@@ -197,8 +250,8 @@ export function FireCMSCloudVersions() {
                             className={clsx(
                                 "px-2 py-0.5 rounded font-medium transition-colors",
                                 currency === "eur"
-                                    ? "text-gray-800 dark:text-gray-200 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700"
-                                    : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                                    ? "text-gray-800  bg-gray-200 border border-gray-300"
+                                    : "text-gray-500 hover:text-gray-700"
                             )}
                         >EUR €
                         </button>
@@ -209,8 +262,8 @@ export function FireCMSCloudVersions() {
                             className={clsx(
                                 "px-2 py-0.5 rounded font-medium transition-colors",
                                 currency === "usd"
-                                    ? "text-gray-800 dark:text-gray-200 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700"
-                                    : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                                    ? "text-gray-800 bg-gray-200 border border-gray-300"
+                                    : "text-gray-500 hover:text-gray-700"
                             )}
                         >USD $
                         </button>
@@ -227,11 +280,6 @@ export function FireCMSCloudVersions() {
                 {proTier}
             </div>
 
-            {/*<ThreeColumns*/}
-            {/*    left={freeTier}*/}
-            {/*    center={plusTier}*/}
-            {/*    right={proTier}*/}
-            {/*/>*/}
 
         </div>
         <LinedSpace position={"top"} size={"medium"}/>
