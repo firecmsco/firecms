@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ContainerMixin, ContainerPaddingMixin, CTACaret, defaultBorderMixin } from "../styles";
 import clsx from "clsx";
 import { LinedSpace } from "../layout/LinedSpace";
@@ -6,6 +6,31 @@ import { Tip } from "./Tip";
 import { AppLink } from "../../AppLink";
 
 export function FireCMSCloudVersions() {
+
+    // Currency state (eur | usd)
+    const [currency, setCurrency] = useState<"eur" | "usd">("eur");
+
+    // Fixed price map; adjust USD values if official pricing differs.
+    const priceMap = {
+        cloud: {
+            eur: 9.99,
+            usd: 11.99
+        }, // €9.99 ~= $10.99
+        pro: {
+            eur: 149.99,
+            usd: 199.99
+        }, // €149.99 ~= $159.99
+        free: {
+            eur: 0,
+            usd: 0
+        }
+    } as const;
+
+    const symbol = currency === "eur" ? "€" : "$";
+
+    function format(amount: number) {
+        return amount === 0 ? `${symbol}0` : `${symbol}${amount.toFixed(2)}`;
+    }
 
     const communityTier = (
         <div
@@ -20,7 +45,7 @@ export function FireCMSCloudVersions() {
             </p>
 
             <div className={"my-4 text-gray-700 w-full"}>
-                <span className={"text-3xl font-bold "}>€0 user/month</span>
+                <span className={"text-3xl font-bold "}>{format(priceMap.free[currency])} user/month</span>
             </div>
 
             <div className={"grow mt-4"}>
@@ -57,7 +82,7 @@ export function FireCMSCloudVersions() {
 
             <div className={" mt-4 w-full"}>
                 {/*<span className={"text-2xl block font-bold line-through"}>€11.99 user/month</span>*/}
-                <span className={"text-3xl font-bold text-primary"}>€9.99 user/month</span>
+                <span className={"text-3xl font-bold text-primary"}>{format(priceMap.cloud[currency])} user/month</span>
             </div>
 
             <div className={"flex flex-row gap-4 my-6"}>
@@ -68,10 +93,8 @@ export function FireCMSCloudVersions() {
                     rel="noopener noreferrer"
                     target="_blank"
                     onClick={() => {
-                        // @ts-ignore
-                        if (window.gtag) {
-                            // @ts-ignore
-                            window.gtag("event", "go_to_app", {
+                        if (typeof window !== "undefined" && (window as any).gtag) {
+                            (window as any).gtag("event", "go_to_app", {
                                 event_category: "pricing",
                                 event_label: "cloud_versions"
                             });
@@ -113,7 +136,7 @@ export function FireCMSCloudVersions() {
                 Perfect for startups, enterprise or agencies.
             </p>
             <div className={"mt-4  text-gray-800 w-full"}>
-                <span className={"text-3xl font-bold "}>€49.99 project/month</span>
+                <span className={"text-3xl font-bold "}>{format(priceMap.pro[currency])} project/month</span>
             </div>
             <div className={"w-fit my-6 flex flex-row gap-2"}>
                 <div
@@ -152,9 +175,11 @@ export function FireCMSCloudVersions() {
     return <section
         className={clsx(defaultBorderMixin, "flex flex-col text-gray-900 items-center justify-center text-lg border-0 border-t bg-gray-100 z-10")}>
 
-        <div className={clsx(ContainerMixin, ContainerPaddingMixin, defaultBorderMixin, "flex flex-col gap-8 border-r border-l border-t-0 border-b-0")}>
-            <div className={"max-w-4xl mx-auto"}>
-                <p className={"max-w-6xl mx-auto mt-0 mb-8"}>
+        <div
+            className={clsx(ContainerMixin, ContainerPaddingMixin, defaultBorderMixin, "flex flex-col gap-8 border-r border-l border-t-0 border-b-0")}>
+            {/* Description */}
+            <div className="max-w-4xl mx-auto w-full">
+                <p className={"max-w-6xl mx-auto mt-0 mb-0"}>
                     <strong>FireCMS Cloud</strong> offers a complete, end-to-end
                     solution for businesses that require the highest level of
                     support and security. With dedicated hosting, advanced features, and
@@ -162,6 +187,38 @@ export function FireCMSCloudVersions() {
                     to the next level.
                 </p>
             </div>
+
+            <div className="mt-2 mb-2 flex justify-center w-full">
+                <div className="flex items-center gap-2 text-xs md:text-sm text-gray-500">
+                    <div className="inline-flex items-center gap-1">
+                        <button
+                            onClick={() => setCurrency("eur")}
+                            aria-pressed={currency === "eur"}
+                            className={clsx(
+                                "px-2 py-0.5 rounded font-medium transition-colors",
+                                currency === "eur"
+                                    ? "text-gray-800 dark:text-gray-200 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700"
+                                    : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                            )}
+                        >EUR €
+                        </button>
+                        <span className="text-gray-400">/</span>
+                        <button
+                            onClick={() => setCurrency("usd")}
+                            aria-pressed={currency === "usd"}
+                            className={clsx(
+                                "px-2 py-0.5 rounded font-medium transition-colors",
+                                currency === "usd"
+                                    ? "text-gray-800 dark:text-gray-200 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700"
+                                    : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                            )}
+                        >USD $
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Pricing cards */}
             <div
                 className="flex flex-col items-center md:grid md:grid-cols-3 gap-4 w-full mx-auto"
             >
