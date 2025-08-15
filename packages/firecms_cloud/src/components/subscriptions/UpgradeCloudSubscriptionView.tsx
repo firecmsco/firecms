@@ -15,7 +15,7 @@ export function UpgradeCloudSubscriptionView({
                                                  projectId
                                              }: {
     product: ProductWithPrices,
-    projectId?: string,
+    projectId: string,
     includePriceSelect?: boolean,
     largePriceLabel?: boolean,
 }) {

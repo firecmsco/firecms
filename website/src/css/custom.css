@@ -764,7 +764,7 @@ code.language-sass .token.property, code.language-scss .token.property {
     left: 0;
     width: 100%;
     height: 100%;
-    min-height: 1200px; /* Ensure it covers the entire viewport */
+    min-height: 1400px; /* Ensure it covers the entire viewport */
     overflow: hidden; /* Clip the child blobs */
     z-index: 0; /* Place behind content (which should have z-10 or higher) */
 }
@@ -803,10 +803,10 @@ code.language-sass .token.property, code.language-scss .token.property {
 
 /* Blob 3 (Orange) */
 .blob-3 {
-    width: 45vw;
-    height: 45vw;
+    width: 40vw;
+    height: 40vw;
     background: radial-gradient(circle at 55% 45%, rgba(255, 138, 61, 0.78), rgba(255, 138, 61, 0) 67%);
-    top: 55%;
+    top: 50%;
     left: 50%;
     animation: moveBlob3 16s infinite alternate ease-in-out;
     animation-delay: -4s;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useBrowserTitleAndIcon } from "@firecms/core";
-import { AutoAwesomeIcon, Button, Card, Chip, CircularProgress, cls, Tooltip, Typography, } from "@firecms/ui";
+import { AutoAwesomeIcon, Button, Card, Chip, CircularProgress, cls, Typography, } from "@firecms/ui";
 import { useSubscriptionsForUserController } from "../../hooks/useSubscriptionsForUserController";
 import { UpgradeCloudSubscriptionView } from "./UpgradeCloudSubscriptionView";
 import { getPriceString, getSubscriptionStatusText } from "../settings/common";
@@ -35,7 +35,11 @@ export function ProjectSubscriptionPlans() {
     const plusProduct = cloudProducts.find(p => p.metadata?.type === "cloud_plus");
     const plusSubscription = projectSubscriptions.find(s => s.product.metadata?.type === "cloud_plus");
 
-    const isSubscribed = subscriptionPlan === "cloud_plus";
+    const trialIsActive = Boolean(trialValidUntil && trialValidUntil > new Date());
+
+    const activePlusSubscription = projectSubscriptions.find(s => s.product.metadata?.type === "cloud_plus" && s.status === "active");
+    const isSubscribed = Boolean(activePlusSubscription);
+
     return (
         <div className={"relative"}>
 
@@ -55,16 +59,24 @@ export function ProjectSubscriptionPlans() {
                             You are currently subscribed to <Chip size={"small"}>FireCMS Cloud</Chip>.
                         </Typography>}
 
-                    {!isSubscribed && trialValidUntil &&
+                    {!isSubscribed && <Typography
+                        variant={"subtitle1"}
+                        className="my-2">
+                        Currently there is no active subscription for this project.
+                    </Typography>}
+
+
+                    {!isSubscribed && trialIsActive && trialValidUntil &&
                         <Typography
                             variant={"subtitle1"}
                             className="my-2">
                             Your trial is valid until {trialValidUntil.toLocaleDateString()}.
                         </Typography>}
 
-                    {subscriptionPlan !== "cloud_plus" && plusProduct && <UpgradeCloudSubscriptionView
+                    {!isSubscribed && plusProduct && <UpgradeCloudSubscriptionView
                         product={plusProduct}
                         projectId={projectId}/>}
+
 
                     {isSubscribed && plusSubscription &&
                         <CurrentCloudSubscriptionView subscription={plusSubscription}/>}
