@@ -29,7 +29,7 @@ function HeroHome({}) {
                         <div>
                             <LinedSpace/>
 
-                            <h1 className={clsx("m-0 mt-16 md:mt-24 text-center block text-5xl md:text-6xl font-bold tracking-tight leading-none uppercase text-white",
+                            <h1 className={clsx("m-0 mt-20 md:mt-24 text-center block text-5xl md:text-6xl font-bold tracking-tight leading-none uppercase text-white",
                                 "px-8 md:px-16 py-4 md:py-8")}>
 
                                 <span className={"block"}>
