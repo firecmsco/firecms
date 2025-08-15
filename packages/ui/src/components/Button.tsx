@@ -43,7 +43,7 @@ const ButtonInner = React.forwardRef<
         "border border-secondary bg-secondary focus:ring-secondary shadow hover:ring-1 hover:ring-secondary text-white hover:text-white": variant === "filled" && color === "secondary" && !disabled,
         "border border-red-500 bg-red-500 hover:bg-red-500 focus:ring-red-500 shadow hover:ring-1 hover:ring-red-600 text-white hover:text-white": variant === "filled" && color === "error" && !disabled,
         "border border-surface-accent-200 bg-surface-accent-200 hover:bg-surface-accent-300 focus:ring-surface-accent-400 shadow hover:ring-1 hover:ring-surface-accent-400 text-text-primary hover:text-text-primary dark:text-text-primary-dark hover:dark:text-text-primary-dark": variant === "filled" && color === "text" && !disabled,
-        "border border-transparent bg-surface-100 hover:bg-surface-accent-200 text-text-primary dark:bg-surface-800 dark:hover:bg-surface-accent-700 dark:text-text-primary-dark": variant === "filled" && color === "neutral" && !disabled,
+        "border border-transparent bg-surface-100 hover:bg-surface-accent-200 text-text-primary dark:bg-surface-800 dark:hover:bg-surface-accent-700 dark:text-text-primary-dark hover:text-text-primary dark:text-text-primary-dark hover:dark:text-text-primary-dark": variant === "filled" && color === "neutral" && !disabled,
 
         // Text Variants
         "border border-transparent text-primary hover:text-primary hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-800": variant === "text" && color === "primary" && !disabled,
