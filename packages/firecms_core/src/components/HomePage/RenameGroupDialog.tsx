@@ -101,10 +101,14 @@ export function RenameGroupDialog({ open, initialName, existingGroupNames, onClo
                 {error && <p id="group-name-error" style={{ display: "none" }}>{error}</p>}
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose} variant="text">
+                <Button onClick={onClose}
+                        color={"primary"}
+                        variant="text">
                     Cancel
                 </Button>
-                <Button onClick={handleSave} disabled={!!error || !name.trim()}>
+                <Button onClick={handleSave}
+                        color={"primary"}
+                        disabled={!!error || !name.trim()}>
                     Save
                 </Button>
             </DialogActions>

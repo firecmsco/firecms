@@ -295,6 +295,7 @@ export function PropertyFormDialog({
 
                 {onCancel && <Button
                     variant={"text"}
+                    color={"primary"}
                     onClick={() => {
                         onCancel();
                         formexRef.current?.resetForm();

@@ -1,5 +1,5 @@
 import { EntityCollection, isEmptyObject, useSnackbarController } from "@firecms/core";
-import { Button, ContentCopyIcon, Dialog, DialogActions, DialogContent, DialogTitle, Typography, } from "@firecms/ui";
+import { Button, ContentCopyIcon, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@firecms/ui";
 import React from "react";
 import JSON5 from "json5";
 import { Highlight, themes } from "prism-react-renderer"
@@ -59,12 +59,13 @@ export function GetCodeDialog({
             <Button
                 variant={"text"}
                 size={"small"}
+                color={"primary"}
                 onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
                     snackbarController.open({
                         type: "success",
-                        message: `Copied`
+                        message: "Copied"
                     })
                     return navigator.clipboard.writeText(code);
                 }}>
@@ -133,7 +134,8 @@ function collectionToCode(collection: EntityCollection): object {
             .map(([key, value]) => ({
                 [key]: propertyCleanup(value)
             }))
-            .reduce((a, b) => ({ ...a, ...b }), {}),
+            .reduce((a, b) => ({ ...a,
+...b }), {}),
         subcollections: (collection.subcollections ?? []).map(collectionToCode)
     }
 

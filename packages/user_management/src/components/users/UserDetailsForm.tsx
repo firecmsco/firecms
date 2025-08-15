@@ -205,6 +205,7 @@ export function UserDetailsForm({
                     <DialogActions>
 
                         <Button variant={"text"}
+                                color={"primary"}
                                 onClick={() => {
                                     handleClose();
                                 }}>
@@ -217,7 +218,6 @@ export function UserDetailsForm({
                             type="submit"
                             disabled={!dirty}
                             loading={isSubmitting}
-                            startIcon={<CheckIcon/>}
                         >
                             {isNewUser ? "Create user" : "Update"}
                         </LoadingButton>

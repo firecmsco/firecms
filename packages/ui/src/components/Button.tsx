@@ -27,7 +27,7 @@ const ButtonInner = React.forwardRef<
        startIcon = null,
        fullWidth = false,
        component: Component,
-       color = "primary",
+       color = "neutral",
        ...props
    }: ButtonProps<any>, ref) => {
 
@@ -57,7 +57,7 @@ const ButtonInner = React.forwardRef<
         "border border-secondary text-secondary hover:text-secondary hover:bg-secondary-bg": variant === "outlined" && color === "secondary" && !disabled,
         "border border-red-500 text-red-500 hover:text-red-500 hover:bg-red-500 hover:text-white": variant === "outlined" && color === "error" && !disabled,
         "border border-surface-accent-400 text-text-primary hover:text-text-primary dark:text-text-primary-dark hover:bg-surface-accent-200": variant === "outlined" && color === "text" && !disabled,
-        "border border-surface-400 text-text-primary hover:bg-surface-accent-200 dark:border-surface-600 dark:text-text-primary-dark dark:hover:bg-surface-accent-700": variant === "outlined" && color === "neutral" && !disabled,
+        "border border-surface-300 text-text-primary hover:bg-surface-accent-200 dark:border-surface-600 dark:text-text-primary-dark dark:hover:bg-surface-accent-700": variant === "outlined" && color === "neutral" && !disabled,
 
         // Disabled states for all variants
         "text-text-disabled dark:text-text-disabled-dark": disabled,

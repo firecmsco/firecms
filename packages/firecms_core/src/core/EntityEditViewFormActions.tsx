@@ -142,7 +142,9 @@ function buildBottomActions<M extends object>({
                                               }: ActionsViewProps<M>) {
 
     const canClose = openEntityMode === "side_panel";
-    return <DialogActions position={"absolute"}>
+    return <DialogActions
+        color={"primary"}
+        position={"absolute"}>
         {savingError &&
             <div className="text-right">
                 <Typography color={"error"}>{savingError.message}</Typography>

@@ -62,6 +62,7 @@ export function OpenAIInstructionsActions() {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}
+                            color={"primary"}
                             variant={"filled"}>
                         Got it!
                     </Button>

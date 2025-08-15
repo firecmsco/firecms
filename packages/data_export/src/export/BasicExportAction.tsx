@@ -134,11 +134,13 @@ export function BasicExportAction({
             <DialogActions>
 
                 <Button onClick={handleClose}
+                        color={"primary"}
                         variant={"text"}>
                     Cancel
                 </Button>
 
                 <Button variant="filled"
+                        color={"primary"}
                         onClick={onOkClicked}>
                     Download
                 </Button>

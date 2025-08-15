@@ -695,6 +695,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                         {isNewCollection && includeTemplates && currentView === "import_data_mapping" &&
                             <Button variant={"text"}
                                     type="button"
+                                    color={"primary"}
                                     onClick={() => {
                                         importConfig.setInUse(false);
                                         return setCurrentView("welcome");
@@ -706,6 +707,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                         {isNewCollection && includeTemplates && currentView === "import_data_preview" &&
                             <Button variant={"text"}
                                     type="button"
+                                    color={"primary"}
                                     onClick={() => {
                                         setCurrentView("import_data_mapping");
                                     }}>
@@ -715,6 +717,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
                         {isNewCollection && includeTemplates && currentView === "details" &&
                             <Button variant={"text"}
+                                    color={"primary"}
                                     type="button"
                                     onClick={() => setCurrentView("welcome")}>
                                 <ArrowBackIcon/>
@@ -723,12 +726,14 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
                         {isNewCollection && currentView === "properties" && <Button variant={"text"}
                                                                                     type="button"
+                                                                                    color={"primary"}
                                                                                     onClick={() => setCurrentView("details")}>
                             <ArrowBackIcon/>
                             Back
                         </Button>}
 
                         <Button variant={"text"}
+                                color={"primary"}
                                 onClick={() => {
                                     handleCancel();
                                 }}>

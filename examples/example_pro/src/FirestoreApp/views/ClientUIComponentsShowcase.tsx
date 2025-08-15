@@ -359,6 +359,7 @@ export default function ClientUIComponentsShowcase({
                     <DialogActions>
                         <Button
                             color="primary"
+                            color={"primary"}
                             onClick={() => setDialogOpen(false)}>
                             Ok
                         </Button>

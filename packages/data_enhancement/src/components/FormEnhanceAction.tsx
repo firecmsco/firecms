@@ -124,7 +124,7 @@ export function FormEnhanceAction({
                              fullWidth={largeLayout && openEntityMode === "full_screen"}
                              size={"small"}
                              disabled={loading || disabled}>
-                {!loading && <AutoFixHighIcon color={"primary"}/>}
+                {!loading && <AutoFixHighIcon/>}
                 {loading && <CircularProgress size={"small"}/>}
                 Autofill
             </Button>}>
