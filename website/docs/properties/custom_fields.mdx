@@ -24,7 +24,17 @@ Custom fields let you fully control how a property's value is edited and display
     <source src="/img/custom_fields_dark.mp4" type="video/mp4"/>
 </video>
 
-## Minimal working example
+## When should you create a custom field?
+Use a custom field when you need one (or more) of the following:
+- A visual style not covered by built‑ins (color pickers, tag inputs, sliders, charts, AI assisted fields, etc.)
+- Composite UI combining several properties (e.g. lat/lng map picker writing to two numeric fields)
+- Integrations (upload to an external API, fetch suggestions, geocode, etc.)
+
+If you only need validation or simple transformation, prefer property level `validation` options first to keep things simple.
+If you need dynamic behavior depending on other values, consider using [conditional fields](./conditional_fields.md) instead.
+
+
+## Custom field example
 A custom text field with a background color supplied via `customProps` (scroll below for full prop contract and advanced techniques):
 
 ```tsx
@@ -94,15 +104,6 @@ export const blogCollection = buildCollection({
 });
 ```
 
-## When should you create a custom field?
-Use a custom field when you need one (or more) of the following:
-- A visual style not covered by built‑ins (color pickers, tag inputs, sliders, charts, AI assisted fields, etc.)
-- Composite UI combining several properties (e.g. lat/lng map picker writing to two numeric fields)
-- Dynamic behavior depending on other values (e.g. discount % only if `isOnSale`)
-- Integrations (upload to an external API, fetch suggestions, geocode, etc.)
-
-If you only need validation or simple transformation, prefer property level `validation` or `config` options first to keep things simple.
-
 ## Component contract (FieldProps)
 Your component must at minimum:
 1. Read the current `value` (it can be `undefined` or `null` for empty)
@@ -118,16 +119,8 @@ Full interface: [`FieldProps`](../api/interfaces/FieldProps) (includes detailed 
 ## Passing custom props
 Provide a `customProps` object in the property definition. The object is strongly typed via the second generic of `FieldProps<T, CustomProps>`.
 
-```ts
-interface CustomColorTextFieldProps { color: string }
 
-Field: CustomColorTextField,
-customProps: { color: "gold" }
-```
-
-In your component: `customProps?.color`.
-
-## Accessing the rest of the entity (context)
+## Accessing the rest of the entity (form context)
 `context` gives you live access to:
 - All current values (`context.values`)
 - `context.setFieldValue(key, value)` to update any other field
@@ -137,7 +130,8 @@ In your component: `customProps?.color`.
 This enables cross‑field logic (e.g. auto‑fill slug when title changes) or conditional disabling.
 
 ## Rendering (or composing) other properties inside a custom field
-If your custom field wants to include the UI of another property, use `PropertyFieldBinding`. This keeps validation and consistency:
+If your custom field wants to include the UI of another property, use `PropertyFieldBinding`.
+This keeps validation and consistency:
 
 ```tsx
 import { PropertyFieldBinding } from "@firecms/core";
@@ -151,6 +145,7 @@ import { PropertyFieldBinding } from "@firecms/core";
 ```
 
 This is ideal for composite widgets that orchestrate multiple underlying values.
+For example, the built-in `map` default widget is just a wrapper around the properties defined
 
 ## Handling arrays & nested data
 When your custom field is inside an array:
@@ -160,7 +155,8 @@ When your custom field is inside an array:
 For nested values (e.g. editing `address.street` inside a composite field), call `setFieldValue("address.street", value)`.
 
 ## Validation strategies
-Prefer declarative validation in the property config when possible. You can still implement client‑side guards in the field (e.g. ignore invalid keystrokes) but allow the central validation to surface errors.
+Prefer declarative validation in the property config when possible. You can still implement client‑side
+guards in the field (e.g. ignore invalid keystrokes) but allow the central validation to surface errors.
 
 Common patterns:
 - Trim on blur but preserve user typing: keep raw input in local state, call `setValue` with cleaned value on blur.

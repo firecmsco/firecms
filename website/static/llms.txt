@@ -2,7 +2,7 @@
 
 > This is the documentation for FireCMS, a headless CMS for Firebase/MongoDB. It is a powerful tool to manage your data,
 > with a focus on developer experience and extensibility.
-> Easy to get started, easy to customize and easy to extend.FireCMS is great both for existing projects, since it will
+> Easy to get started, easy to customize and easy to extend.FireCMS is great both for existing projects, since it will 
 > adapt to any database structure you have, as well as for new ones.
 
 ## Getting started
@@ -481,7 +481,7 @@ firecms deploy --project=your-project-id
 
 ### Deployment
 
-FireCMS Cloud projects can only be deployed to FireCMS Cloud.
+FireCMS Cloud projects can only be deployed to FireCMS Cloud. 
 
 If you need a self-hosted version of FireCMS, you can use the PRO plan, or use the community version.
 Since the APIs are the same for all versions, you can easily switch between them.
@@ -2108,7 +2108,7 @@ return <NavigationRoutes homePage={<>My custom home page</>}>
 </NavigationRoutes>
 ```
 
-Note that you can also define custom views by defining them in `useBuildNavigationController`, with the
+Note that you can also define custom views by defining them in `useBuildNavigationController`, with the 
 added benefit that they will be automatically included in the default drawer.
 
 #### SideDialogs
@@ -2116,7 +2116,7 @@ added benefit that they will be automatically included in the default drawer.
 The `SideDialogs` component is a container for side dialogs. Side dialogs are typically used to display forms or
 additional information in a side panel.
 
-You can access the `useSideDialogsController` hook to open and close side dialogs programmatically from your
+You can access the `useSideDialogsController` hook to open and close side dialogs programmatically from your 
 custom components.
 
 ### Utilities
@@ -2226,7 +2226,7 @@ export default {
                     "disabled-dark": "rgb(35 35 37)"
                 },
                 "text": {
-                    "primary": "rgba(0, 0, 0, 0.75)",
+                    "primary": "rgba(0, 0, 0, 0.87)",
                     "secondary": "rgba(0, 0, 0, 0.55)",
                     "disabled": "rgba(0, 0, 0, 0.38)",
                     "primary-dark": "#ffffff",
@@ -2384,8 +2384,8 @@ If you need to customize any other aspect of FireCMS, please [let us know](https
 
 ## Self-Hosted Deployment
 
-FireCMS works as a **headless CMS** on top of Firebase. It builds as a **single page application** that can be deployed
-to any static hosting provider. It does not require any server-side code.
+FireCMS works as a **headless CMS** on top of Firebase. It builds as a **single page application** that can be deployed 
+to any static hosting provider. It does not require any server-side code. 
 
 We recommend deploying to Firebase Hosting, as it is in the same ecosystem, and FireCMS will even
 pick up the Firebase config from the environment.
@@ -2605,7 +2605,7 @@ service cloud.firestore {
       allow read: if false;
       allow write: if false;
     }
-
+    
     // allow every read to products collection but write only to authenticated users
     match /databases/{database}/documents {
         match /products/{id=**} {
@@ -2613,7 +2613,7 @@ service cloud.firestore {
           allow write: if request.auth != null;
         }
     }
-
+    
     // allow users to modify only their own user document
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
@@ -3145,7 +3145,7 @@ Firestore collections. The Collection Editor UI Plugin provides an interface for
 collections, with support for customizable permissions and configuration options.
 
 Typically, collections in FireCMS are defined in code, and passed as a prop to the `NavigationController` on
-initialization. The Collection Editor UI Plugin allows you to manage collections directly in the application, providing
+initialization. The Collection Editor UI Plugin allows you to manage collections directly in the application, providing 
 a more user-friendly and flexible way to organize and configure your Firestore collections.
 
 In this document, we will cover how to set up and use this plugin in your FireCMS application.
@@ -3317,7 +3317,7 @@ function App() {
         collectionEditorPlugin,
         userManagementPlugin
     ];
-
+    
     const navigationController = useBuildNavigationController({
         collections: collectionsBuilder(),
         views: customViews,
@@ -3781,7 +3781,7 @@ The main hook to utilize the plugin's functionality is `useExportPlugin`. Here's
 ```jsx
 
 function App() {
-
+    
     const exportPlugin = useExportPlugin({
         exportAllowed: ({
                             collectionEntitiesCount,
@@ -3803,7 +3803,7 @@ function App() {
         // ... rest of your config
         plugins
     });
-
+    
     return (
             <FireCMS
                 navigationController={navigationController}
@@ -3985,10 +3985,10 @@ export type ImportPluginProps = {
 Provides context for determining import permissions.
 
 ```typescript
-export type ImportAllowedParams = {
-    collectionEntitiesCount: number;
-    path: string;
-    collection: EntityCollection;
+export type ImportAllowedParams = { 
+    collectionEntitiesCount: number; 
+    path: string; 
+    collection: EntityCollection; 
 };
 ```
 
@@ -5766,7 +5766,7 @@ account and manage the indexing of your documents.
 
 You can achieve this by implementing a Google Cloud Function that listens to
 Firestore changes and updates the Algolia index.
-There is also a [Firebase extension](https://extensions.dev/extensions/algolia/firestore-algolia-search)
+There is also a [Firebase extension](https://extensions.dev/extensions/algolia/firestore-algolia-search) 
 for the very same purpose.
 
 The examples below show how to use Algolia as an external search provider, using the `algoliasearch` library version 5.
@@ -6214,7 +6214,7 @@ match /{path=**}/locales/{document=**} {
 ```
 
 When doing a collection group query, the path will be something like
-`/products/{productId}/locales/{localeId}`. But the query will go to all
+`/products/{productId}/locales/{localeId}`. But the query will go to all 
 the collections called `locales` in your database. That is why you might need
 to add a rule like the one above.
 :::
@@ -6273,7 +6273,7 @@ export const productsCollection = buildCollection<Product>({
     ],
     properties: {}
 });
-```
+````
 
 #### Defining actions globally
 
@@ -6281,6 +6281,7 @@ You can define entity actions globally by passing them to the `FireCMS` componen
 or in the `FireCMSAppConfig` if you are using FireCMS Cloud.
 
 ```tsx
+
 // Self-hosted
 <FireCMS
     entityActions={[{
@@ -6296,6 +6297,7 @@ or in the `FireCMSAppConfig` if you are using FireCMS Cloud.
 ```
 
 ```tsx
+
 // FireCMS Cloud
 const appConfig: FireCMSAppConfig = {
     entityActions: [{
@@ -6316,11 +6318,11 @@ const appConfig: FireCMSAppConfig = {
 * `key`?: Key of the action. You only need to provide this if you want to
   override the default actions, or if you are defining the action globally.
   The default actions are:
-    - edit
-    - delete
-    - copy
+  * `edit`
+  * `delete`
+  * `copy`
 * `icon`?: React.ReactElement Icon of the action
-* `onClick`: (props: EntityActionClickProps) => Promise
+* `onClick`: (props: EntityActionClickProps) =\> Promise
   Function to be called when the action is clicked
 * `collapsed`?: boolean Show this action collapsed in the menu of the collection view. Defaults to true. If false, the
   action will be shown in the menu
@@ -6344,15 +6346,17 @@ const appConfig: FireCMSAppConfig = {
 * `openEntityMode`: "side_panel" | "full_screen"
 * `navigateBack`?: () => void
 
-### Example
+### Examples
 
 Let's build an example where we add an action to archive a product.
-When the action is clicked, we will call a Google Cloud Function to that will run some business logic,
-in the backend.
+When the action is clicked, we will call a Google Cloud Function that will run some business logic in the backend.
 
-In this example, we will use the `fetch` API to call the function.
+#### Using the `fetch` API
+
+You can use the standard `fetch` API to call any HTTP endpoint, including a Google Cloud Function. This is a general-purpose method that works with any backend.
 
 ```tsx
+
 export const productsCollection = buildCollection<Product>({
     id: "products",
     path: "products",
@@ -6364,7 +6368,6 @@ export const productsCollection = buildCollection<Product>({
             collapsed: false,
             onClick({
                         entity,
-                        collection,
                         context,
                     }) {
                 const snackbarController = context.snackbarController;
@@ -6393,10 +6396,58 @@ export const productsCollection = buildCollection<Product>({
 });
 ```
 
+#### Using the Firebase Functions SDK
+
+If you're using Firebase, the recommended approach is to use the Firebase Functions SDK. It simplifies calling functions and automatically handles authentication tokens.
+
+First, ensure you have the `firebase` package installed and initialized in your project.
+
+Then, you can define your action like this:
+
+```tsx
+
+// Initialize Firebase Functions
+// Make sure you have initialized Firebase elsewhere in your app
+const functions = getFunctions();
+const archiveProductCallable = httpsCallable(functions, 'archiveProduct');
+
+export const productsCollection = buildCollection<Product>({
+    id: "products",
+    path: "products",
+    // other properties
+    entityActions: [
+        {
+            icon: <ArchiveIcon/>,
+            name: "Archive with Firebase",
+            collapsed: false,
+            async onClick({
+                        entity,
+                        context,
+                    }) {
+                const snackbarController = context.snackbarController;
+                try {
+                    await archiveProductCallable({ productId: entity.id });
+                    snackbarController.open({
+                        message: "Product archived successfully",
+                        type: "success"
+                    });
+                } catch (error) {
+                    console.error("Error archiving product:", error);
+                    snackbarController.open({
+                        message: "Error archiving product: " + error.message,
+                        type: "error"
+                    });
+                }
+            }
+        }
+    ],
+});
+```
+
 ## Properties
 
 Properties define each **field** in a form or column in a collection included in an
-entity collection.
+entity collection. 
 
 You can build properties by creating the object directly or by
 using the helper method `buildProperty` (just the identity function that uses
@@ -6874,8 +6925,8 @@ is [`SwitchFieldBinding`](https://firecms.co/docs/../api/functions/SwitchFieldBi
 
 Use the date/time fields to allow users to set dates, saved as Firestore timestamps.
 
-You can choose between using dates or date/time fields.
-Also you can create read-only fields that get updated automatically when
+You can choose between using dates or date/time fields. 
+Also you can create read-only fields that get updated automatically when 
 entities are created or updated
 
 The data type is [`date`](https://firecms.co/docs/config/date).
@@ -6934,11 +6985,11 @@ buildProperty({
 ## References
 
 Use reference fields when you need to establish relations between collections.
-For example, you may have a product that is related to one category, or one
+For example, you may have a product that is related to one category, or one 
 that has multiple purchases.
 
 When you set up a FireCMS app, you define collections under paths (or path
-aliases), and those are the paths that you use to configure reference
+aliases), and those are the paths that you use to configure reference 
 properties.
 
 #### Single reference field
@@ -6976,7 +7027,7 @@ buildProperty({
 ```
 
 The data type is [`array`](https://firecms.co/docs/config/array) with a reference
-property as the `of` prop.
+property as the `of` prop. 
 
 Internally the component used
 is [`ArrayOfReferencesFieldBinding`](https://firecms.co/docs/../api/functions/ArrayOfReferencesFieldBinding).
@@ -7182,7 +7233,7 @@ Each property in the CMS has its own API, but they all share some **common props
 * `defaultValue`
   This value will be set by default for new entities.
 
-
+  
 
 
 ## String
@@ -7829,7 +7880,7 @@ Links:
 
 When defining the properties of a collection, you can choose to use a builder
 [`PropertyBuilder`](https://firecms.co/docs/api/type-aliases/PermissionsBuilder), instead of assigning the
-property configuration directly.
+property configuration directly. 
 
 This is useful for changing property configurations like available values on the
 fly, based on other values.
@@ -7941,11 +7992,14 @@ export const userSchema: EntityCollection = buildCollection<User>({
 
 ## Custom fields
 
+Custom fields let you fully control how a property's value is edited and displayed in a form. Instead of the built‑in renderer for a `dataType`, you supply a React component. That component receives a rich set of props (`FieldProps`) so it can:
 
-Custom fields allow you to customize the field that it is displayed in the
-form, related to a specific property. These fields use your own logic to
-render the corresponding view, and are responsible for updating the underlying
-property value.
+- Read and update the current value (`value`, `setValue`)
+- Update any other property in the same form (`setFieldValue` or `context.setFieldValue`)
+- Access all current entity values + form utilities (`context`)
+- Respect form state (`isSubmitting`, `disabled`, `showError`, `error`, `touched`)
+- Adapt layout (`size`, `partOfArray`, `minimalistView`, `autoFocus`)
+- Use developer defined `customProps`
 
 <video style={{
     maxWidth: "100%",
@@ -7957,95 +8011,206 @@ property value.
     <source src="/img/custom_fields_dark.mp4" type="video/mp4"/>
 </video>
 
-If you need a custom field for your property you can do it by passing a React
-component to the `propertyConfig` prop of a property `config`. The React component must
-accept the props of type [`FieldProps`](https://firecms.co/docs/api/interfaces/FieldProps).
-The bare minimum you need to implement
-is a field that displays the received `value` and uses the `setValue` callback.
+### When should you create a custom field?
+Use a custom field when you need one (or more) of the following:
+- A visual style not covered by built‑ins (color pickers, tag inputs, sliders, charts, AI assisted fields, etc.)
+- Composite UI combining several properties (e.g. lat/lng map picker writing to two numeric fields)
+- Integrations (upload to an external API, fetch suggestions, geocode, etc.)
 
-You can also pass custom props to your custom field, which you then receive in
-the `customProps` prop.
+If you only need validation or simple transformation, prefer property level `validation` options first to keep things simple.
+If you need dynamic behavior depending on other values, consider using [conditional fields](https://firecms.co/docs/conditional_fields.md) instead.
 
-If you are developing a custom field and need to access the values of the
-entity, you can use the `context` field in FieldProps.
-
-You can check all the props [`FieldProps`](https://firecms.co/docs/api/interfaces/FieldProps).
-
-### Example
-
-This is an example of a custom TextField that takes the background color as a prop
+### Custom field example
+A custom text field with a background color supplied via `customProps` (scroll below for full prop contract and advanced techniques):
 
 ```tsx
 
-// you can define the props that your custom field will receive
 interface CustomColorTextFieldProps {
-    color: string
+    color: string;
 }
 
 export default function CustomColorTextField({
-                                                 property,
-                                                 value,
-                                                 setValue,
-                                                 setFieldValue,
-                                                 customProps,
-                                                 touched,
-                                                 includeDescription,
-                                                 showError,
-                                                 error,
-                                                 isSubmitting,
-                                                 context, // the rest of the entity values here
-                                                 ...props
-                                             }: FieldProps<string, CustomColorTextFieldProps>) {
+    property,
+    value,
+    setValue,
+    customProps,
+    includeDescription,
+    showError,
+    error,
+    isSubmitting,
+    context
+}: FieldProps<string, CustomColorTextFieldProps>) {
 
     const { mode } = useModeController();
     const backgroundColor = customProps?.color ?? (mode === "light" ? "#eef4ff" : "#16325f");
+
     return (
         <>
             <TextField
-                inputStyle={{
-                    backgroundColor
-                }}
+                inputStyle={{ backgroundColor }}
                 error={!!error}
                 disabled={isSubmitting}
                 label={error ?? property.name}
                 value={value ?? ""}
-                onChange={(evt: any) => {
-                    setValue(
-                        evt.target.value
-                    );
-                }}/>
-
-            <FieldHelperText includeDescription={includeDescription}
-                             showError={showError}
-                             error={error}
-                             property={property}/>
+                onChange={(evt: any) => setValue(evt.target.value)}
+            />
+            <FieldHelperText
+                includeDescription={includeDescription}
+                showError={showError}
+                error={error}
+                property={property}
+            />
         </>
-
     );
-
 }
 ```
 
-...and how it is used:
+Usage in a collection:
+
 ```tsx
 export const blogCollection = buildCollection({
     id: "blog",
     path: "blog",
     name: "Blog entry",
     properties: {
-        // ...
+        // ... other properties
         gold_text: {
             name: "Gold text",
             description: "This field is using a custom component defined by the developer",
             dataType: "string",
             Field: CustomColorTextField,
             customProps: {
-                color: "gold" // pass the custom prop
+                color: "gold"
             }
         }
     }
 });
 ```
+
+### Component contract (FieldProps)
+Your component must at minimum:
+1. Read the current `value` (it can be `undefined` or `null` for empty)
+2. Call `setValue(newValue)` when the user changes it
+
+Recommended good practices:
+- Honor `disabled` / `isSubmitting`
+- Show the label and error (use your own UI or `<FieldHelperText>` / built‑ins)
+- Avoid heavy side effects on every keystroke (debounce network calls)
+
+Full interface: [`FieldProps`](https://firecms.co/docs/api/interfaces/FieldProps) (includes detailed comments).
+
+### Passing custom props
+Provide a `customProps` object in the property definition. The object is strongly typed via the second generic of `FieldProps<T, CustomProps>`.
+
+### Accessing the rest of the entity (form context)
+`context` gives you live access to:
+- All current values (`context.values`)
+- `context.setFieldValue(key, value)` to update any other field
+- `context.save(values)` to trigger a save programmatically (rarely needed in fields)
+- Metadata: `entityId`, `status` (new/existing/copy), `collection`, `openEntityMode`, `disabled`
+
+This enables cross‑field logic (e.g. auto‑fill slug when title changes) or conditional disabling.
+
+### Rendering (or composing) other properties inside a custom field
+If your custom field wants to include the UI of another property, use `PropertyFieldBinding`.
+This keeps validation and consistency:
+
+```tsx
+
+<PropertyFieldBinding
+  propertyKey="subtitle"
+  property={collection.properties.subtitle}
+  context={context}
+  includeDescription
+/>
+```
+
+This is ideal for composite widgets that orchestrate multiple underlying values.
+For example, the built-in `map` default widget is just a wrapper around the properties defined
+
+### Handling arrays & nested data
+When your custom field is inside an array:
+- `partOfArray` is `true`
+- You may receive an index in a parent context when building nested array editors
+
+For nested values (e.g. editing `address.street` inside a composite field), call `setFieldValue("address.street", value)`.
+
+### Validation strategies
+Prefer declarative validation in the property config when possible. You can still implement client‑side
+guards in the field (e.g. ignore invalid keystrokes) but allow the central validation to surface errors.
+
+Common patterns:
+- Trim on blur but preserve user typing: keep raw input in local state, call `setValue` with cleaned value on blur.
+- Async validation (e.g. uniqueness): debounce the check, set a transient local error, do not block typing.
+
+### Performance tips
+- Debounce network or expensive computations (`useEffect` + `setTimeout` or a utility) instead of per‑keystroke.
+- Memo heavy child components based on relevant props.
+- Avoid storing large derived objects in state; derive them on render or memoize.
+
+### Advanced example: Composite slug editor
+Automatically generates a slug from the title, but allows manual override.
+
+```tsx
+function SlugField({ value, setValue, context, property, showError, error }: FieldProps<string>) {
+    const title = context.values.title as string | undefined;
+
+    React.useEffect(() => {
+        if (!value && title) {
+            const auto = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+            setValue(auto);
+        }
+    }, [title]);
+
+    return (
+        <TextField
+            label={property.name}
+            value={value ?? ""}
+            error={!!error}
+            onChange={(e: any) => setValue(e.target.value)}
+            helperText={showError ? error : "Will auto-generate from Title if left empty"}
+        />
+    );
+}
+```
+
+### Using PropertyFieldBinding inside a composite field
+
+```tsx
+function GeoPointField({ context }: FieldProps<any>) {
+  return (
+    <div style={{ display: "flex", gap: 8 }}>
+      <PropertyFieldBinding
+        propertyKey="lat"
+        property={context.collection?.properties.lat}
+        context={context}
+        minimalistView
+      />
+      <PropertyFieldBinding
+        propertyKey="lng"
+        property={context.collection?.properties.lng}
+        context={context}
+        minimalistView
+      />
+      {/* Could add a map picker that calls context.setFieldValue("lat", newLat) */}
+    </div>
+  );
+}
+```
+
+### Troubleshooting & gotchas
+- Value not updating: Ensure you call `setValue` (not mutate `value` directly) and that you don't shadow the `value` in local state without syncing.
+- Error never shows: Remember `showError` gates visual display; `error` can exist while `showError` is false.
+- Cross‑field updates ignored: Use the exact property key (e.g. `address.street`, array indexes like `items[0].price`).
+- Field re-renders too often: Wrap heavy logic in `useMemo` / `useCallback`, avoid creating new objects every render.
+- Need read‑only mode: Respect `disabled` from props or `context.disabled`.
+
+### Next steps
+- Explore other customization: [Custom previews](https://firecms.co/docs/custom_previews.md)
+- Reuse logic across many properties: create a shared field component and pass different `customProps`.
+- Open source friendly? Consider contributing a reusable field to the community.
+
+By leveraging custom fields you can create rich authoring experiences closely aligned with your product's domain while keeping validation, state and persistence centralized in FireCMS.
 
 ## Custom previews
 
@@ -8742,7 +8907,7 @@ export function ExampleCMSView() {
 
 ## useReferenceDialog
 
-:::note
+:::note 
 Please note that in order to use this hook you **must** be in a
 component (you can't use them directly from a callback function).
 :::
@@ -11542,11 +11707,15 @@ export default function DialogBasicDemo() {
                     <TextField size={"small"}/>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpen(false)} variant={"text"}>
+                    <Button
+                        color={"primary"}
+                        onClick={() => setOpen(false)} variant={"text"}>
                         Close
                     </Button>
-                    <Button onClick={() => setOpen(false)}
-                            variant={"filled"}>
+                    <Button
+                        color={"primary"}
+                        onClick={() => setOpen(false)}
+                        variant={"filled"}>
                         Got it!
                     </Button>
                 </DialogActions>
@@ -11591,8 +11760,10 @@ export default function DialogFullScreenDemo() {
                     </CenteredView>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpen(false)}
-                            variant={"filled"}>
+                    <Button
+                        color={"primary"}
+                        onClick={() => setOpen(false)}
+                        variant={"filled"}>
                         Done
                     </Button>
                 </DialogActions>
@@ -11622,11 +11793,14 @@ export default function DialogScrollableDemo() {
                 onOpenChange={setOpen}
                 scrollable={true}
             >
-                <div className={"p-8 bg-red-100 text-red-800"} style={{ height: "200vh" }}>Scrollable Dialog Content</div>
+                <div className={"p-8 bg-red-100 text-red-800"} style={{ height: "200vh" }}>Scrollable Dialog Content
+                </div>
 
                 <DialogActions>
-                    <Button onClick={() => setOpen(false)}
-                            variant={"filled"}>
+                    <Button
+                        color={"primary"}
+                        onClick={() => setOpen(false)}
+                        variant={"filled"}>
                         Got it!
                     </Button>
                 </DialogActions>
@@ -11663,8 +11837,10 @@ export default function DialogCustomWidthDemo() {
                     Dialog with Custom Width
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpen(false)}
-                            variant={"filled"}>
+                    <Button
+                        color={"primary"}
+                        onClick={() => setOpen(false)}
+                        variant={"filled"}>
                         Close
                     </Button>
                 </DialogActions>
@@ -11766,7 +11942,7 @@ export default function ExpandablePanelInvisibleDemo() {
 
 ## File Upload
 
-File Upload component is designed to easily handle the drag and drop of files as well as file selection through the dialog window. It supports features like file type restriction, maximum file size, custom titles, and descriptions.
+File Upload component is designed to easily handle the drag and drop of files as well as file selection through the dialog window. It supports features like file type restriction, maximum file size, custom titles, and descriptions. 
 
 ### Usage
 
@@ -13715,7 +13891,7 @@ import { TextareaAutosize } from '@firecms/ui';
 
 export default function TextareaAutosizeBasicDemo() {
     return (
-        <TextareaAutosize
+        <TextareaAutosize 
             placeholder="Type your text here..."
         />
     );
@@ -13738,7 +13914,7 @@ export default function TextareaAutosizeControlledDemo() {
     };
 
     return (
-        <TextareaAutosize
+        <TextareaAutosize 
             value={value}
             onChange={handleChange}
             placeholder="Type your text here..."
@@ -13757,7 +13933,7 @@ import { TextareaAutosize } from "@firecms/ui";
 
 export default function TextareaAutosizeRowsDemo() {
     return (
-        <TextareaAutosize
+        <TextareaAutosize 
             placeholder="Type your text here..."
             minRows={3}
             maxRows={6}
