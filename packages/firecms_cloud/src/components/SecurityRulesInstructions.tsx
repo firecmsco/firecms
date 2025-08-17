@@ -27,10 +27,7 @@ export function SecurityRulesInstructions({}: {}) {
         <Typography variant={"caption"}>
             This rules restrict access to data
             to FireCMS users only, but does <strong>not</strong> enforce the
-            permissions at the database level.
-        </Typography>
-        <Typography variant={"caption"}>
-            The permissions are enforced in the frontend though, which will
+            permissions at the database level. The permissions are enforced in the frontend though, which will
             work fine for most users. If you need to enforce the permissions
             at the database level, you can modify these security rules
             yourself to suit your needs.

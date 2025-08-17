@@ -107,6 +107,7 @@ function UpgradeButton() {
     if (!plusProduct) {
         return <LoadingButton
             variant={"filled"}
+            color={"primary"}
             loading={true}
             startIcon={<RocketLaunchIcon/>}>
             Create a subscription

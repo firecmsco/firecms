@@ -67,12 +67,12 @@ export function CloudErrorView({
         return <ServiceAccountMissingPermissions missingPermissions={error.data?.missingPermissions}/>;
     }
 
-    return (<div className="flex flex-col space-y-2 py-4">
-            <Typography className="text-red-300">
+    return (<div className="flex flex-col space-y-2">
+            <Typography className="text-red-600 dark:text-red-400">
                 {message}
             </Typography>
 
-            {error.data && <pre className="text-xs text-gray-500 p-4">
+            {error.data && Object.keys(error.data).length > 0 && <pre className="text-xs text-gray-500 p-4">
                 {JSON.stringify(error.data, null, 2)}
             </pre>}
 

@@ -157,8 +157,8 @@ function SampleComponents() {
     return <div className={"p-4 mt-4 flex flex-col items-center gap-2"}>
         <Typography variant={"label"}>Sample theme components</Typography>
         <div className={"flex flex-row gap-4 items-center justify-center"}>
-            <Button> Button </Button>
-            <Button variant={"outlined"}> Button </Button>
+            <Button color={"primary"}> Button </Button>
+            <Button color={"primary"} variant={"outlined"}> Button </Button>
             <BooleanSwitch value={checked} onValueChange={setChecked}/>
             <Checkbox checked={checked} onCheckedChange={setChecked}/>
             <Checkbox color={"secondary"} checked={checked} onCheckedChange={setChecked}/>

@@ -85,6 +85,7 @@ export function UpgradeCloudSubscriptionView({
                 variant={"filled"}
                 loading={linkLoading}
                 onClick={doSubscribe}
+                color={"primary"}
                 startIcon={<RocketLaunchIcon/>}>
                 Create a subscription
             </LoadingButton>
