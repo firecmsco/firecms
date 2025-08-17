@@ -32,12 +32,13 @@ export function RootCollectionSuggestions({
 
     useEffect(() => {
         const googleAccessToken = fireCMSBackend.googleCredential?.accessToken;
-        fireCMSBackend.projectsApi.getRootCollections(projectConfig.projectId, googleAccessToken).then((paths) => {
-            setRootPathSuggestions(paths.filter(p => !existingPaths.includes(p.trim().toLowerCase())));
-        });
+        fireCMSBackend.projectsApi.getRootCollections(projectConfig.projectId, googleAccessToken)
+            .then((paths) => {
+                setRootPathSuggestions(paths.filter(p => !existingPaths.includes(p.trim().toLowerCase())));
+            });
     }, []);
 
-    if (!rootPathSuggestions || !navigationController.initialised) {
+    if ((filteredRootPathSuggestions ?? []).length === 0 || !navigationController.initialised) {
         return null;
     }
 

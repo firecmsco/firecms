@@ -54,6 +54,8 @@ export type ProjectConfig = {
 
     historyDefaultEnabled: boolean;
     updateHistoryDefaultEnabled: (enabled: boolean) => Promise<void>;
+
+    updateSurveyData: (surveyData: Record<string, any>) => Promise<void>;
 };
 
 interface ProjectConfigParams {
@@ -165,6 +167,13 @@ export function useBuildProjectConfig({
         const firestore = getFirestore(backendFirebaseApp);
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         return setDoc(doc(firestore, configPath), { history_default_enabled: enabled }, { merge: true });
+    }, [configPath]);
+
+    const updateSurveyData = useCallback(async (surveyData: Record<string, string>): Promise<void> => {
+        if (!backendFirebaseApp) throw Error("useBuildProjectConfig Firebase not initialised");
+        const firestore = getFirestore(backendFirebaseApp);
+        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        return setDoc(doc(firestore, configPath), { survey_data: surveyData }, { merge: true });
     }, [configPath]);
 
     useEffect(() => {
@@ -285,6 +294,7 @@ export function useBuildProjectConfig({
         updateLocalTextSearchEnabled,
         historyDefaultEnabled,
         updateHistoryDefaultEnabled,
+        updateSurveyData,
         primaryColor,
         secondaryColor,
         updatePrimaryColor,

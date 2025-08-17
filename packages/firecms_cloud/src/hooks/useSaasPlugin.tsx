@@ -213,17 +213,21 @@ export function IntroWidget({
             <Typography paragraph={true} className={"mt-4"}>
                 FireCMS can be used as a standalone admin panel but it shines when you add your own custom
                 functionality. Including your own custom components, fields, actions, views, and more.
+                More info in the <a
+                href={"https://firecms.co/docs/cloud/quickstart"}
+                rel="noopener noreferrer"
+                target="_blank">docs</a>
             </Typography>
             <div className={"mb-8"}>
                 <Typography className={"inline"}>Start customizing with:</Typography>
                 <div
-                    className={"ml-2 select-all font-mono bg-surface-100 text-surface-800 dark:bg-surface-800 dark:text-white p-2 px-3  border-surface-200 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
+                    className={"text-sm ml-2 select-all font-mono bg-surface-100 text-surface-800 dark:bg-surface-800 dark:text-white p-2 px-3  border-surface-200 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
                     yarn create firecms-app
+                </div> or
+                <div
+                    className={"text-sm  ml-2 select-all font-mono bg-surface-100 text-surface-800 dark:bg-surface-800 dark:text-white p-2 px-3  border-surface-200 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
+                    npx create-firecms-app
                 </div>
-                <Typography>More info in the <a
-                    href={"https://firecms.co/docs/cloud/quickstart"}
-                    rel="noopener noreferrer"
-                    target="_blank">docs</a></Typography>
             </div>
 
         </div>

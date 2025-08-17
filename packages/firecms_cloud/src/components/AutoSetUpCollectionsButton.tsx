@@ -12,6 +12,7 @@ export function AutoSetUpCollectionsButton({
                                                onSuccess,
                                                onNoCollections,
                                                onError,
+                                               color = "neutral",
                                                disabled
                                            }: {
     projectsApi: ProjectsApi;
@@ -22,6 +23,7 @@ export function AutoSetUpCollectionsButton({
     onError?: () => void;
     askConfirmation?: boolean;
     small?: boolean;
+    color?: "primary" | "secondary" | "text" | "error" | "neutral";
     disabled?: boolean;
 }) {
 
@@ -68,6 +70,7 @@ export function AutoSetUpCollectionsButton({
         <LoadingButton
             disabled={disabled}
             loading={loadingAutomaticallyCreate}
+            color={color}
             className={small ? "px-2 py-0.5 rounded-lg" : undefined}
             size={small ? "small" : undefined}
             onClick={() => {

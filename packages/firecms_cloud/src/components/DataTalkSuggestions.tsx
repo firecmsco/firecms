@@ -12,14 +12,14 @@ export function DataTalkSuggestions({
 }) {
     const navigate = useNavigate();
     const navigation = useNavigationController();
-
+    const hasCollections = (navigation.collections ?? []).length > 0;
     // const hasCollections = navigation.initialised &&
     //     (navigation.collections ?? []).length > 0;
     // if (!hasCollections) {
     //     return null;
     // }
 
-    return <Collapse in={(suggestions ?? []).length > 0} className={"mt-4"}>
+    return <Collapse in={(suggestions ?? []).length > 0 && hasCollections} className={"mt-4"}>
 
         <Typography variant={"body2"} color={"secondary"} className={"ml-2 flex items-center gap-2"}>
             <ForumIcon size="smallest"/> Query and update your data in natural language with <b>DATATALK</b>
