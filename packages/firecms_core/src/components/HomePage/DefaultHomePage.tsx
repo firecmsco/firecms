@@ -103,6 +103,9 @@ export function DefaultHomePage({
             (entriesByGroup[g] ??= []).push(e);
         });
 
+        // Check if there are custom actions from plugins that should show in the default group
+        const hasPluginAdditionalCards = customizationController.plugins?.some(p => p.homePage?.AdditionalCards);
+
         let allProcessed: { name: string; entries: NavigationEntry[] }[];
 
         if (performingSearch) {
@@ -127,10 +130,20 @@ export function DefaultHomePage({
                         entries: entriesByGroup[g]
                     });
             });
+
+            // Ensure default group exists if there are plugin additional cards but no collections
+            if (hasPluginAdditionalCards && !allProcessed.some(g => g.name === DEFAULT_GROUP_NAME)) {
+                allProcessed.push({
+                    name: DEFAULT_GROUP_NAME,
+                    entries: []
+                });
+            }
+
             allProcessed = allProcessed.filter(
                 (g) =>
                     g.entries.length ||
-                    groupOrderFromNavController.includes(g.name)
+                    groupOrderFromNavController.includes(g.name) ||
+                    (g.name === DEFAULT_GROUP_NAME && hasPluginAdditionalCards)
             );
         }
 
@@ -139,7 +152,7 @@ export function DefaultHomePage({
             adminGroupData: admin || null,
             items: allProcessed.filter((g) => g.name !== ADMIN_GROUP_NAME)
         };
-    }, [filteredNavigationEntries, performingSearch, groupOrderFromNavController]);
+    }, [filteredNavigationEntries, performingSearch, groupOrderFromNavController, customizationController.plugins]);
 
     // Update state only when processedGroups actually changes
     useEffect(() => {
@@ -183,7 +196,7 @@ export function DefaultHomePage({
 
     /* ─────────────────────────────────────────────────────���─────────
        Hook for DnD
-       ─────────────────────────────────────────────────────────────── */
+       ───�����────────────────────────────────────────────────────────── */
     const {
         sensors,
         collisionDetection,

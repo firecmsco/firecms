@@ -13,11 +13,6 @@ export function DataTalkSuggestions({
     const navigate = useNavigate();
     const navigation = useNavigationController();
     const hasCollections = (navigation.collections ?? []).length > 0;
-    // const hasCollections = navigation.initialised &&
-    //     (navigation.collections ?? []).length > 0;
-    // if (!hasCollections) {
-    //     return null;
-    // }
 
     return <Collapse in={(suggestions ?? []).length > 0 && hasCollections} className={"mt-4"}>
 

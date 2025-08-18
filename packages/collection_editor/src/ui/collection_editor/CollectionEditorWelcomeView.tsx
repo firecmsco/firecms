@@ -89,6 +89,11 @@ export function CollectionEditorWelcomeView({
                                 {suggestion}
                             </Chip>
                         ))}
+                        {(filteredPathSuggestions ?? []).length === 0 && !loadingPathSuggestions && <Typography
+                            variant={"caption"}
+                            color={"secondary"}>
+                            No existing paths found
+                        </Typography>}
 
                     </div>
 
