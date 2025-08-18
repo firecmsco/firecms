@@ -402,8 +402,8 @@ export async function createProject(options: InitOptions) {
         console.log("");
         console.log("Then run:");
         console.log(chalk.cyan.bold("cd " + options.dir_name));
-        console.log(chalk.cyan.bold("yarn"));
-        console.log(chalk.cyan.bold("yarn dev"));
+        console.log(chalk.cyan.bold("yarn") + " or " + chalk.cyan.bold("npm install"));
+        console.log(chalk.cyan.bold("yarn dev") + " or " + chalk.cyan.bold("npm run dev"));
         console.log("");
     } else if (options.template === "pro" || options.template === "community") {
         console.log("Make sure you have a valid Firebase config in ");
@@ -415,8 +415,8 @@ export async function createProject(options: InitOptions) {
         console.log("");
         console.log("Run:");
         console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
-        console.log(chalk.bgYellow.black.bold("yarn"));
-        console.log(chalk.bgYellow.black.bold("yarn dev"));
+        console.log(chalk.bgYellow.black.bold("yarn") + " or " + chalk.bgYellow.black.bold("npm install"));
+        console.log(chalk.bgYellow.black.bold("yarn dev") + " or " + chalk.bgYellow.black.bold("npm run dev"));
         console.log("");
     } else if (options.template === "next-pro") {
         console.log("Make sure you have a valid Firebase config in ");
@@ -426,17 +426,17 @@ export async function createProject(options: InitOptions) {
         console.log("");
         console.log("Run:");
         console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
-        console.log(chalk.bgYellow.black.bold("yarn"));
-        console.log(chalk.bgYellow.black.bold("yarn dev"));
+        console.log(chalk.bgYellow.black.bold("yarn") + " or " + chalk.bgYellow.black.bold("npm install"));
+        console.log(chalk.bgYellow.black.bold("yarn dev") + " or " + chalk.bgYellow.black.bold("npm run dev"));
         console.log("");
     } else if (options.template === "cloud") {
         console.log("If you want to run your project locally, run:");
         console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
-        console.log(chalk.bgYellow.black.bold("yarn install"));
-        console.log(chalk.bgYellow.black.bold("yarn dev"));
+        console.log(chalk.bgYellow.black.bold("yarn") + " or " + chalk.bgYellow.black.bold("npm install"));
+        console.log(chalk.bgYellow.black.bold("yarn dev") + " or " + chalk.bgYellow.black.bold("npm run dev"));
         console.log("");
         console.log("If you want to deploy your project, run:");
-        console.log(chalk.bgYellow.black.bold("yarn deploy"));
+        console.log(chalk.bgYellow.black.bold("yarn deploy") + " or " + chalk.bgYellow.black.bold("npm run deploy"));
         console.log("and see it running in https://app.firecms.co");
         console.log("");
     } else {

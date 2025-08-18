@@ -369,6 +369,7 @@ export function CollectionPropertiesEditorForm({
                                  asChild={true}>
                             <Button
                                 variant={"outlined"}
+                                color={"primary"}
                                 onClick={() => setNewPropertyDialogOpen(true)}>
                                 <AddIcon/>
                             </Button>
@@ -437,6 +438,7 @@ export function CollectionPropertiesEditorForm({
                                         : "Select a property to edit it"}
                                 </Typography>
                                 <Button variant={"outlined"}
+                                        color={"primary"}
                                         onClick={() => setNewPropertyDialogOpen(true)}
                                 >
                                     <AddIcon/>
