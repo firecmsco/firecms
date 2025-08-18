@@ -1,6 +1,6 @@
 import { CommandProps, mergeAttributes, Node, NodeViewProps, RawCommands, textblockTypeInputRule } from "@tiptap/core";
 import { ReactNodeViewRenderer } from "@tiptap/react";
-import { Node as ProseMirrorNode } from "prosemirror-model";
+import { Node as ProseMirrorNode } from "@tiptap/pm/model";
 
 // Define the interface for the user-defined component props
 export type CustomBlockComponentProps = NodeViewProps;

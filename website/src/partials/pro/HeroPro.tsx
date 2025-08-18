@@ -54,9 +54,16 @@ export function HeroPro({
                     The Comprehensive Self-Hosted CMS for Professional-Grade Projects
                 </h2>
                 <div className={"flex flex-row gap-4 mt-8"}>
-                    <div
-                        className={" select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
-                        yarn create firecms-app --pro
+                    <div className={"flex flex-row items-center justify-center gap-4"}>
+                        <div
+                            className={"items-center select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
+                            yarn create firecms-app --pro
+                        </div>
+                        or
+                        <div
+                            className={"items-center select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
+                            npx create-firecms-app --pro
+                        </div>
                     </div>
                     <a
                         className={CTAButtonDarkMixin + " w-full lg:w-auto "}

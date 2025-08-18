@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Editor, NodeViewWrapper } from "@tiptap/react";
-import { Node as ProseMirrorNode } from "prosemirror-model";
+import { Node as ProseMirrorNode } from "@tiptap/pm/model";
 
 export interface CustomBlockComponentProps {
     node: ProseMirrorNode;

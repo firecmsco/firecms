@@ -11,6 +11,7 @@ import HeroProButtons from "../partials/home/HeroProButtons";
 import { UITeaser } from "../partials/home/UITeaser";
 import { ImportDataIntro } from "../partials/home/ImportDataIntro";
 import Head from "@docusaurus/Head";
+
 // import { clarityScript } from "../partials/clarity_head";
 
 function ProPage() {
@@ -68,10 +69,15 @@ function ProPage() {
                         <div className="text-sm text-center text-gray-300 mb-4">
                             Try out FireCMS PRO completely for <b>FREE</b>!
                         </div>
-                        <div className={"flex flex-col items-center"}>
+                        <div className={"flex flex-row items-center justify-center gap-4"}>
                             <div
                                 className={"items-center select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
                                 yarn create firecms-app --pro
+                            </div>
+                            or
+                            <div
+                                className={"items-center select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
+                                npx create-firecms-app --pro
                             </div>
                         </div>
                     </Panel>
