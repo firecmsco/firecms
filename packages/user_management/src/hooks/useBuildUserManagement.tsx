@@ -41,6 +41,12 @@ export interface UserManagementParams<CONTROLLER extends AuthController<any> = A
     rolesPath?: string;
 
     /**
+     * The roles that are available in the user management system.
+     * If you provide this, the user management system will not fetch the roles from the database.
+     */
+    roles?: Role[];
+
+    /**
      * If there are no roles in the database, provide a button to create the default roles.
      */
     allowDefaultRolesCreation?: boolean;
@@ -59,6 +65,7 @@ export interface UserManagementParams<CONTROLLER extends AuthController<any> = A
  * @param dataSourceDelegate
  * @param usersPath
  * @param rolesPath
+ * @param roles
  * @param allowDefaultRolesCreation
  * @param includeCollectionConfigPermissions
  */
@@ -67,6 +74,7 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
 ({
      authController,
      dataSourceDelegate,
+     roles: rolesProp,
      usersPath = "__FIRECMS/config/users",
      rolesPath = "__FIRECMS/config/roles",
      allowDefaultRolesCreation,
@@ -77,9 +85,10 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
         throw Error("useBuildUserManagement: You need to provide an authController since version 3.0.0-beta.11. Check https://firecms.co/docs/pro/migrating_from_v3_beta");
     }
 
-    const [rolesLoading, setRolesLoading] = React.useState<boolean>(true);
+    const rolesDefinedInCode = (rolesProp ?? [])?.length > 0;
+    const [rolesLoading, setRolesLoading] = React.useState<boolean>(!rolesDefinedInCode);
     const [usersLoading, setUsersLoading] = React.useState<boolean>(true);
-    const [roles, setRoles] = React.useState<Role[]>([]);
+    const [roles, setRoles] = React.useState<Role[]>(rolesProp ?? []);
     const [usersWithRoleIds, setUsersWithRoleIds] = React.useState<UserWithRoleIds<USER>[]>([]);
 
     const users = usersWithRoleIds.map(u => ({
@@ -96,19 +105,17 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
     const loading = _rolesLoading || _usersLoading;
 
     useEffect(() => {
+        if (rolesDefinedInCode) return;
         if (!dataSourceDelegate || !rolesPath) return;
         if (dataSourceDelegate.initialised !== undefined && !dataSourceDelegate.initialised) return;
         if (authController?.initialLoading) return;
-        // if (authController.user === null) {
-        //     setRolesLoading(false);
-        //     return;
-        // }
 
         setRolesLoading(true);
         return dataSourceDelegate.listenCollection?.({
             path: rolesPath,
             onUpdate(entities: Entity<any>[]): void {
                 setRolesError(undefined);
+                console.debug("Updating roles", entities);
                 try {
                     const newRoles = entityToRoles(entities);
                     if (!equal(newRoles, roles)) {
@@ -129,7 +136,7 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
             }
         });
 
-    }, [dataSourceDelegate?.initialised, authController?.initialLoading, authController?.user?.uid, rolesPath]);
+    }, [rolesDefinedInCode, dataSourceDelegate?.initialised, authController?.initialLoading, authController?.user?.uid, rolesPath]);
 
     useEffect(() => {
         if (!dataSourceDelegate || !usersPath) return;
@@ -315,7 +322,7 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
 
     const userRoleIds = userRoles?.map(r => r.id);
     useEffect(() => {
-        console.debug("Setting roles", userRoles);
+        console.debug("Setting user roles", { userRoles, roles });
         authController.setUserRoles?.(userRoles ?? []);
     }, [userRoleIds]);
 
