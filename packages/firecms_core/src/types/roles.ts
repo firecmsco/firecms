@@ -30,6 +30,9 @@ export type Role = {
      */
     collectionPermissions?: Record<string, Permissions>;
 
+    /**
+     * Permissions related to editing the collections
+     */
     config?: {
 
         createCollections?: boolean;

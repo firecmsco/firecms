@@ -179,10 +179,15 @@ function buildBottomActions<M extends object>({
 
         {pluginActions}
 
-        <Button variant="text" disabled={disabled || isSubmitting} type="reset">
+        <Button variant="text"
+                color="primary"
+                disabled={disabled || isSubmitting}
+                type="reset">
             {status === "existing" ? "Discard" : "Clear"}
         </Button>
-        <Button variant={canClose ? "text" : "filled"} color="primary" type="submit"
+        <Button variant={canClose ? "text" : "filled"}
+                color="primary"
+                type="submit"
                 disabled={disabled || isSubmitting}
                 onClick={() => {
                     sideDialogContext.setPendingClose(false);
