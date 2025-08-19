@@ -29,15 +29,15 @@ body {
 }
 
 h1 {
-    @apply text-6xl font-headers font-semibold
+    @apply text-6xl font-headers font-semibold tracking-tight
 }
 
 h2 {
-    @apply text-5xl font-headers font-semibold
+    @apply text-5xl font-headers font-semibold tracking-tight
 }
 
 h3 {
-    @apply text-4xl font-headers font-bold
+    @apply text-4xl font-headers font-bold tracking-tight
 }
 
 h4 {

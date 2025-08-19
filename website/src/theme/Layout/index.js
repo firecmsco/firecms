@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import clsx from "clsx";
 
 import Layout from "@theme-original/Layout";
-import docsearch from "@docsearch/js";
+// import docsearch from "@docsearch/js";
 import siteConfig from "@generated/docusaurus.config";
 
 import "@docsearch/css";
@@ -61,17 +61,17 @@ export default function LayoutWrapper(props) {
         return pathname.startsWith("/docs/");
     }
 
-// should show algolia docsearch
-    useEffect(() => {
-        if (isDocs()) {
-            docsearch({
-                container: "#docsearch",
-                appId: siteConfig.customFields.docSearchAppId,
-                apiKey: siteConfig.customFields.docSearchApiKey,
-                indexName: "firecms",
-            });
-        }
-    }, [pathname]);
+// // should show algolia docsearch
+//     useEffect(() => {
+//         if (isDocs()) {
+//             docsearch({
+//                 container: "#docsearch",
+//                 appId: siteConfig.customFields.docSearchAppId,
+//                 apiKey: siteConfig.customFields.docSearchApiKey,
+//                 indexName: "firecms",
+//             });
+//         }
+//     }, [pathname]);
 
     return (
         <>

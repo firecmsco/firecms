@@ -78,7 +78,7 @@ function NicerTable() {
                     className="flex gap-2 md:mr-4 mr-2 self-stretch items-center">
                     <div className="hidden lg:block">
                         <div className="flex flex-col items-start justify-center">
-                            <h6 className="text-base font-medium leading-none truncate max-w-[160px] lg:max-w-[240px]">Products</h6>
+                            <h4 className="text-base font-medium leading-none truncate max-w-[160px] lg:max-w-[240px]">Products</h4>
                             <div
                                 className="text-xs text-text-secondary-dark w-full text-ellipsis block overflow-hidden whitespace-nowrap max-w-xs text-left">{productsData.length} entities
                             </div>
