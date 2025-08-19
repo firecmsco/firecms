@@ -30,39 +30,9 @@ export function useSaasPlugin({
     historyDefaultEnabled?: boolean;
 }): FireCMSPlugin {
 
-    const snackbarController = useSnackbarController();
-    const [alertDismissed, setAlertDismissed] = React.useState(isHistoryAlertDismissed());
     const hasOwnTextSearchImplementation = Boolean(appConfig?.textSearchControllerBuilder);
 
-    const showHistoryAlert = !alertDismissed && !projectConfig.historyDefaultEnabled;
     const additionalChildrenStart = <>
-        {showHistoryAlert && <Alert action={<>
-            <Button size={"small"} variant={"text"} color={"text"}
-                    onClick={() => {
-                        setAlertDismissed(true);
-                        saveHistoryAlertDismissed();
-                        onAnalyticsEvent?.("saas_history_alert_dismissed");
-                    }}>Dismiss</Button>
-            <Button size={"small"} variant={"outlined"} color={"text"}
-                    onClick={() => {
-                        setAlertDismissed(true);
-                        onAnalyticsEvent?.("saas_history_alert_enabled");
-                        projectConfig.updateHistoryDefaultEnabled(true).then(() => {
-                            snackbarController.open({
-                                type: "success",
-                                message: "Document history enabled globally",
-                            })
-                        });
-                    }}>Enable globally</Button>
-        </>}><>🕒 You can now enable
-            document history to keep track of your document
-            changes.
-            <Typography variant={"caption"}>
-                You can enable this feature for all your collections or just for specific ones. Data will be stored
-                in your Firestore database as a sub-collection of each document.
-            </Typography>
-        </>
-        </Alert>}
         <IntroWidget
             fireCMSBackend={fireCMSBackend}
             onAnalyticsEvent={onAnalyticsEvent}
