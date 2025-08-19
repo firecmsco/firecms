@@ -9,15 +9,15 @@
 }
 
 .typography-h1 {
-    @apply text-6xl font-headers font-light;
+    @apply text-6xl font-headers font-light tracking-tight;
 }
 
 .typography-h2 {
-    @apply text-5xl font-headers font-light;
+    @apply text-5xl font-headers font-light tracking-tight;
 }
 
 .typography-h3 {
-    @apply text-4xl font-headers font-normal;
+    @apply text-4xl font-headers font-normal tracking-tight;
 }
 
 .typography-h4 {

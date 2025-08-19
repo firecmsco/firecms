@@ -13,13 +13,13 @@ export function GoogleLoginButton({
     return (
         <div className={"m-4 w-full"}>
             <Button
-                className={cls("w-full bg-white text-surface-900 dark:text-surface-100", disabled ? "" : "hover:text-surface-800 hover:dark:text-white")}
+                className={cls("w-full bg-white dark:bg-surface-800 text-surface-900 dark:text-surface-100", disabled ? "" : "hover:text-surface-800 hover:dark:text-white")}
                 style={{
                     height: "40px",
                     borderRadius: "4px",
                     fontSize: "14px"
                 }}
-                variant="filled"
+                variant="outlined"
                 disabled={disabled}
                 onClick={onClick}>
                 <div
