@@ -284,11 +284,11 @@ module.exports = {
                         position: "left",
                         value: "<div class='bg-gray-100 rounded-lg'><a class='gradient-text navbar__item navbar__link' href='/pro'>PRO</a></div>"
                     },
-                    {
-                        type: "html",
-                        position: "right",
-                        value: "<div id=\"docsearch\"></div>"
-                    },
+                    // {
+                    //     type: "html",
+                    //     position: "right",
+                    //     value: "<div id=\"docsearch\"></div>"
+                    // },
                     // {
                     //     type: "html",
                     //     position: "right",

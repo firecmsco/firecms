@@ -73,7 +73,7 @@ function HeroHome({}) {
                                 <video
                                     style={{
                                         pointerEvents: "none",
-                                        // aspectRatio: 1,
+                                        aspectRatio: 960 / 590.77,
                                         // padding: "1px",
                                     }}
                                     className={clsx("rounded-2xl border", defaultBorderMixin)}
