@@ -8,7 +8,7 @@ import {
     ReferenceProperty,
     RelationshipProperty,
     StringProperty
-} from "@firecms/core";
+} from "@firecms/types";
 
 // --- Helper Functions ---
 

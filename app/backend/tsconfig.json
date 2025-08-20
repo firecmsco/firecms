@@ -17,8 +17,8 @@
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@firecms/core": [
-        "../../packages/firecms_core/src"
+      "@firecms/types": [
+        "../../packages/types/src"
       ],
       "@firecms/backend": [
         "../../packages/backend/src"

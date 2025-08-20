@@ -5,10 +5,4 @@
 
 export * from "./collections/collections";
 
-// Re-export FireCMS core types for convenience
-export type {
-    Entity,
-    EntityCollection,
-    Property,
-    PropertyBuilder
-} from "@firecms/core";
+

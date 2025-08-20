@@ -7,6 +7,7 @@
     "@apollo/client": "^3.12.6",
     "@firecms/collection_editor": "^3.0.0-canary.258",
     "@firecms/collection_editor_firebase": "^3.0.0-canary.258",
+    "@firecms/types": "^3.0.0-canary.258",
     "@firecms/core": "^3.0.0-canary.258",
     "@firecms/postgresql": "3.0.0-canary.258",
     "@firecms/data_enhancement": "^3.0.0-canary.258",

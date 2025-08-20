@@ -1,4 +1,4 @@
-import { EntityCollection } from "@firecms/core";
+import { EntityCollection } from "@firecms/types";
 
 export const customersCollection: EntityCollection = {
     name: "Customers",

@@ -35,9 +35,6 @@
       "@firecms/ui": [
         "../ui/src"
       ],
-      "@firecms/types": [
-        "../types/src"
-      ],
       "@firecms/editor": [
         "../editor/src"
       ],
