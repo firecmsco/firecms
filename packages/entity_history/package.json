@@ -1,16 +1,16 @@
 {
   "name": "@firecms/entity_history",
   "type": "module",
-  "version": "3.0.0-canary.260",
+  "version": "3.0.0-canary.261",
   "access": "public",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "^3.0.0-canary.260",
-    "@firecms/formex": "^3.0.0-canary.260",
-    "@firecms/ui": "^3.0.0-canary.260"
+    "@firecms/core": "^3.0.0-canary.261",
+    "@firecms/formex": "^3.0.0-canary.261",
+    "@firecms/ui": "^3.0.0-canary.261"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
